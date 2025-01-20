@@ -1,0 +1,1 @@
+export interface ISelectable { [key: string]: Object; }
