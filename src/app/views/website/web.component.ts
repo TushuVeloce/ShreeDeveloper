@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  template: 'website-works',
-  imports: [CommonModule],
+  template: `<router-outlet></router-outlet>`,
   styleUrls: [],
+  imports: [CommonModule, RouterOutlet,]
 })
 export class WebComponent implements OnInit {
 

@@ -9,7 +9,7 @@ const routes: Routes = [
 
   {
     path: 'website_homepage',
-    loadChildren: () => import('./views/website/sidebarlayout/sidebarlayout.routes').then(m => m.SidebarLayout_ROUTES)
+    loadChildren: () => import('./views/sidebarlayout/sidebarlayout.routes').then(m => m.SidebarLayout_ROUTES)
   },
   {
     path: 'app_homepage',

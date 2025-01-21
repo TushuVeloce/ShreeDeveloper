@@ -11,10 +11,10 @@ import { DemoWebsiteComponent } from './demo-website/demo-website.component';
 
 
 @NgModule({
-  declarations: [DemoWebsiteComponent],
+  declarations: [],
   imports: [
     CommonModule,
-    WebRoutingModule,FormsModule, BrowserModule,
+    WebRoutingModule,FormsModule,
   ]
 })
 export class WebModule { }

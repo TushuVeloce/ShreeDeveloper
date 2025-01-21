@@ -10,6 +10,7 @@ import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginPageComponent } from './views/login-page/login-page.component';
+import { SidebarlayoutComponent } from './views/sidebarlayout/sidebarlayout.component';
 
 
 @NgModule({

@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-sidebarlayout',
  standalone: true,
   templateUrl: './sidebarlayout.component.html',
   styleUrls: ['./sidebarlayout.component.scss'],
+  imports: [RouterOutlet]
 })
 export class SidebarlayoutComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() { }
 
@@ -16,6 +18,10 @@ export class SidebarlayoutComponent implements OnInit {
 
   toggleSidebar() {
     this.sidebarVisible = !this.sidebarVisible;
+  }
+
+  navigateToAbout() {
+    this.router.navigate(['/website_homepage/Website/demowebsite']);
   }
 
 }

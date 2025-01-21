@@ -8,7 +8,7 @@ export const SidebarLayout_ROUTES: Routes = [
     path: '', component: SidebarlayoutComponent,
     children: [
       // { path: 'gladiance', loadChildren: () => import('../../gladiance/gladiance.routes').then(m => m.Gladiance_ROUTES) }
-      { path: 'Website', loadChildren: () => import('../../website/web.module').then(m => m.WebModule) }
+      { path: 'Website', loadChildren: () => import('../website/web.module').then(m => m.WebModule) }
     ]
   },
 ];
