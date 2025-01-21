@@ -4,20 +4,17 @@ import { CommonModule } from '@angular/common';
 import { WebRoutingModule } from './web-routing.module';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { DemoWebsiteComponent } from './demo-website/demo-website.component';
 
-import { SidebarModule } from 'primeng/sidebar';
-import { ButtonModule } from 'primeng/button';
-import { ToolbarModule } from 'primeng/toolbar';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [DemoWebsiteComponent],
   imports: [
     CommonModule,
-    WebRoutingModule,FormsModule, BrowserModule,BrowserAnimationsModule,SidebarModule,ButtonModule,
-    ToolbarModule
+    WebRoutingModule,FormsModule, BrowserModule,
   ]
 })
 export class WebModule { }

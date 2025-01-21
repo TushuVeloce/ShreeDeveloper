@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
   template: 'website-works',
   imports: [CommonModule],
   styleUrls: [],
