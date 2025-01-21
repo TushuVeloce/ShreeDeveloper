@@ -5,10 +5,16 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './sidebarlayout.component.html',
   styleUrls: ['./sidebarlayout.component.scss'],
 })
-export class SidebarlayoutComponent  implements OnInit {
+export class SidebarlayoutComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
+
+  sidebarVisible: boolean = false;
+
+  toggleSidebar() {
+    this.sidebarVisible = !this.sidebarVisible;
+  }
 
 }
