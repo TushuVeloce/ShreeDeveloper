@@ -1,5 +1,3 @@
-import { GladianceUserRoles } from "../../domain/domainenums/domainenums";
-
 export class UserLoginResponse
 {
     public Successful: boolean = false;
@@ -8,6 +6,5 @@ export class UserLoginResponse
     public EMailId: string = '';
     public PhoneNos: string = '';
     public UserDisplayName: string = '';
-    public Role: GladianceUserRoles = GladianceUserRoles.None;
     public ValidMenuItemIds: string[] = [];
 }

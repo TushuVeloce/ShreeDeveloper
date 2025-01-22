@@ -1,0 +1,28 @@
+.logo {
+  height: 64px;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+nz-layout,
+nz-header,
+nz-content {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+nz-content {
+    margin: 16px 0;
+    padding: 24px;
+    background: #fff;
+    min-height: 360px;
+    border: none; /* Ensure no borders are added */
+  }
+
+  nz-layout {
+    box-shadow: none;
+    border: none;
+  }

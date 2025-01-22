@@ -1,36 +1,102 @@
-<!-- <p-toolbar class="toolbar">
-  <div class="p-toolbar-group-left">
-    <button
-      pButton
-      type="button"
-      icon="pi pi-bars"
-      class="p-button-text p-button-plain"
-      (click)="toggleSidebar()"
-    ></button>
-    <span class="title">My Application</span>
-  </div>
-</p-toolbar> -->
+<nz-layout style="min-height: 100vh;">
+  <!-- Sidebar -->
+  <nz-sider aria-label="Sidebar" [nzCollapsible]="true" [nzCollapsedWidth]="80" [nzWidth]="200" [nzBreakpoint]="'md'"
+    style="background-color: #FFFFFF;">
+    <div style="align-items: center;display: flex; justify-content: center; margin-top: 12%;">
+      <img src='/assets/images/shree logo.png' alt="logo" style="height: 55%; width: 55%;" />
+    </div>
+    <!-- <ul nz-menu nzMode="inline" style="background-color: #FFFFFF; color: black; font-size: 18px; font-weight: bold;">
+      <li nz-menu-item>
+        <span nz-icon nzType="home"></span>
+        <span>Home</span>
+      </li>
+      <li nz-menu-item>
+        <span nz-icon nzType="appstore"></span>
+        <span>Dashboard</span>
+      </li>
+      <li nz-submenu>
+        <span nz-icon nzType="setting"></span>
+        <span>Settings</span>
+        <ul>
+          <li nz-menu-item>Profile</li>
+          <li nz-menu-item>Account</li>
+        </ul>
+      </li> 
+    </ul> -->
 
-<!-- <p-sidebar [(visible)]="sidebarVisible" [baseZIndex]="1000">
-  <h3>Menu</h3>
-  <ul class="sidebar-menu">
-    <li><a href="#">Dashboard</a></li>
-    <li><a href="#">Profile</a></li>
-    <li><a href="#">Settings</a></li>
-    <li><a href="#">Logout</a></li>
-  </ul>
-</p-sidebar> -->
+    <ul nz-menu nzMode="inline" [nzInlineCollapsed]="isCollapsed" [ngClass]="{ 'browserBack': BrowserBack }">
+      <div *ngFor="let module of ModuleList">
+        <div style="display: flex">
+          <a style="margin-top: 12px; margin-left: 20px" *ngIf="isCollapsed">
+            <i class="fa-solid fa-house"></i>
+          </a>
+          <li nz-menu-item *ngIf="!isCollapsed">
+            <a style="margin-top: 12px; margin-right: 12px">
+              <i class="fa-solid fa-house"></i>
+            </a>
+            <a *ngIf="module.RouterLink !== ''" routerLink="{{ module.RouterLink }}"></a>
+            <span class="sidebar-menu-item">{{ module.Name }}</span>
+          </li>
+        </div>
+        <div *ngFor="let submodule of module.SubModuleList">
+          <li *ngIf="module.Name === newModulename && isShow" nz-menu-item #menuDiv [ngClass]="{
+            'ant-menu-item-selected': activeSubmodule === submodule.Name && !BrowserBack}">
+            <ul>
+              <div style="display: flex; margin-left: 19px">
+                <!-- Full Sidebar View -->
+                <li nz-menu-item *ngIf="!isCollapsed">
+                  <div class="row g-1">
+                    <div class="col-1">
+                      <span style="margin-top: 16px; margin-right: 5px">
+                        <i class="fa-solid fa-house"></i>
+                      </span>
+                    </div>
+                    <div class="col-11">
+                      <a *ngIf="submodule.RouterLink !== ''" routerLink="{{ submodule.RouterLink }}"></a>
+                      <span class="sidebar-submenu-item">{{ submodule.Name
+                        }}</span>
+                    </div>
+                  </div>
+                </li>
+              </div>
+            </ul>
+          </li>
+        </div>
+      </div>
+    </ul>
+  </nz-sider>
 
-<div class="content">
-  <h1>Welcome to the Application</h1>
-  <p>
-    This is your main content area. Use this section to display your
-    application's primary information.
-  </p>
-</div>
-<div class="home">
-  <h1>Welcome to the Home Page</h1>
-  <button (click)="navigateToAbout()">Go to About Page</button>
-</div>
-
-<router-outlet></router-outlet>
+  <nz-layout>
+    <nz-header class="d-flex">
+      <div class="UserProfile pr-3">
+        <a class="form-switch" style="margin-top: 1rem;">
+          <input class="form-check-input" type="checkbox" id="onOffSwitch" name="onOffSwitch" />
+          <label for="onOffSwitch" style="margin-right: 0.5rem;">
+            {{name}}</label>
+        </a>
+        <a style="margin-right: 15px">
+          <i class="fa-solid fa-bell fa-xl" style="color: #6a788a"></i>
+        </a>
+        <a nz-dropdown nzTrigger="click" style="margin-right: 20px">
+          <img width="50px" class="rounded-circle sidebar-text" height="50px" src="\assets\images\noimage.png"
+            alt="logo" />
+        </a>
+        <nz-dropdown-menu
+          [ngClass]="themeService.IsDarkModeSignal() ? 'profile_dropdwon_dark' : 'profile_dropdwon_light'">
+          <ul class="dropdown-list" nz-menu
+            [ngClass]="themeService.IsDarkModeSignal() ? 'profile_dropdwon_dark' : 'profile_dropdwon_light'">
+            <li class="options" nz-menu-item routerLinkActive="active" routerLink="/homepage/hotel/user_profile">
+              Your Profile
+            </li>
+            <li class="options" nz-menu-item routerLinkActive="active" routerLink="/homepage/hotel/change_password/">
+              Change Password
+            </li>
+            <li class="options" nz-menu-item routerLinkActive="active">
+              Log Out
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </div>
+    </nz-header>
+  </nz-layout>
+</nz-layout>

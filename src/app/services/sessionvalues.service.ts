@@ -3,9 +3,9 @@ import { Platform } from "@ionic/angular";
 import { ServiceInjector } from "../classes/infrastructure/injector";
 import { DeviceOrientations, PlatformTypes } from "../classes/infrastructure/enums";
 import { BaseUrlService } from './baseurl.service';
-import { isNullOrUndefined } from 'src/tools';
-import * as uuid from 'uuid';
 import { AppStateManageService } from "./app-state-manage.service";
+import { isNullOrUndefined } from "src/tools";
+import * as uuid from 'uuid';
 
 @Injectable({
   providedIn: "root",

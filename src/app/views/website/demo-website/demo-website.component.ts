@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-demo-website',
@@ -7,12 +6,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./demo-website.component.scss'],
 })
 export class DemoWebsiteComponent  implements OnInit {
+
+  constructor() { }
+
   ngOnInit() {}
 
-  constructor(private router: Router,) { }
-
-  
-  navigateToSidebarLayout() {
-    this.router.navigate(['/website_homepage']);
-  }
 }

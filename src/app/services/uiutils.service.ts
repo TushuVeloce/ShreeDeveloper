@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { ServiceInjector } from '../classes/infrastructure/injector';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
-import { isNullOrUndefined } from 'src/tools';
 import { ThemeService } from './theme.service';
 import { AppStateManageService } from './app-state-manage.service';
 import { Router } from '@angular/router';
+import { isNullOrUndefined } from 'src/tools';
 
 class SwalResult {
   isConfirmed: boolean = false;
