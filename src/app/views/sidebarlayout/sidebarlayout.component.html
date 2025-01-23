@@ -1,13 +1,12 @@
 <nz-layout class="app-layout">
   <!-- class="menu-sidebar" -->
-  <nz-sider Class="menu-sidebar_light" nzCollapsible nzWidth="260px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
+  <nz-sider Class="menu-sidebar" nzCollapsible nzWidth="260px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
     [nzTrigger]="null">
-    <div Class="sidebar-logo_light">
-      <img [src]="themeService.IsDarkModeSignal() ? '/assets/logos/whitelogo.png' : '/assets/logos/blacklogo.png'"
-        alt="logo" *ngIf="!isCollapsed" class="darktheme_logo" (click)="navigatetodashboard()" />
-      <img
-        [src]="themeService.IsDarkModeSignal() ? '/assets/logos/logo_dark_them.png' : '/assets/logos/logo_light_them.png'"
-        alt="logo" *ngIf="isCollapsed" class="collapselogo" (click)="navigatetodashboard()" />
+    <div Class="sidebar-logo">
+      <img src="/assets/images/shreelogo.png" alt="logo" *ngIf="!isCollapsed" class="theme_logo"
+        (click)="navigatetodashboard()" />
+      <img src="/assets/logos/logo_dark.png" alt="logo" *ngIf="isCollapsed" class="collapselogo"
+        (click)="navigatetodashboard()" />
     </div>
     <!-- -------- Module list start ----------- -->
     <ul nz-menu nzMode="inline" [nzInlineCollapsed]="isCollapsed"
@@ -70,13 +69,13 @@
   <!-- ----------- Module list end--------- -->
 
   <nz-layout Class="layout_light">
-    <nz-header class="d-flex justify-content-between" Class="app-header_light">
-      <div ngClass="app-header_light">
-        <span class="header-trigger desktopsidebar" title="Toggle" Class="header-trigger_light"
+    <nz-header class="d-flex justify-content-between" Class="app-header">
+      <div ngClass="app-header">
+        <span class="header-trigger desktopsidebar" title="Toggle"
           (click)="isCollapsed = !isCollapsed">
           <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></span>
         </span>
-        <span class="header-trigger mobileModal pl-3" title="Toggle" Class="header-trigger_light">
+        <span class="header-trigger mobileModal pl-3" title="Toggle">
           <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
             (click)="openModal()"></span>
           <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -86,8 +85,7 @@
       </div>
       <div class="UserProfile pr-3">
         <a style="margin-top: 1rem;">
-          <label style="margin-right: 0.5rem;"
-            Class="togglebtn_light">
+          <label style="margin-right: 0.5rem;" Class="togglebtn">
             {{Name}}</label>
         </a>
         <a style="margin-right: 15px">
@@ -113,7 +111,7 @@
       </div>
     </nz-header>
     <nz-content class="scrollable-content">
-      <div class="inner-content" Class="inner-content_light">
+      <div class="inner-content" Class="inner-content">
         <router-outlet></router-outlet>
       </div>
     </nz-content>
