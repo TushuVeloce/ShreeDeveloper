@@ -10,11 +10,13 @@ import { VendorMasterComponent } from './Masters/vendor-master/vendor-master.com
 import { VehicleMasterComponent } from './Masters/vehicle-master/vehicle-master.component';
 import { BankMasterComponent } from './Masters/bank-master/bank-master.component';
 import { UserMasterComponent } from './Masters/user-master/user-master.component';
+import { DashboardComponent } from './Dashboard/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
     path: '', component: WebComponent,
     children: [
+      {path: 'Dashboard', component: DashboardComponent},
       {path: 'Material_Master', component: MaterialMasterComponent},
       {path: 'Stage_Master', component: StageMasterComponent},
       {path: 'Account_Main_Ledger', component: AccountMainLedgerComponent},

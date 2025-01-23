@@ -229,6 +229,14 @@ export class SidebarlayoutComponent implements OnInit {
 
     let DashboardsSubModuleList = [
       {
+        Name: 'Dashboard',
+        RouterLink: '/homepage/Website/',
+        LogoPath: '',
+      },
+    ]
+
+    let MasterSubModuleList = [
+      {
         Name: 'Material Master',
         RouterLink: '/homepage/Website/Material_Master',
         LogoPath: '',
@@ -238,17 +246,39 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Stage_Master',
         LogoPath: '',
       },
-    ]
-
-    let UserManagementSubModuleList = [
       {
-        Name: 'Projects',
-        RouterLink: '/homepage/hotel/project_master',
+        Name: 'Account Main Ledger',
+        RouterLink: '/homepage/Website/Account_Main_Ledger',
         LogoPath: '',
       },
       {
-        Name: 'Users',
-        RouterLink: '/homepage/hotel/user_master',
+        Name: 'Account Sub Ledger',
+        RouterLink: '/homepage/Website/Account_Sub_Ledger',
+        LogoPath: '',
+      },
+      {
+        Name: 'Marketing Master',
+        RouterLink: '/homepage/Website/Marketing_Master',
+        LogoPath: '',
+      },
+      {
+        Name: 'Vendor Master',
+        RouterLink: '/homepage/Website/Vendor_Master',
+        LogoPath: '',
+      },
+      {
+        Name: 'Vehicle Master',
+        RouterLink: '/homepage/Website/Vehicle_Master',
+        LogoPath: '',
+      },
+      {
+        Name: 'Bank Master',
+        RouterLink: '/homepage/Website/Bank_Master',
+        LogoPath: '',
+      },
+      {
+        Name: 'User Master',
+        RouterLink: '/homepage/Website/User_Master',
         LogoPath: '',
       },
     ]
@@ -282,14 +312,14 @@ export class SidebarlayoutComponent implements OnInit {
         WhiteLogo: '/assets/icons/masterswhite.png',
         SubModuleList: DashboardsSubModuleList,
       }, {
-        Name: 'User Management',
+        Name: 'Master',
         RouterLink: '',
         BlackLogo: '/assets/icons/mastersdark.png',
         WhiteLogo: '/assets/icons/masterswhite.png',
-        SubModuleList: UserManagementSubModuleList,
+        SubModuleList: MasterSubModuleList,
       },
       {
-        Name: 'Room Inventory',
+        Name: 'Estimate Stage',
         RouterLink: '',
         BlackLogo: '/assets/icons/companydark.png',
         WhiteLogo: '/assets/icons/companywhite.png',
