@@ -28,7 +28,7 @@
   /* Makes the scrollbar thinner */
 }
 
-.header-trigger {
+.header-trigger_light {
   height: 64px;
   padding: 20px 24px;
   font-size: 20px;
@@ -39,7 +39,7 @@
 
 .sidebar-logo {
   position: relative;
-  height: 72px;
+  height: 112px;
   padding-left: 26px;
   overflow: hidden;
   line-height: 64px;
@@ -61,7 +61,6 @@
   color: #fff;
   font-weight: 600;
   font-size: 14px;
-  font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
   vertical-align: middle;
 }
 
@@ -104,8 +103,12 @@ nz-content {
 }
 
 .theme_logo {
-  width: 10rem;
-  height: 10rem!important;
+  width: 60%;
+  height: 80%!important;
+  margin-top: 1rem;
+  margin-left: 1.8rem;
+  align-items: center;
+  justify-content: center;
 }
 
 .layout_light {
@@ -263,15 +266,7 @@ nz-content {
     display: none;
   }
 
-  .app-header_dark[_ngcontent-ng-c4274625810] {
-    position: relative;
-    height: 64px;
-    padding-left: 7px;
-    background: black;
-    box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-  }
-
-  .app-header_light[_ngcontent-ng-c4274625810] {
+  .app-header[_ngcontent-ng-c4274625810] {
     position: relative;
     height: 64px;
     padding: 7px;
@@ -341,6 +336,52 @@ nz-content {
     color: inherit !important;
     border-radius: 0 !important;
   }
+}
+
+.modal_bg_dark {
+  background: rgb(34, 34, 34);
+  color: white
+}
+
+.modal_bg_light {
+  background: white;
+  color: black
+}
+
+.mobile-sidebar_light ::ng-deep .nz-modal-content {
+  background-color: #f0f0f0 !important;
+  color: black;
+  /* Your custom background */
+}
+
+/* Optional header and footer styling */
+.mobile-sidebar_light ::ng-deep .nz-modal-header {
+  background-color: #dfe6e9 !important;
+  color: black;
+}
+
+.mobile-sidebar_light ::ng-deep .nz-modal-footer {
+  background-color: #dfe6e9 !important;
+  color: black;
+}
+
+.mobile-sidebar_dark ::ng-deep .nz-modal-content {
+  background: rgb(34, 34, 34) !important;
+  color: white;
+  /* Your custom background */
+}
+
+/* Optional header and footer styling */
+.mobile-sidebar_dark ::ng-deep .nz-modal-header {
+  background: rgb(34, 34, 34) !important;
+  color: white;
+
+}
+
+.mobile-sidebar_dark ::ng-deep .nz-modal-footer {
+  background: rgb(34, 34, 34) !important;
+  color: white;
+
 }
 
 // .active-menu-item {

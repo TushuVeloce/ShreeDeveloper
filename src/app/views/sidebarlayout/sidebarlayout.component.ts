@@ -4,7 +4,7 @@ import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate, WeekDay } from '@angular/common';
 import { ThemeService } from 'src/app/services/theme.service';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
@@ -72,6 +72,17 @@ export class SidebarlayoutComponent implements OnInit {
   }
   ModuleList: module[] = [];
   BrowserBack: boolean = false;
+
+  
+  myDate = formatDate(new Date(), 'dd/MM/yyyy', 'en');
+  d = new Date();
+  myDay = WeekDay[this.d.getDay()];
+
+  isMenuFolded: boolean = false; // Tracks whether the menu is folded
+
+  toggleMenu(): void {
+    this.isMenuFolded = !this.isMenuFolded; // Toggles the menu state
+  }
   ngOnInit() {
     this.isDarkMode = this.appStateManagement.getTheme() === 'dark';
     this.onThemeToggle();
