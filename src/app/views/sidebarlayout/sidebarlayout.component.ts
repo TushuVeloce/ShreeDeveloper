@@ -235,7 +235,7 @@ export class SidebarlayoutComponent implements OnInit {
       },
       {
         Name: 'Stage Master',
-        RouterLink: '/homepage/hotel/ambiance_automation_live_status',
+        RouterLink: '/homepage/Website/Stage_Master',
         LogoPath: '',
       },
     ]
