@@ -10,7 +10,6 @@ import { VendorMasterComponent } from './Masters/vendor-master/vendor-master.com
 import { VehicleMasterComponent } from './Masters/vehicle-master/vehicle-master.component';
 import { BankMasterComponent } from './Masters/bank-master/bank-master.component';
 import { UserMasterComponent } from './Masters/user-master/user-master.component';
-import { DashboardComponent } from './Dashboard/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
