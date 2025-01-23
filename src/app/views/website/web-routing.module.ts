@@ -16,7 +16,7 @@ const routes: Routes = [
   {
     path: '', component: WebComponent,
     children: [
-      {path: 'Dashboard', component: DashboardComponent},
+      // {path: 'Dashboard', component: DashboardComponent},
       {path: 'Material_Master', component: MaterialMasterComponent},
       {path: 'Stage_Master', component: StageMasterComponent},
       {path: 'Account_Main_Ledger', component: AccountMainLedgerComponent},
