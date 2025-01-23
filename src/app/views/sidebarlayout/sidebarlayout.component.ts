@@ -296,7 +296,7 @@ export class SidebarlayoutComponent implements OnInit {
         SubModuleList: RoomInventorySubModuleList,
       },
       {
-        Name: 'Room Inventory',
+        Name: 'Television Inventory',
         RouterLink: '',
         BlackLogo: '/assets/icons/companydark.png',
         WhiteLogo: '/assets/icons/companywhite.png',
