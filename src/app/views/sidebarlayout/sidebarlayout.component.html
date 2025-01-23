@@ -10,8 +10,8 @@
     </div>
     <!-- -------- Module list start ----------- -->
     <ul nz-menu nzMode="inline" [nzInlineCollapsed]="isCollapsed"
-      style="background-color: white; color: black; font-size: 18px;">
-      <div *ngFor="let module of ModuleList" >
+      style="background-color: white; color: black; font-size: 16px; font-weight: bold;">
+      <div *ngFor="let module of ModuleList">
         <div style="display: flex" (click)="SideMenuHideShowForModule(module.Name, true)">
           <a style="margin-top: 12px; margin-left: 20px" (click)="NavigationFromLogo(module.RouterLink)"
             *ngIf="isCollapsed">
@@ -70,29 +70,35 @@
 
   <nz-layout Class="layout_light">
     <nz-header class="d-flex justify-content-between" Class="app-header">
-      <div ngClass="app-header">
-        <span class="header-trigger desktopsidebar" title="Toggle"
+      <div class="d-flex justify-content-between" Class="app-header">
+
+        <span>
+          <h6 style="margin-top: 17px;font-weight: bold;"><span>{{myDay}}</span>
+            ,<span style="margin-left: 3px;">{{myDate}}</span></h6>
+        </span>
+        
+        <span class="header-trigger desktopsidebar" title="Toggle" Class="header-trigger"
           (click)="isCollapsed = !isCollapsed">
           <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></span>
         </span>
-        <span class="header-trigger mobileModal pl-3" title="Toggle">
+        <span class="header-trigger mobileModal pl-3" title="Toggle" Class="header-trigger">
           <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
             (click)="openModal()"></span>
           <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          Launch demo modal
-        </button> -->
+            Launch demo modal
+          </button> -->
         </span>
       </div>
       <div class="UserProfile pr-3">
         <a style="margin-top: 1rem;">
-          <label style="margin-right: 0.5rem;" Class="togglebtn">
+          <label style="margin-right: 0.5rem; font-weight: bold;" Class="togglebtn">
             {{Name}}</label>
         </a>
         <a style="margin-right: 15px">
           <i class="fa-solid fa-bell fa-xl" style="color: #6a788a"></i>
         </a>
         <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" style="margin-right: 20px">
-          <img width="50px" class="rounded-circle sidebar-text" height="50px" src="\assets\images\noimage.png"
+          <img width="50px" class="rounded-circle sidebar-text" height="50px" src="/assets/images/shreelogo.png"
             alt="logo" />
         </a>
         <nz-dropdown-menu #menu="nzDropdownMenu" Class="profile_dropdwon_light">
@@ -117,3 +123,50 @@
     </nz-content>
   </nz-layout>
 </nz-layout>
+
+<div class="modal fade" id="sidebarModal" tabindex="-1" aria-labelledby="sidebarModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <ul nz-menu [nzTheme]="this.themeService.theme" nzMode="inline">
+        <!-- -------- Module list start ----------- -->
+        <div *ngFor="let module of ModuleList">
+          <div style="display: flex" (click)="SideMenuHideShowForModule(module.Name, true)">
+            <li nz-menu-item>
+              <a style="margin-top: 12px; margin-right: 12px" (click)="NavigationFromLogo(module.RouterLink)">
+                <img [src]="themeService.IsDarkModeSignal() ? module.WhiteLogo : module.BlackLogo" alt="logo"
+                  style="width: 25px; height: 25px" />
+              </a>
+              <a *ngIf="module.RouterLink !== ''" routerLink="{{ module.RouterLink }}"></a>
+              <span class="sidebar-menu-item">{{ module.Name }}</span>
+            </li>
+          </div>
+          <div *ngFor="let submodule of module.SubModuleList">
+            <li *ngIf="module.Name === newModulename && isShow">
+              <ul>
+                <div style="display: flex; margin-left: 19px" (click)="closeModal();">
+                  <li nz-menu-item>
+                    <div class="row g-1">
+                      <div class="col-1">
+                        <span style="margin-top: 16px; margin-right: 5px"
+                          (click)="NavigationFromLogo(submodule.RouterLink)">
+                          <img
+                            [src]="themeService.IsDarkModeSignal() ? '/assets/icons/WhiteRightArrow.png' : '/assets/icons/BlackRightArrow.png'"
+                            alt="Arrow" style="width: 18px; height: 17px" />
+                        </span>
+                      </div>
+                      <div class="col-11">
+                        <a *ngIf="submodule.RouterLink !== ''" routerLink="{{ submodule.RouterLink }}"></a>
+                        <span class="sidebar-submenu-item">{{ submodule.Name }}</span>
+                      </div>
+                    </div>
+                  </li>
+                </div>
+              </ul>
+            </li>
+          </div>
+        </div>
+        <!-- ----------- Module list end--------- -->
+      </ul>
+    </div>
+  </div>
+</div>
