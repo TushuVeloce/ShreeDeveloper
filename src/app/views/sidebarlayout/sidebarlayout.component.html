@@ -1,38 +1,28 @@
-<nz-layout style="min-height: 100vh;">
-  <!-- Sidebar -->
-  <nz-sider aria-label="Sidebar" [nzCollapsible]="true" [nzCollapsedWidth]="80" [nzWidth]="200" [nzBreakpoint]="'md'"
-    style="background-color: #FFFFFF;">
-    <div style="align-items: center;display: flex; justify-content: center; margin-top: 12%;">
-      <img src='/assets/images/shree logo.png' alt="logo" style="height: 55%; width: 55%;" />
+<nz-layout class="app-layout">
+  <!-- class="menu-sidebar" -->
+  <nz-sider Class="menu-sidebar_light" nzCollapsible nzWidth="260px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null">
+    <div Class="sidebar-logo_light">
+      <img [src]="themeService.IsDarkModeSignal() ? '/assets/logos/whitelogo.png' : '/assets/logos/blacklogo.png'"
+        alt="logo" *ngIf="!isCollapsed" class="darktheme_logo" (click)="navigatetodashboard()" />
+      <img
+        [src]="themeService.IsDarkModeSignal() ? '/assets/logos/logo_dark_them.png' : '/assets/logos/logo_light_them.png'"
+        alt="logo" *ngIf="isCollapsed" class="collapselogo" (click)="navigatetodashboard()" />
     </div>
-    <!-- <ul nz-menu nzMode="inline" style="background-color: #FFFFFF; color: black; font-size: 18px; font-weight: bold;">
-      <li nz-menu-item>
-        <span nz-icon nzType="home"></span>
-        <span>Home</span>
-      </li>
-      <li nz-menu-item>
-        <span nz-icon nzType="appstore"></span>
-        <span>Dashboard</span>
-      </li>
-      <li nz-submenu>
-        <span nz-icon nzType="setting"></span>
-        <span>Settings</span>
-        <ul>
-          <li nz-menu-item>Profile</li>
-          <li nz-menu-item>Account</li>
-        </ul>
-      </li> 
-    </ul> -->
-
-    <ul nz-menu nzMode="inline" [nzInlineCollapsed]="isCollapsed" [ngClass]="{ 'browserBack': BrowserBack }">
+    <!-- -------- Module list start ----------- -->
+    <ul nz-menu nzMode="inline" [nzInlineCollapsed]="isCollapsed"
+      style="background-color: white; color: black; font-size: 18px;">
       <div *ngFor="let module of ModuleList">
-        <div style="display: flex">
-          <a style="margin-top: 12px; margin-left: 20px" *ngIf="isCollapsed">
-            <i class="fa-solid fa-house"></i>
+        <div style="display: flex" (click)="SideMenuHideShowForModule(module.Name, true)">
+          <a style="margin-top: 12px; margin-left: 20px" (click)="NavigationFromLogo(module.RouterLink)"
+            *ngIf="isCollapsed">
+            <img [src]="themeService.IsDarkModeSignal() ? module.WhiteLogo : module.BlackLogo" alt="logo"
+              title={{module.Name}} style="width: 25px; height: 25px" />
           </a>
-          <li nz-menu-item *ngIf="!isCollapsed">
-            <a style="margin-top: 12px; margin-right: 12px">
-              <i class="fa-solid fa-house"></i>
+          <li nz-menu-item *ngIf="!isCollapsed" nz-menu-item>
+            <a style="margin-top: 12px; margin-right: 12px" (click)="NavigationFromLogo(module.RouterLink)">
+              <img [src]="themeService.IsDarkModeSignal() ? module.WhiteLogo : module.BlackLogo" alt="logo"
+                style="width: 25px; height: 25px" />
             </a>
             <a *ngIf="module.RouterLink !== ''" routerLink="{{ module.RouterLink }}"></a>
             <span class="sidebar-menu-item">{{ module.Name }}</span>
@@ -40,20 +30,32 @@
         </div>
         <div *ngFor="let submodule of module.SubModuleList">
           <li *ngIf="module.Name === newModulename && isShow" nz-menu-item #menuDiv [ngClass]="{
-            'ant-menu-item-selected': activeSubmodule === submodule.Name && !BrowserBack}">
+        'ant-menu-item-selected': activeSubmodule === submodule.Name && !BrowserBack
+      }">
             <ul>
               <div style="display: flex; margin-left: 19px">
+
+                <!-- Collapse Sidebar View -->
+                <a style="margin-top: 16px; margin-left: 17px" (click)="NavigationFromLogo(submodule.RouterLink)"
+                  *ngIf="isCollapsed">
+                  <img
+                    [src]="themeService.IsDarkModeSignal() ? '/assets/icons/WhiteRightArrow.png' : '/assets/icons/BlackRightArrow.png'"
+                    alt="Arrow" style="width: 18px; height: 17px" title={{submodule.Name}} />
+                </a>
                 <!-- Full Sidebar View -->
                 <li nz-menu-item *ngIf="!isCollapsed">
                   <div class="row g-1">
                     <div class="col-1">
-                      <span style="margin-top: 16px; margin-right: 5px">
-                        <i class="fa-solid fa-house"></i>
+                      <span style="margin-top: 16px; margin-right: 5px"
+                        (click)="NavigationFromLogo(submodule.RouterLink)">
+                        <img
+                          [src]="themeService.IsDarkModeSignal() ? '/assets/icons/WhiteRightArrow.png' : '/assets/icons/BlackRightArrow.png'"
+                          alt="Arrow" style="width: 18px; height: 17px" />
                       </span>
                     </div>
                     <div class="col-11">
                       <a *ngIf="submodule.RouterLink !== ''" routerLink="{{ submodule.RouterLink }}"></a>
-                      <span class="sidebar-submenu-item">{{ submodule.Name
+                      <span class="sidebar-submenu-item" (click)="onMenuItemClick(submodule.Name)">{{ submodule.Name
                         }}</span>
                     </div>
                   </div>
@@ -65,38 +67,55 @@
       </div>
     </ul>
   </nz-sider>
+  <!-- ----------- Module list end--------- -->
 
-  <nz-layout>
-    <nz-header class="d-flex">
+  <nz-layout Class="layout_light">
+    <nz-header class="d-flex justify-content-between" Class="app-header_light">
+      <div ngClass="app-header_light">
+        <span class="header-trigger desktopsidebar" title="Toggle" Class="header-trigger_light"
+          (click)="isCollapsed = !isCollapsed">
+          <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></span>
+        </span>
+        <span class="header-trigger mobileModal pl-3" title="Toggle" Class="header-trigger_light">
+          <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+            (click)="openModal()"></span>
+          <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          Launch demo modal
+        </button> -->
+        </span>
+      </div>
       <div class="UserProfile pr-3">
-        <a class="form-switch" style="margin-top: 1rem;">
-          <input class="form-check-input" type="checkbox" id="onOffSwitch" name="onOffSwitch" />
-          <label for="onOffSwitch" style="margin-right: 0.5rem;">
-            {{name}}</label>
+        <a style="margin-top: 1rem;">
+          <label style="margin-right: 0.5rem;"
+            Class="togglebtn_light">
+            {{Name}}</label>
         </a>
         <a style="margin-right: 15px">
           <i class="fa-solid fa-bell fa-xl" style="color: #6a788a"></i>
         </a>
-        <a nz-dropdown nzTrigger="click" style="margin-right: 20px">
+        <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" style="margin-right: 20px">
           <img width="50px" class="rounded-circle sidebar-text" height="50px" src="\assets\images\noimage.png"
             alt="logo" />
         </a>
-        <nz-dropdown-menu
-          [ngClass]="themeService.IsDarkModeSignal() ? 'profile_dropdwon_dark' : 'profile_dropdwon_light'">
-          <ul class="dropdown-list" nz-menu
-            [ngClass]="themeService.IsDarkModeSignal() ? 'profile_dropdwon_dark' : 'profile_dropdwon_light'">
+        <nz-dropdown-menu #menu="nzDropdownMenu" Class="profile_dropdwon_light">
+          <ul class="dropdown-list" nz-menu Class="profile_dropdwon_light">
             <li class="options" nz-menu-item routerLinkActive="active" routerLink="/homepage/hotel/user_profile">
               Your Profile
             </li>
             <li class="options" nz-menu-item routerLinkActive="active" routerLink="/homepage/hotel/change_password/">
               Change Password
             </li>
-            <li class="options" nz-menu-item routerLinkActive="active">
+            <li class="options" nz-menu-item routerLinkActive="active" (click)="logout()">
               Log Out
             </li>
           </ul>
         </nz-dropdown-menu>
       </div>
     </nz-header>
+    <nz-content class="scrollable-content">
+      <div class="inner-content" Class="inner-content_light">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
   </nz-layout>
 </nz-layout>

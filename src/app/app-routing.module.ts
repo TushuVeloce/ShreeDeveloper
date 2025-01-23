@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: 'login', component: LoginPageComponent, },
 
   {
-    path: 'website_homepage',
+    path: 'homepage',
     loadChildren: () => import('./views/sidebarlayout/sidebarlayout.routes').then(m => m.SidebarLayout_ROUTES)
   },
   {

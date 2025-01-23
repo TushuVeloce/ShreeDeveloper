@@ -3,7 +3,7 @@ import { SidebarlayoutComponent } from './sidebarlayout.component';
 
 
 export const SidebarLayout_ROUTES: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'website_homepage' },
+  { path: '', pathMatch: 'full', redirectTo: 'homepage' },
   {
     path: '', component: SidebarlayoutComponent,
     children: [

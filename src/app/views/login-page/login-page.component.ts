@@ -36,7 +36,7 @@ export class LoginPageComponent implements OnInit {
     if (this.isMobile) {
       this.router.navigate(['/app_homepage']);  // Navigate to mobile
     } else {
-      this.router.navigate(['/website_homepage']);  // Navigate to web
+      this.router.navigate(['/homepage']);  // Navigate to web
     }
   }
 }

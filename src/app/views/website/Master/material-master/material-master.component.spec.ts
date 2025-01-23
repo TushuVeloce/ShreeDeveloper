@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { DemoWebsiteComponent } from './demo-website.component';
+import { MaterialMasterComponent } from './material-master.component';
 
-describe('DemoWebsiteComponent', () => {
-  let component: DemoWebsiteComponent;
-  let fixture: ComponentFixture<DemoWebsiteComponent>;
+describe('MaterialMasterComponent', () => {
+  let component: MaterialMasterComponent;
+  let fixture: ComponentFixture<MaterialMasterComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DemoWebsiteComponent ],
+      declarations: [ MaterialMasterComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DemoWebsiteComponent);
+    fixture = TestBed.createComponent(MaterialMasterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
