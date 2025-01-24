@@ -7,7 +7,7 @@ import { Platform } from '@ionic/angular';
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss'],
-  standalone: true,
+  // standalone: true,
 })
 export class LoginPageComponent implements OnInit {
   isIosPlatform: boolean = false;

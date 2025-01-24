@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 
@@ -5,7 +6,7 @@ import { Router, RouterOutlet } from '@angular/router';
   selector: 'app-home',
   template: `<router-outlet></router-outlet>`,
   styleUrls: [],
-  imports: [RouterOutlet,]
+  imports: [RouterOutlet,CommonModule]
 })
 export class WebComponent implements OnInit {
 
