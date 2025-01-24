@@ -15,12 +15,12 @@
         <div style="display: flex" (click)="SideMenuHideShowForModule(module.Name, true)">
           <a style="margin-top: 12px; margin-left: 20px" (click)="NavigationFromLogo(module.RouterLink)"
             *ngIf="isCollapsed">
-            <img [src]="themeService.IsDarkModeSignal() ? module.WhiteLogo : module.BlackLogo" alt="logo"
+            <img [src]="module.BlackLogo" alt="logo"
               title={{module.Name}} style="width: 25px; height: 25px" />
           </a>
           <li nz-menu-item *ngIf="!isCollapsed" nz-menu-item>
             <a style="margin-top: 12px; margin-right: 12px" (click)="NavigationFromLogo(module.RouterLink)">
-              <img [src]="themeService.IsDarkModeSignal() ? module.WhiteLogo : module.BlackLogo" alt="logo"
+              <img [src]="module.BlackLogo" alt="logo"
                 style="width: 25px; height: 25px" />
             </a>
             <a *ngIf="module.RouterLink !== ''" routerLink="{{ module.RouterLink }}"></a>
@@ -38,7 +38,7 @@
                 <a style="margin-top: 16px; margin-left: 17px" (click)="NavigationFromLogo(submodule.RouterLink)"
                   *ngIf="isCollapsed">
                   <img
-                    [src]="themeService.IsDarkModeSignal() ? '/assets/icons/WhiteRightArrow.png' : '/assets/icons/BlackRightArrow.png'"
+                    src="/assets/icons/BlackRightArrow.png"
                     alt="Arrow" style="width: 18px; height: 17px" title={{submodule.Name}} />
                 </a>
                 <!-- Full Sidebar View -->
@@ -48,7 +48,7 @@
                       <span style="margin-top: 16px; margin-right: 5px"
                         (click)="NavigationFromLogo(submodule.RouterLink)">
                         <img
-                          [src]="themeService.IsDarkModeSignal() ? '/assets/icons/WhiteRightArrow.png' : '/assets/icons/BlackRightArrow.png'"
+                          src="/assets/icons/BlackRightArrow.png"
                           alt="Arrow" style="width: 18px; height: 17px" />
                       </span>
                     </div>
@@ -76,7 +76,7 @@
           <h6 style="margin-top: 17px;font-weight: bold;"><span>{{myDay}}</span>
             ,<span style="margin-left: 3px;">{{myDate}}</span></h6>
         </span>
-        
+
         <span class="header-trigger desktopsidebar" title="Toggle" Class="header-trigger"
           (click)="isCollapsed = !isCollapsed">
           <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></span>
