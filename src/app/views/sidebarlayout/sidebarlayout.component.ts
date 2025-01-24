@@ -16,6 +16,9 @@ import { Subscription } from 'rxjs';
 import { UserLogoutRequest } from 'src/app/classes/infrastructure/request_response/userlogoutrequest';
 import * as bootstrap from 'bootstrap';
 import { Modal } from 'bootstrap';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
+
 
 interface SubModule {
   Name: string;
@@ -36,7 +39,7 @@ interface module {
   templateUrl: './sidebarlayout.component.html',
   styleUrls: ['./sidebarlayout.component.scss'],
   imports: [  CommonModule, RouterLink, RouterOutlet, NzIconModule, NzLayoutModule,
-    NzMenuModule, NzDropDownModule, NzModalModule, FormsModule]
+    NzMenuModule, NzDropDownModule, NzModalModule, FormsModule,FontAwesomeModule]
 })
 export class SidebarlayoutComponent implements OnInit {
   isDarkMode: boolean = false; // Two-way binding to checkbox
@@ -206,6 +209,10 @@ export class SidebarlayoutComponent implements OnInit {
         this.openMap[key] = false;
       }
     }
+  }
+
+  toggleCollapsed(): void {
+    this.isCollapsed = !this.isCollapsed;
   }
 
   SideMenuHideShowForModule = (ModuleName: string, value: boolean) => {
