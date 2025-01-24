@@ -38,11 +38,10 @@
 }
 
 .sidebar-logo {
-  position: relative;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
   height: 112px;
-  padding-left: 26px;
-  overflow: hidden;
-  line-height: 64px;
   background: white !important;
   transition: all .3s;
 }
@@ -103,12 +102,8 @@ nz-content {
 }
 
 .theme_logo {
-  width: 50%;
-  height: 85%!important;
-  margin-top: 1rem;
-  margin-left: 1.8rem;
-  align-items: center;
-  justify-content: center;
+  width: 40%;
+  height: 80%!important;
 }
 
 .layout_light {
