@@ -72,8 +72,15 @@
     padding-right: 1.5rem;
 }
 
+.btn:hover{
+    background-color: brown;
+    color: white;
+}
+
 .title {
     color: brown;
+    font-size: large;
+    font-weight: 600;
 }
 
 form {

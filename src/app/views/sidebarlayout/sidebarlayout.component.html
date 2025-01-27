@@ -139,61 +139,20 @@
   <!-- ----------- Module list end--------- -->
 
   <nz-layout Class="layout_light">
-    <nz-header class="d-flex justify-content-between" Class="app-header">
-      <div class="d-flex justify-content-between" Class="app-header">
-        <span
-          style="
-            display: flex;
-            align-items: center;
-            margin-left: 1rem;
-            margin-right: 1rem;
-          "
+    <nz-header class="d-flex justify-content-between align-items-center">
+     
+        <div style="display: flex;align-items: center;margin: 0 1rem;">
+          <span>
+            <img src="/assets/icons/menu.png" alt="logo" (click)="toggleCollapsed()" style="width: 25px; height: 25px; cursor: pointer;"/>
+          </span>
+            <span style="margin-left: 15px;">
+            <div>
+              <span><b>{{ myDay }}</b></span> <span style="margin-left: 5px"><b>{{myDate}}</b></span>
+            </div>
+        </span>
+        </div>
 
-        >
-          <img
-          src="/assets/icons/menu.png"
-          alt="logo"
-          (click)="toggleCollapsed()"
-          style="width: 25px; height: 25px; cursor: pointer;"
-        />
-        </span>
-
-        <span>
-          <h6 style="margin-top: 17px; font-weight: bold">
-            <span>{{ myDay }}</span> ,<span style="margin-left: 3px">{{
-              myDate
-            }}</span>
-          </h6>
-        </span>
-
-        <span
-          class="header-trigger desktopsidebar"
-          title="Toggle"
-          Class="header-trigger"
-          (click)="isCollapsed = !isCollapsed"
-        >
-          <span
-            class="trigger"
-            nz-icon
-            [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
-          ></span>
-        </span>
-        <span
-          class="header-trigger mobileModal pl-3"
-          title="Toggle"
-          Class="header-trigger"
-        >
-          <span
-            class="trigger"
-            nz-icon
-            [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
-            (click)="openModal()"
-          ></span>
-          <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Launch demo modal
-          </button> -->
-        </span>
-      </div>
+       
       <div class="UserProfile pr-3">
         <a style="margin-top: 1rem">
           <label
@@ -213,9 +172,9 @@
           style="margin-right: 20px"
         >
           <img
-            width="50px"
+            width="40px"
             class="rounded-circle sidebar-text"
-            height="50px"
+            height="40px"
             src="/assets/images/shreelogo.png"
             alt="logo"
           />
