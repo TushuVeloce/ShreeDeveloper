@@ -301,23 +301,23 @@ export class SidebarlayoutComponent implements OnInit {
       },
     ]
 
-    let RoomInventorySubModuleList = [
+    let EstimateStages = [
       {
-        Name: 'Space Groups',
-        RouterLink: '/homepage/hotel/space_groups',
-        LogoPath: '',
-      },
-      {
-        Name: 'Space Types',
-        RouterLink: '/homepage/hotel/space_types',
+        Name: 'Estimate Stages',
+        RouterLink: '/homepage/Website/Estimate_Stages',
         LogoPath: '',
       },
     ]
 
-    let TelevisionInventrySubModuleList = [
+    let SiteManagementSubModuleList = [
       {
-        Name: 'Television Sets',
-        RouterLink: '/homepage/hotel/television_master',
+        Name: 'Site Management Master',
+        RouterLink: '/homepage/Website/site_management_Master',
+        LogoPath: '',
+      },
+      {
+        Name: 'Site Management Actual Stages',
+        RouterLink: '/homepage/Website/site_management_actual_stage',
         LogoPath: '',
       },
     ]
@@ -341,14 +341,14 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '',
         BlackLogo: '/assets/icons/site management.png',
         WhiteLogo: '/assets/icons/companywhite.png',
-        SubModuleList: RoomInventorySubModuleList,
+        SubModuleList: EstimateStages,
       },
       {
         Name: 'Site Management',
         RouterLink: '',
         BlackLogo: '/assets/icons/dashboard.png',
         WhiteLogo: '/assets/icons/dashboard.png',
-        SubModuleList: TelevisionInventrySubModuleList,
+        SubModuleList: SiteManagementSubModuleList,
       },
     ].filter(e => e.SubModuleList.length > 0);
 
