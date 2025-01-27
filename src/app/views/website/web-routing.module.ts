@@ -30,6 +30,8 @@ import { StagesReportComponent } from './reports/stages-report/stages-report.com
 import { AccountReportComponent } from './reports/account-report/account-report.component';
 import { EmployeeReportComponent } from './reports/employee-report/employee-report.component';
 import { DashboardComponent } from './Dashboard/dashboard.component';
+import { SiteManagementMasterComponent } from './site-management/site-management-master/site-management-master.component';
+import { SiteManagementActualStagesComponent } from './site-management/site-management-actual-stages/site-management-actual-stages.component';
 
 const routes: Routes = [
   {
@@ -45,6 +47,9 @@ const routes: Routes = [
       { path: 'Vehicle_Master', component: VehicleMasterComponent},
       { path: 'Bank_Master', component: BankMasterComponent},
       { path: 'User_Master', component: UserMasterComponent},
+
+      { path: 'site_management_Master', component: SiteManagementMasterComponent},
+      { path: 'site_management_actual_stage', component: SiteManagementActualStagesComponent},
 
 
       { path: 'government _Office', component: GovernmentOfficeComponent},

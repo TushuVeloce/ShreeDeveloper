@@ -14,11 +14,16 @@ import { VendorMasterComponent } from './Masters/vendor-master/vendor-master.com
 import { VehicleMasterComponent } from './Masters/vehicle-master/vehicle-master.component';
 import { BankMasterComponent } from './Masters/bank-master/bank-master.component';
 import { UserMasterComponent } from './Masters/user-master/user-master.component';
+import { SiteManagementMasterComponent } from './site-management/site-management-master/site-management-master.component';
+import { SiteManagementActualStagesComponent } from './site-management/site-management-actual-stages/site-management-actual-stages.component';
+import { IonicModule } from '@ionic/angular';
 
 @NgModule({
-  declarations: [MaterialMasterComponent,StageMasterComponent,AccountMainLedgerComponent,AccountSubLedgerComponent,MarketingMasterComponent,VendorMasterComponent,VehicleMasterComponent,BankMasterComponent,UserMasterComponent],
+  declarations: [MaterialMasterComponent,StageMasterComponent,AccountMainLedgerComponent,AccountSubLedgerComponent,MarketingMasterComponent,
+    VendorMasterComponent,VehicleMasterComponent,BankMasterComponent,UserMasterComponent,
+    SiteManagementMasterComponent,SiteManagementActualStagesComponent],
   imports: [
-    CommonModule,WebRoutingModule,FormsModule,NzDropDownModule,NzTableModule
+    CommonModule,WebRoutingModule,FormsModule,NzDropDownModule,NzTableModule,IonicModule.forRoot()
   ],
   providers: [DatePipe]
 })

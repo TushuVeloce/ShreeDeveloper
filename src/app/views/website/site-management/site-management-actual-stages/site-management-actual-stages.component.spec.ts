@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { SiteManagementComponent } from './site-management.component';
+import { SiteManagementActualStagesComponent } from './site-management-actual-stages.component';
 
-describe('SiteManagementComponent', () => {
-  let component: SiteManagementComponent;
-  let fixture: ComponentFixture<SiteManagementComponent>;
+describe('SiteManagementActualStagesComponent', () => {
+  let component: SiteManagementActualStagesComponent;
+  let fixture: ComponentFixture<SiteManagementActualStagesComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SiteManagementComponent ],
+      declarations: [ SiteManagementActualStagesComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SiteManagementComponent);
+    fixture = TestBed.createComponent(SiteManagementActualStagesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
