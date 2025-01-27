@@ -301,15 +301,10 @@ export class SidebarlayoutComponent implements OnInit {
       },
     ]
 
-    let RoomInventorySubModuleList = [
+    let EstimateStages = [
       {
-        Name: 'Space Groups',
-        RouterLink: '/homepage/hotel/space_groups',
-        LogoPath: '',
-      },
-      {
-        Name: 'Space Types',
-        RouterLink: '/homepage/hotel/space_types',
+        Name: 'Estimate Stages',
+        RouterLink: '/homepage/Website/Estimate_Stages',
         LogoPath: '',
       },
     ]
@@ -346,7 +341,7 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '',
         BlackLogo: '/assets/icons/site management.png',
         WhiteLogo: '/assets/icons/companywhite.png',
-        SubModuleList: RoomInventorySubModuleList,
+        SubModuleList: EstimateStages,
       },
       {
         Name: 'Site Management',
