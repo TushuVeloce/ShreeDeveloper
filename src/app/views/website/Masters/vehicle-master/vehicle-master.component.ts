@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-vehicle-master',
+  standalone: false,
   templateUrl: './vehicle-master.component.html',
   styleUrls: ['./vehicle-master.component.scss'],
 })

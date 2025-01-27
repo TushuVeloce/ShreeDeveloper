@@ -1,3 +1,89 @@
-<p>
-  account-main-ledger works!
-</p>
+<div class="container-fluid">
+  <div class="card-body">
+    <div class="card" style="padding: 1rem">
+      <form>
+        <div class="row">
+          <div class="col-md-4">
+            <h5 class="title">Main Ledger</h5>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
+          <div class="col-md-4">
+            <div>
+              <label><b>Main ledger</b></label>
+              <input
+                type="text"
+                name="mainledger"
+                class="form-control"
+                id="mainledger"
+                required
+                placeholder="Enter Main Ledger"
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div>
+              <label><b>Type</b> </label>
+              <input
+                type="text"
+                name="type"
+                class="form-control"
+                id="type"
+                required
+                placeholder="Enter Material Unit"
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div>
+              <label><b>Description</b></label>
+              <input
+                type="text"
+                name="description"
+                class="form-control"
+                id="description"
+                required
+                placeholder="Enter Description"
+              />
+            </div>
+          </div>
+        </div>
+        <div style="justify-content: center; display: flex; gap: 2rem;"   >
+            <div>
+              <button type="button" class="btn">Save</button>
+            </div>
+            <div>
+              <button type="button" class="btn" routerLink="/homepage/dashboard">Back</button>
+            </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="table-container" style="margin-top: 2rem;">
+    <nz-table #basicTable nzSize="small" class="no-hover-table" 
+      Class="bgtable_light" [nzScroll]="{x:'auto' }"
+      nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td Class="tbldata">1</td>
+          <td Class="tbldata">PRE - SITE EXPENSES</td>
+          <td Class="tbldata">EXPENSES</td>
+          <td Class="tbldata">OK</td>
+          <td class="tbldata">
+            <span style="margin-left: 9px;">
+              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
+              </span>
+            <span style="margin-left: 9px;">
+              <img
+                src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>

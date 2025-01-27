@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-user-master',
+  standalone: false,
   templateUrl: './user-master.component.html',
   styleUrls: ['./user-master.component.scss'],
 })
