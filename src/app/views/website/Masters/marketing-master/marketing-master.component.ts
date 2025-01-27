@@ -8,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MarketingMasterComponent  implements OnInit {
 
+  headers: string[] = ['Sr.No.','Marketing Type','Description','Action'];
+
   constructor() { }
 
   ngOnInit() {}

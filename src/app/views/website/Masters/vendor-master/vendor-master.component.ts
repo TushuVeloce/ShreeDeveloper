@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./vendor-master.component.scss'],
 })
 export class VendorMasterComponent  implements OnInit {
+  headers: string[] = ['ID','Vendor Name','Vendor Phone No','Address','Material Name','Action'];
 
   constructor() { }
 

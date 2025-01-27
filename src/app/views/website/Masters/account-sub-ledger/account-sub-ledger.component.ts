@@ -8,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AccountSubLedgerComponent  implements OnInit {
 
+  headers: string[] = ['Sr.No.','Under Main Ledger','Sub Ledger','Description','Action'];
+
   constructor() { }
 
   ngOnInit() {}

@@ -1,3 +1,89 @@
-<p>
-  account-sub-ledger works!
-</p>
+<div class="container-fluid">
+  <div class="card-body">
+    <div class="card" style="padding: 1rem">
+      <form>
+        <div class="row">
+          <div class="col-md-4">
+            <h5 class="title">Account Sub  Ledger</h5>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
+          <div class="col-md-4">
+            <div>
+              <label><b>Under Main Ledger</b></label>
+              <input
+                type="text"
+                name="undermainledger"
+                class="form-control"
+                id="undermainledger"
+                required
+                placeholder="Enter Under Main Ledger"
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div>
+              <label><b>Sub Ledger</b> </label>
+              <input
+                type="text"
+                name="subledger"
+                class="form-control"
+                id="subledger"
+                required
+                placeholder="Enter Sub Ledger"
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div>
+              <label><b>Description</b></label>
+              <input
+                type="text"
+                name="description"
+                class="form-control"
+                id="description"
+                required
+                placeholder="Enter Description"
+              />
+            </div>
+          </div>
+        </div>
+        <div style="justify-content: center; display: flex; gap: 2rem;"   >
+            <div>
+              <button type="button" class="btn">Save</button>
+            </div>
+            <div>
+              <button type="button" class="btn" routerLink="/homepage/dashboard">Back</button>
+            </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="table-container" style="margin-top: 2rem;">
+    <nz-table #basicTable nzSize="small" class="no-hover-table" 
+      Class="bgtable_light" [nzScroll]="{x:'auto' }"
+      nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td Class="tbldata">1</td>
+          <td Class="tbldata">OFFICE EEP</td>
+          <td Class="tbldata">ABC</td>
+          <td Class="tbldata">OK</td>
+          <td class="tbldata">
+            <span style="margin-left: 9px;">
+              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
+              </span>
+            <span style="margin-left: 9px;">
+              <img
+                src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>

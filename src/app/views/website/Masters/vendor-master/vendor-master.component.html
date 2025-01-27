@@ -1,3 +1,105 @@
-<p>
-  vendor-master works!
-</p>
+<div class="container-fluid">
+  <div class="card-body">
+    <div class="card" style="padding: 1rem">
+      <form>
+        <div class="row">
+          <div class="col-md-4">
+            <h5 class="title">Vendor Master</h5>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
+          <div class="col-md-6">
+            <div>
+              <label><b>Vendor Name</b></label>
+              <input
+                type="text"
+                name="vendorname"
+                class="form-control"
+                id="vendorname"
+                required
+                placeholder="Enter Vendor Name"
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div>
+              <label><b>Vendor Phone Number</b> </label>
+              <input
+                type="text"
+                name="phno"
+                class="form-control"
+                id="phno"
+                required
+                placeholder="Enter Vendor Phone No."
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
+          <div class="col-md-6">
+            <div>
+              <label><b>Vendor Address</b></label>
+              <input
+                type="text"
+                name="vendoraddress"
+                class="form-control"
+                id="vendoraddress"
+                required
+                placeholder="Enter Vendor Address"
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div>
+              <label><b>Material Name</b></label>
+              <input
+                type="text"
+                name="materialname"
+                class="form-control"
+                id="materialname"
+                required
+                placeholder="Enter Material Name"
+              />
+            </div>
+          </div>
+        </div>
+        <div style="justify-content: center; display: flex; gap: 2rem;"   >
+            <div>
+              <button type="button" class="btn">Save</button>
+            </div>
+            <div>
+              <button type="button" class="btn" routerLink="/homepage/dashboard">Back</button>
+            </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="table-container" style="margin-top: 2rem;">
+    <nz-table #basicTable nzSize="small" class="no-hover-table" 
+      Class="bgtable_light" [nzScroll]="{x:'auto' }"
+      nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td Class="tbldata">1</td>
+          <td Class="tbldata">SURAJ</td>
+          <td Class="tbldata">8998788798</td>
+          <td Class="tbldata">KOLHPUR</td>
+          <td Class="tbldata">STEEL</td>
+          <td class="tbldata">
+            <span style="margin-left: 9px;">
+              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
+              </span>
+            <span style="margin-left: 9px;">
+              <img
+                src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>
