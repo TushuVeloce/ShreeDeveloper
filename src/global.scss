@@ -41,3 +41,26 @@
 * {
     font-family: 'Poppins';
 }
+
+
+.bgtable_light {
+    background-color: rgb(229, 231, 235);
+  }
+
+  .tblmiddlecell_light {
+    text-align: center !important;
+    padding-left: 10px !important;
+    font-weight: bold !important;
+    background-color: #FBD1D1 !important;
+    color: #A52A2A !important;
+    font-size: 14px !important;
+  }
+
+  .tbldatacell1_light {
+    text-align: center !important;
+    padding-left: 10px !important;
+    font-size: medium !important;
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+    background-color: white !important;
+    color: black !important;
+  }
