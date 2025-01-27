@@ -25,7 +25,7 @@ export class LoginPageComponent implements OnInit {
 
   ngOnInit() { }
   Login = async () => {
-    
+
     // if (this.isIosPlatform || this.isAndroidPlatform) {
     //   await this.router.navigate(['/app_homepage']);
     // }
@@ -34,9 +34,9 @@ export class LoginPageComponent implements OnInit {
     // }
 
     if (this.isMobile) {
-      this.router.navigate(['/app_homepage']);  // Navigate to mobile
+      await this.router.navigate(['/app_homepage']);  // Navigate to mobile
     } else {
-      this.router.navigate(['/homepage']);  // Navigate to web
+      await this.router.navigate(['/homepage']);  // Navigate to web
     }
   }
 }
