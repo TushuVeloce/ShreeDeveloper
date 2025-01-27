@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./material-master.component.scss'],
 })
 export class MaterialMasterComponent  implements OnInit {
-
+  headers: string[] = ['Sr.No.','Material Name','Material Unit','Action'];
   constructor() { }
 
   ngOnInit() {}

@@ -52,42 +52,22 @@
       nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
-          <th Class="tblheader">Sr.No.</th>
-          <th Class="tblheader">Name</th>
-          <th Class="tblheader">IP Address
-          </th>
-          <th Class="tblheader">ONVIF Port
-          </th>
-          <th Class="tblheader">Camera
-            UserName</th>
-          <th Class="tblheader">Camera
-            Password</th>
-          <th Class="tblheader">Action</th>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td Class="tbldata">
-            1</td>
-          <td Class="tbldata">
-            </td>
-          <td Class="tbldata">
-           </td>
-          <td Class="tbldata">
-           </td>
-          <td Class="tbldata">
-            </td>
-          <td Class="tbldata">
-            </td>
-          <!-- <td [ngClass]="themeService.IsDarkModeSignal() ? 'tbldatacell1_dark' : 'tbldata'">
-            <span style="margin-left: 9px;" (click)="onEditClicked(surveillance);">
-              <img src="\assets\icons\editiconwhite.png" alt="logo" title="Edit" width="20px" height="20px"
-                *ngIf="themeService.IsDarkModeSignal()" />
-              <img src="\assets\icons\editiconbtndark.png" alt="logo" title="Edit" width="20px" height="20px"
-                *ngIf="!themeService.IsDarkModeSignal()" /> </span>
-            <span style="margin-left: 9px;" (click)="onDeleteClicked(surveillance);"><img
-                src="\assets\icons\deleteiconbtn.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-          </td> -->
+          <td Class="tbldata">1</td>
+          <td Class="tbldata">SMAPLE1</td>
+          <td Class="tbldata">20</td>
+          <td class="tbldata">
+            <span style="margin-left: 9px;">
+              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
+              </span>
+            <span style="margin-left: 9px;">
+              <img
+                src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+          </td>
         </tr>
       </tbody>
     </nz-table>
