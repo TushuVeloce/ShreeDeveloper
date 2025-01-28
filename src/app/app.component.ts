@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
+import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
+import { ServiceInjector } from './classes/infrastructure/injector';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +10,8 @@ import { Component } from '@angular/core';
   standalone: false,
 })
 export class AppComponent {
-  constructor() {}
+  constructor(public router: Router, private injector: Injector, private alertController: AlertController) {
+    // this.isDarkTheme = themeService.IsDarkMode;
+    ServiceInjector.AppInjector = this.injector;
+  }
 }

@@ -10,12 +10,13 @@ import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginPageComponent } from './views/login-page/login-page.component';
 import { NzTableModule } from 'ng-zorro-antd/table';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
   declarations: [AppComponent,],
   imports: [CommonModule, IonicModule.forRoot(), AppRoutingModule, FormsModule, BrowserAnimationsModule,
-    NzTableModule
+    NzTableModule,HttpClientModule
    ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, DatePipe],
   bootstrap: [AppComponent],
