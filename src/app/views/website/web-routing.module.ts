@@ -38,9 +38,10 @@ import { EmployeeReportComponent } from './Reports/employee-report/employee-repo
 import { MarketingReportComponent } from './Reports/marketing-report/marketing-report.component';
 import { StagesReportComponent } from './Reports/stages-report/stages-report.component';
 import { AccountReportComponent } from './Reports/account-report/account-report.component';
-import { MaterialMasterComponent } from './Masters/material_master/material-master/material-master.component';
 import { VehicleMasterComponent } from './Masters/vehicle/vehicle-master/vehicle-master.component';
 import { VehicleMasterDetailsComponent } from './Masters/vehicle/vehicle-master-details/vehicle-master-details.component';
+import { MaterialMasterComponent } from './Masters/material/material-master/material-master.component';
+import { MaterialMasterDetailsComponent } from './Masters/material/material-master-details/material-master-details.component';
 
 const routes: Routes = [
   {
@@ -48,6 +49,7 @@ const routes: Routes = [
     children: [
       {path: 'Dashboard', component: DashboardComponent},
       { path: 'Material_Master', component: MaterialMasterComponent},
+      { path: 'Material_Master_details', component: MaterialMasterDetailsComponent},
       { path: 'Stage_Master', component: StageMasterComponent},
       { path: 'Account_Main_Ledger', component: AccountMainLedgerComponent},
       { path: 'Account_Sub_Ledger', component: AccountSubLedgerComponent},
