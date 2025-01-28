@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   standalone: false,
 })
 export class SiteManagementMasterComponent  implements OnInit {
-
+  headers: string[] = ['Sr.No.','Site Name','Supervisor Name','Actual stage','Action'];
   constructor() { }
 
   ngOnInit() {}

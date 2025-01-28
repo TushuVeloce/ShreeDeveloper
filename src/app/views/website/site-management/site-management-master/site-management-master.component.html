@@ -1,3 +1,28 @@
-<p>
-  site-management-master works!
-</p>
+<div class="container-fluid">
+  
+  <div class="card-body">
+    <div class="table-container" style="margin-top: 2rem;">
+      <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
+        nzFrontPagination="false" [nzShowSizeChanger]="false">
+        <thead>
+          <tr>
+            <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td Class="tbldata">1</td>
+            <td Class="tbldata">SMAPLE1</td>
+            <td Class="tbldata">20</td>
+            <td class="tbldata">
+              <span style="margin-left: 9px;">
+                <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+              </span>
+              <span style="margin-left: 9px;">
+                <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
