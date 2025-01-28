@@ -88,3 +88,66 @@ form {
         margin-bottom: 0.5rem;
     }
 }
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.title_light {
+  color: black;
+  font-weight: bold;
+  font-size: 26px;
+}
+
+.tblcardtitle {
+  width: auto;
+  vertical-align: text-top !important;
+}
+
+/* ------------------------- Search Box Styles Start ------------------------- */
+.search-container_light {
+  position: relative;
+}
+
+.search-box_light {
+  width: 100%;
+  padding: 5px 20px !important;
+  border-radius: 5px;
+  font-size: 14px;
+  outline: none;
+  border: 1.5px solid orangered !important;
+  background-color: white;
+}
+
+.search-box_light:focus {
+  border-color: orangered;
+}
+
+/* ------------------------- Search Box Styles End ------------------------- */
+
+/* Responsive styles */
+@media only screen and (max-width: 667px) {
+  .modalbtn {
+      text-align: left;
+  }
+}
+
+/* Button styles */
+.btn1 {
+  background-color: brown;
+  color: white;
+  padding: 10px 30px;
+  font-size: medium;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  float: right;
+  justify-self: right
+}
+
+.btn1:hover {
+  background-color: darkred;
+}

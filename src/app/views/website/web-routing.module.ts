@@ -6,7 +6,6 @@ import { StageMasterComponent } from './Masters/stage-master/stage-master.compon
 import { AccountMainLedgerComponent } from './Masters/account-main-ledger/account-main-ledger.component';
 import { AccountSubLedgerComponent } from './Masters/account-sub-ledger/account-sub-ledger.component';
 import { MarketingMasterComponent } from './Masters/marketing-master/marketing-master.component';
-import { VendorMasterComponent } from './Masters/vendor-master/vendor-master.component';
 import { VehicleMasterComponent } from './Masters/vehicle-master/vehicle-master.component';
 import { BankMasterComponent } from './Masters/bank-master/bank-master.component';
 import { UserMasterComponent } from './Masters/user-master/user-master.component';
@@ -38,6 +37,8 @@ import { UserRoleMasterComponent } from './Masters/user-role-master/user-role-ma
 import { EmployeeMasterComponent } from './Masters/employee-master/employee-master.component';
 import { CompanyMasterComponent } from './Masters/company/company-master/company-master.component';
 import { CompanyMasterDetailsComponent } from './Masters/company/company-master-details/company-master-details.component';
+import { VendorMasterComponent } from './Masters/vendor/vendor-master/vendor-master.component';
+import { VendorMasterDetailsComponent } from './Masters/vendor/vendor-master-details/vendor-master-details.component';
 
 const routes: Routes = [
   {
@@ -50,11 +51,12 @@ const routes: Routes = [
       { path: 'Account_Sub_Ledger', component: AccountSubLedgerComponent},
       { path: 'Marketing_Master', component: MarketingMasterComponent},
       { path: 'Vendor_Master', component: VendorMasterComponent},
+      { path: 'Vendor_Master_Details', component: VendorMasterDetailsComponent},
       { path: 'Vehicle_Master', component: VehicleMasterComponent},
       { path: 'Bank_Master', component: BankMasterComponent},
       { path: 'User_Master', component: UserMasterComponent},
       { path: 'Company_Master', component: CompanyMasterComponent},
-      { path: 'Company_Master_detail', component: CompanyMasterDetailsComponent},
+      { path: 'Company_Master_details', component: CompanyMasterDetailsComponent},
       { path: 'Department_Master', component: DepartmentMasterComponent},
       { path: 'User_Role_Master', component: UserRoleMasterComponent},
       { path: 'Employee_Master', component: EmployeeMasterComponent},

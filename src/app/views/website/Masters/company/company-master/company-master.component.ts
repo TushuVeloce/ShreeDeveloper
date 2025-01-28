@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-company-master',
@@ -9,8 +10,12 @@ import { Component, OnInit } from '@angular/core';
 export class CompanyMasterComponent  implements OnInit {
   headers: string[] = ['Sr.No.','Name','Owner Name','Contact','Address','Registration Number',' GST No',' Pan No','Bank Name','Bank Branch','Account No','IFSC Code','CIN No','Action'];
 
-  constructor() { }
+  constructor( private router: Router) { }
 
   ngOnInit() {}
+
+  AddCompany(){
+    this.router.navigate(['/homepage/Website/Company_Master_details']);
+   }
 
 }
