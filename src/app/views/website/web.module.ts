@@ -9,7 +9,6 @@ import { StageMasterComponent } from './Masters/stage-master/stage-master.compon
 import { AccountMainLedgerComponent } from './Masters/account-main-ledger/account-main-ledger.component';
 import { AccountSubLedgerComponent } from './Masters/account-sub-ledger/account-sub-ledger.component';
 import { MarketingMasterComponent } from './Masters/marketing-master/marketing-master.component';
-import { VehicleMasterComponent } from './Masters/vehicle-master/vehicle-master.component';
 import { BankMasterComponent } from './Masters/bank-master/bank-master.component';
 import { UserMasterComponent } from './Masters/user-master/user-master.component';
 import { SiteManagementMasterComponent } from './site-management/site-management-master/site-management-master.component';
@@ -23,10 +22,12 @@ import { CompanyMasterDetailsComponent } from './Masters/company/company-master-
 import { MaterialMasterComponent } from './Masters/material_master/material-master/material-master.component';
 import { MaterialMasterDetailsComponent } from './Masters/material_master/material-master-details/material-master-details.component';
 import { VendorMasterComponent } from './Masters/vendor/vendor-master/vendor-master.component';
+import { VehicleMasterComponent } from './Masters/vehicle/vehicle-master/vehicle-master.component';
+import { VendorMasterDetailsComponent } from './Masters/vendor/vendor-master-details/vendor-master-details.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent  ,StageMasterComponent,AccountMainLedgerComponent,AccountSubLedgerComponent,MarketingMasterComponent,
-    VendorMasterComponent,VehicleMasterComponent,BankMasterComponent,UserMasterComponent,CompanyMasterComponent,CompanyMasterDetailsComponent, DepartmentMasterComponent,UserRoleMasterComponent,EmployeeMasterComponent,
+    VendorMasterComponent,VehicleMasterComponent,VendorMasterDetailsComponent, BankMasterComponent,UserMasterComponent,CompanyMasterComponent,CompanyMasterDetailsComponent, DepartmentMasterComponent,UserRoleMasterComponent,EmployeeMasterComponent,
     SiteManagementMasterComponent,SiteManagementActualStagesComponent],
   imports: [
     CommonModule,WebRoutingModule,FormsModule,NzDropDownModule,NzTableModule,IonicModule.forRoot()

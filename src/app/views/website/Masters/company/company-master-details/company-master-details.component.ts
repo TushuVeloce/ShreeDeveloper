@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-company-master-details',
@@ -8,8 +10,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CompanyMasterDetailsComponent  implements OnInit {
 
-  constructor() { }
+  constructor( private router: Router) { }
 
   ngOnInit() {}
+
+  BackCompany(){
+    this.router.navigate(['/homepage/Website/Company_Master']);
+   }
 
 }

@@ -5,7 +5,6 @@ import { StageMasterComponent } from './Masters/stage-master/stage-master.compon
 import { AccountMainLedgerComponent } from './Masters/account-main-ledger/account-main-ledger.component';
 import { AccountSubLedgerComponent } from './Masters/account-sub-ledger/account-sub-ledger.component';
 import { MarketingMasterComponent } from './Masters/marketing-master/marketing-master.component';
-import { VehicleMasterComponent } from './Masters/vehicle-master/vehicle-master.component';
 import { BankMasterComponent } from './Masters/bank-master/bank-master.component';
 import { UserMasterComponent } from './Masters/user-master/user-master.component';
 import { GovernmentOfficeComponent } from './government_office/government-office/government-office.component';
@@ -40,6 +39,8 @@ import { MarketingReportComponent } from './Reports/marketing-report/marketing-r
 import { StagesReportComponent } from './Reports/stages-report/stages-report.component';
 import { AccountReportComponent } from './Reports/account-report/account-report.component';
 import { MaterialMasterComponent } from './Masters/material_master/material-master/material-master.component';
+import { VehicleMasterComponent } from './Masters/vehicle/vehicle-master/vehicle-master.component';
+import { VehicleMasterDetailsComponent } from './Masters/vehicle/vehicle-master-details/vehicle-master-details.component';
 
 const routes: Routes = [
   {
@@ -54,6 +55,7 @@ const routes: Routes = [
       { path: 'Vendor_Master', component: VendorMasterComponent},
       { path: 'Vendor_Master_Details', component: VendorMasterDetailsComponent},
       { path: 'Vehicle_Master', component: VehicleMasterComponent},
+      { path: 'Vehicle_Master_details', component: VehicleMasterDetailsComponent},
       { path: 'Bank_Master', component: BankMasterComponent},
       { path: 'User_Master', component: UserMasterComponent},
       { path: 'Company_Master', component: CompanyMasterComponent},
