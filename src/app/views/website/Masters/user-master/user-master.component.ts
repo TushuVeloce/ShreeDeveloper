@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-master.component.scss'],
 })
 export class UserMasterComponent  implements OnInit {
+  headers: string[] = ['Sr.No.','User Name','Email Id','Mobile No','Role','Action'];
 
   constructor() { }
 

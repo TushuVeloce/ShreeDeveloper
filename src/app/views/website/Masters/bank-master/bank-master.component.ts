@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./bank-master.component.scss'],
 })
 export class BankMasterComponent  implements OnInit {
+headers: string[] = ['Sr.No.','Bank Name','Branch Name','Account No','IFSC Code','Opening Balance','Action'];
 
   constructor() { }
 

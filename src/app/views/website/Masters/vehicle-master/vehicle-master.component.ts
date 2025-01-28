@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./vehicle-master.component.scss'],
 })
 export class VehicleMasterComponent  implements OnInit {
+  headers: string[] = ['Sr.No.','Vehicle Name','Action'];
 
   constructor() { }
 
