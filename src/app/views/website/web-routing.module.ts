@@ -1,11 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { WebComponent } from './web.component';
-import { AccountMainLedgerComponent } from './Masters/account-main-ledger/account-main-ledger.component';
-import { AccountSubLedgerComponent } from './Masters/account-sub-ledger/account-sub-ledger.component';
-import { MarketingMasterComponent } from './Masters/marketing-master/marketing-master.component';
-import { BankMasterComponent } from './Masters/bank-master/bank-master.component';
-import { UserMasterComponent } from './Masters/user-master/user-master.component';
 import { GovernmentOfficeComponent } from './government_office/government-office/government-office.component';
 import { RegistrarOfficeComponent } from './registrar_office/registrar-office/registrar-office.component';
 import { PlotResellByThirdPartyComponent } from './plot_resell_by_third_party/plot-resell-by-third-party/plot-resell-by-third-party.component';
@@ -16,9 +11,6 @@ import { DashboardComponent } from './Dashboard/dashboard.component';
 import { SiteManagementMasterComponent } from './site-management/site-management-master/site-management-master.component';
 import { SiteManagementActualStagesComponent } from './site-management/site-management-actual-stages/site-management-actual-stages.component';
 import { EstimateStagesComponent } from './estimate-stages/estimate-stages.component';
-import { DepartmentMasterComponent } from './Masters/department-master/department-master.component';
-import { UserRoleMasterComponent } from './Masters/user-role-master/user-role-master.component';
-import { EmployeeMasterComponent } from './Masters/employee-master/employee-master.component';
 import { CompanyMasterComponent } from './Masters/company/company-master/company-master.component';
 import { CompanyMasterDetailsComponent } from './Masters/company/company-master-details/company-master-details.component';
 import { VendorMasterComponent } from './Masters/vendor/vendor-master/vendor-master.component';
@@ -43,6 +35,22 @@ import { MaterialMasterComponent } from './Masters/material/material-master/mate
 import { MaterialMasterDetailsComponent } from './Masters/material/material-master-details/material-master-details.component';
 import { StageMasterComponent } from './Masters/stage/stage-master/stage-master.component';
 import { StageMasterDetailsComponent } from './Masters/stage/stage-master-details/stage-master-details.component';
+import { AccountMainLedgerComponent } from './Masters/account_main_ledger/account-main-ledger/account-main-ledger.component';
+import { AccountMainLedgerDetailsComponent } from './Masters/account_main_ledger/account-main-ledger-details/account-main-ledger-details.component';
+import { AccountSubLedgerComponent } from './Masters/account_sub_ledger/account-sub-ledger/account-sub-ledger.component';
+import { AccountSubLedgerDetailsComponent } from './Masters/account_sub_ledger/account-sub-ledger-details/account-sub-ledger-details.component';
+import { MarketingMasterComponent } from './Masters/marketing/marketing-master/marketing-master.component';
+import { MarketingMasterDetailsComponent } from './Masters/marketing/marketing-master-details/marketing-master-details.component';
+import { BankMasterComponent } from './Masters/bank/bank-master/bank-master.component';
+import { BankMasterDetailsComponent } from './Masters/bank/bank-master-details/bank-master-details.component';
+import { UserMasterComponent } from './Masters/user/user-master/user-master.component';
+import { UserMasterDetailsComponent } from './Masters/user/user-master-details/user-master-details.component';
+import { DepartmentMasterComponent } from './Masters/department/department-master/department-master.component';
+import { DepartmentMasterDetailsComponent } from './Masters/department/department-master-details/department-master-details.component';
+import { UserRoleMasterComponent } from './Masters/user_role/user-role-master/user-role-master.component';
+import { UserRoleMasterDetailsComponent } from './Masters/user_role/user-role-master-details/user-role-master-details.component';
+import { EmployeeMasterComponent } from './Masters/employee/employee-master/employee-master.component';
+import { EmployeeMasterDetailsComponent } from './Masters/employee/employee-master-details/employee-master-details.component';
 
 const routes: Routes = [
   {
@@ -52,21 +60,29 @@ const routes: Routes = [
       { path: 'Material_Master', component: MaterialMasterComponent},
       { path: 'Material_Master_details', component: MaterialMasterDetailsComponent},
       { path: 'Stage_Master', component: StageMasterComponent},
-      { path: 'Stage_Master_details', component: StageMasterDetailsComponent},
+      { path: 'Stage_Master_Details', component: StageMasterDetailsComponent},
       { path: 'Account_Main_Ledger', component: AccountMainLedgerComponent},
+      { path: 'Account_Main_Ledger_Details', component: AccountMainLedgerDetailsComponent},
       { path: 'Account_Sub_Ledger', component: AccountSubLedgerComponent},
+      { path: 'Account_Sub_Ledger_Details', component: AccountSubLedgerDetailsComponent},
       { path: 'Marketing_Master', component: MarketingMasterComponent},
+      { path: 'Marketing_Master_Details', component: MarketingMasterDetailsComponent},
       { path: 'Vendor_Master', component: VendorMasterComponent},
       { path: 'Vendor_Master_Details', component: VendorMasterDetailsComponent},
       { path: 'Vehicle_Master', component: VehicleMasterComponent},
-      { path: 'Vehicle_Master_details', component: VehicleMasterDetailsComponent},
+      { path: 'Vehicle_Master_Details', component: VehicleMasterDetailsComponent},
       { path: 'Bank_Master', component: BankMasterComponent},
+      { path: 'Bank_Master_Details', component: BankMasterDetailsComponent},
       { path: 'User_Master', component: UserMasterComponent},
+      { path: 'User_Master_Details', component: UserMasterDetailsComponent},
       { path: 'Company_Master', component: CompanyMasterComponent},
-      { path: 'Company_Master_details', component: CompanyMasterDetailsComponent},
+      { path: 'Company_Master_Details', component: CompanyMasterDetailsComponent},
       { path: 'Department_Master', component: DepartmentMasterComponent},
+      { path: 'Department_Master_Details', component: DepartmentMasterDetailsComponent},
       { path: 'User_Role_Master', component: UserRoleMasterComponent},
+      { path: 'User_Role_Master_Details', component: UserRoleMasterDetailsComponent},
       { path: 'Employee_Master', component: EmployeeMasterComponent},
+      { path: 'Employee_Master_Details', component: EmployeeMasterDetailsComponent},
      
       { path: 'Estimate_Stages', component: EstimateStagesComponent},
 

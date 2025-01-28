@@ -15,7 +15,7 @@ export class CompanyMasterComponent  implements OnInit {
   ngOnInit() {}
 
   AddCompany(){
-    this.router.navigate(['/homepage/Website/Company_Master_details']);
+    this.router.navigate(['/homepage/Website/Company_Master_Details']);
    }
 
 }

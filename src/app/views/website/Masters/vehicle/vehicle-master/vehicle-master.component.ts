@@ -16,7 +16,7 @@ export class VehicleMasterComponent  implements OnInit {
   ngOnInit() {}
 
   AddVehicle(){
-    this.router.navigate(['/homepage/Website/Vehicle_Master_details']);
+    this.router.navigate(['/homepage/Website/Vehicle_Master_Details']);
    }
 
 }
