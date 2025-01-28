@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-material-master',
@@ -8,8 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MaterialMasterComponent  implements OnInit {
   headers: string[] = ['Sr.No.','Material Name','Material Unit','Action'];
-  constructor() { }
+  constructor( private router:Router) { }
 
   ngOnInit() {}
-
+  AddMaterial(){
+    this.router.navigate(['/homepage/Website/Material_Master_details']);
+   }
 }

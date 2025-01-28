@@ -80,10 +80,28 @@
     color: white;
 }
 
-.title {
+.backbtn {
+  background-color: rgb(252, 252, 252);
+  border: 2px solid brown;
+  color: white;
+  padding: 1px 18px;
+  border-radius: 6px;
+}
+
+.backbtn:hover{
+  color: white;
+}
+
+
+
+
+.detail_title {
     color: brown;
     font-size: large;
     font-weight: 600;
+    font-size: 24px;
+
+
 }
 
 form {
@@ -99,9 +117,11 @@ form {
 }
 
 .title_light {
-  color: black;
+  color: brown;
   font-weight: bold;
-  font-size: 26px;
+  font-size: 24px;
+  font-weight: 600;
+
 }
 
 .tblcardtitle {

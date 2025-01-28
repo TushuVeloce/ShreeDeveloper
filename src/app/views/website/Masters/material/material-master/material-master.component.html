@@ -1,53 +1,18 @@
-<div class="container-fluid">
-  <!-- <div class="card-body">
-    <div class="card" style="padding: 1rem">
-      <form>
-        <div class="row">
-          <div class="col-md-4">
-            <h5 class="title">Material Master</h5>
-          </div>
-        </div>
-        <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
-          <div class="col-md-6">
-            <div>
-              <label><b>Material Name</b></label>
-              <input
-                type="text"
-                name="materialnm"
-                class="form-control"
-                id="materialnm"
-                required
-                placeholder="Enter Material Name"
-              />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div>
-              <label><b>Material Unit</b> </label>
-              <input
-                type="text"
-                name="materialunit"
-                class="form-control"
-                id="materialunit"
-                required
-                placeholder="Enter Material Unit"
-              />
-            </div>
-          </div>
-        </div>
-        <div style="justify-content: center; display: flex; gap: 2rem;"   >
-            <div>
-              <button type="button" class="btn">Save</button>
-            </div>
-            <div>
-              <button type="button" class="btn" routerLink="/homepage/dashboard">Back</button>
-            </div>
-        </div>
-      </form>
-    </div>
-  </div> -->
+<div class="row">
+  <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
+    <h5 style="padding-top: 3px;" class="title title_light">Material Master</h5>
+  </div>
+  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light">
+    <input type="text" Class="search-box_light" placeholder="Search..." autofocus />
+  </div>
+  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
+    <button nz-button class="btn1 mt-1" (click)= 'AddMaterial()'>
+      Add Material
+    </button>
+  </div>
+</div>
   
-  
+
   
   <div class="table-container" style="margin-top: 2rem;">
     <nz-table #basicTable nzSize="small" class="no-hover-table" 
@@ -75,4 +40,3 @@
       </tbody>
     </nz-table>
   </div>
-</div>

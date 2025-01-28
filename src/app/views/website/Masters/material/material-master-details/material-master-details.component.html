@@ -1,3 +1,59 @@
-<p>
-  material-master-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackMaterial()">
+          <img
+            src="/assets/icons/arrow-button.png"
+            alt=""
+            width="34px"
+            height="34px"
+          />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">Material Master</span>
+      </div>
+    </div>
+    <form>
+      <div class="row" style="margin-top: 2rem; margin-bottom: 2rem">
+        <div class="col-md-6">
+          <div>
+            <label><b>Material Name</b></label>
+            <input
+              type="text"
+              name="materialnm"
+              class="form-control"
+              id="materialnm"
+              required
+              placeholder="Enter Material Name"
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div>
+            <label><b>Material Unit</b> </label>
+            <input
+              type="text"
+              name="materialunit"
+              class="form-control"
+              id="materialunit"
+              required
+              placeholder="Enter Material Unit"
+            />
+          </div>
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem">
+        <div>
+          <button type="button" class="btn">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackMaterial()">
+            Back
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
