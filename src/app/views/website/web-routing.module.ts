@@ -15,19 +15,6 @@ import { PlotResellByThirdPartyComponent } from './plot_resell_by_third_party/pl
 import { MarketingManagementComponent } from './marketing_management/marketing-management/marketing-management.component';
 import { EmployeeManagementComponent } from './hr_payroll_management/employee-management/employee-management.component';
 import { AttendanceAndSalaryComponent } from './hr_payroll_management/attendance-and-salary/attendance-and-salary.component';
-import { AccountTransactionsComponent } from './accounting/account-transactions/account-transactions.component';
-import { ExpenseTransactionsComponent } from './accounting/expense-transactions/expense-transactions.component';
-import { ClientIncomeComponent } from './accounting/Income Transactions/client-income/client-income.component';
-import { BillingReportComponent } from './reports/billing-report/billing-report.component';
-import { OfficeReportComponent } from './reports/office-report/office-report.component';
-import { BookingReportComponent } from './reports/booking-report/booking-report.component';
-import { StockReportComponent } from './reports/stock-report/stock-report.component';
-import { CrmReportComponent } from './reports/crm-report/crm-report.component';
-import { FollowUpReportComponent } from './reports/follow-up-report/follow-up-report.component';
-import { MarketingReportComponent } from './reports/marketing-report/marketing-report.component';
-import { StagesReportComponent } from './reports/stages-report/stages-report.component';
-import { AccountReportComponent } from './reports/account-report/account-report.component';
-import { EmployeeReportComponent } from './reports/employee-report/employee-report.component';
 import { DashboardComponent } from './Dashboard/dashboard.component';
 import { SiteManagementMasterComponent } from './site-management/site-management-master/site-management-master.component';
 import { SiteManagementActualStagesComponent } from './site-management/site-management-actual-stages/site-management-actual-stages.component';
@@ -39,6 +26,20 @@ import { CompanyMasterComponent } from './Masters/company/company-master/company
 import { CompanyMasterDetailsComponent } from './Masters/company/company-master-details/company-master-details.component';
 import { VendorMasterComponent } from './Masters/vendor/vendor-master/vendor-master.component';
 import { VendorMasterDetailsComponent } from './Masters/vendor/vendor-master-details/vendor-master-details.component';
+import { SiteManagementDetailsComponent } from './site-management/site-management-details/site-management-details.component';
+import { AccountTransactionsComponent } from './Accounting/account-transactions/account-transactions.component';
+import { ExpenseTransactionsComponent } from './Accounting/expense-transactions/expense-transactions.component';
+import { ClientIncomeComponent } from './Accounting/Income Transactions/client-income/client-income.component';
+import { BillingReportComponent } from './Reports/billing-report/billing-report.component';
+import { OfficeReportComponent } from './Reports/office-report/office-report.component';
+import { BookingReportComponent } from './Reports/booking-report/booking-report.component';
+import { StockReportComponent } from './Reports/stock-report/stock-report.component';
+import { CrmReportComponent } from './Reports/crm-report/crm-report.component';
+import { FollowUpReportComponent } from './Reports/follow-up-report/follow-up-report.component';
+import { EmployeeReportComponent } from './Reports/employee-report/employee-report.component';
+import { MarketingReportComponent } from './Reports/marketing-report/marketing-report.component';
+import { StagesReportComponent } from './Reports/stages-report/stages-report.component';
+import { AccountReportComponent } from './Reports/account-report/account-report.component';
 
 const routes: Routes = [
   {
@@ -65,6 +66,8 @@ const routes: Routes = [
 
 
       { path: 'site_management_Master', component: SiteManagementMasterComponent},
+      { path: 'Site_Management_Details', component: SiteManagementDetailsComponent},
+
       { path: 'site_management_actual_stage', component: SiteManagementActualStagesComponent},
 
 
