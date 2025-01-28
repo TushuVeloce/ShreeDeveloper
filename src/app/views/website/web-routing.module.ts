@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { WebComponent } from './web.component';
-import { MaterialMasterComponent } from './Masters/material-master/material-master.component';
 import { StageMasterComponent } from './Masters/stage-master/stage-master.component';
 import { AccountMainLedgerComponent } from './Masters/account-main-ledger/account-main-ledger.component';
 import { AccountSubLedgerComponent } from './Masters/account-sub-ledger/account-sub-ledger.component';
@@ -40,6 +39,7 @@ import { EmployeeReportComponent } from './Reports/employee-report/employee-repo
 import { MarketingReportComponent } from './Reports/marketing-report/marketing-report.component';
 import { StagesReportComponent } from './Reports/stages-report/stages-report.component';
 import { AccountReportComponent } from './Reports/account-report/account-report.component';
+import { MaterialMasterComponent } from './Masters/material_master/material-master/material-master.component';
 
 const routes: Routes = [
   {
