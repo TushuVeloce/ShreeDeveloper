@@ -1,3 +1,65 @@
-<p>
-  site-management-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <form>
+      <div class="row">
+        <div class="col-md-4">
+          <h5 class="title">Site Management</h5>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
+        <div class="col-md-4">
+          <label><b>Site Name</b></label>
+          <input type="text" name="sitename" class="form-control" id="sitename" required
+            placeholder="Enter Site Name" />
+        </div>
+        <div class="col-md-4">
+          <label><b>Site Address</b></label>
+          <input type="text" name="SiteAddress" class="form-control" id="SiteAddress" required
+            placeholder="Enter Site Address" />
+        </div>
+        <div class="col-md-4">
+          <label><b>Site Incharge</b></label>
+          <input type="text" name="SiteIncharge" class="form-control" id="SiteIncharge" required
+            placeholder="Enter Site Incharge" />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
+        <div class="col-md-4">
+          <label><b>Starting Date</b></label>
+          <input type="date" name="startdate" class="form-control date-input" id="startdate" required
+          placeholder="Select Date" />
+        </div>
+        <div class="col-md-4">
+          <label><b>Estimated End Date</b></label>
+          <input type="date" name="Enddate" class="form-control date-input" id="Enddate" required
+            placeholder="Select Date" />
+        </div>
+        <div class="col-md-4">
+          <label><b>Estimated Cost</b></label>
+          <input type="text" name="EstimatedCost" class="form-control" id="EstimatedCost" required
+            placeholder="Enter Estimated Cost" />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 2rem; margin-bottom: 2rem;">
+        <div class="col-md-4">
+          <label><b>Total Land Area</b></label>
+          <input type="text" name="landarea" class="form-control" id="landarea" required
+            placeholder="Enter Total Land Area" />
+        </div>
+        <div class="col-md-4">
+          <label><b>Number Of Plot</b></label>
+          <input type="number" name="plotnumber" class="form-control" id="plotnumber" required
+            placeholder="Enter Plot Number" />
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem;">
+        <div>
+          <button type="button" class="btn">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" routerLink="/homepage/dashboard">Back</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

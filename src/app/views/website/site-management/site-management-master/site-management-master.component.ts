@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-site-management-master',
@@ -8,8 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SiteManagementMasterComponent  implements OnInit {
   headers: string[] = ['Sr.No.','Site Name','Supervisor Name','Actual stage','Action'];
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {}
+
+  AddSite = async () => {
+    await this.router.navigate(['/homepage/Website/Site_Management_Details']);
+  }
 
 }
