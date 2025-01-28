@@ -5,7 +5,6 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ServiceInjector } from 'src/app/classes/infrastructure/injector';
-import { StageMasterComponent } from './Masters/stage-master/stage-master.component';
 import { AccountMainLedgerComponent } from './Masters/account-main-ledger/account-main-ledger.component';
 import { AccountSubLedgerComponent } from './Masters/account-sub-ledger/account-sub-ledger.component';
 import { MarketingMasterComponent } from './Masters/marketing-master/marketing-master.component';
@@ -24,9 +23,11 @@ import { VehicleMasterComponent } from './Masters/vehicle/vehicle-master/vehicle
 import { VendorMasterDetailsComponent } from './Masters/vendor/vendor-master-details/vendor-master-details.component';
 import { MaterialMasterComponent } from './Masters/material/material-master/material-master.component';
 import { MaterialMasterDetailsComponent } from './Masters/material/material-master-details/material-master-details.component';
+import { StageMasterComponent } from './Masters/stage/stage-master/stage-master.component';
+import { StageMasterDetailsComponent } from './Masters/stage/stage-master-details/stage-master-details.component';
 
 @NgModule({
-  declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent  ,StageMasterComponent,AccountMainLedgerComponent,AccountSubLedgerComponent,MarketingMasterComponent,
+  declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent  ,StageMasterComponent,StageMasterDetailsComponent, AccountMainLedgerComponent,AccountSubLedgerComponent,MarketingMasterComponent,
     VendorMasterComponent,VehicleMasterComponent,VendorMasterDetailsComponent, BankMasterComponent,UserMasterComponent,CompanyMasterComponent,CompanyMasterDetailsComponent, DepartmentMasterComponent,UserRoleMasterComponent,EmployeeMasterComponent,
     SiteManagementMasterComponent,SiteManagementActualStagesComponent],
   imports: [

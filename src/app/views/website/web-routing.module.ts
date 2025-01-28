@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { WebComponent } from './web.component';
-import { StageMasterComponent } from './Masters/stage-master/stage-master.component';
 import { AccountMainLedgerComponent } from './Masters/account-main-ledger/account-main-ledger.component';
 import { AccountSubLedgerComponent } from './Masters/account-sub-ledger/account-sub-ledger.component';
 import { MarketingMasterComponent } from './Masters/marketing-master/marketing-master.component';
@@ -42,6 +41,8 @@ import { VehicleMasterComponent } from './Masters/vehicle/vehicle-master/vehicle
 import { VehicleMasterDetailsComponent } from './Masters/vehicle/vehicle-master-details/vehicle-master-details.component';
 import { MaterialMasterComponent } from './Masters/material/material-master/material-master.component';
 import { MaterialMasterDetailsComponent } from './Masters/material/material-master-details/material-master-details.component';
+import { StageMasterComponent } from './Masters/stage/stage-master/stage-master.component';
+import { StageMasterDetailsComponent } from './Masters/stage/stage-master-details/stage-master-details.component';
 
 const routes: Routes = [
   {
@@ -51,6 +52,7 @@ const routes: Routes = [
       { path: 'Material_Master', component: MaterialMasterComponent},
       { path: 'Material_Master_details', component: MaterialMasterDetailsComponent},
       { path: 'Stage_Master', component: StageMasterComponent},
+      { path: 'Stage_Master_details', component: StageMasterDetailsComponent},
       { path: 'Account_Main_Ledger', component: AccountMainLedgerComponent},
       { path: 'Account_Sub_Ledger', component: AccountSubLedgerComponent},
       { path: 'Marketing_Master', component: MarketingMasterComponent},
