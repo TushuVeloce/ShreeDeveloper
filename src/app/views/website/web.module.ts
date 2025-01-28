@@ -22,6 +22,7 @@ import { CompanyMasterComponent } from './Masters/company/company-master/company
 import { CompanyMasterDetailsComponent } from './Masters/company/company-master-details/company-master-details.component';
 import { MaterialMasterComponent } from './Masters/material_master/material-master/material-master.component';
 import { MaterialMasterDetailsComponent } from './Masters/material_master/material-master-details/material-master-details.component';
+import { VendorMasterComponent } from './Masters/vendor/vendor-master/vendor-master.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent  ,StageMasterComponent,AccountMainLedgerComponent,AccountSubLedgerComponent,MarketingMasterComponent,
