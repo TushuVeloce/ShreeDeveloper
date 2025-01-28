@@ -33,6 +33,11 @@ import { DashboardComponent } from './Dashboard/dashboard.component';
 import { SiteManagementMasterComponent } from './site-management/site-management-master/site-management-master.component';
 import { SiteManagementActualStagesComponent } from './site-management/site-management-actual-stages/site-management-actual-stages.component';
 import { EstimateStagesComponent } from './estimate-stages/estimate-stages.component';
+import { DepartmentMasterComponent } from './Masters/department-master/department-master.component';
+import { UserRoleMasterComponent } from './Masters/user-role-master/user-role-master.component';
+import { EmployeeMasterComponent } from './Masters/employee-master/employee-master.component';
+import { CompanyMasterComponent } from './Masters/company/company-master/company-master.component';
+import { CompanyMasterDetailsComponent } from './Masters/company/company-master-details/company-master-details.component';
 
 const routes: Routes = [
   {
@@ -48,6 +53,11 @@ const routes: Routes = [
       { path: 'Vehicle_Master', component: VehicleMasterComponent},
       { path: 'Bank_Master', component: BankMasterComponent},
       { path: 'User_Master', component: UserMasterComponent},
+      { path: 'Company_Master', component: CompanyMasterComponent},
+      { path: 'Company_Master_detail', component: CompanyMasterDetailsComponent},
+      { path: 'Department_Master', component: DepartmentMasterComponent},
+      { path: 'User_Role_Master', component: UserRoleMasterComponent},
+      { path: 'Employee_Master', component: EmployeeMasterComponent},
      
       { path: 'Estimate_Stages', component: EstimateStagesComponent},
 

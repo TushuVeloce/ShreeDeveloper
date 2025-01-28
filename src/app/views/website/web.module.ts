@@ -17,10 +17,15 @@ import { UserMasterComponent } from './Masters/user-master/user-master.component
 import { SiteManagementMasterComponent } from './site-management/site-management-master/site-management-master.component';
 import { SiteManagementActualStagesComponent } from './site-management/site-management-actual-stages/site-management-actual-stages.component';
 import { IonicModule } from '@ionic/angular';
+import { DepartmentMasterComponent } from './Masters/department-master/department-master.component';
+import { UserRoleMasterComponent } from './Masters/user-role-master/user-role-master.component';
+import { EmployeeMasterComponent } from './Masters/employee-master/employee-master.component';
+import { CompanyMasterComponent } from './Masters/company/company-master/company-master.component';
+import { CompanyMasterDetailsComponent } from './Masters/company/company-master-details/company-master-details.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent,StageMasterComponent,AccountMainLedgerComponent,AccountSubLedgerComponent,MarketingMasterComponent,
-    VendorMasterComponent,VehicleMasterComponent,BankMasterComponent,UserMasterComponent,
+    VendorMasterComponent,VehicleMasterComponent,BankMasterComponent,UserMasterComponent,CompanyMasterComponent,CompanyMasterDetailsComponent, DepartmentMasterComponent,UserRoleMasterComponent,EmployeeMasterComponent,
     SiteManagementMasterComponent,SiteManagementActualStagesComponent],
   imports: [
     CommonModule,WebRoutingModule,FormsModule,NzDropDownModule,NzTableModule,IonicModule.forRoot()

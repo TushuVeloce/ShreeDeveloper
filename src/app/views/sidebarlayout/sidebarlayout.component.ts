@@ -299,6 +299,26 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/User_Master',
         LogoPath: '',
       },
+      {
+        Name: 'Company Master',
+        RouterLink: '/homepage/Website/Company_Master',
+        LogoPath: '',
+      },
+      {
+        Name: 'Department Master',
+        RouterLink: '/homepage/Website/Department_Master',
+        LogoPath: '',
+      },
+      {
+        Name: 'User Role Master',
+        RouterLink: '/homepage/Website/User_Role_Master',
+        LogoPath: '',
+      },
+      {
+        Name: 'Employee Master',
+        RouterLink: '/homepage/Website/Employee_Master',
+        LogoPath: '',
+      },
     ]
 
     let EstimateStages = [
