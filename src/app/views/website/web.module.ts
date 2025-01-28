@@ -20,14 +20,12 @@ import { UserRoleMasterComponent } from './Masters/user-role-master/user-role-ma
 import { EmployeeMasterComponent } from './Masters/employee-master/employee-master.component';
 import { CompanyMasterComponent } from './Masters/company/company-master/company-master.component';
 import { CompanyMasterDetailsComponent } from './Masters/company/company-master-details/company-master-details.component';
-import { VendorMasterComponent } from './Masters/vendor/vendor-master/vendor-master.component';
-import { VendorMasterDetailsComponent } from './Masters/vendor/vendor-master-details/vendor-master-details.component';
 import { MaterialMasterComponent } from './Masters/material_master/material-master/material-master.component';
 import { MaterialMasterDetailsComponent } from './Masters/material_master/material-master-details/material-master-details.component';
 
 @NgModule({
-  declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent,StageMasterComponent,AccountMainLedgerComponent,AccountSubLedgerComponent,MarketingMasterComponent,
-    VendorMasterComponent, VendorMasterDetailsComponent, VehicleMasterComponent,BankMasterComponent,UserMasterComponent,CompanyMasterComponent,CompanyMasterDetailsComponent, DepartmentMasterComponent,UserRoleMasterComponent,EmployeeMasterComponent,
+  declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent  ,StageMasterComponent,AccountMainLedgerComponent,AccountSubLedgerComponent,MarketingMasterComponent,
+    VendorMasterComponent,VehicleMasterComponent,BankMasterComponent,UserMasterComponent,CompanyMasterComponent,CompanyMasterDetailsComponent, DepartmentMasterComponent,UserRoleMasterComponent,EmployeeMasterComponent,
     SiteManagementMasterComponent,SiteManagementActualStagesComponent],
   imports: [
     CommonModule,WebRoutingModule,FormsModule,NzDropDownModule,NzTableModule,IonicModule.forRoot()
