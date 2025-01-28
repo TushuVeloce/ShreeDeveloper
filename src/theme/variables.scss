@@ -1,2 +1,30 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+
+:root {
+    /* Light mode */
+    --ion-color-primary: #7c2424;
+    /* Deep Maroon */
+    --ion-color-primary-contrast: #ffffff;
+    /* White for contrast */
+    --ion-background-color: #f8f9fa;
+    /* Off-White for a clean background */
+    --ion-text-color: #333;
+    /* Rich Brown for text */
+    --ion-accent-color: #d4af37;
+    /* Gold for highlights */
+}
+
+[data-theme='dark'] {
+    /* Dark mode */
+    --ion-color-primary: #7c2424;
+    /* Deep Maroon stays consistent */
+    --ion-color-primary-contrast: #ffffff;
+    /* White for contrast */
+    --ion-background-color: #212121;
+    /* Rich Black for dark mode */
+    --ion-text-color: #ffffff;
+    /* Warm Beige for softer text */
+    --ion-accent-color: #d4af37;
+    /* Gold for highlights */
+}
