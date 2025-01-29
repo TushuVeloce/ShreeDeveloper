@@ -1,0 +1,64 @@
+.custom-bottom-sheet {
+    --border-radius: 20px 20px 0px 0px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-height: 50vh;
+    /* Maximum height of 50% of the viewport */
+    min-height: 0;
+    /* Allow dynamic resizing */
+    background: white;
+}
+
+/* Fixed Handle for Dragging */
+.drag-handle {
+    width: 40px;
+    height: 5px;
+    background: lightgray;
+    border-radius: 5px;
+    margin: 10px auto;
+}
+
+/* Header takes only necessary space */
+ion-header {
+    flex-shrink: 0;
+    /* Prevent the header from shrinking */
+}
+
+/* Scrollable Content */
+.scroll-content {
+    flex-grow: 1;
+    /* Allow content to grow and fill available space */
+    overflow-y: auto;
+    /* Enables scrolling when content overflows */
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    /* Make sure content flows downwards */
+}
+
+/* Filter Container: Two-column layout */
+.filter-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+    /* Space between the columns */
+}
+
+/* Left Column - Main Filters */
+.main-filters {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Right Column - Filter Options */
+.filter-options {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

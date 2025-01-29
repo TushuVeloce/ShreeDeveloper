@@ -9,19 +9,19 @@ const routes: Routes = [
     children: [
       {
         path: 'home',
-        loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
+        loadChildren: () => import('./homelandingmodule/home-landing.module').then(m => m.HomeModule),
       },
       {
         path: 'task',
-        loadChildren: () => import('./task/task.module').then(m => m.TaskModule),
+        loadChildren: () => import('./tasklandingmodule/tasklanding.module').then(m => m.TasklandingModule),
       },
       {
         path: 'attendance',
-        loadChildren: () => import('./attendance/attendance.module').then(m => m.AttendanceModule),
+        loadChildren: () => import('./attendancelandingmodule/attendancelanding.module').then(m => m.AttendancelandingModule),
       },
       {
         path: 'settings',
-        loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule),
+        loadChildren: () => import('./settinglandingmodule/settinglanding.module').then(m => m.SettinglandingModule),
       },
       {
         path: '',

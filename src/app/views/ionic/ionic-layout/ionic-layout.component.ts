@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-ionic-layout',
@@ -8,8 +10,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IonicLayoutComponent  implements OnInit {
 
-  constructor() { }
-
-  ngOnInit() {}
+  constructor(private router: Router, private themeService: ThemeService) {
+   }
+  ngOnInit() {
+    console.log(this.themeService.IsDarkModeSignal());
+  }
+  bottomNavigationTabs = async (path : string) => {
+    await this.router.navigate([`/${path}`]);
+  }
 
 }

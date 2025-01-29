@@ -1,0 +1,41 @@
+<div class="bottom-sheet">
+  <!-- Fixed Drag Handle -->
+  <div class="drag-handle"></div>
+
+  <!-- Header -->
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Filters</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="dismissModal()">Close</ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Content Section -->
+  <ion-content class="scroll-content">
+    <div class="filter-container">
+      <!-- Main Filter List (Left Column) -->
+      <div class="main-filters">
+        <ion-list>
+          <!-- Loop through filter categories dynamically -->
+          <ion-item *ngFor="let filter of filterCategories" button (click)="selectFilter(filter)">
+            <ion-label>{{ filter.label }}</ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+
+      <!-- Dynamic Options (Right Column) -->
+      <div class="filter-options">
+        <!-- Loop through options for the selected filter dynamically -->
+        <ng-container *ngIf="selectedFilter">
+          <ion-list>
+            <ion-item *ngFor="let option of getFilterOptions(selectedFilter)">
+              <ion-label>{{ option }}</ion-label>
+            </ion-item>
+          </ion-list>
+        </ng-container>
+      </div>
+    </div>
+  </ion-content>
+</div>

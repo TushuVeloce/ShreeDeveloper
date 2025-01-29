@@ -1,0 +1,118 @@
+<ion-content [fullscreen]="true">
+  <!-- Tabs -->
+  <div class="tabs">
+    <ion-segment [(ngModel)]="selectedStatus" mode="md" (ionChange)="filterTasks()" scrollable>
+      <ion-segment-button value="all" checked>All</ion-segment-button>
+      <ion-segment-button value="in-progress">In Progress</ion-segment-button>
+      <ion-segment-button value="completed">Completed</ion-segment-button>
+      <ion-segment-button value="not-started">Not Started</ion-segment-button>
+      <ion-segment-button value="cancelled">Cancelled</ion-segment-button>
+    </ion-segment>
+  </div>
+
+
+  <!-- Task Grid -->
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-sm="6" size-md="4" size-lg="3" *ngFor="let task of filteredTasks">
+        <div class="task-card">
+          <!-- Task Header -->
+          <div class="task-header">
+            <h3><strong>{{ task.tasktitle }}</strong></h3>
+          </div>
+
+          <!-- Task Info -->
+          <div class="task-info">
+            <!-- Start Date -->
+            <ion-row>
+              <ion-col size="6">
+                <p class="compact"><strong>Start Date:</strong></p>
+              </ion-col>
+              <ion-col size="6">
+                <p class="compact">{{ task.startDate }}</p>
+              </ion-col>
+            </ion-row>
+
+            <!-- Due Date -->
+            <ion-row>
+              <ion-col size="6">
+                <p class="compact"><strong>Due Date:</strong></p>
+              </ion-col>
+              <ion-col size="6">
+                <p class="compact">{{ task.dueDate }}</p>
+              </ion-col>
+            </ion-row>
+
+            <!-- Priority -->
+            <ion-row>
+              <ion-col size="6">
+                <p class="compact"><strong>Priority:</strong></p>
+              </ion-col>
+              <ion-col size="6">
+                <p class="compact">{{ task.priority === 101 ? 'High' : task.priority === 102 ? 'Medium' : 'Low' }}</p>
+              </ion-col>
+            </ion-row>
+
+            <!-- Status -->
+            <ion-row>
+              <ion-col size="6">
+                <p class="compact"><strong>Status:</strong></p>
+              </ion-col>
+              <ion-col size="6">
+                <p class="compact">
+                  {{ task.status === 101 ? 'Completed' : task.status === 102 ? 'In Progress' : task.status === 103 ?
+                  'Not
+                  Started' : 'Cancelled' }}
+                </p>
+              </ion-col>
+            </ion-row>
+            <div class="progress-bar">
+              <div class="progress" [style.width.%]="task.progress"></div>
+            </div>
+            <p class="compact">{{ task.progress }}%</p>
+          </div>
+
+          <!-- Task Actions -->
+          <div class="task-actions">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="3">
+                  <ion-button expand="block" class="update-button" (click)="updateStatus(task)"
+                    aria-label="Update Status">
+                    <ion-icon slot="icon-only" name="refresh-circle-outline"></ion-icon>
+                  </ion-button>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-button expand="block" class="view-button" (click)="viewTask(task)" aria-label="View Task">
+                    <ion-icon slot="icon-only" name="eye-outline"></ion-icon>
+                  </ion-button>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-button expand="block" class="edit-button" (click)="editTask(task)" aria-label="Edit Task">
+                    <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+                  </ion-button>
+                </ion-col>
+                <ion-col size="3">
+                  <ion-button expand="block" class="delete-button" (click)="deleteTask(task)" aria-label="Delete Task">
+                    <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- Floating Add Button -->
+  <ion-fab>
+    <ion-fab-button (click)="addTask()" >
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+    <ion-fab class="filterFab">
+      <ion-fab-button (click)="openFilter()">
+        <ion-icon name="filter"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+</ion-content>
