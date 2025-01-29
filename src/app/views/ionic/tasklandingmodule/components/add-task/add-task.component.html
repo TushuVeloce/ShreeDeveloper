@@ -1,0 +1,92 @@
+<ion-content>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Add Task</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <!-- Form Container with Grid Layout -->
+    <ion-grid>
+      <ion-row>
+        <!-- Task Name -->
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked">Task Name</ion-label>
+            <ion-input [(ngModel)]="task.name" name="name" required></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <!-- Site Name (Dynamic Dropdown) -->
+        <ion-col size="12" size-md="6">
+          <ion-item>
+            <ion-label position="stacked">Site Name</ion-label>
+            <ion-select [(ngModel)]="task.site" name="site" required>
+              <ion-select-option *ngFor="let site of siteNames" [value]="site">{{ site }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+
+        <!-- Assigned To (Dynamic Dropdown) -->
+        <ion-col size="12" size-md="6">
+          <ion-item>
+            <ion-label position="stacked">Assigned To</ion-label>
+            <ion-select [(ngModel)]="task.assignedTo" name="assignedTo" required>
+              <ion-select-option *ngFor="let user of users" [value]="user">{{ user }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+
+        <!-- Priority (Dropdown) -->
+        <ion-col size="12" size-md="6">
+          <ion-item>
+            <ion-label position="stacked">Priority</ion-label>
+            <ion-select [(ngModel)]="task.priority" name="priority" required>
+                      <ion-select-option *ngFor="let priority of prioritys" [value]="priority">{{ priority }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+
+        <!-- Start Date (Custom Date Input) -->
+        <ion-col size="12" size-md="6">
+          <ion-item>
+            <ion-label position="stacked">Start Date</ion-label>
+                <ion-input type="date" name="startDate" [(ngModel)]="task.startDate" (click)="openDatePicker('startDate')"></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <!-- Due Date (Custom Date Input) -->
+        <ion-col size="12" size-md="6">
+          <ion-item>
+            <ion-label position="stacked">Due Date</ion-label>
+              <ion-input type="date" name="dueDate" [(ngModel)]="task.dueDate" (click)="openDatePicker('dueDate')"></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <!-- Status (Dropdown) -->
+        <ion-col size="12" size-md="6">
+          <ion-item>
+            <ion-label position="stacked">Status</ion-label>
+            <ion-select [(ngModel)]="task.status" name="status" required>
+                <ion-select-option *ngFor="let status of StatusList" [value]="status">{{ status }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+
+        <!-- Description -->
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked">Description</ion-label>
+            <ion-input [(ngModel)]="task.description" name="description" type="text" required></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <!-- Save and Back Buttons -->
+        <ion-col size="12">
+          <ion-button expand="full" color="primary" type="submit" (click)="onSubmit()">Save</ion-button>
+          <ion-button expand="full" color="secondary" (click)="goBack()">Back</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+</ion-content>
