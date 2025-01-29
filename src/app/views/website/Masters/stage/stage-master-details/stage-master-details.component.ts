@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-stage-master-details',
@@ -8,8 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StageMasterDetailsComponent  implements OnInit {
 
-  constructor() { }
-
-  ngOnInit() {}
-
+ constructor( private router: Router) { }
+ 
+   ngOnInit() {}
+   BackMaterial(){
+     this.router.navigate(['/homepage/Website/Stage_Master']);
+    }
 }
