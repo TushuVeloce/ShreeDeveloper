@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account-sub-ledger',
@@ -10,8 +11,12 @@ export class AccountSubLedgerComponent  implements OnInit {
 
   headers: string[] = ['Sr.No.','Under Main Ledger','Sub Ledger','Description','Action'];
 
-  constructor() { }
+  constructor( private router:Router) { }
 
   ngOnInit() {}
+
+  AddSubLedger(){
+    this.router.navigate(['/homepage/Website/Account_Sub_Ledger_Details']);
+   }
 
 }

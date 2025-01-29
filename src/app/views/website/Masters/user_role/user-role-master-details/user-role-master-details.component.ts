@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-role-master-details',
@@ -8,8 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserRoleMasterDetailsComponent  implements OnInit {
 
-  constructor() { }
+  constructor( private router: Router) { }
 
   ngOnInit() {}
+
+  BackUserRole(){
+    this.router.navigate(['/homepage/Website/User_Role_Master']);
+   }
 
 }

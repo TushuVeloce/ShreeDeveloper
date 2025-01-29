@@ -1,92 +1,16 @@
-<div class="container-fluid">
-  <div class="card-body">
-    <div class="card" style="padding: 1rem">
-      <form>
-        <div class="row">
-          <div class="col-md-4">
-            <h5 class="title">Bank Master</h5>
-          </div>
-        </div>
-        <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
-          <div class="col-md-4">
-            <div>
-              <label><b>Bank Name</b></label>
-              <input
-                type="text"
-                name="bankname"
-                class="form-control"
-                id="bankname"
-                required
-                placeholder="Enter Bank Name"
-              />
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div>
-              <label><b>Branch Name</b></label>
-              <input
-                type="text"
-                name="branchname"
-                class="form-control"
-                id="branchname"
-                required
-                placeholder="Enter Branch Name"
-              />
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div>
-              <label><b>Account No</b></label>
-              <input
-                type="text"
-                name="accno"
-                class="form-control"
-                id="accno"
-                required
-                placeholder="Enter Account Number"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
-          <div class="col-md-4">
-            <div>
-              <label><b>IFSC Code</b></label>
-              <input
-                type="text"
-                name="ifsccode"
-                class="form-control"
-                id="ifsccode"
-                required
-                placeholder="Enter IFSC Code"
-              />
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div>
-              <label><b>Opening Balance</b></label>
-              <input
-                type="text"
-                name="openingbal"
-                class="form-control"
-                id="openingbal"
-                required
-                placeholder="Enter Opening Balance"
-              />
-            </div>
-          </div>
-        </div>
-        <div style="justify-content: center; display: flex; gap: 2rem;"   >
-            <div>
-              <button type="button" class="btn">Save</button>
-            </div>
-            <div>
-              <button type="button" class="btn" routerLink="/homepage/dashboard">Back</button>
-            </div>
-        </div>
-      </form>
-    </div>
+  <div class="row table-heading">
+  <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
+    <h5 style="padding-top: 3px;" class="title title_light"> Bank Master</h5>
   </div>
+  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light">
+    <input type="text" Class="search-box_light" placeholder="Search..." autofocus />
+  </div>
+  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
+    <button nz-button class="btn1 mt-1" (click)= 'AddBank()'>
+      Add Bank
+    </button>
+  </div>
+</div>
   <div class="table-container" style="margin-top: 2rem;">
     <nz-table #basicTable nzSize="small" class="no-hover-table" 
       Class="bgtable_light" [nzScroll]="{x:'auto' }"
@@ -116,4 +40,4 @@
       </tbody>
     </nz-table>
   </div>
-</div>
+

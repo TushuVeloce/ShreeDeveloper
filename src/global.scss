@@ -107,9 +107,10 @@
 form {
     label {
         margin-bottom: 0.5rem;
+        font-weight: bold;
     }
 }
-.row {
+.table-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;

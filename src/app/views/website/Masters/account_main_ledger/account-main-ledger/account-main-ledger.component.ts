@@ -12,6 +12,7 @@ export class AccountMainLedgerComponent  implements OnInit {
   constructor( private router:Router) { }
 
   ngOnInit() {}
+  
   AddMainLedger(){
     this.router.navigate(['/homepage/Website/Account_Main_Ledger_Details']);
    }

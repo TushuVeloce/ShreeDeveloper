@@ -1,3 +1,67 @@
-<p>
-  account-sub-ledger-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackSubLedger()">
+          <img
+            src="/assets/icons/arrow-button.png"
+            alt=""
+            width="34px"
+            height="34px"
+          />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">Account Sub  Ledger</span>
+      </div>
+    </div>
+    <form>
+      <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
+        <div class="col-md-4">
+          <div>
+           <label> Under Main Ledger</label>
+            <select  type="text" name="undermainledger" class="form-control" id="undermainledger" required>
+              <option>--Select Type--</option>
+              <option>Partner</option>
+              <option>Loan </option>
+              </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+           <label>Sub Ledger</label>
+            <input
+              type="text"
+              name="subledger"
+              class="form-control"
+              id="subledger"
+              required
+              placeholder="Enter Sub Ledger"
+            />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+           <label>Description</label>
+            <input
+              type="text"
+              name="description"
+              class="form-control"
+              id="description"
+              required
+              placeholder="Enter Description"
+            />
+          </div>
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem;"   >
+          <div>
+            <button type="button" class="btn">Save</button>
+          </div>
+          <div>
+            <button type="button" class="btn" (click)="BackSubLedger()" >Back</button>
+          </div>
+      </div>
+    </form>
+  </div>
+</div>

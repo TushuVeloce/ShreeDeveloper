@@ -1,3 +1,88 @@
-<p>
-  bank-master-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackBank()">
+          <img
+            src="/assets/icons/arrow-button.png"
+            alt=""
+            width="34px"
+            height="34px"
+          />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">Bank Master</span>
+      </div>
+    </div>
+    <form>
+      <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
+        <div class="col-md-4">
+           <label>Bank Name</label>
+            <input
+              type="text"
+              name="bankname"
+              class="form-control"
+              id="bankname"
+              required
+              placeholder="Enter Bank Name"
+            />
+        </div>
+        <div class="col-md-4">
+           <label>Branch Name</label>
+            <input
+              type="text"
+              name="branchname"
+              class="form-control"
+              id="branchname"
+              required
+              placeholder="Enter Branch Name"
+            />
+        </div>
+        <div class="col-md-4">
+           <label>Account No</label>
+            <input
+              type="text"
+              name="accno"
+              class="form-control"
+              id="accno"
+              required
+              placeholder="Enter Account Number"
+            />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
+        <div class="col-md-4">
+           <label>IFSC Code</label>
+            <input
+              type="text"
+              name="ifsccode"
+              class="form-control"
+              id="ifsccode"
+              required
+              placeholder="Enter IFSC Code"
+            />
+        </div>
+        <div class="col-md-4">
+           <label>Opening Balance</label>
+            <input
+              type="text"
+              name="openingbal"
+              class="form-control"
+              id="openingbal"
+              required
+              placeholder="Enter Opening Balance"
+            />
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem;"   >
+          <div>
+            <button type="button" class="btn">Save</button>
+          </div>
+          <div>
+            <button type="button" class="btn" (click)="BackBank()">Back</button>
+          </div>
+      </div>
+    </form>
+  </div>
+</div>

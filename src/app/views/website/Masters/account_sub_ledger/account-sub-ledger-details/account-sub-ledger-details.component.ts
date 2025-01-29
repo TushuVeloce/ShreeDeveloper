@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account-sub-ledger-details',
@@ -8,8 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AccountSubLedgerDetailsComponent  implements OnInit {
 
-  constructor() { }
+  constructor( private router: Router) { }
 
   ngOnInit() {}
+
+  BackSubLedger(){
+    this.router.navigate(['/homepage/Website/Account_Sub_Ledger']);
+   }
+
 
 }

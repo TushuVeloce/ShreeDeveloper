@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-master',
@@ -7,10 +8,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-master.component.scss'],
 })
 export class UserMasterComponent  implements OnInit {
-  headers: string[] = ['Sr.No.','User Name','Email Id','Mobile No','Role','Action'];
+  headers: string[] = ['Sr.No.','Email Id','Contact No','Default Password','Action'];
 
-  constructor() { }
+  constructor( private router: Router) { }
 
   ngOnInit() {}
+
+  AddUser(){
+    this.router.navigate(['/homepage/Website/User_Master_Details']);
+   }
 
 }

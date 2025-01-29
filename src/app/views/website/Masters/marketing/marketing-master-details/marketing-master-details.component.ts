@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-marketing-master-details',
@@ -8,8 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MarketingMasterDetailsComponent  implements OnInit {
 
-  constructor() { }
+  constructor( private router: Router) { }
 
   ngOnInit() {}
+
+  BackMarketing(){
+    this.router.navigate(['/homepage/Website/Marketing_Master']);
+   }
 
 }
