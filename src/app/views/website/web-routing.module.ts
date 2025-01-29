@@ -51,6 +51,7 @@ import { UserRoleMasterComponent } from './Masters/user_role/user-role-master/us
 import { UserRoleMasterDetailsComponent } from './Masters/user_role/user-role-master-details/user-role-master-details.component';
 import { EmployeeMasterComponent } from './Masters/employee/employee-master/employee-master.component';
 import { EmployeeMasterDetailsComponent } from './Masters/employee/employee-master-details/employee-master-details.component';
+import { SiteManagementActualStagesDetailsComponent } from './site-management/site-management-actual-stages-details/site-management-actual-stages-details.component';
 
 const routes: Routes = [
   {
@@ -91,6 +92,7 @@ const routes: Routes = [
       { path: 'Site_Management_Details', component: SiteManagementDetailsComponent},
 
       { path: 'site_management_actual_stage', component: SiteManagementActualStagesComponent},
+      { path: 'Site_Management_Actual_Stage_Details', component: SiteManagementActualStagesDetailsComponent},
 
 
       { path: 'government _Office', component: GovernmentOfficeComponent},
