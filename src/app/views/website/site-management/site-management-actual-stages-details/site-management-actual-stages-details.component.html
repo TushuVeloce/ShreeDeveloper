@@ -1,3 +1,141 @@
-<p>
-  site-management-actual-stages-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <form>
+      <div class="row">
+        <div class="col-md-4">
+          <h5 class="title">Actual Cost</h5>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
+        <div class="col-md-6 mb-2">
+          <label><b>Site Name</b></label>
+          <input type="text" name="sitename" class="form-control" id="sitename" required
+            placeholder="Enter Site Name" />
+        </div>
+        <div class="col-md-6 mb-2">
+          <div>
+            <label><b>Stage</b></label>
+            <select type="text" name="Stage" class="form-control" id="Stage" required>
+              <option>--Select Type--</option>
+              <option>Site Leveling</option>
+              <option>Road</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6 mb-2">
+          <label><b>Date</b></label>
+          <input type="date" name="startdate" class="form-control date-input" id="startdate" required
+            placeholder="Select Date" />
+        </div>
+        <div class="col-md-6 mb-2">
+          <label><b>Chalan No.</b></label>
+          <input type="text" name="chalanno" class="form-control" id="chalanno" required
+            placeholder="Enter Site Incharge" />
+        </div>
+        <div class="col-md-6 mb-2">
+          <div>
+            <label><b>Expense Type</b></label>
+            <select type="text" name="Expensetype" class="form-control" id="Expensetype" required>
+              <option>--Select Type--</option>
+              <option>Machinary Expense</option>
+              <option>Labour Expense</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 2rem; margin-bottom: 2rem;">
+        <div class="col-md-6 mb-2">
+          <label><b>Vehicle No.</b></label>
+          <input type="text" name="VehicleNo" class="form-control" id="VehicleNo" required
+            placeholder="Enter Vehicle No" />
+        </div>
+        <div class="col-md-6 mb-2">
+          <div>
+            <label><b>Select Vehicle</b></label>
+            <select type="vehicle" name="type" class="form-control" id="vehicle" required>
+              <option>--Select Type--</option>
+              <option>Loaders</option>
+              <option>JCB</option>
+              <option>Tractor</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6 mb-2">
+          <div>
+            <label><b>Unit</b></label>
+            <select type="text" name="Unit" class="form-control" id="Unit" required>
+              <option>--Select Type--</option>
+              <option>M3</option>
+              <option>ft</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6 mb-2">
+          <label><b>Diesel Calculation</b></label>
+          <div class="d-flex">
+            <!-- Diesel Ltr. -->
+            <input type="number" class="form-control form-control-sm" [(ngModel)]="dieselLtr"
+            (input)="calculateTotal()" placeholder="Enter Ltr" required />
+
+            <!-- Amount Per Ltr. -->
+            <input type="number" class="form-control form-control-sm" [(ngModel)]="amountPerLtr"
+            [value]="totalAmount" placeholder="Enter Rate" required />
+
+            <!-- Total Amount (Readonly) -->
+            <label><b>Total Amount</b></label>
+            <input type="number" class="form-control form-control-sm" [(ngModel)]="totalAmount"
+              placeholder="Total Amount" readonly />
+          </div>
+        </div>
+        <div class="col-md-6 mb-2">
+          <label><b>Quantity</b></label>
+          <input type="number" name="plotnumber" class="form-control" id="plotnumber" required
+            placeholder="Enter Plot Number" />
+        </div>
+        <div class="col-md-6 mb-2">
+          <label><b>Rate</b></label>
+          <input type="number" name="plotnumber" class="form-control" id="plotnumber" required
+            placeholder="Enter Plot Number" />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 2rem; margin-bottom: 2rem;">
+        <div class="col-md-6 mb-2">
+          <label><b>Amount</b></label>
+          <input type="number" name="plotnumber" class="form-control" id="plotnumber" required
+            placeholder="Enter Plot Number" />
+        </div>
+        <div class="col-md-6 mb-2">
+          <label><b>Description</b></label>
+          <input type="number" name="plotnumber" class="form-control" id="plotnumber" required
+            placeholder="Enter Plot Number" />
+        </div>
+        <div class="col-md-6 mb-2">
+          <div>
+            <label><b>Owner Name</b></label>
+            <select type="text" name="Unit" class="form-control" id="Unit" required>
+              <option>--Select Type--</option>
+              <option>Veloce</option>
+              <option>Tushar</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6 mb-2">
+          <label><b>Sign</b></label>
+          <input type="number" name="plotnumber" class="form-control" id="plotnumber" required
+            placeholder="Enter Plot Number" />
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem;">
+        <div>
+          <button type="button" class="btn">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" routerLink="/homepage/dashboard">Back</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
