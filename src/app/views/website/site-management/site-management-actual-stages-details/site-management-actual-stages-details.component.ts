@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-site-management-actual-stages-details',
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SiteManagementActualStagesDetailsComponent  implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   dieselLtr: number = 0;
   amountPerLtr: number = 0;
@@ -19,5 +20,9 @@ export class SiteManagementActualStagesDetailsComponent  implements OnInit {
   }
 
   ngOnInit() {}
+
+  BackMaterial() {
+    this.router.navigate(['/homepage/Website/site_management_actual_stage']);
+  }
 
 }

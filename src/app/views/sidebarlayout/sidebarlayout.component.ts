@@ -331,13 +331,18 @@ export class SidebarlayoutComponent implements OnInit {
 
     let SiteManagementSubModuleList = [
       {
-        Name: 'Site Management Master',
+        Name: 'New Site',
         RouterLink: '/homepage/Website/site_management_Master',
         LogoPath: '',
       },
       {
-        Name: 'Site Management Actual Stages',
+        Name: 'Actual Stages',
         RouterLink: '/homepage/Website/site_management_actual_stage',
+        LogoPath: '',
+      },
+      {
+        Name: 'Estimate Stages',
+        RouterLink: '/homepage/Website/Estimate_Stages',
         LogoPath: '',
       },
     ]
@@ -355,13 +360,6 @@ export class SidebarlayoutComponent implements OnInit {
         BlackLogo: '/assets/icons/master.png',
         WhiteLogo: '/assets/icons/masterswhite.png',
         SubModuleList: MasterSubModuleList,
-      },
-      {
-        Name: 'Estimate Stage',
-        RouterLink: '',
-        BlackLogo: '/assets/icons/site management.png',
-        WhiteLogo: '/assets/icons/companywhite.png',
-        SubModuleList: EstimateStages,
       },
       {
         Name: 'Site Management',

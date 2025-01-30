@@ -2,23 +2,45 @@
   <div class="headers">
     <div class="row">
       <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
-        <h5 style="padding-top: 3px;" class="title title_light">All Actual Stages</h5>
+        <h5 style="padding-top: 3px;" class="title title_light">All Stages</h5>
       </div>
       <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light">
         <input type="text" Class="search-box_light" placeholder="Search..." autofocus />
       </div>
       <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
-        <button nz-button class="btn1 mt-1" (click)="AddStages()">
+        <nz-button nz-button class="btn1 mt-1" (click)="AddStages()">
           Add Stages
-        </button>
+        </nz-button>
       </div>
     </div>
+    <div class="row">
+       <div class="col-md-4 mb-2">
+        <label for="Date"><b>Date</b></label>
+        <input type="Date" class="form-control" id="Date" name="Date" />
+      </div>
+      <div class="col-md-4 mb-2">
+        <label for="OwnerName"><b>Owner Name</b></label>
+        <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="OwnerName" name="OwnerName" [nzSize]="'large'"
+          [(ngModel)]="OwnerRef" (ngModelChange)="getOwnerRef(OwnerRef)">
+          <nz-option *ngFor="let owner of OwnerList"
+          [nzValue]="owner" [nzLabel]="owner"></nz-option>
+        </nz-select>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label for="stage"><b>Stage</b></label>
+        <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="stage" name="stage" [nzSize]="'large'"
+          [(ngModel)]="OwnerRef" (ngModelChange)="getOwnerRef(OwnerRef)">
+          <nz-option *ngFor="let stage of StagesList"
+          [nzValue]="stage" [nzLabel]="stage"></nz-option>
+        </nz-select>
+      </div> 
+    </div>
   </div>
+  <!-- Machinary Expense -->
   <div class="table-container" style="margin-top: 2rem;">
     <div class="row">
       <div class="col-12">
-        <label
-          style="background-color: rgb(254, 169, 183); height: 36px;text-align: center; width:100%; font-size:larger;">
+        <label class="TableHeading">
           Machinary Expense</label>
       </div>
     </div>
@@ -36,6 +58,154 @@
           <td Class="tbldata">20</td>
           <td Class="tbldata">20</td>
           <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td class="tbldata">
+            <span style="margin-left: 9px;">
+              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+            </span>
+            <span style="margin-left: 9px;">
+              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+
+  <!-- Labour Expense -->
+  <div class="table-container" style="margin-top: 2rem;">
+    <div class="row">
+      <div class="col-12">
+        <label class="TableHeading">
+          Labour Expense</label>
+      </div>
+    </div>
+    <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
+      nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let Labour_Expense of Labour_Expense" class="tblheadersecond">{{ Labour_Expense }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td Class="tbldata">1</td>
+          <td Class="tbldata">SAMAPLE1</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td class="tbldata">
+            <span style="margin-left: 9px;">
+              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+            </span>
+            <span style="margin-left: 9px;">
+              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+
+  <!-- Other Expense  -->
+  <div class="table-container" style="margin-top: 2rem;">
+    <div class="row">
+      <div class="col-12">
+        <label class="TableHeading">
+          Other Expense</label>
+      </div>
+    </div>
+    <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
+      nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let Other_Expense of Other_Expense" class="tblheadersecond">{{ Other_Expense }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td Class="tbldata">1</td>
+          <td Class="tbldata">SAMAPLE1</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td class="tbldata">
+            <span style="margin-left: 9px;">
+              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+            </span>
+            <span style="margin-left: 9px;">
+              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+
+  <!-- Office Details  -->
+  <div class="table-container" style="margin-top: 2rem;">
+    <div class="row">
+      <div class="col-12">
+        <label class="TableHeading">
+          Other Expense</label>
+      </div>
+    </div>
+    <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
+      nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let Office_Details of Office_Details" class="tblheadersecond">{{ Office_Details }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td Class="tbldata">1</td>
+          <td Class="tbldata">SAMAPLE1</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td Class="tbldata">20</td>
+          <td class="tbldata">
+            <span style="margin-left: 9px;">
+              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+            </span>
+            <span style="margin-left: 9px;">
+              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+
+  <!-- Government Details -->
+  <div class="table-container" style="margin-top: 2rem;">
+    <div class="row">
+      <div class="col-12">
+        <label class="TableHeading">
+          Government Details</label>
+      </div>
+    </div>
+    <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
+      nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let Government_Details of Government_Details" class="tblheadersecond">{{ Government_Details }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td Class="tbldata">1</td>
+          <td Class="tbldata">SAMAPLE1</td>
           <td Class="tbldata">20</td>
           <td Class="tbldata">20</td>
           <td Class="tbldata">20</td>

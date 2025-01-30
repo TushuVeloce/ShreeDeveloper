@@ -10,7 +10,6 @@ import { AttendanceAndSalaryComponent } from './hr_payroll_management/attendance
 import { DashboardComponent } from './Dashboard/dashboard.component';
 import { SiteManagementMasterComponent } from './site-management/site-management-master/site-management-master.component';
 import { SiteManagementActualStagesComponent } from './site-management/site-management-actual-stages/site-management-actual-stages.component';
-import { EstimateStagesComponent } from './estimate-stages/estimate-stages.component';
 import { CompanyMasterComponent } from './Masters/company/company-master/company-master.component';
 import { CompanyMasterDetailsComponent } from './Masters/company/company-master-details/company-master-details.component';
 import { VendorMasterComponent } from './Masters/vendor/vendor-master/vendor-master.component';
@@ -52,6 +51,8 @@ import { UserRoleMasterDetailsComponent } from './Masters/user_role/user-role-ma
 import { EmployeeMasterComponent } from './Masters/employee/employee-master/employee-master.component';
 import { EmployeeMasterDetailsComponent } from './Masters/employee/employee-master-details/employee-master-details.component';
 import { SiteManagementActualStagesDetailsComponent } from './site-management/site-management-actual-stages-details/site-management-actual-stages-details.component';
+import { EstimateStagesComponent } from './estimate_stages/estimate-stages/estimate-stages.component';
+import { EstimateStagesDetailsComponent } from './estimate_stages/estimate-stages-details/estimate-stages-details.component';
 
 const routes: Routes = [
   {
@@ -86,6 +87,7 @@ const routes: Routes = [
       { path: 'Employee_Master_Details', component: EmployeeMasterDetailsComponent},
      
       { path: 'Estimate_Stages', component: EstimateStagesComponent},
+      { path: 'Estimate_Stages_details', component: EstimateStagesDetailsComponent},
 
 
       { path: 'site_management_Master', component: SiteManagementMasterComponent},
