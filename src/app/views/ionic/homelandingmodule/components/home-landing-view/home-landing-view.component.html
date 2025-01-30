@@ -30,7 +30,7 @@
             </div>
           </ion-card-header>
           <ion-card-content>
-            Manage your ongoing and upcoming projects.
+            10+
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -38,18 +38,46 @@
       <ion-col size="6" size-md="6">
         <ion-card class="small-card">
           <ion-card-header>
-            <div class="card-header-content" (click)="goToReports()">
+            <div class="card-header-content" (click)="goToCRM()">
+              <ion-icon class="card-icon" name="people-outline"></ion-icon>
+              <ion-card-title>CRM</ion-card-title>
+            </div>
+          </ion-card-header>
+          <ion-card-content>
+            10+
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6" size-md="6">
+        <ion-card class="small-card">
+          <ion-card-header>
+            <div class="card-header-content" (click)="goToMarketing()">
               <ion-icon class="card-icon" name="analytics-outline"></ion-icon>
+              <ion-card-title>Marketing</ion-card-title>
+            </div>
+          </ion-card-header>
+          <ion-card-content>
+            10+
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6" size-md="6">
+        <ion-card class="small-card">
+          <ion-card-header>
+            <div class="card-header-content" (click)="goToReports()">
+              <ion-icon class="card-icon" name="reader-outline"></ion-icon>
               <ion-card-title>Report</ion-card-title>
             </div>
           </ion-card-header>
           <ion-card-content>
-            Analyze and track your performance metrics.
+            10+
           </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
+
 
   <ion-grid [fixed]="true">
     <ion-row>

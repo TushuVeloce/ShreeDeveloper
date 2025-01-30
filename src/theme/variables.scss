@@ -1,30 +1,55 @@
-// For information on how to create your own theme, please see:
-// http://ionicframework.com/docs/theming/
-
 :root {
-    /* Light mode */
+    /* Primary Color - Deep Maroon */
     --ion-color-primary: #7c2424;
-    /* Deep Maroon */
+    --ion-color-primary-rgb: 124, 36, 36;
     --ion-color-primary-contrast: #ffffff;
-    /* White for contrast */
-    --ion-background-color: #f8f9fa;
-    /* Off-White for a clean background */
-    --ion-text-color: #333;
-    /* Rich Brown for text */
-    --ion-accent-color: #d4af37;
-    /* Gold for highlights */
-}
+    --ion-color-primary-contrast-rgb: 255, 255, 255;
+    --ion-color-primary-shade: #6e2020;
+    /* Darker Maroon */
+    --ion-color-primary-tint: #8d2e2e;
+    /* Lighter Maroon */
 
-[data-theme='dark'] {
-    /* Dark mode */
-    --ion-color-primary: #7c2424;
-    /* Deep Maroon stays consistent */
-    --ion-color-primary-contrast: #ffffff;
-    /* White for contrast */
-    --ion-background-color: #212121;
-    /* Rich Black for dark mode */
-    --ion-text-color: #ffffff;
-    /* Warm Beige for softer text */
-    --ion-accent-color: #d4af37;
-    /* Gold for highlights */
+    /* Secondary Color - Muted Gold */
+    --ion-color-secondary: #d4af37;
+    --ion-color-secondary-rgb: 212, 175, 55;
+    --ion-color-secondary-contrast: #ffffff;
+    --ion-color-secondary-shade: #b4942f;
+    --ion-color-secondary-tint: #e2bf4a;
+
+    /* Tertiary Color - Warm Beige */
+    --ion-color-tertiary: #c4a484;
+    --ion-color-tertiary-rgb: 196, 164, 132;
+    --ion-color-tertiary-contrast: #000000;
+    --ion-color-tertiary-shade: #a98f71;
+    --ion-color-tertiary-tint: #d3b798;
+
+    /* Backgrounds & Surface */
+    --ion-background-color: #ffffff;
+    /* Light Mode */
+    --ion-background-color-step-50: #f9f9f9;
+    --ion-background-color-step-100: #f2f2f2;
+    --ion-item-background: #f7f7f7;
+
+    /* Dark Mode */
+    [data-theme='dark'] {
+        --ion-background-color: #212121;
+        --ion-background-color-step-50: #2a2a2a;
+        --ion-background-color-step-100: #333333;
+        --ion-item-background: #292929;
+        --ion-text-color: #ffffff;
+        --ion-color-primary: #9e4545;
+        --ion-color-secondary: #b4942f;
+        --ion-color-tertiary: #a98f71;
+    }
+
+    /* Text Colors */
+    --ion-text-color: #333333;
+    --ion-text-color-rgb: 51,
+    51,
+    51;
+    --ion-text-color-dark: #ffffff;
+
+    /* Accent Color */
+    --ion-color-accent: #e67e22;
+    /* Warm Orange */
 }

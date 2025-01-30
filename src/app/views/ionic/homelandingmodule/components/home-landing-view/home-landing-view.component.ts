@@ -42,7 +42,12 @@ export class HomeLandingViewComponent  implements OnInit {
   goToReports= async()=> {
     await this.router.navigate(['/app_homepage/task']);
   }
-
+  goToCRM = async () => {
+    await this.router.navigate(['/app_homepage/task']);
+  }
+  goToMarketing = async () => {
+    await this.router.navigate(['/app_homepage/task']);
+  }
   // Navigate to the Task page
    goToTask = async ()=> {
      await this.router.navigate(['/app_homepage/task']);
