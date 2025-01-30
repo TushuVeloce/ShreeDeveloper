@@ -1,17 +1,3 @@
-.custom-bottom-sheet {
-    --border-radius: 20px 20px 0px 0px;
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    max-height: 50vh;
-    /* Maximum height of 50% of the viewport */
-    min-height: 0;
-    /* Allow dynamic resizing */
-    background: white;
-}
-
 /* Fixed Handle for Dragging */
 .drag-handle {
     width: 40px;
@@ -21,44 +7,96 @@
     margin: 10px auto;
 }
 
-/* Header takes only necessary space */
-ion-header {
-    flex-shrink: 0;
-    /* Prevent the header from shrinking */
-}
-
 /* Scrollable Content */
 .scroll-content {
     flex-grow: 1;
-    /* Allow content to grow and fill available space */
     overflow-y: auto;
-    /* Enables scrolling when content overflows */
-    padding: 10px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
-    /* Make sure content flows downwards */
 }
 
-/* Filter Container: Two-column layout */
+/* Filter Container: Two-column layout with independent scrolling */
 .filter-container {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
     gap: 20px;
-    /* Space between the columns */
+    height: 100%;
+    /* Ensure it takes full height */
+    overflow: hidden;
+    /* Prevent container overflow */
 }
 
-/* Left Column - Main Filters */
+/* Main Filter List with Dot for Selected Filters */
 .main-filters {
     flex: 1;
-    display: flex;
-    flex-direction: column;
+    max-height: 60vh;
+    overflow-y: auto;
+    /* Hide the scrollbar */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer and Edge */
 }
 
-/* Right Column - Filter Options */
+.main-filters::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari, and Opera */
+}
+
+/* Selected Item in Main Filters */
+.main-filters ion-item.selected {
+    background-color: var(--ion-color-light);
+    font-weight: bold;
+    position: relative;
+    /* Ensure the parent has relative positioning */
+}
+
+/* Dot on Selected Filter */
+.main-filters ion-item.selected::before {
+    content: '•';
+    /* Dot character */
+    font-size: 20px;
+    color: var(--ion-color-primary);
+    /* Adjust dot color */
+    position: absolute;
+    left: -25px;
+    /* Position the dot */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Dynamic Options (Right Column) */
 .filter-options {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    max-height: 60vh;
+    overflow-y: auto;
+    /* Hide the scrollbar */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer and Edge */
+}
+
+.filter-options::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari, and Opera */
+}
+
+/* Highlight Selected Option in Filter Options */
+.filter-options ion-item.selected {
+    background-color: var(--ion-color-light);
+    font-weight: bold;
+}
+
+/* Footer Actions with Multiple Button Styling */
+.footer-actions {
+    padding: 10px;
+    box-shadow: 0px -1px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer Actions */
+.footer-actions {
+    padding: 10px;
+    // background: white;
+    box-shadow: 0px -1px 5px rgba(0, 0, 0, 0.1);
 }

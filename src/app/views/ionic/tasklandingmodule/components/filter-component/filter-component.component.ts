@@ -10,50 +10,66 @@ import { ModalController } from '@ionic/angular';
 export class FilterComponentComponent implements OnInit {
   constructor(private modalController: ModalController) { }
 
-  ngOnInit() { }
-
-  // Main Filter Categories (Dynamic list)
   filterCategories = [
     { label: 'Owner Name', key: 'ownerName' },
     { label: 'Type', key: 'type' },
     { label: 'Status', key: 'status' },
   ];
 
-  // Available options for each filter category
   filterOptions: { [key: string]: string[] } = {
     ownerName: ['Owner 1', 'Owner 2', 'Owner 3'],
     type: ['Type 1', 'Type 2', 'Type 3'],
     status: ['Active', 'Inactive', 'Pending'],
   };
 
-  // Object to store selected filter values
   filters: { [key: string]: string | null } = {
     ownerName: null,
     type: null,
     status: null,
   };
 
-  // Selected Filter Category
   selectedFilter: string = '';
+  selectedFilterOptions: string[] = [];
 
-  // Get options for the selected filter category
-  getFilterOptions(filterKey: string): string[] {
-    return this.filterOptions[filterKey] ?? [];
-  }
+  ngOnInit() { }
 
-  // Select a filter category (click handler)
+  // Select a main filter and show its options
   selectFilter(filter: { label: string; key: string }) {
     this.selectedFilter = filter.key;
+    this.selectedFilterOptions = this.filterOptions[filter.key] ?? [];
   }
 
-  // Dismiss Modal
+  // Toggle the filter selection (only one option can be selected per filter)
+  toggleFilter(filterKey: string, option: string) {
+    // If the same option is clicked again, deselect it
+    if (this.filters[filterKey] === option) {
+      this.filters[filterKey] = null;
+    } else {
+      this.filters[filterKey] = option;
+    }
+  }
+
+  // Apply selected filters
+  applyFilters() {
+    console.log('Applied Filters:', this.filters);
+    this.dismissModal();
+  }
+
+  // Close the modal
   dismissModal() {
     this.modalController.dismiss();
   }
 
-  // Apply Filters
-  applyFilters() {
-    console.log('Applied Filters:', this.filters);
+  // Check if a filter has been selected (for the dot)
+  isFilterSelected(filterKey: string): boolean {
+    return this.filters[filterKey] !== null;
+  }
+  clearFilters() {
+    this.filters = {
+      ownerName: null,
+      type: null,
+      status: null,
+    };
     this.dismissModal();
   }
 }

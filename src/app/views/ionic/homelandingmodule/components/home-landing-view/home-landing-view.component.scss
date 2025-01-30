@@ -95,20 +95,32 @@ ion-card-content {
     font-size: 1rem;
     /* Base font size for content */
 }
+h2,h3{
+        color: var(--ion-text-color);
+}
 
 .scrollable-list {
     max-height: 400px;
     /* Set a maximum height for the list */
-    overflow-y: auto;
+    overflow-y: scroll;
     /* Enable vertical scrolling */
-    border: 1px solid #ccc;
+    border: 1px solid var(--ion-text-color);
     /* Optional: Add a border for better visibility */
-    border-radius: 8px;
+    border-radius: 20px;
     /* Optional: Rounded corners */
-    padding: 10px;
+    // padding: 2px;
     /* Optional: Padding inside the scrollable area */
-    background-color: #f8f8f8;
-    /* Optional: Background color */
+    background-color: var(--ion-text-color);
+    /* Uncomment and fix this line for background color */
+    /* Hide the scrollbar */
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* Internet Explorer and Edge */
+}
+.scrollable-list::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari, and Opera */
 }
 
 /* Responsive Styles */
@@ -189,108 +201,5 @@ ion-card-content {
         font-size: 20px;
         /* Smaller icon size for very small screens */
     }
-
-    ion-card-title {
-        font-size: 1rem;
-        /* Even smaller title font size for very small screens */
-    }
-
-    ion-card-content {
-        font-size: 0.8rem;
-        /* Even smaller content font size for very small screens */
-    }
-
-    .card-icon {
-        font-size: 20px;
-        /* Smaller icon size for very small screens */
-    }
 }
 
-#container {
-    text-align: center;
-
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-#container strong {
-    font-size: 20px;
-    line-height: 26px;
-}
-
-#container p {
-    font-size: 16px;
-    line-height: 22px;
-
-    color: #8c8c8c;
-
-    margin: 0;
-}
-
-#container a {
-    text-decoration: none;
-}
-
-button {
-    background-color: #7c2424;
-    color: #333;
-}
-
-
-.app-header {
-    --background: #fff;
-    box-shadow: none;
-    /* Optional: Set a background color */
-}
-
-.app-title {
-    text-align: center;
-    font-size: 1rem;
-    font-weight: bold;
-    flex: 1;
-    /* This allows the title to take up available space */
-    margin-left: -50px;
-    /* Adjust this value as needed to center the title */
-    margin-right: -50px;
-    /* Adjust this value as needed to center the title */
-}
-
-.ion-content-scroll-host {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    overflow-y: auto;
-}
-
-// :root {
-//     /* Light mode */
-//     --ion-color-primary: #7c2424;
-//     /* Deep Maroon */
-//     --ion-color-primary-contrast: #ffffff;
-//     /* White for contrast */
-//     --ion-background-color: #f8f9fa;
-//     /* Off-White for a clean background */
-//     --ion-text-color: #333;
-//     /* Rich Brown for text */
-//     --ion-accent-color: #d4af37;
-//     /* Gold for highlights */
-// }
-
-// [data-theme='dark'] {
-//     /* Dark mode */
-//     --ion-color-primary: #7c2424;
-//     /* Deep Maroon stays consistent */
-//     --ion-color-primary-contrast: #ffffff;
-//     /* White for contrast */
-//     --ion-background-color: #212121;
-//     /* Rich Black for dark mode */
-//     --ion-text-color: #ffffff;
-//     /* Warm Beige for softer text */
-//     --ion-accent-color: #d4af37;
-//     /* Gold for highlights */
-// }

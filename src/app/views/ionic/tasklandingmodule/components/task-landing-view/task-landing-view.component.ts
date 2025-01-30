@@ -134,16 +134,14 @@ export class TaskLandingViewComponent implements OnInit {
     const modal = await this.modalCtrl.create({
       component: FilterComponentComponent,
       canDismiss: true,
-      breakpoints: [0, 0.5,0.7], // Allows dragging between 0% and 50%
-      initialBreakpoint: 0.5, // Open at minimum height based on content
-      handle: false, // We'll add a custom handle
+      breakpoints: [0, 0.4], // Adjusted breakpoints
+      initialBreakpoint: 0.4,
+      backdropBreakpoint:0.4,
+      handle: false, // Using custom handle
       cssClass: 'custom-bottom-sheet',
       backdropDismiss: true
     });
 
     await modal.present();
   }
-
-
-
 }
