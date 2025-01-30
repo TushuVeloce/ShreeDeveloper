@@ -1,15 +1,25 @@
 <div class="card-body">
   <div class="card" style="padding: 1rem">
-    <form>
-      <div class="row">
-        <div class="col-md-4">
-          <h5 class="title">Vendor Master</h5>
-        </div>
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackVendor()">
+          <img
+            src="/assets/icons/arrow-button.png"
+            alt=""
+            width="34px"
+            height="34px"
+          />
+        </button>
       </div>
+      <div class="col-md-11">
+        <span class="detail_title">Vendor Master</span>
+      </div>
+    </div>
+    <form>
       <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
         <div class="col-md-6">
           <div>
-            <label><b>Vendor Name</b></label>
+           <label>Vendor Name</label>
             <input
               type="text"
               name="vendorname"
@@ -22,7 +32,7 @@
         </div>
         <div class="col-md-6">
           <div>
-            <label><b>Vendor Phone Number</b> </label>
+           <label>Vendor Phone Number</label>
             <input
               type="text"
               name="phno"
@@ -37,7 +47,7 @@
       <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
         <div class="col-md-6">
           <div>
-            <label><b>Vendor Address</b></label>
+           <label>Vendor Address</label>
             <input
               type="text"
               name="vendoraddress"
@@ -50,7 +60,7 @@
         </div>
         <div class="col-md-6">
           <div>
-            <label><b>Material Name</b></label>
+           <label>Material Name</label>
             <input
               type="text"
               name="materialname"
@@ -67,7 +77,7 @@
             <button type="button" class="btn">Save</button>
           </div>
           <div>
-            <button type="button" class="btn" routerLink="/homepage/dashboard" (click)="BackVendor()">Back</button>
+            <button type="button" class="btn"  (click)="BackVendor()">Back</button>
           </div>
       </div>
     </form>

@@ -1,3 +1,161 @@
-<p>
-  employee-master-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackEmployee()">
+          <img
+            src="/assets/icons/arrow-button.png"
+            alt=""
+            width="34px"
+            height="34px"
+          />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">Employee Master</span>
+      </div>
+    </div>
+    <form>
+      <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
+        <div class="col-md-4">
+          <div>
+           <label>Role</label>
+            <select  type="text" name="role" class="form-control" id="role" required>
+              <option>--Select Role--</option>
+              <option>XYZ</option>
+              </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+           <label>First Name</label>
+            <input
+              type="text"
+              name="firstname"
+              class="form-control"
+              id="firstname"
+              required
+              placeholder="Enter First Name"
+            />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+           <label>Last Name</label>
+            <input
+              type="text"
+              name="lastname"
+              class="form-control"
+              id="lastname"
+              required
+              placeholder="Enter Last Name"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
+        <div class="col-md-4">
+          <div>
+           <label>Email id</label>
+            <input
+              type="text"
+              name="emailid"
+              class="form-control"
+              id="emailid"
+              required
+              placeholder="Enter Email id"
+            />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+           <label>Contact No</label>
+            <input
+              type="text"
+              name="contactno"
+              class="form-control"
+              id="contactno"
+              required
+              placeholder="Enter Contact No"
+            />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+           <label>Address</label>
+            <input
+              type="text"
+              name="address"
+              class="form-control"
+              id="address"
+              required
+              placeholder="Enter Address"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
+        <div class="col-md-4">
+          <div>
+           <label>Gender</label>
+            <select  type="text" name="gender" class="form-control" id="gender" required>
+              <option>--Select Gender--</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+           <label>Emp Id</label>
+            <input
+              type="text"
+              name="empid"
+              class="form-control"
+              id="empid"
+              required
+            />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+           <label>Department Name </label>
+            <select  type="text" name="departmentname" class="form-control" id="departmentname" required>
+              <option>--Select Department--</option>
+              <option>ABC</option>
+              </select>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
+        <div class="col-md-4">
+          <div>
+           <label>Login Status</label>
+            <select  type="text" name="loginstatus" class="form-control" id="loginstatus" required>
+              <option>--Select Login Status--</option>
+              <option value="Enable">Enable</option>
+              <option value="Disable">Disable</option>
+              </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Is User</label>
+            <select  type="text" name="isuser" class="form-control" id="isuser" required >
+              <option value="true">Yes</option>
+              <option value="false" selected>No</option>
+              </select>
+          </div>
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem;"   >
+          <div>
+            <button type="button" class="btn">Save</button>
+          </div>
+          <div>
+            <button type="button" class="btn"  (click)="BackEmployee()">Back</button>
+          </div>
+      </div>
+    </form>
+  </div>
+</div>

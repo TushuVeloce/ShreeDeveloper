@@ -33,11 +33,12 @@ import { UserRoleMasterComponent } from './Masters/user_role/user-role-master/us
 import { UserRoleMasterDetailsComponent } from './Masters/user_role/user-role-master-details/user-role-master-details.component';
 import { EmployeeMasterComponent } from './Masters/employee/employee-master/employee-master.component';
 import { EmployeeMasterDetailsComponent } from './Masters/employee/employee-master-details/employee-master-details.component';
+import { SiteManagementActualStagesDetailsComponent } from './site-management/site-management-actual-stages-details/site-management-actual-stages-details.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent  ,StageMasterComponent,StageMasterDetailsComponent, AccountMainLedgerComponent,AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingMasterComponent,MarketingMasterDetailsComponent,
     VendorMasterComponent,VehicleMasterComponent,VendorMasterDetailsComponent, BankMasterComponent,BankMasterDetailsComponent, UserMasterComponent,UserMasterDetailsComponent, CompanyMasterComponent,CompanyMasterDetailsComponent, DepartmentMasterComponent,DepartmentMasterDetailsComponent, UserRoleMasterComponent,UserRoleMasterDetailsComponent, EmployeeMasterComponent,EmployeeMasterDetailsComponent,
-    SiteManagementMasterComponent,SiteManagementActualStagesComponent],
+    SiteManagementMasterComponent,SiteManagementActualStagesComponent,SiteManagementActualStagesDetailsComponent],
   imports: [
     CommonModule,WebRoutingModule,FormsModule,NzDropDownModule,NzTableModule,IonicModule.forRoot()
   ],

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-bank-master-details',
@@ -8,8 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BankMasterDetailsComponent  implements OnInit {
 
-  constructor() { }
+  constructor( private router:Router) { }
 
   ngOnInit() {}
+
+  BackBank(){
+    this.router.navigate(['/homepage/Website/Bank_Master']);
+   }
 
 }

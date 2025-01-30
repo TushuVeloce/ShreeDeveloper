@@ -1,15 +1,25 @@
 <div class="card-body">
   <div class="card" style="padding: 1rem">
-    <form>
-      <div class="row">
-        <div class="col-md-4">
-          <h5 class="title">Vehicle Master</h5>
-        </div>
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackVehicle()">
+          <img
+            src="/assets/icons/arrow-button.png"
+            alt=""
+            width="34px"
+            height="34px"
+          />
+        </button>
       </div>
+      <div class="col-md-11">
+        <span class="detail_title">Vehicle Master</span>
+      </div>
+    </div>
+    <form>
       <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
         <div class="col-md-6">
           <div>
-            <label><b>Vehicle Name</b></label>
+           <label>Vehicle Name</label>
             <input
               type="text"
               name="vehicalname"
@@ -26,7 +36,7 @@
             <button type="button" class="btn">Save</button>
           </div>
           <div>
-            <button type="button" class="btn" routerLink="/homepage/dashboard" (click)="BackVehicle()">Back</button>
+            <button type="button" class="btn"  (click)="BackVehicle()">Back</button>
           </div>
       </div>
     </form>

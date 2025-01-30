@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-department-master-details',
@@ -8,8 +10,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DepartmentMasterDetailsComponent  implements OnInit {
 
-  constructor() { }
+  constructor( private router: Router) { }
 
   ngOnInit() {}
+
+  BackDepartment(){
+    this.router.navigate(['/homepage/Website/Department_Master']);
+   }
 
 }

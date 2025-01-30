@@ -1,3 +1,79 @@
-<p>
-  user-master-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackUser()">
+          <img
+            src="/assets/icons/arrow-button.png"
+            alt=""
+            width="34px"
+            height="34px"
+          />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">User Master</span>
+      </div>
+    </div>
+    <form>
+      <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
+        <!-- <div class="col-md-6">
+          <div>
+           <label>User Name</label>
+            <select  type="text" name="username" class="form-control" id="username" required>
+              <option>--Select User--</option>
+              <option>Tushar</option>
+              </select>
+          </div>
+        </div> -->
+        <div class="col-md-4">
+          <div>
+           <label>Email Id</label>
+            <input
+              type="text"
+              name="emailid"
+              class="form-control"
+              id="emailid"
+              required
+              placeholder="Enter Email Id"
+            />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+           <label>Contact No</label>
+            <input
+              type="text"
+              name="contactno"
+              class="form-control"
+              id="contactno"
+              required
+              placeholder="Enter Contact No"
+            />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+           <label>Default Password</label>
+            <input
+              type="password"
+              name="password"
+              class="form-control"
+              id="password"
+              required
+              placeholder="Enter Default Password"
+            />
+          </div>
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem;"   >
+          <div>
+            <button type="button" class="btn">Save</button>
+          </div>
+          <div>
+            <button type="button" class="btn" (click)="BackUser()">Back</button>
+          </div>
+      </div>
+    </form>
+  </div>
+</div>

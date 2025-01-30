@@ -1,71 +1,16 @@
-<div class="container-fluid">
-  <div class="card-body">
-    <div class="card" style="padding: 1rem">
-      <form>
-        <div class="row">
-          <div class="col-md-4">
-            <h5 class="title">User Master</h5>
-          </div>
-        </div>
-        <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
-          <div class="col-md-6">
-            <div>
-              <label><b>User Name</b></label>
-              <select  type="text" name="username" class="form-control" id="username" required>
-                <option>--Select User--</option>
-                <option>Tushar</option>
-                </select>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div>
-              <label><b>Email Id</b></label>
-              <input
-                type="text"
-                name="emailid"
-                class="form-control"
-                id="emailid"
-                required
-                placeholder="Enter Email Id"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="row" style="margin-top: 2rem; margin-bottom: 2rem; ">
-          <div class="col-md-6">
-            <div>
-              <label><b>Mobile No</b></label>
-              <input
-                type="text"
-                name="mobno"
-                class="form-control"
-                id="mobno"
-                required
-                placeholder="Enter Mobile No"
-              />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div>
-              <label><b>Role</b></label>
-              <select  type="text" name="role" class="form-control" id="role" required>
-                <option>--Select Role--</option>
-                <option>Admin</option>
-                </select>
-            </div>
-          </div>
-        </div>
-        <div style="justify-content: center; display: flex; gap: 2rem;"   >
-            <div>
-              <button type="button" class="btn">Save</button>
-            </div>
-            <div>
-              <button type="button" class="btn" routerLink="/homepage/dashboard">Back</button>
-            </div>
-        </div>
-      </form>
-    </div>
+<div class="row">
+  <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
+    <h5 style="padding-top: 3px;" class="title title_light">User Master</h5>
   </div>
+  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light">
+    <input type="text" Class="search-box_light" placeholder="Search..." autofocus />
+  </div>
+  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
+    <button nz-button class="btn1 mt-1" (click)= 'AddUser()'>
+      Add User
+    </button>
+  </div>
+</div>
   <div class="table-container" style="margin-top: 2rem;">
     <nz-table #basicTable nzSize="small" class="no-hover-table" 
       Class="bgtable_light" [nzScroll]="{x:'auto' }"
@@ -78,10 +23,9 @@
       <tbody>
         <tr>
           <td Class="tbldata">1</td>
-          <td Class="tbldata">TUSHAR</td>
           <td Class="tbldata">tushar&#64;gmail.com</td>
           <td Class="tbldata">9527572020</td>
-          <td Class="tbldata">ADMIN</td>
+          <td Class="tbldata">1236</td>
           <td class="tbldata">
             <span style="margin-left: 9px;">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
@@ -94,4 +38,4 @@
       </tbody>
     </nz-table>
   </div>
-</div>
+
