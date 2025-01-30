@@ -176,8 +176,6 @@ export class SidebarlayoutComponent implements OnInit {
     }
   }
 
-
-
   isRouteActive(route: string, ModuleName: string) {
     return this.currentRoute === route;
   }
@@ -321,14 +319,6 @@ export class SidebarlayoutComponent implements OnInit {
       },
     ]
 
-    let EstimateStages = [
-      {
-        Name: 'Estimate Stages',
-        RouterLink: '/homepage/Website/Estimate_Stages',
-        LogoPath: '',
-      },
-    ]
-
     let SiteManagementSubModuleList = [
       {
         Name: 'New Site',
@@ -343,6 +333,34 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Estimate Stages',
         RouterLink: '/homepage/Website/Estimate_Stages',
+        LogoPath: '',
+      },
+    ]
+
+    let StockManagementSubModuleList = [
+      {
+        Name: 'Material Requisition',
+        RouterLink: '/homepage/Website/Material_Requisition',
+        LogoPath: '',
+      },
+      {
+        Name: 'Stock Order',
+        RouterLink: '/homepage/Website/Stock_Order',
+        LogoPath: '',
+      },
+      {
+        Name: 'Stock Inward',
+        RouterLink: '/homepage/Website/Stock_Inward',
+        LogoPath: '',
+      },
+      {
+        Name: 'Stock Consume',
+        RouterLink: '/homepage/Website/Stock_Consume',
+        LogoPath: '',
+      },
+      {
+        Name: 'Stock Transfer',
+        RouterLink: '/homepage/Website/Stock_Transfer',
         LogoPath: '',
       },
     ]
@@ -367,6 +385,13 @@ export class SidebarlayoutComponent implements OnInit {
         BlackLogo: '/assets/icons/dashboard.png',
         WhiteLogo: '/assets/icons/dashboard.png',
         SubModuleList: SiteManagementSubModuleList,
+      },
+      {
+        Name: 'Stock Management',
+        RouterLink: '',
+        BlackLogo: '/assets/icons/dashboard.png',
+        WhiteLogo: '/assets/icons/dashboard.png',
+        SubModuleList: StockManagementSubModuleList,
       },
     ].filter(e => e.SubModuleList.length > 0);
 

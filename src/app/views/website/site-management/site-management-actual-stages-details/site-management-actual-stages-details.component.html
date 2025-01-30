@@ -2,7 +2,7 @@
   <div class="card" style="padding: 1rem">
     <div class="row">
       <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
-        <button type="button" class="backbtn" (click)="BackMaterial()">
+        <button type="button" class="backbtn" (click)="BackActualStages()">
           <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
         </button>
       </div>
@@ -138,7 +138,7 @@
           <button type="button" class="btn">Save</button>
         </div>
         <div>
-          <button type="button" class="btn" routerLink="/homepage/dashboard">Back</button>
+          <button type="button" class="btn" (click)="BackActualStages()">Back</button>
         </div>
       </div>
     </form>

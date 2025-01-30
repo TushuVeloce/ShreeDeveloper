@@ -21,7 +21,7 @@ export class SiteManagementActualStagesDetailsComponent  implements OnInit {
 
   ngOnInit() {}
 
-  BackMaterial() {
+  BackActualStages() {
     this.router.navigate(['/homepage/Website/site_management_actual_stage']);
   }
 

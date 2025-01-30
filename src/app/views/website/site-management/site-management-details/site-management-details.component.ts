@@ -12,7 +12,7 @@ export class SiteManagementDetailsComponent  implements OnInit {
 
   ngOnInit() {}
 
-  BackMaterial() {
+  BackSiteManagement() {
     this.router.navigate(['/homepage/Website/site_management_Master']);
   }
 
