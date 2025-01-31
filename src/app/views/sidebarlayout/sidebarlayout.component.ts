@@ -38,8 +38,8 @@ interface module {
   selector: 'app-sidebarlayout',
   templateUrl: './sidebarlayout.component.html',
   styleUrls: ['./sidebarlayout.component.scss'],
-  imports: [  CommonModule, RouterLink, RouterOutlet, NzIconModule, NzLayoutModule,
-    NzMenuModule, NzDropDownModule, NzModalModule, FormsModule,FontAwesomeModule]
+  imports: [CommonModule, RouterLink, RouterOutlet, NzIconModule, NzLayoutModule,
+    NzMenuModule, NzDropDownModule, NzModalModule, FormsModule, FontAwesomeModule]
 })
 export class SidebarlayoutComponent implements OnInit {
   isDarkMode: boolean = false; // Two-way binding to checkbox
@@ -76,7 +76,7 @@ export class SidebarlayoutComponent implements OnInit {
   ModuleList: module[] = [];
   BrowserBack: boolean = false;
 
-  
+
   myDate = formatDate(new Date(), 'dd/MM/yyyy', 'en');
   d = new Date();
   myDay = WeekDay[this.d.getDay()];
@@ -101,8 +101,7 @@ export class SidebarlayoutComponent implements OnInit {
     //     this.resetSelectedMenu();
     //   }
     // });
-    console.log(this.ModuleList);
-    
+
   }
   // Method to clear active menu selections
   resetSelectedMenu(): void {
