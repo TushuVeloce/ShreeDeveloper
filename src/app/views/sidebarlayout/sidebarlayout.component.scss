@@ -159,18 +159,18 @@ nz-content {
 .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected,
 .ant-menu.ant-menu-dark .ant-menu-item-selected {
   background-color: black;
-  border: 1px solid orangered;
+  border: 1px solid brown;
   color: orangered;
-  border-radius: 5px 5px 5px 5px;
+  border-radius: 4px 4px 4px 4px;
 }
 
 .ant-menu-light.ant-menu-light:not(.ant-menu-horizontal) .ant-menu-item-selected,
 .ant-menu-submenu-popup.ant-menu-light .ant-menu-item-selected,
 .ant-menu.ant-menu-light .ant-menu-item-selected {
   background-color: white;
-  border: 1px solid orangered;
+  border: 1px solid brown;
   color: orangered;
-  border-radius: 5px 5px 5px 5px;
+  border-radius: 4px 4px 4px 4px;
 }
 
 .sidebar-menu-item {
@@ -188,7 +188,7 @@ nz-content {
   white-space: normal;
   /* Allow text to wrap */
   word-wrap: break-word;
-  line-height: 16px;
+  line-height: 22px;
 }
 
 .ant-menu-inline .ant-menu-item-selected::after,
