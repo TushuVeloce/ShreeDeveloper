@@ -41,49 +41,21 @@
       "
     >
       <div *ngFor="let module of ModuleList">
-        <div
-          style="display: flex"
-          (click)="SideMenuHideShowForModule(module.Name, true)"
-        >
-          <a
-            style="margin-top: 12px; margin-left: 20px"
-            (click)="NavigationFromLogo(module.RouterLink)"
-            *ngIf="isCollapsed"
+        <div  style="display: flex" (click)="SideMenuHideShowForModule(module.Name, true)" >
+          <a style="margin-top: 12px; margin-left: 20px" (click)="NavigationFromLogo(module.RouterLink)" *ngIf="isCollapsed"
           >
-            <img
-              [src]="module.BlackLogo"
-              alt="logo"
-              title="{{ module.Name }}"
-              style="width: 25px; height: 25px"
-            />
+            <img [src]="module.BlackLogo" alt="logo" title="{{ module.Name }}" style="width: 25px; height: 25px" />
           </a>
           <li nz-menu-item *ngIf="!isCollapsed" nz-menu-item>
-            <a
-              style="margin-top: 12px; margin-right: 12px"
-              (click)="NavigationFromLogo(module.RouterLink)"
-            >
-              <img
-                [src]="module.BlackLogo"
-                alt="logo"
-                style="width: 25px; height: 25px"
-              />
+            <a style="margin-top: 12px; margin-right: 12px" (click)="NavigationFromLogo(module.RouterLink)" >
+              <img [src]="module.BlackLogo" alt="logo" style="width: 25px; height: 25px" />
             </a>
-            <a
-              *ngIf="module.RouterLink !== ''"
-              routerLink="{{ module.RouterLink }}"
-            ></a>
+            <a  *ngIf="module.RouterLink !== ''" routerLink="{{ module.RouterLink }}" ></a>
             <span class="sidebar-menu-item">{{ module.Name }}</span>
           </li>
         </div>
         <div *ngFor="let submodule of module.SubModuleList">
-          <li
-            *ngIf="module.Name === newModulename && isShow"
-            nz-menu-item
-            #menuDiv
-            [ngClass]="{
-              'ant-menu-item-selected':
-                activeSubmodule === submodule.Name && !BrowserBack
-            }"
+          <li *ngIf="module.Name === newModulename && isShow" nz-menu-item  #menuDiv [ngClass]="{'ant-menu-item-selected': activeSubmodule === submodule.Name && !BrowserBack }"
           >
             <ul>
               <div style="display: flex;">
@@ -93,38 +65,19 @@
                   (click)="NavigationFromLogo(submodule.RouterLink)"
                   *ngIf="isCollapsed"
                 >
-                  <img
-                    src="/assets/icons/BlackRightArrow.png"
-                    alt="Arrow"
-                    style="width: 18px; height: 17px"
-                    title="{{ submodule.Name }}"
-                  />
+                  <img src="/assets/icons/BlackRightArrow.png" alt="Arrow" style="width: 18px; height: 17px" title="{{ submodule.Name }}"/>
                 </a>
                 <!-- Full Sidebar View -->
                 <li nz-menu-item *ngIf="!isCollapsed">
                   <div class="row g-1">
                     <div class="col-1">
-                      <span
-                        style="margin-top: 16px; margin-right: 5px"
-                        (click)="NavigationFromLogo(submodule.RouterLink)"
-                      >
-                        <img
-                          src="/assets/icons/BlackRightArrow.png"
-                          alt="Arrow"
-                          style="width: 18px; height: 17px"
-                        />
+                      <span style="margin-top: 16px; margin-right: 5px" (click)="NavigationFromLogo(submodule.RouterLink)"  >
+                        <img src="/assets/icons/BlackRightArrow.png" alt="Arrow" style="width: 18px; height: 17px"  />
                       </span>
                     </div>
                     <div class="col-11">
-                      <a
-                        *ngIf="submodule.RouterLink !== ''"
-                        routerLink="{{ submodule.RouterLink }}"
-                      ></a>
-                      <span
-                        class="sidebar-submenu-item"
-                        (click)="onMenuItemClick(submodule.Name)"
-                        >{{ submodule.Name }}</span
-                      >
+                      <a *ngIf="submodule.RouterLink !== ''" routerLink="{{ submodule.RouterLink }}"></a>
+                      <span class="sidebar-submenu-item" (click)="onMenuItemClick(submodule.Name)" >{{ submodule.Name }}</span>
                     </div>
                   </div>
                 </li>
@@ -156,56 +109,19 @@
        
       <div class="UserProfile pr-3">
         <a style="margin-top: 1rem">
-          <label
-            style="margin-right: 0.5rem; font-weight: bold"
-            Class="togglebtn"
-          >
-            {{ Name }}</label
-          >
+          <label style="margin-right: 0.5rem; font-weight: bold" Class="togglebtn" > {{ Name }}</label >
         </a>
         <a style="margin-right: 15px">
           <i class="fa-solid fa-bell fa-xl" style="color: #6a788a"></i>
         </a>
-        <a
-          nz-dropdown
-          nzTrigger="click"
-          [nzDropdownMenu]="menu"
-          style="margin-right: 20px"
-        >
-          <img
-            width="40px"
-            class="rounded-circle sidebar-text"
-            height="40px"
-            src="/assets/images/shreelogo.png"
-            alt="logo"
-          />
+        <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" style="margin-right: 20px" >
+          <img width="40px" class="rounded-circle sidebar-text" height="40px" src="/assets/images/shreelogo.png" alt="logo"  />
         </a>
         <nz-dropdown-menu #menu="nzDropdownMenu" Class="profile_dropdwon_light">
           <ul class="dropdown-list" nz-menu Class="profile_dropdwon_light">
-            <li
-              class="options"
-              nz-menu-item
-              routerLinkActive="active"
-              routerLink="/homepage/hotel/user_profile"
-            >
-              Your Profile
-            </li>
-            <li
-              class="options"
-              nz-menu-item
-              routerLinkActive="active"
-              routerLink="/homepage/hotel/change_password/"
-            >
-              Change Password
-            </li>
-            <li
-              class="options"
-              nz-menu-item
-              routerLinkActive="active"
-              (click)="logout()"
-            >
-              Log Out
-            </li>
+            <li class="options" nz-menu-item routerLinkActive="active" routerLink="/homepage/hotel/user_profile"> Your Profile </li>
+            <li class="options" nz-menu-item routerLinkActive="active" routerLink="/homepage/hotel/change_password/" > Change Password </li>
+            <li class="options" nz-menu-item routerLinkActive="active" (click)="logout()" > Log Out </li>
           </ul>
         </nz-dropdown-menu>
       </div>
@@ -218,13 +134,7 @@
   </nz-layout>
 </nz-layout>
 
-<div
-  class="modal fade"
-  id="sidebarModal"
-  tabindex="-1"
-  aria-labelledby="sidebarModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="sidebarModal" tabindex="-1" aria-labelledby="sidebarModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <ul nz-menu [nzTheme]="this.themeService.theme" nzMode="inline">
@@ -235,60 +145,27 @@
             (click)="SideMenuHideShowForModule(module.Name, true)"
           >
             <li nz-menu-item>
-              <a
-                style="margin-top: 12px; margin-right: 12px"
-                (click)="NavigationFromLogo(module.RouterLink)"
-              >
-                <img
-                  [src]="
-                    themeService.IsDarkModeSignal()
-                      ? module.WhiteLogo
-                      : module.BlackLogo
-                  "
-                  alt="logo"
-                  style="width: 25px; height: 25px"
-                />
+              <a style="margin-top: 12px; margin-right: 12px" (click)="NavigationFromLogo(module.RouterLink)" >
+                <img [src]=" themeService.IsDarkModeSignal() ? module.WhiteLogo : module.BlackLogo " alt="logo" style="width: 25px; height: 25px" />
               </a>
-              <a
-                *ngIf="module.RouterLink !== ''"
-                routerLink="{{ module.RouterLink }}"
-              ></a>
+              <a *ngIf="module.RouterLink !== ''" routerLink="{{ module.RouterLink }}"></a>
               <span class="sidebar-menu-item">{{ module.Name }}</span>
             </li>
           </div>
           <div *ngFor="let submodule of module.SubModuleList">
             <li *ngIf="module.Name === newModulename && isShow">
               <ul>
-                <div
-                  style="display: flex; margin-left: 19px"
-                  (click)="closeModal()"
-                >
+                <div style="display: flex; margin-left: 19px" (click)="closeModal()" >
                   <li nz-menu-item>
                     <div class="row g-1">
                       <div class="col-1">
-                        <span
-                          style="margin-top: 16px; margin-right: 5px"
-                          (click)="NavigationFromLogo(submodule.RouterLink)"
-                        >
-                          <img
-                            [src]="
-                              themeService.IsDarkModeSignal()
-                                ? '/assets/icons/WhiteRightArrow.png'
-                                : '/assets/icons/BlackRightArrow.png'
-                            "
-                            alt="Arrow"
-                            style="width: 18px; height: 17px"
-                          />
+                        <span style="margin-top: 16px; margin-right: 5px" (click)="NavigationFromLogo(submodule.RouterLink)">
+                          <img [src]=" themeService.IsDarkModeSignal() ? '/assets/icons/WhiteRightArrow.png' : '/assets/icons/BlackRightArrow.png' " alt="Arrow" style="width: 18px; height: 17px" />
                         </span>
                       </div>
                       <div class="col-11">
-                        <a
-                          *ngIf="submodule.RouterLink !== ''"
-                          routerLink="{{ submodule.RouterLink }}"
-                        ></a>
-                        <span class="sidebar-submenu-item">{{
-                          submodule.Name
-                        }}</span>
+                        <a *ngIf="submodule.RouterLink !== ''" routerLink="{{ submodule.RouterLink }}" ></a>
+                        <span class="sidebar-submenu-item">{{ submodule.Name}}</span>
                       </div>
                     </div>
                   </li>
