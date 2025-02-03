@@ -71,8 +71,7 @@
   .btn {
     background-color: brown;
     color: white;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding: 0.4rem 2.1rem;
 }
 
 .btn:hover{
@@ -244,6 +243,12 @@ nz-select {
   color: black !important; /* Color for light theme */
 }
 
+// nz-table .ant-empty-image {
+//   display: none !important;      // To remove table empty SVG
+// }
+// .ant-empty {
+//   display: none !important;     // To remove table empty SVG Text
+// }
 
 /* Light theme disabled state */
 .nzSelect-light-disabled ::ng-deep .ant-select-selector {

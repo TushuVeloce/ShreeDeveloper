@@ -15,8 +15,7 @@
 
   
   <div class="table-container" style="margin-top: 2rem;">
-    <nz-table #basicTable nzSize="small" class="no-hover-table" 
-      Class="bgtable_light" [nzScroll]="{x:'auto' }"
+    <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }" [nzNoResult]="'No data Found'"
       nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
@@ -28,7 +27,7 @@
           <td Class="tbldata">1</td>
           <td Class="tbldata">SMAPLE1</td>
           <td Class="tbldata">20</td>
-          <td class="tbldata">
+          <td class="tbldata"> 
             <span style="margin-left: 9px;">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
               </span>
