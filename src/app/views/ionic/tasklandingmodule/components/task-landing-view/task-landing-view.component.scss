@@ -2,13 +2,13 @@
 
 /* Task Card Styling */
 .task-card {
-    background: var(--ion-background-color);
+    background: var(--ion-color-tertiary);
     border-radius: 12px;
     margin: 10px;
     padding: 15px;
     box-shadow: 0 4px 6px var(--ion-background-color-step-100);
     transition: transform 0.2s ease-in-out;
-}
+} 
 
 .task-card:hover {
     transform: scale(1.02);
@@ -139,4 +139,34 @@ ion-fab {
         --padding-start: 4px;
         --padding-end: 4px;
     }
+}
+
+.custom-header {
+    background: linear-gradient(to right, var(--ion-color-accent), var(--ion-color-primary));
+    /* Green Gradient */
+    padding: 20px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    color: white;
+    text-align: center;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+}
+
+.header-title {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.left-icon,
+.right-icon {
+    font-size: 24px;
+    color: white;
 }

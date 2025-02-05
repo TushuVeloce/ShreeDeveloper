@@ -1,55 +1,7 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar>
-    <!-- Left-aligned logo -->
-    <ion-buttons slot="start">
-      <ion-button>
-        <img src="assets/logos/ShreeIcon.png" alt="Shree Developers" style="height: 60px; width: auto;" />
-      </ion-button>
-    </ion-buttons>
-
-    <!-- App title -->
-    <ion-title class="mobile-app-title">Shree Developers</ion-title>
-
-    <!-- Action buttons -->
-    <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon name="notifications-outline" size="large"></ion-icon>
-      </ion-button>
-      <ion-avatar style="width: 40px;height: 40px;">
-        <img alt="User Avatar" src="https://avatar.iran.liara.run/public" />
-      </ion-avatar>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-plan-header title="Shree Developers" ></app-plan-header>
 <ion-content>
   <ion-router-outlet></ion-router-outlet>
-  <!-- <ion-footer> -->
-<ion-tabs>
-  <ion-tab-bar slot="bottom">
-    <!-- <ion-tab-button tab="home" [routerLink]="['/home']"> -->
-    <ion-tab-button tab="home" (click)="bottomNavigationTabs('app_homepage/home')" >
-      <ion-icon name="home-outline"></ion-icon>
-      <ion-label>Home</ion-label>
-    </ion-tab-button>
 
-    <!-- <ion-tab-button tab="task" [routerLink]="['/task']"> -->
-    <ion-tab-button tab="task" (click)="bottomNavigationTabs('app_homepage/task')">
-      <ion-icon name="clipboard-outline"></ion-icon>
-      <ion-label>Task</ion-label>
-    </ion-tab-button>
-
-    <!-- <ion-tab-button tab="attendance" [routerLink]="['/attendance']"> -->
-    <ion-tab-button tab="attendance" (click)="bottomNavigationTabs('app_homepage/attendance')">
-      <ion-icon name="calendar-outline"></ion-icon>
-      <ion-label>Attendance</ion-label>
-    </ion-tab-button>
-
-    <!-- <ion-tab-button tab="settings" [routerLink]="['/settings']"> -->
-    <ion-tab-button tab="settings" (click)="bottomNavigationTabs('app_homepage/settings')">
-      <ion-icon name="settings-outline"></ion-icon>
-      <ion-label>Settings</ion-label>
-    </ion-tab-button>
-  </ion-tab-bar>
-</ion-tabs>
-<!-- </ion-footer> -->
+  <!-- Mobile Bottom Tabs -->
+<app-mobile-bottom-tabs></app-mobile-bottom-tabs>
 </ion-content>

@@ -144,4 +144,8 @@ export class TaskLandingViewComponent implements OnInit {
 
     await modal.present();
   }
+
+  handleSelection(value: string) {
+    console.log('Selected:', value);
+  }
 }

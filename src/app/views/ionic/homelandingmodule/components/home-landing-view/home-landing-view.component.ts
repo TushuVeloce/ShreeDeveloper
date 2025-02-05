@@ -8,15 +8,24 @@ import { Router } from '@angular/router';
   standalone:false
 })
 export class HomeLandingViewComponent  implements OnInit {
-  // List of items
-  itemList: { name: string; description: string }[] = [
-    { name: 'Item 1', description: 'Description 1' },
-    { name: 'Item 2', description: 'Description 2' },
-    { name: 'Item 3', description: 'Description 3' },
-  ];
+  userName: string = "John Doe"; 
+  Role: string = "Site Manager";
+  PunchInTime: string = "12.00 PM 05-02-2025"; 
+  tasks: { title: string; description: string; }[] = []; 
 
-  // List of tasks
-  tasks: { title: string; description: string }[] = [
+  constructor(
+    private router: Router,
+  ) {
+  this.loadTasks();
+   }
+
+  ngOnInit(): void {
+    console.log('HomeComponent initialized');
+  }
+
+loadTasks() {
+  // Example API call or data fetching logic
+  this.tasks = [
     { title: 'Task 1', description: 'Description 1' },
     { title: 'Task 2', description: 'Description 2' },
     { title: 'Task 3', description: 'Description 3' },
@@ -24,14 +33,7 @@ export class HomeLandingViewComponent  implements OnInit {
     { title: 'Task 5', description: 'Description 5' },
     { title: 'Task 6', description: 'Description 6' },
   ];
-
-  constructor(
-    private router: Router,
-  ) { }
-
-  ngOnInit(): void {
-    console.log('HomeComponent initialized');
-  }
+}
 
   // Navigate to the Projects page
   goToProjects(): void {
@@ -61,20 +63,6 @@ export class HomeLandingViewComponent  implements OnInit {
   // Handle action selection for an item
   onActionSelected(event: { action: string; item: any }): void {
     console.log('Action clicked:', event.action, 'for item:', event.item);
-  }
-
-  // Toggle the theme using the ThemeService
-  // toggleTheme(): void {
-  //   this.themeService.toggleTheme();
-  // }
-
-  // Utility method for navigation
-  private navigateTo(path: string): void {
-    try {
-      this.router.navigate([path]);
-    } catch (error) {
-      console.error(`Navigation to ${path} failed:`, error);
-    }
   }
 }
 

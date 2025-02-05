@@ -15,8 +15,12 @@ export class IonicLayoutComponent  implements OnInit {
   ngOnInit() {
     console.log(this.themeService.IsDarkModeSignal());
   }
-  bottomNavigationTabs = async (path : string) => {
-    await this.router.navigate([`/${path}`]);
+  showHeader(): boolean {
+    const hiddenRoutes = [
+      '/app_homepage/task/add',
+      '/app_homepage/task/edit',
+      '/app_homepage/home',
+    ];
+    return !hiddenRoutes.includes(this.router.url);
   }
-
 }
