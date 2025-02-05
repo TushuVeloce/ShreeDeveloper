@@ -36,7 +36,7 @@
         <div class="col-md-6 mb-2">
           <div>
             <label><b>Sub Ledger</b></label>
-            <select type="text" name="MainLedger" class="form-control" id="MainLedger" required>
+            <select type="text" name="SubLedger" class="form-control" id="SubLedger" required>
               <option>--Select Type--</option>
               <option>Customer</option>
               <option>Loan</option>
@@ -46,19 +46,19 @@
         </div>
         <div class="col-md-6 mb-2">
           <label><b>Amount</b></label>
-          <input type="number" name="plotnumber" class="form-control" id="plotnumber" required
+          <input type="number" name="Amount" class="form-control" id="Amount" required
             placeholder="Enter Plot Number" />
         </div>
         <div class="col-md-6 mb-2">
           <label><b>Description</b></label>
-          <input type="number" name="plotnumber" class="form-control" id="plotnumber" required
+          <input type="number" name="Description" class="form-control" id="Description" required
             placeholder="Enter Plot Number" />
         </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
         <div>
           <button type="button" class="btn">Save</button>
-        </div>
+        </div>  
         <div>
           <button type="button" class="btn" (click)="BackEstimateStage()">Back</button>
         </div>
