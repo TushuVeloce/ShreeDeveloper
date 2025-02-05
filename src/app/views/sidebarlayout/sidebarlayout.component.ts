@@ -292,6 +292,21 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '',
       },
       {
+        Name: 'Country Master',
+        RouterLink: '/homepage/Website/Country',
+        LogoPath: '',
+      },
+      {
+        Name: 'State Master',
+        RouterLink: '/homepage/Website/State',
+        LogoPath: '',
+      },
+      {
+        Name: 'City Master',
+        RouterLink: '/homepage/Website/City',
+        LogoPath: '',
+      },
+      {
         Name: 'User Master',
         RouterLink: '/homepage/Website/User_Master',
         LogoPath: '',

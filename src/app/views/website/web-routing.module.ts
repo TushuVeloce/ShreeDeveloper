@@ -58,6 +58,9 @@ import { StockConsumeComponent } from './stock management/stock-consume/stock-co
 import { StockInwardComponent } from './stock management/stock-inward/stock-inward.component';
 import { StockOrderComponent } from './stock management/stock-order/stock-order.component';
 import { StockTransferComponent } from './stock management/stock-transfer/stock-transfer.component';
+import { CountryComponent } from './Masters/country/country.component';
+import { StateComponent } from './Masters/state/state.component';
+import { CityComponent } from './Masters/city/city.component';
 
 const routes: Routes = [
   {
@@ -93,6 +96,10 @@ const routes: Routes = [
 
       { path: 'Estimate_Stages', component: EstimateStagesComponent },
       { path: 'Estimate_Stages_details', component: EstimateStagesDetailsComponent },
+      
+      { path: 'Country', component: CountryComponent },
+      { path: 'State', component: StateComponent },
+      { path: 'City', component: CityComponent },
 
       // Site management 
       { path: 'site_management_Master', component: SiteManagementMasterComponent },
