@@ -8,7 +8,7 @@
     <div class="card-body">
         <form autocomplete="off">
           <div class="row">
-            <div class="col-md-3">
+            <!-- <div class="col-md-3">
               <label>Country Name</label>
                <input
                  type="text"
@@ -18,7 +18,15 @@
                  required
                  placeholder="Enter Country Name"
                />
-           </div>
+           </div> -->
+           <div class="col-md-3 mb-2">
+            <label for="CountryName"><b>Country Name</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CountryName" name="CountryName" [nzSize]="'large'"
+              [(ngModel)]="CountryRef" (ngModelChange)="getCountryRef(CountryRef)">
+              <nz-option *ngFor="let country of CountryList"
+              [nzValue]="country" [nzLabel]="country"></nz-option>
+            </nz-select>
+          </div>
             <div class="col-md-3">
                <label>Name</label>
                 <input

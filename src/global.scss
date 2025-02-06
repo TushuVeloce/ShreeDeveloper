@@ -210,6 +210,57 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   height: 100%;
 }
 
+
+// ====================================== NZ Dropdown Input CSS ======================= //
+
+.nzSelect-light {
+  .ant-select-selector {
+    background-color: #ffffff; /* White background */
+    color: #000000;
+    border: 0.2px solid rgb(133, 130, 130);
+    border-radius: 7px !important;
+  }
+
+  &:hover .ant-select-selector {
+    border-color: brown !important;
+  }
+
+  .ant-select-focused .ant-select-selector,
+  .ant-select-selector:focus-within {
+    border-color: brown !important;
+  }
+
+  .ant-select-clear {
+    color: black !important;
+  }
+
+  .anticon {
+    color: black !important;
+  }
+}
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: white !important;
+}
+
+.ant-empty-description {
+  color: black !important;
+}
+
+::ng-deep .ant-dropdown {
+  font-family: "Poppins" !important;
+  font-size: 16px !important;
+}
+
+::ng-deep .ant-dropdown-menu-item {
+  font-family: "Poppins" !important;
+}
+
+// ====================================== NZ Dropdown Input CSS End ======================= //
+
+
+
+
 // =========================== Nz Select Menu  Css start ==============================
 nz-select {
   width: 100%;

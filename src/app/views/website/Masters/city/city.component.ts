@@ -13,5 +13,10 @@ export class CityComponent  implements OnInit {
   constructor( private router: Router) { }
 
   ngOnInit() {}
+  
+  StateRef: number = 0;
+  StateList: string[] = ['State 1', 'State 2', 'State 3'];
+  getStateRef(Ref:any) {
+  }
 
 }

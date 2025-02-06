@@ -14,4 +14,10 @@ export class StateComponent  implements OnInit {
 
   ngOnInit() {}
 
+  CountryRef: number = 0;
+  CountryList: string[] = ['Country 1', 'Country 2', 'Country 3'];
+  getCountryRef(Ref:any) {
+
+  }
+
 }
