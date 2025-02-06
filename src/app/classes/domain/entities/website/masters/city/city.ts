@@ -10,15 +10,13 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { MaterialFetchRequest } from "./materialfetchrequest";
+import { CityFetchRequest } from "./cityfetchrequest";
 
-
-export class MaterialProps {
-  public readonly Db_Table_Name = "Purchase_Master";
+export class CityProps {
   public Ref: number = 0;
   public Name: string = '';
-  public Unit: string = '';
-
+  public StateRef: number = 0;
+  public readonly StateName: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -28,67 +26,67 @@ export class MaterialProps {
   }
 
   public static Blank() {
-    return new MaterialProps(true);
+    return new CityProps(true);
   }
 }
 
-export class Material implements IPersistable<Material> {
-  public static readonly Db_Table_Name: string = 'GAAProjectSpaceGroupMaster';
+export class City implements IPersistable<City> {
+  public static readonly MasterTableName: string = 'CityMaster';
 
-  private constructor(public readonly p: MaterialProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: CityProps, public readonly AllowEdit: boolean) {
 
   }
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
   }
 
-  public GetEditableVersion(): Material {
-    let newState: MaterialProps = Utils.GetInstance().DeepCopy(this.p);
-    return Material.CreateInstance(newState, true);
+  public GetEditableVersion(): City {
+    let newCity: CityProps = Utils.GetInstance().DeepCopy(this.p);
+    return City.CreateInstance(newCity, true);
   }
 
   public static CreateNewInstance() {
-    return new Material(MaterialProps.Blank(), true);
+    return new City(CityProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new Material(data as MaterialProps, allowEdit);
+    return new City(data as CityProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
+    if (this.p.StateRef <= 0) vra.add('StateRef', 'State cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Material.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, City.MasterTableName, this.p);
   }
 
-  private static m_currentInstance: Material = Material.CreateNewInstance();
+  private static m_currentInstance: City = City.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return Material.m_currentInstance;
+    return City.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: Material) {
-    Material.m_currentInstance = value;
+  public static SetCurrentInstance(value: City) {
+    City.m_currentInstance = value;
   }
-
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): Material {
+  public static SingleInstanceFromTransportData(td: TransportData): City {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, Material.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, Material.Db_Table_Name)!.Entries) {
-        return Material.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, City.MasterTableName)) {
+      for (let data of dcs.GetCollection(td.MainData, City.MasterTableName)!.Entries) {
+        return City.CreateInstance(data, false);
       }
     }
 
@@ -97,13 +95,13 @@ export class Material implements IPersistable<Material> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Material[] {
-    let result: Material[] = [];
+    sortPropertyName: string = "Name"): City[] {
+    let result: City[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, Material.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, Material.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, City.MasterTableName)) {
+      let coll = dcs.GetCollection(cont, City.MasterTableName)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -113,18 +111,18 @@ export class Material implements IPersistable<Material> {
       }
 
       for (let data of entries) {
-        result.push(Material.CreateInstance(data, false));
+        result.push(City.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): Material[] {
-    return Material.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): City[] {
+    return City.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: MaterialFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: CityFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -139,29 +137,29 @@ export class Material implements IPersistable<Material> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MaterialFetchRequest();
-    req.GAAProjectSpaceGroupRefs.push(ref);
+    let req = new CityFetchRequest();
+    req.StateRefs.push(ref);
 
-    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-    return Material.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await City.FetchTransportData(req, errorHandler) as TransportData;
+    return City.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: MaterialFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-    return Material.ListFromTransportData(tdResponse);
+  public static async FetchList(req: CityFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await City.FetchTransportData(req, errorHandler) as TransportData;
+    return City.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MaterialFetchRequest();
-    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-    return Material.ListFromTransportData(tdResponse);
+    let req = new CityFetchRequest();
+    let tdResponse = await City.FetchTransportData(req, errorHandler) as TransportData;
+    return City.ListFromTransportData(tdResponse);
   }
-  public static async FetchEntireListByProjectRef(ProjectRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MaterialFetchRequest();
-    req.GAAProjectRefs.push(ProjectRef)
-    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-    return Material.ListFromTransportData(tdResponse);
-  }
+  // public static async FetchEntireListByStateRef(SpaceGroupRef :number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  //   let req = new CityFetchRequest();
+  //   req.StateRefs.push(SpaceGroupRef)
+  //   let tdResponse = await City.FetchTransportData(req, errorHandler) as TransportData;
+  //   return City.ListFromTransportData(tdResponse);
+  // }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
