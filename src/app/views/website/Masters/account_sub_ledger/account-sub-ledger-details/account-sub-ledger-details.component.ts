@@ -13,6 +13,11 @@ export class AccountSubLedgerDetailsComponent  implements OnInit {
 
   ngOnInit() {}
 
+  UnderMainLedgerRef: number = 0;
+  UnderMainLedgerList: string[] = ['Partner', 'Loan'];
+  getUnderMainLedgerRef(Ref:any) {
+  }
+
   BackSubLedger(){
     this.router.navigate(['/homepage/Website/Account_Sub_Ledger']);
    }

@@ -33,11 +33,11 @@
       <div class="col-md-4">
         <div>
          <label> Type</label>
-          <select  type="text" name="type" class="form-control" id="type" required>
-            <option>--Select Type--</option>
-            <option>Expense</option>
-            <option>Income  </option>
-            </select>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="type" name="type" [nzSize]="'large'"
+            [(ngModel)]="TypeRef" (ngModelChange)="getTypeRef(TypeRef)">
+            <nz-option *ngFor="let type of TypeList"
+            [nzValue]="type" [nzLabel]="type"></nz-option>
+          </nz-select>
         </div>
 
       </div>

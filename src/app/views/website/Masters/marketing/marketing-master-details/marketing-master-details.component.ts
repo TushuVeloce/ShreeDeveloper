@@ -13,6 +13,11 @@ export class MarketingMasterDetailsComponent  implements OnInit {
 
   ngOnInit() {}
 
+  MarketingTypeRef: number = 0;
+  MarketingTypeList: string[] = ['Digital'];
+  getMarketingTypeRef(Ref:any) {
+  }
+
   BackMarketing(){
     this.router.navigate(['/homepage/Website/Marketing_Master']);
    }

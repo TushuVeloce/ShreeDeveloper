@@ -20,10 +20,11 @@
         <div class="col-md-4">
           <div>
            <label>Role</label>
-            <select  type="text" name="role" class="form-control" id="role" required>
-              <option>--Select Role--</option>
-              <option>XYZ</option>
-              </select>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="role" name="role" [nzSize]="'large'"
+              [(ngModel)]="RoleRef" (ngModelChange)="getRoleRef(RoleRef)">
+              <nz-option *ngFor="let role of RoleList"
+              [nzValue]="role" [nzLabel]="role"></nz-option>
+            </nz-select>
           </div>
         </div>
         <div class="col-md-4">
@@ -98,11 +99,11 @@
         <div class="col-md-4">
           <div>
            <label>Gender</label>
-            <select  type="text" name="gender" class="form-control" id="gender" required>
-              <option>--Select Gender--</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              </select>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="gender" name="gender" [nzSize]="'large'"
+              [(ngModel)]="GenderRef" (ngModelChange)="getGenderRef(GenderRef)">
+              <nz-option *ngFor="let gender of GenderList"
+              [nzValue]="gender" [nzLabel]="gender"></nz-option>
+            </nz-select>
           </div>
         </div>
         <div class="col-md-4">
@@ -120,10 +121,11 @@
         <div class="col-md-4">
           <div>
            <label>Department Name </label>
-            <select  type="text" name="departmentname" class="form-control" id="departmentname" required>
-              <option>--Select Department--</option>
-              <option>ABC</option>
-              </select>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="departmentname" name="departmentname" [nzSize]="'large'"
+              [(ngModel)]="DepartmentRef" (ngModelChange)="getDepartmentRef(DepartmentRef)">
+              <nz-option *ngFor="let department of DepartmentList"
+              [nzValue]="department" [nzLabel]="department"></nz-option>
+            </nz-select>
           </div>
         </div>
       </div>
@@ -131,11 +133,11 @@
         <div class="col-md-4">
           <div>
            <label>Login Status</label>
-            <select  type="text" name="loginstatus" class="form-control" id="loginstatus" required>
-              <option>--Select Login Status--</option>
-              <option value="Enable">Enable</option>
-              <option value="Disable">Disable</option>
-              </select>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="loginstatus" name="loginstatus" [nzSize]="'large'"
+              [(ngModel)]="LoginStatusRef" (ngModelChange)="getLoginStatusRef(LoginStatusRef)">
+              <nz-option *ngFor="let loginstatus of LoginStatusList"
+              [nzValue]="loginstatus" [nzLabel]="loginstatus"></nz-option>
+            </nz-select>
           </div>
         </div>
         <div class="col-md-4">

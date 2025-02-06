@@ -74,6 +74,12 @@
     padding: 0.4rem 2.1rem;
 }
 
+.form-control:focus {
+  outline: 0;
+  box-shadow: 0 0 0 0.15rem rgb(180, 103, 103); 
+}
+
+
 .btn:hover{
     background-color: brown;
     color: white;

@@ -20,10 +20,11 @@
         <div class="col-md-6">
           <div>
            <label>Marketing Type</label>
-            <select  type="text" name="marketing" class="form-control" id="marketing" required>
-              <option>--Select Type--</option>
-              <option>Digital</option>
-              </select>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="marketing" name="marketing" [nzSize]="'large'"
+              [(ngModel)]="MarketingTypeRef" (ngModelChange)="getMarketingTypeRef(MarketingTypeRef)">
+              <nz-option *ngFor="let marketingtype of MarketingTypeList"
+              [nzValue]="marketingtype" [nzLabel]="marketingtype"></nz-option>
+            </nz-select>
           </div>
 
         </div>

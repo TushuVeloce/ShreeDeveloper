@@ -20,11 +20,11 @@
         <div class="col-md-4">
           <div>
            <label> Under Main Ledger</label>
-            <select  type="text" name="undermainledger" class="form-control" id="undermainledger" required>
-              <option>--Select Type--</option>
-              <option>Partner</option>
-              <option>Loan </option>
-              </select>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="undermainledger" name="undermainledger" [nzSize]="'large'"
+              [(ngModel)]="UnderMainLedgerRef" (ngModelChange)="getUnderMainLedgerRef(UnderMainLedgerRef)">
+              <nz-option *ngFor="let undermainledger of UnderMainLedgerList"
+              [nzValue]="undermainledger" [nzLabel]="undermainledger"></nz-option>
+            </nz-select>
           </div>
         </div>
         <div class="col-md-4">

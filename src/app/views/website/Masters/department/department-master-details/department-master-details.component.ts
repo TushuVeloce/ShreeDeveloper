@@ -14,6 +14,12 @@ export class DepartmentMasterDetailsComponent  implements OnInit {
 
   ngOnInit() {}
 
+  
+  CompanyRef: number = 0;
+  CompanyList: string[] = ['XYZ',];
+  getCompanyRef(Ref:any) {
+  }
+
   BackDepartment(){
     this.router.navigate(['/homepage/Website/Department_Master']);
    }

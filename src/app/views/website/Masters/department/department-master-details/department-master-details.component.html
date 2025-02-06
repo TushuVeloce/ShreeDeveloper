@@ -33,10 +33,11 @@
         <div class="col-md-6">
           <div>
            <label>Company Name</label>
-            <select  type="text" name="companyname" class="form-control" id="companyname" required>
-              <option>--Select Company--</option>
-              <option>XYZ</option>
-              </select>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="companyname" name="companyname" [nzSize]="'large'"
+              [(ngModel)]="CompanyRef" (ngModelChange)="getCompanyRef(CompanyRef)">
+              <nz-option *ngFor="let company of CompanyList"
+              [nzValue]="company" [nzLabel]="company"></nz-option>
+            </nz-select>
           </div>
         </div>
       </div>

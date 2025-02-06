@@ -13,6 +13,27 @@ export class EmployeeMasterDetailsComponent  implements OnInit {
 
   ngOnInit() {}
 
+  RoleRef: number = 0;
+  RoleList: string[] = ['XYZ'];
+  getRoleRef(Ref:any) {
+  }
+
+  GenderRef: number = 0;
+  GenderList: string[] = ['Male','Female'];
+  getGenderRef(Ref:any) {
+  }
+
+  LoginStatusRef: number = 0;
+  LoginStatusList: string[] = ['Enable','Disable'];
+  getLoginStatusRef(Ref:any) {
+  }
+
+  DepartmentRef: number = 0;
+  DepartmentList: string[] = ['ABC'];
+  getDepartmentRef(Ref:any) {
+  }
+
+
   BackEmployee(){
     this.router.navigate(['/homepage/Website/Employee_Master']);
    }

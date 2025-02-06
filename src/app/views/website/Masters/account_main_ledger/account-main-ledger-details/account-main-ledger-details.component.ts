@@ -12,6 +12,11 @@ export class AccountMainLedgerDetailsComponent  implements OnInit {
   constructor( private router: Router) { }
 
   ngOnInit() {}
+
+  TypeRef: number = 0;
+  TypeList: string[] = ['Expence', 'Income'];
+  getTypeRef(Ref:any) {
+  }
   
   BackMainLedger(){
     this.router.navigate(['/homepage/Website/Account_Main_Ledger']);
