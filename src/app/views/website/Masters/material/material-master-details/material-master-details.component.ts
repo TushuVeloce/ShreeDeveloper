@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Material } from 'src/app/classes/domain/entities/website/spacegroups/material';
+import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';

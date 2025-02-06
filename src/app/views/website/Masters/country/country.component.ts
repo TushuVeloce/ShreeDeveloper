@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-country',
-  standalone:false,
+  standalone: false,
   templateUrl: './country.component.html',
   styleUrls: ['./country.component.scss'],
 })
