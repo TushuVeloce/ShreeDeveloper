@@ -28,14 +28,12 @@ export class MaterialMasterDetailsComponent implements OnInit {
     let entityToSave = this.Entity.GetEditableVersion();
 
     let entitiesToSave = [entityToSave]
-    console.log(entitiesToSave);
-    return
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      // this.uiUtils.showErrorToster(tr.Message);
+      this.uiUtils.showErrorToster(tr.Message);
       return
     }
     else {
@@ -47,7 +45,6 @@ export class MaterialMasterDetailsComponent implements OnInit {
       } else {
         await this.uiUtils.showSuccessToster('Material Master Updated successfully!');
       }
-
     }
   }
 

@@ -14,7 +14,7 @@ import { MaterialFetchRequest } from "./materialfetchrequest";
 
 
 export class MaterialProps {
-  public readonly Db_Table_Name = "Purchase_Master";
+  public readonly Db_Table_Name = "MaterialMaster";
   public Ref: number = 0;
   public Name: string = '';
   public Unit: string = '';
@@ -33,7 +33,7 @@ export class MaterialProps {
 }
 
 export class Material implements IPersistable<Material> {
-  public static readonly Db_Table_Name: string = 'GAAProjectSpaceGroupMaster';
+  public static readonly Db_Table_Name: string = 'MaterialMaster';
 
   private constructor(public readonly p: MaterialProps, public readonly AllowEdit: boolean) {
 
@@ -41,8 +41,8 @@ export class Material implements IPersistable<Material> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            // const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }

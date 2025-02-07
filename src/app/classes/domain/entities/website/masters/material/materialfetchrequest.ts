@@ -6,7 +6,7 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class MaterialFetchRequest
 {
-    public static readonly FetchRequestType: string = "GAAProjectSpaceGroupFetchRequest";
+    public static readonly FetchRequestType: string = "MaterialMaster";
 
     GAAProjectSpaceGroupRefs: number[] = [];
     GAAProjectRefs: number[] = [];

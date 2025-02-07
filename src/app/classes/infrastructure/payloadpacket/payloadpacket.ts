@@ -3,7 +3,7 @@ export class PayloadPacket
   Ref: number = 0;
   PartNo: number = 0;
   TotalPartCount: number = 0;
-  Sender: string = '';
+  Sender: number = 0;
   Topic: string = '';
   PayloadDescriptor: string = '';
   Payload: any = '';
