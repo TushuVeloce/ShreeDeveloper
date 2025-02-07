@@ -9,7 +9,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   templateUrl: './material-master.component.html',
   styleUrls: ['./material-master.component.scss'],
 })
-export class MaterialMasterComponent  implements OnInit {
+export class MaterialMasterComponent implements OnInit {
 
   Entity: Material = Material.CreateNewInstance();
   MasterList: Material[] = [];
@@ -17,39 +17,44 @@ export class MaterialMasterComponent  implements OnInit {
   SearchString: string = '';
   SelectedMaterial: Material = Material.CreateNewInstance();
 
-  headers: string[] = ['Sr.No.','Material Name','Material Unit','Action'];
+  headers: string[] = ['Sr.No.', 'Material Name', 'Material Unit', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.FormulateMaterialList();
     this.DisplayMasterList = [];
 
   }
-
-  onEditClicked = async (item: Material) => {
-    this.SelectedMaterial = item.GetEditableVersion();
-    Material.SetCurrentInstance(this.SelectedMaterial);
-
-    // this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-
-    await this.router.navigate(['/homepage/Website/Material_Master_details']);
+  private FormulateMaterialList = async () => {
+    let lst = await Material.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
   }
 
-  onDeleteClicked = async (material: Material) => {
-    await this.uiUtils.askForConfirmation('Delete',
-      `This process is IRREVERSIBLE!
+    onEditClicked = async (item: Material) => {
+      this.SelectedMaterial = item.GetEditableVersion();
+      Material.SetCurrentInstance(this.SelectedMaterial);
+
+      // this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+
+      await this.router.navigate(['/homepage/Website/Material_Master_details']);
+    }
+
+    onDeleteClicked = async (material: Material) => {
+      await this.uiUtils.askForConfirmation('Delete',
+        `This process is IRREVERSIBLE!
       <br/>
       Are you sure that you want to DELETE this Material?`,
-      async () => {
-        await material.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster( `Material ${material.p.Name} has been deleted!`);
-          // await this.FormulateCustomerList();
-          this.SearchString = '';
-          // this.loadPaginationData();
+        async () => {
+          await material.DeleteInstance(async () => {
+            await this.uiUtils.showSuccessToster(`Material ${material.p.Name} has been deleted!`);
+            // await this.FormulateCustomerList();
+            this.SearchString = '';
+            // this.loadPaginationData();
+          });
         });
-      });
-  }
+    }
 
-  AddMaterial(){
-    this.router.navigate(['/homepage/Website/Material_Master_details']);
-   }
-}
+    AddMaterial(){
+      this.router.navigate(['/homepage/Website/Material_Master_details']);
+    }
+  }
