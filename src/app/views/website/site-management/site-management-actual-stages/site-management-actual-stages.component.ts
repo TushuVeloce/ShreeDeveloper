@@ -23,6 +23,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
   }
 
   OwnerRef: number = 0;
+  StageRef: number = 0;
   OwnerList: string[] = ['Owner1', 'Owner2', 'Owner3'];
   StagesList: string[] = ['Stage1', 'Stage2', 'Stage3'];
   getOwnerRef(Ref:any) {
