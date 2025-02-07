@@ -140,7 +140,7 @@ export class Material implements IPersistable<Material> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MaterialFetchRequest();
-    req.GAAProjectSpaceGroupRefs.push(ref);
+    req.MaterialRef.push(ref);
 
     let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
     return Material.SingleInstanceFromTransportData(tdResponse);
@@ -156,12 +156,12 @@ export class Material implements IPersistable<Material> {
     let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
     return Material.ListFromTransportData(tdResponse);
   }
-  public static async FetchEntireListByProjectRef(ProjectRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MaterialFetchRequest();
-    req.GAAProjectRefs.push(ProjectRef)
-    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-    return Material.ListFromTransportData(tdResponse);
-  }
+  // public static async FetchEntireListByProjectRef(ProjectRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  //   let req = new MaterialFetchRequest();
+  //   req.GAAProjectRefs.push(ProjectRef)
+  //   let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
+  //   return Material.ListFromTransportData(tdResponse);
+  // }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

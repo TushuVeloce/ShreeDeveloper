@@ -6,10 +6,10 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class MaterialFetchRequest
 {
-    public static readonly FetchRequestType: string = "MaterialMaster";
+    public static readonly FetchRequestType: string = "MaterialFetchRequest";
 
-    GAAProjectSpaceGroupRefs: number[] = [];
-    GAAProjectRefs: number[] = [];
+    MaterialRef: number[] = [];
+    // GAAProjectRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

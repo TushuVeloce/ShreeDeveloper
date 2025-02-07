@@ -23,10 +23,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let material of DisplayMasterList; index as i">
-          <td Class="tbldata">1</td>
-          <td Class="tbldata">SMAPLE1</td>
-          <td Class="tbldata">20</td>
+        <tr *ngFor="let material of MasterList; index as i">
+          <td Class="tbldata">{{i+1}}</td>
+          <td Class="tbldata">{{material.p.Name}}</td>
+          <td Class="tbldata">{{material.p.Unit}}</td>
           <td class="tbldata"> 
             <span style="margin-left: 9px;" (click)="onEditClicked(material);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>

@@ -10,23 +10,24 @@ export class BaseUrlService {
   }
 
   public GenerateBaseUrl() {
+    // let baseURLstring = `http://localhost:5111/api`;
     let baseURLstring = ``;
 
-    if (window.location.hostname.includes('enscloud.in')) {
-      baseURLstring = `https://enscloud.in/gladiancedev-gladiance-web-api`;
-    } else if (window.location.hostname.includes('gladiance.one')) {
-      if (window.location.toString().includes("://dev."))
-      {
-        baseURLstring = `https://dev.api.gladiance.one/gladiancecloud-web-api`;
-      }
-      else
-      {
-        baseURLstring = `https://api.gladiance.one/gladiancecloud-web-api`;
-      }
-    } else {
-      // baseURLstring = `https://localhost:5001`;
-      baseURLstring = `https://api.gladiance.one/gladiancecloud-web-api`;
-    }
+    // if (window.location.hostname.includes('enscloud.in')) {
+    //   baseURLstring = `https://enscloud.in/gladiancedev-gladiance-web-api`;
+    // } else if (window.location.hostname.includes('gladiance.one')) {
+    //   if (window.location.toString().includes("://dev."))
+    //   {
+    //     baseURLstring = `https://dev.api.gladiance.one/gladiancecloud-web-api`;
+    //   }
+    //   else
+    //   {
+    //     baseURLstring = `https://api.gladiance.one/gladiancecloud-web-api`;
+    //   }
+    // } else {
+    //   // baseURLstring = `https://localhost:5001`;
+    //   baseURLstring = `https://api.gladiance.one/gladiancecloud-web-api`;
+    // }
 
     return baseURLstring;
   }

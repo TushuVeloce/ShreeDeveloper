@@ -15,7 +15,24 @@ export class MaterialMasterDetailsComponent implements OnInit {
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+      this.IsNewEntity = false;
+      
+      // this.DetailsFormTitle = this.IsNewEntity ? 'New Space Group' : 'Edit Space Group';
+      this.Entity = Material.GetCurrentInstance();
+      this.appStateManage.StorageKey.removeItem('Editable')
+
+    } else {
+      this.Entity = Material.CreateNewInstance();
+      Material.SetCurrentInstance(this.Entity);
+     
+    }
+    this.InitialEntity = Object.assign(Material.CreateNewInstance(),
+    this.utils.DeepCopy(this.Entity)) as Material;
+    
+  }
+  
   BackMaterial() {
     this.router.navigate(['/homepage/Website/Material_Master']);
   }
@@ -23,6 +40,7 @@ export class MaterialMasterDetailsComponent implements OnInit {
   isSaveDisabled: boolean = false;
   private IsNewEntity: boolean = true;
   Entity: Material = Material.CreateNewInstance();
+  InitialEntity: Material = null as any;
 
   SaveMaterialMaster = async () => {
     let entityToSave = this.Entity.GetEditableVersion();
