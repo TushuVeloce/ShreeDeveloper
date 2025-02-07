@@ -23,15 +23,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr *ngFor="let material of DisplayMasterList; index as i">
           <td Class="tbldata">1</td>
           <td Class="tbldata">SMAPLE1</td>
           <td Class="tbldata">20</td>
           <td class="tbldata"> 
-            <span style="margin-left: 9px;">
+            <span style="margin-left: 9px;" (click)="onEditClicked(material);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
               </span>
-            <span style="margin-left: 9px;">
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(material);">
               <img
                 src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>

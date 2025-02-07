@@ -29,7 +29,6 @@ interface module {
   Name: string;
   RouterLink: string;
   WhiteLogo: string;
-  BlackLogo: string;
   SubModuleList: SubModule[];
 }
 
@@ -383,28 +382,24 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Dashboards',
         RouterLink: '',
-        BlackLogo: '/assets/icons/dashboard.png',
         WhiteLogo: '/assets/icons/dashboard.png',
         SubModuleList: DashboardsSubModuleList,
       }, {
         Name: 'Master',
         RouterLink: '',
-        BlackLogo: '/assets/icons/master.png',
-        WhiteLogo: '/assets/icons/masterswhite.png',
+        WhiteLogo: '/assets/icons/master.png',
         SubModuleList: MasterSubModuleList,
       },
       {
         Name: 'Site Management',
         RouterLink: '',
-        BlackLogo: '/assets/icons/dashboard.png',
-        WhiteLogo: '/assets/icons/dashboard.png',
+        WhiteLogo: '/assets/icons/site.png',
         SubModuleList: SiteManagementSubModuleList,
       },
       {
         Name: 'Stock Management',
         RouterLink: '',
-        BlackLogo: '/assets/icons/dashboard.png',
-        WhiteLogo: '/assets/icons/dashboard.png',
+        WhiteLogo: '/assets/icons/stock.png',
         SubModuleList: StockManagementSubModuleList,
       },
     ].filter(e => e.SubModuleList.length > 0);
