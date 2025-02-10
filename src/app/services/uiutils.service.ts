@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { ServiceInjector } from '../classes/infrastructure/injector';
-import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { ThemeService } from './theme.service';
 import { AppStateManageService } from './app-state-manage.service';
 import { Router } from '@angular/router';
 import { isNullOrUndefined } from 'src/tools';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
+
 
 class SwalResult {
   isConfirmed: boolean = false;
@@ -27,30 +28,38 @@ export class UIUtils {
     await this.showErrorMessage('Error', errMsg);
   }
 
+  // public async showErrorMessage(title: string, msg: string,
+
+  //   okHandler: () => Promise<void> = null as any) {
+  //   let result = await Swal.fire(title, msg, 'error') as SwalResult;
+  //   if (result.isConfirmed) {
+  //     if (!isNullOrUndefined(okHandler)) {
+  //       await okHandler();
+  //     }
+  //     if (msg.toLowerCase().includes('invalid login token')) {
+  //       this.appStateManage.StorageKey.clear()
+  //       await this.router.navigate(['']);
+  //       return
+  //     }
+
+  //   }
+  // }
+
+
+  // Try to overlap or not 
+
   public async showErrorMessage(title: string, msg: string,
     okHandler: () => Promise<void> = null as any) {
-    let result = await Swal.fire(title, msg, 'error') as SwalResult;
-    if (result.isConfirmed) {
-      if (!isNullOrUndefined(okHandler)) {
-        await okHandler();
-      }
-      if (msg.toLowerCase().includes('invalid login token')) {
-        this.appStateManage.StorageKey.clear()
-        await this.router.navigate(['']);
-        return
-      }
-    }
-    // const alert = await this.alertController.create({
-    //   header: title,
-    //   message: msg,
-    //   buttons: [{
-    //     text: 'OK',
-    //     handler: okHandler
-    //   }],
-    //   backdropDismiss: false
-    // });
-
-    // await alert.present();
+    const alert = await this.alertController.create({
+      header: title,
+      message: msg,
+      buttons: [{
+        text: 'OK',
+        handler: okHandler
+      }],
+      backdropDismiss: false
+    });
+    await alert.present();
   }
 
   public async showInformationalMessage(title: string, msg: string,

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-material-master',
@@ -95,5 +96,15 @@ export class MaterialMasterComponent implements OnInit {
 
   AddMaterial() {
     this.router.navigate(['/homepage/Website/Material_Master_details']);
+  }
+
+  showError() {
+    Swal.fire({
+      title: 'Error!',
+      text: 'Something went wrong. Please click OK to close.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      allowOutsideClick: false // Prevent closing without user action
+    });
   }
 }
