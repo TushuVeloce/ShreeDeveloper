@@ -331,3 +331,24 @@ nz-select {
 }
 
 // =========================== Nz Select Menu  Css End ==============================
+
+// for sweetalert2 
+
+.custom-popup {
+  max-width: 50% !important; /* Ensures it doesn't exceed screen width */
+  border-radius: 8px !important;
+}
+
+@media (max-width: 768px) {
+  .custom-popup {
+    width: 85% !important; /* Adjust width for mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .custom-popup {
+    width: 90% !important; /* Slightly larger on small mobile screens */
+    font-size: 12px !important; /* Smaller text for better fit */
+  }
+}
+

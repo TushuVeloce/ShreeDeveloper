@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { ServiceInjector } from '../classes/infrastructure/injector';
-import { ThemeService } from './theme.service';
-import { AppStateManageService } from './app-state-manage.service';
-import { Router } from '@angular/router';
+import Swal, { SweetAlertOptions, SweetAlertResult } from 'sweetalert2';
 import { isNullOrUndefined } from 'src/tools';
-import Swal, { SweetAlertOptions } from 'sweetalert2';
-
+import { ThemeService } from './theme.service';
+import { Router } from '@angular/router';
+import { AppStateManageService } from './app-state-manage.service';
 
 class SwalResult {
   isConfirmed: boolean = false;
@@ -22,44 +21,37 @@ export class UIUtils {
     return ServiceInjector.AppInjector.get(UIUtils)
   }
 
-  constructor(private alertController: AlertController, private themeService: ThemeService, private router: Router, private appStateManage: AppStateManageService) { }
+  constructor(private alertController: AlertController, private themeService: ThemeService,private router :Router, private appStateManage: AppStateManageService, ) { }
 
   public GlobalUIErrorHandler = async (errMsg: string) => {
     await this.showErrorMessage('Error', errMsg);
   }
 
-  // public async showErrorMessage(title: string, msg: string,
-
-  //   okHandler: () => Promise<void> = null as any) {
-  //   let result = await Swal.fire(title, msg, 'error') as SwalResult;
-  //   if (result.isConfirmed) {
-  //     if (!isNullOrUndefined(okHandler)) {
-  //       await okHandler();
-  //     }
-  //     if (msg.toLowerCase().includes('invalid login token')) {
-  //       this.appStateManage.StorageKey.clear()
-  //       await this.router.navigate(['']);
-  //       return
-  //     }
-
-  //   }
-  // }
-
-
-  // Try to overlap or not 
-
   public async showErrorMessage(title: string, msg: string,
     okHandler: () => Promise<void> = null as any) {
-    const alert = await this.alertController.create({
-      header: title,
-      message: msg,
-      buttons: [{
-        text: 'OK',
-        handler: okHandler
-      }],
-      backdropDismiss: false
-    });
-    await alert.present();
+      debugger
+      let result: SweetAlertResult = await Swal.fire({
+        title: title,
+        text: msg,
+        icon: 'error',
+        confirmButtonText: 'OK',
+        allowOutsideClick: false, 
+        backdrop: false, // Removes full-screen overlay
+        position: 'center', 
+        customClass: {
+          popup: 'custom-popup', 
+        },
+      });
+    if (result.isConfirmed) {
+      if (!isNullOrUndefined(okHandler)) {
+        await okHandler();
+      }
+      if(msg.toLowerCase().includes('invalid login token')){
+        this.appStateManage.StorageKey.clear()
+        await this.router.navigate(['']);
+        return
+      }
+    }
   }
 
   public async showInformationalMessage(title: string, msg: string,
@@ -69,7 +61,7 @@ export class UIUtils {
       if (!isNullOrUndefined(okHandler)) {
         await okHandler!();
       }
-      if (msg.toLowerCase().includes('invalid login token')) {
+      if(msg.toLowerCase().includes('invalid login token')){
         this.appStateManage.StorageKey.clear()
         await this.router.navigate(['']);
         return
@@ -94,7 +86,6 @@ export class UIUtils {
     // await alert.present();
   }
 
-  // add success & error toster
   toastMixin = Swal.mixin({
     toast: true,
     icon: 'success',
@@ -119,25 +110,22 @@ export class UIUtils {
     const textColor = currentTheme === 'dark' ? 'black' : 'white'; // Black text if dark theme, white otherwise
 
     // Use the toast mixin to show the toast
-
     this.toastMixin.fire({
       title: title,
       icon: 'success',
       background: backgroundColor, // Set background color based on theme
       color: textColor // Set text color based on theme
     });
-
   }
 
-  public async showErrorToster(title: string, text: string = '') {
+  public async showErrorToster(title: string) {
     this.toastMixin.fire({
       title: title,
-      text: text,
       icon: 'error'
     });
 
-    setTimeout(async () => {
-      if (title.toLowerCase().includes('invalid login token')) {
+    setTimeout(async () => {    
+      if(title.toLowerCase().includes('invalid login token')){
         this.appStateManage.StorageKey.clear()
         await this.router.navigate(['']);
         return
@@ -145,15 +133,14 @@ export class UIUtils {
     }, 2000);
   }
 
-  public async showWarningToster(title: string, text: string = '') {
+  public async showWarningToster(title: string) {
     this.toastMixin.fire({
       title: title,
-      text: text,
       icon: 'warning'
     });
 
-    setTimeout(async () => {
-      if (title.toLowerCase().includes('invalid login token')) {
+    setTimeout(async () => {    
+      if(title.toLowerCase().includes('invalid login token')){
         this.appStateManage.StorageKey.clear()
         await this.router.navigate(['']);
         return

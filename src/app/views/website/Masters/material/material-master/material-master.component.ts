@@ -37,7 +37,6 @@ export class MaterialMasterComponent implements OnInit {
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList
     console.log(this.DisplayMasterList);
-
   }
 
   onEditClicked = async (item: Material) => {
@@ -54,57 +53,29 @@ export class MaterialMasterComponent implements OnInit {
     await this.router.navigate(['/homepage/Website/Material_Master_details']);
   }
 
-  // onDeleteClicked = async (material: Material) => {
-  //   await this.uiUtils.askForConfirmation('Delete',
-  //     `This process is IRREVERSIBLE!
-  //   <br/>
-  //   Are you sure that you want to DELETE this Material?`,
-  //     async () => {
-  //       await material.DeleteInstance(async () => {
-  //         await this.uiUtils.showSuccessToster(`Material ${material.p.Name} has been deleted!`);
-  //         // await this.FormulateCustomerList();
-  //         this.SearchString = '';
-  //         // this.loadPaginationData();
-  //       });
-  //     });
-
-  // }
   onDeleteClicked = async (material: Material) => {
-    // Ask for confirmation using the browser's built-in confirm method
-    const isConfirmed = window.confirm(
-      `This process is IRREVERSIBLE!\n\nAre you sure that you want to DELETE this Material?`
-    );
-
-    // If user confirms, proceed with the delete operation
-    if (isConfirmed) {
-      await material.DeleteInstance(async () => {
-        // Show success message using alert
-        alert(`Material ${material.p.Name} has been deleted!`);
-        this.FormulateMaterialList();
-        // Optional: Reset search string and reload pagination if needed
-        this.SearchString = '';
-        this.loadPaginationData();
+    await this.uiUtils.askForConfirmation('Delete',
+      `This process is IRREVERSIBLE!
+    <br/>
+    Are you sure that you want to DELETE this Material?`,
+      async () => {
+        await material.DeleteInstance(async () => {
+          await this.uiUtils.showSuccessToster(`Material ${material.p.Name} has been deleted!`);
+          // await this.FormulateCustomerList();
+          this.SearchString = '';
+          // this.loadPaginationData();
+        });
       });
-    }
-  };
 
+  }
+ 
   // For Pagination  start ----
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   }
 
-
   AddMaterial() {
     this.router.navigate(['/homepage/Website/Material_Master_details']);
   }
 
-  showError() {
-    Swal.fire({
-      title: 'Error!',
-      text: 'Something went wrong. Please click OK to close.',
-      icon: 'error',
-      confirmButtonText: 'OK',
-      allowOutsideClick: false // Prevent closing without user action
-    });
-  }
 }
