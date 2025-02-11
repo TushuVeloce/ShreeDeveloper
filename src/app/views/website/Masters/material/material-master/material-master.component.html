@@ -1,6 +1,6 @@
 <div>
   <div class="row">
-    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2" >
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2">
       <h5 style="padding-top: 3px;" class="title title_light">Material Master</h5>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
@@ -14,7 +14,7 @@
   </div>
   <div class="table-container" style="margin-top: 2rem;">
     <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
-      [nzNoResult]="'No data Found'" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
@@ -35,5 +35,10 @@
         </tr>
       </tbody>
     </nz-table>
+  </div>
+  <div *ngIf="DisplayMasterList.length === 0" Class="card-body_light">
+    <div style="height: 200px;" class="d-flex align-items-center justify-content-center">
+      <span Class="title_light"> Data Not Found</span>
+    </div>
   </div>
 </div>

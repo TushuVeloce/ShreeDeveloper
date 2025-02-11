@@ -21,7 +21,7 @@ export class UIUtils {
     return ServiceInjector.AppInjector.get(UIUtils)
   }
 
-  constructor(private alertController: AlertController, private themeService: ThemeService,private router :Router, private appStateManage: AppStateManageService, ) { }
+  constructor(private alertController: AlertController, private themeService: ThemeService, private router: Router, private appStateManage: AppStateManageService,) { }
 
   public GlobalUIErrorHandler = async (errMsg: string) => {
     await this.showErrorMessage('Error', errMsg);
@@ -29,24 +29,24 @@ export class UIUtils {
 
   public async showErrorMessage(title: string, msg: string,
     okHandler: () => Promise<void> = null as any) {
-      // debugger
-      let result: SweetAlertResult = await Swal.fire({
-        title: title,
-        text: msg,
-        icon: 'error',
-        confirmButtonText: 'OK',
-        allowOutsideClick: false, 
-        backdrop: false, // Removes full-screen overlay
-        position: 'center', 
-        customClass: {
-          popup: 'custom-popup', 
-        },
-      });
+    // debugger
+    let result: SweetAlertResult = await Swal.fire({
+      title: title,
+      text: msg,
+      icon: 'error',
+      confirmButtonText: 'OK',
+      allowOutsideClick: false,
+      backdrop: false, // Removes full-screen overlay
+      position: 'center',
+      customClass: {
+        popup: 'custom-popup',
+      },
+    });
     if (result.isConfirmed) {
       if (!isNullOrUndefined(okHandler)) {
         await okHandler();
       }
-      if(msg.toLowerCase().includes('invalid login token')){
+      if (msg.toLowerCase().includes('invalid login token')) {
         this.appStateManage.StorageKey.clear()
         await this.router.navigate(['']);
         return
@@ -61,7 +61,7 @@ export class UIUtils {
       if (!isNullOrUndefined(okHandler)) {
         await okHandler!();
       }
-      if(msg.toLowerCase().includes('invalid login token')){
+      if (msg.toLowerCase().includes('invalid login token')) {
         this.appStateManage.StorageKey.clear()
         await this.router.navigate(['']);
         return
@@ -118,14 +118,55 @@ export class UIUtils {
     });
   }
 
+  private isAlertOpen = false; 
+  public async showConfirmationMessage(
+    title: string,
+    msg: string,
+    confirmHandler: () => Promise<void> = null as any
+  ) {
+    // Prevent multiple popups from opening at the same time
+    if (this.isAlertOpen) {
+      return;
+    }
+
+    this.isAlertOpen = true; // Mark the alert as open
+
+    try {
+      let result: SweetAlertResult = await Swal.fire({
+        title: title,
+        html: msg,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+        allowOutsideClick: false,
+        backdrop: false,
+        position: 'center',
+        customClass: {
+          popup: 'custom-popup',
+        },
+      });
+
+      if (result.isConfirmed && confirmHandler) {
+        await confirmHandler(); // Execute the confirmation action
+      }
+    } catch (error) {
+      console.error("Error handling SweetAlert:", error);
+    } finally {
+      this.isAlertOpen = false; // Reset flag when alert is closed
+    }
+  }
+
+
+
   public async showErrorToster(title: string) {
     this.toastMixin.fire({
       title: title,
       icon: 'error'
     });
 
-    setTimeout(async () => {    
-      if(title.toLowerCase().includes('invalid login token')){
+    setTimeout(async () => {
+      if (title.toLowerCase().includes('invalid login token')) {
         this.appStateManage.StorageKey.clear()
         await this.router.navigate(['']);
         return
@@ -139,8 +180,8 @@ export class UIUtils {
       icon: 'warning'
     });
 
-    setTimeout(async () => {    
-      if(title.toLowerCase().includes('invalid login token')){
+    setTimeout(async () => {
+      if (title.toLowerCase().includes('invalid login token')) {
         this.appStateManage.StorageKey.clear()
         await this.router.navigate(['']);
         return

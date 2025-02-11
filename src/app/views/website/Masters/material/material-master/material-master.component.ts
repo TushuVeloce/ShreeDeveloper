@@ -54,9 +54,9 @@ export class MaterialMasterComponent implements OnInit {
   }
 
   onDeleteClicked = async (material: Material) => {
-    await this.uiUtils.askForConfirmation('Delete',
-      `This process is IRREVERSIBLE!
-    <br/>
+    debugger
+    await this.uiUtils.showConfirmationMessage('Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
     Are you sure that you want to DELETE this Material?`,
       async () => {
         await material.DeleteInstance(async () => {
@@ -66,7 +66,6 @@ export class MaterialMasterComponent implements OnInit {
           // this.loadPaginationData();
         });
       });
-
   }
  
   // For Pagination  start ----
