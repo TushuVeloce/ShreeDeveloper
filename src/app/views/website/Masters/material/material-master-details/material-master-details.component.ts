@@ -12,6 +12,12 @@ import { Utils } from 'src/app/services/utils.service';
   styleUrls: ['./material-master-details.component.scss'],
 })
 export class MaterialMasterDetailsComponent implements OnInit {
+   Entity: Material = Material.CreateNewInstance();
+    private IsNewEntity: boolean = true;
+    isSaveDisabled: boolean = false;
+    DetailsFormTitle: 'New Material' | 'Edit Material' = 'New Material';
+    IsDropdownDisabled: boolean = false
+    InitialEntity: Material = null as any;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
 
@@ -19,7 +25,7 @@ export class MaterialMasterDetailsComponent implements OnInit {
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       
-      // this.DetailsFormTitle = this.IsNewEntity ? 'New Space Group' : 'Edit Space Group';
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Material' : 'Edit Material';
       this.Entity = Material.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable')
 
@@ -30,17 +36,8 @@ export class MaterialMasterDetailsComponent implements OnInit {
     }
     this.InitialEntity = Object.assign(Material.CreateNewInstance(),
     this.utils.DeepCopy(this.Entity)) as Material;
-    
+    // this.focusInput();
   }
-  
-  BackMaterial() {
-    this.router.navigate(['/homepage/Website/Material_Master']);
-  }
-
-  isSaveDisabled: boolean = false;
-  private IsNewEntity: boolean = true;
-  Entity: Material = Material.CreateNewInstance();
-  InitialEntity: Material = null as any;
 
   SaveMaterialMaster = async () => {
     let entityToSave = this.Entity.GetEditableVersion();
@@ -64,6 +61,10 @@ export class MaterialMasterDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster('Material Master Updated successfully!');
       }
     }
+  }
+
+  BackMaterial() {
+    this.router.navigate(['/homepage/Website/Material_Master']);
   }
 
 }

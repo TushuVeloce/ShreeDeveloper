@@ -44,7 +44,6 @@ export class MaterialMasterComponent implements OnInit {
     // this.SelectedMaterial = Material.CreateInstance(props,true);
 
     this.SelectedMaterial = item.GetEditableVersion();
-    console.log(this.SelectedMaterial);
 
     Material.SetCurrentInstance(this.SelectedMaterial);
 
@@ -54,14 +53,13 @@ export class MaterialMasterComponent implements OnInit {
   }
 
   onDeleteClicked = async (material: Material) => {
-    debugger
     await this.uiUtils.showConfirmationMessage('Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
     Are you sure that you want to DELETE this Material?`,
       async () => {
         await material.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(`Material ${material.p.Name} has been deleted!`);
-          // await this.FormulateCustomerList();
+          await this.FormulateMaterialList();
           this.SearchString = '';
           // this.loadPaginationData();
         });

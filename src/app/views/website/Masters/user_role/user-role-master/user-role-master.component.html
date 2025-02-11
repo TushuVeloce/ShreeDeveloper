@@ -11,24 +11,23 @@
     </nz-button>
   </div>
 </div>
-<div class="table-container" style="margin-top: 2rem;">
-  <nz-table #basicTable nzSize="small" class="no-hover-table" 
-    Class="bgtable_light" [nzScroll]="{x:'auto' }"
-    nzFrontPagination="false" [nzShowSizeChanger]="false">
+<div class="table-container" style="margin-top: 2rem;" *ngIf="DisplayMasterList.length > 0">
+  <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList" [nzScroll]="{x:'auto' }"
+    nzFrontPagination="false" [nzShowSizeChanger]="false" (nzPageIndexChange)="onPageChange($event)">
     <thead>
       <tr>
         <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td Class="tbldata">1</td>
-        <td Class="tbldata">Demo</td>
+      <tr *ngFor="let userrole of paginatedList; index as i">
+        <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <td Class="tbldata">{{userrole.p.Name }}</td>
         <td class="tbldata">
-          <span style="margin-left: 9px;">
+          <span style="margin-left: 9px;" (click)="onEditClicked(userrole);">
             <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
             </span>
-          <span style="margin-left: 9px;">
+          <span style="margin-left: 9px;" (click)="onDeleteClicked(userrole);">
             <img
               src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
         </td>

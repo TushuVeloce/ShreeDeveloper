@@ -1,47 +1,46 @@
 <div class="row">
   <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
-    <h5 style="padding-top: 3px;" class="title title_light">Comapny Master</h5>
+    <h5 style="padding-top: 3px;" class="title title_light">company Master</h5>
   </div>
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light">
     <input type="text" Class="search-box_light" placeholder="Search..." autofocus />
   </div>
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
-    <nz-button nz-button class="btn1" (click)= 'AddCompany()'>
+    <nz-button nz-button class="btn1" (click)='AddCompany()'>
       Add Company
     </nz-button>
   </div>
 </div>
-<div class="table-container" style="margin-top: 2rem;">
-  <nz-table #basicTable nzSize="small" class="no-hover-table" 
-    Class="bgtable_light" [nzScroll]="{x:'auto' }"
-    nzFrontPagination="false" [nzShowSizeChanger]="false">
+<div class="table-container" style="margin-top: 2rem;" *ngIf="DisplayMasterList.length > 0">
+  <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
+    [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false"
+    (nzPageIndexChange)="onPageChange($event)">
     <thead>
       <tr>
         <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td Class="tbldata">1</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
+      <tr *ngFor="let company of paginatedList; index as i">
+        <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <td Class="tbldata">{{company.p.Name }}</td>
+        <td Class="tbldata">{{company.p.Name }}</td>
+        <td Class="tbldata">{{company.p.Name }}</td>
+        <td Class="tbldata">{{company.p.Name }}</td>
+        <td Class="tbldata">{{company.p.Name }}</td>
+        <td Class="tbldata">{{company.p.Name }}</td>
+        <td Class="tbldata">{{company.p.Name }}</td>
+        <td Class="tbldata">{{company.p.Name }}</td>
+        <td Class="tbldata">{{company.p.Name }}</td>
+        <td Class="tbldata">{{company.p.Name }}</td>
+        <td Class="tbldata">{{company.p.Name }}</td>
+        <td Class="tbldata">{{company.p.Name }}</td>
         <td class="tbldata">
-          <span style="margin-left: 9px;">
-            <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
-            </span>
-          <span style="margin-left: 9px;">
-            <img
-              src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+          <span style="margin-left: 9px;" (click)="onEditClicked(company);">
+            <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+          </span>
+          <span style="margin-left: 9px;" (click)="onDeleteClicked(company);">
+            <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
         </td>
       </tr>
     </tbody>
