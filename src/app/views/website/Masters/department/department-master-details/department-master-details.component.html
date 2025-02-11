@@ -32,11 +32,11 @@
         </div>
         <div class="col-md-6">
           <div>
-           <label>Company Name</label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="companyname" name="companyname" [nzSize]="'large'"
-              [(ngModel)]="CompanyRef" (ngModelChange)="getCompanyRef(CompanyRef)">
+           <label for="CompanyRef">Company Name</label>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CompanyRef" name="CompanyRef" [nzSize]="'large'"
+              [(ngModel)]="CompanyRef">
               <nz-option *ngFor="let company of CompanyList"
-              [nzValue]="company" [nzLabel]="company"></nz-option>
+              [nzValue]="company.p.Ref" [nzLabel]="company.p.Name"></nz-option>
             </nz-select>
           </div>
         </div>

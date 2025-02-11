@@ -154,12 +154,13 @@ export class State implements IPersistable<State> {
     let tdResponse = await State.FetchTransportData(req, errorHandler) as TransportData;
     return State.ListFromTransportData(tdResponse);
   }
-  // public static async FetchEntireListByCountryRef(SpaceGroupRef :number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-  //   let req = new StateFetchRequest();
-  //   req.CountryRefs.push(SpaceGroupRef)
-  //   let tdResponse = await State.FetchTransportData(req, errorHandler) as TransportData;
-  //   return State.ListFromTransportData(tdResponse);
-  // }
+
+  public static async FetchEntireListByCountryRef(CountryRef :number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new StateFetchRequest();
+    req.CountryRefs.push(CountryRef)
+    let tdResponse = await State.FetchTransportData(req, errorHandler) as TransportData;
+    return State.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

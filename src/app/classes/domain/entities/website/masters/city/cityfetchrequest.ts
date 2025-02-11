@@ -4,14 +4,13 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class CityFetchRequest
-{
+export class CityFetchRequest {
     public static readonly FetchRequestType: string = "CityFetchRequest";
-
+    CountryRefs: number[] = [];
     StateRefs: number[] = [];
-    
-    public MergeIntoTransportData = (td: TransportData) =>
-    {
+    CityRefs: number[] = [];
+
+    public MergeIntoTransportData = (td: TransportData) => {
         let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CityFetchRequest.FetchRequestType) as DataCollection;
         coll.Entries.push(this);
     }

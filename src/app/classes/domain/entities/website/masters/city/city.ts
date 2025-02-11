@@ -15,6 +15,8 @@ import { CityFetchRequest } from "./cityfetchrequest";
 export class CityProps {
   public Ref: number = 0;
   public Name: string = '';
+  public CountryRef: number = 0;
+  public readonly CountryName: string = '';
   public StateRef: number = 0;
   public readonly StateName: string = '';
 
@@ -154,12 +156,12 @@ export class City implements IPersistable<City> {
     let tdResponse = await City.FetchTransportData(req, errorHandler) as TransportData;
     return City.ListFromTransportData(tdResponse);
   }
-  // public static async FetchEntireListByStateRef(SpaceGroupRef :number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-  //   let req = new CityFetchRequest();
-  //   req.StateRefs.push(SpaceGroupRef)
-  //   let tdResponse = await City.FetchTransportData(req, errorHandler) as TransportData;
-  //   return City.ListFromTransportData(tdResponse);
-  // }
+  public static async FetchEntireListByStateRef(StateRef :number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new CityFetchRequest();
+    req.StateRefs.push(StateRef)
+    let tdResponse = await City.FetchTransportData(req, errorHandler) as TransportData;
+    return City.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

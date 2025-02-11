@@ -17,7 +17,6 @@ export class CountryProps {
   public Name: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
-  // public readonly AccountTypeName: string = '';
 
   private constructor(isNewlyCreated: boolean) {
     this.IsNewlyCreated = isNewlyCreated;
@@ -151,15 +150,6 @@ export class Country implements IPersistable<Country> {
     let tdResponse = await Country.FetchTransportData(req, errorHandler) as TransportData;
     return Country.ListFromTransportData(tdResponse);
   }
-  
-  // public static async FetchEntireListByProjectRef(ProjectRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-  //   let req = new CountryFetchRequest();
-  //   req.GAAProjectRefs.push(ProjectRef)
-  //   let tdResponse = await Country.FetchTransportData(req, errorHandler) as TransportData;
-  //   return Country.ListFromTransportData(tdResponse);
-  // }
-
-
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

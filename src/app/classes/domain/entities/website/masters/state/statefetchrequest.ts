@@ -4,14 +4,12 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class StateFetchRequest
-{
+export class StateFetchRequest {
     public static readonly FetchRequestType: string = "StateFetchRequest";
-
+    StateRefs: number[] = [];
     CountryRefs: number[] = [];
-    
-    public MergeIntoTransportData = (td: TransportData) =>
-    {
+
+    public MergeIntoTransportData = (td: TransportData) => {
         let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, StateFetchRequest.FetchRequestType) as DataCollection;
         coll.Entries.push(this);
     }

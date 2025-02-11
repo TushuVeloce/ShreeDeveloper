@@ -1,22 +1,67 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
+import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
+import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
   selector: 'app-city',
-  standalone:false,
+  standalone: false,
   templateUrl: './city.component.html',
   styleUrls: ['./city.component.scss'],
 })
-export class CityComponent  implements OnInit {
-  headers: string[] = ['Sr.No.','State Name','City Name','Action'];
-
-  constructor( private router: Router) { }
-
-  ngOnInit() {}
-  
+export class CityComponent implements OnInit {
+  Entity: City = City.CreateNewInstance();
+  CountryList: Country[] = [];
+  StateList: State[] = [];
+  MasterList: City[] = [];
+  DisplayMasterList: City[] = [];
+  SearchString: string = '';
+  SelectedCity: City = City.CreateNewInstance();
+  CountryRef: number = 0;
   StateRef: number = 0;
-  StateList: string[] = ['State 1', 'State 2', 'State 3'];
-  getStateRef(Ref:any) {
-  }
+  pageSize = 10; // Items per page
+  currentPage = 1; // Initialize current page
+  total = 0;
+  headers: string[] = ['Sr.No.','City Name', 'Action'];
+
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
+
+  async ngOnInit() {
+    await this.FormulateCountryList();
+   }
+
+     private FormulateCountryList = async () => {
+      this.CountryList = [];
+       let lst = await Country.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+       this.CountryList = lst;
+     }
+
+     getStateListByCountryRef = async (CountryRef: number) => {
+      this.CountryList = [];
+      this.StateList = [];
+      this.MasterList = [];
+      this.DisplayMasterList = [];
+      let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.StateList = lst;
+    }
+
+     getCityListByStateRef = async (StateRef: number) => {
+      this.CountryList = [];
+      this.StateList = [];
+      this.MasterList = [];
+      this.DisplayMasterList = [];
+      let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.MasterList = lst;
+      this.DisplayMasterList = this.MasterList;
+    }
+    
+      // For Pagination  start ----
+      loadPaginationData = () => {
+        this.total = this.DisplayMasterList.length; // Update total based on loaded data
+      }
+
 
 }

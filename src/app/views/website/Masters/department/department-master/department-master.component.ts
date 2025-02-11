@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { UIUtils } from 'src/app/services/uiutils.service';
 
 
 @Component({
@@ -8,15 +11,59 @@ import { Router } from '@angular/router';
   templateUrl: './department-master.component.html',
   styleUrls: ['./department-master.component.scss'],
 })
-export class DepartmentMasterComponent  implements OnInit {
-  headers: string[] = ['Sr.No.','Name','Company Name','Action'];
+export class DepartmentMasterComponent implements OnInit {
 
-  constructor( private router: Router) { }
+  Entity: Department = Department.CreateNewInstance();
+  MasterList: Department[] = [];
+  DisplayMasterList: Department[] = [];
+  SearchString: string = '';
+  SelectedDepartment: Department = Department.CreateNewInstance();
+  pageSize = 10; // Items per page
+  currentPage = 1; // Initialize current page
+  total = 0;
 
-  ngOnInit() {}
+  headers: string[] = ['Sr.No.', 'Name', 'Company Name', 'Action'];
 
-  AddDepartment(){
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
+
+  async ngOnInit() {
+    await this.FormulateDepartmentList();
+
+  }
+  private FormulateDepartmentList = async () => {
+    let lst = await Department.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList
+  }
+
+  onEditClicked = async (item: Department) => {
+    this.SelectedDepartment = item.GetEditableVersion();
+    Department.SetCurrentInstance(this.SelectedDepartment);
+    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+    await this.router.navigate(['/homepage/Website/Department_Master_details']);
+  }
+
+  onDeleteClicked = async (Department: Department) => {
+    await this.uiUtils.showConfirmationMessage('Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+    Are you sure that you want to DELETE this Department?`,
+      async () => {
+        await Department.DeleteInstance(async () => {
+          await this.uiUtils.showSuccessToster(`Department ${Department.p.Name} has been deleted!`);
+          await this.FormulateDepartmentList();
+          this.SearchString = '';
+          // this.loadPaginationData();
+        });
+      });
+  }
+
+  // For Pagination  start ----
+  loadPaginationData = () => {
+    this.total = this.DisplayMasterList.length; // Update total based on loaded data
+  }
+
+  AddDepartment() {
     this.router.navigate(['/homepage/Website/Department_Master_Details']);
-   }
+  }
 
 }

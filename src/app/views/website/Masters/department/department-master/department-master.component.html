@@ -21,15 +21,14 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td Class="tbldata">1</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
+      <tr *ngFor="let department of MasterList; index as i">
+        <td Class="tbldata">{{i+1}}</td>
+          <td Class="tbldata">{{department.p.Name}}</td>
         <td class="tbldata">
-          <span style="margin-left: 9px;">
+          <span style="margin-left: 9px;" (click)="onEditClicked(department);">
             <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
             </span>
-          <span style="margin-left: 9px;">
+          <span style="margin-left: 9px;" (click)="onDeleteClicked(department);">
             <img
               src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
         </td>

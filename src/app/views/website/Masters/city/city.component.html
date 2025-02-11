@@ -8,41 +8,22 @@
     <div class="card-body" style="margin-left: 14px;">
         <form autocomplete="off">
           <div class="row">
-            <div class="col-md-3 mb-2">
-              <label for="StateName"><b>State Name</b></label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateName" name="StateName" [nzSize]="'large'"
-                [(ngModel)]="StateRef" (ngModelChange)="getStateRef(StateRef)">
+            <div class="col-md-4 mb-2">
+              <label for="CountryRef"><b>Country Name</b></label>
+              <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="CountryRef"
+              name="CountryRef" required id="CountryRef" (ngModelChange)="getStateListByCountryRef(CountryRef)">
+              <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
+                [nzValue]="country.p.Ref"></nz-option>
+            </nz-select>
+            </div>
+            <div class="col-md-4 mb-2">
+              <label for="StateRef"><b>State Name</b></label>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef" name="StateRef" [nzSize]="'large'"
+                [(ngModel)]="StateRef" (ngModelChange)="getCityListByStateRef(StateRef)">
                 <nz-option *ngFor="let state of StateList"
-                [nzValue]="state" [nzLabel]="state"></nz-option>
+                [nzValue]="state.p.Ref" [nzLabel]="state.p.Name"></nz-option>
               </nz-select>
             </div>
-            <!-- <div class="col-md-3">
-              <label>State Name</label>
-               <input
-                 type="text"
-                 name="StateName"
-                 class="form-control"
-                 id="StateName"
-                 required
-                 placeholder="Enter State Name"
-               />
-           </div> -->
-            <div class="col-md-3">
-               <label>Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  class="form-control"
-                  id="name"
-                  required
-                  placeholder="Enter City Name"
-                />
-            </div>
-          <div class="col-md-2" style="justify-content: center; display: flex; gap: 2rem; margin-top : 5vh">
-              <div>
-                <button type="button" class="btn">Save</button>
-              </div>
-          </div>
         </div>
         </form>
       </div>
@@ -57,18 +38,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td Class="tbldata">1</td>
-        <td Class="tbldata">Maharashtra</td>
-        <td Class="tbldata">Kolhapur</td>
-        <td class="tbldata">
-          <span style="margin-left: 9px;">
-            <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
-            </span>
-          <span style="margin-left: 9px;">
-            <img
-              src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-        </td>
+      <tr *ngFor="let city of MasterList; index as i">
+        <td Class="tbldata">{{i+1}}</td>
+        <td Class="tbldata">{{city.p.Name}}</td>
       </tr>
     </tbody>
   </nz-table>

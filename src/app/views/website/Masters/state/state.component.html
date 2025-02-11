@@ -8,15 +8,15 @@
     <div class="card-body" style="margin-left: 14px;">
         <form autocomplete="off">
           <div class="row">
-           <div class="col-md-3">
-            <label for="CountryName"><b>Country Name</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CountryName" name="CountryName" [nzSize]="'large'"
-              [(ngModel)]="CountryRef" (ngModelChange)="getCountryRef(CountryRef)">
-              <nz-option *ngFor="let country of CountryList"
-              [nzValue]="country" [nzLabel]="country"></nz-option>
-            </nz-select>
+           <div class="col-md-4">
+            <label for="CountryRef"><b>Country Name</b></label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="CountryRef"
+            name="CountryRef" required id="CountryRef" (ngModelChange)="getStateListByCountryRef(CountryRef)">
+            <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
+              [nzValue]="country.p.Ref"></nz-option>
+          </nz-select>
           </div>
-            <div class="col-md-3">
+            <!-- <div class="col-md-3">
                <label>Name</label>
                 <input
                   type="text"
@@ -26,14 +26,14 @@
                   required
                   placeholder="Enter State Name"
                 />
-            </div>
-          <div class="col-md-2" style="justify-content: center; display: flex; gap: 2rem; margin-top : 5vh">
+            </div> -->
+          <!-- <div class="col-md-2" style="justify-content: center; display: flex; gap: 2rem; margin-top : 5vh">
               <div>
                 <button type="button" class="btn">Save</button>
               </div>
               <div>
               </div>
-          </div>
+          </div> -->
         </div>
         </form>
       </div>
@@ -48,18 +48,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td Class="tbldata">1</td>
-        <td Class="tbldata">India</td>
-        <td Class="tbldata">Maharashtra</td>
-        <td class="tbldata">
-          <span style="margin-left: 9px;">
-            <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
-            </span>
-          <span style="margin-left: 9px;">
-            <img
-              src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-        </td>
+      <tr *ngFor="let state of MasterList; index as i">
+        <td Class="tbldata">{{i+1}}</td>
+        <td Class="tbldata">{{state.p.Name}}</td>
       </tr>
     </tbody>
   </nz-table>

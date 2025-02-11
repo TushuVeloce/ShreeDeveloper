@@ -5,7 +5,7 @@
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light">
     <input type="text" Class="search-box_light" placeholder="Search..." autofocus />
   </div>
-    <div class="card-body" style="margin-left: 14px;">
+    <!-- <div class="card-body" style="margin-left: 14px;">
         <form autocomplete="off">
           <div class="row">
             <div class="col-md-4">
@@ -26,7 +26,7 @@
           </div>
         </div>
         </form>
-      </div>
+      </div> -->
     </div>
 <div class="table-container" style="margin-top: 2rem;">
   <nz-table #basicTable nzSize="small" class="no-hover-table" 
@@ -38,17 +38,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td Class="tbldata">1</td>
-        <td Class="tbldata">India</td>
-        <td class="tbldata">
-          <span style="margin-left: 9px;">
-            <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
-            </span>
-          <span style="margin-left: 9px;">
-            <img
-              src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-        </td>
+      <tr *ngFor="let country of MasterList; index as i">
+        <td Class="tbldata">{{i+1}}</td>
+        <td Class="tbldata">{{country.p.Name}}</td>
       </tr>
     </tbody>
   </nz-table>
