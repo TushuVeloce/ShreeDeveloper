@@ -36,7 +36,7 @@ export class MaterialMasterComponent implements OnInit {
     let lst = await Material.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList
-    console.log(this.DisplayMasterList);
+    // console.log(this.DisplayMasterList);
   }
 
   onEditClicked = async (item: Material) => {
