@@ -47,5 +47,13 @@ export class StateComponent implements OnInit {
        loadPaginationData = () => {
          this.total = this.DisplayMasterList.length; // Update total based on loaded data
        }
+       get paginatedList () {
+        const start = (this.currentPage - 1) * this.pageSize;
+        return this.DisplayMasterList.slice(start, start + this.pageSize);
+      }
+    
+      onPageChange  = (pageIndex: number): void => {
+        this.currentPage = pageIndex; // Update the current page
+      }
 
 }
