@@ -106,15 +106,15 @@ export class UIUtils {
     const currentTheme = this.themeService.getCurrentTheme();
 
     // Determine background and text color based on the current theme
-    const backgroundColor = currentTheme === 'dark' ? 'white' : 'black'; // White background if dark theme, black otherwise
-    const textColor = currentTheme === 'dark' ? 'black' : 'white'; // Black text if dark theme, white otherwise
+   // const backgroundColor = currentTheme === 'dark' ? 'white' : 'black'; // White background if dark theme, black otherwise
+   // const textColor = currentTheme === 'dark' ? 'black' : 'white'; // Black text if dark theme, white otherwise
 
     // Use the toast mixin to show the toast
     this.toastMixin.fire({
       title: title,
       icon: 'success',
-      background: backgroundColor, // Set background color based on theme
-      color: textColor // Set text color based on theme
+    //  background: backgroundColor, // Set background color based on theme
+    //  color: textColor // Set text color based on theme
     });
   }
 
