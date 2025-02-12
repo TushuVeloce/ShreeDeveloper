@@ -11,9 +11,8 @@
     </nz-button>
   </div>
 </div>
-<div class="table-container" style="margin-top: 2rem;">
-  <nz-table #basicTable nzSize="small" class="no-hover-table" 
-    Class="bgtable_light" [nzScroll]="{x:'auto' }"
+<div class="table-container" style="margin-top: 2rem;"  *ngIf="DisplayMasterList.length > 0">
+  <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList" [nzScroll]="{x:'auto' }"
     nzFrontPagination="false" [nzShowSizeChanger]="false">
     <thead>
       <tr>
@@ -21,7 +20,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let department of MasterList; index as i">
+      <tr *ngFor="let department of paginatedList; index as i">
         <td Class="tbldata">{{i+1}}</td>
           <td Class="tbldata">{{department.p.Name}}</td>
         <td class="tbldata">

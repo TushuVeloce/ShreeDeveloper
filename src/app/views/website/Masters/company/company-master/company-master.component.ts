@@ -16,9 +16,7 @@ export class CompanyMasterComponent implements OnInit {
   MasterList: Company[] = [];
   DisplayMasterList: Company[] = [];
   SearchString: string = '';
-  SelectedMaterial: Company = Company.CreateNewInstance();
-
-  CustomerRef: number = 0;
+  SelectedCompany: Company = Company.CreateNewInstance();
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
@@ -28,25 +26,20 @@ export class CompanyMasterComponent implements OnInit {
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 
   ngOnInit() {
-    this.FormulateMaterialList();
+    this.FormulateMasterList();
   }
 
-  private FormulateMaterialList = async () => {
+  private FormulateMasterList = async () => {
     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList
-    // console.log(this.DisplayMasterList);
   }
 
   onEditClicked = async (item: Company) => {
-
-    this.SelectedMaterial = item.GetEditableVersion();
-
-    Company.SetCurrentInstance(this.SelectedMaterial);
-
+    this.SelectedCompany = item.GetEditableVersion();
+    Company.SetCurrentInstance(this.SelectedCompany);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-
-    await this.router.navigate(['/homepage/Website/Material_Master_details']);
+    await this.router.navigate(['/homepage/Website/Company_Master_details']);
   }
 
   onDeleteClicked = async (Company: Company) => {
