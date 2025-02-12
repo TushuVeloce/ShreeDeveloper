@@ -19,18 +19,20 @@ export class CountryComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  headers: string[] = ['Sr.No.', 'Country Name', 'Action'];
+  headers: string[] = ['Sr.No.', 'Country Name'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 
  async ngOnInit() {
     await this.FormulateCountryList();
+    this.loadPaginationData();
    }
 
      private FormulateCountryList = async () => {
        let lst = await Country.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
        this.MasterList = lst;
        this.DisplayMasterList = this.MasterList
+       this.loadPaginationData();
      }
 
        // For Pagination  start ----
@@ -42,8 +44,9 @@ export class CountryComponent implements OnInit {
         return this.DisplayMasterList.slice(start, start + this.pageSize);
       }
     
-      onPageChange  = (pageIndex: number): void => {
-        this.currentPage = pageIndex; // Update the current page
-      }
+     
+ onPageChange  = (pageIndex: number): void => {
+  this.currentPage = pageIndex; // Update the current page
+}
 
 }

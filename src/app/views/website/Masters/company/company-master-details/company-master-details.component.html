@@ -22,9 +22,10 @@
            <label>Name</label>
             <input
               type="text"
-              name="name"
+              [(ngModel)]="Entity.p.Name"
+              name="Name"
               class="form-control"
-              id="name"
+              id="Name"
               required
               placeholder="Enter Name"
             />
@@ -35,9 +36,10 @@
            <label>Owner Name</label>
             <input
               type="text"
-              name="ownerName"
+              [(ngModel)]="Entity.p.OwnerName"
+              name="OwnerName"
               class="form-control"
-              id="ownerName"
+              id="OwnerName"
               required
               placeholder="Enter Owner Name"
             />
@@ -45,12 +47,13 @@
         </div>
         <div class="col-md-4">
           <div>
-           <label>Contact</label>
+           <label>Contacts</label>
             <input
               type="text"
-              name="contact"
+              [(ngModel)]="Entity.p.Contacts"
+              name="Contacts"
               class="form-control"
-              id="contact"
+              id="Contacts"
               required
               placeholder="Enter Contact No"
             />
@@ -63,9 +66,10 @@
            <label>Address</label>
             <input
               type="text"
-              name="address"
+              [(ngModel)]="Entity.p.AddressLine1"
+              name="AddressLine"
               class="form-control"
-              id="address"
+              id="AddressLine"
               required
               placeholder="Enter Address"
             />
@@ -76,9 +80,10 @@
            <label>Registration Number</label>
             <input
               type="text"
-              name="registrationnumber"
+              [(ngModel)]="Entity.p.RegistrationNumber"
+              name="RegistrationNumber"
               class="form-control"
-              id="registrationnumber"
+              id="RegistrationNumber"
               required
               placeholder="Enter Registration Number"
             />
@@ -89,9 +94,10 @@
            <label>GST No</label>
             <input
               type="text"
-              name="gstno"
+              [(ngModel)]="Entity.p.GSTIn"
+              name="GSTIn"
               class="form-control"
-              id="gstno"
+              id="GSTIn"
               required
               placeholder="Enter GST No"
             />
@@ -104,9 +110,10 @@
            <label>Pan No</label>
             <input
               type="text"
-              name="panno"
+              [(ngModel)]="Entity.p.Pan"
+              name="Pan"
               class="form-control"
-              id="panno"
+              id="Pan"
               required
               placeholder="Enter Pan No"
             />
@@ -171,9 +178,9 @@
            <label>CIN No</label>
             <input
               type="text"
-              name="cinno"
+              name="CINNo"
               class="form-control"
-              id="cinno"
+              id="CINNo"
               required
               placeholder="Enter CIN No"
             />

@@ -22,7 +22,7 @@ export class StateComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  headers: string[] = ['Sr.No.','State Name', 'Action'];
+  headers: string[] = ['Sr.No.','State Name'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 

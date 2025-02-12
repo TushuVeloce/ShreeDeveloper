@@ -23,9 +23,9 @@
             <input
               type="text"
               [(ngModel)]="Entity.p.Name"
-              name="name"
+              name="Name"
               class="form-control"
-              id="name"
+              id="Name"
               required
               placeholder="Enter Name"
             />
@@ -35,7 +35,7 @@
           <div>
            <label for="CompanyRef">Company Name</label>
               <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CompanyRef" name="CompanyRef" [nzSize]="'large'"
-              [(ngModel)]="CompanyRef">
+              [(ngModel)]="Entity.p.ComapnyRef">
               <nz-option *ngFor="let company of CompanyList"
               [nzValue]="company.p.Ref" [nzLabel]="company.p.Name"></nz-option>
             </nz-select>

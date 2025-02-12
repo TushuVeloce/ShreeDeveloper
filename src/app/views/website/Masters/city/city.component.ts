@@ -25,7 +25,7 @@ export class CityComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  headers: string[] = ['Sr.No.','City Name', 'Action'];
+  headers: string[] = ['Sr.No.','City Name'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 
