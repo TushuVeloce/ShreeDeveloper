@@ -32,7 +32,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let state of paginatedList; index as i">
-          <td Class="tbldata">{{i+1}}</td>
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{state.p.Name}}</td>
         </tr>
       </tbody>

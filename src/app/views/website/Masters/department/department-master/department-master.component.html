@@ -22,7 +22,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let department of paginatedList; index as i">
-          <td Class="tbldata">{{i+1}}</td>
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{department.p.Name}}</td>
           <td class="tbldata">
             <span style="margin-left: 9px;" (click)="onEditClicked(department);">
