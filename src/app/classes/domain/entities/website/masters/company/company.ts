@@ -21,6 +21,10 @@ export class CompanyProps {
   public Contacts: string = '';
   public AddressLine1: string = '';
   public AddressLine2: string = '';
+  public CountryRef:  number = 0;
+  public readonly CountryName: string='';
+  public StateRef:  number = 0;
+  public readonly StateName: string='';
   public CityRef:  number = 0;
   public readonly CityName: string='';
   public GeoNameId:  string='';
@@ -76,8 +80,10 @@ export class Company implements IPersistable<Company> {
     if (this.p.OwnerName == '') vra.add('OwnerName', 'Owner Name cannot be blank.');
     if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'AddressLine1 cannot be blank.');
     if (this.p.AddressLine2 == '') vra.add('AddressLine2', 'AddressLine2 cannot be blank.');
-    if (this.p.CityName == '') vra.add('CityName', 'CityName cannot be blank.');
-    if (this.p.GeoNameId == '') vra.add('GeoNameId', 'GeoNameId cannot be blank.');
+    if (this.p.CountryName == '') vra.add('CountryName', 'Country Name cannot be blank.');
+    if (this.p.StateName == '') vra.add('StateName', 'State Name cannot be blank.');
+    if (this.p.CityName == '') vra.add('CityName', 'City Name cannot be blank.');
+    if (this.p.GeoNameId == '') vra.add('GeoNameId', 'GeoName Id cannot be blank.');
     if (this.p.RegistrationNumber == '') vra.add('RegistrationNumber', 'Registration Number cannot be blank.');
     if (this.p.GSTIn == '') vra.add('GSTIn', 'GST In cannot be blank.');
     if (this.p.Pan == '') vra.add('Pan', 'Pan cannot be blank.');

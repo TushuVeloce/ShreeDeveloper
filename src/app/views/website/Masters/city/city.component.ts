@@ -31,12 +31,14 @@ export class CityComponent implements OnInit {
 
   async ngOnInit() {
     await this.FormulateCountryList();
+    this.loadPaginationData();
    }
 
      private FormulateCountryList = async () => {
       this.CountryList = [];
        let lst = await Country.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
        this.CountryList = lst;
+       this.loadPaginationData();
      }
 
      getStateListByCountryRef = async (CountryRef: number) => {
@@ -46,6 +48,7 @@ export class CityComponent implements OnInit {
       this.DisplayMasterList = [];
       let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.StateList = lst;
+      this.loadPaginationData();
     }
 
      getCityListByStateRef = async (StateRef: number) => {
@@ -56,6 +59,7 @@ export class CityComponent implements OnInit {
       let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
+      this.loadPaginationData();
     }
     
       // For Pagination  start ----

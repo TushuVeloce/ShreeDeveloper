@@ -27,12 +27,14 @@ export class CompanyMasterComponent implements OnInit {
 
   ngOnInit() {
     this.FormulateMasterList();
+    this.loadPaginationData();
   }
 
   private FormulateMasterList = async () => {
     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList
+    this.loadPaginationData();
   }
 
   onEditClicked = async (item: Company) => {

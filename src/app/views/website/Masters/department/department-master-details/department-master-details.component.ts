@@ -18,6 +18,7 @@ export class DepartmentMasterDetailsComponent implements OnInit {
   isSaveDisabled: boolean = false;
   private IsNewEntity: boolean = true;
   Entity: Department = Department.CreateNewInstance();
+  DetailsFormTitle: 'New Department' | 'Edit Department' = 'New Department';
   InitialEntity: Department = null as any;
   CompanyList: Company[] = [];
   CompanyRef: number = 0;

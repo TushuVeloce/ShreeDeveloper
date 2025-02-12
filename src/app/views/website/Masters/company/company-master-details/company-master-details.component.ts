@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
 import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
+import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
+import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
@@ -14,6 +17,9 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class CompanyMasterDetailsComponent implements OnInit {
   Entity: Company = Company.CreateNewInstance();
+  CountryList: Country[] = [];
+  StateList: State[] = [];
+  CityList: State[] = [];
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Company' | 'Edit Company' = 'New Company';
@@ -22,7 +28,8 @@ export class CompanyMasterDetailsComponent implements OnInit {
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
 
- ngOnInit() { 
+async ngOnInit() { 
+    await this.FormulateCountryList();
      if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
        this.IsNewEntity = false;
        
@@ -40,6 +47,23 @@ export class CompanyMasterDetailsComponent implements OnInit {
      // this.focusInput();
    }
 
+   private FormulateCountryList = async () => {
+    this.CountryList = [];
+    let lst = await Country.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.CountryList = lst;
+  }
+
+  getStateListByCountryRef = async (CountryRef: number) => {
+    this.StateList = [];
+    let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.StateList = lst;
+  }
+
+   getCityListByStateRef = async (StateRef: number) => {
+    this.CityList = [];
+    let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.CityList = lst;
+      }
 
   SaveCompanyMaster = async () => {
     let entityToSave = this.Entity.GetEditableVersion();

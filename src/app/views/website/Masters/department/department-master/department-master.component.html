@@ -6,32 +6,43 @@
     <input type="text" Class="search-box_light" placeholder="Search..." autofocus />
   </div>
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
-    <nz-button nz-button class="btn1" (click)= 'AddDepartment()'>
+    <nz-button nz-button class="btn1" (click)='AddDepartment()'>
       Add Department
     </nz-button>
   </div>
 </div>
-<div class="table-container" style="margin-top: 2rem;"  *ngIf="DisplayMasterList.length > 0">
-  <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList" [nzScroll]="{x:'auto' }"
-    nzFrontPagination="false" [nzShowSizeChanger]="false">
-    <thead>
-      <tr>
-        <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let department of paginatedList; index as i">
-        <td Class="tbldata">{{i+1}}</td>
+<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+  <div class="table-container">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let department of paginatedList; index as i">
+          <td Class="tbldata">{{i+1}}</td>
           <td Class="tbldata">{{department.p.Name}}</td>
-        <td class="tbldata">
-          <span style="margin-left: 9px;" (click)="onEditClicked(department);">
-            <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
+          <td class="tbldata">
+            <span style="margin-left: 9px;" (click)="onEditClicked(department);">
+              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
             </span>
-          <span style="margin-left: 9px;" (click)="onDeleteClicked(department);">
-            <img
-              src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-        </td>
-      </tr>
-    </tbody>
-  </nz-table>
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(department);">
+              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+  <div class="fixed-pagination">
+    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+      (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+    </nz-pagination>
+  </div>
+</div>
+<div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
+  <div style="height: 200px" class="d-flex align-items-center justify-content-center">
+    <span class="title_light"> Data Not Found</span>
+  </div>
 </div>

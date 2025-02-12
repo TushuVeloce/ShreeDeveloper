@@ -3,199 +3,130 @@
     <div class="row">
       <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
         <button type="button" class="backbtn" (click)="BackCompany()">
-          <img
-            src="/assets/icons/arrow-button.png"
-            alt=""
-            width="34px"
-            height="34px"
-          />
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
         </button>
       </div>
       <div class="col-md-11">
-        <span class="detail_title">Company Master</span>
+        <span class="detail_title">{{DetailsFormTitle}}</span>
       </div>
     </div>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
-           <label>Name</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.Name"
-              name="Name"
-              class="form-control"
-              id="Name"
-              required
-              placeholder="Enter Name"
-            />
+            <label>Name</label>
+            <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
+              placeholder="Enter Company Name" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
-           <label>Owner Name</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.OwnerName"
-              name="OwnerName"
-              class="form-control"
-              id="OwnerName"
-              required
-              placeholder="Enter Owner Name"
-            />
+            <label>Owner Name</label>
+            <input type="text" [(ngModel)]="Entity.p.OwnerName" name="OwnerName" class="form-control" id="OwnerName"
+              required placeholder="Enter Owner Name" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
-           <label>Contacts</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.Contacts"
-              name="Contacts"
-              class="form-control"
-              id="Contacts"
-              required
-              placeholder="Enter Contact No"
-            />
+            <label>Contacts</label>
+            <input type="text" [(ngModel)]="Entity.p.Contacts" name="Contacts" class="form-control" id="Contacts"
+              required placeholder="Enter Contact No" />
           </div>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
-           <label>Address</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.AddressLine1"
-              name="AddressLine"
-              class="form-control"
-              id="AddressLine"
-              required
-              placeholder="Enter Address"
-            />
+            <label>AddressLine1</label>
+            <input type="text" [(ngModel)]="Entity.p.AddressLine1" name="AddressLine1" class="form-control"
+              id="AddressLine1" required placeholder="Enter AddressLine1" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
-           <label>Registration Number</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.RegistrationNumber"
-              name="RegistrationNumber"
-              class="form-control"
-              id="RegistrationNumber"
-              required
-              placeholder="Enter Registration Number"
-            />
+            <label>AddressLine2</label>
+            <input type="text" [(ngModel)]="Entity.p.AddressLine2" name="AddressLine2" class="form-control"
+              id="AddressLine2" required placeholder="Enter AddressLine2" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
-           <label>GST No</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.GSTIn"
-              name="GSTIn"
-              class="form-control"
-              id="GSTIn"
-              required
-              placeholder="Enter GST No"
-            />
+            <label for="CountryRef"><b>Country Name</b></label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select"  [nzSize]="'large'"  name="CountryRef" required id="CountryRef"
+            [(ngModel)]="Entity.p.CountryRef" (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
+              <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
+                [nzValue]="country.p.Ref"></nz-option>
+            </nz-select>
           </div>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
-           <label>Pan No</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.Pan"
-              name="Pan"
-              class="form-control"
-              id="Pan"
-              required
-              placeholder="Enter Pan No"
-            />
+            <label for="StateRef"><b>State Name</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
+              name="StateRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StateRef"
+              (ngModelChange)="getCityListByStateRef(Entity.p.StateRef)">
+              <nz-option *ngFor="let state of StateList" [nzValue]="state.p.Ref" [nzLabel]="state.p.Name"></nz-option>
+            </nz-select>
           </div>
         </div>
         <div class="col-md-4">
           <div>
-           <label>Bank Name</label>
-            <input
-              type="text"
-              name="bankname"
-              class="form-control"
-              id="bankname"
-              required
-              placeholder="Enter Bank Name"
-            />
+            <label for="CityRef"><b>City Name</b></label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
+            name="CityRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CityRef"
+            (ngModelChange)="getCityListByStateRef(Entity.p.CityRef)">
+            <nz-option *ngFor="let state of StateList" [nzValue]="state.p.Ref" [nzLabel]="state.p.Name"></nz-option>
+          </nz-select>
           </div>
         </div>
         <div class="col-md-4">
           <div>
-           <label>Bank Branch</label>
-            <input
-              type="text"
-              name="bankbranch"
-              class="form-control"
-              id="bankbranch"
-              required
-              placeholder="Enter Bank Branch"
-            />
+            <label>Geo Name Id</label>
+            <input type="text" [(ngModel)]="Entity.p.GeoNameId" name="GeoNameId" class="form-control" id="GeoNameId"
+              required placeholder="Enter Geo Name Id" />
           </div>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
-           <label>Account No</label>
-            <input
-              type="text"
-              name="accno"
-              class="form-control"
-              id="accno"
-              required
-              placeholder="Enter Account No"
-            />
+            <label>Registration Number</label>
+            <input type="text" [(ngModel)]="Entity.p.RegistrationNumber" name="RegistrationNumber" class="form-control"
+              id="RegistrationNumber" required placeholder="Enter Registration Number" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
-           <label>IFSC Code</label>
-            <input
-              type="text"
-              name="ifsccode"
-              class="form-control"
-              id="ifsccode"
-              required
-              placeholder="Enter IFSC Code"
-            />
+            <label>GST No</label>
+            <input type="text" [(ngModel)]="Entity.p.GSTIn" name="GSTIn" class="form-control" id="GSTIn" required
+              placeholder="Enter GST No" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
-           <label>CIN No</label>
-            <input
-              type="text"
-              name="CINNo"
-              class="form-control"
-              id="CINNo"
-              required
-              placeholder="Enter CIN No"
-            />
+            <label>Pan No</label>
+            <input type="text" [(ngModel)]="Entity.p.Pan" name="Pan" class="form-control" id="Pan" required
+              placeholder="Enter Pan No" />
           </div>
         </div>
       </div>
-    
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>CIN No</label>
+            <input type="text" name="CINNo" class="form-control" id="CINNo" required placeholder="Enter CIN No" />
+          </div>
+        </div>
+      </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
-          <div>
-            <button type="button" class="btn" (click)="SaveCompanyMaster()">Save</button>
-          </div>
-          <div>
-            <button type="button" class="btn"  (click)="BackCompany()">Back</button>
-          </div>
+        <div>
+          <button type="button" class="btn" (click)="SaveCompanyMaster()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackCompany()">Back</button>
+        </div>
       </div>
     </form>
   </div>
-</div>

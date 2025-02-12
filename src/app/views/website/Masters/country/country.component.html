@@ -28,7 +28,7 @@
         </form>
       </div> -->
 </div>
-<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem;" *ngIf="DisplayMasterList.length > 0">
+<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
       [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
@@ -39,23 +39,20 @@
       </thead>
       <tbody>
         <tr *ngFor="let country of paginatedList; index as i">
-          <td Class="tbldata"> {{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{ country.p.Name }}</td>
         </tr>
       </tbody>
     </nz-table>
-
   </div>
   <div class="fixed-pagination">
-    <nz-pagination class="try light-theme" 
-      [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
       (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
     </nz-pagination>
   </div>
-
 </div>
 <div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
-  <div style="height: 200px;" class="d-flex align-items-center justify-content-center">
+  <div style="height: 200px" class="d-flex align-items-center justify-content-center">
     <span class="title_light"> Data Not Found</span>
   </div>
 </div>

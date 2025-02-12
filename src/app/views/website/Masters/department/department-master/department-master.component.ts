@@ -28,12 +28,14 @@ export class DepartmentMasterComponent implements OnInit {
 
   async ngOnInit() {
     await this.FormulateDepartmentList();
+    this.loadPaginationData();
 
   }
   private FormulateDepartmentList = async () => {
     let lst = await Department.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList
+    this.loadPaginationData();
   }
 
   onEditClicked = async (item: Department) => {
@@ -52,7 +54,7 @@ export class DepartmentMasterComponent implements OnInit {
           await this.uiUtils.showSuccessToster(`Department ${Department.p.Name} has been deleted!`);
           await this.FormulateDepartmentList();
           this.SearchString = '';
-          // this.loadPaginationData();
+          this.loadPaginationData();
         });
       });
   }
