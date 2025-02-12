@@ -74,10 +74,26 @@
     padding: 0.4rem 2.1rem;
 }
 
+// ========================== Input Class CSS Start =========================== //
+
 .form-control:focus {
   outline: 0;
-  box-shadow: 0 0 0 0.15rem rgb(180, 103, 103); 
+  box-shadow: none ;
+  border: solid 1px ;
+  border-color: brown;
 }
+
+.form-control:hover {
+  outline: 0;
+  box-shadow: none ;
+  border: solid 1px ;
+  border-color: brown;
+}
+
+
+
+
+// ========================== Input Class CSS End =========================== //
 
 
 .btn:hover{
