@@ -3,160 +3,118 @@
     <div class="row">
       <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
         <button type="button" class="backbtn" (click)="BackEmployee()">
-          <img
-            src="/assets/icons/arrow-button.png"
-            alt=""
-            width="34px"
-            height="34px"
-          />
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
         </button>
       </div>
       <div class="col-md-11">
-        <span class="detail_title">Employee Master</span>
+        <span class="detail_title">{{DetailsFormTitle}}</span>
       </div>
     </div>
     <form autocomplete="off">
-      <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
+      <div class="row" style="margin-top: 1rem; margin-bottom: 1rem; ">
+        <div class="col-md-6">
           <div>
-           <label>Role</label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="role" name="role" [nzSize]="'large'"
-              [(ngModel)]="RoleRef" (ngModelChange)="getRoleRef(RoleRef)">
-              <nz-option *ngFor="let role of RoleList"
-              [nzValue]="role" [nzLabel]="role"></nz-option>
+            <label>Role</label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UserRoleRef"
+              name="UserRoleRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UserRoleRef">
+              <nz-option *ngFor="let role of UserRoleList" [nzValue]="role.p.Ref" [nzLabel]="role.p.Name"></nz-option>
             </nz-select>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div>
-           <label>First Name</label>
-            <input
-              type="text"
-              name="firstname"
-              class="form-control"
-              id="firstname"
-              required
-              placeholder="Enter First Name"
-            />
+            <label>First Name</label>
+            <input type="text" name="firstname" [(ngModel)]="Entity.p.FirstName" class="form-control" id="firstname"
+              required placeholder="Enter First Name" />
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div>
-           <label>Last Name</label>
-            <input
-              type="text"
-              name="lastname"
-              class="form-control"
-              id="lastname"
-              required
-              placeholder="Enter Last Name"
-            />
+            <label>Last Name</label>
+            <input type="text" name="lastname" [(ngModel)]="Entity.p.LastName" class="form-control" id="lastname"
+              required placeholder="Enter Last Name" />
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem;">
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div>
-           <label>Email id</label>
-            <input
-              type="text"
-              name="emailid"
-              class="form-control"
-              id="emailid"
-              required
-              placeholder="Enter Email id"
-            />
+            <label>Email id</label>
+            <input type="text" name="emailid" class="form-control" [(ngModel)]="Entity.p.EmailId" id="emailid" required
+              placeholder="Enter Email id" />
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div>
-           <label>Contact No</label>
-            <input
-              type="text"
-              name="contactno"
-              class="form-control"
-              id="contactno"
-              required
-              placeholder="Enter Contact No"
-            />
+            <label>Contact No</label>
+            <input type="text" name="contactno" [(ngModel)]="Entity.p.ContactNo" class="form-control" id="contactno"
+              required placeholder="Enter Contact No" />
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div>
-           <label>Address</label>
-            <input
-              type="text"
-              name="address"
-              class="form-control"
-              id="address"
-              required
-              placeholder="Enter Address"
-            />
+            <label>Address Line 1</label>
+            <input type="text" name="address" [(ngModel)]="Entity.p.AddressLine1" class="form-control" id="address"
+              required placeholder="Enter Address" />
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem;">
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div>
-           <label>Gender</label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="gender" name="gender" [nzSize]="'large'"
-              [(ngModel)]="GenderRef" (ngModelChange)="getGenderRef(GenderRef)">
-              <nz-option *ngFor="let gender of GenderList"
-              [nzValue]="gender" [nzLabel]="gender"></nz-option>
+            <label>Address Line 2</label>
+            <input type="text" name="address" [(ngModel)]="Entity.p.AddressLine2" class="form-control" id="address"
+              required placeholder="Enter Address" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div>
+            <label>Gender</label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="gender" name="gender"
+              [nzSize]="'large'" [(ngModel)]="Entity.p.Gender">
+              <nz-option *ngFor="let gender of GenderList" [nzValue]="gender.Ref" [nzLabel]="gender.Name"></nz-option>
             </nz-select>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div>
-           <label>Emp Id</label>
-            <input
-              type="text"
-              name="empid"
-              class="form-control"
-              id="empid"
-              required
-            />
+            <label>Emp Id</label>
+            <input type="text" name="empid" [(ngModel)]="Entity.p.EmpId" class="form-control" id="empid" required />
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div>
-           <label>Department Name </label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="departmentname" name="departmentname" [nzSize]="'large'"
-              [(ngModel)]="DepartmentRef" (ngModelChange)="getDepartmentRef(DepartmentRef)">
-              <nz-option *ngFor="let department of DepartmentList"
-              [nzValue]="department" [nzLabel]="department"></nz-option>
+            <label>Department Name </label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="departmentname"
+              name="departmentname" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef">
+              <nz-option *ngFor="let department of DepartmentList" [nzValue]="Entity.p.DepartmentRef"
+                [nzLabel]="department.p.DepartmentName"></nz-option>
             </nz-select>
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem;">
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div>
-           <label>Login Status</label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="loginstatus" name="loginstatus" [nzSize]="'large'"
-              [(ngModel)]="LoginStatusRef" (ngModelChange)="getLoginStatusRef(LoginStatusRef)">
-              <nz-option *ngFor="let loginstatus of LoginStatusList"
-              [nzValue]="loginstatus" [nzLabel]="loginstatus"></nz-option>
+            <label>Login Status</label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="loginstatus"
+              name="loginstatus" [nzSize]="'large'" [(ngModel)]="LoginStatusRef">
+              <nz-option *ngFor="let loginstatus of LoginStatusList" [nzValue]="loginstatus"
+                [nzLabel]="loginstatus"></nz-option>
             </nz-select>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div>
             <label>Is User</label>
-            <select  type="text" name="isuser" class="form-control" id="isuser" required >
+            <select type="text" name="isuser" class="form-control" id="isuser" required>
               <option value="true">Yes</option>
               <option value="false" selected>No</option>
-              </select>
+            </select>
           </div>
         </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
-          <div>
-            <button type="button" class="btn">Save</button>
-          </div>
-          <div>
-            <button type="button" class="btn"  (click)="BackEmployee()">Back</button>
-          </div>
+        <div>
+          <button type="button" class="btn">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackEmployee()">Back</button>
+        </div>
       </div>
     </form>
   </div>

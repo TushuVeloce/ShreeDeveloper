@@ -22,7 +22,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let material of MasterList; index as i">
-          <td Class="tbldata">{{i+1}}</td>
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{material.p.Name}}</td>
           <td Class="tbldata">{{material.p.Unit}}</td>
           <td class="tbldata">

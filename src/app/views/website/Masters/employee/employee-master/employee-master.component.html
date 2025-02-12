@@ -6,41 +6,39 @@
     <input type="text" Class="search-box_light" placeholder="Search..." autofocus />
   </div>
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
-    <nz-button nz-button class="btn1" (click)= 'AddEmployee()'>
+    <nz-button nz-button class="btn1" (click)='AddEmployee()'>
       Add Employee
     </nz-button>
   </div>
 </div>
 <div class="table-container" style="margin-top: 2rem;">
-  <nz-table #basicTable nzSize="small" class="no-hover-table" 
-    Class="bgtable_light" [nzScroll]="{x:'auto' }"
-    nzFrontPagination="false" [nzShowSizeChanger]="false">
+  <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
+    [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
     <thead>
       <tr>
         <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td Class="tbldata">1</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
-        <td Class="tbldata">Demo</td>
+      <tr *ngFor="let employee of paginatedList; index as i">
+        <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <td Class="tbldata">{{employee.p.UserRoleName }}</td>
+        <td Class="tbldata">{{employee.p.FirstName }}</td>
+        <td Class="tbldata">{{employee.p.LastName }}</td>
+        <td Class="tbldata">{{employee.p.EmailId }}</td>
+        <td Class="tbldata">{{employee.p.ContactNo }}</td>
+        <td Class="tbldata">{{employee.p.AddressLine1 }}</td>
+        <td Class="tbldata">{{employee.p.Gender }}</td>
+        <td Class="tbldata">{{employee.p.EmpId }}</td>
+        <td Class="tbldata">{{employee.p.DepartmentName }}</td>
+        <td Class="tbldata">{{employee.p.UserStatus }}</td>
+        <td Class="tbldata">{{employee.p.IsUser }}</td>
         <td class="tbldata">
           <span style="margin-left: 9px;">
-            <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
-            </span>
+            <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+          </span>
           <span style="margin-left: 9px;">
-            <img
-              src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
         </td>
       </tr>
     </tbody>
