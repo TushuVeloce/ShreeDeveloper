@@ -19,25 +19,25 @@
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-6">
           <div>
-           <label>Marketing Type</label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="marketing" name="marketing" [nzSize]="'large'"
-              [(ngModel)]="MarketingTypeRef" (ngModelChange)="getMarketingTypeRef(MarketingTypeRef)">
-              <nz-option *ngFor="let marketingtype of MarketingTypeList"
-              [nzValue]="marketingtype" [nzLabel]="marketingtype"></nz-option>
+           <label>Marketing Modes</label>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="MarketingModes" name="MarketingModes" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.MarketingModes">
+              <nz-option *ngFor="let marketingModes  of MarketingModesList"
+              [nzValue]="marketingModes.Ref" [nzLabel]="marketingModes.Name "></nz-option>
             </nz-select>
           </div>
 
         </div>
         <div class="col-md-6">
           <div>
-           <label>Description</label>
+           <label>Marketing Type</label>
             <input
               type="text"
-              name="description"
+              name="MarketingType"
               class="form-control"
-              id="description"
+              id="MarketingType"
               required
-              placeholder="Enter Description"
+              placeholder="Enter Marketing Type"
             />
           </div>
         </div>

@@ -4,40 +4,52 @@ export enum Gender {
   Female = 20
 }
 
-export enum RoundOffTypes {
+export enum MarketingModes {
   None = 0,
-  RoundDown = 10,
-  RoundUp = 20,
-  RoundAuto = 30
+  Digital = 10,
+  Electronics = 20,
+  Outdoor = 30,
+  PrintingMedia = 40,
+  AgentBoker = 50
 }
 
 
 export class DomainEnums {
 
-  public static RoundOffTypeName(RoundOffType: RoundOffTypes) {
-    switch (RoundOffType) {
-      case RoundOffTypes.RoundAuto: return 'Round Auto';
-      case RoundOffTypes.RoundDown: return 'Round Down';
-      case RoundOffTypes.RoundUp: return 'Round Up';
+  public static MarketingModeName(MarketingMode: MarketingModes) {
+    switch (MarketingMode) {
+      case MarketingModes.Digital: return 'Digital';
+      case MarketingModes.Electronics: return 'Electronics';
+      case MarketingModes.Outdoor: return 'Outdoor';
+      case MarketingModes.PrintingMedia: return 'Printing Media';
+      case MarketingModes.AgentBoker: return 'Agent/Boker';
       default: return '';
     }
   }
 
-  public static RoundOffTypeList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+  public static MarketingModesList(withAllOption: boolean = false, allOptionName: string = '<All>') {
     let result = [
       {
-        Ref: RoundOffTypes.RoundAuto, Name: DomainEnums.RoundOffTypeName(RoundOffTypes.RoundAuto)
+        Ref: MarketingModes.Digital, Name: DomainEnums.MarketingModeName(MarketingModes.Digital)
       },
       {
-        Ref: RoundOffTypes.RoundDown, Name: DomainEnums.RoundOffTypeName(RoundOffTypes.RoundDown)
+        Ref: MarketingModes.Electronics, Name: DomainEnums.MarketingModeName(MarketingModes.Electronics)
       },
       {
-        Ref: RoundOffTypes.RoundUp, Name: DomainEnums.RoundOffTypeName(RoundOffTypes.RoundUp)
-      }
+        Ref: MarketingModes.Outdoor, Name: DomainEnums.MarketingModeName(MarketingModes.Outdoor)
+      },
+      {
+        Ref: MarketingModes.PrintingMedia, Name: DomainEnums.MarketingModeName(MarketingModes.PrintingMedia)
+      },
+      {
+        Ref: MarketingModes.AgentBoker, Name: DomainEnums.MarketingModeName(MarketingModes.AgentBoker)
+      },
+      
+
     ]
     if (withAllOption) {
       let allEntry = {
-        Ref: RoundOffTypes.None,
+        Ref: MarketingModes.None,
         Name: allOptionName
       }
       result.unshift(allEntry);
