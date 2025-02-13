@@ -18,7 +18,7 @@ export class DepartmentProps {
   public Ref: number = 0;
   public Name: string = '';
   public ComapnyRef: number = 0;
-  public readonly DepartmentName: string = '';
+  public readonly CompanyName: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';

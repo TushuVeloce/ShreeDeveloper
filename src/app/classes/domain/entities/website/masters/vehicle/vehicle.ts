@@ -17,6 +17,7 @@ export class VehicleProps {
   public readonly Db_Table_Name = "VehicleMaster";
   public Ref: number = 0;
   public Name: string = '';
+  public Number: string = '';
   
   public readonly IsNewlyCreated: boolean = false;
 
@@ -60,7 +61,8 @@ export class Vehicle implements IPersistable<Vehicle> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') vra.add('Name', 'User Role cannot be blank.');
+    if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
+    if (this.p.Number == '') vra.add('Number', 'Number cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {

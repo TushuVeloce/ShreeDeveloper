@@ -21,7 +21,7 @@ export class CompanyMasterComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
 
-  headers: string[] = ['Sr.No.', 'Name', 'Owner Name', 'Contact', 'Address', 'Reg No', ' GST No', ' Pan No', 'Bank Name', 'Bank Branch', 'Acc No', 'IFSC Code', 'CIN No', 'Action'];
+  headers: string[] = ['Sr.No.', 'Name', 'Owner Name', 'Contacts', 'AddressLine1','AddressLine2','Country Name','State Name','City Name','City Name', 'Reg No', ' GST No', ' Pan No','CIN No', 'Action'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 

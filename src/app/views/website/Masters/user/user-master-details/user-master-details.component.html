@@ -17,23 +17,15 @@
     </div>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-        <!-- <div class="col-md-6">
-          <div>
-           <label>User Name</label>
-            <select  type="text" name="username" class="form-control" id="username" required>
-              <option>--Select User--</option>
-              <option>Tushar</option>
-              </select>
-          </div>
-        </div> -->
         <div class="col-md-4">
           <div>
            <label>Email Id</label>
             <input
               type="text"
-              name="emailid"
+              [(ngModel)]="Entity.p.EmailId"
+              name="EmailId"
               class="form-control"
-              id="emailid"
+              id="EmailId"
               required
               placeholder="Enter Email Id"
             />
@@ -44,9 +36,10 @@
            <label>Contact No</label>
             <input
               type="text"
-              name="contactno"
+              [(ngModel)]="Entity.p.Contacts"
+              name="Contact"
               class="form-control"
-              id="contactno"
+              id="Contact"
               required
               placeholder="Enter Contact No"
             />
@@ -54,21 +47,32 @@
         </div>
         <div class="col-md-4">
           <div>
-           <label>Default Password</label>
+           <label>Password</label>
             <input
               type="password"
-              name="password"
+              [(ngModel)]="Entity.p.Password"
+              name="Password"
               class="form-control"
-              id="password"
+              id="Password"
               required
               placeholder="Enter Default Password"
             />
           </div>
         </div>
       </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <label for="UserRoleRef"><b>User Role</b></label>
+          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.UserRoleRef" name="UserRoleRef" required id="UserRoleRef">
+            <nz-option *ngFor="let userrole of UserRoleList" [nzLabel]="userrole.p.Name"
+              [nzValue]="userrole.p.Ref"></nz-option>
+          </nz-select>
+        </div>
+      </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
           <div>
-            <button type="button" class="btn">Save</button>
+            <button type="button" class="btn" (click)="SaveUserMaster()">Save</button>
           </div>
           <div>
             <button type="button" class="btn" (click)="BackUser()">Back</button>

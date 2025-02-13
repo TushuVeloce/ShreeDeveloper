@@ -46,7 +46,7 @@ export class EmployeeMasterComponent  implements OnInit {
     debugger
     await this.uiUtils.showConfirmationMessage('Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-      Are you sure that you want to DELETE this Company?`,
+      Are you sure that you want to DELETE this Employee?`,
       async () => {
         await employee.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(`Employee ${employee.p.FirstName} has been deleted!`);

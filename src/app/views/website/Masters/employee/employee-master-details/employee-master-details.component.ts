@@ -68,10 +68,10 @@ export class EmployeeMasterDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Employee Master saved successfully!');
+        await this.uiUtils.showSuccessToster('Employee saved successfully!');
         this.Entity = Employee.CreateNewInstance();
       } else {
-        await this.uiUtils.showSuccessToster('Employee Master Updated successfully!');
+        await this.uiUtils.showSuccessToster('Employee Updated successfully!');
       }
     }
   }

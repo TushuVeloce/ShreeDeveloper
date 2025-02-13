@@ -12,7 +12,7 @@
         </button>
       </div>
       <div class="col-md-11">
-        <span class="detail_title">Stage Master</span>
+        <span class="detail_title">{{DetailsFormTitle}}</span>
       </div>
     </div>
     <form autocomplete="off">
@@ -22,9 +22,10 @@
            <label>Stage Name</label>
             <input
               type="text"
-              name="stagenm"
+              [(ngModel)]="Entity.p.Name"
+              name="Name"
               class="form-control"
-              id="stagenm"
+              id="Name"
               required
               placeholder="Enter Stage Name"
             />
@@ -33,7 +34,7 @@
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
           <div>
-            <button type="button" class="btn">Save</button>
+            <button type="button" class="btn" (click)="SaveStageMaster()">Save</button>
           </div>
           <div>
             <button type="button" class="btn" (click)="BackMaterial()">Back</button>

@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { User } from 'src/app/classes/domain/entities/website/masters/user/user';
+import { UserRole } from 'src/app/classes/domain/entities/website/masters/userrole/userrole';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { UIUtils } from 'src/app/services/uiutils.service';
+import { Utils } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-user-master-details',
@@ -9,9 +14,58 @@ import { Router } from '@angular/router';
 })
 export class UserMasterDetailsComponent  implements OnInit {
 
-  constructor( private router: Router) { }
+   isSaveDisabled: boolean = false;
+   private IsNewEntity: boolean = true;
+   Entity: User = User.CreateNewInstance();
+   DetailsFormTitle: 'New User' | 'Edit User' = 'New User';
+   InitialEntity: User = null as any;
+   UserRoleList: UserRole[] = [];
+ 
+   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
+ 
 
-  ngOnInit() {}
+ async ngOnInit() {
+    this.UserRoleList = await UserRole.FetchEntireList();
+     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+          this.IsNewEntity = false;
+    
+          this.DetailsFormTitle = this.IsNewEntity ? 'New User' : 'Edit User';
+          this.Entity = User.GetCurrentInstance();
+          this.appStateManage.StorageKey.removeItem('Editable')
+    
+        } else {
+          this.Entity = User.CreateNewInstance();
+          User.SetCurrentInstance(this.Entity);
+    
+        }
+        this.InitialEntity = Object.assign(User.CreateNewInstance(),
+          this.utils.DeepCopy(this.Entity)) as User;
+        // this.focusInput();
+  }
+
+ SaveUserMaster = async () => {
+    let entityToSave = this.Entity.GetEditableVersion();
+
+    let entitiesToSave = [entityToSave]
+    // await this.Entity.EnsurePrimaryKeysWithValidValues()
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorToster(tr.Message);
+      return
+    }
+    else {
+      this.isSaveDisabled = false;
+      // this.onEntitySaved.emit(entityToSave);
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('User saved successfully!');
+        this.Entity = User.CreateNewInstance();
+      } else {
+        await this.uiUtils.showSuccessToster('User Updated successfully!');
+      }
+    }
+  }
 
   BackUser(){
     this.router.navigate(['/homepage/Website/User_Master']);

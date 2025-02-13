@@ -25,17 +25,18 @@
         <tr *ngFor="let company of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{company.p.Name }}</td>
-          <td Class="tbldata">{{company.p.Name }}</td>
-          <td Class="tbldata">{{company.p.Name }}</td>
-          <td Class="tbldata">{{company.p.Name }}</td>
-          <td Class="tbldata">{{company.p.Name }}</td>
-          <td Class="tbldata">{{company.p.Name }}</td>
-          <td Class="tbldata">{{company.p.Name }}</td>
-          <td Class="tbldata">{{company.p.Name }}</td>
-          <td Class="tbldata">{{company.p.Name }}</td>
-          <td Class="tbldata">{{company.p.Name }}</td>
-          <td Class="tbldata">{{company.p.Name }}</td>
-          <td Class="tbldata">{{company.p.Name }}</td>
+          <td Class="tbldata">{{company.p.OwnerName }}</td>
+          <td Class="tbldata">{{company.p.Contacts }}</td>
+          <td Class="tbldata">{{company.p.AddressLine1 }}</td>
+          <td Class="tbldata">{{company.p.AddressLine2 }}</td>
+          <td Class="tbldata">{{company.p.CountryName }}</td>
+          <td Class="tbldata">{{company.p.StateName}}</td>
+          <td Class="tbldata">{{company.p.CityName}}</td>
+          <td Class="tbldata">{{company.p.GeoNameId }}</td>
+          <td Class="tbldata">{{company.p.RegistrationNumber }}</td>
+          <td Class="tbldata">{{company.p.GSTIn }}</td>
+          <td Class="tbldata">{{company.p.Pan }}</td>
+          <td Class="tbldata">{{company.p.CINNo }}</td>
           <td class="tbldata">
             <span style="margin-left: 9px;" (click)="onEditClicked(company);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />

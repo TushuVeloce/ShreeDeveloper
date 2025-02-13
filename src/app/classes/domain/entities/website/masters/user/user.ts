@@ -16,9 +16,11 @@ import { UserFetchRequest } from "./userfetchrequest";
 export class UserProps {
   public readonly Db_Table_Name = "UserMaster";
   public Ref: number = 0;
-  public Email_Id: string = '';
-  public Contact_No: number = 0;
-  public Default_Password: any = '';
+  public EmailId: string = '';
+  public Contacts: number = 0;
+  public Password: any = '';
+  public UserRoleRef: number = 0;
+  public UserRoleName: string = '';
   
   public readonly IsNewlyCreated: boolean = false;
 
@@ -62,9 +64,10 @@ export class User implements IPersistable<User> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Email_Id == '') vra.add('Email_Id', 'Email Id cannot be blank.');
-    if (this.p.Contact_No == 0) vra.add('Contact_No', 'Contact No cannot be blank.');
-    if (this.p.Default_Password == '') vra.add('Default_Password', 'Default Password cannot be blank.');
+    if (this.p.EmailId == '') vra.add('EmailId', 'Email Id cannot be blank.');
+    if (this.p.Contacts == 0) vra.add('Contacts', 'Contact No cannot be blank.');
+    if (this.p.Password == '') vra.add('Password', 'Default Password cannot be blank.');
+    if (this.p.UserRoleRef == 0) vra.add('UserRoleRef', 'User Role cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {

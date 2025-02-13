@@ -21,9 +21,10 @@
            <label>Bank Name</label>
             <input
               type="text"
-              name="bankname"
+              [(ngModel)]="Entity.p.Name"
+              name="Name"
               class="form-control"
-              id="bankname"
+              id="Name"
               required
               placeholder="Enter Bank Name"
             />
@@ -32,9 +33,10 @@
            <label>Branch Name</label>
             <input
               type="text"
-              name="branchname"
+              [(ngModel)]="Entity.p.Branch"
+              name="Branch"
               class="form-control"
-              id="branchname"
+              id="Branch"
               required
               placeholder="Enter Branch Name"
             />
@@ -43,9 +45,10 @@
            <label>Account No</label>
             <input
               type="text"
-              name="accno"
+              [(ngModel)]="Entity.p.AccountNo"
+              name="AccountNo"
               class="form-control"
-              id="accno"
+              id="AccountNo"
               required
               placeholder="Enter Account Number"
             />
@@ -56,9 +59,10 @@
            <label>IFSC Code</label>
             <input
               type="text"
-              name="ifsccode"
+              [(ngModel)]="Entity.p.IFSCCode"
+              name="IFSCCode"
               class="form-control"
-              id="ifsccode"
+              id="IFSCCode"
               required
               placeholder="Enter IFSC Code"
             />
@@ -67,9 +71,10 @@
            <label>Opening Balance</label>
             <input
               type="text"
-              name="openingbal"
+              [(ngModel)]="Entity.p.OpeningBalance"
+              name="OpeningBalance"
               class="form-control"
-              id="openingbal"
+              id="OpeningBalance"
               required
               placeholder="Enter Opening Balance"
             />
@@ -77,7 +82,7 @@
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
           <div>
-            <button type="button" class="btn">Save</button>
+            <button type="button" class="btn" (click)="SaveBankMaster()">Save</button>
           </div>
           <div>
             <button type="button" class="btn" (click)="BackBank()">Back</button>

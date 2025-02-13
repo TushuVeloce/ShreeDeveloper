@@ -10,17 +10,17 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { BankFetchRequest } from "./bankfetchrequest";
+import { VendorFetchRequest } from "./vendorfetchrequest";
 
 
-export class BankProps {
-  public readonly Db_Table_Name = "BankMaster";
+export class VendorProps {
+  public readonly Db_Table_Name = "VendorMaster";
   public Ref: number = 0;
   public Name: string = '';
-  public Branch: string = '';
-  public AccountNo: string = '';
-  public IFSCCode: string = '';
-  public OpeningBalance: number = 0;
+  public Address: string = '';
+  public MobileNo: string = '';
+  public CompanyRef: number = 0;
+  public readonly CompanyName: string = '';
   
   public readonly IsNewlyCreated: boolean = false;
 
@@ -29,14 +29,14 @@ export class BankProps {
   }
 
   public static Blank() {
-    return new BankProps(true);
+    return new VendorProps(true);
   }
 }
 
-export class Bank implements IPersistable<Bank> {
-  public static readonly Db_Table_Name: string = 'BankMaster';
+export class Vendor implements IPersistable<Vendor> {
+  public static readonly Db_Table_Name: string = 'VendorMaster';
 
-  private constructor(public readonly p: BankProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: VendorProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -49,51 +49,50 @@ export class Bank implements IPersistable<Bank> {
     }
   }
 
-  public GetEditableVersion(): Bank {
-    let newState: BankProps = Utils.GetInstance().DeepCopy(this.p);
-    return Bank.CreateInstance(newState, true);
+  public GetEditableVersion(): Vendor {
+    let newState: VendorProps = Utils.GetInstance().DeepCopy(this.p);
+    return Vendor.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new Bank(BankProps.Blank(), true);
+    return new Vendor(VendorProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new Bank(data as BankProps, allowEdit);
+    return new Vendor(data as VendorProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-    if (this.p.Branch == '') vra.add('Branch', 'Branch cannot be blank.');
-    if (this.p.AccountNo == '') vra.add('AccountNo', 'Account No cannot be blank.');
-    if (this.p.IFSCCode == '') vra.add('IFSCCode', 'IFSC Code cannot be blank.');
-    if (this.p.OpeningBalance == 0) vra.add('OpeningBalance', 'Opening Balance cannot be blank.');
+    if (this.p.Address == '') vra.add('Address', 'Address cannot be blank.');
+    if (this.p.MobileNo == '') vra.add('MobileNo', 'Mobile No cannot be blank.');
+    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Bank.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Vendor.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: Bank = Bank.CreateNewInstance();
+  private static m_currentInstance: Vendor = Vendor.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return Bank.m_currentInstance;
+    return Vendor.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: Bank) {
-    Bank.m_currentInstance = value;
+  public static SetCurrentInstance(value: Vendor) {
+    Vendor.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): Bank {
+  public static SingleInstanceFromTransportData(td: TransportData): Vendor {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, Bank.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, Bank.Db_Table_Name)!.Entries) {
-        return Bank.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, Vendor.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, Vendor.Db_Table_Name)!.Entries) {
+        return Vendor.CreateInstance(data, false);
       }
     }
 
@@ -102,13 +101,13 @@ export class Bank implements IPersistable<Bank> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Bank[] {
-    let result: Bank[] = [];
+    sortPropertyName: string = "Name"): Vendor[] {
+    let result: Vendor[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, Bank.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, Bank.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, Vendor.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, Vendor.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -118,18 +117,18 @@ export class Bank implements IPersistable<Bank> {
       }
 
       for (let data of entries) {
-        result.push(Bank.CreateInstance(data, false));
+        result.push(Vendor.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): Bank[] {
-    return Bank.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): Vendor[] {
+    return Vendor.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: BankFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: VendorFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -144,22 +143,22 @@ export class Bank implements IPersistable<Bank> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new BankFetchRequest();
-    req.BankRef.push(ref);
+    let req = new VendorFetchRequest();
+    req.VendorRef.push(ref);
 
-    let tdResponse = await Bank.FetchTransportData(req, errorHandler) as TransportData;
-    return Bank.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await Vendor.FetchTransportData(req, errorHandler) as TransportData;
+    return Vendor.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: BankFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await Bank.FetchTransportData(req, errorHandler) as TransportData;
-    return Bank.ListFromTransportData(tdResponse);
+  public static async FetchList(req: VendorFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await Vendor.FetchTransportData(req, errorHandler) as TransportData;
+    return Vendor.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new BankFetchRequest();
-    let tdResponse = await Bank.FetchTransportData(req, errorHandler) as TransportData;
-    return Bank.ListFromTransportData(tdResponse);
+    let req = new VendorFetchRequest();
+    let tdResponse = await Vendor.FetchTransportData(req, errorHandler) as TransportData;
+    return Vendor.ListFromTransportData(tdResponse);
   }
   
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {

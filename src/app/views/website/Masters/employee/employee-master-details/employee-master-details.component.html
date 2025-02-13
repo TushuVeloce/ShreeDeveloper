@@ -11,8 +11,8 @@
       </div>
     </div>
     <form autocomplete="off">
-      <div class="row" style="margin-top: 1rem; margin-bottom: 1rem; ">
-        <div class="col-md-6">
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
           <div>
             <label>Role</label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UserRoleRef"
@@ -21,49 +21,53 @@
             </nz-select>
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div>
             <label>First Name</label>
             <input type="text" name="firstname" [(ngModel)]="Entity.p.FirstName" class="form-control" id="firstname"
               required placeholder="Enter First Name" />
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div>
             <label>Last Name</label>
             <input type="text" name="lastname" [(ngModel)]="Entity.p.LastName" class="form-control" id="lastname"
               required placeholder="Enter Last Name" />
           </div>
         </div>
-        <div class="col-md-6">
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
           <div>
             <label>Email id</label>
             <input type="text" name="emailid" class="form-control" [(ngModel)]="Entity.p.EmailId" id="emailid" required
               placeholder="Enter Email id" />
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div>
             <label>Contact No</label>
             <input type="text" name="contactno" [(ngModel)]="Entity.p.ContactNo" class="form-control" id="contactno"
               required placeholder="Enter Contact No" />
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div>
             <label>Address Line 1</label>
             <input type="text" name="address" [(ngModel)]="Entity.p.AddressLine1" class="form-control" id="address"
               required placeholder="Enter Address" />
           </div>
         </div>
-        <div class="col-md-6">
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
           <div>
             <label>Address Line 2</label>
             <input type="text" name="address" [(ngModel)]="Entity.p.AddressLine2" class="form-control" id="address"
               required placeholder="Enter Address" />
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div>
             <label>Gender</label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="gender" name="gender"
@@ -72,45 +76,47 @@
             </nz-select>
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div>
             <label>Emp Id</label>
             <input type="text" name="empid" [(ngModel)]="Entity.p.EmpId" class="form-control" id="empid" required />
           </div>
         </div>
-        <div class="col-md-6">
-          <div>
-            <label>Department Name </label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="departmentname"
-              name="departmentname" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef">
-              <nz-option *ngFor="let department of DepartmentList" [nzValue]="Entity.p.DepartmentRef"
-                [nzLabel]="department.p.DepartmentName"></nz-option>
-            </nz-select>
+        </div>
+        <div class="row" style="margin-top: 1rem; ">
+          <div class="col-md-4">
+            <div>
+              <label>Department Name </label>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DepartmentRef"
+                name="DepartmentRef" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef">
+                <nz-option *ngFor="let department of DepartmentList" [nzValue]="Entity.p.DepartmentRef"
+                  [nzLabel]="department.p.Name"></nz-option>
+              </nz-select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div>
+              <label>Login Status</label>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="loginstatus"
+                name="loginstatus" [nzSize]="'large'" [(ngModel)]="LoginStatusRef">
+                <nz-option *ngFor="let loginstatus of LoginStatusList" [nzValue]="loginstatus"
+                  [nzLabel]="loginstatus"></nz-option>
+              </nz-select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div>
+              <label>Is User</label>
+              <select type="text" name="isuser" class="form-control" id="isuser" required>
+                <option value="true">Yes</option>
+                <option value="false" selected>No</option>
+              </select>
+            </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div>
-            <label>Login Status</label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="loginstatus"
-              name="loginstatus" [nzSize]="'large'" [(ngModel)]="LoginStatusRef">
-              <nz-option *ngFor="let loginstatus of LoginStatusList" [nzValue]="loginstatus"
-                [nzLabel]="loginstatus"></nz-option>
-            </nz-select>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div>
-            <label>Is User</label>
-            <select type="text" name="isuser" class="form-control" id="isuser" required>
-              <option value="true">Yes</option>
-              <option value="false" selected>No</option>
-            </select>
-          </div>
-        </div>
-      </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
-          <button type="button" class="btn">Save</button>
+          <button type="button" class="btn" (click)="SaveEmployeeMaster()">Save</button>
         </div>
         <div>
           <button type="button" class="btn" (click)="BackEmployee()">Back</button>

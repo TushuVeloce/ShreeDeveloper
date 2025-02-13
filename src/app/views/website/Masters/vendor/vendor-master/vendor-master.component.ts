@@ -1,21 +1,79 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
   selector: 'app-vendor-master',
-  standalone:false,
+  standalone: false,
   templateUrl: './vendor-master.component.html',
   styleUrls: ['./vendor-master.component.scss'],
 })
-export class VendorMasterComponent  implements OnInit {
-  headers: string[] = ['ID','Vendor Name','Vendor Phone No','Address','Material Name','Action'];
+export class VendorMasterComponent implements OnInit {
+  Entity: Vendor = Vendor.CreateNewInstance();
+  MasterList: Vendor[] = [];
+  DisplayMasterList: Vendor[] = [];
+  SearchString: string = '';
+  SelectedVendor: Vendor = Vendor.CreateNewInstance();
+  pageSize = 10; // Items per page
+  currentPage = 1; // Initialize current page
+  total = 0;
 
-  constructor( private router: Router) { }
+  headers: string[] = ['SR.No', 'Vendor Name', 'Mobile No', 'Address', 'Company Name', 'Action'];
 
-  ngOnInit() {}
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 
- AddVendor(){
-   this.router.navigate(['/homepage/Website/Vendor_Master_Details']);
+  async ngOnInit() {
+    await this.FormulateMasterList();
+    this.loadPaginationData();
+  }
+
+  private FormulateMasterList = async () => {
+    let lst = await Vendor.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList
+    this.loadPaginationData();
+  }
+
+  onEditClicked = async (item: Vendor) => {
+    this.SelectedVendor = item.GetEditableVersion();
+    Vendor.SetCurrentInstance(this.SelectedVendor);
+    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+    await this.router.navigate(['/homepage/Website/Vendor_Master_details']);
+  }
+
+  onDeleteClicked = async (Vendor: Vendor) => {
+    await this.uiUtils.showConfirmationMessage('Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+    Are you sure that you want to DELETE this Vendor?`,
+      async () => {
+        await Vendor.DeleteInstance(async () => {
+          await this.uiUtils.showSuccessToster(`Vendor ${Vendor.p.Name} has been deleted!`);
+          await this.FormulateMasterList();
+          this.SearchString = '';
+          this.loadPaginationData();
+        });
+      });
+  }
+
+  // For Pagination  start ----
+  loadPaginationData = () => {
+    this.total = this.DisplayMasterList.length; // Update total based on loaded data
+  }
+
+  get paginatedList() {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  onPageChange = (pageIndex: number): void => {
+    this.currentPage = pageIndex; // Update the current page
+  }
+
+
+  AddVendor() {
+    this.router.navigate(['/homepage/Website/Vendor_Master_Details']);
   }
 
 }

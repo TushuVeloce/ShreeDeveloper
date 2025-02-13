@@ -11,36 +11,48 @@
     </nz-button>
   </div>
 </div>
-<div class="table-container" style="margin-top: 2rem;">
-  <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
-    [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
-    <thead>
-      <tr>
-        <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let employee of paginatedList; index as i">
-        <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-        <td Class="tbldata">{{employee.p.UserRoleName }}</td>
-        <td Class="tbldata">{{employee.p.FirstName }}</td>
-        <td Class="tbldata">{{employee.p.LastName }}</td>
-        <td Class="tbldata">{{employee.p.EmailId }}</td>
-        <td Class="tbldata">{{employee.p.ContactNo }}</td>
-        <td Class="tbldata">{{employee.p.AddressLine1 }}</td>
-        <td Class="tbldata">{{employee.p.Gender }}</td>
-        <td Class="tbldata">{{employee.p.EmpId }}</td>
-        <td Class="tbldata">{{employee.p.DepartmentName }}</td>
-        <td Class="tbldata">{{employee.p.UserStatus }}</td>
-        <td Class="tbldata">{{employee.p.IsUser }}</td>
-        <td class="tbldata">
-          <span style="margin-left: 9px;">
-            <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-          </span>
-          <span style="margin-left: 9px;">
-            <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-        </td>
-      </tr>
-    </tbody>
-  </nz-table>
+<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+  <div class="table-container">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let employee of paginatedList; index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{employee.p.UserRoleName }}</td>
+          <td Class="tbldata">{{employee.p.FirstName }}</td>
+          <td Class="tbldata">{{employee.p.LastName }}</td>
+          <td Class="tbldata">{{employee.p.EmailId }}</td>
+          <td Class="tbldata">{{employee.p.ContactNo }}</td>
+          <td Class="tbldata">{{employee.p.AddressLine1 }}</td>
+          <td Class="tbldata">{{employee.p.Gender }}</td>
+          <td Class="tbldata">{{employee.p.EmpId }}</td>
+          <td Class="tbldata">{{employee.p.DepartmentName }}</td>
+          <td Class="tbldata">{{employee.p.UserStatus }}</td>
+          <td Class="tbldata">{{employee.p.IsUser }}</td>
+          <td class="tbldata">
+            <span style="margin-left: 9px;" (click)="onEditClicked(employee);">
+              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+            </span>
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(employee);">
+              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+  <div class="fixed-pagination">
+    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+      (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+    </nz-pagination>
+  </div>
+</div>
+<div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
+  <div style="height: 200px" class="d-flex align-items-center justify-content-center">
+    <span class="title_light"> Data Not Found</span>
+  </div>
 </div>

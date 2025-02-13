@@ -81,10 +81,10 @@ async ngOnInit() {
       this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Company Master saved successfully!');
+        await this.uiUtils.showSuccessToster('Company saved successfully!');
         this.Entity = Company.CreateNewInstance();
       } else {
-        await this.uiUtils.showSuccessToster('Company Master Updated successfully!');
+        await this.uiUtils.showSuccessToster('Company Updated successfully!');
       }
     }
   }

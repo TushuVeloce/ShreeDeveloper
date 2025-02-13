@@ -27,11 +27,11 @@ export class DepartmentMasterComponent implements OnInit {
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 
   async ngOnInit() {
-    await this.FormulateDepartmentList();
+    await this.FormulateMasterList();
     this.loadPaginationData();
-
   }
-  private FormulateDepartmentList = async () => {
+  
+  private FormulateMasterList = async () => {
     let lst = await Department.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList
@@ -52,7 +52,7 @@ export class DepartmentMasterComponent implements OnInit {
       async () => {
         await Department.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(`Department ${Department.p.Name} has been deleted!`);
-          await this.FormulateDepartmentList();
+          await this.FormulateMasterList();
           this.SearchString = '';
           this.loadPaginationData();
         });

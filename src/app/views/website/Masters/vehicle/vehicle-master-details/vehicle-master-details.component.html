@@ -12,7 +12,7 @@
         </button>
       </div>
       <div class="col-md-11">
-        <span class="detail_title">Vehicle Master</span>
+        <span class="detail_title">{{DetailsFormTitle}}</span>
       </div>
     </div>
     <form autocomplete="off">
@@ -30,10 +30,23 @@
             />
           </div>
         </div>
+        <div class="col-md-6">
+          <div>
+           <label>Vehicle Number</label>
+            <input
+              type="text"
+              name="Number"
+              class="form-control"
+              id="Number"
+              required
+              placeholder="Enter Vehical Number"
+            />
+          </div>
+        </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
           <div>
-            <button type="button" class="btn">Save</button>
+            <button type="button" class="btn" (click)="SaveVehicleMaster()">Save</button>
           </div>
           <div>
             <button type="button" class="btn"  (click)="BackVehicle()">Back</button>

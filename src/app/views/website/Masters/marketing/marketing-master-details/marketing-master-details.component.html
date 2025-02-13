@@ -12,7 +12,7 @@
         </button>
       </div>
       <div class="col-md-11">
-        <span class="detail_title">Marketing Type Creation</span>
+        <span class="detail_title">{{DetailsFormTitle}}</span>
       </div>
     </div>
     <form autocomplete="off">
@@ -22,8 +22,8 @@
            <label>Marketing Modes</label>
               <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="MarketingModes" name="MarketingModes" [nzSize]="'large'"
               [(ngModel)]="Entity.p.MarketingModes">
-              <nz-option *ngFor="let marketingModes  of MarketingModesList"
-              [nzValue]="marketingModes.Ref" [nzLabel]="marketingModes.Name "></nz-option>
+              <nz-option *ngFor="let MarketingModes  of MarketingModesList"
+              [nzValue]="MarketingModes.Ref" [nzLabel]="MarketingModes.Name "></nz-option>
             </nz-select>
           </div>
 
@@ -33,6 +33,7 @@
            <label>Marketing Type</label>
             <input
               type="text"
+              [(ngModel)]="Entity.p.MarketingType"
               name="MarketingType"
               class="form-control"
               id="MarketingType"
@@ -44,7 +45,7 @@
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
           <div>
-            <button type="button" class="btn">Save</button>
+            <button type="button" class="btn" (click)="SaveMarketingMaster()">Save</button>
           </div>
           <div>
             <button type="button" class="btn" (click)="BackMarketing()" >Back</button>

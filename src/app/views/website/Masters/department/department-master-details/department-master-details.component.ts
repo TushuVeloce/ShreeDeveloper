@@ -21,7 +21,6 @@ export class DepartmentMasterDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Department' | 'Edit Department' = 'New Department';
   InitialEntity: Department = null as any;
   CompanyList: Company[] = [];
-  CompanyRef: number = 0;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
 
@@ -29,7 +28,7 @@ export class DepartmentMasterDetailsComponent implements OnInit {
     await this.GetCompantList();
        if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
           this.IsNewEntity = false;
-          // this.DetailsFormTitle = this.IsNewEntity ? 'New Space Group' : 'Edit Space Group';
+          this.DetailsFormTitle = this.IsNewEntity ? 'New Department' : 'Edit Department';
           this.Entity = Department.GetCurrentInstance();
           this.appStateManage.StorageKey.removeItem('Editable')
     
@@ -61,10 +60,10 @@ export class DepartmentMasterDetailsComponent implements OnInit {
         this.isSaveDisabled = false;
         // this.onEntitySaved.emit(entityToSave);
         if (this.IsNewEntity) {
-          await this.uiUtils.showSuccessToster('Department Master saved successfully!');
+          await this.uiUtils.showSuccessToster('Department saved successfully!');
           this.Entity = Department.CreateNewInstance();
         } else {
-          await this.uiUtils.showSuccessToster('Department Master Updated successfully!');
+          await this.uiUtils.showSuccessToster('Department Updated successfully!');
         }
       }
     }

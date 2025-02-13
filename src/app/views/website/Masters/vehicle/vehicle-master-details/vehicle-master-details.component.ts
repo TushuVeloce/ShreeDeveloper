@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router'
+import { Vehicle } from 'src/app/classes/domain/entities/website/masters/vehicle/vehicle';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { UIUtils } from 'src/app/services/uiutils.service';
+import { Utils } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-vehicle-master-details',
@@ -7,14 +11,56 @@ import { Router } from '@angular/router'
   templateUrl: './vehicle-master-details.component.html',
   styleUrls: ['./vehicle-master-details.component.scss'],
 })
-export class VehicleMasterDetailsComponent  implements OnInit {
+export class VehicleMasterDetailsComponent implements OnInit {
 
-  constructor( private router: Router) { }
+  isSaveDisabled: boolean = false;
+  private IsNewEntity: boolean = true;
+  Entity: Vehicle = Vehicle.CreateNewInstance();
+  DetailsFormTitle: 'New Vehicle' | 'Edit Vehicle' = 'New Vehicle';
+  InitialEntity: Vehicle = null as any;
 
-  ngOnInit() {}
-  
-  BackVehicle(){
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
+
+  async ngOnInit() {
+    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+      this.IsNewEntity = false;
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Vehicle' : 'Edit Vehicle';
+      this.Entity = Vehicle.GetCurrentInstance();
+      this.appStateManage.StorageKey.removeItem('Editable')
+
+    } else {
+      this.Entity = Vehicle.CreateNewInstance();
+      Vehicle.SetCurrentInstance(this.Entity);
+
+    }
+    this.InitialEntity = Object.assign(Vehicle.CreateNewInstance(),
+      this.utils.DeepCopy(this.Entity)) as Vehicle;
+  }
+
+  SaveVehicleMaster = async () => {
+    let entityToSave = this.Entity.GetEditableVersion();
+    let entitiesToSave = [entityToSave]
+    // await this.Entity.EnsurePrimaryKeysWithValidValues()
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorToster(tr.Message);
+      return
+    }
+    else {
+      this.isSaveDisabled = false;
+      // this.onEntitySaved.emit(entityToSave);
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('Vehicle saved successfully!');
+        this.Entity = Vehicle.CreateNewInstance();
+      } else {
+        await this.uiUtils.showSuccessToster('Vehicle Updated successfully!');
+      }
+    }
+  }
+
+  BackVehicle() {
     this.router.navigate(['/homepage/Website/Vehicle_Master']);
-   }
+  }
 
 }
