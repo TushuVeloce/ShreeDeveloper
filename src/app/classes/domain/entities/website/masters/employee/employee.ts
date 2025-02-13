@@ -18,25 +18,29 @@ export class EmployeeProps {
   public readonly Db_Table_Name = "EmployeeMaster";
   public Ref: number = 0;
   public UserRoleRef: number = 0;
+  public readonly UserRoleName: boolean = false;
   public FirstName: string = '';
   public LastName: string = '';
   public EmailId: string = '';
   public ContactNo: number = 0;
   public AddressLine1: string = '';
   public AddressLine2: string = '';
+  public CountryRef: number = 0;
+  public readonly CountryName: boolean = false;
+  public StateRef: number = 0;
+  public readonly StateName: boolean = false;
   public CityRef: number = 0;
+  public readonly CityName: boolean = false;
   public GeoNameId: string = '';
   public Gender: string = '';
   public EmpId: string = '';
   public DepartmentRef: string = '';
+  public readonly DepartmentName: boolean = false;
   public UserStatus: string = '';
   public IsUser: boolean = false;
   
 
   public readonly IsNewlyCreated: boolean = false;
-  public readonly UserRoleName: boolean = false;
-  public readonly CityName: boolean = false;
-  public readonly DepartmentName: boolean = false;
 
   private constructor(isNewlyCreated: boolean) {
     this.IsNewlyCreated = isNewlyCreated;
