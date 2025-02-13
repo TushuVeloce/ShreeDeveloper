@@ -42,7 +42,6 @@ export class CityComponent implements OnInit {
      }
 
      getStateListByCountryRef = async (CountryRef: number) => {
-      this.CountryList = [];
       this.StateList = [];
       this.MasterList = [];
       this.DisplayMasterList = [];
@@ -52,8 +51,6 @@ export class CityComponent implements OnInit {
     }
 
      getCityListByStateRef = async (StateRef: number) => {
-      this.CountryList = [];
-      this.StateList = [];
       this.MasterList = [];
       this.DisplayMasterList = [];
       let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
