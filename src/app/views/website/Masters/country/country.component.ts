@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -21,11 +22,13 @@ export class CountryComponent implements OnInit {
   total = 0;
   headers: string[] = ['Sr.No.', 'Country Name'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private screenSizeService: ScreenSizeService) { }
 
  async ngOnInit() {
     await this.FormulateCountryList();
     this.loadPaginationData();
+    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+
    }
 
      private FormulateCountryList = async () => {

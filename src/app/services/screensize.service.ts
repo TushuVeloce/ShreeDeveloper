@@ -72,23 +72,39 @@ export class ScreenSizeService {
   //   }
   // }
 
-  getPageSize(sizeDependOn: string): number {
+  getPageSize(sizeDependOn: string, dropdownRows: number = 1): number {
     const height = window.innerHeight;
   
-    // Base row height; adjust as needed
-    let rowHeight = 50; // Smaller row height on smaller screens
+    // Constants for dynamic calculations
+    const rowHeight = 45; // Height of each table row
+    const minPageSize = 2; // Minimum records per page
+    const maxPageSize = 20; // Maximum records per page
   
-    // Dynamic offset for different screen sizes
-    const offset = sizeDependOn === 'withoutDropdown'
-      ? (height > 800 ? 85 : 160)  // Larger offset for larger screens
-      : (height > 800 ? 200 : 270); // Smaller offset on smaller screens
+    // Base offset for different modes
+    const baseOffset = sizeDependOn === 'withoutDropdown'
+        ? (height > 800 ? 85 : 160) // Without dropdowns
+        : (height > 800 ? 150 : 200); // With dropdowns
   
-    // Calculate available height and page size
-    const availableHeight = height - offset;
-    const calculatedPageSize = Math.floor(availableHeight / rowHeight);
+    // Additional offset for dropdown rows
+    const dropdownOffset = dropdownRows * (height > 800 ? 110 : 75);
   
-    // Set a minimum and maximum for page size
-    this.pageSize = Math.max(5, Math.min(calculatedPageSize, 20)); // Adjust this range if needed
+    // Total offset
+    const totalOffset = baseOffset + dropdownOffset;
+  
+    // Calculate available height and base page size
+    const availableHeight = height - totalOffset;
+    const basePageSize = Math.floor(availableHeight / rowHeight);
+  
+    // Dynamically control how much to reduce for dropdown rows
+    const reductionFactor = 0.5 ; // Adjust this to control reduction (e.g., 0.5 means half a row per dropdown)
+    const dynamicAdjustment = Math.ceil(dropdownRows * reductionFactor); // Controlled reduction
+  
+    // Adjusted page size
+    const adjustedPageSize = basePageSize - dynamicAdjustment;
+  
+    // Ensure adjusted page size falls within the allowed range
+    this.pageSize = Math.max(minPageSize, Math.min(adjustedPageSize, maxPageSize));
+  
     return this.pageSize;
   }
   
