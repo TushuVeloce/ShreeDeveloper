@@ -36,9 +36,14 @@
       </tbody>
     </nz-table>
   </div>
+  <div class="fixed-pagination">
+    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+      (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+    </nz-pagination>
+  </div>
+  </div>
   <div *ngIf="DisplayMasterList.length === 0" Class="card-body_light">
     <div style="height: 200px;" class="d-flex align-items-center justify-content-center">
       <span Class="title_light"> Data Not Found</span>
     </div>
   </div>
-</div>

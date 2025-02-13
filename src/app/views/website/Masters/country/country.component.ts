@@ -22,34 +22,38 @@ export class CountryComponent implements OnInit {
   total = 0;
   headers: string[] = ['Sr.No.', 'Country Name'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private screenSizeService: ScreenSizeService) { }
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService
+  ) {}
 
- async ngOnInit() {
+  async ngOnInit() {
     await this.FormulateCountryList();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+  }
 
-   }
+  private FormulateCountryList = async () => {
+    let lst = await Country.FetchEntireList(
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  };
 
-     private FormulateCountryList = async () => {
-       let lst = await Country.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-       this.MasterList = lst;
-       this.DisplayMasterList = this.MasterList
-       this.loadPaginationData();
-     }
+  // For Pagination  start ----
+  loadPaginationData = () => {
+    this.total = this.DisplayMasterList.length; // Update total based on loaded data
+  };
+  get paginatedList() {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
 
-       // For Pagination  start ----
-       loadPaginationData = () => {
-         this.total = this.DisplayMasterList.length; // Update total based on loaded data
-       }
-       get paginatedList () {
-        const start = (this.currentPage - 1) * this.pageSize;
-        return this.DisplayMasterList.slice(start, start + this.pageSize);
-      }
-    
-     
- onPageChange  = (pageIndex: number): void => {
-  this.currentPage = pageIndex; // Update the current page
-}
-
+  onPageChange = (pageIndex: number): void => {
+    this.currentPage = pageIndex; // Update the current page
+  };
 }
