@@ -19,7 +19,7 @@ export class StateComponent implements OnInit {
   SearchString: string = '';
   SelectedState: State = State.CreateNewInstance();
   CountryRef: number = 0;
-  pageSize = 10; // Items per page
+  pageSize = 8; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
   headers: string[] = ['Sr.No.','State Name'];
