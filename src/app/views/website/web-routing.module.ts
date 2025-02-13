@@ -61,12 +61,16 @@ import { StockTransferComponent } from './stock management/stock-transfer/stock-
 import { CountryComponent } from './Masters/country/country.component';
 import { StateComponent } from './Masters/state/state.component';
 import { CityComponent } from './Masters/city/city.component';
+import { UnitMasterComponent } from './Masters/unit/unit-master/unit-master.component';
+import { UnitMasterDetailsComponent } from './Masters/unit/unit-master-details/unit-master-details.component';
 
 const routes: Routes = [
   {
     path: '', component: WebComponent,
     children: [
       { path: 'Dashboard', component: DashboardComponent },
+      { path: 'Unit_Master', component: UnitMasterComponent },
+      { path: 'Unit_Master_details', component: UnitMasterDetailsComponent },
       { path: 'Material_Master', component: MaterialMasterComponent },
       { path: 'Material_Master_details', component: MaterialMasterDetailsComponent },
       { path: 'Stage_Master', component: StageMasterComponent },

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
+import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
@@ -18,10 +19,11 @@ export class MaterialMasterDetailsComponent implements OnInit {
     DetailsFormTitle: 'New Material' | 'Edit Material' = 'New Material';
     IsDropdownDisabled: boolean = false
     InitialEntity: Material = null as any;
+    UnitList: Unit[] = [];
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
 
-  ngOnInit() { 
+  async ngOnInit() { 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       
@@ -37,7 +39,15 @@ export class MaterialMasterDetailsComponent implements OnInit {
     this.InitialEntity = Object.assign(Material.CreateNewInstance(),
     this.utils.DeepCopy(this.Entity)) as Material;
     // this.focusInput();
+
+   await this.FormulateUnitList();
   }
+
+   public FormulateUnitList = async () => {
+         let lst = await Unit.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+         this.UnitList = lst;
+         console.log('UnitList :', this.UnitList);
+       }
 
   SaveMaterialMaster = async () => {
     let entityToSave = this.Entity.GetEditableVersion();

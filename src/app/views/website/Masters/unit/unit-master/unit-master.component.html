@@ -1,14 +1,14 @@
 <div>
   <div class="row">
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2">
-      <h5 style="padding-top: 3px;" class="title title_light">Material Master</h5>
+      <h5 style="padding-top: 3px;" class="title title_light">Unit Master</h5>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
       <input type="text" Class="search-box_light" placeholder="Search..." autofocus />
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
-      <nz-button nz-button class="btn1" (click)='AddMaterial()'>
-        Add Material
+      <nz-button nz-button class="btn1" (click)='AddUnit()'>
+        Add Unit
       </nz-button>
     </div>
   </div>
@@ -21,15 +21,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let material of MasterList; index as i">
+        <tr *ngFor="let Unit of MasterList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{material.p.Name}}</td>
-          <td Class="tbldata">{{material.p.UnitName}}</td>
+          <td Class="tbldata">{{Unit.p.Unit}}</td>
           <td class="tbldata">
-            <span style="margin-left: 9px;" (click)="onEditClicked(material);">
+            <span style="margin-left: 9px;" (click)="onEditClicked(Unit);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
             </span>
-            <span style="margin-left: 9px;" (click)="onDeleteClicked(material);">
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(Unit);">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>

@@ -251,6 +251,11 @@ export class SidebarlayoutComponent implements OnInit {
 
     let MasterSubModuleList = [
       {
+        Name: 'Unit Master',
+        RouterLink: '/homepage/Website/Unit_Master',
+        LogoPath: '',
+      },
+      {
         Name: 'Material Master',
         RouterLink: '/homepage/Website/Material_Master',
         LogoPath: '',

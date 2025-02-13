@@ -19,13 +19,16 @@
               required placeholder="Enter Material Name" />
           </div>
         </div>
-        <div class="col-md-6">
-          <div>
-           <label>Material Unit</label>
-            <input type="text" [(ngModel)]="Entity.p.Unit" name="Unit" class="form-control" id="Unit"
-              required placeholder="Enter Material Unit" />
-          </div>
-        </div>
+
+      <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+        <label> Material Unit</label>
+        <nz-select id="UnitRef" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+          name="UnitRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UnitRef"
+          (ngModelChange)="FormulateUnitList()">
+          <nz-option *ngFor="let Unit of UnitList" [nzLabel]="Unit.p.Unit"
+            [nzValue]="Unit.p.Ref"></nz-option>
+        </nz-select>
+      </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>

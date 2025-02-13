@@ -10,15 +10,14 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { MaterialFetchRequest } from "./materialfetchrequest";
+import { UnitFetchRequest } from "./unitfetchrequest";
 
 
-export class MaterialProps {
-  public readonly Db_Table_Name = "MaterialMaster";
+export class UnitProps {
+  public readonly Db_Table_Name = "UnitMaster";
   public Ref: number = 0;
-  public Name: string = '';
-  public UnitRef: number = 0;
-  public readonly UnitName: string = '';
+  public Unit: string = '';
+
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -28,14 +27,14 @@ export class MaterialProps {
   }
 
   public static Blank() {
-    return new MaterialProps(true);
+    return new UnitProps(true);
   }
 }
 
-export class Material implements IPersistable<Material> {
-  public static readonly Db_Table_Name: string = 'MaterialMaster';
+export class Unit implements IPersistable<Unit> {
+  public static readonly Db_Table_Name: string = 'UnitMaster';
 
-  private constructor(public readonly p: MaterialProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: UnitProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -48,48 +47,47 @@ export class Material implements IPersistable<Material> {
     }
   }
 
-  public GetEditableVersion(): Material {
-    let newState: MaterialProps = Utils.GetInstance().DeepCopy(this.p);
-    return Material.CreateInstance(newState, true);
+  public GetEditableVersion(): Unit {
+    let newState: UnitProps = Utils.GetInstance().DeepCopy(this.p);
+    return Unit.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new Material(MaterialProps.Blank(), true);
+    return new Unit(UnitProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new Material(data as MaterialProps, allowEdit);
+    return new Unit(data as UnitProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-    if (this.p.UnitName == '') vra.add('Unit', 'Unit cannot be blank.');
+    if (this.p.Unit == '') vra.add('Unit', 'Unit cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Material.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Unit.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: Material = Material.CreateNewInstance();
+  private static m_currentInstance: Unit = Unit.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return Material.m_currentInstance;
+    return Unit.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: Material) {
-    Material.m_currentInstance = value;
+  public static SetCurrentInstance(value: Unit) {
+    Unit.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): Material {
+  public static SingleInstanceFromTransportData(td: TransportData): Unit {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, Material.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, Material.Db_Table_Name)!.Entries) {
-        return Material.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, Unit.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, Unit.Db_Table_Name)!.Entries) {
+        return Unit.CreateInstance(data, false);
       }
     }
 
@@ -98,13 +96,13 @@ export class Material implements IPersistable<Material> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Material[] {
-    let result: Material[] = [];
+    sortPropertyName: string = "Name"): Unit[] {
+    let result: Unit[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, Material.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, Material.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, Unit.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, Unit.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -114,18 +112,18 @@ export class Material implements IPersistable<Material> {
       }
 
       for (let data of entries) {
-        result.push(Material.CreateInstance(data, false));
+        result.push(Unit.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): Material[] {
-    return Material.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): Unit[] {
+    return Unit.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: MaterialFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: UnitFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -140,28 +138,28 @@ export class Material implements IPersistable<Material> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MaterialFetchRequest();
-    req.MaterialRef.push(ref);
+    let req = new UnitFetchRequest();
+    req.UnitRef.push(ref);
 
-    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-    return Material.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await Unit.FetchTransportData(req, errorHandler) as TransportData;
+    return Unit.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: MaterialFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-    return Material.ListFromTransportData(tdResponse);
+  public static async FetchList(req: UnitFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await Unit.FetchTransportData(req, errorHandler) as TransportData;
+    return Unit.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MaterialFetchRequest();
-    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-    return Material.ListFromTransportData(tdResponse);
+    let req = new UnitFetchRequest();
+    let tdResponse = await Unit.FetchTransportData(req, errorHandler) as TransportData;
+    return Unit.ListFromTransportData(tdResponse);
   }
   // public static async FetchEntireListByProjectRef(ProjectRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-  //   let req = new MaterialFetchRequest();
+  //   let req = new UnitFetchRequest();
   //   req.GAAProjectRefs.push(ProjectRef)
-  //   let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-  //   return Material.ListFromTransportData(tdResponse);
+  //   let tdResponse = await Unit.FetchTransportData(req, errorHandler) as TransportData;
+  //   return Unit.ListFromTransportData(tdResponse);
   // }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
