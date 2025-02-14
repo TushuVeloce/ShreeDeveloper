@@ -19,7 +19,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
   Entity: Company = Company.CreateNewInstance();
   CountryList: Country[] = [];
   StateList: State[] = [];
-  CityList: State[] = [];
+  CityList: City[] = [];
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Company' | 'Edit Company' = 'New Company';

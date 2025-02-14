@@ -77,7 +77,7 @@
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
             name="CityRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CityRef"
             (ngModelChange)="getCityListByStateRef(Entity.p.CityRef)">
-            <nz-option *ngFor="let state of StateList" [nzValue]="state.p.Ref" [nzLabel]="state.p.Name"></nz-option>
+            <nz-option *ngFor="let city of CityList" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
           </nz-select>
           </div>
         </div>
@@ -116,7 +116,7 @@
         <div class="col-md-4">
           <div>
             <label>CIN No</label>
-            <input type="text" name="CINNo" class="form-control" id="CINNo" required placeholder="Enter CIN No" />
+            <input type="text" [(ngModel)]="Entity.p.CINNo" name="CINNo" class="form-control" id="CINNo" required placeholder="Enter CIN No" />
           </div>
         </div>
       </div>

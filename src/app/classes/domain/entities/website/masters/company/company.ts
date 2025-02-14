@@ -54,8 +54,8 @@ export class Company implements IPersistable<Company> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            // const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -80,9 +80,9 @@ export class Company implements IPersistable<Company> {
     if (this.p.OwnerName == '') vra.add('OwnerName', 'Owner Name cannot be blank.');
     if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'AddressLine1 cannot be blank.');
     if (this.p.AddressLine2 == '') vra.add('AddressLine2', 'AddressLine2 cannot be blank.');
-    if (this.p.CountryName == '') vra.add('CountryName', 'Country Name cannot be blank.');
-    if (this.p.StateName == '') vra.add('StateName', 'State Name cannot be blank.');
-    if (this.p.CityName == '') vra.add('CityName', 'City Name cannot be blank.');
+    if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country Name cannot be blank.');
+    if (this.p.StateRef == 0) vra.add('StateRef', 'State Name cannot be blank.');
+    if (this.p.CityRef == 0) vra.add('CityRef', 'City Name cannot be blank.');
     if (this.p.GeoNameId == '') vra.add('GeoNameId', 'GeoName Id cannot be blank.');
     if (this.p.RegistrationNumber == '') vra.add('RegistrationNumber', 'Registration Number cannot be blank.');
     if (this.p.GSTIn == '') vra.add('GSTIn', 'GST In cannot be blank.');
