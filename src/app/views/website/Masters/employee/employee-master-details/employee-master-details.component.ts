@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
 import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { UserRole } from 'src/app/classes/domain/entities/website/masters/userrole/userrole';
@@ -25,6 +26,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
 
   UserRoleList: UserRole[] = [];
   DepartmentList: Department[] = [];
+  CountryList: Country[] = [];
   GenderList = DomainEnums.GenderTypeList(true,"---Select Gender---");
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
@@ -32,7 +34,10 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   async ngOnInit() {
 
     this.UserRoleList = await UserRole.FetchEntireList();
+    // this.CountryList = await Country.FetchEntireList();
+    // console.log('CountryList :', this.CountryList);
     this.DepartmentList = await Department.FetchEntireList();
+    await this.FormulateCountryList();
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
@@ -51,6 +56,13 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     // this.focusInput();
   }
 
+  private FormulateCountryList = async () => {
+    let lst = await Country.FetchEntireList(
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.CountryList = lst;
+    console.log('CountryList :', this.CountryList);
+  };
 
   SaveEmployeeMaster = async () => {
     let entityToSave = this.Entity.GetEditableVersion();

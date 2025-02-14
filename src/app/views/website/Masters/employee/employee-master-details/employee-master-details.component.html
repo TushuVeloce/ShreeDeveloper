@@ -68,6 +68,30 @@
           </div>
         </div>
         <div class="col-md-4">
+            <label>Country Name </label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CountryRef"
+              name="CountryRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CountryRef">
+              <nz-option *ngFor="let country of CountryList" [nzValue]="Entity.p.CountryRef"
+                [nzLabel]="country.p.Name"></nz-option>
+            </nz-select>
+        </div>
+        <div class="col-md-4">
+          <label>State Name </label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DepartmentRef"
+            name="DepartmentRef" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef">
+            <nz-option *ngFor="let department of DepartmentList" [nzValue]="Entity.p.DepartmentRef"
+              [nzLabel]="department.p.Name"></nz-option>
+          </nz-select>
+      </div>
+      <div class="col-md-4">
+        <label>City Name </label>
+        <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DepartmentRef"
+          name="DepartmentRef" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef">
+          <nz-option *ngFor="let department of DepartmentList" [nzValue]="Entity.p.DepartmentRef"
+            [nzLabel]="department.p.Name"></nz-option>
+        </nz-select>
+    </div>
+        <div class="col-md-4">
           <div>
             <label>Gender</label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="gender" name="gender"

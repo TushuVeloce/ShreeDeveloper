@@ -29,9 +29,9 @@ export class CompanyProps {
   public readonly CityName: string='';
   public GeoNameId:  string='';
   public RegistrationNumber:  string='';
-  public GSTIn:  string='';
+  public GSTIN:  string='';
   public Pan:  string='';
-  public CINNo:  string='';
+  public CINNO:  string='';
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -83,11 +83,10 @@ export class Company implements IPersistable<Company> {
     if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country Name cannot be blank.');
     if (this.p.StateRef == 0) vra.add('StateRef', 'State Name cannot be blank.');
     if (this.p.CityRef == 0) vra.add('CityRef', 'City Name cannot be blank.');
-    if (this.p.GeoNameId == '') vra.add('GeoNameId', 'GeoName Id cannot be blank.');
     if (this.p.RegistrationNumber == '') vra.add('RegistrationNumber', 'Registration Number cannot be blank.');
-    if (this.p.GSTIn == '') vra.add('GSTIn', 'GST In cannot be blank.');
+    if (this.p.GSTIN == '') vra.add('GSTIn', 'GST In cannot be blank.');
     if (this.p.Pan == '') vra.add('Pan', 'Pan cannot be blank.');
-    if (this.p.CINNo == '') vra.add('CINNo', 'CIN No cannot be blank.');
+    if (this.p.CINNO == '') vra.add('CINNo', 'CIN No cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
