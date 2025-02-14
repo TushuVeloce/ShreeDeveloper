@@ -21,17 +21,18 @@ export class CompanyProps {
   public Contacts: string = '';
   public AddressLine1: string = '';
   public AddressLine2: string = '';
-  public CountryRef:  number = 0;
-  public readonly CountryName: string='';
-  public StateRef:  number = 0;
-  public readonly StateName: string='';
-  public CityRef:  number = 0;
-  public readonly CityName: string='';
-  public GeoNameId:  string='';
+  // public GeoNameId:  string='';
   public RegistrationNumber:  string='';
   public GSTIN:  string='';
   public Pan:  string='';
   public CINNO:  string='';
+  public CityRef:  number = 0;
+  public readonly CityName: string='';
+  public CountryRef:  number = 0;
+  public readonly CountryName: string='';
+  public StateRef:  number = 0;
+  public readonly StateName: string='';
+ 
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
