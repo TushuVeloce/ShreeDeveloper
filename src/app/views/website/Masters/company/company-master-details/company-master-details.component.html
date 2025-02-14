@@ -75,8 +75,7 @@
           <div>
             <label for="CityRef"><b>City Name</b></label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
-            name="CityRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CityRef"
-            (ngModelChange)="getCityListByStateRef(Entity.p.CityRef)">
+            name="CityRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CityRef">
             <nz-option *ngFor="let city of CityList" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
           </nz-select>
           </div>
