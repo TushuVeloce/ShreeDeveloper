@@ -33,6 +33,7 @@ export class CompanyMasterComponent implements OnInit {
   private FormulateMasterList = async () => {
     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
+    console.log('MasterList :', this.MasterList);
     this.DisplayMasterList = this.MasterList
     this.loadPaginationData();
   }
@@ -41,7 +42,7 @@ export class CompanyMasterComponent implements OnInit {
     this.SelectedCompany = item.GetEditableVersion();
     Company.SetCurrentInstance(this.SelectedCompany);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Company_Master_details']);
+    await this.router.navigate(['/homepage/Website/Company_Master_Details']);
   }
 
   onDeleteClicked = async (Company: Company) => {
