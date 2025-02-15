@@ -25,7 +25,7 @@
         <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UnitRef"
                 name="UnitRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UnitRef">
                 <nz-option *ngFor="let Unit of UnitList" [nzValue]="Entity.p.UnitRef"
-                  [nzLabel]="Unit.p.Unit"></nz-option>
+                  [nzLabel]="Unit.p.Name"></nz-option>
               </nz-select>
       </div>
       </div>

@@ -9,7 +9,6 @@ export class UnitFetchRequest
     public static readonly FetchRequestType: string = "UnitFetchRequest";
 
     UnitRef: number[] = [];
-    // GAAProjectRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

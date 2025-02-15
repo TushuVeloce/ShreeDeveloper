@@ -36,6 +36,7 @@ export class UnitMasterComponent  implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
+    console.log('MasterList :', this.MasterList);
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
     // console.log(this.DisplayMasterList);
@@ -62,7 +63,7 @@ export class UnitMasterComponent  implements OnInit {
       async () => {
         await Item.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `Unit ${Item.p.Unit} has been deleted!`
+            `Unit ${Item.p.Name} has been deleted!`
           );
           await this.FormulateUnitList();
           this.SearchString = '';

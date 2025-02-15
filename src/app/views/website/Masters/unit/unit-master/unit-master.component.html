@@ -24,7 +24,7 @@
       <tbody>
         <tr *ngFor="let Unit of MasterList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{Unit.p.Unit}}</td>
+          <td Class="tbldata">{{Unit.p.Name}}</td>
           <td class="tbldata">
             <span style="margin-left: 9px;" (click)="onEditClicked(Unit);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />

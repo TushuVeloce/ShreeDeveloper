@@ -16,7 +16,7 @@ import { UnitFetchRequest } from "./unitfetchrequest";
 export class UnitProps {
   public readonly Db_Table_Name = "UnitMaster";
   public Ref: number = 0;
-  public Unit: string = '';
+  public Name: string = '';
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -62,7 +62,7 @@ export class Unit implements IPersistable<Unit> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Unit == '') vra.add('Unit', 'Unit cannot be blank.');
+    if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
