@@ -28,26 +28,33 @@ export class CompanyMasterDetailsComponent implements OnInit {
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
 
-async ngOnInit() { 
+  async ngOnInit() {
     await this.FormulateCountryList();
-     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-       this.IsNewEntity = false;
-       
-       this.DetailsFormTitle = this.IsNewEntity ? 'New Company' : 'Edit Company';
-       this.Entity = Company.GetCurrentInstance();
-       this.appStateManage.StorageKey.removeItem('Editable')
- 
-     } else {
-       this.Entity = Company.CreateNewInstance();
-       Company.SetCurrentInstance(this.Entity);
-      
-     }
-     this.InitialEntity = Object.assign(Company.CreateNewInstance(),
-     this.utils.DeepCopy(this.Entity)) as Company;
-     // this.focusInput();
-   }
+    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+      this.IsNewEntity = false;
 
-   private FormulateCountryList = async () => {
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Company' : 'Edit Company';
+      this.Entity = Company.GetCurrentInstance();
+      this.appStateManage.StorageKey.removeItem('Editable')
+      if (this.Entity.p.CountryRef) {
+        await this.getStateListByCountryRef(this.Entity.p.CountryRef);
+      }
+
+      if (this.Entity.p.StateRef) {
+        await this.getCityListByStateRef(this.Entity.p.StateRef);
+      }
+
+    } else {
+      this.Entity = Company.CreateNewInstance();
+      Company.SetCurrentInstance(this.Entity);
+
+    }
+    this.InitialEntity = Object.assign(Company.CreateNewInstance(),
+      this.utils.DeepCopy(this.Entity)) as Company;
+    // this.focusInput();
+  }
+
+  private FormulateCountryList = async () => {
     this.CountryList = [];
     let lst = await Country.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.CountryList = lst;
@@ -59,11 +66,11 @@ async ngOnInit() {
     this.StateList = lst;
   }
 
-   getCityListByStateRef = async (StateRef: number) => {
+  getCityListByStateRef = async (StateRef: number) => {
     this.CityList = [];
     let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.CityList = lst;
-      }
+  }
 
   SaveCompanyMaster = async () => {
     let entityToSave = this.Entity.GetEditableVersion();
