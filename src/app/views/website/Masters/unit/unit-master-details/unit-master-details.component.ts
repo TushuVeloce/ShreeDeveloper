@@ -41,11 +41,10 @@ export class UnitMasterDetailsComponent  implements OnInit {
 
   SaveUnitMaster = async () => {
     let entityToSave = this.Entity.GetEditableVersion();
-
+    console.log('entityToSave :', entityToSave);
     let entitiesToSave = [entityToSave]
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       this.uiUtils.showErrorToster(tr.Message);

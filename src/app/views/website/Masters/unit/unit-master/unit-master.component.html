@@ -26,11 +26,15 @@
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{Unit.p.Name}}</td>
           <td class="tbldata">
-            <span style="margin-left: 9px;" (click)="onEditClicked(Unit);">
+
+            <!-- <span style="margin-left: 9px;" (click)="onEditClicked(Unit);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span>
-            <span style="margin-left: 9px;" (click)="onDeleteClicked(Unit);">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            </span> -->
+            <!-- <span style="margin-left: 9px;" (click)="onDeleteClicked(Unit);">
+              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span> -->
+              
+              <Edit-Icon (editClick)="onEditClicked(Unit)" />
+              <Delete-Icon (deleteClicked)="onDeleteClicked(Unit)" />
           </td>
         </tr>
       </tbody>
@@ -42,8 +46,12 @@
     </nz-pagination>
   </div>
 </div>
-<div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
-  <div style="height: 200px" class="d-flex align-items-center justify-content-center">
+<!-- <div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
+  <div style="height: 60vh" class="d-flex align-items-center justify-content-center">
     <span class="title_light"> Data Not Found</span>
   </div>
+</div> -->
+
+<div *ngIf="DisplayMasterList.length === 0"> 
+  <Data-Not-Found />
 </div>

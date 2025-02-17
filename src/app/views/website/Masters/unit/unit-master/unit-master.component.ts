@@ -27,7 +27,6 @@ export class UnitMasterComponent  implements OnInit {
 
   async ngOnInit() {
     await this.FormulateUnitList();
-    // this.DisplayMasterList = [];
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
@@ -39,7 +38,6 @@ export class UnitMasterComponent  implements OnInit {
     console.log('MasterList :', this.MasterList);
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-    // console.log(this.DisplayMasterList);
   };
 
   onEditClicked = async (item: Unit) => {

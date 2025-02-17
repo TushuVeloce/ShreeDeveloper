@@ -10,7 +10,7 @@ export class BaseUrlService {
   }
 
   public GenerateBaseUrl() {
-    let baseURLstring = `http://localhost:5111/api`;
+    let baseURLstring = `http://localhost:5111/api/RequestController2`;
     //let baseURLstring = ``;
 
     // if (window.location.hostname.includes('enscloud.in')) {
