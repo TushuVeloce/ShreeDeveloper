@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
-import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
 import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -25,7 +24,8 @@ export class DepartmentMasterDetailsComponent implements OnInit {
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
 
   async ngOnInit() {
-    await this.GetCompantList();
+        this.CompanyList = await Company.FetchEntireList();
+
        if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
           this.IsNewEntity = false;
           this.DetailsFormTitle = this.IsNewEntity ? 'New Department' : 'Edit Department';
@@ -41,13 +41,15 @@ export class DepartmentMasterDetailsComponent implements OnInit {
         this.utils.DeepCopy(this.Entity)) as Department;      
    }
 
-   private GetCompantList = async () => {
-    let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.CompanyList = lst;
-  }
+  //  private GetCompantList = async () => {
+  //   let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.CompanyList = lst;
+  //   console.log('CompanyList :', this.CompanyList);
+  // }
 
     SaveDepartmentMaster = async () => {
       let entityToSave = this.Entity.GetEditableVersion();
+      console.log('entityToSave :', entityToSave);
       let entitiesToSave = [entityToSave]
       // await this.Entity.EnsurePrimaryKeysWithValidValues()
       let tr = await this.utils.SavePersistableEntities(entitiesToSave);

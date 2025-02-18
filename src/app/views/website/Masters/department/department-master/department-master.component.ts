@@ -42,7 +42,7 @@ export class DepartmentMasterComponent implements OnInit {
     this.SelectedDepartment = item.GetEditableVersion();
     Department.SetCurrentInstance(this.SelectedDepartment);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Department_Master_details']);
+    await this.router.navigate(['/homepage/Website/Department_Master_Details']);
   }
 
   onDeleteClicked = async (Department: Department) => {

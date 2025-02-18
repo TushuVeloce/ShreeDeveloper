@@ -35,7 +35,7 @@
           <div>
            <label for="CompanyRef">Company Name</label>
               <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CompanyRef" name="CompanyRef" [nzSize]="'large'"
-              [(ngModel)]="Entity.p.ComapnyRef">
+              [(ngModel)]="Entity.p.CompanyRef">
               <nz-option *ngFor="let company of CompanyList"
               [nzValue]="company.p.Ref" [nzLabel]="company.p.Name"></nz-option>
             </nz-select>

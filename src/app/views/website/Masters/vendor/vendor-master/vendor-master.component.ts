@@ -40,7 +40,7 @@ export class VendorMasterComponent implements OnInit {
     this.SelectedVendor = item.GetEditableVersion();
     Vendor.SetCurrentInstance(this.SelectedVendor);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Vendor_Master_details']);
+    await this.router.navigate(['/homepage/Website/Vendor_Master_Details']);
   }
 
   onDeleteClicked = async (Vendor: Vendor) => {
