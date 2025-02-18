@@ -96,7 +96,6 @@ export class ServerCommunicatorService {
   public async sendHttpRequest(pkt: PayloadPacket, method: string = 'acceptrequest',
     files: FileTransferObject[] = []): Promise<TransactionResult> {
     try {
-      debugger
 
       let pktResult: PayloadPacket = null as any;
       console.log(pkt);
