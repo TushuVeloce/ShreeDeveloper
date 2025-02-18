@@ -6,7 +6,7 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class MarketingFetchRequest
 {
-    public static readonly FetchRequestType: string = "MarketingTypeFetchRequest";
+    public static readonly FetchRequestType: string = "MarketingActivityFetchRequest";
 
     MarketingRef: number[] = [];
 

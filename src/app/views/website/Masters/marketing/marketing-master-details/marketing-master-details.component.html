@@ -3,12 +3,7 @@
     <div class="row">
       <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
         <button type="button" class="backbtn" (click)="BackMarketing()">
-          <img
-            src="/assets/icons/arrow-button.png"
-            alt=""
-            width="34px"
-            height="34px"
-          />
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
         </button>
       </div>
       <div class="col-md-11">
@@ -19,37 +14,30 @@
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-6">
           <div>
-           <label>Marketing Modes</label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="MarketingModes" name="MarketingModes" [nzSize]="'large'"
-              [(ngModel)]="Entity.p.MarketingModes">
-              <nz-option *ngFor="let MarketingModes  of MarketingModesList"
-              [nzValue]="MarketingModes.Ref" [nzLabel]="MarketingModes.Name "></nz-option>
+            <label>Marketing Modes</label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="MarketingModes"
+              name="MarketingModes" [nzSize]="'large'" [(ngModel)]="Entity.p.MarketingModes">
+              <nz-option *ngFor="let MarketingModes  of MarketingModesList" [nzValue]="MarketingModes.Ref"
+                [nzLabel]="MarketingModes.Name "></nz-option>
             </nz-select>
           </div>
 
         </div>
         <div class="col-md-6">
           <div>
-           <label>Marketing Type</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.MarketingType"
-              name="MarketingType"
-              class="form-control"
-              id="MarketingType"
-              required
-              placeholder="Enter Marketing Type"
-            />
+            <label>Marketing Type</label>
+            <input type="text" [(ngModel)]="Entity.p.MarketingType" name="MarketingType" class="form-control"
+              id="MarketingType" required placeholder="Enter Marketing Type" />
           </div>
         </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
-          <div>
-            <button type="button" class="btn" (click)="SaveMarketingMaster()">Save</button>
-          </div>
-          <div>
-            <button type="button" class="btn" (click)="BackMarketing()" >Back</button>
-          </div>
+        <div>
+          <button type="button" class="btn" (click)="SaveMarketingMaster()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackMarketing()">Back</button>
+        </div>
       </div>
     </form>
   </div>

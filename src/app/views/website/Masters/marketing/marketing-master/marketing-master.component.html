@@ -1,21 +1,20 @@
-
 <div class="row">
   <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
     <h5 style="padding-top: 3px;" class="title title_light">Marketing Type Master</h5>
   </div>
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
-    <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus [(ngModel)]="SearchString" />
+    <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus
+      [(ngModel)]="SearchString" />
   </div>
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
-    <nz-button nz-button class="btn1" (click)= 'AddMarketing()'>
+    <nz-button nz-button class="btn1" (click)='AddMarketing()'>
       Add Marketing Type
     </nz-button>
   </div>
 </div>
 <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
-    <nz-table #basicTable nzSize="small" class="no-hover-table" 
-      Class="bgtable_light" [nzScroll]="{x:'auto' }"
+    <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
       nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
@@ -29,11 +28,10 @@
           <td Class="tbldata">{{marketing.p.MarketingType}}</td>
           <td class="tbldata">
             <span style="margin-left: 9px;">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
-              </span>
+              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+            </span>
             <span style="margin-left: 9px;">
-              <img
-                src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
       </tbody>
@@ -50,4 +48,3 @@
     <span class="title_light"> Data Not Found</span>
   </div>
 </div>
-

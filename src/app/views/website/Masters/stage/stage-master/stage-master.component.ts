@@ -21,7 +21,7 @@ export class StageMasterComponent  implements OnInit {
     currentPage = 1; // Initialize current page
     total = 0;
 
-  headers: string[] = ['Stage.No.','Stage Name'];
+  headers: string[] = ['Stage.No.','Stage Name','Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 
   async ngOnInit() {
@@ -40,7 +40,7 @@ export class StageMasterComponent  implements OnInit {
       this.SelectedStage = item.GetEditableVersion();
       Stage.SetCurrentInstance(this.SelectedStage);
       this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-      await this.router.navigate(['/homepage/Website/Stage_Master_details']);
+      await this.router.navigate(['/homepage/Website/Stage_Master_Details']);
     }
   
     onDeleteClicked = async (Stage: Stage) => {
