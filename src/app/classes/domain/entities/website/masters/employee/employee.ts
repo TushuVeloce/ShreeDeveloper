@@ -32,9 +32,10 @@ export class EmployeeProps {
   public CityRef: number = 0;
   public readonly CityName: boolean = false;
   public GeoNameId: string = '';
+  public LoginStatus: string = '';
   public Gender: string = '';
   public EmpId: string = '';
-  public DepartmentRef: string = '';
+  public DepartmentRef: number = 0;
   public readonly DepartmentName: boolean = false;
   public UserStatus: string = '';
   public IsUser: boolean = false;

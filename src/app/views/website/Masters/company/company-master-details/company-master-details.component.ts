@@ -56,6 +56,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
 
   private FormulateCountryList = async () => {
     this.CountryList = [];
+    console.log('CountryList :', this.CountryList);
     let lst = await Country.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.CountryList = lst;
   }

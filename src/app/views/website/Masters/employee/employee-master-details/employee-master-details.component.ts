@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
 import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
 import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
+import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
 import { UserRole } from 'src/app/classes/domain/entities/website/masters/userrole/userrole';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -16,67 +18,77 @@ import { Utils } from 'src/app/services/utils.service';
   styleUrls: ['./employee-master-details.component.scss'],
 })
 export class EmployeeMasterDetailsComponent implements OnInit {
-
   Entity: Employee = Employee.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Employee' | 'Edit Employee' = 'New Employee';
-  IsDropdownDisabled: boolean = false
+  IsDropdownDisabled: boolean = false;
   InitialEntity: Employee = null as any;
-
+  CountryList: Country[] = [];
+  StateList: State[] = [];
+  CityList: City[] = [];
   UserRoleList: UserRole[] = [];
   DepartmentList: Department[] = [];
-  CountryList: Country[] = [];
-  GenderList = DomainEnums.GenderTypeList(true,"---Select Gender---");
+  GenderList = DomainEnums.GenderTypeList(true, '---Select Gender---');
+  MarketingModesList = DomainEnums.MarketingModesList();
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
+  constructor(
+    private router: Router,
+    private uiUtils: UIUtils,
+    private appStateManage: AppStateManageService,
+    private utils: Utils
+  ) {}
 
   async ngOnInit() {
-
-    this.UserRoleList = await UserRole.FetchEntireList();
-    // this.CountryList = await Country.FetchEntireList();
-    // console.log('CountryList :', this.CountryList);
+ //   this.UserRoleList = await UserRole.FetchEntireList();
+    this.CountryList = await Country.FetchEntireList();
     this.DepartmentList = await Department.FetchEntireList();
-    await this.FormulateCountryList();
+    console.log('DepartmentList :', this.DepartmentList);
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
 
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Employee' : 'Edit Employee';
+      this.DetailsFormTitle = this.IsNewEntity
+        ? 'New Employee'
+        : 'Edit Employee';
       this.Entity = Employee.GetCurrentInstance();
-      this.appStateManage.StorageKey.removeItem('Editable')
-
+      this.appStateManage.StorageKey.removeItem('Editable');
     } else {
       this.Entity = Employee.CreateNewInstance();
       Employee.SetCurrentInstance(this.Entity);
-
     }
-    this.InitialEntity = Object.assign(Employee.CreateNewInstance(),
-      this.utils.DeepCopy(this.Entity)) as Employee;
+    this.InitialEntity = Object.assign(
+      Employee.CreateNewInstance(),
+      this.utils.DeepCopy(this.Entity)
+    ) as Employee;
     // this.focusInput();
   }
 
-  private FormulateCountryList = async () => {
-    let lst = await Country.FetchEntireList(
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-    this.CountryList = lst;
-    console.log('CountryList :', this.CountryList);
-  };
+  getStateListByCountryRef = async (CountryRef: number) => {
+    this.StateList = [];
+    let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.StateList = lst;
+  }
+
+  getCityListByStateRef = async (StateRef: number) => {
+    this.CityList = [];
+    let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.CityList = lst;
+  }
 
   SaveEmployeeMaster = async () => {
     let entityToSave = this.Entity.GetEditableVersion();
 
-    let entitiesToSave = [entityToSave]
+    let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       this.uiUtils.showErrorToster(tr.Message);
-      return
-    }
-    else {
+      return;
+    } else {
       this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
@@ -86,17 +98,9 @@ export class EmployeeMasterDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster('Employee Updated successfully!');
       }
     }
-  }
+  };
 
   BackEmployee() {
     this.router.navigate(['/homepage/Website/Employee_Master']);
   }
-
-  // Remaining 
-
-  LoginStatusRef: number = 0;
-  LoginStatusList: string[] = ['Enable','Disable'];
-  getLoginStatusRef(Ref:any) {
-  }
-
 }

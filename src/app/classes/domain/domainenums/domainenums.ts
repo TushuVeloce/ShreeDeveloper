@@ -13,6 +13,12 @@ export enum MarketingModes {
   AgentBoker = 50
 }
 
+// export enum LoginStatusModes {
+//   None = 0,
+//   Enable = 'true',
+//   Disable = 'false',
+// }
+
 
 export class DomainEnums {
 
@@ -84,5 +90,35 @@ export class DomainEnums {
     return result;
 
   }
+
+
+  // public static LoginStatusName(LoginStatus: LoginStatusModes) {
+  //   switch (LoginStatus) {
+  //     case LoginStatusModes.Enable: return 'Enable';
+  //     case LoginStatusModes.Disable: return 'Disable';
+
+  //     default: return '';
+  //   }
+  // }
+
+  // public static LoginStatusList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+  //   let result = [
+  //     {
+  //       Ref: LoginStatusModes.Enable, Name: DomainEnums.LoginStatusName(LoginStatusModes.Enable)
+  //     },
+  //     {
+  //       Ref: LoginStatusModes.Disable, Name: DomainEnums.LoginStatusName(LoginStatusModes.Disable)
+  //     },
+
+  //   ]
+  //   if (withAllOption) {
+  //     let allEntry = {
+  //       Ref: LoginStatusModes.None,
+  //       Name: allOptionName
+  //     }
+  //     result.unshift(allEntry);
+  //   }
+  //   return result;
+  // }
 
 }
