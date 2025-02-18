@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Marketing } from 'src/app/classes/domain/entities/website/masters/marketing/marketing';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -20,6 +21,9 @@ export class MarketingMasterComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
+
+  MarketingModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
+
 
   headers: string[] = ['Sr.No.', 'Marketing Type', 'Description', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
@@ -42,7 +46,7 @@ export class MarketingMasterComponent implements OnInit {
     this.SelectedMarketing = item.GetEditableVersion();
     Marketing.SetCurrentInstance(this.SelectedMarketing);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Marketing_Master_details']);
+    await this.router.navigate(['/homepage/Website/Marketing_Master_Details']);
   }
 
   onDeleteClicked = async (Marketing: Marketing) => {
@@ -51,7 +55,7 @@ export class MarketingMasterComponent implements OnInit {
     Are you sure that you want to DELETE this Marketing Mode?`,
       async () => {
         await Marketing.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(`Marketing ${Marketing.p.MarketingModes} has been deleted!`);
+          await this.uiUtils.showSuccessToster(`Marketing ${Marketing.p.MarketingMode} has been deleted!`);
           await this.FormulateMasterList();
           this.SearchString = '';
           this.loadPaginationData();

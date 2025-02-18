@@ -24,13 +24,13 @@
       <tbody>
         <tr *ngFor="let marketing of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{marketing.p.MarketingModes}}</td>
-          <td Class="tbldata">{{marketing.p.MarketingType}}</td>
+          <td Class="tbldata">{{marketing.p.MarketingMode}}</td>
+          <td Class="tbldata">{{marketing.p.Description}}</td>
           <td class="tbldata">
-            <span style="margin-left: 9px;">
+            <span style="margin-left: 9px;" (click)="onEditClicked(marketing);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
             </span>
-            <span style="margin-left: 9px;">
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(marketing);">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>

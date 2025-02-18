@@ -59,7 +59,7 @@ export class AppStateManageService {
   resetGAAProjectRef(): void {
     this.StorageKey.setItem('GAAProjectRef', '0');
   }
- 
+
   // ----------- Theme Start
   getTheme(): string {
     const theme = this.StorageKey.getItem('Theme');
@@ -76,8 +76,8 @@ export class AppStateManageService {
   }
   //---------- Theme End--------------
 
-   // ValidMenuItemIds
-   getValidMenuItemIds = () => {
+  // ValidMenuItemIds
+  getValidMenuItemIds = () => {
     const strMenuItemIds = this.StorageKey.getItem('ValidMenuItemIds');
     return strMenuItemIds ? JSON.parse(strMenuItemIds) as string[] : [];
   }
@@ -91,7 +91,21 @@ export class AppStateManageService {
   }
 
   // //--------- project Ref Start
- 
+
+  //---------- UserJSON
+  getUserJSON(): Object | null {
+    const UserJSON = this.StorageKey.getItem('UserJSON');
+    return UserJSON // Return the UserJSON or 0 if not found
+  }
+
+  setUserJSON(val: Object | null): void {
+    this.StorageKey.setItem('UserJSON', JSON.stringify(val)); // Store UserJSON reference in local storage
+  }
+
+  resetUserJSON(): void {
+    this.StorageKey.setItem('UserJSON', '0');
+  }
+
 
 
 }
