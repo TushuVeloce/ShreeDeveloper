@@ -12,6 +12,7 @@ import { UserLogoutRequest } from '../classes/infrastructure/request_response/us
 import { UserLoginResponse } from '../classes/infrastructure/request_response/userloginresponse';
 import { UserLoginRequest } from '../classes/infrastructure/request_response/userloginrequest';
 import { AppStateManageService } from './app-state-manage.service';
+import { RequestTypes } from '../classes/infrastructure/enums';
 
 @Injectable({
   providedIn: 'root'
@@ -95,7 +96,15 @@ export class ServerCommunicatorService {
   public async sendHttpRequest(pkt: PayloadPacket, method: string = 'acceptrequest',
     files: FileTransferObject[] = []): Promise<TransactionResult> {
     try {
+      debugger
+
       let pktResult: PayloadPacket = null as any;
+      console.log(pkt);
+      if (pkt.Payload.RequestType === RequestTypes.Fetch) method = 'FetchAcceptRequest';
+      else if (pkt.Payload.RequestType === RequestTypes.CustomProcess) method = 'CustomAcceptRequest';
+      else if (pkt.Payload.RequestType === RequestTypes.Deletion) method = 'DeleteAcceptRequest';
+      else if (pkt.Payload.RequestType === RequestTypes.Save) method = 'SaveAcceptRequest';
+
 
       let url = `${this.sessionValues.requestController}/${method}`;
       let strPkt = JSON.stringify(pkt);
