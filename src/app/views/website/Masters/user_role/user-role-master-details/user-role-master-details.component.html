@@ -13,10 +13,9 @@
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-6">
-          <div>
-            <label for="role">Role</label>
-            <input type="text" name="role" class="form-control" id="role" required placeholder="Enter Role" />
-          </div>
+            <label>Role</label>
+             <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name"
+               required placeholder="Enter Role" />
         </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">

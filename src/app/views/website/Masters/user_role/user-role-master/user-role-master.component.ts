@@ -46,7 +46,7 @@ export class UserRoleMasterComponent implements OnInit {
 
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
 
-    await this.router.navigate(['/homepage/Website/Material_Master_details']);
+    await this.router.navigate(['/homepage/Website/User_Role_Master_Details']);
   }
 
   onDeleteClicked = async (userrole: UserRole) => {
