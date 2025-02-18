@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, MarketingModes } from 'src/app/classes/domain/domainenums/domainenums';
 import { Marketing } from 'src/app/classes/domain/entities/website/masters/marketing/marketing';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -18,7 +18,9 @@ export class MarketingMasterDetailsComponent implements OnInit {
   Entity: Marketing = Marketing.CreateNewInstance();
   DetailsFormTitle: 'New Marketing Type' | 'Edit Marketing Type' = 'New Marketing Type';
   InitialEntity: Marketing = null as any;
-  MarketingModesList = DomainEnums.MarketingModesList();
+
+  MarketingModesTypes = MarketingModes;
+  MarketingModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
 

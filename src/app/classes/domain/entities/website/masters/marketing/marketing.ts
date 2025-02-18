@@ -16,11 +16,12 @@ import { MarketingFetchRequest } from "./marketingfetchrequest";
 export class MarketingProps {
   public readonly Db_Table_Name = "MarketingActivityMaster";
   public Ref: number = 0;
-  public MarketingModes: string = '';
-  public MarketingType: string = '';
+  public MarketingMode: string = '';
+  public Description: string = '';
 
 
   public readonly IsNewlyCreated: boolean = false;
+  
   // public readonly AccountTypeName: string = '';
 
   private constructor(isNewlyCreated: boolean) {
@@ -63,8 +64,8 @@ export class Marketing implements IPersistable<Marketing> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.MarketingModes == '') vra.add('Marketing Modes', 'Marketing Modes cannot be blank.');
-    if (this.p.MarketingType == '') vra.add('Marketing Type', 'Marketing Type cannot be blank.');
+    if (this.p.MarketingMode == '') vra.add('Marketing Modes', 'Marketing Modes cannot be blank.');
+    if (this.p.Description == '') vra.add('Marketing Type', 'Marketing Type cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
