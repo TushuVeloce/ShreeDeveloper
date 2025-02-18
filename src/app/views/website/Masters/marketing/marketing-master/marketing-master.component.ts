@@ -10,28 +10,30 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   templateUrl: './marketing-master.component.html',
   styleUrls: ['./marketing-master.component.scss'],
 })
-export class MarketingMasterComponent  implements OnInit {
+export class MarketingMasterComponent implements OnInit {
 
-    Entity: Marketing = Marketing.CreateNewInstance();
-    MasterList: Marketing[] = [];
-    DisplayMasterList: Marketing[] = [];
-    SearchString: string = '';
-    SelectedMarketing: Marketing = Marketing.CreateNewInstance();
-    pageSize = 10; // Items per page
-    currentPage = 1; // Initialize current page
-    total = 0;
+  Entity: Marketing = Marketing.CreateNewInstance();
+  MasterList: Marketing[] = [];
+  DisplayMasterList: Marketing[] = [];
+  SearchString: string = '';
+  SelectedMarketing: Marketing = Marketing.CreateNewInstance();
+  pageSize = 10; // Items per page
+  currentPage = 1; // Initialize current page
+  total = 0;
 
-  headers: string[] = ['Sr.No.','Marketing Type','Description','Action'];
-constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
+  headers: string[] = ['Sr.No.', 'Marketing Type', 'Description', 'Action'];
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 
   async ngOnInit() {
     await this.FormulateMasterList();
     this.loadPaginationData();
   }
-  
+
   private FormulateMasterList = async () => {
     let lst = await Marketing.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
+    console.log(this.MasterList);
+    
     this.DisplayMasterList = this.MasterList
     this.loadPaginationData();
   }
@@ -62,21 +64,21 @@ constructor(private uiUtils: UIUtils, private router: Router, private appStateMa
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   }
 
-  get paginatedList () {
+  get paginatedList() {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
 
-  onPageChange  = (pageIndex: number): void => {
+  onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
   }
 
 
-  AddMarketing(){
+  AddMarketing() {
     this.router.navigate(['/homepage/Website/Marketing_Master_Details']);
-   }
+  }
 
-   filterTable = () => {
+  filterTable = () => {
     if (this.SearchString != '') {
       this.DisplayMasterList = this.MasterList.filter((data: any) => {
         return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1

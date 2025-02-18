@@ -41,6 +41,8 @@ export class MarketingMasterDetailsComponent implements OnInit {
   SaveMarketingMaster = async () => {
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
+    console.log(entitiesToSave);
+    
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {

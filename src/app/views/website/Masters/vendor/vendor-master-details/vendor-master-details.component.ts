@@ -26,6 +26,8 @@ export class VendorMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.CompanyList = await Company.FetchEntireList();
+    console.log(this.CompanyList);
+    
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Vendor' : 'Edit Vendor';
@@ -44,6 +46,8 @@ export class VendorMasterDetailsComponent implements OnInit {
   SaveVendorMaster = async () => {
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
+    console.log(entitiesToSave);
+    
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {

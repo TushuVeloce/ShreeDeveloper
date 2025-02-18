@@ -25,52 +25,63 @@ export class CityComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  headers: string[] = ['Sr.No.','City Name'];
+  headers: string[] = ['Sr.No.', 'City Name'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 
   async ngOnInit() {
     await this.FormulateCountryList();
     this.loadPaginationData();
-   }
+  }
 
-     private FormulateCountryList = async () => {
-      this.CountryList = [];
-       let lst = await Country.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-       this.CountryList = lst;
-       this.loadPaginationData();
-     }
+  private FormulateCountryList = async () => {
+    this.CountryList = [];
+    let lst = await Country.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.CountryList = lst;
+    this.loadPaginationData();
+  }
 
-     getStateListByCountryRef = async (CountryRef: number) => {
-      this.StateList = [];
-      this.MasterList = [];
-      this.DisplayMasterList = [];
-      let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.StateList = lst;
-      this.loadPaginationData();
+  getStateListByCountryRef = async (CountryRef: number) => {
+    this.StateList = [];
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.StateList = lst;
+    this.loadPaginationData();
+  }
+
+  getCityListByStateRef = async (StateRef: number) => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  }
+
+  // For Pagination  start ----
+  loadPaginationData = () => {
+    this.total = this.DisplayMasterList.length; // Update total based on loaded data
+  }
+
+  get paginatedList() {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  onPageChange = (pageIndex: number): void => {
+    this.currentPage = pageIndex; // Update the current page
+  }
+  filterTable = () => {
+    debugger
+    if (this.SearchString != '') {
+      this.DisplayMasterList = this.MasterList.filter((data: any) => {
+        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1 
+      })
     }
-
-     getCityListByStateRef = async (StateRef: number) => {
-      this.MasterList = [];
-      this.DisplayMasterList = [];
-      let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.MasterList = lst;
-      this.DisplayMasterList = this.MasterList;
-      this.loadPaginationData();
+    else {
+      this.DisplayMasterList = this.MasterList
     }
-    
-      // For Pagination  start ----
-      loadPaginationData = () => {
-        this.total = this.DisplayMasterList.length; // Update total based on loaded data
-      }
-
-      get paginatedList () {
-        const start = (this.currentPage - 1) * this.pageSize;
-        return this.DisplayMasterList.slice(start, start + this.pageSize);
-      }
-    
-      onPageChange  = (pageIndex: number): void => {
-        this.currentPage = pageIndex; // Update the current page
-      }
+  }
 
 }

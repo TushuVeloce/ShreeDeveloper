@@ -21,7 +21,7 @@ export class VehicleMasterComponent  implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
 
-  headers: string[] = ['Sr.No.','Vehicle Name','Vehicle Number','Action'];
+  headers: string[] = ['Sr.No.','Vehicle Name','Action'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 
@@ -33,6 +33,7 @@ export class VehicleMasterComponent  implements OnInit {
    private FormulateMasterList = async () => {
       let lst = await Vehicle.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.MasterList = lst;
+      console.log(this.MasterList);
       this.DisplayMasterList = this.MasterList
       this.loadPaginationData();
     }
@@ -41,7 +42,7 @@ export class VehicleMasterComponent  implements OnInit {
       this.SelectedVehicle = item.GetEditableVersion();
       Vehicle.SetCurrentInstance(this.SelectedVehicle);
       this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-      await this.router.navigate(['/homepage/Website/Vehicle_Master_details']);
+      await this.router.navigate(['/homepage/Website/Vehicle_Master_Details']);
     }
   
     onDeleteClicked = async (Vehicle: Vehicle) => {

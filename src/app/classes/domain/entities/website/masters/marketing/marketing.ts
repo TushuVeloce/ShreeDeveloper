@@ -14,7 +14,7 @@ import { MarketingFetchRequest } from "./marketingfetchrequest";
 
 
 export class MarketingProps {
-  public readonly Db_Table_Name = "MarketingTypeMaster";
+  public readonly Db_Table_Name = "MarketingActivityMaster";
   public Ref: number = 0;
   public MarketingModes: string = '';
   public MarketingType: string = '';
@@ -33,7 +33,7 @@ export class MarketingProps {
 }
 
 export class Marketing implements IPersistable<Marketing> {
-  public static readonly Db_Table_Name: string = 'MarketingMaster';
+  public static readonly Db_Table_Name: string = 'MarketingActivityMaster';
 
   private constructor(public readonly p: MarketingProps, public readonly AllowEdit: boolean) {
 

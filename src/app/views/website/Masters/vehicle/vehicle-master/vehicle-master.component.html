@@ -22,17 +22,16 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let department of paginatedList; index as i">
+      <tr *ngFor="let vehicle of paginatedList; index as i">
         <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-        <td Class="tbldata">{{department.p.Name}}</td>
-        <td Class="tbldata">{{department.p.Number}}</td>
+        <td Class="tbldata">{{vehicle.p.Name}}</td>
+        <!-- <td Class="tbldata">{{vehicle.p.Number}}</td> -->
         <td class="tbldata">
-          <span style="margin-left: 9px;">
-            <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px"/>
-            </span>
-          <span style="margin-left: 9px;">
-            <img
-              src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+          <span style="margin-left: 9px;" (click)="onEditClicked(vehicle);">
+            <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+          </span>
+          <span style="margin-left: 9px;" (click)="onDeleteClicked(vehicle);">
+            <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
         </td>
       </tr>
     </tbody>
