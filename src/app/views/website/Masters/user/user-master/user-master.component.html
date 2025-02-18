@@ -26,10 +26,10 @@
           <td Class="tbldata">{{ user.p.Password }}</td>
           <td Class="tbldata">{{ user.p.UserRoleName}}</td>
           <td class="tbldata">
-            <span style="margin-left: 9px">
+            <span style="margin-left: 9px;" (click)="onEditClicked(user);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
             </span>
-            <span style="margin-left: 9px">
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(user);">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>

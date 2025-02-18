@@ -21,7 +21,7 @@ export class UserMasterComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
 
-  headers: string[] = ['Sr.No.', 'Email Id', 'Contact No', 'Default Password', 'Action'];
+  headers: string[] = ['Sr.No.', 'Email Id', 'Contact No', 'Default Password','User Role Name', 'Action'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 
@@ -32,6 +32,7 @@ export class UserMasterComponent implements OnInit {
   private FormulateMasterList = async () => {
     let lst = await User.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
+    console.log('MasterList :', this.MasterList);
     this.DisplayMasterList = this.MasterList
   }
 
@@ -52,6 +53,7 @@ export class UserMasterComponent implements OnInit {
           await this.uiUtils.showSuccessToster(`User ${User.p.EmailId} has been deleted!`);
           this.SearchString = '';
           this.loadPaginationData();
+          this.FormulateMasterList();
         });
       });
   }
