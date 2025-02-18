@@ -6,7 +6,7 @@ import { ThemeService } from 'src/app/services/theme.service';
   standalone: false,
   template: `
   <span style="margin-left: 9px;" (click)="onEditClick()"  >
-  <img src="/assets/icons/edit.png" alt="Edit icon" title="Edit" width="20px" height="20px">
+  <img src="/assets/icons/edit.png"  alt="Edit icon" title="Edit" width="20px" height="20px">
 </span>
   `,
   styles: ``,

@@ -57,6 +57,7 @@ import { UnitMasterDetailsComponent } from './Masters/unit/unit-master-details/u
 import { DeleteIconComponent } from './Helpers/delete-icon/delete-icon.component';
 import { EditIconComponent } from './Helpers/edit-icon/edit-icon.component';
 import { DataNotFoundComponent } from './Helpers/data-not-found/data-not-found.component';
+import { CustomButtonComponent } from 'veloce-library';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent  ,StageMasterComponent,StageMasterDetailsComponent, AccountMainLedgerComponent,AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingMasterComponent,MarketingMasterDetailsComponent,

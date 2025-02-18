@@ -5,12 +5,15 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import Swal from 'sweetalert2';
+import {CustomButtonComponent, UtilsService, VeloceLibraryComponent, VeloceLibraryService} from 'veloce-library';
 
 @Component({
   selector: 'app-material-master',
   standalone: false,
   templateUrl: './material-master.component.html',
   styleUrls: ['./material-master.component.scss'],
+  imports: [CustomButtonComponent]
+  
 })
 export class MaterialMasterComponent implements OnInit {
   Entity: Material = Material.CreateNewInstance();
@@ -93,5 +96,6 @@ export class MaterialMasterComponent implements OnInit {
 
   AddMaterial() {
     this.router.navigate(['/homepage/Website/Material_Master_details']);
+  UtilsService.generateRandomNumber
   }
 }
