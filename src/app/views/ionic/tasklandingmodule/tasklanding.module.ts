@@ -8,7 +8,7 @@ import { TaskLandingViewComponent } from './components/task-landing-view/task-la
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddTaskComponent } from './components/add-task/add-task.component';
 import { FilterComponentComponent } from './components/filter-component/filter-component.component';
-
+import { CustomButtonComponent} from'veloce-library';
 
 @NgModule({
   declarations: [TaskLandingComponent,TaskLandingViewComponent,AddTaskComponent,FilterComponentComponent],
@@ -17,7 +17,7 @@ import { FilterComponentComponent } from './components/filter-component/filter-c
     TasklandingRoutingModule,
     IonicModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
    ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

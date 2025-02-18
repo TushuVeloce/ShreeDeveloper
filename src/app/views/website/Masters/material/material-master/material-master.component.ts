@@ -24,7 +24,7 @@ export class MaterialMasterComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
 
-  headers: string[] = ['Sr.No.', 'Material Name', 'Material Unit', 'Action'];
+  headers: string[] = ['Sr.No.','Code', 'Material Name', 'Material Unit', 'Action'];
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
@@ -43,6 +43,7 @@ export class MaterialMasterComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
+    console.log('MasterList :', this.MasterList);
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
     // console.log(this.DisplayMasterList);
@@ -94,5 +95,17 @@ export class MaterialMasterComponent implements OnInit {
 
   AddMaterial() {
     this.router.navigate(['/homepage/Website/Material_Master_details']);
+  }
+
+  
+  filterTable = () => {
+    if (this.SearchString != '') {
+      this.DisplayMasterList = this.MasterList.filter((data: any) => {
+        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
+      })
+    }
+    else {
+      this.DisplayMasterList = this.MasterList
+    }
   }
 }

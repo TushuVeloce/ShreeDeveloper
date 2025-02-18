@@ -89,5 +89,18 @@ export class UnitMasterComponent  implements OnInit {
   AddUnit() {
     this.router.navigate(['/homepage/Website/Unit_Master_details']);
   }
+
+
+  filterTable = () => {
+    if (this.SearchString != '') {
+      this.DisplayMasterList = this.MasterList.filter((data: any) => {
+        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
+      })
+    }
+    else {
+      this.DisplayMasterList = this.MasterList
+    }
+  }
+
 }
 

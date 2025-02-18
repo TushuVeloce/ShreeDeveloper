@@ -16,6 +16,7 @@ import { MaterialFetchRequest } from "./materialfetchrequest";
 export class MaterialProps {
   public readonly Db_Table_Name = "MaterialMaster";
   public Ref: number = 0;
+  public Code: string = '';
   public Name: string = '';
   public UnitRef: number = 0;
   public readonly UnitName: string = '';
@@ -64,6 +65,7 @@ export class Material implements IPersistable<Material> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
+    if (this.p.Code == '') vra.add('Code', 'Code cannot be blank.');
     if (this.p.UnitRef == 0) vra.add('Unit', 'Unit cannot be blank.');
   }
 
