@@ -53,6 +53,7 @@ export class VendorMasterComponent implements OnInit {
           await this.FormulateMasterList();
           this.SearchString = '';
           this.loadPaginationData();
+          await this.FormulateMasterList();
         });
       });
   }

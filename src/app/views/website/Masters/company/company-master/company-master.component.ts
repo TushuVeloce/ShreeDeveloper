@@ -55,6 +55,7 @@ export class CompanyMasterComponent implements OnInit {
           await this.uiUtils.showSuccessToster(`Company ${Company.p.Name} has been deleted!`);
           this.SearchString = '';
           this.loadPaginationData();
+          this.FormulateMasterList();
         });
       });
   }

@@ -67,7 +67,9 @@ export class UnitMasterComponent  implements OnInit {
           );
           await this.FormulateUnitList();
           this.SearchString = '';
-          // this.loadPaginationData();
+          this.loadPaginationData();
+          await this.FormulateUnitList();
+
         });
       }
     );

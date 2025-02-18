@@ -74,7 +74,9 @@ export class MaterialMasterComponent implements OnInit {
           );
           await this.FormulateMaterialList();
           this.SearchString = '';
-          // this.loadPaginationData();
+          this.loadPaginationData();
+          await this.FormulateMaterialList();
+
         });
       }
     );

@@ -40,7 +40,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
- //   this.UserRoleList = await UserRole.FetchEntireList();
+    this.UserRoleList = await UserRole.FetchEntireList();
     this.CountryList = await Country.FetchEntireList();
     this.DepartmentList = await Department.FetchEntireList();
     console.log('DepartmentList :', this.DepartmentList);

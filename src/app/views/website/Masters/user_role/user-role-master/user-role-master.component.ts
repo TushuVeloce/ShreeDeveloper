@@ -59,6 +59,8 @@ export class UserRoleMasterComponent implements OnInit {
           await this.uiUtils.showSuccessToster(`Company ${userrole.p.Name} has been deleted!`);
           this.SearchString = '';
           this.loadPaginationData();
+          await this.FormulateMaterialList();
+
         });
       });
   }
