@@ -93,6 +93,7 @@ export class UnitMasterComponent  implements OnInit {
   }
 
 
+  
   filterTable = () => {
     if (this.SearchString != '') {
       this.DisplayMasterList = this.MasterList.filter((data: any) => {
@@ -103,6 +104,5 @@ export class UnitMasterComponent  implements OnInit {
       this.DisplayMasterList = this.MasterList
     }
   }
-
 }
 

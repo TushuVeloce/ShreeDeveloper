@@ -311,16 +311,6 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '',
       },
       {
-        Name: 'User Master',
-        RouterLink: '/homepage/Website/User_Master',
-        LogoPath: '',
-      },
-      {
-        Name: 'Company Master',
-        RouterLink: '/homepage/Website/Company_Master',
-        LogoPath: '',
-      },
-      {
         Name: 'Department Master',
         RouterLink: '/homepage/Website/Department_Master',
         LogoPath: '',
@@ -328,6 +318,16 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'User Role Master',
         RouterLink: '/homepage/Website/User_Role_Master',
+        LogoPath: '',
+      },
+      {
+        Name: 'User Master',
+        RouterLink: '/homepage/Website/User_Master',
+        LogoPath: '',
+      },
+      {
+        Name: 'Company Master',
+        RouterLink: '/homepage/Website/Company_Master',
         LogoPath: '',
       },
       {
