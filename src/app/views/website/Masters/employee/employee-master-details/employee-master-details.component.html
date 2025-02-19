@@ -70,7 +70,7 @@
         <div class="col-md-4">
           <div>
             <label for="CountryRef"><b>Country</b></label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select"  [nzSize]="'large'"  name="CountryRef" required id="CountryRef"
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select"  [nzSize]="'large'"  name="CountryRef" required id="CountryRef"
             [(ngModel)]="Entity.p.CountryRef" (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
               <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
                 [nzValue]="country.p.Ref"></nz-option>
