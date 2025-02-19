@@ -3,7 +3,7 @@
     <h5 style="padding-top: 3px;" class="title title_light">User Role Master</h5>
   </div>
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light">
-    <input type="text" Class="search-box_light" placeholder="Search..." autofocus />
+    <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus [(ngModel)]="SearchString" />
   </div>
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
     <nz-button nz-button class="btn1" (click)='AddUserRole()'>
