@@ -24,7 +24,7 @@
       <tbody>
         <tr *ngFor="let marketing of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{marketing.p.MarketingMode}}</td>
+          <td Class="tbldata">{{marketing.p.MarketingModeName}}</td>
           <td Class="tbldata">{{marketing.p.Description}}</td>
           <td class="tbldata">
             <span style="margin-left: 9px;" (click)="onEditClicked(marketing);">

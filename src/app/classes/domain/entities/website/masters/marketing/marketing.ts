@@ -16,9 +16,10 @@ import { MarketingFetchRequest } from "./marketingfetchrequest";
 export class MarketingProps {
   public readonly Db_Table_Name = "MarketingActivityMaster";
   public Ref: number = 0;
-  public MarketingMode: string = '';
   public Description: string = '';
-
+  
+  public MarketingMode: string = '';
+  public readonly MarketingModeName: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
   

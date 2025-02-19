@@ -24,8 +24,8 @@
         <tr *ngFor="let bank of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{bank.p.Name}}</td>
-          <td Class="tbldata">{{bank.p.Branch}}</td>
-          <td Class="tbldata">{{bank.p.AccountNo}}</td>
+          <td Class="tbldata">{{bank.p.BranchName}}</td>
+          <td Class="tbldata">{{bank.p.AccountNumber}}</td>
           <td Class="tbldata">{{bank.p.IFSCCode}}</td>
           <td Class="tbldata">{{bank.p.OpeningBalance}}</td>
           <td class="tbldata">

@@ -34,6 +34,8 @@ export class BankMasterComponent implements OnInit {
   private FormulateMasterList = async () => {
       let lst = await Bank.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.MasterList = lst;
+      console.log(this.MasterList);
+      
       this.DisplayMasterList = this.MasterList
       this.loadPaginationData();
     }
@@ -42,7 +44,7 @@ export class BankMasterComponent implements OnInit {
       this.SelectedBank = item.GetEditableVersion();
       Bank.SetCurrentInstance(this.SelectedBank);
       this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-      await this.router.navigate(['/homepage/Website/Bank_Master_details']);
+      await this.router.navigate(['/homepage/Website/Bank_Master_Details']);
     }
   
     onDeleteClicked = async (Bank: Bank) => {

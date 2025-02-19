@@ -18,8 +18,8 @@ export class BankProps {
   public Ref: number = 0;
   public CompanyRef: number = 0;
   public Name: string = '';
-  public Branch: string = '';
-  public AccountNo: string = '';
+  public BranchName: string = '';
+  public AccountNumber: string = '';
   public IFSCCode: string = '';
   public OpeningBalance: number = 0;
   public CreatedFinancialYear: string = '';
@@ -67,8 +67,8 @@ export class Bank implements IPersistable<Bank> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-    if (this.p.Branch == '') vra.add('Branch', 'Branch cannot be blank.');
-    if (this.p.AccountNo == '') vra.add('AccountNo', 'Account No cannot be blank.');
+    if (this.p.BranchName == '') vra.add('Branch', 'Branch cannot be blank.');
+    if (this.p.AccountNumber == '') vra.add('AccountNumber', 'Account No cannot be blank.');
     if (this.p.IFSCCode == '') vra.add('IFSCCode', 'IFSC Code cannot be blank.');
     if (this.p.OpeningBalance == 0) vra.add('OpeningBalance', 'Opening Balance cannot be blank.');
     if (this.p.CreatedFinancialYear == '') vra.add('CreatedFinancialYear', 'Created Financial Year cannot be blank.');
