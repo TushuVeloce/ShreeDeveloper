@@ -14,13 +14,15 @@ import { BankFetchRequest } from "./bankfetchrequest";
 
 
 export class BankProps {
-  public readonly Db_Table_Name = "BankMaster";
+  public readonly Db_Table_Name = "BankAccountMaster";
   public Ref: number = 0;
+  public CompanyRef: number = 0;
   public Name: string = '';
   public Branch: string = '';
   public AccountNo: string = '';
   public IFSCCode: string = '';
   public OpeningBalance: number = 0;
+  public CreatedFinancialYear: string = '';
   
   public readonly IsNewlyCreated: boolean = false;
 
@@ -34,7 +36,7 @@ export class BankProps {
 }
 
 export class Bank implements IPersistable<Bank> {
-  public static readonly Db_Table_Name: string = 'BankMaster';
+  public static readonly Db_Table_Name: string = 'BankAccountMaster';
 
   private constructor(public readonly p: BankProps, public readonly AllowEdit: boolean) {
 
@@ -69,6 +71,7 @@ export class Bank implements IPersistable<Bank> {
     if (this.p.AccountNo == '') vra.add('AccountNo', 'Account No cannot be blank.');
     if (this.p.IFSCCode == '') vra.add('IFSCCode', 'IFSC Code cannot be blank.');
     if (this.p.OpeningBalance == 0) vra.add('OpeningBalance', 'Opening Balance cannot be blank.');
+    if (this.p.CreatedFinancialYear == '') vra.add('CreatedFinancialYear', 'Created Financial Year cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {

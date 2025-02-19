@@ -12,81 +12,123 @@
         </button>
       </div>
       <div class="col-md-11">
-        <span class="detail_title">{{DetailsFormTitle}}</span>
+        <span class="detail_title">{{ DetailsFormTitle }}</span>
       </div>
     </div>
     <form autocomplete="off">
-      <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
-           <label>Bank Name</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.Name"
-              name="Name"
-              class="form-control"
-              id="Name"
-              required
-              placeholder="Enter Bank Name"
-            />
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+          <label> Material Unit</label>
+          <nz-select
+            class="nzSelect-light"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Select"
+            id="CompanyRef"
+            name="CompanyRef"
+            [nzSize]="'large'"
+            [(ngModel)]="Entity.p.CompanyRef"
+          >
+            <nz-option
+              *ngFor="let company of CompanyList"
+              [nzValue]="company.p.Ref"
+              [nzLabel]="company.p.Name"
+            ></nz-option>
+          </nz-select>
         </div>
         <div class="col-md-4">
-           <label>Branch Name</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.Branch"
-              name="Branch"
-              class="form-control"
-              id="Branch"
-              required
-              placeholder="Enter Branch Name"
-            />
+          <label>Bank Name</label>
+          <input
+            type="text"
+            [(ngModel)]="Entity.p.Name"
+            name="Name"
+            class="form-control"
+            id="Name"
+            required
+            placeholder="Enter Bank Name"
+          />
         </div>
         <div class="col-md-4">
-           <label>Account No</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.AccountNo"
-              name="AccountNo"
-              class="form-control"
-              id="AccountNo"
-              required
-              placeholder="Enter Account Number"
-            />
+          <label>Branch Name</label>
+          <input
+            type="text"
+            [(ngModel)]="Entity.p.Branch"
+            name="Branch"
+            class="form-control"
+            id="Branch"
+            required
+            placeholder="Enter Branch Name"
+          />
+        </div>
+        <div class="col-md-4">
+          <label>Account No</label>
+          <input
+            type="text"
+            [(ngModel)]="Entity.p.AccountNo"
+            name="AccountNo"
+            class="form-control"
+            id="AccountNo"
+            required
+            placeholder="Enter Account Number"
+          />
+        </div>
+        <div class="col-md-4">
+          <label>IFSC Code</label>
+          <input
+            type="text"
+            [(ngModel)]="Entity.p.IFSCCode"
+            name="IFSCCode"
+            class="form-control"
+            id="IFSCCode"
+            required
+            placeholder="Enter IFSC Code"
+          />
+        </div>
+        <div class="col-md-4">
+          <label>Opening Balance</label>
+          <input
+            type="text"
+            [(ngModel)]="Entity.p.OpeningBalance"
+            name="OpeningBalance"
+            class="form-control"
+            id="OpeningBalance"
+            required
+            placeholder="Enter Opening Balance"
+          />
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
+        <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
-           <label>IFSC Code</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.IFSCCode"
-              name="IFSCCode"
-              class="form-control"
-              id="IFSCCode"
-              required
-              placeholder="Enter IFSC Code"
-            />
-        </div>
-        <div class="col-md-4">
-           <label>Opening Balance</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.OpeningBalance"
-              name="OpeningBalance"
-              class="form-control"
-              id="OpeningBalance"
-              required
-              placeholder="Enter Opening Balance"
-            />
+          <label>Financial Year</label>
+          <input
+            type="text"
+            [(ngModel)]="Entity.p.CreatedFinancialYear"
+            name="CreatedFinancialYear"
+            class="form-control"
+            id="CreatedFinancialYear"
+            required
+            placeholder="Enter FinancialYear"
+          />
         </div>
       </div>
-      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
-          <div>
-            <button type="button" class="btn" (click)="SaveBankMaster()">Save</button>
-          </div>
-          <div>
-            <button type="button" class="btn" (click)="BackBank()">Back</button>
-          </div>
+
+        
+      <div
+        style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        "
+      >
+        <div>
+          <button type="button" class="btn" (click)="SaveBankMaster()">
+            Save
+          </button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackBank()">Back</button>
+        </div>
       </div>
     </form>
   </div>

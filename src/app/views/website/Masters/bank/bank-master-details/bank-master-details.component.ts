@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Bank } from 'src/app/classes/domain/entities/website/masters/bank/bank';
+import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
@@ -18,11 +19,14 @@ export class BankMasterDetailsComponent implements OnInit {
   Entity: Bank = Bank.CreateNewInstance();
   DetailsFormTitle: 'New Bank' | 'Edit Bank' = 'New Bank';
   InitialEntity: Bank = null as any;
+  CompanyList: Company[] = [];
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
 
 
   async ngOnInit() {
+    this.CompanyList = await Company.FetchEntireList();
+
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Bank' : 'Edit Bank';
