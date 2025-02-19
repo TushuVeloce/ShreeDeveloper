@@ -25,10 +25,8 @@ export class LoginPageComponent implements OnInit {
   isMobile: boolean = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
   constructor(private router: Router, private platform: Platform, private servercommunicator: ServerCommunicatorService,
-    private uiUtils: UIUtils,
-    private activatedRoute: ActivatedRoute,
-    private sessionValues: SessionValues,
-    private appStateManage: AppStateManageService,) {
+    private uiUtils: UIUtils, private activatedRoute: ActivatedRoute, private sessionValues: SessionValues,
+    private appStateManage: AppStateManageService) {
 
     platform.ready().then(async () => {
       this.isIosPlatform = platform.is('ios');

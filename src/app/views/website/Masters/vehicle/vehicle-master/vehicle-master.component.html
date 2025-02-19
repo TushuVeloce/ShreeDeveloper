@@ -13,7 +13,7 @@
 </div>
 <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
 <div class="table-container">
-  <nz-table #basicTable nzSize="small" class="no-hover-table" 
+  <nz-table #basicTable nzSize="small" [nzData]="paginatedList" class="no-hover-table" 
     Class="bgtable_light" [nzScroll]="{x:'auto' }"
     nzFrontPagination="false" [nzShowSizeChanger]="false">
     <thead>
