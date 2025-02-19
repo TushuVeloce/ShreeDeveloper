@@ -21,7 +21,7 @@ export class UserMasterComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
 
-  headers: string[] = ['Sr.No.', 'Email Id', 'Contact No', 'Default Password','User Role Name', 'Action'];
+  headers: string[] = ['Sr.No.', 'Email Id', 'Contact No','User Role Name', 'Action'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 
