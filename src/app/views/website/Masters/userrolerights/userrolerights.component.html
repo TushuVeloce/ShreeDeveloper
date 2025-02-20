@@ -1,0 +1,71 @@
+<div class="container-fluid">
+  <div class="headers">
+    <div class="row">
+      <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
+        <h5 style="padding-top: 3px;" class="title title_light">User Role Rights</h5>
+      </div>
+      <!-- <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light">
+        <input type="text" Class="search-box_light" placeholder="Search..." autofocus />
+      </div> -->
+      <!-- <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
+        <nz-button nz-button class="btn1">
+          Add Stages
+        </nz-button>
+      </div> -->
+    </div>
+    <div class="row">
+      <div class="col-md-4 mb-2">
+        <label for="UserRoleRef"><b>User Role</b></label>
+        <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UserRoleRef"
+          name="UserRoleRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UserRoleRef">
+          <nz-option *ngFor="let userrole of UserRoleList" [nzValue]="userrole" [nzLabel]="userrole.p.Name"></nz-option>
+        </nz-select>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label for="FormList"><b>Select Module</b></label>
+        <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="FormRef" name="FormRef"
+          [nzSize]="'large'" [(ngModel)]="FormRef" (ngModelChange)="getOwnerRef(FormRef)">
+          <nz-option *ngFor="let form of FormList" [nzValue]="form" [nzLabel]="form"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+  </div>
+
+  <!-- table start  -->
+  <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem">
+    <div class="table-container">
+      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
+        nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="modules">
+        <thead>
+          <tr>
+            <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let module of modules; let i = index">
+            <td Class="tbldata">{{ module.name }}</td>
+            <td Class="tbldata"><label nz-checkbox class="labledt" [(ngModel)]="module.add"
+                (ngModelChange)="updateRoleRights(i, 'add')"></label>
+            </td>
+            <td Class="tbldata"><label nz-checkbox [(ngModel)]="module.edit"
+                (ngModelChange)="updateRoleRights(i, 'edit')"></label>
+            </td>
+            <td Class="tbldata"><label nz-checkbox [(ngModel)]="module.delete"
+                (ngModelChange)="updateRoleRights(i, 'delete')"></label>
+            </td>
+            <td Class="tbldata"><label nz-checkbox [(ngModel)]="module.view"
+                (ngModelChange)="updateRoleRights(i, 'view')"></label>
+            </td>
+            <td Class="tbldata"><label nz-checkbox [(ngModel)]="module.print"
+                (ngModelChange)="updateRoleRights(i, 'print')"></label>
+            </td>
+            <td Class="tbldata"><label nz-checkbox [(ngModel)]="module.exports"
+                (ngModelChange)="updateRoleRights(i, 'exports')"></label>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+  <!-- table end -->
+</div>

@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,15 +13,13 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss'],
+  imports: [FormsModule, CommonModule]
   // standalone: true,
 })
 export class LoginPageComponent implements OnInit {
   isIosPlatform: boolean = false;
   isAndroidPlatform: boolean = false;
 
-
-  UserId: string = '';
-  Password: string = '';
 
   isMobile: boolean = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -34,59 +33,39 @@ export class LoginPageComponent implements OnInit {
     });
   }
 
+  UserId: string = 'admin@gmail.com';
+  Password: string = '123';
+
   ngOnInit() { }
-  // Login = async () => {
+  Login = async () => {
+    debugger
+    if (this.UserId === '') {
+      this.uiUtils.showErrorMessage('Error', 'Please Enter Email ID');
+      return
+    } else if (this.Password === '') {
+      this.uiUtils.showErrorMessage('Error', 'Please Enter Password');
+      return
+    }
 
-  //   if (this.isMobile) {
-  //     await this.router.navigate(['/app_homepage']);  // Navigate to mobile
-  //   } else {
-  //     await this.router.navigate(['/homepage']);  // Navigate to web
-  //   }
-  // }
+    let req = new UserLoginRequest();
+    req.UserId = this.UserId;
+    req.Password = this.Password;
+    // req.LoginDeviceId = this.sessionValues.LoginDeviceId;
+    // req.SenderURL;
 
+    const response = await this.servercommunicator.LoginUser(req);
 
-
-// Start Code
-// if (this.isIosPlatform || this.isAndroidPlatform) {
-//   await this.router.navigate(['/app_homepage']);
-// }
-// else {
-//   await this.router.navigate(['/website_homepage']);
-// }
-
-// After API
-Login = async () => {
-  debugger
-  this.UserId = 'admin@gmail.com';
-  this.Password = '123';
-  // New Code
-  if (this.UserId === '') {
-    this.uiUtils.showErrorMessage('Error', 'Please Enter Email ID');
-    return
-  } else if (this.Password === '') {
-    this.uiUtils.showErrorMessage('Error', 'Please Enter Password');
-    return
-  }
-
-  let req = new UserLoginRequest();
-  req.UserId = this.UserId;
-  req.Password = this.Password;
-  // req.LoginDeviceId = this.sessionValues.LoginDeviceId;
-  // req.SenderURL;
-
-  const response = await this.servercommunicator.LoginUser(req);
-debugger
-  if (!response.Successful) {
-    await this.uiUtils.showInformationalMessage('Error', response.Message);
-    return
-  } else {
-    //const user = { UserDisplayName: response.UserDisplayName, EMailId: response.EMailId, Role: response.Role, PhoneNos: response.PhoneNos }
-    //this.appStateManage.setUserJSON(user);
-    if (this.isMobile) {
-      await this.router.navigate(['/app_homepage']);  // Navigate to mobile
+    if (!response.Successful) {
+      await this.uiUtils.showErrorMessage('Error', response.Message);
+      return
     } else {
-      await this.router.navigate(['/homepage']);  // Navigate to web
+      //const user = { UserDisplayName: response.UserDisplayName, EMailId: response.EMailId, Role: response.Role, PhoneNos: response.PhoneNos }
+      //this.appStateManage.setUserJSON(user);
+      if (this.isMobile) {
+        await this.router.navigate(['/app_homepage']);  // Navigate to mobile
+      } else {
+        await this.router.navigate(['/homepage']);  // Navigate to web
+      }
     }
   }
-}
 }

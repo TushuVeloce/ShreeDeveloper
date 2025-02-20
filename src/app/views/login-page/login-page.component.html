@@ -17,8 +17,8 @@
             style="height: 25%; width: 25%; align-self: center;margin-bottom: 3%;" />
           <h4 style="text-align: center; margin-bottom: 4%;">Login your account</h4>
           <form autocomplete="off">
-            <input id="inputField" type="text" placeholder="Enter your Mail Id" />
-            <input id="inputField" type="password" placeholder="Enter your Password" />
+            <input id="inputField" type="text" id="userId" name="UserId" placeholder="Enter your Mail Id" [(ngModel)]="UserId" />
+            <input id="inputField" type="password" id="password" name="password" placeholder="Enter your Password" [(ngModel)]="Password" />
             <div>
               <button
                 style="padding: 9px; margin-bottom: 3%; width: 100%;  border-radius: 8px; background-color: #781616; color: white;"
