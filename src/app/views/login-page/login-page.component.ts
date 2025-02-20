@@ -35,15 +35,15 @@ export class LoginPageComponent implements OnInit {
   }
 
   ngOnInit() { }
-  Login = async () => {
+  // Login = async () => {
 
-    if (this.isMobile) {
-      await this.router.navigate(['/app_homepage']);  // Navigate to mobile
-    } else {
-      await this.router.navigate(['/homepage']);  // Navigate to web
-    }
-  }
-}
+  //   if (this.isMobile) {
+  //     await this.router.navigate(['/app_homepage']);  // Navigate to mobile
+  //   } else {
+  //     await this.router.navigate(['/homepage']);  // Navigate to web
+  //   }
+  // }
+
 
 
 // Start Code
@@ -55,35 +55,38 @@ export class LoginPageComponent implements OnInit {
 // }
 
 // After API
-// Login = async () => {
+Login = async () => {
+  debugger
+  this.UserId = 'admin@gmail.com';
+  this.Password = '123';
+  // New Code
+  if (this.UserId === '') {
+    this.uiUtils.showErrorMessage('Error', 'Please Enter Email ID');
+    return
+  } else if (this.Password === '') {
+    this.uiUtils.showErrorMessage('Error', 'Please Enter Password');
+    return
+  }
 
-//   // New Code
-//   if (this.UserId === '') {
-//     this.uiUtils.showErrorMessage('Error', 'Please Enter Email ID');
-//     return
-//   } else if (this.Password === '') {
-//     this.uiUtils.showErrorMessage('Error', 'Please Enter Password');
-//     return
-//   }
+  let req = new UserLoginRequest();
+  req.UserId = this.UserId;
+  req.Password = this.Password;
+  // req.LoginDeviceId = this.sessionValues.LoginDeviceId;
+  // req.SenderURL;
 
-//   let req = new UserLoginRequest();
-//   req.UserId = this.UserId;
-//   req.Password = this.Password;
-//   // req.LoginDeviceId = this.sessionValues.LoginDeviceId;
-//   // req.SenderURL;
-
-//   const response = await this.servercommunicator.LoginUser(req);
-
-//   if (!response.Successful) {
-//     await this.uiUtils.showInformationalMessage('Error', response.Message);
-//     return
-//   } else {
-//     const user = { UserDisplayName: response.UserDisplayName, EMailId: response.EMailId, Role: response.Role, PhoneNos: response.PhoneNos }
-//     this.appStateManage.setUserJSON(user);
-//     if (this.isMobile) {
-//       await this.router.navigate(['/app_homepage']);  // Navigate to mobile
-//     } else {
-//       await this.router.navigate(['/homepage']);  // Navigate to web
-//     }
-//   }
-// }
+  const response = await this.servercommunicator.LoginUser(req);
+debugger
+  if (!response.Successful) {
+    await this.uiUtils.showInformationalMessage('Error', response.Message);
+    return
+  } else {
+    //const user = { UserDisplayName: response.UserDisplayName, EMailId: response.EMailId, Role: response.Role, PhoneNos: response.PhoneNos }
+    //this.appStateManage.setUserJSON(user);
+    if (this.isMobile) {
+      await this.router.navigate(['/app_homepage']);  // Navigate to mobile
+    } else {
+      await this.router.navigate(['/homepage']);  // Navigate to web
+    }
+  }
+}
+}

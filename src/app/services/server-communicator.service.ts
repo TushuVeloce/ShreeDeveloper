@@ -378,15 +378,14 @@ export class ServerCommunicatorService {
   }
 
   public async LoginUser(req: UserLoginRequest) {
-    let apiRoot = this.sessionValues.cloudUIController;
-    let url = `${apiRoot}/loginuser`;
-
+    let apiRoot = this.sessionValues.requestController;
+    let url = `${apiRoot}/loginsystemuser`;
+    
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
     let request = this.http.post(url, req, { headers: headers });
-
     let resp = await (request.toPromise()
       .then(resp => resp as any)
       .catch(err => {
