@@ -17,6 +17,9 @@ import { UserLogoutRequest } from 'src/app/classes/infrastructure/request_respon
 import * as bootstrap from 'bootstrap';
 import { Modal } from 'bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 
 
 
@@ -38,7 +41,7 @@ interface module {
   templateUrl: './sidebarlayout.component.html',
   styleUrls: ['./sidebarlayout.component.scss'],
   imports: [CommonModule, RouterLink, RouterOutlet, NzIconModule, NzLayoutModule,
-    NzMenuModule, NzDropDownModule, NzModalModule, FormsModule, FontAwesomeModule]
+    NzMenuModule, NzDropDownModule, NzModalModule, FormsModule, FontAwesomeModule, NzSelectModule]
 })
 export class SidebarlayoutComponent implements OnInit {
   isDarkMode: boolean = false; // Two-way binding to checkbox
@@ -50,7 +53,8 @@ export class SidebarlayoutComponent implements OnInit {
   routerChangedSubscription: Subscription | undefined;
   activeModule: string | null = null; // Tracks the active module
   activeSubmodule: string | null = null; // Tracks the active submodule
-
+  CompnyList = DomainEnums.CompanyList(true, '--Select Company--');
+  CompanyRef: number = 0;
   Name: string = 'Veloce Tech';
 
   previousActiveSubmodule: string | null = null; // Tracks the active module
@@ -62,7 +66,7 @@ export class SidebarlayoutComponent implements OnInit {
   constructor(public router: Router, public themeService: ThemeService, private el: ElementRef, private renderer: Renderer2,
     private appStateManagement: AppStateManageService,
     private sessionValues: SessionValues, private cdr: ChangeDetectorRef,
-    private uiUtils: UIUtils,) {
+    private uiUtils: UIUtils, private companystatemanagement: CompanyStateManagement) {
 
     this.routerChangedSubscription = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -86,7 +90,8 @@ export class SidebarlayoutComponent implements OnInit {
     this.isMenuFolded = !this.isMenuFolded; // Toggles the menu state
   }
   ngOnInit() {
-    this.isDarkMode = this.appStateManagement.getTheme() === 'dark';
+    this.ongetcompany()
+        this.isDarkMode = this.appStateManagement.getTheme() === 'dark';
     this.onThemeToggle();
 
     this.GenerateAndSetMenuItemModuleList();
@@ -433,5 +438,30 @@ export class SidebarlayoutComponent implements OnInit {
 
   navigatetodashboard() {
     this.router.navigate(['/homepage/hotel/dashboard']);
+  }
+
+  changecompany(ref: number) {    
+    const selectedCompany = this.CompnyList.find(company => company.Ref === ref);
+    if (selectedCompany) {
+      localStorage.setItem('SelectedCompanyRef',selectedCompany.Ref.toString());
+      localStorage.setItem('companyName', selectedCompany.Name);
+      this.companystatemanagement.setCompanyRef(ref, selectedCompany.Name);
+      // console.log('CompanyRef:', this.companystatemanagement.getCurrentCompanyRef());
+      // console.log('CompanyName:', this.companystatemanagement.getCurrentCompanyName());
+    }
+
+  }
+  
+  ongetcompany(){
+    const storedCompanyRef = localStorage.getItem('SelectedCompanyRef');
+    const storedCompanyName = localStorage.getItem('companyName');
+  
+    if (storedCompanyRef && storedCompanyName) {
+      const ref = Number(storedCompanyRef);
+      
+      // Set the stored company details
+      this.CompanyRef = ref; // Bind to dropdown
+      this.companystatemanagement.setCompanyRef(ref, storedCompanyName);
+    }
   }
 }

@@ -17,6 +17,8 @@ export class UnitProps {
   public readonly Db_Table_Name = "UnitMaster";
   public Ref: number = 0;
   public Name: string = '';
+  public CompanyRef:number =0
+  public CompanyName:string =''
 
 
   public readonly IsNewlyCreated: boolean = false;

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -19,7 +20,7 @@ export class UnitMasterDetailsComponent  implements OnInit {
     IsDropdownDisabled: boolean = false
     InitialEntity: Unit = null as any;
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
   ngOnInit() { 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
@@ -40,6 +41,8 @@ export class UnitMasterDetailsComponent  implements OnInit {
   }
 
   SaveUnitMaster = async () => {
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
     console.log('entityToSave :', entityToSave);
     let entitiesToSave = [entityToSave]

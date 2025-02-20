@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,effect  } from '@angular/core';
 import { Router } from '@angular/router';
 import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 
@@ -21,13 +22,20 @@ export class DepartmentMasterComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+  
   headers: string[] = ['Sr.No.', 'Name', 'Company Name', 'Action'];
-
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
+  
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement) {
+    effect(() => {
+      console.log('Company Ref Changed:', this.companyRef());
+      // console.log('Company Name Changed:', this.companyName());
+      this.getDepartmentListByCompanyRef()
+    });
+   }
 
   async ngOnInit() {
-    await this.FormulateMasterList();
+    // await this.FormulateMasterList();
     this.loadPaginationData();
   }
   
@@ -37,6 +45,16 @@ export class DepartmentMasterComponent implements OnInit {
     this.DisplayMasterList = this.MasterList
     this.loadPaginationData();
   }
+
+   getDepartmentListByCompanyRef = async () => {
+      this.MasterList = [];
+      this.DisplayMasterList = [];
+      console.log('companyRef', this.companyRef());
+      let lst = await Department.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.MasterList = lst;
+      this.DisplayMasterList = this.MasterList;
+      this.loadPaginationData();
+    }
 
   onEditClicked = async (item: Department) => {
     this.SelectedDepartment = item.GetEditableVersion();

@@ -18,7 +18,7 @@ export class UserProps {
   public Ref: number = 0;
   public EmailId: string = '';
   public Contacts: number = 0;
-  public Password: any = '';
+  public UserName: string = '';
   public UserRoleRef: number = 0;
   public UserRoleName: string = '';
   
@@ -66,7 +66,7 @@ export class User implements IPersistable<User> {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.EmailId == '') vra.add('EmailId', 'Email Id cannot be blank.');
     if (this.p.Contacts == 0) vra.add('Contacts', 'Contact No cannot be blank.');
-    if (this.p.Password == '') vra.add('Password', 'Default Password cannot be blank.');
+    if (this.p.UserName == '') vra.add('UserName', 'User Name cannot be blank.');
     if (this.p.UserRoleRef == 0) vra.add('UserRoleRef', 'User Role cannot be blank.');
   }
 

@@ -32,14 +32,8 @@
           </div>
         </div>
         <div class="col-md-6">
-          <div>
-           <label for="CompanyRef">Company Name</label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CompanyRef" name="CompanyRef" [nzSize]="'large'"
-              [(ngModel)]="Entity.p.CompanyRef">
-              <nz-option *ngFor="let company of CompanyList"
-              [nzValue]="company.p.Ref" [nzLabel]="company.p.Name"></nz-option>
-            </nz-select>
-          </div>
+          <label>Company</label>
+          <input  class="form-control" type="text" [attr.value]="companyName()" placeholder="Company Name" readonly />
         </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">

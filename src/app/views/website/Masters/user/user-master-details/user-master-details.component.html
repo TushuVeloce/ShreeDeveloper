@@ -3,65 +3,39 @@
     <div class="row">
       <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
         <button type="button" class="backbtn" (click)="BackUser()">
-          <img
-            src="/assets/icons/arrow-button.png"
-            alt=""
-            width="34px"
-            height="34px"
-          />
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
         </button>
       </div>
       <div class="col-md-11">
-        <span class="detail_title">{{DetailsFormTitle}}</span>
+        <span class="detail_title">{{ DetailsFormTitle }}</span>
       </div>
     </div>
     <form autocomplete="off">
-      <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-6">
           <div>
-           <label>Email Id</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.EmailId"
-              name="EmailId"
-              class="form-control"
-              id="EmailId"
-              required
-              placeholder="Enter Email Id"
-            />
+            <label>User ID/Email Id</label>
+            <input type="text" [(ngModel)]="Entity.p.EmailId" name="EmailId" class="form-control" id="EmailId" required
+              placeholder="Enter Email Id" />
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div>
-           <label>Contact No</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.Contacts"
-              name="Contact"
-              class="form-control"
-              id="Contact"
-              required
-              placeholder="Enter Contact No"
-            />
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div>
-           <label>Password</label>
-            <input
-              type="password"
-              [(ngModel)]="Entity.p.Password"
-              name="Password"
-              class="form-control"
-              id="Password"
-              required
-              placeholder="Enter Default Password"
-            />
+            <label>User Name</label>
+            <input type="password" [(ngModel)]="Entity.p.UserName" name="UserName" class="form-control" id="UserName"
+              required placeholder="Enter Default UserName" />
           </div>
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-6">
+          <div>
+            <label>Contact No</label>
+            <input type="text" [(ngModel)]="Entity.p.Contacts" name="Contact" class="form-control" id="Contact" required
+              placeholder="Enter Contact No" />
+          </div>
+        </div>
+        <div class="col-md-6">
           <label for="UserRoleRef"><b>User Role</b></label>
           <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
             [(ngModel)]="Entity.p.UserRoleRef" name="UserRoleRef" required id="UserRoleRef">
@@ -69,14 +43,33 @@
               [nzValue]="userrole.p.Ref"></nz-option>
           </nz-select>
         </div>
+        <!-- <div class="col-md-6">
+          <label>Password</label>
+          <input
+            type="password"
+            [(ngModel)]="Entity.p.Password"
+            name="Password"
+            class="form-control"
+            id="Password"
+            required
+            placeholder="Enter Default Password"
+          />
+        </div> -->
       </div>
-      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
-          <div>
-            <button type="button" class="btn" (click)="SaveUserMaster()">Save</button>
-          </div>
-          <div>
-            <button type="button" class="btn" (click)="BackUser()">Back</button>
-          </div>
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
+        <div>
+          <button type="button" class="btn" (click)="SaveUserMaster()">
+            Save
+          </button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackUser()">Back</button>
+        </div>
       </div>
     </form>
   </div>

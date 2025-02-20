@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
 import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -20,11 +21,12 @@ export class DepartmentMasterDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Department' | 'Edit Department' = 'New Department';
   InitialEntity: Department = null as any;
   CompanyList: Company[] = [];
-
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
+  companyName = this.companyStateManagement.SelectedCompanyName;
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companyStateManagement: CompanyStateManagement,private companystatemanagement: CompanyStateManagement) { }
 
   async ngOnInit() {
         this.CompanyList = await Company.FetchEntireList();
+        
 
        if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
           this.IsNewEntity = false;
@@ -48,6 +50,8 @@ export class DepartmentMasterDetailsComponent implements OnInit {
   // }
 
     SaveDepartmentMaster = async () => {
+      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+      this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
       let entityToSave = this.Entity.GetEditableVersion();
       console.log('entityToSave :', entityToSave);
       let entitiesToSave = [entityToSave]

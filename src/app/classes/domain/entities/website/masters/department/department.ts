@@ -18,7 +18,7 @@ export class DepartmentProps {
   public Ref: number = 0;
   public Name: string = '';
   public CompanyRef: number = 0;
-  public readonly CompanyName: string = '';
+  public CompanyName: string = '';
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -158,9 +158,9 @@ export class Department implements IPersistable<Department> {
     let tdResponse = await Department.FetchTransportData(req, errorHandler) as TransportData;
     return Department.ListFromTransportData(tdResponse);
   }
-  public static async FetchEntireListByDepartmentRef(DepartmentRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new DepartmentFetchRequest();
-    req.DepartmentRefs.push(DepartmentRef)
+    req.CompanyRefs.push(CompanyRef)
     let tdResponse = await Department.FetchTransportData(req, errorHandler) as TransportData;
     return Department.ListFromTransportData(tdResponse);
   }

@@ -35,7 +35,6 @@ export class UnitMasterComponent  implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     console.log(lst);
-    
     this.MasterList = lst;
     console.log('MasterList :', this.MasterList);
     this.DisplayMasterList = this.MasterList;

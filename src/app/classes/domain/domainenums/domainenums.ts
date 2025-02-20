@@ -13,6 +13,14 @@ export enum MarketingModes {
   AgentBoker = 50
 }
 
+export enum Company {
+None = 0,
+Company1 = 10,
+Company2 = 20,
+Company3 = 30,
+Company4 = 40
+}
+
 // export enum LoginStatusModes {
 //   None = 0,
 //   Enable = 'true',
@@ -120,5 +128,43 @@ export class DomainEnums {
   //   }
   //   return result;
   // }
+
+  public static CompanyName(company: Company) {
+    switch (company) {
+      case Company.Company1: return 'Company1';
+      case Company.Company2: return 'Company2';
+      case Company.Company3: return 'Company3';
+      case Company.Company4: return 'Company4';
+      default: return '';
+    }
+  }
+
+  public static CompanyList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+    let result = [
+      {
+        Ref: Company.Company1, Name: DomainEnums.CompanyName(Company.Company1)
+      },
+      {
+        Ref: Company.Company2, Name: DomainEnums.CompanyName(Company.Company2)
+      },
+      {
+        Ref: Company.Company3, Name: DomainEnums.CompanyName(Company.Company3)
+      },
+      {
+        Ref: Company.Company4, Name: DomainEnums.CompanyName(Company.Company4)
+      }
+      
+
+    ]
+    if (withAllOption) {
+      let allEntry = {
+        Ref: Company.None,
+        Name: allOptionName
+      }
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
 
 }

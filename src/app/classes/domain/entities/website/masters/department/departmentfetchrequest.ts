@@ -9,6 +9,7 @@ export class DepartmentFetchRequest
     public static readonly FetchRequestType: string = "DepartmentFetchRequest";
 
     DepartmentRefs: number[] = [];
+    CompanyRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
