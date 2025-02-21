@@ -21,12 +21,6 @@ Company3 = 30,
 Company4 = 40
 }
 
-// export enum LoginStatusModes {
-//   None = 0,
-//   Enable = 'true',
-//   Disable = 'false',
-// }
-
 export enum CompanyType {
   None = 0,
   Proprietorship = 10,
@@ -35,6 +29,13 @@ export enum CompanyType {
   Public_Ltd = 40,
   Cooperative = 50
 }
+
+// export enum LoginStatusModes {
+//   None = 0,
+//   Enable = 'true',
+//   Disable = 'false',
+// }
+
 
 
 export class DomainEnums {
@@ -109,6 +110,48 @@ export class DomainEnums {
   }
 
 
+
+  public static CompanyTypeName(itemType: CompanyType) {
+    switch (itemType) {
+      case CompanyType.Proprietorship: return 'Proprietorship';
+      case CompanyType.Partnership: return 'Partnership';
+      case CompanyType.Pvt_ltd: return 'Pvt.ltd';
+      case CompanyType.Public_Ltd: return 'Public Ltd';
+      case CompanyType.Cooperative: return 'Cooperative';
+      default: return '';
+    }
+  }
+
+  public static CompanyTypeList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+    let result = [
+      {
+        Ref: CompanyType.Proprietorship, Name: DomainEnums.CompanyTypeName(CompanyType.Proprietorship)
+      },
+      {
+        Ref: CompanyType.Partnership, Name: DomainEnums.CompanyTypeName(CompanyType.Partnership)
+      },
+      {
+        Ref: CompanyType.Pvt_ltd, Name: DomainEnums.CompanyTypeName(CompanyType.Pvt_ltd)
+      },
+      {
+        Ref: CompanyType.Public_Ltd, Name: DomainEnums.CompanyTypeName(CompanyType.Public_Ltd)
+      },
+      {
+        Ref: CompanyType.Cooperative, Name: DomainEnums.CompanyTypeName(CompanyType.Cooperative)
+      },
+    ]
+    if (withAllOption) {
+      let allEntry = {
+        Ref: CompanyType.None,
+        Name: allOptionName
+      }
+      result.unshift(allEntry);
+    }
+    return result;
+
+  }
+
+
   // public static LoginStatusName(LoginStatus: LoginStatusModes) {
   //   switch (LoginStatus) {
   //     case LoginStatusModes.Enable: return 'Enable';
@@ -173,47 +216,6 @@ export class DomainEnums {
       result.unshift(allEntry);
     }
     return result;
-  }
-
-
-  public static CompanyTypeName(itemType: CompanyType) {
-    switch (itemType) {
-      case CompanyType.Proprietorship: return 'Proprietorship';
-      case CompanyType.Partnership: return 'Partnership';
-      case CompanyType.Pvt_ltd: return 'Pvt.ltd';
-      case CompanyType.Public_Ltd: return 'Public Ltd';
-      case CompanyType.Cooperative: return 'Cooperative';
-      default: return '';
-    }
-  }
-
-  public static CompanyTypeList(withAllOption: boolean = false, allOptionName: string = '<All>') {
-    let result = [
-      {
-        Ref: CompanyType.Proprietorship, Name: DomainEnums.CompanyTypeName(CompanyType.Proprietorship)
-      },
-      {
-        Ref: CompanyType.Partnership, Name: DomainEnums.CompanyTypeName(CompanyType.Partnership)
-      },
-      {
-        Ref: CompanyType.Pvt_ltd, Name: DomainEnums.CompanyTypeName(CompanyType.Pvt_ltd)
-      },
-      {
-        Ref: CompanyType.Public_Ltd, Name: DomainEnums.CompanyTypeName(CompanyType.Public_Ltd)
-      },
-      {
-        Ref: CompanyType.Cooperative, Name: DomainEnums.CompanyTypeName(CompanyType.Cooperative)
-      },
-    ]
-    if (withAllOption) {
-      let allEntry = {
-        Ref: CompanyType.None,
-        Name: allOptionName
-      }
-      result.unshift(allEntry);
-    }
-    return result;
-
   }
 
 
