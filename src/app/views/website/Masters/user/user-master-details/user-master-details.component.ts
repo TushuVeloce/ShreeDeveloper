@@ -28,6 +28,12 @@ export class UserMasterDetailsComponent implements OnInit {
 
 
   async ngOnInit() {
+    // let disable = localStorage.getItem('isDropdownDisabled')
+    // if(disable){
+    //   const ref = Boolean(disable);
+    //   this.appStateManage.setDropdownDisabled(ref)
+    // }
+    this.appStateManage.setDropdownDisabled(true)
     this.UserRoleList = await UserRole.FetchEntireList();
     this.DepartmentList = await Department.FetchEntireList();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {

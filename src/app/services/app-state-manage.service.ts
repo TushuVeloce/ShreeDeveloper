@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -25,11 +25,15 @@ export class AppStateManageService {
   public readonly StorageKey = sessionStorage
   public devUserId: string = 'deployment@gladiance.com'
   public devPassword: string = 'maths@4321'
-
   private IsForgetPasswordClickedValue = false
+  public isDropdownDisabled = signal<boolean>(false);
 
   constructor() { }
-
+  
+  setDropdownDisabled(value: boolean) {
+    this.isDropdownDisabled.set(value);
+  }
+  
   // ----------- Customer Name Start
   getCustomerName(): string {
     const custName = this.StorageKey.getItem('CustomerName');

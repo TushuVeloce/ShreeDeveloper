@@ -65,10 +65,11 @@ export class SidebarlayoutComponent implements OnInit {
   previousRoute: string = '';
 
   constructor(public router: Router, public themeService: ThemeService, private el: ElementRef, private renderer: Renderer2,
-    private appStateManagement: AppStateManageService,
+    public appStateManagement: AppStateManageService,
     private sessionValues: SessionValues, private cdr: ChangeDetectorRef,
     private uiUtils: UIUtils, private companystatemanagement: CompanyStateManagement) {
 
+      
     this.routerChangedSubscription = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.previousRoute = this.currentRoute;
@@ -77,6 +78,12 @@ export class SidebarlayoutComponent implements OnInit {
       }
     });
   }
+
+  // navigateTo(route: string, disableDropdown: boolean = false) {
+  //   this.appStateManagement.setDropdownDisabled(disableDropdown);
+  //   this.router.navigate([route]);
+  // }
+
   ModuleList: module[] = [];
   BrowserBack: boolean = false;
 
@@ -91,11 +98,12 @@ export class SidebarlayoutComponent implements OnInit {
     this.isMenuFolded = !this.isMenuFolded; // Toggles the menu state
   }
   ngOnInit() {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.checkIfDropdownShouldBeDisabled(event.url);
-      }
-    });
+    // localStorage.setItem('disablecompany',true.toString())
+    // this.router.events.subscribe(event => {
+    //   if (event instanceof NavigationEnd) {
+    //     this.checkIfDropdownShouldBeDisabled(event.url);
+    //   }
+    // });
     this.ongetcompany()
         this.isDarkMode = this.appStateManagement.getTheme() === 'dark';
     this.onThemeToggle();
@@ -459,29 +467,34 @@ export class SidebarlayoutComponent implements OnInit {
     this.CompnyList = lst;
   }
 
-  checkIfDropdownShouldBeDisabled(url: string) {
-    // Define routes where dropdown should be disabled
-    const disabledRoutes = [
-      '/homepage/Website/Employee_Master_Details',
-      '/homepage/Website/Material_Master_Details',
-      '/homepage/Website/Unit_Master_Details',
-      '/homepage/Website/Department_Master_Details',
+  // checkIfDropdownShouldBeDisabled(url: string) {
+  //   const disabledRoutes = [
+  //     '/homepage/Website/Unit_Master_Details',
+  //     '/homepage/Website/Material_Master_Details',
+  //     '/homepage/Website/Material_Master_Details',
+  //     '/homepage/Website/Stage_Master_Details',
+  //     '/homepage/Website/Marketing_Master_Details',
+  //     '/homepage/Website/Vendor_Master_Details',
+  //     '/homepage/Website/Vehicle_Master_Details',
+  //     '/homepage/Website/Bank_Master_Details',
+  //     '/homepage/Website/User_Master_Details',
+  //     '/homepage/Website/Company_Master_Details',
+  //     '/homepage/Website/Department_Master_Details',
+  //     '/homepage/Website/User_Role_Master_Details',
+  //     '/homepage/Website/Employee_Master_Details',
       
-    ];
+  //   ];
     
-    // Disable dropdown if current route matches
-    this.isDropdownDisabled = disabledRoutes.includes(url);
-  }
+  //   // Disable dropdown if current route matches
+  //   this.isDropdownDisabled = disabledRoutes.includes(url);
+  // }
 
   changecompany(ref: number) {    
     const selectedCompany = this.CompnyList.find(company => company.p.Ref === ref);
     if (selectedCompany) {
-      localStorage.setItem('SelectedCompanyRef',selectedCompany.p.Ref.toString());
-      localStorage.setItem('companyName', selectedCompany.p.Name);
+      this.appStateManagement.StorageKey.setItem('SelectedCompanyRef',selectedCompany.p.Ref.toString());
+      this.appStateManagement.StorageKey.setItem('companyName', selectedCompany.p.Name);
       this.companystatemanagement.setCompanyRef(ref, selectedCompany.p.Name);
-      // console.log('CompanyRef:', this.companystatemanagement.getCurrentCompanyRef());
-      // console.log('CompanyName:', this.companystatemanagement.getCurrentCompanyName());
-      // Ensure UI updates immediately
     this.CompanyRef = ref;
     }else {
       console.warn('Selected company not found');
@@ -490,14 +503,11 @@ export class SidebarlayoutComponent implements OnInit {
   }
   
   ongetcompany(){
-    const storedCompanyRef = localStorage.getItem('SelectedCompanyRef');
-    const storedCompanyName = localStorage.getItem('companyName');
-  
+    const storedCompanyRef =  this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
+    const storedCompanyName =  this.appStateManagement.StorageKey.getItem('companyName');
     if (storedCompanyRef && storedCompanyName) {
       const ref = Number(storedCompanyRef);
-      
-      // Set the stored company details
-      this.CompanyRef = ref; // Bind to dropdown
+      this.CompanyRef = ref; 
       this.companystatemanagement.setCompanyRef(ref, storedCompanyName);
     }
   }

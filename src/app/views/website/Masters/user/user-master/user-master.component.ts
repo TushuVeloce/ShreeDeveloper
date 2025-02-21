@@ -35,7 +35,7 @@ export class UserMasterComponent implements OnInit {
 
   ngOnInit() {
     // this.FormulateMasterList();
-    
+    this.appStateManage.setDropdownDisabled(false);
   }
 
   private FormulateMasterList = async () => {
@@ -51,6 +51,7 @@ export class UserMasterComponent implements OnInit {
         let lst = await User.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
         this.MasterList = lst;
         this.DisplayMasterList = this.MasterList;
+        console.log('DisplayMasterList :', this.DisplayMasterList);
         this.loadPaginationData();
       }
   
