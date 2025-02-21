@@ -120,9 +120,9 @@
         <div style="display: flex; justify-content: end; align-items: center; ">
           <div style="padding-right: 1rem;">
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-            [(ngModel)]="CompanyRef" name="CompanyRef" required id="CompanyRef" (ngModelChange)="changecompany(CompanyRef)" [nzDropdownMatchSelectWidth]="true" [style.width.px]="300">
-            <nz-option *ngFor="let company of CompnyList" [nzLabel]="company.Name"
-              [nzValue]="company.Ref"></nz-option>
+            [(ngModel)]="CompanyRef" name="CompanyRef" required id="CompanyRef" (ngModelChange)="changecompany(CompanyRef)" [nzDropdownMatchSelectWidth]="true" [style.width.px]="300" [disabled]="isDropdownDisabled">
+            <nz-option *ngFor="let company of CompnyList" [nzLabel]="company.p.Name"
+              [nzValue]="company.p.Ref"></nz-option>
             </nz-select>
           </div>
           <div style="padding-right: 1rem;">

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { User } from 'src/app/classes/domain/entities/website/masters/user/user';
 import { UserRole } from 'src/app/classes/domain/entities/website/masters/userrole/userrole';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -21,7 +22,7 @@ export class UserMasterDetailsComponent  implements OnInit {
    InitialEntity: User = null as any;
    UserRoleList: UserRole[] = [];
  
-   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
+   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companystatemanagement: CompanyStateManagement) { }
  
 
  async ngOnInit() {
@@ -44,8 +45,9 @@ export class UserMasterDetailsComponent  implements OnInit {
   }
 
  SaveUserMaster = async () => {
+  this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+  // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
-
     let entitiesToSave = [entityToSave]
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);

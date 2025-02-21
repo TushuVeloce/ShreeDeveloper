@@ -71,9 +71,9 @@ const routes: Routes = [
     children: [
       { path: 'Dashboard', component: DashboardComponent },
       { path: 'Unit_Master', component: UnitMasterComponent },
-      { path: 'Unit_Master_details', component: UnitMasterDetailsComponent },
+      { path: 'Unit_Master_Details', component: UnitMasterDetailsComponent },
       { path: 'Material_Master', component: MaterialMasterComponent },
-      { path: 'Material_Master_details', component: MaterialMasterDetailsComponent },
+      { path: 'Material_Master_Details', component: MaterialMasterDetailsComponent },
       { path: 'Stage_Master', component: StageMasterComponent },
       { path: 'Stage_Master_Details', component: StageMasterDetailsComponent },
       { path: 'Account_Main_Ledger', component: AccountMainLedgerComponent },

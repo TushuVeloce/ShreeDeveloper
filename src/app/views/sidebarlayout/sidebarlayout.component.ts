@@ -20,7 +20,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
-
+import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
 
 
 interface SubModule {
@@ -53,9 +53,10 @@ export class SidebarlayoutComponent implements OnInit {
   routerChangedSubscription: Subscription | undefined;
   activeModule: string | null = null; // Tracks the active module
   activeSubmodule: string | null = null; // Tracks the active submodule
-  CompnyList = DomainEnums.CompanyList(true, '--Select Company--');
+  CompnyList : Company[] = [];
   CompanyRef: number = 0;
-  Name: string = 'Veloce Tech';
+  isDropdownDisabled: boolean = false;
+  // Name: string = 'Veloce Tech';
 
   previousActiveSubmodule: string | null = null; // Tracks the active module
   previousActiveModule: string | null = null; // Tracks the active module
@@ -90,6 +91,11 @@ export class SidebarlayoutComponent implements OnInit {
     this.isMenuFolded = !this.isMenuFolded; // Toggles the menu state
   }
   ngOnInit() {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.checkIfDropdownShouldBeDisabled(event.url);
+      }
+    });
     this.ongetcompany()
         this.isDarkMode = this.appStateManagement.getTheme() === 'dark';
     this.onThemeToggle();
@@ -97,6 +103,7 @@ export class SidebarlayoutComponent implements OnInit {
     this.GenerateAndSetMenuItemModuleList();
     this.isDarkMode = this.appStateManagement.getTheme() === 'dark'
     this.onThemeToggle();
+    this.FormulateCompanyList();
 
     // Listen to browser back button events
     // this.location.subscribe(event => {
@@ -107,6 +114,8 @@ export class SidebarlayoutComponent implements OnInit {
     // });
 
   }
+ 
+
   // Method to clear active menu selections
   resetSelectedMenu(): void {
     this.activeModule = null;
@@ -445,14 +454,37 @@ export class SidebarlayoutComponent implements OnInit {
     this.router.navigate(['/homepage/hotel/dashboard']);
   }
 
+ private FormulateCompanyList = async () => {
+    let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.CompnyList = lst;
+  }
+
+  checkIfDropdownShouldBeDisabled(url: string) {
+    // Define routes where dropdown should be disabled
+    const disabledRoutes = [
+      '/homepage/Website/Employee_Master_Details',
+      '/homepage/Website/Material_Master_Details',
+      '/homepage/Website/Unit_Master_Details',
+      '/homepage/Website/Department_Master_Details',
+      
+    ];
+    
+    // Disable dropdown if current route matches
+    this.isDropdownDisabled = disabledRoutes.includes(url);
+  }
+
   changecompany(ref: number) {    
-    const selectedCompany = this.CompnyList.find(company => company.Ref === ref);
+    const selectedCompany = this.CompnyList.find(company => company.p.Ref === ref);
     if (selectedCompany) {
-      localStorage.setItem('SelectedCompanyRef',selectedCompany.Ref.toString());
-      localStorage.setItem('companyName', selectedCompany.Name);
-      this.companystatemanagement.setCompanyRef(ref, selectedCompany.Name);
+      localStorage.setItem('SelectedCompanyRef',selectedCompany.p.Ref.toString());
+      localStorage.setItem('companyName', selectedCompany.p.Name);
+      this.companystatemanagement.setCompanyRef(ref, selectedCompany.p.Name);
       // console.log('CompanyRef:', this.companystatemanagement.getCurrentCompanyRef());
       // console.log('CompanyName:', this.companystatemanagement.getCurrentCompanyName());
+      // Ensure UI updates immediately
+    this.CompanyRef = ref;
+    }else {
+      console.warn('Selected company not found');
     }
 
   }

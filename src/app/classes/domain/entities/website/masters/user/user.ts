@@ -21,7 +21,9 @@ export class UserProps {
   public UserName: string = '';
   public UserRoleRef: number = 0;
   public UserRoleName: string = '';
-  
+  public CompanyRef: number = 0
+  public CompanyName: string = ''
+
   public readonly IsNewlyCreated: boolean = false;
 
   private constructor(isNewlyCreated: boolean) {
@@ -42,8 +44,8 @@ export class User implements IPersistable<User> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -68,6 +70,7 @@ export class User implements IPersistable<User> {
     if (this.p.Contacts == 0) vra.add('Contacts', 'Contact No cannot be blank.');
     if (this.p.UserName == '') vra.add('UserName', 'User Name cannot be blank.');
     if (this.p.UserRoleRef == 0) vra.add('UserRoleRef', 'User Role cannot be blank.');
+    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -160,7 +163,14 @@ export class User implements IPersistable<User> {
     let tdResponse = await User.FetchTransportData(req, errorHandler) as TransportData;
     return User.ListFromTransportData(tdResponse);
   }
-  
+
+    public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+      let req = new UserFetchRequest();
+      req.CompanyRefs.push(CompanyRef)
+      let tdResponse = await User.FetchTransportData(req, errorHandler) as TransportData;
+      return User.ListFromTransportData(tdResponse);
+    }
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

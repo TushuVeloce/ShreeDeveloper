@@ -59,7 +59,7 @@ export class MaterialMasterComponent implements OnInit {
 
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
 
-    await this.router.navigate(['/homepage/Website/Material_Master_details']);
+    await this.router.navigate(['/homepage/Website/Material_Master_Details']);
   };
 
   onDeleteClicked = async (material: Material) => {
@@ -96,7 +96,7 @@ export class MaterialMasterComponent implements OnInit {
   };
 
   AddMaterial() {
-    this.router.navigate(['/homepage/Website/Material_Master_details']);
+    this.router.navigate(['/homepage/Website/Material_Master_Details']);
   }
 
   

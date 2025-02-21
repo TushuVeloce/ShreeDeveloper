@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserRole } from 'src/app/classes/domain/entities/website/masters/userrole/userrole';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -21,7 +22,7 @@ export class UserRoleMasterDetailsComponent  implements OnInit {
   InitialEntity: UserRole = null as any;
 
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companystatemanagement: CompanyStateManagement) { }
 
   ngOnInit() {
 
@@ -41,6 +42,8 @@ export class UserRoleMasterDetailsComponent  implements OnInit {
   }
 
   SaveUserRole = async () => {
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     this.isSaveDisabled = true;
     let entityToSave = this.Entity.GetEditableVersion();
 

@@ -22,6 +22,7 @@
         <tr *ngFor="let user of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{ user.p.EmailId }}</td>
+          <td Class="tbldata">{{ user.p.UserName }}</td>
           <td Class="tbldata">{{ user.p.Contacts }}</td>
           <!-- <td Class="tbldata">{{ user.p.Password }}</td> -->
           <td Class="tbldata">{{ user.p.UserRoleName}}</td>

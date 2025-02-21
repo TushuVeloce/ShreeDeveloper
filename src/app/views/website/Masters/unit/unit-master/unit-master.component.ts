@@ -51,7 +51,7 @@ export class UnitMasterComponent  implements OnInit {
 
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
 
-    await this.router.navigate(['/homepage/Website/Unit_Master_details']);
+    await this.router.navigate(['/homepage/Website/Unit_Master_Details']);
   };
 
   onDeleteClicked = async (Item: Unit) => {
@@ -88,7 +88,7 @@ export class UnitMasterComponent  implements OnInit {
   };
 
   AddUnit() {
-    this.router.navigate(['/homepage/Website/Unit_Master_details']);
+    this.router.navigate(['/homepage/Website/Unit_Master_Details']);
   }
 
 

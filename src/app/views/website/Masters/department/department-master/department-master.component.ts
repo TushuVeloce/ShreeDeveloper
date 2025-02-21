@@ -28,7 +28,7 @@ export class DepartmentMasterComponent implements OnInit {
   
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement) {
     effect(() => {
-      console.log('Company Ref Changed:', this.companyRef());
+      // console.log('Company Ref Changed:', this.companyRef());
       // console.log('Company Name Changed:', this.companyName());
       this.getDepartmentListByCompanyRef()
     });

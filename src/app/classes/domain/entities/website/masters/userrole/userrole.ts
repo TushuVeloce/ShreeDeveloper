@@ -17,6 +17,8 @@ export class UserRoleProps {
   public readonly Db_Table_Name = "UserRoleMaster";
   public Ref: number = 0;
   public Name: string = '';
+   public CompanyRef: number = 0
+  public CompanyName: string = ''
   
   public readonly IsNewlyCreated: boolean = false;
 
@@ -153,6 +155,13 @@ export class UserRole implements IPersistable<UserRole> {
     let tdResponse = await UserRole.FetchTransportData(req, errorHandler) as TransportData;
     return UserRole.ListFromTransportData(tdResponse);
   }
+
+   public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+        let req = new UserRoleFetchRequest();
+        req.CompanyRefs.push(CompanyRef)
+        let tdResponse = await UserRole.FetchTransportData(req, errorHandler) as TransportData;
+        return UserRole.ListFromTransportData(tdResponse);
+      }
   
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

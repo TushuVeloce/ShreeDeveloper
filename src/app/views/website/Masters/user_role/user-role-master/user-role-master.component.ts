@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserRole } from 'src/app/classes/domain/entities/website/masters/userrole/userrole';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 
@@ -23,12 +24,19 @@ export class UserRoleMasterComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   headers: string[] = ['Sr.No.', 'Role', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement) {
+      effect(() => {
+              // console.log('Company Ref Changed:', this.companyRef());
+              // console.log('Company Name Changed:', this.companyName());
+              this.getUserRoleListByCompanyRef()
+            });
+   }
 
   ngOnInit() {
-    this.FormulateMaterialList();
+    // this.FormulateMaterialList();
   }
 
   private FormulateMaterialList = async () => {
@@ -37,6 +45,15 @@ export class UserRoleMasterComponent implements OnInit {
     this.DisplayMasterList = this.MasterList
     // console.log(this.DisplayMasterList);
   }
+
+   getUserRoleListByCompanyRef = async () => {
+          this.MasterList = [];
+          this.DisplayMasterList = [];
+          let lst = await UserRole.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+          this.MasterList = lst;
+          this.DisplayMasterList = this.MasterList;
+          this.loadPaginationData();
+        }
 
   onEditClicked = async (userrole: UserRole) => {
 
