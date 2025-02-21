@@ -40,7 +40,7 @@ export class UserrolerightsComponent implements OnInit {
   }
 
   FormRef: number = 0;
-  FormList: string[] = ['Masters', 'Transactions', 'Accounting'];
+  FormList: string[] = ['Masters', 'Transactions', 'Reports'];
   getOwnerRef(Ref: any) {
     // code here 
     console.log('OwnerRef');
