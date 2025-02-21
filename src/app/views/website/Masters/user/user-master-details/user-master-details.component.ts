@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
 import { User } from 'src/app/classes/domain/entities/website/masters/user/user';
 import { UserRole } from 'src/app/classes/domain/entities/website/masters/userrole/userrole';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -13,40 +14,42 @@ import { Utils } from 'src/app/services/utils.service';
   templateUrl: './user-master-details.component.html',
   styleUrls: ['./user-master-details.component.scss'],
 })
-export class UserMasterDetailsComponent  implements OnInit {
+export class UserMasterDetailsComponent implements OnInit {
 
-   isSaveDisabled: boolean = false;
-   private IsNewEntity: boolean = true;
-   Entity: User = User.CreateNewInstance();
-   DetailsFormTitle: 'New User' | 'Edit User' = 'New User';
-   InitialEntity: User = null as any;
-   UserRoleList: UserRole[] = [];
- 
-   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companystatemanagement: CompanyStateManagement) { }
- 
+  isSaveDisabled: boolean = false;
+  private IsNewEntity: boolean = true;
+  Entity: User = User.CreateNewInstance();
+  DetailsFormTitle: 'New User' | 'Edit User' = 'New User';
+  InitialEntity: User = null as any;
+  UserRoleList: UserRole[] = [];
+  DepartmentList: Department[] = [];
 
- async ngOnInit() {
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
+
+
+  async ngOnInit() {
     this.UserRoleList = await UserRole.FetchEntireList();
-     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-          this.IsNewEntity = false;
-    
-          this.DetailsFormTitle = this.IsNewEntity ? 'New User' : 'Edit User';
-          this.Entity = User.GetCurrentInstance();
-          this.appStateManage.StorageKey.removeItem('Editable')
-    
-        } else {
-          this.Entity = User.CreateNewInstance();
-          User.SetCurrentInstance(this.Entity);
-    
-        }
-        this.InitialEntity = Object.assign(User.CreateNewInstance(),
-          this.utils.DeepCopy(this.Entity)) as User;
-        // this.focusInput();
+    this.DepartmentList = await Department.FetchEntireList();
+    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+      this.IsNewEntity = false;
+
+      this.DetailsFormTitle = this.IsNewEntity ? 'New User' : 'Edit User';
+      this.Entity = User.GetCurrentInstance();
+      this.appStateManage.StorageKey.removeItem('Editable')
+
+    } else {
+      this.Entity = User.CreateNewInstance();
+      User.SetCurrentInstance(this.Entity);
+
+    }
+    this.InitialEntity = Object.assign(User.CreateNewInstance(),
+      this.utils.DeepCopy(this.Entity)) as User;
+    // this.focusInput();
   }
 
- SaveUserMaster = async () => {
-  this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-  // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+  SaveUserMaster = async () => {
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
@@ -69,8 +72,8 @@ export class UserMasterDetailsComponent  implements OnInit {
     }
   }
 
-  BackUser(){
+  BackUser() {
     this.router.navigate(['/homepage/Website/User_Master']);
-   }
+  }
 
 }

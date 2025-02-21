@@ -16,9 +16,11 @@ import { UserFetchRequest } from "./userfetchrequest";
 export class UserProps {
   public readonly Db_Table_Name = "UserMaster";
   public Ref: number = 0;
+  public Name: string = '';
   public EmailId: string = '';
   public Contacts: number = 0;
-  public UserName: string = '';
+  public DepartmentRef: number = 0;
+  public readonly DepartmentName: boolean = false;
   public UserRoleRef: number = 0;
   public UserRoleName: string = '';
   public CompanyRef: number = 0
@@ -68,8 +70,9 @@ export class User implements IPersistable<User> {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.EmailId == '') vra.add('EmailId', 'Email Id cannot be blank.');
     if (this.p.Contacts == 0) vra.add('Contacts', 'Contact No cannot be blank.');
-    if (this.p.UserName == '') vra.add('UserName', 'User Name cannot be blank.');
+    if (this.p.Name == '') vra.add('Name', 'User Name cannot be blank.');
     if (this.p.UserRoleRef == 0) vra.add('UserRoleRef', 'User Role cannot be blank.');
+    if (this.p.DepartmentRef == 0) vra.add('DepartmentRef', 'Department be blank.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company cannot be blank.');
   }
 

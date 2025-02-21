@@ -23,7 +23,7 @@ export class UserMasterComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   
-  headers: string[] = ['Sr.No.', 'User ID/Email Id','User Name', 'Contact No','User Role Name', 'Action'];
+  headers: string[] = ['Sr.No.', 'User Name','User ID/Email Id', 'Contact No','Department','User Role', 'Action'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement) {
      effect(() => {

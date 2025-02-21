@@ -14,16 +14,16 @@
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-6">
           <div>
-            <label>User ID/Email Id</label>
-            <input type="text" [(ngModel)]="Entity.p.EmailId" name="EmailId" class="form-control" id="EmailId" required
-              placeholder="Enter User ID/Email Id" />
+            <label>User Name</label>
+            <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name"
+              required placeholder="Enter User Name" />
           </div>
         </div>
         <div class="col-md-6">
           <div>
-            <label>User Name</label>
-            <input type="text" [(ngModel)]="Entity.p.UserName" name="UserName" class="form-control" id="UserName"
-              required placeholder="Enter User Name" />
+            <label>User ID/Email Id</label>
+            <input type="text" [(ngModel)]="Entity.p.EmailId" name="EmailId" class="form-control" id="EmailId" required
+              placeholder="Enter User ID/Email Id" />
           </div>
         </div>
       </div>
@@ -36,12 +36,14 @@
           </div>
         </div>
         <div class="col-md-6">
-          <label for="UserRoleRef"><b>User Role</b></label>
-          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-            [(ngModel)]="Entity.p.UserRoleRef" name="UserRoleRef" required id="UserRoleRef">
-            <nz-option *ngFor="let userrole of UserRoleList" [nzLabel]="userrole.p.Name"
-              [nzValue]="userrole.p.Ref"></nz-option>
-          </nz-select>
+          <div>
+            <label>Department Name </label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DepartmentName"
+              name="DepartmentName" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef">
+              <nz-option *ngFor="let department of DepartmentList" [nzValue]="department.p.Ref"
+                [nzLabel]="department.p.Name"></nz-option>
+            </nz-select>
+          </div>
         </div>
         <!-- <div class="col-md-6">
           <label>Password</label>
@@ -55,6 +57,17 @@
             placeholder="Enter Default Password"
           />
         </div> -->
+      </div>
+      <div class="row" style="margin-top: 1rem">
+
+      </div>
+      <div class="col-md-6">
+        <label for="UserRoleRef"><b>User Role</b></label>
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+          [(ngModel)]="Entity.p.UserRoleRef" name="UserRoleRef" required id="UserRoleRef">
+          <nz-option *ngFor="let userrole of UserRoleList" [nzLabel]="userrole.p.Name"
+            [nzValue]="userrole.p.Ref"></nz-option>
+        </nz-select>
       </div>
       <div style="
           justify-content: center;
