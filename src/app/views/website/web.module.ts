@@ -60,13 +60,14 @@ import { EditIconComponent } from './Helpers/edit-icon/edit-icon.component';
 import { DataNotFoundComponent } from './Helpers/data-not-found/data-not-found.component';
 import { VehicleMasterDetailsComponent } from './Masters/vehicle/vehicle-master-details/vehicle-master-details.component';
 import { UserrolerightsComponent } from './Masters/userrolerights/userrolerights.component';
+import { FinancialYearMasterComponent } from './Masters/financial-year-master/financial-year-master.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent  ,StageMasterComponent,StageMasterDetailsComponent, AccountMainLedgerComponent,AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingMasterComponent,MarketingMasterDetailsComponent,
     VendorMasterComponent,VehicleMasterComponent,VendorMasterDetailsComponent, BankMasterComponent,BankMasterDetailsComponent, UserMasterComponent,UserMasterDetailsComponent, CompanyMasterComponent,CompanyMasterDetailsComponent, DepartmentMasterComponent,DepartmentMasterDetailsComponent, UserRoleMasterComponent,UserRoleMasterDetailsComponent, EmployeeMasterComponent,EmployeeMasterDetailsComponent,
     SiteManagementMasterComponent,SiteManagementActualStagesComponent,SiteManagementActualStagesDetailsComponent,EstimateStagesDetailsComponent,EstimateStagesComponent,
     MaterialRequisitionComponent,StockConsumeComponent,StockInwardComponent,StockOrderComponent,StockTransferComponent , CountryComponent, StateComponent,CityComponent,UnitMasterComponent,UnitMasterDetailsComponent, 
-    DeleteIconComponent,EditIconComponent, DataNotFoundComponent,VehicleMasterDetailsComponent,UserrolerightsComponent],
+    DeleteIconComponent,EditIconComponent, DataNotFoundComponent,VehicleMasterDetailsComponent,UserrolerightsComponent,FinancialYearMasterComponent],
   imports: [
     CommonModule,WebRoutingModule,FormsModule,NzDropDownModule,NzTableModule,IonicModule.forRoot(),
     NzPaginationModule, NzUploadModule, NzModalModule,NzCheckboxModule, 
