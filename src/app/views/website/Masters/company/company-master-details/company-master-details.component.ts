@@ -74,9 +74,17 @@ export class CompanyMasterDetailsComponent implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity ? 'New Company' : 'Edit Company';
       this.Entity = Company.GetCurrentInstance();
 
-      this.dateOfInCorporation = this.datePipe.transform(this.dtu.FromString(this.Entity.p.DateOfInCorporation),'yyyy-MM-dd' );
+      // While Edit Converting date String into Date Format //
+      this.dateOfInCorporation = this.datePipe.transform(
+        this.dtu.FromString(this.Entity.p.DateOfInCorporation),
+        'yyyy-MM-dd'
+      );
 
-      this.lastDateOfFirstFinancialYear = this.datePipe.transform(this.dtu.FromString(this.Entity.p.LastDateOfFirstFinancialYear), 'yyyy-MM-dd');
+      // While Edit Converting date String into Date Format //
+      this.lastDateOfFirstFinancialYear = this.datePipe.transform(
+        this.dtu.FromString(this.Entity.p.LastDateOfFirstFinancialYear),
+        'yyyy-MM-dd'
+      );
 
       this.appStateManage.StorageKey.removeItem('Editable');
       if (this.Entity.p.CountryRef) {
@@ -87,8 +95,8 @@ export class CompanyMasterDetailsComponent implements OnInit {
       }
     } else {
       this.Entity = Company.CreateNewInstance();
-      this.dateOfInCorporation = ''
-      this.lastDateOfFirstFinancialYear = ''
+      this.dateOfInCorporation = ''; // Clear Date
+      this.lastDateOfFirstFinancialYear = ''; // Clear Date
       Company.SetCurrentInstance(this.Entity);
     }
     this.InitialEntity = Object.assign(
@@ -98,7 +106,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
     // this.focusInput();
   }
 
-   FormulateCountryList = async () => {
+  FormulateCountryList = async () => {
     this.CountryList = [];
     console.log('CountryList :', this.CountryList);
     let lst = await Country.FetchEntireList(
@@ -125,15 +133,14 @@ export class CompanyMasterDetailsComponent implements OnInit {
     this.CityList = lst;
   };
 
-  
   dateOfInCorporation: string | null = null;
   lastDateOfFirstFinancialYear: string | null = null;
-//  lastDateOfFirstFinancialYear: Date = null as any;
+  //  lastDateOfFirstFinancialYear: Date = null as any;
 
   SaveCompanyMaster = async () => {
     let entityToSave = this.Entity.GetEditableVersion();
 
-  // ------ Code For Date Of InCorporation Year Format ---------------//
+    // ------ Code For Save Date Of InCorporation Year Format ---------------//
     if (this.dateOfInCorporation) {
       let dateValue = new Date(this.dateOfInCorporation);
 
@@ -144,7 +151,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
         entityToSave.p.DateOfInCorporation = '';
       }
     }
-  // ------ Code For Last Date Of First Financial Year Format ---------------//
+    // ------ Code For Save Last Date Of First Financial Year Format ---------------//
     if (this.lastDateOfFirstFinancialYear) {
       let dateValue = new Date(this.lastDateOfFirstFinancialYear);
 
@@ -155,6 +162,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
         entityToSave.p.LastDateOfFirstFinancialYear = '';
       }
     }
+
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
@@ -163,20 +171,19 @@ export class CompanyMasterDetailsComponent implements OnInit {
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       this.uiUtils.showErrorToster(tr.Message);
-      return
-    }
-    else {
+      return;
+    } else {
       this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Company saved successfully!');
-      this.dateOfInCorporation = ''
-      this.lastDateOfFirstFinancialYear = ''
+        this.dateOfInCorporation = '';
+        this.lastDateOfFirstFinancialYear = '';
         this.Entity = Company.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster('Company Updated successfully!');
-        this.dateOfInCorporation = ''
-        this.lastDateOfFirstFinancialYear = ''
+        this.dateOfInCorporation = '';
+        this.lastDateOfFirstFinancialYear = '';
       }
     }
   };
