@@ -29,12 +29,12 @@ export class CompanyMasterDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Company' | 'Edit Company' = 'New Company';
   IsDropdownDisabled: boolean = false;
   InitialEntity: Company = null as any;
-  CompanyTypeList = DomainEnums.CompanyTypeList(
-    true,
-    '--Select Company Type--'
-  );
+  CompanyTypeList = DomainEnums.CompanyTypeList( true,'--Select Company Type--');
   errors = { company_image: '' };
   allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+  dateOfInCorporation: string | null = null;
+  lastDateOfFirstFinancialYear: string | null = null;
+  //  lastDateOfFirstFinancialYear: Date = null as any;
 
   constructor(
     private router: Router,
@@ -68,6 +68,17 @@ export class CompanyMasterDetailsComponent implements OnInit {
   }
   async ngOnInit() {
     await this.FormulateCountryList();
+
+    // Load State based on Default Country Ref
+    if (this.Entity.p.CountryRef) {
+      await this.getStateListByCountryRef(this.Entity.p.CountryRef);
+    }
+
+    // Load Cities based on Default State Ref
+    if (this.Entity.p.StateRef) {
+      await this.getCityListByStateRef(this.Entity.p.StateRef);
+    }
+
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
 
@@ -106,37 +117,50 @@ export class CompanyMasterDetailsComponent implements OnInit {
     // this.focusInput();
   }
 
-  FormulateCountryList = async () => {
-    this.CountryList = [];
-    console.log('CountryList :', this.CountryList);
-    let lst = await Country.FetchEntireList(
+  async FormulateCountryList() {
+    this.CountryList = await Country.FetchEntireList(
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.CountryList = lst;
-  };
-
-  getStateListByCountryRef = async (CountryRef: number) => {
-    this.StateList = [];
-    let lst = await State.FetchEntireListByCountryRef(
+  
+    // Set default country if exists
+    if (this.CountryList.length) {
+      const defaultCountry = this.CountryList.find(c => c.p.Ref === this.Entity.p.CountryRef);
+      this.Entity.p.CountryRef = defaultCountry ? defaultCountry.p.Ref : this.CountryList[0].p.Ref;
+  
+      // Fetch the corresponding states
+      await this.getStateListByCountryRef(this.Entity.p.CountryRef);
+    }
+  }
+  async getStateListByCountryRef(CountryRef: number) {
+    this.StateList = await State.FetchEntireListByCountryRef(
       CountryRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.StateList = lst;
-  };
+  
+    // Set default state if exists
+    if (this.StateList.length) {
+      const defaultState = this.StateList.find(s => s.p.Ref === this.Entity.p.StateRef);
+      this.Entity.p.StateRef = defaultState ? defaultState.p.Ref : this.StateList[0].p.Ref;
+  
+      // Fetch the corresponding cities
+      await this.getCityListByStateRef(this.Entity.p.StateRef);
+    }
+  }
 
-  getCityListByStateRef = async (StateRef: number) => {
-    this.CityList = [];
-    let lst = await City.FetchEntireListByStateRef(
+  async getCityListByStateRef(StateRef: number) {
+    this.CityList = await City.FetchEntireListByStateRef(
       StateRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.CityList = lst;
-  };
-
-  dateOfInCorporation: string | null = null;
-  lastDateOfFirstFinancialYear: string | null = null;
-  //  lastDateOfFirstFinancialYear: Date = null as any;
-
+  
+    // Set default city if exists
+    if (this.CityList.length) {
+      const defaultCity = this.CityList.find(c => c.p.Ref === this.Entity.p.CityRef);
+      this.Entity.p.CityRef = defaultCity ? defaultCity.p.Ref : this.CityList[0].p.Ref;
+    }
+  }
+  
+ 
   SaveCompanyMaster = async () => {
     let entityToSave = this.Entity.GetEditableVersion();
 

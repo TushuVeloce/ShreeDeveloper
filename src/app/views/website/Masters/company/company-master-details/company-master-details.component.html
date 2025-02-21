@@ -53,7 +53,6 @@
               placeholder="Enter Company Email Id"
             />
         </div>
-       
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-lg-4 col-md-4 col-sm-12">
@@ -99,8 +98,6 @@
             placeholder="Enter Pin Code"
           />
       </div>
-     
-
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-6">
             <label>Address Line 1</label>
@@ -129,66 +126,66 @@
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
-            <label for="CountryRef"><b>Country</b></label>
-            <nz-select
-              class="nzSelect-light"
-              nzShowSearch
-              nzAllowClear
-              nzPlaceHolder="Select"
-              [nzSize]="'large'"
-              name="CountryRef"
-              required
-              id="CountryRef"
-              [(ngModel)]="Entity.p.CountryRef"
-              (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)"
-            >
-              <nz-option
-                *ngFor="let country of CountryList"
-                [nzLabel]="country.p.Name"
-                [nzValue]="country.p.Ref"
-              ></nz-option>
-            </nz-select>
+          <label for="CountryRef"><b>Country</b></label>
+          <nz-select
+            class="nzSelect-light"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Select"
+            [nzSize]="'large'"
+            name="CountryRef"
+            id="CountryRef"
+            [(ngModel)]="Entity.p.CountryRef"
+            (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)"
+          >
+            <nz-option
+              *ngFor="let country of CountryList"
+              [nzLabel]="country.p.Name"
+              [nzValue]="country.p.Ref"
+            ></nz-option>
+          </nz-select>
         </div>
+        
         <div class="col-md-4">
-            <label for="StateRef"><b>State</b></label>
-            <nz-select
-              class="nzSelect-light"
-              nzShowSearch
-              nzAllowClear
-              nzPlaceHolder="Select"
-              id="StateRef"
-              name="StateRef"
-              [nzSize]="'large'"
-              [(ngModel)]="Entity.p.StateRef"
-              (ngModelChange)="getCityListByStateRef(Entity.p.StateRef)"
-            >
-              <nz-option
-                *ngFor="let state of StateList"
-                [nzValue]="state.p.Ref"
-                [nzLabel]="state.p.Name"
-              ></nz-option>
-            </nz-select>
+          <label for="StateRef"><b>State</b></label>
+          <nz-select
+            class="nzSelect-light"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Select"
+            id="StateRef"
+            name="StateRef"
+            [nzSize]="'large'"
+            [(ngModel)]="Entity.p.StateRef"
+            (ngModelChange)="getCityListByStateRef(Entity.p.StateRef)"
+          >
+            <nz-option
+              *ngFor="let state of StateList"
+              [nzValue]="state.p.Ref"
+              [nzLabel]="state.p.Name"
+            ></nz-option>
+          </nz-select>
         </div>
+        
         <div class="col-md-4">
-            <label for="CityRef"><b>City</b></label>
-            <nz-select
-              class="nzSelect-light"
-              nzShowSearch
-              nzAllowClear
-              nzPlaceHolder="Select"
-              id="CityRef"
-              name="CityRef"
-              [nzSize]="'large'"
-              [(ngModel)]="Entity.p.CityRef"
-            >
-              <nz-option
-                *ngFor="let city of CityList"
-                [nzValue]="city.p.Ref"
-                [nzLabel]="city.p.Name"
-              ></nz-option>
-            </nz-select>
-          </div>
-       
+          <label for="CityRef"><b>City</b></label>
+          <nz-select
+            class="nzSelect-light"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Select"
+            id="CityRef"
+            name="CityRef"
+            [nzSize]="'large'"
+            [(ngModel)]="Entity.p.CityRef"
+          >
+            <nz-option
+              *ngFor="let city of CityList"
+              [nzValue]="city.p.Ref"
+              [nzLabel]="city.p.Name"
+            ></nz-option>
+          </nz-select>
+        </div>
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
@@ -215,11 +212,8 @@
               placeholder="Enter Pan No"
             />
         </div>
-      </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
+
         <div class="col-md-4">
-          <div>
             <label>CIN</label>
             <input
               type="text"
@@ -230,9 +224,11 @@
               required
               placeholder="Enter CIN No"
             />
-          </div>
         </div>
-        <div class="col-md-4 mb-2">
+      </div>
+      </div>
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-6 mb-2">
           <label><b>Date Of Encorporation</b></label>
           <input
             type="date"
@@ -244,7 +240,7 @@
             placeholder="Select Date"
           />
         </div>
-        <div class="col-md-4 mb-2">
+        <div class="col-md-6 mb-2">
           <label><b>Last Date Of Financial Year </b></label>
           <input
             type="date"

@@ -33,8 +33,8 @@ export class CompanyMasterComponent implements OnInit {
   private FormulateMasterList = async () => {
     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
-    console.log('MasterList :', this.MasterList);
     this.DisplayMasterList = this.MasterList
+    console.log('DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
   }
 

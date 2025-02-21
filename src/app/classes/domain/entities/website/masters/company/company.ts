@@ -29,11 +29,11 @@ export class CompanyProps {
   public CINNO:  string='';
   public DateOfInCorporation:string = '';
   public LastDateOfFirstFinancialYear:  string='';
-  public CountryRef:  number = 0;
+  public CountryRef:  number = 9162;
   public readonly CountryName: string='';
-  public StateRef:  number = 0;
+  public StateRef:  number = 10262;
   public readonly StateName: string='';
-  public CityRef:  number = 0;
+  public CityRef:  number = 10373 ;
   public readonly CityName: string='';
  
 
