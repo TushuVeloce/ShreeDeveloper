@@ -64,6 +64,7 @@ import { CityComponent } from './Masters/city/city.component';
 import { UnitMasterComponent } from './Masters/unit/unit-master/unit-master.component';
 import { UnitMasterDetailsComponent } from './Masters/unit/unit-master-details/unit-master-details.component';
 import { UserrolerightsComponent } from './Masters/userrolerights/userrolerights.component';
+import { FinancialYearMasterComponent } from './Masters/financial-year-master/financial-year-master.component';
 
 const routes: Routes = [
   {
@@ -106,6 +107,8 @@ const routes: Routes = [
       { path: 'State', component: StateComponent },
       { path: 'City', component: CityComponent },
       { path: 'User_Role_Rights', component: UserrolerightsComponent },
+
+      { path: 'Financial_Year_Master', component: FinancialYearMasterComponent },
 
       // Site management 
       { path: 'site_management_Master', component: SiteManagementMasterComponent },

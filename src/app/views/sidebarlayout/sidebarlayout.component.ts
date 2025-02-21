@@ -358,6 +358,11 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '',
       },
       {
+        Name: 'Financial Year Master',
+        RouterLink: '/homepage/Website/Financial_Year_Master',
+        LogoPath: '',
+      },
+      {
         Name: 'Employee Master',
         RouterLink: '/homepage/Website/Employee_Master',
         LogoPath: '',
