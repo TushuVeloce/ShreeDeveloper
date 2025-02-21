@@ -18,24 +18,23 @@ export class CompanyProps {
   public Ref: number = 0;
   public Name: string = '';
   public OwnerName: string = '';
-  public CompanyEmailId: string = '';
+  public EmailId: string = '';
   public CompanyType: string = '';
-  public PinCode: string = '';
   public Contacts: string = '';
   public AddressLine1: string = '';
   public AddressLine2: string = '';
-  // public GeoNameId:  string='';
+  public PinCode: string = '';
   public GSTIN:  string='';
   public Pan:  string='';
   public CINNO:  string='';
   public DateOfInCorporation:string = '';
   public LastDateOfFirstFinancialYear:  string='';
-  public CityRef:  number = 0;
-  public readonly CityName: string='';
   public CountryRef:  number = 0;
   public readonly CountryName: string='';
   public StateRef:  number = 0;
   public readonly StateName: string='';
+  public CityRef:  number = 0;
+  public readonly CityName: string='';
  
 
   public readonly IsNewlyCreated: boolean = false;
@@ -83,7 +82,7 @@ export class Company implements IPersistable<Company> {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
     if (this.p.OwnerName == '') vra.add('OwnerName', 'Owner Name cannot be blank.');
-    if (this.p.CompanyEmailId == '') vra.add('CompanyEmailId', 'Email Id cannot be blank.');
+    if (this.p.EmailId == '') vra.add('EmailId', 'Email Id cannot be blank.');
     if (this.p.CompanyType == '') vra.add('CompanyType', 'Company Type cannot be blank.');
     if (this.p.PinCode == '') vra.add('PinCode', 'Pin code cannot be blank.');
     if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'AddressLine1 cannot be blank.');

@@ -21,7 +21,7 @@ export class CompanyMasterComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
 
-  headers: string[] = ['Sr.No.', 'Name', 'Owner Names', 'Contacts','Country ','State ','City ', 'Reg No',' GST No',' Pan No','CIN No', 'Action'];
+  headers: string[] = ['Sr.No.', 'Name', 'Owner Names', 'Contacts','Country ','State ','City ',' GST No',' Pan No', 'Action'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 
@@ -40,6 +40,7 @@ export class CompanyMasterComponent implements OnInit {
 
   onEditClicked = async (item: Company) => {
     this.SelectedCompany = item.GetEditableVersion();
+    console.log('SelectedCompany :', this.SelectedCompany);
     Company.SetCurrentInstance(this.SelectedCompany);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/homepage/Website/Company_Master_Details']);
