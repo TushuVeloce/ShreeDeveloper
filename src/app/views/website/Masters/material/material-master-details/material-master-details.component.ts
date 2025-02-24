@@ -24,6 +24,7 @@ export class MaterialMasterDetailsComponent implements OnInit {
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
 
   async ngOnInit() { 
+    this.appStateManage.setDropdownDisabled(true);
         this.UnitList = await Unit.FetchEntireList();
     
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {

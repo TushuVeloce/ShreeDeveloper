@@ -40,6 +40,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    this.appStateManage.setDropdownDisabled(true);
     this.UserRoleList = await UserRole.FetchEntireList();
     this.CountryList = await Country.FetchEntireList();
     this.DepartmentList = await Department.FetchEntireList();

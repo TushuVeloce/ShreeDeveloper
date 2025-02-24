@@ -25,6 +25,7 @@ export class VendorMasterDetailsComponent implements OnInit {
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
 
   async ngOnInit() {
+    this.appStateManage.setDropdownDisabled(true);
     this.CompanyList = await Company.FetchEntireList();
     console.log(this.CompanyList);
     

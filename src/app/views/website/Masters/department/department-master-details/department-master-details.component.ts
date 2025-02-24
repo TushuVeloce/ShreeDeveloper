@@ -20,14 +20,11 @@ export class DepartmentMasterDetailsComponent implements OnInit {
   Entity: Department = Department.CreateNewInstance();
   DetailsFormTitle: 'New Department' | 'Edit Department' = 'New Department';
   InitialEntity: Department = null as any;
-  CompanyList: Company[] = [];
   companyName = this.companyStateManagement.SelectedCompanyName;
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companyStateManagement: CompanyStateManagement,private companystatemanagement: CompanyStateManagement) { }
 
   async ngOnInit() {
-        this.CompanyList = await Company.FetchEntireList();
-        
-
+    this.appStateManage.setDropdownDisabled(true);
        if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
           this.IsNewEntity = false;
           this.DetailsFormTitle = this.IsNewEntity ? 'New Department' : 'Edit Department';
@@ -42,12 +39,6 @@ export class DepartmentMasterDetailsComponent implements OnInit {
         this.InitialEntity = Object.assign(Department.CreateNewInstance(),
         this.utils.DeepCopy(this.Entity)) as Department;      
    }
-
-  //  private GetCompantList = async () => {
-  //   let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.CompanyList = lst;
-  //   console.log('CompanyList :', this.CompanyList);
-  // }
 
     SaveDepartmentMaster = async () => {
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()

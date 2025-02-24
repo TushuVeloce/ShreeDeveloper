@@ -25,6 +25,7 @@ export class BankMasterDetailsComponent implements OnInit {
 
 
   async ngOnInit() {
+    this.appStateManage.setDropdownDisabled(true);
     this.CompanyList = await Company.FetchEntireList();
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {

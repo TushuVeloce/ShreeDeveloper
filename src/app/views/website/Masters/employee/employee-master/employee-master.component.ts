@@ -26,6 +26,7 @@ export class EmployeeMasterComponent  implements OnInit {
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 
   ngOnInit() {
+    this.appStateManage.setDropdownDisabled(false);
     this.FormulateMasterList();
   }
 

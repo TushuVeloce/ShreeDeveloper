@@ -26,6 +26,7 @@ export class UnitMasterComponent  implements OnInit {
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService ) {}
 
   async ngOnInit() {
+    this.appStateManage.setDropdownDisabled(true);
     await this.FormulateUnitList();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');

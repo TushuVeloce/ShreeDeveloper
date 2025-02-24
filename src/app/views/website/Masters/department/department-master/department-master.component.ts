@@ -36,6 +36,7 @@ export class DepartmentMasterComponent implements OnInit {
 
   async ngOnInit() {
     // await this.FormulateMasterList();
+    this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
   }
   

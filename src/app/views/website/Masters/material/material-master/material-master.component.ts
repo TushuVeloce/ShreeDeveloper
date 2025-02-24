@@ -33,6 +33,7 @@ export class MaterialMasterComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    this.appStateManage.setDropdownDisabled(false);
     await this.FormulateMaterialList();
     // this.DisplayMasterList = [];
     this.loadPaginationData();

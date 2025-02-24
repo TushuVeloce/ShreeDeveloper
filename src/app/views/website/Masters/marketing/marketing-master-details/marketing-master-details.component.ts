@@ -25,6 +25,7 @@ export class MarketingMasterDetailsComponent implements OnInit {
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
 
   async ngOnInit() {
+    this.appStateManage.setDropdownDisabled(true);
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Marketing Type' : 'Edit Marketing Type';

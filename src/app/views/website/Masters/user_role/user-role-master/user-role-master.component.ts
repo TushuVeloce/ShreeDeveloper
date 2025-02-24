@@ -36,6 +36,7 @@ export class UserRoleMasterComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.appStateManage.setDropdownDisabled(false);
     // this.FormulateMaterialList();
   }
 

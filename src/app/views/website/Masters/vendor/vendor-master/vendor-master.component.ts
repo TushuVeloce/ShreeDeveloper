@@ -25,6 +25,7 @@ export class VendorMasterComponent implements OnInit {
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 
   async ngOnInit() {
+    this.appStateManage.setDropdownDisabled(false);
     await this.FormulateMasterList();
     this.loadPaginationData();
   }

@@ -26,13 +26,7 @@ export class UserMasterDetailsComponent implements OnInit {
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
-
   async ngOnInit() {
-    // let disable = localStorage.getItem('isDropdownDisabled')
-    // if(disable){
-    //   const ref = Boolean(disable);
-    //   this.appStateManage.setDropdownDisabled(ref)
-    // }
     this.appStateManage.setDropdownDisabled(true)
     this.UserRoleList = await UserRole.FetchEntireList();
     this.DepartmentList = await Department.FetchEntireList();
