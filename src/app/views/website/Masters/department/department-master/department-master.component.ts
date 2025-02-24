@@ -51,8 +51,6 @@ export class DepartmentMasterComponent implements OnInit {
       if(this.companyRef){
         let lst = await Department.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
         this.MasterList = lst;
-        console.log('MasterList :', this.MasterList);
-
         this.DisplayMasterList = this.MasterList;
       }
       this.loadPaginationData();
