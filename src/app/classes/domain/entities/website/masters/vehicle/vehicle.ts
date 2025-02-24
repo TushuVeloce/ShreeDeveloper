@@ -158,6 +158,12 @@ export class Vehicle implements IPersistable<Vehicle> {
     let tdResponse = await Vehicle.FetchTransportData(req, errorHandler) as TransportData;
     return Vehicle.ListFromTransportData(tdResponse);
   }
+  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new VehicleFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Vehicle.FetchTransportData(req, errorHandler) as TransportData;
+    return Vehicle.ListFromTransportData(tdResponse);
+  }
   
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

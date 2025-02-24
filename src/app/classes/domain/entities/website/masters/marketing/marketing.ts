@@ -162,12 +162,12 @@ export class Marketing implements IPersistable<Marketing> {
     let tdResponse = await Marketing.FetchTransportData(req, errorHandler) as TransportData;
     return Marketing.ListFromTransportData(tdResponse);
   }
-  // public static async FetchEntireListByProjectRef(ProjectRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-  //   let req = new MarketingFetchRequest();
-  //   req.GAAProjectRefs.push(ProjectRef)
-  //   let tdResponse = await Marketing.FetchTransportData(req, errorHandler) as TransportData;
-  //   return Marketing.ListFromTransportData(tdResponse);
-  // }
+  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new MarketingFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Marketing.FetchTransportData(req, errorHandler) as TransportData;
+    return Marketing.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

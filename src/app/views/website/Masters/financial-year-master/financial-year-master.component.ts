@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FinancialYear } from 'src/app/classes/domain/entities/website/masters/state copy/financialyear';
+import { FinancialYear } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';

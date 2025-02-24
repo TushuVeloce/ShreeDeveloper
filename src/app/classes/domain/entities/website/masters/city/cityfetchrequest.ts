@@ -9,6 +9,7 @@ export class CityFetchRequest {
     CountryRefs: number[] = [];
     StateRefs: number[] = [];
     CityRefs: number[] = [];
+    CompanyRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) => {
         let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CityFetchRequest.FetchRequestType) as DataCollection;

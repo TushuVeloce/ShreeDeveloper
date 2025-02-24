@@ -6,8 +6,11 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class UserRoleRightsFetchRequest {
     public static readonly FetchRequestType: string = "UserRoleRightsFetchRequest";
+
     UserRoleRightsRefs: number[] = [];
     CountryRefs: number[] = [];
+    CompanyRefs: number[] = [];
+
 
     public MergeIntoTransportData = (td: TransportData) => {
         let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, UserRoleRightsFetchRequest.FetchRequestType) as DataCollection;

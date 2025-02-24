@@ -161,6 +161,12 @@ export class UserRoleRights implements IPersistable<UserRoleRights> {
     let tdResponse = await UserRoleRights.FetchTransportData(req, errorHandler) as TransportData;
     return UserRoleRights.ListFromTransportData(tdResponse);
   }
+  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new UserRoleRightsFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await UserRoleRights.FetchTransportData(req, errorHandler) as TransportData;
+    return UserRoleRights.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
