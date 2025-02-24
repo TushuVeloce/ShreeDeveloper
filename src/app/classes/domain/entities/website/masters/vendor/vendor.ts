@@ -20,7 +20,8 @@ export class VendorProps {
   public Address: string = '';
   public MobileNo: string = '';
   public CompanyRef: number = 0;
-  public readonly CompanyName: string = '';
+  public CompanyName: string = '';
+  // public readonly CompanyName: string = '';
   
   public readonly IsNewlyCreated: boolean = false;
 

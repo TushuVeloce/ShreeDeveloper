@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -20,20 +21,37 @@ export class VendorMasterComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
 
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+
   headers: string[] = ['SR.No', 'Vendor Name', 'Mobile No', 'Address', 'Company Name', 'Action'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement) {
+    effect(() => {
+      this.getVendorListByCompanyRef()
+    });
+  }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    await this.FormulateMasterList();
+    // await this.FormulateMasterList();
     this.loadPaginationData();
   }
 
-  private FormulateMasterList = async () => {
-    let lst = await Vendor.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList
+  // private FormulateMasterList = async () => {
+  //   let lst = await Vendor.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.MasterList = lst;
+  //   this.DisplayMasterList = this.MasterList
+  //   this.loadPaginationData();
+  // }
+
+  getVendorListByCompanyRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef) {
+      let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.MasterList = lst;
+      this.DisplayMasterList = this.MasterList;
+    }
     this.loadPaginationData();
   }
 
@@ -51,10 +69,10 @@ export class VendorMasterComponent implements OnInit {
       async () => {
         await Vendor.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(`Vendor ${Vendor.p.Name} has been deleted!`);
-          await this.FormulateMasterList();
+          await this.getVendorListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
-          await this.FormulateMasterList();
+          // await this.FormulateMasterList();
         });
       });
   }
@@ -75,7 +93,12 @@ export class VendorMasterComponent implements OnInit {
 
 
   AddVendor() {
+    if(this.companyRef()){
     this.router.navigate(['/homepage/Website/Vendor_Master_Details']);
+    }
+    else{
+      this.uiUtils.showWarningToster('Please select company');
+    }
   }
   filterTable = () => {
     if (this.SearchString != '') {

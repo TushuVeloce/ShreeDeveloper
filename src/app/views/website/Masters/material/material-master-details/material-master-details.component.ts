@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -21,7 +22,9 @@ export class MaterialMasterDetailsComponent implements OnInit {
     InitialEntity: Material = null as any;
     UnitList: Unit[] = [];
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,
+    private companystatemanagement: CompanyStateManagement
+  ) { }
 
   async ngOnInit() { 
     this.appStateManage.setDropdownDisabled(true);
@@ -53,6 +56,8 @@ export class MaterialMasterDetailsComponent implements OnInit {
        }
 
   SaveMaterialMaster = async () => {
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+      this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
 
     let entitiesToSave = [entityToSave]

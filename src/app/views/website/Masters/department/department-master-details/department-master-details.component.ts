@@ -20,8 +20,8 @@ export class DepartmentMasterDetailsComponent implements OnInit {
   Entity: Department = Department.CreateNewInstance();
   DetailsFormTitle: 'New Department' | 'Edit Department' = 'New Department';
   InitialEntity: Department = null as any;
-  companyName = this.companyStateManagement.SelectedCompanyName;
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companyStateManagement: CompanyStateManagement,private companystatemanagement: CompanyStateManagement) { }
+  companyName = this.companystatemanagement.SelectedCompanyName;
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companystatemanagement: CompanyStateManagement) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);

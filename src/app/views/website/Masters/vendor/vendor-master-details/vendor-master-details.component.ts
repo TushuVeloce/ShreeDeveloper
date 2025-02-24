@@ -3,6 +3,7 @@ import { Router } from '@angular/router'
 import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -21,8 +22,9 @@ export class VendorMasterDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Vendor' | 'Edit Vendor' = 'New Vendor';
   InitialEntity: Vendor = null as any;
   CompanyList: Company[] = [];
+  companyName = this.companystatemanagement.SelectedCompanyName;
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companystatemanagement: CompanyStateManagement) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -45,6 +47,8 @@ export class VendorMasterDetailsComponent implements OnInit {
   }
 
   SaveVendorMaster = async () => {
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
     console.log(entitiesToSave);

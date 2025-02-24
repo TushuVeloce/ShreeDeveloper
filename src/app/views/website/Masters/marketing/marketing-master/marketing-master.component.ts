@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Marketing } from 'src/app/classes/domain/entities/website/masters/marketing/marketing';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -22,24 +23,41 @@ export class MarketingMasterComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
 
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+
   MarketingModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
 
 
   headers: string[] = ['Sr.No.', 'Marketing Type', 'Description', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement) {
+    effect(() => {
+      this.getMarketingListByCompanyRef()
+    });
+  }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    await this.FormulateMasterList();
+    // await this.FormulateMasterList();
     this.loadPaginationData();
   }
 
-  private FormulateMasterList = async () => {
-    let lst = await Marketing.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
-    console.log(this.MasterList);
-    
-    this.DisplayMasterList = this.MasterList
+  // private FormulateMasterList = async () => {
+  //   let lst = await Marketing.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.MasterList = lst;
+  //   console.log(this.MasterList);
+
+  //   this.DisplayMasterList = this.MasterList
+  //   this.loadPaginationData();
+  // }
+
+  getMarketingListByCompanyRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef()) {
+      let lst = await Marketing.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.MasterList = lst;
+      this.DisplayMasterList = this.MasterList;
+    }
     this.loadPaginationData();
   }
 
@@ -57,7 +75,7 @@ export class MarketingMasterComponent implements OnInit {
       async () => {
         await Marketing.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(`Marketing ${Marketing.p.MarketingMode} has been deleted!`);
-          await this.FormulateMasterList();
+          await this.getMarketingListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
         });
@@ -80,7 +98,12 @@ export class MarketingMasterComponent implements OnInit {
 
 
   AddMarketing() {
-    this.router.navigate(['/homepage/Website/Marketing_Master_Details']);
+    if (this.companyRef()) {
+      this.router.navigate(['/homepage/Website/Marketing_Master_Details']);
+    }
+    else {
+      this.uiUtils.showWarningToster('Please select the company)');
+    }
   }
 
   filterTable = () => {

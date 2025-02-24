@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import Swal from 'sweetalert2';
@@ -11,7 +12,7 @@ import Swal from 'sweetalert2';
   standalone: false,
   templateUrl: './material-master.component.html',
   styleUrls: ['./material-master.component.scss'],
-  
+
 })
 export class MaterialMasterComponent implements OnInit {
   Entity: Material = Material.CreateNewInstance();
@@ -24,32 +25,47 @@ export class MaterialMasterComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
 
-  headers: string[] = ['Sr.No.','Code', 'Material Name', 'Material Unit', 'Action'];
-  constructor(
-    private uiUtils: UIUtils,
-    private router: Router,
-    private appStateManage: AppStateManageService,
-    private screenSizeService: ScreenSizeService
-  ) {}
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+
+  headers: string[] = ['Sr.No.', 'Code', 'Material Name', 'Material Unit', 'Action'];
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement
+  ) {
+    effect(() => {
+      this.getMaterialListByCompanyRef()
+    });
+  }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    await this.FormulateMaterialList();
+    // await this.FormulateMaterialList();
     // this.DisplayMasterList = [];
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
-  private FormulateMaterialList = async () => {
-    let lst = await Material.FetchEntireList(
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-    this.MasterList = lst;
-    console.log('MasterList :', this.MasterList);
-    this.DisplayMasterList = this.MasterList;
-    this.loadPaginationData();
-    // console.log(this.DisplayMasterList);
-  };
+  // private FormulateMaterialList = async () => {
+  //   let lst = await Material.FetchEntireList(
+  //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+  //   );
+  //   this.MasterList = lst;
+  //   console.log('MasterList :', this.MasterList);
+  //   this.DisplayMasterList = this.MasterList;
+  //   this.loadPaginationData();
+  //   // console.log(this.DisplayMasterList);
+  // };
 
+  getMaterialListByCompanyRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef()) {
+      let lst = await Material.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.MasterList = lst;
+      console.log('MaterialList :', this.MasterList);
+
+      this.DisplayMasterList = this.MasterList;
+    }
+    this.loadPaginationData();
+  }
   onEditClicked = async (item: Material) => {
     // let props = Object.assign(MaterialProps.Blank(),item.p);
     // this.SelectedMaterial = Material.CreateInstance(props,true);
@@ -73,10 +89,10 @@ export class MaterialMasterComponent implements OnInit {
           await this.uiUtils.showSuccessToster(
             `Material ${material.p.Name} has been deleted!`
           );
-          await this.FormulateMaterialList();
+          await this.getMaterialListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
-          await this.FormulateMaterialList();
+          // await this.FormulateMaterialList();
 
         });
       }
@@ -96,11 +112,16 @@ export class MaterialMasterComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
-  AddMaterial() {
-    this.router.navigate(['/homepage/Website/Material_Master_Details']);
+  async AddMaterial() {
+    if (this.companyRef()) {
+      this.router.navigate(['/homepage/Website/Material_Master_Details']);
+    }
+    else {
+      await this.uiUtils.showWarningToster('Company not Selected');
+    }
   }
 
-  
+
   filterTable = () => {
     if (this.SearchString != '') {
       this.DisplayMasterList = this.MasterList.filter((data: any) => {
