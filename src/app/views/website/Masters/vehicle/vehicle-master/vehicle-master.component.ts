@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Vehicle } from 'src/app/classes/domain/entities/website/masters/vehicle/vehicle';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 
@@ -20,24 +21,40 @@ export class VehicleMasterComponent  implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   headers: string[] = ['Sr.No.','Vehicle Name','Action'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement) {
+      effect(() => {
+        this.getVehicleListByCompanyRef()
+      });
+     }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    await this.FormulateMasterList();
+ //   await this.FormulateMasterList();
     this.loadPaginationData();
   }
 
-   private FormulateMasterList = async () => {
-      let lst = await Vehicle.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.MasterList = lst;
-      console.log(this.MasterList);
-      this.DisplayMasterList = this.MasterList
-      this.loadPaginationData();
-    }
+  //  private FormulateMasterList = async () => {
+  //     let lst = await Vehicle.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //     this.MasterList = lst;
+  //     console.log(this.MasterList);
+  //     this.DisplayMasterList = this.MasterList
+  //     this.loadPaginationData();
+  //   }
+
+    getVehicleListByCompanyRef = async () => {
+        this.MasterList = [];
+        this.DisplayMasterList = [];
+        if(this.companyRef()){
+          let lst = await Vehicle.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+          this.MasterList = lst;
+          this.DisplayMasterList = this.MasterList;
+        }
+        this.loadPaginationData();
+      }
   
     onEditClicked = async (item: Vehicle) => {
       this.SelectedVehicle = item.GetEditableVersion();
@@ -53,11 +70,9 @@ export class VehicleMasterComponent  implements OnInit {
         async () => {
           await Vehicle.DeleteInstance(async () => {
             await this.uiUtils.showSuccessToster(`Vehicle ${Vehicle.p.Name} has been deleted!`);
-            await this.FormulateMasterList();
             this.SearchString = '';
             this.loadPaginationData();
-            await this.FormulateMasterList();
-
+            await this.getVehicleListByCompanyRef();
           });
         });
     }
@@ -76,8 +91,12 @@ export class VehicleMasterComponent  implements OnInit {
       this.currentPage = pageIndex; // Update the current page
     }
 
-  AddVehicle(){
-    this.router.navigate(['/homepage/Website/Vehicle_Master_Details']);
+ async AddVehicle(){
+    if(this.companyRef()){
+      this.router.navigate(['/homepage/Website/Vehicle_Master_Details']);
+    }else{
+      await this.uiUtils.showWarningToster('Company not Selected');
+    }
    }
    filterTable = () => {
     if (this.SearchString != '') {

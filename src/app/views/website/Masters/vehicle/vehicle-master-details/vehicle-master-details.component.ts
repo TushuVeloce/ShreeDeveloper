@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router'
 import { Vehicle } from 'src/app/classes/domain/entities/website/masters/vehicle/vehicle';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -18,8 +19,9 @@ export class VehicleMasterDetailsComponent implements OnInit {
   Entity: Vehicle = Vehicle.CreateNewInstance();
   DetailsFormTitle: 'New Vehicle' | 'Edit Vehicle' = 'New Vehicle';
   InitialEntity: Vehicle = null as any;
+  companyName = this.companystatemanagement.SelectedCompanyName;
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils) { }
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companystatemanagement: CompanyStateManagement) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -39,6 +41,8 @@ export class VehicleMasterDetailsComponent implements OnInit {
   }
 
   SaveVehicleMaster = async () => {
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
