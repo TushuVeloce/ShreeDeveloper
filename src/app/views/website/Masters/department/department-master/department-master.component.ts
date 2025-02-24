@@ -48,7 +48,7 @@ export class DepartmentMasterComponent implements OnInit {
    getDepartmentListByCompanyRef = async () => {
       this.MasterList = [];
       this.DisplayMasterList = [];
-      if(this.companyRef){
+      if(this.companyRef()){
         let lst = await Department.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
         this.MasterList = lst;
         this.DisplayMasterList = this.MasterList;

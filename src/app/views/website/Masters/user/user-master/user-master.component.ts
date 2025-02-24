@@ -38,23 +38,26 @@ export class UserMasterComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(false);
   }
 
-  private FormulateMasterList = async () => {
-    let lst = await User.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
-    console.log('MasterList :', this.MasterList);
-    this.DisplayMasterList = this.MasterList
-  }
+  // private FormulateMasterList = async () => {
+  //   let lst = await User.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.MasterList = lst;
+  //   console.log('MasterList :', this.MasterList);
+  //   this.DisplayMasterList = this.MasterList
+  // }
 
-   getUserListByCompanyRef = async () => {
-        this.MasterList = [];
-        this.DisplayMasterList = [];
-        let lst = await User.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      getUserListByCompanyRef = async () => {
+      this.MasterList = [];
+      this.DisplayMasterList = [];
+      if (this.companyRef()) {
+        let lst = await User.FetchEntireListByCompanyRef(
+          this.companyRef(),
+          async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+        );
         this.MasterList = lst;
         this.DisplayMasterList = this.MasterList;
-        console.log('DisplayMasterList :', this.DisplayMasterList);
-        this.loadPaginationData();
       }
-  
+      this.loadPaginationData();
+    };
 
   onEditClicked = async (item: User) => {
     this.SelectedUser = item.GetEditableVersion();
@@ -64,7 +67,6 @@ export class UserMasterComponent implements OnInit {
   }
 
   onDeleteClicked = async (User: User) => {
-    debugger
     await this.uiUtils.showConfirmationMessage('Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
           Are you sure that you want to DELETE this User?`,
@@ -73,7 +75,7 @@ export class UserMasterComponent implements OnInit {
           await this.uiUtils.showSuccessToster(`User ${User.p.EmailId} has been deleted!`);
           this.SearchString = '';
           this.loadPaginationData();
-          this.FormulateMasterList();
+        await this.getUserListByCompanyRef();
         });
       });
   }
@@ -92,8 +94,12 @@ export class UserMasterComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   }
 
-  AddUser() {
+ async AddUser(){
+  if(this.companyRef()){
     this.router.navigate(['/homepage/Website/User_Master_Details']);
+  }else{
+    await this.uiUtils.showWarningToster('Company not Selected');
+  }
   }
 
   filterTable = () => {

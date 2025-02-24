@@ -20,6 +20,7 @@ export class UserRoleMasterDetailsComponent  implements OnInit {
   DetailsFormTitle: 'New User Role' | 'Edit User Role' = 'New User Role';
   IsDropdownDisabled: boolean = false
   InitialEntity: UserRole = null as any;
+  companyName = this.companystatemanagement.SelectedCompanyName;
 
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companystatemanagement: CompanyStateManagement) { }
@@ -43,10 +44,9 @@ export class UserRoleMasterDetailsComponent  implements OnInit {
 
   SaveUserRole = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     this.isSaveDisabled = true;
     let entityToSave = this.Entity.GetEditableVersion();
-
     let entitiesToSave = [entityToSave]
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);

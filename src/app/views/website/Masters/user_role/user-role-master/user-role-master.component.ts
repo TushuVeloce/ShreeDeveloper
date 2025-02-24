@@ -5,7 +5,6 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
-
 @Component({
   selector: 'app-user-role-master',
   standalone: false,
@@ -13,13 +12,11 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   styleUrls: ['./user-role-master.component.scss'],
 })
 export class UserRoleMasterComponent implements OnInit {
-
   Entity: UserRole = UserRole.CreateNewInstance();
   MasterList: UserRole[] = [];
   DisplayMasterList: UserRole[] = [];
   SearchString: string = '';
   SelectedMaterial: UserRole = UserRole.CreateNewInstance();
-
   CustomerRef: number = 0;
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
@@ -27,87 +24,102 @@ export class UserRoleMasterComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   headers: string[] = ['Sr.No.', 'Role', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement) {
-      effect(() => {
-              // console.log('Company Ref Changed:', this.companyRef());
-              // console.log('Company Name Changed:', this.companyName());
-              this.getUserRoleListByCompanyRef()
-            });
-   }
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private companystatemanagement: CompanyStateManagement
+  ) {
+    effect(() => {
+      // console.log('Company Ref Changed:', this.companyRef());
+      // console.log('Company Name Changed:', this.companyName());
+      this.getUserRoleListByCompanyRef();
+    });
+  }
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
     // this.FormulateMaterialList();
   }
 
-  private FormulateMaterialList = async () => {
-    let lst = await UserRole.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList
-    // console.log(this.DisplayMasterList);
-  }
+  // private FormulateMaterialList = async () => {
+  //   let lst = await UserRole.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.MasterList = lst;
+  //   this.DisplayMasterList = this.MasterList
+  //   // console.log(this.DisplayMasterList);
+  // }
 
-   getUserRoleListByCompanyRef = async () => {
-          this.MasterList = [];
-          this.DisplayMasterList = [];
-          let lst = await UserRole.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-          this.MasterList = lst;
-          this.DisplayMasterList = this.MasterList;
-          this.loadPaginationData();
-        }
+  getUserRoleListByCompanyRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef()) {
+      let lst = await UserRole.FetchEntireListByCompanyRef(
+        this.companyRef(),
+        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+      this.MasterList = lst;
+      this.DisplayMasterList = this.MasterList;
+    }
+    this.loadPaginationData();
+  };
 
   onEditClicked = async (userrole: UserRole) => {
-
     this.SelectedMaterial = userrole.GetEditableVersion();
-
     UserRole.SetCurrentInstance(this.SelectedMaterial);
-
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-
     await this.router.navigate(['/homepage/Website/User_Role_Master_Details']);
-  }
+  };
 
   onDeleteClicked = async (userrole: UserRole) => {
-    debugger
-    await this.uiUtils.showConfirmationMessage('Delete',
+    debugger;
+    await this.uiUtils.showConfirmationMessage(
+      'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
       Are you sure that you want to DELETE this Company?`,
       async () => {
         await userrole.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(`Company ${userrole.p.Name} has been deleted!`);
+          await this.uiUtils.showSuccessToster(
+            `Company ${userrole.p.Name} has been deleted!`
+          );
           this.SearchString = '';
           this.loadPaginationData();
-          await this.FormulateMaterialList();
-
+          await this.getUserRoleListByCompanyRef();
         });
-      });
-  }
+      }
+    );
+  };
 
   // For Pagination  start ----
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
-  }
+  };
 
-  get paginatedList () {
+  get paginatedList() {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
 
-  onPageChange  = (pageIndex: number): void => {
+  onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
-  }
-  AddUserRole() {
-    this.router.navigate(['/homepage/Website/User_Role_Master_Details']);
-  }
-  filterTable = () => {
-    if (this.SearchString != '') {
-      this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
-      })
-    }
-    else {
-      this.DisplayMasterList = this.MasterList
+  };
+  async AddUserRole() {
+    if (this.companyRef()) {
+      this.router.navigate(['/homepage/Website/User_Role_Master_Details']);
+    } else {
+      await this.uiUtils.showWarningToster('Company not Selected');
     }
   }
 
+  filterTable = () => {
+    if (this.SearchString != '') {
+      this.DisplayMasterList = this.MasterList.filter((data: any) => {
+        return (
+          data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) >
+          -1
+        );
+      });
+    } else {
+      this.DisplayMasterList = this.MasterList;
+    }
+  };
 }

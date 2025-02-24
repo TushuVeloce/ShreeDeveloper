@@ -23,6 +23,7 @@ export class UserMasterDetailsComponent implements OnInit {
   InitialEntity: User = null as any;
   UserRoleList: UserRole[] = [];
   DepartmentList: Department[] = [];
+  companyName = this.companystatemanagement.SelectedCompanyName;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
@@ -49,7 +50,7 @@ export class UserMasterDetailsComponent implements OnInit {
 
   SaveUserMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
     // await this.Entity.EnsurePrimaryKeysWithValidValues()

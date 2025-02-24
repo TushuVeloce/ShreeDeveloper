@@ -1,8 +1,9 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FinancialYear } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -23,25 +24,43 @@ export class FinancialYearMasterComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+
 
 
   headers: string[] = ['Sr.No.', 'From Date', 'To Date'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,
-    private dtu: DTU, private datePipe: DatePipe
-  ) { }
+    private dtu: DTU, private datePipe: DatePipe,private companystatemanagement: CompanyStateManagement
+  ) {    effect(() => {
+        this.getFinancialYearListByCompanyRef()
+      });
+     }
 
   async ngOnInit() {
-    await this.FormulateMasterList();
+   // await this.FormulateMasterList();
     this.convertdate();
 
   }
 
-  private FormulateMasterList = async () => {
-    let lst = await FinancialYear.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
+  // private FormulateMasterList = async () => {
+  //   let lst = await FinancialYear.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.MasterList = lst;
 
-    this.DisplayMasterList = this.MasterList
-  }
+  //   this.DisplayMasterList = this.MasterList
+  // }
+
+
+
+  getFinancialYearListByCompanyRef = async () => {
+        this.MasterList = [];
+        this.DisplayMasterList = [];
+        if(this.companyRef){
+          let lst = await FinancialYear.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+          this.MasterList = lst;
+          this.DisplayMasterList = this.MasterList;
+        }
+        this.loadPaginationData();
+      }
 
   FromDates: string[] = [];
   ToDates: string[] = [];
