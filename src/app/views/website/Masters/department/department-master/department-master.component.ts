@@ -93,8 +93,12 @@ export class DepartmentMasterComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   }
 
-  AddDepartment() {
-    this.router.navigate(['/homepage/Website/Department_Master_Details']);
+  async AddDepartment() {
+    if(this.companyRef()){
+      this.router.navigate(['/homepage/Website/Department_Master_Details']);
+    }else{
+      await this.uiUtils.showWarningToster('Company not Selected');
+    }
   }
   filterTable = () => {
     if (this.SearchString != '') {
