@@ -8,6 +8,7 @@ import { Employee } from 'src/app/classes/domain/entities/website/masters/employ
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
 import { UserRole } from 'src/app/classes/domain/entities/website/masters/userrole/userrole';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -31,12 +32,14 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   DepartmentList: Department[] = [];
   GenderList = DomainEnums.GenderTypeList(true, '---Select Gender---');
   MarketingModesList = DomainEnums.MarketingModesList();
+  companyName = this.companystatemanagement.SelectedCompanyName;
+
 
   constructor(
     private router: Router,
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
-    private utils: Utils
+    private utils: Utils,private companystatemanagement: CompanyStateManagement
   ) {}
 
   async ngOnInit() {
@@ -78,13 +81,12 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   }
 
   SaveEmployeeMaster = async () => {
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
-
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       this.uiUtils.showErrorToster(tr.Message);
