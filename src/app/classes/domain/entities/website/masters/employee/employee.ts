@@ -39,7 +39,8 @@ export class EmployeeProps {
   public readonly DepartmentName: boolean = false;
   public UserStatus: string = '';
   public IsUser: boolean = false;
-  
+  public CompanyRef: number = 0;
+  public CompanyName: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
 
@@ -84,6 +85,8 @@ export class Employee implements IPersistable<Employee> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.FirstName == '') vra.add('FirstName', 'First Name cannot be blank.');
+    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
+
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -160,7 +163,7 @@ export class Employee implements IPersistable<Employee> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new EmployeeFetchRequest();
-    req.EmployeeRef.push(ref);
+    req.EmployeeRefs.push(ref);
 
     let tdResponse = await Employee.FetchTransportData(req, errorHandler) as TransportData;
     return Employee.SingleInstanceFromTransportData(tdResponse);

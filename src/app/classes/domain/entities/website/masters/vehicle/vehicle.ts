@@ -18,6 +18,8 @@ export class VehicleProps {
   public Ref: number = 0;
   public Name: string = '';
   public Number: string = '';
+  public CompanyRef: number = 0;
+  public CompanyName: string = '';
   
   public readonly IsNewlyCreated: boolean = false;
 
@@ -62,6 +64,7 @@ export class Vehicle implements IPersistable<Vehicle> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
+    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
     // if (this.p.Number == '') vra.add('Number', 'Number cannot be blank.');
   }
 
@@ -139,7 +142,7 @@ export class Vehicle implements IPersistable<Vehicle> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new VehicleFetchRequest();
-    req.VehicleRef.push(ref);
+    req.VehicleRefs.push(ref);
 
     let tdResponse = await Vehicle.FetchTransportData(req, errorHandler) as TransportData;
     return Vehicle.SingleInstanceFromTransportData(tdResponse);

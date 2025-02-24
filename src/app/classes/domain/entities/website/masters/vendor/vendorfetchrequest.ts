@@ -7,7 +7,9 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 export class VendorFetchRequest
 {
     public static readonly FetchRequestType: string = "VendorFetchRequest";
-    VendorRef: number[] = [];
+
+    CompanyRefs: number[] = [];
+    VendorRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

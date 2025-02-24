@@ -17,10 +17,11 @@ export class MarketingProps {
   public readonly Db_Table_Name = "MarketingActivityMaster";
   public Ref: number = 0;
   public Description: string = '';
-  
   public MarketingMode: string = '';
   public readonly MarketingModeName: string = '';
-
+  public CompanyRef: number = 0;
+  public CompanyName: string = '';
+  
   public readonly IsNewlyCreated: boolean = false;
   
   // public readonly AccountTypeName: string = '';
@@ -67,6 +68,8 @@ export class Marketing implements IPersistable<Marketing> {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.MarketingMode == '') vra.add('Marketing Modes', 'Marketing Modes cannot be blank.');
     if (this.p.Description == '') vra.add('Marketing Type', 'Marketing Type cannot be blank.');
+    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
+
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -143,7 +146,7 @@ export class Marketing implements IPersistable<Marketing> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MarketingFetchRequest();
-    req.MarketingRef.push(ref);
+    req.MarketingRefs.push(ref);
 
     let tdResponse = await Marketing.FetchTransportData(req, errorHandler) as TransportData;
     return Marketing.SingleInstanceFromTransportData(tdResponse);

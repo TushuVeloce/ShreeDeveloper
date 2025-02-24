@@ -7,8 +7,9 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 export class BankFetchRequest
 {
     public static readonly FetchRequestType: string = "BankAccountFetchRequest";
-
-    BankRef: number[] = [];
+    
+    CompanyRefs: number[] = [];
+    BankRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

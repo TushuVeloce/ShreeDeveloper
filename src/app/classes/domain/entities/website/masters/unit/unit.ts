@@ -141,7 +141,7 @@ export class Unit implements IPersistable<Unit> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new UnitFetchRequest();
-    req.UnitRef.push(ref);
+    req.UnitRefs.push(ref);
 
     let tdResponse = await Unit.FetchTransportData(req, errorHandler) as TransportData;
     return Unit.SingleInstanceFromTransportData(tdResponse);

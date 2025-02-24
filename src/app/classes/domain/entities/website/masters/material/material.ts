@@ -20,6 +20,8 @@ export class MaterialProps {
   public Name: string = '';
   public UnitRef: number = 0;
   public readonly UnitName: string = '';
+  public CompanyRef: number = 0;
+  public CompanyName: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -66,7 +68,8 @@ export class Material implements IPersistable<Material> {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
     if (this.p.Code == '') vra.add('Code', 'Code cannot be blank.');
-    if (this.p.UnitRef == 0) vra.add('Unit', 'Unit cannot be blank.');
+    if (this.p.UnitRef == 0) vra.add('UnitRef', 'Unit cannot be blank.');
+    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -143,7 +146,7 @@ export class Material implements IPersistable<Material> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MaterialFetchRequest();
-    req.MaterialRef.push(ref);
+    req.MaterialRefs.push(ref);
 
     let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
     return Material.SingleInstanceFromTransportData(tdResponse);
@@ -159,12 +162,13 @@ export class Material implements IPersistable<Material> {
     let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
     return Material.ListFromTransportData(tdResponse);
   }
-  // public static async FetchEntireListByProjectRef(ProjectRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-  //   let req = new MaterialFetchRequest();
-  //   req.GAAProjectRefs.push(ProjectRef)
-  //   let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-  //   return Material.ListFromTransportData(tdResponse);
-  // }
+
+ public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new MaterialFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
+    return Material.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

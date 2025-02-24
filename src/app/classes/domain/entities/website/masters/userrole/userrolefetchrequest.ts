@@ -8,8 +8,8 @@ export class UserRoleFetchRequest
 {
     public static readonly FetchRequestType: string = "UserRoleFetchRequest";
 
-    UserRoleRef: number[] = [];
     CompanyRefs: number[] = [];
+    UserRoleRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

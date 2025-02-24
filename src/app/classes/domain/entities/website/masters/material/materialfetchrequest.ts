@@ -8,8 +8,8 @@ export class MaterialFetchRequest
 {
     public static readonly FetchRequestType: string = "MaterialFetchRequest";
 
-    MaterialRef: number[] = [];
-    // GAAProjectRefs: number[] = [];
+    CompanyRefs: number[] = [];
+    MaterialRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

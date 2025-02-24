@@ -8,7 +8,7 @@ export class UnitFetchRequest
 {
     public static readonly FetchRequestType: string = "UnitFetchRequest";
 
-    UnitRef: number[] = [];
+    UnitRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

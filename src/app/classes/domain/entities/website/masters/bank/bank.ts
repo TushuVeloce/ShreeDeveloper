@@ -16,13 +16,15 @@ import { BankFetchRequest } from "./bankfetchrequest";
 export class BankProps {
   public readonly Db_Table_Name = "BankAccountMaster";
   public Ref: number = 0;
-  public CompanyRef: number = 0;
   public Name: string = '';
   public BranchName: string = '';
   public AccountNumber: string = '';
   public IFSCCode: string = '';
   public OpeningBalance: number = 0;
   public CreatedFinancialYear: string = '';
+  public CompanyRef: number = 0;
+  public CompanyName: string = '';
+  
   
   public readonly IsNewlyCreated: boolean = false;
 
@@ -72,6 +74,8 @@ export class Bank implements IPersistable<Bank> {
     if (this.p.IFSCCode == '') vra.add('IFSCCode', 'IFSC Code cannot be blank.');
     if (this.p.OpeningBalance == 0) vra.add('OpeningBalance', 'Opening Balance cannot be blank.');
     if (this.p.CreatedFinancialYear == '') vra.add('CreatedFinancialYear', 'Created Financial Year cannot be blank.');
+    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
+
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -148,7 +152,7 @@ export class Bank implements IPersistable<Bank> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new BankFetchRequest();
-    req.BankRef.push(ref);
+    req.BankRefs.push(ref);
 
     let tdResponse = await Bank.FetchTransportData(req, errorHandler) as TransportData;
     return Bank.SingleInstanceFromTransportData(tdResponse);
@@ -164,6 +168,13 @@ export class Bank implements IPersistable<Bank> {
     let tdResponse = await Bank.FetchTransportData(req, errorHandler) as TransportData;
     return Bank.ListFromTransportData(tdResponse);
   }
+
+   public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+      let req = new BankFetchRequest();
+      req.CompanyRefs.push(CompanyRef)
+      let tdResponse = await Bank.FetchTransportData(req, errorHandler) as TransportData;
+      return Bank.ListFromTransportData(tdResponse);
+    }
   
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

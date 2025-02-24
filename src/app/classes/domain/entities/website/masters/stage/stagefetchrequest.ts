@@ -7,7 +7,9 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 export class StageFetchRequest
 {
     public static readonly FetchRequestType: string = "StageFetchRequest";
-    StageRef: number[] = [];
+    
+    CompanyRefs: number[] = [];
+    StageRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

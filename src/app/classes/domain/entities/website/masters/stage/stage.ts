@@ -17,6 +17,8 @@ export class StageProps {
   public readonly Db_Table_Name = "StageMaster";
   public Ref: number = 0;
   public Name: string = '';
+  public CompanyRef: number = 0;
+  public CompanyName: string = '';
   
   public readonly IsNewlyCreated: boolean = false;
 
@@ -61,6 +63,8 @@ export class Stage implements IPersistable<Stage> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
+    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
+
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -137,7 +141,7 @@ export class Stage implements IPersistable<Stage> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new StageFetchRequest();
-    req.StageRef.push(ref);
+    req.StageRefs.push(ref);
 
     let tdResponse = await Stage.FetchTransportData(req, errorHandler) as TransportData;
     return Stage.SingleInstanceFromTransportData(tdResponse);

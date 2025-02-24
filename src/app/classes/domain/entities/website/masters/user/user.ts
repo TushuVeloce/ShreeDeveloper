@@ -150,7 +150,7 @@ export class User implements IPersistable<User> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new UserFetchRequest();
-    req.UserRef.push(ref);
+    req.UserRefs.push(ref);
 
     let tdResponse = await User.FetchTransportData(req, errorHandler) as TransportData;
     return User.SingleInstanceFromTransportData(tdResponse);

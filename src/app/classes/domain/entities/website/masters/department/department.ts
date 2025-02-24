@@ -158,6 +158,7 @@ export class Department implements IPersistable<Department> {
     let tdResponse = await Department.FetchTransportData(req, errorHandler) as TransportData;
     return Department.ListFromTransportData(tdResponse);
   }
+  
   public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new DepartmentFetchRequest();
     req.CompanyRefs.push(CompanyRef)

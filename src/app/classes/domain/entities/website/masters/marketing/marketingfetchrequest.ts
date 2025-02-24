@@ -8,7 +8,8 @@ export class MarketingFetchRequest
 {
     public static readonly FetchRequestType: string = "MarketingActivityFetchRequest";
 
-    MarketingRef: number[] = [];
+    CompanyRefs: number[] = [];
+    MarketingRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
