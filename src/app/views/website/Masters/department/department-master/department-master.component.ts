@@ -28,8 +28,6 @@ export class DepartmentMasterComponent implements OnInit {
   
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement) {
     effect(() => {
-      // console.log('Company Ref Changed:', this.companyRef());
-      // console.log('Company Name Changed:', this.companyName());
       this.getDepartmentListByCompanyRef()
     });
    }
@@ -40,12 +38,12 @@ export class DepartmentMasterComponent implements OnInit {
     this.loadPaginationData();
   }
   
-  private FormulateMasterList = async () => {
-    let lst = await Department.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList
-    this.loadPaginationData();
-  }
+  // private FormulateMasterList = async () => {
+  //   let lst = await Department.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.MasterList = lst;
+  //   this.DisplayMasterList = this.MasterList
+  //   this.loadPaginationData();
+  // }
 
    getDepartmentListByCompanyRef = async () => {
       this.MasterList = [];
@@ -53,6 +51,8 @@ export class DepartmentMasterComponent implements OnInit {
       if(this.companyRef){
         let lst = await Department.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
         this.MasterList = lst;
+        console.log('MasterList :', this.MasterList);
+
         this.DisplayMasterList = this.MasterList;
       }
       this.loadPaginationData();
@@ -72,10 +72,9 @@ export class DepartmentMasterComponent implements OnInit {
       async () => {
         await Department.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(`Department ${Department.p.Name} has been deleted!`);
-          await this.FormulateMasterList();
           this.SearchString = '';
           this.loadPaginationData();
-        await this.FormulateMasterList();
+        await this.getDepartmentListByCompanyRef();
         });
       });
   }

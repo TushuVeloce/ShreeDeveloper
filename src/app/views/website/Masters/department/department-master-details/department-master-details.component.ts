@@ -42,7 +42,7 @@ export class DepartmentMasterDetailsComponent implements OnInit {
 
     SaveDepartmentMaster = async () => {
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-      // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+      this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
       let entityToSave = this.Entity.GetEditableVersion();
       console.log('entityToSave :', entityToSave);
       let entitiesToSave = [entityToSave]

@@ -9,7 +9,7 @@ export class CompanyStateManagement {
   public companyRef: number = 0
   public SelectedCompanyRef = signal<number>(this.companyRef);
   public SelectedCompanyName = signal<string>('');
-    constructor(private appStateManage : AppStateManageService) {
+    constructor(private appStateManagement : AppStateManageService) {
     // this.companyRef = appStateManage.getTheme() == 'dark'? 'dark':'light' 
 
   }
@@ -18,8 +18,8 @@ export class CompanyStateManagement {
   setCompanyRef(companyRef: number, companyName: string) {
     this.SelectedCompanyRef.set(companyRef);
     this.SelectedCompanyName.set(companyName);
-    localStorage.setItem('SelectedCompanyRef',companyRef.toString());
-    localStorage.setItem('companyName', companyName);
+    //  this.appStateManagement.StorageKey.setItem('SelectedCompanyRef',companyRef.toString());
+    //  this.appStateManagement.StorageKey.setItem('companyName', companyName);
   }
   getCurrentCompanyRef(): number {
     return this.SelectedCompanyRef();

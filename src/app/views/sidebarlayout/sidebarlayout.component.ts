@@ -98,12 +98,6 @@ export class SidebarlayoutComponent implements OnInit {
     this.isMenuFolded = !this.isMenuFolded; // Toggles the menu state
   }
   ngOnInit() {
-    // localStorage.setItem('disablecompany',true.toString())
-    // this.router.events.subscribe(event => {
-    //   if (event instanceof NavigationEnd) {
-    //     this.checkIfDropdownShouldBeDisabled(event.url);
-    //   }
-    // });
     this.ongetcompany()
         this.isDarkMode = this.appStateManagement.getTheme() === 'dark';
     this.onThemeToggle();
@@ -206,10 +200,8 @@ export class SidebarlayoutComponent implements OnInit {
   }
 
   logout = async () => {
-    // debugger
     await this.uiUtils.showConfirmationMessage('Log Out', 'Are you sure you want to Log Out?',
       async () => {
-        // debugger
         let req = new UserLogoutRequest();
         req.LoginToken = this.sessionValues.CurrentLoginToken;
         let _ = await this.servercommunicator.LogoutUser(req)
@@ -473,28 +465,6 @@ export class SidebarlayoutComponent implements OnInit {
     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.CompnyList = lst;
   }
-
-  // checkIfDropdownShouldBeDisabled(url: string) {
-  //   const disabledRoutes = [
-  //     '/homepage/Website/Unit_Master_Details',
-  //     '/homepage/Website/Material_Master_Details',
-  //     '/homepage/Website/Material_Master_Details',
-  //     '/homepage/Website/Stage_Master_Details',
-  //     '/homepage/Website/Marketing_Master_Details',
-  //     '/homepage/Website/Vendor_Master_Details',
-  //     '/homepage/Website/Vehicle_Master_Details',
-  //     '/homepage/Website/Bank_Master_Details',
-  //     '/homepage/Website/User_Master_Details',
-  //     '/homepage/Website/Company_Master_Details',
-  //     '/homepage/Website/Department_Master_Details',
-  //     '/homepage/Website/User_Role_Master_Details',
-  //     '/homepage/Website/Employee_Master_Details',
-      
-  //   ];
-    
-  //   // Disable dropdown if current route matches
-  //   this.isDropdownDisabled = disabledRoutes.includes(url);
-  // }
 
   changecompany(ref: number) {    
     const selectedCompany = this.CompnyList.find(company => company.p.Ref === ref);
