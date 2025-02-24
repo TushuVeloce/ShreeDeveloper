@@ -403,8 +403,8 @@ export class ServerCommunicatorService {
   }
 
   public async LogoutUser(req: UserLogoutRequest) {
-    let apiRoot = this.sessionValues.cloudUIController;
-    let url = `${apiRoot}/logoutuser`;
+    let apiRoot = this.sessionValues.requestController;
+    let url = `${apiRoot}/logoutsystemuser`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

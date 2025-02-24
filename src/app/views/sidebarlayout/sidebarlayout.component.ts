@@ -67,7 +67,7 @@ export class SidebarlayoutComponent implements OnInit {
   constructor(public router: Router, public themeService: ThemeService, private el: ElementRef, private renderer: Renderer2,
     public appStateManagement: AppStateManageService,
     private sessionValues: SessionValues, private cdr: ChangeDetectorRef,
-    private uiUtils: UIUtils, private companystatemanagement: CompanyStateManagement) {
+    private uiUtils: UIUtils, private companystatemanagement: CompanyStateManagement,private servercommunicator: ServerCommunicatorService,) {
 
       
     this.routerChangedSubscription = this.router.events.subscribe(event => {
@@ -206,13 +206,15 @@ export class SidebarlayoutComponent implements OnInit {
   }
 
   logout = async () => {
-    // await this.uiUtils.askForConfirmation('Log Out', 'Are you sure you want to Log Out?',
-    //   async () => {
-    //     let req = new UserLogoutRequest();
-    //     req.LoginToken = this.sessionValues.CurrentLoginToken;
-    //     let _ = await this.serverCommunicator.LogoutUser(req)
-    //     await this.router.navigate(['/']);
-    //   });
+    // debugger
+    await this.uiUtils.showConfirmationMessage('Log Out', 'Are you sure you want to Log Out?',
+      async () => {
+        // debugger
+        let req = new UserLogoutRequest();
+        req.LoginToken = this.sessionValues.CurrentLoginToken;
+        let _ = await this.servercommunicator.LogoutUser(req)
+        await this.router.navigate(['/']);
+      });
   }
 
   openMap: { [name: string]: boolean } = {
