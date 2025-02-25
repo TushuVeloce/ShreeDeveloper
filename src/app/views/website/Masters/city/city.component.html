@@ -11,7 +11,7 @@
       <div class="row">
         <div class="col-md-4 mb-2">
           <label for="CountryRef"><b>Country Name</b></label>
-          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="CountryRef"
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="CountryRef"
             name="CountryRef" required id="CountryRef" (ngModelChange)="getStateListByCountryRef(CountryRef)">
             <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
               [nzValue]="country.p.Ref"></nz-option>
