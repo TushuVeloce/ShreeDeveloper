@@ -72,6 +72,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     this.Entity.p.StateRef = 0;
     this.Entity.p.CityRef = 0;
     this.StateList = [];
+    this.CityList = [];
     let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.StateList = lst;
   }
