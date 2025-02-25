@@ -29,6 +29,7 @@ export class CompanyProps {
   public CINNO:  string='';
   public DateOfInCorporation:string = '';
   public LastDateOfFirstFinancialYear:  string='';
+  public Notes:  string='';
   public CountryRef:  number = 9162;
   public readonly CountryName: string='';
   public StateRef:  number = 10262;
@@ -93,6 +94,7 @@ export class Company implements IPersistable<Company> {
     if (this.p.GSTIN == '') vra.add('GSTIn', 'GST In cannot be blank.');
     if (this.p.Pan == '') vra.add('Pan', 'Pan cannot be blank.');
     if (this.p.CINNO == '') vra.add('CINNo', 'CIN No cannot be blank.');
+    if (this.p.Notes == '') vra.add('Notes', 'Notes cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {

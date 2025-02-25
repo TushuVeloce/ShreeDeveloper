@@ -228,7 +228,19 @@
       </div>
       </div>
       <div class="row" style="margin-top: 1rem">
-        <div class="col-md-6 mb-2">
+        <div class="col-md-4">
+          <label>Notes</label>
+          <input
+            type="text"
+            [(ngModel)]="Entity.p.Notes"
+            name="Notes"
+            class="form-control"
+            id="Notes"
+            required
+            placeholder="Enter Notes"
+          />
+      </div>
+        <div class="col-md-4 mb-2">
           <label><b>Date Of Encorporation</b></label>
           <input
             type="date"
@@ -240,7 +252,7 @@
             placeholder="Select Date"
           />
         </div>
-        <div class="col-md-6 mb-2">
+        <div class="col-md-4 mb-2">
           <label><b>Last Date Of Financial Year </b></label>
           <input
             type="date"

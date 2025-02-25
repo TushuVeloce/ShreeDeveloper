@@ -67,6 +67,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
     }
   }
   async ngOnInit() {
+    this.appStateManage.setDropdownDisabled(true);
     await this.FormulateCountryList();
 
     // Load State based on Default Country Ref
