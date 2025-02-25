@@ -30,6 +30,7 @@ export class CountryComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    this.appStateManage.setDropdownDisabled(true);
     await this.FormulateCountryList();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');

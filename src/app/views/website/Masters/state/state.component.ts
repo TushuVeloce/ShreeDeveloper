@@ -28,6 +28,7 @@ export class StateComponent implements OnInit {
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 
   async ngOnInit() {
+    this.appStateManage.setDropdownDisabled(true);
     await this.FormulateCountryList();
     this.loadPaginationData();
   }

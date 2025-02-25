@@ -30,6 +30,7 @@ export class CityComponent implements OnInit {
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 
   async ngOnInit() {
+    this.appStateManage.setDropdownDisabled(true);
     await this.FormulateCountryList();
     this.loadPaginationData();
   }
@@ -42,6 +43,7 @@ export class CityComponent implements OnInit {
   }
 
   getStateListByCountryRef = async (CountryRef: number) => {
+    this.Entity.p.StateRef = 0;
     this.StateList = [];
     this.MasterList = [];
     this.DisplayMasterList = [];
