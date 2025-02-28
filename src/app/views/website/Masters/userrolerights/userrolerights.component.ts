@@ -125,7 +125,7 @@ export class UserrolerightsComponent implements OnInit {
 
   loadRoleRightsFromStorage(): void {
     const storedData = localStorage.getItem('userRoleRights');
-    console.log('Stored Data:', storedData);
+    // console.log('Stored Data:', storedData);
 
     if (storedData) {
       const parsedData = JSON.parse(storedData);
