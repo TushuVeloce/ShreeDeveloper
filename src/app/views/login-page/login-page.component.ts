@@ -38,34 +38,34 @@ export class LoginPageComponent implements OnInit {
 
   ngOnInit() { }
   Login = async () => {
-    debugger
-    if (this.UserId === '') {
-      this.uiUtils.showErrorMessage('Error', 'Please Enter Email ID');
-      return
-    } else if (this.Password === '') {
-      this.uiUtils.showErrorMessage('Error', 'Please Enter Password');
-      return
-    }
+    // debugger
+    // if (this.UserId === '') {
+    //   this.uiUtils.showErrorMessage('Error', 'Please Enter Email ID');
+    //   return
+    // } else if (this.Password === '') {
+    //   this.uiUtils.showErrorMessage('Error', 'Please Enter Password');
+    //   return
+    // }
 
-    let req = new UserLoginRequest();
-    req.UserId = this.UserId;
-    req.Password = this.Password;
-    // req.LoginDeviceId = this.sessionValues.LoginDeviceId;
-    // req.SenderURL;
+    // let req = new UserLoginRequest();
+    // req.UserId = this.UserId;
+    // req.Password = this.Password;
+    // // req.LoginDeviceId = this.sessionValues.LoginDeviceId;
+    // // req.SenderURL;
 
-    const response = await this.servercommunicator.LoginUser(req);
+    // const response = await this.servercommunicator.LoginUser(req);
 
-    if (!response.Successful) {
-      await this.uiUtils.showErrorMessage('Error', response.Message);
-      return
+    // if (!response.Successful) {
+    //   await this.uiUtils.showErrorMessage('Error', response.Message);
+    //   return
+    // } else {
+    //   //const user = { UserDisplayName: response.UserDisplayName, EMailId: response.EMailId, Role: response.Role, PhoneNos: response.PhoneNos }
+    //this.appStateManage.setUserJSON(user);
+    if (this.isMobile) {
+      await this.router.navigate(['/app_homepage']);  // Navigate to mobile
     } else {
-      //const user = { UserDisplayName: response.UserDisplayName, EMailId: response.EMailId, Role: response.Role, PhoneNos: response.PhoneNos }
-      //this.appStateManage.setUserJSON(user);
-      if (this.isMobile) {
-        await this.router.navigate(['/app_homepage']);  // Navigate to mobile
-      } else {
-        await this.router.navigate(['/homepage']);  // Navigate to web
-      }
+      await this.router.navigate(['/homepage']);  // Navigate to web
     }
   }
+  // }
 }

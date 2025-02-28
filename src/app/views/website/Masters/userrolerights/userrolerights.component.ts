@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { UserRole } from 'src/app/classes/domain/entities/website/masters/userrole/userrole';
 import { UserRoleRights } from 'src/app/classes/domain/entities/website/masters/userrolerights/userrolerights';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -24,6 +25,7 @@ export class UserrolerightsComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
 
+  ModuleList = DomainEnums.ModuleList(true, '--Select Module Type--');
   headers: string[] = ['Module Name','Add','Edit','Delete','View','Print','Exports',];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
@@ -31,6 +33,8 @@ export class UserrolerightsComponent implements OnInit {
   ngOnInit() {
     this.FormulateCountryList();
     this.loadRoleRightsFromStorage();
+    console.log('Modules:', this.ModuleList);
+    
   }
 
 
@@ -38,14 +42,6 @@ export class UserrolerightsComponent implements OnInit {
     let lst = await UserRole.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.UserRoleList = lst;
   }
-
-  FormRef: number = 0;
-  FormList: string[] = ['Masters', 'Transactions', 'Reports'];
-  getOwnerRef(Ref: any) {
-    // code here 
-    console.log('OwnerRef');
-  }
-
   // New Code 
   modules = [
     { name: 'Dashboard',add: false, edit: false, delete: false, view: false, print: false, exports: false },

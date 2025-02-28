@@ -30,6 +30,12 @@ export enum CompanyType {
   Cooperative = 50
 }
 
+export enum ModuleType {
+  None = 0,
+  Masters = 100,
+  Transactions  = 200,
+  Reports = 300
+}
 // export enum LoginStatusModes {
 //   None = 0,
 //   Enable = 'true',
@@ -211,6 +217,39 @@ export class DomainEnums {
     if (withAllOption) {
       let allEntry = {
         Ref: Company.None,
+        Name: allOptionName
+      }
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+  // User Role Rights
+  public static ModuleName(company: ModuleType) {
+    switch (company) {
+      case ModuleType.Masters: return 'Masters';
+      case ModuleType.Transactions: return 'Transactions';
+      case ModuleType.Reports: return 'Reports';
+      default: return '';
+    }
+  }
+
+  public static ModuleList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+    let result = [
+      {
+        Ref: ModuleType.Masters, Name: DomainEnums.ModuleName(ModuleType.Masters)
+      },
+      {
+        Ref: ModuleType.Transactions, Name: DomainEnums.ModuleName(ModuleType.Transactions)
+      },
+      {
+        Ref: ModuleType.Reports, Name: DomainEnums.ModuleName(ModuleType.Reports)
+      }
+      
+    ]
+    if (withAllOption) {
+      let allEntry = {
+        Ref: ModuleType.None,
         Name: allOptionName
       }
       result.unshift(allEntry);

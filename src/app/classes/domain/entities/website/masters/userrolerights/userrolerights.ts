@@ -18,6 +18,9 @@ export class UserRoleRightsProps {
   public UserRoleRef: number = 0;
   public readonly UserRoleName: string = '';
 
+  public readonly ModuleRef: number = 0;
+  public readonly ModuleName: string = '';
+
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
 

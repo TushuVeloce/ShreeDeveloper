@@ -23,9 +23,9 @@
       </div>
       <div class="col-md-4 mb-2">
         <label for="FormList"><b>Select Module</b></label>
-        <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="FormRef" name="FormRef"
-          [nzSize]="'large'" [(ngModel)]="FormRef" (ngModelChange)="getOwnerRef(FormRef)">
-          <nz-option *ngFor="let form of FormList" [nzValue]="form" [nzLabel]="form"></nz-option>
+        <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="module" name="module"
+          [nzSize]="'large'" [(ngModel)]="Entity.p.ModuleName">
+          <nz-option *ngFor="let module of ModuleList" [nzValue]="module" [nzLabel]="module.Name"></nz-option>
         </nz-select>
       </div>
     </div>
