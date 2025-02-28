@@ -56,7 +56,7 @@ export class UserRoleRightsProps {
 }
 
 export class UserRoleRights implements IPersistable<UserRoleRights> {
-  public static readonly MasterTableName: string = 'UserRoleRightsMaster';
+  public static readonly MasterTableName: string = 'UserRoleRights';
 
   private constructor(public readonly p: UserRoleRightsProps, public readonly AllowEdit: boolean) {
 
