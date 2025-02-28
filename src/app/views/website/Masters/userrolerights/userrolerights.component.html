@@ -23,7 +23,7 @@
       </div>
       <div class="col-md-4 mb-2">
         <label for="ModuleRef"><b>Select Module</b></label>
-        <nz-select class="nzSelect-light" nzShowSearch  nzPlaceHolder="Select" id="ModuleRef" name="ModuleRef"
+        <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select" id="ModuleRef" name="ModuleRef"
           [nzSize]="'large'" [(ngModel)]="Entity.p.ModuleRef" (ngModelChange)="onclick(Entity.p.ModuleRef)">
           <nz-option *ngFor="let module of ModuleList" [nzValue]="module.Ref" [nzLabel]="module.Name"></nz-option>
         </nz-select>
@@ -68,4 +68,7 @@
     </div>
   </div>
   <!-- table end -->
+  <div class="row align-items-center justify-content-center" style="margin-top: 2rem">
+    <button type="button" class="btn btn-sm btn-primary custom-btn" (click)="SaveUserRoleRights()">Save</button>
+  </div>
 </div>
