@@ -22,10 +22,10 @@
         </nz-select>
       </div>
       <div class="col-md-4 mb-2">
-        <label for="FormList"><b>Select Module</b></label>
-        <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="module" name="module"
-          [nzSize]="'large'" [(ngModel)]="Entity.p.ModuleName">
-          <nz-option *ngFor="let module of ModuleList" [nzValue]="module" [nzLabel]="module.Name"></nz-option>
+        <label for="ModuleRef"><b>Select Module</b></label>
+        <nz-select class="nzSelect-light" nzShowSearch  nzPlaceHolder="Select" id="ModuleRef" name="ModuleRef"
+          [nzSize]="'large'" [(ngModel)]="Entity.p.ModuleRef" (ngModelChange)="onclick(Entity.p.ModuleRef)">
+          <nz-option *ngFor="let module of ModuleList" [nzValue]="module.Ref" [nzLabel]="module.Name"></nz-option>
         </nz-select>
       </div>
     </div>

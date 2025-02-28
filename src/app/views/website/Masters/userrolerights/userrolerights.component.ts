@@ -24,9 +24,9 @@ export class UserrolerightsComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-
   ModuleList = DomainEnums.ModuleList(true, '--Select Module Type--');
   headers: string[] = ['Module Name','Add','Edit','Delete','View','Print','Exports',];
+  modules: { name: string; add: boolean; edit: boolean; delete: boolean; view: boolean; print: boolean; exports: boolean }[] = [];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
 
@@ -43,11 +43,37 @@ export class UserrolerightsComponent implements OnInit {
     this.UserRoleList = lst;
   }
   // New Code 
-  modules = [
+  
+  mastermodules = [
     { name: 'Dashboard',add: false, edit: false, delete: false, view: false, print: false, exports: false },
     { name: 'User Management',add: false, edit: false, delete: false, view: false, print: false, exports: false},
     { name: 'Settings',add: false, edit: false, delete: false, view: false, print: false, exports: false},
   ];
+
+  transactionsmodules = [
+    { name: 'Dashboarddddd',add: false, edit: false, delete: false, view: false, print: false, exports: false },
+    { name: 'User Managementtttt',add: false, edit: false, delete: false, view: false, print: false, exports: false},
+    { name: 'Settingssss',add: false, edit: false, delete: false, view: false, print: false, exports: false},
+  ];
+
+  reportsmodules = [
+    { name: 'DDDDDashboard',add: false, edit: false, delete: false, view: false, print: false, exports: false },
+    { name: 'UUUUUser Management',add: false, edit: false, delete: false, view: false, print: false, exports: false},
+    { name: 'SSSSSettings',add: false, edit: false, delete: false, view: false, print: false, exports: false},
+  ];
+
+
+  onclick(ref:number){
+      if(ref == 0){
+        this.modules = []
+      }else if(ref == 100){
+        this.modules = this.mastermodules
+      }else if(ref == 200){
+        this.modules = this.transactionsmodules    
+      }else if(ref == 300){
+        this.modules = this.reportsmodules    
+  }
+}
 
   updateRoleRights(index: number, right: keyof typeof this.modules[number]) {
     const module = this.modules[index];
