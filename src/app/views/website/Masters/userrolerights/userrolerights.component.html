@@ -22,8 +22,8 @@
         </nz-select>
       </div>
       <div class="col-md-4 mb-2">
-        <label for="ModuleRef"><b>Select Module</b></label>
-        <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select" id="ModuleRef" name="ModuleRef"
+        <label for="ModuleTypeRef"><b>Select Module</b></label>
+        <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select" id="ModuleTypeRef" name="ModuleTypeRef"
           [nzSize]="'large'" [(ngModel)]="Entity.p.ModuleTypeRef" (ngModelChange)="onclick(Entity.p.ModuleTypeRef)">
           <nz-option *ngFor="let module of ModuleList" [nzValue]="module.Ref" [nzLabel]="module.Name"></nz-option>
         </nz-select>
@@ -42,25 +42,25 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let module of Entity.p.Feature; let i = index">
+          <tr *ngFor="let module of modules; let i = index">
             <td Class="tbldata">{{ module.FeatureName }}</td>
             <td Class="tbldata"><label nz-checkbox class="labledt" [(ngModel)]="module.CanAdd"
-                (ngModelChange)="updateRoleRights(i, 'add')"></label>
+                (ngModelChange)="updateRoleRights(i, 'CanAdd')"></label>
             </td>
             <td Class="tbldata"><label nz-checkbox [(ngModel)]="module.CanEdit"
-                (ngModelChange)="updateRoleRights(i, 'edit')"></label>
+                (ngModelChange)="updateRoleRights(i, 'CanEdit')"></label>
             </td>
             <td Class="tbldata"><label nz-checkbox [(ngModel)]="module.CanDelete"
-                (ngModelChange)="updateRoleRights(i, 'delete')"></label>
+                (ngModelChange)="updateRoleRights(i, 'CanDelete')"></label>
             </td>
             <td Class="tbldata"><label nz-checkbox [(ngModel)]="module.CanView"
-                (ngModelChange)="updateRoleRights(i, 'view')"></label>
+                (ngModelChange)="updateRoleRights(i, 'CanView')"></label>
             </td>
             <td Class="tbldata"><label nz-checkbox [(ngModel)]="module.CanPrint"
-                (ngModelChange)="updateRoleRights(i, 'print')"></label>
+                (ngModelChange)="updateRoleRights(i, 'CanPrint')"></label>
             </td>
             <td Class="tbldata"><label nz-checkbox [(ngModel)]="module.CanExport"
-                (ngModelChange)="updateRoleRights(i, 'exports')"></label>
+                (ngModelChange)="updateRoleRights(i, 'CanExport')"></label>
             </td>
           </tr>
         </tbody>
