@@ -41,14 +41,12 @@ export class CompanyMasterComponent implements OnInit {
 
   onEditClicked = async (item: Company) => {
     this.SelectedCompany = item.GetEditableVersion();
-    console.log('SelectedCompany :', this.SelectedCompany);
     Company.SetCurrentInstance(this.SelectedCompany);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/homepage/Website/Company_Master_Details']);
   }
 
   onDeleteClicked = async (Company: Company) => {
-    debugger
     await this.uiUtils.showConfirmationMessage('Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
       Are you sure that you want to DELETE this Company?`,

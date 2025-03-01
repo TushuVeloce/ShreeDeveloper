@@ -49,7 +49,6 @@
 
   .tblheader {
     text-align: center !important;
-    padding-left: 10px !important;
     font-weight: bold !important;
     background-color: #FBD1D1 !important;
     color: #A52A2A !important;
@@ -61,12 +60,30 @@
 
   .tbldata {
     text-align: center !important;
-    padding-left: 10px !important;
     font-size: medium !important;
     border-bottom: 1.5px solid rgba(200, 186, 186, 0.2) !important;
     background-color: white !important;
     color: black !important;
   }
+
+  // Alignment classes
+.left-align {
+  padding-left: 10px !important;
+  font-size: medium !important;
+  border-bottom: 1.5px solid rgba(200, 186, 186, 0.2) !important;
+  background-color: white !important;
+  color: black !important;
+  text-align: left !important;
+}
+
+.right-align {
+  padding-left: 10px !important;
+  font-size: medium !important;
+  border-bottom: 1.5px solid rgba(200, 186, 186, 0.2) !important;
+  background-color: white !important;
+  color: black !important;
+  text-align: right !important;
+}
 
   .btn {
     background-color: brown;
@@ -129,16 +146,11 @@
   color: white;
 }
 
-
-
-
 .detail_title {
     color: brown;
     font-size: large;
     font-weight: 600;
-    font-size: 24px;
-
-
+    font-size: 22px;
 }
 
 form {
@@ -157,8 +169,10 @@ form {
 .title_light {
   color: brown;
   font-weight: bold;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 600;
+  justify-content: center;
+  display: flex;
 
 }
 
@@ -403,6 +417,19 @@ nz-select {
   margin-right: 15px;
   margin-bottom: 15px;
 }
+
+
+// .fixed-pagination2 {
+//   width: 100%;
+//   padding: 10px 12px;
+//   text-align: center;
+//   position: fixed;
+//   bottom: 0;
+//   left: 0;
+//   background: #fff; // Keeps it visible on all backgrounds
+//   box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); // Adds a subtle top shadow
+//   z-index: 1000; // Keeps pagination above other elements
+// }
 
 .table-wrapper {
   display: flex;
