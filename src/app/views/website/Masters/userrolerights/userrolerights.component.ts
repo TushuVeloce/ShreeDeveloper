@@ -29,7 +29,7 @@ export class UserrolerightsComponent implements OnInit {
   total = 0;
   ModuleList = DomainEnums.ModuleList(true, '--Select Module Type--');
   headers: string[] = ['Module Name', 'Add', 'Edit', 'Delete', 'View', 'Print', 'Exports',];
-  modules: { name: string; add: boolean; edit: boolean; delete: boolean; view: boolean; print: boolean; exports: boolean }[] = [];
+  modules: { FeatureName: string; CanAdd: boolean; CanEdit: boolean; CanDelete: boolean; CanView: boolean; CanPrint: boolean; CanExport: boolean }[] = [];
 
   constructor(private uiUtils: UIUtils, private router: Router,
      private appStateManage: AppStateManageService,
@@ -38,7 +38,7 @@ export class UserrolerightsComponent implements OnInit {
 
   ngOnInit() {
     this.FormulateCountryList();
-    this.loadRoleRightsFromStorage();
+    // this.loadRoleRightsFromStorage();
     this.mastermodules.forEach(e=> this.Entity.p.Feature.push(e as any));
     console.log('Modules:', this.ModuleList);
 
@@ -66,40 +66,44 @@ export class UserrolerightsComponent implements OnInit {
   ];
 
   transactionsmodules = [
-    { Feature: 'Account Transactions', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    { Feature: 'Expense Transactions', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    { Feature: 'Income Transactions', add: false, edit: false, delete: false, view: false, print: false, exports: false },
+    { FeatureName: 'Dashboardd', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
+    { FeatureName: 'Material Masterr', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
+    // { Feature: 'Account Transactions', add: false, edit: false, delete: false, view: false, print: false, exports: false },
+    // { Feature: 'Expense Transactions', add: false, edit: false, delete: false, view: false, print: false, exports: false },
+    // { Feature: 'Income Transactions', add: false, edit: false, delete: false, view: false, print: false, exports: false },
   ];
 
   reportsmodules = [
-    { Feature: 'Billing Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    { Feature: 'Office Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    { Feature: 'Stock Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    { Feature: 'CRM Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    { Feature: 'Booking Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    { Feature: 'Follow Up Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    { Feature: 'Employee Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    { Feature: 'Marketing Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    { Feature: 'Stages Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    { Feature: 'Account Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
+    { FeatureName: 'DDashboard', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
+    { FeatureName: 'MMaterial Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
+    // { Feature: 'Billing Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
+    // { Feature: 'Office Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
+    // { Feature: 'Stock Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
+    // { Feature: 'CRM Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
+    // { Feature: 'Booking Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
+    // { Feature: 'Follow Up Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
+    // { Feature: 'Employee Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
+    // { Feature: 'Marketing Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
+    // { Feature: 'Stages Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
+    // { Feature: 'Account Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
   ];
 
 
   onclick(ref: number) {
-    // if (ref == 0) {
-    //   this.modules = []
-    // } else if (ref == 100) {
-    //   this.mastermodules
-    // } else if (ref == 200) {
-    //   this.modules = this.transactionsmodules
-    // } else if (ref == 300) {
-    //   this.modules = this.reportsmodules
-    // }
+    if (ref == 0) {
+      this.modules = []
+    } else if (ref == 100) {
+      this.modules = this.mastermodules
+    } else if (ref == 200) {
+      this.modules = this.transactionsmodules
+    } else if (ref == 300) {
+       this.modules = this.reportsmodules
+    }
   }
 
   updateRoleRights(index: number, right: keyof typeof this.modules[number]) {
     const module = this.modules[index];
-    console.log(`Module: ${module.name}, Right: ${right}, Status: ${module[right]}`);
+    console.log(`Module: ${module.FeatureName}, Right: ${right}, Status: ${module[right]}`);
 
 
     // Build the updated JSON structure
@@ -123,32 +127,32 @@ export class UserrolerightsComponent implements OnInit {
     // localStorage.setItem('userRoleRights', JSON.stringify(roleRightsObject));
   }
 
-  loadRoleRightsFromStorage(): void {
-    const storedData = localStorage.getItem('userRoleRights');
-    // console.log('Stored Data:', storedData);
+  // loadRoleRightsFromStorage(): void {
+  //   const storedData = localStorage.getItem('userRoleRights');
+  //   // console.log('Stored Data:', storedData);
 
-    if (storedData) {
-      const parsedData = JSON.parse(storedData);
-      if (parsedData?.Master?.length) {
-        const masterEntry = parsedData.Master[0]; // Assuming only one master entry
+  //   if (storedData) {
+  //     const parsedData = JSON.parse(storedData);
+  //     if (parsedData?.Master?.length) {
+  //       const masterEntry = parsedData.Master[0]; // Assuming only one master entry
 
-        // Convert the master object back to the modules array
-        this.modules = Object.keys(masterEntry).map(moduleName => ({
-          name: moduleName,
-          add: masterEntry[moduleName].Add,
-          edit: masterEntry[moduleName].Edit,
-          delete: masterEntry[moduleName].Delete,
-          view: masterEntry[moduleName].View,
-          print: masterEntry[moduleName].Print,
-          exports: masterEntry[moduleName].Exports
-        }));
-        console.log('Loaded modules:', this.modules);
+  //       // Convert the master object back to the modules array
+  //       this.modules = Object.keys(masterEntry).map(moduleName => ({
+  //         name: moduleName,
+  //         add: masterEntry[moduleName].Add,
+  //         edit: masterEntry[moduleName].Edit,
+  //         delete: masterEntry[moduleName].Delete,
+  //         view: masterEntry[moduleName].View,
+  //         print: masterEntry[moduleName].Print,
+  //         exports: masterEntry[moduleName].Exports
+  //       }));
+  //       console.log('Loaded modules:', this.modules);
 
-      }
-    } else {
-      console.log('No role rights data found in local storage.');
-    }
-  }
+  //     }
+  //   } else {
+  //     console.log('No role rights data found in local storage.');
+  //   }
+  // }
 
   SaveUserRoleRights = async () => {
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
