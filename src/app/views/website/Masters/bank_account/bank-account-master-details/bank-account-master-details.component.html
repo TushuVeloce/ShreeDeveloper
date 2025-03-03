@@ -1,0 +1,62 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackBankAccount()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">{{ DetailsFormTitle }}</span>
+      </div>
+    </div>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-6">
+          <label>Bank Name</label>
+          <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
+            placeholder="Enter Bank Name" />
+        </div>
+        <div class="col-md-6">
+          <label>Branch Name</label>
+          <input type="text" [(ngModel)]="Entity.p.BranchName" name="BranchName" class="form-control" id="BranchName"
+            required placeholder="Enter Branch Name" />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-6">
+          <label>Account No</label>
+          <input type="text" [(ngModel)]="Entity.p.AccountNumber" name="AccountNo" class="form-control" id="AccountNo"
+            required placeholder="Enter Account Number" />
+        </div>
+        <div class="col-md-6">
+          <label>IFSC Code</label>
+          <input type="text" [(ngModel)]="Entity.p.IFSCCode" name="IFSCCode" class="form-control" id="IFSCCode" required
+            placeholder="Enter IFSC Code" />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-6">
+          <label>Opening Balance</label>
+          <input type="text" [(ngModel)]="Entity.p.OpeningBalance" name="OpeningBalance" class="form-control"
+            id="OpeningBalance" required placeholder="Enter Opening Balance" />
+        </div>
+        <div class="col-md-6">
+          <label>Date of Opening</label>
+          <input type="date" [(ngModel)]="Entity.p.DateofOpening" name="DateofOpening" class="form-control"
+            id="DateofOpening" required />
+        </div>
+      </div>
+      <div style=" justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
+        <div>
+          <button type="button" class="btn" (click)="SaveBankAccountMaster()">
+            Save
+          </button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackBankAccount()">Back</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
