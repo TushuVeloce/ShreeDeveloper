@@ -292,7 +292,7 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '',
       },
       {
-        Name: 'Marketing Master',
+        Name: 'Marketing Type Master',
         RouterLink: '/homepage/Website/Marketing_Master',
         LogoPath: '',
       },
@@ -301,13 +301,13 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Vendor_Master',
         LogoPath: '',
       },
+      // {
+      //   Name: 'Vehicle Master',
+      //   RouterLink: '/homepage/Website/Vehicle_Master',
+      //   LogoPath: '',
+      // },
       {
-        Name: 'Vehicle Master',
-        RouterLink: '/homepage/Website/Vehicle_Master',
-        LogoPath: '',
-      },
-      {
-        Name: 'Bank Master',
+        Name: 'Bank Account Master',
         RouterLink: '/homepage/Website/Bank_Master',
         LogoPath: '',
       },
@@ -342,7 +342,7 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '',
       },
       {
-        Name: 'User Master',
+        Name: 'External Users Master',
         RouterLink: '/homepage/Website/User_Master',
         LogoPath: '',
       },
