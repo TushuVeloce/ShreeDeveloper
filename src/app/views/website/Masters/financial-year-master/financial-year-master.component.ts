@@ -6,6 +6,7 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+import { Utils } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-financial-year-master',
@@ -25,12 +26,16 @@ export class FinancialYearMasterComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  companyName = this.companystatemanagement.SelectedCompanyName;
+  isSaveDisabled: boolean = false;
+  private IsNewEntity: boolean = true;
+
 
 
 
   headers: string[] = ['Sr.No.', 'From Date', 'To Date'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,
-    private dtu: DTU, private datePipe: DatePipe,private companystatemanagement: CompanyStateManagement
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private utils: Utils,
+    private dtu: DTU, private datePipe: DatePipe,private companystatemanagement: CompanyStateManagement,
   ) {    effect(() => {
         this.getFinancialYearListByCompanyRef()
       });
@@ -39,15 +44,43 @@ export class FinancialYearMasterComponent implements OnInit {
   async ngOnInit() {
    // await this.FormulateMasterList();
     this.convertdate();
+    this.CreateNewFinancialYear();
 
   }
 
-  // private FormulateMasterList = async () => {
+  //  CreateNewFinancialYear = async () => {
   //   let lst = await FinancialYear.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
   //   this.MasterList = lst;
-
   //   this.DisplayMasterList = this.MasterList
   // }
+
+  CreateNewFinancialYear = async () => {
+      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+      let entityToSave = this.Entity.GetEditableVersion();
+      console.log('entityToSave :', entityToSave);
+      let entitiesToSave = [entityToSave]
+      // await this.Entity.EnsurePrimaryKeysWithValidValues()
+      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+      if (!tr.Successful) {
+        this.isSaveDisabled = false;
+        this.uiUtils.showErrorToster(tr.Message);
+        return
+      }
+      else {
+        this.isSaveDisabled = false;
+        // this.onEntitySaved.emit(entityToSave);
+        if (this.IsNewEntity) {
+          await this.uiUtils.showSuccessToster('Fianacial Master Created successfully!');
+          this.Entity = FinancialYear.CreateNewInstance();
+        } else {
+          await this.uiUtils.showSuccessToster('Fianacial Master Created successfully!');
+        }
+      }
+      this.getFinancialYearListByCompanyRef()
+    }
+
+
+
 
 
 

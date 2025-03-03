@@ -18,40 +18,40 @@
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
-            <label>Company Name</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.Name"
-              name="Name"
-              class="form-control"
-              id="Name"
-              required
-              placeholder="Enter Company Name"
-            />
+          <label>Company Name</label>
+          <input
+            type="text"
+            [(ngModel)]="Entity.p.Name"
+            name="Name"
+            class="form-control"
+            id="Name"
+            required
+            placeholder="Enter Company Name"
+          />
         </div>
         <div class="col-md-4">
-            <label>Contact Nos</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.Contacts"
-              name="ContactNos"
-              class="form-control"
-              id="ContactNos"
-              required
-              placeholder="Enter Contact No"
-            />
+          <label>Contact Nos</label>
+          <input
+            type="text"
+            [(ngModel)]="Entity.p.Contacts"
+            name="ContactNos"
+            class="form-control"
+            id="ContactNos"
+            required
+            placeholder="Enter Contact No"
+          />
         </div>
         <div class="col-md-4">
-            <label>Company Email Id </label>
-            <input
-              type="email"
-              [(ngModel)]="Entity.p.EmailId"
-              name="EmailId"
-              class="form-control"
-              id="EmailId"
-              required
-              placeholder="Enter Company Email Id"
-            />
+          <label>Company Email Id </label>
+          <input
+            type="email"
+            [(ngModel)]="Entity.p.EmailId"
+            name="EmailId"
+            class="form-control"
+            id="EmailId"
+            required
+            placeholder="Enter Company Email Id"
+          />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
@@ -85,8 +85,8 @@
             required
             placeholder="Enter Owner Name"
           />
-      </div>
-      <div class="col-md-4">
+        </div>
+        <div class="col-md-4">
           <label>Pin Code</label>
           <input
             type="text"
@@ -97,9 +97,9 @@
             required
             placeholder="Enter Pin Code"
           />
-      </div>
-      <div class="row" style="margin-top: 1rem">
-        <div class="col-md-6">
+        </div>
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-6">
             <label>Address Line 1</label>
             <input
               type="text"
@@ -110,8 +110,8 @@
               required
               placeholder="Enter Address Line 1"
             />
-        </div>
-        <div class="col-md-6">
+          </div>
+          <div class="col-md-6">
             <label>Address Line 2</label>
             <input
               type="text"
@@ -122,73 +122,73 @@
               required
               placeholder="Enter Address Line 2"
             />
+          </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4">
-          <label for="CountryRef"><b>Country</b></label>
-          <nz-select
-            class="nzSelect-light"
-            nzShowSearch
-            nzAllowClear
-            nzPlaceHolder="Select"
-            [nzSize]="'large'"
-            name="CountryRef"
-            id="CountryRef"
-            [(ngModel)]="Entity.p.CountryRef"
-            (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)"
-          >
-            <nz-option
-              *ngFor="let country of CountryList"
-              [nzLabel]="country.p.Name"
-              [nzValue]="country.p.Ref"
-            ></nz-option>
-          </nz-select>
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-4">
+            <label for="CountryRef"><b>Country</b></label>
+            <nz-select
+              class="nzSelect-light"
+              nzShowSearch
+              nzAllowClear
+              nzPlaceHolder="Select"
+              [nzSize]="'large'"
+              name="CountryRef"
+              id="CountryRef"
+              [(ngModel)]="Entity.p.CountryRef"
+              (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)"
+            >
+              <nz-option
+                *ngFor="let country of CountryList"
+                [nzLabel]="country.p.Name"
+                [nzValue]="country.p.Ref"
+              ></nz-option>
+            </nz-select>
+          </div>
+
+          <div class="col-md-4">
+            <label for="StateRef"><b>State</b></label>
+            <nz-select
+              class="nzSelect-light"
+              nzShowSearch
+              nzAllowClear
+              nzPlaceHolder="Select"
+              id="StateRef"
+              name="StateRef"
+              [nzSize]="'large'"
+              [(ngModel)]="Entity.p.StateRef"
+              (ngModelChange)="getCityListByStateRef(Entity.p.StateRef)"
+            >
+              <nz-option
+                *ngFor="let state of StateList"
+                [nzValue]="state.p.Ref"
+                [nzLabel]="state.p.Name"
+              ></nz-option>
+            </nz-select>
+          </div>
+
+          <div class="col-md-4">
+            <label for="CityRef"><b>City</b></label>
+            <nz-select
+              class="nzSelect-light"
+              nzShowSearch
+              nzAllowClear
+              nzPlaceHolder="Select"
+              id="CityRef"
+              name="CityRef"
+              [nzSize]="'large'"
+              [(ngModel)]="Entity.p.CityRef"
+            >
+              <nz-option
+                *ngFor="let city of CityList"
+                [nzValue]="city.p.Ref"
+                [nzLabel]="city.p.Name"
+              ></nz-option>
+            </nz-select>
+          </div>
         </div>
-        
-        <div class="col-md-4">
-          <label for="StateRef"><b>State</b></label>
-          <nz-select
-            class="nzSelect-light"
-            nzShowSearch
-            nzAllowClear
-            nzPlaceHolder="Select"
-            id="StateRef"
-            name="StateRef"
-            [nzSize]="'large'"
-            [(ngModel)]="Entity.p.StateRef"
-            (ngModelChange)="getCityListByStateRef(Entity.p.StateRef)"
-          >
-            <nz-option
-              *ngFor="let state of StateList"
-              [nzValue]="state.p.Ref"
-              [nzLabel]="state.p.Name"
-            ></nz-option>
-          </nz-select>
-        </div>
-        
-        <div class="col-md-4">
-          <label for="CityRef"><b>City</b></label>
-          <nz-select
-            class="nzSelect-light"
-            nzShowSearch
-            nzAllowClear
-            nzPlaceHolder="Select"
-            id="CityRef"
-            name="CityRef"
-            [nzSize]="'large'"
-            [(ngModel)]="Entity.p.CityRef"
-          >
-            <nz-option
-              *ngFor="let city of CityList"
-              [nzValue]="city.p.Ref"
-              [nzLabel]="city.p.Name"
-            ></nz-option>
-          </nz-select>
-        </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4">
+        <div class="row mb-3" style="margin-top: 1rem">
+          <div class="col-md-4">
             <label>GSTIN</label>
             <input
               type="text"
@@ -197,10 +197,10 @@
               class="form-control"
               id="GSTIN"
               required
-              placeholder="Enter GST No"
+              placeholder="Enter GSTIN"
             />
-        </div>
-        <div class="col-md-4">
+          </div>
+          <div class="col-md-4">
             <label>PAN </label>
             <input
               type="text"
@@ -209,11 +209,11 @@
               class="form-control"
               id="Pan"
               required
-              placeholder="Enter Pan No"
+              placeholder="Enter Pan"
             />
-        </div>
+          </div>
 
-        <div class="col-md-4">
+          <div class="col-md-4">
             <label>CIN</label>
             <input
               type="text"
@@ -222,12 +222,92 @@
               class="form-control"
               id="CINNO"
               required
-              placeholder="Enter CIN No"
+              placeholder="Enter CIN"
             />
+          </div>
         </div>
       </div>
+
+      <div class="row">
+        <div class="col-6">
+          <div class="col-md-12 mb-3">
+            <label>Notes</label>
+            <textarea
+              type="text"
+              [(ngModel)]="Entity.p.Notes"
+              name="Notes"
+              class="form-control"
+              id="Notes"
+              rows="2"
+              required
+              placeholder="Enter Notes"
+            ></textarea>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label><b>Date Of Incorporation</b></label>
+            <input
+              type="date"
+              name="DateOfInCorporation"
+              [(ngModel)]="dateOfInCorporation"
+              class="form-control date-input"
+              id="DateOfInCorporation"
+              required
+              placeholder="Select Date"
+            />
+          </div>
+          <div class="col-md-12">
+            <label><b>Last Date Of First Financial Year </b></label>
+            <input
+              type="date"
+              name="LastDateOfFirstFinancialYear "
+              [(ngModel)]="lastDateOfFirstFinancialYear"
+              class="form-control date-input"
+              id="LastDateOfFirstFinancialYear "
+              required
+              placeholder="Select Date"
+            />
+          </div>
+        </div>
+
+        <div class="col-6" style="flex: content; justify-content: center; justify-items: center" >
+          <div class="col-lg-5 col-md-5 col-sm-12">
+            <div class="text-align-center">
+              <label><b>Company Logo </b></label>
+            </div>
+            <div class="Company-Logo-container">
+              <!-- <img height="300px"
+                  [src]="file ? (file.name ? createObjectURL(file) : '/assets/images/UserImages/' + file) : '/assets/images/noimage.png'"
+                  class="profile-image" alt="Profile Image" />
+                <input type="file" nz-button nzType="default" id="CompanyLogo" class="file-upload"
+                  (change)="handleFileChange($event)" />
+                <div *ngIf="errors.profile_image" class="validation-error">
+                  {{ errors.profile_image }}
+                </div> -->
+              <ng-container *ngIf="imageUrl; else defaultImage">
+                <img [src]="imageUrl" alt="Company Logo" class="Company-Logo" />
+              </ng-container>
+              <ng-template #defaultImage>
+                <img
+                  src="/assets/images/noimage.png"
+                  alt="No Image"
+                  class="Company-Logo"
+                />
+              </ng-template>
+              <input
+                type="file"
+                (change)="handleFileChange($event)"
+                id="CompanyLogo"
+                class="file-upload"
+              />
+              <p *ngIf="errors.company_image" class="validation-error">
+                {{ errors.company_image }}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="row" style="margin-top: 1rem">
+
+      <!-- <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Notes</label>
           <input
@@ -239,9 +319,9 @@
             required
             placeholder="Enter Notes"
           />
-      </div>
+        </div>
         <div class="col-md-4 mb-2">
-          <label><b>Date Of Encorporation</b></label>
+          <label><b>Date Of Incorporation</b></label>
           <input
             type="date"
             name="DateOfInCorporation"
@@ -253,7 +333,7 @@
           />
         </div>
         <div class="col-md-4 mb-2">
-          <label><b>Last Date Of Financial Year </b></label>
+          <label><b>Last Date Of First Financial Year </b></label>
           <input
             type="date"
             name="LastDateOfFirstFinancialYear "
@@ -264,14 +344,14 @@
             placeholder="Select Date"
           />
         </div>
-      </div>
+      </div> -->
 
-      <div class="col-lg-5 col-md-5 col-sm-12">
+      <!-- <div class="col-lg-5 col-md-5 col-sm-12">
         <div class="text-align-center">
           <label><b>Company Logo </b></label>
         </div>
-        <div class="Company-Logo-container">
-          <!-- <img height="300px"
+        <div class="Company-Logo-container"> -->
+      <!-- <img height="300px"
             [src]="file ? (file.name ? createObjectURL(file) : '/assets/images/UserImages/' + file) : '/assets/images/noimage.png'"
             class="profile-image" alt="Profile Image" />
           <input type="file" nz-button nzType="default" id="CompanyLogo" class="file-upload"
@@ -279,16 +359,27 @@
           <div *ngIf="errors.profile_image" class="validation-error">
             {{ errors.profile_image }}
           </div> -->
-          <ng-container *ngIf="imageUrl; else defaultImage">
-            <img [src]="imageUrl" alt="Company Logo"  class="Company-Logo"/>
+      <!-- <ng-container *ngIf="imageUrl; else defaultImage">
+            <img [src]="imageUrl" alt="Company Logo" class="Company-Logo" />
           </ng-container>
           <ng-template #defaultImage>
-            <img src="/assets/images/noimage.png" alt="No Image"  class="Company-Logo"/>
+            <img
+              src="/assets/images/noimage.png"
+              alt="No Image"
+              class="Company-Logo"
+            />
           </ng-template>
-          <input type="file" (change)="handleFileChange($event)" id="CompanyLogo" class="file-upload"/>
-          <p *ngIf="errors.company_image" class="validation-error">{{ errors.company_image }}</p>
+          <input
+            type="file"
+            (change)="handleFileChange($event)"
+            id="CompanyLogo"
+            class="file-upload"
+          />
+          <p *ngIf="errors.company_image" class="validation-error">
+            {{ errors.company_image }}
+          </p>
         </div>
-      </div>
+      </div> -->
 
       <div
         style="
