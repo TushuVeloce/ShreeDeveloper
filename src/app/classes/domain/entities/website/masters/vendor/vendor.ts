@@ -17,10 +17,34 @@ export class VendorProps {
   public readonly Db_Table_Name = "VendorMaster";
   public Ref: number = 0;
   public Name: string = '';
-  public Address: string = '';
+  public Code: string = '';
+  public AddressLine1: string = '';
+  public AddressLine2: string = '';
   public MobileNo: string = '';
+  public CompanyType: string = '';
+
+  public BankName: string = '';
+  public BranchName: string = '';
+  public AccountNumber: string = '';
+  public IFSCCode: string = '';
+
+  public PinCode: string = '';
+  public GSTIN:  string='';
+  public Pan:  string='';
+  public CINNO:  string='';
+
+  public CountryRef:  number = 0;
+  public readonly CountryName: string='';
+  public StateRef:  number = 0;
+  public readonly StateName: string='';
+  public CityRef:  number = 0;
+  public readonly CityName: string='';
+
+  public SelectedMaterial: number[] = [];
+
   public CompanyRef: number = 0;
   public CompanyName: string = '';
+
   // public readonly CompanyName: string = '';
   
   public readonly IsNewlyCreated: boolean = false;
@@ -66,7 +90,7 @@ export class Vendor implements IPersistable<Vendor> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-    if (this.p.Address == '') vra.add('Address', 'Address cannot be blank.');
+    if (this.p.AddressLine1 == '') vra.add('Address', 'Address cannot be blank.');
     if (this.p.MobileNo == '') vra.add('MobileNo', 'Mobile No cannot be blank.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
   }
