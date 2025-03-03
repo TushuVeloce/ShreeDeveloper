@@ -15,9 +15,7 @@ import { UserRoleRightsFetchRequest } from "./userrolerightsfetchrequest";
 export class UserRoleRightsDetailsProps {
 
   // public Ref: number = 0;
-  // public ModuleRef: number = 0;
   public FeatureName: string = '';
-  // public readonly ModuleName: string = '';
 
   public CanAdd: boolean = false;
   public CanEdit: boolean = false;
@@ -35,13 +33,12 @@ export class UserRoleRightsProps {
   // public Name: string = '';
   public UserRoleRef: number = 0;
   public CompanyRef: number = 0;
-  public readonly UserRoleName: string = '';
-  public readonly CompanyName: string = '';
+  public ModuleTypeRef: number = 0;
   public Feature: UserRoleRightsDetailsProps[] = [];
 
-  public ModuleTypeRef: number = 0;
   public readonly ModuleTypeName: string = '';
-  private IsNewEntity: boolean = true;
+  public readonly UserRoleName: string = '';
+  public readonly CompanyName: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';

@@ -38,8 +38,8 @@ export class UserrolerightsComponent implements OnInit {
 
   ngOnInit() {
     this.FormulateCountryList();
-    // this.loadRoleRightsFromStorage();
     this.mastermodules.forEach(e=> this.Entity.p.Feature.push(e as any));
+    // this.loadRoleRightsFromStorage();
     console.log('Modules:', this.ModuleList);
 
   }
@@ -52,30 +52,30 @@ export class UserrolerightsComponent implements OnInit {
   // New Code 
 
   mastermodules = [
-    { FeatureName: 'Dashboard', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
+    { FeatureName: 'Department Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
     { FeatureName: 'Material Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    // { Feature: 'Material Master', CanAdd: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'Stage Master', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'Marketing Master', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'Vendor Master', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'Vehicle Master', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'User Master', add: false, edit: false, delete: false, view: false, print: false, exports: false },
+    { FeatureName: 'Stage Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
+    { FeatureName: 'Marketing Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
+    { FeatureName: 'Vendor Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
+    { FeatureName: 'Vehicle Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
+    { FeatureName: 'User Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
     // { Feature: 'Department Master', add: false, edit: false, delete: false, view: false, print: false, exports: false },
     // { Feature: 'User Role Master', add: false, edit: false, delete: false, view: false, print: false, exports: false },
     // { Feature: 'Employee Master', add: false, edit: false, delete: false, view: false, print: false, exports: false },
   ];
 
   transactionsmodules = [
-    { FeatureName: 'Dashboardd', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    { FeatureName: 'Material Masterr', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    // { Feature: 'Account Transactions', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'Expense Transactions', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'Income Transactions', add: false, edit: false, delete: false, view: false, print: false, exports: false },
+    { FeatureName: 'Account Transactions', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
+    { FeatureName: 'Expense Transactions', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
+    { FeatureName: 'Income Transactions', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
   ];
 
   reportsmodules = [
-    { FeatureName: 'DDashboard', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    { FeatureName: 'MMaterial Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
+    { FeatureName: 'Billing Report', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
+    { FeatureName: 'Office Report', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
+    { FeatureName: 'Stock Report', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
+    { FeatureName: 'CRM Report', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
+    { FeatureName: 'Booking Report', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
     // { Feature: 'Billing Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
     // { Feature: 'Office Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
     // { Feature: 'Stock Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
@@ -155,6 +155,7 @@ export class UserrolerightsComponent implements OnInit {
   // }
 
   SaveUserRoleRights = async () => {
+    // this.modules.forEach(e=> this.Entity.p.Feature.push(e as any));
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
             // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
           let entityToSave = this.Entity.GetEditableVersion();
