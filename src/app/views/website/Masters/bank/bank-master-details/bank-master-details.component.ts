@@ -18,7 +18,7 @@ export class BankMasterDetailsComponent implements OnInit {
   isSaveDisabled: boolean = false;
   private IsNewEntity: boolean = true;
   Entity: Bank = Bank.CreateNewInstance();
-  DetailsFormTitle: 'New Bank' | 'Edit Bank' = 'New Bank';
+  DetailsFormTitle: 'New Bank Account' | 'Edit Bank Account' = 'New Bank Account';
   InitialEntity: Bank = null as any;
   CompanyList: Company[] = [];
   companyName = this.companystatemanagement.SelectedCompanyName;
@@ -31,7 +31,7 @@ export class BankMasterDetailsComponent implements OnInit {
     this.CompanyList = await Company.FetchEntireList();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Bank' : 'Edit Bank';
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Bank Account' : 'Edit Bank Account';
       this.Entity = Bank.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable')
     } else {

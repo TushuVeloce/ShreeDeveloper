@@ -19,7 +19,7 @@ export class UserMasterDetailsComponent implements OnInit {
   isSaveDisabled: boolean = false;
   private IsNewEntity: boolean = true;
   Entity: User = User.CreateNewInstance();
-  DetailsFormTitle: 'New User' | 'Edit User' = 'New User';
+  DetailsFormTitle: 'New External Users' | 'Edit External Users' = 'New External Users'
   InitialEntity: User = null as any;
   UserRoleList: UserRole[] = [];
   DepartmentList: Department[] = [];
@@ -34,7 +34,7 @@ export class UserMasterDetailsComponent implements OnInit {
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
 
-      this.DetailsFormTitle = this.IsNewEntity ? 'New User' : 'Edit User';
+      this.DetailsFormTitle = this.IsNewEntity ? 'New External Users' : 'Edit External Users';
       this.Entity = User.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable')
 
