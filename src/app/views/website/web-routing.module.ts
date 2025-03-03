@@ -65,6 +65,8 @@ import { UnitMasterComponent } from './Masters/unit/unit-master/unit-master.comp
 import { UnitMasterDetailsComponent } from './Masters/unit/unit-master-details/unit-master-details.component';
 import { UserrolerightsComponent } from './Masters/userrolerights/userrolerights.component';
 import { FinancialYearMasterComponent } from './Masters/financial-year-master/financial-year-master.component';
+import { VendorServicesMasterComponent } from './Masters/vendor_services/vendor-services-master/vendor-services-master.component';
+import { VendorServicesMasterDetailsComponent } from './Masters/vendor_services/vendor-services-master-details/vendor-services-master-details.component';
 
 const routes: Routes = [
   {
@@ -85,6 +87,8 @@ const routes: Routes = [
       { path: 'Marketing_Master_Details', component: MarketingMasterDetailsComponent },
       { path: 'Vendor_Master', component: VendorMasterComponent },
       { path: 'Vendor_Master_Details', component: VendorMasterDetailsComponent },
+      { path: 'Vendor_Services_Master', component: VendorServicesMasterComponent },
+      { path: 'Vendor_Services_Master_Details', component: VendorServicesMasterDetailsComponent },
       { path: 'Vehicle_Master', component: VehicleMasterComponent },
       { path: 'Vehicle_Master_Details', component: VehicleMasterDetailsComponent },
       { path: 'Bank_Master', component: BankMasterComponent },
