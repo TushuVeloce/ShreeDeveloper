@@ -135,10 +135,10 @@
           <label for="ServicesProvidedByVendor"><b>Services Provided Services</b></label>
           <nz-select [(ngModel)]="Entity.p.ServicesProvidedByVendor" nzMode="multiple" id="ServicesProvidedByVendor"
             name="ServicesProvidedByVendor" nzShowSearch nzAllowClear nzPlaceHolder="Select services">
-            <nz-option *ngFor="let service of ServiceList" [nzValue]="service.Ref"
-              [nzLabel]="service.Name"></nz-option>
+            <nz-option *ngFor="let service of ServiceList" [nzValue]="service.p.Ref"
+              [nzLabel]="service.p.Name"></nz-option>
           </nz-select>
-        </div>d
+        </div>
       </div>
       <!-- <div class="col-md-6">
         <label>Company Name</label>
