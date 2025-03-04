@@ -21,12 +21,6 @@ import { AccountMainLedgerComponent } from './Masters/account_main_ledger/accoun
 import { AccountMainLedgerDetailsComponent } from './Masters/account_main_ledger/account-main-ledger-details/account-main-ledger-details.component';
 import { AccountSubLedgerComponent } from './Masters/account_sub_ledger/account-sub-ledger/account-sub-ledger.component';
 import { AccountSubLedgerDetailsComponent } from './Masters/account_sub_ledger/account-sub-ledger-details/account-sub-ledger-details.component';
-import { MarketingMasterComponent } from './Masters/marketing/marketing-master/marketing-master.component';
-import { MarketingMasterDetailsComponent } from './Masters/marketing/marketing-master-details/marketing-master-details.component';
-import { BankMasterComponent } from './Masters/bank/bank-master/bank-master.component';
-import { BankMasterDetailsComponent } from './Masters/bank/bank-master-details/bank-master-details.component';
-import { UserMasterComponent } from './Masters/user/user-master/user-master.component';
-import { UserMasterDetailsComponent } from './Masters/user/user-master-details/user-master-details.component';
 import { DepartmentMasterComponent } from './Masters/department/department-master/department-master.component';
 import { DepartmentMasterDetailsComponent } from './Masters/department/department-master-details/department-master-details.component';
 import { UserRoleMasterComponent } from './Masters/user_role/user-role-master/user-role-master.component';
@@ -63,10 +57,16 @@ import { UserrolerightsComponent } from './Masters/userrolerights/userrolerights
 import { FinancialYearMasterComponent } from './Masters/financial-year-master/financial-year-master.component';
 import { VendorServicesMasterComponent } from './Masters/vendor_services/vendor-services-master/vendor-services-master.component';
 import { VendorServicesMasterDetailsComponent } from './Masters/vendor_services/vendor-services-master-details/vendor-services-master-details.component';
+import { BankAccountMasterComponent } from './Masters/bank_account/bank-account-master/bank-account-master.component';
+import { BankAccountMasterDetailsComponent } from './Masters/bank_account/bank-account-master-details/bank-account-master-details.component';
+import { MarketingTypeMasterComponent } from './Masters/marketing_type/marketing-type-master/marketing-type-master.component';
+import { MarketingTypeMasterDetailsComponent } from './Masters/marketing_type/marketing-type-master-details/marketing-type-master-details.component';
+import { ExternalUsersComponent } from './Masters/external_users/external-users/external-users.component';
+import { ExternalUsersMasterDetailsComponent } from './Masters/external_users/external-users-details/external-users-details.component';
 
 @NgModule({
-  declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent  ,StageMasterComponent,StageMasterDetailsComponent, AccountMainLedgerComponent,AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingMasterComponent,MarketingMasterDetailsComponent,
-    VendorMasterComponent,VehicleMasterComponent,VendorMasterDetailsComponent, BankMasterComponent,BankMasterDetailsComponent, UserMasterComponent,UserMasterDetailsComponent, CompanyMasterComponent,CompanyMasterDetailsComponent, DepartmentMasterComponent,DepartmentMasterDetailsComponent, UserRoleMasterComponent,UserRoleMasterDetailsComponent, EmployeeMasterComponent,EmployeeMasterDetailsComponent,
+  declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent  ,StageMasterComponent,StageMasterDetailsComponent, AccountMainLedgerComponent,AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent,MarketingTypeMasterDetailsComponent,
+    VendorMasterComponent,VehicleMasterComponent,VendorMasterDetailsComponent, BankAccountMasterComponent,BankAccountMasterDetailsComponent, ExternalUsersComponent,ExternalUsersMasterDetailsComponent, CompanyMasterComponent,CompanyMasterDetailsComponent, DepartmentMasterComponent,DepartmentMasterDetailsComponent, UserRoleMasterComponent,UserRoleMasterDetailsComponent, EmployeeMasterComponent,EmployeeMasterDetailsComponent,
     SiteManagementMasterComponent,SiteManagementActualStagesComponent,SiteManagementActualStagesDetailsComponent,EstimateStagesDetailsComponent,EstimateStagesComponent,
     MaterialRequisitionComponent,StockConsumeComponent,StockInwardComponent,StockOrderComponent,StockTransferComponent , CountryComponent, StateComponent,CityComponent,UnitMasterComponent,UnitMasterDetailsComponent, 
     DeleteIconComponent,EditIconComponent, DataNotFoundComponent,VehicleMasterDetailsComponent,UserrolerightsComponent,FinancialYearMasterComponent,VendorServicesMasterComponent,VendorServicesMasterDetailsComponent],

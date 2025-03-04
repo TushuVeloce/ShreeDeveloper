@@ -38,12 +38,6 @@ import { AccountMainLedgerComponent } from './Masters/account_main_ledger/accoun
 import { AccountMainLedgerDetailsComponent } from './Masters/account_main_ledger/account-main-ledger-details/account-main-ledger-details.component';
 import { AccountSubLedgerComponent } from './Masters/account_sub_ledger/account-sub-ledger/account-sub-ledger.component';
 import { AccountSubLedgerDetailsComponent } from './Masters/account_sub_ledger/account-sub-ledger-details/account-sub-ledger-details.component';
-import { MarketingMasterComponent } from './Masters/marketing/marketing-master/marketing-master.component';
-import { MarketingMasterDetailsComponent } from './Masters/marketing/marketing-master-details/marketing-master-details.component';
-import { BankMasterComponent } from './Masters/bank/bank-master/bank-master.component';
-import { BankMasterDetailsComponent } from './Masters/bank/bank-master-details/bank-master-details.component';
-import { UserMasterComponent } from './Masters/user/user-master/user-master.component';
-import { UserMasterDetailsComponent } from './Masters/user/user-master-details/user-master-details.component';
 import { DepartmentMasterComponent } from './Masters/department/department-master/department-master.component';
 import { DepartmentMasterDetailsComponent } from './Masters/department/department-master-details/department-master-details.component';
 import { UserRoleMasterComponent } from './Masters/user_role/user-role-master/user-role-master.component';
@@ -67,6 +61,12 @@ import { UserrolerightsComponent } from './Masters/userrolerights/userrolerights
 import { FinancialYearMasterComponent } from './Masters/financial-year-master/financial-year-master.component';
 import { VendorServicesMasterComponent } from './Masters/vendor_services/vendor-services-master/vendor-services-master.component';
 import { VendorServicesMasterDetailsComponent } from './Masters/vendor_services/vendor-services-master-details/vendor-services-master-details.component';
+import { BankAccountMasterComponent } from './Masters/bank_account/bank-account-master/bank-account-master.component';
+import { BankAccountMasterDetailsComponent } from './Masters/bank_account/bank-account-master-details/bank-account-master-details.component';
+import { MarketingTypeMasterComponent } from './Masters/marketing_type/marketing-type-master/marketing-type-master.component';
+import { MarketingTypeMasterDetailsComponent } from './Masters/marketing_type/marketing-type-master-details/marketing-type-master-details.component';
+import { ExternalUsersComponent } from './Masters/external_users/external-users/external-users.component';
+import { ExternalUsersMasterDetailsComponent } from './Masters/external_users/external-users-details/external-users-details.component';
 
 const routes: Routes = [
   {
@@ -83,18 +83,18 @@ const routes: Routes = [
       { path: 'Account_Main_Ledger_Details', component: AccountMainLedgerDetailsComponent },
       { path: 'Account_Sub_Ledger', component: AccountSubLedgerComponent },
       { path: 'Account_Sub_Ledger_Details', component: AccountSubLedgerDetailsComponent },
-      { path: 'Marketing_Master', component: MarketingMasterComponent },
-      { path: 'Marketing_Master_Details', component: MarketingMasterDetailsComponent },
+      { path: 'Marketing_Type_Master', component: MarketingTypeMasterComponent },
+      { path: 'Marketing_Type_Master_Details', component: MarketingTypeMasterDetailsComponent },
       { path: 'Vendor_Master', component: VendorMasterComponent },
       { path: 'Vendor_Master_Details', component: VendorMasterDetailsComponent },
       { path: 'Vendor_Services_Master', component: VendorServicesMasterComponent },
       { path: 'Vendor_Services_Master_Details', component: VendorServicesMasterDetailsComponent },
       { path: 'Vehicle_Master', component: VehicleMasterComponent },
       { path: 'Vehicle_Master_Details', component: VehicleMasterDetailsComponent },
-      { path: 'Bank_Master', component: BankMasterComponent },
-      { path: 'Bank_Master_Details', component: BankMasterDetailsComponent },
-      { path: 'User_Master', component: UserMasterComponent },
-      { path: 'User_Master_Details', component: UserMasterDetailsComponent },
+      { path: 'Bank_Account_Master', component: BankAccountMasterComponent },
+      { path: 'Bank_Account_Master_Details', component: BankAccountMasterDetailsComponent},
+      { path: 'External_Users', component: ExternalUsersComponent },
+      { path: 'External_Users_Details', component: ExternalUsersMasterDetailsComponent },
       { path: 'Company_Master', component: CompanyMasterComponent },
       { path: 'Company_Master_Details', component: CompanyMasterDetailsComponent },
       { path: 'Department_Master', component: DepartmentMasterComponent },
