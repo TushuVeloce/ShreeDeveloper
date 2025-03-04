@@ -123,8 +123,9 @@
       <div class="row" style="margin-top: 1rem;">
         <div class="col-md-6 col-md-4 col-sm-12">
           <label><b>Select Vendor Services</b></label>
-          <nz-select [(ngModel)]="Entity.p.SelectedMaterial" [nzOptions]="VendorServicesOptions" nzMode="multiple"
-            nzPlaceHolder="Select services" nzShowSearch nzAllowClear (ngModelChange)="onVendorServicesChange($event)">
+          <nz-select [(ngModel)]="Entity.p.MaterialListSuppliedByVendor" [nzOptions]="VendorServicesOptions"
+            nzMode="multiple" (ngModelChange)="onVendorServicesChange()" nzPlaceHolder="Select services" nzShowSearch
+            nzAllowClear>
           </nz-select>
         </div>
       </div>

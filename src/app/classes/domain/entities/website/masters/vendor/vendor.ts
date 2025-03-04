@@ -12,6 +12,12 @@ import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { VendorFetchRequest } from "./vendorfetchrequest";
 
+export class MaterialListSuppliedByVendorProps {
+  public MaterialRef: number = 0;
+  public MaterialName: string = '';
+
+}
+
 
 export class VendorProps {
   public readonly Db_Table_Name = "VendorMaster";
@@ -40,7 +46,7 @@ export class VendorProps {
   public CityRef:  number = 0;
   public readonly CityName: string='';
 
-  public SelectedMaterial: number[] = [];
+  public MaterialListSuppliedByVendor: MaterialListSuppliedByVendorProps [] = [];
 
   public CompanyRef: number = 0;
   public CompanyName: string = '';

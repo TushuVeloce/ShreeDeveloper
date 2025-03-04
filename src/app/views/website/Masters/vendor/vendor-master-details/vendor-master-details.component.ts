@@ -40,7 +40,6 @@ export class VendorMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-
     this.VendorServicesList = await Material.FetchEntireList();
     console.log(this.VendorServicesList);
 
@@ -50,15 +49,6 @@ export class VendorMasterDetailsComponent implements OnInit {
         value: item.p.Ref   // Value stored
       }));
     }
-    // Ensure SelectedMaterial is an array
-    if (!Array.isArray(this.Entity.p.SelectedMaterial)) {
-      this.Entity.p.SelectedMaterial = [];
-    }
-
-    // Prepopulate SelectedMaterial with Ref values if editing
-    this.Entity.p.SelectedMaterial = this.Entity.p.SelectedMaterial.map(item => item);
-
-
 
     await this.FormulateCountryList();
 
@@ -132,18 +122,15 @@ export class VendorMasterDetailsComponent implements OnInit {
       await this.getCityListByStateRef(this.Entity.p.StateRef);
     }
   }
+  onVendorServicesChange() {
 
-  onVendorServicesChange(selectedValues: number[]) {
-    this.Entity.p.SelectedMaterial = [...selectedValues]; // Ensure proper reference
-    console.log('Updated SelectedMaterial:', this.Entity.p.SelectedMaterial);
   }
-  
+
   SaveVendorMaster = async () => {
+
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
-
-    entityToSave.p.SelectedMaterial = [...this.Entity.p.SelectedMaterial];
 
     let entitiesToSave = [entityToSave]
     console.log(entitiesToSave);

@@ -29,7 +29,7 @@ export class UserRoleRightsDetailsProps {
 
 
 export class UserRoleRightsProps {
-  public Ref: number = 0;
+  // public Ref: number = 0;
   // public Name: string = '';
   public UserRoleRef: number = 0;
   public CompanyRef: number = 0;
@@ -60,12 +60,12 @@ export class UserRoleRights implements IPersistable<UserRoleRights> {
   }
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
-    if (this.p.Ref === undefined || this.p.Ref === 0) {
-      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
-      this.p.Ref = newRefs[0];
-      if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
-    }
+    // if (this.p.Ref === undefined || this.p.Ref === 0) {
+    //   const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+    //   // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+    //   this.p.Ref = newRefs[0];
+    //   if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
+    // }
   }
 
   public GetEditableVersion(): UserRoleRights {
