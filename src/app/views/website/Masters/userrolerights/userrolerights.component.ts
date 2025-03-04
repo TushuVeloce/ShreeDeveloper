@@ -39,7 +39,7 @@ export class UserrolerightsComponent implements OnInit {
     private utils: Utils) { }
 
   async ngOnInit() {
-    this.FormulateUserRoleList();
+    // this.FormulateUserRoleList();
     this.mastermodules.forEach(e => this.Entity.p.Feature.push(e as any));
     // this.loadRoleRightsFromStorage();
     console.log('Modules:', this.ModuleList);
