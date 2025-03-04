@@ -29,26 +29,26 @@ export class VendorMasterDetailsComponent implements OnInit {
   CompanyList: Company[] = [];
   companyName = this.companystatemanagement.SelectedCompanyName;
   CompanyTypeList = DomainEnums.CompanyTypeList(true, '--Select Company Type--');
-  VendorServicesList: Material[] = [];
+  MaterialList: Material[] = [];
 
   CountryList: Country[] = [];
   StateList: State[] = [];
   CityList: City[] = [];
-  VendorServicesOptions: { label: string, value: number }[] = [];
+  // VendorServicesOptions: { label: string, value: number }[] = [];
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    this.VendorServicesList = await Material.FetchEntireList();
-    console.log(this.VendorServicesList);
+    this.MaterialList = await Material.FetchEntireList();
+    console.log(this.MaterialList);
 
-    if (this.VendorServicesList.length > 0) {
-      this.VendorServicesOptions = this.VendorServicesList.map(item => ({
-        label: item.p.Name, // Text displayed
-        value: item.p.Ref   // Value stored
-      }));
-    }
+    // if (this.VendorServicesList.length > 0) {
+    //   this.VendorServicesOptions = this.VendorServicesList.map(item => ({
+    //     label: item.p.Name, // Text displayed
+    //     value: item.p.Ref   // Value stored
+    //   }));
+    // }
 
     await this.FormulateCountryList();
 
@@ -122,7 +122,9 @@ export class VendorMasterDetailsComponent implements OnInit {
       await this.getCityListByStateRef(this.Entity.p.StateRef);
     }
   }
-  onVendorServicesChange() {
+  onVendorServicesChange(selectedvalue: any) {
+    debugger;
+    this.Entity.p.MaterialListSuppliedByVendor = selectedvalue;
 
   }
 

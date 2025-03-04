@@ -122,10 +122,23 @@
       </div>
       <div class="row" style="margin-top: 1rem;">
         <div class="col-md-6 col-md-4 col-sm-12">
-          <label><b>Select Vendor Services</b></label>
-          <nz-select [(ngModel)]="Entity.p.MaterialListSuppliedByVendor" [nzOptions]="VendorServicesOptions"
-            nzMode="multiple" (ngModelChange)="onVendorServicesChange()" nzPlaceHolder="Select services" nzShowSearch
-            nzAllowClear>
+          <label for="MaterialListSuppliedByVendor"><b>Material Suplied by Vendor</b></label>
+          <nz-select [(ngModel)]="Entity.p.MaterialListSuppliedByVendor" nzMode="multiple"
+            id="MaterialListSuppliedByVendor" name="MaterialListSuppliedByVendor" nzShowSearch nzAllowClear
+            (ngModalChange)="onVendorServicesChange(Entity.p.MaterialListSuppliedByVendor)"
+            nzPlaceHolder="Select services">
+            <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
+              [nzLabel]="material.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-6 col-md-4 col-sm-12">
+          <label for="MaterialListSuppliedByVendor"><b>Services Provided Services</b></label>
+          <nz-select [(ngModel)]="Entity.p.MaterialListSuppliedByVendor" nzMode="multiple"
+            id="MaterialListSuppliedByVendor" name="MaterialListSuppliedByVendor" nzShowSearch nzAllowClear
+            (ngModalChange)="onVendorServicesChange(Entity.p.MaterialListSuppliedByVendor)"
+            nzPlaceHolder="Select services">
+            <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
+              [nzLabel]="material.p.Name"></nz-option>
           </nz-select>
         </div>
       </div>
