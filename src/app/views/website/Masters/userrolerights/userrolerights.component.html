@@ -17,7 +17,7 @@
       <div class="col-md-4 mb-2">
         <label for="UserRoleRef"><b>User Role</b></label>
         <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UserRoleRef"
-          name="UserRoleRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UserRoleRef">
+          name="UserRoleRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UserRoleRef" (ngModelChange)="getUserRoleRights(Entity.p.UserRoleRef)">
           <nz-option *ngFor="let userrole of UserRoleList" [nzValue]="userrole.p.Ref" [nzLabel]="userrole.p.Name"></nz-option>
         </nz-select>
       </div>
