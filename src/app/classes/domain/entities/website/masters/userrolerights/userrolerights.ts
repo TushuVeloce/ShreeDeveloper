@@ -160,8 +160,7 @@ export class UserRoleRights implements IPersistable<UserRoleRights> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new UserRoleRightsFetchRequest();
-    req.CountryRefs.push(ref);
-
+    req.CompanyRefs.push(ref);
     let tdResponse = await UserRoleRights.FetchTransportData(req, errorHandler) as TransportData;
     return UserRoleRights.SingleInstanceFromTransportData(tdResponse);
   }
@@ -177,15 +176,23 @@ export class UserRoleRights implements IPersistable<UserRoleRights> {
     return UserRoleRights.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCountryRef(CountryRef :number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new UserRoleRightsFetchRequest();
-    req.CountryRefs.push(CountryRef)
-    let tdResponse = await UserRoleRights.FetchTransportData(req, errorHandler) as TransportData;
-    return UserRoleRights.ListFromTransportData(tdResponse);
-  }
+  // public static async FetchEntireListByCountryRef(CountryRef :number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  //   let req = new UserRoleRightsFetchRequest();
+  //   req.CompanyRefs.push(CountryRef)
+  //   let tdResponse = await UserRoleRights.FetchTransportData(req, errorHandler) as TransportData;
+  //   return UserRoleRights.ListFromTransportData(tdResponse);
+  // }
   public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new UserRoleRightsFetchRequest();
     req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await UserRoleRights.FetchTransportData(req, errorHandler) as TransportData;
+    return UserRoleRights.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByUserRoleRef(userroleref:number,companeref:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new UserRoleRightsFetchRequest();
+    req.UserRoleRefs.push(userroleref)
+    req.CompanyRefs.push(companeref)
     let tdResponse = await UserRoleRights.FetchTransportData(req, errorHandler) as TransportData;
     return UserRoleRights.ListFromTransportData(tdResponse);
   }

@@ -7,9 +7,10 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 export class UserRoleRightsFetchRequest {
     public static readonly FetchRequestType: string = "UserRoleRightFetchRequest";
 
-    UserRoleRightsRefs: number[] = [];
-    CountryRefs: number[] = [];
+    // UserRoleRightsRefs: number[] = [];
+    // CountryRefs: number[] = [];
     CompanyRefs: number[] = [];
+    UserRoleRefs : number[] = [];
 
 
     public MergeIntoTransportData = (td: TransportData) => {

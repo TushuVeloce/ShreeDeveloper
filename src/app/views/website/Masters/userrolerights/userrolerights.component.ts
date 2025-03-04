@@ -39,22 +39,22 @@ export class UserrolerightsComponent implements OnInit {
     private utils: Utils) { }
 
   async ngOnInit() {
-    this.FormulateCountryList();
+    this.FormulateUserRoleList();
     this.mastermodules.forEach(e => this.Entity.p.Feature.push(e as any));
     // this.loadRoleRightsFromStorage();
     console.log('Modules:', this.ModuleList);
 
-    let lst = await UserRoleRights.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
+    // let lst = await UserRoleRights.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    // this.MasterList = lst;
 
   }
 
 
-  private FormulateCountryList = async () => {
+  private FormulateUserRoleList = async () => {
     let lst = await UserRole.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.UserRoleList = lst;
     console.log('UserRoleList :', this.UserRoleList);
-    
+
   }
   // New Code 
 
@@ -190,6 +190,17 @@ export class UserrolerightsComponent implements OnInit {
     }
   }
 
-
-
+  getUserRoleRights = async (UserRoleRef: number) => {
+    if (UserRoleRef <= 0) {
+      await this.uiUtils.showErrorToster('Select User Role');
+      return;
+    }
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Select Company');
+      return;
+    }
+    let lst = await UserRoleRights.FetchEntireListByUserRoleRef(UserRoleRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.DisplayMasterList = lst;
+    console.log('UserRoleSelected :', this.DisplayMasterList);
+  }
 }
