@@ -59,6 +59,8 @@ export class StageMasterDetailsComponent implements OnInit {
         this.Entity = Stage.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster('Stage Updated successfully!');
+        await this.router.navigate(['/homepage/Website/Stage_Master']);
+
       }
     }
   }

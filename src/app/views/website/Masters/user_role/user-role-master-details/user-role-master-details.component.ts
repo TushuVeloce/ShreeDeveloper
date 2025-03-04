@@ -64,6 +64,8 @@ export class UserRoleMasterDetailsComponent  implements OnInit {
         this.Entity = UserRole.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster('User Role Updated successfully!');
+        await this.router.navigate(['/homepage/Website/User_Role_Master']);
+
       }
 
     }

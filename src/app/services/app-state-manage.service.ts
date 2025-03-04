@@ -4,8 +4,9 @@ import { Injectable, signal } from '@angular/core';
   providedIn: 'root'
 })
 export class AppStateManageService {
-  private CurrentGAAProjectRef = 0;
-  private CurrentGAAProjectName = '';
+  private CurrentCompanyRef = 0;
+  private CurrentCompanyName = '';
+  private CompanyRef = 0;
 
   private CurrentGAAProjectRefForProductVersion = 0;
   private CurrentGAAProjectNameForProductVersion = '';
@@ -18,11 +19,12 @@ export class AppStateManageService {
 
   private CustomerName = '';
   private CustomerRef = 0;
-  private GAAProjectRef = 0;
   // private GAAProjectName = '';
   private projectCount = 0
   private Theme = '';
   public readonly StorageKey = sessionStorage
+  public readonly localStorage = localStorage
+
   public devUserId: string = 'deployment@gladiance.com'
   public devPassword: string = 'maths@4321'
   private IsForgetPasswordClickedValue = false
@@ -34,6 +36,24 @@ export class AppStateManageService {
     this.isDropdownDisabled.set(value);
   }
   
+
+  // CompanyRef  start
+
+  getCompanyRef(): number {
+    const CompanyRef = this.localStorage.getItem('CompanyRef');
+    console.log('CompanyReflocalstorage :', CompanyRef);
+    return CompanyRef ? +CompanyRef : 0 // Return the Company reference or 0 if not found
+  }
+  setCompanyRef(val: number): void {
+    this.CompanyRef = val;
+    this.localStorage.setItem('CompanyRef', val.toString()); // Store Company reference in local storage
+  }
+  resetCompanyRef(): void {
+    this.localStorage.setItem('CompanyRef', '0');
+  }
+
+
+
   // ----------- Customer Name Start
   getCustomerName(): string {
     const custName = this.StorageKey.getItem('CustomerName');
@@ -50,19 +70,12 @@ export class AppStateManageService {
   }
   //---------- Customer Name End
 
-  // GAAProjectRef  start
 
-  getGAAProjectRef(): number {
-    const ProjectRef = this.StorageKey.getItem('GAAProjectRef');
-    return ProjectRef ? +ProjectRef : 0 // Return the project reference or 0 if not found
-  }
-  setGAAProjectRef(val: number): void {
-    this.GAAProjectRef = val;
-    this.StorageKey.setItem('GAAProjectRef', val.toString()); // Store project reference in local storage
-  }
-  resetGAAProjectRef(): void {
-    this.StorageKey.setItem('GAAProjectRef', '0');
-  }
+
+
+
+
+
 
   // ----------- Theme Start
   getTheme(): string {

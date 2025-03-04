@@ -64,6 +64,8 @@ export class MarketingTypeMasterDetailsComponent implements OnInit {
         this.Entity = MarketingType.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster('Marketing Updated successfully!');
+        await this.router.navigate(['/homepage/Website/Marketing_Type_Master']);
+
       }
     }
   }

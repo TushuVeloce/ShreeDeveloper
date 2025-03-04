@@ -466,31 +466,76 @@ export class SidebarlayoutComponent implements OnInit {
     this.router.navigate(['/homepage/hotel/dashboard']);
   }
 
- private FormulateCompanyList = async () => {
+
+  private async FormulateCompanyList() {
     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.CompnyList = lst;
-  }
 
-  changecompany(ref: number) {    
+    // Set default selection if there is no stored value
+    this.ongetcompany();
+}
+
+ongetcompany() {
+    let storedCompanyRef = localStorage.getItem('SelectedCompanyRef');
+    let storedCompanyName = localStorage.getItem('companyName');
+
+    if (storedCompanyRef && storedCompanyName) {
+        const ref = Number(storedCompanyRef);
+        this.CompanyRef = ref; 
+        this.companystatemanagement.setCompanyRef(ref, storedCompanyName);
+    } else if (this.CompnyList && this.CompnyList.length > 0) {
+        // Select first company if no stored value is found
+        const firstCompany = this.CompnyList[0];
+        this.changecompany(firstCompany.p.Ref);
+    }
+}
+
+changecompany(ref: number) {    
     const selectedCompany = this.CompnyList.find(company => company.p.Ref === ref);
     if (selectedCompany) {
-      this.appStateManagement.StorageKey.setItem('SelectedCompanyRef',selectedCompany.p.Ref.toString());
-      this.appStateManagement.StorageKey.setItem('companyName', selectedCompany.p.Name);
-      this.companystatemanagement.setCompanyRef(ref, selectedCompany.p.Name);
-    this.CompanyRef = ref;
-    }else {
-      console.warn('Selected company not found');
-    }
+        localStorage.setItem('SelectedCompanyRef', selectedCompany.p.Ref.toString());
+        localStorage.setItem('companyName', selectedCompany.p.Name);
 
-  }
-  
-  ongetcompany(){
-    const storedCompanyRef =  this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
-    const storedCompanyName =  this.appStateManagement.StorageKey.getItem('companyName');
-    if (storedCompanyRef && storedCompanyName) {
-      const ref = Number(storedCompanyRef);
-      this.CompanyRef = ref; 
-      this.companystatemanagement.setCompanyRef(ref, storedCompanyName);
+        this.companystatemanagement.setCompanyRef(ref, selectedCompany.p.Name);
+        this.CompanyRef = ref;
+    } else {
+        console.warn('Selected company not found');
     }
-  }
+}
+
+
+
+
+
+
+
+
+
+//  private FormulateCompanyList = async () => {
+//     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+//     this.CompnyList = lst;
+//   }
+
+//   changecompany(ref: number) {    
+//     const selectedCompany = this.CompnyList.find(company => company.p.Ref === ref);
+//     if (selectedCompany) {
+//       this.appStateManagement.StorageKey.setItem('SelectedCompanyRef',selectedCompany.p.Ref.toString());
+//       this.appStateManagement.StorageKey.setItem('companyName', selectedCompany.p.Name);
+//       this.companystatemanagement.setCompanyRef(ref, selectedCompany.p.Name);
+//     this.CompanyRef = ref;
+//     }else {
+//       console.warn('Selected company not found');
+//     }
+
+//   }
+  
+//   ongetcompany(){
+//     const storedCompanyRef =  this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
+//     const storedCompanyName =  this.appStateManagement.StorageKey.getItem('companyName');
+//     if (storedCompanyRef && storedCompanyName) {
+//       const ref = Number(storedCompanyRef);
+//       this.CompanyRef = ref; 
+//       this.companystatemanagement.setCompanyRef(ref, storedCompanyName);
+//     }
+//   }
 }

@@ -62,6 +62,7 @@ export class UnitMasterDetailsComponent  implements OnInit {
         this.Entity = Unit.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster('Unit Master Updated successfully!');
+        await this.router.navigate(['/homepage/Website/Unit_Master']);
       }
     }
   }
