@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FinancialYear } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
+// import { FinancialYearCustomRequest } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyearfetchrequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
@@ -44,7 +45,7 @@ export class FinancialYearMasterComponent implements OnInit {
   async ngOnInit() {
    // await this.FormulateMasterList();
     this.convertdate();
-    this.CreateNewFinancialYear();
+  //  this.CreateNewFinancialYear();
 
   }
 
@@ -54,31 +55,52 @@ export class FinancialYearMasterComponent implements OnInit {
   //   this.DisplayMasterList = this.MasterList
   // }
 
-  CreateNewFinancialYear = async () => {
-      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-      let entityToSave = this.Entity.GetEditableVersion();
-      console.log('entityToSave :', entityToSave);
-      let entitiesToSave = [entityToSave]
-      // await this.Entity.EnsurePrimaryKeysWithValidValues()
-      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-      if (!tr.Successful) {
-        this.isSaveDisabled = false;
-        this.uiUtils.showErrorToster(tr.Message);
-        return
-      }
-      else {
-        this.isSaveDisabled = false;
-        // this.onEntitySaved.emit(entityToSave);
-        if (this.IsNewEntity) {
-          await this.uiUtils.showSuccessToster('Fianacial Master Created successfully!');
-          this.Entity = FinancialYear.CreateNewInstance();
-        } else {
-          await this.uiUtils.showSuccessToster('Fianacial Master Created successfully!');
-        }
-      }
-      this.getFinancialYearListByCompanyRef()
-    }
+  // CreateNewFinancialYear = async () => {
+  //     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+  //     let entityToSave = this.Entity.GetEditableVersion();
+  //     console.log('entityToSave :', entityToSave);
+  //     let entitiesToSave = [entityToSave]
+  //     // await this.Entity.EnsurePrimaryKeysWithValidValues()
+  //     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+  //     if (!tr.Successful) {
+  //       this.isSaveDisabled = false;
+  //       this.uiUtils.showErrorToster(tr.Message);
+  //       return
+  //     }
+  //     else {
+  //       this.isSaveDisabled = false;
+  //       // this.onEntitySaved.emit(entityToSave);
+  //       if (this.IsNewEntity) {
+  //         await this.uiUtils.showSuccessToster('Fianacial Master Created successfully!');
+  //         this.Entity = FinancialYear.CreateNewInstance();
+  //       } else {
+  //         await this.uiUtils.showSuccessToster('Fianacial Master Created successfully!');
+  //       }
+  //     }
+  //     this.getFinancialYearListByCompanyRef()
+  //   }
 
+
+  // CreateNewFinancialYear = async () => {
+  //   await this.uiUtils.showConfirmationMessage('Move',
+  //     `This process is IRREVERSIBLE!  <br>
+  //     'Are you sure that you want to Move Fine & Cash?`,
+  //     async () => {
+  //       let req = new FinancialYearCustomRequest();
+  //       req.companyRef.push(this.Entity.p.CompanyRef);
+  //       let td = req.FormulateTransportData();
+  //       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+
+  //       let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+
+  //       if (!tr.Successful) {
+  //         await this.uiUtils.showErrorMessage('Error', tr.Message);
+  //         return;
+  //       }
+  //       await this.uiUtils.showConfirmationMessage('Fine & Cash', 'Fine & Cash moved successfully!');
+  //       this.GetKarigarReceiptByKarigarRef();
+  //     })
+  // }
 
 
 

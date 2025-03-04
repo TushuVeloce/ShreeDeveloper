@@ -60,6 +60,7 @@ export class DepartmentMasterDetailsComponent implements OnInit {
           await this.uiUtils.showSuccessToster('Department saved successfully!');
           this.Entity = Department.CreateNewInstance();
         } else {
+          await this.router.navigate(['/homepage/Website/Department_Master'])
           await this.uiUtils.showSuccessToster('Department Updated successfully!');
         }
       }

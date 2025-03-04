@@ -58,7 +58,7 @@ export class VendorServicesMasterDetailsComponent  implements OnInit {
       this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Vendor Service Master saved successfully!');
+        await this.uiUtils.showSuccessToster('Vendor Service Master Saved successfully!');
         this.Entity = VendorService.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster('Vendor Service Master Updated successfully!');
