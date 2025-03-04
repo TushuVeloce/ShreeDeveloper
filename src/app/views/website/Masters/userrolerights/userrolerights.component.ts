@@ -31,16 +31,21 @@ export class UserrolerightsComponent implements OnInit {
   headers: string[] = ['Module Name', 'Add', 'Edit', 'Delete', 'View', 'Print', 'Exports',];
   modules: { FeatureName: string; CanAdd: boolean; CanEdit: boolean; CanDelete: boolean; CanView: boolean; CanPrint: boolean; CanExport: boolean }[] = [];
 
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+
   constructor(private uiUtils: UIUtils, private router: Router,
-     private appStateManage: AppStateManageService,
-     private companystatemanagement: CompanyStateManagement,
+    private appStateManage: AppStateManageService,
+    private companystatemanagement: CompanyStateManagement,
     private utils: Utils) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.FormulateCountryList();
-    this.mastermodules.forEach(e=> this.Entity.p.Feature.push(e as any));
+    this.mastermodules.forEach(e => this.Entity.p.Feature.push(e as any));
     // this.loadRoleRightsFromStorage();
     console.log('Modules:', this.ModuleList);
+
+    let lst = await UserRoleRights.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
 
   }
 
@@ -48,6 +53,8 @@ export class UserrolerightsComponent implements OnInit {
   private FormulateCountryList = async () => {
     let lst = await UserRole.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.UserRoleList = lst;
+    console.log('UserRoleList :', this.UserRoleList);
+    
   }
   // New Code 
 
@@ -97,7 +104,7 @@ export class UserrolerightsComponent implements OnInit {
     } else if (ref == 200) {
       this.modules = this.transactionsmodules
     } else if (ref == 300) {
-       this.modules = this.reportsmodules
+      this.modules = this.reportsmodules
     }
   }
 
@@ -156,32 +163,32 @@ export class UserrolerightsComponent implements OnInit {
 
   SaveUserRoleRights = async () => {
     // this.modules.forEach(e=> this.Entity.p.Feature.push(e as any));
-      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-            // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-          let entityToSave = this.Entity.GetEditableVersion();
-          console.log('Entity to Save:', entityToSave);
-          
-      
-          let entitiesToSave = [entityToSave]
-          // await this.Entity.EnsurePrimaryKeysWithValidValues()
-          let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-      
-          if (!tr.Successful) {
-            // this.isSaveDisabled = false;
-            this.uiUtils.showErrorToster(tr.Message);
-            return
-          }
-          else {
-            // this.isSaveDisabled = false;
-            // this.onEntitySaved.emit(entityToSave);
-            if (this.IsNewEntity) {
-              await this.uiUtils.showSuccessToster('User Role Rights saved successfully!');
-              this.Entity = UserRoleRights.CreateNewInstance();
-            } else {
-              await this.uiUtils.showSuccessToster('User Role Rights Updated successfully!');
-            }
-          }
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    let entityToSave = this.Entity.GetEditableVersion();
+    console.log('Entity to Save:', entityToSave);
+
+
+    let entitiesToSave = [entityToSave]
+    // await this.Entity.EnsurePrimaryKeysWithValidValues()
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+
+    if (!tr.Successful) {
+      // this.isSaveDisabled = false;
+      this.uiUtils.showErrorToster(tr.Message);
+      return
     }
+    else {
+      // this.isSaveDisabled = false;
+      // this.onEntitySaved.emit(entityToSave);
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('User Role Rights saved successfully!');
+        this.Entity = UserRoleRights.CreateNewInstance();
+      } else {
+        await this.uiUtils.showSuccessToster('User Role Rights Updated successfully!');
+      }
+    }
+  }
 
 
 

@@ -7,7 +7,7 @@ import { Country } from 'src/app/classes/domain/entities/website/masters/country
 import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
-import { VendorServices } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
+import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -31,7 +31,7 @@ export class VendorMasterDetailsComponent implements OnInit {
   companyName = this.companystatemanagement.SelectedCompanyName;
   CompanyTypeList = DomainEnums.CompanyTypeList(true, '--Select Company Type--');
   MaterialList: Material[] = [];
-  ServiceList: VendorServices[] = [];
+  ServiceList: VendorService[] = [];
 
   CountryList: Country[] = [];
   StateList: State[] = [];
@@ -43,7 +43,9 @@ export class VendorMasterDetailsComponent implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.MaterialList = await Material.FetchEntireList();
+    this.ServiceList = await VendorService.FetchEntireList();
     console.log(this.MaterialList);
+    console.log(this.ServiceList);
 
     // if (this.VendorServicesList.length > 0) {
     //   this.VendorServicesOptions = this.VendorServicesList.map(item => ({

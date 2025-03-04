@@ -5,7 +5,7 @@ import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class UserRoleRightsFetchRequest {
-    public static readonly FetchRequestType: string = "UserRoleRightsFetchRequest";
+    public static readonly FetchRequestType: string = "UserRoleRightFetchRequest";
 
     UserRoleRightsRefs: number[] = [];
     CountryRefs: number[] = [];
