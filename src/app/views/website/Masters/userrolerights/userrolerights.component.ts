@@ -39,13 +39,13 @@ export class UserrolerightsComponent implements OnInit {
     private utils: Utils) { }
 
   async ngOnInit() {
-    // this.FormulateUserRoleList();
+    this.FormulateUserRoleList();
     this.mastermodules.forEach(e => this.Entity.p.Feature.push(e as any));
     // this.loadRoleRightsFromStorage();
     console.log('Modules:', this.ModuleList);
 
-    let lst = await UserRoleRights.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
+    // let lst = await UserRoleRights.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    // this.MasterList = lst;
 
   }
 
@@ -202,8 +202,5 @@ export class UserrolerightsComponent implements OnInit {
     let lst = await UserRoleRights.FetchEntireListByUserRoleRef(UserRoleRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = lst;
     console.log('UserRoleSelected :', this.DisplayMasterList);
-}
-
-
-
+  }
 }
