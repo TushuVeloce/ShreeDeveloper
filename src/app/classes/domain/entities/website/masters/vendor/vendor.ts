@@ -15,7 +15,11 @@ import { VendorFetchRequest } from "./vendorfetchrequest";
 export class MaterialListSuppliedByVendorProps {
   public MaterialRef: number = 0;
   public MaterialName: string = '';
+}
 
+export class ServiceSuppliedByVendorProps {
+  public MaterialRef: number = 0;
+  public MaterialName: string = '';
 }
 
 
@@ -32,7 +36,7 @@ export class VendorProps {
   public BankName: string = '';
   public BranchName: string = '';
   public AccountNumber: string = '';
-  public IFSCCode: string = '';
+  public IFSC: string = '';
 
   public PinCode: string = '';
   public GSTIN:  string='';
@@ -47,6 +51,7 @@ export class VendorProps {
   public readonly CityName: string='';
 
   public MaterialListSuppliedByVendor: MaterialListSuppliedByVendorProps [] = [];
+  public ServicesProvidedByVendor: ServiceSuppliedByVendorProps [] = [];
 
   public CompanyRef: number = 0;
   public CompanyName: string = '';

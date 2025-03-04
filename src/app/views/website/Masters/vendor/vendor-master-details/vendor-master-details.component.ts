@@ -7,6 +7,7 @@ import { Country } from 'src/app/classes/domain/entities/website/masters/country
 import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
+import { VendorServices } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -30,6 +31,7 @@ export class VendorMasterDetailsComponent implements OnInit {
   companyName = this.companystatemanagement.SelectedCompanyName;
   CompanyTypeList = DomainEnums.CompanyTypeList(true, '--Select Company Type--');
   MaterialList: Material[] = [];
+  ServiceList: VendorServices[] = [];
 
   CountryList: Country[] = [];
   StateList: State[] = [];
@@ -123,9 +125,8 @@ export class VendorMasterDetailsComponent implements OnInit {
     }
   }
   onVendorServicesChange(selectedvalue: any) {
-    debugger;
     this.Entity.p.MaterialListSuppliedByVendor = selectedvalue;
-
+    console.log(this.Entity.p.MaterialListSuppliedByVendor);
   }
 
   SaveVendorMaster = async () => {

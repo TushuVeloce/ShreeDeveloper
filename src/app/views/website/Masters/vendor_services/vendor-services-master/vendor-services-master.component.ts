@@ -26,7 +26,7 @@ export class VendorServicesMasterComponent  implements OnInit {
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService ) {}
 
   async ngOnInit() {
-    this.appStateManage.setDropdownDisabled(true);
+    this.appStateManage.setDropdownDisabled(false);
     await this.FormulateVendorServiceList();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');

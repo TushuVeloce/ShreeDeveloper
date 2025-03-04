@@ -13,17 +13,17 @@
     <div class="row" style="margin-top: 1rem; ">
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4 col-md-4 col-sm-12">
-          <label>Vendor Code</label>
+          <label for="Code">Vendor Code</label>
           <input type="text" [(ngModel)]="Entity.p.Code" name="Code" class="form-control" id="Code" required
             placeholder="Enter Vendor Code" />
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
-          <label>Vendor Name</label>
+          <label for="Name">Vendor Name</label>
           <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
             placeholder="Enter Vendor Name" />
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12">
-          <label>Vendor Company Type</label>
+          <label for="CompanyType">Vendor Company Type</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CompanyTypeRef"
             name="CompanyTypeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CompanyType">
             <nz-option *ngFor="let company of CompanyTypeList" [nzValue]="company.Ref"
@@ -33,17 +33,17 @@
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4 col-md-4 col-sm-12">
-          <label>Vendor Phone Number</label>
+          <label for="MobileNo">Vendor Phone Number</label>
           <input type="text" [(ngModel)]="Entity.p.MobileNo" name="MobileNo" class="form-control" id="MobileNo" required
             placeholder="Enter Vendor Mobile No." />
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
-          <label>Vendor AddressLine1</label>
+          <label for="AddressLine1">Vendor AddressLine1</label>
           <input type="text" [(ngModel)]="Entity.p.AddressLine1" name="AddressLine1" class="form-control"
             id="AddressLine1" required placeholder="Enter Vendor AddressLine1" />
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
-          <label>Vendor AddressLine2</label>
+          <label for="AddressLine2">Vendor AddressLine2</label>
           <input type="text" [(ngModel)]="Entity.p.AddressLine2" name="AddressLine2" class="form-control"
             id="AddressLine2" required placeholder="Enter Vendor AddressLine2" />
         </div>
@@ -74,22 +74,22 @@
           </nz-select>
         </div>
       </div>
-    </div>
-    <div class="row" style="margin-top: 1rem; ">
-      <div class="col-md-4 col-md-4 col-sm-12">
-        <label>Pin Code</label>
-        <input type="text" [(ngModel)]="Entity.p.PinCode" name="PinCode" class="form-control" id="PinCode" required
-          placeholder="Enter Pin Code" />
-      </div>
-      <div class="col-md-4 col-md-4 col-sm-12">
-        <label>Bank Name</label>
-        <input type="text" [(ngModel)]="Entity.p.BankName" name="Name" class="form-control" id="Name" required
-          placeholder="Enter Bank Name" />
-      </div>
-      <div class="col-md-4 col-md-4 col-sm-12">
-        <label>Branch Name</label>
-        <input type="text" [(ngModel)]="Entity.p.BranchName" name="BranchName" class="form-control" id="BranchName"
-          required placeholder="Enter Branch Name" />
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4 col-md-4 col-sm-12">
+          <label>Pin Code</label>
+          <input type="text" [(ngModel)]="Entity.p.PinCode" name="PinCode" class="form-control" id="PinCode" required
+            placeholder="Enter Pin Code" />
+        </div>
+        <div class="col-md-4 col-md-4 col-sm-12">
+          <label>Bank Name</label>
+          <input type="text" [(ngModel)]="Entity.p.BankName" name="Name" class="form-control" id="Name" required
+            placeholder="Enter Bank Name" />
+        </div>
+        <div class="col-md-4 col-md-4 col-sm-12">
+          <label>Branch Name</label>
+          <input type="text" [(ngModel)]="Entity.p.BranchName" name="BranchName" class="form-control" id="BranchName"
+            required placeholder="Enter Branch Name" />
+        </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4 col-md-4 col-sm-12">
@@ -98,8 +98,8 @@
             required placeholder="Enter Bank Account Number" />
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
-          <label>IFSC Code</label>
-          <input type="text" [(ngModel)]="Entity.p.IFSCCode" name="IFSCCode" class="form-control" id="IFSCCode" required
+          <label for="IFSC">IFSC</label>
+          <input type="text" [(ngModel)]="Entity.p.IFSC" name="IFSC" class="form-control" id="IFSC" required
             placeholder="Enter IFSC Code" />
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
@@ -132,15 +132,13 @@
           </nz-select>
         </div>
         <div class="col-md-6 col-md-4 col-sm-12">
-          <label for="MaterialListSuppliedByVendor"><b>Services Provided Services</b></label>
-          <nz-select [(ngModel)]="Entity.p.MaterialListSuppliedByVendor" nzMode="multiple"
-            id="MaterialListSuppliedByVendor" name="MaterialListSuppliedByVendor" nzShowSearch nzAllowClear
-            (ngModalChange)="onVendorServicesChange(Entity.p.MaterialListSuppliedByVendor)"
-            nzPlaceHolder="Select services">
-            <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
-              [nzLabel]="material.p.Name"></nz-option>
+          <label for="ServicesProvidedByVendor"><b>Services Provided Services</b></label>
+          <nz-select [(ngModel)]="Entity.p.ServicesProvidedByVendor" nzMode="multiple" id="ServicesProvidedByVendor"
+            name="ServicesProvidedByVendor" nzShowSearch nzAllowClear nzPlaceHolder="Select services">
+            <nz-option *ngFor="let service of ServiceList" [nzValue]="service.Ref"
+              [nzLabel]="service.Name"></nz-option>
           </nz-select>
-        </div>
+        </div>d
       </div>
       <!-- <div class="col-md-6">
         <label>Company Name</label>

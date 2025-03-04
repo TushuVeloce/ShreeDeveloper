@@ -6,7 +6,7 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class VendorServiceFetchRequest
 {
-    public static readonly FetchRequestType: string = "VendorserviceFetchRequest";
+    public static readonly FetchRequestType: string = "VendorServiceFetchRequest";
 
     VendorServiceRefs: number[] = [];
 
