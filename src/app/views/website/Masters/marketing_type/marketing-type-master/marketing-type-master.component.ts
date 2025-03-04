@@ -53,11 +53,13 @@ export class MarketingTypeMasterComponent implements OnInit {
   getMarketingTypeListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    if (this.companyRef()) {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
       let lst = await MarketingType.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
-    }
     this.loadPaginationData();
   }
 
@@ -98,12 +100,11 @@ export class MarketingTypeMasterComponent implements OnInit {
 
 
   AddMarketingType() {
-    if (this.companyRef()) {
-      this.router.navigate(['/homepage/Website/Marketing_Type_Master_Details']);
+    if (this.companyRef() <= 0) {
+      this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
-    else {
-      this.uiUtils.showWarningToster('Please select the company)');
-    }
+    this.router.navigate(['/homepage/Website/Marketing_Type_Master_Details']);
   }
 
   filterTable = () => {

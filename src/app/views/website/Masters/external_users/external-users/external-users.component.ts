@@ -48,15 +48,16 @@ export class ExternalUsersComponent implements OnInit {
       getExternalUsersListByCompanyRef = async () => {
       this.MasterList = [];
       this.DisplayMasterList = [];
-      if (this.companyRef()) {
+      if (this.companyRef() <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
         let lst = await ExternalUsers.FetchEntireListByCompanyRef(
           this.companyRef(),
           async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
         );
         this.MasterList = lst;
         this.DisplayMasterList = this.MasterList;
-        console.log('DisplayMasterList :', this.DisplayMasterList);
-      }
       this.loadPaginationData();
     };
 
@@ -96,12 +97,12 @@ export class ExternalUsersComponent implements OnInit {
   }
 
  async AddExternalUser(){
-  if(this.companyRef()){
-    this.router.navigate(['/homepage/Website/External_Users_Details']);
-  }else{
-    await this.uiUtils.showWarningToster('Company not Selected');
+  if (this.companyRef() <= 0) {
+    this.uiUtils.showErrorToster('Company not Selected');
+    return;
   }
-  }
+  this.router.navigate(['/homepage/Website/External_Users_Details']);
+}
 
   filterTable = () => {
     if (this.SearchString != '') {

@@ -35,17 +35,18 @@ export class FinancialYearMasterComponent implements OnInit {
 
 
   headers: string[] = ['Sr.No.', 'From Date', 'To Date'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private utils: Utils,
-    private dtu: DTU, private datePipe: DatePipe,private companystatemanagement: CompanyStateManagement,
-  ) {    effect(() => {
-        this.getFinancialYearListByCompanyRef()
-      });
-     }
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private utils: Utils,
+    private dtu: DTU, private datePipe: DatePipe, private companystatemanagement: CompanyStateManagement,
+  ) {
+    effect(() => {
+      this.getFinancialYearListByCompanyRef()
+    });
+  }
 
   async ngOnInit() {
-   // await this.FormulateMasterList();
+    // await this.FormulateMasterList();
     this.convertdate();
-  //  this.CreateNewFinancialYear();
+    //  this.CreateNewFinancialYear();
 
   }
 
@@ -107,15 +108,17 @@ export class FinancialYearMasterComponent implements OnInit {
 
 
   getFinancialYearListByCompanyRef = async () => {
-        this.MasterList = [];
-        this.DisplayMasterList = [];
-        if(this.companyRef){
-          let lst = await FinancialYear.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-          this.MasterList = lst;
-          this.DisplayMasterList = this.MasterList;
-        }
-        this.loadPaginationData();
-      }
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await FinancialYear.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  }
 
   FromDates: string[] = [];
   ToDates: string[] = [];

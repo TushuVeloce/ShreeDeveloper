@@ -47,13 +47,15 @@ export class StageMasterComponent implements OnInit {
   getStageListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    if (this.companyRef()) {
-      let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.MasterList = lst;
-      console.log('MasterList :', this.MasterList);
-
-      this.DisplayMasterList = this.MasterList;
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
+    let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    console.log('MasterList :', this.MasterList);
+
+    this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
 
@@ -95,11 +97,11 @@ export class StageMasterComponent implements OnInit {
 
 
   AddStage() {
-    if (this.companyRef()) {
-      this.router.navigate(['/homepage/Website/Stage_Master_Details']);
-    } else {
-      this.uiUtils.showErrorToster('Please select a company first!');
+    if (this.companyRef() <= 0) {
+      this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
+    this.router.navigate(['/homepage/Website/Stage_Master_Details']);
   }
 
 

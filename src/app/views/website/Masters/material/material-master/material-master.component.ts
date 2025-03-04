@@ -57,13 +57,15 @@ export class MaterialMasterComponent implements OnInit {
   getMaterialListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    if (this.companyRef()) {
-      let lst = await Material.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.MasterList = lst;
-      console.log('MaterialList :', this.MasterList);
-
-      this.DisplayMasterList = this.MasterList;
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
+    let lst = await Material.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    console.log('MaterialList :', this.MasterList);
+
+    this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
   onEditClicked = async (item: Material) => {
@@ -113,12 +115,11 @@ export class MaterialMasterComponent implements OnInit {
   };
 
   async AddMaterial() {
-    if (this.companyRef()) {
-      this.router.navigate(['/homepage/Website/Material_Master_Details']);
+    if (this.companyRef() <= 0) {
+      this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
-    else {
-      await this.uiUtils.showWarningToster('Company not Selected');
-    }
+    this.router.navigate(['/homepage/Website/Material_Master_Details']);
   }
 
 

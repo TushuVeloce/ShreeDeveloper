@@ -52,14 +52,16 @@ export class UserRoleMasterComponent implements OnInit {
   getUserRoleListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    if (this.companyRef()) {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
       let lst = await UserRole.FetchEntireListByCompanyRef(
         this.companyRef(),
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
-    }
     this.loadPaginationData();
   };
 
@@ -103,11 +105,11 @@ export class UserRoleMasterComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
   async AddUserRole() {
-    if (this.companyRef()) {
-      this.router.navigate(['/homepage/Website/User_Role_Master_Details']);
-    } else {
-      await this.uiUtils.showWarningToster('Company not Selected');
+    if (this.companyRef() <= 0) {
+      this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
+    this.router.navigate(['/homepage/Website/User_Role_Master_Details']);
   }
 
   filterTable = () => {

@@ -49,10 +49,9 @@ export class DepartmentMasterComponent implements OnInit {
       this.MasterList = [];
       this.DisplayMasterList = [];
       if(this.companyRef()<=0){
-        await this.uiUtils.showWarningToster('Company not Selected');
+        await this.uiUtils.showErrorToster('Company not Selected');
         return;
       }
-      alert("m")
         let lst = await Department.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
         this.MasterList = lst;
         this.DisplayMasterList = this.MasterList;
@@ -95,12 +94,15 @@ export class DepartmentMasterComponent implements OnInit {
   }
 
   async AddDepartment() {
-    if(this.companyRef()){
-      this.router.navigate(['/homepage/Website/Department_Master_Details']);
-    }else{
-      await this.uiUtils.showWarningToster('Company not Selected');
+
+    
+    if (this.companyRef() <= 0) {
+      this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
+    this.router.navigate(['/homepage/Website/Department_Master_Details']);
   }
+
   filterTable = () => {
     if (this.SearchString != '') {
       this.DisplayMasterList = this.MasterList.filter((data: any) => {

@@ -63,15 +63,17 @@ export class EmployeeMasterComponent implements OnInit {
   getEmployeeListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    if (this.companyRef()) {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
       let lst = await Employee.FetchEntireListByCompanyRef(
         this.companyRef(),
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
-    }
-    this.loadPaginationData();
+      this.loadPaginationData();
   };
 
   onEditClicked = async (item: Employee) => {
@@ -115,11 +117,11 @@ export class EmployeeMasterComponent implements OnInit {
   };
 
   async AddEmployee() {
-    if (this.companyRef()) {
-      this.router.navigate(['/homepage/Website/Employee_Master_Details']);
-    } else {
-      await this.uiUtils.showWarningToster('Company not Selected');
+    if (this.companyRef() <= 0) {
+      this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
+    this.router.navigate(['/homepage/Website/Employee_Master_Details']);
   }
 
   filterTable = () => {
