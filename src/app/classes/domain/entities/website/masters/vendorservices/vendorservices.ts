@@ -164,6 +164,13 @@ export class VendorService implements IPersistable<VendorService> {
   //   return VendorService.ListFromTransportData(tdResponse);
   // }
 
+   public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+        let req = new VendorServiceFetchRequest();
+        req.CompanyRefs.push(CompanyRef)
+        let tdResponse = await VendorService.FetchTransportData(req, errorHandler) as TransportData;
+        return VendorService.ListFromTransportData(tdResponse);
+      }
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

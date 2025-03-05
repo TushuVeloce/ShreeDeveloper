@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -22,17 +23,31 @@ export class VendorServicesMasterComponent  implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
 
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+
   headers: string[] = ['Sr.No.', 'VendorService', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService ) {}
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement
+   ) {
+     effect(() => {
+          this.FormulateVendorServiceList()
+        });
+   }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    await this.FormulateVendorServiceList();
+    // await this.FormulateVendorServiceList();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
   private FormulateVendorServiceList = async () => {
-    let lst = await VendorService.FetchEntireList(
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await VendorService.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     console.log(lst);

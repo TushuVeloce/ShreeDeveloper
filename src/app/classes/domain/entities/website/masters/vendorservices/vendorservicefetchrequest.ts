@@ -8,7 +8,8 @@ export class VendorServiceFetchRequest
 {
     public static readonly FetchRequestType: string = "VendorServiceFetchRequest";
 
-    VendorServiceRefs: number[] = [];
+    VendorServiceRefs: number[] = [];   
+    CompanyRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
