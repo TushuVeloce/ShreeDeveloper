@@ -6,11 +6,11 @@
     <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus
       [(ngModel)]="SearchString" />
   </div>
-  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
-    <!-- <nz-button nz-button class="btn1" (click)='CreateNewFinancialYear()'>
+  <!-- <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
+    <nz-button nz-button class="btn1" (click)='CreateNewFinancialYear()'>
       Create New Financial Year
-    </nz-button> -->
-  </div>
+    </nz-button>
+  </div> -->
 </div>
 <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="MasterList.length > 0">
   <div class="table-container">

@@ -37,20 +37,44 @@ export class CityComponent implements OnInit {
 
   private FormulateCountryList = async () => {
     this.CountryList = [];
-    let lst = await Country.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Country.FetchEntireList(async errMsg => 
+        await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.CountryList = lst;
-    this.loadPaginationData();
+
+    // Set default country (9163)
+    const defaultCountry = this.CountryList.find(c => c.p.Ref === 9163);
+    this.CountryRef = defaultCountry ? defaultCountry.p.Ref : this.CountryList[0]?.p.Ref;
+
+    // Fetch states based on the selected country
+    if (this.CountryRef) {
+        await this.getStateListByCountryRef(this.CountryRef);
+    }
+};
+
+
+getStateListByCountryRef = async (CountryRef: number) => {
+  this.Entity.p.StateRef = 0;
+  this.StateList = [];
+  this.MasterList = [];
+  this.DisplayMasterList = [];
+  let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => 
+      await this.uiUtils.showErrorMessage('Error', errMsg)
+  );
+  this.StateList = lst;
+
+  // Set default state (10263)
+  const defaultState = this.StateList.find(s => s.p.Ref === 10263);
+  this.Entity.p.StateRef = defaultState ? defaultState.p.Ref : this.StateList[0]?.p.Ref;
+
+  // Fetch cities based on selected state
+  if (this.Entity.p.StateRef) {
+      await this.getCityListByStateRef(this.Entity.p.StateRef);
   }
 
-  getStateListByCountryRef = async (CountryRef: number) => {
-    this.Entity.p.StateRef = 0;
-    this.StateList = [];
-    this.MasterList = [];
-    this.DisplayMasterList = [];
-    let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.StateList = lst;
-    this.loadPaginationData();
-  }
+  this.loadPaginationData();
+};
+
 
   getCityListByStateRef = async (StateRef: number) => {
     this.MasterList = [];

@@ -1,9 +1,9 @@
 
-import { TransportData } from '../../../../../../classes/infrastructure/transportdata';
-import { DataContainerService } from '../../../../../../classes/infrastructure/datacontainer.service';
+import { TransportData } from '../../../../../infrastructure/transportdata';
+import { DataContainerService } from '../../../../../infrastructure/datacontainer.service';
 import { Utils } from '../../../../../../services/utils.service';
-import { RequestTypes } from '../../../../../../classes/infrastructure/enums';
-import { DataCollection } from '../../../../../../classes/infrastructure/datacollection';
+import { RequestTypes } from '../../../../../infrastructure/enums';
+import { DataCollection } from '../../../../../infrastructure/datacollection';
 
 export class FinancialYearCustomRequest {
   public static readonly CustomProcessRequestType: string = "FinancialYearCustomRequest";

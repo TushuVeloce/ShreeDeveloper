@@ -44,6 +44,8 @@ export class StageMasterDetailsComponent implements OnInit {
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
+    console.log(entitiesToSave);
+    
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {

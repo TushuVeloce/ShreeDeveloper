@@ -44,7 +44,7 @@ export class StateComponent implements OnInit {
     );
     this.CountryList = lst;
     // Set "India" (Ref: 9162) as default if present; otherwise, pick the first country.
-    const defaultCountry = this.CountryList.find((c) => c.p.Ref === 9162);
+    const defaultCountry = this.CountryList.find((c) => c.p.Ref === 9163);
     this.Entity.p.CountryRef = defaultCountry ? defaultCountry.p.Ref : this.CountryList[0]?.p.Ref;
 
     // Fetch states based on the selected country
