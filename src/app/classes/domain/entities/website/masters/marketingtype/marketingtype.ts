@@ -14,7 +14,7 @@ import { MarketingTypeFetchRequest } from "./marketingtypefetchrequest";
 
 
 export class MarketingTypeProps {
-  public readonly Db_Table_Name = "MarketingActivityMaster";
+  public readonly Db_Table_Name = "MarketingTypeMaster";
   public Ref: number = 0;
   public Description: string = '';
   public MarketingMode: string = '';
@@ -36,7 +36,7 @@ export class MarketingTypeProps {
 }
 
 export class MarketingType implements IPersistable<MarketingType> {
-  public static readonly Db_Table_Name: string = 'MarketingActivityMaster';
+  public static readonly Db_Table_Name: string = 'MarketingTypeMaster';
 
   private constructor(public readonly p: MarketingTypeProps, public readonly AllowEdit: boolean) {
 
@@ -146,7 +146,7 @@ export class MarketingType implements IPersistable<MarketingType> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MarketingTypeFetchRequest();
-    req.MarketingRefs.push(ref);
+    req.MarketingTypeRefs.push(ref);
 
     let tdResponse = await MarketingType.FetchTransportData(req, errorHandler) as TransportData;
     return MarketingType.SingleInstanceFromTransportData(tdResponse);

@@ -152,7 +152,7 @@ export class BankAccount implements IPersistable<BankAccount> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new BankAccountFetchRequest();
-    req.BankRefs.push(ref);
+    req.BankAccountRefs.push(ref);
 
     let tdResponse = await BankAccount.FetchTransportData(req, errorHandler) as TransportData;
     return BankAccount.SingleInstanceFromTransportData(tdResponse);

@@ -9,7 +9,7 @@ export class BankAccountFetchRequest
     public static readonly FetchRequestType: string = "BankAccountFetchRequest";
     
     CompanyRefs: number[] = [];
-    BankRefs: number[] = [];
+    BankAccountRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

@@ -6,10 +6,10 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class MarketingTypeFetchRequest
 {
-    public static readonly FetchRequestType: string = "MarketingActivityFetchRequest";
+    public static readonly FetchRequestType: string = "MarketingTypeFetchRequest";
 
     CompanyRefs: number[] = [];
-    MarketingRefs: number[] = [];
+    MarketingTypeRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
