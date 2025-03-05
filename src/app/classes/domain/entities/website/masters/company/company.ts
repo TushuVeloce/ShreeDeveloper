@@ -30,11 +30,11 @@ export class CompanyProps {
   public DateOfInCorporation:string = '';
   public LastDateOfFirstFinancialYear:  string='';
   public Notes:  string='';
-  public CountryRef:  number = 9164;
+  public CountryRef:  number = 9163;
   public readonly CountryName: string='';
-  public StateRef:  number = 10264;
+  public StateRef:  number = 10263;
   public readonly StateName: string='';
-  public CityRef:  number = 10375 ;
+  public CityRef:  number = 10374 ;
   public readonly CityName: string='';
  
 
