@@ -26,16 +26,21 @@ export class MaterialMasterComponent implements OnInit {
   total = 0;
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-
+  
   headers: string[] = ['Sr.No.', 'Code', 'Material Name', 'Material Unit', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(() => {
-      this.getMaterialListByCompanyRef()
+      // this.getMaterialListByCompanyRef()
+      setTimeout(() => {
+        if (this.companyRef() > 0) {
+          this.getMaterialListByCompanyRef();
+        }
+      }, 300);
     });
   }
-
+  
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
     // await this.FormulateMaterialList();
@@ -57,6 +62,7 @@ export class MaterialMasterComponent implements OnInit {
   getMaterialListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
+    console.log('companyRef :', this.companyRef());
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
