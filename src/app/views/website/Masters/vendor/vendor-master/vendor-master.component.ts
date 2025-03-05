@@ -51,6 +51,8 @@ export class VendorMasterComponent implements OnInit {
       let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
+      console.log('MasterList :', this.MasterList);
+      
     }
     this.loadPaginationData();
   }

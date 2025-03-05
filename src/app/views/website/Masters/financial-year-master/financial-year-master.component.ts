@@ -109,32 +109,32 @@ export class FinancialYearMasterComponent implements OnInit {
   }
 
   // Financial Year Custom Request 
-  AddNewFinancialYear = async () => {
+  // AddNewFinancialYear = async () => {
 
-    let req = new FetchFinancialYearUserCustomRequest();
-    req.CompanyRef = this.Entity.p.CompanyRef;
-    req.Ref = this.Entity.p.Ref;
+  //   let req = new FetchFinancialYearUserCustomRequest();
+  //   req.CompanyRef = this.Entity.p.CompanyRef;
+  //   req.Ref = this.Entity.p.Ref;
 
-    let td = req.FormulateTransportData();
-    let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+  //   let td = req.FormulateTransportData();
+  //   let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
 
-    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+  //   let tr = await this.serverCommunicator.sendHttpRequest(pkt);
 
-    if (!tr.Successful) {
-      await this.uiUtils.showErrorMessage('Error', tr.Message);
-      return;
-    }
+  //   if (!tr.Successful) {
+  //     await this.uiUtils.showErrorMessage('Error', tr.Message);
+  //     return;
+  //   }
 
-    let tdResult = JSON.parse(tr.Tag) as TransportData;
+  //   let tdResult = JSON.parse(tr.Tag) as TransportData;
 
-    let NewFinancialYear = this.utils.GetString(tdResult);
-    console.log(NewFinancialYear);
+  //   let NewFinancialYear = this.utils.GetString(tdResult);
+  //   console.log(NewFinancialYear);
     
-    this.Entity.p.FromDate = NewFinancialYear;
-    console.log(this.Entity.p.FromDate);
+  //   this.Entity.p.FromDate = NewFinancialYear;
+  //   console.log(this.Entity.p.FromDate);
     
 
-    // this.Entity.p.FromDate = NewFinancialYear.FromDate;
-    // this.Entity.p.ToDate = NewFinancialYear.ToDate;
-  }
+  //   // this.Entity.p.FromDate = NewFinancialYear.FromDate;
+  //   // this.Entity.p.ToDate = NewFinancialYear.ToDate;
+  // }
 }
