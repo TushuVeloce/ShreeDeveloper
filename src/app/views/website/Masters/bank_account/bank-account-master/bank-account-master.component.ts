@@ -64,7 +64,7 @@ export class BankAccountMasterComponent implements OnInit {
     this.SelectedBankAccount = item.GetEditableVersion();
     BankAccount.SetCurrentInstance(this.SelectedBankAccount);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Bank_Master_Details']);
+    await this.router.navigate(['/homepage/Website/Bank_Account_Master_Details']);
   }
 
   onDeleteClicked = async (BankAccount: BankAccount) => {
