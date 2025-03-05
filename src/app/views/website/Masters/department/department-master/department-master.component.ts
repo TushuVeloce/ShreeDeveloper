@@ -94,8 +94,6 @@ export class DepartmentMasterComponent implements OnInit {
   }
 
   async AddDepartment() {
-
-    
     if (this.companyRef() <= 0) {
       this.uiUtils.showErrorToster('Company not Selected');
       return;

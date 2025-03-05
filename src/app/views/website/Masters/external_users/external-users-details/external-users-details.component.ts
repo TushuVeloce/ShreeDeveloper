@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
 import { ExternalUsers } from 'src/app/classes/domain/entities/website/masters/externalusers/externalusers';
@@ -24,29 +24,44 @@ export class ExternalUsersMasterDetailsComponent implements OnInit {
   UserRoleList: UserRole[] = [];
   DepartmentList: Department[] = [];
   companyName = this.companystatemanagement.SelectedCompanyName;
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement)  {
+      effect(() => {
+        this.getDepartmentListByCompanyRef()
+        this.getUserRoleListByCompanyRef()
+      });
+     }
+  
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true)
-    this.UserRoleList = await UserRole.FetchEntireList();
-    this.DepartmentList = await Department.FetchEntireList();
+    // this.UserRoleList = await UserRole.FetchEntireList();
+    // this.DepartmentList = await Department.FetchEntireList();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-
       this.DetailsFormTitle = this.IsNewEntity ? 'New External User' : 'Edit External User';
       this.Entity = ExternalUsers.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable')
-
     } else {
       this.Entity = ExternalUsers.CreateNewInstance();
       ExternalUsers.SetCurrentInstance(this.Entity);
-
     }
     this.InitialEntity = Object.assign(ExternalUsers.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)) as ExternalUsers;
     // this.focusInput();
   }
+
+
+  getDepartmentListByCompanyRef = async () => {
+      let lst = await Department.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.DepartmentList = lst;
+  }
+
+  getUserRoleListByCompanyRef = async () => {
+    let lst = await UserRole.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.UserRoleList = lst;
+}
 
   SaveExternalUserMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
