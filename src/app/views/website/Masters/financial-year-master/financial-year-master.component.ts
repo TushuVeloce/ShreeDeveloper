@@ -2,10 +2,14 @@ import { DatePipe } from '@angular/common';
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FinancialYear } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
+import { FetchFinancialYearUserCustomRequest } from 'src/app/classes/domain/entities/website/masters/financialyear/FinancialYearUserCustomRequest';
+import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
+import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 // import { FinancialYearCustomRequest } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyearfetchrequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
+import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -36,7 +40,8 @@ export class FinancialYearMasterComponent implements OnInit {
 
   headers: string[] = ['Sr.No.', 'From Date', 'To Date'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private utils: Utils,
-    private dtu: DTU, private datePipe: DatePipe, private companystatemanagement: CompanyStateManagement,
+    private dtu: DTU, private datePipe: DatePipe, private companystatemanagement: CompanyStateManagement, private payloadPacketFacade: PayloadPacketFacade,
+    private serverCommunicator: ServerCommunicatorService
   ) {
     effect(() => {
       this.getFinancialYearListByCompanyRef()
@@ -46,66 +51,7 @@ export class FinancialYearMasterComponent implements OnInit {
   async ngOnInit() {
     // await this.FormulateMasterList();
     this.convertdate();
-    //  this.CreateNewFinancialYear();
-
   }
-
-  //  CreateNewFinancialYear = async () => {
-  //   let lst = await FinancialYear.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.MasterList = lst;
-  //   this.DisplayMasterList = this.MasterList
-  // }
-
-  // CreateNewFinancialYear = async () => {
-  //     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-  //     let entityToSave = this.Entity.GetEditableVersion();
-  //     console.log('entityToSave :', entityToSave);
-  //     let entitiesToSave = [entityToSave]
-  //     // await this.Entity.EnsurePrimaryKeysWithValidValues()
-  //     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-  //     if (!tr.Successful) {
-  //       this.isSaveDisabled = false;
-  //       this.uiUtils.showErrorToster(tr.Message);
-  //       return
-  //     }
-  //     else {
-  //       this.isSaveDisabled = false;
-  //       // this.onEntitySaved.emit(entityToSave);
-  //       if (this.IsNewEntity) {
-  //         await this.uiUtils.showSuccessToster('Fianacial Master Created successfully!');
-  //         this.Entity = FinancialYear.CreateNewInstance();
-  //       } else {
-  //         await this.uiUtils.showSuccessToster('Fianacial Master Created successfully!');
-  //       }
-  //     }
-  //     this.getFinancialYearListByCompanyRef()
-  //   }
-
-
-  // CreateNewFinancialYear = async () => {
-  //   await this.uiUtils.showConfirmationMessage('Move',
-  //     `This process is IRREVERSIBLE!  <br>
-  //     'Are you sure that you want to Move Fine & Cash?`,
-  //     async () => {
-  //       let req = new FinancialYearCustomRequest();
-  //       req.companyRef.push(this.Entity.p.CompanyRef);
-  //       let td = req.FormulateTransportData();
-  //       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-
-  //       let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-
-  //       if (!tr.Successful) {
-  //         await this.uiUtils.showErrorMessage('Error', tr.Message);
-  //         return;
-  //       }
-  //       await this.uiUtils.showConfirmationMessage('Fine & Cash', 'Fine & Cash moved successfully!');
-  //       this.GetKarigarReceiptByKarigarRef();
-  //     })
-  // }
-
-
-
-
 
   getFinancialYearListByCompanyRef = async () => {
     this.MasterList = [];
@@ -162,5 +108,33 @@ export class FinancialYearMasterComponent implements OnInit {
     }
   }
 
+  // Financial Year Custom Request 
+  AddNewFinancialYear = async () => {
 
+    let req = new FetchFinancialYearUserCustomRequest();
+    req.CompanyRef = this.Entity.p.CompanyRef;
+    req.Ref = this.Entity.p.Ref;
+
+    let td = req.FormulateTransportData();
+    let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+
+    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+
+    if (!tr.Successful) {
+      await this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
+    }
+
+    let tdResult = JSON.parse(tr.Tag) as TransportData;
+
+    let NewFinancialYear = this.utils.GetString(tdResult);
+    console.log(NewFinancialYear);
+    
+    this.Entity.p.FromDate = NewFinancialYear;
+    console.log(this.Entity.p.FromDate);
+    
+
+    // this.Entity.p.FromDate = NewFinancialYear.FromDate;
+    // this.Entity.p.ToDate = NewFinancialYear.ToDate;
+  }
 }

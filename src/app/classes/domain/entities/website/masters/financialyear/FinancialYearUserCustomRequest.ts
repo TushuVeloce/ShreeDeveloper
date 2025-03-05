@@ -4,16 +4,15 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class UserRoleRightsFetchRequest {
-    public static readonly FetchRequestType: string = "UserRoleRightFetchRequest";
+export class FetchFinancialYearUserCustomRequest
+{
+    public static readonly FetchRequestType: string = "FetchFinancialYearUserCustomRequest";
+    CompanyRef:number = 0;
+    Ref:number = 0;
 
-    // UserRoleRightsRefs: number[] = [];
-    CompanyRefs: number[] = [];
-    UserRoleRefs : number[] = [];
-
-
-    public MergeIntoTransportData = (td: TransportData) => {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, UserRoleRightsFetchRequest.FetchRequestType) as DataCollection;
+    public MergeIntoTransportData = (td: TransportData) =>
+    {
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, FetchFinancialYearUserCustomRequest.FetchRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 

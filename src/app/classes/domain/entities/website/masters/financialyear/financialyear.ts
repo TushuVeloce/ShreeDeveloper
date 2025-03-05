@@ -19,6 +19,7 @@ export class FinancialYearProps {
   ToDate: string = '';
   ShortName	: string = '';
   public CompanyRef: number = 0;
+  // public FinancialYear: string = '';
 
   public readonly CompanyName: string = '';
 
@@ -155,13 +156,6 @@ export class FinancialYear implements IPersistable<FinancialYear> {
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new FinancialYearFetchRequest();
-    let tdResponse = await FinancialYear.FetchTransportData(req, errorHandler) as TransportData;
-    return FinancialYear.ListFromTransportData(tdResponse);
-  }
-
-  public static async FetchEntireListByCountryRef(CountryRef :number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new FinancialYearFetchRequest();
-    req.CompanyRefs.push(CountryRef)
     let tdResponse = await FinancialYear.FetchTransportData(req, errorHandler) as TransportData;
     return FinancialYear.ListFromTransportData(tdResponse);
   }
