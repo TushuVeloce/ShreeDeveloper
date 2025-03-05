@@ -84,7 +84,6 @@ export class UserRoleRights implements IPersistable<UserRoleRights> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     // if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-    if (this.p.UserRoleRef <= 0) vra.add('CountryRef', 'Country cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
