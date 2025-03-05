@@ -33,13 +33,21 @@ export class MaterialMasterComponent implements OnInit {
   ) {
     effect(() => {
       // this.getMaterialListByCompanyRef()
-      setTimeout(() => {
-        if (this.companyRef() > 0) {
           this.getMaterialListByCompanyRef();
-        }
-      }, 300);
     });
   }
+
+  // effect(() => {
+  //   // this.getMaterialListByCompanyRef()
+  //   setTimeout(() => {
+  //     if (this.companyRef() > 0) {
+  //       this.getMaterialListByCompanyRef();
+  //     }
+  //   }, 300);
+  // });
+
+
+
   
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);

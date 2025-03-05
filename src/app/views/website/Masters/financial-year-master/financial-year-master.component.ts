@@ -50,7 +50,6 @@ export class FinancialYearMasterComponent implements OnInit {
 
   async ngOnInit() {
     // await this.FormulateMasterList();
-    this.convertdate();
   }
 
   getFinancialYearListByCompanyRef = async () => {
@@ -64,6 +63,7 @@ export class FinancialYearMasterComponent implements OnInit {
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
+    this.convertdate();
   }
 
   FromDates: string[] = [];
