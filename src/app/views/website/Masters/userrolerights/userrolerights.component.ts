@@ -44,6 +44,8 @@ export class UserrolerightsComponent implements OnInit {
     // this.loadRoleRightsFromStorage();
     console.log('Modules:', this.ModuleList);
 
+    this.modules = this.mastermodules;
+
     // let lst = await UserRoleRights.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     // this.MasterList = lst;
 
@@ -108,59 +110,6 @@ export class UserrolerightsComponent implements OnInit {
     }
   }
 
-  updateRoleRights(index: number, right: keyof typeof this.modules[number]) {
-    const module = this.modules[index];
-    console.log(`Module: ${module.FeatureName}, Right: ${right}, Status: ${module[right]}`);
-
-
-    // Build the updated JSON structure
-    // const roleRightsObject = {
-    //   Ref: 0,
-    //   UserRoleRef: 1,
-    //   CompanyRef: 1,
-    //   Entries: {
-    //     Master: this.mastermodules.map(mod => ({
-    //       Feature: mod.Feature,
-    //       Add: mod.CanAdd,
-    //       Edit: mod.edit,
-    //       Delete: mod.delete,
-    //       View: mod.view,
-    //       Print: mod.print,
-    //       Exports: mod.exports
-    //     }))
-    //   }
-    // };
-    // console.log('Updated Role Rights Object:', roleRightsObject);
-    // localStorage.setItem('userRoleRights', JSON.stringify(roleRightsObject));
-  }
-
-  // loadRoleRightsFromStorage(): void {
-  //   const storedData = localStorage.getItem('userRoleRights');
-  //   // console.log('Stored Data:', storedData);
-
-  //   if (storedData) {
-  //     const parsedData = JSON.parse(storedData);
-  //     if (parsedData?.Master?.length) {
-  //       const masterEntry = parsedData.Master[0]; // Assuming only one master entry
-
-  //       // Convert the master object back to the modules array
-  //       this.modules = Object.keys(masterEntry).map(moduleName => ({
-  //         name: moduleName,
-  //         add: masterEntry[moduleName].Add,
-  //         edit: masterEntry[moduleName].Edit,
-  //         delete: masterEntry[moduleName].Delete,
-  //         view: masterEntry[moduleName].View,
-  //         print: masterEntry[moduleName].Print,
-  //         exports: masterEntry[moduleName].Exports
-  //       }));
-  //       console.log('Loaded modules:', this.modules);
-
-  //     }
-  //   } else {
-  //     console.log('No role rights data found in local storage.');
-  //   }
-  // }
-
   SaveUserRoleRights = async () => {
     // this.modules.forEach(e=> this.Entity.p.Feature.push(e as any));
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
@@ -202,5 +151,22 @@ export class UserrolerightsComponent implements OnInit {
     let lst = await UserRoleRights.FetchEntireListByUserRoleRef(UserRoleRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = lst;
     console.log('UserRoleSelected :', this.DisplayMasterList);
+    if (lst.length > 0) {
+      lst.forEach(e => {
+        e.p.Feature.forEach(f => {
+          let mod = this.modules.find(m => m.FeatureName == f.FeatureName);
+          if (mod) {
+            mod.CanAdd = f.CanAdd;
+            mod.CanEdit = f.CanEdit;
+            mod.CanDelete = f.CanDelete;
+            mod.CanView = f.CanView;
+            mod.CanPrint = f.CanPrint;
+            mod.CanExport = f.CanExport;
+          }
+        });
+      });
+      this.modules= this.DisplayMasterList[0].p.Feature;
+
+    }
   }
 }
