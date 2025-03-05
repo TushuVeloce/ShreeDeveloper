@@ -17,7 +17,7 @@ export class StageProps {
   public readonly Db_Table_Name = "StageMaster";
   public Ref: number = 0;
   public Name: string = '';
-  public DispalyOrder: number = 0;
+  public DisplayOrder: number = 0;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
   
@@ -65,6 +65,7 @@ export class Stage implements IPersistable<Stage> {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
+    if (this.p.DisplayOrder == 0) vra.add('DisplayOrder', 'Display Order cannot be blank.');
 
   }
 
