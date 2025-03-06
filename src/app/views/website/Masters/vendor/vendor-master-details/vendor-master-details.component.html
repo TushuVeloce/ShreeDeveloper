@@ -122,10 +122,10 @@
       </div>
       <div class="row" style="margin-top: 1rem;">
         <div class="col-md-6 col-md-4 col-sm-12">
-          <label for="MaterialListSuppliedByVendor"><b>Material Suplied by Vendor</b></label>
-          <nz-select [(ngModel)]="Entity.p.MaterialListSuppliedByVendor" nzMode="multiple"
-            id="MaterialListSuppliedByVendor" name="MaterialListSuppliedByVendor" nzShowSearch nzAllowClear
-            (ngModalChange)="onVendorServicesChange(Entity.p.MaterialListSuppliedByVendor)"
+          <label for="MaterialSuppliedByVendors"><b>Material Suplied by Vendor</b></label>
+          <nz-select [(ngModel)]="Entity.p.MaterialSuppliedByVendors" nzMode="multiple"
+            id="MaterialSuppliedByVendors" name="MaterialSuppliedByVendors" nzShowSearch nzAllowClear
+            (ngModalChange)="onVendorServicesChange(Entity.p.MaterialSuppliedByVendors)"
             nzPlaceHolder="Select services">
             <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
               [nzLabel]="material.p.Name"></nz-option>

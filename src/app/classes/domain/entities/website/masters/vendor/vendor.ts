@@ -50,7 +50,7 @@ export class VendorProps {
   public CityRef:  number = 0;
   public readonly CityName: string='';
 
-  public MaterialListSuppliedByVendor: MaterialListSuppliedByVendorProps [] = [];
+  public MaterialSuppliedByVendors: MaterialListSuppliedByVendorProps [] = [];
   public ServicesProvidedByVendor: ServiceSuppliedByVendorProps [] = [];
 
   public CompanyRef: number = 0;

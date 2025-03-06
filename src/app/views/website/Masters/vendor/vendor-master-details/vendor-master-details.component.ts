@@ -44,8 +44,8 @@ export class VendorMasterDetailsComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(true);
     this.MaterialList = await Material.FetchEntireList();
     this.ServiceList = await VendorService.FetchEntireList();
-    console.log(this.MaterialList);
-    console.log(this.ServiceList);
+    // console.log(this.MaterialList);
+    // console.log(this.ServiceList);
 
     // if (this.VendorServicesList.length > 0) {
     //   this.VendorServicesOptions = this.VendorServicesList.map(item => ({
@@ -67,12 +67,13 @@ export class VendorMasterDetailsComponent implements OnInit {
     }
 
     this.CompanyList = await Company.FetchEntireList();
-    console.log(this.CompanyList);
+    // console.log(this.CompanyList);
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Vendor' : 'Edit Vendor';
       this.Entity = Vendor.GetCurrentInstance();
+      console.log('this.Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable')
 
     } else {
@@ -127,8 +128,8 @@ export class VendorMasterDetailsComponent implements OnInit {
     }
   }
   onVendorServicesChange(selectedvalue: any) {
-    this.Entity.p.MaterialListSuppliedByVendor = selectedvalue;
-    console.log(this.Entity.p.MaterialListSuppliedByVendor);
+    this.Entity.p.MaterialSuppliedByVendors = selectedvalue;
+    // console.log(this.Entity.p.MaterialSuppliedByVendors);
   }
 
   SaveVendorMaster = async () => {
@@ -138,7 +139,7 @@ export class VendorMasterDetailsComponent implements OnInit {
     let entityToSave = this.Entity.GetEditableVersion();
 
     let entitiesToSave = [entityToSave]
-    console.log(entitiesToSave);
+    // console.log(entitiesToSave);
 
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
