@@ -29,7 +29,15 @@ export class UserrolerightsComponent implements OnInit {
   total = 0;
   ModuleList = DomainEnums.ModuleList(true, '--Select Module Type--');
   headers: string[] = ['Module Name', 'Add', 'Edit', 'Delete', 'View', 'Print', 'Exports',];
-  modules: { FeatureName: string; CanAdd: boolean; CanEdit: boolean; CanDelete: boolean; CanView: boolean; CanPrint: boolean; CanExport: boolean }[] = [];
+  modules: { FeatureName: string; CanAdd: boolean; CanEdit: boolean; CanDelete: boolean; CanView: boolean; CanPrint: boolean; CanExport: boolean }[] = [{
+    FeatureName: '',
+    CanAdd: false,
+    CanEdit: false,
+    CanDelete: false,
+    CanView: false,
+    CanPrint: false,
+    CanExport: false
+  }];
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -40,11 +48,11 @@ export class UserrolerightsComponent implements OnInit {
 
   async ngOnInit() {
     this.FormulateUserRoleList();
-    this.mastermodules.forEach(e => this.Entity.p.Feature.push(e as any));
+    // this.mastermodules.forEach(e => this.Entity.p.Feature.push(e as any));
     // this.loadRoleRightsFromStorage();
     console.log('Modules:', this.ModuleList);
 
-    this.modules = this.mastermodules;
+    // this.modules = this.mastermodules;
 
     // let lst = await UserRoleRights.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     // this.MasterList = lst;
@@ -68,9 +76,6 @@ export class UserrolerightsComponent implements OnInit {
     { FeatureName: 'Vendor Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
     { FeatureName: 'Vehicle Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
     { FeatureName: 'User Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    // { Feature: 'Department Master', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'User Role Master', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'Employee Master', add: false, edit: false, delete: false, view: false, print: false, exports: false },
   ];
 
   transactionsmodules = [
@@ -97,7 +102,6 @@ export class UserrolerightsComponent implements OnInit {
     // { Feature: 'Account Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
   ];
 
-
   onclick(ref: number) {
     if (ref == 0) {
       this.modules = []
@@ -110,8 +114,17 @@ export class UserrolerightsComponent implements OnInit {
     }
   }
 
+  updateRoleRights(index: number, right: keyof typeof this.modules[number]) {
+    const module = this.modules[index];
+    // console.log(`Module: ${module.FeatureName}, Right: ${right}, Status: ${module[right]}`);
+  }
+
+AllModules = this.mastermodules.concat(this.transactionsmodules, this.reportsmodules);
+
   SaveUserRoleRights = async () => {
+    this.AllModules.forEach(e=> this.Entity.p.Feature.push(e as any));
     // this.modules.forEach(e=> this.Entity.p.Feature.push(e as any));
+    // this.Entity.p.Feature = [...this.modules];
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
@@ -165,7 +178,7 @@ export class UserrolerightsComponent implements OnInit {
           }
         });
       });
-      this.modules= this.DisplayMasterList[0].p.Feature;
+      this.modules = this.DisplayMasterList[0].p.Feature;
 
     }
   }
