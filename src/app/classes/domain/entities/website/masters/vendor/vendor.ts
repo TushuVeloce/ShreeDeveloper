@@ -43,15 +43,15 @@ export class VendorProps {
   public Pan:  string='';
   public CINNO:  string='';
 
-  public CountryRef:  number = 0;
+  public CountryRef:  number = 9163;
   public readonly CountryName: string='';
-  public StateRef:  number = 0;
+  public StateRef:  number = 10263;
   public readonly StateName: string='';
-  public CityRef:  number = 0;
+  public CityRef:  number = 10374;
   public readonly CityName: string='';
 
-  public MaterialSuppliedByVendors: MaterialListSuppliedByVendorProps [] = [];
-  public ServiceProvidedByVendors: ServiceSuppliedByVendorProps [] = [];
+  public MaterialListSuppliedByVendor : MaterialListSuppliedByVendorProps [] = [];
+  public ServiceListSuppliedByVendor : ServiceSuppliedByVendorProps [] = [];
 
   public CompanyRef: number = 0;
   public CompanyName: string = '';

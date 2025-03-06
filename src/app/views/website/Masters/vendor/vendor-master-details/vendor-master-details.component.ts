@@ -128,12 +128,12 @@ export class VendorMasterDetailsComponent implements OnInit {
     }
   }
   onVendorServicesChange(selectedvalue: any) {
-    this.Entity.p.MaterialSuppliedByVendors = selectedvalue;
+    this.Entity.p.MaterialListSuppliedByVendor = selectedvalue;
     // console.log(this.Entity.p.MaterialSuppliedByVendors);
   }
 
   onServiceProviceChange(Selectedservice:any){
-    this.Entity.p.ServiceProvidedByVendors = Selectedservice;
+    this.Entity.p.MaterialListSuppliedByVendor = Selectedservice;
   }
 
   SaveVendorMaster = async () => {

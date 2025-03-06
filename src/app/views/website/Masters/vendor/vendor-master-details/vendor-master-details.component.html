@@ -122,20 +122,20 @@
       </div>
       <div class="row" style="margin-top: 1rem;">
         <div class="col-md-6 col-md-4 col-sm-12">
-          <label for="MaterialSuppliedByVendors"><b>Material Suplied by Vendor</b></label>
-          <nz-select [(ngModel)]="Entity.p.MaterialSuppliedByVendors" nzMode="multiple"
-            id="MaterialSuppliedByVendors" name="MaterialSuppliedByVendors" nzShowSearch nzAllowClear
-            (ngModalChange)="onVendorServicesChange(Entity.p.MaterialSuppliedByVendors)"
+          <label for="MaterialListSuppliedByVendor"><b>Material Suplied by Vendor</b></label>
+          <nz-select [(ngModel)]="Entity.p.MaterialListSuppliedByVendor" nzMode="multiple"
+            id="MaterialListSuppliedByVendor" name="MaterialListSuppliedByVendor" nzShowSearch nzAllowClear
+            (ngModalChange)="onVendorServicesChange(Entity.p.MaterialListSuppliedByVendor)"
             nzPlaceHolder="Select services">
             <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
               [nzLabel]="material.p.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-6 col-md-4 col-sm-12">
-          <label for="ServiceProvidedByVendors"><b>Services Provided Services</b></label>
-          <nz-select [(ngModel)]="Entity.p.ServiceProvidedByVendors" nzMode="multiple" id="ServiceProvidedByVendors"
-            name="ServiceProvidedByVendors" nzShowSearch nzAllowClear nzPlaceHolder="Select services"
-            (ngModalChange)="onServiceProviceChange(Entity.p.ServiceProvidedByVendors)">
+          <label for="ServiceListSuppliedByVendor"><b>Services Provided Services</b></label>
+          <nz-select [(ngModel)]="Entity.p.ServiceListSuppliedByVendor" nzMode="multiple" id="ServiceListSuppliedByVendor"
+            name="ServiceListSuppliedByVendor" nzShowSearch nzAllowClear nzPlaceHolder="Select services"
+            (ngModalChange)="onServiceProviceChange(Entity.p.ServiceListSuppliedByVendor)">
             <nz-option *ngFor="let service of ServiceList" [nzValue]="service.p.Ref"
               [nzLabel]="service.p.Name"></nz-option>
           </nz-select>
