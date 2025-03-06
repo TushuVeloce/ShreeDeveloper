@@ -122,9 +122,12 @@ export class UserrolerightsComponent implements OnInit {
 AllModules = this.mastermodules.concat(this.transactionsmodules, this.reportsmodules);
 
   SaveUserRoleRights = async () => {
-    this.AllModules.forEach(e=> this.Entity.p.Feature.push(e as any));
+    // pushing all module data in one array 
+    // this.AllModules.forEach(e=> this.Entity.p.Feature.push(e as any));
+     // pushing all module data in different array 
     // this.modules.forEach(e=> this.Entity.p.Feature.push(e as any));
-    // this.Entity.p.Feature = [...this.modules];
+    // creating array 
+    this.Entity.p.Feature = [...this.modules];
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();

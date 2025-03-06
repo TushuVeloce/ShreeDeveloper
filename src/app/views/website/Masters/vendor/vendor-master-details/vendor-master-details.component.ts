@@ -132,6 +132,10 @@ export class VendorMasterDetailsComponent implements OnInit {
     // console.log(this.Entity.p.MaterialSuppliedByVendors);
   }
 
+  onServiceProviceChange(Selectedservice:any){
+    this.Entity.p.ServiceProvidedByVendors = Selectedservice;
+  }
+
   SaveVendorMaster = async () => {
 
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()

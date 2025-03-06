@@ -51,7 +51,7 @@ export class VendorProps {
   public readonly CityName: string='';
 
   public MaterialSuppliedByVendors: MaterialListSuppliedByVendorProps [] = [];
-  public ServicesProvidedByVendor: ServiceSuppliedByVendorProps [] = [];
+  public ServiceProvidedByVendors: ServiceSuppliedByVendorProps [] = [];
 
   public CompanyRef: number = 0;
   public CompanyName: string = '';
