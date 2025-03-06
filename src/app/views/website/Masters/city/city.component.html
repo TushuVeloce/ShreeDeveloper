@@ -9,7 +9,7 @@
   <div class="card-body" style="margin-left: 14px;">
     <form autocomplete="off">
       <div class="row">
-        <div class="col-md-4 mb-2">
+        <div class="col-md-4 ">
           <label for="CountryRef"><b>Country Name</b></label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="CountryRef"
             name="CountryRef" required id="CountryRef" (ngModelChange)="getStateListByCountryRef(CountryRef)">
@@ -17,7 +17,7 @@
               [nzValue]="country.p.Ref"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4 mb-2">
+        <div class="col-md-4">
           <label for="StateRef"><b>State Name</b></label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
             name="StateRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StateRef"
@@ -29,7 +29,7 @@
     </form>
   </div>
 </div>
-<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+<div class="table-wrapper" class="tblcard_light" style="margin-top: 1rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
       [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">

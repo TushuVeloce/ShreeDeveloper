@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -20,12 +21,11 @@ export class StageMasterComponent implements OnInit {
   SelectedStage: Stage = Stage.CreateNewInstance();
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
-  total = 0;
-
+  total = 0;  
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   headers: string[] = ['Stage.No.', 'Stage Name', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement) {
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private screenSizeService: ScreenSizeService, private companystatemanagement: CompanyStateManagement) {
     effect(() => {
       this.getStageListByCompanyRef()
     });
@@ -33,31 +33,26 @@ export class StageMasterComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    // await this.FormulateMasterList();
     this.loadPaginationData();
+    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
-
-  //  private FormulateMasterList = async () => {
-  //     let lst = await Stage.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //     this.MasterList = lst;
-  //     this.DisplayMasterList = this.MasterList
-  //     this.loadPaginationData();
-  //   }
 
   getStageListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
     }
-    let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
-    console.log('MasterList :', this.MasterList);
-
+    let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(),
+    async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
+  );
+  console.log('lst :', lst);
+    // Sort the list by DisplayOrder in ascending order
+    this.MasterList = lst.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
+};
 
   onEditClicked = async (item: Stage) => {
     this.SelectedStage = item.GetEditableVersion();
