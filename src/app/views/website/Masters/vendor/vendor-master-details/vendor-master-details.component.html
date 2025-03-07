@@ -107,7 +107,7 @@
         <div class="col-md-4 col-md-4 col-sm-12">
           <label for="IFSC">IFSC</label>
           <input type="text" [(ngModel)]="Entity.p.IFSC" name="IFSC" class="form-control" id="IFSC" pattern="{{IFSCPattern}}"
-            placeholder="Enter IFSC Code" #IFSCCtrl="ngModel" (blur)="IFSCCtrl.control.markAsTouched()"/>
+            placeholder="Enter IFSC" #IFSCCtrl="ngModel" (blur)="IFSCCtrl.control.markAsTouched()"/>
           <div *ngIf="(IFSCCtrl.invalid && (IFSCCtrl.touched || IFSCCtrl.dirty))">
             <span class="validation-text" *ngIf="IFSCCtrl.errors?.['pattern']">{{IFSCMsg}}</span>
           </div>
@@ -115,7 +115,7 @@
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>GSTIN</label>
           <input type="text" [(ngModel)]="Entity.p.GSTIN" name="GSTIN" class="form-control" id="GSTIN" pattern="{{GSTINPattern}}"
-            placeholder="Enter GST No" #GSTINCtrl="ngModel" (blur)="GSTINCtrl.control.markAsTouched()"/>
+            placeholder="Enter GST" #GSTINCtrl="ngModel" (blur)="GSTINCtrl.control.markAsTouched()"/>
             <div *ngIf="(GSTINCtrl.invalid && (GSTINCtrl.touched || GSTINCtrl.dirty))">
               <span class="validation-text" *ngIf="GSTINCtrl.errors?.['pattern']">{{GSTINMsg}}</span>
             </div>
@@ -125,7 +125,7 @@
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>PAN </label>
           <input type="text" [(ngModel)]="Entity.p.Pan" name="Pan" class="form-control" id="Pan" pattern="{{PANPattern}}"
-            placeholder="Enter Pan No" #PANCtrl="ngModel" (blur)="PANCtrl.control.markAsTouched()"/>
+            placeholder="Enter Pan" #PANCtrl="ngModel" (blur)="PANCtrl.control.markAsTouched()"/>
             <div *ngIf="(PANCtrl.invalid && (PANCtrl.touched || PANCtrl.dirty))">
               <span class="validation-text" *ngIf="PANCtrl.errors?.['pattern']">{{PANMsg}}</span>
             </div>
