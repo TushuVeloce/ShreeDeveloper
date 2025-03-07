@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FinancialYear } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
-import { FinancialYearCustomRequest } from 'src/app/classes/domain/entities/website/masters/financialyear/FinancialYearUserCustomRequest';
+import { GenerateNewFinancialYearCustomRequest } from 'src/app/classes/domain/entities/website/masters/financialyear/FinancialYearUserCustomRequest';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -108,7 +108,7 @@ export class FinancialYearMasterComponent implements OnInit {
   // Financial Year Custom Request 
   AddNewFinancialYear = async () => {
     debugger
-    let req = new FinancialYearCustomRequest();
+    let req = new GenerateNewFinancialYearCustomRequest();
     req.CompanyRef = this.companyRef();
     // req.Ref = this.Entity.p.Ref;
 

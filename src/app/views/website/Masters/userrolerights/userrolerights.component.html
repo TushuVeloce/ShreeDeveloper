@@ -15,57 +15,60 @@
     </div>
     <div class="row">
       <div class="col-md-4 mb-2">
-        <label for="UserRoleRef"><b>User Role</b></label>
-        <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select User Role" id="UserRoleRef"
-          name="UserRoleRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UserRoleRef"
-          (ngModelChange)="getUserRoleRights(Entity.p.UserRoleRef)">
-          <nz-option *ngFor="let userrole of UserRoleList" [nzValue]="userrole.p.Ref"
-            [nzLabel]="userrole.p.Name"></nz-option>
+        <label for="DepartmentRef"><b>Select Department</b></label>
+        <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select Department" id="DepartmentRef"
+          name="DepartmentRef" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef">
+          <nz-option *ngFor="let department of DepartmentList" [nzValue]="department.p.Ref"
+            [nzLabel]="department.p.Name"></nz-option>
         </nz-select>
       </div>
       <div class="col-md-4 mb-2">
-        <label for="ModuleTypeRef"><b>Select Module</b></label>
-        <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select" id="ModuleTypeRef" name="ModuleTypeRef"
-          [nzSize]="'large'" [(ngModel)]="Entity.p.ModuleTypeRef" (ngModelChange)="onclick(Entity.p.ModuleTypeRef)">
-          <nz-option *ngFor="let module of ModuleList" [nzValue]="module.Ref" [nzLabel]="module.Name"></nz-option>
+        <label for="DesignationRef"><b>Select Designation</b></label>
+        <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select Designation" id="DesignationRef"
+          name="DesignationRef" [nzSize]="'large'" [(ngModel)]="Entity.p.DesignationRef">
+          <nz-option *ngFor="let Designation of DesignationList" [nzValue]="Designation.p.Ref"
+            [nzLabel]="Designation.p.Name"></nz-option>
+        </nz-select>
+      </div>
+      <div class="col-md-4 mb-2">
+        <label for="FeatureGroupRef"><b>Select Feature Group</b></label>
+        <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select" id="FeatureGroupRef"
+          name="FeatureGroupRef" [nzSize]="'large'" [(ngModel)]="FeatureGroupRef"
+          (ngModelChange)="onclick(FeatureGroupRef)">
+          <nz-option *ngFor="let featuregroup of FeatureGroupList" [nzValue]="featuregroup.Ref"
+            [nzLabel]="featuregroup.Name"></nz-option>
         </nz-select>
       </div>
     </div>
   </div>
-  
+
 
   <!-- table start  -->
   <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem">
     <div class="table-container">
       <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
-        nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="modules">
+        nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="DisplayFeature">
         <thead>
           <tr>
             <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let module of modules; let i = index">
-            <td Class="tbldata">{{ module.FeatureName }}</td>
-            <td Class="tbldata"><label nz-checkbox class="labledt" [(ngModel)]="module.CanAdd"
-              (ngModelChange)="updateRoleRights(i, 'CanAdd')"></label>
+          <tr *ngFor="let feature of DisplayFeature; let i = index">
+            <td Class="tbldata">{{ feature.FeatureName }}</td>
+            <td Class="tbldata"><label nz-checkbox class="labledt" [(ngModel)]="feature.CanAdd"></label>
             </td>
-            <td Class="tbldata"><label nz-checkbox [(ngModel)]="module.CanEdit"
-              (ngModelChange)="updateRoleRights(i, 'CanEdit')"></label>
+            <td Class="tbldata"><label nz-checkbox [(ngModel)]="feature.CanEdit"></label>
             </td>
-            <td Class="tbldata"><label nz-checkbox [(ngModel)]="module.CanDelete"
-              (ngModelChange)="updateRoleRights(i, 'CanDelete')"></label>
+            <td Class="tbldata"><label nz-checkbox [(ngModel)]="feature.CanDelete"></label>
             </td>
-            <td Class="tbldata"><label nz-checkbox [(ngModel)]="module.CanView"
-              (ngModelChange)="updateRoleRights(i, 'CanView')"></label>
+            <td Class="tbldata"><label nz-checkbox [(ngModel)]="feature.CanView"></label>
             </td>
-            <td Class="tbldata"><label nz-checkbox [(ngModel)]="module.CanPrint"
-              (ngModelChange)="updateRoleRights(i, 'CanPrint')"></label>
+            <td Class="tbldata"><label nz-checkbox [(ngModel)]="feature.CanPrint"></label>
             </td>
-            <td Class="tbldata"><label nz-checkbox [(ngModel)]="module.CanExport"
-              (ngModelChange)="updateRoleRights(i, 'CanExport')"></label>
+            <td Class="tbldata"><label nz-checkbox [(ngModel)]="feature.CanExport"></label>
             </td>
-          </tr>   
+          </tr>
         </tbody>
       </nz-table>
     </div>

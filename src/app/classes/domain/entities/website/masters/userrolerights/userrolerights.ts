@@ -12,17 +12,17 @@ import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { UserRoleRightsFetchRequest } from "./userrolerightsfetchrequest";
 
-export class UserRoleRightsDetailsProps {
+export class FeatureProps {
 
-  // public Ref: number = 0;
-  public FeatureName: string = '';
-
-  public CanAdd: boolean = false;
-  public CanEdit: boolean = false;
-  public CanDelete: boolean = false;
-  public CanView: boolean = false;
-  public CanPrint: boolean = false;
-  public CanExport: boolean = false;
+  FeatureRef: number = 0;
+  FeatureName: string = "";
+  FeatureGroupRef: number = 0;
+  CanAdd: boolean = false;
+  CanEdit: boolean = false;
+  CanDelete: boolean = false;
+  CanView: boolean = false;
+  CanPrint: boolean = false;
+  CanExport: boolean = false;
 
 }
 
@@ -31,10 +31,11 @@ export class UserRoleRightsDetailsProps {
 export class UserRoleRightsProps {
   // public Ref: number = 0;
   // public Name: string = '';
-  public UserRoleRef: number = 0;
+  public DepartmentRef: number = 0;
   public CompanyRef: number = 0;
-  public ModuleTypeRef: number = 0;
-  public Feature: UserRoleRightsDetailsProps[] = [];
+  // public FeatureGroupRef: number = 0;
+  public DesignationRef: number = 0;
+  public Feature: FeatureProps[] = [];
 
   public readonly ModuleTypeName: string = '';
   public readonly UserRoleName: string = '';
@@ -181,14 +182,14 @@ export class UserRoleRights implements IPersistable<UserRoleRights> {
   //   let tdResponse = await UserRoleRights.FetchTransportData(req, errorHandler) as TransportData;
   //   return UserRoleRights.ListFromTransportData(tdResponse);
   // }
-  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new UserRoleRightsFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await UserRoleRights.FetchTransportData(req, errorHandler) as TransportData;
     return UserRoleRights.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByUserRoleRef(userroleref:number,companeref:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByUserRoleRef(userroleref: number, companeref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new UserRoleRightsFetchRequest();
     req.UserRoleRefs.push(userroleref)
     req.CompanyRefs.push(companeref)

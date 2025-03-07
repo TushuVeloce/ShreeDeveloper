@@ -36,6 +36,20 @@ export enum ModuleTypes {
   Transaction  = 200,
   Report = 300
 }
+
+export enum ApplicationFeatureGroups {
+  None = 0,
+  Master = 10,
+  Transaction  = 20,
+  Report = 30
+}
+
+export enum ApplicationFeatures {
+  None = 0,
+  DepartmentMaster = 100,
+  AccountingTransaction  = 200,
+  VendorReport = 300
+}
 // export enum LoginStatusModes {
 //   None = 0,
 //   Enable = 'true',
@@ -250,6 +264,99 @@ export class DomainEnums {
     if (withAllOption) {
       let allEntry = {
         Ref: ModuleTypes.None,
+        Name: allOptionName
+      }
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+  // For Feature Group 
+
+  public static ApplicationFeatureGroupName(company: ApplicationFeatureGroups) {
+    switch (company) {
+      case ApplicationFeatureGroups.Master: return 'Masters';
+      case ApplicationFeatureGroups.Transaction: return 'Transactions';
+      case ApplicationFeatureGroups.Report: return 'Reports';
+      default: return '';
+    }
+  }
+
+  public static ApplicationFeatureGroupList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+    let result = [
+      {
+        Ref: ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureGroupName(ApplicationFeatureGroups.Master)
+      },
+      {
+        Ref: ApplicationFeatureGroups.Transaction, Name: DomainEnums.ApplicationFeatureGroupName(ApplicationFeatureGroups.Transaction)
+      },
+      {
+        Ref: ApplicationFeatureGroups.Report, Name: DomainEnums.ApplicationFeatureGroupName(ApplicationFeatureGroups.Report)
+      }
+      
+    ]
+    if (withAllOption) {
+      let allEntry = {
+        Ref: ApplicationFeatureGroups.None,
+        Name: allOptionName
+      }
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+  // For Feature
+  
+  public static ApplicationFeatureName(company: ApplicationFeatures) {
+    switch (company) {
+      case ApplicationFeatures.DepartmentMaster: return 'Department Master';
+      case ApplicationFeatures.AccountingTransaction: return 'Accounting Transaction';
+      case ApplicationFeatures.VendorReport: return 'Vendor Report';
+      default: return '';
+    }
+  }
+
+  public static ApplicationFeatureList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+    let result = [
+      {
+        Ref: ApplicationFeatures.DepartmentMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.DepartmentMaster)
+      },
+      {
+        Ref: ApplicationFeatures.AccountingTransaction, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.AccountingTransaction)
+      },
+      {
+        Ref: ApplicationFeatures.VendorReport, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.VendorReport)
+      }
+      
+    ]
+    if (withAllOption) {
+      let allEntry = {
+        Ref: ApplicationFeatures.None,
+        Name: allOptionName
+      }
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+  // creating a map list for Feature Group
+
+  public static FeatureToFeatureGroupMapList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+    let result = [
+      {
+        Ref: ApplicationFeatures.DepartmentMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.DepartmentMaster)
+      },
+      {
+        Ref: ApplicationFeatures.AccountingTransaction,FeatureGroupRef :ApplicationFeatureGroups.Transaction, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.AccountingTransaction)
+      },
+      {
+        Ref: ApplicationFeatures.VendorReport,FeatureGroupRef :ApplicationFeatureGroups.Report, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.VendorReport)
+      }
+      
+    ]
+    if (withAllOption) {
+      let allEntry = {
+        Ref: ApplicationFeatures.None,
+        FeatureGroupRef: ApplicationFeatureGroups.None,
         Name: allOptionName
       }
       result.unshift(allEntry);

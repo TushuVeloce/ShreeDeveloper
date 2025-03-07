@@ -1,13 +1,26 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
+import { Designation } from 'src/app/classes/domain/entities/website/masters/designation/designation';
 import { UserRole } from 'src/app/classes/domain/entities/website/masters/userrole/userrole';
-import { UserRoleRights } from 'src/app/classes/domain/entities/website/masters/userrolerights/userrolerights';
+import { FeatureProps, UserRoleRights } from 'src/app/classes/domain/entities/website/masters/userrolerights/userrolerights';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
+// export class FeatureObj {
+//   FeatureRef: number = 0;
+//   FeatureName: string = "";
+//   FeatureGroupRef: number = 0;
+//   CanAdd: boolean = false;
+//   CanEdit: boolean = false;
+//   CanDelete: boolean = false;
+//   CanView: boolean = false;
+//   CanPrint: boolean = false;
+//   CanExport: boolean = false;
+// }
 @Component({
   selector: 'app-userrolerights',
   standalone: false,
@@ -15,6 +28,7 @@ import { Utils } from 'src/app/services/utils.service';
   styleUrls: ['./userrolerights.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
+
 export class UserrolerightsComponent implements OnInit {
 
   UserRoleList: UserRole[] = [];
@@ -22,22 +36,31 @@ export class UserrolerightsComponent implements OnInit {
   private IsNewEntity: boolean = true;
   MasterList: UserRoleRights[] = [];
   DisplayMasterList: UserRoleRights[] = [];
+  DepartmentList: Department[] = [];
+  DesignationList: Designation[] = [];
   SearchString: string = '';
   SelectedVehicle: UserRoleRights = UserRoleRights.CreateNewInstance();
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
   ModuleList = DomainEnums.ModuleList(true, '--Select Module Type--');
+  FeatureGroupList = DomainEnums.ApplicationFeatureGroupList(true, '--Select Feature Group--');
+  FeatureToGroupMapList = DomainEnums.FeatureToFeatureGroupMapList();
+
+  FeatureGroupRef: number = 0;
+
   headers: string[] = ['Module Name', 'Add', 'Edit', 'Delete', 'View', 'Print', 'Exports',];
-  modules: { FeatureName: string; CanAdd: boolean; CanEdit: boolean; CanDelete: boolean; CanView: boolean; CanPrint: boolean; CanExport: boolean }[] = [{
-    FeatureName: '',
-    CanAdd: false,
-    CanEdit: false,
-    CanDelete: false,
-    CanView: false,
-    CanPrint: false,
-    CanExport: false
-  }];
+  // modules: { FeatureName: string; CanAdd: boolean; CanEdit: boolean; CanDelete: boolean; CanView: boolean; CanPrint: boolean; CanExport: boolean }[] = [{
+  //   FeatureName: '',
+  //   CanAdd: false,
+  //   CanEdit: false,
+  //   CanDelete: false,
+  //   CanView: false,
+  //   CanPrint: false,
+  //   CanExport: false
+  // }];
+  // Feature: FeatureO[] = [];
+  DisplayFeature: FeatureProps[] = [];
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -47,7 +70,22 @@ export class UserrolerightsComponent implements OnInit {
     private utils: Utils) { }
 
   async ngOnInit() {
-    this.FormulateUserRoleList();
+    console.log(this.FeatureToGroupMapList);
+
+    if (this.FeatureToGroupMapList.length > 0) {
+      this.FeatureToGroupMapList.forEach(e => {
+        const item = new FeatureProps();
+        item.FeatureRef = e.Ref;
+        item.FeatureName = e.Name;
+        item.FeatureGroupRef = e.FeatureGroupRef;
+        this.Entity.p.Feature.push(item)
+      })
+    }
+    console.log(this.Entity.p.Feature);
+
+
+    this.FormulateDepartmentList();
+    this.FormulateDesignationList();
     // this.mastermodules.forEach(e => this.Entity.p.Feature.push(e as any));
     // this.loadRoleRightsFromStorage();
     console.log('Modules:', this.ModuleList);
@@ -60,13 +98,16 @@ export class UserrolerightsComponent implements OnInit {
   }
 
 
-  private FormulateUserRoleList = async () => {
-    let lst = await UserRole.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.UserRoleList = lst;
-    console.log('UserRoleList :', this.UserRoleList);
-
+  private FormulateDepartmentList = async () => {
+    let lst = await Department.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.DepartmentList = lst;
+    console.log('DepartmentList :', this.DepartmentList);
   }
-  // New Code 
+  private FormulateDesignationList = async () => {
+    let lst = await Designation.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.DesignationList = lst;
+    console.log('DesignationList :', this.DesignationList);
+  }
 
   mastermodules = [
     { FeatureName: 'Department Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
@@ -102,32 +143,25 @@ export class UserrolerightsComponent implements OnInit {
     // { Feature: 'Account Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
   ];
 
-  onclick(ref: number) {
-    if (ref == 0) {
-      this.modules = []
-    } else if (ref == 100) {
-      this.modules = this.mastermodules
-    } else if (ref == 200) {
-      this.modules = this.transactionsmodules
-    } else if (ref == 300) {
-      this.modules = this.reportsmodules
+  onclick(featureGroupRef: number) {
+    if (featureGroupRef == 0) {
+      alert("Select Feature Group");
+      return
     }
+    this.DisplayFeature = []
+    this.DisplayFeature = this.Entity.p.Feature.filter(e => e.FeatureGroupRef == featureGroupRef)
+
   }
 
-  updateRoleRights(index: number, right: keyof typeof this.modules[number]) {
-    const module = this.modules[index];
-    // console.log(`Module: ${module.FeatureName}, Right: ${right}, Status: ${module[right]}`);
-  }
-
-AllModules = this.mastermodules.concat(this.transactionsmodules, this.reportsmodules);
+  AllModules = this.mastermodules.concat(this.transactionsmodules, this.reportsmodules);
 
   SaveUserRoleRights = async () => {
     // pushing all module data in one array 
     // this.AllModules.forEach(e=> this.Entity.p.Feature.push(e as any));
-     // pushing all module data in different array 
+    // pushing all module data in different array 
     // this.modules.forEach(e=> this.Entity.p.Feature.push(e as any));
     // creating array 
-    this.Entity.p.Feature = [...this.modules];
+    // this.Entity.p.Feature = [...this.modules];
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
@@ -155,34 +189,34 @@ AllModules = this.mastermodules.concat(this.transactionsmodules, this.reportsmod
     }
   }
 
-  getUserRoleRights = async (UserRoleRef: number) => {
-    if (UserRoleRef <= 0) {
-      await this.uiUtils.showErrorToster('Select User Role');
-      return;
-    }
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Select Company');
-      return;
-    }
-    let lst = await UserRoleRights.FetchEntireListByUserRoleRef(UserRoleRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.DisplayMasterList = lst;
-    console.log('UserRoleSelected :', this.DisplayMasterList);
-    if (lst.length > 0) {
-      lst.forEach(e => {
-        e.p.Feature.forEach(f => {
-          let mod = this.modules.find(m => m.FeatureName == f.FeatureName);
-          if (mod) {
-            mod.CanAdd = f.CanAdd;
-            mod.CanEdit = f.CanEdit;
-            mod.CanDelete = f.CanDelete;
-            mod.CanView = f.CanView;
-            mod.CanPrint = f.CanPrint;
-            mod.CanExport = f.CanExport;
-          }
-        });
-      });
-      this.modules = this.DisplayMasterList[0].p.Feature;
+  // getUserRoleRights = async (UserRoleRef: number) => {
+  //   if (UserRoleRef <= 0) {
+  //     await this.uiUtils.showErrorToster('Select User Role');
+  //     return;
+  //   }
+  //   if (this.companyRef() <= 0) {
+  //     await this.uiUtils.showErrorToster('Select Company');
+  //     return;
+  //   }
+  //   let lst = await UserRoleRights.FetchEntireListByUserRoleRef(UserRoleRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.DisplayMasterList = lst;
+  //   console.log('UserRoleSelected :', this.DisplayMasterList);
+  //   if (lst.length > 0) {
+  //     lst.forEach(e => {
+  //       e.p.Feature.forEach(f => {
+  //         let mod = this.modules.find(m => m.FeatureName == f.FeatureName);
+  //         if (mod) {
+  //           mod.CanAdd = f.CanAdd;
+  //           mod.CanEdit = f.CanEdit;
+  //           mod.CanDelete = f.CanDelete;
+  //           mod.CanView = f.CanView;
+  //           mod.CanPrint = f.CanPrint;
+  //           mod.CanExport = f.CanExport;
+  //         }
+  //       });
+  //     });
+  //     this.modules = this.DisplayMasterList[0].p.Feature;
 
-    }
-  }
+  //   }
+  // }
 }
