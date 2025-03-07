@@ -481,8 +481,8 @@ export class SidebarlayoutComponent implements OnInit {
 }
 
 ongetcompany() {
-    let storedCompanyRef = localStorage.getItem('SelectedCompanyRef');
-    let storedCompanyName = localStorage.getItem('companyName');
+  const storedCompanyRef =  this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
+  const storedCompanyName =  this.appStateManagement.StorageKey.getItem('companyName');
 
     if (storedCompanyRef && storedCompanyName) {
         const ref = Number(storedCompanyRef);
@@ -498,8 +498,8 @@ ongetcompany() {
 changecompany(ref: number) {    
     const selectedCompany = this.CompnyList.find(company => company.p.Ref === ref);
     if (selectedCompany) {
-        localStorage.setItem('SelectedCompanyRef', selectedCompany.p.Ref.toString());
-        localStorage.setItem('companyName', selectedCompany.p.Name);
+      this.appStateManagement.StorageKey.setItem('SelectedCompanyRef',selectedCompany.p.Ref.toString());
+      this.appStateManagement.StorageKey.setItem('companyName', selectedCompany.p.Name);
 
         this.companystatemanagement.setCompanyRef(ref, selectedCompany.p.Name);
         this.CompanyRef = ref;
