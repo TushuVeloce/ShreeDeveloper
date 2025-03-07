@@ -9,7 +9,7 @@
       <span class="detail_title">{{DetailsFormTitle}}</span>
     </div>
   </div>
-  <form autocomplete="off">
+  <form #VendorForm="ngForm" autocomplete="off">
     <div class="row" style="margin-top: 1rem; ">
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-6 col-md-4 col-sm-12">
@@ -36,7 +36,7 @@
           <label for="TradeName">Trade Name</label>
           <input type="text" [(ngModel)]="Entity.p.TradeName" name="TradeName" class="form-control" id="TradeName" required
             placeholder="Enter Trade Name" />
-        </div>     
+        </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4 col-md-4 col-sm-12">
@@ -106,20 +106,29 @@
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
           <label for="IFSC">IFSC</label>
-          <input type="text" [(ngModel)]="Entity.p.IFSC" name="IFSC" class="form-control" id="IFSC" required
-            placeholder="Enter IFSC" />
+          <input type="text" [(ngModel)]="Entity.p.IFSC" name="IFSC" class="form-control" id="IFSC" pattern="{{IFSCPattern}}"
+            placeholder="Enter IFSC Code" #IFSCCtrl="ngModel" (blur)="IFSCCtrl.control.markAsTouched()"/>
+          <div *ngIf="(IFSCCtrl.invalid && (IFSCCtrl.touched || IFSCCtrl.dirty))">
+            <span class="validation-text" *ngIf="IFSCCtrl.errors?.['pattern']">{{IFSCMsg}}</span>
+          </div>
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>GSTIN</label>
-          <input type="text" [(ngModel)]="Entity.p.GSTIN" name="GSTIN" class="form-control" id="GSTIN" required
-            placeholder="Enter GSTIN" />
+          <input type="text" [(ngModel)]="Entity.p.GSTIN" name="GSTIN" class="form-control" id="GSTIN" pattern="{{GSTINPattern}}"
+            placeholder="Enter GST No" #GSTINCtrl="ngModel" (blur)="GSTINCtrl.control.markAsTouched()"/>
+            <div *ngIf="(GSTINCtrl.invalid && (GSTINCtrl.touched || GSTINCtrl.dirty))">
+              <span class="validation-text" *ngIf="GSTINCtrl.errors?.['pattern']">{{GSTINMsg}}</span>
+            </div>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4 col-md-4 col-sm-12">
-          <label>PAN</label>
-          <input type="text" [(ngModel)]="Entity.p.Pan" name="Pan" class="form-control" id="Pan" required
-            placeholder="Enter Pan" />
+          <label>PAN </label>
+          <input type="text" [(ngModel)]="Entity.p.Pan" name="Pan" class="form-control" id="Pan" pattern="{{PANPattern}}"
+            placeholder="Enter Pan No" #PANCtrl="ngModel" (blur)="PANCtrl.control.markAsTouched()"/>
+            <div *ngIf="(PANCtrl.invalid && (PANCtrl.touched || PANCtrl.dirty))">
+              <span class="validation-text" *ngIf="PANCtrl.errors?.['pattern']">{{PANMsg}}</span>
+            </div>
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>CIN</label>
@@ -155,7 +164,7 @@
     </div>
     <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
       <div>
-        <button type="button" class="btn" (click)="SaveVendorMaster()">Save</button>
+        <button type="button" class="btn" (click)="SaveVendorMaster()" [disabled]="isSaveDisabled || VendorForm.invalid">Save</button>
       </div>
       <div>
         <button type="button" class="btn" (click)="BackVendor()">Back</button>

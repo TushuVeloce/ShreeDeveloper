@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router'
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
@@ -12,6 +12,8 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
+import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
+import { NgModel } from '@angular/forms';
 
 
 @Component({
@@ -37,6 +39,21 @@ export class VendorMasterDetailsComponent implements OnInit {
   StateList: State[] = [];
   CityList: City[] = [];
   // VendorServicesOptions: { label: string, value: number }[] = [];
+
+  IFSCPattern: string = ValidationPatterns.IFSC;
+  PANPattern: string = ValidationPatterns.PAN;
+  GSTINPattern: string = ValidationPatterns.GSTIN;
+
+
+  IFSCMsg: string = ValidationMessages.IFSCMsg;
+  GSTINMsg: string = ValidationMessages.GSTINMsg;
+  PANMsg: string = ValidationMessages.PANMsg;
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
+
+  @ViewChild('IFSCCtrl') IFSCInputControl!: NgModel;
+  @ViewChild('PANCtrl') PANInputControl!: NgModel;
+  @ViewChild('GSTINCtrl') GSTINInputControl!: NgModel;
+
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
@@ -168,5 +185,14 @@ export class VendorMasterDetailsComponent implements OnInit {
     this.router.navigate(['/homepage/Website/Vendor_Master']);
   }
 
+  resetAllControls = () => {
+    this.IFSCInputControl.control.markAsUntouched();
+    this.PANInputControl.control.markAsUntouched();
+    this.GSTINInputControl.control.markAsUntouched();
+
+    this.IFSCInputControl.control.markAsPristine();
+    this.PANInputControl.control.markAsPristine();
+    this.GSTINInputControl.control.markAsPristine();
+  }
 
 }

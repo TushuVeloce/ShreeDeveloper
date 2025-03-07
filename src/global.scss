@@ -99,14 +99,14 @@
     position: relative;
     overflow: hidden;
   }
-  
+
   /* Hover Effect */
   .btn:hover {
-    background-color: darkred;  
+    background-color: darkred;
     transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   }
-  
+
 // ========================== Input Class CSS Start =========================== //
 
 .form-control:focus {
@@ -233,7 +233,7 @@ form {
   border-radius: 5px;
 }
 
-// For Table Heading 
+// For Table Heading
 .TableHeading {
   background-color: rgb(254, 169, 183);
   height: 36px;
@@ -358,15 +358,15 @@ nz-select {
 .nzSelect-light-disabled ::ng-deep .ant-select-selector {
   background-color: rgb(229, 231, 235) !important;
   color: black !important;
-  border: 0.2px solid rgb(133, 130, 130) !important; 
-  border-radius: 7px !important; 
+  border: 0.2px solid rgb(133, 130, 130) !important;
+  border-radius: 7px !important;
 }
 
 /* Dark theme disabled state */
 .nzSelect-dark-disabled ::ng-deep .ant-select-selector {
-  background-color: rgb(34, 34, 34)!important; 
+  background-color: rgb(34, 34, 34)!important;
   color: white !important;
-  border: 0.2px solid rgb(133, 130, 130) !important; 
+  border: 0.2px solid rgb(133, 130, 130) !important;
   border-radius: 7px !important;
 }
 
@@ -379,7 +379,7 @@ nz-select {
 
 // =========================== Nz Select Menu  Css End ==============================
 
-// for sweetalert2 
+// for sweetalert2
 
 .custom-popup {
   max-width: 50% !important; /* Ensures it doesn't exceed screen width */
@@ -438,4 +438,6 @@ nz-select {
   height: auto;
 }
 
-
+.validation-text {
+  color: red !important;
+}
