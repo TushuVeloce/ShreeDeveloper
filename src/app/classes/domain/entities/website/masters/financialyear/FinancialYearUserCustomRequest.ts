@@ -4,20 +4,20 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class FetchFinancialYearUserCustomRequest
+export class FinancialYearCustomRequest
 {
-    public static readonly FetchRequestType: string = "FetchFinancialYearUserCustomRequest";
+    public static readonly FetchRequestType: string = "FinancialYearCustomRequest";
     CompanyRef:number = 0;
-    Ref:number = 0;
+    // Ref:number = 0;
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, FetchFinancialYearUserCustomRequest.FetchRequestType) as DataCollection;
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, FinancialYearCustomRequest.FetchRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 
     public FormulateTransportData = () => {
-        let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.Fetch);
+        let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.CustomProcess);
         this.MergeIntoTransportData(td);
 
         return td;

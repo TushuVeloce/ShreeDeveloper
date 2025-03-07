@@ -12,18 +12,13 @@
   <form autocomplete="off">
     <div class="row" style="margin-top: 1rem; ">
       <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4 col-md-4 col-sm-12">
+        <div class="col-md-6 col-md-4 col-sm-12">
           <label for="Code">Vendor Code</label>
           <input type="text" [(ngModel)]="Entity.p.Code" name="Code" class="form-control" id="Code" required
             placeholder="Enter Vendor Code" />
         </div>
-        <div class="col-md-4 col-md-4 col-sm-12">
-          <label for="Name">Vendor Name</label>
-          <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
-            placeholder="Enter Vendor Name" />
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
-          <label for="CompanyType">Vendor Company Type</label>
+        <div class="col-lg-6 col-md-4 col-sm-12">
+          <label for="CompanyType">Company Type</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CompanyTypeRef"
             name="CompanyTypeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CompanyType">
             <nz-option *ngFor="let company of CompanyTypeList" [nzValue]="company.Ref"
@@ -31,21 +26,33 @@
           </nz-select>
         </div>
       </div>
+      <div class="row" style="margin-top: 1rem;">
+        <div class="col-md-6 col-md-4 col-sm-12">
+          <label for="Name">Name</label>
+          <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
+            placeholder="Enter Name" />
+        </div>
+        <div class="col-md-6 col-md-4 col-sm-12">
+          <label for="TradeName">Trade Name</label>
+          <input type="text" [(ngModel)]="Entity.p.TradeName" name="TradeName" class="form-control" id="TradeName" required
+            placeholder="Enter Trade Name" />
+        </div>     
+      </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4 col-md-4 col-sm-12">
-          <label for="MobileNo">Vendor Phone Number</label>
+          <label for="MobileNo">Phone Number</label>
           <input type="text" [(ngModel)]="Entity.p.MobileNo" name="MobileNo" class="form-control" id="MobileNo" required
-            placeholder="Enter Vendor Mobile No." />
+            placeholder="Enter Phone No." />
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
-          <label for="AddressLine1">Vendor AddressLine1</label>
+          <label for="AddressLine1">Address Line1</label>
           <input type="text" [(ngModel)]="Entity.p.AddressLine1" name="AddressLine1" class="form-control"
-            id="AddressLine1" required placeholder="Enter Vendor AddressLine1" />
+            id="AddressLine1" required placeholder="Enter Address Line1" />
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
-          <label for="AddressLine2">Vendor AddressLine2</label>
+          <label for="AddressLine2">Address Line2</label>
           <input type="text" [(ngModel)]="Entity.p.AddressLine2" name="AddressLine2" class="form-control"
-            id="AddressLine2" required placeholder="Enter Vendor AddressLine2" />
+            id="AddressLine2" required placeholder="Enter Address Line2" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
@@ -100,24 +107,24 @@
         <div class="col-md-4 col-md-4 col-sm-12">
           <label for="IFSC">IFSC</label>
           <input type="text" [(ngModel)]="Entity.p.IFSC" name="IFSC" class="form-control" id="IFSC" required
-            placeholder="Enter IFSC Code" />
+            placeholder="Enter IFSC" />
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>GSTIN</label>
           <input type="text" [(ngModel)]="Entity.p.GSTIN" name="GSTIN" class="form-control" id="GSTIN" required
-            placeholder="Enter GST No" />
+            placeholder="Enter GSTIN" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4 col-md-4 col-sm-12">
-          <label>PAN </label>
+          <label>PAN</label>
           <input type="text" [(ngModel)]="Entity.p.Pan" name="Pan" class="form-control" id="Pan" required
-            placeholder="Enter Pan No" />
+            placeholder="Enter Pan" />
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>CIN</label>
           <input type="text" [(ngModel)]="Entity.p.CINNO" name="CINNO" class="form-control" id="CINNO" required
-            placeholder="Enter CIN No" />
+            placeholder="Enter CIN" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem;">
