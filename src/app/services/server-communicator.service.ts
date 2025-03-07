@@ -13,6 +13,7 @@ import { UserLoginResponse } from '../classes/infrastructure/request_response/us
 import { UserLoginRequest } from '../classes/infrastructure/request_response/userloginrequest';
 import { AppStateManageService } from './app-state-manage.service';
 import { RequestTypes } from '../classes/infrastructure/enums';
+import { CompanyStateManagement } from './companystatemanagement';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,8 @@ export class ServerCommunicatorService {
 
   constructor(private http: HttpClient,
     private sessionValues: SessionValues,
-    private appStateManagement: AppStateManageService) {
+    private appStateManagement: AppStateManageService,
+    private companystatemanagement: CompanyStateManagement,) {
 
   }
 
@@ -380,7 +382,7 @@ export class ServerCommunicatorService {
   public async LoginUser(req: UserLoginRequest) {
     let apiRoot = this.sessionValues.requestController;
     let url = `${apiRoot}/loginsystemuser`;
-    
+
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
@@ -396,9 +398,13 @@ export class ServerCommunicatorService {
       }));
 
     let result = Object.assign(new UserLoginResponse(), resp) as UserLoginResponse;
+    console.log('result :', result);
     this.sessionValues.CurrentLoginToken = result.LoginToken;
     this.sessionValues.UserDisplayName = result.UserDisplayName;
     this.appStateManagement.setValidMenuItemIds(result.ValidMenuItemIds);
+   this.appStateManagement.StorageKey.setItem('SelectedCompanyRef', result.LastSelectedCompanyRef.toString());
+   this.appStateManagement.StorageKey.setItem('companyName', result.LastSelectedCompanyName);
+    this.companystatemanagement.setCompanyRef(result.LastSelectedCompanyRef,result.LastSelectedCompanyName)
     return result;
   }
 

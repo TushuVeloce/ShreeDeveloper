@@ -7,4 +7,6 @@ export class UserLoginResponse
     public PhoneNos: string = '';
     public UserDisplayName: string = '';
     public ValidMenuItemIds: string[] = [];
+    public LastSelectedCompanyRef: number = 0;
+    public LastSelectedCompanyName: string = '';
 }
