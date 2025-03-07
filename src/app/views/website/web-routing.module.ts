@@ -67,6 +67,8 @@ import { MarketingTypeMasterComponent } from './Masters/marketing_type/marketing
 import { MarketingTypeMasterDetailsComponent } from './Masters/marketing_type/marketing-type-master-details/marketing-type-master-details.component';
 import { ExternalUsersComponent } from './Masters/external_users/external-users/external-users.component';
 import { ExternalUsersMasterDetailsComponent } from './Masters/external_users/external-users-details/external-users-details.component';
+import { DesignationMasterComponent } from './Masters/designation/designation-master/designation-master.component';
+import { DesignationMasterDetailsComponent } from './Masters/designation/designation-master-details/designation-master-details.component';
 
 const routes: Routes = [
   {
@@ -99,6 +101,8 @@ const routes: Routes = [
       { path: 'Company_Master_Details', component: CompanyMasterDetailsComponent },
       { path: 'Department_Master', component: DepartmentMasterComponent },
       { path: 'Department_Master_Details', component: DepartmentMasterDetailsComponent },
+      { path: 'Designation_Master', component: DesignationMasterComponent },
+      { path: 'Designation_Master_Details', component: DesignationMasterDetailsComponent },
       { path: 'User_Role_Master', component: UserRoleMasterComponent },
       { path: 'User_Role_Master_Details', component: UserRoleMasterDetailsComponent },
       { path: 'Employee_Master', component: EmployeeMasterComponent },

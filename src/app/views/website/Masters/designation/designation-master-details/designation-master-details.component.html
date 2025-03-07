@@ -1,0 +1,49 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackDesignation()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">{{DetailsFormTitle}}</span>
+      </div>
+    </div>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem; ">
+        <div class=" col-md-4">
+          <label> Department</label>
+                <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DepartmentRef"
+                name="DepartmentRef" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef">
+                <nz-option *ngFor="let department of DepartmentList" [nzValue]="department.p.Ref" [nzLabel]="department.p.Name"></nz-option>
+              </nz-select>
+        </div>
+        <div class="col-md-4">
+          <div>
+           <label>Name</label>
+            <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name"
+              required placeholder="Enter Name" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+           <label>Seniority Level</label>
+            <input type="text" [(ngModel)]="Entity.p.SeniorityLevel" name="SeniorityLevel" class="form-control" id="SeniorityLevel"
+              required placeholder="Enter Seniority Level" />
+          </div>
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn" (click)="SaveDesignationMaster()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackDesignation()">
+            Back
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

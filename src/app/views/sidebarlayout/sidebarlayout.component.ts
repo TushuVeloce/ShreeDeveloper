@@ -337,6 +337,11 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '',
       },
       {
+        Name: 'Designation Master',
+        RouterLink: '/homepage/Website/Designation_Master',
+        LogoPath: '',
+      },
+      {
         Name: 'User Role Master',
         RouterLink: '/homepage/Website/User_Role_Master',
         LogoPath: '',
