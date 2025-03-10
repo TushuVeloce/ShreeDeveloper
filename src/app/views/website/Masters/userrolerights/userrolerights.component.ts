@@ -114,15 +114,16 @@ export class UserrolerightsComponent implements OnInit {
 
     this.DisplayFeature = []
     this.DisplayFeature = this.Entity.p.Feature.filter(e => e.FeatureGroupRef == featureGroupRef);
-    console.log(this.DisplayFeature);
+    // console.log(this.DisplayFeature);
   }
 
   getUserRoleRights = async (departmentref: number, designationref: number) => {
+    // debugger
     // For Fetching Data 
     let lst = await UserRoleRight.FetchEntireListByUserRoleRef(departmentref, designationref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = lst;
     console.log(this.DisplayMasterList);
-
+    
   }
 
 
