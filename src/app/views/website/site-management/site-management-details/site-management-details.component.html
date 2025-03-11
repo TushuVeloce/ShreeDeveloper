@@ -67,7 +67,7 @@
         </div>
         <div class="col-md-4">
           <label>Site Incharge</label>
-          <input type="text" name="SiteInChargeRef" class="form-control" id="SiteInChargeRef" [(ngModel)]="Entity.p.SiteInChargeRef" required
+          <input type="number" name="SiteInChargeRef" class="form-control" id="SiteInChargeRef" [(ngModel)]="Entity.p.SiteInChargeRef" required
             placeholder="Enter Site Incharge" />
         </div>
         <div class="col-md-4">
@@ -192,7 +192,7 @@
           margin-top: 2rem;
         ">
         <div>
-          <nz-button nz-button class="btn1" (click)="SaveEmployeeMaster()">Save</nz-button>
+          <nz-button nz-button class="btn1" (click)="SaveSite()">Save</nz-button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="BackSiteManagement()">
