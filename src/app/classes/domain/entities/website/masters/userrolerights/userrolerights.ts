@@ -10,7 +10,7 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { UserRoleRightsFetchRequest } from "./userrolerightsfetchrequest";
+import { UserRoleRightFetchRequest } from "./userrolerightfetchrequest";
 
 export class FeatureProps {
 
@@ -28,7 +28,7 @@ export class FeatureProps {
 
 
 
-export class UserRoleRightsProps {
+export class UserRoleRightProps {
   // public Ref: number = 0;
   // public Name: string = '';
   public DepartmentRef: number = 0;
@@ -49,14 +49,14 @@ export class UserRoleRightsProps {
   }
 
   public static Blank() {
-    return new UserRoleRightsProps(true);
+    return new UserRoleRightProps(true);
   }
 }
 
-export class UserRoleRights implements IPersistable<UserRoleRights> {
-  public static readonly MasterTableName: string = 'UserRoleRights';
+export class UserRoleRight implements IPersistable<UserRoleRight> {
+  public static readonly MasterTableName: string = 'UserRoleRight';
 
-  private constructor(public readonly p: UserRoleRightsProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: UserRoleRightProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -69,17 +69,17 @@ export class UserRoleRights implements IPersistable<UserRoleRights> {
     // }
   }
 
-  public GetEditableVersion(): UserRoleRights {
-    let newUserRoleRights: UserRoleRightsProps = Utils.GetInstance().DeepCopy(this.p);
-    return UserRoleRights.CreateInstance(newUserRoleRights, true);
+  public GetEditableVersion(): UserRoleRight {
+    let newUserRoleRight: UserRoleRightProps = Utils.GetInstance().DeepCopy(this.p);
+    return UserRoleRight.CreateInstance(newUserRoleRight, true);
   }
 
   public static CreateNewInstance() {
-    return new UserRoleRights(UserRoleRightsProps.Blank(), true);
+    return new UserRoleRight(UserRoleRightProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new UserRoleRights(data as UserRoleRightsProps, allowEdit);
+    return new UserRoleRight(data as UserRoleRightProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
@@ -88,27 +88,27 @@ export class UserRoleRights implements IPersistable<UserRoleRights> {
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, UserRoleRights.MasterTableName, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, UserRoleRight.MasterTableName, this.p);
   }
 
-  private static m_currentInstance: UserRoleRights = UserRoleRights.CreateNewInstance();
+  private static m_currentInstance: UserRoleRight = UserRoleRight.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return UserRoleRights.m_currentInstance;
+    return UserRoleRight.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: UserRoleRights) {
-    UserRoleRights.m_currentInstance = value;
+  public static SetCurrentInstance(value: UserRoleRight) {
+    UserRoleRight.m_currentInstance = value;
   }
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): UserRoleRights {
+  public static SingleInstanceFromTransportData(td: TransportData): UserRoleRight {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, UserRoleRights.MasterTableName)) {
-      for (let data of dcs.GetCollection(td.MainData, UserRoleRights.MasterTableName)!.Entries) {
-        return UserRoleRights.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, UserRoleRight.MasterTableName)) {
+      for (let data of dcs.GetCollection(td.MainData, UserRoleRight.MasterTableName)!.Entries) {
+        return UserRoleRight.CreateInstance(data, false);
       }
     }
 
@@ -117,13 +117,13 @@ export class UserRoleRights implements IPersistable<UserRoleRights> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): UserRoleRights[] {
-    let result: UserRoleRights[] = [];
+    sortPropertyName: string = "Name"): UserRoleRight[] {
+    let result: UserRoleRight[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, UserRoleRights.MasterTableName)) {
-      let coll = dcs.GetCollection(cont, UserRoleRights.MasterTableName)!;
+    if (dcs.CollectionExists(cont, UserRoleRight.MasterTableName)) {
+      let coll = dcs.GetCollection(cont, UserRoleRight.MasterTableName)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -133,18 +133,18 @@ export class UserRoleRights implements IPersistable<UserRoleRights> {
       }
 
       for (let data of entries) {
-        result.push(UserRoleRights.CreateInstance(data, false));
+        result.push(UserRoleRight.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): UserRoleRights[] {
-    return UserRoleRights.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): UserRoleRight[] {
+    return UserRoleRight.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: UserRoleRightsFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: UserRoleRightFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -159,42 +159,43 @@ export class UserRoleRights implements IPersistable<UserRoleRights> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new UserRoleRightsFetchRequest();
+    let req = new UserRoleRightFetchRequest();
     req.CompanyRefs.push(ref);
-    let tdResponse = await UserRoleRights.FetchTransportData(req, errorHandler) as TransportData;
-    return UserRoleRights.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await UserRoleRight.FetchTransportData(req, errorHandler) as TransportData;
+    return UserRoleRight.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: UserRoleRightsFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await UserRoleRights.FetchTransportData(req, errorHandler) as TransportData;
-    return UserRoleRights.ListFromTransportData(tdResponse);
+  public static async FetchList(req: UserRoleRightFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await UserRoleRight.FetchTransportData(req, errorHandler) as TransportData;
+    return UserRoleRight.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new UserRoleRightsFetchRequest();
-    let tdResponse = await UserRoleRights.FetchTransportData(req, errorHandler) as TransportData;
-    return UserRoleRights.ListFromTransportData(tdResponse);
+    let req = new UserRoleRightFetchRequest();
+    let tdResponse = await UserRoleRight.FetchTransportData(req, errorHandler) as TransportData;
+    return UserRoleRight.ListFromTransportData(tdResponse);
   }
 
   // public static async FetchEntireListByCountryRef(CountryRef :number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-  //   let req = new UserRoleRightsFetchRequest();
+  //   let req = new UserRoleRightFetchRequest();
   //   req.CompanyRefs.push(CountryRef)
-  //   let tdResponse = await UserRoleRights.FetchTransportData(req, errorHandler) as TransportData;
-  //   return UserRoleRights.ListFromTransportData(tdResponse);
+  //   let tdResponse = await UserRoleRight.FetchTransportData(req, errorHandler) as TransportData;
+  //   return UserRoleRight.ListFromTransportData(tdResponse);
   // }
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new UserRoleRightsFetchRequest();
+    let req = new UserRoleRightFetchRequest();
     req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await UserRoleRights.FetchTransportData(req, errorHandler) as TransportData;
-    return UserRoleRights.ListFromTransportData(tdResponse);
+    let tdResponse = await UserRoleRight.FetchTransportData(req, errorHandler) as TransportData;
+    return UserRoleRight.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByUserRoleRef(userroleref: number, companeref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new UserRoleRightsFetchRequest();
-    req.UserRoleRefs.push(userroleref)
-    req.CompanyRefs.push(companeref)
-    let tdResponse = await UserRoleRights.FetchTransportData(req, errorHandler) as TransportData;
-    return UserRoleRights.ListFromTransportData(tdResponse);
+  public static async FetchEntireListByUserRoleRef(departmentref: number,designationref: number, companeref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new UserRoleRightFetchRequest();
+    req.DepartmentRefs.push(departmentref)
+    req.DesignationRefs.push(designationref)
+    req.DesignationRefs.push(companeref)
+    let tdResponse = await UserRoleRight.FetchTransportData(req, errorHandler) as TransportData;
+    return UserRoleRight.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {

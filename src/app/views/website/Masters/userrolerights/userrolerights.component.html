@@ -2,7 +2,7 @@
   <div class="headers">
     <div class="row">
       <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
-        <h5 style="padding-top: 3px;" class="title title_light">User Role Rights</h5>
+        <h5 style="padding-top: 3px;" class="title title_light">User Role Right</h5>
       </div>
       <!-- <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light">
         <input type="text" Class="search-box_light" placeholder="Search..." autofocus />
@@ -17,7 +17,8 @@
       <div class="col-md-4 mb-2">
         <label for="DepartmentRef"><b>Select Department</b></label>
         <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select Department" id="DepartmentRef"
-          name="DepartmentRef" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef">
+          name="DepartmentRef" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef"
+          (ngModelChange)="getUserRoleRights(Entity.p.DepartmentRef,Entity.p.DesignationRef)">
           <nz-option *ngFor="let department of DepartmentList" [nzValue]="department.p.Ref"
             [nzLabel]="department.p.Name"></nz-option>
         </nz-select>
@@ -25,7 +26,8 @@
       <div class="col-md-4 mb-2">
         <label for="DesignationRef"><b>Select Designation</b></label>
         <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select Designation" id="DesignationRef"
-          name="DesignationRef" [nzSize]="'large'" [(ngModel)]="Entity.p.DesignationRef">
+          name="DesignationRef" [nzSize]="'large'" [(ngModel)]="Entity.p.DesignationRef"
+          (ngModelChange)="getUserRoleRights(Entity.p.DepartmentRef,Entity.p.DesignationRef)">
           <nz-option *ngFor="let Designation of DesignationList" [nzValue]="Designation.p.Ref"
             [nzLabel]="Designation.p.Name"></nz-option>
         </nz-select>
@@ -34,7 +36,7 @@
         <label for="FeatureGroupRef"><b>Select Feature Group</b></label>
         <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select" id="FeatureGroupRef"
           name="FeatureGroupRef" [nzSize]="'large'" [(ngModel)]="FeatureGroupRef"
-          (ngModelChange)="onclick(FeatureGroupRef)">
+          (ngModelChange)="onclick(FeatureGroupRef); getUserRoleRights(Entity.p.DepartmentRef,Entity.p.DesignationRef)">
           <nz-option *ngFor="let featuregroup of FeatureGroupList" [nzValue]="featuregroup.Ref"
             [nzLabel]="featuregroup.Name"></nz-option>
         </nz-select>

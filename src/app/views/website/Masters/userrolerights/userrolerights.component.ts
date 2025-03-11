@@ -4,23 +4,12 @@ import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
 import { Designation } from 'src/app/classes/domain/entities/website/masters/designation/designation';
 import { UserRole } from 'src/app/classes/domain/entities/website/masters/userrole/userrole';
-import { FeatureProps, UserRoleRights } from 'src/app/classes/domain/entities/website/masters/userrolerights/userrolerights';
+import { FeatureProps, UserRoleRight } from 'src/app/classes/domain/entities/website/masters/userrolerights/userrolerights';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
-// export class FeatureObj {
-//   FeatureRef: number = 0;
-//   FeatureName: string = "";
-//   FeatureGroupRef: number = 0;
-//   CanAdd: boolean = false;
-//   CanEdit: boolean = false;
-//   CanDelete: boolean = false;
-//   CanView: boolean = false;
-//   CanPrint: boolean = false;
-//   CanExport: boolean = false;
-// }
 @Component({
   selector: 'app-userrolerights',
   standalone: false,
@@ -32,14 +21,14 @@ import { Utils } from 'src/app/services/utils.service';
 export class UserrolerightsComponent implements OnInit {
 
   UserRoleList: UserRole[] = [];
-  Entity: UserRoleRights = UserRoleRights.CreateNewInstance();
+  Entity: UserRoleRight = UserRoleRight.CreateNewInstance();
   private IsNewEntity: boolean = true;
-  MasterList: UserRoleRights[] = [];
-  DisplayMasterList: UserRoleRights[] = [];
+  MasterList: UserRoleRight[] = [];
+  DisplayMasterList: UserRoleRight[] = [];
   DepartmentList: Department[] = [];
   DesignationList: Designation[] = [];
   SearchString: string = '';
-  SelectedVehicle: UserRoleRights = UserRoleRights.CreateNewInstance();
+  SelectedVehicle: UserRoleRight = UserRoleRight.CreateNewInstance();
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
@@ -49,7 +38,7 @@ export class UserrolerightsComponent implements OnInit {
 
   FeatureGroupRef: number = 0;
 
-  headers: string[] = ['Module Name', 'Add', 'Edit', 'Delete', 'View', 'Print', 'Exports',];
+  headers: string[] = ['Features', 'Add', 'Edit', 'Delete', 'View', 'Print', 'Exports',];
   // modules: { FeatureName: string; CanAdd: boolean; CanEdit: boolean; CanDelete: boolean; CanView: boolean; CanPrint: boolean; CanExport: boolean }[] = [{
   //   FeatureName: '',
   //   CanAdd: false,
@@ -89,12 +78,6 @@ export class UserrolerightsComponent implements OnInit {
     // this.mastermodules.forEach(e => this.Entity.p.Feature.push(e as any));
     // this.loadRoleRightsFromStorage();
     console.log('Modules:', this.ModuleList);
-
-    // this.modules = this.mastermodules;
-
-    // let lst = await UserRoleRights.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    // this.MasterList = lst;
-
   }
 
 
@@ -109,59 +92,42 @@ export class UserrolerightsComponent implements OnInit {
     console.log('DesignationList :', this.DesignationList);
   }
 
-  mastermodules = [
-    { FeatureName: 'Department Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    { FeatureName: 'Material Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    { FeatureName: 'Stage Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    { FeatureName: 'Marketing Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    { FeatureName: 'Vendor Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    { FeatureName: 'Vehicle Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    { FeatureName: 'User Master', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-  ];
 
-  transactionsmodules = [
-    { FeatureName: 'Account Transactions', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    { FeatureName: 'Expense Transactions', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    { FeatureName: 'Income Transactions', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-  ];
 
-  reportsmodules = [
-    { FeatureName: 'Billing Report', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    { FeatureName: 'Office Report', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    { FeatureName: 'Stock Report', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    { FeatureName: 'CRM Report', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    { FeatureName: 'Booking Report', CanAdd: false, CanEdit: false, CanDelete: false, CanView: false, CanPrint: false, CanExport: false },
-    // { Feature: 'Billing Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'Office Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'Stock Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'CRM Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'Booking Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'Follow Up Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'Employee Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'Marketing Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'Stages Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-    // { Feature: 'Account Report', add: false, edit: false, delete: false, view: false, print: false, exports: false },
-  ];
+  async onclick(featureGroupRef: number) {
+    if (this.Entity.p.DepartmentRef <= 0) {
+      alert("Please select Department.");
+      setTimeout(() => this.FeatureGroupRef = 0);
+      return;
+    }
+    if (this.Entity.p.DesignationRef <= 0) {
+      alert("Please select Designation.");
+      setTimeout(() => this.FeatureGroupRef = 0);
+      return;
+    }
 
-  onclick(featureGroupRef: number) {
     if (featureGroupRef == 0) {
       alert("Select Feature Group");
-      return
+      setTimeout(() => this.FeatureGroupRef = 0);
+      return;
     }
-    this.DisplayFeature = []
-    this.DisplayFeature = this.Entity.p.Feature.filter(e => e.FeatureGroupRef == featureGroupRef)
 
+    this.DisplayFeature = []
+    this.DisplayFeature = this.Entity.p.Feature.filter(e => e.FeatureGroupRef == featureGroupRef);
+    // console.log(this.DisplayFeature);
   }
 
-  AllModules = this.mastermodules.concat(this.transactionsmodules, this.reportsmodules);
+  getUserRoleRights = async (departmentref: number, designationref: number) => {
+    // debugger
+    // For Fetching Data 
+    let lst = await UserRoleRight.FetchEntireListByUserRoleRef(departmentref, designationref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.DisplayMasterList = lst;
+    console.log(this.DisplayMasterList);
+    
+  }
+
 
   SaveUserRoleRights = async () => {
-    // pushing all module data in one array 
-    // this.AllModules.forEach(e=> this.Entity.p.Feature.push(e as any));
-    // pushing all module data in different array 
-    // this.modules.forEach(e=> this.Entity.p.Feature.push(e as any));
-    // creating array 
-    // this.Entity.p.Feature = [...this.modules];
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
@@ -182,41 +148,10 @@ export class UserrolerightsComponent implements OnInit {
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('User Role Rights saved successfully!');
-        this.Entity = UserRoleRights.CreateNewInstance();
+        this.Entity = UserRoleRight.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster('User Role Rights Updated successfully!');
       }
     }
   }
-
-  // getUserRoleRights = async (UserRoleRef: number) => {
-  //   if (UserRoleRef <= 0) {
-  //     await this.uiUtils.showErrorToster('Select User Role');
-  //     return;
-  //   }
-  //   if (this.companyRef() <= 0) {
-  //     await this.uiUtils.showErrorToster('Select Company');
-  //     return;
-  //   }
-  //   let lst = await UserRoleRights.FetchEntireListByUserRoleRef(UserRoleRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.DisplayMasterList = lst;
-  //   console.log('UserRoleSelected :', this.DisplayMasterList);
-  //   if (lst.length > 0) {
-  //     lst.forEach(e => {
-  //       e.p.Feature.forEach(f => {
-  //         let mod = this.modules.find(m => m.FeatureName == f.FeatureName);
-  //         if (mod) {
-  //           mod.CanAdd = f.CanAdd;
-  //           mod.CanEdit = f.CanEdit;
-  //           mod.CanDelete = f.CanDelete;
-  //           mod.CanView = f.CanView;
-  //           mod.CanPrint = f.CanPrint;
-  //           mod.CanExport = f.CanExport;
-  //         }
-  //       });
-  //     });
-  //     this.modules = this.DisplayMasterList[0].p.Feature;
-
-  //   }
-  // }
 }

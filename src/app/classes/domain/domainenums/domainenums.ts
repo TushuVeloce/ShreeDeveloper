@@ -46,9 +46,32 @@ export enum ApplicationFeatureGroups {
 
 export enum ApplicationFeatures {
   None = 0,
-  DepartmentMaster = 100,
-  AccountingTransaction  = 200,
-  VendorReport = 300
+  UnitMaster = 100,
+  MaterialMaster = 200,
+  StageMaster = 300,
+  MarketingTypeMaster = 400,
+  VendorServicesMaster = 500,
+  VendorMaster = 600,
+  BankAccountMaster = 700,
+  CountryMaster = 800,
+  StateMaster = 900,
+  CityMaster = 1000,
+  DepartmentMaster = 1100,
+  DesignationMaster = 1200,
+  UserRoleMaster = 1300,
+  UserRoleRight = 1400,
+  ExternalUserMaster = 1500,
+  CompanyMaster = 1600,
+  FinancialYearMaster = 1700,
+  EmployeeMaster = 1800,
+  
+
+
+  AccountingTransaction  = 1900,
+  VendorReport = 2000,
+  MaterialReport = 2100,
+  EmployeeReport = 2200,
+  MaterialTransaction = 2300
 }
 // export enum LoginStatusModes {
 //   None = 0,
@@ -309,24 +332,106 @@ export class DomainEnums {
   
   public static ApplicationFeatureName(company: ApplicationFeatures) {
     switch (company) {
+      case ApplicationFeatures.UnitMaster: return 'Unit Master';
+      case ApplicationFeatures.MaterialMaster: return 'Material Master';
+      case ApplicationFeatures.StageMaster: return 'Stage Master';
+      case ApplicationFeatures.MarketingTypeMaster: return 'Marketing Type Master';
+      case ApplicationFeatures.VendorServicesMaster: return 'Vendor Services Master';
+      case ApplicationFeatures.VendorMaster: return 'Vendor Master';
+      case ApplicationFeatures.BankAccountMaster: return 'Bank Account Master';
+      case ApplicationFeatures.CountryMaster: return 'Country Master';
+      case ApplicationFeatures.StateMaster: return 'State Master';
+      case ApplicationFeatures.CityMaster: return 'City Master';
       case ApplicationFeatures.DepartmentMaster: return 'Department Master';
+      case ApplicationFeatures.DesignationMaster: return 'Designation Master';
+      case ApplicationFeatures.UserRoleMaster: return 'User Role Master';
+      case ApplicationFeatures.UserRoleRight: return 'User Role Right Master';
+      case ApplicationFeatures.ExternalUserMaster: return 'External User Master';
+      case ApplicationFeatures.CompanyMaster: return 'Company Master';
+      case ApplicationFeatures.FinancialYearMaster: return 'Financial Year Master';
+      case ApplicationFeatures.EmployeeMaster: return 'Employee Master';
+
+      
       case ApplicationFeatures.AccountingTransaction: return 'Accounting Transaction';
+      case ApplicationFeatures.MaterialTransaction: return 'Material Transaction';
+
       case ApplicationFeatures.VendorReport: return 'Vendor Report';
+      case ApplicationFeatures.EmployeeReport: return 'Employee Report';
       default: return '';
     }
   }
 
   public static ApplicationFeatureList(withAllOption: boolean = false, allOptionName: string = '<All>') {
     let result = [
+
+      {
+        Ref: ApplicationFeatures.UnitMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.UnitMaster)
+      },
+      {
+        Ref: ApplicationFeatures.MaterialMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.MaterialMaster)
+      },
+      {
+        Ref: ApplicationFeatures.DepartmentMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.DepartmentMaster)
+      },
+      
+
+      // New Start
+
+      {
+        Ref: ApplicationFeatures.StageMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.StageMaster)
+      },
+      {
+        Ref: ApplicationFeatures.MarketingTypeMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.MarketingTypeMaster)
+      },
+      {
+        Ref: ApplicationFeatures.VendorServicesMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.VendorServicesMaster)
+      },
+      {
+        Ref: ApplicationFeatures.VendorMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.VendorMaster)
+      },
       {
         Ref: ApplicationFeatures.DepartmentMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.DepartmentMaster)
       },
       {
+        Ref: ApplicationFeatures.DesignationMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.DesignationMaster)
+      },
+      {
+        Ref: ApplicationFeatures.UserRoleMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.UserRoleMaster)
+      },
+      {
+        Ref: ApplicationFeatures.UserRoleRight, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.UserRoleRight)
+      },
+
+      {
+        Ref: ApplicationFeatures.ExternalUserMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.ExternalUserMaster)
+      },
+      {
+        Ref: ApplicationFeatures.CompanyMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.CompanyMaster)
+      },
+      {
+        Ref: ApplicationFeatures.FinancialYearMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.FinancialYearMaster)
+      },
+      {
+        Ref: ApplicationFeatures.EmployeeMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.EmployeeMaster)
+      },
+
+      // New End 
+
+      
+      // for transaction 
+      {
         Ref: ApplicationFeatures.AccountingTransaction, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.AccountingTransaction)
       },
       {
+        Ref: ApplicationFeatures.MaterialTransaction, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.MaterialTransaction)
+      },
+      // For Report 
+      {
+        Ref: ApplicationFeatures.EmployeeReport, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.EmployeeReport)
+      },
+      {
         Ref: ApplicationFeatures.VendorReport, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.VendorReport)
-      }
+      },
       
     ]
     if (withAllOption) {
@@ -343,14 +448,69 @@ export class DomainEnums {
   public static FeatureToFeatureGroupMapList(withAllOption: boolean = false, allOptionName: string = '<All>') {
     let result = [
       {
+        Ref: ApplicationFeatures.UnitMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.UnitMaster)
+      },
+      {
         Ref: ApplicationFeatures.DepartmentMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.DepartmentMaster)
       },
+      
+      {
+        Ref: ApplicationFeatures.MaterialMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.MaterialMaster)
+      },
+
+      // New start
+      {
+        Ref: ApplicationFeatures.StageMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.StageMaster)
+      },
+      {
+        Ref: ApplicationFeatures.MarketingTypeMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.MarketingTypeMaster)
+      },
+      {
+        Ref: ApplicationFeatures.VendorServicesMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.VendorServicesMaster)
+      },
+      {
+        Ref: ApplicationFeatures.VendorMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.VendorMaster)
+      },
+      {
+        Ref: ApplicationFeatures.DepartmentMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.DepartmentMaster)
+      },
+      {
+        Ref: ApplicationFeatures.DesignationMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.DesignationMaster)
+      },
+      {
+        Ref: ApplicationFeatures.UserRoleMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.UserRoleMaster)
+      },
+      {
+        Ref: ApplicationFeatures.UserRoleRight,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.UserRoleRight)
+      },
+
+      {
+        Ref: ApplicationFeatures.ExternalUserMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.ExternalUserMaster)
+      },
+      {
+        Ref: ApplicationFeatures.CompanyMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.CompanyMaster)
+      },
+      {
+        Ref: ApplicationFeatures.FinancialYearMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.FinancialYearMaster)
+      },
+      {
+        Ref: ApplicationFeatures.EmployeeMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.EmployeeMaster)
+      },
+
+      // New End 
+
       {
         Ref: ApplicationFeatures.AccountingTransaction,FeatureGroupRef :ApplicationFeatureGroups.Transaction, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.AccountingTransaction)
       },
       {
+        Ref: ApplicationFeatures.MaterialTransaction,FeatureGroupRef :ApplicationFeatureGroups.Transaction, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.MaterialTransaction)
+      },
+      {
+        Ref: ApplicationFeatures.EmployeeReport,FeatureGroupRef :ApplicationFeatureGroups.Report, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.EmployeeReport)
+      },
+      {
         Ref: ApplicationFeatures.VendorReport,FeatureGroupRef :ApplicationFeatureGroups.Report, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.VendorReport)
-      }
+      },
       
     ]
     if (withAllOption) {
