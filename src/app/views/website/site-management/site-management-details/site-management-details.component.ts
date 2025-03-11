@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Modal } from 'bootstrap';
 import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
 import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
+import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -23,7 +24,8 @@ export class SiteManagementDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Site' | 'Edit Site' = 'New Site';
   IsDropdownDisabled: boolean = false;
   InitialEntity: Site = null as any;
- CountryList: Country[] = [];
+  CountryList: Country[] = [];
+  EmployeeList: Employee[] = [];
   StateList: State[] = [];
   CityList: City[] = [];
 
@@ -67,6 +69,7 @@ export class SiteManagementDetailsComponent implements OnInit {
  async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.CountryList = await Country.FetchEntireList();
+    this.EmployeeList = await Employee.FetchEntireList();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
           this.IsNewEntity = false;
     
@@ -163,7 +166,7 @@ getStateListByCountryRef = async (CountryRef: number) => {
     this.owners.splice(index, 1); // Remove the selected plot from the list
   }
 
-  SaveEmployeeMaster = async () => {
+  SaveSite = async () => {
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
       this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
       this.Entity.p.PlotDetailsList = this.plots
