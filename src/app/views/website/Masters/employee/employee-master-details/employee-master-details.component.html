@@ -34,15 +34,15 @@
             <input type="date" name="DOB " [(ngModel)]="Entity.p.DOB " class="form-control" id="DOB " required />
           </div>
         </div>
-        <div class="col-md-4">
-          <div>
-            <label>Gender</label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="gender" name="gender"
-              [nzSize]="'large'" [(ngModel)]="Entity.p.Gender">
-              <nz-option *ngFor="let gender of GenderList" [nzValue]="gender.Ref" [nzLabel]="gender.Name"></nz-option>
-            </nz-select>
+          <div class="col-md-4">
+            <div>
+              <label>Gender</label>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="gender" name="gender"
+                [nzSize]="'large'" [(ngModel)]="Entity.p.Gender">
+                <nz-option *ngFor="let gender of GenderList" [nzValue]="gender.Ref" [nzLabel]="gender.Name"></nz-option>
+              </nz-select>
+            </div>
           </div>
-        </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
@@ -132,21 +132,20 @@
         </div>
         <div class="col-md-4">
           <div>
-            <label>Department Name </label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DepartmentName"
-              name="DepartmentName" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef">
-              <nz-option *ngFor="let department of DepartmentList" [nzValue]="department.p.Ref"
-                [nzLabel]="department.p.Name"></nz-option>
+            <label>Material Status</label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="MaterialStatus" name="MaterialStatus"
+              [nzSize]="'large'" [(ngModel)]="Entity.p.MaterialStatus">
+              <nz-option *ngFor="let status of MaterialStatusList" [nzValue]="status.Ref" [nzLabel]="status.Name"></nz-option>
             </nz-select>
           </div>
         </div>
         <div class="col-md-4">
           <div>
-            <label>Designation</label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DesignationRef "
-              name="DesignationRef " [nzSize]="'large'" [(ngModel)]="Entity.p.DesignationRef ">
-              <nz-option *ngFor="let designation of DesignationList" [nzValue]="designation.p.Ref"
-                [nzLabel]="designation.p.Name"></nz-option>
+            <label>Department Name </label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DepartmentName"
+              name="DepartmentName" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef">
+              <nz-option *ngFor="let department of DepartmentList" [nzValue]="department.p.Ref"
+                [nzLabel]="department.p.Name"></nz-option>
             </nz-select>
           </div>
         </div>
@@ -194,6 +193,16 @@
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
+            <label>Designation</label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DesignationRef "
+              name="DesignationRef " [nzSize]="'large'" [(ngModel)]="Entity.p.DesignationRef ">
+              <nz-option *ngFor="let designation of DesignationList" [nzValue]="designation.p.Ref"
+                [nzLabel]="designation.p.Name"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
             <label>Date Of Joining</label>
             <input type="date" name="DateOfJoining " [(ngModel)]="Entity.p.DateOfJoining " class="form-control"
               id="DateOfJoining " required />
@@ -206,6 +215,8 @@
               id="SalaryPerMonth  " required />
           </div>
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
             <label>Salary Per Year</label>
@@ -213,8 +224,6 @@
               id="SalaryPerYear  " required />
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
             <label>Bank Name</label>
@@ -229,14 +238,14 @@
               required />
           </div>
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
             <label>IFSC</label>
             <input type="text" name="IFSC" [(ngModel)]="Entity.p.IFSC" class="form-control" id="IFSC" required />
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
             <label>Banck Account No</label>

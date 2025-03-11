@@ -31,6 +31,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   DesignationList: Designation[] = [];
   DepartmentList: Department[] = [];
   GenderList = DomainEnums.GenderTypeList(true, '---Select Gender---');
+  MaterialStatusList = DomainEnums.MaritalStatusesList(true, '---Select Material Status ---');
   MarketingModesList = DomainEnums.MarketingModesList();
   companyName = this.companystatemanagement.SelectedCompanyName;
 

@@ -36,8 +36,10 @@ export class SiteManagementDetailsComponent implements OnInit {
     PlotNo: '',
     AreaInSqm: '',
     AreaInSqft: '',
-    GovermentRate: '',
-    BasicRate: '',
+    GovermentRatePerSqm: '',
+    GovermentRatePerSqft:'',
+    BasicRatePerSqm : '',
+    BasicRatePerSqft : '',
     BookingRemark : '',
     CustomerName: '',
     Address: '',
@@ -119,8 +121,10 @@ getStateListByCountryRef = async (CountryRef: number) => {
         PlotNo: '',
         AreaInSqm: '',
         AreaInSqft: '',
-        GovermentRate: '',
-        BasicRate: '',
+        GovermentRatePerSqm : '',
+        GovermentRatePerSqft:'',
+        BasicRatePerSqm : '',
+        BasicRatePerSqft : '',
         BookingRemark : '',
         CustomerName: '',
         Address: '',
@@ -162,8 +166,8 @@ getStateListByCountryRef = async (CountryRef: number) => {
   SaveEmployeeMaster = async () => {
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
       this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-      this.Entity.p.Plots = this.plots
-      this.Entity.p.Owners = this.owners
+      this.Entity.p.PlotDetailsList = this.plots
+      this.Entity.p.OwnerDetailsList = this.owners
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
       console.log('entityToSave :', entityToSave);

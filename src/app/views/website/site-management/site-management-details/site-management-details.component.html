@@ -100,8 +100,8 @@
             placeholder="Enter Total Land Area in Sq ft" />
         </div>
         <div class="col-md-4">
-          <label>Number Of Plot</label>
-          <input type="number" name="NumberOfPlot" class="form-control" id="NumberOfPlot" [(ngModel)]="Entity.p.NumberOfPlot" required
+          <label>Number Of Plots</label>
+          <input type="number" name="NumberOfPlots" class="form-control" id="NumberOfPlots" [(ngModel)]="Entity.p.NumberOfPlots" required
             placeholder="Enter Plot Number" />
         </div>
       </div>
@@ -143,8 +143,8 @@
               <td Class="tbldata">{{ plot.PlotNo }}</td>
               <td Class="tbldata">{{ plot.AreaInSqm }}</td>
               <td Class="tbldata">{{ plot.AreaInSqft }}</td>
-              <td Class="tbldata">{{ plot.GovermentRate }}</td>
-              <td Class="tbldata">{{ plot.BasicRate }}</td>
+              <td Class="tbldata">{{ plot.GovermentRatePerSqft}}</td>
+              <td Class="tbldata">{{ plot.BasicRatePerSqm}}</td>
               <td Class="tbldata">
                 <button class="btn btn-danger btn-sm" (click)="removePlot(i)">Delete</button>
               </td>
@@ -228,14 +228,22 @@
             <input type="text" name="AreaInSqft" class="form-control" [(ngModel)]="newPlot.AreaInSqft" required placeholder="Enter Area sq.ft" />
           </div>
           <div class="col-md-6">
-            <label>Goverment Rate</label>
-            <input type="text" name="GovermentRate" class="form-control" [(ngModel)]="newPlot.GovermentRate" required placeholder="Enter Goverment Rate" />
+            <label>Goverment Rate Per Sqm </label>
+            <input type="text" name="GovermentRatePerSqm" class="form-control" [(ngModel)]="newPlot.GovermentRatePerSqm" required placeholder="Enter Goverment Rate" />
+          </div>
+          <div class="col-md-6">
+            <label>Goverment Rate Per Sqft </label>
+            <input type="text" name="GovermentRatePerSqft" class="form-control" [(ngModel)]="newPlot.GovermentRatePerSqft" required placeholder="Enter Goverment Rate" />
           </div>
         </div>
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
-            <label>Basic Rate</label>
-            <input type="text" name="BasicRate" class="form-control" [(ngModel)]="newPlot.BasicRate" required placeholder="Enter Basic Rate" />
+            <label>Basic Rate Per Sqm </label>
+            <input type="text" name="BasicRatePerSqm" class="form-control" [(ngModel)]="newPlot.BasicRatePerSqm" required placeholder="Enter Basic Rate" />
+          </div>
+          <div class="col-md-6">
+            <label>Basic Rate Per Sqft </label>
+            <input type="text" name="BasicRatePerSqft" class="form-control" [(ngModel)]="newPlot.BasicRatePerSqft" required placeholder="Enter Basic Rate" />
           </div>
           <div class="col-md-6">
             <label>Booking Remark</label>

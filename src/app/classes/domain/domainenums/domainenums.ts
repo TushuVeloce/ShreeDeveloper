@@ -1,7 +1,15 @@
 export enum Gender {
   None = 0,
-  Male = 10,
-  Female = 20
+  Male = 1,
+  Female = 2,
+  Transgender  = 3
+}
+
+export enum MaritalStatuses {
+  None = 0,
+  UnMarried  = 1,
+  Married  = 2,
+  Divorced   = 3
 }
 
 export enum MarketingModes {
@@ -128,6 +136,7 @@ export class DomainEnums {
     switch (itemType) {
       case Gender.Male: return 'Male';
       case Gender.Female: return 'Female';
+      case Gender.Transgender : return 'Transgender ';
       default: return '';
     }
   }
@@ -140,10 +149,45 @@ export class DomainEnums {
       {
         Ref: Gender.Female, Name: DomainEnums.GenderTypeName(Gender.Female)
       },
+      {
+        Ref: Gender.Transgender , Name: DomainEnums.GenderTypeName(Gender.Transgender )
+      }
     ]
     if (withAllOption) {
       let allEntry = {
         Ref: Gender.None,
+        Name: allOptionName
+      }
+      result.unshift(allEntry);
+    }
+    return result;
+
+  }
+
+  public static MaritalStatusesName(itemType: MaritalStatuses) {
+    switch (itemType) {
+      case MaritalStatuses.UnMarried : return 'UnMarried ';
+      case MaritalStatuses.Married: return 'Married';
+      case MaritalStatuses.Divorced : return 'Divorced ';
+      default: return '';
+    }
+  }
+
+  public static MaritalStatusesList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+    let result = [
+      {
+        Ref: MaritalStatuses.UnMarried, Name: DomainEnums.MaritalStatusesName(MaritalStatuses.UnMarried)
+      },
+      {
+        Ref: MaritalStatuses.Married, Name: DomainEnums.MaritalStatusesName(MaritalStatuses.Married)
+      },
+      {
+        Ref: MaritalStatuses.Divorced , Name: DomainEnums.MaritalStatusesName(MaritalStatuses.Divorced )
+      }
+    ]
+    if (withAllOption) {
+      let allEntry = {
+        Ref: MaritalStatuses.None,
         Name: allOptionName
       }
       result.unshift(allEntry);

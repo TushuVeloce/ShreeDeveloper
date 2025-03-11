@@ -32,11 +32,11 @@ export class SiteProps {
   public EstimatedCost  : string = '';
   public TotalLandAreaInSqm   : string = '';
   public TotalLandAreaInSqft    : string = '';
-  public NumberOfPlot   : string = '';
+  public NumberOfPlots : string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public Plots: any[] = [];
-  public Owners: any[] = [];
+  public PlotDetailsList: any[] = [];
+  public OwnerDetailsList: any[] = [];
 
 
   public readonly IsNewlyCreated: boolean = false;
