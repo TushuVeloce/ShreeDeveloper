@@ -14,7 +14,7 @@ import { SiteFetchRequest } from "./sitefetchrequest";
 
 
 export class SiteProps {
-  public readonly Db_Table_Name = "Purchase_Master";
+  public readonly Db_Table_Name = "SiteManagement";
   public Ref: number = 0;
   public Name: string = '';
   public AddressLine1 : string = '';
@@ -52,7 +52,7 @@ export class SiteProps {
 }
 
 export class Site implements IPersistable<Site> {
-  public static readonly Db_Table_Name: string = 'Purchase_Master';
+  public static readonly Db_Table_Name: string = 'SiteManagement';
 
   private constructor(public readonly p: SiteProps, public readonly AllowEdit: boolean) {
 
