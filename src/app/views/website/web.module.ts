@@ -65,13 +65,14 @@ import { ExternalUsersComponent } from './Masters/external_users/external-users/
 import { ExternalUsersMasterDetailsComponent } from './Masters/external_users/external-users-details/external-users-details.component';
 import { DesignationMasterComponent } from './Masters/designation/designation-master/designation-master.component';
 import { DesignationMasterDetailsComponent } from './Masters/designation/designation-master-details/designation-master-details.component';
+import { SiteManagementDetailsComponent } from './site-management/site-management-details/site-management-details.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent  ,StageMasterComponent,StageMasterDetailsComponent, AccountMainLedgerComponent,AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent,MarketingTypeMasterDetailsComponent,
     VendorMasterComponent,VehicleMasterComponent,VendorMasterDetailsComponent, BankAccountMasterComponent,BankAccountMasterDetailsComponent, ExternalUsersComponent,ExternalUsersMasterDetailsComponent, CompanyMasterComponent,CompanyMasterDetailsComponent, DepartmentMasterComponent,DepartmentMasterDetailsComponent,DesignationMasterComponent,DesignationMasterDetailsComponent, UserRoleMasterComponent,UserRoleMasterDetailsComponent, EmployeeMasterComponent,EmployeeMasterDetailsComponent,
     SiteManagementMasterComponent,SiteManagementActualStagesComponent,SiteManagementActualStagesDetailsComponent,EstimateStagesDetailsComponent,EstimateStagesComponent,
     MaterialRequisitionComponent,StockConsumeComponent,StockInwardComponent,StockOrderComponent,StockTransferComponent , CountryComponent, StateComponent,CityComponent,UnitMasterComponent,UnitMasterDetailsComponent, 
-    DeleteIconComponent,EditIconComponent, DataNotFoundComponent,VehicleMasterDetailsComponent,UserrolerightsComponent,FinancialYearMasterComponent,VendorServicesMasterComponent,VendorServicesMasterDetailsComponent],
+    DeleteIconComponent,EditIconComponent, DataNotFoundComponent,VehicleMasterDetailsComponent,UserrolerightsComponent,FinancialYearMasterComponent,VendorServicesMasterComponent,VendorServicesMasterDetailsComponent,SiteManagementDetailsComponent],
   imports: [
     CommonModule,WebRoutingModule,FormsModule,NzDropDownModule,NzTableModule,IonicModule.forRoot(),
     NzPaginationModule, NzUploadModule, NzModalModule,NzCheckboxModule, 
