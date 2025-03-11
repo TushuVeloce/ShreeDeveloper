@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Modal } from 'bootstrap';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
 import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
@@ -28,7 +29,7 @@ export class SiteManagementDetailsComponent implements OnInit {
   EmployeeList: Employee[] = [];
   StateList: State[] = [];
   CityList: City[] = [];
-
+  BookingRemarkList = DomainEnums.BookingRemarkList(true, '---Select Booking Remark---');
   plotheaders: string[] = ['Sr.No.', 'Plot No', 'Area sq.m', 'Area sq.ft', 'Goverment Rate', 'Company Rate', 'Action'];
   ownerheaders: string[] = ['Sr.No.', 'Name ', 'Contact No ', 'Email Id ', 'AddressLine 1 ', 'AddressLine 2 ','Pin Code ', 'Action'];
   isModalOpen1: boolean = false;

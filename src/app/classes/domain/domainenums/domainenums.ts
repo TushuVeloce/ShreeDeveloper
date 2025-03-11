@@ -12,6 +12,15 @@ export enum MaritalStatuses {
   Divorced   = 3
 }
 
+export enum BookingRemark  {
+  None = 0,
+  Owner_Booked  = 1,
+  Shree_Booked  = 2,
+  Owner_Saledeed   = 3,
+  Shree_Saledeed   = 4,
+  Booked   = 5
+}
+
 export enum MarketingModes {
   None = 0,
   Digital = 10,
@@ -188,6 +197,46 @@ export class DomainEnums {
     if (withAllOption) {
       let allEntry = {
         Ref: MaritalStatuses.None,
+        Name: allOptionName
+      }
+      result.unshift(allEntry);
+    }
+    return result;
+
+  }
+
+  public static BookingRemarkName(itemType: BookingRemark) {
+    switch (itemType) {
+      case BookingRemark.Owner_Booked : return 'Owner Booked ';
+      case BookingRemark.Shree_Booked: return 'Shree Booked';
+      case BookingRemark.Owner_Saledeed : return 'Owner Saledeed ';
+      case BookingRemark.Shree_Saledeed: return 'Shree Saledeed ';
+      case BookingRemark.Booked: return 'Booked ';
+      default: return '';
+    }
+  }
+
+  public static BookingRemarkList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+    let result = [
+      {
+        Ref: BookingRemark.Owner_Booked, Name: DomainEnums.BookingRemarkName(BookingRemark.Owner_Booked)
+      },
+      {
+        Ref: BookingRemark.Shree_Booked, Name: DomainEnums.BookingRemarkName(BookingRemark.Shree_Booked)
+      },
+      {
+        Ref: BookingRemark.Owner_Saledeed , Name: DomainEnums.BookingRemarkName(BookingRemark.Owner_Saledeed )
+      },
+      {
+        Ref: BookingRemark.Shree_Saledeed , Name: DomainEnums.BookingRemarkName(BookingRemark.Shree_Saledeed )
+      },
+      {
+        Ref: BookingRemark.Booked , Name: DomainEnums.BookingRemarkName(BookingRemark.Booked )
+      }
+    ]
+    if (withAllOption) {
+      let allEntry = {
+        Ref: BookingRemark.None,
         Name: allOptionName
       }
       result.unshift(allEntry);

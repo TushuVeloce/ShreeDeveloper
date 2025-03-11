@@ -29,10 +29,10 @@ export class SiteProps {
   public SiteInChargeRef   : number = 0;
   public EstimatedStartingDate : string = '';
   public EstimatedEndDate : string = '';
-  public EstimatedCost  : string = '';
-  public TotalLandAreaInSqm   : string = '';
-  public TotalLandAreaInSqft    : string = '';
-  public NumberOfPlots : string = '';
+  public EstimatedCost  : number = 0;
+  public TotalLandAreaInSqm   : number = 0;
+  public TotalLandAreaInSqft    : number = 0;
+  public NumberOfPlots : number = 0;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
   public PlotDetailsList: any[] = [];

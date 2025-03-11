@@ -84,19 +84,19 @@
         </div>
         <div class="col-md-4">
           <label>Estimated Cost</label>
-          <input type="text" name="EstimatedCost" class="form-control" id="EstimatedCost" [(ngModel)]="Entity.p.EstimatedCost" required
+          <input type="number" name="EstimatedCost" class="form-control" id="EstimatedCost" [(ngModel)]="Entity.p.EstimatedCost" required
             placeholder="Enter Estimated Cost" />
         </div>
         <div class="col-md-4">
           <label>Total Land Area in Sqm</label>
-          <input type="text" name="TotalLandAreaInSqm" class="form-control" id="TotalLandAreaInSqm" [(ngModel)]="Entity.p.TotalLandAreaInSqm" required
+          <input type="number" name="TotalLandAreaInSqm" class="form-control" id="TotalLandAreaInSqm" [(ngModel)]="Entity.p.TotalLandAreaInSqm" required
             placeholder="Enter Total Land Area in Sq m" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Total Land Area in Sq ft</label>
-          <input type="text" name="TotalLandAreaInSqft" class="form-control" id="TotalLandAreaInSqft" [(ngModel)]="Entity.p.TotalLandAreaInSqft" required
+          <input type="number" name="TotalLandAreaInSqft" class="form-control" id="TotalLandAreaInSqft" [(ngModel)]="Entity.p.TotalLandAreaInSqft" required
             placeholder="Enter Total Land Area in Sq ft" />
         </div>
         <div class="col-md-4">
@@ -219,35 +219,38 @@
           </div>
           <div class="col-md-6">
             <label>Area sq.m</label>
-            <input type="text" name="AreaInSqm" class="form-control" [(ngModel)]="newPlot.AreaInSqm" required placeholder="Enter Area sq.m" />
+            <input type="number" name="AreaInSqm" class="form-control" [(ngModel)]="newPlot.AreaInSqm" required placeholder="Enter Area sq.m" />
           </div>
         </div>
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Area sq.ft</label>
-            <input type="text" name="AreaInSqft" class="form-control" [(ngModel)]="newPlot.AreaInSqft" required placeholder="Enter Area sq.ft" />
+            <input type="number" name="AreaInSqft" class="form-control" [(ngModel)]="newPlot.AreaInSqft" required placeholder="Enter Area sq.ft" />
           </div>
           <div class="col-md-6">
             <label>Goverment Rate Per Sqm </label>
-            <input type="text" name="GovermentRatePerSqm" class="form-control" [(ngModel)]="newPlot.GovermentRatePerSqm" required placeholder="Enter Goverment Rate" />
+            <input type="number" name="GovermentRatePerSqm" class="form-control" [(ngModel)]="newPlot.GovermentRatePerSqm" required placeholder="Enter Goverment Rate" />
           </div>
           <div class="col-md-6">
             <label>Goverment Rate Per Sqft </label>
-            <input type="text" name="GovermentRatePerSqft" class="form-control" [(ngModel)]="newPlot.GovermentRatePerSqft" required placeholder="Enter Goverment Rate" />
+            <input type="number" name="GovermentRatePerSqft" class="form-control" [(ngModel)]="newPlot.GovermentRatePerSqft" required placeholder="Enter Goverment Rate" />
           </div>
         </div>
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Basic Rate Per Sqm </label>
-            <input type="text" name="BasicRatePerSqm" class="form-control" [(ngModel)]="newPlot.BasicRatePerSqm" required placeholder="Enter Basic Rate" />
+            <input type="number" name="BasicRatePerSqm" class="form-control" [(ngModel)]="newPlot.BasicRatePerSqm" required placeholder="Enter Basic Rate" />
           </div>
           <div class="col-md-6">
             <label>Basic Rate Per Sqft </label>
-            <input type="text" name="BasicRatePerSqft" class="form-control" [(ngModel)]="newPlot.BasicRatePerSqft" required placeholder="Enter Basic Rate" />
+            <input type="number" name="BasicRatePerSqft" class="form-control" [(ngModel)]="newPlot.BasicRatePerSqft" required placeholder="Enter Basic Rate" />
           </div>
           <div class="col-md-6">
             <label>Booking Remark</label>
-            <input type="text" name="BookingRemark" class="form-control" [(ngModel)]="newPlot.BookingRemark" required placeholder="Enter Booking Remark" />
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="BookingRemark" name="BookingRemark"
+            [nzSize]="'large'" [(ngModel)]="newPlot.BookingRemark">
+            <nz-option *ngFor="let bookingremark of BookingRemarkList" [nzValue]="bookingremark.Ref" [nzLabel]="bookingremark.Name"></nz-option>
+          </nz-select>    
           </div>
         </div>
         <div class="row" style="margin-top: 1rem">
