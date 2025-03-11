@@ -23,7 +23,7 @@ export class EmployeeProps {
   public DOB  : string = '';
   // public FirstName: string = '';
   // public LastName: string = '';
-  public ContactNo: number = 0;
+  public ContactNos: string = '';
   public PersonalEmailId : string = '';
   public OfficialEmailId  : string = '';
   public AddressLine1: string = '';

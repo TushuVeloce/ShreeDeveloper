@@ -12,7 +12,7 @@
     </div>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
+        <!-- <div class="col-md-4"> -->
           <!-- <div>
             <label>Role</label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UserRoleRef"
@@ -20,7 +20,7 @@
               <nz-option *ngFor="let role of UserRoleList" [nzValue]="role.p.Ref" [nzLabel]="role.p.Name"></nz-option>
             </nz-select>
           </div> -->
-        </div>
+        <!-- </div> -->
         <div class="col-md-4">
           <div>
             <label>Name</label>
@@ -83,8 +83,6 @@
               required placeholder="Enter Address" />
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
             <label for="CountryRef"><b>Country</b></label>
@@ -95,6 +93,8 @@
             </nz-select>
           </div>
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
             <label for="StateRef"><b>State</b></label>
@@ -114,14 +114,14 @@
           </nz-select>
           </div>
       </div>
+      <div class="col-md-4">
+        <div>
+          <label>EmergencyContactName</label>
+          <input type="text" name="EmergencyContactName " [(ngModel)]="Entity.p.EmergencyContactName " class="form-control" id="EmergencyContactName " required />
+        </div>
+      </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
-          <div>
-            <label>EmergencyContactName</label>
-            <input type="text" name="EmergencyContactName " [(ngModel)]="Entity.p.EmergencyContactName " class="form-control" id="EmergencyContactName " required />
-          </div>
-        </div>
         <div class="col-md-4">
           <div>
             <label>Emergency Contact No</label>
@@ -130,6 +130,22 @@
         </div>
         <div class="col-md-4">
           <div>
+            <label>Department Name </label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DepartmentName"
+              name="DepartmentName" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef">
+              <nz-option *ngFor="let department of DepartmentList" [nzValue]="department.p.Ref"
+                [nzLabel]="department.p.Name"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Date Of Joining</label>
+            <input type="text" name="DateOfJoining " [(ngModel)]="Entity.p.DateOfJoining " class="form-control" id="DateOfJoining " required />
+          </div>
+        </div>
+        <!-- <div class="col-md-4">
+          <div>
             <label>Material Status </label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LoginStatus"
               name="LoginStatus" [nzSize]="'large'" [(ngModel)]="Entity.p.LoginStatus">
@@ -137,32 +153,17 @@
               <nz-option nzValue="false" nzLabel="Disable"></nz-option>
             </nz-select>
           </div>
+        </div> -->
         </div>
-        </div>
-        <div class="row" style="margin-top: 1rem; ">
-          <div class="col-md-4">
-            <div>
-              <label>Department Name </label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DepartmentName"
-                name="DepartmentName" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef">
-                <nz-option *ngFor="let department of DepartmentList" [nzValue]="department.p.Ref"
-                  [nzLabel]="department.p.Name"></nz-option>
-              </nz-select>
-            </div>
-          </div>
-          <div>
+        <!-- <div class="row" style="margin-top: 1rem; "> -->
+          <!-- <div>
             <label>Role</label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UserRoleRef"
               name="UserRoleRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UserRoleRef">
               <nz-option *ngFor="let role of UserRoleList" [nzValue]="role.p.Ref" [nzLabel]="role.p.Name"></nz-option>
             </nz-select>
-          </div>
-          <div class="col-md-4">
-            <div>
-              <label>Date Of Joining</label>
-              <input type="text" name="DateOfJoining " [(ngModel)]="Entity.p.DateOfJoining " class="form-control" id="DateOfJoining " required />
-            </div>
-          </div>
+          </div> -->
+       
         
           <!-- <div class="col-md-4">
             <div>
@@ -183,7 +184,7 @@
               </select>
             </div>
           </div> -->
-        </div>
+        <!-- </div> -->
         <div class="row" style="margin-top: 1rem; ">
           <div class="col-md-4">
             <div>
@@ -197,19 +198,18 @@
               <input type="text" name="SalaryPerYear  " [(ngModel)]="Entity.p.SalaryPerYear  " class="form-control" id="SalaryPerYear  " required />
             </div>
           </div>
-        </div>
-        <div class="row" style="margin-top: 1rem; ">
           <div class="col-md-4">
             <div>
               <label>Bank Name</label>
               <input type="text" name="BankName  " [(ngModel)]="Entity.p.BankName  " class="form-control" id="BankName  " required />
             </div>
           </div>
+        </div>
+        <div class="row" style="margin-top: 1rem; ">
           <div class="col-md-4">
             <div>
-              <label>Branch Name/label>
+              <label>Branch Name</label>
               <input type="text" name="BranchName" [(ngModel)]="Entity.p.BranchName" class="form-control" id="BranchName" required />
-            </div>
             </div>
           </div>
           <div class="col-md-4">
@@ -224,7 +224,7 @@
               <input type="text" name="BanckAccountNo" [(ngModel)]="Entity.p.BanckAccountNo" class="form-control" id="BanckAccountNo" required />
             </div>
           </div>
-        </div>
+          </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
           <button type="button" class="btn" (click)="SaveEmployeeMaster()">Save</button>
@@ -235,4 +235,6 @@
       </div>
     </form>
     </div>
+    </div>
+
 
