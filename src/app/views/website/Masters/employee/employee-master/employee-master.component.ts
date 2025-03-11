@@ -92,7 +92,7 @@ export class EmployeeMasterComponent implements OnInit {
       async () => {
         await employee.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `Employee ${employee.p.FirstName} has been deleted!`
+            `Employee ${employee.p.Name} has been deleted!`
           );
           this.SearchString = '';
           this.loadPaginationData();

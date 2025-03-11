@@ -17,12 +17,15 @@ import { EmployeeFetchRequest } from "./employeefetchrequest";
 export class EmployeeProps {
   public readonly Db_Table_Name = "EmployeeMaster";
   public Ref: number = 0;
-  public UserRoleRef: number = 0;
-  public readonly UserRoleName: boolean = false;
-  public FirstName: string = '';
-  public LastName: string = '';
-  public EmailId: string = '';
+  public DesignationRef : number = 0;
+  public readonly DesignationName : boolean = false;
+  public Name : string = '';
+  public DOB  : string = '';
+  // public FirstName: string = '';
+  // public LastName: string = '';
   public ContactNo: number = 0;
+  public PersonalEmailId : string = '';
+  public OfficialEmailId  : string = '';
   public AddressLine1: string = '';
   public AddressLine2: string = '';
   public CountryRef: number = 0;
@@ -31,14 +34,23 @@ export class EmployeeProps {
   public readonly StateName: boolean = false;
   public CityRef: number = 0;
   public readonly CityName: boolean = false;
-  public GeoNameId: string = '';
-  public LoginStatus: string = '';
+  public EmergencyContactName : string = '';
+  public EmergencyContactNo : string = '';
+  public MaterialStatus  : string = '';
+  public DateOfJoining : string = '';
+  public SalaryPerMonth : string = '';
+  public SalaryPerYear : string = '';
+  public BankName: string = '';
+  public BranchName : string = '';
+  public IFSC : string = '';
+  public BanckAccountNo : string = '';
+  // public LoginStatus: string = '';
   public Gender: string = '';
-  public EmpId: string = '';
+  // public EmpId: string = '';
   public DepartmentRef: number = 0;
   public readonly DepartmentName: boolean = false;
-  public UserStatus: string = '';
-  public IsUser: boolean = false;
+  // public UserStatus: string = '';
+  // public IsUser: boolean = false;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
 
@@ -84,7 +96,7 @@ export class Employee implements IPersistable<Employee> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.FirstName == '') vra.add('FirstName', 'First Name cannot be blank.');
+    if (this.p.Name == '') vra.add('Name', ' Name cannot be blank.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
 
   }

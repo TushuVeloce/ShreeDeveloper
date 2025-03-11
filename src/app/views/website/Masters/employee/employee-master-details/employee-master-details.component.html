@@ -13,44 +13,62 @@
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
-          <div>
+          <!-- <div>
             <label>Role</label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UserRoleRef"
               name="UserRoleRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UserRoleRef">
               <nz-option *ngFor="let role of UserRoleList" [nzValue]="role.p.Ref" [nzLabel]="role.p.Name"></nz-option>
             </nz-select>
-          </div>
+          </div> -->
         </div>
         <div class="col-md-4">
           <div>
-            <label>First Name</label>
-            <input type="text" name="firstname" [(ngModel)]="Entity.p.FirstName" class="form-control" id="firstname"
+            <label>Name</label>
+            <input type="text" name="Name " [(ngModel)]="Entity.p.Name " class="form-control" id="Name "
               required placeholder="Enter First Name" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
-            <label>Last Name</label>
-            <input type="text" name="lastname" [(ngModel)]="Entity.p.LastName" class="form-control" id="lastname"
-              required placeholder="Enter Last Name" />
+            <label>Date of Birth</label>
+            <input type="date" name="DOB " [(ngModel)]="Entity.p.DOB " class="form-control" id="DOB "
+              required />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Gender</label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="gender" name="gender"
+              [nzSize]="'large'" [(ngModel)]="Entity.p.Gender">
+              <nz-option *ngFor="let gender of GenderList" [nzValue]="gender.Ref" [nzLabel]="gender.Name"></nz-option>
+            </nz-select>
           </div>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
-            <label>Email id</label>
-            <input type="text" name="emailid" class="form-control" [(ngModel)]="Entity.p.EmailId" id="emailid" required
-              placeholder="Enter Email id" />
+            <label>Contact Nos</label>
+            <input type="text" name="ContactNos" class="form-control" [(ngModel)]="Entity.p.ContactNos" id="ContactNos" required
+              placeholder="Enter Contact Nos" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
-            <label>Contact No</label>
-            <input type="text" name="contactno" [(ngModel)]="Entity.p.ContactNo" class="form-control" id="contactno"
-              required placeholder="Enter Contact No" />
+            <label>Personal Email Id</label>
+            <input type="text" name="PersonalEmailId" [(ngModel)]="Entity.p.PersonalEmailId" class="form-control" id="PersonalEmailId"
+              required placeholder="Enter Personal Email Id" />
           </div>
         </div>
+        <div class="col-md-4">
+          <div>
+            <label>Official Email Id</label>
+            <input type="text" name="OfficialEmailId" [(ngModel)]="Entity.p.OfficialEmailId" class="form-control" id="OfficialEmailId"
+              required placeholder="Enter Official Email Id" />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
             <label>Address Line 1</label>
@@ -58,8 +76,6 @@
               required placeholder="Enter Address" />
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
             <label>Address Line 2</label>
@@ -67,6 +83,8 @@
               required placeholder="Enter Address" />
           </div>
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
             <label for="CountryRef"><b>Country</b></label>
@@ -87,9 +105,6 @@
             </nz-select>
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
-        
         <div class="col-md-4">
           <div>
             <label for="CityRef"><b>City</b></label>
@@ -98,20 +113,29 @@
             <nz-option *ngFor="let city of CityList" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
           </nz-select>
           </div>
-        </div>
+      </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
-            <label>Gender</label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="gender" name="gender"
-              [nzSize]="'large'" [(ngModel)]="Entity.p.Gender">
-              <nz-option *ngFor="let gender of GenderList" [nzValue]="gender.Ref" [nzLabel]="gender.Name"></nz-option>
-            </nz-select>
+            <label>EmergencyContactName</label>
+            <input type="text" name="EmergencyContactName " [(ngModel)]="Entity.p.EmergencyContactName " class="form-control" id="EmergencyContactName " required />
           </div>
         </div>
         <div class="col-md-4">
           <div>
-            <label>Emp Id</label>
-            <input type="text" name="empid" [(ngModel)]="Entity.p.EmpId" class="form-control" id="empid" required />
+            <label>Emergency Contact No</label>
+            <input type="text" name="EmergencyContactNo " [(ngModel)]="Entity.p.EmergencyContactNo " class="form-control" id="EmergencyContactNo " required />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Material Status </label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LoginStatus"
+              name="LoginStatus" [nzSize]="'large'" [(ngModel)]="Entity.p.LoginStatus">
+              <nz-option nzValue="true" nzLabel="Enable"></nz-option>
+              <nz-option nzValue="false" nzLabel="Disable"></nz-option>
+            </nz-select>
           </div>
         </div>
         </div>
@@ -126,7 +150,21 @@
               </nz-select>
             </div>
           </div>
+          <div>
+            <label>Role</label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UserRoleRef"
+              name="UserRoleRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UserRoleRef">
+              <nz-option *ngFor="let role of UserRoleList" [nzValue]="role.p.Ref" [nzLabel]="role.p.Name"></nz-option>
+            </nz-select>
+          </div>
           <div class="col-md-4">
+            <div>
+              <label>Date Of Joining</label>
+              <input type="text" name="DateOfJoining " [(ngModel)]="Entity.p.DateOfJoining " class="form-control" id="DateOfJoining " required />
+            </div>
+          </div>
+        
+          <!-- <div class="col-md-4">
             <div>
               <label>Login Status</label>
               <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LoginStatus"
@@ -135,14 +173,55 @@
                 <nz-option nzValue="false" nzLabel="Disable"></nz-option>
               </nz-select>
             </div>
-          </div>
-          <div class="col-md-4">
+          </div> -->
+          <!-- <div class="col-md-4">
             <div>
               <label>Is User</label>
               <select type="text" name="isuser" class="form-control" id="isuser" required>
                 <option value="true">Yes</option>
                 <option value="false" selected>No</option>
               </select>
+            </div>
+          </div> -->
+        </div>
+        <div class="row" style="margin-top: 1rem; ">
+          <div class="col-md-4">
+            <div>
+              <label>Salary Per Month</label>
+              <input type="text" name="SalaryPerMonth  " [(ngModel)]="Entity.p.SalaryPerMonth  " class="form-control" id="SalaryPerMonth  " required />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div>
+              <label>Salary Per Year</label>
+              <input type="text" name="SalaryPerYear  " [(ngModel)]="Entity.p.SalaryPerYear  " class="form-control" id="SalaryPerYear  " required />
+            </div>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 1rem; ">
+          <div class="col-md-4">
+            <div>
+              <label>Bank Name</label>
+              <input type="text" name="BankName  " [(ngModel)]="Entity.p.BankName  " class="form-control" id="BankName  " required />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div>
+              <label>Branch Name/label>
+              <input type="text" name="BranchName" [(ngModel)]="Entity.p.BranchName" class="form-control" id="BranchName" required />
+            </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div>
+              <label>IFSC</label>
+              <input type="text" name="IFSC" [(ngModel)]="Entity.p.IFSC" class="form-control" id="IFSC" required />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div>
+              <label>Banck Account No</label>
+              <input type="text" name="BanckAccountNo" [(ngModel)]="Entity.p.BanckAccountNo" class="form-control" id="BanckAccountNo" required />
             </div>
           </div>
         </div>
@@ -155,5 +234,5 @@
         </div>
       </div>
     </form>
-  </div>
-</div>
+    </div>
+

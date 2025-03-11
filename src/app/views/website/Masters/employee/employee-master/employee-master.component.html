@@ -23,17 +23,16 @@
       <tbody>
         <tr *ngFor="let employee of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{employee.p.UserRoleName }}</td>
-          <td Class="tbldata">{{employee.p.FirstName }}</td>
-          <td Class="tbldata">{{employee.p.LastName }}</td>
-          <td Class="tbldata">{{employee.p.EmailId }}</td>
-          <td Class="tbldata">{{employee.p.ContactNo }}</td>
-          <td Class="tbldata">{{employee.p.AddressLine1 }}</td>
+          <td Class="tbldata">{{employee.p.Name }}</td>
+          <td Class="tbldata">{{employee.p.DOB  }}</td>
           <td Class="tbldata">{{employee.p.Gender }}</td>
-          <td Class="tbldata">{{employee.p.EmpId }}</td>
+          <td Class="tbldata">{{employee.p.ContactNo  }}</td>
+          <td Class="tbldata">{{employee.p.PersonalEmailId  }}</td>
+          <td Class="tbldata">{{employee.p.DateOfJoining  }}</td>
+          <td Class="tbldata">{{employee.p.SalaryPerMonth  }}</td>
           <td Class="tbldata">{{employee.p.DepartmentName }}</td>
-          <td Class="tbldata">{{employee.p.UserStatus }}</td>
-          <td Class="tbldata">{{employee.p.IsUser }}</td>
+          <!-- <td Class="tbldata">{{employee.p.UserStatus }}</td> -->
+          <!-- <td Class="tbldata">{{employee.p.IsUser }}</td> -->
           <td class="tbldata">
             <span style="margin-left: 9px;" (click)="onEditClicked(employee);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />

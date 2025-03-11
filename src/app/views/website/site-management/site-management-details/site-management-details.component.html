@@ -11,101 +11,328 @@
       </div>
     </div>
     <form autocomplete="off">
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Site Name</label>
-          <input type="text" name="sitename" class="form-control" id="sitename" required
+          <input type="text" name="Name" class="form-control" id="Name" [(ngModel)]="Entity.p.Name" required
             placeholder="Enter Site Name" />
         </div>
         <div class="col-md-4">
-          <label>Site Address</label>
-          <input type="text" name="SiteAddress" class="form-control" id="SiteAddress" required
-            placeholder="Enter Site Address" />
+          <label>AddressLine 1</label>
+          <input type="text" name="AddressLine1" class="form-control" id="AddressLine1" [(ngModel)]="Entity.p.AddressLine1" required
+            placeholder="Enter AddressLine 1" />
+        </div>
+        <div class="col-md-4">
+          <label>AddressLine 2</label>
+          <input type="text" name="AddressLine2" class="form-control" id="AddressLine2" [(ngModel)]="Entity.p.AddressLine2" required
+            placeholder="Enter AddressLine 2" />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-4">
+          <label>PinCode</label>
+          <input type="text" name="PinCode" class="form-control" id="PinCode" [(ngModel)]="Entity.p.PinCode" required
+            placeholder="Enter PinCode" />
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label for="CountryRef"><b>Country</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select"  [nzSize]="'large'"  name="CountryRef" required id="CountryRef"
+            [(ngModel)]="Entity.p.CountryRef" (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
+              <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
+                [nzValue]="country.p.Ref"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label for="StateRef"><b>State</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
+              name="StateRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StateRef"
+              (ngModelChange)="getCityListByStateRef(Entity.p.StateRef)">
+              <nz-option *ngFor="let state of StateList" [nzValue]="state.p.Ref" [nzLabel]="state.p.Name"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-4">
+          <div>
+            <label for="CityRef"><b>City</b></label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
+            name="CityRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CityRef">
+            <nz-option *ngFor="let city of CityList" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
+          </nz-select>
+          </div>
         </div>
         <div class="col-md-4">
           <label>Site Incharge</label>
-          <input type="text" name="SiteIncharge" class="form-control" id="SiteIncharge" required
+          <input type="text" name="SiteInChargeRef" class="form-control" id="SiteInChargeRef" [(ngModel)]="Entity.p.SiteInChargeRef" required
             placeholder="Enter Site Incharge" />
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <label>Starting Date</label>
-          <input type="date" name="startdate" class="form-control date-input" id="startdate" required
+          <input type="date" name="EstimatedStartingDate" class="form-control date-input" id="EstimatedStartingDate" [(ngModel)]="Entity.p.EstimatedStartingDate" required
             placeholder="Select Date" />
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Estimated End Date</label>
-          <input type="date" name="Enddate" class="form-control date-input" id="Enddate" required
+          <input type="date" name="EstimatedEndDate" class="form-control date-input" id="EstimatedEndDate" [(ngModel)]="Entity.p.EstimatedEndDate" required
             placeholder="Select Date" />
         </div>
         <div class="col-md-4">
           <label>Estimated Cost</label>
-          <input type="text" name="EstimatedCost" class="form-control" id="EstimatedCost" required
+          <input type="text" name="EstimatedCost" class="form-control" id="EstimatedCost" [(ngModel)]="Entity.p.EstimatedCost" required
             placeholder="Enter Estimated Cost" />
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
-          <label>Total Land Area</label>
-          <input type="text" name="landarea" class="form-control" id="landarea" required
-            placeholder="Enter Total Land Area" />
+          <label>Total Land Area in Sqm</label>
+          <input type="text" name="TotalLandAreaInSqm" class="form-control" id="TotalLandAreaInSqm" [(ngModel)]="Entity.p.TotalLandAreaInSqm" required
+            placeholder="Enter Total Land Area in Sq m" />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-4">
+          <label>Total Land Area in Sq ft</label>
+          <input type="text" name="TotalLandAreaInSqft" class="form-control" id="TotalLandAreaInSqft" [(ngModel)]="Entity.p.TotalLandAreaInSqft" required
+            placeholder="Enter Total Land Area in Sq ft" />
         </div>
         <div class="col-md-4">
           <label>Number Of Plot</label>
-          <input type="number" name="plotnumber" class="form-control" id="plotnumber" required
+          <input type="number" name="NumberOfPlot" class="form-control" id="NumberOfPlot" [(ngModel)]="Entity.p.NumberOfPlot" required
             placeholder="Enter Plot Number" />
         </div>
       </div>
-      <div class="row" style="margin-top: 2rem; padding: 1rem;">
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
-          <h5 style="padding-top: 3px; color: black;"><b>Add Plot Details</b></h5>
+     
+      <div class="row" style="margin-top: 2rem; padding: 1rem">
+        <div class="col-lg-8 col-md-4 col-sm-12 col-xs-12 col-12">
+          <h5 style="padding-top: 3px; color: black">
+            <b>Add Plot Details</b>
+          </h5>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" style="display: flex; justify-content: end;" routerLinkActive="active">
-           <button type="button" class="btn">Add Plot</button>
+        <div class="col-lg-2 col-md-4 col-sm-12 col-xs-12 col-12 btn-container"
+          style="display: flex; justify-content: end" routerLinkActive="active">
+          <nz-button nz-button class="btn1" (click)="isModalOpen1 = true">Add Plot</nz-button>
+        </div>
+        <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
+          style="display: flex; justify-content: end" routerLinkActive="active">
+          <nz-button nz-button class="btn1" (click)="isModalOpen2 = true">Add Owner</nz-button>
         </div>
       </div>
-      <div class="table-container" style="margin-top: 2rem;">
+
+      <div class="table-container" style="margin-top: 2rem">
         <div class="row">
           <div class="col-12">
-            <label class="TableHeading">
-              Plot Details Table</label>
+            <label class="TableHeading"> Plot Details Table</label>
           </div>
         </div>
-        <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
+        <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{ x: 'auto' }"
           nzFrontPagination="false" [nzShowSizeChanger]="false">
           <thead>
             <tr>
-              <th *ngFor="let header of headers" class="tblheadersecond">{{ header }}</th>
+              <th *ngFor="let header of plotheaders" class="tblheadersecond">
+                {{ header }}
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td Class="tbldata">1</td>
-              <td Class="tbldata">SMAPLE1</td>
-              <td Class="tbldata">20</td>
-              <td Class="tbldata">20</td>
-              <td Class="tbldata">20</td>
-              <td Class="tbldata">20</td>
-              <td class="tbldata">
-                <span style="margin-left: 9px;">
-                  <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-                </span>
-                <span style="margin-left: 9px;">
-                  <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            <tr *ngFor="let plot of plots; let i = index">
+              <td Class="tbldata">{{ i}}</td>
+              <td Class="tbldata">{{ plot.PlotNo }}</td>
+              <td Class="tbldata">{{ plot.AreaInSqm }}</td>
+              <td Class="tbldata">{{ plot.AreaInSqft }}</td>
+              <td Class="tbldata">{{ plot.GovermentRate }}</td>
+              <td Class="tbldata">{{ plot.BasicRate }}</td>
+              <td Class="tbldata">
+                <button class="btn btn-danger btn-sm" (click)="removePlot(i)">Delete</button>
               </td>
             </tr>
           </tbody>
         </nz-table>
       </div>
-      <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
+
+      <div class="table-container" style="margin-top: 2rem">
+        <div class="row">
+          <div class="col-12">
+            <label class="TableHeading"> Owner Details Table</label>
+          </div>
+        </div>
+        <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{ x: 'auto' }"
+          nzFrontPagination="false" [nzShowSizeChanger]="false">
+          <thead>
+            <tr>
+              <th *ngFor="let header of ownerheaders" class="tblheadersecond">
+                {{header}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let owner of owners; let i = index">
+              <td Class="tbldata">{{ i}}</td>
+              <td Class="tbldata">{{ owner.Name  }}</td>
+              <td Class="tbldata">{{ owner.ContactNo  }}</td>
+              <td Class="tbldata">{{ owner.EmailId  }}</td>
+              <td Class="tbldata">{{ owner.AddressLine1  }}</td>
+              <td Class="tbldata">{{ owner.AddressLine2  }}</td>
+              <!-- <td Class="tbldata">{{ owner.CityRef }}</td> -->
+              <td Class="tbldata">{{ owner.PinCode   }}</td>
+              <td Class="tbldata">
+                <button class="btn btn-danger btn-sm" (click)="removeowner(i)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
         <div>
-          <button type="button" class="btn">Save</button>
+          <nz-button nz-button class="btn1" (click)="SaveEmployeeMaster()">Save</nz-button>
         </div>
         <div>
-          <button type="button" class="btn" (click)="BackSiteManagement()">Back</button>
+          <nz-button nz-button class="btn1" (click)="BackSiteManagement()">
+            Back
+          </nz-button>
         </div>
       </div>
     </form>
+  </div>
+</div>
+
+<div *ngIf="isModalOpen1" class="custom-modal-overlay">
+  <div class="custom-modal">
+    <div class="custom-modal-header">
+      <h5>Add Plot</h5>
+      <button type="button" class="btn-close" (click)="closeModal('plot')"></button>
+    </div>
+    <div class="custom-modal-body">
+      <form autocomplete="off">
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-6">
+            <label>Plot No.</label>
+            <input type="text" name="PlotNo" class="form-control" [(ngModel)]="newPlot.PlotNo" required placeholder="Enter Plot No." />
+          </div>
+          <div class="col-md-6">
+            <label>Area sq.m</label>
+            <input type="text" name="AreaInSqm" class="form-control" [(ngModel)]="newPlot.AreaInSqm" required placeholder="Enter Area sq.m" />
+          </div>
+        </div>
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-6">
+            <label>Area sq.ft</label>
+            <input type="text" name="AreaInSqft" class="form-control" [(ngModel)]="newPlot.AreaInSqft" required placeholder="Enter Area sq.ft" />
+          </div>
+          <div class="col-md-6">
+            <label>Goverment Rate</label>
+            <input type="text" name="GovermentRate" class="form-control" [(ngModel)]="newPlot.GovermentRate" required placeholder="Enter Goverment Rate" />
+          </div>
+        </div>
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-6">
+            <label>Basic Rate</label>
+            <input type="text" name="BasicRate" class="form-control" [(ngModel)]="newPlot.BasicRate" required placeholder="Enter Basic Rate" />
+          </div>
+          <div class="col-md-6">
+            <label>Booking Remark</label>
+            <input type="text" name="BookingRemark" class="form-control" [(ngModel)]="newPlot.BookingRemark" required placeholder="Enter Booking Remark" />
+          </div>
+        </div>
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-6">
+            <label>Customer Name</label>
+            <input type="text" name="CustomerName" class="form-control" [(ngModel)]="newPlot.CustomerName" required placeholder="Enter Customer Name" />
+          </div>
+          <div class="col-md-6">
+            <label>Address</label>
+            <input type="text" name="Address" class="form-control" [(ngModel)]="newPlot.Address" required placeholder="Enter Address" />
+          </div>
+        </div>
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-6">
+            <label>Mobile No</label>
+            <input type="text" name="MobNo" class="form-control" [(ngModel)]="newPlot.MobNo" required placeholder="Enter Mobile No" />
+          </div>
+          <div class="col-md-6">
+            <label>Reference</label>
+            <input type="text" name="Reference" class="form-control" [(ngModel)]="newPlot.Reference" required placeholder="Enter Reference" />
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="custom-modal-footer">
+      <!-- <button type="button" class="btn btn-secondary" (click)="isModalOpen = false">Close</button> -->
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
+        <div>
+          <nz-button nz-button class="btn1" (click)="addPlot()" >Save</nz-button>
+        </div>
+        <div>
+          <nz-button nz-button class="btn1" (click)="closeModal('plot')">
+            Close
+          </nz-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="isModalOpen2" class="custom-modal-overlay">
+  <div class="custom-modal">
+    <div class="custom-modal-header">
+      <h5>Add Owner</h5>
+      <button type="button" class="btn-close" (click)="closeModal('owner')"></button>
+    </div>
+    <div class="custom-modal-body">
+      <form autocomplete="off">
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-6">
+            <label>Name</label>
+            <input type="text" name="Name" class="form-control" [(ngModel)]="newOwner.Name" required placeholder="Enter Plot No." />
+          </div>
+          <div class="col-md-6">
+            <label>Contact No</label>
+            <input type="text" name="ContactNo" class="form-control" [(ngModel)]="newOwner.ContactNo" required placeholder="Enter Area sq.m" />
+          </div>
+        </div>
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-6">
+            <label>Email Id</label>
+            <input type="text" name="EmailId" class="form-control" [(ngModel)]="newOwner.EmailId" required placeholder="Enter Area sq.ft" />
+          </div>
+          <div class="col-md-6">
+            <label>AddressLine 1</label>
+            <input type="text" name="AddressLine1" class="form-control" [(ngModel)]="newOwner.AddressLine1" required placeholder="Enter Goverment Rate" />
+          </div>
+        </div>
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-6">
+            <label>AddressLine 2</label>
+            <input type="text" name="AddressLine2" class="form-control" [(ngModel)]="newOwner.AddressLine2" required placeholder="Enter Booking Remark" />
+          </div>
+          <div class="col-md-6">
+            <label>Pin Code</label>
+            <input type="text" name="PinCode" class="form-control" [(ngModel)]="newOwner.PinCode" required placeholder="Enter Customer Name" />
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="custom-modal-footer">
+      <!-- <button type="button" class="btn btn-secondary" (click)="isModalOpen = false">Close</button> -->
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
+        <div>
+          <nz-button nz-button class="btn1" (click)="addOwner()" >Save</nz-button>
+        </div>
+        <div>
+          <nz-button nz-button class="btn1" (click)="closeModal('owner')">
+            Close
+          </nz-button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

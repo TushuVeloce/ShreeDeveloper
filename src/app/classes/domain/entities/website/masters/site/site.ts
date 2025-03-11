@@ -17,13 +17,26 @@ export class SiteProps {
   public readonly Db_Table_Name = "Purchase_Master";
   public Ref: number = 0;
   public Name: string = '';
-  public SiteAddress: string = '';
-  public SiteIncharge: string = '';
-  public StartDate: string = '';
-  public EndDate: string = '';
-  public EstimatedCost: string = '';
-  public TotalLandArea: string = '';
-  public NumberOfPlot: string = '';
+  public AddressLine1 : string = '';
+  public AddressLine2 : string = '';
+  public PinCode : string = '';
+  public CountryRef: number = 0;
+  public readonly CountryName: boolean = false;
+  public StateRef: number = 0;
+  public readonly StateName: boolean = false;
+  public CityRef: number = 0;
+  public readonly CityName: boolean = false;
+  public SiteInChargeRef   : number = 0;
+  public EstimatedStartingDate : string = '';
+  public EstimatedEndDate : string = '';
+  public EstimatedCost  : string = '';
+  public TotalLandAreaInSqm   : string = '';
+  public TotalLandAreaInSqft    : string = '';
+  public NumberOfPlot   : string = '';
+  public CompanyRef: number = 0;
+  public CompanyName: string = '';
+  public Plots: any[] = [];
+  public Owners: any[] = [];
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -70,13 +83,6 @@ export class Site implements IPersistable<Site> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-    if (this.p.SiteAddress == '') vra.add('SiteAddress', 'Site Address cannot be blank.');
-    if (this.p.SiteIncharge == '') vra.add('SiteIncharge', 'Site Incharge cannot be blank.');
-    if (this.p.StartDate == '') vra.add('StartDate', 'Start Date cannot be blank.');
-    if (this.p.EndDate == '') vra.add('EndDate', 'End Date cannot be blank.');
-    if (this.p.EstimatedCost == '') vra.add('EstimatedCost', 'Estimated Cost cannot be blank.');
-    if (this.p.TotalLandArea == '') vra.add('TotalLandArea', 'Total Land Area cannot be blank.');
-    if (this.p.NumberOfPlot == '') vra.add('NumberOfPlot', 'Number Of Plot cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
