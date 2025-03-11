@@ -73,6 +73,7 @@ export class EmployeeMasterComponent implements OnInit {
       );
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
+      console.log('DisplayMasterList :', this.DisplayMasterList);
       this.loadPaginationData();
   };
 

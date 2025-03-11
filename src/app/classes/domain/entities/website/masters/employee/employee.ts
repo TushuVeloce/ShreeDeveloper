@@ -38,8 +38,8 @@ export class EmployeeProps {
   public EmergencyContactNo : string = '';
   public MaterialStatus  : string = '';
   public DateOfJoining : string = '';
-  public SalaryPerMonth : string = '';
-  public SalaryPerYear : string = '';
+  public SalaryPerMonth : Number = 0;
+  public SalaryPerYear : Number = 0;
   public BankName: string = '';
   public BranchName : string = '';
   public IFSC : string = '';

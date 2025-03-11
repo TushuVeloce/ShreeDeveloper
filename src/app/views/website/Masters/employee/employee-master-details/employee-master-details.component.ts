@@ -4,9 +4,9 @@ import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
 import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
 import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
+import { Designation } from 'src/app/classes/domain/entities/website/masters/designation/designation';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
-import { UserRole } from 'src/app/classes/domain/entities/website/masters/userrole/userrole';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -28,7 +28,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   CountryList: Country[] = [];
   StateList: State[] = [];
   CityList: City[] = [];
-  UserRoleList: UserRole[] = [];
+  DesignationList: Designation[] = [];
   DepartmentList: Department[] = [];
   GenderList = DomainEnums.GenderTypeList(true, '---Select Gender---');
   MarketingModesList = DomainEnums.MarketingModesList();
@@ -44,7 +44,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    this.UserRoleList = await UserRole.FetchEntireList();
+    this.DesignationList = await Designation.FetchEntireList();
     this.CountryList = await Country.FetchEntireList();
     this.DepartmentList = await Department.FetchEntireList();
     console.log('DepartmentList :', this.DepartmentList);
@@ -89,6 +89,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
