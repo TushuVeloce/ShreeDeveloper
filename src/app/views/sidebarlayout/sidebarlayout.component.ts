@@ -371,9 +371,25 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Employee_Master',
         LogoPath: '',
       },
+      {
+        Name: 'Employee Appraisal Master',
+        RouterLink: '/homepage/Website/Employee_Appraisal_Master',
+        LogoPath: '',
+      },
+      {
+        Name: 'Employee Exit Master',
+        RouterLink: '/homepage/Website/Employee_Exit_Master',
+        LogoPath: '',
+      },
+
     ]
 
     let SiteManagementSubModuleList = [
+      {
+        Name: 'Plot Details',
+        RouterLink: '/homepage/Website/Plot_Master',
+        LogoPath: '',
+      },
       {
         Name: 'New Site',
         RouterLink: '/homepage/Website/site_management_Master',

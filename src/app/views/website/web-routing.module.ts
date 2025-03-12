@@ -69,6 +69,12 @@ import { ExternalUsersComponent } from './Masters/external_users/external-users/
 import { ExternalUsersMasterDetailsComponent } from './Masters/external_users/external-users-details/external-users-details.component';
 import { DesignationMasterComponent } from './Masters/designation/designation-master/designation-master.component';
 import { DesignationMasterDetailsComponent } from './Masters/designation/designation-master-details/designation-master-details.component';
+import { EmployeeAppraisalDetailsComponent } from './Masters/employee_appraisal/employee-appraisal-details/employee-appraisal-details.component';
+import { EmployeeAppraisalMasterComponent } from './Masters/employee_appraisal/employee-appraisal-master/employee-appraisal-master.component';
+import { EmployeeExitDetailsComponent } from './Masters/employee_exit/employee-exit-details/employee-exit-details.component';
+import { EmployeeExitMasterComponent } from './Masters/employee_exit/employee-exit-master/employee-exit-master.component';
+import { PlotMasterDetailsComponent } from './site-management/plot_details/plot-master-details/plot-master-details.component';
+import { PlotMasterComponent } from './site-management/plot_details/plot-master/plot-master.component';
 
 const routes: Routes = [
   {
@@ -108,6 +114,12 @@ const routes: Routes = [
       { path: 'Employee_Master', component: EmployeeMasterComponent },
       { path: 'Employee_Master_Details', component: EmployeeMasterDetailsComponent },
 
+      { path: 'Employee_appraisal_Master_Details', component: EmployeeAppraisalDetailsComponent },
+      { path: 'Employee_Appraisal_Master', component: EmployeeAppraisalMasterComponent },
+
+      { path: 'Employee_Exit_Master_Details', component: EmployeeExitDetailsComponent },
+      { path: 'Employee_Exit_Master', component: EmployeeExitMasterComponent },
+
       { path: 'Estimate_Stages', component: EstimateStagesComponent },
       { path: 'Estimate_Stages_details', component: EstimateStagesDetailsComponent },
       
@@ -119,11 +131,17 @@ const routes: Routes = [
       { path: 'Financial_Year_Master', component: FinancialYearMasterComponent },
 
       // Site management 
+
+      { path: 'Plot_Master', component: PlotMasterComponent },
+      { path: 'Plot_Master_Details', component: PlotMasterDetailsComponent },
+
+
       { path: 'site_management_Master', component: SiteManagementMasterComponent },
       { path: 'Site_Management_Details', component: SiteManagementDetailsComponent },
 
       { path: 'site_management_actual_stage', component: SiteManagementActualStagesComponent },
       { path: 'Site_Management_Actual_Stage_Details', component: SiteManagementActualStagesDetailsComponent },
+
 
       // Stock Management 
       { path: 'Material_Requisition', component: MaterialRequisitionComponent },
