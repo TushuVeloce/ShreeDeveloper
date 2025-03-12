@@ -39,8 +39,8 @@
             <label for="CountryRef"><b>Country</b></label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
               name="CountryRef" required id="CountryRef" [(ngModel)]="Entity.p.CountryRef"
-              (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
-              <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
+              (ngModelChange)="getStateListByCountryRefforSite(Entity.p.CountryRef)">
+              <nz-option *ngFor="let country of CountryListforSite" [nzLabel]="country.p.Name"
                 [nzValue]="country.p.Ref"></nz-option>
             </nz-select>
           </div>
@@ -50,8 +50,8 @@
             <label for="StateRef"><b>State</b></label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
               name="StateRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StateRef"
-              (ngModelChange)="getCityListByStateRef(Entity.p.StateRef)">
-              <nz-option *ngFor="let state of StateList" [nzValue]="state.p.Ref" [nzLabel]="state.p.Name"></nz-option>
+              (ngModelChange)="getCityListByStateRefforSite(Entity.p.StateRef)">
+              <nz-option *ngFor="let state of StateListforSite" [nzValue]="state.p.Ref" [nzLabel]="state.p.Name"></nz-option>
             </nz-select>
           </div>
         </div>
@@ -62,7 +62,7 @@
             <label for="CityRef"><b>City</b></label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
               name="CityRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CityRef">
-              <nz-option *ngFor="let city of CityList" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
+              <nz-option *ngFor="let city of CityListforSite" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
             </nz-select>
           </div>
         </div>
@@ -340,8 +340,8 @@
               <label for="CountryRef"><b>Country</b></label>
               <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
                 name="CountryRef" required id="CountryRef" [(ngModel)]="newOwner.CountryRef"
-                (ngModelChange)="getStateListByCountryRef(newOwner.CountryRef)">
-                <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
+                (ngModelChange)="getStateListByCountryRefforOwner(newOwner.CountryRef)">
+                <nz-option *ngFor="let country of CountryListforOwner" [nzLabel]="country.p.Name"
                   [nzValue]="country.p.Ref"></nz-option>
               </nz-select>
             </div>
@@ -353,8 +353,8 @@
               <label for="StateRef"><b>State</b></label>
               <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
                 name="StateRef" [nzSize]="'large'" [(ngModel)]="newOwner.StateRef"
-                (ngModelChange)="getCityListByStateRef(newOwner.StateRef)">
-                <nz-option *ngFor="let state of StateList" [nzValue]="state.p.Ref"
+                (ngModelChange)="getCityListByStateRefforOwner(newOwner.StateRef)">
+                <nz-option *ngFor="let state of StateListforOwner" [nzValue]="state.p.Ref"
                   [nzLabel]="state.p.Name"></nz-option>
               </nz-select>
             </div>
@@ -363,7 +363,7 @@
             <label for="CityRef"><b>City</b></label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
               name="CityRef" [nzSize]="'large'" [(ngModel)]="newOwner.CityRef">
-              <nz-option *ngFor="let city of CityList" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
+              <nz-option *ngFor="let city of CityListforOwner" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
             </nz-select>
           </div>
         </div>

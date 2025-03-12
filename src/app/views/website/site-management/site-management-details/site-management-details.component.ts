@@ -25,10 +25,13 @@ export class SiteManagementDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Site' | 'Edit Site' = 'New Site';
   IsDropdownDisabled: boolean = false;
   InitialEntity: Site = null as any;
-  CountryList: Country[] = [];
   EmployeeList: Employee[] = [];
-  StateList: State[] = [];
-  CityList: City[] = [];
+  CountryListforSite: Country[] = [];
+  StateListforSite: State[] = [];
+  CityListforSite: City[] = [];
+  CountryListforOwner: Country[] = [];
+  StateListforOwner: State[] = [];
+  CityListforOwner: City[] = [];
   BookingRemarkList = DomainEnums.BookingRemarkList(true, '---Select Booking Remark---');
   plotheaders: string[] = ['Sr.No.', 'Plot No', 'Area sq.m', 'Area sq.ft', 'Goverment Rate', 'Company Rate', 'Action'];
   ownerheaders: string[] = ['Sr.No.', 'Name ', 'Contact No ', 'Email Id ', 'AddressLine 1 ', 'AddressLine 2 ','Pin Code ', 'Action'];
@@ -46,7 +49,8 @@ export class SiteManagementDetailsComponent implements OnInit {
 
  async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    this.CountryList = await Country.FetchEntireList();
+    this.CountryListforSite = await Country.FetchEntireList();
+    this.CountryListforOwner = await Country.FetchEntireList();
     this.EmployeeList = await Employee.FetchEntireList();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
           this.IsNewEntity = false;
@@ -66,20 +70,36 @@ export class SiteManagementDetailsComponent implements OnInit {
         ) as Site;
    }
 
-getStateListByCountryRef = async (CountryRef: number) => {
+getStateListByCountryRefforSite = async (CountryRef: number) => {
     this.Entity.p.StateRef = 0;
     this.Entity.p.CityRef = 0;
-    this.StateList = [];
-    this.CityList = [];
+    this.StateListforSite = [];
+    this.CityListforSite = [];
     let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.StateList = lst;
+    this.StateListforSite = lst;
   }
 
-  getCityListByStateRef = async (StateRef: number) => {
+  getCityListByStateRefforSite = async (StateRef: number) => {
     this.Entity.p.CityRef = 0;
-    this.CityList = [];
+    this.CityListforSite = [];
     let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.CityList = lst;
+    this.CityListforSite = lst;
+  }
+
+getStateListByCountryRefforOwner = async (CountryRef: number) => {
+    this.newOwner.StateRef = 0;
+    this.newOwner.CityRef = 0;
+    this.StateListforOwner = [];
+    this.CityListforOwner = [];
+    let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.StateListforOwner = lst;
+  }
+
+  getCityListByStateRefforOwner = async (StateRef: number) => {
+    this.newOwner.CityRef = 0;
+    this.CityListforOwner = [];
+    let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.CityListforOwner = lst;
   }
 
   openModal(type: string) {
