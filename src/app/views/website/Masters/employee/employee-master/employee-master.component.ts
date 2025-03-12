@@ -24,17 +24,11 @@ export class EmployeeMasterComponent implements OnInit {
 
   headers: string[] = [
     'Sr.No.',
-    'Role',
-    'First Name',
-    'Last Name',
-    'Email ID',
+    'Name',
     'Contact No',
     ' Address',
-    ' Gender',
-    'Emp Id ',
     'Department Name',
-    'Login Status ',
-    'Is User ',
+    'Designation Name',
     'Action',
   ];
 
@@ -67,14 +61,14 @@ export class EmployeeMasterComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-      let lst = await Employee.FetchEntireListByCompanyRef(
-        this.companyRef(),
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-      );
-      this.MasterList = lst;
-      this.DisplayMasterList = this.MasterList;
-      console.log('DisplayMasterList :', this.DisplayMasterList);
-      this.loadPaginationData();
+    let lst = await Employee.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    console.log('DisplayMasterList :', this.DisplayMasterList);
+    this.loadPaginationData();
   };
 
   onEditClicked = async (item: Employee) => {
