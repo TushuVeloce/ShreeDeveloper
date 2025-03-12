@@ -8,7 +8,8 @@ export class PlotFetchRequest
 {
     // public static readonly FetchRequestType: string = "GAAProjectSpaceGroupFetchRequest";
     public static readonly FetchRequestType: string = "PlotFetchRequest";
-
+    CompanyRefs: number[] = [];
+    SiteRefs: number[] = [];
     PlotRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>

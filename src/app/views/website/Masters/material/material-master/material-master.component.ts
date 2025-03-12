@@ -82,6 +82,7 @@ export class MaterialMasterComponent implements OnInit {
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
+  
   onEditClicked = async (item: Material) => {
     // let props = Object.assign(MaterialProps.Blank(),item.p);
     // this.SelectedMaterial = Material.CreateInstance(props,true);

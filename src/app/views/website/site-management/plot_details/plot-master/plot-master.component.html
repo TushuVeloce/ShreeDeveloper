@@ -22,7 +22,7 @@
               <label for="SiteRef"><b>Site Name</b></label>
               <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
                 [(ngModel)]="Entity.p.SiteRef" name="SiteRef" required id="SiteRef">
-                <nz-option *ngFor="let site of SiteList" [nzLabel]="site.p.Name"  (ngModelChange)="setSiteRef(Entity.p.SiteRef)"
+                <nz-option *ngFor="let site of SiteList" [nzLabel]="site.p.Name"  (ngModelChange)="getPlotListByCompanyandSiteRefList(Entity.p.SiteRef)"
                   [nzValue]="site.p.Ref"></nz-option>
               </nz-select>
             </div>
