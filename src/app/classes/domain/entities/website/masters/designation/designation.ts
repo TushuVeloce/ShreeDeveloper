@@ -169,6 +169,14 @@ export class Designation implements IPersistable<Designation> {
     return Designation.ListFromTransportData(tdResponse);
   }
 
+  public static async FetchEntireListByCompanyAndDepartmentRef(CompanyRef:number,departmentref:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new DesignationFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    req.DepartmentRefs.push(departmentref)
+    let tdResponse = await Designation.FetchTransportData(req, errorHandler) as TransportData;
+    return Designation.ListFromTransportData(tdResponse);
+  }
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

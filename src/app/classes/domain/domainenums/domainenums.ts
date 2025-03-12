@@ -389,8 +389,8 @@ export class DomainEnums {
 
   // For Feature Group 
 
-  public static ApplicationFeatureGroupName(company: ApplicationFeatureGroups) {
-    switch (company) {
+  public static ApplicationFeatureGroupName(ApplicationFeature: ApplicationFeatureGroups) {
+    switch (ApplicationFeature) {
       case ApplicationFeatureGroups.Master: return 'Masters';
       case ApplicationFeatureGroups.Transaction: return 'Transactions';
       case ApplicationFeatureGroups.Report: return 'Reports';
@@ -423,8 +423,8 @@ export class DomainEnums {
 
   // For Feature
   
-  public static ApplicationFeatureName(company: ApplicationFeatures) {
-    switch (company) {
+  public static ApplicationFeatureName(ApplicationFeature: ApplicationFeatures) {
+    switch (ApplicationFeature) {
       case ApplicationFeatures.UnitMaster: return 'Unit Master';
       case ApplicationFeatures.MaterialMaster: return 'Material Master';
       case ApplicationFeatures.StageMaster: return 'Stage Master';
@@ -462,9 +462,6 @@ export class DomainEnums {
       },
       {
         Ref: ApplicationFeatures.MaterialMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.MaterialMaster)
-      },
-      {
-        Ref: ApplicationFeatures.DepartmentMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.DepartmentMaster)
       },
       
 
@@ -542,11 +539,7 @@ export class DomainEnums {
     let result = [
       {
         Ref: ApplicationFeatures.UnitMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.UnitMaster)
-      },
-      {
-        Ref: ApplicationFeatures.DepartmentMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.DepartmentMaster)
-      },
-      
+      },      
       {
         Ref: ApplicationFeatures.MaterialMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.MaterialMaster)
       },

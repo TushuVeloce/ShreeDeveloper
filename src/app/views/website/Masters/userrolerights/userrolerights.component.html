@@ -17,7 +17,8 @@
       <div class="col-md-4 mb-2">
         <label for="DepartmentRef"><b>Select Department</b></label>
         <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select Department" id="DepartmentRef"
-          name="DepartmentRef" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef">
+          name="DepartmentRef" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef"
+          (ngModelChange)="getDesignationByDepartmentRefList(Entity.p.DepartmentRef)">
           <nz-option *ngFor="let department of DepartmentList" [nzValue]="department.p.Ref"
             [nzLabel]="department.p.Name"></nz-option>
         </nz-select>
@@ -35,7 +36,7 @@
         <label for="FeatureGroupRef"><b>Select Feature Group</b></label>
         <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select" id="FeatureGroupRef"
           name="FeatureGroupRef" [nzSize]="'large'" [(ngModel)]="FeatureGroupRef"
-          (ngModelChange)="onclick(FeatureGroupRef)">
+          (ngModelChange)="onFeatureGroupSelected(FeatureGroupRef)">
           <nz-option *ngFor="let featuregroup of FeatureGroupList" [nzValue]="featuregroup.Ref"
             [nzLabel]="featuregroup.Name"></nz-option>
         </nz-select>

@@ -195,7 +195,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
 
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      this.uiUtils.showErrorToster(tr.Message);
+      this.uiUtils.showErrorMessage('Error',tr.Message);
       return;
     } else {
       this.isSaveDisabled = false;
