@@ -24,6 +24,7 @@ export class EmployeeExitProps {
   public Description : string = '';
   public DateOfJoin: string = '';
   public DateOfExit: string = '';
+  public Reason: string = '';
   
   
 
