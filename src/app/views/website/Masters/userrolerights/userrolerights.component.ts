@@ -108,20 +108,21 @@ export class UserrolerightsComponent implements OnInit {
   }
 
 
-  onFeatureGroupSelected = (featureGroupRef: number) => {
+  onFeatureGroupSelected = async (featureGroupRef: number) => {
     if (this.Entity.p.DepartmentRef <= 0) {
-      alert("Please select Department.");
+      await this.uiUtils.showWarningToster(`Please Select Department`);
       setTimeout(() => this.FeatureGroupRef = 0);
       return;
     }
     if (this.Entity.p.DesignationRef <= 0) {
-      alert("Please select Designation.");
+      featureGroupRef = 0;
+      await this.uiUtils.showWarningToster(`Please Select Designation`);
       setTimeout(() => this.FeatureGroupRef = 0);
       return;
     }
 
     if (featureGroupRef == 0) {
-      alert("Select Feature Group");
+      await this.uiUtils.showWarningToster(`Please Select Feature`);
       setTimeout(() => this.FeatureGroupRef = 0);
       return;
     }
@@ -187,8 +188,8 @@ export class UserrolerightsComponent implements OnInit {
         this.Entity.p.DesignationRef = designationRef;
         this.FeatureGroupRef = featureGroupRef
 
-        this.getUserRoleRights(departmentRef, designationRef);
-        this.onFeatureGroupSelected(featureGroupRef);
+        // this.getUserRoleRights(departmentRef, designationRef);
+        // this.onFeatureGroupSelected(featureGroupRef);
 
       } else {
         await this.uiUtils.showSuccessToster('User Role Rights Updated successfully!');
