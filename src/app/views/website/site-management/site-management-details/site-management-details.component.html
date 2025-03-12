@@ -14,18 +14,18 @@
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Site Name</label>
-          <input type="text" name="Name" class="form-control" id="Name" [(ngModel)]="Entity.p.Name" required
+          <input type="text" name="Name" class="form-control" id="Name" [(ngModel)]="newOwner.Name" required
             placeholder="Enter Site Name" />
         </div>
         <div class="col-md-4">
           <label>AddressLine 1</label>
-          <input type="text" name="AddressLine1" class="form-control" id="AddressLine1" [(ngModel)]="Entity.p.AddressLine1" required
-            placeholder="Enter AddressLine 1" />
+          <input type="text" name="AddressLine1" class="form-control" id="AddressLine1"
+            [(ngModel)]="Entity.p.AddressLine1" required placeholder="Enter AddressLine 1" />
         </div>
         <div class="col-md-4">
           <label>AddressLine 2</label>
-          <input type="text" name="AddressLine2" class="form-control" id="AddressLine2" [(ngModel)]="Entity.p.AddressLine2" required
-            placeholder="Enter AddressLine 2" />
+          <input type="text" name="AddressLine2" class="form-control" id="AddressLine2"
+            [(ngModel)]="Entity.p.AddressLine2" required placeholder="Enter AddressLine 2" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
@@ -37,8 +37,9 @@
         <div class="col-md-4">
           <div>
             <label for="CountryRef"><b>Country</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select"  [nzSize]="'large'"  name="CountryRef" required id="CountryRef"
-            [(ngModel)]="Entity.p.CountryRef" (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+              name="CountryRef" required id="CountryRef" [(ngModel)]="Entity.p.CountryRef"
+              (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
               <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
                 [nzValue]="country.p.Ref"></nz-option>
             </nz-select>
@@ -59,53 +60,56 @@
         <div class="col-md-4">
           <div>
             <label for="CityRef"><b>City</b></label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
-            name="CityRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CityRef">
-            <nz-option *ngFor="let city of CityList" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
-          </nz-select>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
+              name="CityRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CityRef">
+              <nz-option *ngFor="let city of CityList" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
+            </nz-select>
           </div>
         </div>
         <div class="col-md-4">
           <label>Site Incharge</label>
-          <input type="number" name="SiteInChargeRef" class="form-control" id="SiteInChargeRef" [(ngModel)]="Entity.p.SiteInChargeRef" required
-            placeholder="Enter Site Incharge" />
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+            name="SiteInChargeRef" required id="SiteInChargeRef" [(ngModel)]="Entity.p.SiteInChargeRef">
+            <nz-option *ngFor="let employee of EmployeeList" [nzLabel]="employee.p.Name"
+              [nzValue]="employee.p.Ref"></nz-option>
+          </nz-select>
         </div>
         <div class="col-md-4">
           <label>Starting Date</label>
-          <input type="date" name="EstimatedStartingDate" class="form-control date-input" id="EstimatedStartingDate" [(ngModel)]="Entity.p.EstimatedStartingDate" required
-            placeholder="Select Date" />
+          <input type="date" name="EstimatedStartingDate" class="form-control date-input" id="EstimatedStartingDate"
+            [(ngModel)]="Entity.p.EstimatedStartingDate" required placeholder="Select Date" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Estimated End Date</label>
-          <input type="date" name="EstimatedEndDate" class="form-control date-input" id="EstimatedEndDate" [(ngModel)]="Entity.p.EstimatedEndDate" required
-            placeholder="Select Date" />
+          <input type="date" name="EstimatedEndDate" class="form-control date-input" id="EstimatedEndDate"
+            [(ngModel)]="Entity.p.EstimatedEndDate" required placeholder="Select Date" />
         </div>
         <div class="col-md-4">
           <label>Estimated Cost</label>
-          <input type="number" name="EstimatedCost" class="form-control" id="EstimatedCost" [(ngModel)]="Entity.p.EstimatedCost" required
-            placeholder="Enter Estimated Cost" />
+          <input type="number" name="EstimatedCost" class="form-control" id="EstimatedCost"
+            [(ngModel)]="Entity.p.EstimatedCost" required placeholder="Enter Estimated Cost" />
         </div>
         <div class="col-md-4">
           <label>Total Land Area in Sqm</label>
-          <input type="number" name="TotalLandAreaInSqm" class="form-control" id="TotalLandAreaInSqm" [(ngModel)]="Entity.p.TotalLandAreaInSqm" required
-            placeholder="Enter Total Land Area in Sq m" />
+          <input type="number" name="TotalLandAreaInSqm" class="form-control" id="TotalLandAreaInSqm"
+            [(ngModel)]="Entity.p.TotalLandAreaInSqm" required placeholder="Enter Total Land Area in Sq m" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Total Land Area in Sq ft</label>
-          <input type="number" name="TotalLandAreaInSqft" class="form-control" id="TotalLandAreaInSqft" [(ngModel)]="Entity.p.TotalLandAreaInSqft" required
-            placeholder="Enter Total Land Area in Sq ft" />
+          <input type="number" name="TotalLandAreaInSqft" class="form-control" id="TotalLandAreaInSqft"
+            [(ngModel)]="Entity.p.TotalLandAreaInSqft" required placeholder="Enter Total Land Area in Sq ft" />
         </div>
         <div class="col-md-4">
           <label>Number Of Plots</label>
-          <input type="number" name="NumberOfPlots" class="form-control" id="NumberOfPlots" [(ngModel)]="Entity.p.NumberOfPlots" required
-            placeholder="Enter Plot Number" />
+          <input type="number" name="NumberOfPlots" class="form-control" id="NumberOfPlots"
+            [(ngModel)]="Entity.p.NumberOfPlots" required placeholder="Enter Plot Number" />
         </div>
       </div>
-     
+
       <div class="row" style="margin-top: 2rem; padding: 1rem">
         <div class="col-lg-8 col-md-4 col-sm-12 col-xs-12 col-12">
           <h5 style="padding-top: 3px; color: black">
@@ -171,13 +175,13 @@
           <tbody>
             <tr *ngFor="let owner of owners; let i = index">
               <td Class="tbldata">{{ i}}</td>
-              <td Class="tbldata">{{ owner.Name  }}</td>
-              <td Class="tbldata">{{ owner.ContactNo  }}</td>
-              <td Class="tbldata">{{ owner.EmailId  }}</td>
-              <td Class="tbldata">{{ owner.AddressLine1  }}</td>
-              <td Class="tbldata">{{ owner.AddressLine2  }}</td>
+              <td Class="tbldata">{{ owner.Name }}</td>
+              <td Class="tbldata">{{ owner.ContactNo }}</td>
+              <td Class="tbldata">{{ owner.EmailId }}</td>
+              <td Class="tbldata">{{ owner.AddressLine1 }}</td>
+              <td Class="tbldata">{{ owner.AddressLine2 }}</td>
               <!-- <td Class="tbldata">{{ owner.CityRef }}</td> -->
-              <td Class="tbldata">{{ owner.PinCode   }}</td>
+              <td Class="tbldata">{{ owner.PinCode }}</td>
               <td Class="tbldata">
                 <button class="btn btn-danger btn-sm" (click)="removeowner(i)">Delete</button>
               </td>
@@ -215,62 +219,76 @@
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Plot No.</label>
-            <input type="text" name="PlotNo" class="form-control" [(ngModel)]="newPlot.PlotNo" required placeholder="Enter Plot No." />
+            <input type="text" name="PlotNo" class="form-control" [(ngModel)]="newPlot.PlotNo" required
+              placeholder="Enter Plot No." />
           </div>
           <div class="col-md-6">
             <label>Area sq.m</label>
-            <input type="number" name="AreaInSqm" class="form-control" [(ngModel)]="newPlot.AreaInSqm" required placeholder="Enter Area sq.m" />
+            <input type="number" name="AreaInSqm" class="form-control" [(ngModel)]="newPlot.AreaInSqm" required
+              placeholder="Enter Area sq.m" />
           </div>
         </div>
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Area sq.ft</label>
-            <input type="number" name="AreaInSqft" class="form-control" [(ngModel)]="newPlot.AreaInSqft" required placeholder="Enter Area sq.ft" />
+            <input type="number" name="AreaInSqft" class="form-control" [(ngModel)]="newPlot.AreaInSqft" required
+              placeholder="Enter Area sq.ft" />
           </div>
           <div class="col-md-6">
             <label>Goverment Rate Per Sqm </label>
-            <input type="number" name="GovermentRatePerSqm" class="form-control" [(ngModel)]="newPlot.GovermentRatePerSqm" required placeholder="Enter Goverment Rate" />
-          </div>
-          <div class="col-md-6">
-            <label>Goverment Rate Per Sqft </label>
-            <input type="number" name="GovermentRatePerSqft" class="form-control" [(ngModel)]="newPlot.GovermentRatePerSqft" required placeholder="Enter Goverment Rate" />
+            <input type="number" name="GovermentRatePerSqm" class="form-control"
+              [(ngModel)]="newPlot.GovermentRatePerSqm" required placeholder="Enter Goverment Rate Per Sqm " />
           </div>
         </div>
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
-            <label>Basic Rate Per Sqm </label>
-            <input type="number" name="BasicRatePerSqm" class="form-control" [(ngModel)]="newPlot.BasicRatePerSqm" required placeholder="Enter Basic Rate" />
+            <label>Goverment Rate Per Sqft </label>
+            <input type="number" name="GovermentRatePerSqft" class="form-control"
+              [(ngModel)]="newPlot.GovermentRatePerSqft" required placeholder="Enter Goverment Rate Per Sqft " />
           </div>
           <div class="col-md-6">
+            <label>Basic Rate Per Sqm </label>
+            <input type="number" name="BasicRatePerSqm" class="form-control" [(ngModel)]="newPlot.BasicRatePerSqm"
+              required placeholder="Enter Basic Rate Per Sqm" />
+          </div>
+        </div>
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-6">
             <label>Basic Rate Per Sqft </label>
-            <input type="number" name="BasicRatePerSqft" class="form-control" [(ngModel)]="newPlot.BasicRatePerSqft" required placeholder="Enter Basic Rate" />
+            <input type="number" name="BasicRatePerSqft" class="form-control" [(ngModel)]="newPlot.BasicRatePerSqft"
+              required placeholder="Enter Basic Rate Per Sqft" />
           </div>
           <div class="col-md-6">
             <label>Booking Remark</label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="BookingRemark" name="BookingRemark"
-            [nzSize]="'large'" [(ngModel)]="newPlot.BookingRemark">
-            <nz-option *ngFor="let bookingremark of BookingRemarkList" [nzValue]="bookingremark.Ref" [nzLabel]="bookingremark.Name"></nz-option>
-          </nz-select>    
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="BookingRemark"
+              name="BookingRemark" [nzSize]="'large'" [(ngModel)]="newPlot.BookingRemark">
+              <nz-option *ngFor="let bookingremark of BookingRemarkList" [nzValue]="bookingremark.Ref"
+                [nzLabel]="bookingremark.Name"></nz-option>
+            </nz-select>
           </div>
         </div>
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Customer Name</label>
-            <input type="text" name="CustomerName" class="form-control" [(ngModel)]="newPlot.CustomerName" required placeholder="Enter Customer Name" />
+            <input type="text" name="CustomerName" class="form-control" [(ngModel)]="newPlot.CustomerName" required
+              placeholder="Enter Customer Name" />
           </div>
           <div class="col-md-6">
             <label>Address</label>
-            <input type="text" name="Address" class="form-control" [(ngModel)]="newPlot.Address" required placeholder="Enter Address" />
+            <input type="text" name="Address" class="form-control" [(ngModel)]="newPlot.Address" required
+              placeholder="Enter Address" />
           </div>
         </div>
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Mobile No</label>
-            <input type="text" name="MobNo" class="form-control" [(ngModel)]="newPlot.MobNo" required placeholder="Enter Mobile No" />
+            <input type="text" name="MobNo" class="form-control" [(ngModel)]="newPlot.MobNo" required
+              placeholder="Enter Mobile No" />
           </div>
           <div class="col-md-6">
             <label>Reference</label>
-            <input type="text" name="Reference" class="form-control" [(ngModel)]="newPlot.Reference" required placeholder="Enter Reference" />
+            <input type="text" name="Reference" class="form-control" [(ngModel)]="newPlot.Reference" required
+              placeholder="Enter Reference" />
           </div>
         </div>
       </form>
@@ -279,7 +297,7 @@
       <!-- <button type="button" class="btn btn-secondary" (click)="isModalOpen = false">Close</button> -->
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
         <div>
-          <nz-button nz-button class="btn1" (click)="addPlot()" >Save</nz-button>
+          <nz-button nz-button class="btn1" (click)="addPlot()">Save</nz-button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="closeModal('plot')">
@@ -303,40 +321,79 @@
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Name</label>
-            <input type="text" name="Name" class="form-control" [(ngModel)]="newOwner.Name" required placeholder="Enter Plot No." />
+            <input type="text" name="Name" class="form-control" [(ngModel)]="newOwner.Name" required
+              placeholder="Enter Name" />
           </div>
           <div class="col-md-6">
             <label>Contact No</label>
-            <input type="text" name="ContactNo" class="form-control" [(ngModel)]="newOwner.ContactNo" required placeholder="Enter Area sq.m" />
+            <input type="text" name="ContactNo" class="form-control" [(ngModel)]="newOwner.ContactNo" required
+              placeholder="Enter Contact No" />
           </div>
         </div>
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Email Id</label>
-            <input type="text" name="EmailId" class="form-control" [(ngModel)]="newOwner.EmailId" required placeholder="Enter Area sq.ft" />
+            <input type="text" name="EmailId" class="form-control" [(ngModel)]="newOwner.EmailId" required
+              placeholder="Enter Email Id" />
           </div>
           <div class="col-md-6">
             <label>AddressLine 1</label>
-            <input type="text" name="AddressLine1" class="form-control" [(ngModel)]="newOwner.AddressLine1" required placeholder="Enter Goverment Rate" />
+            <input type="text" name="AddressLine1" class="form-control" [(ngModel)]="newOwner.AddressLine1" required
+              placeholder="Enter AddressLine 1" />
           </div>
         </div>
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>AddressLine 2</label>
-            <input type="text" name="AddressLine2" class="form-control" [(ngModel)]="newOwner.AddressLine2" required placeholder="Enter Booking Remark" />
+            <input type="text" name="AddressLine2" class="form-control" [(ngModel)]="newOwner.AddressLine2" required
+              placeholder="Enter AddressLine 2" />
           </div>
           <div class="col-md-6">
-            <label>Pin Code</label>
-            <input type="text" name="PinCode" class="form-control" [(ngModel)]="newOwner.PinCode" required placeholder="Enter Customer Name" />
+            <div>
+              <label for="CountryRef"><b>Country</b></label>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+                name="CountryRef" required id="CountryRef" [(ngModel)]="newOwner.CountryRef"
+                (ngModelChange)="getStateListByCountryRef(newOwner.CountryRef)">
+                <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
+                  [nzValue]="country.p.Ref"></nz-option>
+              </nz-select>
+            </div>
           </div>
         </div>
+          <div class="row" style="margin-top: 1rem">
+            <div class="col-md-6">
+              <div>
+                <label for="StateRef"><b>State</b></label>
+                <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
+                  name="StateRef" [nzSize]="'large'" [(ngModel)]="newOwner.StateRef"
+                  (ngModelChange)="getCityListByStateRef(newOwner.StateRef)">
+                  <nz-option *ngFor="let state of StateList" [nzValue]="state.p.Ref"
+                    [nzLabel]="state.p.Name"></nz-option>
+                </nz-select>
+              </div>
+            </div>
+              <div class="col-md-6">
+                <label for="CityRef"><b>City</b></label>
+                <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
+                  name="CityRef" [nzSize]="'large'" [(ngModel)]="newOwner.CityRef">
+                  <nz-option *ngFor="let city of CityList" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
+                </nz-select>
+              </div>
+          </div>
+          <div class="row" style="margin-top: 1rem">
+            <div class="col-md-6">
+              <label>Pin Code</label>
+              <input type="text" name="PinCode" class="form-control" [(ngModel)]="newOwner.PinCode" required
+                placeholder="Enter Pin Code" />
+            </div>
+          </div>
       </form>
     </div>
     <div class="custom-modal-footer">
       <!-- <button type="button" class="btn btn-secondary" (click)="isModalOpen = false">Close</button> -->
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
         <div>
-          <nz-button nz-button class="btn1" (click)="addOwner()" >Save</nz-button>
+          <nz-button nz-button class="btn1" (click)="addOwner()">Save</nz-button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="closeModal('owner')">

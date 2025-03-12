@@ -12,6 +12,22 @@ import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { SiteFetchRequest } from "./sitefetchrequest";
 
+export class PlotDetailProps{
+  public PlotNo: number =0;
+  public AreaInSqm: number =0;
+  public AreaInSqft: number =0;
+  public GovermentRatePerSqm: number =0;
+  public GovermentRatePerSqft:number =0;
+  public BasicRatePerSqm : number =0;
+  public BasicRatePerSqft : number =0;
+  public BookingRemark : number =0;
+  public CustomerName: string ='';
+  public Address: string ='';
+  public MobNo: number =0;
+  public Reference: string ='';
+
+}
+
 
 export class SiteProps {
   public readonly Db_Table_Name = "SiteManagement";
@@ -35,7 +51,7 @@ export class SiteProps {
   public NumberOfPlots : number = 0;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public PlotDetailsList: any[] = [];
+  public PlotDetailsList: PlotDetailProps[] = [];
   public OwnerDetailsList: any[] = [];
 
 

@@ -58,6 +58,9 @@ export class SiteManagementDetailsComponent implements OnInit {
     AddressLine1: '',
     AddressLine2: '',
     PinCode : '',
+    CountryRef : 0,
+    StateRef : 0,
+    CityRef : 0,
   };
 
   constructor(
@@ -153,6 +156,9 @@ getStateListByCountryRef = async (CountryRef: number) => {
         AddressLine1: '',
         AddressLine2: '',
         PinCode : '',
+        CountryRef : 0,
+        StateRef : 0,
+        CityRef : 0,
       };
     } else {
       alert('Please fill in all required fields.');
