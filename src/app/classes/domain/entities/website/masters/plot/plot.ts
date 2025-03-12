@@ -14,7 +14,7 @@ import { PlotFetchRequest } from "./plotfetchrequest";
 
 
 export class PlotProps {
-  public readonly Db_Table_Name = "PlotManagement";
+  public readonly Db_Table_Name = "SiteManagementPlotDetails";
   public Ref: number = 0;
   public PlotNo: string ='';
   public AreaInSqm: number =0;
@@ -47,7 +47,7 @@ export class PlotProps {
 }
 
 export class Plot implements IPersistable<Plot> {
-  public static readonly Db_Table_Name: string = 'PlotManagement';
+  public static readonly Db_Table_Name: string = 'SiteManagementPlotDetails';
 
   private constructor(public readonly p: PlotProps, public readonly AllowEdit: boolean) {
 
