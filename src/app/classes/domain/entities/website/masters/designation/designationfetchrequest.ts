@@ -9,6 +9,7 @@ export class DesignationFetchRequest
     public static readonly FetchRequestType: string = "DesignationFetchRequest";
 
     CompanyRefs: number[] = [];
+    DepartmentRefs: number[] = [];
     DesignationRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>

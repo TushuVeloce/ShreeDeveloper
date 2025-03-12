@@ -166,7 +166,7 @@ export class VendorMasterDetailsComponent implements OnInit {
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      this.uiUtils.showErrorToster(tr.Message);
+      this.uiUtils.showErrorMessage('Error',tr.Message);
       return
     }
     else {
