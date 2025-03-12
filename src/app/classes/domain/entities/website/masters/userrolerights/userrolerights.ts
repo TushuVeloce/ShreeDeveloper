@@ -189,11 +189,11 @@ export class UserRoleRight implements IPersistable<UserRoleRight> {
     return UserRoleRight.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByUserRoleRef(departmentref: number,designationref: number, companeref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListBydepartmentRef(departmentref: number,designationref: number, Companyref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new UserRoleRightFetchRequest();
     req.DepartmentRefs.push(departmentref)
     req.DesignationRefs.push(designationref)
-    req.DesignationRefs.push(companeref)
+    req.CompanyRefs.push(Companyref)
     let tdResponse = await UserRoleRight.FetchTransportData(req, errorHandler) as TransportData;
     return UserRoleRight.ListFromTransportData(tdResponse);
   }

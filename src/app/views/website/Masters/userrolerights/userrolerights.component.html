@@ -17,8 +17,7 @@
       <div class="col-md-4 mb-2">
         <label for="DepartmentRef"><b>Select Department</b></label>
         <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select Department" id="DepartmentRef"
-          name="DepartmentRef" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef"
-          (ngModelChange)="getUserRoleRights(Entity.p.DepartmentRef,Entity.p.DesignationRef)">
+          name="DepartmentRef" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef">
           <nz-option *ngFor="let department of DepartmentList" [nzValue]="department.p.Ref"
             [nzLabel]="department.p.Name"></nz-option>
         </nz-select>
@@ -36,7 +35,7 @@
         <label for="FeatureGroupRef"><b>Select Feature Group</b></label>
         <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select" id="FeatureGroupRef"
           name="FeatureGroupRef" [nzSize]="'large'" [(ngModel)]="FeatureGroupRef"
-          (ngModelChange)="onclick(FeatureGroupRef); getUserRoleRights(Entity.p.DepartmentRef,Entity.p.DesignationRef)">
+          (ngModelChange)="onclick(FeatureGroupRef)">
           <nz-option *ngFor="let featuregroup of FeatureGroupList" [nzValue]="featuregroup.Ref"
             [nzLabel]="featuregroup.Name"></nz-option>
         </nz-select>
@@ -46,7 +45,7 @@
 
 
   <!-- table start  -->
-  <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem">
+  <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="FeatureGroupRef > 0">
     <div class="table-container">
       <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
         nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="DisplayFeature">

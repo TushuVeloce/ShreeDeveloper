@@ -19,6 +19,11 @@ export class AppStateManageService {
 
   private CustomerName = '';
   private CustomerRef = 0;
+
+  private DepartmentName = 0;
+  private DepartmentRef = 0;
+  private DesignationRef = 0;
+
   // private GAAProjectName = '';
   private projectCount = 0
   private Theme = '';
@@ -70,13 +75,6 @@ export class AppStateManageService {
   }
   //---------- Customer Name End
 
-
-
-
-
-
-
-
   // ----------- Theme Start
   getTheme(): string {
     const theme = this.StorageKey.getItem('Theme');
@@ -123,6 +121,35 @@ export class AppStateManageService {
     this.StorageKey.setItem('UserJSON', '0');
   }
 
+  // for Department Ref Start 
+
+ getDepartmentRef(): number {
+    const DepartmentRef = this.localStorage.getItem('DepartmentRef');
+    console.log('CompanyReflocalstorage :', DepartmentRef);
+    return DepartmentRef ? +DepartmentRef : 0 // Return the Company reference or 0 if not found
+  }
+  setDepartmentRef(val: number): void {
+    this.DepartmentRef = val;
+    this.localStorage.setItem('DepartmentRef', val.toString()); // Store Company reference in local storage
+  }
+  resetDepartmentRef(): void {
+    this.localStorage.setItem('DepartmentRef', '0');
+  }
+
+    // for Department Ref End 
+
+ getDesignationRef(): number {
+  const DesignationRef = this.localStorage.getItem('DesignationRef');
+  console.log('CompanyReflocalstorage :', DesignationRef);
+  return DesignationRef ? +DesignationRef : 0 // Return the Company reference or 0 if not found
+}
+setDesignationRef(val: number): void {
+  this.DesignationRef = val;
+  this.localStorage.setItem('DesignationRef', val.toString()); // Store Company reference in local storage
+}
+resetDesignationRef(): void {
+  this.localStorage.setItem('DesignationRef', '0');
+}
 
 
 }
