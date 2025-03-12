@@ -1,3 +1,199 @@
-<p>
-  plot-master-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackPlot()">
+          <img
+            src="/assets/icons/arrow-button.png"
+            alt=""
+            width="34px"
+            height="34px"
+          />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">{{ DetailsFormTitle }}</span>
+      </div>
+    </div>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-4">
+          <label>Plot No.</label>
+          <input
+            type="text"
+            name="PlotNo"
+            class="form-control date-input"
+            id="PlotNo"
+            [(ngModel)]="Entity.p.PlotNo"
+            required
+            placeholder="Enter Plot No."
+          />
+        </div>
+        <div class="col-md-4">
+          <label>Area sq.m</label>
+          <input
+            type="number"
+            name="AreaInSqm"
+            class="form-control date-input"
+            id="AreaInSqm"
+            [(ngModel)]="Entity.p.AreaInSqm"
+            required
+            placeholder="Enter Area sq.m"
+          />
+        </div>
+        <div class="col-md-4">
+          <label>Area sq.ft</label>
+          <input
+            type="number"
+            name="AreaInSqft"
+            class="form-control date-input"
+            id="AreaInSqft"
+            [(ngModel)]="Entity.p.AreaInSqft"
+            required
+            placeholder="Enter Area sq.ft"
+          />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-4">
+          <label>Goverment Rate Per Sqm </label>
+          <input
+            type="number"
+            name="GovermentRatePerSqm"
+            class="form-control date-input"
+            id="GovermentRatePerSqm"
+            [(ngModel)]="Entity.p.GovermentRatePerSqm"
+            required
+            placeholder="Enter Goverment Rate Per Sqm "
+          />
+        </div>
+        <div class="col-md-4">
+          <label>Goverment Rate Per Sqft </label>
+          <input
+            type="number"
+            name="GovermentRatePerSqft"
+            class="form-control date-input"
+            id="GovermentRatePerSqft"
+            [(ngModel)]="Entity.p.GovermentRatePerSqft"
+            required
+            placeholder="Enter Goverment Rate Per Sqft "
+          />
+        </div>
+        <div class="col-md-4">
+          <label>Basic Rate Per Sqm </label>
+          <input
+            type="number"
+            name="BasicRatePerSqm"
+            class="form-control date-input"
+            id="BasicRatePerSqm"
+            [(ngModel)]="Entity.p.BasicRatePerSqm"
+            required
+            placeholder="Enter Basic Rate Per Sqm"
+          />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-4">
+          <label>Basic Rate Per Sqft </label>
+          <input
+            type="number"
+            name="BasicRatePerSqft"
+            class="form-control date-input"
+            id="BasicRatePerSqft"
+            [(ngModel)]="Entity.p.BasicRatePerSqft"
+            required
+            placeholder="Enter Basic Rate Per Sqft"
+          />
+        </div>
+        <div class="col-md-4">
+          <label>Booking Remark</label>
+          <nz-select
+            class="nzSelect-light"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Select"
+            id="BookingRemark"
+            name="BookingRemark"
+            [nzSize]="'large'"
+            [(ngModel)]="Entity.p.BookingRemark"
+          >
+            <nz-option
+              *ngFor="let bookingremark of BookingRemarkList"
+              [nzValue]="bookingremark.Ref"
+              [nzLabel]="bookingremark.Name"
+            ></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4">
+          <label>Customer Name</label>
+          <input
+            type="text"
+            name="CustomerName"
+            class="form-control date-input"
+            id="CustomerName"
+            [(ngModel)]="Entity.p.CustomerName"
+            required
+            placeholder="Enter Customer Name"
+          />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-4">
+          <label>Address</label>
+          <input
+            type="text"
+            name="Address"
+            class="form-control date-input"
+            id="Address"
+            [(ngModel)]="Entity.p.Address"
+            required
+            placeholder="Enter Address"
+          />
+        </div>
+        <div class="col-md-4">
+          <label>Mobile No</label>
+          <input
+            type="text"
+            name="MobNo"
+            class="form-control date-input"
+            id="MobNo"
+            [(ngModel)]="Entity.p.MobNo"
+            required
+            placeholder="Enter Mobile No"
+          />
+        </div>
+        <div class="col-md-4">
+          <label>Reference</label>
+          <input
+            type="text"
+            name="Reference"
+            class="form-control date-input"
+            id="Reference"
+            [(ngModel)]="Entity.p.Reference"
+            required
+            placeholder="Enter Reference"
+          />
+        </div>
+      </div>
+      <div
+        style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        "
+      >
+        <div>
+          <nz-button nz-button class="btn1" (click)="SavePlot()"
+            >Save</nz-button
+          >
+        </div>
+        <div>
+          <nz-button nz-button class="btn1" (click)="BackPlot()">
+            Back
+          </nz-button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

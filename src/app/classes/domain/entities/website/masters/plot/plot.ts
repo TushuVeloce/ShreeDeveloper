@@ -10,9 +10,12 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { SiteFetchRequest } from "./sitefetchrequest";
+import { PlotFetchRequest } from "./plotfetchrequest";
 
-export class PlotDetailProps{
+
+export class PlotProps {
+  public readonly Db_Table_Name = "PlotManagement";
+  public Ref: number = 0;
   public PlotNo: string ='';
   public AreaInSqm: number =0;
   public AreaInSqft: number =0;
@@ -25,46 +28,10 @@ export class PlotDetailProps{
   public Address: string ='';
   public MobNo: string ='';
   public Reference: string ='';
-
-}
-
-export class OwnerDetailProps{
-  public Name: string ='';
-  public ContactNo : string ='';
-  public EmailId : string ='';
-  public AddressLine1: string ='';
-  public AddressLine2: string ='';
-  public PinCode : string ='';
-  public CountryRef: number = 0;
-  public StateRef : number = 0;
-  public CityRef : number = 0;
-}
-
-
-export class SiteProps {
-  public readonly Db_Table_Name = "SiteManagement";
-  public Ref: number = 0;
-  public Name: string = '';
-  public AddressLine1 : string = '';
-  public AddressLine2 : string = '';
-  public PinCode : string = '';
-  public CountryRef: number = 0;
-  public readonly CountryName: boolean = false;
-  public StateRef: number = 0;
-  public readonly StateName: boolean = false;
-  public CityRef: number = 0;
-  public readonly CityName: boolean = false;
-  public SiteInchargeRef   : number = 0;
-  public EstimatedStartingDate : string = '';
-  public EstimatedEndDate : string = '';
-  public EstimatedCost  : number = 0;
-  public TotalLandAreaInSqm   : number = 0;
-  public TotalLandAreaInSqft    : number = 0;
-  public NumberOfPlots : number = 0;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public PlotDetailsList: PlotDetailProps[] = [];
-  public OwnerDetailsList: OwnerDetailProps[] = [];
+  public SiteRef: number = 0;
+  public readonly SiteName: string = '';
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -75,14 +42,14 @@ export class SiteProps {
   }
 
   public static Blank() {
-    return new SiteProps(true);
+    return new PlotProps(true);
   }
 }
 
-export class Site implements IPersistable<Site> {
-  public static readonly Db_Table_Name: string = 'SiteManagement';
+export class Plot implements IPersistable<Plot> {
+  public static readonly Db_Table_Name: string = 'PlotManagement';
 
-  private constructor(public readonly p: SiteProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: PlotProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -95,47 +62,47 @@ export class Site implements IPersistable<Site> {
     }
   }
 
-  public GetEditableVersion(): Site {
-    let newState: SiteProps = Utils.GetInstance().DeepCopy(this.p);
-    return Site.CreateInstance(newState, true);
+  public GetEditableVersion(): Plot {
+    let newState: PlotProps = Utils.GetInstance().DeepCopy(this.p);
+    return Plot.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new Site(SiteProps.Blank(), true);
+    return new Plot(PlotProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new Site(data as SiteProps, allowEdit);
+    return new Plot(data as PlotProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
+    if (this.p.PlotNo == '') vra.add('PlotNo', 'Plot No cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Site.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Plot.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: Site = Site.CreateNewInstance();
+  private static m_currentInstance: Plot = Plot.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return Site.m_currentInstance;
+    return Plot.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: Site) {
-    Site.m_currentInstance = value;
+  public static SetCurrentInstance(value: Plot) {
+    Plot.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): Site {
+  public static SingleInstanceFromTransportData(td: TransportData): Plot {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, Site.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, Site.Db_Table_Name)!.Entries) {
-        return Site.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, Plot.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, Plot.Db_Table_Name)!.Entries) {
+        return Plot.CreateInstance(data, false);
       }
     }
 
@@ -144,13 +111,13 @@ export class Site implements IPersistable<Site> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Site[] {
-    let result: Site[] = [];
+    sortPropertyName: string = "Name"): Plot[] {
+    let result: Plot[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, Site.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, Site.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, Plot.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, Plot.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -160,18 +127,18 @@ export class Site implements IPersistable<Site> {
       }
 
       for (let data of entries) {
-        result.push(Site.CreateInstance(data, false));
+        result.push(Plot.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): Site[] {
-    return Site.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): Plot[] {
+    return Plot.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: SiteFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: PlotFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -186,28 +153,28 @@ export class Site implements IPersistable<Site> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new SiteFetchRequest();
-    req.SiteRefs.push(ref);
+    let req = new PlotFetchRequest();
+    req.PlotRefs.push(ref);
 
-    let tdResponse = await Site.FetchTransportData(req, errorHandler) as TransportData;
-    return Site.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await Plot.FetchTransportData(req, errorHandler) as TransportData;
+    return Plot.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: SiteFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await Site.FetchTransportData(req, errorHandler) as TransportData;
-    return Site.ListFromTransportData(tdResponse);
+  public static async FetchList(req: PlotFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await Plot.FetchTransportData(req, errorHandler) as TransportData;
+    return Plot.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new SiteFetchRequest();
-    let tdResponse = await Site.FetchTransportData(req, errorHandler) as TransportData;
-    return Site.ListFromTransportData(tdResponse);
+    let req = new PlotFetchRequest();
+    let tdResponse = await Plot.FetchTransportData(req, errorHandler) as TransportData;
+    return Plot.ListFromTransportData(tdResponse);
   }
   // public static async FetchEntireListByProjectRef(ProjectRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-  //   let req = new SiteFetchRequest();
+  //   let req = new PlotFetchRequest();
   //   req.GAAProjectRefs.push(ProjectRef)
-  //   let tdResponse = await Site.FetchTransportData(req, errorHandler) as TransportData;
-  //   return Site.ListFromTransportData(tdResponse);
+  //   let tdResponse = await Plot.FetchTransportData(req, errorHandler) as TransportData;
+  //   return Plot.ListFromTransportData(tdResponse);
   // }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {

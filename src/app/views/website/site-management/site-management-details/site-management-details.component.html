@@ -69,7 +69,7 @@
         <div class="col-md-4">
           <label>Site Incharge</label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-            name="SiteInChargeRef" required id="SiteInChargeRef" [(ngModel)]="Entity.p.SiteInChargeRef">
+            name="SiteInchargeRef" required id="SiteInchargeRef" [(ngModel)]="Entity.p.SiteInchargeRef">
             <nz-option *ngFor="let employee of EmployeeList" [nzLabel]="employee.p.Name"
               [nzValue]="employee.p.Ref"></nz-option>
           </nz-select>
@@ -111,29 +111,29 @@
       </div>
 
       <div class="row" style="margin-top: 2rem; padding: 1rem">
-        <div class="col-lg-8 col-md-4 col-sm-12 col-xs-12 col-12">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
           <h5 style="padding-top: 3px; color: black">
             <b>Add Plot Details</b>
           </h5>
         </div>
-        <div class="col-lg-2 col-md-4 col-sm-12 col-xs-12 col-12 btn-container"
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
+        style="display: flex; justify-content: end" routerLinkActive="active">
+        <nz-button nz-button class="btn1" (click)="isModalOpen2 = true">Add Owner</nz-button>
+      </div>
+        <!-- <div class="col-lg-2 col-md-4 col-sm-12 col-xs-12 col-12 btn-container"
           style="display: flex; justify-content: end" routerLinkActive="active">
-          <nz-button nz-button class="btn1" (click)="isModalOpen1 = true">Add Plot</nz-button>
-        </div>
-        <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
-          style="display: flex; justify-content: end" routerLinkActive="active">
-          <nz-button nz-button class="btn1" (click)="isModalOpen2 = true">Add Owner</nz-button>
-        </div>
+          <nz-button nz-button class="btn1" (click)="addplotvalidation()">Add Plot</nz-button>
+        </div> -->
       </div>
 
-      <div class="table-container" style="margin-top: 2rem">
+      <!-- <div class="table-container" style="margin-top: 2rem">
         <div class="row">
           <div class="col-12">
             <label class="TableHeading"> Plot Details Table</label>
           </div>
         </div>
         <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{ x: 'auto' }"
-          nzFrontPagination="false" [nzShowSizeChanger]="false">
+          nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.PlotDetailsList">
           <thead>
             <tr>
               <th *ngFor="let header of plotheaders" class="tblheadersecond">
@@ -142,7 +142,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let plot of plots; let i = index">
+            <tr *ngFor="let plot of Entity.p.PlotDetailsList; let i = index">
               <td Class="tbldata">{{ i}}</td>
               <td Class="tbldata">{{ plot.PlotNo }}</td>
               <td Class="tbldata">{{ plot.AreaInSqm }}</td>
@@ -155,7 +155,7 @@
             </tr>
           </tbody>
         </nz-table>
-      </div>
+      </div> -->
 
       <div class="table-container" style="margin-top: 2rem">
         <div class="row">
@@ -164,7 +164,7 @@
           </div>
         </div>
         <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{ x: 'auto' }"
-          nzFrontPagination="false" [nzShowSizeChanger]="false">
+          nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.OwnerDetailsList">
           <thead>
             <tr>
               <th *ngFor="let header of ownerheaders" class="tblheadersecond">
@@ -173,7 +173,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let owner of owners; let i = index">
+            <tr *ngFor="let owner of Entity.p.OwnerDetailsList; let i = index">
               <td Class="tbldata">{{ i}}</td>
               <td Class="tbldata">{{ owner.Name }}</td>
               <td Class="tbldata">{{ owner.ContactNo }}</td>
@@ -208,7 +208,7 @@
   </div>
 </div>
 
-<div *ngIf="isModalOpen1" class="custom-modal-overlay">
+<!-- <div *ngIf="isModalOpen1" class="custom-modal-overlay">
   <div class="custom-modal">
     <div class="custom-modal-header">
       <h5>Add Plot</h5>
@@ -294,7 +294,6 @@
       </form>
     </div>
     <div class="custom-modal-footer">
-      <!-- <button type="button" class="btn btn-secondary" (click)="isModalOpen = false">Close</button> -->
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
         <div>
           <nz-button nz-button class="btn1" (click)="addPlot()">Save</nz-button>
@@ -307,7 +306,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 
 <div *ngIf="isModalOpen2" class="custom-modal-overlay">
@@ -325,7 +324,7 @@
               placeholder="Enter Name" />
           </div>
           <div class="col-md-6">
-            <label>Contact No</label>
+            <label>Contact Nos</label>
             <input type="text" name="ContactNo" class="form-control" [(ngModel)]="newOwner.ContactNo" required
               placeholder="Enter Contact No" />
           </div>
@@ -335,18 +334,6 @@
             <label>Email Id</label>
             <input type="text" name="EmailId" class="form-control" [(ngModel)]="newOwner.EmailId" required
               placeholder="Enter Email Id" />
-          </div>
-          <div class="col-md-6">
-            <label>AddressLine 1</label>
-            <input type="text" name="AddressLine1" class="form-control" [(ngModel)]="newOwner.AddressLine1" required
-              placeholder="Enter AddressLine 1" />
-          </div>
-        </div>
-        <div class="row" style="margin-top: 1rem">
-          <div class="col-md-6">
-            <label>AddressLine 2</label>
-            <input type="text" name="AddressLine2" class="form-control" [(ngModel)]="newOwner.AddressLine2" required
-              placeholder="Enter AddressLine 2" />
           </div>
           <div class="col-md-6">
             <div>
@@ -360,26 +347,38 @@
             </div>
           </div>
         </div>
-          <div class="row" style="margin-top: 1rem">
-            <div class="col-md-6">
-              <div>
-                <label for="StateRef"><b>State</b></label>
-                <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
-                  name="StateRef" [nzSize]="'large'" [(ngModel)]="newOwner.StateRef"
-                  (ngModelChange)="getCityListByStateRef(newOwner.StateRef)">
-                  <nz-option *ngFor="let state of StateList" [nzValue]="state.p.Ref"
-                    [nzLabel]="state.p.Name"></nz-option>
-                </nz-select>
-              </div>
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-6">
+            <div>
+              <label for="StateRef"><b>State</b></label>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
+                name="StateRef" [nzSize]="'large'" [(ngModel)]="newOwner.StateRef"
+                (ngModelChange)="getCityListByStateRef(newOwner.StateRef)">
+                <nz-option *ngFor="let state of StateList" [nzValue]="state.p.Ref"
+                  [nzLabel]="state.p.Name"></nz-option>
+              </nz-select>
             </div>
-              <div class="col-md-6">
-                <label for="CityRef"><b>City</b></label>
-                <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
-                  name="CityRef" [nzSize]="'large'" [(ngModel)]="newOwner.CityRef">
-                  <nz-option *ngFor="let city of CityList" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
-                </nz-select>
-              </div>
           </div>
+          <div class="col-md-6">
+            <label for="CityRef"><b>City</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
+              name="CityRef" [nzSize]="'large'" [(ngModel)]="newOwner.CityRef">
+              <nz-option *ngFor="let city of CityList" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-6">
+            <label>AddressLine 1</label>
+            <input type="text" name="AddressLine1" class="form-control" [(ngModel)]="newOwner.AddressLine1" required
+              placeholder="Enter AddressLine 1" />
+          </div>
+          <div class="col-md-6">
+            <label>AddressLine 2</label>
+            <input type="text" name="AddressLine2" class="form-control" [(ngModel)]="newOwner.AddressLine2" required
+              placeholder="Enter AddressLine 2" />
+          </div>
+        </div>
           <div class="row" style="margin-top: 1rem">
             <div class="col-md-6">
               <label>Pin Code</label>

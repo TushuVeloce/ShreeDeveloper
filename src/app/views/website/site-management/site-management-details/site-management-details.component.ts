@@ -5,7 +5,7 @@ import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
 import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
-import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { OwnerDetailProps, PlotDetailProps, Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -34,34 +34,8 @@ export class SiteManagementDetailsComponent implements OnInit {
   ownerheaders: string[] = ['Sr.No.', 'Name ', 'Contact No ', 'Email Id ', 'AddressLine 1 ', 'AddressLine 2 ','Pin Code ', 'Action'];
   isModalOpen1: boolean = false;
   isModalOpen2: boolean = false;
-  plots: any[] = []; // Store all added plots
-  newPlot = {
-    PlotNo: '',
-    AreaInSqm: '',
-    AreaInSqft: '',
-    GovermentRatePerSqm: '',
-    GovermentRatePerSqft:'',
-    BasicRatePerSqm : '',
-    BasicRatePerSqft : '',
-    BookingRemark : '',
-    CustomerName: '',
-    Address: '',
-    MobNo: '',
-    Reference: '',
-  };
-
-  owners: any[] = []; // Store all added plots
-  newOwner= {
-    Name: '',
-    ContactNo : '',
-    EmailId : '',
-    AddressLine1: '',
-    AddressLine2: '',
-    PinCode : '',
-    CountryRef : 0,
-    StateRef : 0,
-    CityRef : 0,
-  };
+  // newPlot: PlotDetailProps = new PlotDetailProps(); // Store all added plots
+  newOwner: OwnerDetailProps= new OwnerDetailProps(); // Store all added owners
 
   constructor(
     private router: Router,
@@ -118,66 +92,50 @@ getStateListByCountryRef = async (CountryRef: number) => {
     if (type === 'owner') this.isModalOpen2 = false;
   }
 
-  addPlot() {
-    // Prevent adding empty fields
-    if (this.newPlot.PlotNo && this.newPlot.AreaInSqm && this.newPlot.AreaInSqft && this.newPlot.MobNo) {
-      this.plots.push({ ...this.newPlot });
-      this.closeModal('plot');
-      // Clear the form
-      this.newPlot = {
-        PlotNo: '',
-        AreaInSqm: '',
-        AreaInSqft: '',
-        GovermentRatePerSqm : '',
-        GovermentRatePerSqft:'',
-        BasicRatePerSqm : '',
-        BasicRatePerSqft : '',
-        BookingRemark : '',
-        CustomerName: '',
-        Address: '',
-        MobNo: '',
-        Reference: '',
-      };
-    } else {
-      alert('Please fill in all required fields.');
-    }
-  }
+  // addPlot() {
+  //      if (!this.newPlot.PlotNo || !this.newPlot.AreaInSqm || !this.newPlot.AreaInSqft || !this.newPlot.GovermentRatePerSqm || !this.newPlot.GovermentRatePerSqft
+  //       || !this.newPlot.BasicRatePerSqm || !this.newPlot.BasicRatePerSqft || !this.newPlot.BookingRemark
+  //      ) {
+  //       alert('Please fill in required fields');
+  //       return;
+  //     }
+      
+  //     this.Entity.p.PlotDetailsList.push({ ...this.newPlot }); // Push new plot
+  //     this.newPlot = new PlotDetailProps(); // Reset form after adding
+  //   }
+
 
   addOwner() {
-    // Prevent adding empty fields
-    if (this.newOwner.Name && this.newOwner.ContactNo && this.newOwner.EmailId && this.newOwner.PinCode) {
-      this.owners.push({ ...this.newOwner });
-      this.closeModal('owner');
-      // Clear the form
-      this.newOwner = {
-        Name: '',
-        ContactNo : '',
-        EmailId : '',
-        AddressLine1: '',
-        AddressLine2: '',
-        PinCode : '',
-        CountryRef : 0,
-        StateRef : 0,
-        CityRef : 0,
-      };
-    } else {
-      alert('Please fill in all required fields.');
+    if (!this.newOwner.Name || !this.newOwner.ContactNo) {
+      alert('Please fill in required fields');
+      return;
     }
+    this.Entity.p.OwnerDetailsList.push({ ...this.newOwner }); // Push new owner
+    this.newOwner = new OwnerDetailProps(); // Reset form after adding
   }
 
-  removePlot(index: number) {
-    this.plots.splice(index, 1); // Remove the selected plot from the list
-  }
+  // removePlot(index: number) {
+  //   this.Entity.p.PlotDetailsList.splice(index, 1); // Remove plot
+  // }
 
   removeowner(index: number) {
-    this.owners.splice(index, 1); // Remove the selected plot from the list
+    this.Entity.p.OwnerDetailsList.splice(index, 1); // Remove owner
   }
+
+  // async addplotvalidation(){
+  //   console.log('Entity.p.PlotDetailsList.length :', this.Entity.p.PlotDetailsList.length);
+  //   if(this.Entity.p.NumberOfPlots == this.Entity.p.PlotDetailsList.length + 1){
+  //     this.isModalOpen1 = true
+  //   }else if(this.Entity.p.NumberOfPlots == 0 && this.Entity.p.PlotDetailsList.length == 0){
+  //     await this.uiUtils.showWarningToster('No plots can be added');
+  //   }else{
+  //     await this.uiUtils.showWarningToster('Only ' + this.Entity.p.NumberOfPlots +' '+ ' plots can be added');
+  //   }
+  // }
 
   SaveSite = async () => {
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-      this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-      this.Entity.p.PlotDetailsList = this.plots
-      this.Entity.p.OwnerDetailsList = this.owners
+      // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
       console.log('entityToSave :', entityToSave);
