@@ -128,7 +128,7 @@ getStateListByCountryRefforOwner = async (CountryRef: number) => {
 
   async addOwner() {
     if (!this.newOwner.Name || !this.newOwner.ContactNo) {
-      alert('Please fill in required fields');
+      await this.uiUtils.showWarningToster('All Fields are Required!')
       return;
     }
     // Create an Owner instance to generate a valid Ref
@@ -171,7 +171,7 @@ getStateListByCountryRefforOwner = async (CountryRef: number) => {
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      this.uiUtils.showErrorToster(tr.Message);
+       this.uiUtils.showErrorMessage('Error', tr.Message)
         return;
       } else {
         this.isSaveDisabled = false;
