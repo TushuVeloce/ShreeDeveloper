@@ -27,6 +27,7 @@ export class PlotMasterDetailsComponent implements OnInit {
   InitialEntity: Plot = null as any;
   BookingRemarkList = DomainEnums.BookingRemarkList(true, '---Select Booking Remark---');
   SiteRf:number =0
+  SiteName:string =''
 
   constructor(
     private router: Router,
@@ -37,6 +38,7 @@ export class PlotMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     const siteref = this.appStateManage.StorageKey.getItem('siteRf')
+    const siteName = this.appStateManage.StorageKey.getItem('SiteName')
     this.SiteRf = Number(siteref)
     this.appStateManage.setDropdownDisabled(true);
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
@@ -59,7 +61,7 @@ export class PlotMasterDetailsComponent implements OnInit {
 
   SavePlot = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     this.Entity.p.SiteRef = this.SiteRf
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];

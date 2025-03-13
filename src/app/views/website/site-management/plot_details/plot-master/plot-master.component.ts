@@ -27,36 +27,44 @@ export class PlotMasterComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-      private companystatemanagement: CompanyStateManagement,) {}
+      private companystatemanagement: CompanyStateManagement,) {
+        effect(() => {
+              this.FormulateSiteListByCompanyRef();
+        });
+      }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    await this.FormulateSiteList();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
 
   }
 
-  private FormulateSiteList = async () => {
-    let lst = await Site.FetchEntireList(async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-    this.SiteList = lst;
-    const defaultSite = this.SiteList.find((c) => c.p.Ref === 9163);
-    this.Entity.p.SiteRef = defaultSite ? defaultSite.p.Ref : this.SiteList[0]?.p.Ref;
-    this.loadPaginationData();
-  };
-
-  getPlotListByCompanyandSiteRefList = async (siteref: number) => {
+  FormulateSiteListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
+    this.Entity.p.SiteRef = 0;
+    this.appStateManage.setSiteRef(0,'')
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.appStateManage.setSiteRef(siteref)
-    let lst = await Plot.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(),siteref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
+    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SiteList = lst;
+    this.loadPaginationData();
+  }
 
+  getPlotListBySiteRef = async (siteref: number) => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    const selectedSite= this.SiteList.find(site => site.p.Ref === siteref);
+    if (!selectedSite) { 
+      await this.uiUtils.showErrorMessage('Error', `No site found `);
+      return; 
+  }
+    this.appStateManage.setSiteRef(siteref, selectedSite.p.Name);
+    let lst = await Plot.FetchEntireListBySiteRef(siteref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }

@@ -171,13 +171,13 @@ export class Plot implements IPersistable<Plot> {
     return Plot.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef:number,SiteRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-     let req = new PlotFetchRequest();
-     req.CompanyRefs.push(CompanyRef)
-     req.SiteRefs.push(SiteRef)
-     let tdResponse = await Plot.FetchTransportData(req, errorHandler) as TransportData;
-     return Plot.ListFromTransportData(tdResponse);
-   }
+    public static async FetchEntireListBySiteRef(siteref:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+      let req = new PlotFetchRequest();
+      req.SiteRefs.push(siteref)
+      let tdResponse = await Plot.FetchTransportData(req, errorHandler) as TransportData;
+      return Plot.ListFromTransportData(tdResponse);
+    }
+  
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

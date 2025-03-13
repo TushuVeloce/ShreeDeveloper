@@ -41,10 +41,15 @@ export class AppStateManageService {
     this.isDropdownDisabled.set(value);
   }
 
-  setSiteRef(value:number){
+  setSiteRef(value:number,Name:string){
     this.StorageKey.setItem('siteRf',value.toString())
+    this.StorageKey.setItem('siteName',Name)
   }
   
+  resetSiteRef(): void {
+    this.StorageKey.setItem('siteRf', '0');
+    this.StorageKey.setItem('siteName', '');
+  }
 
   // CompanyRef  start
 

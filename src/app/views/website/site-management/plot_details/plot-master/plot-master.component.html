@@ -1,4 +1,3 @@
-
 <div class="container-fluid">
   <div class="headers">
     <div class="row">
@@ -20,10 +19,10 @@
           <div class="row">
             <div class="col-md-4">
               <label for="SiteRef"><b>Site Name</b></label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-                [(ngModel)]="Entity.p.SiteRef" name="SiteRef" required id="SiteRef">
-                <nz-option *ngFor="let site of SiteList" [nzLabel]="site.p.Name"  (ngModelChange)="getPlotListByCompanyandSiteRefList(Entity.p.SiteRef)"
-                  [nzValue]="site.p.Ref"></nz-option>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteRef"
+                name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
+                (ngModelChange)="getPlotListBySiteRef(Entity.p.SiteRef)">
+                <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
               </nz-select>
             </div>
           </div>
