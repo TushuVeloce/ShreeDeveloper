@@ -126,15 +126,18 @@ getStateListByCountryRefforOwner = async (CountryRef: number) => {
   //   }
 
 
-  addOwner() {
+  async addOwner() {
     if (!this.newOwner.Name || !this.newOwner.ContactNo) {
       alert('Please fill in required fields');
       return;
     }
-    this.Entity.p.SiteManagementOwnerDetails.push({ ...this.newOwner }); // Push new owner
-    this.newOwner = OwnerDetailProps.Blank();
-    // Reset form after adding
-  }
+
+    // Create an Owner instance to generate a valid Ref
+    let ownerInstance = new Owner(this.newOwner, true);
+    await ownerInstance.EnsurePrimaryKeysWithValidValues(); // Assign a valid Ref
+    this.Entity.p.SiteManagementOwnerDetails.push({ ...ownerInstance.p }); 
+    this.newOwner = OwnerDetailProps.Blank(); // Reset form after adding
+}
 
   // removePlot(index: number) {
   //   this.Entity.p.PlotDetailsList.splice(index, 1); // Remove plot
