@@ -131,7 +131,7 @@ getStateListByCountryRefforOwner = async (CountryRef: number) => {
       alert('Please fill in required fields');
       return;
     }
-    this.Entity.p.OwnerDetailsList.push({ ...this.newOwner }); // Push new owner
+    this.Entity.p.SiteManagementOwnerDetails.push({ ...this.newOwner }); // Push new owner
     this.newOwner = OwnerDetailProps.Blank();
     // Reset form after adding
   }
@@ -141,7 +141,7 @@ getStateListByCountryRefforOwner = async (CountryRef: number) => {
   // }
 
   removeowner(index: number) {
-    this.Entity.p.OwnerDetailsList.splice(index, 1); // Remove owner
+    this.Entity.p.SiteManagementOwnerDetails.splice(index, 1); // Remove owner
   }
 
   // async addplotvalidation(){

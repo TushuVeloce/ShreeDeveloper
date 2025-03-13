@@ -38,7 +38,7 @@ export class SiteProps {
   public CompanyRef: number = 0;
   public CompanyName: string = '';
   // public PlotDetailsList: PlotDetailProps[] = [];
-  public OwnerDetailsList: OwnerDetailProps[] = [];
+  public SiteManagementOwnerDetails: OwnerDetailProps[] = [];
 
 
   public readonly IsNewlyCreated: boolean = false;
