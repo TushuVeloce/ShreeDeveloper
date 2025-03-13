@@ -5,7 +5,8 @@ import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
 import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
-import { OwnerDetailProps, PlotDetailProps, Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { Owner, OwnerDetailProps } from 'src/app/classes/domain/entities/website/masters/site/owner/owner';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -38,7 +39,7 @@ export class SiteManagementDetailsComponent implements OnInit {
   isModalOpen1: boolean = false;
   isModalOpen2: boolean = false;
   // newPlot: PlotDetailProps = new PlotDetailProps(); // Store all added plots
-  newOwner: OwnerDetailProps= new OwnerDetailProps(); // Store all added owners
+  newOwner: OwnerDetailProps = OwnerDetailProps.Blank(); // Creates a new instance with `isNewlyCreated = true`
 
   constructor(
     private router: Router,
@@ -131,7 +132,8 @@ getStateListByCountryRefforOwner = async (CountryRef: number) => {
       return;
     }
     this.Entity.p.OwnerDetailsList.push({ ...this.newOwner }); // Push new owner
-    this.newOwner = new OwnerDetailProps(); // Reset form after adding
+    this.newOwner = OwnerDetailProps.Blank();
+    // Reset form after adding
   }
 
   // removePlot(index: number) {
