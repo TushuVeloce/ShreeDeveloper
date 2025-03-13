@@ -51,7 +51,7 @@ export class PlotMasterDetailsComponent implements OnInit {
   SavePlot = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-    this.Entity.p.SiteRef = this.SiteRf
+    this.Entity.p.SiteManagementRef = this.SiteRf
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entityToSave :', entityToSave);
@@ -65,10 +65,10 @@ export class PlotMasterDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Site saved successfully!');
+        await this.uiUtils.showSuccessToster('Plot saved successfully!');
         this.Entity = Plot.CreateNewInstance();
       } else {
-        await this.uiUtils.showSuccessToster('Site Updated successfully!');
+        await this.uiUtils.showSuccessToster('Plot Updated successfully!');
       }
     }
   };

@@ -20,8 +20,8 @@
             <div class="col-md-4">
               <label for="SiteRef"><b>Site Name</b></label>
               <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteRef"
-                name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
-                (ngModelChange)="getPlotListBySiteRef(Entity.p.SiteRef)">
+                name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteManagementRef"
+                (ngModelChange)="getPlotListBySiteRef(Entity.p.SiteManagementRef)">
                 <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
               </nz-select>
             </div>
@@ -31,7 +31,7 @@
     </div>
   </div>
   <div class="card-body">
-    <!-- <div class="table-container" style="margin-top: 2rem;">
+    <div class="table-container" style="margin-top: 2rem;">
       <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
         nzFrontPagination="false" [nzShowSizeChanger]="false">
         <thead>
@@ -40,21 +40,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td Class="tbldata">1</td>
-            <td Class="tbldata">SMAPLE1</td>
-            <td Class="tbldata">20</td>
-            <td Class="tbldata">20</td>
+          <tr *ngFor="let plot of paginatedList; index as i">
+            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td Class="tbldata">{{plot.p.PlotNo}}</td>
             <td class="tbldata">
-              <span style="margin-left: 9px;">
+              <span style="margin-left: 9px;" (click)="onEditClicked(plot);">
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
               </span>
-              <span style="margin-left: 9px;">
+              <span style="margin-left: 9px;" (click)="onDeleteClicked(plot);">
                 <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
             </td>
           </tr>
         </tbody>
       </nz-table>
-    </div> -->
+    </div>
   </div>
 </div>

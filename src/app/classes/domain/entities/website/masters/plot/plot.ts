@@ -30,8 +30,7 @@ export class PlotProps {
   public Reference: string ='';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public SiteRef: number = 0;
-  public readonly SiteName: string = '';
+  public SiteManagementRef: number = 0;
 
 
   public readonly IsNewlyCreated: boolean = false;

@@ -48,7 +48,7 @@ export class PlotMasterComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     this.SiteList = [];
-    this.Entity.p.SiteRef = 0;
+    this.Entity.p.SiteManagementRef = 0;
     this.appStateManage.setSiteRef(0,'')
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
@@ -63,7 +63,7 @@ export class PlotMasterComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if(siteref > 0){
-      this.Entity.p.SiteRef = siteref;
+      this.Entity.p.SiteManagementRef = siteref;
       const selectedSite= this.SiteList.find(site => site.p.Ref === siteref);
       if (!selectedSite) { 
         return; 
@@ -76,6 +76,32 @@ export class PlotMasterComponent implements OnInit {
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
+
+  onEditClicked = async (item: Plot) => {
+    this.SelectedPlot = item.GetEditableVersion();
+    Plot.SetCurrentInstance(this.SelectedPlot);
+
+    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+
+    await this.router.navigate(['/homepage/Website/Plot_Master_Details']);
+  };
+
+  onDeleteClicked = async (plot: Plot) => {
+    await this.uiUtils.showConfirmationMessage(
+      'Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+      Are you sure that you want to DELETE this Plot?`,
+      async () => {
+        await plot.DeleteInstance(async () => {
+          await this.uiUtils.showSuccessToster(
+            `Material ${plot.p.PlotNo} has been deleted!`
+          );
+          this.SearchString = '';
+          this.loadPaginationData();
+        });
+      }
+    );
+  };
 
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
