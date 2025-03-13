@@ -111,6 +111,9 @@ export class PlotMasterComponent implements OnInit {
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
 
+  onPageChange = (pageIndex: number): void => {
+    this.currentPage = pageIndex; // Update the current page
+  };
 
   filterTable = () => {
     const searchTerm = this.SearchString?.trim().toLowerCase();
