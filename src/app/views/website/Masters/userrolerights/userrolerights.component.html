@@ -52,19 +52,25 @@
         nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="DisplayFeature">
         <thead>
           <tr>
-            <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+            <th class="tblheader">Features</th>
+            <th class="tblheader" *ngIf="!hideEditDelete">Add</th>
+            <th class="tblheader" *ngIf="!hideEditDelete">Edit</th>
+            <th class="tblheader" *ngIf="!hideEditDelete">Delete</th>
+            <th class="tblheader" *ngIf="!hideEditDelete">View</th>
+            <th class="tblheader">Print</th>
+            <th class="tblheader">Exports</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let feature of DisplayFeature; let i = index">
             <td Class="tbldata">{{ feature.FeatureName }}</td>
-            <td Class="tbldata"><label nz-checkbox class="labledt" [(ngModel)]="feature.CanAdd"></label>
+            <td Class="tbldata" *ngIf="!hideEditDelete"><label nz-checkbox class="labledt" [(ngModel)]="feature.CanAdd"></label>
             </td>
-            <td Class="tbldata"><label nz-checkbox [(ngModel)]="feature.CanEdit"></label>
+            <td Class="tbldata" *ngIf="!hideEditDelete"><label nz-checkbox [(ngModel)]="feature.CanEdit"></label>
             </td>
-            <td Class="tbldata"><label nz-checkbox [(ngModel)]="feature.CanDelete"></label>
+            <td Class="tbldata" *ngIf="!hideEditDelete"><label nz-checkbox [(ngModel)]="feature.CanDelete"></label>
             </td>
-            <td Class="tbldata"><label nz-checkbox [(ngModel)]="feature.CanView"></label>
+            <td Class="tbldata" *ngIf="!hideEditDelete"><label nz-checkbox [(ngModel)]="feature.CanView"></label>
             </td>
             <td Class="tbldata"><label nz-checkbox [(ngModel)]="feature.CanPrint"></label>
             </td>
