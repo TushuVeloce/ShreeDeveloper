@@ -177,12 +177,12 @@ export class Site implements IPersistable<Site> {
     let tdResponse = await Site.FetchTransportData(req, errorHandler) as TransportData;
     return Site.ListFromTransportData(tdResponse);
   }
-  // public static async FetchEntireListByProjectRef(ProjectRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-  //   let req = new SiteFetchRequest();
-  //   req.GAAProjectRefs.push(ProjectRef)
-  //   let tdResponse = await Site.FetchTransportData(req, errorHandler) as TransportData;
-  //   return Site.ListFromTransportData(tdResponse);
-  // }
+  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new SiteFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Site.FetchTransportData(req, errorHandler) as TransportData;
+    return Site.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
