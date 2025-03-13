@@ -1,3 +1,56 @@
-<p>
-  employee-exit-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackEmployeeExit()">
+          <img
+            src="/assets/icons/arrow-button.png"
+            alt=""
+            width="34px"
+            height="34px"
+          />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">{{DetailsFormTitle}}</span>
+      </div>
+    </div>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem;  ">
+        <div class="col-md-4">
+            <label>Employee Name </label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="EmployeeName
+              name="EmployeeName [nzSize]="'large'" [(ngModel)]="Entity.p.EmployeeRef">
+              <nz-option *ngFor="let employee of EmployeeList" [nzValue]="employee.p.Ref"
+                [nzLabel]="employee.p.Name"></nz-option>
+            </nz-select>
+        </div>
+
+        <div class="col-md-4">
+          <label>Date Of Join</label>
+          <input type="date" [(ngModel)]="Entity.p.DateOfJoin" name="DateOfJoin" class="form-control"
+            id="DateOfJoin" required />
+        </div>
+        <div class="col-md-4 mb-2">
+          <label>Date Of Exit</label>
+          <input type="date" [(ngModel)]="Entity.p.DateOfExit" name="DateOfExit" class="form-control"
+            id="DateOfExit" required />
+        </div>
+        
+      </div>
+      <div class="col-md-6 col-md-4 col-sm-12">
+        <label for="Reason">Reason</label>
+        <input type="text" [(ngModel)]="Entity.p.Reason" name="Reason" class="form-control" id="Reason" required
+          placeholder="Enter Reason" />
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+          <div>
+            <button type="button" class="btn" (click)="SaveEmployeeExitMaster()">Save</button>
+          </div>
+          <div>
+            <button type="button" class="btn"  (click)="BackEmployeeExit()">Back</button>
+          </div>
+      </div>
+    </form>
+  </div>
+</div>

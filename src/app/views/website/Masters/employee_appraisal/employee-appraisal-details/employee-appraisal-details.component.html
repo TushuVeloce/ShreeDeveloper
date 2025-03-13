@@ -1,3 +1,90 @@
-<p>
-  employee-appraisal-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackEmployeeAppraisal()">
+          <img
+            src="/assets/icons/arrow-button.png"
+            alt=""
+            width="34px"
+            height="34px"
+          />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">{{DetailsFormTitle}}</span>
+      </div>
+    </div>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem;">
+        <div class="col-md-6">
+          <div>
+            <label>Employee Name </label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="EmployeeName
+              name="EmployeeName [nzSize]="'large'" [(ngModel)]="Entity.p.EmployeeRef">
+              <nz-option *ngFor="let employee of EmployeeList" [nzValue]="employee.p.Ref"
+                [nzLabel]="employee.p.Name"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label>Appraisal Date</label>
+          <input type="date" [(ngModel)]="Entity.p.Appraisaldate" name="AppraisalDate" class="form-control"
+            id="AppraisalDate" required />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem;">
+        <div class="col-md-6 col-md-4 col-sm-12">
+          <label for="Name">Previous Designation</label>
+          <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
+            placeholder="Enter Previous Designation" />
+        </div>
+        <div class="col-md-6 col-md-4 col-sm-12">
+          <label for="NewDesignation">New Designation</label>
+          <input type="text" [(ngModel)]="Entity.p.NewDesignation" name="NewDesignation" class="form-control" id="NewDesignation" required
+            placeholder="Enter New Designation" />
+        </div>
+        
+      </div>
+
+      <div class="row" style="margin-top: 1rem;">
+        <div class="col-md-6 col-md-4 col-sm-12">
+          <label for="PreviousSalaryPerMonth">Previous Salary Per Month</label>
+          <input type="text" [(ngModel)]="Entity.p.PreviousSalaryPerMonth" name="PreviousSalaryPerMonth" class="form-control" id="PreviousSalaryPerMonth" required
+            placeholder="Enter Previous Salary Per Month" />
+        </div>
+        <div class="col-md-6 col-md-4 col-sm-12">
+          <label for="PreviousSalaryPerYear">Previous Salary Per Year</label>
+          <input type="text" [(ngModel)]="Entity.p.PreviousSalaryPerYear" name="PreviousSalaryPerYear" class="form-control" id="PreviousSalaryPerYear" required
+            placeholder="Enter Previous Salary Per Year" />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem;">
+        <div class="col-md-4 col-md-4 col-sm-12">
+          <label for="NewSalaryPerMonth">New Salary Per Month</label>
+          <input type="text" [(ngModel)]="Entity.p.NewSalaryPerMonth" name="NewSalaryPerMonth" class="form-control" id="NewSalaryPerMonth" required
+            placeholder="Enter New Salary PMonthear" />
+        </div>
+        <div class="col-md-4 col-md-4 col-sm-12">
+          <label for="NewSalaryPerYear">New Salary Per Year</label>
+          <input type="text" [(ngModel)]="Entity.p.NewSalaryPerYear" name="NewSalaryPerYear" class="form-control" id="NewSalaryPerYear" required
+            placeholder="Enter New Salary Per Year" />
+        </div>
+        <div class="col-md-4 col-md-4 col-sm-12">
+          <label for="Description">Description</label>
+          <input type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control" id="Description" required
+            placeholder="Enter Description" />
+        </div>
+        
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+          <div>
+            <button type="button" class="btn" (click)="SaveEmployeeAppraisalMaster()">Save</button>
+          </div>
+          <div>
+            <button type="button" class="btn"  (click)="BackEmployeeAppraisal()">Back</button>
+          </div>
+      </div>
+    </form>
+  </div>
+</div>

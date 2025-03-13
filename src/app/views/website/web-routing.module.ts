@@ -114,7 +114,7 @@ const routes: Routes = [
       { path: 'Employee_Master', component: EmployeeMasterComponent },
       { path: 'Employee_Master_Details', component: EmployeeMasterDetailsComponent },
 
-      { path: 'Employee_appraisal_Master_Details', component: EmployeeAppraisalDetailsComponent },
+      { path: 'Employee_Appraisal_Master_Details', component: EmployeeAppraisalDetailsComponent },
       { path: 'Employee_Appraisal_Master', component: EmployeeAppraisalMasterComponent },
 
       { path: 'Employee_Exit_Master_Details', component: EmployeeExitDetailsComponent },
