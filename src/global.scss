@@ -89,27 +89,27 @@
   text-align: right !important;
 }
 
-  .btn {
-    background-color: brown;
-    color: white;
-    padding: 0.4rem 2.1rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
+.btn {
+  background-color: brown !important;
+    color: white !important;
+    padding: 0.4rem 2.1rem !important;
+    border: none !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
+    transition: background-color 0.1s ease, transform 0.2s ease, box-shadow 0.3s ease !important ;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
 
   /* Hover Effect */
-  .btn:hover {
-    background-color: darkred;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-  }
+.btn:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3) !important;
+}
 
 // ========================== Input Class CSS Start =========================== //
 
