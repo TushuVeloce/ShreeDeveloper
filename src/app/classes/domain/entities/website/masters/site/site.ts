@@ -56,7 +56,7 @@ export class SiteProps {
 export class Site implements IPersistable<Site> {
   public static readonly Db_Table_Name: string = 'SiteManagement';
 
-  private constructor(public readonly p: SiteProps, public readonly AllowEdit: boolean) {
+  public constructor(public readonly p: SiteProps, public readonly AllowEdit: boolean) {
 
   }
 

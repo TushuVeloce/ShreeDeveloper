@@ -131,10 +131,13 @@ getStateListByCountryRefforOwner = async (CountryRef: number) => {
       alert('Please fill in required fields');
       return;
     }
-
     // Create an Owner instance to generate a valid Ref
     let ownerInstance = new Owner(this.newOwner, true);
+    let siteInstance = new Site(this.Entity.p, true);
     await ownerInstance.EnsurePrimaryKeysWithValidValues(); // Assign a valid Ref
+    await siteInstance.EnsurePrimaryKeysWithValidValues(); // Assign a valid Ref
+    console.log("ref",siteInstance.p.Ref)
+    this.newOwner.SiteManagementRef = this.Entity.p.Ref
     this.Entity.p.SiteManagementOwnerDetails.push({ ...ownerInstance.p }); 
     this.newOwner = OwnerDetailProps.Blank(); // Reset form after adding
 }
@@ -148,7 +151,6 @@ getStateListByCountryRefforOwner = async (CountryRef: number) => {
   }
 
   // async addplotvalidation(){
-  //   console.log('Entity.p.PlotDetailsList.length :', this.Entity.p.PlotDetailsList.length);
   //   if(this.Entity.p.NumberOfPlots == this.Entity.p.PlotDetailsList.length + 1){
   //     this.isModalOpen1 = true
   //   }else if(this.Entity.p.NumberOfPlots == 0 && this.Entity.p.PlotDetailsList.length == 0){
@@ -159,16 +161,17 @@ getStateListByCountryRefforOwner = async (CountryRef: number) => {
   // }
 
   SaveSite = async () => {
-      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-      // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-      let entityToSave = this.Entity.GetEditableVersion();
-      let entitiesToSave = [entityToSave];
-      console.log('entityToSave :', entityToSave);
-      // await this.Entity.EnsurePrimaryKeysWithValidValues()
-      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-      if (!tr.Successful) {
-        this.isSaveDisabled = false;
-        this.uiUtils.showErrorToster(tr.Message);
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    this.newOwner.SiteManagementRef = this.Entity.p.Ref
+    // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    let entityToSave = this.Entity.GetEditableVersion();
+    let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
+    // await this.Entity.EnsurePrimaryKeysWithValidValues()
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorToster(tr.Message);
         return;
       } else {
         this.isSaveDisabled = false;

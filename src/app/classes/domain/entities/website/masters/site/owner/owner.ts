@@ -25,6 +25,7 @@ export class OwnerDetailProps {
   public CountryRef: number = 0;
   public StateRef : number = 0;
   public CityRef : number = 0;
+  public SiteManagementRef : number = 0;
 
 
   public readonly IsNewlyCreated: boolean = false;
