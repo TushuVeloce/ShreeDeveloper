@@ -37,12 +37,17 @@ export class PlotMasterComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
-
+    const storedSiteRef = Number(this.appStateManage.StorageKey.getItem('siteRf'));
+    if (storedSiteRef > 0) {
+        console.log('Restoring selected site:', storedSiteRef);
+        await this.getPlotListBySiteRef(storedSiteRef);
+    }
   }
 
   FormulateSiteListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
+    this.SiteList = [];
     this.Entity.p.SiteRef = 0;
     this.appStateManage.setSiteRef(0,'')
     if (this.companyRef() <= 0) {
@@ -57,12 +62,15 @@ export class PlotMasterComponent implements OnInit {
   getPlotListBySiteRef = async (siteref: number) => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    const selectedSite= this.SiteList.find(site => site.p.Ref === siteref);
-    if (!selectedSite) { 
-      await this.uiUtils.showErrorMessage('Error', `No site found `);
-      return; 
-  }
-    this.appStateManage.setSiteRef(siteref, selectedSite.p.Name);
+    if(siteref > 0){
+      this.Entity.p.SiteRef = siteref;
+      const selectedSite= this.SiteList.find(site => site.p.Ref === siteref);
+      if (!selectedSite) { 
+        return; 
+    }
+      this.appStateManage.StorageKey.setItem('siteRf', String(siteref));
+      this.appStateManage.StorageKey.setItem('siteName', selectedSite.p.Name);
+    }
     let lst = await Plot.FetchEntireListBySiteRef(siteref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;

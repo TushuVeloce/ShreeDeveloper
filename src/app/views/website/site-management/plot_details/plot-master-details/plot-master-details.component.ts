@@ -38,21 +38,10 @@ export class PlotMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     const siteref = this.appStateManage.StorageKey.getItem('siteRf')
-    const siteName = this.appStateManage.StorageKey.getItem('SiteName')
-    this.SiteRf = Number(siteref)
+    const siteName = this.appStateManage.StorageKey.getItem('siteName')
+    this.SiteRf = siteref ? Number(siteref) : 0;
+    this.SiteName = siteName ? siteName : '';
     this.appStateManage.setDropdownDisabled(true);
-    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-      this.IsNewEntity = false;
-
-      this.DetailsFormTitle = this.IsNewEntity
-        ? 'New Plot'
-        : 'Edit Plot';
-      this.Entity = Plot.GetCurrentInstance();
-      this.appStateManage.StorageKey.removeItem('Editable');
-    } else {
-      this.Entity = Plot.CreateNewInstance();
-      Plot.SetCurrentInstance(this.Entity);
-    }
     this.InitialEntity = Object.assign(
       Plot.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
