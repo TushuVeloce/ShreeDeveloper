@@ -4,17 +4,17 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class SiteFetchRequest
+export class OwnerFetchRequest
 {
     // public static readonly FetchRequestType: string = "GAAProjectSpaceGroupFetchRequest";
-    public static readonly FetchRequestType: string = "SiteManagementFetchRequest";
-
-    SiteRefs: number[] = [];
+    public static readonly FetchRequestType: string = "OwnerFetchRequest";
     CompanyRefs: number[] = [];
+    SiteRefs: number[] = [];
+    OwnerRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, SiteFetchRequest.FetchRequestType) as DataCollection;
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, OwnerFetchRequest.FetchRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 

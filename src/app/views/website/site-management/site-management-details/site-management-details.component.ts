@@ -5,7 +5,8 @@ import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
 import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
-import { OwnerDetailProps, PlotDetailProps, Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { Owner, OwnerDetailProps } from 'src/app/classes/domain/entities/website/masters/site/owner/owner';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -38,7 +39,7 @@ export class SiteManagementDetailsComponent implements OnInit {
   isModalOpen1: boolean = false;
   isModalOpen2: boolean = false;
   // newPlot: PlotDetailProps = new PlotDetailProps(); // Store all added plots
-  newOwner: OwnerDetailProps= new OwnerDetailProps(); // Store all added owners
+  newOwner: OwnerDetailProps = OwnerDetailProps.Blank(); // Creates a new instance with `isNewlyCreated = true`
 
   constructor(
     private router: Router,
@@ -125,25 +126,31 @@ getStateListByCountryRefforOwner = async (CountryRef: number) => {
   //   }
 
 
-  addOwner() {
+  async addOwner() {
     if (!this.newOwner.Name || !this.newOwner.ContactNo) {
-      alert('Please fill in required fields');
+      await this.uiUtils.showWarningToster('All Fields are Required!')
       return;
     }
-    this.Entity.p.OwnerDetailsList.push({ ...this.newOwner }); // Push new owner
-    this.newOwner = new OwnerDetailProps(); // Reset form after adding
-  }
+    // Create an Owner instance to generate a valid Ref
+    let ownerInstance = new Owner(this.newOwner, true);
+    let siteInstance = new Site(this.Entity.p, true);
+    await ownerInstance.EnsurePrimaryKeysWithValidValues(); // Assign a valid Ref
+    await siteInstance.EnsurePrimaryKeysWithValidValues(); // Assign a valid Ref
+    console.log("ref",siteInstance.p.Ref)
+    this.newOwner.SiteManagementRef = this.Entity.p.Ref
+    this.Entity.p.SiteManagementOwnerDetails.push({ ...ownerInstance.p }); 
+    this.newOwner = OwnerDetailProps.Blank(); // Reset form after adding
+}
 
   // removePlot(index: number) {
   //   this.Entity.p.PlotDetailsList.splice(index, 1); // Remove plot
   // }
 
   removeowner(index: number) {
-    this.Entity.p.OwnerDetailsList.splice(index, 1); // Remove owner
+    this.Entity.p.SiteManagementOwnerDetails.splice(index, 1); // Remove owner
   }
 
   // async addplotvalidation(){
-  //   console.log('Entity.p.PlotDetailsList.length :', this.Entity.p.PlotDetailsList.length);
   //   if(this.Entity.p.NumberOfPlots == this.Entity.p.PlotDetailsList.length + 1){
   //     this.isModalOpen1 = true
   //   }else if(this.Entity.p.NumberOfPlots == 0 && this.Entity.p.PlotDetailsList.length == 0){
@@ -154,16 +161,17 @@ getStateListByCountryRefforOwner = async (CountryRef: number) => {
   // }
 
   SaveSite = async () => {
-      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-      // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-      let entityToSave = this.Entity.GetEditableVersion();
-      let entitiesToSave = [entityToSave];
-      console.log('entityToSave :', entityToSave);
-      // await this.Entity.EnsurePrimaryKeysWithValidValues()
-      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-      if (!tr.Successful) {
-        this.isSaveDisabled = false;
-        this.uiUtils.showErrorToster(tr.Message);
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    this.newOwner.SiteManagementRef = this.Entity.p.Ref
+    // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    let entityToSave = this.Entity.GetEditableVersion();
+    let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
+    // await this.Entity.EnsurePrimaryKeysWithValidValues()
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+       this.uiUtils.showErrorMessage('Error', tr.Message)
         return;
       } else {
         this.isSaveDisabled = false;

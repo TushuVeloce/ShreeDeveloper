@@ -10,53 +10,40 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { SiteFetchRequest } from "./sitefetchrequest";
-import { OwnerDetailProps } from "./owner/owner";
+import { OwnerFetchRequest } from "./ownerfetchrequest";
 
 
-
-export class SiteProps {
-  public readonly Db_Table_Name = "SiteManagement";
+export class OwnerDetailProps {
+  public readonly Db_Table_Name = "SiteManagementOwnerDetails";
   public Ref: number = 0;
-  public Name: string = '';
-  public AddressLine1 : string = '';
-  public AddressLine2 : string = '';
-  public PinCode : string = '';
+  public Name: string ='';
+  public ContactNo : string ='';
+  public EmailId : string ='';
+  public AddressLine1: string ='';
+  public AddressLine2: string ='';
+  public PinCode : string ='';
   public CountryRef: number = 0;
-  public readonly CountryName: boolean = false;
-  public StateRef: number = 0;
-  public readonly StateName: boolean = false;
-  public CityRef: number = 0;
-  public readonly CityName: boolean = false;
-  public SiteInchargeRef   : number = 0;
-  public EstimatedStartingDate : string = '';
-  public EstimatedEndDate : string = '';
-  public EstimatedCost  : number = 0;
-  public TotalLandAreaInSqm   : number = 0;
-  public TotalLandAreaInSqft    : number = 0;
-  public NumberOfPlots : number = 0;
-  public CompanyRef: number = 0;
-  public CompanyName: string = '';
-  // public PlotDetailsList: PlotDetailProps[] = [];
-  public SiteManagementOwnerDetails: OwnerDetailProps[] = [];
+  public StateRef : number = 0;
+  public CityRef : number = 0;
+  public SiteManagementRef : number = 0;
 
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
 
-  private constructor(isNewlyCreated: boolean) {
+  public constructor(isNewlyCreated: boolean) {
     this.IsNewlyCreated = isNewlyCreated;
   }
 
   public static Blank() {
-    return new SiteProps(true);
+    return new OwnerDetailProps(true);
   }
 }
 
-export class Site implements IPersistable<Site> {
-  public static readonly Db_Table_Name: string = 'SiteManagement';
+export class Owner implements IPersistable<Owner> {
+  public static readonly Db_Table_Name: string = 'SiteManagementOwnerDetails';
 
-  public constructor(public readonly p: SiteProps, public readonly AllowEdit: boolean) {
+  public constructor(public readonly p: OwnerDetailProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -69,17 +56,17 @@ export class Site implements IPersistable<Site> {
     }
   }
 
-  public GetEditableVersion(): Site {
-    let newState: SiteProps = Utils.GetInstance().DeepCopy(this.p);
-    return Site.CreateInstance(newState, true);
+  public GetEditableVersion(): Owner {
+    let newState: OwnerDetailProps = Utils.GetInstance().DeepCopy(this.p);
+    return Owner.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new Site(SiteProps.Blank(), true);
+    return new Owner(OwnerDetailProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new Site(data as SiteProps, allowEdit);
+    return new Owner(data as OwnerDetailProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
@@ -88,28 +75,28 @@ export class Site implements IPersistable<Site> {
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Site.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Owner.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: Site = Site.CreateNewInstance();
+  private static m_currentInstance: Owner = Owner.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return Site.m_currentInstance;
+    return Owner.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: Site) {
-    Site.m_currentInstance = value;
+  public static SetCurrentInstance(value: Owner) {
+    Owner.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): Site {
+  public static SingleInstanceFromTransportData(td: TransportData): Owner {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, Site.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, Site.Db_Table_Name)!.Entries) {
-        return Site.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, Owner.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, Owner.Db_Table_Name)!.Entries) {
+        return Owner.CreateInstance(data, false);
       }
     }
 
@@ -118,13 +105,13 @@ export class Site implements IPersistable<Site> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Site[] {
-    let result: Site[] = [];
+    sortPropertyName: string = "Name"): Owner[] {
+    let result: Owner[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, Site.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, Site.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, Owner.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, Owner.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -134,18 +121,18 @@ export class Site implements IPersistable<Site> {
       }
 
       for (let data of entries) {
-        result.push(Site.CreateInstance(data, false));
+        result.push(Owner.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): Site[] {
-    return Site.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): Owner[] {
+    return Owner.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: SiteFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: OwnerFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -160,29 +147,31 @@ export class Site implements IPersistable<Site> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new SiteFetchRequest();
-    req.SiteRefs.push(ref);
+    let req = new OwnerFetchRequest();
+    req.OwnerRefs.push(ref);
 
-    let tdResponse = await Site.FetchTransportData(req, errorHandler) as TransportData;
-    return Site.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await Owner.FetchTransportData(req, errorHandler) as TransportData;
+    return Owner.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: SiteFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await Site.FetchTransportData(req, errorHandler) as TransportData;
-    return Site.ListFromTransportData(tdResponse);
+  public static async FetchList(req: OwnerFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await Owner.FetchTransportData(req, errorHandler) as TransportData;
+    return Owner.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new SiteFetchRequest();
-    let tdResponse = await Site.FetchTransportData(req, errorHandler) as TransportData;
-    return Site.ListFromTransportData(tdResponse);
+    let req = new OwnerFetchRequest();
+    let tdResponse = await Owner.FetchTransportData(req, errorHandler) as TransportData;
+    return Owner.ListFromTransportData(tdResponse);
   }
-  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new SiteFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await Site.FetchTransportData(req, errorHandler) as TransportData;
-    return Site.ListFromTransportData(tdResponse);
-  }
+
+   public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef:number,SiteRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+     let req = new OwnerFetchRequest();
+     req.CompanyRefs.push(CompanyRef)
+     req.SiteRefs.push(SiteRef)
+     let tdResponse = await Owner.FetchTransportData(req, errorHandler) as TransportData;
+     return Owner.ListFromTransportData(tdResponse);
+   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

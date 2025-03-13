@@ -164,7 +164,7 @@
           </div>
         </div>
         <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{ x: 'auto' }"
-          nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.OwnerDetailsList">
+          nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.SiteManagementOwnerDetails">
           <thead>
             <tr>
               <th *ngFor="let header of ownerheaders" class="tblheadersecond">
@@ -173,7 +173,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let owner of Entity.p.OwnerDetailsList; let i = index">
+            <tr *ngFor="let owner of Entity.p.SiteManagementOwnerDetails; let i = index">
               <td Class="tbldata">{{ i}}</td>
               <td Class="tbldata">{{ owner.Name }}</td>
               <td Class="tbldata">{{ owner.ContactNo }}</td>

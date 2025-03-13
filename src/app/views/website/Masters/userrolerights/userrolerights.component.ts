@@ -39,8 +39,9 @@ export class UserrolerightsComponent implements OnInit {
   FeatureGroupRef: number = 0;
 
   DepartmentRef: number = 0;
+  hideEditDelete: boolean = false;
 
-  headers: string[] = ['Features', 'Add', 'Edit', 'Delete', 'View', 'Print', 'Exports',];
+  // headers: string[] = ['Features', 'Add', 'Edit', 'Delete', 'View', 'Print', 'Exports',];
   // modules: { FeatureName: string; CanAdd: boolean; CanEdit: boolean; CanDelete: boolean; CanView: boolean; CanPrint: boolean; CanExport: boolean }[] = [{
   //   FeatureName: '',
   //   CanAdd: false,
@@ -53,6 +54,8 @@ export class UserrolerightsComponent implements OnInit {
   // Feature: FeatureO[] = [];
   DisplayFeature: FeatureProps[] = [];
   Feature: FeatureProps[] = [];
+
+  IsReportDisplay: boolean = false;
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -127,8 +130,11 @@ export class UserrolerightsComponent implements OnInit {
       return;
     }
 
+    this.hideEditDelete = (featureGroupRef === 30);
+
     this.DisplayFeature = []
     this.DisplayFeature = this.Feature.filter(e => e.FeatureGroupRef == featureGroupRef);
+    console.log(this.DisplayFeature);
   }
 
   getUserRoleRights = async (departmentref: number, designationref: number) => {
@@ -172,7 +178,7 @@ export class UserrolerightsComponent implements OnInit {
 
     if (!tr.Successful) {
       // this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error',tr.Message);
+      this.uiUtils.showErrorMessage('Error', tr.Message);
       return
     }
     else {
