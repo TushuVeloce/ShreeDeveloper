@@ -7,9 +7,10 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 export class OwnerFetchRequest
 {
     // public static readonly FetchRequestType: string = "GAAProjectSpaceGroupFetchRequest";
-    public static readonly FetchRequestType: string = "OwnerFetchRequest";
+    public static readonly FetchRequestType: string = "OwnerDetailsFetchRequest";
     CompanyRefs: number[] = [];
-    SiteRefs: number[] = [];
+    SiteManagementRefs: number[] = [];
+    BookingRemarkRefs: number[] = [];
     OwnerRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>

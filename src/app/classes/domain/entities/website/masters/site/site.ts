@@ -161,7 +161,7 @@ export class Site implements IPersistable<Site> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new SiteFetchRequest();
-    req.SiteRefs.push(ref);
+    req.SiteManagementRefs.push(ref);
 
     let tdResponse = await Site.FetchTransportData(req, errorHandler) as TransportData;
     return Site.SingleInstanceFromTransportData(tdResponse);

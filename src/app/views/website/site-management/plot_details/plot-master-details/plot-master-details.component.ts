@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
-import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
-import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
-import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
-import { Customer } from 'src/app/classes/domain/entities/website/masters/plot/customer/customer';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
+import { Owner } from 'src/app/classes/domain/entities/website/masters/site/owner/owner';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -29,7 +26,7 @@ export class PlotMasterDetailsComponent implements OnInit {
   BookingRemarkList = DomainEnums.BookingRemarkList(true, '---Select Booking Remark---');
   SiteRf: number = 0
   SiteName: string = ''
-  CustomerList: Customer[] = [];
+  CustomerList: Owner[] = [];
 
   constructor(
     private router: Router,
@@ -60,14 +57,14 @@ export class PlotMasterDetailsComponent implements OnInit {
   }
 
   getCustomerListBySiteandBookingRef = async (SiteRf:number,bookingremark:number) => {
-    alert("hh")
     this.CustomerList = [];
     if (SiteRf <= 0 && bookingremark <= 0) {
       await this.uiUtils.showErrorToster('Site or Booking Remark not Selected');
       return;
     }
-    let lst = await Customer.FetchEntireListBySiteandBookingRemarkRef(SiteRf,bookingremark, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Owner.FetchEntireListBySiteandBookingRemarkRef(SiteRf,bookingremark, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.CustomerList = lst;
+    console.log('CustomerList :', this.CustomerList);
   }
 
   SavePlot = async () => {

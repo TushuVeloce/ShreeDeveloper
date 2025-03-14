@@ -40,7 +40,7 @@ export class OwnerDetailProps {
   }
 }
 
-export class Owner implements IPersistable<Owner> {
+export class  Owner implements IPersistable<Owner> {
   public static readonly Db_Table_Name: string = 'SiteManagementOwnerDetails';
 
   public constructor(public readonly p: OwnerDetailProps, public readonly AllowEdit: boolean) {
@@ -168,10 +168,19 @@ export class Owner implements IPersistable<Owner> {
    public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef:number,SiteRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
      let req = new OwnerFetchRequest();
      req.CompanyRefs.push(CompanyRef)
-     req.SiteRefs.push(SiteRef)
+     req.SiteManagementRefs.push(SiteRef)
      let tdResponse = await Owner.FetchTransportData(req, errorHandler) as TransportData;
      return Owner.ListFromTransportData(tdResponse);
    }
+
+    public static async FetchEntireListBySiteandBookingRemarkRef(siteref:number,bookingremark:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+       let req = new OwnerFetchRequest();
+       req.SiteManagementRefs.push(siteref)
+       req.BookingRemarkRefs.push(bookingremark)
+       let tdResponse = await Owner.FetchTransportData(req, errorHandler) as TransportData;
+       return Owner.ListFromTransportData(tdResponse);
+     }
+   
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
