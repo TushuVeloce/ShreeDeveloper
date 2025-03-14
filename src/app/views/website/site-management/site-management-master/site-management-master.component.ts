@@ -23,7 +23,6 @@ export class SiteManagementMasterComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   headers: string[] = ['Sr.No.', 'Site Name', 'Supervisor Name', 'Actual stage', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
@@ -34,7 +33,9 @@ export class SiteManagementMasterComponent implements OnInit {
       this.getSiteListByCompanyRef();
     });
   }
-  ngOnInit() { }
+  ngOnInit() {
+      this.appStateManage.setDropdownDisabled(false);
+   }
 
   getSiteListByCompanyRef = async () => {
     this.MasterList = [];

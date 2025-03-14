@@ -4,6 +4,7 @@ import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
 import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
+import { Customer } from 'src/app/classes/domain/entities/website/masters/plot/customer/customer';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
@@ -21,13 +22,14 @@ import { Utils } from 'src/app/services/utils.service';
 export class PlotMasterDetailsComponent implements OnInit {
   Entity: Plot = Plot.CreateNewInstance();
   private IsNewEntity: boolean = true;
-  isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Plot' | 'Edit Plot' = 'New Plot';
+  isSaveDisabled: boolean = false;
   IsDropdownDisabled: boolean = false;
   InitialEntity: Plot = null as any;
   BookingRemarkList = DomainEnums.BookingRemarkList(true, '---Select Booking Remark---');
-  SiteRf:number =0
-  SiteName:string =''
+  SiteRf: number = 0
+  SiteName: string = ''
+  CustomerList: Customer[] = [];
 
   constructor(
     private router: Router,
@@ -42,10 +44,30 @@ export class PlotMasterDetailsComponent implements OnInit {
     this.SiteRf = siteref ? Number(siteref) : 0;
     this.SiteName = siteName ? siteName : '';
     this.appStateManage.setDropdownDisabled(true);
+    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+      this.IsNewEntity = false;
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Plot' : 'Edit Plot';
+      this.Entity = Plot.GetCurrentInstance();
+      this.appStateManage.StorageKey.removeItem('Editable');
+    } else {
+      this.Entity = Plot.CreateNewInstance();
+      Plot.SetCurrentInstance(this.Entity);
+    }
     this.InitialEntity = Object.assign(
       Plot.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as Plot;
+  }
+
+  getCustomerListBySiteandBookingRef = async (SiteRf:number,bookingremark:number) => {
+    alert("hh")
+    this.CustomerList = [];
+    if (SiteRf <= 0 && bookingremark <= 0) {
+      await this.uiUtils.showErrorToster('Site or Booking Remark not Selected');
+      return;
+    }
+    let lst = await Customer.FetchEntireListBySiteandBookingRemarkRef(SiteRf,bookingremark, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.CustomerList = lst;
   }
 
   SavePlot = async () => {

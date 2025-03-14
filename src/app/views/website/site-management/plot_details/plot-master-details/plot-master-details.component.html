@@ -120,6 +120,7 @@
             name="BookingRemark"
             [nzSize]="'large'"
             [(ngModel)]="Entity.p.BookingRemark"
+            (ngModelChange)="getCustomerListBySiteandBookingRef(this.SiteRf,Entity.p.BookingRemark)"
           >
             <nz-option
               *ngFor="let bookingremark of BookingRemarkList"
@@ -131,16 +132,12 @@
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
-          <label>Customer Name</label>
-          <input
-            type="text"
-            name="CustomerName"
-            class="form-control date-input"
-            id="CustomerName"
-            [(ngModel)]="Entity.p.CustomerName"
-            required
-            placeholder="Enter Customer Name"
-          />
+          <label>CustomerRef</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+          [(ngModel)]="Entity.p.CustomerRef" name="CustomerRef" required id="CustomerRef">
+          <nz-option *ngFor="let customer of CustomerList" [nzLabel]="customer.p.Name"
+            [nzValue]="customer.p.Ref"></nz-option>
+        </nz-select>
         </div>
         <div class="col-md-4">
           <label>Address</label>

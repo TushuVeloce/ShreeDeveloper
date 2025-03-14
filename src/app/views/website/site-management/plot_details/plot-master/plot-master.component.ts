@@ -23,7 +23,7 @@ export class PlotMasterComponent implements OnInit {
   pageSize = 8; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  headers: string[] = ['Sr.No.', 'Plot Name'];
+  headers: string[] = ['Sr.No.', 'Plot No','Area sq.m','Area sq.ft','Gov Rate/Sq m','Gov Rate/Sq ft','Basic Rate/Sq m','Basic Rate/Sq ft','Booking Remark','Action',];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
@@ -74,17 +74,17 @@ export class PlotMasterComponent implements OnInit {
     let lst = await Plot.FetchEntireListBySiteRef(siteref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
+    console.log('DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
   }
 
   onEditClicked = async (item: Plot) => {
     this.SelectedPlot = item.GetEditableVersion();
     Plot.SetCurrentInstance(this.SelectedPlot);
-
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-
     await this.router.navigate(['/homepage/Website/Plot_Master_Details']);
   };
+  
 
   onDeleteClicked = async (plot: Plot) => {
     await this.uiUtils.showConfirmationMessage(

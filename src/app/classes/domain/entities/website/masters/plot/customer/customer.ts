@@ -10,28 +10,17 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { PlotFetchRequest } from "./plotfetchrequest";
+import { CustomerFetchRequest } from "./customerfetchrequest";
 
 
-export class PlotProps {
-  public readonly Db_Table_Name = "SiteManagementPlotDetails";
+export class CustomerProps {
+  public readonly Db_Table_Name = "SiteManagementCustomerDetails";
   public Ref: number = 0;
-  public PlotNo: string ='';
-  public AreaInSqm: number =0;
-  public AreaInSqft: number =0;
-  public GovermentRatePerSqm: number =0;
-  public GovermentRatePerSqft:number =0;
-  public BasicRatePerSqm : number =0;
-  public BasicRatePerSqft : number =0;
-  public BookingRemark : number =0;
-  public CustomerName: string ='';
+  public Name: string ='';
   public Address: string ='';
   public MobNo: string ='';
   public Reference: string ='';
-  public CompanyRef: number = 0;
-  public CompanyName: string = '';
-  public SiteManagementRef: number = 0;
-  public CustomerRef: number = 0;
+
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -41,14 +30,14 @@ export class PlotProps {
   }
 
   public static Blank() {
-    return new PlotProps(true);
+    return new CustomerProps(true);
   }
 }
 
-export class Plot implements IPersistable<Plot> {
-  public static readonly Db_Table_Name: string = 'SiteManagementPlotDetails';
+export class Customer implements IPersistable<Customer> {
+  public static readonly Db_Table_Name: string = 'SiteManagementCustomerDetails';
 
-  private constructor(public readonly p: PlotProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: CustomerProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -61,47 +50,47 @@ export class Plot implements IPersistable<Plot> {
     }
   }
 
-  public GetEditableVersion(): Plot {
-    let newState: PlotProps = Utils.GetInstance().DeepCopy(this.p);
-    return Plot.CreateInstance(newState, true);
+  public GetEditableVersion(): Customer {
+    let newState: CustomerProps = Utils.GetInstance().DeepCopy(this.p);
+    return Customer.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new Plot(PlotProps.Blank(), true);
+    return new Customer(CustomerProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new Plot(data as PlotProps, allowEdit);
+    return new Customer(data as CustomerProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.PlotNo == '') vra.add('PlotNo', 'Plot No cannot be blank.');
+    if (this.p.Name == '') vra.add('Name', 'Customer Name cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Plot.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Customer.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: Plot = Plot.CreateNewInstance();
+  private static m_currentInstance: Customer = Customer.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return Plot.m_currentInstance;
+    return Customer.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: Plot) {
-    Plot.m_currentInstance = value;
+  public static SetCurrentInstance(value: Customer) {
+    Customer.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): Plot {
+  public static SingleInstanceFromTransportData(td: TransportData): Customer {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, Plot.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, Plot.Db_Table_Name)!.Entries) {
-        return Plot.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, Customer.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, Customer.Db_Table_Name)!.Entries) {
+        return Customer.CreateInstance(data, false);
       }
     }
 
@@ -110,13 +99,13 @@ export class Plot implements IPersistable<Plot> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Plot[] {
-    let result: Plot[] = [];
+    sortPropertyName: string = "Name"): Customer[] {
+    let result: Customer[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, Plot.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, Plot.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, Customer.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, Customer.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -126,18 +115,18 @@ export class Plot implements IPersistable<Plot> {
       }
 
       for (let data of entries) {
-        result.push(Plot.CreateInstance(data, false));
+        result.push(Customer.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): Plot[] {
-    return Plot.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): Customer[] {
+    return Customer.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: PlotFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: CustomerFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -152,29 +141,30 @@ export class Plot implements IPersistable<Plot> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new PlotFetchRequest();
-    req.PlotRefs.push(ref);
+    let req = new CustomerFetchRequest();
+    req.CustomerRefs.push(ref);
 
-    let tdResponse = await Plot.FetchTransportData(req, errorHandler) as TransportData;
-    return Plot.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await Customer.FetchTransportData(req, errorHandler) as TransportData;
+    return Customer.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: PlotFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await Plot.FetchTransportData(req, errorHandler) as TransportData;
-    return Plot.ListFromTransportData(tdResponse);
+  public static async FetchList(req: CustomerFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await Customer.FetchTransportData(req, errorHandler) as TransportData;
+    return Customer.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new PlotFetchRequest();
-    let tdResponse = await Plot.FetchTransportData(req, errorHandler) as TransportData;
-    return Plot.ListFromTransportData(tdResponse);
+    let req = new CustomerFetchRequest();
+    let tdResponse = await Customer.FetchTransportData(req, errorHandler) as TransportData;
+    return Customer.ListFromTransportData(tdResponse);
   }
 
-    public static async FetchEntireListBySiteRef(siteref:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-      let req = new PlotFetchRequest();
+    public static async FetchEntireListBySiteandBookingRemarkRef(siteref:number,bookingremark:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+      let req = new CustomerFetchRequest();
       req.SiteManagementRefs.push(siteref)
-      let tdResponse = await Plot.FetchTransportData(req, errorHandler) as TransportData;
-      return Plot.ListFromTransportData(tdResponse);
+      req.BookingRemarkRefs.push(bookingremark)
+      let tdResponse = await Customer.FetchTransportData(req, errorHandler) as TransportData;
+      return Customer.ListFromTransportData(tdResponse);
     }
   
 
