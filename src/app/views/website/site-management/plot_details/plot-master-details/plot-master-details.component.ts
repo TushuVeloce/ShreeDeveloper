@@ -27,6 +27,12 @@ export class PlotMasterDetailsComponent implements OnInit {
   SiteRf: number = 0
   SiteName: string = ''
   CustomerList: Owner[] = [];
+  CoustomerName:string=''
+  CoustomerMob:string=''
+  CoustomerCountry:string=''
+  CoustomerState:string=''
+  CoustomerCity:string=''
+  CoustomerAddress:string=''
 
   constructor(
     private router: Router,
@@ -54,17 +60,29 @@ export class PlotMasterDetailsComponent implements OnInit {
       Plot.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as Plot;
+    this.getCustomerListBySiteandBookingRef(this.SiteRf)
   }
 
-  getCustomerListBySiteandBookingRef = async (SiteRf:number,bookingremark:number) => {
+  getCustomerListBySiteandBookingRef = async (SiteRf:number) => {
     this.CustomerList = [];
-    if (SiteRf <= 0 && bookingremark <= 0) {
+    if (SiteRf <= 0) {
       await this.uiUtils.showErrorToster('Site or Booking Remark not Selected');
       return;
     }
-    let lst = await Owner.FetchEntireListBySiteandBookingRemarkRef(SiteRf,bookingremark, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Owner.FetchEntireListBySiteRef(SiteRf, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.CustomerList = lst;
-    console.log('CustomerList :', this.CustomerList);
+  }
+
+  getCustomerDataBycustomerRef(customerref:number){
+    let customer = this.CustomerList.find(customer => customer.p.Ref == customerref)
+    console.log('customer :', customer);
+    if(customer){
+      this.CoustomerAddress= customer.p.AddressLine;
+      this.CoustomerMob = customer.p.ContactNo;
+      this.CoustomerCountry= customer.p.CountryName
+      this.CoustomerState= customer.p.StateName
+      this.CoustomerCity= customer.p.CityName
+    }
   }
 
   SavePlot = async () => {

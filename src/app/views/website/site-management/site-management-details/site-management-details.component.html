@@ -178,8 +178,7 @@
               <td Class="tbldata">{{ owner.Name }}</td>
               <td Class="tbldata">{{ owner.ContactNo }}</td>
               <td Class="tbldata">{{ owner.EmailId }}</td>
-              <td Class="tbldata">{{ owner.AddressLine1 }}</td>
-              <td Class="tbldata">{{ owner.AddressLine2 }}</td>
+              <td Class="tbldata">{{ owner.AddressLine }}</td>
               <!-- <td Class="tbldata">{{ owner.CityRef }}</td> -->
               <td Class="tbldata">{{ owner.PinCode }}</td>
               <td Class="tbldata">
@@ -369,23 +368,28 @@
         </div>
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
-            <label>AddressLine 1</label>
-            <input type="text" name="AddressLine1" class="form-control" [(ngModel)]="newOwner.AddressLine1" required
-              placeholder="Enter AddressLine 1" />
+            <label>AddressLine</label>
+            <input type="text" name="AddressLine" class="form-control" [(ngModel)]="newOwner.AddressLine" required
+              placeholder="Enter AddressLine" />
           </div>
-          <div class="col-md-6">
+          <!-- <div class="col-md-6">
             <label>AddressLine 2</label>
             <input type="text" name="AddressLine2" class="form-control" [(ngModel)]="newOwner.AddressLine2" required
               placeholder="Enter AddressLine 2" />
+          </div> -->
+          <div class="col-md-6">
+            <label>Pin Code</label>
+            <input type="text" name="PinCode" class="form-control" [(ngModel)]="newOwner.PinCode" required
+              placeholder="Enter Pin Code" />
           </div>
         </div>
-          <div class="row" style="margin-top: 1rem">
+          <!-- <div class="row" style="margin-top: 1rem">
             <div class="col-md-6">
               <label>Pin Code</label>
               <input type="text" name="PinCode" class="form-control" [(ngModel)]="newOwner.PinCode" required
                 placeholder="Enter Pin Code" />
             </div>
-          </div>
+          </div> -->
       </form>
     </div>
     <div class="custom-modal-footer">

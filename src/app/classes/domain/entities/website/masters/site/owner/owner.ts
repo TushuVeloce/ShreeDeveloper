@@ -19,12 +19,14 @@ export class OwnerDetailProps {
   public Name: string ='';
   public ContactNo : string ='';
   public EmailId : string ='';
-  public AddressLine1: string ='';
-  public AddressLine2: string ='';
+  public AddressLine: string ='';
   public PinCode : string ='';
   public CountryRef: number = 0;
+  public readonly CountryName: string = '';
   public StateRef : number = 0;
+  public readonly StateName : string = '';
   public CityRef : number = 0;
+  public readonly CityName : string = '';
   public SiteManagementRef : number = 0;
 
 
@@ -173,10 +175,9 @@ export class  Owner implements IPersistable<Owner> {
      return Owner.ListFromTransportData(tdResponse);
    }
 
-    public static async FetchEntireListBySiteandBookingRemarkRef(siteref:number,bookingremark:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    public static async FetchEntireListBySiteRef(siteref:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
        let req = new OwnerFetchRequest();
        req.SiteManagementRefs.push(siteref)
-       req.BookingRemarkRefs.push(bookingremark)
        let tdResponse = await Owner.FetchTransportData(req, errorHandler) as TransportData;
        return Owner.ListFromTransportData(tdResponse);
      }

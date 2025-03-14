@@ -19,7 +19,7 @@
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Site Name</label>
-          <input class="form-control date-input"  value={{SiteName}} />
+          <input class="form-control date-input"  value={{SiteName}} readonly />
         </div>
         <div class="col-md-4">
           <label>Plot No.</label>
@@ -120,7 +120,6 @@
             name="BookingRemark"
             [nzSize]="'large'"
             [(ngModel)]="Entity.p.BookingRemark"
-            (ngModelChange)="getCustomerListBySiteandBookingRef(this.SiteRf,Entity.p.BookingRemark)"
           >
             <nz-option
               *ngFor="let bookingremark of BookingRemarkList"
@@ -134,33 +133,36 @@
         <div class="col-md-4">
           <label>Customer Name</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-          [(ngModel)]="Entity.p.CustomerRef" name="CustomerRef" required id="CustomerRef">
+          [(ngModel)]="Entity.p.CustomerRef" name="CustomerRef" required id="CustomerRef" (ngModelChange) = "getCustomerDataBycustomerRef(Entity.p.CustomerRef)">
           <nz-option *ngFor="let customer of CustomerList" [nzLabel]="customer.p.Name"
             [nzValue]="customer.p.Ref"></nz-option>
         </nz-select>
         </div>
         <div class="col-md-4">
-          <label>Address</label>
-          <input
-            type="text"
-            name="Address"
-            class="form-control date-input"
-            id="Address"
-            [(ngModel)]="Entity.p.Address"
-            required
-            placeholder="Enter Address"
+          <label>Mobile No</label>
+          <input  class="form-control date-input"  value={{this.CoustomerMob}} readonly
           />
         </div>
         <div class="col-md-4">
-          <label>Mobile No</label>
-          <input
-            type="text"
-            name="MobNo"
-            class="form-control date-input"
-            id="MobNo"
-            [(ngModel)]="Entity.p.MobNo"
-            required
-            placeholder="Enter Mobile No"
+          <label>Country</label>
+          <input  class="form-control date-input"  value={{CoustomerCountry}} readonly
+          />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-4">
+          <label>State</label>
+          <input  class="form-control date-input"  value={{CoustomerState}} readonly
+          />
+        </div>
+        <div class="col-md-4">
+          <label>City</label>
+          <input  class="form-control date-input"  value={{this.CoustomerCity}} readonly
+          />
+        </div>
+        <div class="col-md-4">
+          <label>Address</label>
+          <input  class="form-control date-input"  value={{CoustomerAddress}} readonly
           />
         </div>
       </div>

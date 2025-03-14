@@ -24,9 +24,6 @@ export class PlotProps {
   public BasicRatePerSqm : number =0;
   public BasicRatePerSqft : number =0;
   public BookingRemark : number =0;
-  public CustomerName: string ='';
-  public Address: string ='';
-  public MobNo: string ='';
   public Reference: string ='';
   public CompanyRef: number = 0;
   public CompanyName: string = '';

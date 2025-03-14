@@ -10,7 +10,6 @@ export class OwnerFetchRequest
     public static readonly FetchRequestType: string = "OwnerDetailsFetchRequest";
     CompanyRefs: number[] = [];
     SiteManagementRefs: number[] = [];
-    BookingRemarkRefs: number[] = [];
     OwnerRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
