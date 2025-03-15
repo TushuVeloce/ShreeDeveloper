@@ -1,0 +1,176 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">Customer Enquiry</span>
+      </div>
+    </div>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Name</label>
+            <input type="text" name="Name" class="form-control" id="Name " required placeholder="Enter First Name" />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Contact Nos</label>
+            <input type="text" name="ContactNos" class="form-control" id="ContactNos" required
+              placeholder="Enter Contact Nos" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Personal Email Id</label>
+            <input type="text" name="PersonalEmailId" class="form-control" id="PersonalEmailId" required
+              placeholder="Enter Personal Email Id" />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Address Line 1</label>
+            <input type="text" name="address" class="form-control" id="address" required placeholder="Enter Address" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Address Line 2</label>
+            <input type="text" name="address" class="form-control" id="address" required placeholder="Enter Address" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label for="CountryRef"><b>Country</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+              name="CountryRef" required id="CountryRef">
+              <nz-option></nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label for="StateRef"><b>State</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
+              name="StateRef" [nzSize]="'large'">
+              <nz-option></nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label for="CityRef"><b>City</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
+              name="CityRef" [nzSize]="'large'">
+              <nz-option></nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Designation</label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DesignationRef "
+              name="DesignationRef " [nzSize]="'large'">
+              <nz-option *ngFor="let designation of DesignationList"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Date Of Joining</label>
+            <input type="date" name="DateOfJoining" class="form-control" id="DateOfJoining " required />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Salary Per Month</label>
+            <input type="number" name="SalaryPerMonth" class="form-control" id="SalaryPerMonth  " required />
+          </div>
+        </div>
+      </div>
+      <div class="table-container" style="margin-top: 2rem">
+        <div class="row">
+          <div class="col-12">
+            <label class="TableHeading">Follow Up Plots</label>
+          </div>
+        </div>
+        <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{ x: 'auto' }"
+          nzFrontPagination="false" [nzShowSizeChanger]="false">
+          <thead>
+            <tr>
+              <th *ngFor="let header of Plotheaders" class="tblheadersecond">
+                {{header}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td Class="tbldata">1</td>
+              <td Class="tbldata">4</td>
+              <td Class="tbldata">500</td>
+              <td Class="tbldata">500</td>
+              <td Class="tbldata">Deal</td>
+              <td Class="tbldata">abc</td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+      <hr style="color: black;">
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Salary Per Year</label>
+            <input type="number" name="SalaryPerYear" class="form-control" id="SalaryPerYear  " required />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Bank Name</label>
+            <input type="text" name="BankName" class="form-control" id="BankName  " required />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Branch Name</label>
+            <input type="text" name="BranchName" class="form-control" id="BranchName" required />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>IFSC</label>
+            <input type="text" name="IFSC" class="form-control" id="IFSC" required />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Banck Account No</label>
+            <input type="text" name="BanckAccountNo" class="form-control" id="BanckAccountNo" required />
+          </div>
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn">Back</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

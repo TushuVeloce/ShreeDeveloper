@@ -75,6 +75,8 @@ import { EmployeeExitDetailsComponent } from './Masters/employee_exit/employee-e
 import { EmployeeExitMasterComponent } from './Masters/employee_exit/employee-exit-master/employee-exit-master.component';
 import { PlotMasterDetailsComponent } from './site-management/plot_details/plot-master-details/plot-master-details.component';
 import { PlotMasterComponent } from './site-management/plot_details/plot-master/plot-master.component';
+import { CustomerEnquiryComponent } from './customer-management/presale/customer-enquiry/customer-enquiry.component';
+import { CustomerEnquiryDetailsComponent } from './customer-management/presale/customer-enquiry-details/customer-enquiry-details.component';
 
 const routes: Routes = [
   {
@@ -149,6 +151,10 @@ const routes: Routes = [
       { path: 'Stock_Inward', component: StockInwardComponent },
       { path: 'Stock_Order', component: StockOrderComponent },
       { path: 'Stock_Transfer', component: StockTransferComponent },
+
+      // Customer Management 
+      { path: 'Customer_Enquiry', component: CustomerEnquiryComponent },
+      { path: 'Customer_Enquiry_Details', component: CustomerEnquiryDetailsComponent },
 
 
       { path: 'government _Office', component: GovernmentOfficeComponent },
