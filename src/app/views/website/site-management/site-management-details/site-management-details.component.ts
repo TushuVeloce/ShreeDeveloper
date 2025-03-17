@@ -35,7 +35,7 @@ export class SiteManagementDetailsComponent implements OnInit {
   CityListforOwner: City[] = [];
   BookingRemarkList = DomainEnums.BookingRemarkList(true, '---Select Booking Remark---');
   plotheaders: string[] = ['Sr.No.', 'Plot No', 'Area sq.m', 'Area sq.ft', 'Goverment Rate', 'Company Rate', 'Action'];
-  ownerheaders: string[] = ['Sr.No.', 'Name ', 'Contact No ', 'Email Id ', 'AddressLine ','Pin Code ', 'Action'];
+  ownerheaders: string[] = ['Sr.No.', 'Name ', 'Contact No ', 'Email Id ', 'Address','Pin Code ', 'Action'];
   isModalOpen1: boolean = false;
   isModalOpen2: boolean = false;
   // newPlot: PlotDetailProps = new PlotDetailProps(); // Store all added plots
@@ -55,10 +55,7 @@ export class SiteManagementDetailsComponent implements OnInit {
     this.EmployeeList = await Employee.FetchEntireList();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
           this.IsNewEntity = false;
-    
-          this.DetailsFormTitle = this.IsNewEntity
-            ? 'New Site'
-            : 'Edit Site';
+          this.DetailsFormTitle = this.IsNewEntity ? 'New Site': 'Edit Site';
           this.Entity = Site.GetCurrentInstance();
           this.appStateManage.StorageKey.removeItem('Editable');
         } else {

@@ -19,7 +19,7 @@ export class OwnerDetailProps {
   public Name: string ='';
   public ContactNo : string ='';
   public EmailId : string ='';
-  public AddressLine: string ='';
+  public Address: string ='';
   public PinCode : string ='';
   public CountryRef: number = 0;
   public readonly CountryName: string = '';

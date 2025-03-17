@@ -51,6 +51,7 @@ export class PlotMasterDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Plot' : 'Edit Plot';
       this.Entity = Plot.GetCurrentInstance();
+      console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
     } else {
       this.Entity = Plot.CreateNewInstance();
@@ -61,6 +62,9 @@ export class PlotMasterDetailsComponent implements OnInit {
       this.utils.DeepCopy(this.Entity)
     ) as Plot;
     this.getCustomerListBySiteandBookingRef(this.SiteRf)
+    if(this.Entity.p.CustomerRef > 0){
+      this.getCustomerDataBycustomerRef(this.Entity.p.CustomerRef)
+    }
   }
 
   getCustomerListBySiteandBookingRef = async (SiteRf:number) => {
@@ -77,7 +81,7 @@ export class PlotMasterDetailsComponent implements OnInit {
     let customer = this.CustomerList.find(customer => customer.p.Ref == customerref)
     console.log('customer :', customer);
     if(customer){
-      this.CoustomerAddress= customer.p.AddressLine;
+      this.CoustomerAddress= customer.p.Address;
       this.CoustomerMob = customer.p.ContactNo;
       this.CoustomerCountry= customer.p.CountryName
       this.CoustomerState= customer.p.StateName

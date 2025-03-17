@@ -178,7 +178,7 @@
               <td Class="tbldata">{{ owner.Name }}</td>
               <td Class="tbldata">{{ owner.ContactNo }}</td>
               <td Class="tbldata">{{ owner.EmailId }}</td>
-              <td Class="tbldata">{{ owner.AddressLine }}</td>
+              <td Class="tbldata">{{ owner.Address}}</td>
               <!-- <td Class="tbldata">{{ owner.CityRef }}</td> -->
               <td Class="tbldata">{{ owner.PinCode }}</td>
               <td Class="tbldata">
@@ -368,9 +368,9 @@
         </div>
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
-            <label>AddressLine</label>
-            <input type="text" name="AddressLine" class="form-control" [(ngModel)]="newOwner.AddressLine" required
-              placeholder="Enter AddressLine" />
+            <label>Address</label>
+            <input type="text" name="Address" class="form-control" [(ngModel)]="newOwner.Address" required
+              placeholder="Enter Address" />
           </div>
           <!-- <div class="col-md-6">
             <label>AddressLine 2</label>
