@@ -18,8 +18,12 @@
             <input type="text" name="Name" class="form-control" id="Name " required placeholder="Enter First Name" />
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Date</label>
+            <input type="date" name="Date" class="form-control" id="Date" required />
+          </div>
+        </div>
         <div class="col-md-4">
           <div>
             <label>Contact Nos</label>
@@ -27,15 +31,44 @@
               placeholder="Enter Contact Nos" />
           </div>
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
-            <label>Personal Email Id</label>
+            <label>Email Id</label>
             <input type="text" name="PersonalEmailId" class="form-control" id="PersonalEmailId" required
               placeholder="Enter Personal Email Id" />
           </div>
         </div>
+        <div class="col-md-4">
+          <div>
+            <label for="CountryRef"><b>Country</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+              name="CountryRef" required id="CountryRef">
+              <nz-option></nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label for="StateRef"><b>State</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
+              name="StateRef" [nzSize]="'large'">
+              <nz-option></nz-option>
+            </nz-select>
+          </div>
+        </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label for="CityRef"><b>City</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
+              name="CityRef" [nzSize]="'large'">
+              <nz-option></nz-option>
+            </nz-select>
+          </div>
+        </div>
         <div class="col-md-4">
           <div>
             <label>Address Line 1</label>
@@ -48,56 +81,29 @@
             <input type="text" name="address" class="form-control" id="address" required placeholder="Enter Address" />
           </div>
         </div>
+        <div class="col-md-4 col-md-4 col-sm-12 mt-2">
+          <label>Pin Code</label>
+          <input type="text" name="PinCode" class="form-control" id="PinCode" required
+            placeholder="Enter Pin Code" />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
-            <label for="CountryRef"><b>Country</b></label>
+            <label for="InterestedSiteRef"><b>Interested site</b></label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-              name="CountryRef" required id="CountryRef">
-              <nz-option></nz-option>
-            </nz-select>
-          </div>
-        </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
-          <div>
-            <label for="StateRef"><b>State</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
-              name="StateRef" [nzSize]="'large'">
+              name="InterestedSiteRef" required id="InterestedSiteRef">
               <nz-option></nz-option>
             </nz-select>
           </div>
         </div>
         <div class="col-md-4">
           <div>
-            <label for="CityRef"><b>City</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
-              name="CityRef" [nzSize]="'large'">
+            <label for="InterestedPlotRef"><b>Interested Plots</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="InterestedPlotRef"
+              name="InterestedPlotRef" [nzSize]="'large'">
               <nz-option></nz-option>
             </nz-select>
-          </div>
-        </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
-          <div>
-            <label>Designation</label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DesignationRef "
-              name="DesignationRef " [nzSize]="'large'">
-              <nz-option *ngFor="let designation of DesignationList"></nz-option>
-            </nz-select>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div>
-            <label>Date Of Joining</label>
-            <input type="date" name="DateOfJoining" class="form-control" id="DateOfJoining " required />
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div>
-            <label>Salary Per Month</label>
-            <input type="number" name="SalaryPerMonth" class="form-control" id="SalaryPerMonth  " required />
           </div>
         </div>
       </div>
@@ -128,41 +134,81 @@
           </tbody>
         </nz-table>
       </div>
+      
       <hr style="color: black;">
-      <div class="row" style="margin-top: 1rem; ">
+
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
-            <label>Salary Per Year</label>
-            <input type="number" name="SalaryPerYear" class="form-control" id="SalaryPerYear  " required />
+            <label for="LeadSourceRef"><b>Lead Source</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+              name="LeadSourceRef" required id="LeadSourceRef">
+              <nz-option></nz-option>
+            </nz-select>
           </div>
         </div>
         <div class="col-md-4">
           <div>
-            <label>Bank Name</label>
-            <input type="text" name="BankName" class="form-control" id="BankName  " required />
+            <label for="LeadHandledByRef"><b>Lead Handled By</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LeadHandledByRef"
+              name="LeadHandledByRef" [nzSize]="'large'">
+              <nz-option></nz-option>
+            </nz-select>
           </div>
         </div>
         <div class="col-md-4">
           <div>
-            <label>Branch Name</label>
-            <input type="text" name="BranchName" class="form-control" id="BranchName" required />
+            <label for="ContactModeRef"><b>Contact Mode</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="ContactModeRef"
+              name="ContactModeRef" [nzSize]="'large'">
+              <nz-option></nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Reason</label>
+            <input type="text" name="Reason" class="form-control" id="Reason " required placeholder="Enter Reason" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label for="CustomerStatusRef"><b>Customer Status</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CustomerStatusRef"
+              name="CustomerStatusRef" [nzSize]="'large'">
+              <nz-option></nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Remark</label>
+            <input type="text" name="Remark" class="form-control" id="Remark " required placeholder="Enter Remark" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label for="VisitedModeRef"><b>Visited Mode</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VisitedModeRef"
+              name="VisitedModeRef" [nzSize]="'large'">
+              <nz-option></nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Site/Office Visit Date</label>
+            <input type="date" name="Date" class="form-control" id="Date" required />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Reminder Date</label>
+            <input type="Date" name="ReminderDate" class="form-control" id="ReminderDate" required />
           </div>
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
-          <div>
-            <label>IFSC</label>
-            <input type="text" name="IFSC" class="form-control" id="IFSC" required />
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div>
-            <label>Banck Account No</label>
-            <input type="text" name="BanckAccountNo" class="form-control" id="BanckAccountNo" required />
-          </div>
-        </div>
-      </div>
+
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
           <button type="button" class="btn">Save</button>

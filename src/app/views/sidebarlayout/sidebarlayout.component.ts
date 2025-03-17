@@ -435,6 +435,14 @@ export class SidebarlayoutComponent implements OnInit {
       },
     ]
 
+    let CustomerManagementSubModuleList = [
+      {
+        Name: 'Customer Enquiry',
+        RouterLink: '/homepage/Website/Customer_Enquiry',
+        LogoPath: '',
+      }
+    ]
+
     let moduleListInternal = [
       {
         Name: 'Dashboards',
@@ -458,6 +466,12 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '',
         WhiteLogo: '/assets/icons/stock.png',
         SubModuleList: StockManagementSubModuleList,
+      },
+      {
+        Name: 'Customer Management',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/stock.png',
+        SubModuleList: CustomerManagementSubModuleList,
       },
     ].filter(e => e.SubModuleList.length > 0);
 
