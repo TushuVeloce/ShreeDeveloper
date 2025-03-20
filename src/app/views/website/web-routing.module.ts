@@ -75,8 +75,10 @@ import { EmployeeExitDetailsComponent } from './Masters/employee_exit/employee-e
 import { EmployeeExitMasterComponent } from './Masters/employee_exit/employee-exit-master/employee-exit-master.component';
 import { PlotMasterDetailsComponent } from './site-management/plot_details/plot-master-details/plot-master-details.component';
 import { PlotMasterComponent } from './site-management/plot_details/plot-master/plot-master.component';
-import { CustomerEnquiryComponent } from './customer-management/presale/customer-enquiry/customer-enquiry.component';
-import { CustomerEnquiryDetailsComponent } from './customer-management/presale/customer-enquiry-details/customer-enquiry-details.component';
+import { CustomerEnquiryComponent } from './customer_management/presale/customer_enquiry/customer-enquiry/customer-enquiry.component';
+import { CustomerEnquiryDetailsComponent } from './customer_management/presale/customer_enquiry/customer-enquiry-details/customer-enquiry-details.component';
+import { CustomerFollowupComponent } from './customer_management/presale/customer_followup/customer-followup/customer-followup.component';
+import { CustomerFollowupDetailsComponent } from './customer_management/presale/customer_followup/customer-followup-details/customer-followup-details.component';
 
 const routes: Routes = [
   {
@@ -155,6 +157,9 @@ const routes: Routes = [
       // Customer Management 
       { path: 'Customer_Enquiry', component: CustomerEnquiryComponent },
       { path: 'Customer_Enquiry_Details', component: CustomerEnquiryDetailsComponent },
+
+      { path: 'Customer_FollowUp', component: CustomerFollowupComponent },
+      { path: 'Customer_FollowUp_Details', component: CustomerFollowupDetailsComponent },
 
 
       { path: 'government _Office', component: GovernmentOfficeComponent },

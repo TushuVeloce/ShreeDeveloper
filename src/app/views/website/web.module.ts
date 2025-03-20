@@ -72,8 +72,10 @@ import { EmployeeExitDetailsComponent } from './Masters/employee_exit/employee-e
 import { EmployeeExitMasterComponent } from './Masters/employee_exit/employee-exit-master/employee-exit-master.component';
 import { PlotMasterComponent } from './site-management/plot_details/plot-master/plot-master.component';
 import { PlotMasterDetailsComponent } from './site-management/plot_details/plot-master-details/plot-master-details.component';
-import { CustomerEnquiryDetailsComponent } from './customer-management/presale/customer-enquiry-details/customer-enquiry-details.component';
-import { CustomerEnquiryComponent } from './customer-management/presale/customer-enquiry/customer-enquiry.component';
+import { CustomerEnquiryComponent } from './customer_management/presale/customer_enquiry/customer-enquiry/customer-enquiry.component';
+import { CustomerEnquiryDetailsComponent } from './customer_management/presale/customer_enquiry/customer-enquiry-details/customer-enquiry-details.component';
+import { CustomerFollowupDetailsComponent } from './customer_management/presale/customer_followup/customer-followup-details/customer-followup-details.component';
+import { CustomerFollowupComponent } from './customer_management/presale/customer_followup/customer-followup/customer-followup.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent  ,StageMasterComponent,StageMasterDetailsComponent, AccountMainLedgerComponent,AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent,MarketingTypeMasterDetailsComponent,
@@ -83,7 +85,7 @@ import { CustomerEnquiryComponent } from './customer-management/presale/customer
     DeleteIconComponent,EditIconComponent, DataNotFoundComponent,VehicleMasterDetailsComponent,UserrolerightsComponent,FinancialYearMasterComponent,
     VendorServicesMasterComponent,VendorServicesMasterDetailsComponent,SiteManagementDetailsComponent,EmployeeAppraisalDetailsComponent,
     EmployeeAppraisalMasterComponent,EmployeeExitDetailsComponent,EmployeeExitMasterComponent,PlotMasterComponent,
-    PlotMasterDetailsComponent,CustomerEnquiryComponent,CustomerEnquiryDetailsComponent],
+    PlotMasterDetailsComponent,CustomerEnquiryComponent,CustomerEnquiryDetailsComponent,CustomerFollowupComponent, CustomerFollowupDetailsComponent],
   imports: [
     CommonModule,WebRoutingModule,FormsModule,NzDropDownModule,NzTableModule,IonicModule.forRoot(),
     NzPaginationModule, NzUploadModule, NzModalModule,NzCheckboxModule, 

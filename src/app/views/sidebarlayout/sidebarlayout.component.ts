@@ -440,6 +440,11 @@ export class SidebarlayoutComponent implements OnInit {
         Name: 'Customer Enquiry',
         RouterLink: '/homepage/Website/Customer_Enquiry',
         LogoPath: '',
+      },
+      {
+        Name: 'Customer Follow Up',
+        RouterLink: '/homepage/Website/Customer_FollowUp',
+        LogoPath: '',
       }
     ]
 
