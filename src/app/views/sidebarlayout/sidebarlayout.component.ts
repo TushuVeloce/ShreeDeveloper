@@ -386,13 +386,13 @@ export class SidebarlayoutComponent implements OnInit {
 
     let SiteManagementSubModuleList = [
       {
-        Name: 'Plot Details',
-        RouterLink: '/homepage/Website/Plot_Master',
+        Name: 'New Site',
+        RouterLink: '/homepage/Website/site_management_Master',
         LogoPath: '',
       },
       {
-        Name: 'New Site',
-        RouterLink: '/homepage/Website/site_management_Master',
+        Name: 'Plot Details',
+        RouterLink: '/homepage/Website/Plot_Master',
         LogoPath: '',
       },
       {
