@@ -54,9 +54,8 @@
             name="AreaInSqft"
             class="form-control date-input"
             id="AreaInSqft"
-            [(ngModel)]="Entity.p.AreaInSqft"
-            required
-            placeholder="Enter Area sq.ft"
+            [value]="Entity.p.AreaInSqm ? (Entity.p.AreaInSqm * 10.7639).toFixed(3) : 0" 
+            readonly 
           />
         </div>
         <div class="col-md-4">
