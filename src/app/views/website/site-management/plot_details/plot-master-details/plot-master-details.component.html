@@ -34,30 +34,21 @@
           />
         </div>
         <div class="col-md-4">
-          <label>Area sq.m</label>
-          <input
-            type="number"
-            name="AreaInSqm"
-            class="form-control date-input"
-            id="AreaInSqm"
-            [(ngModel)]="Entity.p.AreaInSqm"
-            required
-            placeholder="Enter Area sq.m"
-          />
+          <label for="AreaInSqm">Area in Sqm</label>
+          <input type="number" class="form-control" name="AreaInSqm" id="AreaInSqm"
+            [(ngModel)]="Entity.p.AreaInSqm" 
+            (ngModelChange)="convertSqmToSqft()" 
+            required placeholder="Enter Area in Sqm"/>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
-          <label>Area sq.ft</label>
-          <input
-            type="number"
-            name="AreaInSqft"
-            class="form-control date-input"
-            id="AreaInSqft"
-            [value]="Entity.p.AreaInSqm ? (Entity.p.AreaInSqm * 10.7639).toFixed(3) : 0" 
-            readonly 
-          />
-        </div>
+          <label for="AreaInSqft">Area in Sq ft</label>
+          <input type="number" class="form-control" name="AreaInSqft" id="AreaInSqft"
+            [(ngModel)]="Entity.p.AreaInSqft" 
+            (ngModelChange)="convertSqftToSqm()" 
+            required placeholder="Enter Area in Sqft"/>
+        </div>     
         <div class="col-md-4">
           <label>Goverment Rate Per Sqm </label>
           <input

@@ -57,6 +57,7 @@ export class SiteManagementDetailsComponent implements OnInit {
           this.IsNewEntity = false;
           this.DetailsFormTitle = this.IsNewEntity ? 'New Site': 'Edit Site';
           this.Entity = Site.GetCurrentInstance();
+          console.log('Entity :', this.Entity);
           this.appStateManage.StorageKey.removeItem('Editable');
         } else {
           this.Entity = Site.CreateNewInstance();
@@ -139,6 +140,32 @@ getStateListByCountryRefforOwner = async (CountryRef: number) => {
     this.newOwner = OwnerDetailProps.Blank(); // Reset form after adding
 }
 
+async editOwner() {
+  this.isModalOpen2 = true
+  if (!this.newOwner.Name || !this.newOwner.ContactNo) {
+    await this.uiUtils.showWarningToster('All Fields are Required!');
+    return;
+  }
+
+  // Find the existing owner in the array
+  let existingOwnerIndex = this.Entity.p.SiteManagementOwnerDetails.findIndex(
+    (owner) => owner.Ref === this.newOwner.Ref
+  );
+
+  if (existingOwnerIndex === -1) {
+    await this.uiUtils.showWarningToster('Owner not found!');
+    return;
+  }
+
+  // Update the existing owner details
+  this.Entity.p.SiteManagementOwnerDetails[existingOwnerIndex] = {
+    ...this.newOwner,
+  };
+
+  // Reset form after editing
+  this.newOwner = OwnerDetailProps.Blank();
+}
+
   // removePlot(index: number) {
   //   this.Entity.p.PlotDetailsList.splice(index, 1); // Remove plot
   // }
@@ -183,7 +210,25 @@ getStateListByCountryRefforOwner = async (CountryRef: number) => {
       }
     };
 
+    convertSqmToSqft() {
+      if (this.Entity.p.TotalLandAreaInSqm) {
+        this.Entity.p.TotalLandAreaInSqft = parseFloat((this.Entity.p.TotalLandAreaInSqm * 10.7639).toFixed(3));
+      } else {
+        this.Entity.p.TotalLandAreaInSqft = 0;
+      }
+    }
+    
+    convertSqftToSqm() {
+      if (this.Entity.p.TotalLandAreaInSqft) {
+        this.Entity.p.TotalLandAreaInSqm = parseFloat((this.Entity.p.TotalLandAreaInSqft / 10.7639).toFixed(3));
+      } else {
+        this.Entity.p.TotalLandAreaInSqm = 0;
+      }
+    }
+
   BackSiteManagement() {
     this.router.navigate(['/homepage/Website/site_management_Master']);
   }
+
+  
 }

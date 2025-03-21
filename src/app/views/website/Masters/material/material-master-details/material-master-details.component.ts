@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
@@ -6,6 +6,9 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
+import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
+import { NgModel } from '@angular/forms';
+
 
 @Component({
   selector: 'app-material-master-details',
@@ -21,6 +24,12 @@ export class MaterialMasterDetailsComponent implements OnInit {
   IsDropdownDisabled: boolean = false;
   InitialEntity: Material = null as any;
   UnitList: Unit[] = [];
+    NameWithoutNos: string = ValidationPatterns.NameWithoutNos
+    NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
+    RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
+    companyRef = this.companystatemanagement.SelectedCompanyRef;
+    
+    @ViewChild('NameCtrl') NameInputControl!: NgModel;
 
   constructor(
     private router: Router,
@@ -98,5 +107,14 @@ export class MaterialMasterDetailsComponent implements OnInit {
 
   BackMaterial() {
     this.router.navigate(['/homepage/Website/Material_Master']);
+  }
+
+  resetAllControls = () => {
+    // reset touched
+    this.NameInputControl.control.markAsUntouched();
+  
+    // reset dirty
+  
+    this.NameInputControl.control.markAsPristine();
   }
 }

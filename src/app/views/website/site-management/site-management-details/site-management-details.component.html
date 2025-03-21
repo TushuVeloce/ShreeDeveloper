@@ -92,18 +92,21 @@
             [(ngModel)]="Entity.p.EstimatedCost" required placeholder="Enter Estimated Cost" />
         </div>
         <div class="col-md-4">
-          <label>Total Land Area in Sqm</label>
-          <input type="number" name="TotalLandAreaInSqm" class="form-control" id="TotalLandAreaInSqm"
-            [(ngModel)]="Entity.p.TotalLandAreaInSqm" required placeholder="Enter Total Land Area in Sq m"/>
+          <label for="TotalLandAreaInSqm">Total Land Area in Sqm</label>
+          <input type="number" class="form-control" name="TotalLandAreaInSqm" id="TotalLandAreaInSqm"
+            [(ngModel)]="Entity.p.TotalLandAreaInSqm" 
+            (ngModelChange)="convertSqmToSqft()" 
+            required placeholder="Enter Total Land Area in Sqm"/>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
-          <label>Total Land Area in Sq ft</label>
-          <input type="number" class="form-control" id="TotalLandAreaInSqft"
-            [value]="Entity.p.TotalLandAreaInSqm ? (Entity.p.TotalLandAreaInSqm * 10.7639).toFixed(3) : 0" 
-            readonly />
-        </div>        
+    <label for="TotalLandAreaInSqft">Total Land Area in Sq ft</label>
+    <input type="number" class="form-control" name="TotalLandAreaInSqft" id="TotalLandAreaInSqft"
+      [(ngModel)]="Entity.p.TotalLandAreaInSqft" 
+      (ngModelChange)="convertSqftToSqm()" 
+      required placeholder="Enter Total Land Area in Sqft"/>
+  </div>     
         <div class="col-md-4">
           <label>Number Of Plots</label>
           <input type="number" name="NumberOfPlots" class="form-control" id="NumberOfPlots"
@@ -114,7 +117,7 @@
       <div class="row" style="margin-top: 2rem; padding: 1rem">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
           <h5 style="padding-top: 3px; color: black">
-            <b>Add Plot Details</b>
+            <b>Add Owner Details</b>
           </h5>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
@@ -182,6 +185,9 @@
               <td Class="tbldata">{{ owner.Address}}</td>
               <!-- <td Class="tbldata">{{ owner.CityRef }}</td> -->
               <td Class="tbldata">{{ owner.PinCode }}</td>
+              <td Class="tbldata">
+                <!-- <button class="btn btn-danger btn-sm"  (click)="editOwner(i)">Edit</button> -->
+              </td>
               <td Class="tbldata">
                 <button class="btn btn-danger btn-sm" (click)="removeowner(i)">Delete</button>
               </td>

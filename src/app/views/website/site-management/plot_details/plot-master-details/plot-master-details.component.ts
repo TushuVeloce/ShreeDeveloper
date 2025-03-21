@@ -101,7 +101,7 @@ export class PlotMasterDetailsComponent implements OnInit {
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      this.uiUtils.showErrorToster(tr.Message);
+      this.uiUtils.showErrorMessage('Error', tr.Message)
       return;
     } else {
       this.isSaveDisabled = false;
@@ -114,6 +114,22 @@ export class PlotMasterDetailsComponent implements OnInit {
       }
     }
   };
+
+  convertSqmToSqft() {
+    if (this.Entity.p.AreaInSqm) {
+      this.Entity.p.AreaInSqft = parseFloat((this.Entity.p.AreaInSqm * 10.7639).toFixed(3));
+    } else {
+      this.Entity.p.AreaInSqft = 0;
+    }
+  }
+  
+  convertSqftToSqm() {
+    if (this.Entity.p.AreaInSqft) {
+      this.Entity.p.AreaInSqm = parseFloat((this.Entity.p.AreaInSqft / 10.7639).toFixed(3));
+    } else {
+      this.Entity.p.AreaInSqm = 0;
+    }
+  }
 
   BackPlot() {
     this.router.navigate(['/homepage/Website/Plot_Master']);
