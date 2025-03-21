@@ -41,7 +41,6 @@ export class PlotMasterComponent implements OnInit {
     const storedSiteRef = Number(this.appStateManage.StorageKey.getItem('siteRf'));
     this.siteref = storedSiteRef
     if (storedSiteRef > 0) {
-    console.log('storedSiteRef :', storedSiteRef);
       setTimeout(async () => {
         this.Entity.p.SiteManagementRef = storedSiteRef;
         await this.getPlotListBySiteRef(storedSiteRef);
@@ -67,11 +66,10 @@ export class PlotMasterComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     this.siteref = siteref
-    if(siteref > 0){
+    if(siteref > 0 && this.SiteList.length > 0){
       this.Entity.p.SiteManagementRef = siteref;
       const selectedSite= this.SiteList.find(site => site.p.Ref === siteref);
       if (!selectedSite) { 
-        console.log("siteref not found in site")
         return; 
     }
       this.appStateManage.StorageKey.setItem('siteRf', String(siteref));
@@ -80,7 +78,6 @@ export class PlotMasterComponent implements OnInit {
     let lst = await Plot.FetchEntireListBySiteRef(siteref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    console.log('DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
   }
 
