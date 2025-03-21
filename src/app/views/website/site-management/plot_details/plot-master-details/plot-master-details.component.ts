@@ -70,7 +70,7 @@ export class PlotMasterDetailsComponent implements OnInit {
   getCustomerListBySiteandBookingRef = async (SiteRf:number) => {
     this.CustomerList = [];
     if (SiteRf <= 0) {
-      await this.uiUtils.showErrorToster('Site or Booking Remark not Selected');
+      await this.uiUtils.showErrorToster('Site not Selected');
       return;
     }
     let lst = await Owner.FetchEntireListBySiteRef(SiteRf, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));

@@ -40,6 +40,7 @@ export class SiteManagementDetailsComponent implements OnInit {
   isModalOpen2: boolean = false;
   // newPlot: PlotDetailProps = new PlotDetailProps(); // Store all added plots
   newOwner: OwnerDetailProps = OwnerDetailProps.Blank(); // Creates a new instance with `isNewlyCreated = true`
+  editingIndex :number = 0
 
   constructor(
     private router: Router,
@@ -57,8 +58,9 @@ export class SiteManagementDetailsComponent implements OnInit {
           this.IsNewEntity = false;
           this.DetailsFormTitle = this.IsNewEntity ? 'New Site': 'Edit Site';
           this.Entity = Site.GetCurrentInstance();
-          console.log('Entity :', this.Entity);
           this.appStateManage.StorageKey.removeItem('Editable');
+          console.log('Entity :', this.Entity);
+
         } else {
           this.Entity = Site.CreateNewInstance();
           Site.SetCurrentInstance(this.Entity);
@@ -126,49 +128,44 @@ getStateListByCountryRefforOwner = async (CountryRef: number) => {
 
   async addOwner() {
     if (!this.newOwner.Name || !this.newOwner.ContactNo) {
-      await this.uiUtils.showWarningToster('All Fields are Required!')
+      await this.uiUtils.showWarningToster('All Fields are Required!');
       return;
     }
-    // Create an Owner instance to generate a valid Ref
-    let ownerInstance = new Owner(this.newOwner, true);
-    let siteInstance = new Site(this.Entity.p, true);
-    await ownerInstance.EnsurePrimaryKeysWithValidValues(); // Assign a valid Ref
-    await siteInstance.EnsurePrimaryKeysWithValidValues(); // Assign a valid Ref
-    console.log("ref",siteInstance.p.Ref)
-    this.newOwner.SiteManagementRef = this.Entity.p.Ref
-    this.Entity.p.SiteManagementOwnerDetails.push({ ...ownerInstance.p }); 
-    this.newOwner = OwnerDetailProps.Blank(); // Reset form after adding
-}
+  
+    // If editing an existing owner
+    if (this.editingIndex !=  null) {
+      this.Entity.p.SiteManagementOwnerDetails[this.editingIndex] = { ...this.newOwner };
+      await this.uiUtils.showSuccessToster('Owner details updated successfully!');
+      this.isModalOpen2 = false; // Close modal
 
-async editOwner() {
-  this.isModalOpen2 = true
-  if (!this.newOwner.Name || !this.newOwner.ContactNo) {
-    await this.uiUtils.showWarningToster('All Fields are Required!');
-    return;
+    } 
+    // If adding a new owner
+    else {
+      let ownerInstance = new Owner(this.newOwner, true);
+      let siteInstance = new Site(this.Entity.p, true);
+      await ownerInstance.EnsurePrimaryKeysWithValidValues(); // Assign a valid Ref
+      await siteInstance.EnsurePrimaryKeysWithValidValues(); // Assign a valid Ref
+  
+      console.log("ref", siteInstance.p.Ref);
+      this.newOwner.SiteManagementRef = this.Entity.p.Ref;
+      this.Entity.p.SiteManagementOwnerDetails.push({ ...ownerInstance.p });
+      await this.uiUtils.showSuccessToster('Owner added successfully!');
+    }
+    // Reset form after adding/editing
+    this.newOwner = OwnerDetailProps.Blank();
+    this.editingIndex = 0;
   }
-
-  // Find the existing owner in the array
-  let existingOwnerIndex = this.Entity.p.SiteManagementOwnerDetails.findIndex(
-    (owner) => owner.Ref === this.newOwner.Ref
-  );
-
-  if (existingOwnerIndex === -1) {
-    await this.uiUtils.showWarningToster('Owner not found!');
-    return;
-  }
-
-  // Update the existing owner details
-  this.Entity.p.SiteManagementOwnerDetails[existingOwnerIndex] = {
-    ...this.newOwner,
-  };
-
-  // Reset form after editing
-  this.newOwner = OwnerDetailProps.Blank();
-}
+  
 
   // removePlot(index: number) {
   //   this.Entity.p.PlotDetailsList.splice(index, 1); // Remove plot
   // }
+
+editowner(index:number){
+  this.isModalOpen2 = true
+  this.newOwner = {...this.Entity.p.SiteManagementOwnerDetails[index]}
+  this.editingIndex = index;
+}
 
   removeowner(index: number) {
     this.Entity.p.SiteManagementOwnerDetails.splice(index, 1); // Remove owner

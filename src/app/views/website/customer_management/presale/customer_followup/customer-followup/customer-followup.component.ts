@@ -21,7 +21,7 @@ export class CustomerFollowupComponent  implements OnInit {
   
     companyRef = this.companystatemanagement.SelectedCompanyRef;
     
-    headers: string[] = ['Sr.No.','Name','Contact No', 'Date', 'Customer Status','Action'];
+    headers: string[] = ['Sr.No.','Site Name','Customer Name','Mobile No','Plot No', 'Last Contact Date', 'Reason for Last Contact','Action'];
     constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
       private companystatemanagement: CompanyStateManagement
     ) {

@@ -25,6 +25,7 @@ export class PlotMasterComponent implements OnInit {
   total = 0;
   headers: string[] = ['Sr.No.', 'Plot No','Area sq.m','Area sq.ft','Gov Rate/Sq m','Gov Rate/Sq ft','Basic Rate/Sq m','Basic Rate/Sq ft','Booking Remark','Action',];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  siteref : number=0
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
       private companystatemanagement: CompanyStateManagement,) {
@@ -38,9 +39,13 @@ export class PlotMasterComponent implements OnInit {
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
     const storedSiteRef = Number(this.appStateManage.StorageKey.getItem('siteRf'));
+    this.siteref = storedSiteRef
     if (storedSiteRef > 0) {
-        console.log('Restoring selected site:', storedSiteRef);
+    console.log('storedSiteRef :', storedSiteRef);
+      setTimeout(async () => {
+        this.Entity.p.SiteManagementRef = storedSiteRef;
         await this.getPlotListBySiteRef(storedSiteRef);
+      });
     }
   }
 
@@ -49,7 +54,6 @@ export class PlotMasterComponent implements OnInit {
     this.DisplayMasterList = [];
     this.SiteList = [];
     this.Entity.p.SiteManagementRef = 0;
-    this.appStateManage.setSiteRef(0,'')
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -62,10 +66,12 @@ export class PlotMasterComponent implements OnInit {
   getPlotListBySiteRef = async (siteref: number) => {
     this.MasterList = [];
     this.DisplayMasterList = [];
+    this.siteref = siteref
     if(siteref > 0){
       this.Entity.p.SiteManagementRef = siteref;
       const selectedSite= this.SiteList.find(site => site.p.Ref === siteref);
       if (!selectedSite) { 
+        console.log("siteref not found in site")
         return; 
     }
       this.appStateManage.StorageKey.setItem('siteRf', String(siteref));
@@ -130,7 +136,11 @@ export class PlotMasterComponent implements OnInit {
   };
 
   AddPlot = async () => {
-    await this.router.navigate(['/homepage/Website/Plot_Master_Details']);
+    if(this.siteref > 0){
+      await this.router.navigate(['/homepage/Website/Plot_Master_Details']);
+    }else{
+      this.uiUtils.showWarningToster('Please select a site first');
+    }
   }
 
 }

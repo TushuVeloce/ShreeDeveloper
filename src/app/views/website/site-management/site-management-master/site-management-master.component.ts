@@ -42,7 +42,7 @@ export class SiteManagementMasterComponent implements OnInit {
     this.DisplayMasterList = [];
     console.log('companyRef :', this.companyRef());
     if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
+      await this.uiUtils.showErrorToster('Company not FSelected');
       return;
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));

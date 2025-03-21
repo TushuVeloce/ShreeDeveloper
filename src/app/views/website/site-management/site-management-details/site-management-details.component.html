@@ -185,11 +185,12 @@
               <td Class="tbldata">{{ owner.Address}}</td>
               <!-- <td Class="tbldata">{{ owner.CityRef }}</td> -->
               <td Class="tbldata">{{ owner.PinCode }}</td>
-              <td Class="tbldata">
-                <!-- <button class="btn btn-danger btn-sm"  (click)="editOwner(i)">Edit</button> -->
-              </td>
-              <td Class="tbldata">
-                <button class="btn btn-danger btn-sm" (click)="removeowner(i)">Delete</button>
+              <td class="tbldata">
+                <span style="margin-left: 9px;" (click) = "editowner(i)">
+                  <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+                </span>
+                <span style="margin-left: 9px;"  (click)="removeowner(i);">
+                  <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
               </td>
             </tr>
           </tbody>
