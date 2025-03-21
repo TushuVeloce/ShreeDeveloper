@@ -58,6 +58,14 @@ export class EmployeeMasterDetailsComponent implements OnInit {
         : 'Edit Employee';
       this.Entity = Employee.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
+      console.log('this.Entity :', this.Entity);
+      
+      if (this.Entity.p.CountryRef) {
+        this.getStateListByCountryRef(this.Entity.p.CountryRef);
+      }
+      if (this.Entity.p.StateRef) {
+        this.getCityListByStateRef(this.Entity.p.StateRef);
+      }
     } else {
       this.Entity = Employee.CreateNewInstance();
       Employee.SetCurrentInstance(this.Entity);
@@ -70,19 +78,42 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   }
 
   getStateListByCountryRef = async (CountryRef: number) => {
-    this.Entity.p.StateRef = 0;
-    this.Entity.p.CityRef = 0;
     this.StateList = [];
     this.CityList = [];
-    let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.StateList = lst;
+  
+    if (CountryRef) {
+      let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.StateList = lst;
+      console.log('StateList :', this.StateList);
+  
+      if (CountryRef !== this.Entity.p.CountryRef) {
+        // Reset StateRef and CityRef when country is changed
+        this.Entity.p.StateRef = 0;
+        this.Entity.p.CityRef = 0;
+      }
+    } else {
+      // Clear selections if country is cleared
+      this.Entity.p.StateRef = 0;
+      this.Entity.p.CityRef = 0;
+    }
   }
-
+  
   getCityListByStateRef = async (StateRef: number) => {
-    this.Entity.p.CityRef = 0;
     this.CityList = [];
-    let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.CityList = lst;
+  
+    if (StateRef) {
+      let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.CityList = lst;
+      console.log('CityList :', this.CityList);
+  
+      if (StateRef !== this.Entity.p.StateRef) {
+        // Reset CityRef when state is changed
+        this.Entity.p.CityRef = 0;
+      }
+    } else {
+      // Clear selection if state is cleared
+      this.Entity.p.CityRef = 0;
+    }
   }
 
   SaveEmployeeMaster = async () => {
