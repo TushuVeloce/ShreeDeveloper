@@ -167,9 +167,10 @@ export class Plot implements IPersistable<Plot> {
     return Plot.ListFromTransportData(tdResponse);
   }
 
-    public static async FetchEntireListBySiteRef(siteref:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    public static async FetchEntireListBySiteandbookingremarkRef(siteref:number,bookingremarkref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
       let req = new PlotFetchRequest();
       req.SiteManagementRefs.push(siteref)
+      req.BookingRemarkRefs.push(bookingremarkref)
       let tdResponse = await Plot.FetchTransportData(req, errorHandler) as TransportData;
       return Plot.ListFromTransportData(tdResponse);
     }
