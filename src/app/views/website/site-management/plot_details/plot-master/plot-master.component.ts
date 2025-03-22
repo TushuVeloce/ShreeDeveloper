@@ -44,7 +44,8 @@ export class PlotMasterComponent implements OnInit {
     const storedSiteRef = Number(this.appStateManage.StorageKey.getItem('siteRf'));
     const bookingRemarkeRef = Number(this.appStateManage.StorageKey.getItem('bookingremarkRef'));
     this.siteref = storedSiteRef
-    if (storedSiteRef > 0) {
+    this.bookigremark = bookingRemarkeRef
+    if (storedSiteRef > 0)  {
       setTimeout(async () => {
         this.Entity.p.SiteManagementRef = storedSiteRef;
         this.Entity.p.BookingRemark = bookingRemarkeRef;
@@ -88,20 +89,20 @@ export class PlotMasterComponent implements OnInit {
     this.DisplayMasterList = [];
     this.siteref = siteref
     this.bookigremark = bookingremarkref
-    console.log("site",siteref ,"booking", bookingremarkref)
     // if(siteref > 0 && this.SiteList.length > 0){
-    //   this.Entity.p.SiteManagementRef = siteref;
-    //   const selectedSite= this.SiteList.find(site => site.p.Ref === siteref);
-    //   if (!selectedSite) { 
-    //     return; 
-    // }
-      // this.appStateManage.StorageKey.setItem('siteRf', String(siteref));
-      // this.appStateManage.StorageKey.setItem('siteName', selectedSite.p.Name);
-      // }
-      if(bookingremarkref <= 0 || siteref <= 0){
-        return
-      }
-    
+      //   this.Entity.p.SiteManagementRef = siteref;
+      //   const selectedSite= this.SiteList.find(site => site.p.Ref === siteref);
+      //   if (!selectedSite) { 
+        //     return; 
+        // }
+        // this.appStateManage.StorageKey.setItem('siteRf', String(siteref));
+        // this.appStateManage.StorageKey.setItem('siteName', selectedSite.p.Name);
+        // }
+        if(bookingremarkref <= 0 || siteref <= 0){
+          return
+        }
+        
+     console.log("site",siteref ,"booking", bookingremarkref)
     this.appStateManage.StorageKey.setItem('bookingremarkRef', String(bookingremarkref));
     let lst = await Plot.FetchEntireListBySiteandbookingremarkRef(siteref, bookingremarkref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;

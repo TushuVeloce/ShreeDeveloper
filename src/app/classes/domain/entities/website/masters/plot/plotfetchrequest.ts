@@ -10,7 +10,7 @@ export class PlotFetchRequest
     public static readonly FetchRequestType: string = "PlotDetailsFetchRequest";
     CompanyRefs: number[] = [];
     SiteManagementRefs: number[] = [];
-    BookingRemarkRefs: number[] = [];
+    BookingRemarks: number[] = [];
     PlotRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
