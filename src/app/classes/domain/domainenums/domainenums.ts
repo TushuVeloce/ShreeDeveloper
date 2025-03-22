@@ -1,24 +1,24 @@
 export enum Gender {
   None = 0,
-  Male = 1,
-  Female = 2,
-  Transgender  = 3
+  Male = 10,
+  Female = 20,
+  Transgender  = 30
 }
 
 export enum MaritalStatuses {
   None = 0,
-  UnMarried  = 1,
-  Married  = 2,
-  Divorced   = 3
+  UnMarried  = 10,
+  Married  = 20,
+  Divorced   = 30
 }
 
 export enum BookingRemark  {
   None = 0,
-  Owner_Booked  = 1,
-  Shree_Booked  = 2,
-  Owner_Saledeed   = 3,
-  Shree_Saledeed   = 4,
-  Booked   = 5
+  Owner_Booked  = 10,
+  Shree_Booked  = 20,
+  Owner_Saledeed   = 30,
+  Shree_Saledeed   = 40,
+  Booked   = 50
 }
 
 export enum MarketingModes {
