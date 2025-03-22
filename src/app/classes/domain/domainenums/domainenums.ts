@@ -97,6 +97,25 @@ export enum ApplicationFeatures {
 // }
 
 
+export enum ContactMode {
+  None = 0,
+  CustomerCalled = 10,
+  ShreeCalled = 20,
+  CustomerSiteVisit  = 30,
+  CustomerOfficeVisit  = 40,
+  ShreeCustomerVisit  = 50
+}
+
+export enum CustomerStatus {
+  None = 0,
+  Interested = 10,
+  LeadInprocess = 20,
+  LeadClosed  = 30,
+  DealOpen = 40,
+  DealClosed = 50,
+}
+
+
 
 export class DomainEnums {
 
@@ -603,6 +622,88 @@ export class DomainEnums {
       let allEntry = {
         Ref: ApplicationFeatures.None,
         FeatureGroupRef: ApplicationFeatureGroups.None,
+        Name: allOptionName
+      }
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+  public static ContactModeName(itemType: ContactMode) {
+    switch (itemType) {
+      case ContactMode.CustomerCalled: return 'CustomerCalled';
+      case ContactMode.ShreeCalled: return 'ShreeCalled';
+      case ContactMode.CustomerSiteVisit: return 'CustomerSiteVisit';
+      case ContactMode.CustomerOfficeVisit: return 'CustomerOfficeVisit';
+      case ContactMode.ShreeCustomerVisit: return 'ShreeCustomerVisit';
+      default: return '';
+    }
+  }
+
+  public static ContactModeList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+    let result = [
+      {
+        Ref: ContactMode.CustomerCalled, Name: DomainEnums.ContactModeName(ContactMode.CustomerCalled)
+      },
+      {
+        Ref: ContactMode.ShreeCalled, Name: DomainEnums.ContactModeName(ContactMode.ShreeCalled)
+      },
+      {
+        Ref: ContactMode.CustomerSiteVisit, Name: DomainEnums.ContactModeName(ContactMode.CustomerSiteVisit)
+      },
+      {
+        Ref: ContactMode.CustomerOfficeVisit, Name: DomainEnums.ContactModeName(ContactMode.CustomerOfficeVisit)
+      },
+      {
+        Ref: ContactMode.ShreeCustomerVisit, Name: DomainEnums.ContactModeName(ContactMode.ShreeCustomerVisit)
+      }
+      
+
+    ]
+    if (withAllOption) {
+      let allEntry = {
+        Ref: ContactMode.None,
+        Name: allOptionName
+      }
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+  public static CustomerStatusName(itemType: CustomerStatus) {
+    switch (itemType) {
+      case CustomerStatus.Interested: return 'Interested';
+      case CustomerStatus.LeadInprocess: return 'LeadInprocess';
+      case CustomerStatus.LeadClosed: return 'LeadClosed';
+      case CustomerStatus.DealOpen: return 'DealOpen';
+      case CustomerStatus.DealClosed: return 'DealClosed';
+      default: return '';
+    }
+  }
+
+  public static CustomerStatusList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+    let result = [
+      {
+        Ref: CustomerStatus.Interested, Name: DomainEnums.CustomerStatusName(CustomerStatus.Interested)
+      },
+      {
+        Ref: CustomerStatus.LeadInprocess, Name: DomainEnums.CustomerStatusName(CustomerStatus.LeadInprocess)
+      },
+      {
+        Ref: CustomerStatus.LeadClosed, Name: DomainEnums.CustomerStatusName(CustomerStatus.LeadClosed)
+      },
+      {
+        Ref: CustomerStatus.DealOpen, Name: DomainEnums.CustomerStatusName(CustomerStatus.DealOpen)
+      },
+      {
+        Ref: CustomerStatus.DealClosed, Name: DomainEnums.CustomerStatusName(CustomerStatus.DealClosed)
+      }
+      
+
+    ]
+    if (withAllOption) {
+      let allEntry = {
+        Ref: CustomerStatus.None,
         Name: allOptionName
       }
       result.unshift(allEntry);
