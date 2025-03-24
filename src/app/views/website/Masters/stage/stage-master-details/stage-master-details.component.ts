@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -19,6 +21,10 @@ export class StageMasterDetailsComponent implements OnInit {
   Entity: Stage = Stage.CreateNewInstance();
   DetailsFormTitle: 'New Stage' | 'Edit Stage' = 'New Stage';
   InitialEntity: Stage = null as any;
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
+
+   @ViewChild('NameCtrl') NameInputControl!: NgModel;
+   @ViewChild('DisplayOrderCtrl') DisplayOrderInputControl!: NgModel;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
@@ -70,4 +76,15 @@ export class StageMasterDetailsComponent implements OnInit {
   BackMaterial() {
     this.router.navigate(['/homepage/Website/Stage_Master']);
   }
+
+  resetAllControls = () => {
+    // reset touched
+    this.NameInputControl.control.markAsUntouched();
+    this.DisplayOrderInputControl.control.markAsUntouched();
+  
+    // reset dirty
+    this.NameInputControl.control.markAsPristine();
+    this.DisplayOrderInputControl.control.markAsPristine();
+  }
+
 }

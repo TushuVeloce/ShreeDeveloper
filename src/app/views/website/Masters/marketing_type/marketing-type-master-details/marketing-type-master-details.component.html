@@ -69,7 +69,10 @@
               id="Description"
               required
               placeholder="Enter Description"
-            />
+              #DescriptionCtrl="ngModel" required (blur)="DescriptionCtrl.control.markAsTouched()" />
+              <div *ngIf="(DescriptionCtrl.invalid && (DescriptionCtrl.touched || DescriptionCtrl.dirty))">
+                <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              </div>
           </div>
         </div>
       </div>

@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ValidationMessages } from 'src/app/classes/domain/constants';
 import { DomainEnums, MarketingModes } from 'src/app/classes/domain/domainenums/domainenums';
 import { MarketingType } from 'src/app/classes/domain/entities/website/masters/marketingtype/marketingtype';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -22,6 +24,10 @@ export class MarketingTypeMasterDetailsComponent implements OnInit {
 
   MarketingModesTypes = MarketingModes;
   MarketingModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
+
+  
+ @ViewChild('DescriptionCtrl') DescriptionInputControl!: NgModel;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companystatemanagement: CompanyStateManagement) { }
 
@@ -74,4 +80,12 @@ export class MarketingTypeMasterDetailsComponent implements OnInit {
   BackMarketingType() {
     this.router.navigate(['/homepage/Website/Marketing_Type_Master']);
   }
+  resetAllControls = () => {
+    // reset touched
+    this.DescriptionInputControl.control.markAsUntouched();
+  
+    // reset dirty
+    this.DescriptionInputControl.control.markAsPristine();
+  }
+
 }

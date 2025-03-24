@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -19,6 +21,11 @@ export class UnitMasterDetailsComponent  implements OnInit {
     DetailsFormTitle: 'New Unit' | 'Edit Unit' = 'New Unit';
     IsDropdownDisabled: boolean = false
     InitialEntity: Unit = null as any;
+    NameWithoutNos: string = ValidationPatterns.NameWithoutNos
+    NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
+    RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
+ 
+  @ViewChild('NameCtrl') NameInputControl!: NgModel;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
@@ -69,6 +76,14 @@ export class UnitMasterDetailsComponent  implements OnInit {
 
   BackUnit() {
     this.router.navigate(['/homepage/Website/Unit_Master']);
+  }
+
+  resetAllControls = () => {
+    // reset touched
+    this.NameInputControl.control.markAsUntouched();
+  
+    // reset dirty
+    this.NameInputControl.control.markAsPristine();
   }
 
 }

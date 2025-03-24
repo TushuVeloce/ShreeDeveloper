@@ -24,12 +24,14 @@ export class MaterialMasterDetailsComponent implements OnInit {
   IsDropdownDisabled: boolean = false;
   InitialEntity: Material = null as any;
   UnitList: Unit[] = [];
-    NameWithoutNos: string = ValidationPatterns.NameWithoutNos
-    NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
-    RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
-    companyRef = this.companystatemanagement.SelectedCompanyRef;
-    
-    @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+  NameWithNos: string = ValidationPatterns.NameWithNos
+  
+  NameWithNosMsg: string = ValidationMessages.NameWithNosMsg
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
+ 
+  @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('CodeCtrl') CodeInputControl!: NgModel;
 
   constructor(
     private router: Router,
@@ -112,9 +114,11 @@ export class MaterialMasterDetailsComponent implements OnInit {
   resetAllControls = () => {
     // reset touched
     this.NameInputControl.control.markAsUntouched();
+    this.CodeInputControl.control.markAsUntouched();
   
     // reset dirty
   
     this.NameInputControl.control.markAsPristine();
+    this.CodeInputControl.control.markAsPristine();
   }
 }

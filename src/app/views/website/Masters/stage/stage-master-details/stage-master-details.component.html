@@ -27,8 +27,10 @@
               class="form-control"
               id="Name"
               required
-              placeholder="Enter Stage Name"
-            />
+              placeholder="Enter Stage Name"  #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()" />
+              <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
+                <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              </div>
           </div>
       </div>
       <div class="col-md-6">
@@ -41,8 +43,10 @@
             class="form-control"
             id="DisplayOrder"
             required
-            placeholder="Enter Display Order"
-          />
+            placeholder="Enter Display Order" #DisplayOrderCtrl="ngModel" required (blur)="DisplayOrderCtrl.control.markAsTouched()" />
+            <div *ngIf="(DisplayOrderCtrl.invalid && (DisplayOrderCtrl.touched || DisplayOrderCtrl.dirty))">
+              <span class="validation-text" *ngIf="DisplayOrderCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
         </div>
       </div>
       </div>

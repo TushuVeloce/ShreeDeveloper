@@ -40,19 +40,32 @@ export class VendorMasterDetailsComponent implements OnInit {
   CityList: City[] = [];
   // VendorServicesOptions: { label: string, value: number }[] = [];
 
+  
+  PinCodePattern: string = ValidationPatterns.PinCode;
   IFSCPattern: string = ValidationPatterns.IFSC;
   PANPattern: string = ValidationPatterns.PAN;
   GSTINPattern: string = ValidationPatterns.GSTIN;
 
 
+  PinCodeMsg: string = ValidationMessages.PinCodeMsg;
   IFSCMsg: string = ValidationMessages.IFSCMsg;
   GSTINMsg: string = ValidationMessages.GSTINMsg;
   PANMsg: string = ValidationMessages.PANMsg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
+  @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('CodeCtrl') CodeInputControl!: NgModel;
+  @ViewChild('AddressLine1Ctrl') AddressLine1InputControl!: NgModel;
+  @ViewChild('MobileNoCtrl') MobileNoInputControl!: NgModel;
+  @ViewChild('TradeNameCtrl') TradeNameInputControl!: NgModel;
+  @ViewChild('PinCodeCtrl') PinCodeInputControl!: NgModel;
+  @ViewChild('BankNameCtrl') BankNameInputControl!: NgModel;
+  @ViewChild('BranchNameCtrl') BranchNameInputControl!: NgModel;
+  @ViewChild('AccountNumberCtrl') AccountNumberInputControl!: NgModel;
   @ViewChild('IFSCCtrl') IFSCInputControl!: NgModel;
   @ViewChild('PANCtrl') PANInputControl!: NgModel;
   @ViewChild('GSTINCtrl') GSTINInputControl!: NgModel;
+
 
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
@@ -186,10 +199,28 @@ export class VendorMasterDetailsComponent implements OnInit {
   }
 
   resetAllControls = () => {
+    this.NameInputControl.control.markAsUntouched();
+    this.CodeInputControl.control.markAsUntouched();
+    this.AddressLine1InputControl.control.markAsUntouched();
+    this.MobileNoInputControl.control.markAsUntouched();
+    this.TradeNameInputControl.control.markAsUntouched();
+    this.PinCodeInputControl.control.markAsUntouched();
+    this.BankNameInputControl.control.markAsUntouched();
+    this.BranchNameInputControl.control.markAsUntouched();
+    this.AccountNumberInputControl.control.markAsUntouched();
     this.IFSCInputControl.control.markAsUntouched();
     this.PANInputControl.control.markAsUntouched();
     this.GSTINInputControl.control.markAsUntouched();
 
+    this.NameInputControl.control.markAsPristine();
+    this.CodeInputControl.control.markAsPristine();
+    this.AddressLine1InputControl.control.markAsPristine();
+    this.MobileNoInputControl.control.markAsPristine();
+    this.TradeNameInputControl.control.markAsPristine();
+    this.PinCodeInputControl.control.markAsPristine();
+    this.BankNameInputControl.control.markAsPristine();
+    this.BranchNameInputControl.control.markAsPristine();
+    this.AccountNumberInputControl.control.markAsPristine();
     this.IFSCInputControl.control.markAsPristine();
     this.PANInputControl.control.markAsPristine();
     this.GSTINInputControl.control.markAsPristine();

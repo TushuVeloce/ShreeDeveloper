@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ValidationMessages } from 'src/app/classes/domain/constants';
 import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -19,6 +21,10 @@ export class VendorServicesMasterDetailsComponent  implements OnInit {
     DetailsFormTitle: 'New Vendor Service' | 'Edit Vendor Service' = 'New Vendor Service';
     IsDropdownDisabled: boolean = false
     InitialEntity: VendorService = null as any;
+    RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
+
+  
+   @ViewChild('NameCtrl') NameInputControl!: NgModel;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
@@ -68,6 +74,14 @@ export class VendorServicesMasterDetailsComponent  implements OnInit {
 
   BackVendorService() {
     this.router.navigate(['/homepage/Website/Vendor_Services_Master']);
+  }
+
+  resetAllControls = () => {
+    // reset touched
+    this.NameInputControl.control.markAsUntouched();
+  
+    // reset dirty
+    this.NameInputControl.control.markAsPristine();
   }
 
 }
