@@ -10,34 +10,28 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { CompanyFetchRequest } from "./customerfollowupfetchrequest";
+import { CustomerFollowUpFetchRequest } from "./customerfollowupfetchrequest";
+import { CustomerFollowUpPlotDetailsProps } from "../customerfollowupplotdetails/CustomerFollowUpPlotDetails";
 
 
-export class CompanyProps {
-  public readonly Db_Table_Name = "CompanyMaster";
+export class CustomerFollowUpProps {
+  public readonly Db_Table_Name = "CustomerFollowUpMaster";
+
   public Ref: number = 0;
-  public Name: string = '';
-  public OwnerName: string = '';
-  public EmailId: string = '';
-  public CompanyType: string = '';
-  public Contacts: string = '';
-  public AddressLine1: string = '';
-  public AddressLine2: string = '';
-  public PinCode: string = '';
-  public GSTIN:  string='';
-  public Pan:  string='';
-  public CINNO:  string='';
-  public DateOfInCorporation:string = '';
-  public LastDateOfFirstFinancialYear:  string='';
-  public Notes:  string='';
-  public CountryRef:  number = 9163;
-  public readonly CountryName: string='';
-  public StateRef:  number = 10263;
-  public readonly StateName: string='';
-  public CityRef:  number = 10374 ;
-  public readonly CityName: string='';
- 
+  public CustomerEnquiryRef : number = 0;
+  public CustomerRequirement: string = '';
+  public LeadSource : number = 0;
+  public LeadHandelBy : number = 0;
+  public BrokerName: string = '';
+  public ContactMode: number = 0;
+  public CustomerStatus: number = 0;
+  public SiteVisitDate:string = '';
+  public OfficeVisitDate:string = '';
+  public ReminderDate :string = '';
+  public Reason: string = '';
 
+  public CustomerFollowUpPlotDetails : CustomerFollowUpPlotDetailsProps []= [];
+ 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
 
@@ -46,14 +40,14 @@ export class CompanyProps {
   }
 
   public static Blank() {
-    return new CompanyProps(true);
+    return new CustomerFollowUpProps(true);
   }
 }
 
-export class Company implements IPersistable<Company> {
-  public static readonly Db_Table_Name: string = 'CompanyMaster';
+export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
+  public static readonly Db_Table_Name: string = 'CustomerFollowUpMaster';
 
-  private constructor(public readonly p: CompanyProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: CustomerFollowUpProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -66,60 +60,52 @@ export class Company implements IPersistable<Company> {
     }
   }
 
-  public GetEditableVersion(): Company {
-    let newState: CompanyProps = Utils.GetInstance().DeepCopy(this.p);
-    return Company.CreateInstance(newState, true);
+  public GetEditableVersion(): CustomerFollowUp {
+    let newState: CustomerFollowUpProps = Utils.GetInstance().DeepCopy(this.p);
+    return CustomerFollowUp.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new Company(CompanyProps.Blank(), true);
+    return new CustomerFollowUp(CustomerFollowUpProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new Company(data as CompanyProps, allowEdit);
+    return new CustomerFollowUp(data as CustomerFollowUpProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-    if (this.p.OwnerName == '') vra.add('OwnerName', 'Owner Name cannot be blank.');
-    if (this.p.EmailId == '') vra.add('EmailId', 'Email Id cannot be blank.');
-    if (this.p.CompanyType == '') vra.add('CompanyType', 'Company Type cannot be blank.');
-    if (this.p.PinCode == '') vra.add('PinCode', 'Pin code cannot be blank.');
-    if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'AddressLine1 cannot be blank.');
-    if (this.p.AddressLine2 == '') vra.add('AddressLine2', 'AddressLine2 cannot be blank.');
-    if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country Name cannot be blank.');
-    if (this.p.StateRef == 0) vra.add('StateRef', 'State Name cannot be blank.');
-    if (this.p.CityRef == 0) vra.add('CityRef', 'City Name cannot be blank.');
-    if (this.p.GSTIN == '') vra.add('GSTIn', 'GST In cannot be blank.');
-    if (this.p.Pan == '') vra.add('Pan', 'Pan cannot be blank.');
-    if (this.p.CINNO == '') vra.add('CINNo', 'CIN No cannot be blank.');
-    if (this.p.Notes == '') vra.add('Notes', 'Notes cannot be blank.');
+    if (this.p.CustomerEnquiryRef == 0) vra.add('CustomerEnquiryRef', 'CustomerEnquiry Name cannot be blank.');
+    if (this.p.CustomerRequirement == '') vra.add('CustomerRequirement', 'CustomerRequirement cannot be blank.');
+    if (this.p.LeadSource  == 0) vra.add('LeadSource ', 'LeadSource  cannot be blank.');
+    if (this.p.LeadHandelBy == 0) vra.add('LeadHandelBy', 'LeadHandelBy  cannot be blank.');
+    if (this.p.BrokerName == '') vra.add('BrokerName', 'BrokerName cannot be blank.');
+    if (this.p.ContactMode == 0) vra.add('CustomerFollowUpType', 'ContactMode cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Company.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, CustomerFollowUp.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: Company = Company.CreateNewInstance();
+  private static m_currentInstance: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return Company.m_currentInstance;
+    return CustomerFollowUp.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: Company) {
-    Company.m_currentInstance = value;
+  public static SetCurrentInstance(value: CustomerFollowUp) {
+    CustomerFollowUp.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): Company {
+  public static SingleInstanceFromTransportData(td: TransportData): CustomerFollowUp {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, Company.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, Company.Db_Table_Name)!.Entries) {
-        return Company.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, CustomerFollowUp.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, CustomerFollowUp.Db_Table_Name)!.Entries) {
+        return CustomerFollowUp.CreateInstance(data, false);
       }
     }
 
@@ -128,13 +114,13 @@ export class Company implements IPersistable<Company> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Company[] {
-    let result: Company[] = [];
+    sortPropertyName: string = "Name"): CustomerFollowUp[] {
+    let result: CustomerFollowUp[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, Company.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, Company.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, CustomerFollowUp.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, CustomerFollowUp.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -144,18 +130,18 @@ export class Company implements IPersistable<Company> {
       }
 
       for (let data of entries) {
-        result.push(Company.CreateInstance(data, false));
+        result.push(CustomerFollowUp.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): Company[] {
-    return Company.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): CustomerFollowUp[] {
+    return CustomerFollowUp.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: CompanyFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: CustomerFollowUpFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -170,28 +156,28 @@ export class Company implements IPersistable<Company> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new CompanyFetchRequest();
-    req.CompanyRefs.push(ref);
+    let req = new CustomerFollowUpFetchRequest();
+    req.CustomerFollowUpRefs.push(ref);
 
-    let tdResponse = await Company.FetchTransportData(req, errorHandler) as TransportData;
-    return Company.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await CustomerFollowUp.FetchTransportData(req, errorHandler) as TransportData;
+    return CustomerFollowUp.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: CompanyFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await Company.FetchTransportData(req, errorHandler) as TransportData;
-    return Company.ListFromTransportData(tdResponse);
+  public static async FetchList(req: CustomerFollowUpFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await CustomerFollowUp.FetchTransportData(req, errorHandler) as TransportData;
+    return CustomerFollowUp.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new CompanyFetchRequest();
-    let tdResponse = await Company.FetchTransportData(req, errorHandler) as TransportData;
-    return Company.ListFromTransportData(tdResponse);
+    let req = new CustomerFollowUpFetchRequest();
+    let tdResponse = await CustomerFollowUp.FetchTransportData(req, errorHandler) as TransportData;
+    return CustomerFollowUp.ListFromTransportData(tdResponse);
   }
-  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new CompanyFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await Company.FetchTransportData(req, errorHandler) as TransportData;
-    return Company.ListFromTransportData(tdResponse);
+  public static async FetchEntireListByCustomerFollowUpRef(CustomerFollowUpRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new CustomerFollowUpFetchRequest();
+    req.CustomerFollowUpRefs.push(CustomerFollowUpRef)
+    let tdResponse = await CustomerFollowUp.FetchTransportData(req, errorHandler) as TransportData;
+    return CustomerFollowUp.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {

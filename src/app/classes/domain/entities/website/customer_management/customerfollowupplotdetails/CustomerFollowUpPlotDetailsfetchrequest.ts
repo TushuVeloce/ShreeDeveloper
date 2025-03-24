@@ -4,15 +4,15 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class CustomerEnquiryFetchRequest
+export class CustomerFollowUpPlotDetailsFetchRequest
 {
-    public static readonly FetchRequestType: string = "CustomerEnquiryFetchRequest";
+    public static readonly FetchRequestType: string = "CustomerFollowUpPlotDetailsFetchRequest";
 
-    CustomerEnquiryRefs: number[] = [];
+    CustomerFollowUpPlotDetailsRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CustomerEnquiryFetchRequest.FetchRequestType) as DataCollection;
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CustomerFollowUpPlotDetailsFetchRequest.FetchRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 
