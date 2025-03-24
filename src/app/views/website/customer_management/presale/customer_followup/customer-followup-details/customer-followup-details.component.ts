@@ -54,10 +54,19 @@ export class CustomerFollowupDetailsComponent  implements OnInit {
       console.log('EmployeeList :', this.EmployeeList);
       this.getSiteListByCompanyRef()
       // Check if CountryRef is already set (e.g., India is preselected)
-      if (this.Entity.p.CountryRef) {
-        // Load states for the preselected country
-        await this.getStateListByCountryRef(this.Entity.p.CountryRef);
-      }
+    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+         this.IsNewEntity = false;
+         this.Entity = CustomerFollowUp.GetCurrentInstance();
+         this.appStateManage.StorageKey.removeItem('Editable');
+       } else {
+         this.Entity = CustomerFollowUp.CreateNewInstance();
+         CustomerFollowUp.SetCurrentInstance(this.Entity);
+       }
+       this.InitialEntity = Object.assign(
+         CustomerFollowUp.CreateNewInstance(),
+         this.utils.DeepCopy(this.Entity)
+       ) as CustomerFollowUp;
+       // this.focusInput();
     }
   
     // For country, state, city dropdowns
