@@ -631,11 +631,11 @@ export class DomainEnums {
 
   public static ContactModeName(itemType: ContactMode) {
     switch (itemType) {
-      case ContactMode.CustomerCalled: return 'CustomerCalled';
-      case ContactMode.ShreeCalled: return 'ShreeCalled';
-      case ContactMode.CustomerSiteVisit: return 'CustomerSiteVisit';
-      case ContactMode.CustomerOfficeVisit: return 'CustomerOfficeVisit';
-      case ContactMode.ShreeCustomerVisit: return 'ShreeCustomerVisit';
+      case ContactMode.CustomerCalled: return 'Customer Called';
+      case ContactMode.ShreeCalled: return 'Shree Called';
+      case ContactMode.CustomerSiteVisit: return 'Customer Site Visit';
+      case ContactMode.CustomerOfficeVisit: return 'Customer Office Visit';
+      case ContactMode.ShreeCustomerVisit: return 'Shree Customer Visit';
       default: return '';
     }
   }
@@ -673,10 +673,10 @@ export class DomainEnums {
   public static CustomerStatusName(itemType: CustomerStatus) {
     switch (itemType) {
       case CustomerStatus.Interested: return 'Interested';
-      case CustomerStatus.LeadInprocess: return 'LeadInprocess';
-      case CustomerStatus.LeadClosed: return 'LeadClosed';
-      case CustomerStatus.DealOpen: return 'DealOpen';
-      case CustomerStatus.DealClosed: return 'DealClosed';
+      case CustomerStatus.LeadInprocess: return 'Lead Inprocess';
+      case CustomerStatus.LeadClosed: return 'Lead Closed';
+      case CustomerStatus.DealOpen: return 'Deal Open';
+      case CustomerStatus.DealClosed: return 'Deal Closed';
       default: return '';
     }
   }

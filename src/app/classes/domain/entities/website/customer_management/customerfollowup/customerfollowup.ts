@@ -15,11 +15,12 @@ import { CustomerFollowUpPlotDetailsProps } from "../customerfollowupplotdetails
 
 
 export class CustomerFollowUpProps {
-  public readonly Db_Table_Name = "CustomerFollowUpMaster";
+  public readonly Db_Table_Name = "CustomerFollowUp";
 
   public Ref: number = 0;
   public CustomerEnquiryRef : number = 0;
   public CustomerRequirement: string = '';
+  public SiteManagementRef : number = 0;
   public LeadSource : number = 0;
   public LeadHandelBy : number = 0;
   public BrokerName: string = '';
@@ -29,6 +30,12 @@ export class CustomerFollowUpProps {
   public OfficeVisitDate:string = '';
   public ReminderDate :string = '';
   public Reason: string = '';
+  public CountryRef:  number = 9163;
+  public readonly CountryName: string='';
+  public StateRef:  number = 10263;
+  public readonly StateName: string='';
+  public CityRef:  number = 10374 ;
+  public readonly CityName: string='';
 
   public CustomerFollowUpPlotDetails : CustomerFollowUpPlotDetailsProps []= [];
  
@@ -45,7 +52,7 @@ export class CustomerFollowUpProps {
 }
 
 export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
-  public static readonly Db_Table_Name: string = 'CustomerFollowUpMaster';
+  public static readonly Db_Table_Name: string = 'CustomerFollowUp';
 
   private constructor(public readonly p: CustomerFollowUpProps, public readonly AllowEdit: boolean) {
 

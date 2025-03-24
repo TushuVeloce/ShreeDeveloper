@@ -14,27 +14,28 @@
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
-            <label>Contract Mode</label>
+            <label>Contact Mode</label>
             <nz-select
             class="nzSelect-light"
             nzShowSearch
             nzAllowClear
             nzPlaceHolder="Select"
-            id="ContractModeRef"
-            name="ContractModeRef"
+            id="ContactMode"
+            name="ContactMode"
             [nzSize]="'large'"
           >
             <nz-option
-              *ngFor="let Mode of ContractModesList"
+              *ngFor="let Mode of ContactModesList"
               [nzValue]="Mode.Ref"
               [nzLabel]="Mode.Name"
             ></nz-option>
-          </nz-select>          </div>
+          </nz-select> 
+        </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Reason</label>
-            <input type="text" name="reason" class="form-control" id="reason" required />
+            <input type="text" name="reason" class="form-control" id="reason" [(ngModel)]="Entity.p.Reason" required />
           </div>
         </div>
         <div class="col-md-4">
@@ -105,7 +106,7 @@
         <div class="col-md-4">
           <div>
             <label>Customer Requirement</label>
-            <input type="text" name="CustomerRequirement" class="form-control" id="CustomerRequirement" required placeholder="Enter Customer Requirement" />
+            <input type="text" name="CustomerRequirement" class="form-control" id="CustomerRequirement" [(ngModel)]="Entity.p.CustomerRequirement" required placeholder="Enter Customer Requirement" />
           </div>
         </div>
         <div class="col-md-4">
@@ -162,19 +163,27 @@
       <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
-            <label for="LeadSourceRef"><b>Lead Source</b></label>
+            <label for="LeadSource"><b>Lead Source</b></label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-              name="LeadSourceRef" required id="LeadSourceRef">
-              <nz-option></nz-option>
+              name="LeadSource" [(ngModel)]="Entity.p.LeadSource" required id="LeadSource">
+              <nz-option
+              *ngFor="let lead of LeadSourceList"
+              [nzValue]="lead.Ref"
+              [nzLabel]="lead.Name"
+            ></nz-option>
             </nz-select>
           </div>
         </div>
         <div class="col-md-4">
           <div>
-            <label for="LeadHandledByRef"><b>Lead Handled By</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LeadHandledByRef"
-              name="LeadHandledByRef" [nzSize]="'large'">
-              <nz-option></nz-option>
+            <label for="LeadHandelBy"><b>Lead Handled By</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LeadHandelBy"
+              name="LeadHandelBy" [(ngModel)]="Entity.p.LeadHandelBy" [nzSize]="'large'">
+              <nz-option
+              *ngFor="let employee of EmployeeList"
+              [nzValue]="employee.p.Ref"
+              [nzLabel]="employee.p.Name"
+            ></nz-option>
             </nz-select>
           </div>
         </div>
@@ -186,23 +195,27 @@
       <div class="row" style="margin-top: 1rem;">
         <div class="col-md-4">
           <div>
-            <label for="CustomerStatusRef"><b>Customer Status</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CustomerStatusRef"
-              name="CustomerStatusRef" [nzSize]="'large'">
-              <nz-option></nz-option>
+            <label for="CustomerStatus"><b>Customer Status</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CustomerStatus"
+              name="CustomerStatus" [(ngModel)]="Entity.p.CustomerStatus" [nzSize]="'large'">
+              <nz-option
+              *ngFor="let status of CustomerStatusList"
+              [nzValue]="status.Ref"
+              [nzLabel]="status.Name"
+            ></nz-option>
             </nz-select>
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Next Site/Office Visit Date</label>
-            <input type="date" name="Date" class="form-control" id="Date" required />
+            <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Entity.p.SiteVisitDate" required />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Reminder Date</label>
-            <input type="Date" name="ReminderDate" class="form-control" id="ReminderDate" required />
+            <input type="Date" name="ReminderDate" class="form-control" id="ReminderDate" [(ngModel)]="Entity.p.ReminderDate" required />
           </div>
         </div>
       </div>
