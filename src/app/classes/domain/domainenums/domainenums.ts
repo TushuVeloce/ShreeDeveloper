@@ -125,7 +125,7 @@ export class DomainEnums {
       case MarketingModes.Electronics: return 'Electronics';
       case MarketingModes.Outdoor: return 'Outdoor';
       case MarketingModes.PrintingMedia: return 'Printing Media';
-      case MarketingModes.AgentBoker: return 'Agent/Boker';
+      case MarketingModes.AgentBoker: return 'Agent/Broker';
       default: return '';
     }
   }
