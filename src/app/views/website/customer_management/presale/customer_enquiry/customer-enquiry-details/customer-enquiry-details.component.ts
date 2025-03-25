@@ -45,6 +45,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   IsPlotDetails: boolean = false;
   InterestedPlotRef: number = 0;
   SiteManagementRef: number = 0;
+  DetailsFormTitle: 'New Customer' | 'Edit Customer' = 'New Customer';
 
   MarketingModesList = DomainEnums.MarketingModesList(
     true,
@@ -84,6 +85,25 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     this.CountryList = await Country.FetchEntireList();
     this.getSiteListByCompanyRef();
     this.getEmployeeListByCompanyRef();
+
+    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+      this.IsNewEntity = false;
+
+      this.DetailsFormTitle = this.IsNewEntity
+        ? 'New Customer'
+        : 'Edit Customer';
+      this.Entity = CustomerEnquiry.GetCurrentInstance();
+      this.appStateManage.StorageKey.removeItem('Editable');
+    } else {
+      this.Entity = CustomerEnquiry.CreateNewInstance();
+      CustomerEnquiry.SetCurrentInstance(this.Entity);
+    }
+    this.InitialEntity = Object.assign(
+      CustomerEnquiry.CreateNewInstance(),
+      this.utils.DeepCopy(this.Entity)
+    ) as CustomerEnquiry;
+    // this.focusInput();
+
     // Check if CountryRef is already set (e.g., India is preselected)
     if (this.Entity.p.CountryRef) {
       // Load states for the preselected country
@@ -227,10 +247,9 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
 
   onLeadSourceChange(selectedValue: number) {
     // Check if the selected value is AgentBroker (50)
-    if(selectedValue === 50){
+    if (selectedValue === 50) {
       this.showAgentBrokerInput = true;
-    }
-    else{
+    } else {
       this.showAgentBrokerInput = false;
     }
   }

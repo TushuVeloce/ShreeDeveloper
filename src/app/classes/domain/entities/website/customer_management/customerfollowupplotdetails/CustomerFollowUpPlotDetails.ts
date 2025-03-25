@@ -25,6 +25,7 @@ export class CustomerFollowUpPlotDetailsProps {
   public Reason: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
+  public readonly SiteName: string = '';
   // public readonly AccountTypeName: string = '';
 
   private constructor(isNewlyCreated: boolean) {

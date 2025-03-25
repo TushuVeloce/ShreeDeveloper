@@ -9,6 +9,7 @@ export class CustomerEnquiryFetchRequest
     public static readonly FetchRequestType: string = "CustomerEnquiryFetchRequest";
 
     CustomerEnquiryRefs: number[] = [];
+    CompanyRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
