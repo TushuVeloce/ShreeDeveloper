@@ -15,30 +15,23 @@ import { CustomerFollowUpPlotDetailsProps } from "../customerfollowupplotdetails
 
 
 export class CustomerFollowUpProps {
-  public readonly Db_Table_Name = "CustomerFollowUp";
-
   public Ref: number = 0;
   public CustomerEnquiryRef : number = 0;
   public CustomerRequirement: string = '';
-  public SiteManagementRef : number = 0;
   public LeadSource : number = 0;
-  public LeadHandelBy : number = 0;
+  public LeadHandleBy : number = 0;
   public BrokerName: string = '';
   public ContactMode: number = 0;
   public CustomerStatus: number = 0;
   public SiteVisitDate:string = '';
   public OfficeVisitDate:string = '';
   public ReminderDate :string = '';
+  public TodaysDate :string = '';
   public Reason: string = '';
-  public CountryRef:  number = 9163;
-  public readonly CountryName: string='';
-  public StateRef:  number = 10263;
-  public readonly StateName: string='';
-  public CityRef:  number = 10374 ;
-  public readonly CityName: string='';
+  public Remark: string = '';
 
   public CustomerFollowUpPlotDetails : CustomerFollowUpPlotDetailsProps []= [];
- 
+
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
 
@@ -52,7 +45,7 @@ export class CustomerFollowUpProps {
 }
 
 export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
-  public static readonly Db_Table_Name: string = 'CustomerFollowUp';
+  public static readonly Db_Table_Name: string = 'CustomerFollowUpMaster';
 
   private constructor(public readonly p: CustomerFollowUpProps, public readonly AllowEdit: boolean) {
 
@@ -66,6 +59,14 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
   }
+
+  public static async getPrimaryKeysWithValidValues(): Promise<number> {
+    const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+          // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+    let newRef = newRefs[0];
+    if (newRef <= 0) throw new Error("Cannot assign Id. Please try again");
+    return newRef
+}
 
   public GetEditableVersion(): CustomerFollowUp {
     let newState: CustomerFollowUpProps = Utils.GetInstance().DeepCopy(this.p);
@@ -85,7 +86,7 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
     if (this.p.CustomerEnquiryRef == 0) vra.add('CustomerEnquiryRef', 'CustomerEnquiry Name cannot be blank.');
     if (this.p.CustomerRequirement == '') vra.add('CustomerRequirement', 'CustomerRequirement cannot be blank.');
     if (this.p.LeadSource  == 0) vra.add('LeadSource ', 'LeadSource  cannot be blank.');
-    if (this.p.LeadHandelBy == 0) vra.add('LeadHandelBy', 'LeadHandelBy  cannot be blank.');
+    if (this.p.LeadHandleBy == 0) vra.add('LeadHandelBy', 'LeadHandelBy  cannot be blank.');
     if (this.p.BrokerName == '') vra.add('BrokerName', 'BrokerName cannot be blank.');
     if (this.p.ContactMode == 0) vra.add('CustomerFollowUpType', 'ContactMode cannot be blank.');
   }

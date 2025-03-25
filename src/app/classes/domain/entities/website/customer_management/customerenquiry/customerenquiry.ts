@@ -28,13 +28,13 @@ export class CustomerEnquiryProps {
   public readonly StateName: string='';
   public CityRef:  number = 10374 ;
   public readonly CityName: string='';
-  public Date: string = '';
+  // public Date: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  
+
   // public CustomerFollowUpPlotDetails: CustomerFollowUpPlotDetailsProps = new Object() as CustomerFollowUpPlotDetailsProps;
 
-  public CustomerFollowUps: CustomerFollowUpProps = new Object() as CustomerFollowUpProps;
+  public CustomerFollowUps: CustomerFollowUpProps []=[ CustomerFollowUpProps.Blank()];
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -50,7 +50,7 @@ export class CustomerEnquiryProps {
 }
 
 export class CustomerEnquiry implements IPersistable<CustomerEnquiry> {
-  public static readonly Db_Table_Name: string = 'CustomerEnquiryMaster';
+  public static readonly Db_Table_Name: string = 'CustomerEnquiry';
 
   private constructor(public readonly p: CustomerEnquiryProps, public readonly AllowEdit: boolean) {
 

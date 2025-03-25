@@ -3,9 +3,13 @@ import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
-import { CustomerFollowUpPlotDetails } from 'src/app/classes/domain/entities/website/customer_management/customerfollowupplotdetails/CustomerFollowUpPlotDetails';
+import {
+  CustomerFollowUpPlotDetails,
+  CustomerFollowUpPlotDetailsProps,
+} from 'src/app/classes/domain/entities/website/customer_management/customerfollowupplotdetails/CustomerFollowUpPlotDetails';
 import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
 import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
+import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
@@ -18,7 +22,7 @@ import { Utils } from 'src/app/services/utils.service';
   selector: 'app-customer-enquiry-details',
   templateUrl: './customer-enquiry-details.component.html',
   styleUrls: ['./customer-enquiry-details.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class CustomerEnquiryDetailsComponent implements OnInit {
   Entity: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
@@ -37,24 +41,49 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   CityList: City[] = [];
   SiteList: Site[] = [];
   PlotList: Plot[] = [];
+  EmployeeList: Employee[] = [];
   IsPlotDetails: boolean = false;
   InterestedPlotRef: number = 0;
   SiteManagementRef: number = 0;
 
-  MarketingModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
+  MarketingModesList = DomainEnums.MarketingModesList(
+    true,
+    '--Select Modes Type--'
+  );
+  ContactModeList = DomainEnums.ContactModeList(
+    true,
+    '--Select Contact Type--'
+  );
+  CustomerStatusList = DomainEnums.CustomerStatusList(
+    true,
+    '--Select Customer Status--'
+  );
 
   DisplayMasterList: Plot[] = [];
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  Plotheaders: string[] = ['Sr.No.', 'Plot No', 'Area in sqm', 'Area in Sqft', 'Customer Status', 'Remark'];
+  Plotheaders: string[] = [
+    'Sr.No.',
+    'Plot No',
+    'Area in sqm',
+    'Area in Sqft',
+    'Customer Status',
+    'Remark',
+  ];
 
-
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
+  constructor(
+    private router: Router,
+    private uiUtils: UIUtils,
+    private appStateManage: AppStateManageService,
+    private utils: Utils,
+    private companystatemanagement: CompanyStateManagement
+  ) {}
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.CountryList = await Country.FetchEntireList();
-    this.getSiteListByCompanyRef()
+    this.getSiteListByCompanyRef();
+    this.getEmployeeListByCompanyRef();
     // Check if CountryRef is already set (e.g., India is preselected)
     if (this.Entity.p.CountryRef) {
       // Load states for the preselected country
@@ -74,7 +103,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
 
       let lst = await State.FetchEntireListByCountryRef(
         CountryRef,
-        async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
+        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
 
       this.StateList = lst;
@@ -87,7 +116,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       this.Entity.p.StateRef = 0;
       this.Entity.p.CityRef = 0;
     }
-  }
+  };
 
   getCityListByStateRef = async (StateRef: number) => {
     this.CityList = [];
@@ -98,7 +127,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
 
       let lst = await City.FetchEntireListByStateRef(
         StateRef,
-        async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
+        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
 
       this.CityList = lst;
@@ -110,25 +139,100 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       // Clear selection if state is cleared
       this.Entity.p.CityRef = 0;
     }
-  }
+  };
 
-  // for site and plot 
+  // for site and plot
   private getSiteListByCompanyRef = async () => {
-    this.DisplayMasterList = [];
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SiteList = lst;
-  }
+  };
+  // get employee list
+  private getEmployeeListByCompanyRef = async () => {
+    let lst = await Employee.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.EmployeeList = lst;
+  };
 
   getPlotBySiteRefList = async (siteRef: number) => {
     if (siteRef <= 0) {
       await this.uiUtils.showWarningToster(`Please Select Site`);
-      return
+      return;
     }
-    let lst = await Plot.FetchEntireListBySiteRef(siteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.InterestedPlotRef = 0;
+
+    let lst = await Plot.FetchEntireListBySiteRef(
+      siteRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.PlotList = lst;
-    this.DisplayMasterList = this.PlotList
+    // this.DisplayMasterList = this.PlotList
     this.IsPlotDetails = true;
     console.log('PlotList :', this.PlotList);
+  };
+
+  addDataToTable() {
+    if (this.SiteManagementRef <= 0) {
+      this.uiUtils.showWarningToster(`Please Select a Site`);
+      return;
+    }
+    if (this.InterestedPlotRef <= 0) {
+      this.uiUtils.showWarningToster(`Please Select a Plot`);
+      return;
+    }
+    let selectedPlot = this.PlotList.find(
+      (plot) => plot.p.Ref === this.InterestedPlotRef
+    );
+    let obj = CustomerFollowUpPlotDetails.CreateNewInstance();
+
+    if (selectedPlot) {
+      obj.EnsurePrimaryKeysWithValidValues();
+      obj.p.SiteRef = this.SiteManagementRef;
+      obj.p.PlotRef = this.InterestedPlotRef;
+      obj.p.AreaInSqft = selectedPlot.p.AreaInSqft;
+      obj.p.AreaInSqm = selectedPlot.p.AreaInSqm;
+    }
+    console.log(obj);
+
+    // Check if the plot is already added
+    const isAlreadyAdded = this.DisplayMasterList.some(
+      (plot) => plot.p.Ref === this.InterestedPlotRef
+    );
+
+    if (isAlreadyAdded) {
+      this.uiUtils.showWarningToster(
+        'This plot is already added to the table.'
+      );
+      return;
+    }
+
+    if (selectedPlot) {
+      this.Entity.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails.push(
+        obj.p
+      );
+      this.DisplayMasterList.push(selectedPlot);
+      this.IsPlotDetails = true;
+      console.log('Updated DisplayMasterList :', this.DisplayMasterList);
+      this.SiteManagementRef = 0;
+      this.InterestedPlotRef = 0;
+    }
+  }
+
+  // On lead source broker selected
+  showAgentBrokerInput: boolean = false;
+
+  onLeadSourceChange(selectedValue: number) {
+    // Check if the selected value is AgentBroker (50)
+    if(selectedValue === 50){
+      this.showAgentBrokerInput = true;
+    }
+    else{
+      this.showAgentBrokerInput = false;
+    }
   }
 
   // onPlotSelected(selectedvalue: any) {
@@ -137,10 +241,25 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   // }
 
   SaveCustomerEnquiry = async () => {
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CompanyRef =
+      this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CustomerFollowUps[0].Ref =
+      await CustomerFollowUp.getPrimaryKeysWithValidValues();
+
+    // Now, update the CustomerEnquiryRef in CustomerFollowUps
+    this.Entity.p.CustomerFollowUps.forEach((followUp) => {
+      followUp.CustomerEnquiryRef = this.Entity.p.Ref;
+
+      // Update CustomerEnquiryFollowUpDetailsRef for each PlotDetail
+      followUp.CustomerFollowUpPlotDetails.forEach((plotDetail) => {
+        plotDetail.CustomerFollowUpRef = followUp.Ref;
+      });
+    });
+
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
+
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
@@ -151,18 +270,19 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Customer Enquiry saved successfully!');
+        await this.uiUtils.showSuccessToster(
+          'Customer Enquiry saved successfully!'
+        );
         this.Entity = CustomerEnquiry.CreateNewInstance();
       } else {
-        await this.uiUtils.showSuccessToster('Customer Enquiry Updated successfully!');
+        await this.uiUtils.showSuccessToster(
+          'Customer Enquiry Updated successfully!'
+        );
       }
     }
   };
 
-
-
   BackCustomerEnquiry() {
     this.router.navigate(['/homepage/Website/Customer_Enquiry']);
   }
-
 }

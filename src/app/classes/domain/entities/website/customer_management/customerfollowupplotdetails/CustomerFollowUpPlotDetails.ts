@@ -13,15 +13,17 @@ import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { CustomerFollowUpPlotDetailsFetchRequest } from "./CustomerFollowUpPlotDetailsfetchrequest";
 
 export class CustomerFollowUpPlotDetailsProps {
-  public readonly Db_Table_Name = "CustomerFollowUpPlotDetailsMaster";
 
   public Ref: number = 0;
-  public CustomerEnquiryFollowUpDetailsRef  : number = 0;
-  public SiteManagementRef  : number = 0;
-  public PlotDetailsRef : number = 0;
+  public CustomerFollowUpRef  : number = 0;
+  public SiteRef  : number = 0;
+  public PlotRef : number = 0;
   public CustomerStatus: number = 0;
-  public Remark: string = '';
- 
+  public AreaInSqm: number = 0;
+  public AreaInSqft: number = 0;
+  // public Remark: string = '';
+  public Reason: string = '';
+
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
 
@@ -65,7 +67,7 @@ export class CustomerFollowUpPlotDetails implements IPersistable<CustomerFollowU
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.PlotDetailsRef == 0) vra.add('PlotDetailsRef', 'PlotDetails cannot be blank.');
+    if (this.p.PlotRef == 0) vra.add('PlotDetailsRef', 'PlotDetails cannot be blank.');
     if (this.p.CustomerStatus == 0) vra.add('CustomerStatus', 'CustomerStatus cannot be blank.');
   }
 

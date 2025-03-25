@@ -158,6 +158,7 @@ export class Utils {
         await obj.EnsurePrimaryKeysWithValidValues();
         obj.MergeIntoTransportData(td);
       }
+console.log(td);
 
       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td, 'TransportData');
 
