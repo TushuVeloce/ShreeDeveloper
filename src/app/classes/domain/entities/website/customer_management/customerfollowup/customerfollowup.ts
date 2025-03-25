@@ -45,7 +45,7 @@ export class CustomerFollowUpProps {
 }
 
 export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
-  public static readonly Db_Table_Name: string = 'CustomerFollowUpMaster';
+  public static readonly Db_Table_Name: string = 'CustomerFollowUp';
 
   private constructor(public readonly p: CustomerFollowUpProps, public readonly AllowEdit: boolean) {
 
@@ -184,6 +184,13 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
   public static async FetchEntireListByCustomerFollowUpRef(CustomerFollowUpRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new CustomerFollowUpFetchRequest();
     req.CustomerFollowUpRefs.push(CustomerFollowUpRef)
+    let tdResponse = await CustomerFollowUp.FetchTransportData(req, errorHandler) as TransportData;
+    return CustomerFollowUp.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByCustomerEnquiryRef(CustomerEnquiry:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new CustomerFollowUpFetchRequest();
+    req.CustomerEnquiryRefs.push(CustomerEnquiry)
     let tdResponse = await CustomerFollowUp.FetchTransportData(req, errorHandler) as TransportData;
     return CustomerFollowUp.ListFromTransportData(tdResponse);
   }
