@@ -35,13 +35,13 @@
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
           <div>
             <label>Email Id</label>
             <input type="text" name="PersonalEmailId" [(ngModel)]="Entity.p.EmailId" class="form-control"
               id="PersonalEmailId" required placeholder="Enter Personal Email Id" />
           </div>
-        </div>
+        </div> -->
         <div class="col-md-4">
           <div>
             <label for="CountryRef"><b>Country</b></label>
@@ -63,8 +63,6 @@
             </nz-select>
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
             <label for="CityRef"><b>City</b></label>
@@ -74,6 +72,8 @@
             </nz-select>
           </div>
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
             <label>Address</label>
@@ -133,8 +133,8 @@
             <tr *ngFor="let plot of Entity.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails; let i = index">
               <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
               <td Class="tbldata">{{ plot.SiteRef }}</td>
-              <td Class="tbldata">{{ plot.AreaInSqm }}</td>
-              <td Class="tbldata">{{ plot.AreaInSqft }}</td>
+              <td Class="tbldata">{{ plot.PlotAreaInSqm }}</td>
+              <td Class="tbldata">{{ plot.PlotAreaInSqft }}</td>
               <td class="tbldata">
                 <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CustomerStatus"
                   name="CustomerStatus" [(ngModel)]="plot.CustomerStatus" [nzSize]="'large'">
@@ -220,6 +220,13 @@
               id="Remark " required placeholder="Enter Remark" />
           </div>
         </div>
+        <!-- <div class="col-md-4">
+          <div>
+            <label>Reason</label>
+            <input type="text" name="Reason" [(ngModel)]="Entity.p.CustomerFollowUps[0].Reason" class="form-control"
+              id="Reason " required placeholder="Enter Reason" />
+          </div>
+        </div> -->
         <!-- <div class="col-md-4">
           <div>
             <label for="VisitedModeRef"><b>Visited Mode</b></label>

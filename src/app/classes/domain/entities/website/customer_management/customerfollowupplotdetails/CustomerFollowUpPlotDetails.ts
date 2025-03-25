@@ -19,8 +19,9 @@ export class CustomerFollowUpPlotDetailsProps {
   public SiteRef  : number = 0;
   public PlotRef : number = 0;
   public CustomerStatus: number = 0;
-  public AreaInSqm: number = 0;
-  public AreaInSqft: number = 0;
+  public CustomerStatusName: string = '';
+  public PlotAreaInSqm: number = 0;
+  public PlotAreaInSqft: number = 0;
   // public Remark: string = '';
   public Reason: string = '';
 

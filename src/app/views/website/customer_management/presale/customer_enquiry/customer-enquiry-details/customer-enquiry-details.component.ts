@@ -94,6 +94,13 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
         : 'Edit Customer';
       this.Entity = CustomerEnquiry.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
+      this.IsPlotDetails = true;
+       if (this.Entity.p.CountryRef) {
+        this.getStateListByCountryRef(this.Entity.p.CountryRef);
+      }
+      if (this.Entity.p.StateRef) {
+        this.getCityListByStateRef(this.Entity.p.StateRef);
+      }
     } else {
       this.Entity = CustomerEnquiry.CreateNewInstance();
       CustomerEnquiry.SetCurrentInstance(this.Entity);
@@ -127,7 +134,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       );
 
       this.StateList = lst;
-      console.log('StateList :', this.StateList);
+      // console.log('StateList :', this.StateList);
 
       // Update CountryRef AFTER fetching data
       this.Entity.p.CountryRef = CountryRef;
@@ -151,7 +158,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       );
 
       this.CityList = lst;
-      console.log('CityList :', this.CityList);
+      // console.log('CityList :', this.CityList);
 
       // Update StateRef AFTER fetching data
       this.Entity.p.StateRef = StateRef;
@@ -192,7 +199,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     this.PlotList = lst;
     // this.DisplayMasterList = this.PlotList
     this.IsPlotDetails = true;
-    console.log('PlotList :', this.PlotList);
+    // console.log('PlotList :', this.PlotList);
   };
 
   addDataToTable() {
@@ -213,8 +220,8 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       obj.EnsurePrimaryKeysWithValidValues();
       obj.p.SiteRef = this.SiteManagementRef;
       obj.p.PlotRef = this.InterestedPlotRef;
-      obj.p.AreaInSqft = selectedPlot.p.AreaInSqft;
-      obj.p.AreaInSqm = selectedPlot.p.AreaInSqm;
+      obj.p.PlotAreaInSqft = selectedPlot.p.AreaInSqft;
+      obj.p.PlotAreaInSqm = selectedPlot.p.AreaInSqm;
     }
     console.log(obj);
 
@@ -236,7 +243,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       );
       this.DisplayMasterList.push(selectedPlot);
       this.IsPlotDetails = true;
-      console.log('Updated DisplayMasterList :', this.DisplayMasterList);
+      // console.log('Updated DisplayMasterList :', this.DisplayMasterList);
       this.SiteManagementRef = 0;
       this.InterestedPlotRef = 0;
     }
@@ -278,7 +285,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
-
+    // return;
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {

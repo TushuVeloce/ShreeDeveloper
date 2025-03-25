@@ -20,7 +20,7 @@ export class CustomerEnquiryComponent implements OnInit {
   SelectedCustomerEnquiry: CustomerEnquiry =
     CustomerEnquiry.CreateNewInstance();
   CustomerRef: number = 0;
-  pageSize = 10; // Items per page
+  pageSize = 5; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
 
@@ -30,7 +30,7 @@ export class CustomerEnquiryComponent implements OnInit {
     'Sr.No.',
     'Name',
     'Contact No',
-    'Date',
+    // 'Date',
     'Customer Status',
     'Action',
   ];
