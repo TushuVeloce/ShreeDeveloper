@@ -204,6 +204,8 @@ export class SidebarlayoutComponent implements OnInit {
       async () => {
         let req = new UserLogoutRequest();
         req.LoginToken = this.sessionValues.CurrentLoginToken;
+        req.LastSelectedCompanyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
+        console.log('req :', req);
         let _ = await this.servercommunicator.LogoutUser(req)
         await this.router.navigate(['/']);
       });
