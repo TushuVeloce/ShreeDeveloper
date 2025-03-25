@@ -1,5 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -15,11 +16,11 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 })
 export class CustomerFollowupComponent  implements OnInit {
 
-  Entity: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
-    MasterList: CustomerFollowUp[] = [];
-    DisplayMasterList: CustomerFollowUp[] = [];
+    Entity: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
+    MasterList: CustomerEnquiry[] = [];
+    DisplayMasterList: CustomerEnquiry[] = [];
     SearchString: string = '';
-    SelectedFollowUp: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
+    SelectedFollowUp: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
     CustomerRef: number = 0;
     pageSize = 10; // Items per page
     currentPage = 1; // Initialize current page
@@ -34,7 +35,7 @@ export class CustomerFollowupComponent  implements OnInit {
     
     async ngOnInit() {
       this.appStateManage.setDropdownDisabled(false);
-      // await this.FormulateCustomerFollowUpList();
+      await this.getCustomerFollowUpList();
       // this.DisplayMasterList = [];
       this.loadPaginationData();
       this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
@@ -47,17 +48,15 @@ export class CustomerFollowupComponent  implements OnInit {
           await this.uiUtils.showErrorToster('Company not Selected');
           return;
         }
-        let lst = await CustomerFollowUp.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-        this.MasterList = lst;
-        console.log('CustomerFollowUpList :', this.MasterList);
-    
+        let lst = await CustomerEnquiry.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+        this.MasterList = lst;    
         this.DisplayMasterList = this.MasterList;
         this.loadPaginationData();
       }
       
-      onEditClicked = async (item: CustomerFollowUp) => {
+      onEditClicked = async (item: CustomerEnquiry) => {
         this.SelectedFollowUp = item.GetEditableVersion();
-        CustomerFollowUp.SetCurrentInstance(this.SelectedFollowUp);
+        CustomerEnquiry.SetCurrentInstance(this.SelectedFollowUp);
         this.appStateManage.StorageKey.setItem('Editable', 'Edit');
         await this.router.navigate(['/homepage/Website/Customer_FollowUp_Details']);
       };

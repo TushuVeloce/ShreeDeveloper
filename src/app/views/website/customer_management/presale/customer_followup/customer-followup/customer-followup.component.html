@@ -26,9 +26,8 @@
       <tbody>
         <tr *ngFor="let followup of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <!-- <td Class="tbldata">{{followup.p.CustomerEnquiryDetails.SiteRef}}</td> -->
-          <td Class="tbldata">{{followup.p.LeadSource}}</td>
-          <td Class="tbldata">{{followup.p.LeadHandleBy}}</td>
+          <!-- <td Class="tbldata">{{followup.p.LeadSource}}</td> -->
+          <!-- <td Class="tbldata">{{followup.p.LeadHandleBy}}</td> -->
           <td class="tbldata">
             <span style="margin-left: 9px;"  (click)="onEditClicked(followup);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
