@@ -410,8 +410,7 @@ export class ServerCommunicatorService {
   public async LogoutUser(req: UserLogoutRequest) {
     let apiRoot = this.sessionValues.requestController;
     let url = `${apiRoot}/logoutsystemuser`;
-    req.LastSelectedCompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-
+    
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });

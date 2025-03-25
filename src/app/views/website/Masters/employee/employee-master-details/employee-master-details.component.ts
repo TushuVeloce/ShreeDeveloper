@@ -48,7 +48,6 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     this.DesignationList = await Designation.FetchEntireList();
     this.CountryList = await Country.FetchEntireList();
     this.DepartmentList = await Department.FetchEntireList();
-    console.log('DepartmentList :', this.DepartmentList);
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
@@ -57,9 +56,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
         ? 'New Employee'
         : 'Edit Employee';
       this.Entity = Employee.GetCurrentInstance();
-      this.appStateManage.StorageKey.removeItem('Editable');
-      console.log('this.Entity :', this.Entity);
-      
+      this.appStateManage.StorageKey.removeItem('Editable');      
       if (this.Entity.p.CountryRef) {
         this.getStateListByCountryRef(this.Entity.p.CountryRef);
       }
@@ -82,10 +79,13 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     this.CityList = [];
   
     if (CountryRef) {
+      if(CountryRef == 9163){
+        this.Entity.p.StateRef = 10263
+        this.Entity.p.CityRef = 10374
+        this.getCityListByStateRef(10263)
+      }
       let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.StateList = lst;
-      console.log('StateList :', this.StateList);
-  
       if (CountryRef !== this.Entity.p.CountryRef) {
         // Reset StateRef and CityRef when country is changed
         this.Entity.p.StateRef = 0;
@@ -104,7 +104,6 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     if (StateRef) {
       let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.CityList = lst;
-      console.log('CityList :', this.CityList);
   
       if (StateRef !== this.Entity.p.StateRef) {
         // Reset CityRef when state is changed

@@ -3,11 +3,11 @@
     <div class="row">
       <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
         <button type="button" class="backbtn">
-          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" (click)="BackCustomerFollowUp()"/>
         </button>
       </div>
       <div class="col-md-11">
-        <span class="detail_title">Customer Enquiry</span>
+        <span class="detail_title">Customer Follow Up</span>
       </div>
     </div>
     <form autocomplete="off">
@@ -41,7 +41,7 @@
         <div class="col-md-4">
           <div>
             <label>Customer Name</label>
-            <input type="text" name="CustomerName" class="form-control" id="CustomerName" required
+            <input type="text" name="CustomerName" class="form-control" id="CustomerName" [(ngModel)]="CustomerEnquiryEntity.p.Name"  required
               placeholder="Enter Contact Nos" />
           </div>
         </div>
@@ -50,14 +50,14 @@
         <div class="col-md-4">
           <div>
             <label>Contact Nos</label>
-            <input type="text" name="ContactNos" class="form-control" id="ContactNos" required
+            <input type="text" name="ContactNos" class="form-control" id="ContactNos" required [(ngModel)]="CustomerEnquiryEntity.p.ContactNos"
               placeholder="Enter Contact Nos" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Email Id</label>
-            <input type="text" name="PersonalEmailId" class="form-control" id="PersonalEmailId" required
+            <input type="text" name="PersonalEmailId" class="form-control" id="PersonalEmailId" required [(ngModel)]="CustomerEnquiryEntity.p.EmailId"
               placeholder="Enter Personal Email Id" />
           </div>
         </div>
@@ -65,7 +65,7 @@
           <div>
             <label for="CountryRef"><b>Country</b></label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-              name="CountryRef" required id="CountryRef">
+              name="CountryRef" required id="CountryRef" [(ngModel)]="CustomerEnquiryEntity.p.CountryRef">
               <nz-option></nz-option>
             </nz-select>
           </div>
@@ -76,7 +76,7 @@
           <div>
             <label for="StateRef"><b>State</b></label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
-              name="StateRef" [nzSize]="'large'">
+              name="StateRef" [nzSize]="'large'"  [(ngModel)]="CustomerEnquiryEntity.p.StateRef">
               <nz-option></nz-option>
             </nz-select>
           </div>
@@ -85,7 +85,7 @@
           <div>
             <label for="CityRef"><b>City</b></label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
-              name="CityRef" [nzSize]="'large'">
+              name="CityRef" [nzSize]="'large'"  [(ngModel)]="CustomerEnquiryEntity.p.CityRef">
               <nz-option></nz-option>
             </nz-select>
           </div>
@@ -93,7 +93,7 @@
         <div class="col-md-4">
           <div>
             <label>Address</label>
-            <input type="text" name="address" class="form-control" id="address" required placeholder="Enter Address" />
+            <input type="text" name="address" class="form-control" id="address" required placeholder="Enter Address"  [(ngModel)]="CustomerEnquiryEntity.p.Address">
           </div>
         </div>
       </div>
@@ -176,9 +176,9 @@
         </div>
         <div class="col-md-4">
           <div>
-            <label for="LeadHandelBy"><b>Lead Handled By</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LeadHandelBy"
-              name="LeadHandelBy" [(ngModel)]="Entity.p.LeadHandelBy" [nzSize]="'large'">
+            <label for="LeadHandleBy"><b>Lead Handled By</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LeadHandleBy"
+              name="LeadHandleBy" [(ngModel)]="Entity.p.LeadHandleBy" [nzSize]="'large'">
               <nz-option
               *ngFor="let employee of EmployeeList"
               [nzValue]="employee.p.Ref"
@@ -189,7 +189,7 @@
         </div>
         <div class="col-md-4">
           <label>Remark</label>
-          <input type="text" name="Remark" class="form-control" id="Remark " required placeholder="Enter Remark" />
+          <input type="text" name="Remark" class="form-control" id="Remark " required placeholder="Enter Remark"   [(ngModel)]="Entity.p.Remark"/>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem;">
@@ -222,10 +222,10 @@
 
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
-          <button type="button" class="btn">Save</button>
+          <button type="button" class="btn" (click)="SaveCustomerFollowUp()">Save</button>
         </div>
         <div>
-          <button type="button" class="btn">Back</button>
+          <button type="button" class="btn" (click)="BackCustomerFollowUp()">Back</button>
         </div>
       </div>
     </form>

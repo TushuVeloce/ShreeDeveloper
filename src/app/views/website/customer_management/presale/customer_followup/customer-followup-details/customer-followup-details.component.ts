@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
 import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
@@ -21,6 +22,7 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class CustomerFollowupDetailsComponent  implements OnInit {
   Entity: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
+  CustomerEnquiryEntity: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
   Plotheaders: string[] = ['Sr.No.', 'Plot No', 'Area in sqm', 'Area in Sqft', 'Customer Status', 'Remark'];
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
@@ -52,11 +54,12 @@ export class CustomerFollowupDetailsComponent  implements OnInit {
       this.CountryList = await Country.FetchEntireList();
       this.EmployeeList = await Employee.FetchEntireList();
       console.log('EmployeeList :', this.EmployeeList);
-      this.getSiteListByCompanyRef()
+      // this.getSiteListByCompanyRef()
       // Check if CountryRef is already set (e.g., India is preselected)
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
          this.IsNewEntity = false;
          this.Entity = CustomerFollowUp.GetCurrentInstance();
+         this.CustomerEnquiryEntity = CustomerEnquiry.GetCurrentInstance();
          this.appStateManage.StorageKey.removeItem('Editable');
        } else {
          this.Entity = CustomerFollowUp.CreateNewInstance();
@@ -76,8 +79,8 @@ export class CustomerFollowupDetailsComponent  implements OnInit {
   
       if (CountryRef) {
         // Reset StateRef and CityRef immediately when CountryRef changes
-        this.Entity.p.StateRef = 0;
-        this.Entity.p.CityRef = 0;
+        this.CustomerEnquiryEntity.p.StateRef = 0;
+        this.CustomerEnquiryEntity.p.CityRef = 0;
   
         let lst = await State.FetchEntireListByCountryRef(
           CountryRef,
@@ -88,11 +91,11 @@ export class CustomerFollowupDetailsComponent  implements OnInit {
         console.log('StateList :', this.StateList);
   
         // Update CountryRef AFTER fetching data
-        this.Entity.p.CountryRef = CountryRef;
+        this.CustomerEnquiryEntity.p.CountryRef = CountryRef;
       } else {
         // Clear selections if country is cleared
-        this.Entity.p.StateRef = 0;
-        this.Entity.p.CityRef = 0;
+        this.CustomerEnquiryEntity.p.StateRef = 0;
+        this.CustomerEnquiryEntity.p.CityRef = 0;
       }
     }
   
@@ -101,7 +104,7 @@ export class CustomerFollowupDetailsComponent  implements OnInit {
   
       if (StateRef) {
         // Reset CityRef immediately when StateRef changes
-        this.Entity.p.CityRef = 0;
+        this.CustomerEnquiryEntity.p.CityRef = 0;
   
         let lst = await City.FetchEntireListByStateRef(
           StateRef,
@@ -112,10 +115,10 @@ export class CustomerFollowupDetailsComponent  implements OnInit {
         console.log('CityList :', this.CityList);
   
         // Update StateRef AFTER fetching data
-        this.Entity.p.StateRef = StateRef;
+        this.CustomerEnquiryEntity.p.StateRef = StateRef;
       } else {
         // Clear selection if state is cleared
-        this.Entity.p.CityRef = 0;
+        this.CustomerEnquiryEntity.p.CityRef = 0;
       }
     }
   
@@ -126,22 +129,22 @@ export class CustomerFollowupDetailsComponent  implements OnInit {
       this.SiteList = lst;
     }
   
-    // getPlotBySiteRefList = async (siteRef: number) => {
-    //   if (siteRef <= 0) {
-    //     await this.uiUtils.showWarningToster(`Please Select Site`);
-    //     return
-    //   }
-    //   let lst = await Plot.FetchEntireListBySiteRef(siteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    //   this.PlotList = lst;
-    //   this.DisplayMasterList = this.PlotList
-    //   this.IsPlotDetails = true;
-    //   console.log('PlotList :', this.PlotList);
-    // }
+    getPlotBySiteRefList = async (siteRef: number) => {
+      if (siteRef <= 0) {
+        await this.uiUtils.showWarningToster(`Please Select Site`);
+        return
+      }
+      let lst = await Plot.FetchEntireListBySiteRef(siteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.PlotList = lst;
+      this.DisplayMasterList = this.PlotList
+      this.IsPlotDetails = true;
+      console.log('PlotList :', this.PlotList);
+    }
   
-    // onPlotSelected(selectedvalue: any) {
-    //   this.Entity.p.CustomerFollowUpPlotDetails = selectedvalue;
-    //   // console.log(this.Entity.p.MaterialSuppliedByVendors);
-    // }
+    onPlotSelected(selectedvalue: any) {
+      this.Entity.p.CustomerFollowUpPlotDetails = selectedvalue;
+      // console.log(this.Entity.p.MaterialSuppliedByVendors);
+    }
   
     SaveCustomerFollowUp = async () => {
       let entityToSave = this.Entity.GetEditableVersion();
@@ -168,7 +171,7 @@ export class CustomerFollowupDetailsComponent  implements OnInit {
   
   
     BackCustomerFollowUp() {
-      this.router.navigate(['/homepage/Website/Customer_Enquiry']);
+      this.router.navigate(['/homepage/Website/Customer_FollowUp']);
     }
   
   }
