@@ -36,7 +36,7 @@ export class EmployeeProps {
   public readonly CityName: boolean = false;
   public EmergencyContactName : string = '';
   public EmergencyContactNo : string = '';
-  public MaterialStatus  : string = '';
+  public MaritalStatus  : string = '';
   public DateOfJoining : string = '';
   public SalaryPerMonth : Number = 0;
   public SalaryPerYear : Number = 0;

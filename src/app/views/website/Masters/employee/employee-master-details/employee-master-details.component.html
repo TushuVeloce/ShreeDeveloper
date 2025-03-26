@@ -31,7 +31,7 @@
         <div class="col-md-4">
           <div>
             <label>Date of Birth</label>
-            <input type="date" name="DOB " [(ngModel)]="Entity.p.DOB " class="form-control" id="DOB " required />
+            <input type="date" name="DOB " [(ngModel)]="dob " class="form-control" id="DOB " required />
           </div>
         </div>
           <div class="col-md-4">
@@ -132,10 +132,10 @@
         </div>
         <div class="col-md-4">
           <div>
-            <label>Material Status</label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="MaterialStatus" name="MaterialStatus"
-              [nzSize]="'large'" [(ngModel)]="Entity.p.MaterialStatus">
-              <nz-option *ngFor="let status of MaterialStatusList" [nzValue]="status.Ref" [nzLabel]="status.Name"></nz-option>
+            <label>Marital  Status</label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="MaritalStatus" name="MaritalStatus"
+              [nzSize]="'large'" [(ngModel)]="Entity.p.MaritalStatus">
+              <nz-option *ngFor="let status of MaritalStatusList" [nzValue]="status.Ref" [nzLabel]="status.Name"></nz-option>
             </nz-select>
           </div>
         </div>
@@ -204,7 +204,7 @@
         <div class="col-md-4">
           <div>
             <label>Date Of Joining</label>
-            <input type="date" name="DateOfJoining " [(ngModel)]="Entity.p.DateOfJoining " class="form-control"
+            <input type="date" name="DateOfJoining " [(ngModel)]="dateofjoining " class="form-control"
               id="DateOfJoining " required />
           </div>
         </div>

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
@@ -9,6 +10,7 @@ import { Employee } from 'src/app/classes/domain/entities/website/masters/employ
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -31,9 +33,11 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   DesignationList: Designation[] = [];
   DepartmentList: Department[] = [];
   GenderList = DomainEnums.GenderTypeList(true, '---Select Gender---');
-  MaterialStatusList = DomainEnums.MaritalStatusesList(true, '---Select Material Status ---');
+  MaritalStatusList = DomainEnums.MaritalStatusesList(true, '---Select Marital Status ---');
   MarketingModesList = DomainEnums.MarketingModesList();
   companyName = this.companystatemanagement.SelectedCompanyName;
+  dateofjoining: string | null = null;
+  dob: string | null = null;
 
 
   constructor(
@@ -41,7 +45,8 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
     private utils: Utils,private companystatemanagement: CompanyStateManagement
-  ) {}
+  , private dtu: DTU,
+      private datePipe: DatePipe) {}
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -56,6 +61,18 @@ export class EmployeeMasterDetailsComponent implements OnInit {
         ? 'New Employee'
         : 'Edit Employee';
       this.Entity = Employee.GetCurrentInstance();
+      
+      // While Edit Converting date String into Date Format //
+      this.dateofjoining = this.datePipe.transform(
+        this.dtu.FromString(this.Entity.p.DateOfJoining),
+        'yyyy-MM-dd'
+      );
+        
+      // While Edit Converting date String into Date Format //
+      this.dob = this.datePipe.transform(
+        this.dtu.FromString(this.Entity.p.DOB),
+        'yyyy-MM-dd'
+      );
       this.appStateManage.StorageKey.removeItem('Editable');      
       if (this.Entity.p.CountryRef) {
         this.getStateListByCountryRef(this.Entity.p.CountryRef);
@@ -119,6 +136,28 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
+     // ------ Code For Save Date Of Joining Format ---------------//
+     if (this.dateofjoining) {
+      let dateValue = new Date(this.dateofjoining);
+
+      if (!isNaN(dateValue.getTime())) {
+        entityToSave.p.DateOfJoining =
+          this.dtu.DateStartStringFromDateValue(dateValue);
+      } else {
+        entityToSave.p.DateOfJoining = '';
+      }
+    }
+     // ------ Code For Save DDate Of Birth Format ---------------//
+     if (this.dob) {
+      let dateValue = new Date(this.dob);
+
+      if (!isNaN(dateValue.getTime())) {
+        entityToSave.p.DOB =
+          this.dtu.DateStartStringFromDateValue(dateValue);
+      } else {
+        entityToSave.p.DOB = '';
+      }
+    }
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
@@ -132,9 +171,11 @@ export class EmployeeMasterDetailsComponent implements OnInit {
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Employee saved successfully!');
+        this.dob = '';
         this.Entity = Employee.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster('Employee Updated successfully!');
+        this.router.navigate(['/homepage/Website/Employee_Master']);
       }
     }
   };
