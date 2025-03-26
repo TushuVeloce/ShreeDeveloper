@@ -70,6 +70,10 @@ export class PlotMasterComponent implements OnInit {
 
   onsitechange(siteref: number){
     this.siteref = siteref
+    this.Entity.p.BookingRemark = 0
+    this.bookigremark = 0
+    this.MasterList = [];
+    this.DisplayMasterList = [];
     if(siteref > 0 && this.SiteList.length > 0){
       this.Entity.p.SiteManagementRef = siteref;
       const selectedSite= this.SiteList.find(site => site.p.Ref === siteref);
@@ -78,6 +82,7 @@ export class PlotMasterComponent implements OnInit {
     }
       this.appStateManage.StorageKey.setItem('siteRf', String(siteref));
       this.appStateManage.StorageKey.setItem('siteName', selectedSite.p.Name);
+      this.appStateManage.StorageKey.setItem('bookingremarkRef', String(this.bookigremark));
       if(this.bookigremark > 0){
         this.getPlotListBySiteRef(siteref,this.bookigremark)
       }
