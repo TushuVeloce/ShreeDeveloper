@@ -1,0 +1,248 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" (click) = "BackRegisteredCustomer()"/>
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">Customer Follow Up</span>
+      </div>
+    </div>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-6">
+          <div>
+            <label>Site Name</label>
+            <input type="text" name="reason" class="form-control" id="reason" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Site Name"/>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div>
+            <label>Register Customer Name</label>
+            <input type="text" name="reason" class="form-control" id="reason" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Register Customer Name"  />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-12">
+          <label class="TableHeading"> Customer Details</label>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <!-- <div class="col-md-4">
+          <div>
+            <label>Email ID</label>
+            <input type="text" name="EmailId" class="form-control" id="EmailId" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Email ID" />
+          </div>
+        </div> -->
+        <div class="col-md-4">
+          <div>
+            <label>Address</label>
+            <input type="text" name="Address" class="form-control" id="Address" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Address" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Mobile No.</label>
+            <input type="text" name="MobNo" class="form-control" id="MobNo" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Mobile No." />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Visited Date</label>
+            <input type="text" name="VisitedDate" class="form-control" id="VisitedDate" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Visited Date" />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Lead Source</label>
+            <input type="text" name="LeadSource" class="form-control" id="LeadSource" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Lead Source" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Lead By</label>
+            <input type="text" name="LeadHandleBy" class="form-control" id="LeadHandleBy" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Lead By" />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-12">
+          <label class="TableHeading">Plot Details</label>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Plot Number</label>
+            <input type="text" name="PlotNumber" class="form-control" id="PlotNumber" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Plot Number" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Basic Rate</label>
+            <input type="text" name="BasicRate" class="form-control" id="BasicRate" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Basic Rate" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Area Sqmt</label>
+            <input type="text" name="AreaInSqm" class="form-control" id="AreaInSqm" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Area Sqmt" />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Area Sqft</label>
+            <input type="text" name="AreaInSqft" class="form-control" id="AreaInSqft" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Area Sqft" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Discounted Rate On Area </label>
+            <input type="text" name="DiscountedRateOnArea " class="form-control" id="DiscountedRateOnArea " [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Discounted Rate" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Discount On Total Plot Amount </label>
+            <input type="text" name="Discount On Total Plot Amount " class="form-control" id="Discount On Total Plot Amount " [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Discount" />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Total Plot Amount</label>
+            <input type="text" name="TotalPlotAmount" class="form-control" id="TotalPlotAmount" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Total Plot Amount" />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-12">
+          <label class="TableHeading">Agreement Value & Legal Charges</label>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Register Date</label>
+            <input type="text" name="RegisterDate" class="form-control" id="RegisterDate" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Register Date" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Register By</label>
+            <input type="text" name="RegisterBy" class="form-control" id="RegisterBy" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Register By" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Government Recknor</label>
+            <input type="text" name="GovernmentRecknor" class="form-control" id="GovernmentRecknor" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Government Recknor" />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Government Value</label>
+            <input type="text" name="GovernmentValue" class="form-control" id="GovernmentValue" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Government Value" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Value Of Agreement</label>
+            <input type="text" name="ValueOfAgreement" class="form-control" id="ValueOfAgreement" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Value Of Agreement" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Tax Value In %</label>
+            <input type="text" name="TaxValueInPercentage" class="form-control" id="TaxValueInPercentage" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Tax Value In %" />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Stamp Duties</label>
+            <input type="text" name="StampDuties" class="form-control" id="StampDuties" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Stamp Duties" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Reg. Tax Values in %</label>
+            <input type="text" name="RegTaxValuesInPercentage" class="form-control" id="RegTaxValuesInPercentage" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Reg. Tax Values in %" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Registration Fees</label>
+            <input type="text" name="RegistrationFees" class="form-control" id="RegistrationFees" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Registration Fees" />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Goods & Services Tax (GST)</label>
+            <input type="text" name="GoodsServicesTax" class="form-control" id="GoodsServicesTax" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter GST" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Legal Charges</label>
+            <input type="text" name="LegalCharges" class="form-control" id="LegalCharges" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Legal Charges" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Total Extra Charges</label>
+            <input type="text" name="TotalExtraCharges" class="form-control" id="TotalExtraCharges" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Total Extra Charges" />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Grand Total</label>
+            <input type="text" name="GrandTotal" class="form-control" id="GrandTotal" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Grand Total" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Amount Paid</label>
+            <input type="text" name="AmountPaid" class="form-control" id="AmountPaid" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Amount Paid" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Remaining Amount</label>
+            <input type="text" name="RemainingAmount" class="form-control" id="RemainingAmount" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Remaining Amount" />
+          </div>
+        </div>
+      </div>`
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Gst Total Amount </label>
+            <input type="text" name="GstToatalAmount " class="form-control" id="GstToatalAmount " [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Gst Total Amount" />
+          </div>
+        </div>
+      </div>`
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn" (click) = "SaveRegisteredCustomer()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click) = "BackRegisteredCustomer()">Back</button>
+        </div>
+      </div>
+    </form>
+  </div>

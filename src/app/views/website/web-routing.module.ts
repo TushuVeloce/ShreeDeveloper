@@ -79,6 +79,8 @@ import { CustomerEnquiryComponent } from './customer_management/presale/customer
 import { CustomerEnquiryDetailsComponent } from './customer_management/presale/customer_enquiry/customer-enquiry-details/customer-enquiry-details.component';
 import { CustomerFollowupComponent } from './customer_management/presale/customer_followup/customer-followup/customer-followup.component';
 import { CustomerFollowupDetailsComponent } from './customer_management/presale/customer_followup/customer-followup-details/customer-followup-details.component';
+import { RegisteredCustomerComponent } from './customer_management/presale/registered_customer/registered-customer/registered-customer.component';
+import { RegisteredCustomerDetailsComponent } from './customer_management/presale/registered_customer/registered-customer-details/registered-customer-details.component';
 
 const routes: Routes = [
   {
@@ -160,6 +162,9 @@ const routes: Routes = [
 
       { path: 'Customer_FollowUp', component: CustomerFollowupComponent },
       { path: 'Customer_FollowUp_Details', component: CustomerFollowupDetailsComponent },
+
+      { path: 'Registered_Customer', component: RegisteredCustomerComponent},
+      { path: 'Registered_Customer_Details', component: RegisteredCustomerDetailsComponent },
 
 
       { path: 'government _Office', component: GovernmentOfficeComponent },

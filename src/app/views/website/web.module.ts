@@ -76,6 +76,8 @@ import { CustomerEnquiryComponent } from './customer_management/presale/customer
 import { CustomerEnquiryDetailsComponent } from './customer_management/presale/customer_enquiry/customer-enquiry-details/customer-enquiry-details.component';
 import { CustomerFollowupDetailsComponent } from './customer_management/presale/customer_followup/customer-followup-details/customer-followup-details.component';
 import { CustomerFollowupComponent } from './customer_management/presale/customer_followup/customer-followup/customer-followup.component';
+import { RegisteredCustomerComponent } from './customer_management/presale/registered_customer/registered-customer/registered-customer.component';
+import { RegisteredCustomerDetailsComponent } from './customer_management/presale/registered_customer/registered-customer-details/registered-customer-details.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent  ,StageMasterComponent,StageMasterDetailsComponent, AccountMainLedgerComponent,AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent,MarketingTypeMasterDetailsComponent,
@@ -85,7 +87,7 @@ import { CustomerFollowupComponent } from './customer_management/presale/custome
     DeleteIconComponent,EditIconComponent, DataNotFoundComponent,VehicleMasterDetailsComponent,UserrolerightsComponent,FinancialYearMasterComponent,
     VendorServicesMasterComponent,VendorServicesMasterDetailsComponent,SiteManagementDetailsComponent,EmployeeAppraisalDetailsComponent,
     EmployeeAppraisalMasterComponent,EmployeeExitDetailsComponent,EmployeeExitMasterComponent,PlotMasterComponent,
-    PlotMasterDetailsComponent,CustomerEnquiryComponent,CustomerEnquiryDetailsComponent,CustomerFollowupComponent, CustomerFollowupDetailsComponent],
+    PlotMasterDetailsComponent,CustomerEnquiryComponent,CustomerEnquiryDetailsComponent,CustomerFollowupComponent, CustomerFollowupDetailsComponent,RegisteredCustomerComponent,RegisteredCustomerDetailsComponent],
   imports: [
     CommonModule,WebRoutingModule,FormsModule,NzDropDownModule,NzTableModule,IonicModule.forRoot(),
     NzPaginationModule, NzUploadModule, NzModalModule,NzCheckboxModule, 

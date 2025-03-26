@@ -447,6 +447,11 @@ export class SidebarlayoutComponent implements OnInit {
         Name: 'Customer Follow Up',
         RouterLink: '/homepage/Website/Customer_FollowUp',
         LogoPath: '',
+      },
+      {
+        Name: 'Registered Customer',
+        RouterLink: '/homepage/Website/Registered_Customer',
+        LogoPath: '',
       }
     ]
 
