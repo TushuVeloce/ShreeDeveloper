@@ -45,7 +45,16 @@ export class CustomerFollowupDetailsComponent  implements OnInit {
     LeadSourceList = DomainEnums.MarketingModesList(true, '--Select Lead Source --');
     CustomerStatusList = DomainEnums.CustomerStatusList(true, '--Select Customer Status --');
     companyRef = this.companystatemanagement.SelectedCompanyRef;
+    showAgentBrokerInput: boolean = false;
 
+    onLeadSourceChange(selectedValue: number) {
+      // Check if the selected value is AgentBroker (50)
+      if (selectedValue === 50) {
+        this.showAgentBrokerInput = true;
+      } else {
+        this.showAgentBrokerInput = false;
+      }
+    }
   
     constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
   
@@ -53,23 +62,24 @@ export class CustomerFollowupDetailsComponent  implements OnInit {
       this.appStateManage.setDropdownDisabled(true);
       this.CountryList = await Country.FetchEntireList();
       this.EmployeeList = await Employee.FetchEntireList();
-      console.log('EmployeeList :', this.EmployeeList);
       // this.getSiteListByCompanyRef()
       // Check if CountryRef is already set (e.g., India is preselected)
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
          this.IsNewEntity = false;
          this.Entity = CustomerFollowUp.GetCurrentInstance();
          this.CustomerEnquiryEntity = CustomerEnquiry.GetCurrentInstance();
+         console.log('Entity :', this.Entity);
+         console.log('CustomerEnquiryEntity :', this.CustomerEnquiryEntity);
          this.appStateManage.StorageKey.removeItem('Editable');
-       } else {
-         this.Entity = CustomerFollowUp.CreateNewInstance();
-         CustomerFollowUp.SetCurrentInstance(this.Entity);
-       }
-       this.InitialEntity = Object.assign(
-         CustomerFollowUp.CreateNewInstance(),
-         this.utils.DeepCopy(this.Entity)
-       ) as CustomerFollowUp;
-       // this.focusInput();
+        } else {
+          this.Entity = CustomerFollowUp.CreateNewInstance();
+          CustomerFollowUp.SetCurrentInstance(this.Entity);
+        }
+        this.InitialEntity = Object.assign(
+          CustomerFollowUp.CreateNewInstance(),
+          this.utils.DeepCopy(this.Entity)
+        ) as CustomerFollowUp;
+        // this.focusInput();
     }
   
     // For country, state, city dropdowns
@@ -88,7 +98,6 @@ export class CustomerFollowupDetailsComponent  implements OnInit {
         );
   
         this.StateList = lst;
-        console.log('StateList :', this.StateList);
   
         // Update CountryRef AFTER fetching data
         this.CustomerEnquiryEntity.p.CountryRef = CountryRef;
@@ -112,7 +121,6 @@ export class CustomerFollowupDetailsComponent  implements OnInit {
         );
   
         this.CityList = lst;
-        console.log('CityList :', this.CityList);
   
         // Update StateRef AFTER fetching data
         this.CustomerEnquiryEntity.p.StateRef = StateRef;
@@ -138,18 +146,17 @@ export class CustomerFollowupDetailsComponent  implements OnInit {
       this.PlotList = lst;
       this.DisplayMasterList = this.PlotList
       this.IsPlotDetails = true;
-      console.log('PlotList :', this.PlotList);
     }
   
     onPlotSelected(selectedvalue: any) {
       this.Entity.p.CustomerFollowUpPlotDetails = selectedvalue;
-      // console.log(this.Entity.p.MaterialSuppliedByVendors);
     }
   
     SaveCustomerFollowUp = async () => {
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
-      console.log('entitiesToSave :', entitiesToSave);
+      this.Entity.p.ContactMode = this.CustomerEnquiryEntity.p.CustomerFollowUps[0].ContactMode;
+      console.log('entitiesToSave:', entitiesToSave);
       // await this.Entity.EnsurePrimaryKeysWithValidValues()
       let tr = await this.utils.SavePersistableEntities(entitiesToSave);
       if (!tr.Successful) {
