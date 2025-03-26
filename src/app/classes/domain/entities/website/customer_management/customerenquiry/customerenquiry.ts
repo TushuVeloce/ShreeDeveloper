@@ -24,20 +24,23 @@ export class CustomerEnquiryProps {
   public PinCode: string = '';
   public CountryRef:  number = 9163;
   public readonly CountryName: string='';
-  public StateRef:  number = 10263;
+  public StateRef:  number = 0;
   public readonly StateName: string='';
-  public CityRef:  number = 10374 ;
+  public CityRef:  number = 0 ;
   public readonly CityName: string='';
   // public Date: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
+
+  public CustomerStatus :number = 0;
+  public CustomerStatusName :string = '';
 
   // public CustomerFollowUpPlotDetails: CustomerFollowUpPlotDetailsProps = new Object() as CustomerFollowUpPlotDetailsProps;
 
   public CustomerFollowUps: CustomerFollowUpProps []=[ CustomerFollowUpProps.Blank()];
 
 
-  public readonly IsNewlyCreated: boolean = false;
+  public IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
 
   private constructor(isNewlyCreated: boolean) {

@@ -1,6 +1,7 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
+import { CustomerFollowUp, CustomerFollowUpProps } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
@@ -55,7 +56,6 @@ export class CustomerEnquiryComponent implements OnInit {
   getCustomerEnquiryListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    console.log('companyRef :', this.companyRef());
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -65,8 +65,7 @@ export class CustomerEnquiryComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
-    console.log('CustomerEnquiryList :', this.MasterList);
-
+    this.MasterList.forEach(e => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()))
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
@@ -74,6 +73,8 @@ export class CustomerEnquiryComponent implements OnInit {
   onEditClicked = async (item: CustomerEnquiry) => {
     // let props = Object.assign(CustomerEnquiryProps.Blank(),item.p);
     // this.SelectedCustomerEnquiry = CustomerEnquiry.CreateInstance(props,true);
+    item.p.CustomerFollowUps = [];
+    item.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank())
 
     this.SelectedCustomerEnquiry = item.GetEditableVersion();
 

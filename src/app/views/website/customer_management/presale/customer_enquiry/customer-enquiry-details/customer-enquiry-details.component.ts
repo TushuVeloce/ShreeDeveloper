@@ -60,7 +60,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     '--Select Customer Status--'
   );
 
-  DisplayMasterList: Plot[] = [];
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   Plotheaders: string[] = [
@@ -78,32 +77,41 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     private appStateManage: AppStateManageService,
     private utils: Utils,
     private companystatemanagement: CompanyStateManagement
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.CountryList = await Country.FetchEntireList();
+    this.StateList = await State.FetchEntireList();
+
+    this.CityList = await City.FetchEntireList();
     this.getSiteListByCompanyRef();
     this.getEmployeeListByCompanyRef();
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-
       this.DetailsFormTitle = this.IsNewEntity
         ? 'New Customer'
         : 'Edit Customer';
       this.Entity = CustomerEnquiry.GetCurrentInstance();
+
       this.appStateManage.StorageKey.removeItem('Editable');
       this.IsPlotDetails = true;
-       if (this.Entity.p.CountryRef) {
-        this.getStateListByCountryRef(this.Entity.p.CountryRef);
+      if (this.Entity.p.CountryRef) {
+        this.StateList = this.StateList.filter(e => e.p.CountryRef == this.Entity.p.CountryRef)
+        if (this.Entity.p.StateRef) {
+          this.CityList = this.CityList.filter(e => e.p.StateRef == this.Entity.p.StateRef)
+        }
       }
-      if (this.Entity.p.StateRef) {
-        this.getCityListByStateRef(this.Entity.p.StateRef);
-      }
+
     } else {
       this.Entity = CustomerEnquiry.CreateNewInstance();
       CustomerEnquiry.SetCurrentInstance(this.Entity);
+      // Check if CountryRef is already set (e.g., India is preselected)
+      if (this.Entity.p.CountryRef) {
+        // Load states for the preselected country
+        await this.getStateListByCountryRef(this.Entity.p.CountryRef);
+      }
     }
     this.InitialEntity = Object.assign(
       CustomerEnquiry.CreateNewInstance(),
@@ -111,23 +119,15 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     ) as CustomerEnquiry;
     // this.focusInput();
 
-    // Check if CountryRef is already set (e.g., India is preselected)
-    if (this.Entity.p.CountryRef) {
-      // Load states for the preselected country
-      await this.getStateListByCountryRef(this.Entity.p.CountryRef);
-    }
+
   }
 
   // For country, state, city dropdowns
   getStateListByCountryRef = async (CountryRef: number) => {
     this.StateList = [];
-    this.CityList = [];
-
+    this.Entity.p.StateRef = 0;
+    this.Entity.p.CityRef = 0;
     if (CountryRef) {
-      // Reset StateRef and CityRef immediately when CountryRef changes
-      this.Entity.p.StateRef = 0;
-      this.Entity.p.CityRef = 0;
-
       let lst = await State.FetchEntireListByCountryRef(
         CountryRef,
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
@@ -138,20 +138,14 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
 
       // Update CountryRef AFTER fetching data
       this.Entity.p.CountryRef = CountryRef;
-    } else {
-      // Clear selections if country is cleared
-      this.Entity.p.StateRef = 0;
-      this.Entity.p.CityRef = 0;
     }
   };
 
   getCityListByStateRef = async (StateRef: number) => {
     this.CityList = [];
-
+    this.Entity.p.CityRef = 0;
     if (StateRef) {
       // Reset CityRef immediately when StateRef changes
-      this.Entity.p.CityRef = 0;
-
       let lst = await City.FetchEntireListByStateRef(
         StateRef,
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
@@ -184,6 +178,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     );
     this.EmployeeList = lst;
   };
+
 
   getPlotBySiteRefList = async (siteRef: number) => {
     if (siteRef <= 0) {
@@ -223,12 +218,10 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       obj.p.PlotAreaInSqft = selectedPlot.p.AreaInSqft;
       obj.p.PlotAreaInSqm = selectedPlot.p.AreaInSqm;
     }
-    console.log(obj);
 
     // Check if the plot is already added
-    const isAlreadyAdded = this.DisplayMasterList.some(
-      (plot) => plot.p.Ref === this.InterestedPlotRef
-    );
+    const isAlreadyAdded = this.Entity.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails.some(
+      (plot) => plot.PlotRef === this.InterestedPlotRef);
 
     if (isAlreadyAdded) {
       this.uiUtils.showWarningToster(
@@ -241,7 +234,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       this.Entity.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails.push(
         obj.p
       );
-      this.DisplayMasterList.push(selectedPlot);
       this.IsPlotDetails = true;
       // console.log('Updated DisplayMasterList :', this.DisplayMasterList);
       this.SiteManagementRef = 0;
@@ -282,9 +274,9 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       });
     });
 
+    this.Entity.p.IsNewlyCreated = this.IsNewEntity;
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
     // return;
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);

@@ -26,7 +26,7 @@ export class CustomerFollowUpProps {
   public SiteVisitDate:string = '';
   public OfficeVisitDate:string = '';
   public ReminderDate :string = '';
-  public TodaysDate :string = '';
+  public TransDateTime :string = '';
   public Reason: string = '';
   public Remark: string = '';
 
