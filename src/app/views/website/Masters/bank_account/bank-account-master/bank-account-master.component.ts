@@ -1,8 +1,11 @@
+import { DatePipe } from '@angular/common';
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -26,7 +29,8 @@ export class BankAccountMasterComponent implements OnInit {
 
   headers: string[] = ['Sr.No.', 'Bank Name', 'Branch Name', 'Account No', 'IFSC Code', 'Opening Balance', 'Date of Opening', 'Action'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement) {
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement,    private dtu: DTU,
+      private datePipe: DatePipe, private DateconversionService:DateconversionService) {
     effect(() => {
       this.getBankListByCompanyRef()
     });
@@ -47,6 +51,7 @@ export class BankAccountMasterComponent implements OnInit {
   //     this.DisplayMasterList = this.MasterList
   //     this.loadPaginationData();
   //   }
+  
 
   getBankListByCompanyRef = async () => {
     this.MasterList = [];
@@ -60,6 +65,12 @@ export class BankAccountMasterComponent implements OnInit {
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
+  
+   // Extracted from services date conversion // 
+   formatDate(date: string | Date): string {
+    return this.DateconversionService.formatDate(date);
+  }
+  
   onEditClicked = async (item: BankAccount) => {
     this.SelectedBankAccount = item.GetEditableVersion();
     BankAccount.SetCurrentInstance(this.SelectedBankAccount);
@@ -114,4 +125,16 @@ export class BankAccountMasterComponent implements OnInit {
     }
   }
 
+  // without using services date conersion into dd-mm-yyyy // 
+  // formatDate(dateValue: string | Date): string {
+  //   if (!dateValue) return '';
+  
+  //   const parsedDate = (dateValue instanceof Date) ? dateValue : this.dtu.FromString(dateValue);
+  
+  //   if (parsedDate instanceof Date && !isNaN(parsedDate.getTime())) {
+  //     return this.datePipe.transform(parsedDate, 'dd-MM-yyyy') || '';
+  //   }
+    
+  //   return 'Invalid Date';
+  // }
 }
