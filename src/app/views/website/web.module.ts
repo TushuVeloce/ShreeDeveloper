@@ -78,20 +78,21 @@ import { CustomerFollowupDetailsComponent } from './customer_management/presale/
 import { CustomerFollowupComponent } from './customer_management/presale/customer_followup/customer-followup/customer-followup.component';
 import { RegisteredCustomerComponent } from './customer_management/presale/registered_customer/registered-customer/registered-customer.component';
 import { RegisteredCustomerDetailsComponent } from './customer_management/presale/registered_customer/registered-customer-details/registered-customer-details.component';
+import { DocumentListComponent } from './government_office/document-list/document-list.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent  ,StageMasterComponent,StageMasterDetailsComponent, AccountMainLedgerComponent,AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent,MarketingTypeMasterDetailsComponent,
     VendorMasterComponent,VehicleMasterComponent,VendorMasterDetailsComponent, BankAccountMasterComponent,BankAccountMasterDetailsComponent, ExternalUsersComponent,ExternalUsersMasterDetailsComponent, CompanyMasterComponent,CompanyMasterDetailsComponent, DepartmentMasterComponent,DepartmentMasterDetailsComponent,DesignationMasterComponent,DesignationMasterDetailsComponent, UserRoleMasterComponent,UserRoleMasterDetailsComponent, EmployeeMasterComponent,EmployeeMasterDetailsComponent,
     SiteManagementMasterComponent,SiteManagementActualStagesComponent,SiteManagementActualStagesDetailsComponent,EstimateStagesDetailsComponent,EstimateStagesComponent,
-    MaterialRequisitionComponent,StockConsumeComponent,StockInwardComponent,StockOrderComponent,StockTransferComponent , CountryComponent, StateComponent,CityComponent,UnitMasterComponent,UnitMasterDetailsComponent, 
+    MaterialRequisitionComponent,StockConsumeComponent,StockInwardComponent,StockOrderComponent,StockTransferComponent , CountryComponent, StateComponent,CityComponent,UnitMasterComponent,UnitMasterDetailsComponent,
     DeleteIconComponent,EditIconComponent, DataNotFoundComponent,VehicleMasterDetailsComponent,UserrolerightsComponent,FinancialYearMasterComponent,
     VendorServicesMasterComponent,VendorServicesMasterDetailsComponent,SiteManagementDetailsComponent,EmployeeAppraisalDetailsComponent,
-    EmployeeAppraisalMasterComponent,EmployeeExitDetailsComponent,EmployeeExitMasterComponent,PlotMasterComponent,
+    EmployeeAppraisalMasterComponent,EmployeeExitDetailsComponent,EmployeeExitMasterComponent,PlotMasterComponent, DocumentListComponent,
     PlotMasterDetailsComponent,CustomerEnquiryComponent,CustomerEnquiryDetailsComponent,CustomerFollowupComponent, CustomerFollowupDetailsComponent,RegisteredCustomerComponent,RegisteredCustomerDetailsComponent],
   imports: [
     CommonModule,WebRoutingModule,FormsModule,NzDropDownModule,NzTableModule,IonicModule.forRoot(),
-    NzPaginationModule, NzUploadModule, NzModalModule,NzCheckboxModule, 
-    CommonModule, NzTableModule, NzIconModule, NzLayoutModule, NzMenuModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, 
+    NzPaginationModule, NzUploadModule, NzModalModule,NzCheckboxModule,
+    CommonModule, NzTableModule, NzIconModule, NzLayoutModule, NzMenuModule, ReactiveFormsModule, NzButtonModule, NzSelectModule,
   ],
   providers: [DatePipe]
 })

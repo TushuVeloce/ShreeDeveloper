@@ -81,6 +81,7 @@ import { CustomerFollowupComponent } from './customer_management/presale/custome
 import { CustomerFollowupDetailsComponent } from './customer_management/presale/customer_followup/customer-followup-details/customer-followup-details.component';
 import { RegisteredCustomerComponent } from './customer_management/presale/registered_customer/registered-customer/registered-customer.component';
 import { RegisteredCustomerDetailsComponent } from './customer_management/presale/registered_customer/registered-customer-details/registered-customer-details.component';
+import { DocumentListComponent } from './government_office/document-list/document-list.component';
 
 const routes: Routes = [
   {
@@ -128,7 +129,7 @@ const routes: Routes = [
 
       { path: 'Estimate_Stages', component: EstimateStagesComponent },
       { path: 'Estimate_Stages_details', component: EstimateStagesDetailsComponent },
-      
+
       { path: 'Country', component: CountryComponent },
       { path: 'State', component: StateComponent },
       { path: 'City', component: CityComponent },
@@ -136,7 +137,7 @@ const routes: Routes = [
 
       { path: 'Financial_Year_Master', component: FinancialYearMasterComponent },
 
-      // Site management 
+      // Site management
 
       { path: 'Plot_Master', component: PlotMasterComponent },
       { path: 'Plot_Master_Details', component: PlotMasterDetailsComponent },
@@ -149,14 +150,14 @@ const routes: Routes = [
       { path: 'Site_Management_Actual_Stage_Details', component: SiteManagementActualStagesDetailsComponent },
 
 
-      // Stock Management 
+      // Stock Management
       { path: 'Material_Requisition', component: MaterialRequisitionComponent },
       { path: 'Stock_Consume', component: StockConsumeComponent },
       { path: 'Stock_Inward', component: StockInwardComponent },
       { path: 'Stock_Order', component: StockOrderComponent },
       { path: 'Stock_Transfer', component: StockTransferComponent },
 
-      // Customer Management 
+      // Customer Management
       { path: 'Customer_Enquiry', component: CustomerEnquiryComponent },
       { path: 'Customer_Enquiry_Details', component: CustomerEnquiryDetailsComponent },
 
@@ -191,7 +192,11 @@ const routes: Routes = [
       { path: 'Employee_Report', component: EmployeeReportComponent },
       { path: 'Marketing_Report', component: MarketingReportComponent },
       { path: 'Stages_Report', component: StagesReportComponent },
-      { path: 'Account_Report', component: AccountReportComponent }
+      { path: 'Account_Report', component: AccountReportComponent },
+
+       // Government Office
+       { path: 'document', component: DocumentListComponent },
+       { path: 'Customer_Enquiry_Details', component: CustomerEnquiryDetailsComponent },
 
     ]
 

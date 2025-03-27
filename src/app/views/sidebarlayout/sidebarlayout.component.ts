@@ -53,7 +53,7 @@ export class SidebarlayoutComponent implements OnInit {
   routerChangedSubscription: Subscription | undefined;
   activeModule: string | null = null; // Tracks the active module
   activeSubmodule: string | null = null; // Tracks the active submodule
-  CompnyList : Company[] = [];
+  CompnyList: Company[] = [];
   CompanyRef: number = 0;
   isDropdownDisabled: boolean = false;
   // Name: string = 'Veloce Tech';
@@ -67,9 +67,9 @@ export class SidebarlayoutComponent implements OnInit {
   constructor(public router: Router, public themeService: ThemeService, private el: ElementRef, private renderer: Renderer2,
     public appStateManagement: AppStateManageService,
     private sessionValues: SessionValues, private cdr: ChangeDetectorRef,
-    private uiUtils: UIUtils, private companystatemanagement: CompanyStateManagement,private servercommunicator: ServerCommunicatorService,) {
+    private uiUtils: UIUtils, private companystatemanagement: CompanyStateManagement, private servercommunicator: ServerCommunicatorService,) {
 
-      
+
     this.routerChangedSubscription = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.previousRoute = this.currentRoute;
@@ -99,7 +99,7 @@ export class SidebarlayoutComponent implements OnInit {
   }
   ngOnInit() {
     this.ongetcompany()
-        this.isDarkMode = this.appStateManagement.getTheme() === 'dark';
+    this.isDarkMode = this.appStateManagement.getTheme() === 'dark';
     this.onThemeToggle();
 
     this.GenerateAndSetMenuItemModuleList();
@@ -116,7 +116,7 @@ export class SidebarlayoutComponent implements OnInit {
     // });
 
   }
- 
+
 
   // Method to clear active menu selections
   resetSelectedMenu(): void {
@@ -455,13 +455,27 @@ export class SidebarlayoutComponent implements OnInit {
       }
     ]
 
+    let GovernmentOfficeSubModuleList = [
+      {
+        Name: 'Progress Report',
+        RouterLink: '/homepage/Website/progress_report',
+        LogoPath: '',
+      },
+      {
+        Name: 'Document List',
+        RouterLink: '/homepage/Website/document',
+        LogoPath: '',
+      },
+    ]
+
     let moduleListInternal = [
       {
         Name: 'Dashboards',
         RouterLink: '',
         WhiteLogo: '/assets/icons/dashboard.png',
         SubModuleList: DashboardsSubModuleList,
-      }, {
+      },
+      {
         Name: 'Master',
         RouterLink: '',
         WhiteLogo: '/assets/icons/master.png',
@@ -484,6 +498,12 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '',
         WhiteLogo: '/assets/icons/stock.png',
         SubModuleList: CustomerManagementSubModuleList,
+      },
+      {
+        Name: 'Government Office',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/stock.png',
+        SubModuleList: GovernmentOfficeSubModuleList,
       },
     ].filter(e => e.SubModuleList.length > 0);
 
@@ -520,35 +540,35 @@ export class SidebarlayoutComponent implements OnInit {
 
     // Set default selection if there is no stored value
     this.ongetcompany();
-}
+  }
 
-ongetcompany() {
-  const storedCompanyRef =  this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
-  const storedCompanyName =  this.appStateManagement.StorageKey.getItem('companyName');
+  ongetcompany() {
+    const storedCompanyRef = this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
+    const storedCompanyName = this.appStateManagement.StorageKey.getItem('companyName');
 
     if (storedCompanyRef && storedCompanyName) {
-        const ref = Number(storedCompanyRef);
-        this.CompanyRef = ref; 
-        this.companystatemanagement.setCompanyRef(ref, storedCompanyName);
+      const ref = Number(storedCompanyRef);
+      this.CompanyRef = ref;
+      this.companystatemanagement.setCompanyRef(ref, storedCompanyName);
     } else if (this.CompnyList && this.CompnyList.length > 0) {
-        // Select first company if no stored value is found
-        const firstCompany = this.CompnyList[0];
-        this.changecompany(firstCompany.p.Ref);
+      // Select first company if no stored value is found
+      const firstCompany = this.CompnyList[0];
+      this.changecompany(firstCompany.p.Ref);
     }
-}
+  }
 
-changecompany(ref: number) {    
+  changecompany(ref: number) {
     const selectedCompany = this.CompnyList.find(company => company.p.Ref === ref);
     if (selectedCompany) {
-      this.appStateManagement.StorageKey.setItem('SelectedCompanyRef',selectedCompany.p.Ref.toString());
+      this.appStateManagement.StorageKey.setItem('SelectedCompanyRef', selectedCompany.p.Ref.toString());
       this.appStateManagement.StorageKey.setItem('companyName', selectedCompany.p.Name);
 
-        this.companystatemanagement.setCompanyRef(ref, selectedCompany.p.Name);
-        this.CompanyRef = ref;
+      this.companystatemanagement.setCompanyRef(ref, selectedCompany.p.Name);
+      this.CompanyRef = ref;
     } else {
-        console.warn('Selected company not found');
+      console.warn('Selected company not found');
     }
-}
+  }
 
 
 
@@ -558,31 +578,31 @@ changecompany(ref: number) {
 
 
 
-//  private FormulateCompanyList = async () => {
-//     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-//     this.CompnyList = lst;
-//   }
+  //  private FormulateCompanyList = async () => {
+  //     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //     this.CompnyList = lst;
+  //   }
 
-//   changecompany(ref: number) {    
-//     const selectedCompany = this.CompnyList.find(company => company.p.Ref === ref);
-//     if (selectedCompany) {
-//       this.appStateManagement.StorageKey.setItem('SelectedCompanyRef',selectedCompany.p.Ref.toString());
-//       this.appStateManagement.StorageKey.setItem('companyName', selectedCompany.p.Name);
-//       this.companystatemanagement.setCompanyRef(ref, selectedCompany.p.Name);
-//     this.CompanyRef = ref;
-//     }else {
-//       console.warn('Selected company not found');
-//     }
+  //   changecompany(ref: number) {
+  //     const selectedCompany = this.CompnyList.find(company => company.p.Ref === ref);
+  //     if (selectedCompany) {
+  //       this.appStateManagement.StorageKey.setItem('SelectedCompanyRef',selectedCompany.p.Ref.toString());
+  //       this.appStateManagement.StorageKey.setItem('companyName', selectedCompany.p.Name);
+  //       this.companystatemanagement.setCompanyRef(ref, selectedCompany.p.Name);
+  //     this.CompanyRef = ref;
+  //     }else {
+  //       console.warn('Selected company not found');
+  //     }
 
-//   }
-  
-//   ongetcompany(){
-//     const storedCompanyRef =  this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
-//     const storedCompanyName =  this.appStateManagement.StorageKey.getItem('companyName');
-//     if (storedCompanyRef && storedCompanyName) {
-//       const ref = Number(storedCompanyRef);
-//       this.CompanyRef = ref; 
-//       this.companystatemanagement.setCompanyRef(ref, storedCompanyName);
-//     }
-//   }
+  //   }
+
+  //   ongetcompany(){
+  //     const storedCompanyRef =  this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
+  //     const storedCompanyName =  this.appStateManagement.StorageKey.getItem('companyName');
+  //     if (storedCompanyRef && storedCompanyName) {
+  //       const ref = Number(storedCompanyRef);
+  //       this.CompanyRef = ref;
+  //       this.companystatemanagement.setCompanyRef(ref, storedCompanyName);
+  //     }
+  //   }
 }
