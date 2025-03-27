@@ -1,24 +1,24 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Document } from 'src/app/classes/domain/entities/website/government_office/document/document';
+import { ProgressReport } from 'src/app/classes/domain/entities/website/government_office/progressreport/progressreport';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
-  selector: 'app-document-list',
+  selector: 'app-progressreport-list',
   standalone: false,
-  templateUrl: './document-list.component.html',
-  styleUrls: ['./document-list.component.scss'],
+  templateUrl: './progress-report.component.html',
+  styleUrls: ['./progress-report.component.scss'],
 })
-export class DocumentListComponent implements OnInit {
+export class ProgressReportComponent implements OnInit {
 
-  Entity: Document = Document.CreateNewInstance();
-  MasterList: Document[] = [];
-  DisplayMasterList: Document[] = [];
+  Entity: ProgressReport = ProgressReport.CreateNewInstance();
+  MasterList: ProgressReport[] = [];
+  DisplayMasterList: ProgressReport[] = [];
   SearchString: string = '';
-  SelectedDocument: Document = Document.CreateNewInstance();
+  SelectedProgressReport: ProgressReport = ProgressReport.CreateNewInstance();
   CustomerRef: number = 0;
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
@@ -26,12 +26,12 @@ export class DocumentListComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Document Name', 'Office Name', 'Action'];
+  headers: string[] = ['Sr.No.', 'Site Name', 'TP Office', 'NA Letter', 'Mojani', 'ULC', 'Final Layout', 'KaJaPa', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(() => {
-      this.getDocumentListByCompanyRef();
+      this.getProgressReportListByCompanyRef();
     });
   }
 
@@ -40,13 +40,13 @@ export class DocumentListComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    // await this.FormulateDocumentList();
+    // await this.FormulateProgressReportList();
     // this.DisplayMasterList = [];
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
-  // private FormulateDocumentList = async () => {
-  //   let lst = await Document.FetchEntireList(
+  // private FormulateProgressReportList = async () => {
+  //   let lst = await ProgressReport.FetchEntireList(
   //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
   //   );
   //   this.MasterList = lst;
@@ -56,7 +56,7 @@ export class DocumentListComponent implements OnInit {
   //   // console.log(this.DisplayMasterList);
   // };
 
-  getDocumentListByCompanyRef = async () => {
+  getProgressReportListByCompanyRef = async () => {
     // this.MasterList = [];
     // this.DisplayMasterList = [];
     // console.log('companyRef :', this.companyRef());
@@ -64,35 +64,35 @@ export class DocumentListComponent implements OnInit {
     //   await this.uiUtils.showErrorToster('Company not Selected');
     //   return;
     // }
-    // let lst = await Document.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    // let lst = await ProgressReport.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     // this.MasterList = lst;
-    // console.log('DocumentList :', this.MasterList);
+    // console.log('ProgressReportList :', this.MasterList);
 
     // this.DisplayMasterList = this.MasterList;
     // this.loadPaginationData();
   }
 
-  onEditClicked = async (item: Document) => {
-    this.SelectedDocument = item.GetEditableVersion();
+  onEditClicked = async (item: ProgressReport) => {
+    this.SelectedProgressReport = item.GetEditableVersion();
 
-    Document.SetCurrentInstance(this.SelectedDocument);
+    ProgressReport.SetCurrentInstance(this.SelectedProgressReport);
 
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
 
-    await this.router.navigate(['/homepage/Website/Document_Master_Details']);
+    await this.router.navigate(['/homepage/Website/ProgressReport_Master_Details']);
   };
 
-  onDeleteClicked = async (document: Document) => {
+  onDeleteClicked = async (progressreport: ProgressReport) => {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-      Are you sure that you want to DELETE this Document?`,
+      Are you sure that you want to DELETE this ProgressReport?`,
       async () => {
-        await document.DeleteInstance(async () => {
+        await progressreport.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `Document ${document.p.Name} has been deleted!`
+            `ProgressReport ${progressreport.p.SiteName} has been deleted!`
           );
-          await this.getDocumentListByCompanyRef();
+          await this.getProgressReportListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
 
@@ -114,12 +114,12 @@ export class DocumentListComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
-  async AddDocument() {
+  async AddProgressReport() {
     if (this.companyRef() <= 0) {
       this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.router.navigate(['/homepage/Website/Document_Details']);
+    this.router.navigate(['/homepage/Website/ProgressReport_Details']);
   }
 
 

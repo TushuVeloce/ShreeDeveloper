@@ -84,6 +84,7 @@ import { RegisteredCustomerDetailsComponent } from './customer_management/presal
 import { RegistrarOfficeDetailComponent } from './registrar_office/registrar-office-detail/registrar-office-detail.component';
 import { DocumentListComponent } from './government_office/document/document-list/document-list.component';
 import { DocumentDetailsComponent } from './government_office/document/document-details/document-details.component';
+import { ProgressReportComponent } from './government_office/progress_report/progress-report.component';
 
 const routes: Routes = [
   {
@@ -109,7 +110,7 @@ const routes: Routes = [
       { path: 'Vehicle_Master', component: VehicleMasterComponent },
       { path: 'Vehicle_Master_Details', component: VehicleMasterDetailsComponent },
       { path: 'Bank_Account_Master', component: BankAccountMasterComponent },
-      { path: 'Bank_Account_Master_Details', component: BankAccountMasterDetailsComponent},
+      { path: 'Bank_Account_Master_Details', component: BankAccountMasterDetailsComponent },
       { path: 'External_Users', component: ExternalUsersComponent },
       { path: 'External_Users_Details', component: ExternalUsersMasterDetailsComponent },
       { path: 'Company_Master', component: CompanyMasterComponent },
@@ -166,11 +167,9 @@ const routes: Routes = [
       { path: 'Customer_FollowUp', component: CustomerFollowupComponent },
       { path: 'Customer_FollowUp_Details', component: CustomerFollowupDetailsComponent },
 
-      { path: 'Registered_Customer', component: RegisteredCustomerComponent},
+      { path: 'Registered_Customer', component: RegisteredCustomerComponent },
       { path: 'Registered_Customer_Details', component: RegisteredCustomerDetailsComponent },
 
-
-      { path: 'government _Office', component: GovernmentOfficeComponent },
 
       //Registrar Office //
 
@@ -199,11 +198,13 @@ const routes: Routes = [
       { path: 'Stages_Report', component: StagesReportComponent },
       { path: 'Account_Report', component: AccountReportComponent },
 
-       // Government Office
-       { path: 'Document', component: DocumentListComponent },
-       { path: 'Document_Details', component: DocumentDetailsComponent },
-       { path: 'Customer_Enquiry_Details', component: CustomerEnquiryDetailsComponent },
+      // Government Office
+      { path: 'Document', component: DocumentListComponent },
+      { path: 'Document_Details', component: DocumentDetailsComponent },
 
+      { path: 'Government_Office', component: GovernmentOfficeComponent },
+
+      { path: 'Progress_Report', component: ProgressReportComponent },
     ]
 
 

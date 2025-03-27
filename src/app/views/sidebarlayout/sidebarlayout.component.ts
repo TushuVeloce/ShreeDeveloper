@@ -458,7 +458,7 @@ export class SidebarlayoutComponent implements OnInit {
     let GovernmentOfficeSubModuleList = [
       {
         Name: 'Progress Report',
-        RouterLink: '/homepage/Website/progress_report',
+        RouterLink: '/homepage/Website/Progress_Report',
         LogoPath: '',
       },
       {
