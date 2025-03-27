@@ -26,7 +26,7 @@ export class CustomerFollowupComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  followup : CustomerFollowUp[]=[];
+  followup: CustomerFollowUp[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   headers: string[] = [
@@ -36,11 +36,11 @@ export class CustomerFollowupComponent implements OnInit {
     'Date',
     'Customer Status',
     'Action',
-  ];  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
+  ]; constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
-  ) { 
+  ) {
     effect(() => {
-      this.getCustomerFollowUpListByCompanyRef()
+      this.getCustomerFollowUpListByEnquiryRef()
       // this.getCustomerFollowUpListByEnquiryRef();
     });
   }
@@ -53,48 +53,52 @@ export class CustomerFollowupComponent implements OnInit {
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
-  getCustomerFollowUpListByCompanyRef = async () => {
-    this.MasterList = [];
-    this.DisplayMasterList = [];
-    console.log('companyRef :', this.companyRef());
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await CustomerEnquiry.FetchEntireListByCompanyRef(
-      this.companyRef(),
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-    this.MasterList = lst;
-    console.log('CustomerEnquiryList :', this.MasterList);
+  // getCustomerFollowUpListByCompanyRef = async () => {
+  //   this.MasterList = [];
+  //   this.DisplayMasterList = [];
+  //   console.log('companyRef :', this.companyRef());
+  //   if (this.companyRef() <= 0) {
+  //     await this.uiUtils.showErrorToster('Company not Selected');
+  //     return;
+  //   }
+  //   let lst = await CustomerEnquiry.FetchEntireListByCompanyRef(
+  //     this.companyRef(),
+  //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+  //   );
+  //   this.MasterList = lst;
+  //   console.log('CustomerEnquiryList :', this.MasterList);
 
-    this.DisplayMasterList = this.MasterList;
-    this.loadPaginationData();
-    this.getCustomerFollowUpListByEnquiryRef()
-    // New for customerfollowup 
-    
-  };
+  //   this.DisplayMasterList = this.MasterList;
+  //   this.loadPaginationData();
+  //   this.getCustomerFollowUpListByEnquiryRef()
+  //   // New for customerfollowup 
+
+  // };
 
   getCustomerFollowUpListByEnquiryRef = async () => {
     // this.MasterList = [];
     // this.DisplayMasterList = [];
-   
-    let CustomerEnquiryRefs = this.DisplayMasterList[0].p.CustomerFollowUps[0].CustomerEnquiryRef;
-    console.log('CustomerEnquiryRefs :', CustomerEnquiryRefs);
-    let FollowUp = await CustomerFollowUp.FetchEntireListByCustomerEnquiryRef(CustomerEnquiryRefs,async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+
+    // let CustomerEnquiryRefs = this.DisplayMasterList[0].p.CustomerFollowUps[0].CustomerEnquiryRef;
+    // console.log('CustomerEnquiryRefs :', CustomerEnquiryRefs);
+    let FollowUp = await CustomerFollowUp.FetchEntireListByCustomerEnquiryRef(
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log(FollowUp);
-    this.followup = this.followup
+    this.followup = FollowUp
     // this.MasterList = FollowUp;
     // this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
 
-  onEditClicked = async (item: CustomerEnquiry,followup?:CustomerFollowUp) => {
+  onEditClicked = async (followup: CustomerFollowUp) => {
 
-    this.SelectedCustomerEnquiry = item.GetEditableVersion();
-    this.SelectedFollowUp = (followup ? followup.GetEditableVersion() : {}) as CustomerFollowUp
-    CustomerEnquiry.SetCurrentInstance(this.SelectedCustomerEnquiry);
+    // // this.SelectedCustomerEnquiry = item.GetEditableVersion();
+    // this.SelectedFollowUp = (followup ? followup.GetEditableVersion() : {}) as CustomerFollowUp
+    // CustomerEnquiry.SetCurrentInstance(this.SelectedCustomerEnquiry);
+    // CustomerFollowUp.SetCurrentInstance(this.SelectedFollowUp);
+    this.SelectedFollowUp = followup.GetEditableVersion();
     CustomerFollowUp.SetCurrentInstance(this.SelectedFollowUp);
+    // console.log(CustomerFollowUp.GetCurrentInstance);
 
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/homepage/Website/Customer_FollowUp_Details']);
@@ -107,7 +111,7 @@ export class CustomerFollowupComponent implements OnInit {
   };
   get paginatedList() {
     const start = (this.currentPage - 1) * this.pageSize;
-    return this.DisplayMasterList.slice(start, start + this.pageSize);
+    return this.followup.slice(start, start + this.pageSize);
   }
 
   onPageChange = (pageIndex: number): void => {

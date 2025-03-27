@@ -16,23 +16,32 @@ import { CustomerFollowUpPlotDetailsProps } from "../customerfollowupplotdetails
 
 export class CustomerFollowUpProps {
   public Ref: number = 0;
-  public CustomerEnquiryRef : number = 0;
+  public CustomerEnquiryRef: number = 0;
   public CustomerRequirement: string = '';
-  public LeadSource : number = 0;
-  public LeadHandleBy : number = 0;
+  public LeadSource: number = 0;
+  public LeadHandleBy: number = 0;
   public BrokerName: string = '';
   public ContactMode: number = 0;
   public CustomerStatus: number = 0;
-  public SiteVisitDate:string = '';
-  public OfficeVisitDate:string = '';
-  public ReminderDate :string = '';
-  public TransDateTime :string = '';
+  public SiteVisitDate: string = '';
+  public OfficeVisitDate: string = '';
+  public TransDateTime: string = '';
   public Reason: string = '';
   public Remark: string = '';
+  
+  public CustomerStatusName: string = '';
+  public ReminderDate: string = '';
+  public ContactNos: string = '';
+  public CustomerName: string = '';
+  public CountryName: string = '';
+  public StateName: string = '';
+  public CityName: string = '';
+  public Address: string = '';
+  public PinCode: string = '';
 
-  public CustomerFollowUpPlotDetails : CustomerFollowUpPlotDetailsProps []= [];
+  public CustomerFollowUpPlotDetails: CustomerFollowUpPlotDetailsProps[] = [];
 
-  public readonly IsNewlyCreated: boolean = false;
+  public IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
 
   private constructor(isNewlyCreated: boolean) {
@@ -53,8 +62,8 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -62,11 +71,11 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
 
   public static async getPrimaryKeysWithValidValues(): Promise<number> {
     const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-          // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+    // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
     let newRef = newRefs[0];
     if (newRef <= 0) throw new Error("Cannot assign Id. Please try again");
     return newRef
-}
+  }
 
   public GetEditableVersion(): CustomerFollowUp {
     let newState: CustomerFollowUpProps = Utils.GetInstance().DeepCopy(this.p);
@@ -84,10 +93,10 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.CustomerEnquiryRef == 0) vra.add('CustomerEnquiryRef', 'CustomerEnquiry Name cannot be blank.');
-    if (this.p.CustomerRequirement == '') vra.add('CustomerRequirement', 'CustomerRequirement cannot be blank.');
-    if (this.p.LeadSource  == 0) vra.add('LeadSource ', 'LeadSource  cannot be blank.');
+    // if (this.p.CustomerRequirement == '') vra.add('CustomerRequirement', 'CustomerRequirement cannot be blank.');
+    if (this.p.LeadSource == 0) vra.add('LeadSource ', 'LeadSource  cannot be blank.');
     if (this.p.LeadHandleBy == 0) vra.add('LeadHandelBy', 'LeadHandelBy  cannot be blank.');
-    if (this.p.BrokerName == '') vra.add('BrokerName', 'BrokerName cannot be blank.');
+    // if (this.p.BrokerName == '') vra.add('BrokerName', 'BrokerName cannot be blank.');
     if (this.p.ContactMode == 0) vra.add('CustomerFollowUpType', 'ContactMode cannot be blank.');
   }
 
@@ -165,7 +174,7 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new CustomerFollowUpFetchRequest();
-    req.CustomerFollowUpRefs.push(ref);
+    // req.CustomerFollowUpRefs.push(ref);
 
     let tdResponse = await CustomerFollowUp.FetchTransportData(req, errorHandler) as TransportData;
     return CustomerFollowUp.SingleInstanceFromTransportData(tdResponse);
@@ -181,16 +190,16 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
     let tdResponse = await CustomerFollowUp.FetchTransportData(req, errorHandler) as TransportData;
     return CustomerFollowUp.ListFromTransportData(tdResponse);
   }
-  public static async FetchEntireListByCustomerFollowUpRef(CustomerFollowUpRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCustomerFollowUpRef(CustomerFollowUpRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new CustomerFollowUpFetchRequest();
-    req.CustomerFollowUpRefs.push(CustomerFollowUpRef)
+    // req.CustomerFollowUpRefs.push(CustomerFollowUpRef)
     let tdResponse = await CustomerFollowUp.FetchTransportData(req, errorHandler) as TransportData;
     return CustomerFollowUp.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCustomerEnquiryRef(CustomerEnquiry:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCustomerEnquiryRef(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new CustomerFollowUpFetchRequest();
-    req.CustomerEnquiryRefs.push(CustomerEnquiry)
+
     let tdResponse = await CustomerFollowUp.FetchTransportData(req, errorHandler) as TransportData;
     return CustomerFollowUp.ListFromTransportData(tdResponse);
   }

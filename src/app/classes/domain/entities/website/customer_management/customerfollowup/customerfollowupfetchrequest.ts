@@ -8,8 +8,8 @@ export class CustomerFollowUpFetchRequest
 {
     public static readonly FetchRequestType: string = "CustomerFollowUpFetchRequest";
 
-    CustomerFollowUpRefs: number[] = [];
-    CustomerEnquiryRefs: number[] = [];
+    // CustomerFollowUpRefs: number[] = [];
+    // CustomerEnquiryRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

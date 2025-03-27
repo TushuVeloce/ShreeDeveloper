@@ -30,6 +30,10 @@ export class PlotProps {
   public SiteManagementRef: number = 0;
   public CustomerRef: number = 0;
 
+  public SiteName: number = 0;
+  public PlotName: number = 0;
+
+
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
 
