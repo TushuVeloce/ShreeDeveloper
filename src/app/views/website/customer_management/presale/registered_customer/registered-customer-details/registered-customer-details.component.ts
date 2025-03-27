@@ -94,6 +94,7 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
       const StampDuties = Number(this.Entity.p.StampDuties);
       const RegistrationFees = Number(this.Entity.p.RegistrationFees);
       this.Entity.p.TotalExtraCharges = Math.ceil(LegalCharges +  StampDuties + RegistrationFees);
+      this.calculateGrandTotal()
     }
 
     calculateGrandTotal() {
@@ -102,6 +103,7 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
       const TotalExtraCharges = Number(this.Entity.p.TotalExtraCharges);
       const GSTonValueofAgreement = Number((this.Entity.p.GoodsServicesTax / 100) * (this.Entity.p.ValueOfAgreement));
       this.Entity.p.GrandTotal = Math.ceil(TotalPlotAmount +  ValueOfAgreement + TotalExtraCharges + GSTonValueofAgreement);
+      this.Entity.p.GstToatalAmount = GSTonValueofAgreement
     }
 
     SaveRegisteredCustomer = async () => {
