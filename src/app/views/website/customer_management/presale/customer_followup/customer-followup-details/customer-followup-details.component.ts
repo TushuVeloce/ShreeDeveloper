@@ -164,13 +164,13 @@ export class CustomerFollowupDetailsComponent implements OnInit {
   }
 
   SaveCustomerFollowUp = async () => {
-    // this.Entity.p.CustomerFollowUpPlotDetails.forEach((plotDetail) => {
-    //   plotDetail.CustomerFollowUpRef = this.Entity.p.Ref;
-    // });
+    this.Entity.p.CustomerFollowUpPlotDetails.forEach((plotDetail) => {
+      plotDetail.CustomerFollowUpRef = this.Entity.p.Ref;
+    });
 
-    // // -----------------------------------
-    // this.GenerateChildRef();
-    // return
+    // -----------------------------------
+    this.GenerateChildRef();
+    return
     this.Entity.p.Ref =
       await CustomerFollowUp.getPrimaryKeysWithValidValues();
 

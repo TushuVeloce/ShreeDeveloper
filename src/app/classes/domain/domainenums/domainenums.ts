@@ -118,8 +118,8 @@ export enum CustomerStatus {
   Interested = 10,
   LeadInprocess = 20,
   LeadClosed = 30,
-  DealOpen = 40,
-  DealClosed = 50,
+  ConvertToDeal = 40,
+  // DealClosed = 50,
 }
 
 
@@ -718,8 +718,8 @@ export class DomainEnums {
       case CustomerStatus.Interested: return 'Interested';
       case CustomerStatus.LeadInprocess: return 'Lead Inprocess';
       case CustomerStatus.LeadClosed: return 'Lead Closed';
-      case CustomerStatus.DealOpen: return 'Deal Open';
-      case CustomerStatus.DealClosed: return 'Deal Closed';
+      case CustomerStatus.ConvertToDeal: return 'Convert To Deal';
+      // case CustomerStatus.DealClosed: return 'Deal Closed';
       default: return '';
     }
   }
@@ -736,11 +736,11 @@ export class DomainEnums {
         Ref: CustomerStatus.LeadClosed, Name: DomainEnums.CustomerStatusName(CustomerStatus.LeadClosed)
       },
       {
-        Ref: CustomerStatus.DealOpen, Name: DomainEnums.CustomerStatusName(CustomerStatus.DealOpen)
+        Ref: CustomerStatus.ConvertToDeal, Name: DomainEnums.CustomerStatusName(CustomerStatus.ConvertToDeal)
       },
-      {
-        Ref: CustomerStatus.DealClosed, Name: DomainEnums.CustomerStatusName(CustomerStatus.DealClosed)
-      }
+      // {
+      //   Ref: CustomerStatus.DealClosed, Name: DomainEnums.CustomerStatusName(CustomerStatus.DealClosed)
+      // }
 
 
     ]
