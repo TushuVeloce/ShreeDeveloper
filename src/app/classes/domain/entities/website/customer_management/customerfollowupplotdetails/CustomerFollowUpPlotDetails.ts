@@ -26,7 +26,7 @@ export class CustomerFollowUpPlotDetailsProps {
   public Reason: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
-  public  SiteName: string = '';
+  public SiteName: string = '';
 
   public PlotName: string = '';
 
@@ -55,6 +55,13 @@ export class CustomerFollowUpPlotDetails implements IPersistable<CustomerFollowU
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
+  }
+  public static async getPrimaryKeysWithValidValues(): Promise<number> {
+    const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+    // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+    let newRef = newRefs[0];
+    if (newRef <= 0) throw new Error("Cannot assign Id. Please try again");
+    return newRef
   }
 
   public GetEditableVersion(): CustomerFollowUpPlotDetails {

@@ -28,7 +28,7 @@ export class CustomerFollowUpProps {
   public TransDateTime: string = '';
   public Reason: string = '';
   public Remark: string = '';
-  
+
   public CustomerStatusName: string = '';
   public ReminderDate: string = '';
   public ContactNos: string = '';
@@ -38,6 +38,8 @@ export class CustomerFollowUpProps {
   public CityName: string = '';
   public Address: string = '';
   public PinCode: string = '';
+
+  public CompanyRef: number = 0;
 
   public CustomerFollowUpPlotDetails: CustomerFollowUpPlotDetailsProps[] = [];
 

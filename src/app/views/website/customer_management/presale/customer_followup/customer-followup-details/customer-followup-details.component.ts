@@ -164,12 +164,15 @@ export class CustomerFollowupDetailsComponent implements OnInit {
   }
 
   SaveCustomerFollowUp = async () => {
+    
     this.Entity.p.CustomerFollowUpPlotDetails.forEach((plotDetail) => {
-      plotDetail.CustomerFollowUpRef = this.Entity.p.Ref;
+      plotDetail.Ref = 0;
     });
 
     // -----------------------------------
-    this.GenerateChildRef();
+    await this.GenerateChildRef();
+    console.log(this.Entity.p.CustomerFollowUpPlotDetails);
+
     return
     this.Entity.p.Ref =
       await CustomerFollowUp.getPrimaryKeysWithValidValues();
@@ -180,7 +183,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       plotDetail.CustomerFollowUpRef = this.Entity.p.Ref;
     });
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
-   
+
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     // this.Entity.p.ContactMode = this.CustomerEnquiryEntity.p.CustomerFollowUps[0].ContactMode;
@@ -209,7 +212,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     this.router.navigate(['/homepage/Website/Customer_FollowUp']);
   }
   addDataToTable() {
-    // debugger
+    debugger
     if (this.SiteManagementRef <= 0) {
       this.uiUtils.showWarningToster(`Please Select a Site`);
       return;
@@ -253,29 +256,35 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       // this.Entity.p.CustomerFollowUpPlotDetails.push(
       //   obj.p
       // );
-      this.plotDetailsArray.push(
+      // this.plotDetailsArray.push(
+      //   this.obj.p
+      // );
+      this.Entity.p.CustomerFollowUpPlotDetails.push(
         this.obj.p
       );
       this.IsPlotDetails = true;
 
-      this.Entity.p.CustomerFollowUpPlotDetails = [];
-      this.Entity.p.CustomerFollowUpPlotDetails.push(...this.plotDetailsArray);
-      console.log('Updated IsPlotDetails :', this.plotDetailsArray);
+      // this.Entity.p.CustomerFollowUpPlotDetails = [];
+      // this.Entity.p.CustomerFollowUpPlotDetails.push(...this.plotDetailsArray);
+      // console.log('Updated IsPlotDetails :', this.plotDetailsArray);
       console.log('Updated IsPlotDetails :', this.Entity.p.CustomerFollowUpPlotDetails);
       this.SiteManagementRef = 0;
       this.InterestedPlotRef = 0;
     }
   }
   async GenerateChildRef() {
-    this.obj.EnsurePrimaryKeysWithValidValues();
-    this.Entity.p.CustomerFollowUpPlotDetails.push(
-      this.obj.p
-    );
-    console.log(this.Entity.p.CustomerFollowUpPlotDetails);
-    return
-    this.plotDetailsArray.forEach(obj => {
+    // debugger
 
-      debugger
-    });
+    // this.obj.EnsurePrimaryKeysWithValidValues();
+    // this.Entity.p.CustomerFollowUpPlotDetails.push(
+    //   this.obj.p
+    // );
+    // console.log(this.Entity.p.CustomerFollowUpPlotDetails);
+    // return
+    for (const obj of this.Entity.p.CustomerFollowUpPlotDetails) {
+      obj.Ref = await CustomerFollowUpPlotDetails.getPrimaryKeysWithValidValues();
+    }
+    // console.log(this.Entity.p.CustomerFollowUpPlotDetails);
+
   }
 }

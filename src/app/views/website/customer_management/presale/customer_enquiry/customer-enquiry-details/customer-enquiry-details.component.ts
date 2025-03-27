@@ -206,11 +206,12 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       this.uiUtils.showWarningToster(`Please Select a Plot`);
       return;
     }
+
     let selectedPlot = this.PlotList.find(
       (plot) => plot.p.Ref === this.InterestedPlotRef
     );
     let obj = CustomerFollowUpPlotDetails.CreateNewInstance();
-
+    debugger
     if (selectedPlot) {
       obj.EnsurePrimaryKeysWithValidValues();
       obj.p.SiteRef = this.SiteManagementRef;
@@ -261,6 +262,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   SaveCustomerEnquiry = async () => {
     this.Entity.p.CompanyRef =
       this.companystatemanagement.getCurrentCompanyRef();
+
     this.Entity.p.CustomerFollowUps[0].Ref =
       await CustomerFollowUp.getPrimaryKeysWithValidValues();
 
