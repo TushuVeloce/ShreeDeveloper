@@ -79,6 +79,8 @@ import { CustomerFollowupComponent } from './customer_management/presale/custome
 import { RegisteredCustomerComponent } from './customer_management/presale/registered_customer/registered-customer/registered-customer.component';
 import { RegisteredCustomerDetailsComponent } from './customer_management/presale/registered_customer/registered-customer-details/registered-customer-details.component';
 import { DocumentListComponent } from './government_office/document-list/document-list.component';
+import { RegistrarOfficeComponent } from './registrar_office/registrar-office/registrar-office.component';
+import { RegistrarOfficeDetailComponent } from './registrar_office/registrar-office-detail/registrar-office-detail.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent  ,StageMasterComponent,StageMasterDetailsComponent, AccountMainLedgerComponent,AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent,MarketingTypeMasterDetailsComponent,
@@ -88,7 +90,7 @@ import { DocumentListComponent } from './government_office/document-list/documen
     DeleteIconComponent,EditIconComponent, DataNotFoundComponent,VehicleMasterDetailsComponent,UserrolerightsComponent,FinancialYearMasterComponent,
     VendorServicesMasterComponent,VendorServicesMasterDetailsComponent,SiteManagementDetailsComponent,EmployeeAppraisalDetailsComponent,
     EmployeeAppraisalMasterComponent,EmployeeExitDetailsComponent,EmployeeExitMasterComponent,PlotMasterComponent, DocumentListComponent,
-    PlotMasterDetailsComponent,CustomerEnquiryComponent,CustomerEnquiryDetailsComponent,CustomerFollowupComponent, CustomerFollowupDetailsComponent,RegisteredCustomerComponent,RegisteredCustomerDetailsComponent],
+    PlotMasterDetailsComponent,CustomerEnquiryComponent,CustomerEnquiryDetailsComponent,CustomerFollowupComponent, CustomerFollowupDetailsComponent,RegisteredCustomerComponent,RegisteredCustomerDetailsComponent,RegistrarOfficeComponent,RegistrarOfficeDetailComponent],
   imports: [
     CommonModule,WebRoutingModule,FormsModule,NzDropDownModule,NzTableModule,IonicModule.forRoot(),
     NzPaginationModule, NzUploadModule, NzModalModule,NzCheckboxModule,

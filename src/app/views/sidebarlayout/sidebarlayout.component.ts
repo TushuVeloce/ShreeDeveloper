@@ -467,6 +467,13 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '',
       },
     ]
+    let RegistrarOfficeSubModuleList = [
+      {
+        Name: 'Registrar Office',
+        RouterLink: '/homepage/Website/Registrar_Office',
+        LogoPath: '',
+      },
+    ]
 
     let moduleListInternal = [
       {
@@ -504,6 +511,12 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '',
         WhiteLogo: '/assets/icons/stock.png',
         SubModuleList: GovernmentOfficeSubModuleList,
+      },
+      {
+        Name: 'Registrar Office',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/gov office.png',
+        SubModuleList: RegistrarOfficeSubModuleList,
       },
     ].filter(e => e.SubModuleList.length > 0);
 

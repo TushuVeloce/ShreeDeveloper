@@ -82,6 +82,7 @@ import { CustomerFollowupDetailsComponent } from './customer_management/presale/
 import { RegisteredCustomerComponent } from './customer_management/presale/registered_customer/registered-customer/registered-customer.component';
 import { RegisteredCustomerDetailsComponent } from './customer_management/presale/registered_customer/registered-customer-details/registered-customer-details.component';
 import { DocumentListComponent } from './government_office/document-list/document-list.component';
+import { RegistrarOfficeDetailComponent } from './registrar_office/registrar-office-detail/registrar-office-detail.component';
 
 const routes: Routes = [
   {
@@ -169,8 +170,11 @@ const routes: Routes = [
 
 
       { path: 'government _Office', component: GovernmentOfficeComponent },
+      
+      //Registrar Office //
 
       { path: 'Registrar_Office', component: RegistrarOfficeComponent },
+      { path: 'Registrar_Office_Details', component: RegistrarOfficeDetailComponent },
 
       { path: 'Plot_Resell_By_Third_Party', component: PlotResellByThirdPartyComponent },
 
@@ -195,7 +199,7 @@ const routes: Routes = [
       { path: 'Account_Report', component: AccountReportComponent },
 
        // Government Office
-       { path: 'document', component: DocumentListComponent },
+       { path: 'Document', component: DocumentListComponent },
        { path: 'Customer_Enquiry_Details', component: CustomerEnquiryDetailsComponent },
 
     ]
