@@ -144,7 +144,7 @@
         <div class="col-md-4">
           <div>
             <label>Government Recknor</label>
-            <input type="number" name="GovermentRatePerSqm" class="form-control" id="GovermentRatePerSqm" [(ngModel)]="NewEntity.GovermentRatePerSqm"  required placeholder="Enter Government Recknor" />
+            <input type="number" name="GovermentRatePerSqm" class="form-control" id="GovermentRatePerSqm" [(ngModel)]="NewEntity.GovermentRatePerSqm"  readonly placeholder="Enter Government Recknor" />
           </div>
         </div>
       </div>
@@ -152,7 +152,7 @@
         <div class="col-md-4">
           <div>
             <label>Government Value</label>
-            <input type="number" name="GovernmentValue" class="form-control" id="GovernmentValue" [(ngModel)]="Entity.p.GovernmentValue"  required placeholder="Enter Government Value" />
+            <input type="number" name="GovernmentValue" class="form-control" id="GovernmentValue" [(ngModel)]="Entity.p.GovernmentValue" readonly placeholder="Enter Government Value" />
           </div>
         </div>
         <div class="col-md-4">
@@ -164,7 +164,7 @@
         <div class="col-md-4">
           <div>
             <label>Tax Value In %</label>
-            <input type="number" name="TaxValueInPercentage" class="form-control" id="TaxValueInPercentage" [(ngModel)]="Entity.p.TaxValueInPercentage"  required placeholder="Enter Tax Value In %" />
+            <input type="number" name="TaxValueInPercentage" class="form-control" id="TaxValueInPercentage" [(ngModel)]="Entity.p.TaxValueInPercentage" readonly placeholder="Enter Tax Value In %" />
           </div>
         </div>
       </div>
@@ -172,19 +172,19 @@
         <div class="col-md-4">
           <div>
             <label>Stamp Duties</label>
-            <input type="number" name="StampDuties" class="form-control" id="StampDuties" [(ngModel)]="Entity.p.StampDuties"  required placeholder="Enter Stamp Duties" />
+            <input type="number" name="StampDuties" class="form-control" id="StampDuties" [(ngModel)]="Entity.p.StampDuties" readonly placeholder="Enter Stamp Duties" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Reg. Tax Values in %</label>
-            <input type="text" name="RegTaxValuesInPercentage" class="form-control" id="RegTaxValuesInPercentage" [(ngModel)]="Entity.p.RegTaxValuesInPercentage"  required placeholder="Enter Reg. Tax Values in %" />
+            <input type="text" name="RegTaxValuesInPercentage" class="form-control" id="RegTaxValuesInPercentage" [(ngModel)]="Entity.p.RegTaxValuesInPercentage" readonly placeholder="Enter Reg. Tax Values in %" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Registration Fees</label>
-            <input type="number" name="RegistrationFees" class="form-control" id="RegistrationFees" [(ngModel)]="Entity.p.RegistrationFees"  required placeholder="Enter Registration Fees" />
+            <input type="number" name="RegistrationFees" class="form-control" id="RegistrationFees" [(ngModel)]="Entity.p.RegistrationFees"  readonly placeholder="Enter Registration Fees" />
           </div>
         </div>
       </div>
@@ -219,7 +219,13 @@
         <div class="col-md-4">
           <div>
             <label>Grand Total</label>
-            <input type="number" name="GrandTotal" class="form-control" id="GrandTotal" [(ngModel)]="Entity.p.GrandTotal"  required placeholder="Enter Grand Total" />
+            <input type="number" name="GrandTotal" class="form-control" id="GrandTotal" [(ngModel)]="Entity.p.GrandTotal"  readonly placeholder="Enter Grand Total" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Gst Total Amount </label>
+            <input type="number" name="GstToatalAmount " class="form-control" id="GstToatalAmount " [(ngModel)]="Entity.p.GstToatalAmount"  required placeholder="Enter Gst Total Amount" />
           </div>
         </div>
         <!-- <div class="col-md-4">
@@ -234,15 +240,7 @@
             <input type="number" name="RemainingAmount" class="form-control" id="RemainingAmount" [(ngModel)]="Entity.p.RemainingAmount"  required placeholder="Enter Remaining Amount" />
           </div>
         </div> -->
-      </div>`
-      <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
-          <div>
-            <label>Gst Total Amount </label>
-            <input type="number" name="GstToatalAmount " class="form-control" id="GstToatalAmount " [(ngModel)]="Entity.p.GstToatalAmount"  required placeholder="Enter Gst Total Amount" />
-          </div>
-        </div>
-      </div>`
+      </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
           <button type="button" class="btn" (click) = "SaveRegisteredCustomer()">Save</button>

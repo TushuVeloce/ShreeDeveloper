@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { RegisteredCustomer } from 'src/app/classes/domain/entities/website/customer_management/registeredcustomer/registeredcustomer';
+import { FinancialYear } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -29,7 +30,8 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
     InterestedPlotRef: number = 0;
     SiteManagementRef: number = 0;
     GoodandServicesTaxList = DomainEnums.GoodsAndServicesTaxList(true, '--Select GST --');
-    
+    companyRef = this.companystatemanagement.SelectedCompanyRef;
+    FinancialYearList: FinancialYear[]=[]
   
     constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
   
@@ -106,9 +108,11 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
       this.Entity.p.GstToatalAmount = GSTonValueofAgreement
     }
 
+
     SaveRegisteredCustomer = async () => {
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
+      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
       console.log('entitiesToSave:', entitiesToSave);
       // await this.Entity.EnsurePrimaryKeysWithValidValues()
       let tr = await this.utils.SavePersistableEntities(entitiesToSave);

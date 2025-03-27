@@ -28,7 +28,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   Entity: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
   // CustomerPlotDetails: CustomerFollowUpPlotDetails = CustomerFollowUpPlotDetails.CreateNewInstance();
   // CustomerFollowUpEntity: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
-  private IsNewEntity: boolean = true;
+  public IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   // DetailsFormTitle: 'New Employee' | 'Edit Employee' = 'New Employee';
   IsDropdownDisabled: boolean = false;
