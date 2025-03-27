@@ -210,6 +210,7 @@ export class DomainEnums {
 
   public static GoodsAndServicesTaxName(itemType: GoodsAndServicesTax) {
     switch (itemType) {
+      case GoodsAndServicesTax.None: return 'None';
       case GoodsAndServicesTax.Five: return '5%';
       case GoodsAndServicesTax.Nine: return '9%';
       case GoodsAndServicesTax.Eighteen: return '18%';
@@ -242,6 +243,9 @@ export class DomainEnums {
 
   public static GoodsAndServicesTaxList(withAllOption: boolean = false, allOptionName: string = '<All>') {
     let result = [
+      {
+        Ref: GoodsAndServicesTax.None, Name: DomainEnums.GoodsAndServicesTaxName(GoodsAndServicesTax.None)
+      },
       {
         Ref: GoodsAndServicesTax.Five, Name: DomainEnums.GoodsAndServicesTaxName(GoodsAndServicesTax.Five)
       },
