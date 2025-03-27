@@ -15,9 +15,9 @@ import { CustomerFollowUpPlotDetailsFetchRequest } from "./CustomerFollowUpPlotD
 export class CustomerFollowUpPlotDetailsProps {
 
   public Ref: number = 0;
-  public CustomerFollowUpRef  : number = 0;
-  public SiteRef  : number = 0;
-  public PlotRef : number = 0;
+  public CustomerFollowUpRef: number = 0;
+  public SiteRef: number = 0;
+  public PlotRef: number = 0;
   public CustomerStatus: number = 0;
   public CustomerStatusName: string = '';
   public PlotAreaInSqm: number = 0;
@@ -26,7 +26,10 @@ export class CustomerFollowUpPlotDetailsProps {
   public Reason: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
-  public readonly SiteName: string = '';
+  public  SiteName: string = '';
+
+  public PlotName: string = '';
+
   // public readonly AccountTypeName: string = '';
 
   private constructor(isNewlyCreated: boolean) {
@@ -47,8 +50,8 @@ export class CustomerFollowUpPlotDetails implements IPersistable<CustomerFollowU
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -163,7 +166,7 @@ export class CustomerFollowUpPlotDetails implements IPersistable<CustomerFollowU
     let tdResponse = await CustomerFollowUpPlotDetails.FetchTransportData(req, errorHandler) as TransportData;
     return CustomerFollowUpPlotDetails.ListFromTransportData(tdResponse);
   }
-  public static async FetchEntireListByCustomerFollowUpPlotDetailsRef(CustomerFollowUpPlotDetailsRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCustomerFollowUpPlotDetailsRef(CustomerFollowUpPlotDetailsRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new CustomerFollowUpPlotDetailsFetchRequest();
     req.CustomerFollowUpPlotDetailsRefs.push(CustomerFollowUpPlotDetailsRef)
     let tdResponse = await CustomerFollowUpPlotDetails.FetchTransportData(req, errorHandler) as TransportData;
