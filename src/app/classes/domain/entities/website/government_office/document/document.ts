@@ -16,23 +16,9 @@ import { DocumentFetchRequest } from "./documentfetchrequest";
 export class DocumentProps {
   public Ref: number = 0;
   public Name: string = '';
-  public ContactNos: string = '';
-  public EmailId: string = '';
-  public Address: string = '';
-  public PinCode: string = '';
-  public CountryRef:  number = 9163;
-  public readonly CountryName: string='';
-  public StateRef:  number = 0;
-  public readonly StateName: string='';
-  public CityRef:  number = 0 ;
-  public readonly CityName: string='';
-  // public Date: string = '';
+  public OfficeName: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-
-  public CustomerStatus :number = 0;
-  public CustomerStatusName :string = '';
-
 
   public IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';

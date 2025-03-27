@@ -463,7 +463,7 @@ export class SidebarlayoutComponent implements OnInit {
       },
       {
         Name: 'Document List',
-        RouterLink: '/homepage/Website/document',
+        RouterLink: '/homepage/Website/Document',
         LogoPath: '',
       },
     ]

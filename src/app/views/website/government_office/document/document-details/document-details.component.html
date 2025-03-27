@@ -1,0 +1,50 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackDocument()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">{{DetailsFormTitle}}</span>
+      </div>
+    </div>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Name</label>
+            <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
+              placeholder="Enter Name" #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()" />
+            <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
+              <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Office Name</label>
+            <input type="text" [(ngModel)]="Entity.p.OfficeName" name="OfficeName" class="form-control" id="OfficeName" required
+              placeholder="Enter Office Name" pattern="{{NameWithNos}}" #OfficeNameCtrl="ngModel" required
+              (blur)="OfficeNameCtrl.control.markAsTouched()" />
+            <div *ngIf="(OfficeNameCtrl.invalid && (OfficeNameCtrl.touched || OfficeNameCtrl.dirty))">
+              <span class="validation-text" *ngIf="OfficeNameCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
+              <span class="validation-text" *ngIf="OfficeNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn" (click)="SaveDocument()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackDocument()">
+            Back
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
