@@ -232,6 +232,8 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     }
 
     if (selectedPlot) {
+      this.Entity.p.CustomerFollowUps[0].CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+
       this.Entity.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails.push(
         obj.p
       );
