@@ -15,13 +15,13 @@
         <div class="col-md-6">
           <div>
             <label>Site Name</label>
-            <input type="text" name="reason" class="form-control" id="reason" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Site Name"/>
+            <input type="text" name="SiteName" class="form-control" id="SiteName" [(ngModel)]="NewEntity.SiteName" readonly placeholder="Enter Site Name"/>
           </div>
         </div>
         <div class="col-md-6">
           <div>
             <label>Register Customer Name</label>
-            <input type="text" name="reason" class="form-control" id="reason" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Register Customer Name"  />
+            <input type="text" name="CustomerName" class="form-control" id="CustomerName" [(ngModel)]="NewEntity.CustomerName" readonly placeholder="Enter Register Customer Name"  />
           </div>
         </div>
       </div>
@@ -40,19 +40,19 @@
         <div class="col-md-4">
           <div>
             <label>Address</label>
-            <input type="text" name="Address" class="form-control" id="Address" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Address" />
+            <input type="text" name="CustomerAddress" class="form-control" id="CustomerAddress" [(ngModel)]="NewEntity.CustomerAddress" readonly placeholder="Enter Address" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Mobile No.</label>
-            <input type="text" name="MobNo" class="form-control" id="MobNo" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Mobile No." />
+            <input type="text" name="CustomerMobileNo" class="form-control" id="MobNo" [(ngModel)]="NewEntity.CustomerMobileNo" readonly placeholder="Enter Mobile No." />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Visited Date</label>
-            <input type="text" name="VisitedDate" class="form-control" id="VisitedDate" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Visited Date" />
+            <input type="text" name="VisitedDate" class="form-control" id="VisitedDate" [(ngModel)]="NewEntity.SiteRef" readonly placeholder="Enter Visited Date" />
           </div>
         </div>
       </div>
@@ -60,13 +60,13 @@
         <div class="col-md-4">
           <div>
             <label>Lead Source</label>
-            <input type="text" name="LeadSource" class="form-control" id="LeadSource" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Lead Source" />
+            <input type="text" name="LeadSourceName" class="form-control" id="LeadSourceName" [(ngModel)]="NewEntity.LeadSourceName" readonly placeholder="Enter Lead Source" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Lead By</label>
-            <input type="text" name="LeadHandleBy" class="form-control" id="LeadHandleBy" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Lead By" />
+            <input type="text" name="LeadHandleByName" class="form-control" id="LeadHandleByName" [(ngModel)]="NewEntity.LeadHandleByName" readonly placeholder="Enter Lead By" />
           </div>
         </div>
       </div>
@@ -79,19 +79,19 @@
         <div class="col-md-4">
           <div>
             <label>Plot Number</label>
-            <input type="text" name="PlotNumber" class="form-control" id="PlotNumber" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Plot Number" />
+            <input type="text" name="PlotName" class="form-control" id="PlotName" [(ngModel)]="NewEntity.PlotName" readonly placeholder="Enter Plot Number" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Basic Rate</label>
-            <input type="text" name="BasicRate" class="form-control" id="BasicRate" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Basic Rate" />
+            <input type="text" name="BasicRatePerSqft" class="form-control" id="BasicRatePerSqft" [(ngModel)]="NewEntity.BasicRatePerSqft" readonly placeholder="Enter Basic Rate" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Area Sqmt</label>
-            <input type="text" name="AreaInSqm" class="form-control" id="AreaInSqm" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Area Sqmt" />
+            <input type="text" name="AreaInSqm" class="form-control" id="AreaInSqm" [(ngModel)]="NewEntity.AreaInSqm"  readonly placeholder="Enter Area Sqmt" />
           </div>
         </div>
       </div>
@@ -99,19 +99,19 @@
         <div class="col-md-4">
           <div>
             <label>Area Sqft</label>
-            <input type="text" name="AreaInSqft" class="form-control" id="AreaInSqft" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Area Sqft" />
+            <input type="text" name="AreaInSqft" class="form-control" id="AreaInSqft" [(ngModel)]="NewEntity.AreaInSqft"  readonly placeholder="Enter Area Sqft" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Discounted Rate On Area </label>
-            <input type="text" name="DiscountedRateOnArea " class="form-control" id="DiscountedRateOnArea " [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Discounted Rate" />
+            <input type="text" name="DiscountedRateOnArea " class="form-control" id="DiscountedRateOnArea " [(ngModel)]="Entity.p.DiscountedRateOnArea" (ngModelChange)="calculateTotalPlotAmount()"  placeholder="Enter Discounted Rate" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Discount On Total Plot Amount </label>
-            <input type="text" name="Discount On Total Plot Amount " class="form-control" id="Discount On Total Plot Amount " [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Discount" />
+            <input type="text" name="DiscountOnTotalPlotAmount " class="form-control" id="DiscountOnTotalPlotAmount " [(ngModel)]="Entity.p.DiscountOnTotalPlotAmount" (ngModelChange)="calculateTotalPlotAmount()" required placeholder="Enter Discount" />
           </div>
         </div>
       </div>
@@ -119,7 +119,7 @@
         <div class="col-md-4">
           <div>
             <label>Total Plot Amount</label>
-            <input type="text" name="TotalPlotAmount" class="form-control" id="TotalPlotAmount" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Total Plot Amount" />
+            <input type="text" name="TotalPlotAmount" class="form-control" id="TotalPlotAmount" [(ngModel)]="Entity.p.TotalPlotAmount" readonly placeholder="Enter Total Plot Amount" />
           </div>
         </div>
       </div>
@@ -132,19 +132,19 @@
         <div class="col-md-4">
           <div>
             <label>Register Date</label>
-            <input type="text" name="RegisterDate" class="form-control" id="RegisterDate" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Register Date" />
+            <input type="date" name="RegisterDate" class="form-control" id="RegisterDate" [(ngModel)]="Entity.p.RegisterDate"  required placeholder="Enter Register Date" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Register By</label>
-            <input type="text" name="RegisterBy" class="form-control" id="RegisterBy" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Register By" />
+            <input type="text" name="RegisterBy" class="form-control" id="RegisterBy" [(ngModel)]="Entity.p.RegisterBy"  required placeholder="Enter Register By" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Government Recknor</label>
-            <input type="text" name="GovernmentRecknor" class="form-control" id="GovernmentRecknor" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Government Recknor" />
+            <input type="text" name="GovermentRatePerSqm" class="form-control" id="GovermentRatePerSqm" [(ngModel)]="NewEntity.GovermentRatePerSqm"  required placeholder="Enter Government Recknor" />
           </div>
         </div>
       </div>
@@ -152,19 +152,19 @@
         <div class="col-md-4">
           <div>
             <label>Government Value</label>
-            <input type="text" name="GovernmentValue" class="form-control" id="GovernmentValue" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Government Value" />
+            <input type="text" name="GovernmentValue" class="form-control" id="GovernmentValue" [(ngModel)]="Entity.p.GovernmentValue"  required placeholder="Enter Government Value" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Value Of Agreement</label>
-            <input type="text" name="ValueOfAgreement" class="form-control" id="ValueOfAgreement" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Value Of Agreement" />
+            <input type="text" name="ValueOfAgreement" class="form-control" id="ValueOfAgreement" [(ngModel)]="Entity.p.ValueOfAgreement"  (ngModelChange)="calculateStampDuties()"  required placeholder="Enter Value Of Agreement" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Tax Value In %</label>
-            <input type="text" name="TaxValueInPercentage" class="form-control" id="TaxValueInPercentage" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Tax Value In %" />
+            <input type="text" name="TaxValueInPercentage" class="form-control" id="TaxValueInPercentage" [(ngModel)]="Entity.p.TaxValueInPercentage"  required placeholder="Enter Tax Value In %" />
           </div>
         </div>
       </div>
@@ -172,19 +172,19 @@
         <div class="col-md-4">
           <div>
             <label>Stamp Duties</label>
-            <input type="text" name="StampDuties" class="form-control" id="StampDuties" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Stamp Duties" />
+            <input type="text" name="StampDuties" class="form-control" id="StampDuties" [(ngModel)]="Entity.p.StampDuties"  required placeholder="Enter Stamp Duties" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Reg. Tax Values in %</label>
-            <input type="text" name="RegTaxValuesInPercentage" class="form-control" id="RegTaxValuesInPercentage" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Reg. Tax Values in %" />
+            <input type="text" name="RegTaxValuesInPercentage" class="form-control" id="RegTaxValuesInPercentage" [(ngModel)]="Entity.p.RegTaxValuesInPercentage"  required placeholder="Enter Reg. Tax Values in %" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Registration Fees</label>
-            <input type="text" name="RegistrationFees" class="form-control" id="RegistrationFees" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Registration Fees" />
+            <input type="text" name="RegistrationFees" class="form-control" id="RegistrationFees" [(ngModel)]="Entity.p.RegistrationFees"  required placeholder="Enter Registration Fees" />
           </div>
         </div>
       </div>
@@ -192,19 +192,26 @@
         <div class="col-md-4">
           <div>
             <label>Goods & Services Tax (GST)</label>
-            <input type="text" name="GoodsServicesTax" class="form-control" id="GoodsServicesTax" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter GST" />
-          </div>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+            name="GoodsServicesTax" [(ngModel)]="Entity.p.GoodsServicesTax" required id="GoodsServicesTax" (ngModelChange)="calculateGrandTotal()">
+            <nz-option
+            *ngFor="let goodsservices of GoodandServicesTaxList"
+            [nzValue]="goodsservices.Ref"
+            [nzLabel]="goodsservices.Name"
+          ></nz-option>
+          </nz-select> 
+        </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Legal Charges</label>
-            <input type="text" name="LegalCharges" class="form-control" id="LegalCharges" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Legal Charges" />
+            <input type="text" name="LegalCharges" class="form-control" id="LegalCharges" [(ngModel)]="Entity.p.LegalCharges"  (ngModelChange)="calculateExtraCharges()"  required placeholder="Enter Legal Charges" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Total Extra Charges</label>
-            <input type="text" name="TotalExtraCharges" class="form-control" id="TotalExtraCharges" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Total Extra Charges" />
+            <input type="text" name="TotalExtraCharges" class="form-control" id="TotalExtraCharges" [(ngModel)]="Entity.p.TotalExtraCharges"  required placeholder="Enter Total Extra Charges" />
           </div>
         </div>
       </div>
@@ -212,19 +219,19 @@
         <div class="col-md-4">
           <div>
             <label>Grand Total</label>
-            <input type="text" name="GrandTotal" class="form-control" id="GrandTotal" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Grand Total" />
+            <input type="text" name="GrandTotal" class="form-control" id="GrandTotal" [(ngModel)]="Entity.p.GrandTotal"  required placeholder="Enter Grand Total" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Amount Paid</label>
-            <input type="text" name="AmountPaid" class="form-control" id="AmountPaid" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Amount Paid" />
+            <input type="text" name="AmountPaid" class="form-control" id="AmountPaid" [(ngModel)]="Entity.p.AmountPaid"  required placeholder="Enter Amount Paid" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Remaining Amount</label>
-            <input type="text" name="RemainingAmount" class="form-control" id="RemainingAmount" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Remaining Amount" />
+            <input type="text" name="RemainingAmount" class="form-control" id="RemainingAmount" [(ngModel)]="Entity.p.RemainingAmount"  required placeholder="Enter Remaining Amount" />
           </div>
         </div>
       </div>`
@@ -232,7 +239,7 @@
         <div class="col-md-4">
           <div>
             <label>Gst Total Amount </label>
-            <input type="text" name="GstToatalAmount " class="form-control" id="GstToatalAmount " [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Gst Total Amount" />
+            <input type="text" name="GstToatalAmount " class="form-control" id="GstToatalAmount " [(ngModel)]="Entity.p.GstToatalAmount"  required placeholder="Enter Gst Total Amount" />
           </div>
         </div>
       </div>`
