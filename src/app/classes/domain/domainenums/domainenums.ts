@@ -2,23 +2,30 @@ export enum Gender {
   None = 0,
   Male = 10,
   Female = 20,
-  Transgender  = 30
+  Transgender = 30
 }
 
 export enum MaritalStatuses {
   None = 0,
-  UnMarried  = 10,
-  Married  = 20,
-  Divorced   = 30
+  UnMarried = 10,
+  Married = 20,
+  Divorced = 30
 }
 
-export enum BookingRemark  {
+export enum GoodsAndServicesTax {
   None = 0,
-  Owner_Booked  = 10,
-  Shree_Booked  = 20,
-  Owner_Saledeed   = 30,
-  Shree_Saledeed   = 40,
-  Booked   = 50
+  Five = 5,
+  Nine = 9,
+  Eighteen = 18
+}
+
+export enum BookingRemark {
+  None = 0,
+  Owner_Booked = 10,
+  Shree_Booked = 20,
+  Owner_Saledeed = 30,
+  Shree_Saledeed = 40,
+  Booked = 50
 }
 
 export enum MarketingModes {
@@ -31,11 +38,11 @@ export enum MarketingModes {
 }
 
 export enum Company {
-None = 0,
-Company1 = 10,
-Company2 = 20,
-Company3 = 30,
-Company4 = 40
+  None = 0,
+  Company1 = 10,
+  Company2 = 20,
+  Company3 = 30,
+  Company4 = 40
 }
 
 export enum CompanyType {
@@ -50,14 +57,14 @@ export enum CompanyType {
 export enum ModuleTypes {
   None = 0,
   Master = 100,
-  Transaction  = 200,
+  Transaction = 200,
   Report = 300
 }
 
 export enum ApplicationFeatureGroups {
   None = 0,
   Master = 10,
-  Transaction  = 20,
+  Transaction = 20,
   Report = 30
 }
 
@@ -81,10 +88,10 @@ export enum ApplicationFeatures {
   CompanyMaster = 1600,
   FinancialYearMaster = 1700,
   EmployeeMaster = 1800,
-  
 
 
-  AccountingTransaction  = 1900,
+
+  AccountingTransaction = 1900,
   VendorReport = 2000,
   MaterialReport = 2100,
   EmployeeReport = 2200,
@@ -101,16 +108,16 @@ export enum ContactMode {
   None = 0,
   CustomerCalled = 10,
   ShreeCalled = 20,
-  CustomerSiteVisit  = 30,
-  CustomerOfficeVisit  = 40,
-  ShreeCustomerVisit  = 50
+  CustomerSiteVisit = 30,
+  CustomerOfficeVisit = 40,
+  ShreeCustomerVisit = 50
 }
 
 export enum CustomerStatus {
   None = 0,
   Interested = 10,
   LeadInprocess = 20,
-  LeadClosed  = 30,
+  LeadClosed = 30,
   DealOpen = 40,
   DealClosed = 50,
 }
@@ -147,7 +154,7 @@ export class DomainEnums {
       {
         Ref: MarketingModes.AgentBoker, Name: DomainEnums.MarketingModeName(MarketingModes.AgentBoker)
       },
-      
+
 
     ]
     if (withAllOption) {
@@ -164,7 +171,7 @@ export class DomainEnums {
     switch (itemType) {
       case Gender.Male: return 'Male';
       case Gender.Female: return 'Female';
-      case Gender.Transgender : return 'Transgender ';
+      case Gender.Transgender: return 'Transgender ';
       default: return '';
     }
   }
@@ -178,7 +185,7 @@ export class DomainEnums {
         Ref: Gender.Female, Name: DomainEnums.GenderTypeName(Gender.Female)
       },
       {
-        Ref: Gender.Transgender , Name: DomainEnums.GenderTypeName(Gender.Transgender )
+        Ref: Gender.Transgender, Name: DomainEnums.GenderTypeName(Gender.Transgender)
       }
     ]
     if (withAllOption) {
@@ -194,9 +201,19 @@ export class DomainEnums {
 
   public static MaritalStatusesName(itemType: MaritalStatuses) {
     switch (itemType) {
-      case MaritalStatuses.UnMarried : return 'UnMarried ';
+      case MaritalStatuses.UnMarried: return 'UnMarried ';
       case MaritalStatuses.Married: return 'Married';
-      case MaritalStatuses.Divorced : return 'Divorced ';
+      case MaritalStatuses.Divorced: return 'Divorced ';
+      default: return '';
+    }
+  }
+
+  public static GoodsAndServicesTaxName(itemType: GoodsAndServicesTax) {
+    switch (itemType) {
+      case GoodsAndServicesTax.None: return 'None';
+      case GoodsAndServicesTax.Five: return '5%';
+      case GoodsAndServicesTax.Nine: return '9%';
+      case GoodsAndServicesTax.Eighteen: return '18%';
       default: return '';
     }
   }
@@ -210,7 +227,7 @@ export class DomainEnums {
         Ref: MaritalStatuses.Married, Name: DomainEnums.MaritalStatusesName(MaritalStatuses.Married)
       },
       {
-        Ref: MaritalStatuses.Divorced , Name: DomainEnums.MaritalStatusesName(MaritalStatuses.Divorced )
+        Ref: MaritalStatuses.Divorced, Name: DomainEnums.MaritalStatusesName(MaritalStatuses.Divorced)
       }
     ]
     if (withAllOption) {
@@ -224,11 +241,37 @@ export class DomainEnums {
 
   }
 
+  public static GoodsAndServicesTaxList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+    let result = [
+      {
+        Ref: GoodsAndServicesTax.None, Name: DomainEnums.GoodsAndServicesTaxName(GoodsAndServicesTax.None)
+      },
+      {
+        Ref: GoodsAndServicesTax.Five, Name: DomainEnums.GoodsAndServicesTaxName(GoodsAndServicesTax.Five)
+      },
+      {
+        Ref: GoodsAndServicesTax.Nine, Name: DomainEnums.GoodsAndServicesTaxName(GoodsAndServicesTax.Nine)
+      },
+      {
+        Ref: GoodsAndServicesTax.Eighteen, Name: DomainEnums.GoodsAndServicesTaxName(GoodsAndServicesTax.Eighteen)
+      }
+    ]
+    if (withAllOption) {
+      let allEntry = {
+        Ref: GoodsAndServicesTax.None,
+        Name: allOptionName
+      }
+      result.unshift(allEntry);
+    }
+    return result;
+
+  }
+
   public static BookingRemarkName(itemType: BookingRemark) {
     switch (itemType) {
-      case BookingRemark.Owner_Booked : return 'Owner Booked ';
+      case BookingRemark.Owner_Booked: return 'Owner Booked ';
       case BookingRemark.Shree_Booked: return 'Shree Booked';
-      case BookingRemark.Owner_Saledeed : return 'Owner Saledeed ';
+      case BookingRemark.Owner_Saledeed: return 'Owner Saledeed ';
       case BookingRemark.Shree_Saledeed: return 'Shree Saledeed ';
       case BookingRemark.Booked: return 'Booked ';
       default: return '';
@@ -244,13 +287,13 @@ export class DomainEnums {
         Ref: BookingRemark.Shree_Booked, Name: DomainEnums.BookingRemarkName(BookingRemark.Shree_Booked)
       },
       {
-        Ref: BookingRemark.Owner_Saledeed , Name: DomainEnums.BookingRemarkName(BookingRemark.Owner_Saledeed )
+        Ref: BookingRemark.Owner_Saledeed, Name: DomainEnums.BookingRemarkName(BookingRemark.Owner_Saledeed)
       },
       {
-        Ref: BookingRemark.Shree_Saledeed , Name: DomainEnums.BookingRemarkName(BookingRemark.Shree_Saledeed )
+        Ref: BookingRemark.Shree_Saledeed, Name: DomainEnums.BookingRemarkName(BookingRemark.Shree_Saledeed)
       },
       {
-        Ref: BookingRemark.Booked , Name: DomainEnums.BookingRemarkName(BookingRemark.Booked )
+        Ref: BookingRemark.Booked, Name: DomainEnums.BookingRemarkName(BookingRemark.Booked)
       }
     ]
     if (withAllOption) {
@@ -360,7 +403,7 @@ export class DomainEnums {
       {
         Ref: Company.Company4, Name: DomainEnums.CompanyName(Company.Company4)
       }
-      
+
 
     ]
     if (withAllOption) {
@@ -394,7 +437,7 @@ export class DomainEnums {
       {
         Ref: ModuleTypes.Report, Name: DomainEnums.ModuleName(ModuleTypes.Report)
       }
-      
+
     ]
     if (withAllOption) {
       let allEntry = {
@@ -406,7 +449,7 @@ export class DomainEnums {
     return result;
   }
 
-  // For Feature Group 
+  // For Feature Group
 
   public static ApplicationFeatureGroupName(ApplicationFeature: ApplicationFeatureGroups) {
     switch (ApplicationFeature) {
@@ -428,7 +471,7 @@ export class DomainEnums {
       {
         Ref: ApplicationFeatureGroups.Report, Name: DomainEnums.ApplicationFeatureGroupName(ApplicationFeatureGroups.Report)
       }
-      
+
     ]
     if (withAllOption) {
       let allEntry = {
@@ -441,7 +484,7 @@ export class DomainEnums {
   }
 
   // For Feature
-  
+
   public static ApplicationFeatureName(ApplicationFeature: ApplicationFeatures) {
     switch (ApplicationFeature) {
       case ApplicationFeatures.UnitMaster: return 'Unit Master';
@@ -463,7 +506,7 @@ export class DomainEnums {
       case ApplicationFeatures.FinancialYearMaster: return 'Financial Year Master';
       case ApplicationFeatures.EmployeeMaster: return 'Employee Master';
 
-      
+
       case ApplicationFeatures.AccountingTransaction: return 'Accounting Transaction';
       case ApplicationFeatures.MaterialTransaction: return 'Material Transaction';
 
@@ -482,7 +525,7 @@ export class DomainEnums {
       {
         Ref: ApplicationFeatures.MaterialMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.MaterialMaster)
       },
-      
+
 
       // New Start
 
@@ -524,24 +567,24 @@ export class DomainEnums {
         Ref: ApplicationFeatures.EmployeeMaster, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.EmployeeMaster)
       },
 
-      // New End 
+      // New End
 
-      
-      // for transaction 
+
+      // for transaction
       {
         Ref: ApplicationFeatures.AccountingTransaction, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.AccountingTransaction)
       },
       {
         Ref: ApplicationFeatures.MaterialTransaction, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.MaterialTransaction)
       },
-      // For Report 
+      // For Report
       {
         Ref: ApplicationFeatures.EmployeeReport, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.EmployeeReport)
       },
       {
         Ref: ApplicationFeatures.VendorReport, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.VendorReport)
       },
-      
+
     ]
     if (withAllOption) {
       let allEntry = {
@@ -557,66 +600,66 @@ export class DomainEnums {
   public static FeatureToFeatureGroupMapList(withAllOption: boolean = false, allOptionName: string = '<All>') {
     let result = [
       {
-        Ref: ApplicationFeatures.UnitMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.UnitMaster)
-      },      
+        Ref: ApplicationFeatures.UnitMaster, FeatureGroupRef: ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.UnitMaster)
+      },
       {
-        Ref: ApplicationFeatures.MaterialMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.MaterialMaster)
+        Ref: ApplicationFeatures.MaterialMaster, FeatureGroupRef: ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.MaterialMaster)
       },
 
       // New start
       {
-        Ref: ApplicationFeatures.StageMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.StageMaster)
+        Ref: ApplicationFeatures.StageMaster, FeatureGroupRef: ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.StageMaster)
       },
       {
-        Ref: ApplicationFeatures.MarketingTypeMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.MarketingTypeMaster)
+        Ref: ApplicationFeatures.MarketingTypeMaster, FeatureGroupRef: ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.MarketingTypeMaster)
       },
       {
-        Ref: ApplicationFeatures.VendorServicesMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.VendorServicesMaster)
+        Ref: ApplicationFeatures.VendorServicesMaster, FeatureGroupRef: ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.VendorServicesMaster)
       },
       {
-        Ref: ApplicationFeatures.VendorMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.VendorMaster)
+        Ref: ApplicationFeatures.VendorMaster, FeatureGroupRef: ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.VendorMaster)
       },
       {
-        Ref: ApplicationFeatures.DepartmentMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.DepartmentMaster)
+        Ref: ApplicationFeatures.DepartmentMaster, FeatureGroupRef: ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.DepartmentMaster)
       },
       {
-        Ref: ApplicationFeatures.DesignationMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.DesignationMaster)
+        Ref: ApplicationFeatures.DesignationMaster, FeatureGroupRef: ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.DesignationMaster)
       },
       {
-        Ref: ApplicationFeatures.UserRoleMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.UserRoleMaster)
+        Ref: ApplicationFeatures.UserRoleMaster, FeatureGroupRef: ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.UserRoleMaster)
       },
       {
-        Ref: ApplicationFeatures.UserRoleRight,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.UserRoleRight)
+        Ref: ApplicationFeatures.UserRoleRight, FeatureGroupRef: ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.UserRoleRight)
       },
 
       {
-        Ref: ApplicationFeatures.ExternalUserMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.ExternalUserMaster)
+        Ref: ApplicationFeatures.ExternalUserMaster, FeatureGroupRef: ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.ExternalUserMaster)
       },
       {
-        Ref: ApplicationFeatures.CompanyMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.CompanyMaster)
+        Ref: ApplicationFeatures.CompanyMaster, FeatureGroupRef: ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.CompanyMaster)
       },
       {
-        Ref: ApplicationFeatures.FinancialYearMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.FinancialYearMaster)
+        Ref: ApplicationFeatures.FinancialYearMaster, FeatureGroupRef: ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.FinancialYearMaster)
       },
       {
-        Ref: ApplicationFeatures.EmployeeMaster,FeatureGroupRef :ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.EmployeeMaster)
+        Ref: ApplicationFeatures.EmployeeMaster, FeatureGroupRef: ApplicationFeatureGroups.Master, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.EmployeeMaster)
       },
 
-      // New End 
+      // New End
 
       {
-        Ref: ApplicationFeatures.AccountingTransaction,FeatureGroupRef :ApplicationFeatureGroups.Transaction, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.AccountingTransaction)
+        Ref: ApplicationFeatures.AccountingTransaction, FeatureGroupRef: ApplicationFeatureGroups.Transaction, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.AccountingTransaction)
       },
       {
-        Ref: ApplicationFeatures.MaterialTransaction,FeatureGroupRef :ApplicationFeatureGroups.Transaction, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.MaterialTransaction)
+        Ref: ApplicationFeatures.MaterialTransaction, FeatureGroupRef: ApplicationFeatureGroups.Transaction, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.MaterialTransaction)
       },
       {
-        Ref: ApplicationFeatures.EmployeeReport,FeatureGroupRef :ApplicationFeatureGroups.Report, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.EmployeeReport)
+        Ref: ApplicationFeatures.EmployeeReport, FeatureGroupRef: ApplicationFeatureGroups.Report, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.EmployeeReport)
       },
       {
-        Ref: ApplicationFeatures.VendorReport,FeatureGroupRef :ApplicationFeatureGroups.Report, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.VendorReport)
+        Ref: ApplicationFeatures.VendorReport, FeatureGroupRef: ApplicationFeatureGroups.Report, Name: DomainEnums.ApplicationFeatureName(ApplicationFeatures.VendorReport)
       },
-      
+
     ]
     if (withAllOption) {
       let allEntry = {
@@ -657,7 +700,7 @@ export class DomainEnums {
       {
         Ref: ContactMode.ShreeCustomerVisit, Name: DomainEnums.ContactModeName(ContactMode.ShreeCustomerVisit)
       }
-      
+
 
     ]
     if (withAllOption) {
@@ -698,7 +741,7 @@ export class DomainEnums {
       {
         Ref: CustomerStatus.DealClosed, Name: DomainEnums.CustomerStatusName(CustomerStatus.DealClosed)
       }
-      
+
 
     ]
     if (withAllOption) {

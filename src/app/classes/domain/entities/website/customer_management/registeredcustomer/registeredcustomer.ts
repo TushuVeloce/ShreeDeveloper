@@ -35,6 +35,8 @@ export class RegisteredCustomerProps {
   public AmountPaid:  number = 0;
   public RemainingAmount:  number = 0;
   public GstToatalAmount:  number = 0;
+  public CreatedBy:  number = 26893;
+  public UpdatedBy:  number = 26893;
 
 
   public readonly IsNewlyCreated: boolean = false;
