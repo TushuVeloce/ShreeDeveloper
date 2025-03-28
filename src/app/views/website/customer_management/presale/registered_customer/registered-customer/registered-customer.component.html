@@ -24,13 +24,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let registercustomer of paginatedList; index as i">
+        <tr *ngFor="let registercustomer of RegisterCustomerList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">Abc</td>
-          <td Class="tbldata">Abc</td>
-          <td Class="tbldata">Abc</td>
-          <td Class="tbldata">Abc</td>
-          <td Class="tbldata">Abc</td>
+          <td Class="tbldata">{{ registercustomer.p.SiteName}}</td>
+          <td Class="tbldata">{{ registercustomer.p.PlotName}}</td>
+          <td Class="tbldata">{{ registercustomer.p.CustomerName}}</td>
+          <td Class="tbldata">{{ registercustomer.p.CustomerMobileNo}}</td>
+          <td Class="tbldata">{{ registercustomer.p.CustomerAddress }}</td>
           <td class="tbldata">
             <span style="margin-left: 9px;" (click)="onEditClicked(registercustomer);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
