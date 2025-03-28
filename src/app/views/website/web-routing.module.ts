@@ -87,6 +87,8 @@ import { DocumentDetailsComponent } from './government_office/document/document-
 import { ProgressReportComponent } from './government_office/progress_report/progress-report.component';
 import { SiteWorkGroupMasterComponent } from './government_office/site_work_group/site-work-group-master/site-work-group-master.component';
 import { SiteWorkGroupMasterDetailsComponent } from './government_office/site_work_group/site-work-group-master-details/site-work-group-master-details.component';
+import { SiteWorkMasterDetailComponent } from './government_office/siteworkmaster/site-work-master-detail/site-work-master-detail.component';
+import { SiteWorkMasterComponent } from './government_office/siteworkmaster/site-work-master/site-work-master.component';
 
 const routes: Routes = [
   {
@@ -205,6 +207,9 @@ const routes: Routes = [
       { path: 'Document_Details', component: DocumentDetailsComponent },
 
       { path: 'Government_Office', component: GovernmentOfficeComponent },
+      
+      { path: 'Site_Work_Master', component: SiteWorkMasterDetailComponent },
+      { path: 'Site_Work_Master_Detail', component: SiteWorkMasterComponent },
 
       { path: 'Site_Work_Group', component: SiteWorkGroupMasterComponent },
       { path: 'Site_Work_Group_Details', component: SiteWorkGroupMasterDetailsComponent },

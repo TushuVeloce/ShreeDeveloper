@@ -87,6 +87,8 @@ import { GovernmentOfficeComponent } from './government_office/government-office
 import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { SiteWorkGroupMasterComponent } from './government_office/site_work_group/site-work-group-master/site-work-group-master.component';
 import { SiteWorkGroupMasterDetailsComponent } from './government_office/site_work_group/site-work-group-master-details/site-work-group-master-details.component';
+import { SiteWorkMasterDetailComponent } from './government_office/siteworkmaster/site-work-master-detail/site-work-master-detail.component';
+import { SiteWorkMasterComponent } from './government_office/siteworkmaster/site-work-master/site-work-master.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent, StageMasterComponent, StageMasterDetailsComponent, AccountMainLedgerComponent, AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent, MarketingTypeMasterDetailsComponent,
@@ -96,7 +98,7 @@ import { SiteWorkGroupMasterDetailsComponent } from './government_office/site_wo
     DeleteIconComponent, EditIconComponent, DataNotFoundComponent, VehicleMasterDetailsComponent, UserrolerightsComponent, FinancialYearMasterComponent, SiteWorkGroupMasterComponent, SiteWorkGroupMasterDetailsComponent,
     VendorServicesMasterComponent, VendorServicesMasterDetailsComponent, SiteManagementDetailsComponent, EmployeeAppraisalDetailsComponent, ProgressReportComponent, GovernmentOfficeComponent,
     EmployeeAppraisalMasterComponent, EmployeeExitDetailsComponent, EmployeeExitMasterComponent, PlotMasterComponent, DocumentListComponent, DocumentDetailsComponent,
-    PlotMasterDetailsComponent, CustomerEnquiryComponent, CustomerEnquiryDetailsComponent, CustomerFollowupComponent, CustomerFollowupDetailsComponent, RegisteredCustomerComponent, RegisteredCustomerDetailsComponent, RegistrarOfficeComponent, RegistrarOfficeDetailComponent],
+    PlotMasterDetailsComponent, CustomerEnquiryComponent, CustomerEnquiryDetailsComponent, CustomerFollowupComponent, CustomerFollowupDetailsComponent, RegisteredCustomerComponent, RegisteredCustomerDetailsComponent, RegistrarOfficeComponent, RegistrarOfficeDetailComponent,SiteWorkMasterDetailComponent,SiteWorkMasterComponent],
   imports: [
     CommonModule, WebRoutingModule, FormsModule, NzDropDownModule, NzTableModule, IonicModule.forRoot(),
     NzPaginationModule, NzUploadModule, NzModalModule, NzCheckboxModule,
