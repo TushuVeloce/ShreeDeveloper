@@ -4,11 +4,13 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-attendance-and-salary',
   templateUrl: './attendance-and-salary.component.html',
   styleUrls: ['./attendance-and-salary.component.scss'],
+  standalone: false,
 })
-export class AttendanceAndSalaryComponent  implements OnInit {
-
-  constructor() { }
+export class AttendanceAndSalaryComponent implements OnInit {
+  SearchString : string = ''
+  constructor() {}
 
   ngOnInit() {}
 
+  filterTable = () => {};
 }

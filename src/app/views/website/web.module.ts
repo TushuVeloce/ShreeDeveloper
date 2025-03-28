@@ -89,6 +89,8 @@ import { SiteWorkGroupMasterComponent } from './government_office/site_work_grou
 import { SiteWorkGroupMasterDetailsComponent } from './government_office/site_work_group/site-work-group-master-details/site-work-group-master-details.component';
 import { SiteWorkMasterDetailComponent } from './government_office/siteworkmaster/site-work-master-detail/site-work-master-detail.component';
 import { SiteWorkMasterComponent } from './government_office/siteworkmaster/site-work-master/site-work-master.component';
+import { AttendanceAndSalaryComponent } from './hr_payroll_management/attendance-salary/attendance-and-salary/attendance-and-salary.component';
+import { OfficeDutyTimeComponent } from './hr_payroll_management/office_duty_time/office-duty-time/office-duty-time.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent, StageMasterComponent, StageMasterDetailsComponent, AccountMainLedgerComponent, AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent, MarketingTypeMasterDetailsComponent,
@@ -98,7 +100,8 @@ import { SiteWorkMasterComponent } from './government_office/siteworkmaster/site
     DeleteIconComponent, EditIconComponent, DataNotFoundComponent, VehicleMasterDetailsComponent, UserrolerightsComponent, FinancialYearMasterComponent, SiteWorkGroupMasterComponent, SiteWorkGroupMasterDetailsComponent,
     VendorServicesMasterComponent, VendorServicesMasterDetailsComponent, SiteManagementDetailsComponent, EmployeeAppraisalDetailsComponent, ProgressReportComponent, GovernmentOfficeComponent,
     EmployeeAppraisalMasterComponent, EmployeeExitDetailsComponent, EmployeeExitMasterComponent, PlotMasterComponent, DocumentListComponent, DocumentDetailsComponent,
-    PlotMasterDetailsComponent, CustomerEnquiryComponent, CustomerEnquiryDetailsComponent, CustomerFollowupComponent, CustomerFollowupDetailsComponent, RegisteredCustomerComponent, RegisteredCustomerDetailsComponent, RegistrarOfficeComponent, RegistrarOfficeDetailComponent,SiteWorkMasterDetailComponent,SiteWorkMasterComponent],
+    PlotMasterDetailsComponent, CustomerEnquiryComponent, CustomerEnquiryDetailsComponent, CustomerFollowupComponent, CustomerFollowupDetailsComponent, RegisteredCustomerComponent, RegisteredCustomerDetailsComponent, RegistrarOfficeComponent, RegistrarOfficeDetailComponent,SiteWorkMasterDetailComponent,SiteWorkMasterComponent,
+    AttendanceAndSalaryComponent,OfficeDutyTimeComponent],
   imports: [
     CommonModule, WebRoutingModule, FormsModule, NzDropDownModule, NzTableModule, IonicModule.forRoot(),
     NzPaginationModule, NzUploadModule, NzModalModule, NzCheckboxModule,

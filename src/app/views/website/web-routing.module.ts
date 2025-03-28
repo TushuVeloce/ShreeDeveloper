@@ -5,8 +5,6 @@ import { GovernmentOfficeComponent } from './government_office/government-office
 import { RegistrarOfficeComponent } from './registrar_office/registrar-office/registrar-office.component';
 import { PlotResellByThirdPartyComponent } from './plot_resell_by_third_party/plot-resell-by-third-party/plot-resell-by-third-party.component';
 import { MarketingManagementComponent } from './marketing_management/marketing-management/marketing-management.component';
-import { EmployeeManagementComponent } from './hr_payroll_management/employee-management/employee-management.component';
-import { AttendanceAndSalaryComponent } from './hr_payroll_management/attendance-and-salary/attendance-and-salary.component';
 import { DashboardComponent } from './Dashboard/dashboard.component';
 import { SiteManagementMasterComponent } from './site-management/site-management-master/site-management-master.component';
 import { SiteManagementActualStagesComponent } from './site-management/site-management-actual-stages/site-management-actual-stages.component';
@@ -89,6 +87,9 @@ import { SiteWorkGroupMasterComponent } from './government_office/site_work_grou
 import { SiteWorkGroupMasterDetailsComponent } from './government_office/site_work_group/site-work-group-master-details/site-work-group-master-details.component';
 import { SiteWorkMasterDetailComponent } from './government_office/siteworkmaster/site-work-master-detail/site-work-master-detail.component';
 import { SiteWorkMasterComponent } from './government_office/siteworkmaster/site-work-master/site-work-master.component';
+import { OfficeDutyTimeComponent } from './hr_payroll_management/office_duty_time/office-duty-time/office-duty-time.component';
+import { OfficeDutyTimeDetailsComponent } from './hr_payroll_management/office_duty_time/office-duty-time-details/office-duty-time-details.component';
+import { AttendanceAndSalaryComponent } from './hr_payroll_management/attendance-salary/attendance-and-salary/attendance-and-salary.component';
 
 const routes: Routes = [
   {
@@ -184,8 +185,11 @@ const routes: Routes = [
 
       { path: 'Marketing_Management', component: MarketingManagementComponent },
 
-      { path: 'Employee_Management', component: EmployeeManagementComponent },
+      { path: 'Employee_Management', component: EmployeeMasterComponent },
       { path: 'Attendance_and_Salary', component: AttendanceAndSalaryComponent },
+
+      { path: 'Office_Duty_Time', component: OfficeDutyTimeComponent },
+      { path: 'Office_Duty_Time_Details', component: OfficeDutyTimeDetailsComponent },
 
       { path: 'Accounting_Transaction', component: AccountTransactionsComponent },
       { path: 'Expense_Transactions', component: ExpenseTransactionsComponent },
@@ -207,7 +211,7 @@ const routes: Routes = [
       { path: 'Document_Details', component: DocumentDetailsComponent },
 
       { path: 'Government_Office', component: GovernmentOfficeComponent },
-      
+
       { path: 'Site_Work_Master', component: SiteWorkMasterDetailComponent },
       { path: 'Site_Work_Master_Detail', component: SiteWorkMasterComponent },
 

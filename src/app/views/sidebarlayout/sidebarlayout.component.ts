@@ -489,6 +489,18 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '',
       },
     ]
+    let HrPayrollManagement = [
+      {
+        Name: 'Office Duty & Time',
+        RouterLink: '/homepage/Website/Office_Duty_Time',
+        LogoPath: '',
+      },
+      {
+        Name: 'Attendance & Salary',
+        RouterLink: '/homepage/Website/Attendance_and_Salary',
+        LogoPath: '',
+      }
+    ]
 
     let moduleListInternal = [
       {
@@ -533,6 +545,12 @@ export class SidebarlayoutComponent implements OnInit {
         WhiteLogo: '/assets/icons/gov office.png',
         SubModuleList: RegistrarOfficeSubModuleList,
       },
+      {
+        Name: 'Hr-Payroll Management',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/gov office.png',
+        SubModuleList: HrPayrollManagement,
+      }
     ].filter(e => e.SubModuleList.length > 0);
 
     this.ModuleList = moduleListInternal;
