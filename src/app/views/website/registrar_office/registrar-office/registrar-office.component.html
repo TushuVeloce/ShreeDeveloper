@@ -1,3 +1,75 @@
-<p>
-  registrar-office works!
-</p>
+<div class="row">
+  <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
+    <h5 style="padding-top: 3px;" class="title title_light">Registrar Office </h5>
+  </div>
+  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light">
+    <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus [(ngModel)]="SearchString" />
+  </div>
+  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
+    <nz-button nz-button class="btn1" (click)='AddDepartment()'>
+      Add Registrar Office
+    </nz-button>
+  </div>
+
+
+  <!-- <div class="row">
+    <div class="col-md-4">
+      <label for="SiteManagementRef"><b>Site Name</b></label>
+      <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteManagementRef"
+        name="SiteManagementRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteManagementRef" (ngModelChange)="onsitechange(Entity.p.SiteManagementRef)"
+       >
+        <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+      </nz-select>
+    </div>
+    <div class="col-md-4">
+      <label for="CustomerRef"><b>Customer Name</b></label>
+      <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CustomerRef"
+        name="CustomerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CustomerRef">
+        <nz-option *ngFor="let customer of CustomerList" [nzValue]="customer.p.Ref" [nzLabel]="customer.p.Name"></nz-option>
+      </nz-select>
+    </div>
+    <div class="col-md-4">
+      <label for="PlotRef"><b>Plot No.</b></label>
+      <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PlotRef"
+        name="PlotRef" [nzSize]="'large'" [(ngModel)]="Entity.p.PlotRef">
+        <nz-option *ngFor="let plot of PlotList" [nzValue]="plot.p.Ref" [nzLabel]="plot.p.Name"></nz-option>
+      </nz-select>
+    </div>
+  </div> -->
+</div>
+<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+  <div class="table-container">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let department of paginatedList; index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{department.p.Name}}</td>
+          <td Class="tbldata">{{department.p.CompanyName}}</td>
+          <td class="tbldata">
+            <span style="margin-left: 9px;" (click)="onEditClicked(department);">
+              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+            </span>
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(department);">
+              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+  <div class="fixed-pagination">
+    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+      (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+    </nz-pagination>
+  </div>
+</div>
+<div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
+  <div style="height: 200px" class="d-flex align-items-center justify-content-center">
+    <span class="title_light"> Data Not Found</span>
+  </div>
+</div>
