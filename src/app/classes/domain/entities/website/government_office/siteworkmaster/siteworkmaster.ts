@@ -35,7 +35,7 @@ export class SiteWorkMasterProps {
 }
 
 export class SiteWorkMaster implements IPersistable<SiteWorkMaster> {
-  public static readonly Db_Table_Name: string = 'SiteWorkMasterMaster';
+  public static readonly Db_Table_Name: string = 'SiteWorkMaster';
 
   private constructor(public readonly p: SiteWorkMasterProps, public readonly AllowEdit: boolean) {
 

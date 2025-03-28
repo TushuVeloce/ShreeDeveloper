@@ -6,7 +6,7 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class SiteWorkMasterFetchRequest
 {
-    public static readonly FetchRequestType: string = "SiteWorkMasterFetchRequest";
+    public static readonly FetchRequestType: string = "SiteWorkFetchRequest";
 
     CompanyRefs: number[] = [];
     SiteWorkGroupRef : number[] = [];
