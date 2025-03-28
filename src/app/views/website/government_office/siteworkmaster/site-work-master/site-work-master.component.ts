@@ -1,6 +1,7 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
+import { SiteWorkGroup } from 'src/app/classes/domain/entities/website/government_office/siteworkgroup/siteworkgroup';
+import { SiteWorkMaster } from 'src/app/classes/domain/entities/website/government_office/siteworkmaster/siteworkmaster';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
@@ -13,33 +14,35 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   styleUrls: ['./site-work-master.component.scss'],
 })
 export class SiteWorkMasterComponent  implements OnInit {
-  Entity: Material = Material.CreateNewInstance();
-  MasterList: Material[] = [];
-  DisplayMasterList: Material[] = [];
+  Entity: SiteWorkMaster = SiteWorkMaster.CreateNewInstance();
+  MasterList: SiteWorkMaster[] = [];
+  DisplayMasterList: SiteWorkMaster[] = [];
   SearchString: string = '';
-  SelectedMaterial: Material = Material.CreateNewInstance();
+  SelectedSiteWorkMaster: SiteWorkMaster = SiteWorkMaster.CreateNewInstance();
   CustomerRef: number = 0;
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
+    SiteWorkGroupList: SiteWorkGroup[] = [];
+  
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   
-  headers: string[] = ['Sr.No.', 'Code', 'Material Name', 'Material Unit', 'Action'];
+  headers: string[] = ['Sr.No.', 'Code', 'SiteWorkMaster Name', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(() => {
-      // this.getMaterialListByCompanyRef()
-          this.getMaterialListByCompanyRef();
+      // this.getSiteWorkMasterListByCompanyRef()
+          this.getSiteWorkMasterListByCompanyRef();
     });
   }
 
   // effect(() => {
-  //   // this.getMaterialListByCompanyRef()
+  //   // this.getSiteWorkMasterListByCompanyRef()
   //   setTimeout(() => {
   //     if (this.companyRef() > 0) {
-  //       this.getMaterialListByCompanyRef();
+  //       this.getSiteWorkMasterListByCompanyRef();
   //     }
   //   }, 300);
   // });
@@ -48,14 +51,15 @@ export class SiteWorkMasterComponent  implements OnInit {
 
   
   async ngOnInit() {
+    this.SiteWorkGroupList = await SiteWorkGroup.FetchEntireList();
     this.appStateManage.setDropdownDisabled(false);
-    // await this.FormulateMaterialList();
+    // await this.FormulateSiteWorkMasterList();
     // this.DisplayMasterList = [];
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
-  // private FormulateMaterialList = async () => {
-  //   let lst = await Material.FetchEntireList(
+  // private FormulateSiteWorkMasterList = async () => {
+  //   let lst = await SiteWorkMaster.FetchEntireList(
   //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
   //   );
   //   this.MasterList = lst;
@@ -65,7 +69,7 @@ export class SiteWorkMasterComponent  implements OnInit {
   //   // console.log(this.DisplayMasterList);
   // };
 
-  getMaterialListByCompanyRef = async () => {
+  getSiteWorkMasterListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     console.log('companyRef :', this.companyRef());
@@ -73,41 +77,41 @@ export class SiteWorkMasterComponent  implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Material.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SiteWorkMaster.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
-    console.log('MaterialList :', this.MasterList);
+    console.log('SiteWorkMasterList :', this.MasterList);
 
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
   
-  onEditClicked = async (item: Material) => {
-    // let props = Object.assign(MaterialProps.Blank(),item.p);
-    // this.SelectedMaterial = Material.CreateInstance(props,true);
+  onEditClicked = async (item: SiteWorkMaster) => {
+    // let props = Object.assign(SiteWorkMasterProps.Blank(),item.p);
+    // this.SelectedSiteWorkMaster = SiteWorkMaster.CreateInstance(props,true);
 
-    this.SelectedMaterial = item.GetEditableVersion();
+    this.SelectedSiteWorkMaster = item.GetEditableVersion();
 
-    Material.SetCurrentInstance(this.SelectedMaterial);
+    SiteWorkMaster.SetCurrentInstance(this.SelectedSiteWorkMaster);
 
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
 
-    await this.router.navigate(['/homepage/Website/Material_Master_Details']);
+    await this.router.navigate(['/homepage/Website/Site_Work_Master_Detail']);
   };
 
-  onDeleteClicked = async (material: Material) => {
+  onDeleteClicked = async (SiteWorkMaster: SiteWorkMaster) => {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-    Are you sure that you want to DELETE this Material?`,
+    Are you sure that you want to DELETE this SiteWorkMaster?`,
       async () => {
-        await material.DeleteInstance(async () => {
+        await SiteWorkMaster.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `Material ${material.p.Name} has been deleted!`
+            `Site Work Master ${SiteWorkMaster.p.Name} has been deleted!`
           );
-          await this.getMaterialListByCompanyRef();
+          await this.getSiteWorkMasterListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
-          // await this.FormulateMaterialList();
+          // await this.FormulateSiteWorkMasterList();
 
         });
       }
@@ -127,12 +131,12 @@ export class SiteWorkMasterComponent  implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
-  async AddMaterial() {
+  async AddSiteWorkMaster() {
     if (this.companyRef() <= 0) {
       this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.router.navigate(['/homepage/Website/Material_Master_Details']);
+    this.router.navigate(['/homepage/Website/Site_Work_Master_Detail']);
   }
 
 

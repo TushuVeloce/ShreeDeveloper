@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -8,6 +7,8 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { NgModel } from '@angular/forms';
+import { SiteWorkMaster } from 'src/app/classes/domain/entities/website/government_office/siteworkmaster/siteworkmaster';
+import { SiteWorkGroup } from 'src/app/classes/domain/entities/website/government_office/siteworkgroup/siteworkgroup';
 
 @Component({
   selector: 'app-site-work-master-detail',
@@ -16,13 +17,13 @@ import { NgModel } from '@angular/forms';
   styleUrls: ['./site-work-master-detail.component.scss'],
 })
 export class SiteWorkMasterDetailComponent  implements OnInit {
-  Entity: Material = Material.CreateNewInstance();
+  Entity: SiteWorkMaster = SiteWorkMaster.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
-  DetailsFormTitle: 'New Material' | 'Edit Material' = 'New Material';
+  DetailsFormTitle: 'New Site Work Master' | 'Edit Site Work Master' = 'New Site Work Master';
   IsDropdownDisabled: boolean = false;
-  InitialEntity: Material = null as any;
-  UnitList: Unit[] = [];
+  InitialEntity: SiteWorkMaster = null as any;
+  SiteWorkGroupList: SiteWorkGroup[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   NameWithNos: string = ValidationPatterns.NameWithNos
   
@@ -42,38 +43,30 @@ export class SiteWorkMasterDetailComponent  implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    this.UnitList = await Unit.FetchEntireList();
+    this.SiteWorkGroupList = await SiteWorkGroup.FetchEntireList();
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
 
       this.DetailsFormTitle = this.IsNewEntity
-        ? 'New Material'
-        : 'Edit Material';
-      this.Entity = Material.GetCurrentInstance();
+        ? 'New Site Work Master'
+        : 'Edit Site Work Master';
+      this.Entity = SiteWorkMaster.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
     } else {
-      this.Entity = Material.CreateNewInstance();
-      Material.SetCurrentInstance(this.Entity);
+      this.Entity = SiteWorkMaster.CreateNewInstance();
+      SiteWorkMaster.SetCurrentInstance(this.Entity);
     }
     this.InitialEntity = Object.assign(
-      Material.CreateNewInstance(),
+      SiteWorkMaster.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
-    ) as Material;
+    ) as SiteWorkMaster;
     // this.focusInput();
 
-    await this.FormulateUnitList();
   }
 
-  public FormulateUnitList = async () => {
-    let lst = await Unit.FetchEntireList(
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-    this.UnitList = lst;
-    console.log('UnitList :', this.UnitList);
-  };
-
-  SaveMaterialMaster = async () => {
+ 
+  SaveSiteWorkMaster = async () => {
     this.Entity.p.CompanyRef =
       this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName =
@@ -94,20 +87,20 @@ export class SiteWorkMasterDetailComponent  implements OnInit {
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster(
-          'Material Master saved successfully!'
+          'Site Work Master  saved successfully!'
         );
-        this.Entity = Material.CreateNewInstance();
+        this.Entity = SiteWorkMaster.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster(
-          'Material Master Updated successfully!'
+          'Site Work Master  Updated successfully!'
         );
-        await this.router.navigate(['/homepage/Website/Material_Master']);
+        await this.router.navigate(['/homepage/Website/Site_Work_Master']);
       }
     }
   };
 
-  BackMaterial() {
-    this.router.navigate(['/homepage/Website/Material_Master']);
+  BackSiteWorkMaster() {
+    this.router.navigate(['/homepage/Website/Site_Work_Master']);
   }
 
   resetAllControls = () => {

@@ -1,19 +1,30 @@
 <div>
   <div class="row">
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2">
-      <h5 style="padding-top: 3px;" class="title title_light">Material Master</h5>
+      <h5 style="padding-top: 3px;" class="title title_light">Add Site Work Master </h5>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
       <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus [(ngModel)]="SearchString" />
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
-      <nz-button nz-button class="btn1" (click)='AddMaterial()'>
-        Add Material
+      <nz-button nz-button class="btn1" (click)='AddSiteWorkMaster()'>
+        Add Site Work Master
       </nz-button>
     </div>
     <div>
     </div>
   </div>
+
+<div class="row">
+
+  <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+    <label> Site Work Group</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteWorkGroupRef"
+          name="SiteWorkGroupRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteWorkGroupRef">
+          <nz-option *ngFor="let siteworkgroup of SiteWorkGroupList" [nzValue]="siteworkgroup.p.Ref" [nzLabel]="siteworkgroup.p.Name"></nz-option>
+        </nz-select>
+  </div>
+</div>
   <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList" [nzScroll]="{x:'auto' }"
@@ -24,16 +35,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let material of paginatedList; index as i">
+        <tr *ngFor="let siteworkmaster of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{material.p.Code}}</td>
-          <td Class="tbldata">{{material.p.Name}}</td>
-          <td Class="tbldata">{{material.p.UnitName}}</td>
+          <td Class="tbldata">{{siteworkmaster.p.SiteWorkGroupName}}</td>
+          <td Class="tbldata">{{siteworkmaster.p.Name}}</td>
           <td class="tbldata">
-            <span style="margin-left: 9px;" (click)="onEditClicked(material);">
+            <span style="margin-left: 9px;" (click)="onEditClicked(siteworkmaster);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
             </span>
-            <span style="margin-left: 9px;" (click)="onDeleteClicked(material);">
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(siteworkmaster);">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
