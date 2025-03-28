@@ -1,0 +1,75 @@
+// :host ::ng-deep .custom-steps .ant-steps-item {
+//   font-size: 28px; /* Increase text size */
+// }
+// :host ::ng-deep .custom-steps .ant-steps-item-title,
+// :host ::ng-deep .custom-steps .ant-steps-item-description {
+//   color: red !important; /* Change text color */
+// }
+// :host ::ng-deep .custom-steps .ant-steps-item-icon {
+//   font-size: 54px; /* Increase icon size */
+//   color: red !important; /* Change icon color */
+// }
+
+
+
+// :host ::ng-deep .custom-steps .ant-steps-item {
+//   font-size: 25px; /* Increase text size */
+// }
+// :host ::ng-deep .custom-steps .ant-steps-item-title,
+// :host ::ng-deep .custom-steps .ant-steps-item-description {
+//   color: red !important; /* Change text color */
+//   font-size: large;
+// }
+// :host ::ng-deep .custom-steps .ant-steps-item-icon {
+//   font-size: 28px !important; /* Increase icon size */
+//   font-weight: 600;
+//   width: 50px !important;
+//   height: 50px !important;
+//   line-height: 50px !important;
+//   color: red !important; /* Change icon color */
+//   margin-bottom: 4vh;
+// }
+// :host ::ng-deep .custom-steps .ant-steps-item-icon > .ant-steps-icon {
+//   font-size: 32px !important; /* Increase step number size */
+// }
+
+
+:host ::ng-deep .custom-steps .ant-steps-item {
+  font-size: 32px; /* Increase text size */
+}
+
+:host ::ng-deep .custom-steps .ant-steps-item-title {
+  color: white !important; /* Change text color */
+  font-size: 25px;
+  font-weight: 800;
+  cursor: pointer;
+  background-color: rgb(176, 91, 91);
+  border-radius: 5px;
+  padding: 5px;
+  width: 100%;
+  text-align: center;
+}
+
+:host ::ng-deep .custom-steps .ant-steps-item-icon {
+  font-size: 28px !important; /* Increase icon size */
+  font-weight: 600;
+  width: 50px !important;
+  height: 50px !important;
+  line-height: 50px !important;
+  color: red !important; /* Change icon color */
+  margin-bottom: 4vh; /* Reduce margin to properly align the line */
+  background-color: brown;
+  border-color: black;
+}
+
+:host ::ng-deep .custom-steps .ant-steps-item-icon > .ant-steps-icon {
+  font-size: 32px !important; /* Increase step number size */
+  color: white;
+}
+
+/* Fix line alignment */
+:host ::ng-deep .custom-steps .ant-steps-item-tail {
+  top: 50% !important; /* Adjust line alignment */
+  transform: translateY(-50%) !important; /* Center the line */
+  height: calc(100% - 50px) !important; /* Adjust height dynamically */
+}

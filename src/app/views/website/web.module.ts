@@ -84,6 +84,7 @@ import { DocumentListComponent } from './government_office/document/document-lis
 import { DocumentDetailsComponent } from './government_office/document/document-details/document-details.component';
 import { ProgressReportComponent } from './government_office/progress_report/progress-report.component';
 import { GovernmentOfficeComponent } from './government_office/government-office/government-office.component';
+import { NzStepsModule } from 'ng-zorro-antd/steps';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent, StageMasterComponent, StageMasterDetailsComponent, AccountMainLedgerComponent, AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent, MarketingTypeMasterDetailsComponent,
@@ -97,7 +98,7 @@ import { GovernmentOfficeComponent } from './government_office/government-office
   imports: [
     CommonModule, WebRoutingModule, FormsModule, NzDropDownModule, NzTableModule, IonicModule.forRoot(),
     NzPaginationModule, NzUploadModule, NzModalModule, NzCheckboxModule,
-    CommonModule, NzTableModule, NzIconModule, NzLayoutModule, NzMenuModule, ReactiveFormsModule, NzButtonModule, NzSelectModule,
+    CommonModule, NzTableModule, NzIconModule, NzLayoutModule, NzMenuModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzStepsModule
   ],
   providers: [DatePipe]
 })
