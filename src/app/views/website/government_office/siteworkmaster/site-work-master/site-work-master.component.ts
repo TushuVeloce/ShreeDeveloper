@@ -28,7 +28,7 @@ export class SiteWorkMasterComponent  implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   
-  headers: string[] = ['Sr.No.', 'Code', 'SiteWorkMaster Name', 'Action'];
+  headers: string[] = ['Sr.No.', 'Name', 'Site Work Master Name', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
