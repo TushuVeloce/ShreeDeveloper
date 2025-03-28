@@ -85,6 +85,8 @@ import { RegistrarOfficeDetailComponent } from './registrar_office/registrar-off
 import { DocumentListComponent } from './government_office/document/document-list/document-list.component';
 import { DocumentDetailsComponent } from './government_office/document/document-details/document-details.component';
 import { ProgressReportComponent } from './government_office/progress_report/progress-report.component';
+import { SiteWorkGroupMasterComponent } from './government_office/site_work_group/site-work-group-master/site-work-group-master.component';
+import { SiteWorkGroupMasterDetailsComponent } from './government_office/site_work_group/site-work-group-master-details/site-work-group-master-details.component';
 
 const routes: Routes = [
   {
@@ -203,6 +205,9 @@ const routes: Routes = [
       { path: 'Document_Details', component: DocumentDetailsComponent },
 
       { path: 'Government_Office', component: GovernmentOfficeComponent },
+
+      { path: 'Site_Work_Group', component: SiteWorkGroupMasterComponent },
+      { path: 'Site_Work_Group_Details', component: SiteWorkGroupMasterDetailsComponent },
 
       { path: 'Progress_Report', component: ProgressReportComponent },
     ]
