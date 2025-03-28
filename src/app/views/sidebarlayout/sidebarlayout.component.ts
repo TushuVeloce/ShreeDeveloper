@@ -457,6 +457,16 @@ export class SidebarlayoutComponent implements OnInit {
 
     let GovernmentOfficeSubModuleList = [
       {
+        Name: 'Site Work Group',
+        RouterLink: '/homepage/Website/Site_Work_Group',
+        LogoPath: '',
+      },
+      {
+        Name: 'Site Work Master',
+        RouterLink: '/homepage/Website/Site_Work_Master',
+        LogoPath: '',
+      },
+      {
         Name: 'Progress Report',
         RouterLink: '/homepage/Website/Progress_Report',
         LogoPath: '',
@@ -478,6 +488,18 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Registrar_Office',
         LogoPath: '',
       },
+    ]
+    let HrPayrollManagement = [
+      {
+        Name: 'Office Duty & Time',
+        RouterLink: '/homepage/Website/Office_Duty_Time',
+        LogoPath: '',
+      },
+      {
+        Name: 'Attendance & Salary',
+        RouterLink: '/homepage/Website/Attendance_and_Salary',
+        LogoPath: '',
+      }
     ]
 
     let moduleListInternal = [
@@ -523,6 +545,12 @@ export class SidebarlayoutComponent implements OnInit {
         WhiteLogo: '/assets/icons/gov office.png',
         SubModuleList: RegistrarOfficeSubModuleList,
       },
+      {
+        Name: 'Hr-Payroll Management',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/gov office.png',
+        SubModuleList: HrPayrollManagement,
+      }
     ].filter(e => e.SubModuleList.length > 0);
 
     this.ModuleList = moduleListInternal;

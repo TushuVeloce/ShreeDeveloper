@@ -1,0 +1,56 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackOfficeTime()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">Add Office Duty Time</span>
+      </div>
+    </div>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+            <label>Working Time From:</label>
+            <input type="time" name="workingFrom" required class="form-control" id="workingFrom"
+              placeholder="Enter Working From" required />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Working Time To:</label>
+            <input type="time" name="workingTo" required class="form-control" id="workingTo"
+              placeholder="Enter Working To" required />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Late Mark Grace Time (mins):</label>
+            <input type="number" name="lateMarkGrace" class="form-control" id="lateMarkGrace"
+              placeholder="Enter late Mark Grace" required />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Overtime Grace Time (mins):</label>
+            <input type="number" name="overtimeGrace" class="form-control" id="lateMarkGrace" min="0"
+              placeholder="Enter over time Grace" required />
+          </div>
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackOfficeTime()">
+            Back
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

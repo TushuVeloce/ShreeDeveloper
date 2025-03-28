@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { EmployeeManagementComponent } from './employee-management.component';
+import { OfficeDutyTimeComponent } from './office-duty-time.component';
 
-describe('EmployeeManagementComponent', () => {
-  let component: EmployeeManagementComponent;
-  let fixture: ComponentFixture<EmployeeManagementComponent>;
+describe('OfficeDutyTimeComponent', () => {
+  let component: OfficeDutyTimeComponent;
+  let fixture: ComponentFixture<OfficeDutyTimeComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ EmployeeManagementComponent ],
+      declarations: [ OfficeDutyTimeComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(EmployeeManagementComponent);
+    fixture = TestBed.createComponent(OfficeDutyTimeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

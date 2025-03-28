@@ -1,0 +1,47 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackSiteWorkMaster()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">{{DetailsFormTitle}}</span>
+      </div>
+    </div>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+          <div>
+           <label> Name</label>
+            <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name"
+              required placeholder="Enter Site Work Name"  pattern="{{NameWithNos}}" #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()" />
+              <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
+                <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
+                <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              </div>
+            </div>
+        </div>
+
+      <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+        <label> Site Work Group</label>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteWorkGroupRef"
+              name="SiteWorkGroupRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteWorkGroupRef">
+              <nz-option *ngFor="let siteworkgroup of SiteWorkGroupList" [nzValue]="siteworkgroup.p.Ref" [nzLabel]="siteworkgroup.p.Name"></nz-option>
+            </nz-select>
+      </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn" (click)="SaveSiteWorkMaster()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackSiteWorkMaster()">
+            Back
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
