@@ -212,8 +212,8 @@ const routes: Routes = [
 
       { path: 'Government_Office', component: GovernmentOfficeComponent },
 
-      { path: 'Site_Work_Master', component: SiteWorkMasterDetailComponent },
-      { path: 'Site_Work_Master_Detail', component: SiteWorkMasterComponent },
+      { path: 'Site_Work_Master', component: SiteWorkMasterComponent },
+      { path: 'Site_Work_Master_Detail', component: SiteWorkMasterDetailComponent },
 
       { path: 'Site_Work_Group', component: SiteWorkGroupMasterComponent },
       { path: 'Site_Work_Group_Details', component: SiteWorkGroupMasterDetailsComponent },
