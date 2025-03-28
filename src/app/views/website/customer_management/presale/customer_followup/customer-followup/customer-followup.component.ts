@@ -2,6 +2,7 @@ import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
@@ -17,6 +18,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 export class CustomerFollowupComponent implements OnInit {
 
   Entity: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
+  SiteList: Site[] = [];
   MasterList: CustomerEnquiry[] = [];
   DisplayMasterList: CustomerEnquiry[] = [];
   SearchString: string = '';
@@ -28,6 +30,8 @@ export class CustomerFollowupComponent implements OnInit {
   total = 0;
   followup: CustomerFollowUp[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  siteref: number = 0
+  date: string = ''
 
   headers: string[] = [
     'Sr.No.',
@@ -41,6 +45,7 @@ export class CustomerFollowupComponent implements OnInit {
   ) {
     effect(() => {
       this.getCustomerFollowUpListByEnquiryRef()
+      this.FormulateSiteListByCompanyRef();
       // this.getCustomerFollowUpListByEnquiryRef();
     });
   }
@@ -89,6 +94,78 @@ export class CustomerFollowupComponent implements OnInit {
     // this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
+  
+  onSiteReforDateChange(selectedSiteRef?: number, date?: string) {
+    if (selectedSiteRef && date) {
+      this.getCustomerFollowUpListByDateandSiteRef(date, selectedSiteRef);
+    } else if (selectedSiteRef) {
+      this.getCustomerFollowUpListBySiteRef(selectedSiteRef);
+    } else if (date) {
+      this.getCustomerFollowUpListByDate(date);
+    }
+  }
+  
+  getCustomerFollowUpListByDate = async (date:string) => {
+  console.log('date :', date);
+    // this.MasterList = [];
+    // this.DisplayMasterList = [];
+
+    // let CustomerEnquiryRefs = this.DisplayMasterList[0].p.CustomerFollowUps[0].CustomerEnquiryRef;
+    // console.log('CustomerEnquiryRefs :', CustomerEnquiryRefs);
+    let FollowUp = await CustomerFollowUp.FetchEntireListByDate(this.date,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log(FollowUp);
+    this.followup = FollowUp
+    // this.MasterList = FollowUp;
+    // this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  };
+
+  getCustomerFollowUpListBySiteRef= async (siteref:number) => {
+  console.log('siteref :', siteref);
+    // this.MasterList = [];
+    // this.DisplayMasterList = [];
+
+    // let CustomerEnquiryRefs = this.DisplayMasterList[0].p.CustomerFollowUps[0].CustomerEnquiryRef;
+    // console.log('CustomerEnquiryRefs :', CustomerEnquiryRefs);
+    let FollowUp = await CustomerFollowUp.FetchEntireListBySiteRef(siteref,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log(FollowUp);
+    this.followup = FollowUp
+    // this.MasterList = FollowUp;
+    // this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  };
+
+  getCustomerFollowUpListByDateandSiteRef = async (date:string,site:number) => {
+  console.log('site and ref :', date,this.siteref);
+    // this.MasterList = [];
+    // this.DisplayMasterList = [];
+
+    // let CustomerEnquiryRefs = this.DisplayMasterList[0].p.CustomerFollowUps[0].CustomerEnquiryRef;
+    // console.log('CustomerEnquiryRefs :', CustomerEnquiryRefs);
+    let FollowUp = await CustomerFollowUp.FetchEntireListByandDateSiteRef(date,site,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log(FollowUp);
+    this.followup = FollowUp
+    // this.MasterList = FollowUp;
+    // this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  };
+
+  FormulateSiteListByCompanyRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    this.SiteList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SiteList = lst;
+    this.loadPaginationData();
+  }
+
 
   onEditClicked = async (followup: CustomerFollowUp) => {
 

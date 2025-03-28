@@ -23,6 +23,7 @@ export class RegisteredCustomerComponent  implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  RegisterCustomerList: any[] = [];  // ✅ Correct
 
   headers: string[] = [
     'Sr.No.',
@@ -59,6 +60,8 @@ export class RegisteredCustomerComponent  implements OnInit {
     console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
+    this.RegisterCustomerList = lst
+    console.log('RegisterCustomerList :',this. RegisterCustomerList[0].p);
     this.loadPaginationData();    
   };
 
