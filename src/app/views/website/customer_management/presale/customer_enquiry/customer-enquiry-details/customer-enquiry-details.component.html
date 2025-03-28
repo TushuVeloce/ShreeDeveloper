@@ -19,21 +19,14 @@
               placeholder="Enter First Name" />
           </div>
         </div>
-        <div class="col-md-4" *ngIf="IsNewEntity">
-          <div>
-            <label>Date</label>
-            <input type="date" name="Date" class="form-control" id="Date"
-              [(ngModel)]="Entity.p.CustomerFollowUps[0].TransDateTime" required />
-          </div>
-        </div>
-        <div class="col-md-4" >
+        <div class="col-md-4">
           <div>
             <label for="ContactNos">Contact Nos</label>
             <input type="text" name="ContactNos" class="form-control" [(ngModel)]="Entity.p.ContactNos" id="ContactNos"
               required placeholder="Enter Contact Nos" />
           </div>
         </div>
-        <div class="col-md-4" *ngIf="!IsNewEntity">
+        <div class="col-md-4" *ngIf="IsNewEntity">
           <div>
             <label for="CountryRef"><b>Country</b></label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
@@ -46,24 +39,6 @@
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
-        <!-- <div class="col-md-4">
-          <div>
-            <label>Email Id</label>
-            <input type="text" name="PersonalEmailId" [(ngModel)]="Entity.p.EmailId" class="form-control"
-              id="PersonalEmailId" required placeholder="Enter Personal Email Id" />
-          </div>
-        </div> -->
-        <div class="col-md-4" *ngIf="IsNewEntity">
-          <div>
-            <label for="CountryRef"><b>Country</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-              name="CountryRef" required id="CountryRef" [(ngModel)]="Entity.p.CountryRef"
-              (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
-              <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
-                [nzValue]="country.p.Ref"></nz-option>
-            </nz-select>
-          </div>
-        </div>
         <div class="col-md-4">
           <div>
             <label for="StateRef"><b>State</b></label>
@@ -83,8 +58,6 @@
             </nz-select>
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
             <label>Address</label>
@@ -92,6 +65,8 @@
               placeholder="Enter Address" />
           </div>
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4 col-md-4 col-sm-12 mt-2">
           <label>Pin Code</label>
           <input type="text" name="PinCode" class="form-control" [(ngModel)]="Entity.p.PinCode" id="PinCode" required
@@ -99,8 +74,22 @@
         </div>
         <div class="col-md-4 col-md-4 col-sm-12 mt-2" *ngIf="IsNewEntity">
           <label>Customer Requirement</label>
-          <input type="text" name="CustomerRequirement" class="form-control" [(ngModel)]="Entity.p.CustomerRequirement" id="CustomerRequirement" required
-            placeholder="Enter Customer Requirement" />
+          <input type="text" name="CustomerRequirement" class="form-control" [(ngModel)]="Entity.p.CustomerRequirement"
+            id="CustomerRequirement" required placeholder="Enter Customer Requirement" />
+        </div>
+        <div class="col-md-4 col-md-4 col-sm-12 mt-2" *ngIf="IsNewEntity">
+          <div>
+            <label>Reason</label>
+            <input type="text" name="Reason" [(ngModel)]="Entity.p.CustomerFollowUps[0].Reason" class="form-control"
+              id="Reason " required placeholder="Enter Reason" />
+          </div>
+        </div>
+        <div class="col-md-4" *ngIf="IsNewEntity">
+          <div>
+            <label>Date</label>
+            <input type="date" name="Date" class="form-control" id="Date"
+              [(ngModel)]="Entity.p.CustomerFollowUps[0].TransDateTime" required />
+          </div>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem;" *ngIf="IsNewEntity">
@@ -129,7 +118,7 @@
           </div>
         </div>
       </div>
-      <div class="table-container" style="margin-top: 2rem" *ngIf="IsPlotDetails && IsNewEntity" >
+      <div class="table-container" style="margin-top: 2rem" *ngIf="IsPlotDetails && IsNewEntity">
         <div class="row">
           <div class="col-12">
             <label class="TableHeading">Intrested Plots</label>
@@ -184,7 +173,7 @@
           </div>
         </div>
         <!-- Additional input field for Agent Broker -->
-        <div class="col-md-4" *ngIf="showAgentBrokerInput" >
+        <div class="col-md-4" *ngIf="showAgentBrokerInput">
           <div>
             <label for="AgentName"><b>Agent Name</b></label>
             <input type="text" name="AgentName" class="form-control" id="AgentName"
@@ -224,13 +213,6 @@
             </nz-select>
           </div>
         </div>
-        <!-- <div class="col-md-4">
-          <div>
-            <label>Reason</label>
-            <input type="text" name="Reason" [(ngModel)]="Entity.p.CustomerFollowUps[0].Reason" class="form-control"
-              id="Reason " required placeholder="Enter Reason" />
-          </div>
-        </div> -->
         <div class="col-md-4">
           <div>
             <label for="CustomerStatusRef"><b>Customer Status</b></label>
@@ -257,7 +239,7 @@
         </div>
       </div>
       <div class="row" style="margin-top: 1rem;" *ngIf="IsNewEntity">
-   <!-- <div class="col-md-4">
+        <!-- <div class="col-md-4">
           <div>
             <label>Reason</label>
             <input type="text" name="Reason" [(ngModel)]="Entity.p.CustomerFollowUps[0].Reason" class="form-control"
