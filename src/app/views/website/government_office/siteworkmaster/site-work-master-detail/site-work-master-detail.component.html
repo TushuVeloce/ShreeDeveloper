@@ -14,23 +14,34 @@
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
-           <label> Name</label>
-            <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name"
-              required placeholder="Enter Site Work Name"  pattern="{{NameWithNos}}" #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()" />
-              <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
-                <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
-                <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-              </div>
+            <label> Name</label>
+            <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
+              placeholder="Enter Site Work Name" pattern="{{NameWithNos}}" #NameCtrl="ngModel" required
+              (blur)="NameCtrl.control.markAsTouched()" />
+            <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
+              <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
+              <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+          <label> Site Work Group</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteWorkGroupRef"
+            name="SiteWorkGroupRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteWorkGroupRef">
+            <nz-option *ngFor="let siteworkgroup of SiteWorkGroupList" [nzValue]="siteworkgroup.p.Ref"
+              [nzLabel]="siteworkgroup.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+          <label for="ListOfApplicableTypes"><b>Applicable Types</b></label>
+          <nz-select [(ngModel)]="Entity.p.ListOfApplicableTypes" nzMode="multiple" id="ListOfApplicableTypes"
+            name="ListOfApplicableTypes" nzShowSearch nzAllowClear
+            (ngModalChange)="onApplicableTypeChange(Entity.p.ListOfApplicableTypes)" nzPlaceHolder="Select Applicable Type">
+            <nz-option *ngFor="let applicabletype of ApplicableTypesForSites" [nzValue]="applicabletype.Ref"
+              [nzLabel]="applicabletype.Name"></nz-option>
+          </nz-select>
         </div>
 
-      <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
-        <label> Site Work Group</label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteWorkGroupRef"
-              name="SiteWorkGroupRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteWorkGroupRef">
-              <nz-option *ngFor="let siteworkgroup of SiteWorkGroupList" [nzValue]="siteworkgroup.p.Ref" [nzLabel]="siteworkgroup.p.Name"></nz-option>
-            </nz-select>
-      </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>

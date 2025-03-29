@@ -13,7 +13,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   templateUrl: './site-work-master.component.html',
   styleUrls: ['./site-work-master.component.scss'],
 })
-export class SiteWorkMasterComponent  implements OnInit {
+export class SiteWorkMasterComponent implements OnInit {
   Entity: SiteWorkMaster = SiteWorkMaster.CreateNewInstance();
   MasterList: SiteWorkMaster[] = [];
   DisplayMasterList: SiteWorkMaster[] = [];
@@ -23,18 +23,21 @@ export class SiteWorkMasterComponent  implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-    SiteWorkGroupList: SiteWorkGroup[] = [];
-  
+  SiteWorkGroupList: SiteWorkGroup[] = [];
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  
+
   headers: string[] = ['Sr.No.', 'Name', 'Site Work Master Name', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(() => {
       // this.getSiteWorkMasterListByCompanyRef()
-          this.getSiteWorkMasterListByCompanyRef();
+      this.getSiteWorkMasterListByCompanyRef();
     });
   }
 
@@ -47,9 +50,6 @@ export class SiteWorkMasterComponent  implements OnInit {
   //   }, 300);
   // });
 
-
-
-  
   async ngOnInit() {
     this.SiteWorkGroupList = await SiteWorkGroup.FetchEntireList();
     this.appStateManage.setDropdownDisabled(false);
@@ -77,14 +77,17 @@ export class SiteWorkMasterComponent  implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await SiteWorkMaster.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SiteWorkMaster.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     console.log('SiteWorkMasterList :', this.MasterList);
 
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-  }
-  
+  };
+
   onEditClicked = async (item: SiteWorkMaster) => {
     // let props = Object.assign(SiteWorkMasterProps.Blank(),item.p);
     // this.SelectedSiteWorkMaster = SiteWorkMaster.CreateInstance(props,true);
@@ -112,7 +115,6 @@ export class SiteWorkMasterComponent  implements OnInit {
           this.SearchString = '';
           this.loadPaginationData();
           // await this.FormulateSiteWorkMasterList();
-
         });
       }
     );
@@ -135,19 +137,41 @@ export class SiteWorkMasterComponent  implements OnInit {
     if (this.companyRef() <= 0) {
       this.uiUtils.showErrorToster('Company not Selected');
       return;
+    } else if (this.Entity.p.SiteWorkGroupRef <= 0) {
+      this.uiUtils.showErrorToster('Please Select site work group');
+      return;
     }
     this.router.navigate(['/homepage/Website/Site_Work_Master_Detail']);
   }
 
-
   filterTable = () => {
     if (this.SearchString != '') {
       this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
-      })
+        return (
+          data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) >
+          -1
+        );
+      });
+    } else {
+      this.DisplayMasterList = this.MasterList;
     }
-    else {
-      this.DisplayMasterList = this.MasterList
+  };
+
+  SiteGroup: number = 0;
+
+  onSiteGroupChange(sitegroup: number) {
+    this.SiteGroup = sitegroup;
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (sitegroup > 0) {
+      this.Entity.p.SiteWorkGroupRef = sitegroup;
+      const selectedSitegroupref = this.SiteWorkGroupList.find(
+        (site) => site.p.Ref === sitegroup
+      );
+      if (!selectedSitegroupref) {
+        return;
+      }
+      this.appStateManage.StorageKey.setItem('siteRf', String(sitegroup));
     }
   }
 }

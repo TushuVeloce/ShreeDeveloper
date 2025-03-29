@@ -90,6 +90,8 @@ import { SiteWorkMasterComponent } from './government_office/siteworkmaster/site
 import { OfficeDutyTimeComponent } from './hr_payroll_management/office_duty_time/office-duty-time/office-duty-time.component';
 import { OfficeDutyTimeDetailsComponent } from './hr_payroll_management/office_duty_time/office-duty-time-details/office-duty-time-details.component';
 import { AttendanceAndSalaryComponent } from './hr_payroll_management/attendance-salary/attendance-and-salary/attendance-and-salary.component';
+import { SiteWorkDoneMasterComponent } from './government_office/site_work_done/site-work-done-master/site-work-done-master.component';
+import { SiteWorkDoneMasterDetailsComponent } from './government_office/site_work_done/site-work-done-master-details/site-work-done-master-details.component';
 
 const routes: Routes = [
   {
@@ -217,6 +219,10 @@ const routes: Routes = [
 
       { path: 'Site_Work_Group', component: SiteWorkGroupMasterComponent },
       { path: 'Site_Work_Group_Details', component: SiteWorkGroupMasterDetailsComponent },
+
+
+      { path: 'Site_Work_Done', component: SiteWorkDoneMasterComponent },
+      { path: 'Site_Work_Done_Details', component: SiteWorkDoneMasterDetailsComponent },
 
       { path: 'Progress_Report', component: ProgressReportComponent },
     ]

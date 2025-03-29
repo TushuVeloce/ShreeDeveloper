@@ -91,6 +91,8 @@ import { SiteWorkMasterDetailComponent } from './government_office/siteworkmaste
 import { SiteWorkMasterComponent } from './government_office/siteworkmaster/site-work-master/site-work-master.component';
 import { AttendanceAndSalaryComponent } from './hr_payroll_management/attendance-salary/attendance-and-salary/attendance-and-salary.component';
 import { OfficeDutyTimeComponent } from './hr_payroll_management/office_duty_time/office-duty-time/office-duty-time.component';
+import { SiteWorkDoneMasterDetailsComponent } from './government_office/site_work_done/site-work-done-master-details/site-work-done-master-details.component';
+import { SiteWorkDoneMasterComponent } from './government_office/site_work_done/site-work-done-master/site-work-done-master.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent, StageMasterComponent, StageMasterDetailsComponent, AccountMainLedgerComponent, AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent, MarketingTypeMasterDetailsComponent,
@@ -101,7 +103,7 @@ import { OfficeDutyTimeComponent } from './hr_payroll_management/office_duty_tim
     VendorServicesMasterComponent, VendorServicesMasterDetailsComponent, SiteManagementDetailsComponent, EmployeeAppraisalDetailsComponent, ProgressReportComponent, GovernmentOfficeComponent,
     EmployeeAppraisalMasterComponent, EmployeeExitDetailsComponent, EmployeeExitMasterComponent, PlotMasterComponent, DocumentListComponent, DocumentDetailsComponent,
     PlotMasterDetailsComponent, CustomerEnquiryComponent, CustomerEnquiryDetailsComponent, CustomerFollowupComponent, CustomerFollowupDetailsComponent, RegisteredCustomerComponent, RegisteredCustomerDetailsComponent, RegistrarOfficeComponent, RegistrarOfficeDetailComponent,SiteWorkMasterDetailComponent,SiteWorkMasterComponent,
-    AttendanceAndSalaryComponent,OfficeDutyTimeComponent],
+    AttendanceAndSalaryComponent,OfficeDutyTimeComponent,SiteWorkDoneMasterDetailsComponent,SiteWorkDoneMasterComponent],
   imports: [
     CommonModule, WebRoutingModule, FormsModule, NzDropDownModule, NzTableModule, IonicModule.forRoot(),
     NzPaginationModule, NzUploadModule, NzModalModule, NzCheckboxModule,

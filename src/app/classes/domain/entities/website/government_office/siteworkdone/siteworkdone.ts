@@ -10,42 +10,34 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { SiteWorkMasterFetchRequest } from "./siteworkmasterfetchrequest";
-
-export class ApplicableTypeProps {
-  public ApplicableTypeRef: number = 0;
-  public ApplicableTypeName: string = '';
-}
+import { SiteWorkDoneFetchRequest } from "./siteworkdonefetchrequest";
 
 
-export class SiteWorkMasterProps {
-  public readonly Db_Table_Name = "SiteWorkMaster";
+export class SiteWorkDoneProps {
+  public readonly Db_Table_Name = "SiteWorkDone";
   public Ref: number = 0;
-  public Name: string = '';
+  public SiteWorkRef: number = 0;
+  public ApplicableTypeRef: number = 0;
   public SiteWorkGroupRef : number = 0;
-  public readonly SiteWorkGroupName: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
 
-    public ListOfApplicableTypes : ApplicableTypeProps [] = [];
-
-
   public readonly IsNewlyCreated: boolean = false;
-  // public readonly AccountTypeName: string = '';
+  public readonly SiteWorkRefName: string = '';
 
   private constructor(isNewlyCreated: boolean) {
     this.IsNewlyCreated = isNewlyCreated;
   }
 
   public static Blank() {
-    return new SiteWorkMasterProps(true);
+    return new SiteWorkDoneProps(true);
   }
 }
 
-export class SiteWorkMaster implements IPersistable<SiteWorkMaster> {
-  public static readonly Db_Table_Name: string = 'SiteWorkMaster';
+export class SiteWorkDone implements IPersistable<SiteWorkDone> {
+  public static readonly Db_Table_Name: string = 'SiteWorkDone';
 
-  private constructor(public readonly p: SiteWorkMasterProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: SiteWorkDoneProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -58,48 +50,48 @@ export class SiteWorkMaster implements IPersistable<SiteWorkMaster> {
     }
   }
 
-  public GetEditableVersion(): SiteWorkMaster {
-    let newState: SiteWorkMasterProps = Utils.GetInstance().DeepCopy(this.p);
-    return SiteWorkMaster.CreateInstance(newState, true);
+  public GetEditableVersion(): SiteWorkDone {
+    let newState: SiteWorkDoneProps = Utils.GetInstance().DeepCopy(this.p);
+    return SiteWorkDone.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new SiteWorkMaster(SiteWorkMasterProps.Blank(), true);
+    return new SiteWorkDone(SiteWorkDoneProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new SiteWorkMaster(data as SiteWorkMasterProps, allowEdit);
+    return new SiteWorkDone(data as SiteWorkDoneProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
+    if (this.p.SiteWorkRef == 0) vra.add('SiteWorkRef', 'Site Work Name cannot be blank.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, SiteWorkMaster.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, SiteWorkDone.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: SiteWorkMaster = SiteWorkMaster.CreateNewInstance();
+  private static m_currentInstance: SiteWorkDone = SiteWorkDone.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return SiteWorkMaster.m_currentInstance;
+    return SiteWorkDone.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: SiteWorkMaster) {
-    SiteWorkMaster.m_currentInstance = value;
+  public static SetCurrentInstance(value: SiteWorkDone) {
+    SiteWorkDone.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): SiteWorkMaster {
+  public static SingleInstanceFromTransportData(td: TransportData): SiteWorkDone {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, SiteWorkMaster.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, SiteWorkMaster.Db_Table_Name)!.Entries) {
-        return SiteWorkMaster.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, SiteWorkDone.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, SiteWorkDone.Db_Table_Name)!.Entries) {
+        return SiteWorkDone.CreateInstance(data, false);
       }
     }
 
@@ -108,13 +100,13 @@ export class SiteWorkMaster implements IPersistable<SiteWorkMaster> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): SiteWorkMaster[] {
-    let result: SiteWorkMaster[] = [];
+    sortPropertyName: string = "Name"): SiteWorkDone[] {
+    let result: SiteWorkDone[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, SiteWorkMaster.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, SiteWorkMaster.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, SiteWorkDone.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, SiteWorkDone.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -124,18 +116,18 @@ export class SiteWorkMaster implements IPersistable<SiteWorkMaster> {
       }
 
       for (let data of entries) {
-        result.push(SiteWorkMaster.CreateInstance(data, false));
+        result.push(SiteWorkDone.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): SiteWorkMaster[] {
-    return SiteWorkMaster.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): SiteWorkDone[] {
+    return SiteWorkDone.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: SiteWorkMasterFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: SiteWorkDoneFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -150,29 +142,29 @@ export class SiteWorkMaster implements IPersistable<SiteWorkMaster> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new SiteWorkMasterFetchRequest();
+    let req = new SiteWorkDoneFetchRequest();
     req.SiteWorkGroupRef.push(ref);
 
-    let tdResponse = await SiteWorkMaster.FetchTransportData(req, errorHandler) as TransportData;
-    return SiteWorkMaster.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await SiteWorkDone.FetchTransportData(req, errorHandler) as TransportData;
+    return SiteWorkDone.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: SiteWorkMasterFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await SiteWorkMaster.FetchTransportData(req, errorHandler) as TransportData;
-    return SiteWorkMaster.ListFromTransportData(tdResponse);
+  public static async FetchList(req: SiteWorkDoneFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await SiteWorkDone.FetchTransportData(req, errorHandler) as TransportData;
+    return SiteWorkDone.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new SiteWorkMasterFetchRequest();
-    let tdResponse = await SiteWorkMaster.FetchTransportData(req, errorHandler) as TransportData;
-    return SiteWorkMaster.ListFromTransportData(tdResponse);
+    let req = new SiteWorkDoneFetchRequest();
+    let tdResponse = await SiteWorkDone.FetchTransportData(req, errorHandler) as TransportData;
+    return SiteWorkDone.ListFromTransportData(tdResponse);
   }
 
  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new SiteWorkMasterFetchRequest();
+    let req = new SiteWorkDoneFetchRequest();
     req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await SiteWorkMaster.FetchTransportData(req, errorHandler) as TransportData;
-    return SiteWorkMaster.ListFromTransportData(tdResponse);
+    let tdResponse = await SiteWorkDone.FetchTransportData(req, errorHandler) as TransportData;
+    return SiteWorkDone.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
