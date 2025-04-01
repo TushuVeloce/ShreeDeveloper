@@ -27,7 +27,7 @@
             name="ListOfApplicableTypes" nzShowSearch nzAllowClear
             (ngModalChange)="onApplicableTypeChange(Entity.p.ListOfApplicableTypes)"
             nzPlaceHolder="Select Applicable Type">
-            <nz-option *ngFor="let applicabletype of SiteWorkApplicableTypes" [nzValue]="applicabletype.Ref"
+            <nz-option *ngFor="let applicabletype of ApplicableTypesForSites" [nzValue]="applicabletype.Ref"
               [nzLabel]="applicabletype.Name"></nz-option>
           </nz-select>
         </div>

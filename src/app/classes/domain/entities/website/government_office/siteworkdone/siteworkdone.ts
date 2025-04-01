@@ -26,6 +26,8 @@ export class SiteWorkDoneProps {
 
   public readonly IsNewlyCreated: boolean = false;
   public readonly SiteWorkName: string = '';
+  public readonly SiteWorkGroupName: string = '';
+  public readonly SiteWorkApplicableTypeName : string = '';
 
   private constructor(isNewlyCreated: boolean) {
     this.IsNewlyCreated = isNewlyCreated;

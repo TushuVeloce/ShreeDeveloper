@@ -41,7 +41,7 @@
           <tr *ngFor="let SiteWorkDone of paginatedList; index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{SiteWorkDone.p.SiteWorkName}}</td>
-            <!-- <td Class="tbldata">{{SiteWorkDone.p.Name}}</td> -->
+            <td Class="tbldata">{{SiteWorkDone.p.SiteWorkApplicableTypeName}}</td>
             <td class="tbldata">
               <span style="margin-left: 9px;" (click)="onEditClicked(SiteWorkDone);">
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />

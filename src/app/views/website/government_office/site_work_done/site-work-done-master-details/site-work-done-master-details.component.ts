@@ -34,7 +34,7 @@ export class SiteWorkDoneMasterDetailsComponent implements OnInit {
   NameWithNosMsg: string = ValidationMessages.NameWithNosMsg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
-  SiteWorkApplicableTypes = DomainEnums.ApplicableTypesForSiteList(
+  ApplicableTypesForSites = DomainEnums.ApplicableTypesForSiteList(
     true,
     '--Select Applicable Types--'
   );
