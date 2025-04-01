@@ -68,15 +68,15 @@ export enum ApplicationFeatureGroups {
   Report = 30
 }
 
-export enum ApplicableTypesForSites {
+export enum SiteWorkApplicableTypes {
   None = 0,
   Submit = 100,
-  InwardDate = 200,
-  InwardNo = 300,
+  InwardNo = 200,
+  InwardDate = 300,
   ScrutinyFees = 400,
   YesNo = 500,
-  OutwardDate = 600,
-  OutwardNo = 700
+  OutwardNo = 600,
+  OutwardDate = 700,
 }
 
 export enum ApplicationFeatures {
@@ -494,15 +494,15 @@ export class DomainEnums {
     return result;
   }
 
-  public static ApplicableTypesForSiteName(ApplicableTypesForSite: ApplicableTypesForSites) {
+  public static ApplicableTypesForSiteName(ApplicableTypesForSite: SiteWorkApplicableTypes) {
     switch (ApplicableTypesForSite) {
-      case ApplicableTypesForSites.Submit: return 'Submit';
-      case ApplicableTypesForSites.InwardDate: return 'InwardDate';
-      case ApplicableTypesForSites.InwardNo: return 'InwardNo';
-      case ApplicableTypesForSites.ScrutinyFees: return 'ScrutinyFees';
-      case ApplicableTypesForSites.YesNo: return 'YesNo';
-      case ApplicableTypesForSites.OutwardDate: return 'OutwardDate';
-      case ApplicableTypesForSites.OutwardNo: return 'OutwardNo';
+      case SiteWorkApplicableTypes.Submit: return 'Submit';
+      case SiteWorkApplicableTypes.InwardDate: return 'InwardDate';
+      case SiteWorkApplicableTypes.InwardNo: return 'InwardNo';
+      case SiteWorkApplicableTypes.ScrutinyFees: return 'ScrutinyFees';
+      case SiteWorkApplicableTypes.YesNo: return 'YesNo';
+      case SiteWorkApplicableTypes.OutwardDate: return 'OutwardDate';
+      case SiteWorkApplicableTypes.OutwardNo: return 'OutwardNo';
       default: return '';
     }
   }
@@ -510,31 +510,32 @@ export class DomainEnums {
   public static ApplicableTypesForSiteList(withAllOption: boolean = false, allOptionName: string = '<All>') {
     let result = [
       {
-        Ref: ApplicableTypesForSites.Submit, Name: DomainEnums.ApplicableTypesForSiteName(ApplicableTypesForSites.Submit)
+        Ref: SiteWorkApplicableTypes.Submit, Name: DomainEnums.ApplicableTypesForSiteName(SiteWorkApplicableTypes.Submit)
       },
       {
-        Ref: ApplicableTypesForSites.InwardDate, Name: DomainEnums.ApplicableTypesForSiteName(ApplicableTypesForSites.InwardDate)
+        Ref: SiteWorkApplicableTypes.InwardNo, Name: DomainEnums.ApplicableTypesForSiteName(SiteWorkApplicableTypes.InwardNo)
       },
       {
-        Ref: ApplicableTypesForSites.InwardNo, Name: DomainEnums.ApplicableTypesForSiteName(ApplicableTypesForSites.InwardNo)
+        Ref: SiteWorkApplicableTypes.InwardDate, Name: DomainEnums.ApplicableTypesForSiteName(SiteWorkApplicableTypes.InwardDate)
       },
       {
-        Ref: ApplicableTypesForSites.ScrutinyFees, Name: DomainEnums.ApplicableTypesForSiteName(ApplicableTypesForSites.ScrutinyFees)
+        Ref: SiteWorkApplicableTypes.ScrutinyFees, Name: DomainEnums.ApplicableTypesForSiteName(SiteWorkApplicableTypes.ScrutinyFees)
       },
       {
-        Ref: ApplicableTypesForSites.YesNo, Name: DomainEnums.ApplicableTypesForSiteName(ApplicableTypesForSites.YesNo)
+        Ref: SiteWorkApplicableTypes.YesNo, Name: DomainEnums.ApplicableTypesForSiteName(SiteWorkApplicableTypes.YesNo)
       },
       {
-        Ref: ApplicableTypesForSites.OutwardDate, Name: DomainEnums.ApplicableTypesForSiteName(ApplicableTypesForSites.OutwardDate)
+        Ref: SiteWorkApplicableTypes.OutwardNo, Name: DomainEnums.ApplicableTypesForSiteName(SiteWorkApplicableTypes.OutwardNo)
       },
       {
-        Ref: ApplicableTypesForSites.OutwardNo, Name: DomainEnums.ApplicableTypesForSiteName(ApplicableTypesForSites.OutwardNo)
-      }
+        Ref: SiteWorkApplicableTypes.OutwardDate, Name: DomainEnums.ApplicableTypesForSiteName(SiteWorkApplicableTypes.OutwardDate)
+      },
+
 
     ]
     if (withAllOption) {
       let allEntry = {
-        Ref: ApplicableTypesForSites.None,
+        Ref: SiteWorkApplicableTypes.None,
         Name: allOptionName
       }
       result.unshift(allEntry);
