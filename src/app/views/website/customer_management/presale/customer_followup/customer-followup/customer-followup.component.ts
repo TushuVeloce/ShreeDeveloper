@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
@@ -6,6 +7,7 @@ import { Site } from 'src/app/classes/domain/entities/website/masters/site/site'
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DTU } from 'src/app/services/dtu.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -42,7 +44,7 @@ export class CustomerFollowupComponent implements OnInit {
     'Customer Status',
     'Action',
   ]; constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement, private dtu: DTU, private datePipe: DatePipe
   ) {
     effect(() => {
       this.getCustomerFollowUpListByEnquiryRef()
@@ -54,7 +56,27 @@ export class CustomerFollowupComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+    if (this.date == '') {
+      debugger
+      let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+      let parts = strCDT.substring(0, 16).split('-');
+      // Construct the new date format
+      const formattedDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+      strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+      this.date = formattedDate;
+      // ------ Code For Save Date Of InCorporation Year Format ---------------//
+      // if (strCDT) {
+      //   let dateValue = new Date(strCDT);
+
+      //   if (!isNaN(dateValue.getTime())) {
+      //     strCDT = this.dtu.DateStartStringFromDateValue(dateValue);
+      //   } else {
+      //     this.date = '';
+      //   }
+      // }
+      this.getCustomerFollowUpListByDateandSiteRef(strCDT, this.siteref);
+    }
+
     // this.DisplayMasterList = [];
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
@@ -107,8 +129,8 @@ export class CustomerFollowupComponent implements OnInit {
     }
   }
 
-  getCustomerFollowUpListByDate = async (date:string) => {
-  console.log('date :', date);
+  getCustomerFollowUpListByDate = async (date: string) => {
+    console.log('date :', date);
     // this.MasterList = [];
     // this.DisplayMasterList = [];
 
@@ -123,8 +145,8 @@ export class CustomerFollowupComponent implements OnInit {
     this.loadPaginationData();
   };
 
-  getCustomerFollowUpListBySiteRef= async (siteref:number) => {
-  console.log('siteref :', siteref);
+  getCustomerFollowUpListBySiteRef = async (siteref: number) => {
+    console.log('siteref :', siteref);
     // this.MasterList = [];
     // this.DisplayMasterList = [];
 
@@ -139,14 +161,14 @@ export class CustomerFollowupComponent implements OnInit {
     this.loadPaginationData();
   };
 
-  getCustomerFollowUpListByDateandSiteRef = async (date:string,site:number) => {
-  console.log('site and ref :', date,this.siteref);
+  getCustomerFollowUpListByDateandSiteRef = async (date: string, site: number) => {
+    console.log('site and ref :', date, this.siteref);
     // this.MasterList = [];
     // this.DisplayMasterList = [];
 
     // let CustomerEnquiryRefs = this.DisplayMasterList[0].p.CustomerFollowUps[0].CustomerEnquiryRef;
     // console.log('CustomerEnquiryRefs :', CustomerEnquiryRefs);
-    let FollowUp = await CustomerFollowUp.FetchEntireListByandDateSiteRef(date,site,
+    let FollowUp = await CustomerFollowUp.FetchEntireListByandDateSiteRef(date, site,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log(FollowUp);
     this.followup = FollowUp

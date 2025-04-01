@@ -229,10 +229,10 @@
               id="Remark " required placeholder="Enter Remark" />
           </div>
         </div>
-        <div class="col-md-4" *ngIf="!showAgentBrokerInput">
+        <div class="col-md-4">
           <div>
             <label for="SiteVisitDate">Site Visit Date</label>
-            <input type="Date" name="SiteVisitDate" [(ngModel)]="Entity.p.CustomerFollowUps[0].SiteVisitDate"
+            <input type="Date" name="SiteVisitDate" [(ngModel)]="sitevisitdate"
               class="form-control" id="SiteVisitDate" required />
           </div>
         </div>
@@ -254,24 +254,18 @@
             </nz-select>
           </div>
         </div> -->
-        <div class="col-md-4" *ngIf="showAgentBrokerInput">
-          <div>
-            <label for="SiteVisitDate">Site Visit Date</label>
-            <input type="Date" name="Sitevisitdate" [(ngModel)]="sitevisitdate"
-              class="form-control" id="SiteVisitDate" required />
-          </div>
-        </div>
+
         <div class="col-md-4">
           <div>
             <label for="OfficeVisitDate">Office Visit Date</label>
-            <input type="Date" name="officevisitdate" [(ngModel)]="officevistdate"
+            <input type="Date" name="OfficeVisitDate" [(ngModel)]="officevistdate"
               class="form-control" id="OfficeVisitDate" required />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Reminder Date</label>
-            <input type="Date" name="reminderdate" [(ngModel)]="reminderdate"
+            <input type="Date" name="ReminderDate" [(ngModel)]="reminderdate"
               class="form-control" id="ReminderDate" required />
           </div>
         </div>
