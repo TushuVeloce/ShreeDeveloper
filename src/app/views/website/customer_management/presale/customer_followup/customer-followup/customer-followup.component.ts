@@ -63,20 +63,9 @@ export class CustomerFollowupComponent implements OnInit {
       const formattedDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
       strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
       this.date = formattedDate;
-      // ------ Code For Save Date Of InCorporation Year Format ---------------//
-      // if (strCDT) {
-      //   let dateValue = new Date(strCDT);
-
-      //   if (!isNaN(dateValue.getTime())) {
-      //     strCDT = this.dtu.DateStartStringFromDateValue(dateValue);
-      //   } else {
-      //     this.date = '';
-      //   }
-      // }
       this.getCustomerFollowUpListByDateandSiteRef(strCDT, this.siteref);
     }
-
-    // this.DisplayMasterList = [];
+    
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }

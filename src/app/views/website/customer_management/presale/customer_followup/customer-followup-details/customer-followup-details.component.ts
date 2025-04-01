@@ -70,24 +70,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
   async ngOnInit() {
 
-    // While Edit Converting date String into Date Format //
-    this.reminderdate = this.datePipe.transform(
-      this.dtu.FromString(this.Entity.p.ReminderDate),
-      'yyyy-MM-dd'
-    );
-
-    // While Edit Converting date String into Date Format //
-    this.sitevisitdate = this.datePipe.transform(
-      this.dtu.FromString(this.Entity.p.SiteVisitDate),
-      'yyyy-MM-dd'
-    );
-
-    // While Edit Converting date String into Date Format //
-    this.officevistdate = this.datePipe.transform(
-      this.dtu.FromString(this.Entity.p.OfficeVisitDate),
-      'yyyy-MM-dd'
-    );
-
     this.appStateManage.setDropdownDisabled(true);
     this.CountryList = await Country.FetchEntireList();
     this.EmployeeList = await Employee.FetchEntireList();
@@ -98,7 +80,31 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.Entity = CustomerFollowUp.GetCurrentInstance();
       //  this.CustomerEnquiryEntity = CustomerEnquiry.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
+
+      // While Edit Converting date String into Date Format //
+      if (this.Entity.p.ReminderDate) {
+        this.reminderdate = this.datePipe.transform(
+          this.dtu.FromString(this.Entity.p.ReminderDate),
+          'yyyy-MM-dd'
+        );
+      }
+
+      if (this.Entity.p.SiteVisitDate) {
+        // While Edit Converting date String into Date Format //
+        this.sitevisitdate = this.datePipe.transform(
+          this.dtu.FromString(this.Entity.p.SiteVisitDate),
+          'yyyy-MM-dd'
+        );
+      }
+
+      if (this.Entity.p.OfficeVisitDate) {
+        // While Edit Converting date String into Date Format //
+        this.officevistdate = this.datePipe.transform(
+          this.dtu.FromString(this.Entity.p.OfficeVisitDate),
+          'yyyy-MM-dd'
+        );
+      }
+      
       //  console.log('CustomerEnquiryEntity :', this.CustomerEnquiryEntity);
       this.appStateManage.StorageKey.removeItem('Editable');
     } else {
