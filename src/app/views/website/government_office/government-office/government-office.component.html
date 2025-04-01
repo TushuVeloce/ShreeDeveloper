@@ -32,3 +32,40 @@
     </div>
 
   </div>
+</div>
+
+
+<div *ngFor="let group of GovermentList">
+  <h4>{{ group.SiteWorkGroupName }}</h4>
+  <ul>
+    <li *ngFor="let siteWorkContainer of group.SiteWorks">
+      <ul>
+        <li *ngFor="let siteWork of siteWorkContainer.SiteWork">
+          <strong>{{ siteWork.SiteWorkName }}</strong>
+          <ul>
+            <li *ngFor="let type of siteWork.ApplicableTypes">
+              <!-- {{ type.SiteWorkApplicableTypeName }}: {{ type.Value || 'N/A' }} -->
+              {{ type.SiteWorkApplicableTypeName }} : <!-- Checkbox Input -->
+              <input *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'checkbox'"
+                class="form-check-input" type="checkbox" [(ngModel)]="type.Value" [checked]="type.Value === 'true'">
+
+              <!-- Radio Button Input -->
+              <div *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'radio'">
+                <input type="radio" name="{{siteWork.SiteWorkName}}" value="Option1" [(ngModel)]="type.Value"> Option 1
+                <input type="radio" name="{{siteWork.SiteWorkName}}" value="Option2" [(ngModel)]="type.Value"> Option 2
+              </div>
+
+              <!-- Text Input (Default) -->
+              <input *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'number'"
+                class="form-control" [(ngModel)]="type.Value" [placeholder]="'N/A'" type="number">
+
+              <!-- Date Input (Default) -->
+              <input *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'date'"
+                class="form-control" [(ngModel)]="type.Value" [placeholder]="'N/A'" type="date">
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>

@@ -26,6 +26,8 @@ export class GovernmentOfficeComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
 
+
+
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   headers: string[] = ['Sr.No.', 'Document Name', 'Office Name', 'Action'];
@@ -133,6 +135,85 @@ export class GovernmentOfficeComponent implements OnInit {
     }
     else {
       this.DisplayMasterList = this.MasterList
+    }
+  }
+
+  GovermentList = [
+    {
+      "SiteWorkGroupName": "Mojani",
+      "SiteWorks": [{
+        "SiteWork": [{
+          "SiteWorkName": "T.P पत्र",
+          "ApplicableTypes": [{
+            "SiteWorkApplicableTypeName": "Submit",
+            "Value": "false"
+          }, {
+            "SiteWorkApplicableTypeName": "Inward No",
+            "Value": ""
+          }, {
+            "SiteWorkApplicableTypeName": "Date",
+            "Value": ""
+          }
+          ]
+        }
+        ]
+      }, {
+        "SiteWork": [{
+          "SiteWorkName": "प्राधिकरण Office पत्र",
+          "ApplicableTypes": [{
+            "SiteWorkApplicableTypeName": "Submit",
+            "Value": "false"
+          }
+          ]
+        }
+        ]
+      }
+      ]
+    }, {
+      "SiteWorkGroupName": "T.P Office",
+      "SiteWorks": [{
+        "SiteWork": [{
+          "SiteWorkName": "Survey Remark",
+          "ApplicableTypes": [{
+            "SiteWorkApplicableTypeName": "Submit",
+            "Value": "false"
+          }
+          ]
+        }
+        ]
+      }, {
+        "SiteWork": [{
+          "SiteWorkName": "Tentative Layout",
+          "ApplicableTypes": [{
+            "SiteWorkApplicableTypeName": "Submit",
+            "Value": "false"
+          }, {
+            "SiteWorkApplicableTypeName": "Inward No",
+            "Value": ""
+          }, {
+            "SiteWorkApplicableTypeName": "Date",
+            "Value": ""
+          }, {
+            "SiteWorkApplicableTypeName": "Scrutiny Fees",
+            "Value": ""
+          }
+          ]
+        }
+        ]
+      }
+      ]
+    }
+  ];
+
+
+  getTypeOnApplicableTypeName = (ApplicableTypesName: string): '' | 'checkbox' | 'number' | 'date' | 'radio' | 'text' => {
+    switch (ApplicableTypesName) {
+      case 'Submit': return 'checkbox';
+      case 'Inward No': return 'number';
+      case 'Date': return 'date';
+      case 'Scrutiny Fees': return 'checkbox';
+      default:
+        return ''; // Default return value
     }
   }
 }
