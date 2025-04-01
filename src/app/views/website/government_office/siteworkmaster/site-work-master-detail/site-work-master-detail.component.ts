@@ -37,7 +37,7 @@ export class SiteWorkMasterDetailComponent implements OnInit {
   InputNumber: string = ValidationPatterns.InputNumber;
   InputNumberMsg: string = ValidationMessages.InputNumberMsg;
 
-  ApplicableTypesForSites = DomainEnums.ApplicableTypesForSiteList(
+  SiteWorkApplicableTypes = DomainEnums.ApplicableTypesForSiteList(
     true,
     '--Select Applicable Types--'
   );
