@@ -2,7 +2,7 @@
   <div class="card" style="padding: 1rem">
     <div class="row">
       <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
-        <button type="button" class="backbtn" (click)="BackDepartment()">
+        <button type="button" class="backbtn" (click)="BackRegistrarOffice()">
           <img
             src="/assets/icons/arrow-button.png"
             alt=""
@@ -22,12 +22,12 @@
            <label>Plot No</label>
             <input
               type="text"
-              [(ngModel)]="Entity.p.Name"
-              name="Name"
+              [(ngModel)]="Entity.p.PlotRef"
+              name="PlotRef"
               class="form-control"
-              id="Name"
+              id="PlotRef"
               required
-              placeholder="Enter Name"
+              placeholder="Enter Plot No"
             />
         </div>
         <!-- Name -->
@@ -53,7 +53,7 @@
            class="form-control"
            id="Name"
            required
-           placeholder="Enter Name"
+           placeholder="Enter Contact No. "
          />
      </div>
       </div>
@@ -160,7 +160,7 @@
            class="form-control"
            id="Name"
            required
-           placeholder="Enter Name"
+           placeholder="Enter Contact No."
          />
      </div>
       </div>
@@ -213,14 +213,10 @@
           <label for="Submit">Submit</label>
             <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
       </div>
-
       </div>
-
-
-     
     </div>
 
-        <!-- Witness 2 Box-->
+        <!--------------------- Witness 2 Box ------------------>
     
     <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px;">
       <!-- Witness 2 -->
@@ -261,7 +257,7 @@
           class="form-control"
           id="Name"
           required
-          placeholder="Enter Name"
+          placeholder="Enter Contact No."
         />
     </div>
      </div>
@@ -316,11 +312,11 @@
      </div>
    </div>
 
-        <!-- Agreement to Sale Box -->
+        <!--------------------- Agreement to Sale Box ------------------------>
 
    <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px;">
       <!-- Agreement to Sale -->
-    <div class="row mb-4" style="margin-top: 1rem; background-color: #fbe6e6; ">
+    <!-- <div class="row mb-4" style="margin-top: 1rem; background-color: #fbe6e6; ">
      <div class="col-md-4 justify-content-center d-flex">
        <label  for="AllowOTAUpdate"> Agreement to Sale</label>
            <div style="margin-left: 25px;">
@@ -332,8 +328,33 @@
              />
            </div>
      </div>
+    </div> -->
+
+<!-- Aadhar -->
+<div class="col-md-8 d-flex mb-4 " style="margin-top: 1rem; background-color: #fbe6e6; ">
+  <div class="col-md-8 d-flex ">
+    <div class="col-md-4 d-flex justify-content-center">
+      <label>Agreement to Sale</label>
     </div>
-<!-- Document -->
+    <div class="col-md-8 d-flex">
+      <input
+        type="file"
+        [(ngModel)]="Entity.p.Name"
+        name="Name"
+        class="form-control"
+        id="Name"
+        required
+        placeholder="Enter Name"
+      />
+    </div>
+  </div>
+  <!-- Submit -->
+  <div class="col-md-4 d-flex justify-content-center  ">
+    <label for="Submit">Submit</label>
+      <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
+  </div>
+</div>
+    <!-- Document -->
     <div class="row mb-4" style="margin-top: 1rem; ">
      <div class="col-md-6">
        <label>Document</label>
@@ -344,7 +365,7 @@
           class="form-control"
           id="Name"
           required
-          placeholder="Enter Name"
+          placeholder="Enter Document No."
         />
     </div>
     <!-- Date -->
@@ -363,7 +384,8 @@
    </div>
  </div>
 
-        <!-- Sale Deed Box  -->
+        <!---------------------- Sale Deed Box  ----------------------------->
+
  <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px;">
       <!-- Sale Deed -->
   <div class="row mb-4" style="margin-top: 1rem; background-color: #fbe6e6; ">
@@ -390,7 +412,7 @@
         class="form-control"
         id="Name"
         required
-        placeholder="Enter Name"
+        placeholder="Enter Document No."
       />
   </div>
   <!-- Date -->
@@ -409,7 +431,7 @@
  </div>
 </div>
 
-<!-- Talathi Box -->
+<!---------------------- Talathi Box ----------------->
 <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px;">
       <!-- Talathi -->
   <div class="row mb-4" style="margin-top: 1rem; background-color: #fbe6e6; ">
@@ -425,33 +447,7 @@
          </div>
    </div>
   </div>
-<!-- Inward No: -->
-  <div class="row mb-4" style="margin-top: 1rem; ">
-   <div class="col-md-6">
-     <label>Inward No:</label>
-      <input
-        type="text"
-        [(ngModel)]="Entity.p.Name"
-        name="Inward No:"
-        class="form-control"
-        id="Inward No:"
-        required
-        placeholder="Enter Inward No:"
-      />
-  </div>
-  <div class="col-md-6">
-   <label>Date</label>
-    <input
-      type="date"
-      [(ngModel)]="Entity.p.Name"
-      name="Date"
-      class="form-control"
-      id="Date"
-      required
-      placeholder="Enter Date"
-    />
-</div>
- </div>
+
 
 <!-- Index Original -->
   <div class="row mb-4">
@@ -503,6 +499,36 @@
  </div>
 
  </div>
+
+
+ <!-- Inward No: -->
+ <div class="row mb-4" style="margin-top: 1rem; ">
+  <div class="col-md-6">
+    <label>Inward No:</label>
+     <input
+       type="text"
+       [(ngModel)]="Entity.p.Name"
+       name="Inward No:"
+       class="form-control"
+       id="Inward No:"
+       required
+       placeholder="Enter Inward No:"
+     />
+ </div>
+ <div class="col-md-6">
+  <label>Date</label>
+   <input
+     type="date"
+     [(ngModel)]="Entity.p.Name"
+     name="Date"
+     class="form-control"
+     id="Date"
+     required
+     placeholder="Enter Date"
+   />
+</div>
+</div>
+
 <!-- फेरफार Notice घेणे -->
  <div class="row mb-4 ">
   <div class="col-md-8 d-flex ">
@@ -551,72 +577,33 @@
     <label for="Submit">Submit</label>
       <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
 </div>
-
 </div>
-
 </div>
 
 <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px;">
+
 <!-- Spiral 7/12 -->
-<div class="row mb-4 mt-4 ">
-  <div class="col-md-8 d-flex ">
-    <div class="col-md-4 d-flex justify-content-center">
-      <label> Spiral 7/12</label>
-    </div>
-    <div class="col-md-8 d-flex">
-      <input
-        type="file"
-        [(ngModel)]="Entity.p.Name"
-        name="Spiral 7/12"
-        class="form-control"
-        id="Spiral 7/12"
-        required
-        placeholder="Enter Spiral 7/12"
-      />
-    </div>
-  </div>
-
-  <div class="col-md-4 d-flex justify-content-center  ">
-    <label for="Submit">Submit</label>
-      <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
-</div>
-
+ <div class="row mt-3">
+  <div class="col-md-6 d-flex justify-content-center  ">
+    <label> Spiral 7/12</label>
+    <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
 </div>
 
 <!-- Client Submit -->
-<div class="row mb-4 ">
-  <div class="col-md-8 d-flex ">
-    <div class="col-md-4 d-flex justify-content-center">
-      <label> Client Submit</label>
-    </div>
-    <div class="col-md-8 d-flex">
-      <input
-        type="file"
-        [(ngModel)]="Entity.p.Name"
-        name="Client Submit"
-        class="form-control"
-        id="Client Submit"
-        required
-        placeholder="Enter Client Submit"
-      />
-    </div>
-  </div>
-
-  <div class="col-md-4 d-flex justify-content-center  ">
-    <label for="Submit">Submit</label>
+  <div class="col-md-6 d-flex justify-content-center  mb-3 ">
+    <label for="Submit">Client Submit</label>
       <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
 </div>
-
-</div>
-
+ </div>
+  
 </div>
       </div>
               <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
           <div>
-            <button type="button" class="btn" (click)="SaveDepartmentMaster()">Save</button>
+            <button type="button" class="btn" (click)="SaveRegistrarOfficeMaster()">Save</button>
           </div>
           <div>
-            <button type="button" class="btn"  (click)="BackDepartment()">Back</button>
+            <button type="button" class="btn"  (click)="BackRegistrarOffice()">Back</button>
           </div>
       </div>
     </form>

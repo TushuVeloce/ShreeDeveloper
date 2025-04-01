@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
+import { RegistrarOffice } from 'src/app/classes/domain/entities/website/registraroffice/registraroffice';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -17,10 +17,11 @@ export class RegistrarOfficeDetailComponent  implements OnInit {
   isSaveDisabled: boolean = false;
   private IsNewEntity: boolean = true;
   isChecked = false; // Default value
-  Entity: Department = Department.CreateNewInstance();
+  Entity: RegistrarOffice = RegistrarOffice.CreateNewInstance();
   DetailsFormTitle: 'New Registrar Office' | 'Edit Registrar Office' = 'New Registrar Office';
-  InitialEntity: Department = null as any;
+  InitialEntity: RegistrarOffice = null as any;
   companyName = this.companystatemanagement.SelectedCompanyName;
+
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companystatemanagement: CompanyStateManagement) { }
 
   async ngOnInit() {
@@ -28,19 +29,19 @@ export class RegistrarOfficeDetailComponent  implements OnInit {
        if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
           this.IsNewEntity = false;
           this.DetailsFormTitle = this.IsNewEntity ? 'New Registrar Office' : 'Edit Registrar Office';
-          this.Entity = Department.GetCurrentInstance();
+          this.Entity = RegistrarOffice.GetCurrentInstance();
           this.appStateManage.StorageKey.removeItem('Editable')
     
         } else {
-          this.Entity = Department.CreateNewInstance();
-          Department.SetCurrentInstance(this.Entity);
+          this.Entity = RegistrarOffice.CreateNewInstance();
+          RegistrarOffice.SetCurrentInstance(this.Entity);
          
         }
-        this.InitialEntity = Object.assign(Department.CreateNewInstance(),
-        this.utils.DeepCopy(this.Entity)) as Department;      
+        this.InitialEntity = Object.assign(RegistrarOffice.CreateNewInstance(),
+        this.utils.DeepCopy(this.Entity)) as RegistrarOffice;      
    }
 
-    SaveDepartmentMaster = async () => {
+    SaveRegistrarOfficeMaster = async () => {
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
       this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
       let entityToSave = this.Entity.GetEditableVersion();
@@ -58,16 +59,16 @@ export class RegistrarOfficeDetailComponent  implements OnInit {
         // this.onEntitySaved.emit(entityToSave);
         if (this.IsNewEntity) {
           await this.uiUtils.showSuccessToster('Registrar Office saved successfully!');
-          this.Entity = Department.CreateNewInstance();
+          this.Entity = RegistrarOffice.CreateNewInstance();
         } else {
-          await this.router.navigate(['/homepage/Website/Department_Master'])
-          await this.uiUtils.showSuccessToster('Department Updated successfully!');
+          await this.router.navigate(['/homepage/Website/Registrar_Office'])
+          await this.uiUtils.showSuccessToster('Registrar Office Updated successfully!');
         }
       }
     }
 
-  BackDepartment() {
-    this.router.navigate(['/homepage/Website/Department_Master']);
+  BackRegistrarOffice() {
+    this.router.navigate(['/homepage/Website/Registrar_Office']);
   }
 
 }
