@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
@@ -13,8 +14,10 @@ import { Employee } from 'src/app/classes/domain/entities/website/masters/employ
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
+import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -47,6 +50,9 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   SiteManagementRef: number = 0;
   DetailsFormTitle: 'New Customer' | 'Edit Customer' = 'New Customer';
 
+  Date: string | null = null;
+  DateWithTime: string | null = null;
+
   MarketingModesList = DomainEnums.MarketingModesList(
     true,
     '--Select Modes Type--'
@@ -75,7 +81,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     private router: Router,
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
-    private utils: Utils,
+    private utils: Utils, private dtu: DTU, private datePipe: DatePipe,
     private companystatemanagement: CompanyStateManagement
   ) { }
 
@@ -120,6 +126,20 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     // this.focusInput();
 
 
+    if (this.Entity.p.CustomerFollowUps[0].TransDateTime.trim().length <= 0) {
+      let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+
+      // this.BillDate = this.datePipe.transform(this.dtu.FromString(strCDT), 'yyyy-MM-dd');
+      this.Date = strCDT.substring(0, 10);
+      this.DateWithTime = strCDT;
+      console.log(strCDT);
+
+    }
+    else {
+      this.Date = this.datePipe.transform(this.dtu.FromString(this.Entity.p.CustomerFollowUps[0].TransDateTime), 'yyyy-MM-dd');
+      this.Date = this.Entity.p.CustomerFollowUps[0].TransDateTime.substring(0, 10);
+      this.DateWithTime = this.Entity.p.CustomerFollowUps[0].TransDateTime;
+    }
   }
 
   // For country, state, city dropdowns
@@ -277,6 +297,8 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
         plotDetail.CustomerFollowUpRef = followUp.Ref;
       });
     });
+
+    this.Entity.p.CustomerFollowUps[0].TransDateTime = this.DateWithTime!;
 
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
     let entityToSave = this.Entity.GetEditableVersion();
