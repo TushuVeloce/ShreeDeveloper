@@ -7,6 +7,7 @@ import { Site } from 'src/app/classes/domain/entities/website/masters/site/site'
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -44,7 +45,7 @@ export class CustomerFollowupComponent implements OnInit {
     'Customer Status',
     'Action',
   ]; constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement, private dtu: DTU, private datePipe: DatePipe
+    private companystatemanagement: CompanyStateManagement, private dtu: DTU, private datePipe: DatePipe, private DateconversionService:DateconversionService
   ) {
     effect(() => {
       this.getCustomerFollowUpListByEnquiryRef()
@@ -65,7 +66,7 @@ export class CustomerFollowupComponent implements OnInit {
       this.date = formattedDate;
       this.getCustomerFollowUpListByDateandSiteRef(strCDT, this.siteref);
     }
-    
+
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
@@ -106,6 +107,11 @@ export class CustomerFollowupComponent implements OnInit {
     // this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
+
+     // Extracted from services date conversion //
+     formatDate(date: string | Date): string {
+      return this.DateconversionService.formatDate(date);
+    }
 
   onSiteReforDateChange(selectedSiteRef?: number, date?: string) {
     if (selectedSiteRef && date) {
