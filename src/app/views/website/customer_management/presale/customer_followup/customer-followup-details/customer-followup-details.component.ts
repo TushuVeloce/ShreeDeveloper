@@ -70,17 +70,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
   async ngOnInit() {
 
-
-    this.appStateManage.setDropdownDisabled(true);
-    this.CountryList = await Country.FetchEntireList();
-    this.EmployeeList = await Employee.FetchEntireList();
-    this.getSiteListByCompanyRef()
-    // Check if CountryRef is already set (e.g., India is preselected)
-    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-      // debugger
-      this.IsNewEntity = false;
-      this.Entity = CustomerFollowUp.GetCurrentInstance();
-
     // While Edit Converting date String into Date Format //
     this.reminderdate = this.datePipe.transform(
       this.dtu.FromString(this.Entity.p.ReminderDate),
@@ -98,6 +87,16 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       this.dtu.FromString(this.Entity.p.OfficeVisitDate),
       'yyyy-MM-dd'
     );
+
+    this.appStateManage.setDropdownDisabled(true);
+    this.CountryList = await Country.FetchEntireList();
+    this.EmployeeList = await Employee.FetchEntireList();
+    this.getSiteListByCompanyRef()
+    // Check if CountryRef is already set (e.g., India is preselected)
+    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+      // debugger
+      this.IsNewEntity = false;
+      this.Entity = CustomerFollowUp.GetCurrentInstance();
       //  this.CustomerEnquiryEntity = CustomerEnquiry.GetCurrentInstance();
       console.log('Entity :', this.Entity);
       //  console.log('CustomerEnquiryEntity :', this.CustomerEnquiryEntity);
@@ -191,8 +190,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
   SaveCustomerFollowUp = async () => {
     let entityToSave = this.Entity.GetEditableVersion();
-    console.log('entityToSave :', entityToSave);
-
+    this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.CustomerFollowUpPlotDetails.forEach((plotDetail) => {
       plotDetail.Ref = 0;
     });
@@ -247,9 +245,8 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
 
     let entitiesToSave = [entityToSave];
-    this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     // this.Entity.p.ContactMode = this.CustomerEnquiryEntity.p.CustomerFollowUps[0].ContactMode;
-    // console.log('entitiesToSave:', entitiesToSave);
+    console.log('entitiesToSave:', entitiesToSave);
     // // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
