@@ -190,6 +190,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
   SaveCustomerFollowUp = async () => {
     let entityToSave = this.Entity.GetEditableVersion();
+    console.log('entityToSave :', entityToSave);
 
     this.Entity.p.CustomerFollowUpPlotDetails.forEach((plotDetail) => {
       plotDetail.Ref = 0;

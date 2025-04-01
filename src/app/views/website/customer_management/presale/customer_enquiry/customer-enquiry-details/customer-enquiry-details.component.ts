@@ -89,25 +89,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-
-    // While Edit Converting date String into Date Format //
-    this.reminderdate = this.datePipe.transform(
-      this.dtu.FromString(this.Entity.p.CustomerFollowUps[0].ReminderDate),
-      'yyyy-MM-dd'
-    );
-
-    // While Edit Converting date String into Date Format //
-    this.sitevisitdate = this.datePipe.transform(
-      this.dtu.FromString(this.Entity.p.CustomerFollowUps[0].SiteVisitDate),
-      'yyyy-MM-dd'
-    );
-
-    // While Edit Converting date String into Date Format //
-    this.officevistdate = this.datePipe.transform(
-      this.dtu.FromString(this.Entity.p.CustomerFollowUps[0].OfficeVisitDate),
-      'yyyy-MM-dd'
-    );
-
     this.appStateManage.setDropdownDisabled(true);
     this.CountryList = await Country.FetchEntireList();
     this.StateList = await State.FetchEntireList();
@@ -122,6 +103,23 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
         ? 'New Customer'
         : 'Edit Customer';
       this.Entity = CustomerEnquiry.GetCurrentInstance();
+// While Edit Converting date String into Date Format //
+this.reminderdate = this.datePipe.transform(
+  this.dtu.FromString(this.Entity.p.CustomerFollowUps[0].ReminderDate),
+  'yyyy-MM-dd'
+);
+
+// While Edit Converting date String into Date Format //
+this.sitevisitdate = this.datePipe.transform(
+  this.dtu.FromString(this.Entity.p.CustomerFollowUps[0].SiteVisitDate),
+  'yyyy-MM-dd'
+);
+
+// While Edit Converting date String into Date Format //
+this.officevistdate = this.datePipe.transform(
+  this.dtu.FromString(this.Entity.p.CustomerFollowUps[0].OfficeVisitDate),
+  'yyyy-MM-dd'
+);
 
       this.appStateManage.StorageKey.removeItem('Editable');
       this.IsPlotDetails = true;
@@ -309,12 +307,28 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
 
     this.Entity.p.CompanyRef =
       this.companystatemanagement.getCurrentCompanyRef();
+
     // ------ Code For Save Date Of InCorporation Year Format ---------------//
-    if (this.sitevisitdate) {
+    // if (this.sitevisitdate) {
+    //   let dateValue = new Date(this.sitevisitdate);
+
+    //   if (!isNaN(dateValue.getTime())) {
+    //     entityToSave.p.CustomerFollowUps[0].SiteVisitDate = this.dtu.DateStartStringFromDateValue(dateValue);
+    //   } else {
+    //     entityToSave.p.CustomerFollowUps[0].SiteVisitDate = '';
+    //   }
+    // }
+
+
+
+     // ------ Code For Save site visit date Format ---------------//
+     if (this.sitevisitdate) {
       let dateValue = new Date(this.sitevisitdate);
+      console.log('site visit date :', dateValue);
 
       if (!isNaN(dateValue.getTime())) {
-        entityToSave.p.CustomerFollowUps[0].SiteVisitDate = this.dtu.DateStartStringFromDateValue(dateValue);
+        entityToSave.p.CustomerFollowUps[0].SiteVisitDate =
+          this.dtu.DateStartStringFromDateValue(dateValue);
       } else {
         entityToSave.p.CustomerFollowUps[0].SiteVisitDate = '';
       }
@@ -330,6 +344,9 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
         entityToSave.p.CustomerFollowUps[0].OfficeVisitDate = '';
       }
     }
+
+
+
 
     // ------ Code For Save Date Of Reminder Date Format ---------------//
     if (this.reminderdate) {
@@ -359,6 +376,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
 
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
     let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
     // return;
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
