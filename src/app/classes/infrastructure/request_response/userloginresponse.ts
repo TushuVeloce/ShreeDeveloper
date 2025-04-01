@@ -9,4 +9,6 @@ export class UserLoginResponse
     public ValidMenuItemIds: string[] = [];
     public LastSelectedCompanyRef: number = 0;
     public LastSelectedCompanyName: string = '';
+    public LoginEmployeeRef: number = 0;
+    public LoginEmployeeName: string = '';
 }
