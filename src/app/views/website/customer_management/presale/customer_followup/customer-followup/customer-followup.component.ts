@@ -57,7 +57,6 @@ export class CustomerFollowupComponent implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
     if (this.date == '') {
-      debugger
       let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       let parts = strCDT.substring(0, 16).split('-');
       // Construct the new date format
