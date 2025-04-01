@@ -34,6 +34,8 @@ export class SiteWorkMasterDetailComponent implements OnInit {
 
   NameWithNosMsg: string = ValidationMessages.NameWithNosMsg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
+  InputNumber: string = ValidationPatterns.InputNumber;
+  InputNumberMsg: string = ValidationMessages.InputNumberMsg;
 
   ApplicableTypesForSites = DomainEnums.ApplicableTypesForSiteList(
     true,
@@ -52,7 +54,7 @@ export class SiteWorkMasterDetailComponent implements OnInit {
     private appStateManage: AppStateManageService,
     private utils: Utils,
     private companystatemanagement: CompanyStateManagement
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -81,10 +83,10 @@ export class SiteWorkMasterDetailComponent implements OnInit {
     // this.focusInput();
   }
 
-  onApplicableTypeChange(selectedvalue: any) {
-    this.Entity.p.ListOfApplicableTypes = selectedvalue;
-    // console.log(this.Entity.p.MaterialSuppliedByVendors);
-  }
+  // onApplicableTypeChange(selectedvalue: any) {
+  //   this.Entity.p.ListOfApplicableTypes = selectedvalue;
+  //   // console.log(this.Entity.p.MaterialSuppliedByVendors);
+  // }
 
   SaveSiteWorkMaster = async () => {
     this.Entity.p.CompanyRef =

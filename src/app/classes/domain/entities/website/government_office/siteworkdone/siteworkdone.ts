@@ -11,19 +11,21 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { SiteWorkDoneFetchRequest } from "./siteworkdonefetchrequest";
+import { ApplicableTypeProps } from "../siteworkmaster/siteworkmaster";
 
 
 export class SiteWorkDoneProps {
-  public readonly Db_Table_Name = "SiteWorkDone";
+  public readonly Db_Table_Name = "SiteWorkDoneMaster";
   public Ref: number = 0;
   public SiteWorkRef: number = 0;
   public ApplicableTypeRef: number = 0;
-  public SiteWorkGroupRef : number = 0;
+  public SiteWorkGroupRef: number = 0;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
+  public ListOfApplicableTypes: ApplicableTypeProps[] = [];
 
   public readonly IsNewlyCreated: boolean = false;
-  public readonly SiteWorkRefName: string = '';
+  public readonly SiteWorkName: string = '';
 
   private constructor(isNewlyCreated: boolean) {
     this.IsNewlyCreated = isNewlyCreated;
@@ -35,7 +37,7 @@ export class SiteWorkDoneProps {
 }
 
 export class SiteWorkDone implements IPersistable<SiteWorkDone> {
-  public static readonly Db_Table_Name: string = 'SiteWorkDone';
+  public static readonly Db_Table_Name: string = 'SiteWorkDoneMaster';
 
   private constructor(public readonly p: SiteWorkDoneProps, public readonly AllowEdit: boolean) {
 
@@ -43,8 +45,8 @@ export class SiteWorkDone implements IPersistable<SiteWorkDone> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -160,7 +162,7 @@ export class SiteWorkDone implements IPersistable<SiteWorkDone> {
     return SiteWorkDone.ListFromTransportData(tdResponse);
   }
 
- public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new SiteWorkDoneFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await SiteWorkDone.FetchTransportData(req, errorHandler) as TransportData;

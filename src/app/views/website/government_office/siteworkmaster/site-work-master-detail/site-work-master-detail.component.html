@@ -12,6 +12,15 @@
     </div>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
+
+        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+          <label> Site Work Group</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteWorkGroupRef"
+            name="SiteWorkGroupRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteWorkGroupRef">
+            <nz-option *ngFor="let siteworkgroup of SiteWorkGroupList" [nzValue]="siteworkgroup.p.Ref"
+              [nzLabel]="siteworkgroup.p.Name"></nz-option>
+          </nz-select>
+        </div>
         <div class="col-md-4">
           <div>
             <label> Name</label>
@@ -24,22 +33,17 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
-          <label> Site Work Group</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteWorkGroupRef"
-            name="SiteWorkGroupRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteWorkGroupRef">
-            <nz-option *ngFor="let siteworkgroup of SiteWorkGroupList" [nzValue]="siteworkgroup.p.Ref"
-              [nzLabel]="siteworkgroup.p.Name"></nz-option>
-          </nz-select>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
-          <label for="ListOfApplicableTypes"><b>Applicable Types</b></label>
-          <nz-select [(ngModel)]="Entity.p.ListOfApplicableTypes" nzMode="multiple" id="ListOfApplicableTypes"
-            name="ListOfApplicableTypes" nzShowSearch nzAllowClear
-            (ngModalChange)="onApplicableTypeChange(Entity.p.ListOfApplicableTypes)" nzPlaceHolder="Select Applicable Type">
-            <nz-option *ngFor="let applicabletype of ApplicableTypesForSites" [nzValue]="applicabletype.Ref"
-              [nzLabel]="applicabletype.Name"></nz-option>
-          </nz-select>
+        <div class="col-md-4">
+          <div>
+            <label> Display Order</label>
+            <input type="text" [(ngModel)]="Entity.p.DisplayOrder" name="DisplayOrder" class="form-control"
+              id="DisplayOrder" required placeholder="Enter Display Order" pattern="{{InputNumber}}"
+              #DisplayOrderCtrl="ngModel" required (blur)="DisplayOrderCtrl.control.markAsTouched()" />
+            <div *ngIf="(DisplayOrderCtrl.invalid && (DisplayOrderCtrl.touched || DisplayOrderCtrl.dirty))">
+              <span class="validation-text" *ngIf="DisplayOrderCtrl.errors?.['pattern']">{{InputNumberMsg}}</span>
+              <span class="validation-text" *ngIf="DisplayOrderCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
         </div>
 
       </div>
