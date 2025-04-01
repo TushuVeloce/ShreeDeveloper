@@ -29,11 +29,8 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class CustomerEnquiryDetailsComponent implements OnInit {
   Entity: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
-  // CustomerPlotDetails: CustomerFollowUpPlotDetails = CustomerFollowUpPlotDetails.CreateNewInstance();
-  // CustomerFollowUpEntity: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
   public IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
-  // DetailsFormTitle: 'New Employee' | 'Edit Employee' = 'New Employee';
   IsDropdownDisabled: boolean = false;
   InitialEntity: CustomerEnquiry = null as any;
   pageSize = 10; // Items per page
@@ -102,24 +99,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity
         ? 'New Customer'
         : 'Edit Customer';
-      this.Entity = CustomerEnquiry.GetCurrentInstance();
-// While Edit Converting date String into Date Format //
-this.reminderdate = this.datePipe.transform(
-  this.dtu.FromString(this.Entity.p.CustomerFollowUps[0].ReminderDate),
-  'yyyy-MM-dd'
-);
-
-// While Edit Converting date String into Date Format //
-this.sitevisitdate = this.datePipe.transform(
-  this.dtu.FromString(this.Entity.p.CustomerFollowUps[0].SiteVisitDate),
-  'yyyy-MM-dd'
-);
-
-// While Edit Converting date String into Date Format //
-this.officevistdate = this.datePipe.transform(
-  this.dtu.FromString(this.Entity.p.CustomerFollowUps[0].OfficeVisitDate),
-  'yyyy-MM-dd'
-);
 
       this.appStateManage.StorageKey.removeItem('Editable');
       this.IsPlotDetails = true;
@@ -321,12 +300,9 @@ this.officevistdate = this.datePipe.transform(
 
 
 
-     // ------ Code For Save site visit date Format ---------------//
-     console.log('sitevisitdate :', this.sitevisitdate);
-     if (this.sitevisitdate) {
+    // ------ Code For Save site visit date Format ---------------//
+    if (this.sitevisitdate) {
       let dateValue = new Date(this.sitevisitdate);
-      console.log('site visit date :', dateValue);
-
       if (!isNaN(dateValue.getTime())) {
         entityToSave.p.CustomerFollowUps[0].SiteVisitDate =
           this.dtu.DateStartStringFromDateValue(dateValue);
@@ -336,7 +312,7 @@ this.officevistdate = this.datePipe.transform(
     }
 
     // ------ Code For Save Date Of InCorporation Year Format ---------------//
-    console.log('officevistdate :', this.officevistdate);
+    console.log('if officevistdate :', this.officevistdate);
     if (this.officevistdate) {
       let dateValue = new Date(this.officevistdate);
       console.log('officevistdate :', dateValue);
