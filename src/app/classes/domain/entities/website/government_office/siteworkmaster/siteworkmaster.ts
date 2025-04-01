@@ -19,7 +19,7 @@ export class ApplicableTypeProps {
 
 
 export class SiteWorkMasterProps {
-  public readonly Db_Table_Name = "SiteWorkDoneDetails";
+  public readonly Db_Table_Name = "SiteWorkMaster";
   public Ref: number = 0;
   public Name: string = '';
   public SiteWorkGroupRef: number = 0;
@@ -44,7 +44,7 @@ export class SiteWorkMasterProps {
 }
 
 export class SiteWorkMaster implements IPersistable<SiteWorkMaster> {
-  public static readonly Db_Table_Name: string = 'SiteWorkDoneDetails';
+  public static readonly Db_Table_Name: string = 'SiteWorkMaster';
 
   private constructor(public readonly p: SiteWorkMasterProps, public readonly AllowEdit: boolean) {
 
@@ -76,6 +76,7 @@ export class SiteWorkMaster implements IPersistable<SiteWorkMaster> {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company cannot be blank.');
+    if (this.p.DisplayOrder < 0) vra.add('DisplayOrder', 'Display Order cannot be less than 1.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
