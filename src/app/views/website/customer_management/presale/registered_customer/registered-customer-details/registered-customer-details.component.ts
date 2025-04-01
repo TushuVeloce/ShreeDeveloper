@@ -6,6 +6,7 @@ import { FinancialYear } from 'src/app/classes/domain/entities/website/masters/f
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -33,7 +34,7 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
     companyRef = this.companystatemanagement.SelectedCompanyRef;
     FinancialYearList: FinancialYear[]=[]
   
-    constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
+    constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement,private servicecommunicator: ServerCommunicatorService) { }
   
     async ngOnInit() {
       this.appStateManage.setDropdownDisabled(true);
@@ -110,10 +111,11 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
 
 
     SaveRegisteredCustomer = async () => {
+      let serverTime = await this.servicecommunicator.GetCurrentTime();
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = String(serverTime); 
       console.log('this.Entity.p.UpdatedBy :', this.Entity.p.UpdatedBy);
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
       console.log('entitiesToSave:', entitiesToSave);

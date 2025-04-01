@@ -158,6 +158,7 @@ export class Utils {
         await obj.EnsurePrimaryKeysWithValidValues();
         obj.MergeIntoTransportData(td);
       }
+
       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td, 'TransportData');
 
       let result = await this.serverCommunicator.sendHttpRequest(pkt, "acceptrequest", files);
