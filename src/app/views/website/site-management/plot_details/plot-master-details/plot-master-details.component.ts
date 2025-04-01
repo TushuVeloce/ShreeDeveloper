@@ -62,8 +62,8 @@ export class PlotMasterDetailsComponent implements OnInit {
       this.utils.DeepCopy(this.Entity)
     ) as Plot;
     this.getCustomerListBySiteandBookingRef(this.SiteRf)
-    if(this.Entity.p.CustomerRef > 0){
-      this.getCustomerDataBycustomerRef(this.Entity.p.CustomerRef)
+    if(this.Entity.p.CurrentOwnerRef > 0){
+      this.getCustomerDataBycustomerRef(this.Entity.p.CurrentOwnerRef)
     }
   }
 
@@ -92,6 +92,7 @@ export class PlotMasterDetailsComponent implements OnInit {
   SavePlot = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.SiteManagementRef = this.SiteRf
     this.Entity.p.AreaInSqft = this.Entity.p.AreaInSqm * 10.7639 
     let entityToSave = this.Entity.GetEditableVersion();

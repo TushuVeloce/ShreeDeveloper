@@ -1,4 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { SiteWorkDone } from 'src/app/classes/domain/entities/website/government_office/siteworkdone/siteworkdone';
+import { SiteWorkGroup } from 'src/app/classes/domain/entities/website/government_office/siteworkgroup/siteworkgroup';
+import { SiteWorkMaster } from 'src/app/classes/domain/entities/website/government_office/siteworkmaster/siteworkmaster';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { ScreenSizeService } from 'src/app/services/screensize.service';
+import { UIUtils } from 'src/app/services/uiutils.service'
 
 @Component({
   selector: 'app-site-work-done-master',
@@ -7,7 +15,165 @@ import { Component, OnInit } from '@angular/core';
   standalone: false,
 })
 export class SiteWorkDoneMasterComponent implements OnInit {
-  constructor() {}
+  Entity: SiteWorkDone = SiteWorkDone.CreateNewInstance();
+  MasterList: SiteWorkDone[] = [];
+  DisplayMasterList: SiteWorkDone[] = [];
+  SearchString: string = '';
+  SelectedSiteWorkDone: SiteWorkDone = SiteWorkDone.CreateNewInstance();
+  CustomerRef: number = 0;
+  pageSize = 10; // Items per page
+  currentPage = 1; // Initialize current page
+  total = 0;
+  // SiteWorkGroupList: SiteWorkGroup[] = [];
+  SiteWorkMasterList: SiteWorkMaster[] = [];
 
-  ngOnInit() {}
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+
+  headers: string[] = ['Sr.No.', 'Site Work', 'Applicable Type', 'Action'];
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement
+  ) {
+    effect(() => {
+      // this.getSiteWorkDoneListByCompanyRef()
+      this.getSiteWorkDoneListByCompanyRef();
+    });
+  }
+
+  // effect(() => {
+  //   // this.getSiteWorkDoneListByCompanyRef()
+  //   setTimeout(() => {
+  //     if (this.companyRef() > 0) {
+  //       this.getSiteWorkDoneListByCompanyRef();
+  //     }
+  //   }, 300);
+  // });
+
+  async ngOnInit() {
+    this.SiteWorkMasterList = await SiteWorkMaster.FetchEntireList();
+    this.appStateManage.setDropdownDisabled(false);
+    // await this.FormulateSiteWorkDoneList();
+    // this.DisplayMasterList = [];
+    this.loadPaginationData();
+    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+  }
+  // private FormulateSiteWorkDoneList = async () => {
+  //   let lst = await SiteWorkDone.FetchEntireList(
+  //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+  //   );
+  //   this.MasterList = lst;
+  //   console.log('MasterList :', this.MasterList);
+  //   this.DisplayMasterList = this.MasterList;
+  //   this.loadPaginationData();
+  //   // console.log(this.DisplayMasterList);
+  // };
+
+  getSiteWorkDoneListByCompanyRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    console.log('companyRef :', this.companyRef());
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await SiteWorkDone.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.MasterList = lst;
+    console.log('SiteWorkDoneList :', this.MasterList);
+
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  };
+
+  onEditClicked = async (item: SiteWorkDone) => {
+    // let props = Object.assign(SiteWorkDoneProps.Blank(),item.p);
+    // this.SelectedSiteWorkDone = SiteWorkDone.CreateInstance(props,true);
+
+    this.SelectedSiteWorkDone = item.GetEditableVersion();
+
+    SiteWorkDone.SetCurrentInstance(this.SelectedSiteWorkDone);
+
+    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+
+    await this.router.navigate(['/homepage/Website/Site_Work_Done_Details']);
+  };
+
+  onDeleteClicked = async (SiteWorkDone: SiteWorkDone) => {
+    await this.uiUtils.showConfirmationMessage(
+      'Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+     Are you sure that you want to DELETE this SiteWorkDone?`,
+      async () => {
+        await SiteWorkDone.DeleteInstance(async () => {
+          await this.uiUtils.showSuccessToster(
+            `Site Work Master ${SiteWorkDone.p.SiteWorkName} has been deleted!`
+          );
+          await this.getSiteWorkDoneListByCompanyRef();
+          this.SearchString = '';
+          this.loadPaginationData();
+          // await this.FormulateSiteWorkDoneList();
+        });
+      }
+    );
+  };
+
+  // For Pagination  start ----
+  loadPaginationData = () => {
+    this.total = this.DisplayMasterList.length; // Update total based on loaded data
+  };
+  get paginatedList() {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  onPageChange = (pageIndex: number): void => {
+    this.currentPage = pageIndex; // Update the current page
+  };
+
+  async AddSiteWorkDone() {
+    if (this.companyRef() <= 0) {
+      this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    } else if (this.Entity.p.SiteWorkRef <= 0) {
+      this.uiUtils.showErrorToster('Please Select site work Name');
+      return;
+    }
+    this.router.navigate(['/homepage/Website/Site_Work_Done_Details']);
+  }
+
+  filterTable = () => {
+    if (this.SearchString != '') {
+      this.DisplayMasterList = this.MasterList.filter((data: any) => {
+        return (
+          data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) >
+          -1
+        );
+      });
+    } else {
+      this.DisplayMasterList = this.MasterList;
+    }
+  };
+
+  SiteGroup: number = 0;
+
+  onSiteWorkChange(sitework: number) {
+    this.SiteGroup = sitework;
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (sitework > 0) {
+      this.Entity.p.SiteWorkGroupRef = sitework;
+      const selectedSiteWorkref = this.SiteWorkMasterList.find(
+        (site) => site.p.Ref === sitework
+      );
+      if (!selectedSiteWorkref) {
+        return;
+      }
+      this.appStateManage.StorageKey.setItem('siteRf', String(sitework));
+    }
+  }
 }

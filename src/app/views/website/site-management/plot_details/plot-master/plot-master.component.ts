@@ -48,7 +48,7 @@ export class PlotMasterComponent implements OnInit {
     if (storedSiteRef > 0)  {
       setTimeout(async () => {
         this.Entity.p.SiteManagementRef = storedSiteRef;
-        this.Entity.p.BookingRemark = bookingRemarkeRef;
+        this.Entity.p.CurrentBookingRemark = bookingRemarkeRef;
         await this.getPlotListBySiteRef(storedSiteRef,bookingRemarkeRef);
       });
     }
@@ -70,7 +70,7 @@ export class PlotMasterComponent implements OnInit {
 
   onsitechange(siteref: number){
     this.siteref = siteref
-    this.Entity.p.BookingRemark = 0
+    this.Entity.p.CurrentBookingRemark = 0
     this.bookigremark = 0
     this.MasterList = [];
     this.DisplayMasterList = [];

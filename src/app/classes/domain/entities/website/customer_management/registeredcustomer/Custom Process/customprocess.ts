@@ -10,10 +10,10 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { RegisteredCustomerFetchRequest } from "./registeredcustomerfetchrequest";
+import { CustomProcessFetchRequest } from "./customprocessfetchrequest";
 
 
-export class RegisteredCustomerProps {
+export class CustomProcessProps {
   public Ref: number = 0;
   public SiteRef : number = 0;
   public CustomerEnquiryRef: number = 0;
@@ -42,19 +42,19 @@ export class RegisteredCustomerProps {
 
   public readonly IsNewlyCreated: boolean = false;
 
-  private constructor(isNewlyCreated: boolean) {
+  public constructor(isNewlyCreated: boolean) {
     this.IsNewlyCreated = isNewlyCreated;
   }
 
   public static Blank() {
-    return new RegisteredCustomerProps(true);
+    return new CustomProcessProps(true);
   }
 }
 
-export class RegisteredCustomer implements IPersistable<RegisteredCustomer> {
-  public static readonly Db_Table_Name: string = 'RegisterCustomer';
+export class CustomProcess implements IPersistable<CustomProcess> {
+  public static readonly Db_Table_Name: string = 'CustomProcess';
 
-  private constructor(public readonly p: RegisteredCustomerProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: CustomProcessProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -75,17 +75,17 @@ export class RegisteredCustomer implements IPersistable<RegisteredCustomer> {
     return newRef
 }
 
-  public GetEditableVersion(): RegisteredCustomer {
-    let newState: RegisteredCustomerProps = Utils.GetInstance().DeepCopy(this.p);
-    return RegisteredCustomer.CreateInstance(newState, true);
+  public GetEditableVersion(): CustomProcess {
+    let newState: CustomProcessProps = Utils.GetInstance().DeepCopy(this.p);
+    return CustomProcess.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new RegisteredCustomer(RegisteredCustomerProps.Blank(), true);
+    return new CustomProcess(CustomProcessProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new RegisteredCustomer(data as RegisteredCustomerProps, allowEdit);
+    return new CustomProcess(data as CustomProcessProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
@@ -94,28 +94,28 @@ export class RegisteredCustomer implements IPersistable<RegisteredCustomer> {
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, RegisteredCustomer.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, CustomProcess.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: RegisteredCustomer = RegisteredCustomer.CreateNewInstance();
+  private static m_currentInstance: CustomProcess = CustomProcess.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return RegisteredCustomer.m_currentInstance;
+    return CustomProcess.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: RegisteredCustomer) {
-    RegisteredCustomer.m_currentInstance = value;
+  public static SetCurrentInstance(value: CustomProcess) {
+    CustomProcess.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): RegisteredCustomer {
+  public static SingleInstanceFromTransportData(td: TransportData): CustomProcess {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, RegisteredCustomer.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, RegisteredCustomer.Db_Table_Name)!.Entries) {
-        return RegisteredCustomer.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, CustomProcess.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, CustomProcess.Db_Table_Name)!.Entries) {
+        return CustomProcess.CreateInstance(data, false);
       }
     }
 
@@ -124,13 +124,13 @@ export class RegisteredCustomer implements IPersistable<RegisteredCustomer> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): RegisteredCustomer[] {
-    let result: RegisteredCustomer[] = [];
+    sortPropertyName: string = "Name"): CustomProcess[] {
+    let result: CustomProcess[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, RegisteredCustomer.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, RegisteredCustomer.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, CustomProcess.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, CustomProcess.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -140,18 +140,18 @@ export class RegisteredCustomer implements IPersistable<RegisteredCustomer> {
       }
 
       for (let data of entries) {
-        result.push(RegisteredCustomer.CreateInstance(data, false));
+        result.push(CustomProcess.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): RegisteredCustomer[] {
-    return RegisteredCustomer.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): CustomProcess[] {
+    return CustomProcess.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: RegisteredCustomerFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: CustomProcessFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -166,29 +166,29 @@ export class RegisteredCustomer implements IPersistable<RegisteredCustomer> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new RegisteredCustomerFetchRequest();
-    req.RegisteredCustomerRefs.push(ref);
+    let req = new CustomProcessFetchRequest();
+    req.CustomProcessRefs.push(ref);
 
-    let tdResponse = await RegisteredCustomer.FetchTransportData(req, errorHandler) as TransportData;
-    return RegisteredCustomer.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await CustomProcess.FetchTransportData(req, errorHandler) as TransportData;
+    return CustomProcess.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: RegisteredCustomerFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await RegisteredCustomer.FetchTransportData(req, errorHandler) as TransportData;
-    return RegisteredCustomer.ListFromTransportData(tdResponse);
+  public static async FetchList(req: CustomProcessFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await CustomProcess.FetchTransportData(req, errorHandler) as TransportData;
+    return CustomProcess.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new RegisteredCustomerFetchRequest();
-    let tdResponse = await RegisteredCustomer.FetchTransportData(req, errorHandler) as TransportData;
-    return RegisteredCustomer.ListFromTransportData(tdResponse);
+    let req = new CustomProcessFetchRequest();
+    let tdResponse = await CustomProcess.FetchTransportData(req, errorHandler) as TransportData;
+    return CustomProcess.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new RegisteredCustomerFetchRequest();
+    let req = new CustomProcessFetchRequest();
     req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await RegisteredCustomer.FetchTransportData(req, errorHandler) as TransportData;
-    return RegisteredCustomer.ListFromTransportData(tdResponse);
+    let tdResponse = await CustomProcess.FetchTransportData(req, errorHandler) as TransportData;
+    return CustomProcess.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {

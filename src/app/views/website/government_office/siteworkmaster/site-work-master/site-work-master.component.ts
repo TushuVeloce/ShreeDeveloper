@@ -27,7 +27,7 @@ export class SiteWorkMasterComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Name', 'Site Work Master Name', 'Action'];
+  headers: string[] = ['Sr.No.', 'Name', 'Site Work Master Name', 'Display Order', 'Action'];
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
@@ -171,7 +171,7 @@ export class SiteWorkMasterComponent implements OnInit {
       if (!selectedSitegroupref) {
         return;
       }
-      this.appStateManage.StorageKey.setItem('siteRf', String(sitegroup));
+      this.appStateManage.StorageKey.setItem('sitegroup', String(sitegroup));
     }
   }
 }

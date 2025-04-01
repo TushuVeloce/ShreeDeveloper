@@ -22,12 +22,13 @@ export class SiteWorkMasterProps {
   public readonly Db_Table_Name = "SiteWorkMaster";
   public Ref: number = 0;
   public Name: string = '';
-  public SiteWorkGroupRef : number = 0;
+  public SiteWorkGroupRef: number = 0;
   public readonly SiteWorkGroupName: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
+  public DisplayOrder: number = 0
 
-    public ListOfApplicableTypes : ApplicableTypeProps [] = [];
+  // public ListOfApplicableTypes : ApplicableTypeProps [] = [];
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -51,8 +52,8 @@ export class SiteWorkMaster implements IPersistable<SiteWorkMaster> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -75,6 +76,7 @@ export class SiteWorkMaster implements IPersistable<SiteWorkMaster> {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company cannot be blank.');
+    if (this.p.DisplayOrder > 0) vra.add('DisplayOrder', 'Display Order cannot be less than 1.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -168,7 +170,7 @@ export class SiteWorkMaster implements IPersistable<SiteWorkMaster> {
     return SiteWorkMaster.ListFromTransportData(tdResponse);
   }
 
- public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new SiteWorkMasterFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await SiteWorkMaster.FetchTransportData(req, errorHandler) as TransportData;

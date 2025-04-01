@@ -23,12 +23,13 @@ export class PlotProps {
   public GovermentRatePerSqft:number =0;
   public BasicRatePerSqm : number =0;
   public BasicRatePerSqft : number =0;
-  public BookingRemark : number =0;
+  public CurrentBookingRemark : number =0;
   public Reference: string ='';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
   public SiteManagementRef: number = 0;
-  public CustomerRef: number = 0;
+  public CurrentOwnerRef: number = 0;
+  public LoginEmployeeRef:  number = 26893;
 
   public SiteName: number = 0;
   public PlotName: number = 0;

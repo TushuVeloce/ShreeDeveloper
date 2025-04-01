@@ -4,14 +4,16 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class SiteWorkDoneFetchRequest {
-    public static readonly FetchRequestType: string = "SiteWorkDoneFetchRequest";
+export class CustomProcessFetchRequest
+{
+    public static readonly FetchRequestType: string = "CancelDealCustomRequest";
 
+    CustomProcessRefs: number[] = [];
     CompanyRefs: number[] = [];
-    SiteWorkGroupRef: number[] = [];
 
-    public MergeIntoTransportData = (td: TransportData) => {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, SiteWorkDoneFetchRequest.FetchRequestType) as DataCollection;
+    public MergeIntoTransportData = (td: TransportData) =>
+    {
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CustomProcessFetchRequest.FetchRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 

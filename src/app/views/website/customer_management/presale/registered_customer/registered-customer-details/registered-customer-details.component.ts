@@ -112,6 +112,9 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
     SaveRegisteredCustomer = async () => {
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      console.log('this.Entity.p.UpdatedBy :', this.Entity.p.UpdatedBy);
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
       console.log('entitiesToSave:', entitiesToSave);
       // await this.Entity.EnsurePrimaryKeysWithValidValues()

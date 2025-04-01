@@ -106,10 +106,10 @@
             nzShowSearch
             nzAllowClear
             nzPlaceHolder="Select"
-            id="BookingRemark"
-            name="BookingRemark"
+            id="CurrentBookingRemark"
+            name="CurrentBookingRemark"
             [nzSize]="'large'"
-            [(ngModel)]="Entity.p.BookingRemark"
+            [(ngModel)]="Entity.p.CurrentBookingRemark"
           >
             <nz-option
               *ngFor="let bookingremark of BookingRemarkList"
@@ -123,7 +123,7 @@
         <div class="col-md-4">
           <label>Customer Name</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-          [(ngModel)]="Entity.p.CustomerRef" name="CustomerRef" required id="CustomerRef" (ngModelChange) = "getCustomerDataBycustomerRef(Entity.p.CustomerRef)">
+          [(ngModel)]="Entity.p.CurrentOwnerRef" name="CurrentOwnerRef" required id="CurrentOwnerRef" (ngModelChange) = "getCustomerDataBycustomerRef(Entity.p.CurrentOwnerRef)">
           <nz-option *ngFor="let customer of CustomerList" [nzLabel]="customer.p.Name"
             [nzValue]="customer.p.Ref"></nz-option>
         </nz-select>

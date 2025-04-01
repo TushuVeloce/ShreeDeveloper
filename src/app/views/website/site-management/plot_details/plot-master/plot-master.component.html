@@ -27,8 +27,8 @@
               </div>
               <div class="col-md-4">
                 <label>Booking Remark</label>
-                <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="BookingRemark"
-                  name="BookingRemark" [nzSize]="'large'" [(ngModel)]="Entity.p.BookingRemark"  (ngModelChange)="getPlotListBySiteRef(Entity.p.SiteManagementRef,Entity.p.BookingRemark)">
+                <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CurrentBookingRemark"
+                  name="CurrentBookingRemark" [nzSize]="'large'" [(ngModel)]="Entity.p.CurrentBookingRemark"  (ngModelChange)="getPlotListBySiteRef(Entity.p.SiteManagementRef,Entity.p.CurrentBookingRemark)">
                   <nz-option *ngFor="let bookingremark of BookingRemarkList" [nzValue]="bookingremark.Ref"
                     [nzLabel]="bookingremark.Name"></nz-option>
                 </nz-select>
@@ -57,7 +57,7 @@
             <td Class="tbldata">{{plot.p.GovermentRatePerSqft}}</td>
             <td Class="tbldata">{{plot.p.BasicRatePerSqm}}</td>
             <td Class="tbldata">{{plot.p.BasicRatePerSqft}}</td>
-            <td Class="tbldata">{{plot.p.BookingRemark}}</td>
+            <td Class="tbldata">{{plot.p.CurrentBookingRemark}}</td>
             <td class="tbldata">
               <span style="margin-left: 9px;" (click)="onEditClicked(plot);">
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />

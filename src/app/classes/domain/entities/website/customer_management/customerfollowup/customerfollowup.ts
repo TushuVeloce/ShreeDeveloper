@@ -40,6 +40,7 @@ export class CustomerFollowUpProps {
   public PinCode: string = '';
 
   public CompanyRef: number = 0;
+  public LoginEmployeeRef: number = 0;
 
   public CustomerFollowUpPlotDetails: CustomerFollowUpPlotDetailsProps[] = [];
 

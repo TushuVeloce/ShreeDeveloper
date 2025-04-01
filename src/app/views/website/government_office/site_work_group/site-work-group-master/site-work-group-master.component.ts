@@ -7,11 +7,11 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
   selector: 'app-site-work-group-master',
-  standalone:false,
+  standalone: false,
   templateUrl: './site-work-group-master.component.html',
   styleUrls: ['./site-work-group-master.component.scss'],
 })
-export class SiteWorkGroupMasterComponent  implements OnInit {
+export class SiteWorkGroupMasterComponent implements OnInit {
   Entity: SiteWorkGroup = SiteWorkGroup.CreateNewInstance();
   MasterList: SiteWorkGroup[] = [];
   DisplayMasterList: SiteWorkGroup[] = [];
@@ -22,8 +22,8 @@ export class SiteWorkGroupMasterComponent  implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
 
-  headers: string[] = ['Sr.No.', 'SiteWorkGroup', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService ) {}
+  headers: string[] = ['Sr.No.', 'Site Work Group', 'Display Order', 'Action'];
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -52,7 +52,7 @@ export class SiteWorkGroupMasterComponent  implements OnInit {
 
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
 
-    await this.router.navigate(['/homepage/Website/SiteWorkGroup_Master_Details']);
+    await this.router.navigate(['/homepage/Website/Site_Work_Group_Details']);
   };
 
   onDeleteClicked = async (Item: SiteWorkGroup) => {
