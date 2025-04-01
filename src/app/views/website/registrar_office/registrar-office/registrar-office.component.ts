@@ -29,17 +29,18 @@ export class RegistrarOfficeComponent  implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   
-  headers: string[] = ['Sr.No.', 'Name', 'Company Name', 'Action'];
+  headers: string[] = ['Sr.No.', 'Cheque', 'Witness 1', 'Action'];
   
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement) {
     effect(() => {
       this.getRegistrarOfficeListByCompanyRef()
+      this.getSiteListByCompanyRef();
+      this.getCustomerListByCompanyRef();
     });
    }
 
   async ngOnInit() {
-    await this.getSiteListByCompanyRef();
-    await this.getCustomerListByCompanyRef();
+    await this.getRegistrarOfficeListByCompanyRef()
     this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
   }
@@ -63,6 +64,7 @@ export class RegistrarOfficeComponent  implements OnInit {
     this.SiteList = lst;
     this.loadPaginationData();
   }
+
   getCustomerListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
@@ -76,7 +78,6 @@ export class RegistrarOfficeComponent  implements OnInit {
     this.loadPaginationData();
   }
 
-  
 
    getRegistrarOfficeListByCompanyRef = async () => {
       this.MasterList = [];
@@ -86,7 +87,9 @@ export class RegistrarOfficeComponent  implements OnInit {
         return;
       }
         let lst = await RegistrarOffice.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+        console.log('lst :', lst);
         this.MasterList = lst;
+        console.log('MasterList :', this.MasterList);
         this.DisplayMasterList = this.MasterList;
       this.loadPaginationData();
     }

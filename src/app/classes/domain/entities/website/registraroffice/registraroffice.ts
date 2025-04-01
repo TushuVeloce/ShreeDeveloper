@@ -14,22 +14,23 @@ import { RegistrarOfficeFetchRequest } from "./registrarofficefetchrequest";
 
 
 export class RegistrarOfficeProps {
-  public readonly Db_Table_Name = "RegistrarOfficeMaster";
+  public readonly Db_Table_Name = "RegistrarOffice";
   public Ref: number = 0;
   public PlotRef	: number = 0;
   public SiteRef	: number = 0;
   public Name: string = '';
   public ContactNo: number = 0;
 
-  public IsChequeSubmit : boolean = false;
+  public IsChequeSubmit: Boolean = false;
+
   public IsCustomerAadharSubmit : boolean = false;
   public IsCustomerPanSubmit  : boolean = false;
 
-  public Witness1Submit  : boolean = false;
+  public Witness1Submit : boolean = false;
   public Witness1Name : string = '';
   public Witness1ContactNo : string = '';
   public Witness1IsAadharSubmit  : boolean = false;
-  public Witness1IsPanSubmit   : boolean = false;
+  public Witness1IsPanSubmit  : boolean = false;
 
   public Witness2Submit  : boolean = false;
   public Witness2Name : string = '';
@@ -37,13 +38,17 @@ export class RegistrarOfficeProps {
   public Witness2IsAadharSubmit  : boolean = false;
   public Witness2IsPanSubmit   : boolean = false;
 
+//  public IsAgreementToSaleSubmit : boolean = false;
   public AgreementDocumentNo  : string = '';
   public AgreementDate : string = '';
+
+//  public IsSaledeedSubmit : Boolean = false;
   public SaleDeedDocumentNo : string = '';
   public SaleDeedDate : string = '';
   public IsIndexOriginalSubmit : string = '';
   public IsDastZeroxSubmit : string = '';
 
+//  public IsTalathiSubmit : Boolean = false;
   public TalathiInwardNo : string = '';
   public TalathiDate : string = '';
   public IsFerfarNoticeSubmit : string = '';
@@ -57,6 +62,9 @@ export class RegistrarOfficeProps {
   public CompanyName: string = '';
 
 
+
+  
+
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
 
@@ -68,6 +76,9 @@ export class RegistrarOfficeProps {
     return new RegistrarOfficeProps(true);
   }
 }
+
+
+
 
 export class RegistrarOffice implements IPersistable<RegistrarOffice> {
   public static readonly Db_Table_Name: string = 'RegistrarOfficeMaster';
