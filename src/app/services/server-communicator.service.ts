@@ -403,6 +403,7 @@ export class ServerCommunicatorService {
     this.appStateManagement.setValidMenuItemIds(result.ValidMenuItemIds);
    this.appStateManagement.StorageKey.setItem('SelectedCompanyRef', result.LastSelectedCompanyRef.toString());
    this.appStateManagement.StorageKey.setItem('companyName', result.LastSelectedCompanyName);
+   this.appStateManagement.StorageKey.setItem('LoginEmployeeRef', result.LoginEmployeeRef.toString());
     this.companystatemanagement.setCompanyRef(result.LastSelectedCompanyRef,result.LastSelectedCompanyName)
     return result;
   }

@@ -186,6 +186,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
+    this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     // this.Entity.p.ContactMode = this.CustomerEnquiryEntity.p.CustomerFollowUps[0].ContactMode;
     // console.log('entitiesToSave:', entitiesToSave);
     // // await this.Entity.EnsurePrimaryKeysWithValidValues()

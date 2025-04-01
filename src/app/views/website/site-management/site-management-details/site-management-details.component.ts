@@ -235,6 +235,7 @@ export class SiteManagementDetailsComponent implements OnInit {
 
   SaveSite = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.newOwner.SiteManagementRef = this.Entity.p.Ref
     // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     this.Entity.p.TotalLandAreaInSqft = this.Entity.p.TotalLandAreaInSqm * 10.7639

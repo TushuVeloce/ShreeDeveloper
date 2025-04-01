@@ -5,6 +5,11 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
+import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
+import { TransportData } from 'src/app/classes/infrastructure/transportdata';
+import { Utils } from 'src/app/services/utils.service';
+
 
 @Component({
   selector: 'app-registered-customer',
@@ -17,7 +22,7 @@ export class RegisteredCustomerComponent  implements OnInit {
   Entity: RegisteredCustomer = RegisteredCustomer.CreateNewInstance();
   MasterList: RegisteredCustomer[] = [];
   DisplayMasterList: RegisteredCustomer[] = [];
-  SearchString: string = '';
+  // SearchString: string = '';
   SelectedRegisteredCustomer: RegisteredCustomer = RegisteredCustomer.CreateNewInstance();
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
@@ -34,7 +39,8 @@ export class RegisteredCustomerComponent  implements OnInit {
     'Address',
     'Action',
   ];  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement, private payloadPacketFacade: PayloadPacketFacade,
+        private serverCommunicator: ServerCommunicatorService
   ) { 
     effect(() => {
       this.getRegisterCustomerListByCompanyRef()
@@ -77,6 +83,26 @@ export class RegisteredCustomerComponent  implements OnInit {
   };
 
 
+  //  Cancel = async () => {
+  //      let req = new GenerateNewFinancialYearCustomRequest();
+  //      req.CompanyRef = this.companyRef();
+   
+  //      let td = req.FormulateTransportData();
+  //      let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+   
+  //      let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+   
+  //      if (!tr.Successful) {
+  //        await this.uiUtils.showErrorMessage('Error', tr.Message);
+  //        return;
+  //      }
+   
+  //      let tdResult = JSON.parse(tr.Tag) as TransportData;
+  //      console.log('tdResult :', tdResult);
+  //      // this.Entity = tdResult
+  //    }
+
+    
   // For Pagination  start ----
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
@@ -91,16 +117,16 @@ export class RegisteredCustomerComponent  implements OnInit {
   };
 
 
-  filterTable = () => {
-    if (this.SearchString != '') {
-      this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
-      })
-    }
-    else {
-      this.DisplayMasterList = this.MasterList
-    }
-  }
+  // filterTable = () => {
+  //   if (this.SearchString != '') {
+  //     this.DisplayMasterList = this.MasterList.filter((data: any) => {
+  //       return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
+  //     })
+  //   }
+  //   else {
+  //     this.DisplayMasterList = this.MasterList
+  //   }
+  // }
 
   async AddRegisteredCustomer() {
     await this.router.navigate(['/homepage/Website/Registered_Customer_Details']);
