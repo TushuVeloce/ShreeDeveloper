@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
@@ -12,6 +13,7 @@ import { Site } from 'src/app/classes/domain/entities/website/masters/site/site'
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -44,6 +46,9 @@ export class CustomerFollowupDetailsComponent implements OnInit {
   InterestedPlotRef: number = 0;
   SiteManagementRef: number = 0;
   EmployeeList: Employee[] = [];
+  reminderdate: string | null = null;
+  officevistdate: string | null = null;
+  sitevisitdate: string | null = null;
   ContactModesList = DomainEnums.ContactModeList(true, '--Select Contact Mode --');
   LeadSourceList = DomainEnums.MarketingModesList(true, '--Select Lead Source --');
   CustomerStatusList = DomainEnums.CustomerStatusList(true, '--Select Customer Status --');
@@ -60,9 +65,29 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     }
   }
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private dtu: DTU,
+    private datePipe: DatePipe) { }
 
   async ngOnInit() {
+
+    // While Edit Converting date String into Date Format //
+    this.reminderdate = this.datePipe.transform(
+      this.dtu.FromString(this.Entity.p.ReminderDate),
+      'yyyy-MM-dd'
+    );
+
+    // While Edit Converting date String into Date Format //
+    this.sitevisitdate = this.datePipe.transform(
+      this.dtu.FromString(this.Entity.p.SiteVisitDate),
+      'yyyy-MM-dd'
+    );
+
+    // While Edit Converting date String into Date Format //
+    this.officevistdate = this.datePipe.transform(
+      this.dtu.FromString(this.Entity.p.OfficeVisitDate),
+      'yyyy-MM-dd'
+    );
+
     this.appStateManage.setDropdownDisabled(true);
     this.CountryList = await Country.FetchEntireList();
     this.EmployeeList = await Employee.FetchEntireList();
@@ -138,7 +163,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     }
   }
 
-  // for site and plot 
+  // for site and plot
   private getSiteListByCompanyRef = async () => {
     this.DisplayMasterList = [];
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
@@ -164,10 +189,45 @@ export class CustomerFollowupDetailsComponent implements OnInit {
   }
 
   SaveCustomerFollowUp = async () => {
+    let entityToSave = this.Entity.GetEditableVersion();
 
     this.Entity.p.CustomerFollowUpPlotDetails.forEach((plotDetail) => {
       plotDetail.Ref = 0;
     });
+
+
+    // ------ Code For Save Date Of InCorporation Year Format ---------------//
+    if (this.sitevisitdate) {
+      let dateValue = new Date(this.sitevisitdate);
+
+      if (!isNaN(dateValue.getTime())) {
+        entityToSave.p.SiteVisitDate = this.dtu.DateStartStringFromDateValue(dateValue);
+      } else {
+        entityToSave.p.SiteVisitDate = '';
+      }
+    }
+
+    // ------ Code For Save Date Of InCorporation Year Format ---------------//
+    if (this.officevistdate) {
+      let dateValue = new Date(this.officevistdate);
+
+      if (!isNaN(dateValue.getTime())) {
+        entityToSave.p.OfficeVisitDate = this.dtu.DateStartStringFromDateValue(dateValue);
+      } else {
+        entityToSave.p.OfficeVisitDate = '';
+      }
+    }
+
+    // ------ Code For Save Date Of Reminder Date Format ---------------//
+    if (this.reminderdate) {
+      let dateValue = new Date(this.reminderdate);
+
+      if (!isNaN(dateValue.getTime())) {
+        entityToSave.p.ReminderDate = this.dtu.DateStartStringFromDateValue(dateValue);
+      } else {
+        entityToSave.p.ReminderDate = '';
+      }
+    }
 
     // -----------------------------------
     await this.GenerateChildRef();
@@ -184,7 +244,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     });
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
 
-    let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     // this.Entity.p.ContactMode = this.CustomerEnquiryEntity.p.CustomerFollowUps[0].ContactMode;
     // console.log('entitiesToSave:', entitiesToSave);
@@ -211,6 +270,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
   BackCustomerFollowUp() {
     this.router.navigate(['/homepage/Website/Customer_FollowUp']);
   }
+
   addDataToTable() {
     debugger
     if (this.SiteManagementRef <= 0) {
@@ -267,7 +327,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       // this.Entity.p.CustomerFollowUpPlotDetails = [];
       // this.Entity.p.CustomerFollowUpPlotDetails.push(...this.plotDetailsArray);
       // console.log('Updated IsPlotDetails :', this.plotDetailsArray);
-      console.log('Updated IsPlotDetails :', this.Entity.p.CustomerFollowUpPlotDetails);
       this.SiteManagementRef = 0;
       this.InterestedPlotRef = 0;
     }

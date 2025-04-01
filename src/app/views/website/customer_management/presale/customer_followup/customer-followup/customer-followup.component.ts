@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
@@ -53,6 +54,7 @@ export class CustomerFollowupComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
+    let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
     // this.DisplayMasterList = [];
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
@@ -76,7 +78,7 @@ export class CustomerFollowupComponent implements OnInit {
   //   this.DisplayMasterList = this.MasterList;
   //   this.loadPaginationData();
   //   this.getCustomerFollowUpListByEnquiryRef()
-  //   // New for customerfollowup 
+  //   // New for customerfollowup
 
   // };
 
@@ -94,7 +96,7 @@ export class CustomerFollowupComponent implements OnInit {
     // this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
-  
+
   onSiteReforDateChange(selectedSiteRef?: number, date?: string) {
     if (selectedSiteRef && date) {
       this.getCustomerFollowUpListByDateandSiteRef(date, selectedSiteRef);
@@ -104,7 +106,7 @@ export class CustomerFollowupComponent implements OnInit {
       this.getCustomerFollowUpListByDate(date);
     }
   }
-  
+
   getCustomerFollowUpListByDate = async (date:string) => {
   console.log('date :', date);
     // this.MasterList = [];

@@ -257,21 +257,21 @@
         <div class="col-md-4" *ngIf="showAgentBrokerInput">
           <div>
             <label for="SiteVisitDate">Site Visit Date</label>
-            <input type="Date" name="SiteVisitDate" [(ngModel)]="Entity.p.CustomerFollowUps[0].SiteVisitDate"
+            <input type="Date" name="SiteVisitDate" [(ngModel)]="this.sitevisitdate"
               class="form-control" id="SiteVisitDate" required />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label for="OfficeVisitDate">Office Visit Date</label>
-            <input type="Date" name="OfficeVisitDate" [(ngModel)]="Entity.p.CustomerFollowUps[0].OfficeVisitDate"
+            <input type="Date" name="OfficeVisitDate" [(ngModel)]="this.officevistdate"
               class="form-control" id="OfficeVisitDate" required />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Reminder Date</label>
-            <input type="Date" name="ReminderDate" [(ngModel)]="Entity.p.CustomerFollowUps[0].ReminderDate"
+            <input type="Date" name="ReminderDate" [(ngModel)]="this.reminderdate"
               class="form-control" id="ReminderDate" required />
           </div>
         </div>

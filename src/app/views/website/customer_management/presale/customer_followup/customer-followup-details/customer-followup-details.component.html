@@ -225,8 +225,15 @@
         </div>
         <div class="col-md-4">
           <div>
-            <label>Next Site/Office Visit Date</label>
-            <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Entity.p.SiteVisitDate"
+            <label>Next Site Visit Date</label>
+            <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="this.sitevisitdate"
+              required />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <label>Next Office Visit Date</label>
+            <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="this.officevistdate"
               required />
           </div>
         </div>
@@ -234,7 +241,7 @@
           <div>
             <label>Reminder Date</label>
             <input type="Date" name="ReminderDate" class="form-control" id="ReminderDate"
-              [(ngModel)]="Entity.p.ReminderDate" required />
+              [(ngModel)]="this.reminderdate" required />
           </div>
         </div>
       </div>
