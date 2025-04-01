@@ -70,6 +70,16 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
   async ngOnInit() {
 
+
+    this.appStateManage.setDropdownDisabled(true);
+    this.CountryList = await Country.FetchEntireList();
+    this.EmployeeList = await Employee.FetchEntireList();
+    this.getSiteListByCompanyRef()
+    // Check if CountryRef is already set (e.g., India is preselected)
+    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+      // debugger
+
+
     // While Edit Converting date String into Date Format //
     this.reminderdate = this.datePipe.transform(
       this.dtu.FromString(this.Entity.p.ReminderDate),
@@ -87,14 +97,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       this.dtu.FromString(this.Entity.p.OfficeVisitDate),
       'yyyy-MM-dd'
     );
-
-    this.appStateManage.setDropdownDisabled(true);
-    this.CountryList = await Country.FetchEntireList();
-    this.EmployeeList = await Employee.FetchEntireList();
-    this.getSiteListByCompanyRef()
-    // Check if CountryRef is already set (e.g., India is preselected)
-    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-      // debugger
       this.IsNewEntity = false;
       this.Entity = CustomerFollowUp.GetCurrentInstance();
       //  this.CustomerEnquiryEntity = CustomerEnquiry.GetCurrentInstance();
