@@ -76,7 +76,7 @@ export class SiteWorkMaster implements IPersistable<SiteWorkMaster> {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company cannot be blank.');
-    if (this.p.DisplayOrder < 0) vra.add('DisplayOrder', 'Display Order cannot be less than 1.');
+    if (this.p.DisplayOrder > 0) vra.add('DisplayOrder', 'Display Order cannot be less than 1.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
