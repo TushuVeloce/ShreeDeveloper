@@ -57,12 +57,15 @@ export class SiteWorkMasterDetailComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.appStateManage.setDropdownDisabled(true);
-    const SiteGroupRef = this.appStateManage.StorageKey.getItem('siteRf');
-    const sitegroupName = this.appStateManage.StorageKey.getItem('siteName');
-    this.SiteGroupRef = SiteGroupRef ? Number(SiteGroupRef) : 0;
-    this.SiteGroupName = sitegroupName ? sitegroupName : '';
+    // debugger
     this.SiteWorkGroupList = await SiteWorkGroup.FetchEntireList();
+    
+    this.appStateManage.setDropdownDisabled(true);
+    const SiteGroupRef = this.appStateManage.StorageKey.getItem('sitegroup');
+    this.Entity.p.SiteWorkGroupRef = SiteGroupRef ? Number(SiteGroupRef) : 0;
+
+    // const sitegroupName = this.appStateManage.StorageKey.getItem('siteName');
+    // this.SiteGroupName = sitegroupName ? sitegroupName : '';
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;

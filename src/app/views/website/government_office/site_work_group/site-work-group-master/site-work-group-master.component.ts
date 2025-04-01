@@ -52,7 +52,7 @@ export class SiteWorkGroupMasterComponent implements OnInit {
 
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
 
-    await this.router.navigate(['/homepage/Website/SiteWorkGroup_Master_Details']);
+    await this.router.navigate(['/homepage/Website/Site_Work_Group_Details']);
   };
 
   onDeleteClicked = async (Item: SiteWorkGroup) => {

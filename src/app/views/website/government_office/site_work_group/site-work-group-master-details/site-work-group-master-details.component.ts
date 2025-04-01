@@ -10,22 +10,22 @@ import { Utils } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-siteworkgroup-master-details',
-  standalone:false,
+  standalone: false,
   templateUrl: './site-work-group-master-details.component.html',
   styleUrls: ['./site-work-group-master-details.component.scss'],
 })
-export class SiteWorkGroupMasterDetailsComponent  implements OnInit {
-   Entity: SiteWorkGroup = SiteWorkGroup.CreateNewInstance();
-    private IsNewEntity: boolean = true;
-    isSaveDisabled: boolean = false;
-    DetailsFormTitle: 'New SiteWorkGroup' | 'Edit SiteWorkGroup' = 'New SiteWorkGroup';
-    IsDropdownDisabled: boolean = false
-    InitialEntity: SiteWorkGroup = null as any;
-    InputNumber: string = ValidationPatterns.InputNumber
-    InputNumberMsg: string = ValidationMessages.InputNumberMsg
-    NameWithoutNos: string = ValidationPatterns.NameWithoutNos
-    NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
-    RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
+export class SiteWorkGroupMasterDetailsComponent implements OnInit {
+  Entity: SiteWorkGroup = SiteWorkGroup.CreateNewInstance();
+  private IsNewEntity: boolean = true;
+  isSaveDisabled: boolean = false;
+  DetailsFormTitle: 'New SiteWorkGroup' | 'Edit SiteWorkGroup' = 'New SiteWorkGroup';
+  IsDropdownDisabled: boolean = false
+  InitialEntity: SiteWorkGroup = null as any;
+  InputNumber: string = ValidationPatterns.InputNumber
+  InputNumberMsg: string = ValidationMessages.InputNumberMsg
+  NameWithoutNos: string = ValidationPatterns.NameWithoutNos
+  NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
 
@@ -46,7 +46,7 @@ export class SiteWorkGroupMasterDetailsComponent  implements OnInit {
 
     }
     this.InitialEntity = Object.assign(SiteWorkGroup.CreateNewInstance(),
-    this.utils.DeepCopy(this.Entity)) as SiteWorkGroup;
+      this.utils.DeepCopy(this.Entity)) as SiteWorkGroup;
     // this.focusInput();
   }
 
@@ -60,7 +60,7 @@ export class SiteWorkGroupMasterDetailsComponent  implements OnInit {
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error',tr.Message);
+      this.uiUtils.showErrorMessage('Error', tr.Message);
       return
     }
     else {
@@ -71,7 +71,7 @@ export class SiteWorkGroupMasterDetailsComponent  implements OnInit {
         this.Entity = SiteWorkGroup.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster('SiteWorkGroup Master Updated successfully!');
-        await this.router.navigate(['/homepage/Website/SiteWorkGroup_Master']);
+        await this.router.navigate(['/homepage/Website/Site_Work_Group']);
       }
     }
   }
