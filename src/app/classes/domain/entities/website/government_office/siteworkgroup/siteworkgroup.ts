@@ -17,8 +17,9 @@ export class SiteWorkGroupProps {
   public readonly Db_Table_Name = "SiteWorkGroupMaster";
   public Ref: number = 0;
   public Name: string = '';
-  public CompanyRef:number =0
-  public CompanyName:string =''
+  public CompanyRef: number = 0
+  public DisplayOrder: number = 0
+  public CompanyName: string = ''
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -42,8 +43,8 @@ export class SiteWorkGroup implements IPersistable<SiteWorkGroup> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }

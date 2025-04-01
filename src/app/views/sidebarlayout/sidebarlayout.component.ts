@@ -466,11 +466,11 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Site_Work_Master',
         LogoPath: '',
       },
-      // {
-      //   Name: 'Site Work Done',
-      //   RouterLink: '/homepage/Website/Site_Work_Done',
-      //   LogoPath: '',
-      // },
+      {
+        Name: 'Site Work Done',
+        RouterLink: '/homepage/Website/Site_Work_Done',
+        LogoPath: '',
+      },
       {
         Name: 'Progress Report',
         RouterLink: '/homepage/Website/Progress_Report',

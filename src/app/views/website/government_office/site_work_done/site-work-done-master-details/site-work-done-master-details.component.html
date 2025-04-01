@@ -1,3 +1,48 @@
-<p>
-  site-work-done-master-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackSiteWorkDone()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">{{DetailsFormTitle}}</span>
+      </div>
+    </div>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem; ">
+
+        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+          <label> Site Work</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteWorkRef"
+            name="SiteWorkRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteWorkRef">
+            <nz-option *ngFor="let sitework of SiteWorkMasterList" [nzValue]="sitework.p.Ref"
+              [nzLabel]="sitework.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+          <label for="ListOfApplicableTypes"><b>Applicable Types</b></label>
+          <nz-select [(ngModel)]="Entity.p.ListOfApplicableTypes" nzMode="multiple" id="ListOfApplicableTypes"
+            name="ListOfApplicableTypes" nzShowSearch nzAllowClear
+            (ngModalChange)="onApplicableTypeChange(Entity.p.ListOfApplicableTypes)"
+            nzPlaceHolder="Select Applicable Type">
+            <nz-option *ngFor="let applicabletype of ApplicableTypesForSites" [nzValue]="applicabletype.Ref"
+              [nzLabel]="applicabletype.Name"></nz-option>
+          </nz-select>
+        </div>
+       
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn" (click)="SaveSiteWorkDone()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackSiteWorkDone()">
+            Back
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

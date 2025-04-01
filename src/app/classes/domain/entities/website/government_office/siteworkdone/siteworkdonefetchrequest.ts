@@ -4,15 +4,13 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class SiteWorkDoneFetchRequest
-{
-    public static readonly FetchRequestType: string = "SiteWorkFetchRequest";
+export class SiteWorkDoneFetchRequest {
+    public static readonly FetchRequestType: string = "SiteWorkDoneFetchRequest";
 
     CompanyRefs: number[] = [];
-    SiteWorkGroupRef : number[] = [];
+    SiteWorkGroupRef: number[] = [];
 
-    public MergeIntoTransportData = (td: TransportData) =>
-    {
+    public MergeIntoTransportData = (td: TransportData) => {
         let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, SiteWorkDoneFetchRequest.FetchRequestType) as DataCollection;
         coll.Entries.push(this);
     }
