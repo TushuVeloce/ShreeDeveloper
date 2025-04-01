@@ -78,7 +78,8 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     // Check if CountryRef is already set (e.g., India is preselected)
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       // debugger
-
+      this.IsNewEntity = false;
+      this.Entity = CustomerFollowUp.GetCurrentInstance();
 
     // While Edit Converting date String into Date Format //
     this.reminderdate = this.datePipe.transform(
@@ -97,8 +98,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       this.dtu.FromString(this.Entity.p.OfficeVisitDate),
       'yyyy-MM-dd'
     );
-      this.IsNewEntity = false;
-      this.Entity = CustomerFollowUp.GetCurrentInstance();
       //  this.CustomerEnquiryEntity = CustomerEnquiry.GetCurrentInstance();
       console.log('Entity :', this.Entity);
       //  console.log('CustomerEnquiryEntity :', this.CustomerEnquiryEntity);

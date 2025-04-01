@@ -322,6 +322,7 @@ this.officevistdate = this.datePipe.transform(
 
 
      // ------ Code For Save site visit date Format ---------------//
+     console.log('sitevisitdate :', this.sitevisitdate);
      if (this.sitevisitdate) {
       let dateValue = new Date(this.sitevisitdate);
       console.log('site visit date :', dateValue);
@@ -335,8 +336,10 @@ this.officevistdate = this.datePipe.transform(
     }
 
     // ------ Code For Save Date Of InCorporation Year Format ---------------//
+    console.log('officevistdate :', this.officevistdate);
     if (this.officevistdate) {
       let dateValue = new Date(this.officevistdate);
+      console.log('officevistdate :', dateValue);
 
       if (!isNaN(dateValue.getTime())) {
         entityToSave.p.CustomerFollowUps[0].OfficeVisitDate = this.dtu.DateStartStringFromDateValue(dateValue);
