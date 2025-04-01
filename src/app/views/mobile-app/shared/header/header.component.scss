@@ -1,0 +1,40 @@
+/* Modern Header */
+.modern-header {
+    --background: linear-gradient(to right, var(--ion-color-primary), var(--ion-color-secondary));
+    display: flex;
+    align-items: center;
+}
+
+/* Logo Styling */
+.logo-button {
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.logo-img {
+    height: 40px;
+    width: auto;
+}
+
+/* Title Styling */
+.mobile-app-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* User Avatar */
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+/* Action Buttons */
+.icon-button {
+    color: var(--ion-color-dark);
+    font-size: 1.4rem;
+}

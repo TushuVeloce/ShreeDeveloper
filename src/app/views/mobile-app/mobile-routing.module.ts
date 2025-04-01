@@ -1,19 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MobileComponent } from './mobile.component';
-import { DemoMobileComponent } from './demo-mobile/demo-mobile.component';
 
 const routes: Routes = [
   {
-    path: '', component: MobileComponent, 
-    children: [{
-        path: 'demomobile', component: DemoMobileComponent,
-      },
-
-      ]
+    path: '',
+    redirectTo: 'tabs',
+    pathMatch: 'full'
   },
-
-];
+  {
+    path: 'tabs',
+    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsModule)
+  },
+ ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

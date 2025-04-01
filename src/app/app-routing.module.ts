@@ -14,7 +14,7 @@ const routes: Routes = [
   },
   {
     path: 'app_homepage',
-    loadChildren: () => import('./views/ionic/ionic-feature.module').then(m => m.IonicFeaturesModule)
+    loadChildren: () => import('./views/mobile-app/mobile.module').then(m => m.MobileModule)
   }
 ];
 

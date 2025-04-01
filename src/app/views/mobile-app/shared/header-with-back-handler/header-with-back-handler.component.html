@@ -1,0 +1,27 @@
+
+<ion-header class="ion-no-border modern-header">
+  <ion-toolbar>
+    <!-- Left-aligned logo -->
+      <ion-buttons slot="start" *ngIf="showBackButton">
+        <ion-button (click)="goBack()">
+          <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+
+    <!-- App title -->
+    <ion-title class="mobile-app-title">{{ title }}</ion-title>
+    <!-- <app-dropdown label="Select Company" [dataList]="departments" [(selectedValue)]="selectedDepartment"></app-dropdown> -->
+
+
+
+    <!-- Action buttons -->
+    <ion-buttons slot="end">
+      <!-- <ion-button class="icon-button">
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button> -->
+      <!-- <ion-avatar class="user-avatar">
+        <img alt="User Avatar" src="https://avatar.iran.liara.run/public" />
+      </ion-avatar> -->
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>

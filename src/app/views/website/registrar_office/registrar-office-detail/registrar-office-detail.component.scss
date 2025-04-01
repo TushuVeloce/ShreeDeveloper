@@ -4,8 +4,27 @@
     height: 20px;
     margin-left: 20px;
     cursor: pointer;
-    accent-color: #2e62d3; /* Changes checkbox color */
+    accent-color: white; /* White check color */
+    background-color: white; /* Black background */
+    border: 2px solid rgb(95, 86, 86); /* White border */
+    appearance: none; /* Remove default styles */
     margin-top: 2px;
-
-
+    border-radius: 3px;
 }
+
+.custom-checkbox:checked {
+    background-color: rgb(81, 79, 172); /* Ensures background stays black */
+    border: 1px solid white; /* Keeps white border */
+    border-radius: 5rem;
+}
+
+.custom-checkbox:checked::before {
+    content: '✔'; /* Checkmark */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white; /* White tick */
+    font-size: 14px;
+    font-weight: bold;
+}
+
