@@ -38,7 +38,7 @@
             <div>
               <label for="InterestedPlotRef"><b>Interested Plots</b></label>
               <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="InterestedPlotRef"
-                name="InterestedPlotRef"  (ngModelChange)="getCustomerFollowUpListByDateandPlotRef()" [(ngModel)]="InterestedPlotRef" [nzSize]="'large'">
+                name="InterestedPlotRef"  [(ngModel)]="InterestedPlotRef" (ngModelChange)="getCustomerFollowUpListByDateandPlotRef()" [nzSize]="'large'">
                 <nz-option *ngFor="let Plot of PlotList" [nzValue]="Plot.p.Ref" [nzLabel]="Plot.p.PlotNo"></nz-option>
               </nz-select>
             </div>
