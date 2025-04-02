@@ -481,6 +481,11 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Document',
         LogoPath: '',
       },
+      {
+        Name: 'Government Office',
+        RouterLink: '/homepage/Website/Government_Office',
+        LogoPath: '',
+      },
     ]
     let RegistrarOfficeSubModuleList = [
       {
