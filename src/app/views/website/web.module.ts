@@ -80,19 +80,31 @@ import { RegisteredCustomerComponent } from './customer_management/presale/regis
 import { RegisteredCustomerDetailsComponent } from './customer_management/presale/registered_customer/registered-customer-details/registered-customer-details.component';
 import { RegistrarOfficeComponent } from './registrar_office/registrar-office/registrar-office.component';
 import { RegistrarOfficeDetailComponent } from './registrar_office/registrar-office-detail/registrar-office-detail.component';
-import { DocumentListComponent } from './government_office/document/document-list/document-list.component';
-import { DocumentDetailsComponent } from './government_office/document/document-details/document-details.component';
-import { ProgressReportComponent } from './government_office/progress_report/progress-report.component';
-import { GovernmentOfficeComponent } from './government_office/government-office/government-office.component';
+
 import { NzStepsModule } from 'ng-zorro-antd/steps';
-import { SiteWorkGroupMasterComponent } from './government_office/site_work_group/site-work-group-master/site-work-group-master.component';
-import { SiteWorkGroupMasterDetailsComponent } from './government_office/site_work_group/site-work-group-master-details/site-work-group-master-details.component';
-import { SiteWorkMasterDetailComponent } from './government_office/siteworkmaster/site-work-master-detail/site-work-master-detail.component';
-import { SiteWorkMasterComponent } from './government_office/siteworkmaster/site-work-master/site-work-master.component';
+
 import { AttendanceAndSalaryComponent } from './hr_payroll_management/attendance-salary/attendance-and-salary/attendance-and-salary.component';
 import { OfficeDutyTimeComponent } from './hr_payroll_management/office_duty_time/office-duty-time/office-duty-time.component';
-import { SiteWorkDoneMasterDetailsComponent } from './government_office/site_work_done/site-work-done-master-details/site-work-done-master-details.component';
-import { SiteWorkDoneMasterComponent } from './government_office/site_work_done/site-work-done-master/site-work-done-master.component';
+import { SiteWorkGroupMasterComponent } from './government_office_masters/site_work_group/site-work-group-master/site-work-group-master.component';
+import { SiteWorkGroupMasterDetailsComponent } from './government_office_masters/site_work_group/site-work-group-master-details/site-work-group-master-details.component';
+import { ProgressReportComponent } from './government_office_masters/progress_report/progress-report.component';
+import { GovernmentOfficeComponent } from './government_office_masters/government-office/government-office.component';
+import { DocumentListComponent } from './government_office_masters/document/document-list/document-list.component';
+import { DocumentDetailsComponent } from './government_office_masters/document/document-details/document-details.component';
+import { SiteWorkMasterDetailComponent } from './government_office_masters/siteworkmaster/site-work-master-detail/site-work-master-detail.component';
+import { SiteWorkMasterComponent } from './government_office_masters/siteworkmaster/site-work-master/site-work-master.component';
+import { SiteWorkDoneMasterDetailsComponent } from './government_office_masters/site_work_done/site-work-done-master-details/site-work-done-master-details.component';
+import { SiteWorkDoneMasterComponent } from './government_office_masters/site_work_done/site-work-done-master/site-work-done-master.component';
+import { GovernmentOfficeDetailsComponent } from './government_office/government-office-details/government-office-details.component';
+import { GovernmentOfficeMasterComponent } from './government_office/government-office-master/government-office-master.component';
+import { TpOfficeDetailsComponent } from './government_office/child component/tp-office-details/tp-office-details.component';
+import { NaLetterDetailsComponent } from './government_office/child component/na-letter-details/na-letter-details.component';
+import { MojaniDetailsComponent } from './government_office/child component/mojani-details/mojani-details.component';
+import { UlcDetailsComponent } from './government_office/child component/ulc-details/ulc-details.component';
+import { FinalLayoutDetailsComponent } from './government_office/child component/final-layout-details/final-layout-details.component';
+import { KJaPaDetailsComponent } from './government_office/child component/k-ja-pa-details/k-ja-pa-details.component';
+import { RespectedChildComponentComponent } from './government_office/respected-child-component/respected-child-component.component';
+
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent, StageMasterComponent, StageMasterDetailsComponent, AccountMainLedgerComponent, AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent, MarketingTypeMasterDetailsComponent,
@@ -102,8 +114,9 @@ import { SiteWorkDoneMasterComponent } from './government_office/site_work_done/
     DeleteIconComponent, EditIconComponent, DataNotFoundComponent, VehicleMasterDetailsComponent, UserrolerightsComponent, FinancialYearMasterComponent, SiteWorkGroupMasterComponent, SiteWorkGroupMasterDetailsComponent,
     VendorServicesMasterComponent, VendorServicesMasterDetailsComponent, SiteManagementDetailsComponent, EmployeeAppraisalDetailsComponent, ProgressReportComponent, GovernmentOfficeComponent,
     EmployeeAppraisalMasterComponent, EmployeeExitDetailsComponent, EmployeeExitMasterComponent, PlotMasterComponent, DocumentListComponent, DocumentDetailsComponent,
-    PlotMasterDetailsComponent, CustomerEnquiryComponent, CustomerEnquiryDetailsComponent, CustomerFollowupComponent, CustomerFollowupDetailsComponent, RegisteredCustomerComponent, RegisteredCustomerDetailsComponent, RegistrarOfficeComponent, RegistrarOfficeDetailComponent,SiteWorkMasterDetailComponent,SiteWorkMasterComponent,
-    AttendanceAndSalaryComponent,OfficeDutyTimeComponent,SiteWorkDoneMasterDetailsComponent,SiteWorkDoneMasterComponent],
+    PlotMasterDetailsComponent, CustomerEnquiryComponent, CustomerEnquiryDetailsComponent, CustomerFollowupComponent, CustomerFollowupDetailsComponent, RegisteredCustomerComponent, RegisteredCustomerDetailsComponent, RegistrarOfficeComponent, RegistrarOfficeDetailComponent, SiteWorkMasterDetailComponent, SiteWorkMasterComponent,
+    AttendanceAndSalaryComponent, OfficeDutyTimeComponent, SiteWorkDoneMasterDetailsComponent, SiteWorkDoneMasterComponent, GovernmentOfficeDetailsComponent, GovernmentOfficeMasterComponent, TpOfficeDetailsComponent, NaLetterDetailsComponent, MojaniDetailsComponent,
+    UlcDetailsComponent, FinalLayoutDetailsComponent, KJaPaDetailsComponent, RespectedChildComponentComponent],
   imports: [
     CommonModule, WebRoutingModule, FormsModule, NzDropDownModule, NzTableModule, IonicModule.forRoot(),
     NzPaginationModule, NzUploadModule, NzModalModule, NzCheckboxModule,

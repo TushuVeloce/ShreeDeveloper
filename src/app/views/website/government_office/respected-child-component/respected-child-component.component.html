@@ -1,0 +1,37 @@
+<div class="row" [ngSwitch]="SectionName">
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
+    <app-tp-office-details *ngSwitchCase="'T.P Office'"></app-tp-office-details>
+  </div>
+  <div class="col-md-1"></div>
+
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
+    <app-na-letter-details *ngSwitchCase="'परिशिष्ठ A(NA)'"></app-na-letter-details>
+  </div>
+  <div class="col-md-1"></div>
+
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
+    <app-mojani-details *ngSwitchCase=" 'Mojani'"></app-mojani-details>
+  </div>
+  <div class="col-md-1"></div>
+
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
+    <app-ulc-details *ngSwitchCase="'ULC'"></app-ulc-details>
+  </div>
+  <div class="col-md-1"></div>
+
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
+    <app-final-layout-details *ngSwitchCase="'Final Layout'"></app-final-layout-details>
+  </div>
+  <div class="col-md-1"></div>
+
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
+    <app-k-ja-pa-details *ngSwitchCase="'क जा पा'"></app-k-ja-pa-details>
+  </div>
+  <div class="col-md-1"></div>
+</div>

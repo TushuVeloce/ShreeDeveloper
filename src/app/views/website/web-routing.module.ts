@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { WebComponent } from './web.component';
-import { GovernmentOfficeComponent } from './government_office/government-office/government-office.component';
 import { RegistrarOfficeComponent } from './registrar_office/registrar-office/registrar-office.component';
 import { PlotResellByThirdPartyComponent } from './plot_resell_by_third_party/plot-resell-by-third-party/plot-resell-by-third-party.component';
 import { MarketingManagementComponent } from './marketing_management/marketing-management/marketing-management.component';
@@ -80,18 +79,23 @@ import { CustomerFollowupDetailsComponent } from './customer_management/presale/
 import { RegisteredCustomerComponent } from './customer_management/presale/registered_customer/registered-customer/registered-customer.component';
 import { RegisteredCustomerDetailsComponent } from './customer_management/presale/registered_customer/registered-customer-details/registered-customer-details.component';
 import { RegistrarOfficeDetailComponent } from './registrar_office/registrar-office-detail/registrar-office-detail.component';
-import { DocumentListComponent } from './government_office/document/document-list/document-list.component';
-import { DocumentDetailsComponent } from './government_office/document/document-details/document-details.component';
-import { ProgressReportComponent } from './government_office/progress_report/progress-report.component';
-import { SiteWorkGroupMasterComponent } from './government_office/site_work_group/site-work-group-master/site-work-group-master.component';
-import { SiteWorkGroupMasterDetailsComponent } from './government_office/site_work_group/site-work-group-master-details/site-work-group-master-details.component';
-import { SiteWorkMasterDetailComponent } from './government_office/siteworkmaster/site-work-master-detail/site-work-master-detail.component';
-import { SiteWorkMasterComponent } from './government_office/siteworkmaster/site-work-master/site-work-master.component';
+
 import { OfficeDutyTimeComponent } from './hr_payroll_management/office_duty_time/office-duty-time/office-duty-time.component';
 import { OfficeDutyTimeDetailsComponent } from './hr_payroll_management/office_duty_time/office-duty-time-details/office-duty-time-details.component';
 import { AttendanceAndSalaryComponent } from './hr_payroll_management/attendance-salary/attendance-and-salary/attendance-and-salary.component';
-import { SiteWorkDoneMasterComponent } from './government_office/site_work_done/site-work-done-master/site-work-done-master.component';
-import { SiteWorkDoneMasterDetailsComponent } from './government_office/site_work_done/site-work-done-master-details/site-work-done-master-details.component';
+import { DocumentListComponent } from './government_office_masters/document/document-list/document-list.component';
+import { DocumentDetailsComponent } from './government_office_masters/document/document-details/document-details.component';
+import { GovernmentOfficeMasterComponent } from './government_office/government-office-master/government-office-master.component';
+import { SiteWorkMasterComponent } from './government_office_masters/siteworkmaster/site-work-master/site-work-master.component';
+import { SiteWorkMasterDetailComponent } from './government_office_masters/siteworkmaster/site-work-master-detail/site-work-master-detail.component';
+import { SiteWorkGroupMasterComponent } from './government_office_masters/site_work_group/site-work-group-master/site-work-group-master.component';
+import { SiteWorkGroupMasterDetailsComponent } from './government_office_masters/site_work_group/site-work-group-master-details/site-work-group-master-details.component';
+import { SiteWorkDoneMasterComponent } from './government_office_masters/site_work_done/site-work-done-master/site-work-done-master.component';
+import { SiteWorkDoneMasterDetailsComponent } from './government_office_masters/site_work_done/site-work-done-master-details/site-work-done-master-details.component';
+import { ProgressReportComponent } from './government_office_masters/progress_report/progress-report.component';
+import { GovernmentOfficeDetailsComponent } from './government_office/government-office-details/government-office-details.component';
+import { RespectedChildComponentComponent } from './government_office/respected-child-component/respected-child-component.component';
+
 
 const routes: Routes = [
   {
@@ -212,7 +216,9 @@ const routes: Routes = [
       { path: 'Document', component: DocumentListComponent },
       { path: 'Document_Details', component: DocumentDetailsComponent },
 
-      { path: 'Government_Office', component: GovernmentOfficeComponent },
+      { path: 'Government_Office', component: GovernmentOfficeMasterComponent },
+      { path: 'Government_Office_Details', component: GovernmentOfficeDetailsComponent },
+      { path: 'Respected_child', component: RespectedChildComponentComponent },
 
       { path: 'Site_Work_Master', component: SiteWorkMasterComponent },
       { path: 'Site_Work_Master_Detail', component: SiteWorkMasterDetailComponent },
