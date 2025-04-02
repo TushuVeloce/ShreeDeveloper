@@ -1,7 +1,9 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {BookingRemark,DomainEnums,
+import {
+  BookingRemark,
+  DomainEnums,
 } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
@@ -94,13 +96,17 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     this.StateList = await State.FetchEntireList();
 
     this.CityList = await City.FetchEntireList();
-    this.getSiteListByCompanyRef();
-    this.getEmployeeListByCompanyRef();
+    await this.getSiteListByCompanyRef();
+    await this.getEmployeeListByCompanyRef();
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Customer' : 'Edit Customer';
+      this.DetailsFormTitle = this.IsNewEntity
+        ? 'New Customer'
+        : 'Edit Customer';
       this.Entity = CustomerEnquiry.GetCurrentInstance();
+      console.log(this.Entity);
+
       this.appStateManage.StorageKey.removeItem('Editable');
       this.IsPlotDetails = true;
       if (this.Entity.p.CountryRef) {
@@ -299,13 +305,11 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     control.control.markAsTouched(); // Mark the field as touched on blur (when user leaves input)
   }
 
-
   SaveCustomerEnquiry = async () => {
-    // debugger
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-    let entityToSave = this.Entity.GetEditableVersion();
-    console.log('entityToSave :', entityToSave);
-
+    debugger;
+    this.Entity.p.CompanyRef =
+      this.companystatemanagement.getCurrentCompanyRef();
+    
 
     // ------ Code For Save Date Of InCorporation Year Format ---------------//
     // if (this.sitevisitdate) {
@@ -322,10 +326,11 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     if (this.sitevisitdate) {
       let dateValue = new Date(this.sitevisitdate);
       if (!isNaN(dateValue.getTime())) {
-        entityToSave.p.CustomerFollowUps[0].SiteVisitDate =
+        this.Entity.p.CustomerFollowUps[0].SiteVisitDate =
           this.dtu.DateStartStringFromDateValue(dateValue);
       } else {
-        entityToSave.p.CustomerFollowUps[0].SiteVisitDate = '';
+        this.Entity
+        .p.CustomerFollowUps[0].SiteVisitDate = '';
       }
     }
 
@@ -336,10 +341,10 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       console.log('officevistdate :', dateValue);
 
       if (!isNaN(dateValue.getTime())) {
-        entityToSave.p.CustomerFollowUps[0].OfficeVisitDate =
+        this.Entity.p.CustomerFollowUps[0].OfficeVisitDate =
           this.dtu.DateStartStringFromDateValue(dateValue);
       } else {
-        entityToSave.p.CustomerFollowUps[0].OfficeVisitDate = '';
+        this.Entity.p.CustomerFollowUps[0].OfficeVisitDate = '';
       }
     }
 
@@ -348,10 +353,11 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       let dateValue = new Date(this.reminderdate);
 
       if (!isNaN(dateValue.getTime())) {
-        entityToSave.p.CustomerFollowUps[0].ReminderDate =
+        this.Entity.p.CustomerFollowUps[0].ReminderDate =
           this.dtu.DateStartStringFromDateValue(dateValue);
       } else {
-        entityToSave.p.CustomerFollowUps[0].ReminderDate = '';
+        this.Entity
+        .p.CustomerFollowUps[0].ReminderDate = '';
       }
     }
 
@@ -371,6 +377,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     this.Entity.p.CustomerFollowUps[0].TransDateTime = this.DateWithTime!;
 
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
+    let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
     // return;

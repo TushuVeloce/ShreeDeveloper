@@ -10,7 +10,7 @@
         <span class="detail_title">Customer Enquiry</span>
       </div>
     </div>
-    <form autocomplete="off">
+    <form #myForm="ngForm" autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
@@ -87,7 +87,7 @@
         <div class="col-md-4" *ngIf="IsNewEntity">
           <div>
             <label>Date</label>
-            <input type="date" name="Date" class="form-control" id="Date" readonly [(ngModel)]="Date" required />
+            <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Date" required />
           </div>
         </div>
       </div>
@@ -233,8 +233,8 @@
         <div class="col-md-4">
           <div>
             <label for="SiteVisitDate">Site Visit Date</label>
-            <input type="Date" name="SiteVisitDate" [(ngModel)]="sitevisitdate"
-            class="form-control" id="SiteVisitDate" required />
+            <input type="Date" name="SiteVisitDate" [(ngModel)]="sitevisitdate" class="form-control" id="SiteVisitDate"
+              required />
           </div>
         </div>
       </div>
@@ -259,8 +259,8 @@
         <div class="col-md-4">
           <div>
             <label for="OfficeVisitDate">Office Visit Date</label>
-            <input type="Date" name="OfficeVisitDate" [(ngModel)]="officevistdate"
-            class="form-control" id="OfficeVisitDate" required />
+            <input type="Date" name="OfficeVisitDate" [(ngModel)]="officevistdate" class="form-control"
+              id="OfficeVisitDate" required />
           </div>
         </div>
         <div class="col-md-4">
@@ -271,7 +271,7 @@
 
               <div *ngIf="isReminderRequired && reminderDateField.invalid && reminderDateField.touched"
               class="text-danger">
-              Reminder Date is required unless 'Convert To Deal' is selected.
+              Reminder Date is required when Customer Status is 'Convert To Deal'.
             </div>
           </div>
         </div>
@@ -280,7 +280,6 @@
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
           <button type="button" class="btn" (click)="SaveCustomerEnquiry()">Save</button>
-          <!-- [disabled]="myForm.invalid"  -->
         </div>
         <div>
           <button type="button" class="btn" (click)="BackCustomerEnquiry()">Back</button>
