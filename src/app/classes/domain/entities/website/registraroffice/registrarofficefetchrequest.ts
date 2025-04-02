@@ -8,7 +8,7 @@ export class RegistrarOfficeFetchRequest
 {
     public static readonly FetchRequestType: string = "RegistrarOfficeFetchRequest";
 
-    CompanyRefs: number[] = [];
+    CustomerRefs: number[] = [];
     RegistrarOfficeRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>

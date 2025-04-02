@@ -1,6 +1,7 @@
 import { Component, OnInit,effect  } from '@angular/core';
 import { Router } from '@angular/router';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
+import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { RegistrarOffice } from 'src/app/classes/domain/entities/website/registraroffice/registraroffice';
@@ -20,7 +21,7 @@ export class RegistrarOfficeComponent  implements OnInit {
   MasterList: RegistrarOffice[] = [];
   DisplayMasterList: RegistrarOffice[] = [];
   SiteList: Site[] = [];
-  CustomerList: CustomerEnquiry[] = [];
+  CustomerList: CustomerFollowUp[] = [];
   PlotNoList: Plot[] = [];
   SearchString: string = '';
   SelectedRegistrarOffice: RegistrarOffice = RegistrarOffice.CreateNewInstance();
@@ -28,30 +29,21 @@ export class RegistrarOfficeComponent  implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  
+  SiteRef : number = 0;
   headers: string[] = ['Sr.No.', 'Cheque', 'Witness 1', 'Action'];
   
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement) {
     effect(() => {
-      this.getRegistrarOfficeListByCompanyRef()
       this.getSiteListByCompanyRef();
-      this.getCustomerListByCompanyRef();
     });
    }
 
   async ngOnInit() {
-    await this.getRegistrarOfficeListByCompanyRef()
     this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
-  }
-  
-  // private FormulateMasterList = async () => {
-  //   let lst = await RegistrarOffice.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.MasterList = lst;
-  //   this.DisplayMasterList = this.MasterList
-  //   this.loadPaginationData();
-  // }
-
+  } 
+    
+  // get SiteList With Company Ref //
   getSiteListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
@@ -65,36 +57,44 @@ export class RegistrarOfficeComponent  implements OnInit {
     this.loadPaginationData();
   }
 
-  getCustomerListByCompanyRef = async () => {
-    this.MasterList = [];
+
+  // get PlotList With Site Ref //
+
+onSiteRefPlotList = async (siteRef: number) => {
+  this.DisplayMasterList = [];
+  if (siteRef <= 0) {
+    await this.uiUtils.showWarningToster(`Please Select Site`);
+    return
+  }
+  let lst = await Plot.FetchEntireListBySiteRef(siteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  this.PlotNoList = lst;
+  this.loadPaginationData(); 
+}
+
+
+  // get CustomerList With Plot Ref //
+
+  onPlotRefCustomerList = async (PlotRef: number) => {
     this.DisplayMasterList = [];
-    this.CustomerList = [];
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
+    if (PlotRef <= 0) {
+      await this.uiUtils.showWarningToster(`Please Select Site`);
+      return
     }
-    let lst = await CustomerEnquiry.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await CustomerFollowUp.FetchEntireListByPlotRef(PlotRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.CustomerList = lst;
-    this.loadPaginationData();
+    this.loadPaginationData(); 
   }
 
-
-   getRegistrarOfficeListByCompanyRef = async () => {
+  getRegistrarOfficeListByCustomerRef = async (CustomerRef:number) => {
       this.MasterList = [];
       this.DisplayMasterList = [];
-      if(this.companyRef()<=0){
-        await this.uiUtils.showErrorToster('Company not Selected');
-        return;
-      }
-        let lst = await RegistrarOffice.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+        let lst = await RegistrarOffice.FetchEntireListByCustomerRef(CustomerRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
         console.log('lst :', lst);
         this.MasterList = lst;
         console.log('MasterList :', this.MasterList);
         this.DisplayMasterList = this.MasterList;
       this.loadPaginationData();
     }
-
-    
 
   onEditClicked = async (item: RegistrarOffice) => {
     this.SelectedRegistrarOffice = item.GetEditableVersion();
@@ -112,7 +112,6 @@ export class RegistrarOfficeComponent  implements OnInit {
           await this.uiUtils.showSuccessToster(`Registrar Office ${RegistrarOffice.p.Name} has been deleted!`);
           this.SearchString = '';
           this.loadPaginationData();
-        await this.getRegistrarOfficeListByCompanyRef();
         });
       });
   }
@@ -132,10 +131,6 @@ export class RegistrarOfficeComponent  implements OnInit {
   }
 
   async AddRegistrarOffice() {
-    if (this.companyRef() <= 0) {
-      this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
     this.router.navigate(['/homepage/Website/Registrar_Office_Details']);
   }
 

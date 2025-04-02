@@ -200,6 +200,12 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
     return CustomerFollowUp.ListFromTransportData(tdResponse);
   }
 
+  public static async FetchEntireListByPlotRef(PlotRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new CustomerFollowUpFetchRequest();
+    let tdResponse = await CustomerFollowUp.FetchTransportData(req, errorHandler) as TransportData;
+    return CustomerFollowUp.ListFromTransportData(tdResponse);
+  }
+
   public static async FetchEntireListByCustomerEnquiryRef(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new CustomerFollowUpFetchRequest();
 

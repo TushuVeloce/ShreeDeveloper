@@ -206,9 +206,16 @@ export class RegistrarOffice implements IPersistable<RegistrarOffice> {
     return RegistrarOffice.ListFromTransportData(tdResponse);
   }
   
-  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  // public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  //   let req = new RegistrarOfficeFetchRequest();
+  //   req.CompanyRefs.push(CompanyRef)
+  //   let tdResponse = await RegistrarOffice.FetchTransportData(req, errorHandler) as TransportData;
+  //   return RegistrarOffice.ListFromTransportData(tdResponse);
+  // }
+
+  public static async FetchEntireListByCustomerRef(CustomerRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new RegistrarOfficeFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
+    req.CustomerRefs.push(CustomerRef)
     let tdResponse = await RegistrarOffice.FetchTransportData(req, errorHandler) as TransportData;
     return RegistrarOffice.ListFromTransportData(tdResponse);
   }
