@@ -53,7 +53,6 @@ export class CustomerFollowupComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement, private dtu: DTU, private datePipe: DatePipe, private DateconversionService: DateconversionService
   ) {
     effect(() => {
-      // this.getCustomerFollowUpListByEnquiryRef()
       this.formulateSiteListByCompanyRef();
     });
   }
@@ -81,25 +80,37 @@ export class CustomerFollowupComponent implements OnInit {
       let parts = date.substring(0, 16).split('-');
       // Construct the new date format
       this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
-      this.getCustomerFollowUpListByDateandPlotRef();
+    } else {
+      this.date = ''; // Clears the date variable when input is cleared
+      this.strCDT = '';
     }
+    this.getCustomerFollowUpListByDateandPlotRef();
   }
-
-  // getCustomerFollowUpListByEnquiryRef = async () => {
-  //   let FollowUp = await CustomerFollowUp.FetchEntireListByCustomerEnquiryRef(
-  //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.followup = FollowUp
-  //   this.loadPaginationData();
-  // };
 
   // Extracted from services date conversion //
   formatDate(date: string | Date): string {
     return this.DateconversionService.formatDate(date);
   }
 
+  // getCustomerFollowUpListByDate = async () => {
+  //   let FollowUp = await CustomerFollowUp.FetchEntireListByDate(this.strCDT,
+  //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.followup = FollowUp
+  //   this.loadPaginationData();
+  // };
+
+  // getCustomerFollowUpListByPlotRef = async () => {
+  //   if (this.InterestedPlotRef != 0) {
+  //     let FollowUp = await CustomerFollowUp.FetchEntireListByDateandPlotRef(this.strCDT, this.InterestedPlotRef,
+  //       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //     this.followup = FollowUp
+  //     this.loadPaginationData();
+  //   }
+  // };
+
 
   getCustomerFollowUpListByDateandPlotRef = async () => {
-    let FollowUp = await CustomerFollowUp.FetchEntireListByandDatePlotRef(this.strCDT, this.InterestedPlotRef,
+    let FollowUp = await CustomerFollowUp.FetchEntireListByDateandPlotRef(this.strCDT, this.InterestedPlotRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.followup = FollowUp
     this.loadPaginationData();
