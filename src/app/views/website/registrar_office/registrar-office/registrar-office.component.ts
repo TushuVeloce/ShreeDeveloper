@@ -30,7 +30,7 @@ export class RegistrarOfficeComponent  implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   SiteRef : number = 0;
-  headers: string[] = ['Sr.No.', 'Cheque', 'Witness 1', 'Action'];
+  headers: string[] = ['Sr.No.', 'Cheque', 'Witness 1','Witness 2', 'Action'];
   
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement) {
     effect(() => {
@@ -114,7 +114,7 @@ onSiteRefPlotList = async (siteRef: number) => {
     Are you sure that you want to DELETE this Registrar Office?`,
       async () => {
         await RegistrarOffice.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(`Registrar Office ${RegistrarOffice.p.Name} has been deleted!`);
+          await this.uiUtils.showSuccessToster(`Registrar Office ${RegistrarOffice.p.CustomerName} has been deleted!`);
           this.SearchString = '';
           this.loadPaginationData();
         });

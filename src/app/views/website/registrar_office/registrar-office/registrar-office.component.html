@@ -61,6 +61,14 @@
             </span>
             <ng-template #pending>Pending</ng-template>
           </td>
+
+          <td class="tbldata">
+            <!-- Check if all required fields for Witness 1 are available -->
+            <span *ngIf="registraroffice.p.Witness2Name && registraroffice.p.Witness2ContactNo && registraroffice.p.Witness2IsAadharSubmit && registraroffice.p.Witness2IsPanSubmit; else pending">
+              Completed
+            </span>
+            <ng-template #pending>Pending</ng-template>
+          </td>
           <td class="tbldata">
             <span style="margin-left: 9px;" (click)="onEditClicked(registraroffice);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
