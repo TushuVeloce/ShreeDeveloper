@@ -22,19 +22,26 @@
           <div class="col-md-4">
             <label for="date"><b>Date</b></label>
             <input type="date" name="date" class="form-control" id="date" [(ngModel)]="date"
-              (ngModelChange)="onSiteReforDateChange(siteref, date)" />
-
+              (ngModelChange)="getCustomerFollowUpListByDateandPlotRef()" />
           </div>
           <div class="col-md-4">
             <label for="siteref"><b>Site Name</b></label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="siteref"
               name="siteref" [nzSize]="'large'" [(ngModel)]="siteref"
-              (ngModelChange)="onSiteReforDateChange(siteref, date)">
-
+              (ngModelChange)="getCustomerFollowUpListByDateandPlotRef()">
               <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
             </nz-select>
           </div>
+          <div class="col-md-4">
+            <div>
+              <label for="InterestedPlotRef"><b>Interested Plots</b></label>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="InterestedPlotRef"
+                name="InterestedPlotRef" [(ngModel)]="InterestedPlotRef" [nzSize]="'large'">
+                <nz-option *ngFor="let Plot of PlotList" (ngModelChange)="getCustomerFollowUpListByDateandPlotRef()" [nzValue]="Plot.p.Ref" [nzLabel]="Plot.p.PlotNo"></nz-option>
+              </nz-select>
+            </div>
 
+          </div>
         </div>
       </form>
     </div>

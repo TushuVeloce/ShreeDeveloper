@@ -3,6 +3,7 @@ import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
+import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -23,6 +24,7 @@ export class CustomerFollowupComponent implements OnInit {
 
   Entity: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
   SiteList: Site[] = [];
+  PlotList: Plot[] = [];
   MasterList: CustomerEnquiry[] = [];
   DisplayMasterList: CustomerEnquiry[] = [];
   SearchString: string = '';
@@ -35,7 +37,9 @@ export class CustomerFollowupComponent implements OnInit {
   followup: CustomerFollowUp[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   siteref: number = 0
+  InterestedPlotRef: number = 0
   date: string = ''
+  strCDT: string = ''
 
   headers: string[] = [
     'Sr.No.',
@@ -45,12 +49,11 @@ export class CustomerFollowupComponent implements OnInit {
     'Customer Status',
     'Action',
   ]; constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement, private dtu: DTU, private datePipe: DatePipe, private DateconversionService:DateconversionService
+    private companystatemanagement: CompanyStateManagement, private dtu: DTU, private datePipe: DatePipe, private DateconversionService: DateconversionService
   ) {
     effect(() => {
       this.getCustomerFollowUpListByEnquiryRef()
       this.FormulateSiteListByCompanyRef();
-      // this.getCustomerFollowUpListByEnquiryRef();
     });
   }
 
@@ -58,116 +61,38 @@ export class CustomerFollowupComponent implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
     if (this.date == '') {
-      let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-      let parts = strCDT.substring(0, 16).split('-');
+      this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+      let parts = this.strCDT.substring(0, 16).split('-');
       // Construct the new date format
       const formattedDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
-      strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+      this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
       this.date = formattedDate;
-      this.getCustomerFollowUpListByDateandSiteRef(strCDT, this.siteref);
+      this.getCustomerFollowUpListByDateandPlotRef();
     }
 
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
-  // getCustomerFollowUpListByCompanyRef = async () => {
-  //   this.MasterList = [];
-  //   this.DisplayMasterList = [];
-  //   console.log('companyRef :', this.companyRef());
-  //   if (this.companyRef() <= 0) {
-  //     await this.uiUtils.showErrorToster('Company not Selected');
-  //     return;
-  //   }
-  //   let lst = await CustomerEnquiry.FetchEntireListByCompanyRef(
-  //     this.companyRef(),
-  //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-  //   );
-  //   this.MasterList = lst;
-  //   console.log('CustomerEnquiryList :', this.MasterList);
-
-  //   this.DisplayMasterList = this.MasterList;
-  //   this.loadPaginationData();
-  //   this.getCustomerFollowUpListByEnquiryRef()
-  //   // New for customerfollowup
-
-  // };
-
   getCustomerFollowUpListByEnquiryRef = async () => {
-    // this.MasterList = [];
-    // this.DisplayMasterList = [];
-
-    // let CustomerEnquiryRefs = this.DisplayMasterList[0].p.CustomerFollowUps[0].CustomerEnquiryRef;
-    // console.log('CustomerEnquiryRefs :', CustomerEnquiryRefs);
     let FollowUp = await CustomerFollowUp.FetchEntireListByCustomerEnquiryRef(
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log(FollowUp);
     this.followup = FollowUp
-    // this.MasterList = FollowUp;
-    // this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
 
-     // Extracted from services date conversion //
-     formatDate(date: string | Date): string {
-      return this.DateconversionService.formatDate(date);
-    }
-
-  onSiteReforDateChange(selectedSiteRef?: number, date?: string) {
-    if (selectedSiteRef && date) {
-      this.getCustomerFollowUpListByDateandSiteRef(date, selectedSiteRef);
-    } else if (selectedSiteRef) {
-      this.getCustomerFollowUpListBySiteRef(selectedSiteRef);
-    } else if (date) {
-      this.getCustomerFollowUpListByDate(date);
-    }
+  // Extracted from services date conversion //
+  formatDate(date: string | Date): string {
+    return this.DateconversionService.formatDate(date);
   }
 
-  getCustomerFollowUpListByDate = async (date: string) => {
-    console.log('date :', date);
-    // this.MasterList = [];
-    // this.DisplayMasterList = [];
 
-    // let CustomerEnquiryRefs = this.DisplayMasterList[0].p.CustomerFollowUps[0].CustomerEnquiryRef;
-    // console.log('CustomerEnquiryRefs :', CustomerEnquiryRefs);
-    let FollowUp = await CustomerFollowUp.FetchEntireListByDate(this.date,
+  getCustomerFollowUpListByDateandPlotRef = async () => {
+    let FollowUp = await CustomerFollowUp.FetchEntireListByandDatePlotRef(this.date, this.InterestedPlotRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log(FollowUp);
     this.followup = FollowUp
-    // this.MasterList = FollowUp;
-    // this.DisplayMasterList = this.MasterList;
-    this.loadPaginationData();
-  };
-
-  getCustomerFollowUpListBySiteRef = async (siteref: number) => {
-    console.log('siteref :', siteref);
-    // this.MasterList = [];
-    // this.DisplayMasterList = [];
-
-    // let CustomerEnquiryRefs = this.DisplayMasterList[0].p.CustomerFollowUps[0].CustomerEnquiryRef;
-    // console.log('CustomerEnquiryRefs :', CustomerEnquiryRefs);
-    let FollowUp = await CustomerFollowUp.FetchEntireListBySiteRef(siteref,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log(FollowUp);
-    this.followup = FollowUp
-    // this.MasterList = FollowUp;
-    // this.DisplayMasterList = this.MasterList;
-    this.loadPaginationData();
-  };
-
-  getCustomerFollowUpListByDateandSiteRef = async (date: string, site: number) => {
-    console.log('site and ref :', date, this.siteref);
-    // this.MasterList = [];
-    // this.DisplayMasterList = [];
-
-    // let CustomerEnquiryRefs = this.DisplayMasterList[0].p.CustomerFollowUps[0].CustomerEnquiryRef;
-    // console.log('CustomerEnquiryRefs :', CustomerEnquiryRefs);
-    let FollowUp = await CustomerFollowUp.FetchEntireListByandDateSiteRef(date, site,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log(FollowUp);
-    this.followup = FollowUp
-    // this.MasterList = FollowUp;
-    // this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
 
@@ -181,9 +106,18 @@ export class CustomerFollowupComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
+    this.siteref = lst[0].p.Ref;
     this.loadPaginationData();
   }
 
+  getPlotBySiteRefList = async () => {
+    if (this.siteref <= 0) {
+      await this.uiUtils.showWarningToster(`Please Select Site`);
+      return
+    }
+    let lst = await Plot.FetchEntireListBySiteRef(this.siteref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.PlotList = lst;
+  }
 
   onEditClicked = async (followup: CustomerFollowUp) => {
 
