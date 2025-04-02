@@ -213,24 +213,24 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
     return CustomerFollowUp.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByDate(ReminderDate:string,errorHandler: ( err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByDate(ReminderDate: string, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new CustomerFollowUpFetchRequest();
     req.ReminderDate.push(ReminderDate)
     let tdResponse = await CustomerFollowUp.FetchTransportData(req, errorHandler) as TransportData;
     return CustomerFollowUp.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListBySiteRef(siteref:number,errorHandler: ( err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListBySiteRef(siteref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new CustomerFollowUpFetchRequest();
     req.SiteManagemetRefs.push(siteref)
     let tdResponse = await CustomerFollowUp.FetchTransportData(req, errorHandler) as TransportData;
     return CustomerFollowUp.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByandDatePlotRef(ReminderDate:string,plotref:number,errorHandler: ( err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByandDatePlotRef(ReminderDate: string, plotref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new CustomerFollowUpFetchRequest();
     req.ReminderDate.push(ReminderDate)
-    req.SiteManagemetRefs.push(plotref)
+    req.PlotRefs.push(plotref)
     let tdResponse = await CustomerFollowUp.FetchTransportData(req, errorHandler) as TransportData;
     return CustomerFollowUp.ListFromTransportData(tdResponse);
   }

@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { BookingRemark } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
@@ -36,8 +37,8 @@ export class CustomerFollowupComponent implements OnInit {
   total = 0;
   followup: CustomerFollowUp[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  siteref: number = 0
   InterestedPlotRef: number = 0
+  SiteManagementRef: number = 0;
   date: string = ''
   strCDT: string = ''
 
@@ -52,8 +53,8 @@ export class CustomerFollowupComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement, private dtu: DTU, private datePipe: DatePipe, private DateconversionService: DateconversionService
   ) {
     effect(() => {
-      this.getCustomerFollowUpListByEnquiryRef()
-      this.FormulateSiteListByCompanyRef();
+      // this.getCustomerFollowUpListByEnquiryRef()
+      this.formulateSiteListByCompanyRef();
     });
   }
 
@@ -64,23 +65,32 @@ export class CustomerFollowupComponent implements OnInit {
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       let parts = this.strCDT.substring(0, 16).split('-');
       // Construct the new date format
-      const formattedDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+      this.date = `${parts[0]}-${parts[1]}-${parts[2]}`;
       this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
-      this.date = formattedDate;
-      this.getCustomerFollowUpListByDateandPlotRef();
+      if (this.strCDT != '') {
+        this.getCustomerFollowUpListByDateandPlotRef();
+      }
     }
 
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
-  getCustomerFollowUpListByEnquiryRef = async () => {
-    let FollowUp = await CustomerFollowUp.FetchEntireListByCustomerEnquiryRef(
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log(FollowUp);
-    this.followup = FollowUp
-    this.loadPaginationData();
-  };
+  DateToStandardDateTime = async (date: string) => {
+    if (date != '') {
+      let parts = date.substring(0, 16).split('-');
+      // Construct the new date format
+      this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+      this.getCustomerFollowUpListByDateandPlotRef();
+    }
+  }
+
+  // getCustomerFollowUpListByEnquiryRef = async () => {
+  //   let FollowUp = await CustomerFollowUp.FetchEntireListByCustomerEnquiryRef(
+  //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.followup = FollowUp
+  //   this.loadPaginationData();
+  // };
 
   // Extracted from services date conversion //
   formatDate(date: string | Date): string {
@@ -89,14 +99,14 @@ export class CustomerFollowupComponent implements OnInit {
 
 
   getCustomerFollowUpListByDateandPlotRef = async () => {
-    let FollowUp = await CustomerFollowUp.FetchEntireListByandDatePlotRef(this.date, this.InterestedPlotRef,
+    this.strCDT = '';
+    let FollowUp = await CustomerFollowUp.FetchEntireListByandDatePlotRef(this.strCDT, this.InterestedPlotRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log(FollowUp);
     this.followup = FollowUp
     this.loadPaginationData();
   };
 
-  FormulateSiteListByCompanyRef = async () => {
+  formulateSiteListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     this.SiteList = [];
@@ -106,18 +116,28 @@ export class CustomerFollowupComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
-    this.siteref = lst[0].p.Ref;
+    this.SiteManagementRef = lst[0].p.Ref;
+    this.getPlotBySiteRefList(this.SiteManagementRef);
     this.loadPaginationData();
   }
 
-  getPlotBySiteRefList = async () => {
-    if (this.siteref <= 0) {
+
+  getPlotBySiteRefList = async (siteRef: number) => {
+    let BookingRemarkRef = BookingRemark.Booked;
+    if (siteRef <= 0) {
       await this.uiUtils.showWarningToster(`Please Select Site`);
-      return
+      return;
     }
-    let lst = await Plot.FetchEntireListBySiteRef(this.siteref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.InterestedPlotRef = 0;
+
+    let lst = await Plot.FetchEntireListBySiteandbookingremarkRef(
+      siteRef, BookingRemarkRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.PlotList = lst;
-  }
+    this.InterestedPlotRef = lst[0].p.Ref;
+
+  };
 
   onEditClicked = async (followup: CustomerFollowUp) => {
 
@@ -127,7 +147,6 @@ export class CustomerFollowupComponent implements OnInit {
     // CustomerFollowUp.SetCurrentInstance(this.SelectedFollowUp);
     this.SelectedFollowUp = followup.GetEditableVersion();
     CustomerFollowUp.SetCurrentInstance(this.SelectedFollowUp);
-    // console.log(CustomerFollowUp.GetCurrentInstance);
 
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/homepage/Website/Customer_FollowUp_Details']);

@@ -9,6 +9,7 @@ export class CustomerFollowUpFetchRequest
     public static readonly FetchRequestType: string = "CustomerFollowUpFetchRequest";
 
     SiteManagemetRefs: number[] = [];
+    PlotRefs: number[] = [];
     ReminderDate: string[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
