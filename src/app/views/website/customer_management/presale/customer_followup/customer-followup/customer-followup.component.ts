@@ -99,7 +99,6 @@ export class CustomerFollowupComponent implements OnInit {
 
 
   getCustomerFollowUpListByDateandPlotRef = async () => {
-    this.strCDT = '';
     let FollowUp = await CustomerFollowUp.FetchEntireListByandDatePlotRef(this.strCDT, this.InterestedPlotRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.followup = FollowUp
@@ -116,8 +115,8 @@ export class CustomerFollowupComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
-    this.SiteManagementRef = lst[0].p.Ref;
-    this.getPlotBySiteRefList(this.SiteManagementRef);
+    // this.SiteManagementRef = lst[0].p.Ref;
+    // this.getPlotBySiteRefList(this.SiteManagementRef);
     this.loadPaginationData();
   }
 
@@ -135,7 +134,7 @@ export class CustomerFollowupComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.PlotList = lst;
-    this.InterestedPlotRef = lst[0].p.Ref;
+    // this.InterestedPlotRef = lst[0].p.Ref;
 
   };
 
