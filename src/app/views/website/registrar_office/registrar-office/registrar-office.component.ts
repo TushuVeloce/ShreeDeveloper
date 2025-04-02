@@ -66,7 +66,7 @@ onSiteRefPlotList = async (siteRef: number) => {
     await this.uiUtils.showWarningToster(`Please Select Site`);
     return
   }
-  let lst = await Plot.FetchEntireList( async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  let lst = await Plot.FetchEntireListBySiteRef(siteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
   console.log('lst :', lst);
   this.PlotNoList = lst.filter(plot => plot.p.CurrentBookingRemark === 50);
   console.log('PlotNoList :', this.PlotNoList);

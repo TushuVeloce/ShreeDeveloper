@@ -81,7 +81,7 @@ export class RegistrarOfficeProps {
 
 
 export class RegistrarOffice implements IPersistable<RegistrarOffice> {
-  public static readonly Db_Table_Name: string = 'RegistrarOfficeMaster';
+  public static readonly Db_Table_Name: string = 'RegisterOffice';
 
   private constructor(public readonly p: RegistrarOfficeProps, public readonly AllowEdit: boolean) {
 
