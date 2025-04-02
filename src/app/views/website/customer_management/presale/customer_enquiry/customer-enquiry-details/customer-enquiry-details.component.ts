@@ -1,7 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import {BookingRemark,DomainEnums,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import {
@@ -66,7 +67,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     '--Select Customer Status--'
   );
 
-
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   Plotheaders: string[] = [
     'Sr.No.',
@@ -81,12 +81,15 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     private router: Router,
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
-    private utils: Utils, private dtu: DTU, private datePipe: DatePipe,
+    private utils: Utils,
+    private dtu: DTU,
+    private datePipe: DatePipe,
     private companystatemanagement: CompanyStateManagement
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
+
     this.CountryList = await Country.FetchEntireList();
     this.StateList = await State.FetchEntireList();
 
@@ -96,19 +99,20 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity
-        ? 'New Customer'
-        : 'Edit Customer';
-
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Customer' : 'Edit Customer';
+      this.Entity = CustomerEnquiry.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.IsPlotDetails = true;
       if (this.Entity.p.CountryRef) {
-        this.StateList = this.StateList.filter(e => e.p.CountryRef == this.Entity.p.CountryRef)
+        this.StateList = this.StateList.filter(
+          (e) => e.p.CountryRef == this.Entity.p.CountryRef
+        );
         if (this.Entity.p.StateRef) {
-          this.CityList = this.CityList.filter(e => e.p.StateRef == this.Entity.p.StateRef)
+          this.CityList = this.CityList.filter(
+            (e) => e.p.StateRef == this.Entity.p.StateRef
+          );
         }
       }
-
     } else {
       this.Entity = CustomerEnquiry.CreateNewInstance();
       CustomerEnquiry.SetCurrentInstance(this.Entity);
@@ -124,7 +128,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     ) as CustomerEnquiry;
     // this.focusInput();
 
-
     if (this.Entity.p.CustomerFollowUps[0].TransDateTime.trim().length <= 0) {
       let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
 
@@ -132,11 +135,15 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       this.Date = strCDT.substring(0, 10);
       this.DateWithTime = strCDT;
       console.log(strCDT);
-
-    }
-    else {
-      this.Date = this.datePipe.transform(this.dtu.FromString(this.Entity.p.CustomerFollowUps[0].TransDateTime), 'yyyy-MM-dd');
-      this.Date = this.Entity.p.CustomerFollowUps[0].TransDateTime.substring(0, 10);
+    } else {
+      this.Date = this.datePipe.transform(
+        this.dtu.FromString(this.Entity.p.CustomerFollowUps[0].TransDateTime),
+        'yyyy-MM-dd'
+      );
+      this.Date = this.Entity.p.CustomerFollowUps[0].TransDateTime.substring(
+        0,
+        10
+      );
       this.DateWithTime = this.Entity.p.CustomerFollowUps[0].TransDateTime;
     }
   }
@@ -197,17 +204,16 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     );
     this.EmployeeList = lst;
   };
-
-
   getPlotBySiteRefList = async (siteRef: number) => {
     if (siteRef <= 0) {
       await this.uiUtils.showWarningToster(`Please Select Site`);
       return;
     }
     this.InterestedPlotRef = 0;
-
-    let lst = await Plot.FetchEntireListBySiteRef(
+    let bookingref = BookingRemark.Booked;
+    let lst = await Plot.FetchEntireListBySiteandbookingremarkRef(
       siteRef,
+      bookingref,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.PlotList = lst;
@@ -230,7 +236,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       (plot) => plot.p.Ref === this.InterestedPlotRef
     );
     let obj = CustomerFollowUpPlotDetails.CreateNewInstance();
-    debugger
     if (selectedPlot) {
       obj.EnsurePrimaryKeysWithValidValues();
       obj.p.SiteRef = this.SiteManagementRef;
@@ -240,8 +245,10 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     }
 
     // Check if the plot is already added
-    const isAlreadyAdded = this.Entity.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails.some(
-      (plot) => plot.PlotRef === this.InterestedPlotRef);
+    const isAlreadyAdded =
+      this.Entity.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails.some(
+        (plot) => plot.PlotRef === this.InterestedPlotRef
+      );
 
     if (isAlreadyAdded) {
       this.uiUtils.showWarningToster(
@@ -251,7 +258,8 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     }
 
     if (selectedPlot) {
-      this.Entity.p.CustomerFollowUps[0].CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+      this.Entity.p.CustomerFollowUps[0].CompanyRef =
+        this.companystatemanagement.getCurrentCompanyRef();
 
       this.Entity.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails.push(
         obj.p
@@ -279,13 +287,25 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   //   this.Entity.p.CustomerFollowUpPlotDetails = selectedvalue;
   //   // console.log(this.Entity.p.MaterialSuppliedByVendors);
   // }
+  selectedCustomerStatus: number = 0;
+  isReminderRequired: boolean = false;
+
+  isOfficeDateInvalid: boolean = false;
+
+  onStatusChange(selectedStatus: number) {
+    this.isReminderRequired = selectedStatus !== 40; // Set required if status is 'Convert To Deal'
+  }
+  markTouched(control: any) {
+    control.control.markAsTouched(); // Mark the field as touched on blur (when user leaves input)
+  }
+
 
   SaveCustomerEnquiry = async () => {
+    // debugger
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     let entityToSave = this.Entity.GetEditableVersion();
     console.log('entityToSave :', entityToSave);
 
-    this.Entity.p.CompanyRef =
-      this.companystatemanagement.getCurrentCompanyRef();
 
     // ------ Code For Save Date Of InCorporation Year Format ---------------//
     // if (this.sitevisitdate) {
@@ -297,8 +317,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     //     entityToSave.p.CustomerFollowUps[0].SiteVisitDate = '';
     //   }
     // }
-
-
 
     // ------ Code For Save site visit date Format ---------------//
     if (this.sitevisitdate) {
@@ -318,21 +336,20 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       console.log('officevistdate :', dateValue);
 
       if (!isNaN(dateValue.getTime())) {
-        entityToSave.p.CustomerFollowUps[0].OfficeVisitDate = this.dtu.DateStartStringFromDateValue(dateValue);
+        entityToSave.p.CustomerFollowUps[0].OfficeVisitDate =
+          this.dtu.DateStartStringFromDateValue(dateValue);
       } else {
         entityToSave.p.CustomerFollowUps[0].OfficeVisitDate = '';
       }
     }
-
-
-
 
     // ------ Code For Save Date Of Reminder Date Format ---------------//
     if (this.reminderdate) {
       let dateValue = new Date(this.reminderdate);
 
       if (!isNaN(dateValue.getTime())) {
-        entityToSave.p.CustomerFollowUps[0].ReminderDate = this.dtu.DateStartStringFromDateValue(dateValue);
+        entityToSave.p.CustomerFollowUps[0].ReminderDate =
+          this.dtu.DateStartStringFromDateValue(dateValue);
       } else {
         entityToSave.p.CustomerFollowUps[0].ReminderDate = '';
       }

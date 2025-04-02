@@ -87,7 +87,7 @@
         <div class="col-md-4" *ngIf="IsNewEntity">
           <div>
             <label>Date</label>
-            <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Date" required />
+            <input type="date" name="Date" class="form-control" id="Date" readonly [(ngModel)]="Date" required />
           </div>
         </div>
       </div>
@@ -216,7 +216,8 @@
           <div>
             <label for="CustomerStatusRef"><b>Customer Status</b></label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CustomerStatusRef"
-              name="CustomerStatusRef" [(ngModel)]="Entity.p.CustomerFollowUps[0].CustomerStatus" [nzSize]="'large'">
+              name="CustomerStatusRef" [(ngModel)]="Entity.p.CustomerFollowUps[0].CustomerStatus"
+              (ngModelChange)="onStatusChange($event)" [nzSize]="'large'">
               <nz-option *ngFor="let customerstatus of CustomerStatusList" [nzValue]="customerstatus.Ref"
                 [nzLabel]="customerstatus.Name"></nz-option>
             </nz-select>
@@ -233,7 +234,7 @@
           <div>
             <label for="SiteVisitDate">Site Visit Date</label>
             <input type="Date" name="SiteVisitDate" [(ngModel)]="sitevisitdate"
-              class="form-control" id="SiteVisitDate" required />
+            class="form-control" id="SiteVisitDate" required />
           </div>
         </div>
       </div>
@@ -259,14 +260,19 @@
           <div>
             <label for="OfficeVisitDate">Office Visit Date</label>
             <input type="Date" name="OfficeVisitDate" [(ngModel)]="officevistdate"
-              class="form-control" id="OfficeVisitDate" required />
+            class="form-control" id="OfficeVisitDate" required />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Reminder Date</label>
-            <input type="Date" name="ReminderDate" [(ngModel)]="reminderdate"
-              class="form-control" id="ReminderDate" required />
+            <input type="Date" name="ReminderDate" [(ngModel)]="reminderdate" class="form-control" id="ReminderDate"
+              [required]="isReminderRequired" #reminderDateField="ngModel" (blur)="markTouched(reminderDateField)" />
+
+              <div *ngIf="isReminderRequired && reminderDateField.invalid && reminderDateField.touched"
+              class="text-danger">
+              Reminder Date is required unless 'Convert To Deal' is selected.
+            </div>
           </div>
         </div>
       </div>
@@ -274,6 +280,7 @@
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
           <button type="button" class="btn" (click)="SaveCustomerEnquiry()">Save</button>
+          <!-- [disabled]="myForm.invalid"  -->
         </div>
         <div>
           <button type="button" class="btn" (click)="BackCustomerEnquiry()">Back</button>

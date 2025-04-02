@@ -83,9 +83,21 @@ export class CustomerEnquiry implements IPersistable<CustomerEnquiry> {
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
+    debugger
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     // if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-    // if (this.p.Date == '') vra.add('Date', 'Date cannot be blank.');
+    // if (this.p.CustomerFollowUps[0].ReminderDate == '') vra.add('ReminderDate', 'Reminder Date cannot be blank.');
+   // If it's a new entity, perform the necessary validity checks
+   if (this.p.IsNewlyCreated) {
+    if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
+    if (!this.p.CustomerFollowUps[0].ReminderDate) 
+        vra.add('ReminderDate', 'Reminder Date cannot be blank.');
+    
+    if (this.p.CustomerFollowUps[0].CustomerStatus !== 40 && 
+        !this.p.CustomerFollowUps[0].ReminderDate) {
+        vra.add('ReminderDate', 'Reminder Date cannot be blank unless Customer Status is Convert To Deal.');
+    }
+  }
     // if (this.p.ContactNos == '') vra.add('OwnerName', 'Owner Name cannot be blank.');
     // if (this.p.EmailId == '') vra.add('EmailId', 'Email Id cannot be blank.');
     // if (this.p.PinCode == '') vra.add('PinCode', 'Pin code cannot be blank.');
