@@ -76,15 +76,18 @@ onSiteRefPlotList = async (siteRef: number) => {
 
   // get CustomerList With Plot Ref //
 
-  onPlotRefCustomerList = async (PlotRef: number) => {
+  onPlotRefRegistrarOfficeList = async (PlotRef: number) => {
     this.DisplayMasterList = [];
     if (PlotRef <= 0) {
       await this.uiUtils.showWarningToster(`Please Select Site`);
       return
     }
-    let lst = await CustomerFollowUp.FetchEntireListByPlotRef(PlotRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.CustomerList = lst;
-    this.loadPaginationData(); 
+    let lst = await RegistrarOffice.FetchEntireListByPlotRef(PlotRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+        this.MasterList = lst;
+        console.log('MasterList :', this.MasterList);
+        this.DisplayMasterList = this.MasterList;
+      this.loadPaginationData();
   }
 
   // getRegistrarOfficeListByCustomerRef = async (CustomerRef:number) => {
