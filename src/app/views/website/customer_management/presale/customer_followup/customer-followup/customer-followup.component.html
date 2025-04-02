@@ -22,13 +22,14 @@
           <div class="col-md-4">
             <label for="date"><b>Date</b></label>
             <input type="date" name="date" class="form-control" id="date" [(ngModel)]="date"
-              (ngModelChange)="onSiteReforDateChange(siteref, date)"/>
+              (ngModelChange)="onSiteReforDateChange(siteref, date)" />
 
           </div>
           <div class="col-md-4">
             <label for="siteref"><b>Site Name</b></label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="siteref"
-              name="siteref" [nzSize]="'large'" [(ngModel)]="siteref" (ngModelChange)="onSiteReforDateChange(siteref, date)">
+              name="siteref" [nzSize]="'large'" [(ngModel)]="siteref"
+              (ngModelChange)="onSiteReforDateChange(siteref, date)">
 
               <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
             </nz-select>
@@ -52,7 +53,8 @@
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{followup.p.CustomerName}}</td>
             <td Class="tbldata">{{followup.p.ContactNos}}</td>
-            <td Class="tbldata">{{followup.p.ReminderDate}}</td>
+            <td class="tbldata">{{ formatDate(followup.p.ReminderDate) }}</td>
+
             <td Class="tbldata">{{followup.p.CustomerStatusName}}</td>
             <!-- <td Class="tbldata">{{followup.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails[0].SiteName}}</td> -->
             <td class="tbldata">

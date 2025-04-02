@@ -48,10 +48,10 @@
         <label>Contact No.</label>
          <input
            type="text"
-           [(ngModel)]="Entity.p.Name"
-           name="Name"
+           [(ngModel)]="Entity.p.ContactNo"
+           name="ContactNo"
            class="form-control"
-           id="Name"
+           id="ContactNo"
            required
            placeholder="Enter Contact No. "
          />
@@ -62,7 +62,7 @@
        <div class="row ">
         <div class="col-md-4 d-flex justify-content-center ">
           <label>Cheque</label>
-            <input type="checkbox" id="Cheque" name="Cheque" class="custom-checkbox">
+            <input type="checkbox" id="IsChequeSubmit"  [(ngModel)]="Entity.p.IsChequeSubmit" name="IsChequeSubmit" class="custom-checkbox">
       </div>
 <!-- Aadhar -->
         <div class="col-md-8 d-flex mb-4">
@@ -84,8 +84,8 @@
           </div>
           <!-- Submit -->
           <div class="col-md-4 d-flex justify-content-center  ">
-            <label for="Submit">Submit</label>
-              <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
+            <label for="IsCustomerAadharSubmit">Submit</label>
+              <input type="checkbox" id="IsCustomerAadharSubmit"  [(ngModel)]="Entity.p.IsCustomerAadharSubmit" name="IsCustomerAadharSubmit" class="custom-checkbox">
           </div>
        </div>
 
@@ -113,8 +113,8 @@
             </div>
             <!-- Submit -->
             <div class="col-md-4 d-flex justify-content-center  ">
-              <label for="Submit">Submit</label>
-                <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
+              <label for="IsCustomerPanSubmit">Submit</label>
+                <input type="checkbox" id="IsCustomerPanSubmit"  [(ngModel)]="Entity.p.IsCustomerPanSubmit" name="IsCustomerPanSubmit" class="custom-checkbox">
             </div>
 
         </div>
@@ -125,13 +125,14 @@
       <!-- Witness 1 -->
        <div class="row mb-4" style="margin-top: 1rem; background-color: #fbe6e6; ">
         <div class="col-md-4 justify-content-center d-flex">
-          <label  for="AllowOTAUpdate"> Witness 1</label>
+          <label  for="Witness1Submit"> Witness 1</label>
               <div style="margin-left: 25px;">
                 <input
                   type="checkbox"
                   class="custom-checkbox"
-                  id="AllowOTAUpdate"
-                  name="AllowOTAUpdate"
+                  [checked]="Entity.p.Witness1Submit"
+                  id="Witness1Submit"
+                  name="Witness1Submit"
                 />
               </div>
         </div>
@@ -142,10 +143,10 @@
           <label>Name</label>
            <input
              type="text"
-             [(ngModel)]="Entity.p.Name"
-             name="Name"
+             [(ngModel)]="Entity.p.Witness1Name"
+             name="Witness1Name"
              class="form-control"
-             id="Name"
+             id="Witness1Name"
              required
              placeholder="Enter Name"
            />
@@ -155,10 +156,10 @@
         <label>Contact No.</label>
          <input
            type="text"
-           [(ngModel)]="Entity.p.Name"
-           name="Name"
+           [(ngModel)]="Entity.p.Witness1ContactNo"
+           name="Witness1ContactNo"
            class="form-control"
-           id="Name"
+           id="Witness1ContactNo"
            required
            placeholder="Enter Contact No."
          />
@@ -185,8 +186,8 @@
         </div>
 <!-- Submit -->
         <div class="col-md-4 d-flex justify-content-center  ">
-          <label for="Submit">Submit</label>
-            <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
+          <label for="Witness1IsAadharSubmit">Submit</label>
+            <input type="checkbox" id="Witness1IsAadharSubmit"  [(ngModel)]="Entity.p.Witness1IsAadharSubmit" name="Witness1IsAadharSubmit" class="custom-checkbox">
       </div>
 
       </div>
@@ -210,8 +211,8 @@
         </div>
 <!-- Submit -->
         <div class="col-md-4 d-flex justify-content-center  ">
-          <label for="Submit">Submit</label>
-            <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
+          <label for="Witness1IsPanSubmit">Submit</label>
+            <input type="checkbox" id="Witness1IsPanSubmit"  [(ngModel)]="Entity.p.Witness1IsPanSubmit" name="Witness1IsPanSubmit" class="custom-checkbox">
       </div>
       </div>
     </div>
@@ -222,13 +223,14 @@
       <!-- Witness 2 -->
       <div class="row mb-4" style="margin-top: 1rem; background-color: #fbe6e6; ">
        <div class="col-md-4 justify-content-center d-flex">
-         <label  for="AllowOTAUpdate"> Witness 2</label>
+         <label  for="Witness2Submit"> Witness 2</label>
              <div style="margin-left: 25px;">
                <input
                  type="checkbox"
                  class="custom-checkbox"
-                 id="AllowOTAUpdate"
-                 name="AllowOTAUpdate"
+                 [(ngModel)]="Entity.p.Witness2Submit"
+                 id="Witness2Submit"
+                 name="Witness2Submit"
                />
              </div>
        </div>
@@ -239,10 +241,10 @@
          <label>Name</label>
           <input
             type="text"
-            [(ngModel)]="Entity.p.Name"
-            name="Name"
+            [(ngModel)]="Entity.p.Witness2Name"
+            name="Witness2Name"
             class="form-control"
-            id="Name"
+            id="Witness2Name"
             required
             placeholder="Enter Name"
           />
@@ -252,10 +254,10 @@
        <label>Contact No.</label>
         <input
           type="text"
-          [(ngModel)]="Entity.p.Name"
-          name="Name"
+          [(ngModel)]="Entity.p.Witness2ContactNo"
+          name="Witness2ContactNo"
           class="form-control"
-          id="Name"
+          id="Witness2ContactNo"
           required
           placeholder="Enter Contact No."
         />
@@ -282,8 +284,8 @@
        </div>
 
        <div class="col-md-4 d-flex justify-content-center  ">
-         <label for="Submit">Submit</label>
-           <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
+         <label for="Witness2IsAadharSubmit">Submit</label>
+           <input type="checkbox" id="Witness2IsAadharSubmit"  [(ngModel)]="Entity.p.Witness2IsAadharSubmit" name="Witness2IsAadharSubmit" class="custom-checkbox">
      </div>
      </div>
      <!-- Pan -->
@@ -306,8 +308,8 @@
        </div>
 <!-- Submit -->
        <div class="col-md-4 d-flex justify-content-center  ">
-         <label for="Submit">Submit</label>
-           <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
+         <label for="Witness2IsPanSubmit">Submit</label>
+           <input type="checkbox" id="Witness2IsPanSubmit"  [(ngModel)]="Entity.p.Witness2IsPanSubmit" name="Witness2IsPanSubmit" class="custom-checkbox">
      </div>
      </div>
    </div>
@@ -315,55 +317,42 @@
         <!--------------------- Agreement to Sale Box ------------------------>
 
    <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px;">
-      <!-- Agreement to Sale -->
-    <!-- <div class="row mb-4" style="margin-top: 1rem; background-color: #fbe6e6; ">
-     <div class="col-md-4 justify-content-center d-flex">
-       <label  for="AllowOTAUpdate"> Agreement to Sale</label>
-           <div style="margin-left: 25px;">
-             <input
-               type="checkbox"
-               class="custom-checkbox"
-               id="AllowOTAUpdate"
-               name="AllowOTAUpdate"
-             />
-           </div>
-     </div>
-    </div> -->
-
-<!-- Aadhar -->
-<div class="col-md-8 d-flex mb-4 " style="margin-top: 1rem; background-color: #fbe6e6; ">
-  <div class="col-md-8 d-flex ">
-    <div class="col-md-4 d-flex justify-content-center">
-      <label>Agreement to Sale</label>
-    </div>
-    <div class="col-md-8 d-flex">
-      <input
-        type="file"
-        [(ngModel)]="Entity.p.Name"
-        name="Name"
-        class="form-control"
-        id="Name"
-        required
-        placeholder="Enter Name"
-      />
-    </div>
-  </div>
-  <!-- Submit -->
-  <div class="col-md-4 d-flex justify-content-center  ">
-    <label for="Submit">Submit</label>
-      <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
-  </div>
-</div>
-    <!-- Document -->
+    <div class="row mb-4" style="margin-top: 1rem; background-color: #fbe6e6; ">
+      <div class="col-md-4 justify-content-center d-flex">
+        <label  for="IsAgreementToSaleSubmit"> Agreement to Sale</label>
+            <div style="margin-left: 25px;">
+              <input
+                type="checkbox"
+                class="custom-checkbox"
+                id="IsAgreementToSaleSubmit"
+                name="IsAgreementToSaleSubmit"
+                />
+                <!-- [(ngModel)]="Entity.p.IsAgreementToSaleSubmit" -->
+            </div>
+      </div>
+     
+       <div class="col-md-4 d-flex">
+         <input
+           type="file"
+           [(ngModel)]="Entity.p.Name"
+           name="Name"
+           class="form-control"
+           id="Name"
+           required
+           placeholder="Enter Name"
+         />
+       </div>
+   </div> 
+   
     <div class="row mb-4" style="margin-top: 1rem; ">
      <div class="col-md-6">
        <label>Document</label>
         <input
           type="text"
-          [(ngModel)]="Entity.p.Name"
-          name="Name"
+          [(ngModel)]="Entity.p.AgreementDocumentNo"
+          name="AgreementDocumentNo"
           class="form-control"
-          id="Name"
+          id="AgreementDocumentNo"
           required
           placeholder="Enter Document No."
         />
@@ -373,10 +362,10 @@
      <label>Date</label>
       <input
         type="date"
-        [(ngModel)]="Entity.p.Name"
-        name="Name"
+        [(ngModel)]="Entity.p.AgreementDate"
+        name="AgreementDate"
         class="form-control"
-        id="Name"
+        id="AgreementDate"
         required
         placeholder="Enter Name"
       />
@@ -390,27 +379,39 @@
       <!-- Sale Deed -->
   <div class="row mb-4" style="margin-top: 1rem; background-color: #fbe6e6; ">
    <div class="col-md-4 justify-content-center d-flex">
-     <label  for="AllowOTAUpdate"> Sale Deed</label>
+     <label  for="IsSaledeedSubmit"> Sale Deed</label>
          <div style="margin-left: 25px;">
            <input
              type="checkbox"
              class="custom-checkbox"
-             id="AllowOTAUpdate"
-             name="AllowOTAUpdate"
-           />
+             id="IsSaledeedSubmit"
+             name="IsSaledeedSubmit"
+             />
+             <!-- [(ngModel)]="Entity.p.IsSaledeedSubmit" -->
          </div>
    </div>
-  </div>
+  <div class="col-md-4 d-flex ">
+      <input
+        type="file"
+        [(ngModel)]="Entity.p.Name"
+        name="Name"
+        class="form-control"
+        id="Name"
+        required
+        placeholder="Enter Name"
+      />
+    </div>
+</div>
 <!-- Document -->
   <div class="row mb-4" style="margin-top: 1rem; ">
    <div class="col-md-6">
      <label>Document</label>
       <input
         type="text"
-        [(ngModel)]="Entity.p.Name"
-        name="Name"
+        [(ngModel)]="Entity.p.SaleDeedDocumentNo"
+        name="SaleDeedDocumentNo"
         class="form-control"
-        id="Name"
+        id="SaleDeedDocumentNo"
         required
         placeholder="Enter Document No."
       />
@@ -420,10 +421,10 @@
    <label>Date</label>
     <input
       type="date"
-      [(ngModel)]="Entity.p.Name"
-      name="Name"
+      [(ngModel)]="Entity.p.SaleDeedDate"
+      name="SaleDeedDate"
       class="form-control"
-      id="Name"
+      id="SaleDeedDate"
       required
       placeholder="Enter Name"
     />
@@ -436,15 +437,16 @@
       <!-- Talathi -->
   <div class="row mb-4" style="margin-top: 1rem; background-color: #fbe6e6; ">
    <div class="col-md-4 justify-content-center d-flex">
-     <label  for="AllowOTAUpdate"> Talathi</label>
+     <label  for="IsTalathiSubmit"> Talathi</label>
          <div style="margin-left: 25px;">
            <input
              type="checkbox"
              class="custom-checkbox"
-             id="AllowOTAUpdate"
-             name="AllowOTAUpdate"
-           />
-         </div>
+             id="IsTalathiSubmit"
+             name="IsTalathiSubmit"
+             />
+             <!-- [(ngModel)]="Entity.p.IsTalathiSubmit" -->
+            </div>
    </div>
   </div>
 
@@ -469,8 +471,8 @@
    </div>
 
    <div class="col-md-4 d-flex justify-content-center  ">
-     <label for="Submit">Submit</label>
-       <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
+     <label for="IsIndexOriginalSubmit">Submit</label>
+       <input type="checkbox" id="IsIndexOriginalSubmit"  [(ngModel)]="Entity.p.IsIndexOriginalSubmit" name="IsIndexOriginalSubmit" class="custom-checkbox">
  </div>
 
  </div>
@@ -494,8 +496,8 @@
    </div>
 
    <div class="col-md-4 d-flex justify-content-center  ">
-     <label for="Submit">Submit</label>
-       <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
+     <label for="IsDastZeroxSubmit">Submit</label>
+       <input type="checkbox" id="IsDastZeroxSubmit"  [(ngModel)]="Entity.p.IsDastZeroxSubmit" name="IsDastZeroxSubmit" class="custom-checkbox">
  </div>
 
  </div>
@@ -504,25 +506,25 @@
  <!-- Inward No: -->
  <div class="row mb-4" style="margin-top: 1rem; ">
   <div class="col-md-6">
-    <label>Inward No:</label>
+    <label>Inward No</label>
      <input
        type="text"
-       [(ngModel)]="Entity.p.Name"
-       name="Inward No:"
+       [(ngModel)]="Entity.p.TalathiInwardNo"
+       name="TalathiInwardNo"
        class="form-control"
-       id="Inward No:"
+       id="TalathiInwardNo"
        required
-       placeholder="Enter Inward No:"
+       placeholder="Enter Inward No"
      />
  </div>
  <div class="col-md-6">
   <label>Date</label>
    <input
      type="date"
-     [(ngModel)]="Entity.p.Name"
-     name="Date"
+     [(ngModel)]="Entity.p.TalathiDate"
+     name="TalathiDate"
      class="form-control"
-     id="Date"
+     id="TalathiDate"
      required
      placeholder="Enter Date"
    />
@@ -549,8 +551,8 @@
   </div>
 
   <div class="col-md-4 d-flex justify-content-center  ">
-    <label for="Submit">Submit</label>
-      <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
+    <label for="IsFerfarNoticeSubmit">Submit</label>
+      <input type="checkbox" id="IsFerfarNoticeSubmit"  [(ngModel)]="Entity.p.IsFerfarNoticeSubmit" name="IsFerfarNoticeSubmit" class="custom-checkbox">
 </div>
 
 </div>
@@ -574,8 +576,8 @@
   </div>
 
   <div class="col-md-4 d-flex justify-content-center  ">
-    <label for="Submit">Submit</label>
-      <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
+    <label for="IsFinalCustomer712Submit">Submit</label>
+      <input type="checkbox" id="IsFinalCustomer712Submit"  [(ngModel)]="Entity.p.IsFinalCustomer712Submit" name="IsFinalCustomer712Submit" class="custom-checkbox">
 </div>
 </div>
 </div>
@@ -585,14 +587,14 @@
 <!-- Spiral 7/12 -->
  <div class="row mt-3">
   <div class="col-md-6 d-flex justify-content-center  ">
-    <label> Spiral 7/12</label>
-    <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
+    <label for="IsSpiral712Submit"> Spiral 7/12</label>
+    <input type="checkbox" id="IsSpiral712Submit"  [(ngModel)]="Entity.p.IsSpiral712Submit" name="IsSpiral712Submit" class="custom-checkbox">
 </div>
 
 <!-- Client Submit -->
   <div class="col-md-6 d-flex justify-content-center  mb-3 ">
-    <label for="Submit">Client Submit</label>
-      <input type="checkbox" id="Submit" name="Submit" class="custom-checkbox">
+    <label for="IsClientSubmit">Client Submit</label>
+      <input type="checkbox" id="IsClientSubmit"  [(ngModel)]="Entity.p.IsClientSubmit" name="IsClientSubmit" class="custom-checkbox">
 </div>
  </div>
   
