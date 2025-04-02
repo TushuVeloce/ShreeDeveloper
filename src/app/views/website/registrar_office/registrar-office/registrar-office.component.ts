@@ -66,8 +66,10 @@ onSiteRefPlotList = async (siteRef: number) => {
     await this.uiUtils.showWarningToster(`Please Select Site`);
     return
   }
-  let lst = await Plot.FetchEntireListBySiteRef(siteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  this.PlotNoList = lst;
+  let lst = await Plot.FetchEntireList( async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  console.log('lst :', lst);
+  this.PlotNoList = lst.filter(plot => plot.p.CurrentBookingRemark === 50);
+  console.log('PlotNoList :', this.PlotNoList);
   this.loadPaginationData(); 
 }
 
@@ -85,16 +87,16 @@ onSiteRefPlotList = async (siteRef: number) => {
     this.loadPaginationData(); 
   }
 
-  getRegistrarOfficeListByCustomerRef = async (CustomerRef:number) => {
-      this.MasterList = [];
-      this.DisplayMasterList = [];
-        let lst = await RegistrarOffice.FetchEntireListByCustomerRef(CustomerRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-        console.log('lst :', lst);
-        this.MasterList = lst;
-        console.log('MasterList :', this.MasterList);
-        this.DisplayMasterList = this.MasterList;
-      this.loadPaginationData();
-    }
+  // getRegistrarOfficeListByCustomerRef = async (CustomerRef:number) => {
+  //     this.MasterList = [];
+  //     this.DisplayMasterList = [];
+  //       let lst = await RegistrarOffice.FetchEntireListByCustomerRef(CustomerRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //       console.log('lst :', lst);
+  //       this.MasterList = lst;
+  //       console.log('MasterList :', this.MasterList);
+  //       this.DisplayMasterList = this.MasterList;
+  //     this.loadPaginationData();
+  //   }
 
   onEditClicked = async (item: RegistrarOffice) => {
     this.SelectedRegistrarOffice = item.GetEditableVersion();

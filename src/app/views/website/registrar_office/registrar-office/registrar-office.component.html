@@ -29,13 +29,13 @@
         <nz-option *ngFor="let plot of PlotNoList" [nzValue]="plot.p.Ref" [nzLabel]="plot.p.PlotNo"></nz-option>
       </nz-select>
     </div>
-    <div class="col-md-4">
+    <!-- <div class="col-md-4">
       <label for="CustomerRef"><b>Customer Name</b></label>
       <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CustomerRef"
         name="CustomerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CustomerRef" (ngModelChange)="getRegistrarOfficeListByCustomerRef(Entity.p.CustomerRef)">
         <nz-option *ngFor="let customer of CustomerList" [nzValue]="customer.p.Ref" [nzLabel]="customer.p.CustomerName"></nz-option>
       </nz-select>
-    </div>
+    </div> -->
     
     
   </div>
