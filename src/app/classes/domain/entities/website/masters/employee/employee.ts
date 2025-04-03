@@ -17,15 +17,15 @@ import { EmployeeFetchRequest } from "./employeefetchrequest";
 export class EmployeeProps {
   public readonly Db_Table_Name = "EmployeeMaster";
   public Ref: number = 0;
-  public DesignationRef : number = 0;
-  public readonly DesignationName : boolean = false;
-  public Name : string = '';
-  public DOB  : string = '';
+  public DesignationRef: number = 0;
+  public readonly DesignationName: boolean = false;
+  public Name: string = '';
+  public DOB: string = '';
   // public FirstName: string = '';
   // public LastName: string = '';
   public ContactNos: string = '';
-  public PersonalEmailId : string = '';
-  public OfficialEmailId  : string = '';
+  public PersonalEmailId: string = '';
+  public OfficialEmailId: string = '';
   public AddressLine1: string = '';
   public AddressLine2: string = '';
   public CountryRef: number = 0;
@@ -34,18 +34,18 @@ export class EmployeeProps {
   public readonly StateName: boolean = false;
   public CityRef: number = 0;
   public readonly CityName: boolean = false;
-  public EmergencyContactName : string = '';
-  public EmergencyContactNo : string = '';
-  public MaritalStatus  : string = '';
-  public DateOfJoining : string = '';
-  public SalaryPerMonth : Number = 0;
-  public SalaryPerYear : Number = 0;
+  public EmergencyContactName: string = '';
+  public EmergencyContactNo: string = '';
+  public MaritalStatus: number = 0;
+  public DateOfJoining: string = '';
+  public SalaryPerMonth: Number = 0;
+  public SalaryPerYear: Number = 0;
   public BankName: string = '';
-  public BranchName : string = '';
-  public IFSC : string = '';
-  public BanckAccountNo : string = '';
+  public BranchName: string = '';
+  public IFSC: string = '';
+  public BanckAccountNo: string = '';
   // public LoginStatus: string = '';
-  public Gender: string = '';
+  public Gender: number = 0;
   // public EmpId: string = '';
   public DepartmentRef: number = 0;
   public readonly DepartmentName: boolean = false;
@@ -74,8 +74,8 @@ export class Employee implements IPersistable<Employee> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -96,8 +96,28 @@ export class Employee implements IPersistable<Employee> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') vra.add('Name', ' Name cannot be blank.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
+    if (this.p.Name == '') vra.add('Name', ' Name cannot be blank.');
+    if (this.p.DOB == '') vra.add('DOB', ' DOB cannot be blank.');
+    if (this.p.Gender == 0) vra.add('Gender', ' Gender cannot be blank.');
+    if (this.p.ContactNos == '') vra.add('ContactNos', ' Contact Nos cannot be blank.');
+    if (this.p.PersonalEmailId == '') vra.add('PersonalEmailId', ' Personal Email Id cannot be blank.');
+    if (this.p.OfficialEmailId == '') vra.add('OfficialEmailId', ' Official Email Id cannot be blank.');
+    if (this.p.AddressLine1 == '') vra.add('AddressLine1', ' AddressLine1 cannot be blank.');
+    if (this.p.AddressLine2 == '') vra.add('AddressLine2', ' AddressLine2 cannot be blank.');
+    if (this.p.CityRef == 0) vra.add('CityRef', ' City cannot be blank.');
+    if (this.p.EmergencyContactName == '') vra.add('EmergencyContactName', 'Emergency Contact Name cannot be blank.');
+    if (this.p.EmergencyContactNo == '') vra.add('EmergencyContactNo', 'Emergency Contact No cannot be blank.');
+    if (this.p.MaritalStatus == 0) vra.add('MaritalStatus', 'Marital Status cannot be blank.');
+    if (this.p.DepartmentRef == 0) vra.add('DepartmentRef', 'Department cannot be blank.');
+    if (this.p.DesignationRef == 0) vra.add('DesignationRef', 'Designation cannot be blank.');
+    if (this.p.DateOfJoining == '') vra.add('DateOfJoining', ' Date Of Joining cannot be blank.');
+    if (this.p.SalaryPerMonth == 0) vra.add('SalaryPerMonth', ' Salary Per Month cannot be blank.');
+    if (this.p.SalaryPerYear == 0) vra.add('SalaryPerYear', ' Salary Per Year cannot be blank.');
+    if (this.p.BankName == '') vra.add('BankName', ' Bank Name cannot be blank.');
+    if (this.p.BranchName == '') vra.add('BranchName ', ' Branch Name cannot be blank.');
+    if (this.p.IFSC == '') vra.add('IFSC', ' IFSC cannot be blank.');
+    if (this.p.BanckAccountNo == '') vra.add('BanckAccountNo', ' Banck Account No cannot be blank.');
 
   }
 
@@ -192,13 +212,13 @@ export class Employee implements IPersistable<Employee> {
     return Employee.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new EmployeeFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await Employee.FetchTransportData(req, errorHandler) as TransportData;
     return Employee.ListFromTransportData(tdResponse);
   }
-  
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;
