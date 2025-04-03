@@ -30,30 +30,43 @@ export class RegistrarOfficeProps {
   public Witness1Submit : boolean = false;
   public Witness1Name : string = '';
   public Witness1ContactNo : string = '';
+  public CustomerAadharPath :string = '';
+  public CustomerPanPath   :string = '';
   public Witness1IsAadharSubmit  : boolean = false;
+  public Witness1AadharPath : string = '';
   public Witness1IsPanSubmit  : boolean = false;
+  public Witness1PanPath  : string = '' ;
 
   public Witness2Submit  : boolean = false;
   public Witness2Name : string = '';
   public Witness2ContactNo : string = '';
   public Witness2IsAadharSubmit  : boolean = false;
+  public Witness2AadharPath : string = '';
   public Witness2IsPanSubmit   : boolean = false;
+  public Witness2PanPath  : string = '' ;
+
 
 //  public IsAgreementToSaleSubmit : boolean = false;
   public AgreementDocumentNo  : string = '';
   public AgreementDate : string = '';
+  public AgreementDocumentPath : string ='';
 
 //  public IsSaledeedSubmit : Boolean = false;
   public SaleDeedDocumentNo : string = '';
+  public SaleDeedtDocumentPath :string = '';
   public SaleDeedDate : string = '';
   public IsIndexOriginalSubmit : string = '';
+  public IndexOriginalDocumentPath : string = '';
   public IsDastZeroxSubmit : string = '';
+  public DastZeroxDocumentPath  : string = '';
 
 //  public IsTalathiSubmit : Boolean = false;
   public TalathiInwardNo : string = '';
   public TalathiDate : string = '';
   public IsFerfarNoticeSubmit : string = '';
+  public FerfarNoticeDocumentPath  : string = '';
   public IsFinalCustomer712Submit : string = '';
+  public FinalCustomer712DocumentPath  : string = '';
   public IsSpiral712Submit : string = '';
   public IsClientSubmit : string = '';
 
