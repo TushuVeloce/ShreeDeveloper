@@ -74,7 +74,7 @@
         </div>
         <div class="col-md-4 col-md-4 col-sm-12 mt-2" *ngIf="IsNewEntity">
           <label>Customer Requirement</label>
-          <input type="text" name="CustomerRequirement" class="form-control" [(ngModel)]="Entity.p.CustomerRequirement"
+          <input type="text" name="CustomerRequirement" class="form-control" [(ngModel)]="Entity.p.CustomerFollowUps[0].CustomerRequirement"
             id="CustomerRequirement" required placeholder="Enter Customer Requirement" />
         </div>
         <div class="col-md-4 col-md-4 col-sm-12 mt-2" *ngIf="IsNewEntity">

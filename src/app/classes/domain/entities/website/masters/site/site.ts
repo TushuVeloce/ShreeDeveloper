@@ -181,7 +181,6 @@ export class Site implements IPersistable<Site> {
   }
   public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new SiteFetchRequest();
-    console.log('req :', req);
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await Site.FetchTransportData(req, errorHandler) as TransportData;
     return Site.ListFromTransportData(tdResponse);

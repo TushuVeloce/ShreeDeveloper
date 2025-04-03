@@ -375,6 +375,8 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
+    
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
