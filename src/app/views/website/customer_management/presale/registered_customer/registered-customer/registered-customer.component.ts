@@ -95,12 +95,13 @@ export class RegisteredCustomerComponent  implements OnInit {
           await this.uiUtils.showErrorMessage('Error', tr.Message);
           return;
         }
-    
-        let tdResult = JSON.parse(tr.Tag) as TransportData;
+        await this.uiUtils.showSuccessToster('Deal canceled Successfully');      
+       let tdResult = JSON.parse(tr.Tag) as TransportData;
         console.log('tdResult :', tdResult);
       }
     );
     this.getRegisterCustomerListByCompanyRef()
+    this.loadPaginationData()
 };
 
     
