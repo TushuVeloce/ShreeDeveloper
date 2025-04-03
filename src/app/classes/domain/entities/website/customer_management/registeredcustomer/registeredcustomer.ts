@@ -16,6 +16,7 @@ import { RegisteredCustomerFetchRequest } from "./registeredcustomerfetchrequest
 export class RegisteredCustomerProps {
   public Ref: number = 0;
   public SiteRef : number = 0;
+  public PlotRef : number = 0;
   public CustomerEnquiryRef: number = 0;
   public DiscountedRateOnArea : number = 0;
   public DiscountOnTotalPlotAmount : number = 0;
@@ -38,6 +39,13 @@ export class RegisteredCustomerProps {
   public CompanyRef:  number = 0;
   public CreatedBy:  number = 0;
   public UpdatedDate:  string = '';
+
+  public readonly SiteName : string = '';
+  public readonly CustomerName : string = '';
+  public readonly CompanyName : string = '';
+  public readonly PlotName : string = '';
+  public readonly CustomerMobileNo : string = '';
+  public readonly CustomerAddress : string = '';
 
 
   public readonly IsNewlyCreated: boolean = false;

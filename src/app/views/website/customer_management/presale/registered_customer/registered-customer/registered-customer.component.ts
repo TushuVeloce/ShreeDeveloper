@@ -9,8 +9,7 @@ import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacke
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { Utils } from 'src/app/services/utils.service';
-import { CustomProcessProps } from 'src/app/classes/domain/entities/website/customer_management/registeredcustomer/Custom Process/CancelDealCustomProcess';
-import { CancelDealCustomRequest } from 'src/app/classes/domain/entities/website/customer_management/registeredcustomer/Custom Process/CancelDealCustomRequest';
+import { CancelDealCustomRequest } from 'src/app/classes/domain/entities/website/customer_management/registeredcustomer/custom_process/CancelDealCustomRequest';
 
 
 @Component({
@@ -30,7 +29,7 @@ export class RegisteredCustomerComponent  implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  RegisterCustomerList: any[] = [];  // ✅ Correct
+  RegisterCustomerList: RegisteredCustomer[] = []; 
 
   headers: string[] = [
     'Sr.No.',
@@ -63,7 +62,8 @@ export class RegisteredCustomerComponent  implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await RegisteredCustomer.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await RegisteredCustomer.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));    
+    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.RegisterCustomerList = lst
@@ -81,10 +81,13 @@ export class RegisteredCustomerComponent  implements OnInit {
     await this.router.navigate(['/homepage/Website/Registered_Customer_Details']);
   };
 
-  CancelDeal = async (registercustomer:any) => {
+  CancelDeal = async (registercustomer:RegisteredCustomer) => {
     let confirm = await this.uiUtils.showConfirmationMessage('Confirmation','Are you sure you want to cancel this process?',
       async () => {
+        debugger
         let req = new CancelDealCustomRequest();  
+        req.RegisterCustomerRef = registercustomer.p.Ref;
+        req.PlotRef = registercustomer.p.PlotRef;
         let td = req.FormulateTransportData();
         let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
         let tr = await this.serverCommunicator.sendHttpRequest(pkt);

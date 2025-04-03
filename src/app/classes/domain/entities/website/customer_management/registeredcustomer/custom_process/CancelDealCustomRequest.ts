@@ -8,8 +8,8 @@ export class CancelDealCustomRequest
 {
     public static readonly CustomProcessRequestType: string = "CancelDealCustomRequest";
 
-    CustomProcessRefs: number[] = [];
-    CompanyRefs: number[] = [];
+    RegisterCustomerRef: number = 0;
+    PlotRef: number = 0;
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
@@ -18,7 +18,7 @@ export class CancelDealCustomRequest
     }
 
     public FormulateTransportData = () => {
-        let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.Save);
+        let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.CustomProcess);
         this.MergeIntoTransportData(td);
 
         return td;
