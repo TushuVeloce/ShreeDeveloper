@@ -140,7 +140,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       // this.BillDate = this.datePipe.transform(this.dtu.FromString(strCDT), 'yyyy-MM-dd');
       this.Date = strCDT.substring(0, 10);
       this.DateWithTime = strCDT;
-      console.log(strCDT);
     } else {
       this.Date = this.datePipe.transform(
         this.dtu.FromString(this.Entity.p.CustomerFollowUps[0].TransDateTime),
@@ -306,7 +305,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   }
 
   SaveCustomerEnquiry = async () => {
-    debugger;
     this.Entity.p.CompanyRef =
       this.companystatemanagement.getCurrentCompanyRef();
     
@@ -335,10 +333,8 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     }
 
     // ------ Code For Save Date Of InCorporation Year Format ---------------//
-    console.log('if officevistdate :', this.officevistdate);
     if (this.officevistdate) {
       let dateValue = new Date(this.officevistdate);
-      console.log('officevistdate :', dateValue);
 
       if (!isNaN(dateValue.getTime())) {
         this.Entity.p.CustomerFollowUps[0].OfficeVisitDate =
@@ -379,8 +375,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
-    // return;
+    return;
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
