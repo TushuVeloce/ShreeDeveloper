@@ -328,7 +328,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     let entitiesToSave = [entityToSave];
     // this.Entity.p.ContactMode = this.CustomerEnquiryEntity.p.CustomerFollowUps[0].ContactMode;
     // console.log('entitiesToSave:', entitiesToSave);
-    return
     // // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
