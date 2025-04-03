@@ -20,7 +20,6 @@ import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_r
 })
 export class RegisteredCustomerDetailsComponent  implements OnInit {
  Entity: RegisteredCustomer = RegisteredCustomer.CreateNewInstance();
- NewEntity: any = {}; 
   Plotheaders: string[] = ['Sr.No.', 'Plot No', 'Area in sqm', 'Area in Sqft', 'Customer Status', 'Remark'];
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
@@ -43,7 +42,6 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
          this.IsNewEntity = false;
          this.Entity = RegisteredCustomer.GetCurrentInstance();
-         this.NewEntity = this.Entity.p
          this.Entity.p.TaxValueInPercentage = 6
          this.Entity.p.RegTaxValuesInPercentage = 1
          this.calculateTotalPlotAmount()
@@ -61,9 +59,9 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
     }
 
     calculateTotalPlotAmount = () => {
-      const AreaInSqft = Number(this.NewEntity.AreaInSqft);
+      const AreaInSqft = Number(this.Entity.p.AreaInSqft);
       const DiscountedRateOnArea = Number(this.Entity.p.DiscountedRateOnArea);
-      const BasicRatePerSqft = Number(this.NewEntity.BasicRatePerSqft);
+      const BasicRatePerSqft = Number(this.Entity.p.BasicRatePerSqft);
       const DiscountOnTotalPlotAmount = Number(this.Entity.p.DiscountOnTotalPlotAmount)
   
       if (DiscountedRateOnArea === 0) {
@@ -74,8 +72,8 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
     }
 
     calculateGovernmentValue= () => {
-      const GovermentRatePerSqm = Number(this.NewEntity.GovermentRatePerSqm);
-      const AreaInSqm = Number(this.NewEntity.AreaInSqm);
+      const GovermentRatePerSqm = Number(this.Entity.p.GovermentRatePerSqm);
+      const AreaInSqm = Number(this.Entity.p.AreaInSqm);
       this.Entity.p.GovernmentValue = Math.ceil(GovermentRatePerSqm * AreaInSqm);
     }
 
@@ -110,6 +108,10 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
       this.Entity.p.GstToatalAmount = GSTonValueofAgreement
     }
 
+    selectAllValue(event: MouseEvent): void {
+      const input = event.target as HTMLInputElement;
+      input.select();
+    }
 
     SaveRegisteredCustomer = async () => {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
