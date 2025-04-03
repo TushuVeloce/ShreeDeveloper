@@ -20,6 +20,7 @@ export class SiteFetchRequest
     }
 
     public FormulateTransportData = () => {
+        debugger
         let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.Fetch);
         this.MergeIntoTransportData(td);
 

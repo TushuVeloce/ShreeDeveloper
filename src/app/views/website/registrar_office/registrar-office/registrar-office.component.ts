@@ -45,6 +45,7 @@ export class RegistrarOfficeComponent  implements OnInit {
     
   // get SiteList With Company Ref //
   getSiteListByCompanyRef = async () => {
+    debugger
     this.MasterList = [];
     this.DisplayMasterList = [];
     this.SiteList = [];
@@ -52,6 +53,7 @@ export class RegistrarOfficeComponent  implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
+    console.log('this.companyRef :', this.companyRef());
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
     this.loadPaginationData();

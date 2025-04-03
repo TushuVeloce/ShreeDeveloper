@@ -148,6 +148,7 @@ export class Site implements IPersistable<Site> {
   }
 
   public static async FetchTransportData(req: SiteFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+   debugger
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -180,7 +181,9 @@ export class Site implements IPersistable<Site> {
     return Site.ListFromTransportData(tdResponse);
   }
   public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    debugger
     let req = new SiteFetchRequest();
+    console.log('req :', req);
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await Site.FetchTransportData(req, errorHandler) as TransportData;
     return Site.ListFromTransportData(tdResponse);
