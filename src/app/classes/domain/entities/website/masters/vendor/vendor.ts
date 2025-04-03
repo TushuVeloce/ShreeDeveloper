@@ -31,7 +31,7 @@ export class VendorProps {
   public AddressLine1: string = '';
   public AddressLine2: string = '';
   public MobileNo: string = '';
-  public CompanyType: string = '';
+  public CompanyType: number = 0;
   public TradeName: string = '';
 
   public BankName: string = '';
@@ -58,7 +58,7 @@ export class VendorProps {
   public CompanyName: string = '';
 
   // public readonly CompanyName: string = '';
-  
+
   public readonly IsNewlyCreated: boolean = false;
 
   private constructor(isNewlyCreated: boolean) {
@@ -102,7 +102,7 @@ export class Vendor implements IPersistable<Vendor> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-    if (this.p.CompanyType == '') vra.add('CompanyType', 'Company Type cannot be blank.');
+    if (this.p.CompanyType == 0) vra.add('CompanyType', 'Company Type cannot be blank.');
     if (this.p.MobileNo == '') vra.add('MobileNo', 'Mobile No cannot be blank.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
     if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country Name cannot be blank.');
@@ -208,7 +208,7 @@ export class Vendor implements IPersistable<Vendor> {
     let tdResponse = await Vendor.FetchTransportData(req, errorHandler) as TransportData;
     return Vendor.ListFromTransportData(tdResponse);
   }
-  
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

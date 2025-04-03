@@ -17,13 +17,13 @@ export class MarketingTypeProps {
   public readonly Db_Table_Name = "MarketingTypeMaster";
   public Ref: number = 0;
   public Description: string = '';
-  public MarketingMode: string = '';
+  public MarketingMode: number = 0;
   public readonly MarketingModeName: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  
+
   public readonly IsNewlyCreated: boolean = false;
-  
+
   // public readonly AccountTypeName: string = '';
 
   private constructor(isNewlyCreated: boolean) {
@@ -66,7 +66,7 @@ export class MarketingType implements IPersistable<MarketingType> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.MarketingMode == '') vra.add('Marketing Modes', 'Marketing Modes cannot be blank.');
+    if (this.p.MarketingMode == 0) vra.add('Marketing Modes', 'Marketing Modes cannot be blank.');
     if (this.p.Description == '') vra.add('Description', 'Description cannot be blank.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
 
