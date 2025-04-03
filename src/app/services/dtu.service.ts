@@ -189,6 +189,15 @@ export class DTU {
     const seconds = String(date.getSeconds()).padStart(2, '0');
     const milliseconds = String(date.getMilliseconds()).padStart(3, '0');
 
-    return `${ year } -${ month } -${ day } -${ hours } -${ minutes } -${ seconds } -${ milliseconds }`;
+    return `${year} -${month} -${day} -${hours} -${minutes} -${seconds} -${milliseconds}`;
+  }
+  public ConvertStringDateToFullFormat(date: string): string {
+    if (date != "") {
+      const time = '00-00-00'; // Hardcoded time part for '00:00:00'
+      const milliseconds = '000'; // Hardcoded milliseconds part
+
+      return `${date}-${time}-${milliseconds}`;
+    }
+    return '';
   }
 }

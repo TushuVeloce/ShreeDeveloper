@@ -226,14 +226,14 @@
         <div class="col-md-4">
           <div>
             <label>Next Site Visit Date</label>
-            <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="this.sitevisitdate"
+            <input type="date" name="Date" class="form-control" id="Date" [value]="localSiteVisitDate!.split('-').slice(0, 3).join('-') | date:'yyyy-MM-dd'" (change)="onLocalSiteVisitDate($event)"
               required />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Next Office Visit Date</label>
-            <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="this.officevistdate"
+            <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="officevistdate"
               required />
           </div>
         </div>
@@ -241,7 +241,7 @@
           <div>
             <label>Reminder Date</label>
             <input type="Date" name="ReminderDate" class="form-control" id="ReminderDate"
-              [(ngModel)]="this.reminderdate" required />
+              [(ngModel)]="reminderdate" required />
           </div>
         </div>
       </div>

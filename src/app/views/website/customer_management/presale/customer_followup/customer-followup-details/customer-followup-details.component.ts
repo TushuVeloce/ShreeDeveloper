@@ -49,7 +49,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
   EmployeeList: Employee[] = [];
   reminderdate: string | null = null;
   officevistdate: string | null = null;
-  sitevisitdate: string | null = null;
+  localSiteVisitDate: string  = '2025-04-15-00-00-00-000';
   ContactModesList = DomainEnums.ContactModeList(true, '--Select Contact Mode --');
   LeadSourceList = DomainEnums.MarketingModesList(true, '--Select Lead Source --');
   CustomerStatusList = DomainEnums.CustomerStatusList(true, '--Select Customer Status --');
@@ -90,12 +90,12 @@ export class CustomerFollowupDetailsComponent implements OnInit {
         );
       }
 
-      if (this.Entity.p.SiteVisitDate) {
+      if (this.Entity.p.SiteVisitDate!= "") {
         // While Edit Converting date String into Date Format //
-        this.sitevisitdate = this.datePipe.transform(
-          this.dtu.FromString(this.Entity.p.SiteVisitDate),
-          'yyyy-MM-dd'
-        );
+        // this.localSiteVisitDate = this.datePipe.transform(
+        //   this.dtu.FromString(this.Entity.p.SiteVisitDate),
+        //   'yyyy-MM-dd'
+        // );
       }
 
       if (this.Entity.p.OfficeVisitDate) {
@@ -182,6 +182,16 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     this.DisplayMasterList = [];
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
+  }
+  onLocalSiteVisitDate(event: any) {
+    const selectedDate = event.target.value;
+    console.log('Selected Date:', selectedDate);
+    this.localSiteVisitDate = selectedDate
+    let a =DTU.GetInstance().ConvertStringDateToFullFormat(this.localSiteVisitDate!)
+    console.log('a :', a);
+    console.log('this.localSiteVisitDate :', this.localSiteVisitDate);
+
+    // You can now process the selected date as needed
   }
 
   getPlotBySiteRefList = async (siteRef: number) => {
@@ -278,8 +288,8 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     this.Entity.p.TransDateTime = CurrentDateTime;
 
     // ------ Code For Save Date Of InCorporation Year Format ---------------//
-    if (this.sitevisitdate) {
-      let dateValue = new Date(this.sitevisitdate);
+    if (this.localSiteVisitDate) {
+      let dateValue = new Date(this.localSiteVisitDate);
 
       if (!isNaN(dateValue.getTime())) {
         this.Entity.p.SiteVisitDate = this.dtu.DateStartStringFromDateValue(dateValue);
