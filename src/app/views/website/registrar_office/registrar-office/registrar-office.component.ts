@@ -30,7 +30,7 @@ export class RegistrarOfficeComponent  implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   SiteRef : number = 0;
-  headers: string[] = ['Sr.No.', 'Cheque', 'Witness 1','Witness 2', 'Action'];
+  headers: string[] = ['Sr.No.','Customer', 'Cheque', 'Witness 1','Witness 2', 'Action'];
   
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement) {
     effect(() => {
@@ -45,15 +45,14 @@ export class RegistrarOfficeComponent  implements OnInit {
     
   // get SiteList With Company Ref //
   getSiteListByCompanyRef = async () => {
-    debugger
+    this.PlotNoList = [];
+    this.SiteList = [];
     this.MasterList = [];
     this.DisplayMasterList = [];
-    this.SiteList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    console.log('this.companyRef :', this.companyRef());
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
     this.loadPaginationData();
@@ -63,15 +62,15 @@ export class RegistrarOfficeComponent  implements OnInit {
   // get PlotList With Site Ref //
 
 onSiteRefPlotList = async (siteRef: number) => {
+  this.MasterList = [];
   this.DisplayMasterList = [];
+  this.PlotNoList = [];
   if (siteRef <= 0) {
     await this.uiUtils.showWarningToster(`Please Select Site`);
     return
   }
   let lst = await Plot.FetchEntireListBySiteRef(siteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  console.log('lst :', lst);
   this.PlotNoList = lst.filter(plot => plot.p.CurrentBookingRemark === 50);
-  console.log('PlotNoList :', this.PlotNoList);
   this.loadPaginationData(); 
 }
 
@@ -85,10 +84,9 @@ onSiteRefPlotList = async (siteRef: number) => {
       return
     }
     let lst = await RegistrarOffice.FetchEntireListByPlotRef(PlotRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
         this.MasterList = lst;
-        console.log('MasterList :', this.MasterList);
         this.DisplayMasterList = this.MasterList;
+        console.log('DisplayMasterList :', this.DisplayMasterList);
       this.loadPaginationData();
   }
 
