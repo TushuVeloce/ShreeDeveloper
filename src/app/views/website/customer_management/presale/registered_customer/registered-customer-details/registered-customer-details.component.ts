@@ -60,7 +60,7 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
         // this.focusInput();
     }
 
-    calculateTotalPlotAmount() {
+    calculateTotalPlotAmount = () => {
       const AreaInSqft = Number(this.NewEntity.AreaInSqft);
       const DiscountedRateOnArea = Number(this.Entity.p.DiscountedRateOnArea);
       const BasicRatePerSqft = Number(this.NewEntity.BasicRatePerSqft);
@@ -73,27 +73,27 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
       }
     }
 
-    calculateGovernmentValue() {
+    calculateGovernmentValue= () => {
       const GovermentRatePerSqm = Number(this.NewEntity.GovermentRatePerSqm);
       const AreaInSqm = Number(this.NewEntity.AreaInSqm);
       this.Entity.p.GovernmentValue = Math.ceil(GovermentRatePerSqm * AreaInSqm);
     }
 
-    calculateStampDuties() {
+    calculateStampDuties= () => {
       const ValueOfAgreement = Number(this.Entity.p.ValueOfAgreement);
       const TaxValueInPercentage = Number(this.Entity.p.TaxValueInPercentage);
       this.Entity.p.StampDuties = Math.ceil(ValueOfAgreement * (TaxValueInPercentage / 100));
       this.calculateRegistrationFees()
     }
 
-    calculateRegistrationFees() {
+    calculateRegistrationFees= () => {
       const ValueOfAgreement = Number(this.Entity.p.ValueOfAgreement);
       const RegTaxValuesInPercentage = Number(this.Entity.p.RegTaxValuesInPercentage);
       this.Entity.p.RegistrationFees = Math.ceil(ValueOfAgreement * (RegTaxValuesInPercentage / 100));
       this.calculateExtraCharges()
     }
 
-    calculateExtraCharges() {
+    calculateExtraCharges= () => {
       const LegalCharges = Number(this.Entity.p.LegalCharges);
       const StampDuties = Number(this.Entity.p.StampDuties);
       const RegistrationFees = Number(this.Entity.p.RegistrationFees);
@@ -101,7 +101,7 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
       this.calculateGrandTotal()
     }
 
-    calculateGrandTotal() {
+    calculateGrandTotal= () => {
       const TotalPlotAmount = Number(this.Entity.p.TotalPlotAmount);
       const ValueOfAgreement = Number(this.Entity.p.ValueOfAgreement);
       const TotalExtraCharges = Number(this.Entity.p.TotalExtraCharges);
@@ -136,7 +136,7 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
     };
   
    
-    BackRegisteredCustomer() {
+    BackRegisteredCustomer= () => {
       this.router.navigate(['/homepage/Website/Registered_Customer']);
     }
 
