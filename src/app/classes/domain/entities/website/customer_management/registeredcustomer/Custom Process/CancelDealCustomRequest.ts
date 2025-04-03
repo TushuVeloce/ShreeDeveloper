@@ -4,16 +4,16 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class CustomProcessFetchRequest
+export class CancelDealCustomRequest
 {
-    public static readonly FetchRequestType: string = "CancelDealCustomRequest";
+    public static readonly CustomProcessRequestType: string = "CancelDealCustomRequest";
 
     CustomProcessRefs: number[] = [];
     CompanyRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CustomProcessFetchRequest.FetchRequestType) as DataCollection;
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CancelDealCustomRequest.CustomProcessRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 
@@ -24,4 +24,3 @@ export class CustomProcessFetchRequest
         return td;
     }
 }
-

@@ -9,8 +9,8 @@ import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacke
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { Utils } from 'src/app/services/utils.service';
-import { CustomProcessProps } from 'src/app/classes/domain/entities/website/customer_management/registeredcustomer/Custom Process/customprocess';
-import { CustomProcessFetchRequest } from 'src/app/classes/domain/entities/website/customer_management/registeredcustomer/Custom Process/customprocessfetchrequest';
+import { CustomProcessProps } from 'src/app/classes/domain/entities/website/customer_management/registeredcustomer/Custom Process/CancelDealCustomProcess';
+import { CancelDealCustomRequest } from 'src/app/classes/domain/entities/website/customer_management/registeredcustomer/Custom Process/CancelDealCustomRequest';
 
 
 @Component({
@@ -73,7 +73,6 @@ export class RegisteredCustomerComponent  implements OnInit {
   
 
   onEditClicked = async (item: RegisteredCustomer) => {
-  console.log('item :', item);
 
     this.SelectedRegisteredCustomer = item.GetEditableVersion();
     RegisteredCustomer.SetCurrentInstance(this.SelectedRegisteredCustomer);
@@ -82,11 +81,10 @@ export class RegisteredCustomerComponent  implements OnInit {
     await this.router.navigate(['/homepage/Website/Registered_Customer_Details']);
   };
 
-  Cancel = async (registercustomer:any) => {
-    debugger
+  CancelDeal = async (registercustomer:any) => {
     let confirm = await this.uiUtils.showConfirmationMessage('Confirmation','Are you sure you want to cancel this process?',
       async () => {
-        let req = new CustomProcessFetchRequest();   
+        let req = new CancelDealCustomRequest();  
         let td = req.FormulateTransportData();
         let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
         let tr = await this.serverCommunicator.sendHttpRequest(pkt);
