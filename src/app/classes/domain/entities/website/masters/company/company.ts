@@ -19,7 +19,7 @@ export class CompanyProps {
   public Name: string = '';
   public OwnerName: string = '';
   public EmailId: string = '';
-  public CompanyType: string = '';
+  public CompanyType: number = 0;
   public Contacts: string = '';
   public AddressLine1: string = '';
   public AddressLine2: string = '';
@@ -36,7 +36,7 @@ export class CompanyProps {
   public readonly StateName: string='';
   public CityRef:  number = 10374 ;
   public readonly CityName: string='';
- 
+
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -84,7 +84,7 @@ export class Company implements IPersistable<Company> {
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
     if (this.p.OwnerName == '') vra.add('OwnerName', 'Owner Name cannot be blank.');
     if (this.p.EmailId == '') vra.add('EmailId', 'Email Id cannot be blank.');
-    if (this.p.CompanyType == '') vra.add('CompanyType', 'Company Type cannot be blank.');
+    if (this.p.CompanyType == 0) vra.add('CompanyType', 'Company Type cannot be blank.');
     if (this.p.PinCode == '') vra.add('PinCode', 'Pin code cannot be blank.');
     if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'AddressLine1 cannot be blank.');
     if (this.p.AddressLine2 == '') vra.add('AddressLine2', 'AddressLine2 cannot be blank.');
