@@ -9,6 +9,8 @@ import { CompanyStateManagement } from 'src/app/services/companystatemanagement'
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
+import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
+
 
 @Component({
   selector: 'app-registered-customer-details',
@@ -33,16 +35,18 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
     GoodandServicesTaxList = DomainEnums.GoodsAndServicesTaxList(true, '--Select GST --');
     companyRef = this.companystatemanagement.SelectedCompanyRef;
     FinancialYearList: FinancialYear[]=[]
+    CurrentDateWithTime: string= ''
   
     constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement,private servicecommunicator: ServerCommunicatorService) { }
   
     async ngOnInit() {
       this.appStateManage.setDropdownDisabled(true);
+      let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+      this.CurrentDateWithTime = strCDT
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
          this.IsNewEntity = false;
          this.Entity = RegisteredCustomer.GetCurrentInstance();
          this.NewEntity = this.Entity.p
-         console.log('NewEntity :', this.NewEntity);
          this.Entity.p.TaxValueInPercentage = 6
          this.Entity.p.RegTaxValuesInPercentage = 1
          this.calculateTotalPlotAmount()
@@ -111,15 +115,11 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
 
 
     SaveRegisteredCustomer = async () => {
-      let serverTime = await this.servicecommunicator.GetCurrentTime();
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.Entity.p.UpdatedBy = String(serverTime); 
-      console.log('this.Entity.p.UpdatedBy :', this.Entity.p.UpdatedBy);
+      this.Entity.p.UpdatedBy = this.CurrentDateWithTime; 
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-      console.log('entitiesToSave:', entitiesToSave);
-      // await this.Entity.EnsurePrimaryKeysWithValidValues()
       let tr = await this.utils.SavePersistableEntities(entitiesToSave);
       if (!tr.Successful) {
         this.isSaveDisabled = false;

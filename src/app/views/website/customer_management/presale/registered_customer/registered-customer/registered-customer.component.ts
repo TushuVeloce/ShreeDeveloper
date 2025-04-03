@@ -59,17 +59,14 @@ export class RegisteredCustomerComponent  implements OnInit {
   getRegisterCustomerListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    console.log('companyRef :', this.companyRef());
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
     let lst = await RegisteredCustomer.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.RegisterCustomerList = lst
-    console.log('RegisterCustomerList :',this. RegisterCustomerList[0].p);
     this.loadPaginationData();    
   };
 
@@ -84,10 +81,11 @@ export class RegisteredCustomerComponent  implements OnInit {
     await this.router.navigate(['/homepage/Website/Registered_Customer_Details']);
   };
 
-  Cancel = async () => {
+  Cancel = async (registercustomer:any) => {
+    debugger
     let confirm = await this.uiUtils.showConfirmationMessage('Confirmation','Are you sure you want to cancel this process?',
       async () => {
-        let req = new CustomProcessFetchRequest();   
+        let req = new CustomProcessFetchRequest(registercustomer);   
         let td = req.FormulateTransportData();
         let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
         let tr = await this.serverCommunicator.sendHttpRequest(pkt);
@@ -99,7 +97,6 @@ export class RegisteredCustomerComponent  implements OnInit {
     
         let tdResult = JSON.parse(tr.Tag) as TransportData;
         console.log('tdResult :', tdResult);
-        // this.Entity = tdResult
       }
     );
 };
