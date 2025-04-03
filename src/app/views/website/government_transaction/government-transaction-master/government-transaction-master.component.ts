@@ -50,6 +50,8 @@ export class GovernmentTransactionMasterComponent implements OnInit {
     let lst = await GovernmentTransaction.FetchEntireList(async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
+    console.log('GovernmentTransactionList', this.MasterList);
+    
   }
 
   onEditClicked = async (item: GovernmentTransaction) => {
