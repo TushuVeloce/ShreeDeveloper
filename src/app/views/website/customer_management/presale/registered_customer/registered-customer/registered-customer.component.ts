@@ -84,7 +84,6 @@ export class RegisteredCustomerComponent  implements OnInit {
   CancelDeal = async (registercustomer:RegisteredCustomer) => {
     let confirm = await this.uiUtils.showConfirmationMessage('Confirmation','Are you sure you want to cancel this process?',
       async () => {
-        debugger
         let req = new CancelDealCustomRequest();  
         req.RegisterCustomerRef = registercustomer.p.Ref;
         req.PlotRef = registercustomer.p.PlotRef;
@@ -101,6 +100,7 @@ export class RegisteredCustomerComponent  implements OnInit {
         console.log('tdResult :', tdResult);
       }
     );
+    this.getRegisterCustomerListByCompanyRef()
 };
 
     

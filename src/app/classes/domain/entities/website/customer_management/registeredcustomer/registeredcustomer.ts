@@ -15,8 +15,6 @@ import { RegisteredCustomerFetchRequest } from "./registeredcustomerfetchrequest
 
 export class RegisteredCustomerProps {
   public Ref: number = 0;
-  public SiteRef : number = 0;
-  public PlotRef : number = 0;
   public CustomerEnquiryRef: number = 0;
   public DiscountedRateOnArea : number = 0;
   public DiscountOnTotalPlotAmount : number = 0;
@@ -36,16 +34,30 @@ export class RegisteredCustomerProps {
   public AmountPaid:  number = 0;
   public RemainingAmount:  number = 0;
   public GstToatalAmount:  number = 0;
-  public CompanyRef:  number = 0;
-  public CreatedBy:  number = 0;
+  public CompanyRef : number = 0;
   public UpdatedDate:  string = '';
-
+  public CreatedBy:  number = 0;
+  
+  public readonly SiteRef : number = 0;
   public readonly SiteName : string = '';
   public readonly CustomerName : string = '';
-  public readonly CompanyName : string = '';
-  public readonly PlotName : string = '';
-  public readonly CustomerMobileNo : string = '';
   public readonly CustomerAddress : string = '';
+  public readonly CustomerMobileNo : string = '';
+  public readonly SiteVisitDate : string = '';
+  public readonly LeadSouceName : string = '';
+  public readonly LeadHandleByName : string = '';
+  public readonly PlotRef : number = 0;
+  public readonly PlotName : string = '';
+  public readonly BasicRatePerSqft : number = 0;
+  public readonly BasicRatePerSqm : number = 0;
+  public readonly AreaInSqm : number = 0;
+  public readonly AreaInSqft : number = 0;
+  public readonly CreatedDate : string = '';
+  public readonly CustomerStatus : number = 0;
+  public readonly FinancialYearName : string = '';
+  public readonly FinancialYearRef : number = 0;
+  public readonly GovermentRatePerSqft : number = 0;
+  public readonly GovermentRatePerSqm : number = 0;
 
 
   public readonly IsNewlyCreated: boolean = false;
