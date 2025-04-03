@@ -37,7 +37,7 @@ export class RegisteredCustomerProps {
   public GstToatalAmount:  number = 0;
   public CompanyRef:  number = 0;
   public CreatedBy:  number = 0;
-  public UpdatedBy:  string = '';
+  public UpdatedDate:  string = '';
 
 
   public readonly IsNewlyCreated: boolean = false;

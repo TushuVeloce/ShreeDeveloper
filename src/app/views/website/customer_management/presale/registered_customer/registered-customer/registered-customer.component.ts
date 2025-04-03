@@ -73,6 +73,7 @@ export class RegisteredCustomerComponent  implements OnInit {
   
 
   onEditClicked = async (item: RegisteredCustomer) => {
+  console.log('item :', item);
 
     this.SelectedRegisteredCustomer = item.GetEditableVersion();
     RegisteredCustomer.SetCurrentInstance(this.SelectedRegisteredCustomer);
