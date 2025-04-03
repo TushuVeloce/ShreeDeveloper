@@ -35,18 +35,14 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
     GoodandServicesTaxList = DomainEnums.GoodsAndServicesTaxList(true, '--Select GST --');
     companyRef = this.companystatemanagement.SelectedCompanyRef;
     FinancialYearList: FinancialYear[]=[]
-    // CurrentDateWithTime: string= ''
   
     constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement,private servicecommunicator: ServerCommunicatorService) { }
   
     async ngOnInit() {
       this.appStateManage.setDropdownDisabled(true);
-      // let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-      // this.CurrentDateWithTime = strCDT
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
          this.IsNewEntity = false;
          this.Entity = RegisteredCustomer.GetCurrentInstance();
-         console.log('Entity :', this.Entity);
          this.NewEntity = this.Entity.p
          this.Entity.p.TaxValueInPercentage = 6
          this.Entity.p.RegTaxValuesInPercentage = 1
@@ -116,13 +112,13 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
 
 
     SaveRegisteredCustomer = async () => {
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedDate= await CurrentDateTimeRequest.GetCurrentDateTime();
+      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
-      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.Entity.p.UpdatedDate = await CurrentDateTimeRequest.GetCurrentDateTime();
-      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
       console.log('entitiesToSave :', entitiesToSave);
+      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
       if (!tr.Successful) {
         this.isSaveDisabled = false;
         this.uiUtils.showErrorMessage('Error', tr.Message);

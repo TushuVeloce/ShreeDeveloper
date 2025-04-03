@@ -10,35 +10,10 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { CustomProcessFetchRequest } from "./customprocessfetchrequest";
-
+import { CancelDealCustomRequest } from "./CancelDealCustomRequest";
 
 export class CustomProcessProps {
   public Ref: number = 0;
-  public SiteRef : number = 0;
-  public CustomerEnquiryRef: number = 0;
-  public DiscountedRateOnArea : number = 0;
-  public DiscountOnTotalPlotAmount : number = 0;
-  public TotalPlotAmount: number = 0;
-  public RegisterDate: string = '';
-  public RegisterBy: string = '';
-  public GovernmentValue: number = 0;
-  public ValueOfAgreement: number = 0;
-  public TaxValueInPercentage : number = 0;
-  public StampDuties : number = 0;
-  public RegTaxValuesInPercentage:  number = 0;
-  public RegistrationFees:  number = 0;
-  public GoodsServicesTax:  number = 0;
-  public LegalCharges:  number = 0;
-  public TotalExtraCharges:  number = 0;
-  public GrandTotal:  number = 0;
-  public AmountPaid:  number = 0;
-  public RemainingAmount:  number = 0;
-  public GstToatalAmount:  number = 0;
-  public CompanyRef:  number = 0;
-  public CreatedBy:  number = 0;
-  public UpdatedBy:  number = 0;
-
 
   public readonly IsNewlyCreated: boolean = false;
 
@@ -90,7 +65,6 @@ export class CustomProcess implements IPersistable<CustomProcess> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.CustomerEnquiryRef == 0) vra.add('CustomerEnquiryRef', 'CustomerEnquiry Name cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -151,7 +125,7 @@ export class CustomProcess implements IPersistable<CustomProcess> {
     return CustomProcess.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: CustomProcessFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: CancelDealCustomRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -166,26 +140,26 @@ export class CustomProcess implements IPersistable<CustomProcess> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new CustomProcessFetchRequest();
+    let req = new CancelDealCustomRequest();
     req.CustomProcessRefs.push(ref);
 
     let tdResponse = await CustomProcess.FetchTransportData(req, errorHandler) as TransportData;
     return CustomProcess.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: CustomProcessFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchList(req: CancelDealCustomRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdResponse = await CustomProcess.FetchTransportData(req, errorHandler) as TransportData;
     return CustomProcess.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new CustomProcessFetchRequest();
+    let req = new CancelDealCustomRequest();
     let tdResponse = await CustomProcess.FetchTransportData(req, errorHandler) as TransportData;
     return CustomProcess.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new CustomProcessFetchRequest();
+    let req = new CancelDealCustomRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await CustomProcess.FetchTransportData(req, errorHandler) as TransportData;
     return CustomProcess.ListFromTransportData(tdResponse);
