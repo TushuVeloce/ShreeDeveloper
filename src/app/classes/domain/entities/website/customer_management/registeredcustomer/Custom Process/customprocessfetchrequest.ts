@@ -10,11 +10,6 @@ export class CustomProcessFetchRequest
 
     CustomProcessRefs: number[] = [];
     CompanyRefs: number[] = [];
-    RegisterCustomer: any; // Add this property to store registercustomer data
-
-    constructor(registercustomer: any) {
-        this.RegisterCustomer = registercustomer;
-    }
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

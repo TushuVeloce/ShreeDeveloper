@@ -85,7 +85,7 @@ export class RegisteredCustomerComponent  implements OnInit {
     debugger
     let confirm = await this.uiUtils.showConfirmationMessage('Confirmation','Are you sure you want to cancel this process?',
       async () => {
-        let req = new CustomProcessFetchRequest(registercustomer);   
+        let req = new CustomProcessFetchRequest();   
         let td = req.FormulateTransportData();
         let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
         let tr = await this.serverCommunicator.sendHttpRequest(pkt);
