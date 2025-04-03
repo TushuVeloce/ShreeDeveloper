@@ -42,6 +42,7 @@ export class CustomerFollowUpProps {
   public CompanyRef: number = 0;
   public LoginEmployeeRef: number = 0;
 
+
   public CustomerFollowUpPlotDetails: CustomerFollowUpPlotDetailsProps[] = [];
 
   public IsNewlyCreated: boolean = false;

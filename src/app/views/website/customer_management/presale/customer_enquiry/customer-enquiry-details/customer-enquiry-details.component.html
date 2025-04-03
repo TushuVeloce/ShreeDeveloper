@@ -74,7 +74,7 @@
         </div>
         <div class="col-md-4 col-md-4 col-sm-12 mt-2" *ngIf="IsNewEntity">
           <label>Customer Requirement</label>
-          <input type="text" name="CustomerRequirement" class="form-control" [(ngModel)]="Entity.p.CustomerRequirement"
+          <input type="text" name="CustomerRequirement" class="form-control" [(ngModel)]="Entity.p.CustomerFollowUps[0].CustomerRequirement"
             id="CustomerRequirement" required placeholder="Enter Customer Requirement" />
         </div>
         <div class="col-md-4 col-md-4 col-sm-12 mt-2" *ngIf="IsNewEntity">
@@ -140,14 +140,14 @@
               <td Class="tbldata">{{ plot.PlotAreaInSqm }}</td>
               <td Class="tbldata">{{ plot.PlotAreaInSqft }}</td>
               <td class="tbldata">
-                <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CustomerStatus"
-                  name="CustomerStatus" [(ngModel)]="plot.CustomerStatus" [nzSize]="'large'">
+                <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" 
+                name="{{plot.PlotName.trim() + '_' + i + 100}}" [(ngModel)]="plot.CustomerStatus" [nzSize]="'large'">
                   <nz-option *ngFor="let customerstatus of CustomerStatusList" [nzValue]="customerstatus.Ref"
                     [nzLabel]="customerstatus.Name"></nz-option>
                 </nz-select>
               </td>
               <td class="tbldata">
-                <input type="text" name="Reason" class="form-control" id="Reason " [(ngModel)]="plot.Reason" required
+                <input type="text" name="{{plot.PlotName.trim() + '_' + i + 1000}}" class="form-control"  [(ngModel)]="plot.Reason" required
                   placeholder="Enter Reason" />
               </td>
               <!-- <td Class="tbldata">{{ plot.CustomerStatus }}</td> -->

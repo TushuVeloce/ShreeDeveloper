@@ -34,7 +34,6 @@ export class CustomerEnquiryProps {
 
   public CustomerStatus :number = 0;
   public CustomerStatusName :string = '';
-  public CustomerRequirement :string = '';
 
   // public CustomerFollowUpPlotDetails: CustomerFollowUpPlotDetailsProps = new Object() as CustomerFollowUpPlotDetailsProps;
 

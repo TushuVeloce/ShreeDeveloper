@@ -4,13 +4,14 @@ import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
-import { CustomerFollowUpPlotDetails } from 'src/app/classes/domain/entities/website/customer_management/customerfollowupplotdetails/CustomerFollowUpPlotDetails';
+import { CustomerFollowUpPlotDetails, CustomerFollowUpPlotDetailsProps } from 'src/app/classes/domain/entities/website/customer_management/customerfollowupplotdetails/CustomerFollowUpPlotDetails';
 import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
 import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
+import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
@@ -54,9 +55,9 @@ export class CustomerFollowupDetailsComponent implements OnInit {
   CustomerStatusList = DomainEnums.CustomerStatusList(true, '--Select Customer Status --');
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   showAgentBrokerInput: boolean = false;
-  plotDetailsArray: any[] = [];
+  plotDetailsArray: CustomerFollowUpPlotDetailsProps[] = [];
 
-  onLeadSourceChange(selectedValue: number) {
+  onLeadSourceChange = (selectedValue: number) => {
     // Check if the selected value is AgentBroker (50)
     if (selectedValue === 50) {
       this.showAgentBrokerInput = true;
@@ -104,7 +105,15 @@ export class CustomerFollowupDetailsComponent implements OnInit {
           'yyyy-MM-dd'
         );
       }
+      // console.log(this.Entity.p.CustomerFollowUpPlotDetails);
       
+      this.plotDetailsArray = [...this.Entity.p.CustomerFollowUpPlotDetails];
+      this.plotDetailsArray.forEach(e=> e.Ref = 0)
+      this.Entity.p.CustomerFollowUpPlotDetails = []
+      // console.log('Before:', this.Entity.p.CustomerFollowUpPlotDetails);
+      // console.log(this.plotDetailsArray);
+      this.Entity.p.CustomerFollowUpPlotDetails = this.plotDetailsArray;
+      // console.log('After :', this.Entity.p.CustomerFollowUpPlotDetails);
       //  console.log('CustomerEnquiryEntity :', this.CustomerEnquiryEntity);
       this.appStateManage.StorageKey.removeItem('Editable');
     } else {
@@ -117,8 +126,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     ) as CustomerFollowUp;
     // this.focusInput();
 
-    this.plotDetailsArray = [...this.Entity.p.CustomerFollowUpPlotDetails];
-    console.log(this.plotDetailsArray);
+
   }
 
   // For country, state, city dropdowns
@@ -184,7 +192,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     }
     let lst = await Plot.FetchEntireListBySiteRef(siteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.PlotList = lst;
-    console.log(lst);
 
     this.DisplayMasterList = this.PlotList
     this.IsPlotDetails = true;
@@ -194,22 +201,90 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     this.Entity.p.CustomerFollowUpPlotDetails = selectedvalue;
   }
 
+  addDataToCustomerFollowUpPlotDetail =()=> {
+    if (this.SiteManagementRef <= 0) {
+      this.uiUtils.showWarningToster(`Please Select a Site`);
+      return;
+    }
+    if (this.InterestedPlotRef <= 0) {
+      this.uiUtils.showWarningToster(`Please Select a Plot`);
+      return;
+    }
+    let selectedPlot = this.PlotList.find(
+      (plot) => plot.p.Ref === this.InterestedPlotRef
+    );
+    let selectedSite = this.SiteList.find(
+      (site) => site.p.Ref === this.SiteManagementRef
+    );
+    let obj = CustomerFollowUpPlotDetails.CreateNewInstance();
+    if (selectedPlot) {
+      // obj.EnsurePrimaryKeysWithValidValues();
+      obj.p.SiteRef = this.SiteManagementRef;
+      obj.p.PlotRef = this.InterestedPlotRef;
+      obj.p.PlotAreaInSqft = selectedPlot.p.AreaInSqft;
+      obj.p.PlotAreaInSqm = selectedPlot.p.AreaInSqm;
+      obj.p.PlotName = selectedPlot.p.PlotNo;
+      if (selectedSite) {
+        obj.p.SiteName = selectedSite.p.Name;
+      }
+    }
+    // console.log(selectedPlot);
+
+    // Check if the plot is already added
+    const isAlreadyAdded = this.Entity.p.CustomerFollowUpPlotDetails.some(
+      (plot) => plot.PlotRef === this.InterestedPlotRef);
+    // const isAlreadyAdded = this.plotDetailsArray.some(
+    //   (plot) => plot.PlotRef === this.InterestedPlotRef);
+
+    if (isAlreadyAdded) {
+      this.uiUtils.showWarningToster(
+        'This plot is already added to the table.'
+      );
+      return;
+    }
+
+    if (selectedPlot) {
+      // this.Entity.p.CustomerFollowUpPlotDetails.push(
+      //   obj.p
+      // );
+      // this.plotDetailsArray.push(
+      //   this.obj.p
+      // );
+      
+      this.Entity.p.CustomerFollowUpPlotDetails.push(...[obj.p]);
+      this.IsPlotDetails = true;
+
+      // this.Entity.p.CustomerFollowUpPlotDetails = [];
+      // this.Entity.p.CustomerFollowUpPlotDetails.push(...this.plotDetailsArray);
+      // console.log('Updated IsPlotDetails :', this.plotDetailsArray);
+      this.SiteManagementRef = 0;
+      this.InterestedPlotRef = 0;
+    }
+  }
+   GenerateCustomerFollowUpPlotDetailsRef = async()=> {
+    for (const obj of this.Entity.p.CustomerFollowUpPlotDetails) {
+      obj.Ref = await CustomerFollowUpPlotDetails.getPrimaryKeysWithValidValues();
+    }
+    // console.log(this.Entity.p.CustomerFollowUpPlotDetails);
+
+  }
+
   SaveCustomerFollowUp = async () => {
-    let entityToSave = this.Entity.GetEditableVersion();
     this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.CustomerFollowUpPlotDetails.forEach((plotDetail) => {
       plotDetail.Ref = 0;
     });
-
+    let CurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
+    this.Entity.p.TransDateTime = CurrentDateTime;
 
     // ------ Code For Save Date Of InCorporation Year Format ---------------//
     if (this.sitevisitdate) {
       let dateValue = new Date(this.sitevisitdate);
 
       if (!isNaN(dateValue.getTime())) {
-        entityToSave.p.SiteVisitDate = this.dtu.DateStartStringFromDateValue(dateValue);
+        this.Entity.p.SiteVisitDate = this.dtu.DateStartStringFromDateValue(dateValue);
       } else {
-        entityToSave.p.SiteVisitDate = '';
+        this.Entity.p.SiteVisitDate = '';
       }
     }
 
@@ -218,9 +293,9 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       let dateValue = new Date(this.officevistdate);
 
       if (!isNaN(dateValue.getTime())) {
-        entityToSave.p.OfficeVisitDate = this.dtu.DateStartStringFromDateValue(dateValue);
+        this.Entity.p.OfficeVisitDate = this.dtu.DateStartStringFromDateValue(dateValue);
       } else {
-        entityToSave.p.OfficeVisitDate = '';
+        this.Entity.p.OfficeVisitDate = '';
       }
     }
 
@@ -229,14 +304,14 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       let dateValue = new Date(this.reminderdate);
 
       if (!isNaN(dateValue.getTime())) {
-        entityToSave.p.ReminderDate = this.dtu.DateStartStringFromDateValue(dateValue);
+        this.Entity.p.ReminderDate = this.dtu.DateStartStringFromDateValue(dateValue);
       } else {
-        entityToSave.p.ReminderDate = '';
+        this.Entity.p.ReminderDate = '';
       }
     }
 
     // -----------------------------------
-    await this.GenerateChildRef();
+    await this.GenerateCustomerFollowUpPlotDetailsRef();
     // console.log(this.Entity.p.CustomerFollowUpPlotDetails);
 
     // return
@@ -249,10 +324,10 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       plotDetail.CustomerFollowUpRef = this.Entity.p.Ref;
     });
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
-
+    let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     // this.Entity.p.ContactMode = this.CustomerEnquiryEntity.p.CustomerFollowUps[0].ContactMode;
-    console.log('entitiesToSave:', entitiesToSave);
+    // console.log('entitiesToSave:', entitiesToSave);
     // // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
@@ -273,83 +348,9 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
 
 
-  BackCustomerFollowUp() {
+  BackCustomerFollowUp =()=> {
     this.router.navigate(['/homepage/Website/Customer_FollowUp']);
   }
 
-  addDataToTable() {
-    debugger
-    if (this.SiteManagementRef <= 0) {
-      this.uiUtils.showWarningToster(`Please Select a Site`);
-      return;
-    }
-    if (this.InterestedPlotRef <= 0) {
-      this.uiUtils.showWarningToster(`Please Select a Plot`);
-      return;
-    }
-    let selectedPlot = this.PlotList.find(
-      (plot) => plot.p.Ref === this.InterestedPlotRef
-    );
-    let selectedSite = this.SiteList.find(
-      (site) => site.p.Ref === this.SiteManagementRef
-    );
 
-    if (selectedPlot) {
-      // obj.EnsurePrimaryKeysWithValidValues();
-      this.obj.p.SiteRef = this.SiteManagementRef;
-      this.obj.p.PlotRef = this.InterestedPlotRef;
-      this.obj.p.PlotAreaInSqft = selectedPlot.p.AreaInSqft;
-      this.obj.p.PlotAreaInSqm = selectedPlot.p.AreaInSqm;
-      this.obj.p.PlotName = selectedPlot.p.PlotNo;
-      if (selectedSite) {
-        this.obj.p.SiteName = selectedSite.p.Name;
-      }
-    }
-    // console.log(selectedPlot);
-
-    // Check if the plot is already added
-    const isAlreadyAdded = this.Entity.p.CustomerFollowUpPlotDetails.some(
-      (plot) => plot.PlotRef === this.InterestedPlotRef);
-
-    if (isAlreadyAdded) {
-      this.uiUtils.showWarningToster(
-        'This plot is already added to the table.'
-      );
-      return;
-    }
-
-    if (selectedPlot) {
-      // this.Entity.p.CustomerFollowUpPlotDetails.push(
-      //   obj.p
-      // );
-      // this.plotDetailsArray.push(
-      //   this.obj.p
-      // );
-      this.Entity.p.CustomerFollowUpPlotDetails.push(
-        this.obj.p
-      );
-      this.IsPlotDetails = true;
-
-      // this.Entity.p.CustomerFollowUpPlotDetails = [];
-      // this.Entity.p.CustomerFollowUpPlotDetails.push(...this.plotDetailsArray);
-      // console.log('Updated IsPlotDetails :', this.plotDetailsArray);
-      this.SiteManagementRef = 0;
-      this.InterestedPlotRef = 0;
-    }
-  }
-  async GenerateChildRef() {
-    // debugger
-
-    // this.obj.EnsurePrimaryKeysWithValidValues();
-    // this.Entity.p.CustomerFollowUpPlotDetails.push(
-    //   this.obj.p
-    // );
-    // console.log(this.Entity.p.CustomerFollowUpPlotDetails);
-    // return
-    for (const obj of this.Entity.p.CustomerFollowUpPlotDetails) {
-      obj.Ref = await CustomerFollowUpPlotDetails.getPrimaryKeysWithValidValues();
-    }
-    // console.log(this.Entity.p.CustomerFollowUpPlotDetails);
-
-  }
 }

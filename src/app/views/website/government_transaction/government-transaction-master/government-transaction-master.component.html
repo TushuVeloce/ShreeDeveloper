@@ -1,15 +1,15 @@
 <div>
   <div class="row">
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2">
-      <h5 style="padding-top: 3px;" class="title title_light">Government Office</h5>
+      <h5 style="padding-top: 3px;" class="title title_light">Government Transaction</h5>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
       <!-- <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus
         [(ngModel)]="SearchString" /> -->
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
-      <nz-button nz-button class="btn1" (click)='AddDocument ()'>
-        Add 
+      <nz-button nz-button class="btn1" (click)='AddGovernmentTransaction ()'>
+        Add
       </nz-button>
     </div>
   </div>
@@ -25,10 +25,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let SiteWorkGroup of MasterList; index as i">
+            <tr *ngFor="let gov of paginatedList; index as i">
               <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-              <!-- <td Class="tbldata">{{SiteWorkGroup.p.Name}}</td>
-              <td Class="tbldata">{{SiteWorkGroup.p.DisplayOrder}}</td> -->
+              <td Class="tbldata">{{gov.p.SiteName}}</td>
               <td class="tbldata">
 
                 <!-- <span style="margin-left: 9px;" (click)="onEditClicked(SiteWorkGroup);">
@@ -37,8 +36,8 @@
                 <!-- <span style="margin-left: 9px;" (click)="onDeleteClicked(SiteWorkGroup);">
                   <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span> -->
 
-                <Edit-Icon (editClick)="onEditClicked(SiteWorkGroup)" />
-                <Delete-Icon (deleteClicked)="onDeleteClicked(SiteWorkGroup)" />
+                <Edit-Icon (editClick)="onEditClicked(gov)" />
+                <Delete-Icon (deleteClicked)="onDeleteClicked(gov)" />
               </td>
             </tr>
           </tbody>

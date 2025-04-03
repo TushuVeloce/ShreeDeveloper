@@ -52,6 +52,7 @@
       <tbody>
         <tr *ngFor="let registraroffice of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{ registraroffice.p.CustomerName}}</td>
           <td Class="tbldata">{{registraroffice.p.IsChequeSubmit}}</td>
           <!-- <td Class="tbldata">{{registraroffice.p.Witness1Submit}}</td> -->
           <td class="tbldata">

@@ -35,13 +35,13 @@
 
 
 :host ::ng-deep .custom-steps .ant-steps-item {
-  font-size: 32px; /* Increase text size */
+  font-size: 30px; /* Increase text size */
 }
 
 :host ::ng-deep .custom-steps .ant-steps-item-title {
   color: white !important; /* Change text color */
   font-size: 25px;
-  font-weight: 800;
+  font-weight: 700;
   cursor: pointer;
   background-color: rgb(176, 91, 91);
   border-radius: 5px;

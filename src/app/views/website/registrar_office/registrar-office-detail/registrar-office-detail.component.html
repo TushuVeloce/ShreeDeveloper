@@ -28,6 +28,7 @@
               id="PlotRef"
               required
               placeholder="Enter Plot No"
+              (click)="selectAllValue($event)"
             />
         </div>
         <!-- Name -->
@@ -54,6 +55,7 @@
            id="ContactNo"
            required
            placeholder="Enter Contact No. "
+           (click)="selectAllValue($event)"
          />
      </div>
       </div>
@@ -85,14 +87,13 @@
           <!-- Submit -->
           <div class="col-md-4 d-flex justify-content-center  ">
             <label for="IsCustomerAadharSubmit">Submit</label>
-              <input type="checkbox" id="IsCustomerAadharSubmit"  [(ngModel)]="Entity.p.IsCustomerAadharSubmit" name="IsCustomerAadharSubmit" class="custom-checkbox">
+              <input type="checkbox" id="IsCustomerAadharSubmit" [(ngModel)]="Entity.p.IsCustomerAadharSubmit" name="IsCustomerAadharSubmit" class="custom-checkbox">
           </div>
        </div>
 
        
        <div class="col-md-4"> </div>
        <!--  Pan   -->
-  
           <div class="col-md-8 d-flex mb-4">
             <div class="col-md-8 d-flex ">
               <div class="col-md-4 d-flex justify-content-center">
@@ -109,7 +110,6 @@
                   placeholder="Enter Name"
                 />
               </div>
-              <!-- Submit -->
             </div>
             <!-- Submit -->
             <div class="col-md-4 d-flex justify-content-center  ">
@@ -362,7 +362,7 @@
      <label>Date</label>
       <input
         type="date"
-        [(ngModel)]="Entity.p.AgreementDate"
+        [(ngModel)]="agreementdate"
         name="AgreementDate"
         class="form-control"
         id="AgreementDate"
@@ -421,7 +421,7 @@
    <label>Date</label>
     <input
       type="date"
-      [(ngModel)]="Entity.p.SaleDeedDate"
+      [(ngModel)]="saledeeddate"
       name="SaleDeedDate"
       class="form-control"
       id="SaleDeedDate"
@@ -521,7 +521,7 @@
   <label>Date</label>
    <input
      type="date"
-     [(ngModel)]="Entity.p.TalathiDate"
+     [(ngModel)]="talathidate"
      name="TalathiDate"
      class="form-control"
      id="TalathiDate"
