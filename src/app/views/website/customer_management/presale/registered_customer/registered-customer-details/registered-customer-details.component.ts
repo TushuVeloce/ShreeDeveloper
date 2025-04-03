@@ -121,6 +121,7 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
       this.Entity.p.UpdatedBy = this.CurrentDateWithTime; 
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
       let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+      console.log('entitiesToSave :', entitiesToSave);
       if (!tr.Successful) {
         this.isSaveDisabled = false;
         this.uiUtils.showErrorMessage('Error', tr.Message);
