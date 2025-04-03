@@ -1,25 +1,25 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Document } from 'src/app/classes/domain/entities/website/government_office/document/document';
+import { GovernmentTransaction } from 'src/app/classes/domain/entities/website/government_office/government_transaction/governmenttransaction';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
-  selector: 'app-government-office-master',
-  templateUrl: './government-office-master.component.html',
-  styleUrls: ['./government-office-master.component.scss'],
+  selector: 'app-government-transaction-master',
+  templateUrl: './government-transaction-master.component.html',
+  styleUrls: ['./government-transaction-master.component.scss'],
   standalone: false,
 })
 
-export class GovernmentOfficeMasterComponent implements OnInit {
+export class GovernmentTransactionMasterComponent implements OnInit {
 
-  Entity: Document = Document.CreateNewInstance();
-  MasterList: Document[] = [];
-  DisplayMasterList: Document[] = [];
+  Entity: GovernmentTransaction = GovernmentTransaction.CreateNewInstance();
+  MasterList: GovernmentTransaction[] = [];
+  DisplayMasterList: GovernmentTransaction[] = [];
   SearchString: string = '';
-  SelectedDocument: Document = Document.CreateNewInstance();
+  SelectedGovernmentTransaction: GovernmentTransaction = GovernmentTransaction.CreateNewInstance();
   CustomerRef: number = 0;
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
@@ -32,39 +32,47 @@ export class GovernmentOfficeMasterComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement
   ) {
     // effect(() => {
-    //   this.getDocumentListByCompanyRef();
+    //   this.getGovernmentTransactionListByCompanyRef();
     // });
   }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    // await this.FormulateDocumentList();
-    // this.DisplayMasterList = [];
+    await this.FormulateGovernmentTransactionList();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
-  onEditClicked = async (item: Document) => {
-    // this.SelectedDocument = item.GetEditableVersion();
+  FormulateGovernmentTransactionList = async () => {
+    // let lst = await GovernmentTransaction.FetchEntireListByCompanyRef(
+    //   this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.DisplayMasterList = [];
+    let lst = await GovernmentTransaction.FetchEntireList(async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+  }
 
-    // Document.SetCurrentInstance(this.SelectedDocument);
+  onEditClicked = async (item: GovernmentTransaction) => {
+    this.SelectedGovernmentTransaction = item.GetEditableVersion();
 
-    // this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+    GovernmentTransaction.SetCurrentInstance(this.SelectedGovernmentTransaction);
+
+    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
 
     await this.router.navigate(['/homepage/Website/Government_Office_Details']);
   };
 
-  onDeleteClicked = async (document: Document) => {
+  onDeleteClicked = async (GovernmentTransaction: GovernmentTransaction) => {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-       Are you sure that you want to DELETE this Document?`,
+       Are you sure that you want to DELETE this GovernmentTransaction?`,
       async () => {
-        await document.DeleteInstance(async () => {
+        await GovernmentTransaction.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `Document ${document.p.Name} has been deleted!`
+            `GovernmentTransaction ${GovernmentTransaction.p.SiteName} has been deleted!`
           );
-          // await this.getDocumentListByCompanyRef();
+          // await this.getGovernmentTransactionListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
 
@@ -86,7 +94,7 @@ export class GovernmentOfficeMasterComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
-  async AddDocument() {
+  AddGovernmentTransaction = async () => {
     if (this.companyRef() <= 0) {
       this.uiUtils.showErrorToster('Company not Selected');
       return;

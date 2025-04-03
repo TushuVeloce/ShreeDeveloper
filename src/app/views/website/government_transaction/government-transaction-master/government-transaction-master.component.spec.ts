@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
+import { GovernmentTransactionMasterComponent } from './government-transaction-master.component';
 
-import { GovernmentOfficeMasterComponent } from './government-office-master.component';
 
 describe('GovernmentOfficeMasterComponent', () => {
-  let component: GovernmentOfficeMasterComponent;
-  let fixture: ComponentFixture<GovernmentOfficeMasterComponent>;
+  let component: GovernmentTransactionMasterComponent;
+  let fixture: ComponentFixture<GovernmentTransactionMasterComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ GovernmentOfficeMasterComponent ],
+      declarations: [GovernmentTransactionMasterComponent],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(GovernmentOfficeMasterComponent);
+    fixture = TestBed.createComponent(GovernmentTransactionMasterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

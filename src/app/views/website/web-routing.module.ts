@@ -85,7 +85,6 @@ import { OfficeDutyTimeDetailsComponent } from './hr_payroll_management/office_d
 import { AttendanceAndSalaryComponent } from './hr_payroll_management/attendance-salary/attendance-and-salary/attendance-and-salary.component';
 import { DocumentListComponent } from './government_office_masters/document/document-list/document-list.component';
 import { DocumentDetailsComponent } from './government_office_masters/document/document-details/document-details.component';
-import { GovernmentOfficeMasterComponent } from './government_office/government-office-master/government-office-master.component';
 import { SiteWorkMasterComponent } from './government_office_masters/siteworkmaster/site-work-master/site-work-master.component';
 import { SiteWorkMasterDetailComponent } from './government_office_masters/siteworkmaster/site-work-master-detail/site-work-master-detail.component';
 import { SiteWorkGroupMasterComponent } from './government_office_masters/site_work_group/site-work-group-master/site-work-group-master.component';
@@ -93,8 +92,9 @@ import { SiteWorkGroupMasterDetailsComponent } from './government_office_masters
 import { SiteWorkDoneMasterComponent } from './government_office_masters/site_work_done/site-work-done-master/site-work-done-master.component';
 import { SiteWorkDoneMasterDetailsComponent } from './government_office_masters/site_work_done/site-work-done-master-details/site-work-done-master-details.component';
 import { ProgressReportComponent } from './government_office_masters/progress_report/progress-report.component';
-import { GovernmentOfficeDetailsComponent } from './government_office/government-office-details/government-office-details.component';
-import { RespectedChildComponentComponent } from './government_office/respected-child-component/respected-child-component.component';
+import { RespectedChildComponentComponent } from './government_transaction/respected-child-component/respected-child-component.component';
+import { GovernmentTransactionMasterComponent } from './government_transaction/government-transaction-master/government-transaction-master.component';
+import { GovernmentTransactionDetailsComponent } from './government_transaction/government-transaction-details/government-transaction-details.component';
 
 
 const routes: Routes = [
@@ -216,8 +216,8 @@ const routes: Routes = [
       { path: 'Document', component: DocumentListComponent },
       { path: 'Document_Details', component: DocumentDetailsComponent },
 
-      { path: 'Government_Office', component: GovernmentOfficeMasterComponent },
-      { path: 'Government_Office_Details', component: GovernmentOfficeDetailsComponent },
+      { path: 'Government_Office', component: GovernmentTransactionMasterComponent },
+      { path: 'Government_Office_Details', component: GovernmentTransactionDetailsComponent },
       { path: 'Respected_child', component: RespectedChildComponentComponent },
 
       { path: 'Site_Work_Master', component: SiteWorkMasterComponent },

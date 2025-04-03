@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-government-office-details',
-  templateUrl: './government-office-details.component.html',
-  styleUrls: ['./government-office-details.component.scss'],
+  selector: 'app-government-transaction-details',
+  templateUrl: './government-transaction-details.component.html',
+  styleUrls: ['./government-transaction-details.component.scss'],
   standalone: false,
 
 })
-export class GovernmentOfficeDetailsComponent implements OnInit {
+export class GovernmentTransactionDetailsComponent implements OnInit {
 
   constructor(private router: Router,) { }
 
