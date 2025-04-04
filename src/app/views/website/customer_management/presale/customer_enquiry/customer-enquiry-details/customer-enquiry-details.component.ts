@@ -46,11 +46,12 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   PlotList: Plot[] = [];
   EmployeeList: Employee[] = [];
   IsPlotDetails: boolean = false;
-  reminderdate: string | null = null;
-  officevistdate: string | null = null;
-  sitevisitdate: string | null = null;
+  localReminderDate: string = '';
+  localOfficeVisitDate: string = '';
+  localSiteVisitDate: string = '';
   InterestedPlotRef: number = 0;
   SiteManagementRef: number = 0;
+  today: string = new Date().toISOString().split('T')[0];
   DetailsFormTitle: 'New Customer' | 'Edit Customer' = 'New Customer';
 
   Date: string | null = null;
@@ -105,7 +106,38 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
         ? 'New Customer'
         : 'Edit Customer';
       this.Entity = CustomerEnquiry.GetCurrentInstance();
-      console.log(this.Entity);
+      // Site Visit Date
+      if (this.Entity.p.CustomerFollowUps[0].SiteVisitDate != '') {
+        // While Edit Converting date String into Date Format //
+        // convert  2025-02-23-00-00-00-000 to 2025-02-23
+        this.localSiteVisitDate = this.dtu.ConvertStringDateToShortFormat(
+          this.Entity.p.CustomerFollowUps[0].SiteVisitDate
+        );
+      }
+
+      // Office Visit Date
+
+      if (this.Entity.p.CustomerFollowUps[0].OfficeVisitDate) {
+        // While Edit Converting date String into Date Format //
+        this.localOfficeVisitDate = this.dtu.ConvertStringDateToShortFormat(
+          this.Entity.p.CustomerFollowUps[0].OfficeVisitDate
+        );
+        // this.localOfficeVisitDate = this.datePipe.transform(
+        //   this.dtu.FromString(this.Entity.p.OfficeVisitDate),
+        //   'yyyy-MM-dd'
+        // );
+      }
+
+      // Reminde Date
+      if (this.Entity.p.CustomerFollowUps[0].ReminderDate) {
+        this.localReminderDate = this.dtu.ConvertStringDateToShortFormat(
+          this.Entity.p.CustomerFollowUps[0].ReminderDate
+        );
+        // this.localReminderDate = this.datePipe.transform(
+        //   this.dtu.FromString(this.Entity.p.ReminderDate),
+        //   'yyyy-MM-dd'
+        // );
+      }
 
       this.appStateManage.StorageKey.removeItem('Editable');
       this.IsPlotDetails = true;
@@ -294,69 +326,35 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   // }
   selectedCustomerStatus: number = 0;
   isReminderRequired: boolean = false;
-
-  isOfficeDateInvalid: boolean = false;
+  reminderMessage: string = '';
 
   onStatusChange(selectedStatus: number) {
-    this.isReminderRequired = selectedStatus !== 40; // Set required if status is 'Convert To Deal'
+    this.selectedCustomerStatus = selectedStatus;
+
+    // Reminder is required unless status is 30 (Lead Closed) or 40 (Convert To Deal)
+    this.isReminderRequired = selectedStatus !== 30 && selectedStatus !== 40;
+
+    if (this.isReminderRequired) {
+      this.reminderMessage =
+        "Reminder Date is required when Customer Status is not 'Lead Closed' or 'Convert To Deal'.";
+    } else {
+      this.reminderMessage = ''; // No message needed if not required
+    }
   }
+
   markTouched(control: any) {
-    control.control.markAsTouched(); // Mark the field as touched on blur (when user leaves input)
+    control.control.markAsTouched();
   }
+
+  // isSIteVisitSelected(): boolean {
+    // const visitRefs = [30, 40, 50]; // these are the "visit" type Ref values
+    // return visitRefs.includes(this.Entity.p.CustomerFollowUps[0].ContactMode);
+  // }
 
   SaveCustomerEnquiry = async () => {
+    debugger
     this.Entity.p.CompanyRef =
       this.companystatemanagement.getCurrentCompanyRef();
-    
-
-    // ------ Code For Save Date Of InCorporation Year Format ---------------//
-    // if (this.sitevisitdate) {
-    //   let dateValue = new Date(this.sitevisitdate);
-
-    //   if (!isNaN(dateValue.getTime())) {
-    //     entityToSave.p.CustomerFollowUps[0].SiteVisitDate = this.dtu.DateStartStringFromDateValue(dateValue);
-    //   } else {
-    //     entityToSave.p.CustomerFollowUps[0].SiteVisitDate = '';
-    //   }
-    // }
-
-    // ------ Code For Save site visit date Format ---------------//
-    if (this.sitevisitdate) {
-      let dateValue = new Date(this.sitevisitdate);
-      if (!isNaN(dateValue.getTime())) {
-        this.Entity.p.CustomerFollowUps[0].SiteVisitDate =
-          this.dtu.DateStartStringFromDateValue(dateValue);
-      } else {
-        this.Entity
-        .p.CustomerFollowUps[0].SiteVisitDate = '';
-      }
-    }
-
-    // ------ Code For Save Date Of InCorporation Year Format ---------------//
-    if (this.officevistdate) {
-      let dateValue = new Date(this.officevistdate);
-
-      if (!isNaN(dateValue.getTime())) {
-        this.Entity.p.CustomerFollowUps[0].OfficeVisitDate =
-          this.dtu.DateStartStringFromDateValue(dateValue);
-      } else {
-        this.Entity.p.CustomerFollowUps[0].OfficeVisitDate = '';
-      }
-    }
-
-    // ------ Code For Save Date Of Reminder Date Format ---------------//
-    if (this.reminderdate) {
-      let dateValue = new Date(this.reminderdate);
-
-      if (!isNaN(dateValue.getTime())) {
-        this.Entity.p.CustomerFollowUps[0].ReminderDate =
-          this.dtu.DateStartStringFromDateValue(dateValue);
-      } else {
-        this.Entity
-        .p.CustomerFollowUps[0].ReminderDate = '';
-      }
-    }
-
     this.Entity.p.CustomerFollowUps[0].Ref =
       await CustomerFollowUp.getPrimaryKeysWithValidValues();
 
@@ -370,13 +368,25 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       });
     });
 
-    this.Entity.p.CustomerFollowUps[0].TransDateTime = this.DateWithTime!;
 
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
+
+    // if (this.Entity.p.CustomerFollowUps[0].CustomerStatus == 30 || this.Entity.p.CustomerFollowUps[0].CustomerStatus == 40) {
+    //   this.Entity.p.CustomerFollowUps[0].ReminderDate = '';
+    // }
+
+    this.Entity.p.CustomerFollowUps[0].TransDateTime = this.DateWithTime!;
+    this.Entity.p.CustomerFollowUps[0].SiteVisitDate =
+      this.dtu.ConvertStringDateToFullFormat(this.localSiteVisitDate);
+    this.Entity.p.CustomerFollowUps[0].OfficeVisitDate =
+      this.dtu.ConvertStringDateToFullFormat(this.localOfficeVisitDate);
+    this.Entity.p.CustomerFollowUps[0].ReminderDate =
+      this.dtu.ConvertStringDateToFullFormat(this.localReminderDate);
+
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
-    
+
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {

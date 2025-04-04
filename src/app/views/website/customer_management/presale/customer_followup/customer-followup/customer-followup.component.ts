@@ -113,6 +113,8 @@ export class CustomerFollowupComponent implements OnInit {
     let FollowUp = await CustomerFollowUp.FetchEntireListByDateandPlotRef(this.strCDT, this.InterestedPlotRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.followup = FollowUp
+    console.log('followup',this.followup);
+
     this.loadPaginationData();
   };
 

@@ -25,14 +25,14 @@
         <div class="col-md-4">
           <div>
             <label>Reason</label>
-            <input type="text" name="reason" class="form-control" id="reason" [(ngModel)]="Entity.p.Reason" required />
+            <input type="text" name="reason" class="form-control" id="reason" [(ngModel)]="Entity.p.Reason" required readonly/>
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Customer Name</label>
             <input type="text" name="CustomerName" class="form-control" id="CustomerName"
-              [(ngModel)]="Entity.p.CustomerName" required placeholder="Enter Customer Name" />
+              [(ngModel)]="Entity.p.CustomerName" required placeholder="Enter Customer Name" readonly />
           </div>
         </div>
       </div>
@@ -41,7 +41,7 @@
           <div>
             <label>Contact Nos</label>
             <input type="text" name="ContactNos" class="form-control" id="ContactNos" required
-              [(ngModel)]="Entity.p.ContactNos" placeholder="Enter Contact Nos" />
+              [(ngModel)]="Entity.p.ContactNos" placeholder="Enter Contact Nos" readonly />
           </div>
         </div>
         <!-- <div class="col-md-4">
@@ -55,7 +55,7 @@
           <div>
             <label for="CountryRef"><b>Country</b></label>
             <input type="text" name="CountryRef" class="form-control" id="CountryRef"
-              [(ngModel)]="Entity.p.CountryName" />
+              [(ngModel)]="Entity.p.CountryName" readonly/>
             <!-- <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
               name="CountryRef" required id="CountryRef" [(ngModel)]="CustomerEnquiryEntity.p.CountryRef">
               <nz-option></nz-option>
@@ -67,7 +67,7 @@
         <div class="col-md-4">
           <div>
             <label for="StateRef"><b>State</b></label>
-            <input type="text" name="StateRef" class="form-control" id="StateRef" [(ngModel)]="Entity.p.StateName" />
+            <input type="text" name="StateRef" class="form-control" id="StateRef" [(ngModel)]="Entity.p.StateName" readonly />
             <!-- <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
               name="StateRef" [nzSize]="'large'"  [(ngModel)]="CustomerEnquiryEntity.p.StateRef">
               <nz-option></nz-option>
@@ -77,7 +77,7 @@
         <div class="col-md-4">
           <div>
             <label for="CityRef"><b>City</b></label>
-            <input type="text" name="CityRef" class="form-control" id="CityRef" [(ngModel)]="Entity.p.CityName" />
+            <input type="text" name="CityRef" class="form-control" id="CityRef" [(ngModel)]="Entity.p.CityName" readonly/>
             <!-- <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
               name="CityRef" [nzSize]="'large'"  [(ngModel)]="CustomerEnquiryEntity.p.CityRef">
               <nz-option></nz-option>
@@ -88,7 +88,7 @@
           <div>
             <label>Address</label>
             <input type="text" name="address" class="form-control" id="address" required placeholder="Enter Address"
-              [(ngModel)]="Entity.p.Address">
+              [(ngModel)]="Entity.p.Address" readonly>
           </div>
         </div>
       </div>
@@ -96,13 +96,13 @@
         <div class="col-md-4">
           <label>Pin Code</label>
           <input type="text" name="PinCode" class="form-control" id="PinCode" required [(ngModel)]="Entity.p.PinCode"
-            placeholder="Enter Pin Code" />
+            placeholder="Enter Pin Code" readonly/>
         </div>
         <div class="col-md-4">
           <div>
             <label>Customer Requirement</label>
             <input type="text" name="CustomerRequirement" class="form-control" id="CustomerRequirement"
-              [(ngModel)]="Entity.p.CustomerRequirement" required placeholder="Enter Customer Requirement" />
+              [(ngModel)]="Entity.p.CustomerRequirement" required placeholder="Enter Customer Requirement" readonly/>
           </div>
         </div>
         <div class="col-md-4">
@@ -156,7 +156,7 @@
               <td Class="tbldata">{{ plot.PlotAreaInSqm }}</td>
               <td Class="tbldata">{{ plot.PlotAreaInSqft }}</td>
               <td class="tbldata">
-                <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" 
+                <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select"
                   name="{{plot.PlotName.trim() + '_' + i + 100}}" [(ngModel)]="plot.CustomerStatus" [nzSize]="'large'">
                   <nz-option *ngFor="let customerstatus of CustomerStatusList" [nzValue]="customerstatus.Ref"
                     [nzLabel]="customerstatus.Name"></nz-option>
@@ -226,7 +226,7 @@
         <div class="col-md-4">
           <div>
             <label>Next Site Visit Date</label>
-            <input type="date" name="localSiteVisitDate" class="form-control" id="localSiteVisitDate" [min]="today"  [(ngModel)]="localSiteVisitDate"  
+            <input type="date" name="localSiteVisitDate" class="form-control" id="localSiteVisitDate" [min]="today"  [(ngModel)]="localSiteVisitDate"
               required />
           </div>
         </div>
