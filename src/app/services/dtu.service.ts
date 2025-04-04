@@ -191,12 +191,27 @@ export class DTU {
 
     return `${year} -${month} -${day} -${hours} -${minutes} -${seconds} -${milliseconds}`;
   }
-  public ConvertStringDateToFullFormat(date: string): string {
-    if (date != "") {
-      const time = '00-00-00'; // Hardcoded time part for '00:00:00'
-      const milliseconds = '000'; // Hardcoded milliseconds part
+  public ConvertStringDateToFullFormat(dateString: string): string {
+    if (dateString != "") {
+      // if (dateString.includes('-00-00-00')) {
+      //   // Already in the desired format, return it directly
+      //   return dateString;
+      // }
+      if (dateString.length > 10) {
+        // Extract the first 10 characters (YYYY-MM-DD)
+        dateString =  dateString.slice(0, 10);
+      }
+      const date = new Date(dateString);
+      const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}-00-00-00-000`;
 
-      return `${date}-${time}-${milliseconds}`;
+      return `${formattedDate}`;
+    }
+    return '';
+  }
+  public ConvertStringDateToShortFormat(dateString: string): string {
+    if (dateString != "") {
+      const formattedDate = dateString.split('-').slice(0, 3).join('-');
+      return `${formattedDate}`;
     }
     return '';
   }
