@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 
 @Component({
   selector: 'app-tp-office-details',
@@ -7,111 +8,27 @@ import { Component, OnInit } from '@angular/core';
   standalone: false,
 
 })
-export class TpOfficeDetailsComponent implements OnInit {
+export class TpOfficeDetailsComponent implements OnInit, OnChanges {
+  @Input() SelectedTransactionType: string = '';
+  TpOfficeList: any[] = [];
+  constructor(private appStateManage: AppStateManageService,) { }
+  ngOnChanges(changes: SimpleChanges): void {
+    debugger
+    let arr = JSON.parse(this.appStateManage.StorageKey.getItem('TransactionJson') ?? '[]');
+    console.log('SelectedTransactionType',this.SelectedTransactionType);
 
-  constructor() { }
+    this.TpOfficeList = arr.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
+    console.log('TpOfficeList', this.TpOfficeList);
+  }
 
   ngOnInit() { }
-
-  GovermentList =
-    [
-      {
-        "SiteWorkGroupName": "TP Office",
-        "SiteWorkGroupRef": 27294,
-        "SiteWorkGroupDisplayOrder": 1,
-        "SiteWorks": [{
-          "SiteWorkName": "Tentative Layout",
-          "SiteWorkRef": 27320,
-          "SiteWorkDisplayOrder": 1,
-          "ApplicableTypes": [{
-            "ApplicableType": 100,
-            "SiteWorkApplicableTypeName": "Submit",
-            "Value": ""
-          }, {
-            "ApplicableType": 200,
-            "SiteWorkApplicableTypeName": "Inward No",
-            "Value": ""
-          }, {
-            "ApplicableType": 300,
-            "SiteWorkApplicableTypeName": "Inward Date",
-            "Value": ""
-          }
-          ]
-        }, {
-          "SiteWorkName": "Survey Remark",
-          "SiteWorkRef": 27321,
-          "SiteWorkDisplayOrder": 2,
-          "ApplicableTypes": [{
-            "ApplicableType": 100,
-            "SiteWorkApplicableTypeName": "Submit",
-            "Value": ""
-          }
-          ]
-        }, {
-          "SiteWorkName": "ATP Site Visit",
-          "SiteWorkRef": 27322,
-          "SiteWorkDisplayOrder": 3,
-          "ApplicableTypes": [{
-            "ApplicableType": 100,
-            "SiteWorkApplicableTypeName": "Submit",
-            "Value": ""
-          }
-          ]
-        }
-        ]
-      }, {
-        "SiteWorkGroupName": "परिशिष्ठ A(NA)",
-        "SiteWorkGroupRef": 27312,
-        "SiteWorkGroupDisplayOrder": 2,
-        "SiteWorks": [{
-          "SiteWorkName": " T.P. पत्र",
-          "SiteWorkRef": 27323,
-          "SiteWorkDisplayOrder": 1,
-          "ApplicableTypes": [{
-            "ApplicableType": 100,
-            "SiteWorkApplicableTypeName": "Submit",
-            "Value": ""
-          }, {
-            "ApplicableType": 200,
-            "SiteWorkApplicableTypeName": "Inward No",
-            "Value": ""
-          }, {
-            "ApplicableType": 300,
-            "SiteWorkApplicableTypeName": "Inward Date",
-            "Value": ""
-          }
-          ]
-        }, {
-          "SiteWorkName": "प्राधिकरण Office पत्र",
-          "SiteWorkRef": 27324,
-          "SiteWorkDisplayOrder": 2,
-          "ApplicableTypes": [{
-            "ApplicableType": 100,
-            "SiteWorkApplicableTypeName": "Submit",
-            "Value": ""
-          }
-          ]
-        }, {
-          "SiteWorkName": "Tentative Order व नकाशा",
-          "SiteWorkRef": 27325,
-          "SiteWorkDisplayOrder": 3,
-          "ApplicableTypes": [{
-            "ApplicableType": 100,
-            "SiteWorkApplicableTypeName": "Submit",
-            "Value": ""
-          }
-          ]
-        }
-        ]
-      }
-    ]
 
 
   getTypeOnApplicableTypeName = (ApplicableTypesName: string): '' | 'checkbox' | 'number' | 'date' | 'radio' | 'text' => {
     switch (ApplicableTypesName) {
       case 'Submit': return 'checkbox';
       case 'Inward No': return 'number';
-      case 'Date': return 'date';
+      case 'Inward Date': return 'date';
       case 'Scrutiny Fees': return 'checkbox';
       default:
         return ''; // Default return value

@@ -1,3 +1,41 @@
-<p>
-  mojani-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div *ngFor="let group of MojaniList">
+      <h4 style="font-size: 27px; font-weight: bold; color: brown;">{{ group.SiteWorkGroupName }}</h4>
+      <ul style="margin-top: 1rem;">
+        <li *ngFor="let siteWork of group.SiteWorks">
+          <strong>{{ siteWork.SiteWorkName }} :-</strong>
+          <ul>
+            <div class="row" style="margin-top: 1rem;margin-bottom: 1rem">
+              <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12" *ngFor="let type of siteWork.ApplicableTypes">
+                <label for="SiteWorkApplicableTypeName"><b>{{ type.SiteWorkApplicableTypeName }} : </b>&nbsp; </label>
+                <!-- <div>{{ type.SiteWorkApplicableTypeName }}</div> -->
+                <!-- Checkbox -->
+                <input *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'checkbox'"
+                  class="form-check-input dark-border" type="checkbox" [(ngModel)]="type.Value"
+                  [checked]="type.Value === 'true'">
+
+                <!-- Radio Buttons -->
+                <div *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'radio'">
+                  <input type="radio" class="dark-border" name="{{siteWork.SiteWorkName}}" value="Option1"
+                    [(ngModel)]="type.Value"> Option 1
+                  <input type="radio" class="dark-border" name="{{siteWork.SiteWorkName}}" value="Option2"
+                    [(ngModel)]="type.Value"> Option 2
+                </div>
+
+                <!-- Number Input -->
+                <input *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'number'"
+                  class="form-control dark-border" [(ngModel)]="type.Value" type="number">
+
+                <!-- Date Input -->
+                <input *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'date'"
+                  class="form-control dark-border" [(ngModel)]="type.Value" type="date">
+
+              </div>
+            </div>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
