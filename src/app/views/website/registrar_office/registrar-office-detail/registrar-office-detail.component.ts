@@ -70,6 +70,7 @@ export class RegistrarOfficeDetailComponent  implements OnInit {
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
       this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
       let entityToSave = this.Entity.GetEditableVersion();
+      console.log('entityToSave :', entityToSave);
 
         // ------ Code For Save Date Of Agreement Date Format ---------------//
     if (this.agreementdate) {
@@ -121,6 +122,7 @@ export class RegistrarOfficeDetailComponent  implements OnInit {
         if (this.IsNewEntity) {
           await this.uiUtils.showSuccessToster('Registrar Office saved successfully!');
           this.Entity = RegistrarOffice.CreateNewInstance();
+          console.log('Entity :', this.Entity);
         } else {
           await this.router.navigate(['/homepage/Website/Registrar_Office'])
           await this.uiUtils.showSuccessToster('Registrar Office Updated successfully!');

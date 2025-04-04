@@ -49,10 +49,10 @@
         <label>Contact No.</label>
          <input
            type="text"
-           [(ngModel)]="Entity.p.ContactNo"
-           name="ContactNo"
+           [(ngModel)]="Entity.p.PhoneNumber"
+           name="PhoneNumber"
            class="form-control"
-           id="ContactNo"
+           id="PhoneNumber"
            required
            placeholder="Enter Contact No. "
            (click)="selectAllValue($event)"
@@ -162,6 +162,7 @@
            id="Witness1ContactNo"
            required
            placeholder="Enter Contact No."
+           (click)="selectAllValue($event)"
          />
      </div>
       </div>
@@ -260,6 +261,8 @@
           id="Witness2ContactNo"
           required
           placeholder="Enter Contact No."
+          (click)="selectAllValue($event)"
+
         />
     </div>
      </div>

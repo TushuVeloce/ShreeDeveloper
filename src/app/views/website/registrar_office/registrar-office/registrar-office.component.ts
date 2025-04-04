@@ -65,6 +65,7 @@ onSiteRefPlotList = async (siteRef: number) => {
   this.MasterList = [];
   this.DisplayMasterList = [];
   this.PlotNoList = [];
+  this.Entity.p.PlotRef= 0 ;
   if (siteRef <= 0) {
     await this.uiUtils.showWarningToster(`Please Select Site`);
     return

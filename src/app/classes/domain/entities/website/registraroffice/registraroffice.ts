@@ -20,7 +20,7 @@ export class RegistrarOfficeProps {
   public SiteRef	: number = 0;
   public CustomerName: string = '';
   public Name: string = '';
-  public ContactNo: number = 0;
+  public PhoneNumber: number = 0;
 
   public IsChequeSubmit: Boolean = false;
 
@@ -29,7 +29,7 @@ export class RegistrarOfficeProps {
 
   public Witness1Submit : boolean = false;
   public Witness1Name : string = '';
-  public Witness1ContactNo : string = '';
+  public Witness1ContactNo : number = 0 ;
   public CustomerAadharPath :string = '';
   public CustomerPanPath   :string = '';
   public Witness1IsAadharSubmit  : boolean = false;
@@ -39,7 +39,7 @@ export class RegistrarOfficeProps {
 
   public Witness2Submit  : boolean = false;
   public Witness2Name : string = '';
-  public Witness2ContactNo : string = '';
+  public Witness2ContactNo : number = 0 ;
   public Witness2IsAadharSubmit  : boolean = false;
   public Witness2AadharPath : string = '';
   public Witness2IsPanSubmit   : boolean = false;
