@@ -1,32 +1,67 @@
 <div class="row">
   <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
-    <h5 style="padding-top: 3px;" class="title title_light">Registrar Office </h5>
+    <h5 style="padding-top: 3px" class="title title_light">Registrar Office</h5>
   </div>
-  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light">
-    <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus [(ngModel)]="SearchString" />
+  <div
+    class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light"
+  >
+    <input
+      type="text"
+      Class="search-box_light"
+      placeholder="Search..."
+      (input)="filterTable()"
+      autofocus
+      [(ngModel)]="SearchString"
+    />
   </div>
-  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
-    <nz-button nz-button class="btn1" (click)='AddRegistrarOffice()'>
+  <div
+    class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
+    routerLinkActive="active"
+  >
+    <nz-button nz-button class="btn1" (click)="AddRegistrarOffice()">
       Add Registrar Office
     </nz-button>
   </div>
 
-
   <div class="row mt-3">
     <div class="col-md-4">
       <label for="SiteRef"><b>Site Name</b></label>
-      <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteRef"
-        name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"(ngModelChange)="onSiteRefPlotList(Entity.p.SiteRef)"
-       >
-        <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+      <nz-select
+        class="nzSelect-light"
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Select"
+        id="SiteRef"
+        name="SiteRef"
+        [nzSize]="'large'"
+        [(ngModel)]="Entity.p.SiteRef"
+        (ngModelChange)="getPlotListBySiteRef(Entity.p.SiteRef)"
+      >
+        <nz-option
+          *ngFor="let site of SiteList"
+          [nzValue]="site.p.Ref"
+          [nzLabel]="site.p.Name"
+        ></nz-option>
       </nz-select>
     </div>
     <div class="col-md-4">
       <label for="PlotRef"><b>Plot No.</b></label>
-      <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PlotRef"
-        name="PlotRef" [nzSize]="'large'" [(ngModel)]="Entity.p.PlotRef" (ngModelChange)="onPlotRefRegistrarOfficeList(Entity.p.PlotRef)"
-       >
-        <nz-option *ngFor="let plot of PlotNoList" [nzValue]="plot.p.Ref" [nzLabel]="plot.p.PlotNo"></nz-option>
+      <nz-select
+        class="nzSelect-light"
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Select"
+        id="PlotRef"
+        name="PlotRef"
+        [nzSize]="'large'"
+        [(ngModel)]="Entity.p.PlotRef"
+        (ngModelChange)="getRegistrarOfficeListByPlotRef(Entity.p.PlotRef)"
+      >
+        <nz-option
+          *ngFor="let plot of PlotNoList"
+          [nzValue]="plot.p.Ref"
+          [nzLabel]="plot.p.PlotNo"
+        ></nz-option>
       </nz-select>
     </div>
     <!-- <div class="col-md-4">
@@ -36,14 +71,24 @@
         <nz-option *ngFor="let customer of CustomerList" [nzValue]="customer.p.Ref" [nzLabel]="customer.p.CustomerName"></nz-option>
       </nz-select>
     </div> -->
-    
-    
   </div>
 </div>
-<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+<div
+  class="table-wrapper"
+  class="tblcard_light"
+  style="margin-top: 2rem"
+  *ngIf="DisplayMasterList.length > 0"
+>
   <div class="table-container">
-    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
-      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+    <nz-table
+      #basicTable
+      nzSize="small"
+      class="no-hover-table bgtable_light"
+      [nzData]="paginatedList"
+      [nzScroll]="{ x: 'auto' }"
+      nzFrontPagination="false"
+      [nzShowSizeChanger]="false"
+    >
       <thead>
         <tr>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
@@ -52,27 +97,167 @@
       <tbody>
         <tr *ngFor="let registraroffice of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{ registraroffice.p.CustomerName}}</td>
-          <td Class="tbldata">{{registraroffice.p.IsChequeSubmit}}</td>
-          <!-- <td Class="tbldata">{{registraroffice.p.Witness1Submit}}</td> -->
+          <td Class="tbldata">{{ registraroffice.p.CustomerName }}</td>
+          <!-- <td Class="tbldata">{{registraroffice.p.IsChequeSubmit}}</td> -->
           <td class="tbldata">
-            <!-- Check if all required fields for Witness 1 are available -->
-            <span *ngIf="registraroffice.p.Witness1Name && registraroffice.p.Witness1ContactNo && registraroffice.p.Witness1IsAadharSubmit && registraroffice.p.Witness1IsPanSubmit; else pending">
-              Completed
+            <span
+              class="status"
+              [ngClass]="
+                registraroffice.p.IsChequeSubmit ? 'completed' : 'pending'
+              "
+            >
+              {{ registraroffice.p.IsChequeSubmit ? "Completed" : "Pending" }}
             </span>
-            <ng-template #pending>Pending</ng-template>
+          </td>
+          <td class="tbldata">
+            <span
+              class="status"
+              [ngClass]="{
+                completed:
+                  registraroffice.p.Witness1Name &&
+                  registraroffice.p.Witness1ContactNo &&
+                  registraroffice.p.Witness1IsAadharSubmit &&
+                  registraroffice.p.Witness1IsPanSubmit,
+                pending: !(
+                  registraroffice.p.Witness1Name &&
+                  registraroffice.p.Witness1ContactNo &&
+                  registraroffice.p.Witness1IsAadharSubmit &&
+                  registraroffice.p.Witness1IsPanSubmit
+                )
+              }"
+            >
+              {{
+                registraroffice.p.Witness1Name &&
+                registraroffice.p.Witness1ContactNo &&
+                registraroffice.p.Witness1IsAadharSubmit &&
+                registraroffice.p.Witness1IsPanSubmit
+                  ? "Completed"
+                  : "Pending"
+              }}
+            </span>
           </td>
 
           <td class="tbldata">
-            <!-- Check if all required fields for Witness 1 are available -->
-            <span *ngIf="registraroffice.p.Witness2Name && registraroffice.p.Witness2ContactNo && registraroffice.p.Witness2IsAadharSubmit && registraroffice.p.Witness2IsPanSubmit; else pending">
-              Completed
+            <span
+              class="status"
+              [ngClass]="{
+                completed:
+                  registraroffice.p.AgreementDocumentNo &&
+                  registraroffice.p.AgreementDate,
+                pending: !(
+                  registraroffice.p.AgreementDocumentNo &&
+                  registraroffice.p.AgreementDate 
+                 
+                )
+              }"
+            >
+              {{
+                registraroffice.p.AgreementDocumentNo &&
+                registraroffice.p.AgreementDate
+                  ? "Completed"
+                  : "Pending"
+              }}
             </span>
-            <ng-template #pending>Pending</ng-template>
+          </td>
+
+          <td class="tbldata">
+            <span
+              class="status"
+              [ngClass]="{
+                completed:
+                  registraroffice.p.SaleDeedDocumentNo &&
+                  registraroffice.p.SaleDeedDate,
+                pending: !(
+                  registraroffice.p.SaleDeedDocumentNo &&
+                  registraroffice.p.SaleDeedDate 
+                 
+                )
+              }"
+            >
+              {{
+                registraroffice.p.SaleDeedDocumentNo &&
+                registraroffice.p.SaleDeedDate
+                  ? "Completed"
+                  : "Pending"
+              }}
+            </span>
           </td>
           <td class="tbldata">
-            <span style="margin-left: 9px;" (click)="onEditClicked(registraroffice);">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+            <span
+              class="status"
+              [ngClass]="{
+                completed:
+                  registraroffice.p.IsIndexOriginalSubmit &&
+                  registraroffice.p.IsDastZeroxSubmit &&
+                  registraroffice.p.TalathiInwardNo &&
+                  registraroffice.p.TalathiDate &&
+                  registraroffice.p.IsFerfarNoticeSubmit,
+                pending: !(
+                  registraroffice.p.IsIndexOriginalSubmit &&
+                  registraroffice.p.IsDastZeroxSubmit &&
+                  registraroffice.p.TalathiInwardNo &&
+                  registraroffice.p.TalathiDate &&
+                  registraroffice.p.IsFerfarNoticeSubmit
+
+                )
+              }"
+            >
+              {{
+                registraroffice.p.IsIndexOriginalSubmit &&
+                registraroffice.p.IsDastZeroxSubmit &&
+                registraroffice.p.TalathiInwardNo &&
+                registraroffice.p.TalathiDate && 
+                registraroffice.p.IsFerfarNoticeSubmit
+
+                  ? "Completed"
+                  : "Pending"
+              }}
+            </span>
+          </td>
+          <td class="tbldata">
+            <span
+              class="status"
+              [ngClass]="
+                registraroffice.p.IsFinalCustomer712Submit ? 'completed' : 'pending'
+              "
+            >
+              {{ registraroffice.p.IsFinalCustomer712Submit ? "Completed" : "Pending" }}
+            </span>
+          </td>
+
+          <td class="tbldata">
+            <span
+              class="status"
+              [ngClass]="
+                registraroffice.p.IsSpiral712Submit ? 'completed' : 'pending'
+              "
+            >
+              {{ registraroffice.p.IsSpiral712Submit ? "Completed" : "Pending" }}
+            </span>
+          </td>
+          <td class="tbldata">
+            <span
+              class="status"
+              [ngClass]="
+                registraroffice.p.IsClientSubmit ? 'completed' : 'pending'
+              "
+            >
+              {{ registraroffice.p.IsClientSubmit ? "Completed" : "Pending" }}
+            </span>
+          </td>
+
+          <td class="tbldata">
+            <span
+              style="margin-left: 9px"
+              (click)="onEditClicked(registraroffice)"
+            >
+              <img
+                src="\assets\icons\edit.png"
+                alt="logo"
+                title="Edit"
+                width="20px"
+                height="20px"
+              />
             </span>
             <!-- <span style="margin-left: 9px;" (click)="onDeleteClicked(registraroffice);">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span> -->
@@ -82,13 +267,23 @@
     </nz-table>
   </div>
   <div class="fixed-pagination">
-    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
-      (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+    <nz-pagination
+      class="try light-theme"
+      [nzPageSize]="pageSize"
+      [nzTotal]="total"
+      [(nzPageIndex)]="currentPage"
+      (nzPageIndexChange)="onPageChange($event)"
+      [nzShowSizeChanger]="false"
+      [nzResponsive]="true"
+    >
     </nz-pagination>
   </div>
 </div>
 <div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
-  <div style="height: 200px" class="d-flex align-items-center justify-content-center">
+  <div
+    style="height: 200px"
+    class="d-flex align-items-center justify-content-center"
+  >
     <span class="title_light"> Data Not Found</span>
   </div>
 </div>

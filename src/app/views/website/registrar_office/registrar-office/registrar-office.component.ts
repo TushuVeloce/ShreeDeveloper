@@ -30,7 +30,7 @@ export class RegistrarOfficeComponent  implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   SiteRef : number = 0;
-  headers: string[] = ['Sr.No.','Customer', 'Cheque', 'Witness 1','Witness 2', 'Action'];
+  headers: string[] = ['Sr.No.','Customer', 'Cheque', 'Witness 1','Agreement to Sale','Sale Deed','Talathi','7/12	','Spiral','Client Submit	', 'Action'];
   
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement) {
     effect(() => {
@@ -61,7 +61,7 @@ export class RegistrarOfficeComponent  implements OnInit {
 
   // get PlotList With Site Ref //
 
-onSiteRefPlotList = async (siteRef: number) => {
+getPlotListBySiteRef = async (siteRef: number) => {
   this.MasterList = [];
   this.DisplayMasterList = [];
   this.PlotNoList = [];
@@ -78,10 +78,10 @@ onSiteRefPlotList = async (siteRef: number) => {
 
   // get CustomerList With Plot Ref //
 
-  onPlotRefRegistrarOfficeList = async (PlotRef: number) => {
+  getRegistrarOfficeListByPlotRef = async (PlotRef: number) => {
     this.DisplayMasterList = [];
     if (PlotRef <= 0) {
-      await this.uiUtils.showWarningToster(`Please Select Site`);
+      await this.uiUtils.showWarningToster(`Please Select Plot`);
       return
     }
     let lst = await RegistrarOffice.FetchEntireListByPlotRef(PlotRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
@@ -90,17 +90,6 @@ onSiteRefPlotList = async (siteRef: number) => {
         console.log('DisplayMasterList :', this.DisplayMasterList);
       this.loadPaginationData();
   }
-
-  // getRegistrarOfficeListByCustomerRef = async (CustomerRef:number) => {
-  //     this.MasterList = [];
-  //     this.DisplayMasterList = [];
-  //       let lst = await RegistrarOffice.FetchEntireListByCustomerRef(CustomerRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //       console.log('lst :', lst);
-  //       this.MasterList = lst;
-  //       console.log('MasterList :', this.MasterList);
-  //       this.DisplayMasterList = this.MasterList;
-  //     this.loadPaginationData();
-  //   }
 
   onEditClicked = async (item: RegistrarOffice) => {
     this.SelectedRegistrarOffice = item.GetEditableVersion();
