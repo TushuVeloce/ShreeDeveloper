@@ -11,11 +11,12 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 export class TpOfficeDetailsComponent implements OnInit, OnChanges {
   @Input() SelectedTransactionType: string = '';
   TpOfficeList: any[] = [];
+
   constructor(private appStateManage: AppStateManageService,) { }
   ngOnChanges(changes: SimpleChanges): void {
     debugger
     let arr = JSON.parse(this.appStateManage.StorageKey.getItem('TransactionJson') ?? '[]');
-    console.log('SelectedTransactionType',this.SelectedTransactionType);
+    console.log('SelectedTransactionType', this.SelectedTransactionType);
 
     this.TpOfficeList = arr.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
     console.log('TpOfficeList', this.TpOfficeList);

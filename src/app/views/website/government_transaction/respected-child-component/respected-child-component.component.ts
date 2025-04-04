@@ -20,7 +20,7 @@ export class RespectedChildComponentComponent implements OnInit {
     let str = this.route.snapshot.params['queryParams'];
     // console.log('str :', str);
     this.SectionName = str;
-    this.SelectedTransactionType = this.SectionName.split(',')[0];
+    this.SelectedTransactionType = this.SectionName;
     console.log(this.SelectedTransactionType);
   }
 

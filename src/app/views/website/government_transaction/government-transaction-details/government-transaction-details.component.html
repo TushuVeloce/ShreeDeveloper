@@ -45,13 +45,15 @@
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12">
   </div>
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12">
-    <nz-steps nzDirection="vertical" class="custom-steps">
-      <nz-step nzTitle="TP Office" nzDescription="" (click)="getSiteWorkGroupName('T.P Office')"></nz-step>
-      <nz-step nzTitle="परिशिष्ठ A (NA)" nzDescription="" (click)="getSiteWorkGroupName('परिशिष्ठ A(NA)')"></nz-step>
+    <nz-steps nzDirection="vertical" class="custom-steps" *ngFor="let step of TransactionJson;">
+      <nz-step nzTitle={{step.SiteWorkGroupName}} nzDescription=""
+        (click)="getSiteWorkGroupName(step.SiteWorkGroupName)"></nz-step>
+
+      <!-- <nz-step nzTitle="परिशिष्ठ A (NA)" nzDescription="" (click)="getSiteWorkGroupName('परिशिष्ठ A(NA)')"></nz-step>
       <nz-step nzTitle="मोजणी" nzDescription="" (click)="getSiteWorkGroupName('Mojani')"></nz-step>
       <nz-step nzTitle="ULC" nzDescription="" (click)="getSiteWorkGroupName('ULC')"></nz-step>
       <nz-step nzTitle="Final Layout" nzDescription="" (click)="getSiteWorkGroupName('Final Layout')"></nz-step>
-      <nz-step nzTitle="क जा पा" nzDescription="" (click)="getSiteWorkGroupName('क जा पा')"></nz-step>
+      <nz-step nzTitle="क जा पा" nzDescription="" (click)="getSiteWorkGroupName('क जा पा')"></nz-step> -->
     </nz-steps>
   </div>
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12">
