@@ -101,14 +101,27 @@ export class Vendor implements IPersistable<Vendor> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-    if (this.p.CompanyType == 0) vra.add('CompanyType', 'Company Type cannot be blank.');
-    if (this.p.MobileNo == '') vra.add('MobileNo', 'Mobile No cannot be blank.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
-    if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country Name cannot be blank.');
-    if (this.p.StateRef == 0) vra.add('StateRef', 'State Name cannot be blank.');
-    if (this.p.CityRef == 0) vra.add('CityRef', 'City Name cannot be blank.');
+    if (this.p.Code == '') vra.add('Code', 'Vendor Code cannot be blank.');
+    if (this.p.CompanyType == 0) vra.add('CompanyType', 'Company Type cannot be blank.');
+    if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
     if (this.p.TradeName == '') vra.add('TradeName', 'Trade Name cannot be blank.');
+    if (this.p.MobileNo == '') vra.add('MobileNo', 'Mobile No cannot be blank.');
+    if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'AddressLine1 cannot be blank.');
+    if (this.p.AddressLine2 == '') vra.add('AddressLine2', 'AddressLine2 cannot be blank.');
+    if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country cannot be blank.');
+    if (this.p.StateRef == 0) vra.add('StateRef', 'State cannot be blank.');
+    if (this.p.CityRef == 0) vra.add('CityRef', 'City cannot be blank.');
+    if (this.p.PinCode == '') vra.add('PinCode', 'Pin cannot be blank.');
+    if (this.p.BankName == '') vra.add('BankName', 'Bank cannot be blank.');
+    if (this.p.BranchName == '') vra.add('BranchName', 'Branch cannot be blank.');
+    if (this.p.AccountNumber == '') vra.add('AccountNumber', 'Account Number cannot be blank.');
+    if (this.p.IFSC == '') vra.add('IFSC', 'IFSC cannot be blank.');
+    if (this.p.GSTIN == '') vra.add('GSTIN', 'GST IN cannot be blank.');
+    if (this.p.Pan == '') vra.add('Pan', 'PAN cannot be blank.');
+    if (this.p.CINNO == '') vra.add('CINNO', 'CIN cannot be blank.');
+    if (this.p.MaterialListSuppliedByVendor.length < 0) vra.add('MaterialListSuppliedByVendor', ' Vendor Material Supply list cannot be blank.');
+    if (this.p.ServiceListSuppliedByVendor.length < 0) vra.add('ServiceListSuppliedByVendor', 'Vendor Service Supply list cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
