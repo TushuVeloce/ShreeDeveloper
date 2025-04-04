@@ -149,7 +149,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let plot of plotDetailsArray; let i = index">
+            <tr *ngFor="let plot of Entity.p.CustomerFollowUpPlotDetails; let i = index">
               <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
               <td Class="tbldata">{{ plot.SiteName }}</td>
               <td Class="tbldata">{{ plot.PlotName }}</td>
@@ -226,22 +226,21 @@
         <div class="col-md-4">
           <div>
             <label>Next Site Visit Date</label>
-            <input type="date" name="Date" class="form-control" id="Date" [value]="localSiteVisitDate!.split('-').slice(0, 3).join('-') | date:'yyyy-MM-dd'" (change)="onLocalSiteVisitDate($event)"
+            <input type="date" name="localSiteVisitDate" class="form-control" id="localSiteVisitDate" [min]="today"  [(ngModel)]="localSiteVisitDate"  
               required />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Next Office Visit Date</label>
-            <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="officevistdate"
+            <input type="date" name="localOfficeVisitDate" class="form-control" id="localOfficeVisitDate" [min]="today" [(ngModel)]="localOfficeVisitDate"
               required />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Reminder Date</label>
-            <input type="Date" name="ReminderDate" class="form-control" id="ReminderDate"
-              [(ngModel)]="reminderdate" required />
+            <input type="Date" name="localReminderDate" class="form-control" id="localReminderDate" [min]="today" [(ngModel)]="localReminderDate" required />
           </div>
         </div>
       </div>

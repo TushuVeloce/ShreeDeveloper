@@ -28,7 +28,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
   Entity: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
   CustomerEnquiryEntity: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
   obj = CustomerFollowUpPlotDetails.CreateNewInstance();
-
+  today: string = new Date().toISOString().split('T')[0];
   Plotheaders: string[] = ['Sr.No.', 'Site', 'Plot No', 'Area in sqm', 'Area in Sqft', 'Customer Status', 'Remark'];
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
@@ -47,15 +47,16 @@ export class CustomerFollowupDetailsComponent implements OnInit {
   InterestedPlotRef: number = 0;
   SiteManagementRef: number = 0;
   EmployeeList: Employee[] = [];
-  reminderdate: string | null = null;
-  officevistdate: string | null = null;
-  localSiteVisitDate: string  = '2025-04-15-00-00-00-000';
+  localReminderDate: string  = '';
+  localOfficeVisitDate: string  = '';
+  localSiteVisitDate: string  = '';
+  todayDate: string  = '';
   ContactModesList = DomainEnums.ContactModeList(true, '--Select Contact Mode --');
   LeadSourceList = DomainEnums.MarketingModesList(true, '--Select Lead Source --');
   CustomerStatusList = DomainEnums.CustomerStatusList(true, '--Select Customer Status --');
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   showAgentBrokerInput: boolean = false;
-  plotDetailsArray: CustomerFollowUpPlotDetailsProps[] = [];
+
 
   onLeadSourceChange = (selectedValue: number) => {
     // Check if the selected value is AgentBroker (50)
@@ -84,37 +85,34 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
       // While Edit Converting date String into Date Format //
       if (this.Entity.p.ReminderDate) {
-        this.reminderdate = this.datePipe.transform(
-          this.dtu.FromString(this.Entity.p.ReminderDate),
-          'yyyy-MM-dd'
-        );
-      }
-
-      if (this.Entity.p.SiteVisitDate!= "") {
-        // While Edit Converting date String into Date Format //
-        // this.localSiteVisitDate = this.datePipe.transform(
-        //   this.dtu.FromString(this.Entity.p.SiteVisitDate),
+        this.localReminderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.ReminderDate)
+        // this.localReminderDate = this.datePipe.transform(
+        //   this.dtu.FromString(this.Entity.p.ReminderDate),
         //   'yyyy-MM-dd'
         // );
       }
 
+      if (this.Entity.p.SiteVisitDate!= "") {
+        // While Edit Converting date String into Date Format //
+          // convert  2025-02-23-00-00-00-000 to 2025-02-23
+        this.localSiteVisitDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.SiteVisitDate)
+      }
+      //else this.localSiteVisitDate = this.dtu.ConvertStringDateToShortFormat(this.localSiteVisitDate)
+
       if (this.Entity.p.OfficeVisitDate) {
         // While Edit Converting date String into Date Format //
-        this.officevistdate = this.datePipe.transform(
-          this.dtu.FromString(this.Entity.p.OfficeVisitDate),
-          'yyyy-MM-dd'
-        );
+        this.localOfficeVisitDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.OfficeVisitDate)
+        // this.localOfficeVisitDate = this.datePipe.transform(
+        //   this.dtu.FromString(this.Entity.p.OfficeVisitDate),
+        //   'yyyy-MM-dd'
+        // );
       }
       // console.log(this.Entity.p.CustomerFollowUpPlotDetails);
-      
-      this.plotDetailsArray = [...this.Entity.p.CustomerFollowUpPlotDetails];
-      this.plotDetailsArray.forEach(e=> e.Ref = 0)
+      let plotDetailsArray: CustomerFollowUpPlotDetailsProps[] = [];
+      plotDetailsArray = [...this.Entity.p.CustomerFollowUpPlotDetails];
+      plotDetailsArray.forEach(e=> e.Ref = 0)
       this.Entity.p.CustomerFollowUpPlotDetails = []
-      // console.log('Before:', this.Entity.p.CustomerFollowUpPlotDetails);
-      // console.log(this.plotDetailsArray);
-      this.Entity.p.CustomerFollowUpPlotDetails = this.plotDetailsArray;
-      // console.log('After :', this.Entity.p.CustomerFollowUpPlotDetails);
-      //  console.log('CustomerEnquiryEntity :', this.CustomerEnquiryEntity);
+      this.Entity.p.CustomerFollowUpPlotDetails = plotDetailsArray;
       this.appStateManage.StorageKey.removeItem('Editable');
     } else {
       this.Entity = CustomerFollowUp.CreateNewInstance();
@@ -183,16 +181,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
   }
-  onLocalSiteVisitDate(event: any) {
-    const selectedDate = event.target.value;
-    console.log('Selected Date:', selectedDate);
-    this.localSiteVisitDate = selectedDate
-    let a =DTU.GetInstance().ConvertStringDateToFullFormat(this.localSiteVisitDate!)
-    console.log('a :', a);
-    console.log('this.localSiteVisitDate :', this.localSiteVisitDate);
 
-    // You can now process the selected date as needed
-  }
 
   getPlotBySiteRefList = async (siteRef: number) => {
 
@@ -253,20 +242,9 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       return;
     }
 
-    if (selectedPlot) {
-      // this.Entity.p.CustomerFollowUpPlotDetails.push(
-      //   obj.p
-      // );
-      // this.plotDetailsArray.push(
-      //   this.obj.p
-      // );
-      
+    if (selectedPlot) {  
       this.Entity.p.CustomerFollowUpPlotDetails.push(...[obj.p]);
       this.IsPlotDetails = true;
-
-      // this.Entity.p.CustomerFollowUpPlotDetails = [];
-      // this.Entity.p.CustomerFollowUpPlotDetails.push(...this.plotDetailsArray);
-      // console.log('Updated IsPlotDetails :', this.plotDetailsArray);
       this.SiteManagementRef = 0;
       this.InterestedPlotRef = 0;
     }
@@ -287,39 +265,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     let CurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
     this.Entity.p.TransDateTime = CurrentDateTime;
 
-    // ------ Code For Save Date Of InCorporation Year Format ---------------//
-    if (this.localSiteVisitDate) {
-      let dateValue = new Date(this.localSiteVisitDate);
-
-      if (!isNaN(dateValue.getTime())) {
-        this.Entity.p.SiteVisitDate = this.dtu.DateStartStringFromDateValue(dateValue);
-      } else {
-        this.Entity.p.SiteVisitDate = '';
-      }
-    }
-
-    // ------ Code For Save Date Of InCorporation Year Format ---------------//
-    if (this.officevistdate) {
-      let dateValue = new Date(this.officevistdate);
-
-      if (!isNaN(dateValue.getTime())) {
-        this.Entity.p.OfficeVisitDate = this.dtu.DateStartStringFromDateValue(dateValue);
-      } else {
-        this.Entity.p.OfficeVisitDate = '';
-      }
-    }
-
-    // ------ Code For Save Date Of Reminder Date Format ---------------//
-    if (this.reminderdate) {
-      let dateValue = new Date(this.reminderdate);
-
-      if (!isNaN(dateValue.getTime())) {
-        this.Entity.p.ReminderDate = this.dtu.DateStartStringFromDateValue(dateValue);
-      } else {
-        this.Entity.p.ReminderDate = '';
-      }
-    }
-
     // -----------------------------------
     await this.GenerateCustomerFollowUpPlotDetailsRef();
     // console.log(this.Entity.p.CustomerFollowUpPlotDetails);
@@ -334,8 +279,15 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       plotDetail.CustomerFollowUpRef = this.Entity.p.Ref;
     });
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
+    // convert date 2025-02-23 to 2025-02-23-00-00-00-000
+    this.Entity.p.SiteVisitDate = this.dtu.ConvertStringDateToFullFormat(this.localSiteVisitDate)
+    this.Entity.p.OfficeVisitDate = this.dtu.ConvertStringDateToFullFormat(this.localOfficeVisitDate)
+    this.Entity.p.ReminderDate = this.dtu.ConvertStringDateToFullFormat(this.localReminderDate)
+    // return
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
+    
+    // return
     // this.Entity.p.ContactMode = this.CustomerEnquiryEntity.p.CustomerFollowUps[0].ContactMode;
     // console.log('entitiesToSave:', entitiesToSave);
     // // await this.Entity.EnsurePrimaryKeysWithValidValues()
