@@ -114,7 +114,7 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
     if (this.p.Remark == '') vra.add('Remark', 'Remark cannot be blank.');
 
     if (this.p.CustomerStatus == 0)
-      vra.add('ContactMode', 'ContactMode cannot be blank.');
+      vra.add('CustomerStatus', 'CustomerStatus cannot be blank.');
 
     if (this.p.Reason == '')
       vra.add('Reason', 'Reason cannot be blank.');

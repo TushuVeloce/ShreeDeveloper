@@ -102,6 +102,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       this.Entity.p.ReminderDate = '';
       this.Entity.p.Reason = '';
       this.Entity.p.CustomerStatus = 0;
+      this.Entity.p.ContactMode = 0;
       console.log(this.Entity);
 
       //  this.CustomerEnquiryEntity = CustomerEnquiry.GetCurrentInstance();
