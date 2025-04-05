@@ -64,6 +64,54 @@ export class RegistrarOfficeDetailComponent  implements OnInit {
     const input = event.target as HTMLInputElement;
     input.select();
   }
+
+  isWitness1Complete(): boolean {
+    const p = this.Entity.p;
+    return (
+      p.Witness1Name?.trim() !== '' &&
+      p.Witness1ContactNo?.toString().trim() !== '' &&
+      p.Witness1IsAadharSubmit &&
+      p.Witness1IsPanSubmit
+    );
+  }
+  isWitness2Complete(): boolean {
+    const p = this.Entity.p;
+    return (
+      p.Witness2Name?.trim() !== '' &&
+      p.Witness2ContactNo?.toString().trim() !== '' &&
+      p.Witness2IsAadharSubmit &&
+      p.Witness2IsPanSubmit
+    );
+  }
+
+  isAgreementtoSaleComplete(): boolean {
+    const p = this.Entity.p;
+    return (
+      p.AgreementDocumentNo?.trim() !== '' &&
+      this.localagreementdate?.trim() !== '' 
+    );
+  }
+
+  isSaleDeedComplete(): boolean {
+    const p = this.Entity.p;
+    return (
+      p.SaleDeedDocumentNo?.trim() !== '' &&
+      this.localsaledeeddate?.trim() !== '' 
+    );
+  }
+  
+  isTalathiComplete(): boolean {
+    const p = this.Entity.p;
+    return (
+      p.TalathiInwardNo?.trim() !== '' &&
+      this.localtalathidate?.trim() !== '' &&
+      p.IsIndexOriginalSubmit &&
+      p.IsDastZeroxSubmit  &&
+      p.IsFerfarNoticeSubmit &&
+      p.IsFinalCustomer712Submit
+    );
+  }
+
     SaveRegistrarOfficeMaster = async () => {
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
       this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()

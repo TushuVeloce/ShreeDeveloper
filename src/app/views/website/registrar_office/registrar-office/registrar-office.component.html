@@ -35,7 +35,7 @@
         name="SiteRef"
         [nzSize]="'large'"
         [(ngModel)]="Entity.p.SiteRef"
-        (ngModelChange)="getPlotListBySiteRef(Entity.p.SiteRef)"
+        (ngModelChange)="getPlotListBySiteRef(Entity.p.SiteRef) "
       >
         <nz-option
           *ngFor="let site of SiteList"
