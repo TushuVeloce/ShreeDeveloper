@@ -1,18 +1,20 @@
 <div class="card-body">
   <div class="card" style="padding: 1rem">
     <div *ngFor="let group of TpOfficeList">
-      <h4 style="font-size: 27px; font-weight: bold; color: brown;">{{ group.SiteWorkGroupName }}</h4>
+      <h4 class="SiteWorkGroupNamestyle">{{ group.SiteWorkGroupName }}</h4>
       <ul style="margin-top: 1rem;">
         <li *ngFor="let siteWork of group.SiteWorks">
-          <strong>{{ siteWork.SiteWorkName }} :-</strong>
+          <strong class="SiteWorkNameStyle">{{ siteWork.SiteWorkName }}:-</strong>
           <ul>
             <div class="row" style="margin-top: 1rem;margin-bottom: 1rem">
-              <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12" *ngFor="let type of siteWork.ApplicableTypes">
+              <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12"
+                *ngFor="let type of siteWork.ApplicableTypes; let i = index">
                 <label for="SiteWorkApplicableTypeName"><b>{{ type.SiteWorkApplicableTypeName }} : </b>&nbsp; </label>
                 <!-- <div>{{ type.SiteWorkApplicableTypeName }}</div> -->
                 <!-- Checkbox -->
                 <input *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'checkbox'"
-                  class="form-check-input dark-border" type="checkbox" [(ngModel)]="type.Value"
+                  class="form-check-input dark-border" type="checkbox"
+                  name="{{siteWork.SiteWorkName.trim() + '_' + i + 100}}" [(ngModel)]="type.Value"
                   [checked]="type.Value === 'true'">
 
                 <!-- Radio Buttons -->
@@ -25,17 +27,30 @@
 
                 <!-- Number Input -->
                 <input *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'number'"
-                  class="form-control dark-border" [(ngModel)]="type.Value" type="number">
+                  class="form-control dark-border" name="{{siteWork.SiteWorkName.trim() + '_' + i + 100}}"
+                  [(ngModel)]="type.Value" type="number">
 
                 <!-- Date Input -->
                 <input *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'date'"
-                  class="form-control dark-border" [(ngModel)]="type.Value" type="date">
-
+                  class="form-control dark-border" name="{{siteWork.SiteWorkName.trim() + '_' + i + 100}}"
+                  [(ngModel)]="type.Value" type="date">
               </div>
             </div>
           </ul>
         </li>
       </ul>
+    </div>
+    <div class="row">
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn" (click)="onSave()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="onCancel()">
+            Back
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

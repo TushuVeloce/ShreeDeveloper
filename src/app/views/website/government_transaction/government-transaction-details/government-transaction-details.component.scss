@@ -1,22 +1,22 @@
 
 :host ::ng-deep .custom-steps .ant-steps-item {
-    font-size: 30px; /* Increase text size */
+    font-size: 27px; /* Increase text size */
   }
   
   :host ::ng-deep .custom-steps .ant-steps-item-title {
     color: white !important; /* Change text color */
     font-size: 25px;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
-    background-color: rgb(176, 91, 91);
-    border-radius: 5px;
+    background-color:brown;
+    border-radius: 3px;
     padding: 4px;
     width: 100%;
     text-align: center;
   }
   
   :host ::ng-deep .custom-steps .ant-steps-item-icon {
-    font-size: 28px !important; /* Increase icon size */
+    font-size: 27px !important; /* Increase icon size */
     font-weight: 600;
     width: 40px !important;
     height: 40px !important;
@@ -28,7 +28,7 @@
   }
   
   :host ::ng-deep .custom-steps .ant-steps-item-icon > .ant-steps-icon {
-    font-size: 28px !important; /* Increase step number size */
+    font-size: 27px !important; /* Increase step number size */
     color: white;
   }
   
