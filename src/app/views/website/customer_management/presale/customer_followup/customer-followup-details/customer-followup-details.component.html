@@ -25,7 +25,7 @@
         <div class="col-md-4">
           <div>
             <label>Reason</label>
-            <input type="text" name="reason" class="form-control" id="reason" [(ngModel)]="Entity.p.Reason" required readonly/>
+            <input type="text" name="reason" class="form-control" id="reason" [(ngModel)]="Entity.p.Reason" required />
           </div>
         </div>
         <div class="col-md-4">
@@ -54,8 +54,8 @@
         <div class="col-md-4">
           <div>
             <label for="CountryRef"><b>Country</b></label>
-            <input type="text" name="CountryRef" class="form-control" id="CountryRef"
-              [(ngModel)]="Entity.p.CountryName" readonly/>
+            <input type="text" name="CountryRef" class="form-control" id="CountryRef" [(ngModel)]="Entity.p.CountryName"
+              readonly />
             <!-- <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
               name="CountryRef" required id="CountryRef" [(ngModel)]="CustomerEnquiryEntity.p.CountryRef">
               <nz-option></nz-option>
@@ -67,7 +67,8 @@
         <div class="col-md-4">
           <div>
             <label for="StateRef"><b>State</b></label>
-            <input type="text" name="StateRef" class="form-control" id="StateRef" [(ngModel)]="Entity.p.StateName" readonly />
+            <input type="text" name="StateRef" class="form-control" id="StateRef" [(ngModel)]="Entity.p.StateName"
+              readonly />
             <!-- <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
               name="StateRef" [nzSize]="'large'"  [(ngModel)]="CustomerEnquiryEntity.p.StateRef">
               <nz-option></nz-option>
@@ -77,7 +78,8 @@
         <div class="col-md-4">
           <div>
             <label for="CityRef"><b>City</b></label>
-            <input type="text" name="CityRef" class="form-control" id="CityRef" [(ngModel)]="Entity.p.CityName" readonly/>
+            <input type="text" name="CityRef" class="form-control" id="CityRef" [(ngModel)]="Entity.p.CityName"
+              readonly />
             <!-- <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
               name="CityRef" [nzSize]="'large'"  [(ngModel)]="CustomerEnquiryEntity.p.CityRef">
               <nz-option></nz-option>
@@ -96,13 +98,13 @@
         <div class="col-md-4">
           <label>Pin Code</label>
           <input type="text" name="PinCode" class="form-control" id="PinCode" required [(ngModel)]="Entity.p.PinCode"
-            placeholder="Enter Pin Code" readonly/>
+            placeholder="Enter Pin Code" readonly />
         </div>
         <div class="col-md-4">
           <div>
             <label>Customer Requirement</label>
             <input type="text" name="CustomerRequirement" class="form-control" id="CustomerRequirement"
-              [(ngModel)]="Entity.p.CustomerRequirement" required placeholder="Enter Customer Requirement" readonly/>
+              [(ngModel)]="Entity.p.CustomerRequirement" required placeholder="Enter Customer Requirement" readonly />
           </div>
         </div>
         <div class="col-md-4">
@@ -163,8 +165,8 @@
                 </nz-select>
               </td>
               <td class="tbldata">
-                <input type="text" name="{{plot.PlotName.trim() + '_' + i + 1000}}" class="form-control"  [(ngModel)]="plot.Reason" required
-                  placeholder="Enter Reason" />
+                <input type="text" name="{{plot.PlotName.trim() + '_' + i + 1000}}" class="form-control"
+                  [(ngModel)]="plot.Reason" required placeholder="Enter Reason" />
               </td>
             </tr>
           </tbody>
@@ -223,24 +225,28 @@
             </nz-select>
           </div>
         </div>
-        <div class="col-md-4">
+        <!-- Next site visit date  -->
+        <div class="col-md-4" *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== 40">
           <div>
             <label>Next Site Visit Date</label>
-            <input type="date" name="localSiteVisitDate" class="form-control" id="localSiteVisitDate" [min]="today"  [(ngModel)]="localSiteVisitDate"
-              required />
+            <input type="date" name="localSiteVisitDate" class="form-control" id="localSiteVisitDate" [min]="today"
+              [(ngModel)]="localSiteVisitDate" required />
           </div>
         </div>
-        <div class="col-md-4">
+        <!-- Next Office visit date  -->
+        <div class="col-md-4" *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== 40">
           <div>
             <label>Next Office Visit Date</label>
-            <input type="date" name="localOfficeVisitDate" class="form-control" id="localOfficeVisitDate" [min]="today" [(ngModel)]="localOfficeVisitDate"
-              required />
+            <input type="date" name="localOfficeVisitDate" class="form-control" id="localOfficeVisitDate" [min]="today"
+              [(ngModel)]="localOfficeVisitDate" required />
           </div>
         </div>
-        <div class="col-md-4">
+        <!--Reminder Date  -->
+        <div class="col-md-4" *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== 40">
           <div>
             <label>Reminder Date</label>
-            <input type="Date" name="localReminderDate" class="form-control" id="localReminderDate" [min]="today" [(ngModel)]="localReminderDate" required />
+            <input type="Date" name="localReminderDate" class="form-control" id="localReminderDate" [min]="today"
+              [(ngModel)]="localReminderDate" required />
           </div>
         </div>
       </div>

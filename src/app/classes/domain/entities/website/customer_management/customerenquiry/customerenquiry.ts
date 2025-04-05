@@ -118,6 +118,8 @@ export class CustomerEnquiry implements IPersistable<CustomerEnquiry> {
         vra.add('TransDateTime', 'Date cannot be blank.');
       if (this.p.CustomerFollowUps[0].CustomerStatus <= 0)
         vra.add('CustomerStatus', 'CustomerStatus cannot be blank.');
+      if (!this.p.CustomerFollowUps[0].ReminderDate)
+        vra.add('ReminderDate', 'Reminder Date cannot be blank.');
     }
     //  Check if ContactMode requires interested plots start
     // const visitModes = [30, 40, 50];
@@ -134,28 +136,28 @@ export class CustomerEnquiry implements IPersistable<CustomerEnquiry> {
     // }
     //  Check if ContactMode requires interested plots End
     // If it's a new entity, perform the necessary validity checks
-    if (this.p.IsNewlyCreated) {
-      // if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-      if (!this.p.CustomerFollowUps[0].ReminderDate)
-        vra.add('ReminderDate', 'Reminder Date cannot be blank.');
-      else if (
-        this.p.CustomerFollowUps[0].CustomerStatus !== 30 &&
-        !this.p.CustomerFollowUps[0].ReminderDate
-      ) {
-        vra.add(
-          'ReminderDate',
-          'Reminder Date cannot be blank unless Customer Status is Lead Close or Convert To Deal.'
-        );
-      } else if (
-        this.p.CustomerFollowUps[0].CustomerStatus !== 40 &&
-        !this.p.CustomerFollowUps[0].ReminderDate
-      ) {
-        vra.add(
-          'ReminderDate',
-          'Reminder Date cannot be blank unless Customer Status is Lead Close or Convert To Deal.'
-        );
-      }
-    }
+    // if (this.p.IsNewlyCreated) {
+    //   // if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
+    //   if (!this.p.CustomerFollowUps[0].ReminderDate)
+    //     vra.add('ReminderDate', 'Reminder Date cannot be blank.');
+    //   else if (
+    //     this.p.CustomerFollowUps[0].CustomerStatus !== 30 &&
+    //     !this.p.CustomerFollowUps[0].ReminderDate
+    //   ) {
+    //     vra.add(
+    //       'ReminderDate',
+    //       'Reminder Date cannot be blank unless Customer Status is Lead Close or Convert To Deal.'
+    //     );
+    //   } else if (
+    //     this.p.CustomerFollowUps[0].CustomerStatus !== 40 &&
+    //     !this.p.CustomerFollowUps[0].ReminderDate
+    //   ) {
+    //     vra.add(
+    //       'ReminderDate',
+    //       'Reminder Date cannot be blank unless Customer Status is Lead Close or Convert To Deal.'
+    //     );
+    //   }
+    // }
   }
 
   public MergeIntoTransportData(td: TransportData) {

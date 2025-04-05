@@ -66,9 +66,13 @@
             <td Class="tbldata">{{followup.p.CustomerStatusName}}</td>
             <!-- <td Class="tbldata">{{followup.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails[0].SiteName}}</td> -->
             <td class="tbldata">
-              <span style="margin-left: 9px;" (click)="onEditClicked(followup);">
+              <!-- <span style="margin-left: 9px;" (click)="onEditClicked(followup);">
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-              </span>
+              </span> -->
+              <nz-button nz-button class="btn2"
+                (click)="onEditClicked(followup)">
+                Follow Up?
+              </nz-button>
             </td>
           </tr>
         </tbody>
