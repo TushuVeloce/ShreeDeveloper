@@ -81,6 +81,8 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       // debugger
       this.IsNewEntity = false;
       this.Entity = CustomerFollowUp.GetCurrentInstance();
+      console.log(this.Entity);
+
       //  this.CustomerEnquiryEntity = CustomerEnquiry.GetCurrentInstance();
 
       // While Edit Converting date String into Date Format //
@@ -242,7 +244,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       return;
     }
 
-    if (selectedPlot) {  
+    if (selectedPlot) {
       this.Entity.p.CustomerFollowUpPlotDetails.push(...[obj.p]);
       this.IsPlotDetails = true;
       this.SiteManagementRef = 0;
@@ -286,7 +288,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     // return
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    
+
     // return
     // this.Entity.p.ContactMode = this.CustomerEnquiryEntity.p.CustomerFollowUps[0].ContactMode;
     // console.log('entitiesToSave:', entitiesToSave);

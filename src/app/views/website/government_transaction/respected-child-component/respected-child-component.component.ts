@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GovernmentTransaction } from 'src/app/classes/domain/entities/website/government_office/government_transaction/governmenttransaction';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 
 @Component({
   selector: 'app-respected-child-component',
@@ -10,14 +12,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class RespectedChildComponentComponent implements OnInit {
   SectionName: string = '';
-  SectionName1: string = '';
-  constructor(private router: Router, private route: ActivatedRoute) {
+  SelectedTransactionType: string = '';
+
+  Entity: GovernmentTransaction = GovernmentTransaction.CreateNewInstance();
+
+  constructor(private router: Router, private route: ActivatedRoute, private appStateManage: AppStateManageService,) {
     let str = this.route.snapshot.params['queryParams'];
-    console.log('str :', str);
+    // console.log('str :', str);
     this.SectionName = str;
-    this.SectionName1 = str;
+    this.SelectedTransactionType = this.SectionName;
+    console.log(this.SelectedTransactionType);
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 
 }

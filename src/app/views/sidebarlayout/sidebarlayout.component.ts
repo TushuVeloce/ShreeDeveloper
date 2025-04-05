@@ -482,8 +482,8 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '',
       },
       {
-        Name: 'Government Office',
-        RouterLink: '/homepage/Website/Government_Office',
+        Name: 'Government Transaction',
+        RouterLink: '/homepage/Website/Government_Transaction',
         LogoPath: '',
       },
     ]

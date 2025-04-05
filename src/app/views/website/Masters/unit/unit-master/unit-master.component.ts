@@ -35,16 +35,12 @@ export class UnitMasterComponent  implements OnInit {
     let lst = await Unit.FetchEntireList(
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    console.log(lst);
     this.MasterList = lst;
-    console.log('MasterList :', this.MasterList);
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
 
   onEditClicked = async (item: Unit) => {
-    // let props = Object.assign(UnitProps.Blank(),item.p);
-    // this.SelectedUnit = Unit.CreateInstance(props,true);
 
     this.SelectedUnit = item.GetEditableVersion();
 
@@ -93,7 +89,7 @@ export class UnitMasterComponent  implements OnInit {
   }
 
 
-  
+
   filterTable = () => {
     if (this.SearchString != '') {
       this.DisplayMasterList = this.MasterList.filter((data: any) => {

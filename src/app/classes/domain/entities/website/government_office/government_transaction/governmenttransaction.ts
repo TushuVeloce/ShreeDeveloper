@@ -15,11 +15,12 @@ import { GovernmentTransactionFetchRequest } from "./governmenttransactionfetchr
 
 
 export class GovernmentTransactionProps {
-  public readonly Db_Table_Name = " GovernmentTransaction";
+  public readonly Db_Table_Name = "GovernmentTransaction";
   public Ref: number = 0;
   public SiteRef: number = 0;
   public SiteName: string = '';
   public TransactionJson: string = '';
+  public TransactionJson1: [] = [];
   public CompanyRef: number = 0;
   public CompanyName: string = '';
 
@@ -35,7 +36,7 @@ export class GovernmentTransactionProps {
 }
 
 export class GovernmentTransaction implements IPersistable<GovernmentTransaction> {
-  public static readonly Db_Table_Name: string = ' GovernmentTransaction';
+  public static readonly Db_Table_Name: string = 'GovernmentTransaction';
 
   private constructor(public readonly p: GovernmentTransactionProps, public readonly AllowEdit: boolean) {
 

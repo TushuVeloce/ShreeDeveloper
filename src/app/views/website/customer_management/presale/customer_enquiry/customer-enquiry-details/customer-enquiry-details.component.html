@@ -12,6 +12,7 @@
     </div>
     <form #myForm="ngForm" autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
+        <!-- Name  -->
         <div class="col-md-4">
           <div>
             <label>Name</label>
@@ -19,6 +20,7 @@
               placeholder="Enter First Name" />
           </div>
         </div>
+        <!-- Contact No -->
         <div class="col-md-4">
           <div>
             <label for="ContactNos">Contact Nos</label>
@@ -26,6 +28,7 @@
               required placeholder="Enter Contact Nos" />
           </div>
         </div>
+        <!-- Country -->
         <div class="col-md-4" *ngIf="IsNewEntity">
           <div>
             <label for="CountryRef"><b>Country</b></label>
@@ -39,6 +42,7 @@
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
+        <!-- State -->
         <div class="col-md-4">
           <div>
             <label for="StateRef"><b>State</b></label>
@@ -49,6 +53,7 @@
             </nz-select>
           </div>
         </div>
+        <!-- City  -->
         <div class="col-md-4">
           <div>
             <label for="CityRef"><b>City</b></label>
@@ -58,6 +63,7 @@
             </nz-select>
           </div>
         </div>
+        <!-- Address  -->
         <div class="col-md-4">
           <div>
             <label>Address</label>
@@ -67,41 +73,46 @@
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
+        <!-- Pin Code  -->
         <div class="col-md-4 col-md-4 col-sm-12 mt-2">
           <label>Pin Code</label>
           <input type="text" name="PinCode" class="form-control" [(ngModel)]="Entity.p.PinCode" id="PinCode" required
             placeholder="Enter Pin Code" />
         </div>
+        <!-- Customer Requirement  -->
         <div class="col-md-4 col-md-4 col-sm-12 mt-2" *ngIf="IsNewEntity">
           <label>Customer Requirement</label>
-          <input type="text" name="CustomerRequirement" class="form-control" [(ngModel)]="Entity.p.CustomerFollowUps[0].CustomerRequirement"
-            id="CustomerRequirement" required placeholder="Enter Customer Requirement" />
+          <input type="text" name="CustomerRequirement" class="form-control"
+            [(ngModel)]="Entity.p.CustomerFollowUps[0].CustomerRequirement" id="CustomerRequirement" required
+            placeholder="Enter Customer Requirement" />
         </div>
-        <div class="col-md-4 col-md-4 col-sm-12 mt-2" *ngIf="IsNewEntity">
-          <div>
-            <label>Reason</label>
-            <input type="text" name="Reason" [(ngModel)]="Entity.p.CustomerFollowUps[0].Reason" class="form-control"
-              id="Reason " required placeholder="Enter Reason" />
-          </div>
-        </div>
+
+        <!-- Todays Date  -->
         <div class="col-md-4" *ngIf="IsNewEntity">
           <div>
             <label>Date</label>
-            <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Date" required />
+            <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Date" required readonly />
           </div>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem;" *ngIf="IsNewEntity">
+        <!-- Intrested Site  -->
         <div class="col-md-4">
           <div>
             <label for="SiteManagementRef"><b>Interested site</b></label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-              name="SiteManagementRef" [(ngModel)]="SiteManagementRef" required id="SiteManagementRef"
+              name="SiteManagementRef" [(ngModel)]="SiteManagementRef" id="SiteManagementRef"
               (ngModelChange)="getPlotBySiteRefList(SiteManagementRef)">
               <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
             </nz-select>
+            <!--
+            [required]="isSIteVisitSelected()"
+            <div *ngIf="isSIteVisitSelected() && !SiteManagementRef" class="text-danger mt-1">
+              Interested site is required
+            </div> -->
           </div>
         </div>
+        <!-- Intrested Plot  -->
         <div class="col-md-4">
           <div>
             <label for="InterestedPlotRef"><b>Interested Plots</b></label>
@@ -109,14 +120,20 @@
               name="InterestedPlotRef" [(ngModel)]="InterestedPlotRef" [nzSize]="'large'">
               <nz-option *ngFor="let Plot of PlotList" [nzValue]="Plot.p.Ref" [nzLabel]="Plot.p.PlotNo"></nz-option>
             </nz-select>
+            <!--   [required]="isSIteVisitSelected()"
+            <div *ngIf="isSIteVisitSelected() && !InterestedPlotRef" class="text-danger mt-1">
+              Interested plot is required
+            </div> -->
           </div>
         </div>
+        <!-- Add button  -->
         <div class="col-md-4" style="margin-top: 33px;">
           <div>
             <button type="button" class="btn" (click)="addDataToTable()">Add</button>
           </div>
         </div>
       </div>
+      <!-- Table For SIte and Plot details -->
       <div class="table-container" style="margin-top: 2rem" *ngIf="IsPlotDetails && IsNewEntity">
         <div class="row">
           <div class="col-12">
@@ -140,15 +157,15 @@
               <td Class="tbldata">{{ plot.PlotAreaInSqm }}</td>
               <td Class="tbldata">{{ plot.PlotAreaInSqft }}</td>
               <td class="tbldata">
-                <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" 
-                name="{{plot.PlotName.trim() + '_' + i + 100}}" [(ngModel)]="plot.CustomerStatus" [nzSize]="'large'">
+                <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+                  name="{{plot.PlotName.trim() + '_' + i + 100}}" [(ngModel)]="plot.CustomerStatus" [nzSize]="'large'">
                   <nz-option *ngFor="let customerstatus of CustomerStatusList" [nzValue]="customerstatus.Ref"
                     [nzLabel]="customerstatus.Name"></nz-option>
                 </nz-select>
               </td>
               <td class="tbldata">
-                <input type="text" name="{{plot.PlotName.trim() + '_' + i + 1000}}" class="form-control"  [(ngModel)]="plot.Reason" required
-                  placeholder="Enter Reason" />
+                <input type="text" name="{{plot.PlotName.trim() + '_' + i + 1000}}" class="form-control"
+                  [(ngModel)]="plot.Reason" required placeholder="Enter Reason" />
               </td>
               <!-- <td Class="tbldata">{{ plot.CustomerStatus }}</td> -->
               <!-- <td Class="tbldata">{{ plot.Reason }}</td> -->
@@ -161,6 +178,7 @@
       <hr style="color: black;">
 
       <div class="row" style="margin-top: 1rem;" *ngIf="IsNewEntity">
+        <!-- Lead Source  -->
         <div class="col-md-4">
           <div>
             <label for="LeadSourceRef"><b>Lead Source</b></label>
@@ -180,6 +198,8 @@
           </div>
         </div>
         <!-- End -->
+
+        <!-- Lead Handle By  -->
         <div class="col-md-4">
           <div>
             <label for="LeadHandledByRef"><b>Lead Handled By</b></label>
@@ -190,6 +210,7 @@
             </nz-select>
           </div>
         </div>
+        <!-- Contact Mode  -->
         <div class="col-md-4" *ngIf="!showAgentBrokerInput">
           <div>
             <label for="ContactModeRef"><b>Contact Mode</b></label>
@@ -212,6 +233,15 @@
             </nz-select>
           </div>
         </div>
+        <!-- Reason  -->
+        <div class="col-md-4" *ngIf="IsNewEntity">
+          <div>
+            <label>Reason</label>
+            <input type="text" name="Reason" [(ngModel)]="Entity.p.CustomerFollowUps[0].Reason" class="form-control"
+              id="Reason " required placeholder="Enter Reason" />
+          </div>
+        </div>
+        <!-- Customer Status  -->
         <div class="col-md-4">
           <div>
             <label for="CustomerStatusRef"><b>Customer Status</b></label>
@@ -223,6 +253,9 @@
             </nz-select>
           </div>
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem;" *ngIf="IsNewEntity">
+        <!-- Remark  -->
         <div class="col-md-4">
           <div>
             <label>Remark</label>
@@ -230,49 +263,35 @@
               id="Remark " required placeholder="Enter Remark" />
           </div>
         </div>
+        <!-- Next Site Visit Date  -->
         <div class="col-md-4">
           <div>
-            <label for="SiteVisitDate">Site Visit Date</label>
-            <input type="Date" name="SiteVisitDate" [(ngModel)]="sitevisitdate" class="form-control" id="SiteVisitDate"
-              required />
+            <label for="localSiteVisitDate">Next Site Visit Date</label>
+            <input type="Date" name="localSiteVisitDate" [(ngModel)]="localSiteVisitDate" [min]="today"
+              class="form-control" id="localSiteVisitDate" required />
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem;" *ngIf="IsNewEntity">
-        <!-- <div class="col-md-4">
-          <div>
-            <label>Reason</label>
-            <input type="text" name="Reason" [(ngModel)]="Entity.p.CustomerFollowUps[0].Reason" class="form-control"
-              id="Reason " required placeholder="Enter Reason" />
-          </div>
-        </div> -->
-        <!-- <div class="col-md-4">
-          <div>
-            <label for="VisitedModeRef"><b>Visited Mode</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VisitedModeRef"
-              name="VisitedModeRef" [nzSize]="'large'">
-              <nz-option></nz-option>
-            </nz-select>
-          </div>
-        </div> -->
 
+        <!-- Next Office Visit Date -->
         <div class="col-md-4">
           <div>
-            <label for="OfficeVisitDate">Office Visit Date</label>
-            <input type="Date" name="OfficeVisitDate" [(ngModel)]="officevistdate" class="form-control"
-              id="OfficeVisitDate" required />
+            <label for="localOfficeVisitDate">Next Office Visit Date</label>
+            <input type="Date" name="localOfficeVisitDate" [(ngModel)]="localOfficeVisitDate" [min]="today"
+              class="form-control" id="localOfficeVisitDate" required />
           </div>
         </div>
+        <!-- Reminder Date  -->
         <div class="col-md-4">
           <div>
             <label>Reminder Date</label>
-            <input type="Date" name="ReminderDate" [(ngModel)]="reminderdate" class="form-control" id="ReminderDate"
-              [required]="isReminderRequired" #reminderDateField="ngModel" (blur)="markTouched(reminderDateField)" />
-
-              <div *ngIf="isReminderRequired && reminderDateField.invalid && reminderDateField.touched"
+            <input type="Date" name="localReminderDate" [(ngModel)]="localReminderDate" class="form-control"
+              id="localReminderDate" [required]="isReminderRequired" #reminderDateField="ngModel"
+              (ngModelChange)="markTouched(reminderDateField)" [min]="today" />
+            <div *ngIf="isReminderRequired && reminderDateField.invalid && reminderDateField.touched"
               class="text-danger">
-              Reminder Date is required when Customer Status is 'Convert To Deal'.
+              {{ reminderMessage }}
             </div>
+
           </div>
         </div>
       </div>

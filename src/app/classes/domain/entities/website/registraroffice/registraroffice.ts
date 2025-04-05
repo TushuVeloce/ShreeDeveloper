@@ -70,6 +70,9 @@ export class RegistrarOfficeProps {
   public IsSpiral712Submit : string = '';
   public IsClientSubmit : string = '';
 
+  public UpdatedDate:  string = '';
+  public UpdatedBy:  number = 0;
+
 
   public CompanyRef: number = 0;
   public CustomerRef: number = 0;
