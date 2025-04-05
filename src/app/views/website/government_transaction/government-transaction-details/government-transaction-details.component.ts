@@ -21,6 +21,7 @@ export class GovernmentTransactionDetailsComponent implements OnInit {
   constructor(private router: Router, private appStateManage: AppStateManageService,
     private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
   TransactionJson: any[] = [];
+
   ngOnInit() {
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
@@ -33,11 +34,20 @@ export class GovernmentTransactionDetailsComponent implements OnInit {
     let arr = JSON.parse(this.Entity.p.TransactionJson);
     this.appStateManage.StorageKey.setItem('TransactionJson', JSON.stringify(arr));
     this.TransactionJson = arr;
-    // console.log('Entity', arr);
-
+    console.log('Entity', arr);
   }
 
   getSiteWorkGroupName = async (SiteWorkGroupName: string) => {
+    console.log('SiteWorkGroupName', SiteWorkGroupName);
     await this.router.navigate(['/homepage/Website/Respected_child', { queryParams: SiteWorkGroupName }]);
+  }
+
+  onSave = () => {
+    let arr = this.appStateManage.StorageKey.getItem('TpOfficeList')
+    console.log('onSave arr', arr);
+  }
+
+  onCancel = async () => {
+    await this.router.navigate(['/homepage/Website/Government_Transaction']);
   }
 }

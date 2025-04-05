@@ -1,4 +1,5 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 
 @Component({
@@ -10,11 +11,12 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 })
 export class TpOfficeDetailsComponent implements OnInit, OnChanges {
   @Input() SelectedTransactionType: string = '';
+  @Output() onEntitySaved = new EventEmitter<any>();
+
   TpOfficeList: any[] = [];
 
-  constructor(private appStateManage: AppStateManageService,) { }
+  constructor(private appStateManage: AppStateManageService, private router: Router,) { }
   ngOnChanges(changes: SimpleChanges): void {
-    debugger
     let arr = JSON.parse(this.appStateManage.StorageKey.getItem('TransactionJson') ?? '[]');
     console.log('SelectedTransactionType', this.SelectedTransactionType);
 
@@ -35,4 +37,17 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
         return ''; // Default return value
     }
   }
+
+  onSave = () => {
+    this.appStateManage.StorageKey.setItem('TpOfficeList', JSON.stringify(this.TpOfficeList));
+    this.onEntitySaved.emit(this.TpOfficeList);
+    this.router.navigate(['/homepage/Website/Government_Transaction_Details']);
+    console.log('onSave', this.TpOfficeList);
+  }
+
+  onCancel = async () => {
+    await this.router.navigate(['/homepage/Website/Government_Transaction_Details']);
+
+  }
+
 }

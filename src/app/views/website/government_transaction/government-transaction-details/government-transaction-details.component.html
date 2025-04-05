@@ -42,10 +42,11 @@
 </div>
 
 <div class="row" style="margin-top: 2rem">
-  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12">
+  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 col-12">
   </div>
-  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12">
-    <nz-steps nzDirection="vertical" class="custom-steps" *ngFor="let step of TransactionJson;">
+  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+    <nz-steps [nzCurrent]="i+1" nzDirection="vertical" class="custom-steps"
+      *ngFor="let step of TransactionJson;index as i">
       <nz-step nzTitle={{step.SiteWorkGroupName}} nzDescription=""
         (click)="getSiteWorkGroupName(step.SiteWorkGroupName)"></nz-step>
 
@@ -56,7 +57,20 @@
       <nz-step nzTitle="क जा पा" nzDescription="" (click)="getSiteWorkGroupName('क जा पा')"></nz-step> -->
     </nz-steps>
   </div>
-  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12">
+  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 col-12">
+
   </div>
 
+</div>
+<div class="row">
+  <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+    <div>
+      <button type="button" class="btn" (click)="onSave()">Save</button>
+    </div>
+    <div>
+      <button type="button" class="btn" (click)="onCancel()">
+        Back
+      </button>
+    </div>
+  </div>
 </div>

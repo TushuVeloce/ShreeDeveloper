@@ -1,8 +1,8 @@
 <div class="row" [ngSwitch]="SectionName">
   <div class="col-md-1"></div>
   <div class="col-md-10">
-    <app-tp-office-details *ngSwitchCase="'T.P Office'"
-      [SelectedTransactionType]="SelectedTransactionType"></app-tp-office-details>
+    <app-tp-office-details *ngSwitchCase="'TP Office'"
+      [SelectedTransactionType]="SelectedTransactionType" (onEntitySaved)="onAddTransactionSubmit($event)"></app-tp-office-details>
   </div>
   <div class="col-md-1"></div>
 
