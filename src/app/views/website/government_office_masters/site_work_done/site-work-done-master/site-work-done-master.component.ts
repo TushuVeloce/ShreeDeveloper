@@ -18,9 +18,13 @@ export class SiteWorkDoneMasterComponent implements OnInit {
   Entity: SiteWorkDone = SiteWorkDone.CreateNewInstance();
   MasterList: SiteWorkDone[] = [];
   DisplayMasterList: SiteWorkDone[] = [];
+  SiteWorkGroupList: SiteWorkGroup[] = [];
+  DisplaySiteWorkMasterList: SiteWorkMaster[] = [];
+
   SearchString: string = '';
   SelectedSiteWorkDone: SiteWorkDone = SiteWorkDone.CreateNewInstance();
   CustomerRef: number = 0;
+  SiteGroupRef: number = 0;
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
@@ -37,9 +41,9 @@ export class SiteWorkDoneMasterComponent implements OnInit {
     private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
-    effect(() => {
+    effect(async () => {
       // this.getSiteWorkDoneListByCompanyRef()
-      this.getSiteWorkDoneListByCompanyRef();
+     await this.getSiteWorkDoneListByCompanyRef();
     });
   }
 
@@ -53,6 +57,7 @@ export class SiteWorkDoneMasterComponent implements OnInit {
   // });
 
   async ngOnInit() {
+    this.SiteWorkGroupList = await SiteWorkGroup.FetchEntireList();
     this.SiteWorkMasterList = await SiteWorkMaster.FetchEntireList();
     this.appStateManage.setDropdownDisabled(false);
     // await this.FormulateSiteWorkDoneList();
@@ -74,7 +79,6 @@ export class SiteWorkDoneMasterComponent implements OnInit {
   getSiteWorkDoneListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    console.log('companyRef :', this.companyRef());
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -84,11 +88,25 @@ export class SiteWorkDoneMasterComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
-    console.log('SiteWorkDoneList :', this.MasterList);
 
-    this.DisplayMasterList = this.MasterList;
+    //this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
+  onSiteGroupChange(siteGroupRef: number) {
+    this.DisplayMasterList = [];
+    this.DisplaySiteWorkMasterList = [];
+    this.Entity.p.SiteWorkRef = 0;
+    if (siteGroupRef > 0) {
+      // this.Entity.p.SiteWorkGroupRef = sitework;
+      // const selectedSiteWorkref = this.SiteWorkMasterList.find(
+      //   (site) => site.p.Ref === sitework
+      // );
+      // if (!selectedSiteWorkref) {
+      //   return;
+      // }
+      this.DisplaySiteWorkMasterList = this.SiteWorkMasterList.filter(e=> e.p.SiteWorkGroupRef == siteGroupRef)
+    }
+  }
 
   onEditClicked = async (item: SiteWorkDone) => {
     // let props = Object.assign(SiteWorkDoneProps.Blank(),item.p);
@@ -162,17 +180,17 @@ export class SiteWorkDoneMasterComponent implements OnInit {
   SiteGroup: number = 0;
 
   onSiteWorkChange(sitework: number) {
-    this.SiteGroup = sitework;
-    this.MasterList = [];
     this.DisplayMasterList = [];
+    this.SiteGroup = sitework;
     if (sitework > 0) {
-      this.Entity.p.SiteWorkGroupRef = sitework;
-      const selectedSiteWorkref = this.SiteWorkMasterList.find(
-        (site) => site.p.Ref === sitework
-      );
-      if (!selectedSiteWorkref) {
-        return;
-      }
+      // this.Entity.p.SiteWorkGroupRef = sitework;
+      // const selectedSiteWorkref = this.SiteWorkMasterList.find(
+      //   (site) => site.p.Ref === sitework
+      // );
+      // if (!selectedSiteWorkref) {
+      //   return;
+      // }
+      this.DisplayMasterList = this.MasterList.filter(e=> e.p.SiteWorkRef == sitework)
       this.appStateManage.StorageKey.setItem('siteRf', String(sitework));
     }
   }

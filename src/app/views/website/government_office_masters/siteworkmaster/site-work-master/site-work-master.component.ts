@@ -84,7 +84,7 @@ export class SiteWorkMasterComponent implements OnInit {
     this.MasterList = lst;
     console.log('SiteWorkMasterList :', this.MasterList);
 
-    this.DisplayMasterList = this.MasterList;
+    //this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
 
@@ -159,19 +159,20 @@ export class SiteWorkMasterComponent implements OnInit {
 
   SiteGroup: number = 0;
 
-  onSiteGroupChange(sitegroup: number) {
-    this.SiteGroup = sitegroup;
-    this.MasterList = [];
+  onSiteGroupChange(siteGroupRef: number) {
+    // this.SiteGroup = sitegroup;
+    // this.MasterList = [];
     this.DisplayMasterList = [];
-    if (sitegroup > 0) {
-      this.Entity.p.SiteWorkGroupRef = sitegroup;
-      const selectedSitegroupref = this.SiteWorkGroupList.find(
-        (site) => site.p.Ref === sitegroup
-      );
-      if (!selectedSitegroupref) {
-        return;
-      }
-      this.appStateManage.StorageKey.setItem('sitegroup', String(sitegroup));
+    if (siteGroupRef > 0) {
+      // this.Entity.p.SiteWorkGroupRef = sitegroup;
+      // const selectedSitegroupref = this.SiteWorkGroupList.find(
+      //   (site) => site.p.Ref === sitegroup
+      // );
+      // if (!selectedSitegroupref) {
+      //   return;
+      // }
+      // this.appStateManage.StorageKey.setItem('sitegroup', String(sitegroup));
+      this.DisplayMasterList = this.MasterList.filter(e=> e.p.SiteWorkGroupRef == siteGroupRef)
     }
   }
 }
