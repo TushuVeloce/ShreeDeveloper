@@ -82,12 +82,11 @@ getPlotListBySiteRef = async (SiteRef: number) => {
     let lst = await RegistrarOffice.FetchEntireListBySiteRef(SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
         this.MasterList = lst;
         this.DisplayMasterList = this.MasterList;
-        console.log('DisplayMasterList :', this.DisplayMasterList);
+        console.log('SiteRef :', this.DisplayMasterList);
       this.loadPaginationData();
   }
 
   // get CustomerList With Plot Ref //
-
   getRegistrarOfficeListByPlotRef = async (PlotRef: number) => {
     this.DisplayMasterList = [];
     if (PlotRef <= 0) {
@@ -97,10 +96,34 @@ getPlotListBySiteRef = async (SiteRef: number) => {
     let lst = await RegistrarOffice.FetchEntireListByPlotRef(PlotRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
         this.MasterList = lst;
         this.DisplayMasterList = this.MasterList;
-        console.log('DisplayMasterList :', this.DisplayMasterList);
+        console.log('PlotRef :', this.DisplayMasterList);
       this.loadPaginationData();
   }
 
+
+  isWitness1Completed(office: any): boolean {
+    const p = office.p;
+    return p.Witness1Name && p.Witness1ContactNo && p.Witness1IsAadharSubmit && p.Witness1IsPanSubmit;
+  }
+  
+  isAgreementCompleted(office: any): boolean {
+    const p = office.p;
+    return p.AgreementDocumentNo && p.AgreementDate;
+  }
+  
+  isSaleDeedCompleted(office: any): boolean {
+    return office.p.SaleDeedDocumentNo && office.p.SaleDeedDate;
+  }
+  
+  isFerfarCompleted(office: any): boolean {
+    const p = office.p;
+    return p.IsIndexOriginalSubmit &&
+           p.IsDastZeroxSubmit &&
+           p.TalathiInwardNo &&
+           p.TalathiDate &&
+           p.IsFerfarNoticeSubmit;
+  }
+  
   onEditClicked = async (item: RegistrarOffice) => {
     this.SelectedRegistrarOffice = item.GetEditableVersion();
     RegistrarOffice.SetCurrentInstance(this.SelectedRegistrarOffice);
