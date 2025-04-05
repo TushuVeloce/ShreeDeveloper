@@ -103,6 +103,7 @@ export class PlotMasterDetailsComponent implements OnInit {
     this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.SiteManagementRef = this.SiteRf
     this.Entity.p.AreaInSqft = this.Entity.p.AreaInSqm * 10.7639 
+    this.Entity.p.IsNewlyCreated = this.IsNewEntity;
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entityToSave :', entityToSave);

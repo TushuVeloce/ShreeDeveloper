@@ -37,7 +37,7 @@ export class PlotProps {
   public PlotName: number = 0;
 
 
-  public readonly IsNewlyCreated: boolean = false;
+  public IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
 
   private constructor(isNewlyCreated: boolean) {
