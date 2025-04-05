@@ -31,6 +31,7 @@
             [(ngModel)]="Entity.p.PlotNo"
             required
             placeholder="Enter Plot No."
+            (click)="selectAllValue($event)"
           />
         </div>
         <div class="col-md-4">
@@ -38,7 +39,7 @@
           <input type="number" class="form-control" name="AreaInSqm" id="AreaInSqm"
             [(ngModel)]="Entity.p.AreaInSqm" 
             (ngModelChange)="convertSqmToSqft()" 
-            required placeholder="Enter Area in Sqm"/>
+            required placeholder="Enter Area in Sqm"  (click)="selectAllValue($event)"/>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
@@ -47,7 +48,7 @@
           <input type="number" class="form-control" name="AreaInSqft" id="AreaInSqft"
             [(ngModel)]="Entity.p.AreaInSqft" 
             (ngModelChange)="convertSqftToSqm()" 
-            required placeholder="Enter Area in Sqft"/>
+            required placeholder="Enter Area in Sqft"  (click)="selectAllValue($event)"/>
         </div>     
         <div class="col-md-4">
           <label>Goverment Rate Per Sqm </label>
@@ -59,9 +60,10 @@
             [(ngModel)]="Entity.p.GovermentRatePerSqm"
             required
             placeholder="Enter Goverment Rate Per Sqm "
+            (click)="selectAllValue($event)"
           />
         </div>
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
           <label>Goverment Rate Per Sqft </label>
           <input
             type="number"
@@ -71,22 +73,9 @@
             [(ngModel)]="Entity.p.GovermentRatePerSqft"
             required
             placeholder="Enter Goverment Rate Per Sqft "
+            (click)="selectAllValue($event)"
           />
-        </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4">
-          <label>Basic Rate Per Sqm </label>
-          <input
-            type="number"
-            name="BasicRatePerSqm"
-            class="form-control date-input"
-            id="BasicRatePerSqm"
-            [(ngModel)]="Entity.p.BasicRatePerSqm"
-            required
-            placeholder="Enter Basic Rate Per Sqm"
-          />
-        </div>
+        </div> -->
         <div class="col-md-4">
           <label>Basic Rate Per Sqft </label>
           <input
@@ -97,8 +86,25 @@
             [(ngModel)]="Entity.p.BasicRatePerSqft"
             required
             placeholder="Enter Basic Rate Per Sqft"
+            (click)="selectAllValue($event)"
           />
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem">
+        <!-- <div class="col-md-4">
+          <label>Basic Rate Per Sqm </label>
+          <input
+            type="number"
+            name="BasicRatePerSqm"
+            class="form-control date-input"
+            id="BasicRatePerSqm"
+            [(ngModel)]="Entity.p.BasicRatePerSqm"
+            required
+            placeholder="Enter Basic Rate Per Sqm"
+            (click)="selectAllValue($event)"
+          />
+        </div> -->
+      
         <div class="col-md-4">
           <label>Booking Remark</label>
           <nz-select
@@ -118,8 +124,6 @@
             ></nz-option>
           </nz-select>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Customer Name</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
@@ -133,13 +137,13 @@
           <input  class="form-control date-input"  value={{this.CoustomerMob}} readonly
           />
         </div>
-        <div class="col-md-4">
+      </div>
+      <div class="row" style="margin-top: 1rem">     
+       <div class="col-md-4">
           <label>Country</label>
           <input  class="form-control date-input"  value={{CoustomerCountry}} readonly
           />
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>State</label>
           <input  class="form-control date-input"  value={{CoustomerState}} readonly
@@ -150,13 +154,13 @@
           <input  class="form-control date-input"  value={{this.CoustomerCity}} readonly
           />
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Address</label>
           <input  class="form-control date-input"  value={{CoustomerAddress}} readonly
           />
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Reference</label>
           <input
@@ -179,9 +183,7 @@
         "
       >
         <div>
-          <nz-button nz-button class="btn1" (click)="SavePlot()"
-            >Save</nz-button
-          >
+          <button type="button" class="btn" (click)="SavePlot()" [disabled]="isSaveDisabled">Save</button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="BackPlot()">

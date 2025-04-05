@@ -29,6 +29,7 @@ export class SiteProps {
   public CityRef: number = 0;
   public readonly CityName: boolean = false;
   public SiteInchargeRef   : number = 0;
+  public SiteInchargeName  : string = '';
   public EstimatedStartingDate : string = '';
   public EstimatedEndDate : string = '';
   public EstimatedCost  : number = 0;
@@ -87,6 +88,13 @@ export class Site implements IPersistable<Site> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
+    if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'AddressLine1 cannot be blank.');
+    if (this.p.PinCode == '') vra.add('PinCode', 'PinCode cannot be blank.');
+    if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country Name cannot be blank.');
+    if (this.p.StateRef == 0) vra.add('StateRef', 'State Name cannot be blank.');
+    if (this.p.CityRef == 0) vra.add('CityRef', 'City Name cannot be blank.');
+    if (this.p.SiteInchargeRef == 0) vra.add('SiteInchargeRef', 'Site Incharge cannot be blank.');
+    if (this.p.EstimatedStartingDate == '') vra.add('EstimatedStartingDate', 'Estimated Starting Date cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {

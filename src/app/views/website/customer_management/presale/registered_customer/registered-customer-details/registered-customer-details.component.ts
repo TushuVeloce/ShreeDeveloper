@@ -10,6 +10,7 @@ import { ServerCommunicatorService } from 'src/app/services/server-communicator.
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
+import { DTU } from 'src/app/services/dtu.service';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
     pageSize = 10; // Items per page
     currentPage = 1; // Initialize current page
     total = 0;
+    localRegisterDate: string  = '';
     IsPlotDetails: boolean = false;
     InterestedPlotRef: number = 0;
     SiteManagementRef: number = 0;
@@ -35,13 +37,18 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
     companyRef = this.companystatemanagement.SelectedCompanyRef;
     FinancialYearList: FinancialYear[]=[]
   
-    constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement,private servicecommunicator: ServerCommunicatorService) { }
+    constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement,private servicecommunicator: ServerCommunicatorService,private dtu: DTU,) { }
   
     async ngOnInit() {
       this.appStateManage.setDropdownDisabled(true);
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
          this.IsNewEntity = false;
          this.Entity = RegisteredCustomer.GetCurrentInstance();
+         console.log('Entity :', this.Entity);
+         this.Entity.p.SiteVisitDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.SiteVisitDate)
+         if(this.Entity.p.RegisterDate != ''){
+          this.localRegisterDate= this.dtu.ConvertStringDateToShortFormat(this.Entity.p.RegisterDate)
+         }
          this.Entity.p.TaxValueInPercentage = 6
          this.Entity.p.RegTaxValuesInPercentage = 1
          this.calculateTotalPlotAmount()
@@ -117,6 +124,8 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       this.Entity.p.UpdatedDate= await CurrentDateTimeRequest.GetCurrentDateTime();
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+          // convert date 2025-02-23 to 2025-02-23-00-00-00-000
+      this.Entity.p.RegisterDate = this.dtu.ConvertStringDateToFullFormat(this.localRegisterDate)
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
       console.log('entitiesToSave :', entitiesToSave);

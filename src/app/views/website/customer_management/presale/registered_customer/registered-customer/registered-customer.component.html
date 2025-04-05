@@ -3,14 +3,9 @@
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2">
       <h5 style="padding-top: 3px;" class="title title_light">Registered Customer</h5>
     </div>
-    <!-- <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
       <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus [(ngModel)]="SearchString" />
-    </div> -->
-    <!-- <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
-      <nz-button nz-button class="btn1" (click) = "AddRegisteredCustomer()">
-        Add Registered Customer
-      </nz-button>
-    </div> -->
+    </div>
     <div>
     </div>
   </div>
@@ -24,7 +19,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let registercustomer of RegisterCustomerList; index as i">
+        <tr *ngFor="let registercustomer of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{ registercustomer.p.SiteName}}</td>
           <td Class="tbldata">{{ registercustomer.p.PlotName}}</td>

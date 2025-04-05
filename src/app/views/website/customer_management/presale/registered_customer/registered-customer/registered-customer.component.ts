@@ -23,7 +23,7 @@ export class RegisteredCustomerComponent  implements OnInit {
   Entity: RegisteredCustomer = RegisteredCustomer.CreateNewInstance();
   MasterList: RegisteredCustomer[] = [];
   DisplayMasterList: RegisteredCustomer[] = [];
-  // SearchString: string = '';
+  SearchString: string = '';
   SelectedRegisteredCustomer: RegisteredCustomer = RegisteredCustomer.CreateNewInstance();
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
@@ -120,19 +120,14 @@ export class RegisteredCustomerComponent  implements OnInit {
   };
 
 
-  // filterTable = () => {
-  //   if (this.SearchString != '') {
-  //     this.DisplayMasterList = this.MasterList.filter((data: any) => {
-  //       return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
-  //     })
-  //   }
-  //   else {
-  //     this.DisplayMasterList = this.MasterList
-  //   }
-  // }
-
-  async AddRegisteredCustomer() {
-    await this.router.navigate(['/homepage/Website/Registered_Customer_Details']);
+  filterTable = () => {
+    if (this.SearchString != '') {
+      this.DisplayMasterList = this.MasterList.filter((data: any) => {
+        return data.p.siteName.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
+      })
+    }
+    else {
+      this.DisplayMasterList = this.MasterList
+    }
   }
-
 }
