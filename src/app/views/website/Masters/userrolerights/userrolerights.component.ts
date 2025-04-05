@@ -134,12 +134,11 @@ export class UserrolerightsComponent implements OnInit {
 
     this.DisplayFeature = []
     this.DisplayFeature = this.Feature.filter(e => e.FeatureGroupRef == featureGroupRef);
-    console.log(this.DisplayFeature);
   }
 
   getUserRoleRights = async (departmentref: number, designationref: number) => {
     debugger
-    // For Fetching Data 
+    // For Fetching Data
     this.FeatureGroupRef = 0;
     this.DisplayFeature = []
     this.resetFeatureList()
@@ -202,6 +201,4 @@ export class UserrolerightsComponent implements OnInit {
       }
     }
   }
-
-
 }

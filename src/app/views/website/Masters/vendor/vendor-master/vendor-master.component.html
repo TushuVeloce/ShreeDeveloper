@@ -13,7 +13,7 @@
 </div>
 <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
-    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList" [nzScroll]="{x:'auto' }"
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()" [nzScroll]="{x:'auto' }"
       nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
@@ -21,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let vendor of paginatedList; index as i">
+        <tr *ngFor="let vendor of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{vendor.p.Name}}</td>
           <td Class="tbldata">{{vendor.p.MobileNo}}</td>

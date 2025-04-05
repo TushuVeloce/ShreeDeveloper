@@ -39,7 +39,7 @@ export class CityComponent implements OnInit {
 
   private FormulateCountryList = async () => {
     this.CountryList = [];
-    let lst = await Country.FetchEntireList(async errMsg => 
+    let lst = await Country.FetchEntireList(async errMsg =>
         await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.CountryList = lst;
@@ -60,7 +60,7 @@ getStateListByCountryRef = async (CountryRef: number) => {
   this.StateList = [];
   this.MasterList = [];
   this.DisplayMasterList = [];
-  let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => 
+  let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg =>
       await this.uiUtils.showErrorMessage('Error', errMsg)
   );
   this.StateList = lst;
@@ -92,7 +92,7 @@ getStateListByCountryRef = async (CountryRef: number) => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   }
 
-  get paginatedList() {
+  paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
@@ -104,7 +104,7 @@ getStateListByCountryRef = async (CountryRef: number) => {
     debugger
     if (this.SearchString != '') {
       this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1 
+        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
       })
     }
     else {

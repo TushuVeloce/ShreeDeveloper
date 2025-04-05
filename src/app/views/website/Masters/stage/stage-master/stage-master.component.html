@@ -16,14 +16,14 @@
 <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
-      [nzData]="paginatedList" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      [nzData]="paginatedList()" nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let stage of paginatedList; index as i">
+        <tr *ngFor="let stage of paginatedList(); index as i">
           <td Class="tbldata">{{stage.p.DisplayOrder}}</td>
           <td Class="tbldata">{{stage.p.Name}}</td>
           <td class="tbldata">

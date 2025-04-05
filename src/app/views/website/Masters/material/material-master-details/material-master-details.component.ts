@@ -26,10 +26,10 @@ export class MaterialMasterDetailsComponent implements OnInit {
   UnitList: Unit[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   NameWithNos: string = ValidationPatterns.NameWithNos
-  
+
   NameWithNosMsg: string = ValidationMessages.NameWithNosMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
- 
+
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
   @ViewChild('CodeCtrl') CodeInputControl!: NgModel;
 
@@ -71,7 +71,6 @@ export class MaterialMasterDetailsComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.UnitList = lst;
-    console.log('UnitList :', this.UnitList);
   };
 
   SaveMaterialMaster = async () => {
@@ -80,7 +79,6 @@ export class MaterialMasterDetailsComponent implements OnInit {
     this.Entity.p.CompanyName =
       this.companystatemanagement.getCurrentCompanyName();
     let entityToSave = this.Entity.GetEditableVersion();
-    console.log('entityToSave :', entityToSave);
 
     let entitiesToSave = [entityToSave];
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
@@ -107,7 +105,7 @@ export class MaterialMasterDetailsComponent implements OnInit {
     }
   };
 
-  BackMaterial() {
+  BackMaterial = () => {
     this.router.navigate(['/homepage/Website/Material_Master']);
   }
 
@@ -115,9 +113,9 @@ export class MaterialMasterDetailsComponent implements OnInit {
     // reset touched
     this.NameInputControl.control.markAsUntouched();
     this.CodeInputControl.control.markAsUntouched();
-  
+
     // reset dirty
-  
+
     this.NameInputControl.control.markAsPristine();
     this.CodeInputControl.control.markAsPristine();
   }

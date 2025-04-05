@@ -43,16 +43,6 @@ export class BankAccountMasterComponent implements OnInit {
 
   }
 
-  // private FormulateMasterList = async () => {
-  //     let lst = await Bank.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //     this.MasterList = lst;
-  //     console.log(this.MasterList);
-
-  //     this.DisplayMasterList = this.MasterList
-  //     this.loadPaginationData();
-  //   }
-  
-
   getBankListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
@@ -65,12 +55,12 @@ export class BankAccountMasterComponent implements OnInit {
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
-  
-   // Extracted from services date conversion // 
-   formatDate(date: string | Date): string {
+
+   // Extracted from services date conversion //
+   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   }
-  
+
   onEditClicked = async (item: BankAccount) => {
     this.SelectedBankAccount = item.GetEditableVersion();
     BankAccount.SetCurrentInstance(this.SelectedBankAccount);
@@ -97,7 +87,7 @@ export class BankAccountMasterComponent implements OnInit {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   }
 
-  get paginatedList() {
+  paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
@@ -106,7 +96,7 @@ export class BankAccountMasterComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   }
 
-  async AddBankAccount() {
+  AddBankAccount = () => {
     if (this.companyRef() <= 0) {
       this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -125,16 +115,16 @@ export class BankAccountMasterComponent implements OnInit {
     }
   }
 
-  // without using services date conersion into dd-mm-yyyy // 
+  // without using services date conersion into dd-mm-yyyy //
   // formatDate(dateValue: string | Date): string {
   //   if (!dateValue) return '';
-  
+
   //   const parsedDate = (dateValue instanceof Date) ? dateValue : this.dtu.FromString(dateValue);
-  
+
   //   if (parsedDate instanceof Date && !isNaN(parsedDate.getTime())) {
   //     return this.datePipe.transform(parsedDate, 'dd-MM-yyyy') || '';
   //   }
-    
+
   //   return 'Invalid Date';
   // }
 }

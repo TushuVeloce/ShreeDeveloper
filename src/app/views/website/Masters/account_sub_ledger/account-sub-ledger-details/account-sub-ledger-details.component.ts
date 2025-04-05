@@ -18,7 +18,7 @@ export class AccountSubLedgerDetailsComponent  implements OnInit {
   getUnderMainLedgerRef(Ref:any) {
   }
 
-  BackSubLedger(){
+  BackSubLedger = () => {
     this.router.navigate(['/homepage/Website/Account_Sub_Ledger']);
    }
 

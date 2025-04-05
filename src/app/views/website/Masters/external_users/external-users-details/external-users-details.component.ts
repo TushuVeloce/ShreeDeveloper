@@ -32,7 +32,7 @@ export class ExternalUsersMasterDetailsComponent implements OnInit {
         this.getUserRoleListByCompanyRef()
       });
      }
-  
+
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true)
@@ -88,7 +88,7 @@ export class ExternalUsersMasterDetailsComponent implements OnInit {
     }
   }
 
-  BackExternalUser() {
+  BackExternalUser = () => {
     this.router.navigate(['/homepage/Website/External_Users']);
   }
 

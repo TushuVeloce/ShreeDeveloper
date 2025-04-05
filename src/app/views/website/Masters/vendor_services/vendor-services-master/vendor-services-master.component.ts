@@ -50,9 +50,7 @@ export class VendorServicesMasterComponent  implements OnInit {
     let lst = await VendorService.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    console.log(lst);
     this.MasterList = lst;
-    console.log('MasterList :', this.MasterList);
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
@@ -94,7 +92,8 @@ export class VendorServicesMasterComponent  implements OnInit {
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   };
-  get paginatedList() {
+
+  paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
@@ -103,12 +102,12 @@ export class VendorServicesMasterComponent  implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
-  AddVendorService() {
+  AddVendorService = () => {
     this.router.navigate(['/homepage/Website/Vendor_Services_Master_Details']);
   }
 
 
-  
+
   filterTable = () => {
     if (this.SearchString != '') {
       this.DisplayMasterList = this.MasterList.filter((data: any) => {

@@ -26,10 +26,10 @@ export class MarketingTypeMasterDetailsComponent implements OnInit {
   MarketingModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
-  
- @ViewChild('DescriptionCtrl') DescriptionInputControl!: NgModel;
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companystatemanagement: CompanyStateManagement) { }
+  @ViewChild('DescriptionCtrl') DescriptionInputControl!: NgModel;
+
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -53,13 +53,12 @@ export class MarketingTypeMasterDetailsComponent implements OnInit {
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
-    console.log(entitiesToSave);
-    
+
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error',tr.Message);
+      this.uiUtils.showErrorMessage('Error', tr.Message);
       return
     }
     else {
@@ -77,13 +76,13 @@ export class MarketingTypeMasterDetailsComponent implements OnInit {
   }
 
 
-  BackMarketingType() {
+  BackMarketingType = () => {
     this.router.navigate(['/homepage/Website/Marketing_Type_Master']);
   }
   resetAllControls = () => {
     // reset touched
     this.DescriptionInputControl.control.markAsUntouched();
-  
+
     // reset dirty
     this.DescriptionInputControl.control.markAsPristine();
   }

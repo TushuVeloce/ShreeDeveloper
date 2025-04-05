@@ -7,11 +7,11 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
   selector: 'app-unit-master',
-  standalone:false,
+  standalone: false,
   templateUrl: './unit-master.component.html',
   styleUrls: ['./unit-master.component.scss'],
 })
-export class UnitMasterComponent  implements OnInit {
+export class UnitMasterComponent implements OnInit {
   Entity: Unit = Unit.CreateNewInstance();
   MasterList: Unit[] = [];
   DisplayMasterList: Unit[] = [];
@@ -23,7 +23,7 @@ export class UnitMasterComponent  implements OnInit {
   total = 0;
 
   headers: string[] = ['Sr.No.', 'Unit', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService ) {}
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -75,7 +75,8 @@ export class UnitMasterComponent  implements OnInit {
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   };
-  get paginatedList() {
+
+  paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
@@ -84,7 +85,7 @@ export class UnitMasterComponent  implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
-  AddUnit() {
+  AddUnit = () => {
     this.router.navigate(['/homepage/Website/Unit_Master_Details']);
   }
 

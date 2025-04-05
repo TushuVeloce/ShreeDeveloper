@@ -29,7 +29,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Company' | 'Edit Company' = 'New Company';
   IsDropdownDisabled: boolean = false;
   InitialEntity: Company = null as any;
-  CompanyTypeList = DomainEnums.CompanyTypeList( true,'--Select Company Type--');
+  CompanyTypeList = DomainEnums.CompanyTypeList(true, '--Select Company Type--');
   errors = { company_image: '' };
   allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
   dateOfInCorporation: string | null = null;
@@ -44,28 +44,9 @@ export class CompanyMasterDetailsComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private dtu: DTU,
     private datePipe: DatePipe
-  ) {}
+  ) { }
 
-  // Handle file selection
-  handleFileChange(event: any) {
-    const fileInput = event.target.files[0];
 
-    if (fileInput) {
-      if (this.allowedImageTypes.includes(fileInput.type)) {
-        this.file = fileInput;
-        this.errors.company_image = '';
-        if (this.file) {
-          this.imageUrl = this.createObjectURL(this.file);
-        }
-        this.cdr.detectChanges();
-      } else {
-        this.errors.company_image =
-          'Only image files (JPG, PNG, GIF) are allowed';
-        this.file = null;
-        this.imageUrl = null;
-      }
-    }
-  }
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     await this.FormulateCountryList();
@@ -118,50 +99,71 @@ export class CompanyMasterDetailsComponent implements OnInit {
     // this.focusInput();
   }
 
-  async FormulateCountryList() {
+  // Handle file selection
+  handleFileChange = (event: any) => {
+    const fileInput = event.target.files[0];
+
+    if (fileInput) {
+      if (this.allowedImageTypes.includes(fileInput.type)) {
+        this.file = fileInput;
+        this.errors.company_image = '';
+        if (this.file) {
+          this.imageUrl = this.createObjectURL(this.file);
+        }
+        this.cdr.detectChanges();
+      } else {
+        this.errors.company_image =
+          'Only image files (JPG, PNG, GIF) are allowed';
+        this.file = null;
+        this.imageUrl = null;
+      }
+    }
+  }
+
+  FormulateCountryList = async () => {
     this.CountryList = await Country.FetchEntireList(
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-  
+
     // Set default country if exists
     if (this.CountryList.length) {
       const defaultCountry = this.CountryList.find(c => c.p.Ref === this.Entity.p.CountryRef);
       this.Entity.p.CountryRef = defaultCountry ? defaultCountry.p.Ref : this.CountryList[0].p.Ref;
-  
+
       // Fetch the corresponding states
       await this.getStateListByCountryRef(this.Entity.p.CountryRef);
     }
   }
-  async getStateListByCountryRef(CountryRef: number) {
+  getStateListByCountryRef = async (CountryRef: number) => {
     this.StateList = await State.FetchEntireListByCountryRef(
       CountryRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-  
+
     // Set default state if exists
     if (this.StateList.length) {
       const defaultState = this.StateList.find(s => s.p.Ref === this.Entity.p.StateRef);
       this.Entity.p.StateRef = defaultState ? defaultState.p.Ref : this.StateList[0].p.Ref;
-  
+
       // Fetch the corresponding cities
       await this.getCityListByStateRef(this.Entity.p.StateRef);
     }
   }
 
-  async getCityListByStateRef(StateRef: number) {
+  getCityListByStateRef = async (StateRef: number) => {
     this.CityList = await City.FetchEntireListByStateRef(
       StateRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-  
+
     // Set default city if exists
     if (this.CityList.length) {
       const defaultCity = this.CityList.find(c => c.p.Ref === this.Entity.p.CityRef);
       this.Entity.p.CityRef = defaultCity ? defaultCity.p.Ref : this.CityList[0].p.Ref;
     }
   }
-  
- 
+
+
   SaveCompanyMaster = async () => {
     let entityToSave = this.Entity.GetEditableVersion();
 
@@ -189,13 +191,11 @@ export class CompanyMasterDetailsComponent implements OnInit {
     }
 
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
-    // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error',tr.Message);
+      this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     } else {
       this.isSaveDisabled = false;
@@ -210,16 +210,16 @@ export class CompanyMasterDetailsComponent implements OnInit {
         this.dateOfInCorporation = '';
         this.lastDateOfFirstFinancialYear = '';
         await this.router.navigate(['/homepage/Website/Company_Master']);
-        
+
       }
     }
   };
 
-  createObjectURL(file: File): string {
+  createObjectURL = (file: File): string => {
     return URL.createObjectURL(file);
   }
 
-  BackCompany() {
+  BackCompany = () => {
     this.router.navigate(['/homepage/Website/Company_Master']);
   }
 }

@@ -76,7 +76,7 @@ export class UserRoleMasterDetailsComponent  implements OnInit {
     txtName.focus();
   }
 
-  BackUserRole(){
+  BackUserRole = () => {
     this.router.navigate(['/homepage/Website/User_Role_Master']);
    }
 

@@ -33,6 +33,8 @@ export class FinancialYearMasterComponent implements OnInit {
   companyName = this.companystatemanagement.SelectedCompanyName;
   isSaveDisabled: boolean = false;
   private IsNewEntity: boolean = true;
+  FromDates: string[] = [];
+  ToDates: string[] = [];
 
 
   headers: string[] = ['Sr.No.', 'From Date', 'To Date'];
@@ -63,9 +65,7 @@ export class FinancialYearMasterComponent implements OnInit {
     this.convertdate();
   }
 
-  FromDates: string[] = [];
-  ToDates: string[] = [];
-  convertdate() {
+  convertdate = () => {
     this.MasterList.forEach(item => {
       let convertedDate = this.dtu.GetIndianDate(item.p.FromDate,);
       this.FromDates.push(convertedDate);
@@ -76,8 +76,6 @@ export class FinancialYearMasterComponent implements OnInit {
       this.ToDates.push(convertedDate);
       item.p.ToDate = convertedDate;
     });
-    console.log(this.ToDates);
-
   }
 
   // For Pagination  start ----
@@ -85,7 +83,7 @@ export class FinancialYearMasterComponent implements OnInit {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   }
 
-  get paginatedList() {
+  paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
@@ -105,7 +103,7 @@ export class FinancialYearMasterComponent implements OnInit {
     }
   }
 
-  // Financial Year Custom Request 
+  // Financial Year Custom Request
   AddNewFinancialYear = async () => {
     debugger
     let req = new GenerateNewFinancialYearCustomRequest();
@@ -125,10 +123,8 @@ export class FinancialYearMasterComponent implements OnInit {
     let tdResult = JSON.parse(tr.Tag) as TransportData;
 
     let NewFinancialYear = this.utils.GetString(tdResult);
-    console.log(NewFinancialYear);
 
     this.Entity.p.FromDate = NewFinancialYear;
-    console.log(this.Entity.p.FromDate);
 
 
     // this.Entity.p.FromDate = NewFinancialYear.FromDate;

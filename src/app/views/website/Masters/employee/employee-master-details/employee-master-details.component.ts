@@ -61,19 +61,19 @@ export class EmployeeMasterDetailsComponent implements OnInit {
         ? 'New Employee'
         : 'Edit Employee';
       this.Entity = Employee.GetCurrentInstance();
-      
+
       // While Edit Converting date String into Date Format //
       this.dateofjoining = this.datePipe.transform(
         this.dtu.FromString(this.Entity.p.DateOfJoining),
         'yyyy-MM-dd'
       );
-        
+
       // While Edit Converting date String into Date Format //
       this.dob = this.datePipe.transform(
         this.dtu.FromString(this.Entity.p.DOB),
         'yyyy-MM-dd'
       );
-      this.appStateManage.StorageKey.removeItem('Editable');      
+      this.appStateManage.StorageKey.removeItem('Editable');
       if (this.Entity.p.CountryRef) {
         this.getStateListByCountryRef(this.Entity.p.CountryRef);
       }
@@ -94,7 +94,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   getStateListByCountryRef = async (CountryRef: number) => {
     this.StateList = [];
     this.CityList = [];
-  
+
     if (CountryRef) {
       if(CountryRef == 9163){
         this.Entity.p.StateRef = 10263
@@ -114,14 +114,14 @@ export class EmployeeMasterDetailsComponent implements OnInit {
       this.Entity.p.CityRef = 0;
     }
   }
-  
+
   getCityListByStateRef = async (StateRef: number) => {
     this.CityList = [];
-  
+
     if (StateRef) {
       let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.CityList = lst;
-  
+
       if (StateRef !== this.Entity.p.StateRef) {
         // Reset CityRef when state is changed
         this.Entity.p.CityRef = 0;
@@ -159,7 +159,6 @@ export class EmployeeMasterDetailsComponent implements OnInit {
       }
     }
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
@@ -180,7 +179,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     }
   };
 
-  BackEmployee() {
+  BackEmployee = () => {
     this.router.navigate(['/homepage/Website/Employee_Master']);
   }
 }
