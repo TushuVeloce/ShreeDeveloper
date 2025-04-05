@@ -37,18 +37,8 @@ export class MarketingTypeMasterComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    // await this.FormulateMasterList();
     this.loadPaginationData();
   }
-
-  // private FormulateMasterList = async () => {
-  //   let lst = await MarketingType.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.MasterList = lst;
-  //   console.log(this.MasterList);
-
-  //   this.DisplayMasterList = this.MasterList
-  //   this.loadPaginationData();
-  // }
 
   getMarketingTypeListByCompanyRef = async () => {
     this.MasterList = [];
@@ -57,9 +47,9 @@ export class MarketingTypeMasterComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-      let lst = await MarketingType.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.MasterList = lst;
-      this.DisplayMasterList = this.MasterList;
+    let lst = await MarketingType.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
 
@@ -89,7 +79,7 @@ export class MarketingTypeMasterComponent implements OnInit {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   }
 
-  get paginatedList() {
+  paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
@@ -98,8 +88,7 @@ export class MarketingTypeMasterComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   }
 
-
-  AddMarketingType() {
+  AddMarketingType = () => {
     if (this.companyRef() <= 0) {
       this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -117,6 +106,4 @@ export class MarketingTypeMasterComponent implements OnInit {
       this.DisplayMasterList = this.MasterList
     }
   }
-
-
 }

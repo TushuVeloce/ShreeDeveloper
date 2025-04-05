@@ -64,7 +64,7 @@ export class VehicleMasterDetailsComponent implements OnInit {
     }
   }
 
-  BackVehicle() {
+  BackVehicle = () => {
     this.router.navigate(['/homepage/Website/Vehicle_Master']);
   }
 

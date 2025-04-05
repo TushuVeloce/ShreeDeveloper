@@ -29,7 +29,6 @@ export class RegistrarOfficeComponent  implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  SiteRef : number = 0;
   headers: string[] = ['Sr.No.','Customer', 'Cheque', 'Witness 1','Agreement to Sale','Sale Deed','Talathi','7/12	','Spiral','Client Submit	', 'Action'];
   
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement) {
@@ -61,23 +60,33 @@ export class RegistrarOfficeComponent  implements OnInit {
 
   // get PlotList With Site Ref //
 
-getPlotListBySiteRef = async (siteRef: number) => {
+getPlotListBySiteRef = async (SiteRef: number) => {
   this.MasterList = [];
   this.DisplayMasterList = [];
   this.PlotNoList = [];
   this.Entity.p.PlotRef= 0 ;
-  if (siteRef <= 0) {
+  if (SiteRef <= 0) {
     await this.uiUtils.showWarningToster(`Please Select Site`);
     return
   }
-  let lst = await Plot.FetchEntireListBySiteRef(siteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  let lst = await Plot.FetchEntireListBySiteRef(SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
   this.PlotNoList = lst.filter(plot => plot.p.CurrentBookingRemark === 50);
+  this.getRegistrarOfficeListBySiteRef(SiteRef)
+  console.log('SiteRef :', SiteRef);
   this.loadPaginationData(); 
 }
 
+  // get CustomerList With Plot Ref //
+  getRegistrarOfficeListBySiteRef = async (SiteRef: number) => {
+    this.DisplayMasterList = [];
+    let lst = await RegistrarOffice.FetchEntireListBySiteRef(SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+        this.MasterList = lst;
+        this.DisplayMasterList = this.MasterList;
+        console.log('SiteRef :', this.DisplayMasterList);
+      this.loadPaginationData();
+  }
 
   // get CustomerList With Plot Ref //
-
   getRegistrarOfficeListByPlotRef = async (PlotRef: number) => {
     this.DisplayMasterList = [];
     if (PlotRef <= 0) {
@@ -87,10 +96,34 @@ getPlotListBySiteRef = async (siteRef: number) => {
     let lst = await RegistrarOffice.FetchEntireListByPlotRef(PlotRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
         this.MasterList = lst;
         this.DisplayMasterList = this.MasterList;
-        console.log('DisplayMasterList :', this.DisplayMasterList);
+        console.log('PlotRef :', this.DisplayMasterList);
       this.loadPaginationData();
   }
 
+
+  isWitness1Completed(office: any): boolean {
+    const p = office.p;
+    return p.Witness1Name && p.Witness1ContactNo && p.Witness1IsAadharSubmit && p.Witness1IsPanSubmit;
+  }
+  
+  isAgreementCompleted(office: any): boolean {
+    const p = office.p;
+    return p.AgreementDocumentNo && p.AgreementDate;
+  }
+  
+  isSaleDeedCompleted(office: any): boolean {
+    return office.p.SaleDeedDocumentNo && office.p.SaleDeedDate;
+  }
+  
+  isFerfarCompleted(office: any): boolean {
+    const p = office.p;
+    return p.IsIndexOriginalSubmit &&
+           p.IsDastZeroxSubmit &&
+           p.TalathiInwardNo &&
+           p.TalathiDate &&
+           p.IsFerfarNoticeSubmit;
+  }
+  
   onEditClicked = async (item: RegistrarOffice) => {
     this.SelectedRegistrarOffice = item.GetEditableVersion();
     RegistrarOffice.SetCurrentInstance(this.SelectedRegistrarOffice);

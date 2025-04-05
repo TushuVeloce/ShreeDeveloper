@@ -92,6 +92,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
+    console.log(this.CustomerStatusList);
 
     this.CountryList = await Country.FetchEntireList();
     this.StateList = await State.FetchEntireList();
@@ -247,15 +248,23 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       return;
     }
     this.InterestedPlotRef = 0;
-    let bookingref = BookingRemark.Booked;
-    let lst = await Plot.FetchEntireListBySiteandbookingremarkRef(
-      siteRef,
-      bookingref,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-    this.PlotList = lst;
+    // old code start
+    // let bookingref = BookingRemark.Booked;
+    // let lst = await Plot.FetchEntireListBySiteandbookingremarkRef(
+    //   siteRef,
+    //   bookingref,
+    //   async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    // );
+    // this.PlotList = lst;
+    // old code End
+
+    let lst = await Plot.FetchEntireListBySiteRef(siteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.PlotList = lst.filter(plot => plot.p.CurrentBookingRemark !== BookingRemark.Booked);
+
+    console.log(this.PlotList);
+
     // this.DisplayMasterList = this.PlotList
-    this.IsPlotDetails = true;
+    // this.IsPlotDetails = true;
     // console.log('PlotList :', this.PlotList);
   };
 
@@ -347,12 +356,12 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   }
 
   // isSIteVisitSelected(): boolean {
-    // const visitRefs = [30, 40, 50]; // these are the "visit" type Ref values
-    // return visitRefs.includes(this.Entity.p.CustomerFollowUps[0].ContactMode);
+  // const visitRefs = [30, 40, 50]; // these are the "visit" type Ref values
+  // return visitRefs.includes(this.Entity.p.CustomerFollowUps[0].ContactMode);
   // }
 
   SaveCustomerEnquiry = async () => {
-    debugger
+    debugger;
     this.Entity.p.CompanyRef =
       this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CustomerFollowUps[0].Ref =
@@ -367,7 +376,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
         plotDetail.CustomerFollowUpRef = followUp.Ref;
       });
     });
-
 
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
 

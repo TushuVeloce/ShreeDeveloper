@@ -22,16 +22,14 @@ export class ExternalUsersComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  
-  headers: string[] = ['Sr.No.', 'User Name','User ID/Email Id', 'Contact No','Department','User Role', 'Action'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement) {
-     effect(() => {
-          // console.log('Company Ref Changed:', this.companyRef());
-          // console.log('Company Name Changed:', this.companyName());
-          this.getExternalUsersListByCompanyRef()
-        });
-   }
+  headers: string[] = ['Sr.No.', 'User Name', 'User ID/Email Id', 'Contact No', 'Department', 'User Role', 'Action'];
+
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement) {
+    effect(() => {
+      this.getExternalUsersListByCompanyRef()
+    });
+  }
 
   ngOnInit() {
     // this.FormulateMasterList();
@@ -41,26 +39,24 @@ export class ExternalUsersComponent implements OnInit {
   // private FormulateMasterList = async () => {
   //   let lst = await User.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
   //   this.MasterList = lst;
-  //   console.log('MasterList :', this.MasterList);
   //   this.DisplayMasterList = this.MasterList
   // }
 
-      getExternalUsersListByCompanyRef = async () => {
-      this.MasterList = [];
-      this.DisplayMasterList = [];
-      if (this.companyRef() <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
-        return;
-      }
-        let lst = await ExternalUsers.FetchEntireListByCompanyRef(
-          this.companyRef(),
-          async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-        );
-        this.MasterList = lst;
-        this.DisplayMasterList = this.MasterList;
-        console.log('DisplayMasterList :', this.DisplayMasterList);
-      this.loadPaginationData();
-    };
+  getExternalUsersListByCompanyRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await ExternalUsers.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  };
 
   onEditClicked = async (item: ExternalUsers) => {
     this.SelectedExternalUsers = item.GetEditableVersion();
@@ -78,7 +74,7 @@ export class ExternalUsersComponent implements OnInit {
           await this.uiUtils.showSuccessToster(`User ${User.p.EmailId} has been deleted!`);
           this.SearchString = '';
           this.loadPaginationData();
-        await this.getExternalUsersListByCompanyRef();
+          await this.getExternalUsersListByCompanyRef();
         });
       });
   }
@@ -88,7 +84,7 @@ export class ExternalUsersComponent implements OnInit {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   }
 
-  get paginatedList() {
+  paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
@@ -97,13 +93,13 @@ export class ExternalUsersComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   }
 
- async AddExternalUser(){
-  if (this.companyRef() <= 0) {
-    this.uiUtils.showErrorToster('Company not Selected');
-    return;
+  AddExternalUser = async () => {
+    if (this.companyRef() <= 0) {
+      this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    this.router.navigate(['/homepage/Website/External_Users_Details']);
   }
-  this.router.navigate(['/homepage/Website/External_Users_Details']);
-}
 
   filterTable = () => {
     if (this.SearchString != '') {

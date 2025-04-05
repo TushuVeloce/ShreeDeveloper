@@ -53,6 +53,9 @@ export class PlotMasterDetailsComponent implements OnInit {
       this.Entity = Plot.GetCurrentInstance();
       console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
+      if(this.Entity.p.CurrentBookingRemark == 50){
+      this.isSaveDisabled =true
+      }
     } else {
       this.Entity = Plot.CreateNewInstance();
       Plot.SetCurrentInstance(this.Entity);
@@ -62,9 +65,6 @@ export class PlotMasterDetailsComponent implements OnInit {
       this.utils.DeepCopy(this.Entity)
     ) as Plot;
     this.getCustomerListBySiteandBookingRef(this.SiteRf)
-    if(this.Entity.p.CurrentOwnerRef > 0){
-      this.getCustomerDataBycustomerRef(this.Entity.p.CurrentOwnerRef)
-    }
   }
 
   getCustomerListBySiteandBookingRef = async (SiteRf:number) => {
@@ -75,11 +75,19 @@ export class PlotMasterDetailsComponent implements OnInit {
     }
     let lst = await Owner.FetchEntireListBySiteRef(SiteRf, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.CustomerList = lst;
+    if(this.CustomerList.length == 1){
+      this.Entity.p.CurrentOwnerRef = this.CustomerList[0].p.Ref
+      this.getCustomerDataBycustomerRef(this.Entity.p.CurrentOwnerRef)
+    }
+    if(this.Entity.p.CurrentOwnerRef > 0 && this.CustomerList.length > 0){
+      this.getCustomerDataBycustomerRef(this.Entity.p.CurrentOwnerRef)
+    }
   }
 
-  getCustomerDataBycustomerRef(customerref:number){
+  getCustomerDataBycustomerRef = (customerref:number) => {
+  console.log('customerref :', customerref);
     let customer = this.CustomerList.find(customer => customer.p.Ref == customerref)
-    console.log('customer :', customer);
+    console.log('CustomerList :', this.CustomerList);
     if(customer){
       this.CoustomerAddress= customer.p.Address;
       this.CoustomerMob = customer.p.ContactNo;
@@ -98,7 +106,6 @@ export class PlotMasterDetailsComponent implements OnInit {
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entityToSave :', entityToSave);
-    // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
@@ -110,13 +117,18 @@ export class PlotMasterDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Plot saved successfully!');
         this.Entity = Plot.CreateNewInstance();
+        this.CoustomerMob=''
+        this.CoustomerCountry=''
+        this.CoustomerState=''
+        this.CoustomerCity=''
+        this.CoustomerAddress=''
       } else {
         await this.uiUtils.showSuccessToster('Plot Updated successfully!');
       }
     }
   };
 
-  convertSqmToSqft() {
+  convertSqmToSqft = () => {
     if (this.Entity.p.AreaInSqm) {
       this.Entity.p.AreaInSqft = parseFloat((this.Entity.p.AreaInSqm * 10.7639).toFixed(3));
     } else {
@@ -124,7 +136,7 @@ export class PlotMasterDetailsComponent implements OnInit {
     }
   }
   
-  convertSqftToSqm() {
+  convertSqftToSqm= () => {
     if (this.Entity.p.AreaInSqft) {
       this.Entity.p.AreaInSqm = parseFloat((this.Entity.p.AreaInSqft / 10.7639).toFixed(3));
     } else {
@@ -132,7 +144,13 @@ export class PlotMasterDetailsComponent implements OnInit {
     }
   }
 
-  BackPlot() {
+  selectAllValue(event: MouseEvent): void {
+    const input = event.target as HTMLInputElement;
+    input.select();
+  }
+
+
+  BackPlot= () => {
     this.router.navigate(['/homepage/Website/Plot_Master']);
   }
 

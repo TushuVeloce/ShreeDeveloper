@@ -31,8 +31,6 @@ export class UserRoleMasterComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(() => {
-      // console.log('Company Ref Changed:', this.companyRef());
-      // console.log('Company Name Changed:', this.companyName());
       this.getUserRoleListByCompanyRef();
     });
   }
@@ -46,7 +44,6 @@ export class UserRoleMasterComponent implements OnInit {
   //   let lst = await UserRole.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
   //   this.MasterList = lst;
   //   this.DisplayMasterList = this.MasterList
-  //   // console.log(this.DisplayMasterList);
   // }
 
   getUserRoleListByCompanyRef = async () => {
@@ -96,7 +93,7 @@ export class UserRoleMasterComponent implements OnInit {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   };
 
-  get paginatedList() {
+  paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
@@ -104,7 +101,8 @@ export class UserRoleMasterComponent implements OnInit {
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
   };
-  async AddUserRole() {
+
+  AddUserRole = () => {
     if (this.companyRef() <= 0) {
       this.uiUtils.showErrorToster('Company not Selected');
       return;

@@ -24,7 +24,7 @@ export class PlotMasterComponent implements OnInit {
   pageSize = 8; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  headers: string[] = ['Sr.No.', 'Plot No','Area sq.m','Area sq.ft','Gov Rate/Sq m','Gov Rate/Sq ft','Basic Rate/Sq m','Basic Rate/Sq ft','Booking Remark','Action',];
+  headers: string[] = ['Sr.No.', 'Plot No','Area /sqm','Area /sqft','Gov Rate/Sqm','Basic Rate/Sqft','Booking Remark','Action',];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   siteref : number=0
   bookigremark: number=0
@@ -52,6 +52,9 @@ export class PlotMasterComponent implements OnInit {
         await this.getPlotListBySiteRef(storedSiteRef,bookingRemarkeRef);
       });
     }
+    if(this.siteref == 0 && this.bookigremark == 0){
+      this.getPlotListBy()
+    }
   }
 
   FormulateSiteListByCompanyRef = async () => {
@@ -68,7 +71,7 @@ export class PlotMasterComponent implements OnInit {
     this.loadPaginationData();
   }
 
-  onsitechange(siteref: number){
+  onsitechange = (siteref: number) => {
     this.siteref = siteref
     this.Entity.p.CurrentBookingRemark = 0
     this.bookigremark = 0
@@ -94,22 +97,23 @@ export class PlotMasterComponent implements OnInit {
     this.DisplayMasterList = [];
     this.siteref = siteref
     this.bookigremark = bookingremarkref
-    // if(siteref > 0 && this.SiteList.length > 0){
-      //   this.Entity.p.SiteManagementRef = siteref;
-      //   const selectedSite= this.SiteList.find(site => site.p.Ref === siteref);
-      //   if (!selectedSite) { 
-        //     return; 
-        // }
-        // this.appStateManage.StorageKey.setItem('siteRf', String(siteref));
-        // this.appStateManage.StorageKey.setItem('siteName', selectedSite.p.Name);
-        // }
         if(bookingremarkref <= 0 || siteref <= 0){
           return
         }
         
-     console.log("site",siteref ,"booking", bookingremarkref)
     this.appStateManage.StorageKey.setItem('bookingremarkRef', String(bookingremarkref));
     let lst = await Plot.FetchEntireListBySiteandbookingremarkRef(siteref, bookingremarkref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  }
+
+  getPlotListBy = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    this.siteref = 0
+    let lst = await Plot.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -173,5 +177,6 @@ export class PlotMasterComponent implements OnInit {
       this.uiUtils.showWarningToster('Please select a site first');
     }
   }
+
 
 }

@@ -19,6 +19,7 @@ export class RegistrarOfficeProps {
   public PlotRef	: number = 0;
   public SiteRef	: number = 0;
   public CustomerName: string = '';
+  public PlotName: string = '';
   public Name: string = '';
   public PhoneNumber: number = 0;
 
@@ -28,6 +29,7 @@ export class RegistrarOfficeProps {
   public IsCustomerPanSubmit  : boolean = false;
 
   public Witness1Submit : boolean = false;
+
   public Witness1Name : string = '';
   public Witness1ContactNo : number = 0 ;
   public CustomerAadharPath :string = '';
@@ -55,20 +57,20 @@ export class RegistrarOfficeProps {
   public SaleDeedDocumentNo : string = '';
   public SaleDeedtDocumentPath :string = '';
   public SaleDeedDate : string = '';
-  public IsIndexOriginalSubmit : string = '';
+  public IsIndexOriginalSubmit : boolean = false;
   public IndexOriginalDocumentPath : string = '';
-  public IsDastZeroxSubmit : string = '';
+  public IsDastZeroxSubmit : boolean = false;
   public DastZeroxDocumentPath  : string = '';
 
 //  public IsTalathiSubmit : Boolean = false;
   public TalathiInwardNo : string = '';
   public TalathiDate : string = '';
-  public IsFerfarNoticeSubmit : string = '';
+  public IsFerfarNoticeSubmit : boolean = false;
   public FerfarNoticeDocumentPath  : string = '';
-  public IsFinalCustomer712Submit : string = '';
+  public IsFinalCustomer712Submit :  boolean = false;
   public FinalCustomer712DocumentPath  : string = '';
-  public IsSpiral712Submit : string = '';
-  public IsClientSubmit : string = '';
+  public IsSpiral712Submit :  boolean = false;
+  public IsClientSubmit :  boolean = false;
 
   public UpdatedDate:  string = '';
   public UpdatedBy:  number = 0;
@@ -93,7 +95,6 @@ export class RegistrarOfficeProps {
     return new RegistrarOfficeProps(true);
   }
 }
-
 
 
 
@@ -223,12 +224,12 @@ export class RegistrarOffice implements IPersistable<RegistrarOffice> {
     return RegistrarOffice.ListFromTransportData(tdResponse);
   }
   
-  // public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-  //   let req = new RegistrarOfficeFetchRequest();
-  //   req.CompanyRefs.push(CompanyRef)
-  //   let tdResponse = await RegistrarOffice.FetchTransportData(req, errorHandler) as TransportData;
-  //   return RegistrarOffice.ListFromTransportData(tdResponse);
-  // }
+  public static async FetchEntireListBySiteRef(SiteRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new RegistrarOfficeFetchRequest();
+    req.SiteRefs.push(SiteRef)
+    let tdResponse = await RegistrarOffice.FetchTransportData(req, errorHandler) as TransportData;
+    return RegistrarOffice.ListFromTransportData(tdResponse);
+  }
 
   public static async FetchEntireListByPlotRef(PlotRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new RegistrarOfficeFetchRequest();

@@ -15,7 +15,7 @@ export class AccountSubLedgerComponent  implements OnInit {
 
   ngOnInit() {}
 
-  AddSubLedger(){
+  AddSubLedger = () => {
     this.router.navigate(['/homepage/Website/Account_Sub_Ledger_Details']);
    }
 

@@ -26,7 +26,7 @@ export class StateComponent implements OnInit {
   headers: string[] = ['Sr.No.', 'State Name'];
 
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private screenSizeService: ScreenSizeService) { }
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -35,12 +35,6 @@ export class StateComponent implements OnInit {
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
 
   }
-
-  // private FormulateCountryList = async () => {
-  //   let lst = await Country.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.CountryList = lst;
-  //   this.loadPaginationData();
-  // }
 
   private FormulateCountryList = async () => {
     let lst = await Country.FetchEntireList(async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
@@ -56,7 +50,7 @@ export class StateComponent implements OnInit {
     }
     this.loadPaginationData();
   };
-  
+
 
   getStateListByCountryRef = async (CountryRef: number) => {
     this.MasterList = [];
@@ -71,7 +65,8 @@ export class StateComponent implements OnInit {
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   }
-  get paginatedList() {
+
+  paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
@@ -79,18 +74,6 @@ export class StateComponent implements OnInit {
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
   }
-
-  // filterTable = () => {
-  //   debugger
-  //   if (this.SearchString != '') {
-  //     this.DisplayMasterList = this.MasterList.filter((data: any) => {
-  //       return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
-  //     })
-  //   }
-  //   else {
-  //     this.DisplayMasterList = this.MasterList
-  //   }
-  // }
 
   filterTable = () => {
     const searchTerm = this.SearchString?.trim().toLowerCase();
@@ -105,6 +88,4 @@ export class StateComponent implements OnInit {
       this.DisplayMasterList = [...this.MasterList];
     }
   };
-
-
 }

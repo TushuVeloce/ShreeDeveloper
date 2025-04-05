@@ -21,52 +21,51 @@ export class DepartmentMasterDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Department' | 'Edit Department' = 'New Department';
   InitialEntity: Department = null as any;
   companyName = this.companystatemanagement.SelectedCompanyName;
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companystatemanagement: CompanyStateManagement) { }
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-       if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-          this.IsNewEntity = false;
-          this.DetailsFormTitle = this.IsNewEntity ? 'New Department' : 'Edit Department';
-          this.Entity = Department.GetCurrentInstance();
-          this.appStateManage.StorageKey.removeItem('Editable')
-    
-        } else {
-          this.Entity = Department.CreateNewInstance();
-          Department.SetCurrentInstance(this.Entity);
-         
-        }
-        this.InitialEntity = Object.assign(Department.CreateNewInstance(),
-        this.utils.DeepCopy(this.Entity)) as Department;      
-   }
+    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+      this.IsNewEntity = false;
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Department' : 'Edit Department';
+      this.Entity = Department.GetCurrentInstance();
+      this.appStateManage.StorageKey.removeItem('Editable')
 
-    SaveDepartmentMaster = async () => {
-      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-      this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-      let entityToSave = this.Entity.GetEditableVersion();
-      console.log('entityToSave :', entityToSave);
-      let entitiesToSave = [entityToSave]
-      // await this.Entity.EnsurePrimaryKeysWithValidValues()
-      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-      if (!tr.Successful) {
-        this.isSaveDisabled = false;
-        this.uiUtils.showErrorMessage('Error',tr.Message);
-        return
-      }
-      else {
-        this.isSaveDisabled = false;
-        // this.onEntitySaved.emit(entityToSave);
-        if (this.IsNewEntity) {
-          await this.uiUtils.showSuccessToster('Department saved successfully!');
-          this.Entity = Department.CreateNewInstance();
-        } else {
-          await this.router.navigate(['/homepage/Website/Department_Master'])
-          await this.uiUtils.showSuccessToster('Department Updated successfully!');
-        }
+    } else {
+      this.Entity = Department.CreateNewInstance();
+      Department.SetCurrentInstance(this.Entity);
+
+    }
+    this.InitialEntity = Object.assign(Department.CreateNewInstance(),
+      this.utils.DeepCopy(this.Entity)) as Department;
+  }
+
+  SaveDepartmentMaster = async () => {
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    let entityToSave = this.Entity.GetEditableVersion();
+    let entitiesToSave = [entityToSave]
+    // await this.Entity.EnsurePrimaryKeysWithValidValues()
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return
+    }
+    else {
+      this.isSaveDisabled = false;
+      // this.onEntitySaved.emit(entityToSave);
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('Department saved successfully!');
+        this.Entity = Department.CreateNewInstance();
+      } else {
+        await this.router.navigate(['/homepage/Website/Department_Master'])
+        await this.uiUtils.showSuccessToster('Department Updated successfully!');
       }
     }
+  }
 
-  BackDepartment() {
+  BackDepartment = () => {
     this.router.navigate(['/homepage/Website/Department_Master']);
   }
 

@@ -33,7 +33,7 @@ export class BankAccountMasterDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Bank Account' : 'Edit Bank Account';
       this.Entity = BankAccount.GetCurrentInstance();
-      
+
       // While Edit Converting date String into Date Format //
       this.dateofopening = this.datePipe.transform(
         this.dtu.FromString(this.Entity.p.DateofOpening),
@@ -65,8 +65,6 @@ export class BankAccountMasterDetailsComponent implements OnInit {
       }
     }
     let entitiesToSave = [entityToSave]
-    console.log('entitiesToSave :', entitiesToSave);
-    // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
@@ -75,7 +73,6 @@ export class BankAccountMasterDetailsComponent implements OnInit {
     }
     else {
       this.isSaveDisabled = false;
-      // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Bank Account saved successfully!');
         this.dateofopening = '';
@@ -83,13 +80,13 @@ export class BankAccountMasterDetailsComponent implements OnInit {
       } else {
         await this.uiUtils.showSuccessToster('Bank Account Updated successfully!');
         await this.router.navigate(['/homepage/Website/Bank_Account_Master']);
-        
+
       }
     }
   }
 
 
-  BackBankAccount() {
+  BackBankAccount = () => {
     this.router.navigate(['/homepage/Website/Bank_Account_Master']);
   }
 

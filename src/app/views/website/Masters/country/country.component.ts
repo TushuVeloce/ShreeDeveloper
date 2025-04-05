@@ -49,7 +49,7 @@ export class CountryComponent implements OnInit {
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   };
-  get paginatedList() {
+  paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
@@ -61,7 +61,7 @@ export class CountryComponent implements OnInit {
   filterTable = () => {
     if (this.SearchString != '') {
       this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1 
+        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
       })
     }
     else {

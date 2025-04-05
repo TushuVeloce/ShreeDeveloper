@@ -22,7 +22,7 @@
            <label>Plot No</label>
             <input
               type="text"
-              [(ngModel)]="Entity.p.PlotRef"
+              [(ngModel)]="Entity.p.PlotName"
               name="PlotRef"
               class="form-control"
               id="PlotRef"
@@ -128,12 +128,14 @@
           <label  for="Witness1Submit"> Witness 1</label>
               <div style="margin-left: 25px;">
                 <input
-                  type="checkbox"
-                  class="custom-checkbox"
-                  [checked]="Entity.p.Witness1Submit"
-                  id="Witness1Submit"
-                  name="Witness1Submit"
-                />
+                type="checkbox"
+                class="custom-checkbox"
+                id="Witness1Submit"
+                name="Witness1Submit"
+                [checked]="isWitness1Complete()"
+                disabled
+              />
+              
               </div>
         </div>
        </div>
@@ -226,13 +228,14 @@
        <div class="col-md-4 justify-content-center d-flex">
          <label  for="Witness2Submit"> Witness 2</label>
              <div style="margin-left: 25px;">
-               <input
-                 type="checkbox"
-                 class="custom-checkbox"
-                 [(ngModel)]="Entity.p.Witness2Submit"
-                 id="Witness2Submit"
-                 name="Witness2Submit"
-               />
+              <input
+              type="checkbox"
+              class="custom-checkbox"
+              id="Witness2Submit"
+              name="Witness2Submit"
+              [checked]="isWitness2Complete()"
+              disabled
+            />
              </div>
        </div>
       </div>
@@ -325,12 +328,13 @@
         <label  for="IsAgreementToSaleSubmit"> Agreement to Sale</label>
             <div style="margin-left: 25px;">
               <input
-                type="checkbox"
-                class="custom-checkbox"
-                id="IsAgreementToSaleSubmit"
-                name="IsAgreementToSaleSubmit"
-                />
-                <!-- [(ngModel)]="Entity.p.IsAgreementToSaleSubmit" -->
+      type="checkbox"
+      class="custom-checkbox"
+      id="IsAgreementToSaleSubmit"
+      name="IsAgreementToSaleSubmit"
+      [checked]="isAgreementtoSaleComplete()"
+      disabled
+    />
             </div>
       </div>
      
@@ -384,13 +388,14 @@
    <div class="col-md-4 justify-content-center d-flex">
      <label  for="IsSaledeedSubmit"> Sale Deed</label>
          <div style="margin-left: 25px;">
-           <input
-             type="checkbox"
-             class="custom-checkbox"
-             id="IsSaledeedSubmit"
-             name="IsSaledeedSubmit"
-             />
-             <!-- [(ngModel)]="Entity.p.IsSaledeedSubmit" -->
+          <input
+          type="checkbox"
+          class="custom-checkbox"
+          id="IsSaledeedSubmit"
+          name="IsSaledeedSubmit"
+          [checked]="isSaleDeedComplete()"
+          disabled
+        />
          </div>
    </div>
   <div class="col-md-4 d-flex ">
@@ -442,13 +447,14 @@
    <div class="col-md-4 justify-content-center d-flex">
      <label  for="IsTalathiSubmit"> Talathi</label>
          <div style="margin-left: 25px;">
-           <input
-             type="checkbox"
-             class="custom-checkbox"
-             id="IsTalathiSubmit"
-             name="IsTalathiSubmit"
-             />
-             <!-- [(ngModel)]="Entity.p.IsTalathiSubmit" -->
+          <input
+          type="checkbox"
+          class="custom-checkbox"
+          id="IsAgreementToSaleSubmit"
+          name="IsAgreementToSaleSubmit"
+          [checked]="isTalathiComplete()"
+          disabled
+        />
             </div>
    </div>
   </div>

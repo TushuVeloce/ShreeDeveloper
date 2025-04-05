@@ -10,11 +10,11 @@ import { Utils } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-employee-exit-details',
-  standalone:false,
+  standalone: false,
   templateUrl: './employee-exit-details.component.html',
   styleUrls: ['./employee-exit-details.component.scss'],
 })
-export class EmployeeExitDetailsComponent  implements OnInit {
+export class EmployeeExitDetailsComponent implements OnInit {
   isSaveDisabled: boolean = false;
   private IsNewEntity: boolean = true;
   Entity: EmployeeExit = EmployeeExit.CreateNewInstance();
@@ -22,58 +22,57 @@ export class EmployeeExitDetailsComponent  implements OnInit {
   InitialEntity: EmployeeExit = null as any;
   EmployeeList: Employee[] = [];
   companyName = this.companystatemanagement.SelectedCompanyName;
-  companyRef = this.companystatemanagement.SelectedCompanyRef;  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companystatemanagement: CompanyStateManagement) { }
+  companyRef = this.companystatemanagement.SelectedCompanyRef; constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
   async ngOnInit() {
-   this.getEmployeeListByCompanyRef()
+    this.getEmployeeListByCompanyRef()
     this.appStateManage.setDropdownDisabled(true);
-       if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-          this.IsNewEntity = false;
-          this.DetailsFormTitle = this.IsNewEntity ? 'New Employee Exit' : 'Edit Employee Exit';
-          this.Entity = EmployeeExit.GetCurrentInstance();
-          this.appStateManage.StorageKey.removeItem('Editable')
-    
-        } else {
-          this.Entity = EmployeeExit.CreateNewInstance();
-          EmployeeExit.SetCurrentInstance(this.Entity);
-         
-        }
-        this.InitialEntity = Object.assign(EmployeeExit.CreateNewInstance(),
-        this.utils.DeepCopy(this.Entity)) as EmployeeExit;      
-   }
+    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+      this.IsNewEntity = false;
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Employee Exit' : 'Edit Employee Exit';
+      this.Entity = EmployeeExit.GetCurrentInstance();
+      this.appStateManage.StorageKey.removeItem('Editable')
 
-    getEmployeeListByCompanyRef = async () => {
-         let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-         this.EmployeeList = lst;
-     }
+    } else {
+      this.Entity = EmployeeExit.CreateNewInstance();
+      EmployeeExit.SetCurrentInstance(this.Entity);
 
-    SaveEmployeeExitMaster = async () => {
-      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-      this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-      let entityToSave = this.Entity.GetEditableVersion();
-      console.log('entityToSave :', entityToSave);
-      let entitiesToSave = [entityToSave]
-      // await this.Entity.EnsurePrimaryKeysWithValidValues()
-      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-      if (!tr.Successful) {
-        this.isSaveDisabled = false;
-        this.uiUtils.showErrorMessage('Error',tr.Message);
-        return
-      }
-      else {
-        this.isSaveDisabled = false;
-        // this.onEntitySaved.emit(entityToSave);
-        if (this.IsNewEntity) {
-          await this.uiUtils.showSuccessToster('Employee Exit saved successfully!');
-          this.Entity = EmployeeExit.CreateNewInstance();
-        } else {
-          await this.router.navigate(['/homepage/Website/Employee_Exit_Master'])
-          await this.uiUtils.showSuccessToster('Employee Exit Updated successfully!');
-        }
+    }
+    this.InitialEntity = Object.assign(EmployeeExit.CreateNewInstance(),
+      this.utils.DeepCopy(this.Entity)) as EmployeeExit;
+  }
+
+  getEmployeeListByCompanyRef = async () => {
+    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.EmployeeList = lst;
+  }
+
+  SaveEmployeeExitMaster = async () => {
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    let entityToSave = this.Entity.GetEditableVersion();
+    let entitiesToSave = [entityToSave]
+    // await this.Entity.EnsurePrimaryKeysWithValidValues()
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return
+    }
+    else {
+      this.isSaveDisabled = false;
+      // this.onEntitySaved.emit(entityToSave);
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('Employee Exit saved successfully!');
+        this.Entity = EmployeeExit.CreateNewInstance();
+      } else {
+        await this.router.navigate(['/homepage/Website/Employee_Exit_Master'])
+        await this.uiUtils.showSuccessToster('Employee Exit Updated successfully!');
       }
     }
+  }
 
-  BackEmployeeExit() {
+  BackEmployeeExit = () => {
     this.router.navigate(['/homepage/Website/Employee_Exit_Master']);
   }
 

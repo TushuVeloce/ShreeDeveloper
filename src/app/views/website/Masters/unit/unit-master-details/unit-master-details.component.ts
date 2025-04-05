@@ -24,16 +24,16 @@ export class UnitMasterDetailsComponent  implements OnInit {
     NameWithoutNos: string = ValidationPatterns.NameWithoutNos
     NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
     RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
- 
+
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      
+
       this.DetailsFormTitle = this.IsNewEntity ? 'New Unit' : 'Edit Unit';
       this.Entity = Unit.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable')
@@ -41,7 +41,7 @@ export class UnitMasterDetailsComponent  implements OnInit {
     } else {
       this.Entity = Unit.CreateNewInstance();
       Unit.SetCurrentInstance(this.Entity);
-     
+
     }
     this.InitialEntity = Object.assign(Unit.CreateNewInstance(),
     this.utils.DeepCopy(this.Entity)) as Unit;
@@ -52,7 +52,6 @@ export class UnitMasterDetailsComponent  implements OnInit {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
-    console.log('entityToSave :', entityToSave);
     let entitiesToSave = [entityToSave]
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
@@ -74,16 +73,15 @@ export class UnitMasterDetailsComponent  implements OnInit {
     }
   }
 
-  BackUnit() {
+  BackUnit = () => {
     this.router.navigate(['/homepage/Website/Unit_Master']);
   }
 
   resetAllControls = () => {
     // reset touched
     this.NameInputControl.control.markAsUntouched();
-  
+
     // reset dirty
     this.NameInputControl.control.markAsPristine();
   }
-
 }

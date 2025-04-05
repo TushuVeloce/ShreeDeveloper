@@ -43,7 +43,7 @@ export class RegisteredCustomerProps {
   public readonly CustomerName : string = '';
   public readonly CustomerAddress : string = '';
   public readonly CustomerMobileNo : string = '';
-  public readonly SiteVisitDate : string = '';
+  public  SiteVisitDate : string = '';
   public readonly LeadSourceName : string = '';
   public readonly LeadHandleByName : string = '';
   public readonly PlotRef : number = 0;

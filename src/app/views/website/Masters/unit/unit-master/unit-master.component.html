@@ -14,7 +14,7 @@
   </div>
   <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
-    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList" [nzScroll]="{x:'auto' }"
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()" [nzScroll]="{x:'auto' }"
       nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
@@ -22,7 +22,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let Unit of MasterList; index as i">
+        <tr *ngFor="let Unit of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{Unit.p.Name}}</td>
           <td class="tbldata">
@@ -32,7 +32,7 @@
             </span> -->
             <!-- <span style="margin-left: 9px;" (click)="onDeleteClicked(Unit);">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span> -->
-              
+
               <Edit-Icon (editClick)="onEditClicked(Unit)" />
               <Delete-Icon (deleteClicked)="onDeleteClicked(Unit)" />
           </td>
@@ -52,6 +52,6 @@
   </div>
 </div> -->
 
-<div *ngIf="DisplayMasterList.length === 0"> 
+<div *ngIf="DisplayMasterList.length === 0">
   <Data-Not-Found />
 </div>

@@ -67,7 +67,6 @@ export class EmployeeMasterComponent implements OnInit {
     );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    console.log('DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
   };
 
@@ -102,7 +101,7 @@ export class EmployeeMasterComponent implements OnInit {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   };
 
-  get paginatedList() {
+  paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
@@ -111,7 +110,7 @@ export class EmployeeMasterComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
-  async AddEmployee() {
+  AddEmployee = () => {
     if (this.companyRef() <= 0) {
       this.uiUtils.showErrorToster('Company not Selected');
       return;

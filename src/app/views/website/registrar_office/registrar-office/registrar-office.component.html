@@ -35,7 +35,7 @@
         name="SiteRef"
         [nzSize]="'large'"
         [(ngModel)]="Entity.p.SiteRef"
-        (ngModelChange)="getPlotListBySiteRef(Entity.p.SiteRef)"
+        (ngModelChange)="getPlotListBySiteRef(Entity.p.SiteRef) "
       >
         <nz-option
           *ngFor="let site of SiteList"
@@ -102,125 +102,41 @@
           <td class="tbldata">
             <span
               class="status"
-              [ngClass]="
-                registraroffice.p.IsChequeSubmit ? 'completed' : 'pending'
-              "
-            >
+              [ngClass]="registraroffice.p.IsChequeSubmit ? 'completed' : 'pending' " >
               {{ registraroffice.p.IsChequeSubmit ? "Completed" : "Pending" }}
             </span>
           </td>
           <td class="tbldata">
             <span
               class="status"
-              [ngClass]="{
-                completed:
-                  registraroffice.p.Witness1Name &&
-                  registraroffice.p.Witness1ContactNo &&
-                  registraroffice.p.Witness1IsAadharSubmit &&
-                  registraroffice.p.Witness1IsPanSubmit,
-                pending: !(
-                  registraroffice.p.Witness1Name &&
-                  registraroffice.p.Witness1ContactNo &&
-                  registraroffice.p.Witness1IsAadharSubmit &&
-                  registraroffice.p.Witness1IsPanSubmit
-                )
-              }"
-            >
-              {{
-                registraroffice.p.Witness1Name &&
-                registraroffice.p.Witness1ContactNo &&
-                registraroffice.p.Witness1IsAadharSubmit &&
-                registraroffice.p.Witness1IsPanSubmit
-                  ? "Completed"
-                  : "Pending"
-              }}
+              [ngClass]="isWitness1Completed(registraroffice) ? 'completed' : 'pending'" >
+              {{ isWitness1Completed(registraroffice) ? 'Completed' : 'Pending' }}
             </span>
           </td>
 
           <td class="tbldata">
             <span
-              class="status"
-              [ngClass]="{
-                completed:
-                  registraroffice.p.AgreementDocumentNo &&
-                  registraroffice.p.AgreementDate,
-                pending: !(
-                  registraroffice.p.AgreementDocumentNo &&
-                  registraroffice.p.AgreementDate 
-                 
-                )
-              }"
-            >
-              {{
-                registraroffice.p.AgreementDocumentNo &&
-                registraroffice.p.AgreementDate
-                  ? "Completed"
-                  : "Pending"
-              }}
+              class="status" [ngClass]="isAgreementCompleted(registraroffice) ? 'completed' : 'pending'" >
+              {{ isAgreementCompleted(registraroffice) ? 'Completed' : 'Pending' }}
             </span>
           </td>
 
           <td class="tbldata">
             <span
-              class="status"
-              [ngClass]="{
-                completed:
-                  registraroffice.p.SaleDeedDocumentNo &&
-                  registraroffice.p.SaleDeedDate,
-                pending: !(
-                  registraroffice.p.SaleDeedDocumentNo &&
-                  registraroffice.p.SaleDeedDate 
-                 
-                )
-              }"
+              class="status" [ngClass]="isSaleDeedCompleted(registraroffice) ? 'completed' : 'pending'"
             >
-              {{
-                registraroffice.p.SaleDeedDocumentNo &&
-                registraroffice.p.SaleDeedDate
-                  ? "Completed"
-                  : "Pending"
-              }}
+              {{ isSaleDeedCompleted(registraroffice) ? 'Completed' : 'Pending' }}
             </span>
           </td>
           <td class="tbldata">
             <span
-              class="status"
-              [ngClass]="{
-                completed:
-                  registraroffice.p.IsIndexOriginalSubmit &&
-                  registraroffice.p.IsDastZeroxSubmit &&
-                  registraroffice.p.TalathiInwardNo &&
-                  registraroffice.p.TalathiDate &&
-                  registraroffice.p.IsFerfarNoticeSubmit,
-                pending: !(
-                  registraroffice.p.IsIndexOriginalSubmit &&
-                  registraroffice.p.IsDastZeroxSubmit &&
-                  registraroffice.p.TalathiInwardNo &&
-                  registraroffice.p.TalathiDate &&
-                  registraroffice.p.IsFerfarNoticeSubmit
-
-                )
-              }"
-            >
-              {{
-                registraroffice.p.IsIndexOriginalSubmit &&
-                registraroffice.p.IsDastZeroxSubmit &&
-                registraroffice.p.TalathiInwardNo &&
-                registraroffice.p.TalathiDate && 
-                registraroffice.p.IsFerfarNoticeSubmit
-
-                  ? "Completed"
-                  : "Pending"
-              }}
+              class="status" [ngClass]="isFerfarCompleted(registraroffice) ? 'completed' : 'pending'" >
+              {{ isFerfarCompleted(registraroffice) ? 'Completed' : 'Pending' }}
             </span>
           </td>
           <td class="tbldata">
             <span
-              class="status"
-              [ngClass]="
-                registraroffice.p.IsFinalCustomer712Submit ? 'completed' : 'pending'
-              "
-            >
+              class="status" [ngClass]="registraroffice.p.IsFinalCustomer712Submit ? 'completed' : 'pending' " >
               {{ registraroffice.p.IsFinalCustomer712Submit ? "Completed" : "Pending" }}
             </span>
           </td>
@@ -238,19 +154,13 @@
           <td class="tbldata">
             <span
               class="status"
-              [ngClass]="
-                registraroffice.p.IsClientSubmit ? 'completed' : 'pending'
-              "
-            >
+              [ngClass]=" registraroffice.p.IsClientSubmit ? 'completed' : 'pending' "  >
               {{ registraroffice.p.IsClientSubmit ? "Completed" : "Pending" }}
             </span>
           </td>
 
           <td class="tbldata">
-            <span
-              style="margin-left: 9px"
-              (click)="onEditClicked(registraroffice)"
-            >
+            <span style="margin-left: 9px" (click)="onEditClicked(registraroffice)" >
               <img
                 src="\assets\icons\edit.png"
                 alt="logo"

@@ -20,11 +20,11 @@ export class SiteManagementMasterComponent implements OnInit {
   SearchString: string = '';
   SelectedSite: Site = Site.CreateNewInstance();
   CustomerRef: number = 0;
-  pageSize = 10; // Items per page
-  currentPage = 1; // Initialize current page
+  pageSize = 10;
+  currentPage = 1; 
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.', 'Site Name', 'Supervisor Name', 'Actual stage', 'Action'];
+  headers: string[] = ['Sr.No.', 'Site Name', 'No of Plots', 'Site Incharge','Site Location', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
@@ -40,7 +40,6 @@ export class SiteManagementMasterComponent implements OnInit {
   getSiteListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    console.log('companyRef :', this.companyRef());
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not FSelected');
       return;
@@ -48,7 +47,6 @@ export class SiteManagementMasterComponent implements OnInit {
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     console.log('Site :', this.MasterList);
-
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
@@ -66,15 +64,9 @@ export class SiteManagementMasterComponent implements OnInit {
   }
 
   onEditClicked = async (item: Site) => {
-    // let props = Object.assign(MaterialProps.Blank(),item.p);
-    // this.SelectedMaterial = Material.CreateInstance(props,true);
-
     this.SelectedSite = item.GetEditableVersion();
-
     Site.SetCurrentInstance(this.SelectedSite);
-
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-
     await this.router.navigate(['/homepage/Website/Site_Management_Details']);
   };
 

@@ -26,14 +26,14 @@ export class MaterialMasterComponent implements OnInit {
   total = 0;
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  
+
   headers: string[] = ['Sr.No.', 'Code', 'Material Name', 'Material Unit', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(() => {
       // this.getMaterialListByCompanyRef()
-          this.getMaterialListByCompanyRef();
+      this.getMaterialListByCompanyRef();
     });
   }
 
@@ -48,7 +48,7 @@ export class MaterialMasterComponent implements OnInit {
 
 
 
-  
+
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
     // await this.FormulateMaterialList();
@@ -61,28 +61,24 @@ export class MaterialMasterComponent implements OnInit {
   //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
   //   );
   //   this.MasterList = lst;
-  //   console.log('MasterList :', this.MasterList);
   //   this.DisplayMasterList = this.MasterList;
   //   this.loadPaginationData();
-  //   // console.log(this.DisplayMasterList);
   // };
 
   getMaterialListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    console.log('companyRef :', this.companyRef());
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
     let lst = await Material.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
-    console.log('MaterialList :', this.MasterList);
 
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
-  
+
   onEditClicked = async (item: Material) => {
     // let props = Object.assign(MaterialProps.Blank(),item.p);
     // this.SelectedMaterial = Material.CreateInstance(props,true);
@@ -120,7 +116,8 @@ export class MaterialMasterComponent implements OnInit {
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   };
-  get paginatedList() {
+
+  paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
@@ -129,7 +126,7 @@ export class MaterialMasterComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
-  async AddMaterial() {
+  AddMaterial = () => {
     if (this.companyRef() <= 0) {
       this.uiUtils.showErrorToster('Company not Selected');
       return;

@@ -98,6 +98,7 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
     _td: TransportData,
     vra: ValidationResultAccumulator
   ): void {
+    // debugger
     if (!this.AllowEdit)
       vra.add('', 'This object is not editable and hence cannot be saved.');
     // if (this.p.CustomerEnquiryRef == 0)
@@ -115,19 +116,14 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
     if (this.p.CustomerStatus == 0)
       vra.add('ContactMode', 'ContactMode cannot be blank.');
 
+    if (this.p.Reason == '')
+      vra.add('Reason', 'Reason cannot be blank.');
+
     // if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-    if (!this.p.ReminderDate)
-      vra.add('ReminderDate', 'Reminder Date cannot be blank.');
-    else if (this.p.CustomerStatus !== 30 && !this.p.ReminderDate) {
-      vra.add(
-        'ReminderDate',
-        'Reminder Date cannot be blank unless Customer Status is Lead Close or Convert To Deal.'
-      );
-    } else if (this.p.CustomerStatus !== 40 && !this.p.ReminderDate) {
-      vra.add(
-        'ReminderDate',
-        'Reminder Date cannot be blank unless Customer Status is Lead Close or Convert To Deal.'
-      );
+    // if (!this.p.ReminderDate)
+    //   vra.add('ReminderDate', 'Reminder Date cannot be blank.');
+    if ((this.p.CustomerStatus !== 30 && this.p.CustomerStatus !== 40) && !this.p.ReminderDate) {
+      vra.add('ReminderDate', 'Reminder Date cannot be blank unless Customer Status is Lead Close or Convert To Deal.');
     }
   }
 

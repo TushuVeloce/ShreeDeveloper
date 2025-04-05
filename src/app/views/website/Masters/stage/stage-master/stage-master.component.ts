@@ -21,7 +21,7 @@ export class StageMasterComponent implements OnInit {
   SelectedStage: Stage = Stage.CreateNewInstance();
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
-  total = 0;  
+  total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   headers: string[] = ['Stage.No.', 'Stage Name', 'Action'];
@@ -47,7 +47,6 @@ export class StageMasterComponent implements OnInit {
     let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(),
     async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
   );
-  console.log('lst :', lst);
     // Sort the list by DisplayOrder in ascending order
     this.MasterList = lst.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
     this.DisplayMasterList = this.MasterList;
@@ -81,7 +80,7 @@ export class StageMasterComponent implements OnInit {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   }
 
-  get paginatedList() {
+  paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
@@ -91,7 +90,7 @@ export class StageMasterComponent implements OnInit {
   }
 
 
-  AddStage() {
+  AddStage = () => {
     if (this.companyRef() <= 0) {
       this.uiUtils.showErrorToster('Company not Selected');
       return;

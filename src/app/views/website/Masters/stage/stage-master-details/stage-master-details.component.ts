@@ -50,8 +50,7 @@ export class StageMasterDetailsComponent implements OnInit {
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
-    console.log(entitiesToSave);
-    
+
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
@@ -73,7 +72,7 @@ export class StageMasterDetailsComponent implements OnInit {
     }
   }
 
-  BackMaterial() {
+  BackMaterial = () => {
     this.router.navigate(['/homepage/Website/Stage_Master']);
   }
 
@@ -81,7 +80,7 @@ export class StageMasterDetailsComponent implements OnInit {
     // reset touched
     this.NameInputControl.control.markAsUntouched();
     this.DisplayOrderInputControl.control.markAsUntouched();
-  
+
     // reset dirty
     this.NameInputControl.control.markAsPristine();
     this.DisplayOrderInputControl.control.markAsPristine();

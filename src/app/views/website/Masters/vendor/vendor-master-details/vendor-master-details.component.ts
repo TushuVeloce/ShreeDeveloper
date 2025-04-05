@@ -40,7 +40,7 @@ export class VendorMasterDetailsComponent implements OnInit {
   CityList: City[] = [];
   // VendorServicesOptions: { label: string, value: number }[] = [];
 
-  
+
   PinCodePattern: string = ValidationPatterns.PinCode;
   IFSCPattern: string = ValidationPatterns.IFSC;
   PANPattern: string = ValidationPatterns.PAN;
@@ -74,8 +74,6 @@ export class VendorMasterDetailsComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(true);
     this.MaterialList = await Material.FetchEntireList();
     this.ServiceList = await VendorService.FetchEntireList();
-    // console.log(this.MaterialList);
-    // console.log(this.ServiceList);
 
     // if (this.VendorServicesList.length > 0) {
     //   this.VendorServicesOptions = this.VendorServicesList.map(item => ({
@@ -97,13 +95,11 @@ export class VendorMasterDetailsComponent implements OnInit {
     }
 
     this.CompanyList = await Company.FetchEntireList();
-    // console.log(this.CompanyList);
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Vendor' : 'Edit Vendor';
       this.Entity = Vendor.GetCurrentInstance();
-      console.log('this.Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable')
 
     } else {
@@ -114,7 +110,7 @@ export class VendorMasterDetailsComponent implements OnInit {
       this.utils.DeepCopy(this.Entity)) as Vendor;
   }
 
-  async FormulateCountryList() {
+  FormulateCountryList = async () => {
     this.CountryList = await Country.FetchEntireList(
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
@@ -129,7 +125,7 @@ export class VendorMasterDetailsComponent implements OnInit {
     }
   }
 
-  async getCityListByStateRef(StateRef: number) {
+  getCityListByStateRef = async (StateRef: number) => {
     this.CityList = await City.FetchEntireListByStateRef(
       StateRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
@@ -142,7 +138,7 @@ export class VendorMasterDetailsComponent implements OnInit {
     }
   }
 
-  async getStateListByCountryRef(CountryRef: number) {
+  getStateListByCountryRef = async (CountryRef: number) => {
     this.StateList = await State.FetchEntireListByCountryRef(
       CountryRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
@@ -157,23 +153,21 @@ export class VendorMasterDetailsComponent implements OnInit {
       await this.getCityListByStateRef(this.Entity.p.StateRef);
     }
   }
-  onVendorServicesChange(selectedvalue: any) {
+
+  onVendorServicesChange = (selectedvalue: any) => {
     this.Entity.p.MaterialListSuppliedByVendor = selectedvalue;
-    // console.log(this.Entity.p.MaterialSuppliedByVendors);
   }
 
-  onServiceProviceChange(Selectedservice:any){
+  onServiceProviceChange = (Selectedservice:any) => {
     this.Entity.p.MaterialListSuppliedByVendor = Selectedservice;
   }
 
   SaveVendorMaster = async () => {
-
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
 
     let entitiesToSave = [entityToSave]
-    // console.log(entitiesToSave);
 
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
@@ -194,7 +188,7 @@ export class VendorMasterDetailsComponent implements OnInit {
     }
   }
 
-  BackVendor() {
+  BackVendor = () => {
     this.router.navigate(['/homepage/Website/Vendor_Master']);
   }
 

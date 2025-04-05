@@ -35,7 +35,6 @@ export class CompanyMasterComponent implements OnInit {
     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList
-    console.log('DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
   }
 
@@ -65,7 +64,7 @@ export class CompanyMasterComponent implements OnInit {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   }
 
-  get paginatedList () {
+  paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
@@ -74,7 +73,7 @@ export class CompanyMasterComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   }
 
-  AddCompany() {
+  AddCompany = () => {
     this.router.navigate(['/homepage/Website/Company_Master_Details']);
   }
 

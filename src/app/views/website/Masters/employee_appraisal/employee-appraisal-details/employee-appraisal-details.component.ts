@@ -11,11 +11,11 @@ import { Utils } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-employee-appraisal-details',
-  standalone:false,
+  standalone: false,
   templateUrl: './employee-appraisal-details.component.html',
   styleUrls: ['./employee-appraisal-details.component.scss'],
 })
-export class EmployeeAppraisalDetailsComponent  implements OnInit {
+export class EmployeeAppraisalDetailsComponent implements OnInit {
   isSaveDisabled: boolean = false;
   private IsNewEntity: boolean = true;
   Entity: EmployeeAppraisal = EmployeeAppraisal.CreateNewInstance();
@@ -23,58 +23,57 @@ export class EmployeeAppraisalDetailsComponent  implements OnInit {
   InitialEntity: EmployeeAppraisal = null as any;
   EmployeeList: Employee[] = [];
   companyName = this.companystatemanagement.SelectedCompanyName;
-  companyRef = this.companystatemanagement.SelectedCompanyRef;  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companystatemanagement: CompanyStateManagement) { }
+  companyRef = this.companystatemanagement.SelectedCompanyRef; constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
   async ngOnInit() {
-   this.getEmployeeListByCompanyRef()
+    this.getEmployeeListByCompanyRef()
     this.appStateManage.setDropdownDisabled(true);
-       if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-          this.IsNewEntity = false;
-          this.DetailsFormTitle = this.IsNewEntity ? 'New Employee Appraisal' : 'Edit Employee Appraisal';
-          this.Entity = EmployeeAppraisal.GetCurrentInstance();
-          this.appStateManage.StorageKey.removeItem('Editable')
-    
-        } else {
-          this.Entity = EmployeeAppraisal.CreateNewInstance();
-          EmployeeAppraisal.SetCurrentInstance(this.Entity);
-         
-        }
-        this.InitialEntity = Object.assign(EmployeeAppraisal.CreateNewInstance(),
-        this.utils.DeepCopy(this.Entity)) as EmployeeAppraisal;      
-   }
+    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+      this.IsNewEntity = false;
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Employee Appraisal' : 'Edit Employee Appraisal';
+      this.Entity = EmployeeAppraisal.GetCurrentInstance();
+      this.appStateManage.StorageKey.removeItem('Editable')
 
-    getEmployeeListByCompanyRef = async () => {
-         let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-         this.EmployeeList = lst;
-     }
+    } else {
+      this.Entity = EmployeeAppraisal.CreateNewInstance();
+      EmployeeAppraisal.SetCurrentInstance(this.Entity);
 
-    SaveEmployeeAppraisalMaster = async () => {
-      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-      this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-      let entityToSave = this.Entity.GetEditableVersion();
-      console.log('entityToSave :', entityToSave);
-      let entitiesToSave = [entityToSave]
-      // await this.Entity.EnsurePrimaryKeysWithValidValues()
-      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-      if (!tr.Successful) {
-        this.isSaveDisabled = false;
-        this.uiUtils.showErrorMessage('Error',tr.Message);
-        return
-      }
-      else {
-        this.isSaveDisabled = false;
-        // this.onEntitySaved.emit(entityToSave);
-        if (this.IsNewEntity) {
-          await this.uiUtils.showSuccessToster('Employee Appraisal saved successfully!');
-          this.Entity = EmployeeAppraisal.CreateNewInstance();
-        } else {
-          await this.router.navigate(['/homepage/Website/Employee_Appraisal_Master'])
-          await this.uiUtils.showSuccessToster('Employee Appraisal Updated successfully!');
-        }
+    }
+    this.InitialEntity = Object.assign(EmployeeAppraisal.CreateNewInstance(),
+      this.utils.DeepCopy(this.Entity)) as EmployeeAppraisal;
+  }
+
+  getEmployeeListByCompanyRef = async () => {
+    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.EmployeeList = lst;
+  }
+
+  SaveEmployeeAppraisalMaster = async () => {
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    let entityToSave = this.Entity.GetEditableVersion();
+    let entitiesToSave = [entityToSave]
+    // await this.Entity.EnsurePrimaryKeysWithValidValues()
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return
+    }
+    else {
+      this.isSaveDisabled = false;
+      // this.onEntitySaved.emit(entityToSave);
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('Employee Appraisal saved successfully!');
+        this.Entity = EmployeeAppraisal.CreateNewInstance();
+      } else {
+        await this.router.navigate(['/homepage/Website/Employee_Appraisal_Master'])
+        await this.uiUtils.showSuccessToster('Employee Appraisal Updated successfully!');
       }
     }
+  }
 
-  BackEmployeeAppraisal() {
+  BackEmployeeAppraisal = () => {
     this.router.navigate(['/homepage/Website/Employee_Appraisal_Master']);
   }
 

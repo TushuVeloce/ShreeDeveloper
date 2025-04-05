@@ -31,12 +31,6 @@
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
-        <!-- <div class="col-md-4">
-          <div>
-            <label>Email ID</label>
-            <input type="text" name="EmailId" class="form-control" id="EmailId" [(ngModel)]="Entity.p.SiteRef"  required placeholder="Enter Email ID" />
-          </div>
-        </div> -->
         <div class="col-md-4">
           <div>
             <label>Address</label>
@@ -52,7 +46,7 @@
         <div class="col-md-4">
           <div>
             <label>Visited Date</label>
-            <input type="text" name="VisitedDate" class="form-control" id="VisitedDate" [(ngModel)]="Entity.p.SiteVisitDate" readonly placeholder="Enter Visited Date" />
+            <input type="text" name="SiteVisitDate" class="form-control" id="SiteVisitDate" [(ngModel)]="Entity.p.SiteVisitDate" readonly placeholder="Enter Visited Date" />
           </div>
         </div>
       </div>
@@ -132,7 +126,7 @@
         <div class="col-md-4">
           <div>
             <label>Register Date</label>
-            <input type="date" name="RegisterDate" class="form-control" id="RegisterDate" [(ngModel)]="Entity.p.RegisterDate"  required placeholder="Enter Register Date" />
+            <input type="date" name="localRegisterDate" class="form-control" id="localRegisterDate" [(ngModel)]="localRegisterDate"  required placeholder="Enter Register Date" />
           </div>
         </div>
         <div class="col-md-4">

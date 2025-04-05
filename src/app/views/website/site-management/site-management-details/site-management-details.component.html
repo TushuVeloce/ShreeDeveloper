@@ -23,9 +23,9 @@
             [(ngModel)]="Entity.p.AddressLine1" required placeholder="Enter AddressLine 1" />
         </div>
         <div class="col-md-4">
-          <label>AddressLine 2</label>
+          <label>Site Location</label>
           <input type="text" name="AddressLine2" class="form-control" id="AddressLine2"
-            [(ngModel)]="Entity.p.AddressLine2" required placeholder="Enter AddressLine 2" />
+            [(ngModel)]="Entity.p.AddressLine2" required placeholder="Enter Site Location" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
@@ -89,14 +89,14 @@
         <div class="col-md-4">
           <label>Estimated Cost</label>
           <input type="number" name="EstimatedCost" class="form-control" id="EstimatedCost"
-            [(ngModel)]="Entity.p.EstimatedCost" required placeholder="Enter Estimated Cost" />
+            [(ngModel)]="Entity.p.EstimatedCost" required placeholder="Enter Estimated Cost" (click)="selectAllValue($event)"/>
         </div>
         <div class="col-md-4">
           <label for="TotalLandAreaInSqm">Total Land Area in Sqm</label>
           <input type="number" class="form-control" name="TotalLandAreaInSqm" id="TotalLandAreaInSqm"
             [(ngModel)]="Entity.p.TotalLandAreaInSqm" 
             (ngModelChange)="convertSqmToSqft()" 
-            required placeholder="Enter Total Land Area in Sqm"/>
+            required placeholder="Enter Total Land Area in Sqm" (click)="selectAllValue($event)"/>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
@@ -105,12 +105,12 @@
     <input type="number" class="form-control" name="TotalLandAreaInSqft" id="TotalLandAreaInSqft"
       [(ngModel)]="Entity.p.TotalLandAreaInSqft" 
       (ngModelChange)="convertSqftToSqm()" 
-      required placeholder="Enter Total Land Area in Sqft"/>
+      required placeholder="Enter Total Land Area in Sqft" (click)="selectAllValue($event)"/>
   </div>     
         <div class="col-md-4">
           <label>Number Of Plots</label>
           <input type="number" name="NumberOfPlots" class="form-control" id="NumberOfPlots"
-            [(ngModel)]="Entity.p.NumberOfPlots" required placeholder="Enter Plot Number" />
+            [(ngModel)]="Entity.p.NumberOfPlots" required placeholder="Enter Plot Number" (click)="selectAllValue($event)"/>
         </div>
       </div>
 
@@ -124,42 +124,8 @@
         style="display: flex; justify-content: end" routerLinkActive="active">
         <nz-button nz-button class="btn1" (click)="isModalOpen2 = true">Add Owner</nz-button>
       </div>
-        <!-- <div class="col-lg-2 col-md-4 col-sm-12 col-xs-12 col-12 btn-container"
-          style="display: flex; justify-content: end" routerLinkActive="active">
-          <nz-button nz-button class="btn1" (click)="addplotvalidation()">Add Plot</nz-button>
-        </div> -->
       </div>
 
-      <!-- <div class="table-container" style="margin-top: 2rem">
-        <div class="row">
-          <div class="col-12">
-            <label class="TableHeading"> Plot Details Table</label>
-          </div>
-        </div>
-        <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{ x: 'auto' }"
-          nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.PlotDetailsList">
-          <thead>
-            <tr>
-              <th *ngFor="let header of plotheaders" class="tblheadersecond">
-                {{ header }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let plot of Entity.p.PlotDetailsList; let i = index">
-              <td Class="tbldata">{{ i}}</td>
-              <td Class="tbldata">{{ plot.PlotNo }}</td>
-              <td Class="tbldata">{{ plot.AreaInSqm }}</td>
-              <td Class="tbldata">{{ plot.AreaInSqft }}</td>
-              <td Class="tbldata">{{ plot.GovermentRatePerSqft}}</td>
-              <td Class="tbldata">{{ plot.BasicRatePerSqm}}</td>
-              <td Class="tbldata">
-                <button class="btn btn-danger btn-sm" (click)="removePlot(i)">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </nz-table>
-      </div> -->
 
       <div class="table-container" style="margin-top: 2rem">
         <div class="row">
@@ -183,7 +149,6 @@
               <td Class="tbldata">{{ owner.ContactNo }}</td>
               <td Class="tbldata">{{ owner.EmailId }}</td>
               <td Class="tbldata">{{ owner.Address}}</td>
-              <!-- <td Class="tbldata">{{ owner.CityRef }}</td> -->
               <td Class="tbldata">{{ owner.PinCode }}</td>
               <td class="tbldata">
                 <span style="margin-left: 9px;" (click) = "editowner(i)">
@@ -214,107 +179,6 @@
     </form>
   </div>
 </div>
-
-<!-- <div *ngIf="isModalOpen1" class="custom-modal-overlay">
-  <div class="custom-modal">
-    <div class="custom-modal-header">
-      <h5>Add Plot</h5>
-      <button type="button" class="btn-close" (click)="closeModal('plot')"></button>
-    </div>
-    <div class="custom-modal-body">
-      <form autocomplete="off">
-        <div class="row" style="margin-top: 1rem">
-          <div class="col-md-6">
-            <label>Plot No.</label>
-            <input type="text" name="PlotNo" class="form-control" [(ngModel)]="newPlot.PlotNo" required
-              placeholder="Enter Plot No." />
-          </div>
-          <div class="col-md-6">
-            <label>Area sq.m</label>
-            <input type="number" name="AreaInSqm" class="form-control" [(ngModel)]="newPlot.AreaInSqm" required
-              placeholder="Enter Area sq.m" />
-          </div>
-        </div>
-        <div class="row" style="margin-top: 1rem">
-          <div class="col-md-6">
-            <label>Area sq.ft</label>
-            <input type="number" name="AreaInSqft" class="form-control" [(ngModel)]="newPlot.AreaInSqft" required
-              placeholder="Enter Area sq.ft" />
-          </div>
-          <div class="col-md-6">
-            <label>Goverment Rate Per Sqm </label>
-            <input type="number" name="GovermentRatePerSqm" class="form-control"
-              [(ngModel)]="newPlot.GovermentRatePerSqm" required placeholder="Enter Goverment Rate Per Sqm " />
-          </div>
-        </div>
-        <div class="row" style="margin-top: 1rem">
-          <div class="col-md-6">
-            <label>Goverment Rate Per Sqft </label>
-            <input type="number" name="GovermentRatePerSqft" class="form-control"
-              [(ngModel)]="newPlot.GovermentRatePerSqft" required placeholder="Enter Goverment Rate Per Sqft " />
-          </div>
-          <div class="col-md-6">
-            <label>Basic Rate Per Sqm </label>
-            <input type="number" name="BasicRatePerSqm" class="form-control" [(ngModel)]="newPlot.BasicRatePerSqm"
-              required placeholder="Enter Basic Rate Per Sqm" />
-          </div>
-        </div>
-        <div class="row" style="margin-top: 1rem">
-          <div class="col-md-6">
-            <label>Basic Rate Per Sqft </label>
-            <input type="number" name="BasicRatePerSqft" class="form-control" [(ngModel)]="newPlot.BasicRatePerSqft"
-              required placeholder="Enter Basic Rate Per Sqft" />
-          </div>
-          <div class="col-md-6">
-            <label>Booking Remark</label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="BookingRemark"
-              name="BookingRemark" [nzSize]="'large'" [(ngModel)]="newPlot.BookingRemark">
-              <nz-option *ngFor="let bookingremark of BookingRemarkList" [nzValue]="bookingremark.Ref"
-                [nzLabel]="bookingremark.Name"></nz-option>
-            </nz-select>
-          </div>
-        </div>
-        <div class="row" style="margin-top: 1rem">
-          <div class="col-md-6">
-            <label>Customer Name</label>
-            <input type="text" name="CustomerName" class="form-control" [(ngModel)]="newPlot.CustomerName" required
-              placeholder="Enter Customer Name" />
-          </div>
-          <div class="col-md-6">
-            <label>Address</label>
-            <input type="text" name="Address" class="form-control" [(ngModel)]="newPlot.Address" required
-              placeholder="Enter Address" />
-          </div>
-        </div>
-        <div class="row" style="margin-top: 1rem">
-          <div class="col-md-6">
-            <label>Mobile No</label>
-            <input type="text" name="MobNo" class="form-control" [(ngModel)]="newPlot.MobNo" required
-              placeholder="Enter Mobile No" />
-          </div>
-          <div class="col-md-6">
-            <label>Reference</label>
-            <input type="text" name="Reference" class="form-control" [(ngModel)]="newPlot.Reference" required
-              placeholder="Enter Reference" />
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class="custom-modal-footer">
-      <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
-        <div>
-          <nz-button nz-button class="btn1" (click)="addPlot()">Save</nz-button>
-        </div>
-        <div>
-          <nz-button nz-button class="btn1" (click)="closeModal('plot')">
-            Close
-          </nz-button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
-
 
 <div *ngIf="isModalOpen2" class="custom-modal-overlay">
   <div class="custom-modal">

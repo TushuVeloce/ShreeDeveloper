@@ -17,8 +17,8 @@ export class AccountMainLedgerDetailsComponent  implements OnInit {
   TypeList: string[] = ['Expence', 'Income'];
   getTypeRef(Ref:any) {
   }
-  
-  BackMainLedger(){
+
+  BackMainLedger = () => {
     this.router.navigate(['/homepage/Website/Account_Main_Ledger']);
    }
 

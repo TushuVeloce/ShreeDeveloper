@@ -112,6 +112,9 @@ export class AppStateManageService {
 
   clearValidMenuItemIds = () => {
     this.StorageKey.removeItem('ValidMenuItemIds');
+    this.StorageKey.removeItem('siteRf');
+    this.StorageKey.removeItem('siteName');
+    this.StorageKey.removeItem('bookingremarkRef');
   }
 
   // //--------- project Ref Start
