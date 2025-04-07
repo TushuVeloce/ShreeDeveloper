@@ -29,6 +29,7 @@
               required
               placeholder="Enter Plot No"
               (click)="selectAllValue($event)"
+              disabled
             />
         </div>
         <!-- Name -->
@@ -42,6 +43,7 @@
              id="CustomerName"
              required
              placeholder="Enter Name"
+             disabled
            />
        </div>
        <!-- Contact No. -->
@@ -56,6 +58,7 @@
            required
            placeholder="Enter Contact No. "
            (click)="selectAllValue($event)"
+           disabled
          />
      </div>
       </div>
@@ -162,6 +165,7 @@
            name="Witness1ContactNo"
            class="form-control"
            id="Witness1ContactNo"
+           maxlength="10"
            required
            placeholder="Enter Contact No."
            (click)="selectAllValue($event)"
@@ -265,7 +269,7 @@
           required
           placeholder="Enter Contact No."
           (click)="selectAllValue($event)"
-
+          maxlength="10"
         />
     </div>
      </div>
@@ -362,7 +366,13 @@
           id="AgreementDocumentNo"
           required
           placeholder="Enter Document No."
+          pattern="^[a-zA-Z0-9]*$"
+          pattern="{{NameWithNos}}" #NameCtrl="ngModel"
         />
+        <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
+          <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
+          <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+        </div>
     </div>
     <!-- Date -->
     <div class="col-md-6">
@@ -611,7 +621,7 @@
       </div>
               <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
           <div>
-            <button type="button" class="btn" (click)="SaveRegistrarOfficeMaster()">Save</button>
+            <button type="button" class="btn" (click)="SaveRegistrarOfficeMaster()" [disabled]="isSaveDisabled">Save</button>
           </div>
           <div>
             <button type="button" class="btn"  (click)="BackRegistrarOffice()">Back</button>
