@@ -11,6 +11,7 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { CompanyFetchRequest } from "./companyfetchrequest";
+import { CountryStateCityRefs } from "src/app/classes/domain/constants";
 
 
 export class CompanyProps {
@@ -30,11 +31,11 @@ export class CompanyProps {
   public DateOfInCorporation:string = '';
   public LastDateOfFirstFinancialYear:  string='';
   public Notes:  string='';
-  public CountryRef:  number = 9163;
+  public CountryRef:  number = CountryStateCityRefs.IndiaRef; 
   public readonly CountryName: string='';
-  public StateRef:  number = 10263;
+  public StateRef:  number = CountryStateCityRefs.MaharashtraRef;
   public readonly StateName: string='';
-  public CityRef:  number = 10374 ;
+  public CityRef:  number = CountryStateCityRefs.KolhapurRef ;
   public readonly CityName: string='';
 
 

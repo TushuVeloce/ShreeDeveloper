@@ -1,6 +1,8 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { RegistrarOffice } from 'src/app/classes/domain/entities/website/registraroffice/registraroffice';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -27,6 +29,13 @@ export class RegistrarOfficeDetailComponent  implements OnInit {
   localagreementdate: string = '';
   localsaledeeddate: string = '';
   localtalathidate: string = '';
+
+    NameWithNos: string = ValidationPatterns.NameWithNos
+
+    NameWithNosMsg: string = ValidationMessages.NameWithNosMsg
+    RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
+
+  @ViewChild('NameCtrl') NameInputControl!: NgModel;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companystatemanagement: CompanyStateManagement, private dtu: DTU,
       private datePipe: DatePipe) { }
@@ -113,6 +122,7 @@ export class RegistrarOfficeDetailComponent  implements OnInit {
   }
 
     SaveRegistrarOfficeMaster = async () => {
+      this.isSaveDisabled = true;
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
       this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
       this.Entity.p.UpdatedDate= await CurrentDateTimeRequest.GetCurrentDateTime();
@@ -125,7 +135,6 @@ export class RegistrarOfficeDetailComponent  implements OnInit {
 
     let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave]
-      console.log('entitiesToSave :', entitiesToSave);
       // await this.Entity.EnsurePrimaryKeysWithValidValues()
       let tr = await this.utils.SavePersistableEntities(entitiesToSave);
       if (!tr.Successful) {
@@ -139,7 +148,6 @@ export class RegistrarOfficeDetailComponent  implements OnInit {
         if (this.IsNewEntity) {
           await this.uiUtils.showSuccessToster('Registrar Office saved successfully!');
           this.Entity = RegistrarOffice.CreateNewInstance();
-          console.log('Entity :', this.Entity);
         } else {
           await this.router.navigate(['/homepage/Website/Registrar_Office'])
           await this.uiUtils.showSuccessToster('Registrar Office Updated successfully!');
@@ -149,6 +157,14 @@ export class RegistrarOfficeDetailComponent  implements OnInit {
 
   BackRegistrarOffice() {
     this.router.navigate(['/homepage/Website/Registrar_Office']);
+  }
+
+  resetAllControls = () => {
+    // reset touched
+    this.NameInputControl.control.markAsUntouched();
+
+    // reset dirty
+    this.NameInputControl.control.markAsPristine();
   }
 
 }

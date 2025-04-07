@@ -58,8 +58,10 @@ export class ValidationMessages {
   public static readonly GSTINMsg: string = "Invalid GSTIN!";
 }
 
-export class AddressCountryRefs {
+export class CountryStateCityRefs {
   public static readonly IndiaRef = 800051;
+  public static readonly MaharashtraRef = 800051;
+  public static readonly KolhapurRef = 800051;
 }
 
 export class AddressStateRefs {

@@ -72,7 +72,6 @@ getPlotListBySiteRef = async (SiteRef: number) => {
   let lst = await Plot.FetchEntireListBySiteRef(SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
   this.PlotNoList = lst.filter(plot => plot.p.CurrentBookingRemark === 50);
   this.getRegistrarOfficeListBySiteRef(SiteRef)
-  console.log('SiteRef :', SiteRef);
   this.loadPaginationData(); 
 }
 
@@ -82,7 +81,6 @@ getPlotListBySiteRef = async (SiteRef: number) => {
     let lst = await RegistrarOffice.FetchEntireListBySiteRef(SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
         this.MasterList = lst;
         this.DisplayMasterList = this.MasterList;
-        console.log('SiteRef :', this.DisplayMasterList);
       this.loadPaginationData();
   }
 
@@ -96,7 +94,6 @@ getPlotListBySiteRef = async (SiteRef: number) => {
     let lst = await RegistrarOffice.FetchEntireListByPlotRef(PlotRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
         this.MasterList = lst;
         this.DisplayMasterList = this.MasterList;
-        console.log('PlotRef :', this.DisplayMasterList);
       this.loadPaginationData();
   }
 
@@ -165,8 +162,7 @@ getPlotListBySiteRef = async (SiteRef: number) => {
   filterTable = () => {
     if (this.SearchString != '') {
       this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1 ||
-         data.p.CustomerName.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
+        return data.p.CustomerName.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
       })
     }
     else {
