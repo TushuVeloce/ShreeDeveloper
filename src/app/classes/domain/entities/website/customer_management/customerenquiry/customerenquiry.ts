@@ -13,6 +13,7 @@ import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { CustomerEnquiryFetchRequest } from './customerenquiryfetchrequest';
 import { CustomerFollowUpProps } from '../customerfollowup/customerfollowup';
 import { CustomerFollowUpPlotDetailsProps } from '../customerfollowupplotdetails/CustomerFollowUpPlotDetails';
+import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 
 export class CustomerEnquiryProps {
   public Ref: number = 0;
@@ -90,6 +91,9 @@ export class CustomerEnquiry implements IPersistable<CustomerEnquiry> {
     if (!this.AllowEdit)
       vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
+    else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
+      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg);
+    }
     if (this.p.ContactNos == '')
       vra.add('ContactNos', 'Contact Number cannot be blank.');
     if (this.p.CountryRef == 0)

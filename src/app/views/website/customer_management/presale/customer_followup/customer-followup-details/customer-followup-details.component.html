@@ -13,6 +13,7 @@
     </div>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
+        <!-- Contact Mode Field  -->
         <div class="col-md-4">
           <div>
             <label>Contact Mode</label>
@@ -22,12 +23,14 @@
             </nz-select>
           </div>
         </div>
+        <!-- Reason -->
         <div class="col-md-4">
           <div>
             <label>Reason</label>
             <input type="text" name="reason" class="form-control" id="reason" [(ngModel)]="Entity.p.Reason" required />
           </div>
         </div>
+        <!-- Customer Name  -->
         <div class="col-md-4">
           <div>
             <label>Customer Name</label>
@@ -37,6 +40,7 @@
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
+        <!-- Contact Nos  -->
         <div class="col-md-4">
           <div>
             <label>Contact Nos</label>
@@ -51,6 +55,7 @@
               [(ngModel)]="Entity.p.EmailId" placeholder="Enter Personal Email Id" />
           </div>
         </div> -->
+        <!-- Country  -->
         <div class="col-md-4">
           <div>
             <label for="CountryRef"><b>Country</b></label>
@@ -64,6 +69,7 @@
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
+        <!-- State  -->
         <div class="col-md-4">
           <div>
             <label for="StateRef"><b>State</b></label>
@@ -75,6 +81,7 @@
             </nz-select> -->
           </div>
         </div>
+        <!-- City  -->
         <div class="col-md-4">
           <div>
             <label for="CityRef"><b>City</b></label>
@@ -86,6 +93,7 @@
             </nz-select> -->
           </div>
         </div>
+        <!-- Address  -->
         <div class="col-md-4">
           <div>
             <label>Address</label>
@@ -95,11 +103,13 @@
         </div>
       </div>
       <div class="row" style="margin-top: 1rem;">
+        <!-- Pin Code  -->
         <div class="col-md-4">
           <label>Pin Code</label>
           <input type="text" name="PinCode" class="form-control" id="PinCode" required [(ngModel)]="Entity.p.PinCode"
             placeholder="Enter Pin Code" readonly />
         </div>
+        <!-- Customer Requirement  -->
         <div class="col-md-4">
           <div>
             <label>Customer Requirement</label>
@@ -107,6 +117,7 @@
               [(ngModel)]="Entity.p.CustomerRequirement" required placeholder="Enter Customer Requirement" />
           </div>
         </div>
+        <!-- Intrested Site  -->
         <div class="col-md-4">
           <div>
             <label for="SiteManagementRef"><b>Interested site</b></label>
@@ -119,6 +130,7 @@
         </div>
       </div>
       <div class="row" style="margin-top: 1rem;">
+        <!-- Intrested Plots  -->
         <div class="col-md-4">
           <div>
             <label for="InterestedPlotRef"><b>Interested Plots</b></label>
@@ -129,12 +141,14 @@
           </div>
 
         </div>
+        <!-- Add button  -->
         <div class="col-md-4" style="margin-top: 33px;">
           <div>
             <button type="button" class="btn" (click)="addDataToCustomerFollowUpPlotDetail()">Add</button>
           </div>
         </div>
       </div>
+      <!-- Plot Details table  -->
       <div class="table-container" style="margin-top: 2rem">
         <div class="row">
           <div class="col-12">
@@ -176,6 +190,7 @@
       <hr style="color: black;">
 
       <div class="row" style="margin-top: 1rem;">
+        <!-- Lead Source -->
         <div class="col-md-4">
           <div>
             <label for="LeadSource"><b>Lead Source</b></label>
@@ -186,6 +201,7 @@
             </nz-select>
           </div>
         </div>
+        <!-- Agent Name  -->
         <div class="col-md-4" *ngIf="showAgentBrokerInput">
           <div>
             <label for="AgentName"><b>Agent Name</b></label>
@@ -193,6 +209,7 @@
               required placeholder="Enter Agent Name">
           </div>
         </div>
+        <!-- Lead Handle By  -->
         <div class="col-md-4">
           <div>
             <label for="LeadHandleBy"><b>Lead Handled By</b></label>
@@ -203,6 +220,7 @@
             </nz-select>
           </div>
         </div>
+        <!-- Remark  -->
         <div class="col-md-4" *ngIf="!showAgentBrokerInput">
           <label>Remark</label>
           <input type="text" name="Remark" class="form-control" id="Remark " required placeholder="Enter Remark"
@@ -215,6 +233,7 @@
           <input type="text" name="Remark" class="form-control" id="Remark " required placeholder="Enter Remark"
             [(ngModel)]="Entity.p.Remark" />
         </div>
+        <!-- Customer Status  -->
         <div class="col-md-4">
           <div>
             <label for="CustomerStatus"><b>Customer Status</b></label>

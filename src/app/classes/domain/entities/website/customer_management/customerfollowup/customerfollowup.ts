@@ -12,7 +12,10 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { CustomerFollowUpFetchRequest } from './customerfollowupfetchrequest';
 import { CustomerFollowUpPlotDetailsProps } from '../customerfollowupplotdetails/CustomerFollowUpPlotDetails';
-import { BookingRemark, CustomerStatus } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  BookingRemark,
+  CustomerStatus,
+} from 'src/app/classes/domain/domainenums/domainenums';
 
 export class CustomerFollowUpProps {
   public Ref: number = 0;
@@ -99,12 +102,13 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
     _td: TransportData,
     vra: ValidationResultAccumulator
   ): void {
-    // debugger
+    debugger;
     if (!this.AllowEdit)
       vra.add('', 'This object is not editable and hence cannot be saved.');
     // if (this.p.CustomerEnquiryRef == 0)
     //   vra.add('CustomerEnquiryRef', 'CustomerEnquiry Name cannot be blank.');
-    if (this.p.CustomerRequirement == '') vra.add('CustomerRequirement', 'CustomerRequirement cannot be blank.');
+    if (this.p.CustomerRequirement == '')
+      vra.add('CustomerRequirement', 'CustomerRequirement cannot be blank.');
     if (this.p.LeadSource == 0)
       vra.add('LeadSource ', 'LeadSource  cannot be blank.');
     if (this.p.LeadHandleBy == 0)
@@ -117,14 +121,22 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
     if (this.p.CustomerStatus == 0)
       vra.add('CustomerStatus', 'CustomerStatus cannot be blank.');
 
-    if (this.p.Reason == '')
-      vra.add('Reason', 'Reason cannot be blank.');
+    if (this.p.Reason == '') vra.add('Reason', 'Reason cannot be blank.');
 
     // if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
     // if (!this.p.ReminderDate)
     //   vra.add('ReminderDate', 'Reminder Date cannot be blank.');
-    if ((this.p.CustomerStatus !== CustomerStatus.LeadClosed && this.p.CustomerStatus !== CustomerStatus.LeadClosed) && !this.p.ReminderDate) {
-      vra.add('ReminderDate', 'Reminder Date cannot be blank unless Customer Status is Lead Close or Convert To Deal.');
+    if (this.p.IsNewlyCreated) {
+      if (
+        this.p.CustomerStatus !== CustomerStatus.LeadClosed &&
+        this.p.CustomerStatus !== CustomerStatus.LeadClosed &&
+        !this.p.ReminderDate
+      ) {
+        vra.add(
+          'ReminderDate',
+          'Reminder Date cannot be blank unless Customer Status is Lead Close or Convert To Deal.'
+        );
+      }
     }
   }
 

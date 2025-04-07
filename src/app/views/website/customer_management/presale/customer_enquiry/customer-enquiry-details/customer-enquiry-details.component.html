@@ -24,7 +24,12 @@
           <div>
             <label>Name</label>
             <input type="text" name="Name" class="form-control" id="Name " [(ngModel)]="Entity.p.Name" required
-              placeholder="Enter First Name" (focus)="selectAll($event)" />
+              placeholder="Enter First Name" (focus)="selectAll($event)" pattern="{{NameWithNosAndSpace}}"
+              #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()" />
+            <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
+              <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithoutNosMsg}}</span>
+              <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
           </div>
         </div>
         <!-- Contact No -->
@@ -84,7 +89,12 @@
         <div class="col-md-4 col-md-4 col-sm-12 mt-2">
           <label>Pin Code</label>
           <input type="text" name="PinCode" class="form-control" [(ngModel)]="Entity.p.PinCode" id="PinCode" required
-            placeholder="Enter Pin Code" (focus)="selectAll($event)" />
+            placeholder="Enter Pin Code" (focus)="selectAll($event)" pattern="{{PinCode}}"
+            #PinCodeCtrl="ngModel" required (blur)="PinCodeCtrl.control.markAsTouched()" />
+          <div *ngIf="(PinCodeCtrl.invalid && (PinCodeCtrl.touched || PinCodeCtrl.dirty))">
+            <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['pattern']">{{PinCodeWithoutMsg}}</span>
+            <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
         <!-- Customer Requirement  -->
         <div class="col-md-4 col-md-4 col-sm-12 mt-2" *ngIf="IsNewEntity">

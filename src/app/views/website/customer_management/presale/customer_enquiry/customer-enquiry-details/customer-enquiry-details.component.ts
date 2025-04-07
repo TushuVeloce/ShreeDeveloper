@@ -1,6 +1,11 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
+import {
+  ValidationMessages,
+  ValidationPatterns,
+} from 'src/app/classes/domain/constants';
 import {
   BookingRemark,
   DomainEnums,
@@ -56,6 +61,17 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
 
   Date: string | null = null;
   DateWithTime: string | null = null;
+
+  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace;
+  NameWithoutNosMsg: string = ValidationMessages.NameWithNosAndSpaceAnd_Msg;
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
+
+  PinCode : string = ValidationPatterns.PinCode;
+  PinCodeWithoutMsg : string = ValidationMessages.PinCodeMsg;
+
+  @ViewChild('NameCtrl') CustomerEnquiryNameInputControl!: NgModel;
+  @ViewChild('PinCodeCtrl') PinCodeNoInputControl!: NgModel;
+  // @ViewChild('ContactNos') phoneNosInput!: NgModel;
 
   MarketingModesList = DomainEnums.MarketingModesList(
     true,
@@ -258,8 +274,13 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     // this.PlotList = lst;
     // old code End
 
-    let lst = await Plot.FetchEntireListBySiteRef(siteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.PlotList = lst.filter(plot => plot.p.CurrentBookingRemark !== BookingRemark.Booked);
+    let lst = await Plot.FetchEntireListBySiteRef(
+      siteRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.PlotList = lst.filter(
+      (plot) => plot.p.CurrentBookingRemark !== BookingRemark.Booked
+    );
 
     console.log(this.PlotList);
 
@@ -345,7 +366,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
 
     if (this.isReminderRequired) {
       this.reminderMessage =
-        "Reminder Date is required when Customer Status is not 'Lead Closed' or 'Convert To Deal'.";
+        "Reminder Date is required";
     } else {
       this.reminderMessage = ''; // No message needed if not required
     }
@@ -360,8 +381,17 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   // return visitRefs.includes(this.Entity.p.CustomerFollowUps[0].ContactMode);
   // }
 
+  resetAllControls = () => {
+    // reset touched
+    this.CustomerEnquiryNameInputControl.control.markAsUntouched();
+    this.PinCodeNoInputControl.control.markAsUntouched();
+
+    // reset dirty
+    this.CustomerEnquiryNameInputControl.control.markAsPristine();
+    this.PinCodeNoInputControl.control.markAsPristine();
+  };
+
   SaveCustomerEnquiry = async () => {
-    debugger;
     this.Entity.p.CompanyRef =
       this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CustomerFollowUps[0].Ref =
@@ -398,21 +428,22 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
-      this.isSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     } else {
-      this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster(
           'Customer Enquiry saved successfully!'
         );
         this.Entity = CustomerEnquiry.CreateNewInstance();
+        this.router.navigate(['/homepage/Website/Customer_Enquiry']);
+        this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster(
           'Customer Enquiry Updated successfully!'
         );
+        this.router.navigate(['/homepage/Website/Customer_Enquiry']);
       }
     }
   };
@@ -421,8 +452,8 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     this.router.navigate(['/homepage/Website/Customer_Enquiry']);
   }
 
-   // function for preselected values in field
-   selectAll(event: any) {
+  // function for preselected values in field
+  selectAll(event: any) {
     event.target.select();
   }
 }
