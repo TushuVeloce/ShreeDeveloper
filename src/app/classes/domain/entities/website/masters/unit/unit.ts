@@ -11,14 +11,15 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { UnitFetchRequest } from "./unitfetchrequest";
+import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 
 
 export class UnitProps {
   public readonly Db_Table_Name = "UnitMaster";
   public Ref: number = 0;
   public Name: string = '';
-  public CompanyRef:number =0
-  public CompanyName:string =''
+  public CompanyRef: number = 0
+  public CompanyName: string = ''
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -42,8 +43,8 @@ export class Unit implements IPersistable<Unit> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -64,7 +65,12 @@ export class Unit implements IPersistable<Unit> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
+
+    if (this.p.Name == '') {
+      vra.add('Name', 'Name cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.Unit).test(this.p.Name)) {
+      vra.add('Name', ValidationMessages.UnitMsg);
+    }
   }
 
   public MergeIntoTransportData(td: TransportData) {
