@@ -10,6 +10,7 @@ import { Site } from 'src/app/classes/domain/entities/website/masters/site/site'
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -33,6 +34,8 @@ export class SiteManagementDetailsComponent implements OnInit {
   CountryListforOwner: Country[] = [];
   StateListforOwner: State[] = [];
   CityListforOwner: City[] = [];
+  localEstimatedStartingDate: string  = '';
+  localEstimatedEndDate: string  = '';
   BookingRemarkList = DomainEnums.BookingRemarkList(true, '---Select Booking Remark---');
   plotheaders: string[] = ['Sr.No.', 'Plot No', 'Area sq.m', 'Area sq.ft', 'Goverment Rate', 'Company Rate', 'Action'];
   ownerheaders: string[] = ['Sr.No.', 'Name ', 'Contact No ', 'Email Id ', 'Address', 'Pin Code ', 'Action'];
@@ -45,7 +48,8 @@ export class SiteManagementDetailsComponent implements OnInit {
     private router: Router,
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
-    private utils: Utils, private companystatemanagement: CompanyStateManagement
+    private utils: Utils, private companystatemanagement: CompanyStateManagement,
+    private dtu: DTU,
   ) { }
 
   async ngOnInit() {
@@ -59,7 +63,12 @@ export class SiteManagementDetailsComponent implements OnInit {
       this.Entity = Site.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       console.log('Entity :', this.Entity);
-
+      if(this.Entity.p.EstimatedStartingDate != ''){
+        this.localEstimatedStartingDate= this.dtu.ConvertStringDateToShortFormat(this.Entity.p.EstimatedStartingDate)
+       }
+      if(this.Entity.p.EstimatedEndDate != ''){
+        this.localEstimatedEndDate= this.dtu.ConvertStringDateToShortFormat(this.Entity.p.EstimatedEndDate)
+       }
 
       if (this.Entity.p.CountryRef) {
         this.getStateListByCountryRefforSite(this.Entity.p.CountryRef);
@@ -215,6 +224,8 @@ export class SiteManagementDetailsComponent implements OnInit {
     this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.newOwner.SiteManagementRef = this.Entity.p.Ref
     this.Entity.p.TotalLandAreaInSqft = this.Entity.p.TotalLandAreaInSqm * 10.7639
+    this.Entity.p.EstimatedStartingDate = this.dtu.ConvertStringDateToFullFormat(this.localEstimatedStartingDate)
+    this.Entity.p.EstimatedEndDate = this.dtu.ConvertStringDateToFullFormat(this.localEstimatedEndDate)
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('sitemanagemnt :', entitiesToSave);

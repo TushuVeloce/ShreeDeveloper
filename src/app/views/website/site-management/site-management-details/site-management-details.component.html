@@ -76,15 +76,15 @@
         </div>
         <div class="col-md-4">
           <label>Starting Date</label>
-          <input type="date" name="EstimatedStartingDate" class="form-control date-input" id="EstimatedStartingDate"
-            [(ngModel)]="Entity.p.EstimatedStartingDate" required placeholder="Select Date" />
+          <input type="date" name="localEstimatedStartingDate" class="form-control date-input" id="localEstimatedStartingDate"
+            [(ngModel)]="localEstimatedStartingDate" required placeholder="Select Date" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Estimated End Date</label>
-          <input type="date" name="EstimatedEndDate" class="form-control date-input" id="EstimatedEndDate"
-            [(ngModel)]="Entity.p.EstimatedEndDate" required placeholder="Select Date" />
+          <input type="date" name="localEstimatedEndDate" class="form-control date-input" id="localEstimatedEndDate"
+            [(ngModel)]="localEstimatedEndDate" required placeholder="Select Date" />
         </div>
         <div class="col-md-4">
           <label>Estimated Cost</label>
@@ -201,9 +201,9 @@
               placeholder="Enter Name" />
           </div>
           <div class="col-md-6">
-            <label>Contact Nos</label>
+            <label>Contact Numbers</label>
             <input type="text" name="ContactNo" class="form-control" [(ngModel)]="newOwner.ContactNo" required
-              placeholder="Enter Contact No" />
+              placeholder="Enter Contact Numbers" />
           </div>
         </div>
         <div class="row" style="margin-top: 1rem">
