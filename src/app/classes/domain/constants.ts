@@ -1,5 +1,8 @@
 export class ValidationPatterns {
+  // public static readonly Unit: string = "^[A-Za-z0-9./]+$";
+  public static readonly Unit: string = "^[A-Za-z0-9./⁰¹²³⁴⁵⁶⁷⁸⁹₀₁₂₃₄₅₆₇₈₉]+$";
   public static readonly NameWithoutNos: string = "^[a-zA-Z\\s]+$";
+  public static readonly NameWithNos: string = "^[a-zA-Z0-9]+$";
   public static readonly NameWithoutNoswith_: string = "^[a-zA-Z\\s_]+$";
   public static readonly Email: string = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
   public static readonly INDPhoneNo: string = "^[6789][0-9]{9}$";
@@ -8,7 +11,6 @@ export class ValidationPatterns {
 
   public static readonly NameWithNosAndSpace: string = "^[a-zA-Z0-9\\s]+$";
   public static readonly NameWithNosAndSpaceAnd_: string = "^[a-zA-Z0-9\\s_]+$";
-  public static readonly NameWithNos: string = "^[a-zA-Z0-9]+$";
 
   public static readonly CurrencyRegex: string = "^[A-Za-z\\s$€£¥₹₩₽₦₪฿₫₴₲₵₣₱₲]+$";
   public static readonly CurrencySymbolRegex: string = "^[\\$€£¥₹₩₽₦₪฿₫₴₲₵₣₱؋]+|^[A-Za-z]{1,10}$";
@@ -26,6 +28,7 @@ export class ValidationPatterns {
 
 export class ValidationMessages {
   public static readonly RequiredFieldMsg: string = "This field is required!";
+  public static readonly UnitMsg: string = "Special char, _ , space not Allowed";
   public static readonly NameWithoutNosMsg: string = "Special char, _ ,Number not Allowed";
   public static readonly NameWithNosMsg: string = "Special char, _ and space not allowed";
   public static readonly NameWithoutNoswith_Msg: string = "Special char,Number not Allowed";

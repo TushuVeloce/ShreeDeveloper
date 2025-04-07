@@ -28,6 +28,7 @@ export class SiteWorkDoneMasterDetailsComponent implements OnInit {
   InitialEntity: SiteWorkDone = null as any;
   SiteWorkGroupList: SiteWorkGroup[] = [];
   SiteWorkMasterList: SiteWorkMaster[] = [];
+  DisplaySiteWorkMasterList: SiteWorkMaster[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   NameWithNos: string = ValidationPatterns.NameWithNos;
 
@@ -69,6 +70,9 @@ export class SiteWorkDoneMasterDetailsComponent implements OnInit {
         ? 'New Site Work Done'
         : 'Edit Site Work Done';
       this.Entity = SiteWorkDone.GetCurrentInstance();
+      this.SiteGroupRef =this.Entity.p.SiteWorkGroupRef
+      this.DisplaySiteWorkMasterList = this.SiteWorkMasterList.filter(e=> e.p.SiteWorkGroupRef == this.Entity.p.SiteWorkGroupRef)
+       
       this.appStateManage.StorageKey.removeItem('Editable');
     } else {
       this.Entity = SiteWorkDone.CreateNewInstance();
@@ -86,13 +90,27 @@ export class SiteWorkDoneMasterDetailsComponent implements OnInit {
     // console.log(this.Entity.p.MaterialSuppliedByVendors);
   }
 
+  onSiteGroupChange(siteGroupRef: number) {
+    this.DisplaySiteWorkMasterList = [];
+    this.Entity.p.SiteWorkRef = 0;
+    if (siteGroupRef > 0) {
+      // this.Entity.p.SiteWorkGroupRef = sitework;
+      // const selectedSiteWorkref = this.SiteWorkMasterList.find(
+      //   (site) => site.p.Ref === sitework
+      // );
+      // if (!selectedSiteWorkref) {
+      //   return;
+      // }
+      this.DisplaySiteWorkMasterList = this.SiteWorkMasterList.filter(e=> e.p.SiteWorkGroupRef == siteGroupRef)
+    }
+  }
+
   SaveSiteWorkDone = async () => {
     this.Entity.p.CompanyRef =
       this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName =
       this.companystatemanagement.getCurrentCompanyName();
     let entityToSave = this.Entity.GetEditableVersion();
-    console.log('entityToSave :', entityToSave);
 
     let entitiesToSave = [entityToSave];
     // await this.Entity.EnsurePrimaryKeysWithValidValues()

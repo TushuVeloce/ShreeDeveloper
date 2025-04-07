@@ -24,7 +24,7 @@
           <div>
             <label>Name</label>
             <input type="text" name="Name" class="form-control" id="Name " [(ngModel)]="Entity.p.Name" required
-              placeholder="Enter First Name" />
+              placeholder="Enter First Name" (focus)="selectAll($event)" />
           </div>
         </div>
         <!-- Contact No -->
@@ -32,7 +32,7 @@
           <div>
             <label for="ContactNos">Contact Nos</label>
             <input type="text" name="ContactNos" class="form-control" [(ngModel)]="Entity.p.ContactNos" id="ContactNos"
-              required placeholder="Enter Contact Nos" />
+              required placeholder="Enter Contact Nos" (focus)="selectAll($event)" />
           </div>
         </div>
         <!-- </div> -->
@@ -77,14 +77,14 @@
           <div>
             <label>Address</label>
             <input type="text" name="address" class="form-control" [(ngModel)]="Entity.p.Address" id="address" required
-              placeholder="Enter Address" />
+              placeholder="Enter Address" (focus)="selectAll($event)" />
           </div>
         </div>
         <!-- Pin Code  -->
         <div class="col-md-4 col-md-4 col-sm-12 mt-2">
           <label>Pin Code</label>
           <input type="text" name="PinCode" class="form-control" [(ngModel)]="Entity.p.PinCode" id="PinCode" required
-            placeholder="Enter Pin Code" />
+            placeholder="Enter Pin Code" (focus)="selectAll($event)" />
         </div>
         <!-- Customer Requirement  -->
         <div class="col-md-4 col-md-4 col-sm-12 mt-2" *ngIf="IsNewEntity">
@@ -238,7 +238,7 @@
           <div>
             <label>Reason</label>
             <textarea type="text" name="Reason" [(ngModel)]="Entity.p.CustomerFollowUps[0].Reason" class="form-control"
-              id="Reason " required placeholder="Enter Reason" >
+              id="Reason " required placeholder="Enter Reason">
             </textarea>
           </div>
         </div>

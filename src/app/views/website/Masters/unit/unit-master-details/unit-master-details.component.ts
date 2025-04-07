@@ -21,7 +21,11 @@ export class UnitMasterDetailsComponent  implements OnInit {
     DetailsFormTitle: 'New Unit' | 'Edit Unit' = 'New Unit';
     IsDropdownDisabled: boolean = false
     InitialEntity: Unit = null as any;
+
+    Unit: string = ValidationPatterns.Unit
     NameWithoutNos: string = ValidationPatterns.NameWithoutNos
+
+    UnitMsg: string = ValidationMessages.UnitMsg
     NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
     RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
@@ -49,6 +53,7 @@ export class UnitMasterDetailsComponent  implements OnInit {
   }
 
   SaveUnitMaster = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();

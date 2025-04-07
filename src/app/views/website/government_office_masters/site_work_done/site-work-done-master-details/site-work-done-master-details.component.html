@@ -14,10 +14,18 @@
       <div class="row" style="margin-top: 1rem; ">
 
         <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+          <label> Site Group</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteGroupRef"
+            name="SiteGroupRef" [nzSize]="'large'" [(ngModel)]="SiteGroupRef" (ngModelChange)="onSiteGroupChange(SiteGroupRef)">
+            <nz-option *ngFor="let siteGroup of SiteWorkGroupList" [nzValue]="siteGroup.p.Ref"
+              [nzLabel]="siteGroup.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
           <label> Site Work</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteWorkRef"
             name="SiteWorkRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteWorkRef">
-            <nz-option *ngFor="let sitework of SiteWorkMasterList" [nzValue]="sitework.p.Ref"
+            <nz-option *ngFor="let sitework of DisplaySiteWorkMasterList" [nzValue]="sitework.p.Ref"
               [nzLabel]="sitework.p.Name"></nz-option>
           </nz-select>
         </div>

@@ -18,10 +18,10 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
   constructor(private appStateManage: AppStateManageService, private router: Router,) { }
   ngOnChanges(changes: SimpleChanges): void {
     let arr = JSON.parse(this.appStateManage.StorageKey.getItem('TransactionJson') ?? '[]');
-    console.log('SelectedTransactionType', this.SelectedTransactionType);
+    // console.log('SelectedTransactionType', this.SelectedTransactionType);
 
     this.TpOfficeList = arr.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
-    console.log('TpOfficeList', this.TpOfficeList);
+    // console.log('TpOfficeList', this.TpOfficeList);
   }
 
   ngOnInit() { }
@@ -33,16 +33,17 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
       case 'Inward No': return 'number';
       case 'Inward Date': return 'date';
       case 'Scrutiny Fees': return 'checkbox';
+      case 'Yes No': return 'radio';
       default:
         return ''; // Default return value
     }
   }
 
   onSave = () => {
-    this.appStateManage.StorageKey.setItem('TpOfficeList', JSON.stringify(this.TpOfficeList));
+    // this.appStateManage.StorageKey.setItem('TpOfficeList', JSON.stringify(this.TpOfficeList));
     this.onEntitySaved.emit(this.TpOfficeList);
     this.router.navigate(['/homepage/Website/Government_Transaction_Details']);
-    console.log('onSave', this.TpOfficeList);
+    // console.log('onSave TpOfficeList', this.TpOfficeList);
   }
 
   onCancel = async () => {

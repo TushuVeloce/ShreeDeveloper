@@ -104,7 +104,7 @@
           <div>
             <label>Customer Requirement</label>
             <input type="text" name="CustomerRequirement" class="form-control" id="CustomerRequirement"
-              [(ngModel)]="Entity.p.CustomerRequirement" required placeholder="Enter Customer Requirement" readonly />
+              [(ngModel)]="Entity.p.CustomerRequirement" required placeholder="Enter Customer Requirement" />
           </div>
         </div>
         <div class="col-md-4">
@@ -206,7 +206,7 @@
         <div class="col-md-4" *ngIf="!showAgentBrokerInput">
           <label>Remark</label>
           <input type="text" name="Remark" class="form-control" id="Remark " required placeholder="Enter Remark"
-            [(ngModel)]="Entity.p.Remark" />
+            [(ngModel)]="Entity.p.Remark" (focus)="selectAll($event)"/>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem;">

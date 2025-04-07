@@ -15,16 +15,16 @@
         <div class="col-md-6">
            <label>Unit</label>
             <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name"
-              required placeholder="Enter Unit" pattern="{{NameWithoutNos}}" #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()" />
+              required placeholder="Enter Unit" pattern="{{Unit}}" #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()" />
               <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
-                <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithoutNosMsg}}</span>
+                <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{UnitMsg}}</span>
                 <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
               </div>
             </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
-          <button type="button" class="btn" (click)="SaveUnitMaster()">Save</button>
+          <button type="button" class="btn" (click)="SaveUnitMaster()" [disabled]="isSaveDisabled">Save</button>
         </div>
         <div>
           <button type="button" class="btn" (click)="BackUnit()">Back</button>

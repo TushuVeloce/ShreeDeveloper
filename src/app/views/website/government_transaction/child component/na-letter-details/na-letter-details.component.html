@@ -8,8 +8,9 @@
           <ul>
             <div class="row" style="margin-top: 1rem;margin-bottom: 1rem">
               <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12" *ngFor="let type of siteWork.ApplicableTypes">
-                <label for="SiteWorkApplicableTypeName"><b>{{ type.SiteWorkApplicableTypeName }} : </b>&nbsp; </label>
-                <!-- <div>{{ type.SiteWorkApplicableTypeName }}</div> -->
+                <label for="SiteWorkApplicableTypeName"><b>{{ type.SiteWorkApplicableTypeName=="Yes No" ?
+                  '' : type.SiteWorkApplicableTypeName}}
+                </b>&nbsp;&nbsp; </label>                <!-- <div>{{ type.SiteWorkApplicableTypeName }}</div> -->
                 <!-- Checkbox -->
                 <input *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'checkbox'"
                   class="form-check-input dark-border" type="checkbox" [(ngModel)]="type.Value"
@@ -36,6 +37,18 @@
           </ul>
         </li>
       </ul>
+    </div>
+    <div class="row">
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn" (click)="onSave()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="onCancel()">
+            Back
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

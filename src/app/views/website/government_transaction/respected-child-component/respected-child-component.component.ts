@@ -18,64 +18,83 @@ export class RespectedChildComponentComponent implements OnInit {
   private IsNewEntity: boolean = true;
   Entity: GovernmentTransaction = GovernmentTransaction.CreateNewInstance();
   SelectedArrayObj: any[] = [];
+  TransactionTypeArrayObj: any[] = [];
   constructor(private router: Router, private route: ActivatedRoute, private appStateManage: AppStateManageService, private utils: Utils, private uiUtils: UIUtils,) {
     let str = this.route.snapshot.params['queryParams'];
     // console.log('str :', str);
     this.SectionName = str;
     this.SelectedTransactionType = this.SectionName;
 
-    let arr = JSON.parse(this.appStateManage.StorageKey.getItem('TransactionJson') ?? '[]');
-    this.SelectedArrayObj = arr.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
-    console.log('TpOfficeList', this.SelectedArrayObj);
+    this.TransactionTypeArrayObj = JSON.parse(this.appStateManage.StorageKey.getItem('TransactionJson') ?? '[]');
+    this.SelectedArrayObj = this.TransactionTypeArrayObj.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
+    // console.log('TpOfficeList', this.SelectedArrayObj);
     // console.log(this.SelectedTransactionType);
   }
 
   ngOnInit() {
     this.Entity = GovernmentTransaction.GetCurrentInstance();
-
   }
+
   onAddTransactionSubmit = async (value: any) => {
-    console.log('onAddTransactionType', value);
-    // debugger
-    for (let i = 0; i < this.SelectedArrayObj.length; i++) {
-      const e = this.SelectedArrayObj[i];
-      if (e.SiteWorkGroupRef == value.SiteWorkGroupRef) {
+    // console.log('onAddTransactionType value', value);
+    // console.log('SelectedArrayObj', this.SelectedArrayObj);
+    let arr = await this.updatePreviousObjWithAfterAddValues(this.TransactionTypeArrayObj, value);
+    let str = JSON.stringify(arr);
+    this.Entity.p.TransactionJson = str;
+    let entityToSave = this.Entity.GetEditableVersion();
+    // console.log('entityToSave :', entityToSave);
+    let entitiesToSave = [entityToSave];
+    // await this.Entity.EnsurePrimaryKeysWithValidValues()
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
-        let str = JSON.stringify(value);
-        this.Entity.p.TransactionJson = str;
-        let entityToSave = this.Entity.GetEditableVersion();
-        console.log('entityToSave :', entityToSave);
-        await this.router.navigate(['/homepage/Website/Government_Transaction_Details']);
-        return
-        let entitiesToSave = [entityToSave];
-        // await this.Entity.EnsurePrimaryKeysWithValidValues()
-        let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-
-        if (!tr.Successful) {
-          this.uiUtils.showErrorMessage('Error', tr.Message);
-          return;
-        } else {
-          await this.uiUtils.showSuccessToster('Site Work Done  saved successfully!');
-          this.Entity = GovernmentTransaction.CreateNewInstance();
-
-          // if (this.IsNewEntity) {
-          //   await this.uiUtils.showSuccessToster('Site Work Done  saved successfully!');
-          //   this.Entity = GovernmentTransaction.CreateNewInstance();
-          //   await this.router.navigate(['/homepage/Website/Government_Transaction_Details']);
-          // } else {
-          //   await this.uiUtils.showSuccessToster('Site Work Done  Updated successfully!');
-          // }
-        }
-        // if (e.SiteWorks.length > 0 && value.SiteWorks.length > 0) {
-        //   this.SelectedArrayObj[i].ApplicableTypesName = value.ApplicableTypesName;
-        //   this.SelectedArrayObj[i].ApplicableTypesValue = value.ApplicableTypesValue;
-        //   this.SelectedArrayObj[i].ApplicableTypesRef = value.ApplicableTypesRef;
-        //   this.SelectedArrayObj[i].ApplicableTypesId = value.ApplicableTypesId;
-        //   this.SelectedArrayObj[i].ApplicableTypeName = value.ApplicableTypeName
-        // }
-      }
+    if (!tr.Successful) {
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
+    } else {
+      await this.uiUtils.showSuccessToster(`${this.SelectedTransactionType} 'saved successfully!`);
+      this.Entity = GovernmentTransaction.CreateNewInstance();
     }
-    console.log('SelectedArrayObj', this.SelectedArrayObj);
-
   }
+
+  updatePreviousObjWithAfterAddValues = async (previousObj: any[], afterAddValues: any[]): Promise<any[]> => {
+    return previousObj.map(prevGroup => {
+      const matchingGroup = afterAddValues.find(
+        newGroup =>
+          newGroup.SiteWorkGroupRef === prevGroup.SiteWorkGroupRef &&
+          newGroup.SiteWorkGroupName === prevGroup.SiteWorkGroupName
+      );
+
+      if (!matchingGroup) return prevGroup;
+
+      const updatedSiteWorks = prevGroup.SiteWorks.map((prevWork: any) => {
+        const matchingWork = matchingGroup.SiteWorks.find(
+          (newWork: any) => newWork.SiteWorkRef === prevWork.SiteWorkRef
+        );
+
+        if (!matchingWork) return prevWork;
+
+        const updatedApplicableTypes = prevWork.ApplicableTypes.map((prevType: any) => {
+          const matchingType = matchingWork.ApplicableTypes.find(
+            (newType: any) => newType.ApplicableType === prevType.ApplicableType
+          );
+
+          return matchingType
+            ? { ...prevType, Value: matchingType.Value }
+            : prevType;
+        });
+
+        return {
+          ...prevWork,
+          ApplicableTypes: updatedApplicableTypes
+        };
+      });
+
+      return {
+        ...prevGroup,
+        SiteWorks: updatedSiteWorks
+      };
+    });
+  }
+
+
 }
