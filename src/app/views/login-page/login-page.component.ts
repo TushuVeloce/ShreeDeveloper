@@ -38,7 +38,6 @@ export class LoginPageComponent implements OnInit {
 
   ngOnInit() { }
   Login = async () => {
-    debugger
      if (this.UserId === '') {
        this.uiUtils.showErrorMessage('Error', 'Please Enter Email ID');
        return

@@ -43,8 +43,8 @@ export class RegisteredCustomerComponent  implements OnInit {
     private companystatemanagement: CompanyStateManagement, private payloadPacketFacade: PayloadPacketFacade,
         private serverCommunicator: ServerCommunicatorService
   ) { 
-    effect(() => {
-      this.getRegisterCustomerListByCompanyRef()
+    effect(async() => {
+     await this.getRegisterCustomerListByCompanyRef()
     });
   }
 

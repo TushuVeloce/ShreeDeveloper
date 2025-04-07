@@ -623,12 +623,6 @@ export class SidebarlayoutComponent implements OnInit {
 
 
 
-
-
-
-
-
-
   //  private FormulateCompanyList = async () => {
   //     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
   //     this.CompnyList = lst;

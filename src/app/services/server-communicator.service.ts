@@ -398,14 +398,13 @@ export class ServerCommunicatorService {
       }));
 
     let result = Object.assign(new UserLoginResponse(), resp) as UserLoginResponse;
-    console.log('result :', result);
     this.sessionValues.CurrentLoginToken = result.LoginToken;
     this.sessionValues.UserDisplayName = result.UserDisplayName;
     this.appStateManagement.setValidMenuItemIds(result.ValidMenuItemIds);
    this.appStateManagement.StorageKey.setItem('SelectedCompanyRef', result.LastSelectedCompanyRef.toString());
    this.appStateManagement.StorageKey.setItem('companyName', result.LastSelectedCompanyName);
    this.appStateManagement.StorageKey.setItem('LoginEmployeeRef', result.LoginEmployeeRef.toString());
-    this.companystatemanagement.setCompanyRef(result.LastSelectedCompanyRef,result.LastSelectedCompanyName)
+   this.companystatemanagement.setCompanyRef(result.LastSelectedCompanyRef,result.LastSelectedCompanyName)
     return result;
   }
 
