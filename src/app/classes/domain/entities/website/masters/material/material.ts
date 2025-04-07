@@ -19,6 +19,8 @@ export class MaterialProps {
   public Code: string = '';
   public Name: string = '';
   public UnitRef: number = 0;
+  public CreatedBy: number = 0;
+  public UpdatedBy: number = 0;
   public readonly UnitName: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';

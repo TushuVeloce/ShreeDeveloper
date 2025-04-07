@@ -398,6 +398,7 @@ export class ServerCommunicatorService {
       }));
 
     let result = Object.assign(new UserLoginResponse(), resp) as UserLoginResponse;
+    console.log('result :', result);
     this.sessionValues.CurrentLoginToken = result.LoginToken;
     this.sessionValues.UserDisplayName = result.UserDisplayName;
     this.appStateManagement.setValidMenuItemIds(result.ValidMenuItemIds);

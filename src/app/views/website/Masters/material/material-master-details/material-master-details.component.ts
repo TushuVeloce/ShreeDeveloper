@@ -53,6 +53,7 @@ export class MaterialMasterDetailsComponent implements OnInit {
         : 'Edit Material';
       this.Entity = Material.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
       this.Entity = Material.CreateNewInstance();
       Material.SetCurrentInstance(this.Entity);
@@ -74,13 +75,12 @@ export class MaterialMasterDetailsComponent implements OnInit {
   };
 
   SaveMaterialMaster = async () => {
-    this.Entity.p.CompanyRef =
-      this.companystatemanagement.getCurrentCompanyRef();
-    this.Entity.p.CompanyName =
-      this.companystatemanagement.getCurrentCompanyName();
+    this.Entity.p.CompanyRef =this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CompanyName =this.companystatemanagement.getCurrentCompanyName();
+    this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     let entityToSave = this.Entity.GetEditableVersion();
-
     let entitiesToSave = [entityToSave];
+    console.log('entityToSave :', entityToSave);
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
