@@ -99,10 +99,12 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       // debugger
       this.IsNewEntity = false;
       this.Entity = CustomerFollowUp.GetCurrentInstance();
+      // Reset Required Entities
       this.Entity.p.ReminderDate = '';
       this.Entity.p.Reason = '';
       this.Entity.p.CustomerStatus = 0;
       this.Entity.p.ContactMode = 0;
+      this.Entity.p.CustomerRequirement = '';
       console.log(this.Entity);
 
       //  this.CustomerEnquiryEntity = CustomerEnquiry.GetCurrentInstance();
@@ -221,7 +223,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       siteRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.PlotList = lst.filter((plot) => plot.p.CurrentBookingRemark == BookingRemark.Booked);
+    this.PlotList = lst.filter((plot) => plot.p.CurrentBookingRemark !== BookingRemark.Booked);
 
     console.log(this.PlotList);
 
@@ -368,4 +370,9 @@ export class CustomerFollowupDetailsComponent implements OnInit {
   BackCustomerFollowUp = () => {
     this.router.navigate(['/homepage/Website/Customer_FollowUp']);
   };
+
+    // function for preselected values in field
+    selectAll(event: any) {
+      event.target.select();
+    }
 }
