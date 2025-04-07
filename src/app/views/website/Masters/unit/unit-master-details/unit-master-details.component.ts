@@ -22,10 +22,10 @@ export class UnitMasterDetailsComponent  implements OnInit {
     IsDropdownDisabled: boolean = false
     InitialEntity: Unit = null as any;
 
-    Unit: string = ValidationPatterns.Unit
+    Unit: string = ValidationPatterns.SIUnit
     NameWithoutNos: string = ValidationPatterns.NameWithoutNos
 
-    UnitMsg: string = ValidationMessages.UnitMsg
+    UnitMsg: string = ValidationMessages.SIUnitMsg
     NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
     RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 

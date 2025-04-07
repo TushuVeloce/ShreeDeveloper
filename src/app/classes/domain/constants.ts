@@ -1,6 +1,5 @@
 export class ValidationPatterns {
-  // public static readonly Unit: string = "^[A-Za-z0-9./]+$";
-  public static readonly Unit: string = "^[A-Za-z0-9./⁰¹²³⁴⁵⁶⁷⁸⁹₀₁₂₃₄₅₆₇₈₉]+$";
+  public static readonly SIUnit: string = "^[A-Za-z0-9./⁰¹²³⁴⁵⁶⁷⁸⁹₀₁₂₃₄₅₆₇₈₉]+$";
   public static readonly NameWithoutNos: string = "^[a-zA-Z\\s]+$";
   public static readonly NameWithNos: string = "^[a-zA-Z0-9]+$";
   public static readonly NameWithoutNoswith_: string = "^[a-zA-Z\\s_]+$";
@@ -28,15 +27,15 @@ export class ValidationPatterns {
 
 export class ValidationMessages {
   public static readonly RequiredFieldMsg: string = "This field is required!";
-  public static readonly UnitMsg: string = "Special char, _ , space not Allowed";
-  public static readonly NameWithoutNosMsg: string = "Special char, _ ,Number not Allowed";
-  public static readonly NameWithNosMsg: string = "Special char, _ and space not allowed";
-  public static readonly NameWithoutNoswith_Msg: string = "Special char,Number not Allowed";
-  public static readonly NameWithNosAndSpaceMsg: string = "Special char & _ not Allowed";
-  public static readonly NameWithNosAndSpaceAnd_Msg: string = "Special char not Allowed";
+  public static readonly SIUnitMsg: string = "Special char, _ , space not Allowed.";
+  public static readonly NameWithoutNosMsg: string = "Special char, _ ,Number not Allowed.";
+  public static readonly NameWithNosMsg: string = "Special char, _ and space not Allowed.";
+  public static readonly NameWithoutNoswith_Msg: string = "Special char,Number not Allowed.";
+  public static readonly NameWithNosAndSpaceMsg: string = "Special char & _ not Allowed.";
+  public static readonly NameWithNosAndSpaceAnd_Msg: string = "Special char not Allowed.";
 
-  public static readonly EmailMsg: string = "Please enter a valid email address.";
-  public static readonly INDPhoneNoMsg: string = "Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9.";
+  public static readonly EmailMsg: string = "Please Enter a Valid Email Address.";
+  public static readonly INDPhoneNoMsg: string = "Please Enter a Valid 10-digit Mobile Number starting with 6, 7, 8, or 9.";
   public static readonly InputNumberMsg: string = "Please enter a number between 0 and 999."
   public static readonly IPAddressMsg: string = "Please enter a valid IPv4 address (e.g., 192.168.1.1)."
   public static readonly ONVIFPortMsg: string = "Please enter a valid port number between 0 and 65535."
