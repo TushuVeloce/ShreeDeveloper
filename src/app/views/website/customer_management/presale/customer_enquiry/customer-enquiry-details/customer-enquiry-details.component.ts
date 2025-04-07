@@ -420,4 +420,9 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   BackCustomerEnquiry() {
     this.router.navigate(['/homepage/Website/Customer_Enquiry']);
   }
+
+   // function for preselected values in field
+   selectAll(event: any) {
+    event.target.select();
+  }
 }
