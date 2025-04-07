@@ -52,6 +52,7 @@ export class MaterialMasterDetailsComponent implements OnInit {
         ? 'New Material'
         : 'Edit Material';
       this.Entity = Material.GetCurrentInstance();
+      console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
@@ -77,7 +78,9 @@ export class MaterialMasterDetailsComponent implements OnInit {
   SaveMaterialMaster = async () => {
     this.Entity.p.CompanyRef =this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName =this.companystatemanagement.getCurrentCompanyName();
-    this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    if(this.Entity.p.CreatedBy == 0){
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entityToSave :', entityToSave);
