@@ -28,9 +28,9 @@ export class SiteManagementMasterComponent implements OnInit {
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
-    effect(() => {
+    effect(async() => {
       // this.getMaterialListByCompanyRef()
-      this.getSiteListByCompanyRef();
+    await this.getSiteListByCompanyRef();
     });
   }
   ngOnInit() {
@@ -41,7 +41,7 @@ export class SiteManagementMasterComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not FSelected');
+      await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));

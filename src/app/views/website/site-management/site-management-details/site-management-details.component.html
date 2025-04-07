@@ -126,7 +126,7 @@
       </div>
       </div>
 
-
+      <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="Entity.p.SiteManagementOwnerDetails.length > 0">
       <div class="table-container" style="margin-top: 2rem">
         <div class="row">
           <div class="col-12">
@@ -160,6 +160,12 @@
             </tr>
           </tbody>
         </nz-table>
+      </div>
+      </div>
+      <div *ngIf="Entity.p.SiteManagementOwnerDetails.length === 0" class="card-body_light">
+        <div style="height: 200px; background-color: white;" class="d-flex align-items-center  justify-content-center">
+          <span class="title_light"> Data Not Found</span>
+        </div>
       </div>
       <div style="
           justify-content: center;
