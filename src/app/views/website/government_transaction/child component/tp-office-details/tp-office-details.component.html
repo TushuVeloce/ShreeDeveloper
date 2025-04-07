@@ -9,7 +9,9 @@
             <div class="row" style="margin-top: 1rem;margin-bottom: 1rem">
               <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12"
                 *ngFor="let type of siteWork.ApplicableTypes; let i = index">
-                <label for="SiteWorkApplicableTypeName"><b>{{ type.SiteWorkApplicableTypeName }} : </b>&nbsp; </label>
+                <label for="SiteWorkApplicableTypeName"><b>{{ type.SiteWorkApplicableTypeName=="Yes No" ?
+                    '' : type.SiteWorkApplicableTypeName}}
+                  </b>&nbsp;&nbsp; </label>
                 <!-- <div>{{ type.SiteWorkApplicableTypeName }}</div> -->
                 <!-- Checkbox -->
                 <input *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'checkbox'"
@@ -20,9 +22,9 @@
                 <!-- Radio Buttons -->
                 <div *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'radio'">
                   <input type="radio" class="dark-border" name="{{siteWork.SiteWorkName}}" value="Option1"
-                    [(ngModel)]="type.Value"> Option 1
+                    [(ngModel)]="type.Value"> Yes
                   <input type="radio" class="dark-border" name="{{siteWork.SiteWorkName}}" value="Option2"
-                    [(ngModel)]="type.Value"> Option 2
+                    [(ngModel)]="type.Value"> No
                 </div>
 
                 <!-- Number Input -->
