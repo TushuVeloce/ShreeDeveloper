@@ -1,13 +1,13 @@
 <div>
   <div class="row">
-    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 col-12 mb-2">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12 mb-2">
       <h5 style="padding-top: 3px;" class="title title_light">Government Transaction</h5>
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
+    <!-- <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
       <nz-button nz-button class="btn1" (click)='AddGovernmentTransaction ()'>
         Add
       </nz-button>
-    </div>
+    </div> -->
   </div>
 
   <div class="row">
@@ -24,14 +24,12 @@
             <tr *ngFor="let gov of paginatedList; index as i">
               <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
               <td Class="tbldata">{{gov.p.SiteName}}</td>
+
+              <!-- <td Class="tbldata"> <span class="status"
+                  [ngClass]="registraroffice.p.IsChequeSubmit ? 'completed' : 'pending' ">
+                  {{ registraroffice.p.IsChequeSubmit ? "Completed" : "Pending" }}
+                </span></td> -->
               <td class="tbldata">
-
-                <!-- <span style="margin-left: 9px;" (click)="onEditClicked(SiteWorkGroup);">
-                  <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-                </span> -->
-                <!-- <span style="margin-left: 9px;" (click)="onDeleteClicked(SiteWorkGroup);">
-                  <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span> -->
-
                 <Edit-Icon (editClick)="onEditClicked(gov)" />
                 <Delete-Icon (deleteClicked)="onDeleteClicked(gov)" />
               </td>

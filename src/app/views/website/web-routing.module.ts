@@ -216,8 +216,8 @@ const routes: Routes = [
       { path: 'Document', component: DocumentListComponent },
       { path: 'Document_Details', component: DocumentDetailsComponent },
 
-      { path: 'Government_Transaction', component: GovernmentTransactionMasterComponent },
-      { path: 'Government_Transaction_Details', component: GovernmentTransactionDetailsComponent },
+      { path: 'Site_Progress_Report', component: GovernmentTransactionMasterComponent },
+      { path: 'Site_Progress_Report_Details', component: GovernmentTransactionDetailsComponent },
       { path: 'Respected_child', component: RespectedChildComponentComponent },
 
       { path: 'Site_Work_Master', component: SiteWorkMasterComponent },

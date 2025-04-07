@@ -48,6 +48,6 @@ export class GovernmentTransactionDetailsComponent implements OnInit {
   }
 
   onCancel = async () => {
-    await this.router.navigate(['/homepage/Website/Government_Transaction']);
+    await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
   }
 }

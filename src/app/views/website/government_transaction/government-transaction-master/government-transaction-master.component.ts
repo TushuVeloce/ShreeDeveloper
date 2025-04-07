@@ -50,7 +50,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
     let lst = await GovernmentTransaction.FetchEntireList(async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    // console.log('GovernmentTransactionList', this.MasterList);
+    console.log('GovernmentTransactionList', this.MasterList);
 
   }
 
@@ -61,7 +61,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
 
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
 
-    await this.router.navigate(['/homepage/Website/Government_Transaction_Details']);
+    await this.router.navigate(['/homepage/Website/Site_Progress_Report_Details']);
   };
 
   onDeleteClicked = async (GovernmentTransaction: GovernmentTransaction) => {
@@ -101,7 +101,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
       this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.router.navigate(['/homepage/Website/Government_Transaction_Details']);
+    this.router.navigate(['/homepage/Website/Site_Progress_Report_Details']);
   }
 
 

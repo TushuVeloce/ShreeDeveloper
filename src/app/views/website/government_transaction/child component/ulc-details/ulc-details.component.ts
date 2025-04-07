@@ -36,15 +36,20 @@ export class UlcDetailsComponent implements OnInit {
     }
   }
 
+  getReportNOCAirportNOC = (value: boolean) => {
+    console.log(value, 'value');
+
+  }
+  
   onSave = () => {
     // this.appStateManage.StorageKey.setItem('TpOfficeList', JSON.stringify(this.TpOfficeList));
     this.onEntitySaved.emit(this.ULCList);
-    this.router.navigate(['/homepage/Website/Government_Transaction_Details']);
+    this.router.navigate(['/homepage/Website/Site_Progress_Report_Details']);
     // console.log('onSave TpOfficeList', this.TpOfficeList);
   }
 
   onCancel = async () => {
-    await this.router.navigate(['/homepage/Website/Government_Transaction_Details']);
+    await this.router.navigate(['/homepage/Website/Site_Progress_Report_Details']);
 
   }
 

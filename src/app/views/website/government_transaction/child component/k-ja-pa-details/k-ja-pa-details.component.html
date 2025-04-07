@@ -18,11 +18,21 @@
                   [checked]="type.Value === 'true'">
 
                 <!-- Radio Buttons -->
-                <div *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'radio'">
-                  <input type="radio" class="dark-border" name="{{siteWork.SiteWorkName}}" value="Option1"
-                    [(ngModel)]="type.Value"> Option 1
-                  <input type="radio" class="dark-border" name="{{siteWork.SiteWorkName}}" value="Option2"
-                    [(ngModel)]="type.Value"> Option 2
+                <div *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'radio'"
+                  style="display: flex;">
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input dark-border" id="radio1"
+                      name="{{ siteWork.SiteWorkName }}" name="{{ siteWork.SiteWorkName }}" [value]="true"
+                      [(ngModel)]="type.Value" (change)="getReportNOCAirportNOC(type.Value)">Yes
+                    <label class="form-check-label" for="radio1"></label>
+                  </div>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input dark-border" id="radio2"
+                      name="{{ siteWork.SiteWorkName }}" name="{{ siteWork.SiteWorkName }}" [value]="false"
+                      [(ngModel)]="type.Value" (change)="getReportNOCAirportNOC(type.Value)">No
+                    <label class="form-check-label" for="radio2"></label>
+                  </div>
                 </div>
 
                 <!-- Number Input -->
