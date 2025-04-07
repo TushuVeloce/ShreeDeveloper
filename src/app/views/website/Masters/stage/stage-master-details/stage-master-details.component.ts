@@ -48,10 +48,13 @@ export class StageMasterDetailsComponent implements OnInit {
   SaveStageMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    if(!this.Entity.p.DisplayOrder){
+      this.Entity.p.DisplayOrder = 0;
+    }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
 
-    // await this.Entity.EnsurePrimaryKeysWithValidValues()
+    await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;

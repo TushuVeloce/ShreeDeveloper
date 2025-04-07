@@ -11,6 +11,7 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { StageFetchRequest } from "./stagefetchrequest";
+import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 
 
 export class StageProps {
@@ -20,7 +21,7 @@ export class StageProps {
   public DisplayOrder: number = 0;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  
+
   public readonly IsNewlyCreated: boolean = false;
 
   private constructor(isNewlyCreated: boolean) {
@@ -41,8 +42,8 @@ export class Stage implements IPersistable<Stage> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -63,10 +64,17 @@ export class Stage implements IPersistable<Stage> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
+    if (this.p.Name == '') {
+      vra.add('Name', 'Name cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
+      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg);
+    }
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
-    if (this.p.DisplayOrder == 0) vra.add('DisplayOrder', 'Display Order cannot be blank.');
-
+    if (this.p.DisplayOrder == 0) {
+      vra.add('DisplayOrder', 'Display Order cannot be blank.');
+    } else if(this.p.DisplayOrder < 0) {
+      vra.add('DisplayOrder', 'Display Order cannot be less then 0.');
+    }
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -160,13 +168,13 @@ export class Stage implements IPersistable<Stage> {
     return Stage.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-      let req = new StageFetchRequest();
-      req.CompanyRefs.push(CompanyRef)
-      let tdResponse = await Stage.FetchTransportData(req, errorHandler) as TransportData;
-      return Stage.ListFromTransportData(tdResponse);
-    }
-  
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new StageFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Stage.FetchTransportData(req, errorHandler) as TransportData;
+    return Stage.ListFromTransportData(tdResponse);
+  }
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;
