@@ -502,8 +502,8 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '',
       },
       {
-        Name: 'Attendance & Salary',
-        RouterLink: '/homepage/Website/Attendance_and_Salary',
+        Name: 'Attendance',
+        RouterLink: '/homepage/Website/Attendance_Logs',
         LogoPath: '',
       },
       {
