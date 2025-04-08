@@ -95,6 +95,8 @@ import { ProgressReportComponent } from './government_office_masters/progress_re
 import { RespectedChildComponentComponent } from './government_transaction/respected-child-component/respected-child-component.component';
 import { GovernmentTransactionMasterComponent } from './government_transaction/government-transaction-master/government-transaction-master.component';
 import { GovernmentTransactionDetailsComponent } from './government_transaction/government-transaction-details/government-transaction-details.component';
+import { SalaryGenerationComponent } from './hr_payroll_management/salary_generation/salary-generation/salary-generation.component';
+import { SalaryGenerationDetailsComponent } from './hr_payroll_management/salary_generation/salary-generation-details/salary-generation-details.component';
 
 
 const routes: Routes = [
@@ -191,12 +193,6 @@ const routes: Routes = [
 
       { path: 'Marketing_Management', component: MarketingManagementComponent },
 
-      { path: 'Employee_Management', component: EmployeeMasterComponent },
-      { path: 'Attendance_and_Salary', component: AttendanceAndSalaryComponent },
-
-      { path: 'Office_Duty_Time', component: OfficeDutyTimeComponent },
-      { path: 'Office_Duty_Time_Details', component: OfficeDutyTimeDetailsComponent },
-
       { path: 'Accounting_Transaction', component: AccountTransactionsComponent },
       { path: 'Expense_Transactions', component: ExpenseTransactionsComponent },
       { path: 'Client_Income', component: ClientIncomeComponent },
@@ -211,6 +207,13 @@ const routes: Routes = [
       { path: 'Marketing_Report', component: MarketingReportComponent },
       { path: 'Stages_Report', component: StagesReportComponent },
       { path: 'Account_Report', component: AccountReportComponent },
+
+      // HR Payroll Management
+      { path: 'Attendance_and_Salary', component: AttendanceAndSalaryComponent },
+      { path: 'Office_Duty_Time', component: OfficeDutyTimeComponent },
+      { path: 'Office_Duty_Time_Details', component: OfficeDutyTimeDetailsComponent },
+      { path: 'Salary_Generation', component: SalaryGenerationComponent },
+      { path: 'Salary_Generation_Details', component: SalaryGenerationDetailsComponent },
 
       // Government Office
       { path: 'Document', component: DocumentListComponent },
