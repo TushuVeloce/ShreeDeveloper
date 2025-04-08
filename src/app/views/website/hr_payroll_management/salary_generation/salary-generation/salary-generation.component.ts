@@ -29,8 +29,8 @@ export class SalaryGenerationComponent  implements OnInit {
       this.currentPage = pageIndex; // Update the current page
     };
   
-    async AddOfficeTime() {
-      this.router.navigate(['/homepage/Website/Office_Duty_Time_Details']);
+    async AddSalaryDetails() {
+      this.router.navigate(['/homepage/Website/Salary_Generation_Details']);
     }
   
   

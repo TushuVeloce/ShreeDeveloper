@@ -133,6 +133,29 @@ export enum CustomerStatus {
   // DealClosed = 50,
 }
 
+export enum Month {
+  None = 0,
+  January = 1,
+  February = 2,
+  March = 3,
+  April = 4,
+  May = 5,
+  June = 6,
+  July = 7,
+  August = 8,
+  September = 9,
+  October = 10,
+  November = 11,
+  December = 12
+}
+
+export enum LeaveRequestType {
+  None = 0,
+  PersonalLeave = 100,
+  SickLeave = 200,
+  HalfDay = 300,
+}
+
 
 
 export class DomainEnums {
@@ -814,5 +837,105 @@ export class DomainEnums {
     return result;
   }
 
+  public static MonthName(itemType: Month) {
+    switch (itemType) {
+      case Month.January: return 'January';
+      case Month.February: return 'February';
+      case Month.March: return 'March';
+      case Month.April: return 'April';
+      case Month.May: return 'May';
+      case Month.June: return 'June';
+      case Month.July: return 'July';
+      case Month.August: return 'August';
+      case Month.September: return 'September';
+      case Month.October: return 'October';
+      case Month.November: return 'November';
+      case Month.December: return 'December';
+      default: return '';
+    }
+  }
 
+  public static MonthList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+    let result = [
+      {
+        Ref: Month.January, Name: DomainEnums.MonthName(Month.January)
+      },
+      {
+         Ref: Month.January, Name: DomainEnums.MonthName(Month.January) 
+        },
+      {
+         Ref: Month.February, Name: DomainEnums.MonthName(Month.February) 
+        },
+      {
+         Ref: Month.March, Name: DomainEnums.MonthName(Month.March)
+         },
+      {
+         Ref: Month.April, Name: DomainEnums.MonthName(Month.April)
+         },
+      {
+         Ref: Month.May, Name: DomainEnums.MonthName(Month.May) 
+        },
+      {
+         Ref: Month.June, Name: DomainEnums.MonthName(Month.June)
+         },
+      {
+         Ref: Month.July, Name: DomainEnums.MonthName(Month.July)
+         },
+      { 
+        Ref: Month.August, Name: DomainEnums.MonthName(Month.August) 
+      },
+      {
+         Ref: Month.September, Name: DomainEnums.MonthName(Month.September) 
+        },
+      {
+         Ref: Month.October, Name: DomainEnums.MonthName(Month.October) 
+        },
+      {
+         Ref: Month.November, Name: DomainEnums.MonthName(Month.November) 
+        },
+      {
+         Ref: Month.December, Name: DomainEnums.MonthName(Month.December) 
+        }
+
+    ]
+    if (withAllOption) {
+      let allEntry = {
+        Ref: Month.None,
+        Name: allOptionName
+      }
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+  public static LeaveRequestTypeName(itemType: LeaveRequestType) {
+    switch (itemType) {
+      case LeaveRequestType.PersonalLeave: return 'PersonalLeave';
+      case LeaveRequestType.SickLeave: return 'SickLeave';
+      case LeaveRequestType.HalfDay: return 'HalfDay';
+      default: return '';
+    }
+  }
+
+  public static LeaveRequestTypeList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+    let result = [
+      {
+        Ref: LeaveRequestType.PersonalLeave, Name: DomainEnums.LeaveRequestTypeName(LeaveRequestType.PersonalLeave)
+      },
+      {
+         Ref: LeaveRequestType.SickLeave, Name: DomainEnums.LeaveRequestTypeName(LeaveRequestType.SickLeave) 
+        },
+      {
+         Ref: LeaveRequestType.HalfDay, Name: DomainEnums.LeaveRequestTypeName(LeaveRequestType.HalfDay) 
+        }
+    ]
+    if (withAllOption) {
+      let allEntry = {
+        Ref: LeaveRequestType.None,
+        Name: allOptionName
+      }
+      result.unshift(allEntry);
+    }
+    return result;
+  }
 }
