@@ -12,7 +12,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   templateUrl: './vendor-services-master.component.html',
   styleUrls: ['./vendor-services-master.component.scss'],
 })
-export class VendorServicesMasterComponent  implements OnInit {
+export class VendorServicesMasterComponent implements OnInit {
   Entity: VendorService = VendorService.CreateNewInstance();
   MasterList: VendorService[] = [];
   DisplayMasterList: VendorService[] = [];
@@ -28,18 +28,18 @@ export class VendorServicesMasterComponent  implements OnInit {
   headers: string[] = ['Sr.No.', 'VendorService', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
-   ) {
-     effect(() => {
-          this.FormulateVendorServiceList()
-        });
-   }
+  ) {
+    effect(() => {
+      this.FormulateVendorServiceList()
+    });
+  }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    // await this.FormulateVendorServiceList();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
+
   private FormulateVendorServiceList = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
@@ -56,15 +56,9 @@ export class VendorServicesMasterComponent  implements OnInit {
   };
 
   onEditClicked = async (item: VendorService) => {
-    // let props = Object.assign(VendorServiceProps.Blank(),item.p);
-    // this.SelectedVendorService = VendorService.CreateInstance(props,true);
-
     this.SelectedVendorService = item.GetEditableVersion();
-
     VendorService.SetCurrentInstance(this.SelectedVendorService);
-
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-
     await this.router.navigate(['/homepage/Website/Vendor_Services_Master_Details']);
   };
 
@@ -82,7 +76,6 @@ export class VendorServicesMasterComponent  implements OnInit {
           this.SearchString = '';
           this.loadPaginationData();
           await this.FormulateVendorServiceList();
-
         });
       }
     );
@@ -105,8 +98,6 @@ export class VendorServicesMasterComponent  implements OnInit {
   AddVendorService = () => {
     this.router.navigate(['/homepage/Website/Vendor_Services_Master_Details']);
   }
-
-
 
   filterTable = () => {
     if (this.SearchString != '') {

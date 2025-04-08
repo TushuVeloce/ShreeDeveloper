@@ -15,6 +15,7 @@ import { Utils } from 'src/app/services/utils.service';
   templateUrl: './marketing-type-master-details.component.html',
   styleUrls: ['./marketing-type-master-details.component.scss'],
 })
+
 export class MarketingTypeMasterDetailsComponent implements OnInit {
   isSaveDisabled: boolean = false;
   private IsNewEntity: boolean = true;
@@ -24,9 +25,7 @@ export class MarketingTypeMasterDetailsComponent implements OnInit {
 
   MarketingModesTypes = MarketingModes;
   MarketingModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
-  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
-
-
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
   @ViewChild('DescriptionCtrl') DescriptionInputControl!: NgModel;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
@@ -42,10 +41,16 @@ export class MarketingTypeMasterDetailsComponent implements OnInit {
     } else {
       this.Entity = MarketingType.CreateNewInstance();
       MarketingType.SetCurrentInstance(this.Entity);
-
+      this.Entity.p.MarketingMode = this.MarketingModesList[1].Ref;
     }
     this.InitialEntity = Object.assign(MarketingType.CreateNewInstance(),
-      this.utils.DeepCopy(this.Entity)) as MarketingType;
+    this.utils.DeepCopy(this.Entity)) as MarketingType;
+    this.focusInput();
+  }
+
+  focusInput = () => {
+    let txtName = document.getElementById('Description')!;
+    txtName.focus();
   }
 
   SaveMarketingTypeMaster = async () => {
@@ -54,7 +59,6 @@ export class MarketingTypeMasterDetailsComponent implements OnInit {
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
 
-    // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
@@ -63,22 +67,21 @@ export class MarketingTypeMasterDetailsComponent implements OnInit {
     }
     else {
       this.isSaveDisabled = false;
-      // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Marketing saved successfully!');
         this.Entity = MarketingType.CreateNewInstance();
+        this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Marketing Updated successfully!');
         await this.router.navigate(['/homepage/Website/Marketing_Type_Master']);
-
       }
     }
   }
 
-
   BackMarketingType = () => {
     this.router.navigate(['/homepage/Website/Marketing_Type_Master']);
   }
+
   resetAllControls = () => {
     // reset touched
     this.DescriptionInputControl.control.markAsUntouched();

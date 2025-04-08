@@ -10,24 +10,25 @@ import { Utils } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-unit-master-details',
-  standalone:false,
+  standalone: false,
   templateUrl: './unit-master-details.component.html',
   styleUrls: ['./unit-master-details.component.scss'],
 })
-export class UnitMasterDetailsComponent  implements OnInit {
-   Entity: Unit = Unit.CreateNewInstance();
-    private IsNewEntity: boolean = true;
-    isSaveDisabled: boolean = false;
-    DetailsFormTitle: 'New Unit' | 'Edit Unit' = 'New Unit';
-    IsDropdownDisabled: boolean = false
-    InitialEntity: Unit = null as any;
 
-    Unit: string = ValidationPatterns.SIUnit
-    NameWithoutNos: string = ValidationPatterns.NameWithoutNos
+export class UnitMasterDetailsComponent implements OnInit {
+  Entity: Unit = Unit.CreateNewInstance();
+  private IsNewEntity: boolean = true;
+  isSaveDisabled: boolean = false;
+  DetailsFormTitle: 'New Unit' | 'Edit Unit' = 'New Unit';
+  IsDropdownDisabled: boolean = false
+  InitialEntity: Unit = null as any;
 
-    UnitMsg: string = ValidationMessages.SIUnitMsg
-    NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
-    RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
+  Unit: string = ValidationPatterns.SIUnit
+  NameWithoutNos: string = ValidationPatterns.NameWithoutNos
+
+  UnitMsg: string = ValidationMessages.SIUnitMsg
+  NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
 
@@ -47,9 +48,13 @@ export class UnitMasterDetailsComponent  implements OnInit {
       Unit.SetCurrentInstance(this.Entity);
 
     }
-    this.InitialEntity = Object.assign(Unit.CreateNewInstance(),
-    this.utils.DeepCopy(this.Entity)) as Unit;
-    // this.focusInput();
+    this.InitialEntity = Object.assign(Unit.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Unit;
+    this.focusInput();
+  }
+
+  focusInput = () => {
+    let txtName = document.getElementById('Name')!;
+    txtName.focus();
   }
 
   SaveUnitMaster = async () => {
@@ -58,16 +63,14 @@ export class UnitMasterDetailsComponent  implements OnInit {
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
-    // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error',tr.Message);
+      this.uiUtils.showErrorMessage('Error', tr.Message);
       return
     }
     else {
       this.isSaveDisabled = false;
-      // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Unit Master saved successfully!');
         this.Entity = Unit.CreateNewInstance();

@@ -63,9 +63,13 @@ export class MaterialMasterDetailsComponent implements OnInit {
       Material.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as Material;
-    // this.focusInput();
-
+    this.focusInput();
     await this.FormulateUnitList();
+  }
+
+  focusInput = () => {
+    let txtName = document.getElementById('Code')!;
+    txtName.focus();
   }
 
   public FormulateUnitList = async () => {
@@ -84,7 +88,6 @@ export class MaterialMasterDetailsComponent implements OnInit {
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entityToSave :', entityToSave);
-    // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
@@ -93,7 +96,6 @@ export class MaterialMasterDetailsComponent implements OnInit {
       return;
     } else {
       this.isSaveDisabled = false;
-      // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Material Master saved successfully!');
         this.Entity = Material.CreateNewInstance();

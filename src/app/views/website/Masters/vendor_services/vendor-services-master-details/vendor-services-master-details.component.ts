@@ -49,7 +49,12 @@ export class VendorServicesMasterDetailsComponent implements OnInit {
     }
     this.InitialEntity = Object.assign(VendorService.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)) as VendorService;
-    // this.focusInput();
+    this.focusInput();
+  }
+
+  focusInput = () => {
+    let txtName = document.getElementById('Name')!;
+    txtName.focus();
   }
 
   SaveVendorServiceMaster = async () => {
@@ -57,7 +62,6 @@ export class VendorServicesMasterDetailsComponent implements OnInit {
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
-    // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
@@ -66,7 +70,6 @@ export class VendorServicesMasterDetailsComponent implements OnInit {
     }
     else {
       this.isSaveDisabled = false;
-      // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Vendor Service Master Saved successfully!');
         this.Entity = VendorService.CreateNewInstance();
@@ -87,5 +90,4 @@ export class VendorServicesMasterDetailsComponent implements OnInit {
     // reset dirty
     this.NameInputControl.control.markAsPristine();
   }
-
 }

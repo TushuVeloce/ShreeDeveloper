@@ -5,7 +5,6 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-material-master',
@@ -14,6 +13,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./material-master.component.scss'],
 
 })
+
 export class MaterialMasterComponent implements OnInit {
   Entity: Material = Material.CreateNewInstance();
   MasterList: Material[] = [];
@@ -32,38 +32,15 @@ export class MaterialMasterComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
-      // this.getMaterialListByCompanyRef()
       await this.getMaterialListByCompanyRef();
     });
   }
 
-  // effect(() => {
-  //   // this.getMaterialListByCompanyRef()
-  //   setTimeout(() => {
-  //     if (this.companyRef() > 0) {
-  //       this.getMaterialListByCompanyRef();
-  //     }
-  //   }, 300);
-  // });
-
-
-
-
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    // await this.FormulateMaterialList();
-    // this.DisplayMasterList = [];
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
-  // private FormulateMaterialList = async () => {
-  //   let lst = await Material.FetchEntireList(
-  //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-  //   );
-  //   this.MasterList = lst;
-  //   this.DisplayMasterList = this.MasterList;
-  //   this.loadPaginationData();
-  // };
 
   getMaterialListByCompanyRef = async () => {
     this.MasterList = [];
@@ -80,15 +57,9 @@ export class MaterialMasterComponent implements OnInit {
   }
 
   onEditClicked = async (item: Material) => {
-    // let props = Object.assign(MaterialProps.Blank(),item.p);
-    // this.SelectedMaterial = Material.CreateInstance(props,true);
-
     this.SelectedMaterial = item.GetEditableVersion();
-
     Material.SetCurrentInstance(this.SelectedMaterial);
-
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-
     await this.router.navigate(['/homepage/Website/Material_Master_Details']);
   };
 
@@ -105,8 +76,6 @@ export class MaterialMasterComponent implements OnInit {
           await this.getMaterialListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
-          // await this.FormulateMaterialList();
-
         });
       }
     );
@@ -133,7 +102,6 @@ export class MaterialMasterComponent implements OnInit {
     }
     this.router.navigate(['/homepage/Website/Material_Master_Details']);
   }
-
 
   filterTable = () => {
     if (this.SearchString != '') {

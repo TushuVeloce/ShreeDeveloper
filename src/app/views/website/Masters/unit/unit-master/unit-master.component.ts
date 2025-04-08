@@ -89,8 +89,6 @@ export class UnitMasterComponent implements OnInit {
     this.router.navigate(['/homepage/Website/Unit_Master_Details']);
   }
 
-
-
   filterTable = () => {
     if (this.SearchString != '') {
       this.DisplayMasterList = this.MasterList.filter((data: any) => {

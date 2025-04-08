@@ -43,10 +43,14 @@ export class StageMasterDetailsComponent implements OnInit {
     } else {
       this.Entity = Stage.CreateNewInstance();
       Stage.SetCurrentInstance(this.Entity);
-
     }
-    this.InitialEntity = Object.assign(Stage.CreateNewInstance(),
-      this.utils.DeepCopy(this.Entity)) as Stage;
+    this.InitialEntity = Object.assign(Stage.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Stage;
+    this.focusInput();
+  }
+
+  focusInput = () => {
+    let txtName = document.getElementById('Name')!;
+    txtName.focus();
   }
 
   SaveStageMaster = async () => {
@@ -67,7 +71,6 @@ export class StageMasterDetailsComponent implements OnInit {
     }
     else {
       this.isSaveDisabled = false;
-      // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Stage saved successfully!');
         this.Entity = Stage.CreateNewInstance();
@@ -99,5 +102,4 @@ export class StageMasterDetailsComponent implements OnInit {
     this.NameInputControl.control.markAsPristine();
     this.DisplayOrderInputControl.control.markAsPristine();
   }
-
 }
