@@ -35,7 +35,9 @@ export class RegistrarOfficeDetailComponent  implements OnInit {
     NameWithNosMsg: string = ValidationMessages.NameWithNosMsg
     RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
-  @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('AgreementDocumentNoCtrl') AgreementDocumentNoInputControl!: NgModel;
+  @ViewChild('SaleDeedDocumentNoCtrl') SaleDeedDocumentNoInputControl!: NgModel;
+  @ViewChild('TalathiInwardNoCtrl') TalathiInwardNoInputControl!: NgModel;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils,private companystatemanagement: CompanyStateManagement, private dtu: DTU,
       private datePipe: DatePipe) { }
@@ -161,10 +163,14 @@ export class RegistrarOfficeDetailComponent  implements OnInit {
 
   resetAllControls = () => {
     // reset touched
-    this.NameInputControl.control.markAsUntouched();
+    this.AgreementDocumentNoInputControl.control.markAsUntouched();
+    this.SaleDeedDocumentNoInputControl.control.markAsUntouched();
+    this.TalathiInwardNoInputControl.control.markAsUntouched();
 
     // reset dirty
-    this.NameInputControl.control.markAsPristine();
+    this.AgreementDocumentNoInputControl.control.markAsPristine();
+    this.SaleDeedDocumentNoInputControl.control.markAsPristine();
+    this.TalathiInwardNoInputControl.control.markAsPristine();
   }
 
 }

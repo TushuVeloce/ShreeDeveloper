@@ -367,11 +367,10 @@
           required
           placeholder="Enter Document No."
           pattern="^[a-zA-Z0-9]*$"
-          pattern="{{NameWithNos}}" #NameCtrl="ngModel"
+          pattern="{{NameWithNos}}" #AgreementDocumentNoCtrl="ngModel"
         />
-        <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
-          <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
-          <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+        <div *ngIf="(AgreementDocumentNoCtrl.invalid && (AgreementDocumentNoCtrl.touched || AgreementDocumentNoCtrl.dirty))">
+          <span class="validation-text" *ngIf="AgreementDocumentNoCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
         </div>
     </div>
     <!-- Date -->
@@ -432,7 +431,11 @@
         id="SaleDeedDocumentNo"
         required
         placeholder="Enter Document No."
-      />
+        pattern="{{NameWithNos}}" #SaleDeedDocumentNoCtrl="ngModel"
+        />
+        <div *ngIf="(SaleDeedDocumentNoCtrl.invalid && (SaleDeedDocumentNoCtrl.touched || SaleDeedDocumentNoCtrl.dirty))">
+          <span class="validation-text" *ngIf="SaleDeedDocumentNoCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
+        </div>
   </div>
   <!-- Date -->
   <div class="col-md-6">
@@ -534,7 +537,11 @@
        id="TalathiInwardNo"
        required
        placeholder="Enter Inward No"
-     />
+       pattern="{{NameWithNos}}" #TalathiInwardNoCtrl="ngModel"
+       />
+       <div *ngIf="(TalathiInwardNoCtrl.invalid && (TalathiInwardNoCtrl.touched || TalathiInwardNoCtrl.dirty))">
+         <span class="validation-text" *ngIf="TalathiInwardNoCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
+       </div>
  </div>
  <div class="col-md-6">
   <label>Date</label>
