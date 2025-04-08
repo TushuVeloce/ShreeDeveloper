@@ -104,6 +104,14 @@ import { UlcDetailsComponent } from './government_transaction/child component/ul
 import { FinalLayoutDetailsComponent } from './government_transaction/child component/final-layout-details/final-layout-details.component';
 import { KJaPaDetailsComponent } from './government_transaction/child component/k-ja-pa-details/k-ja-pa-details.component';
 import { RespectedChildComponentComponent } from './government_transaction/respected-child-component/respected-child-component.component';
+import { SalaryGenerationComponent } from './hr_payroll_management/salary_generation/salary-generation/salary-generation.component';
+import { SalaryGenerationDetailsComponent } from './hr_payroll_management/salary_generation/salary-generation-details/salary-generation-details.component';
+import { LeaveApprovalComponent } from './hr_payroll_management/leave-approval/leave-approval.component';
+import { LeaveRequestComponent } from './request/leave_request/leave-request/leave-request.component';
+import { LeaveRequestDetailsComponent } from './request/leave_request/leave-request-details/leave-request-details.component';
+import { SalarySlipApprovalComponent } from './hr_payroll_management/salary-slip-approval/salary-slip-approval.component';
+import { SalarySlipRequestComponent } from './request/salary_slip_request/salary-slip-request/salary-slip-request.component';
+import { SalarySlipRequestDetailsComponent } from './request/salary_slip_request/salary-slip-request-details/salary-slip-request-details.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent, StageMasterComponent, StageMasterDetailsComponent, AccountMainLedgerComponent, AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent, MarketingTypeMasterDetailsComponent,
@@ -114,7 +122,7 @@ import { RespectedChildComponentComponent } from './government_transaction/respe
     VendorServicesMasterComponent, VendorServicesMasterDetailsComponent, SiteManagementDetailsComponent, EmployeeAppraisalDetailsComponent, ProgressReportComponent, GovernmentOfficeComponent,
     EmployeeAppraisalMasterComponent, EmployeeExitDetailsComponent, EmployeeExitMasterComponent, PlotMasterComponent, DocumentListComponent, DocumentDetailsComponent,
     PlotMasterDetailsComponent, CustomerEnquiryComponent, CustomerEnquiryDetailsComponent, CustomerFollowupComponent, CustomerFollowupDetailsComponent, RegisteredCustomerComponent, RegisteredCustomerDetailsComponent, RegistrarOfficeComponent, RegistrarOfficeDetailComponent, SiteWorkMasterDetailComponent, SiteWorkMasterComponent,
-    AttendanceAndSalaryComponent, OfficeDutyTimeComponent, SiteWorkDoneMasterDetailsComponent, SiteWorkDoneMasterComponent, GovernmentTransactionDetailsComponent, GovernmentTransactionMasterComponent, TpOfficeDetailsComponent, NaLetterDetailsComponent, MojaniDetailsComponent,
+    AttendanceAndSalaryComponent, OfficeDutyTimeComponent, SiteWorkDoneMasterDetailsComponent, SiteWorkDoneMasterComponent, GovernmentTransactionDetailsComponent, GovernmentTransactionMasterComponent, TpOfficeDetailsComponent, NaLetterDetailsComponent, MojaniDetailsComponent,SalaryGenerationComponent,SalaryGenerationDetailsComponent,LeaveApprovalComponent,LeaveRequestComponent,LeaveRequestDetailsComponent,SalarySlipApprovalComponent,SalarySlipRequestComponent,SalarySlipRequestDetailsComponent,
     UlcDetailsComponent, FinalLayoutDetailsComponent, KJaPaDetailsComponent, RespectedChildComponentComponent],
   imports: [
     CommonModule, WebRoutingModule, FormsModule, NzDropDownModule, NzTableModule, IonicModule.forRoot(),

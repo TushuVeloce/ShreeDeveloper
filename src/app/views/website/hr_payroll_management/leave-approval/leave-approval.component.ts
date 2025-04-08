@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-leave-approval',
+  standalone: false,
   templateUrl: './leave-approval.component.html',
   styleUrls: ['./leave-approval.component.scss'],
 })
