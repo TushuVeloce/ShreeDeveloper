@@ -1,3 +1,140 @@
-<p>
-  salary-generation-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackOfficeTime()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">Add Salary Details</span>
+      </div>
+    </div>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+            <label>Employee Name</label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="EmployeeName
+              name="EmployeeName [nzSize]="'large'">
+              <nz-option *ngFor="let employee of EmployeeList" [nzValue]="employee.p.Ref"
+                [nzLabel]="employee.p.Name"></nz-option>
+            </nz-select>
+        </div>
+        <div class="col-md-4">
+            <label>Month</label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="Month
+            name="Month [nzSize]="'large'">
+            <nz-option *ngFor="let month of MonthList" [nzValue]="month.Ref"
+              [nzLabel]="month.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4">
+            <label>Total Days</label>
+            <input type="number" name="TotalDays" class="form-control" id="TotalDays" 
+              placeholder="Enter TotalDays" required />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+            <label>Total Working Days</label>
+            <input type="number" name="TotalWorkingDays" class="form-control" id="TotalWorkingDays" placeholder="Enter Total Working Days" required />
+        </div>
+        <div class="col-md-4">
+            <label>Total Leaves</label>
+            <input type="number" name="TotalLeaves" class="form-control" id="TotalLeaves" 
+              placeholder="Enter Total Leaves" required />
+        </div>
+        <div class="col-md-4">
+            <label>Total Over Time Hours</label>
+            <input type="number" name="TotalOverTimeHours" class="form-control" id="TotalOverTimeHours" 
+              placeholder="Enter Total Over Time Hours" required />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+            <label>Total Working Hours</label>
+            <input type="number" name="TotalWorkingHours" class="form-control" id="TotalWorkingHours" placeholder="Enter Total Working Hours" required />
+        </div>
+        <div class="col-md-4">
+            <label>Total Leaves Hours</label>
+            <input type="number" name="TotalLeavesHours" class="form-control" id="TotalLeavesHours" 
+              placeholder="Enter Total Leaves Hours" required />
+        </div>
+        <div class="col-md-4">
+            <label>Overall Working Hours</label>
+            <input type="number" name="OverallWorkingHous" class="form-control" id="OverallWorkingHous" 
+              placeholder="Enter Overall Working Hours" required />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+            <label>Basic Salary</label>
+            <input type="number" name="BasicSalary" class="form-control" id="BasicSalary" placeholder="Enter Basic Salary" required />
+        </div>
+        <div class="col-md-4">
+            <label>Total Allowance</label>
+            <input type="number" name="TotalAllowance" class="form-control" id="TotalAllowance" 
+              placeholder="Enter Total Allowance" required />
+        </div>
+        <div class="col-md-4">
+            <label>Total Incentive</label>
+            <input type="number" name="TotalIncentive" class="form-control" id="TotalIncentive" 
+              placeholder="Enter Total Incentive" required />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+            <label>Other</label>
+            <input type="number" name="Other" class="form-control" id="Other" placeholder="Enter Other" required />
+        </div>
+        <div class="col-md-4">
+            <label>Gross Total</label>
+            <input type="number" name="GrossTotal" class="form-control" id="GrossTotal" 
+              placeholder="Enter Gross Total" required />
+        </div>
+        <div class="col-md-4">
+            <label>TDS</label>
+            <input type="number" name="TDS" class="form-control" id="TDS" 
+              placeholder="Enter TDS" required />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+            <label>PF</label>
+            <input type="number" name="PF" class="form-control" id="PF" placeholder="Enter PF" required />
+        </div>
+        <div class="col-md-4">
+            <label>Total Leave Deduction</label>
+            <input type="number" name="TotalLeaveDeduction" class="form-control" id="TotalLeaveDeduction" 
+              placeholder="Enter Total Leave Deduction" required />
+        </div>
+        <div class="col-md-4">
+            <label>Advance Payment</label>
+            <input type="number" name="Advance Payment" class="form-control" id="Advance Payment" 
+              placeholder="Enter Advance Payment" required />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4">
+            <label>Total Deduction</label>
+            <input type="number" name="TotalDeduction" class="form-control" id="TotalDeduction" placeholder="Enter Total Deduction" required />
+        </div>
+        <div class="col-md-4">
+            <label>Net Salary</label>
+            <input type="number" name="NetSalary" class="form-control" id="NetSalary" 
+              placeholder="Enter Net Salary" required />
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackOfficeTime()">
+            Back
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
