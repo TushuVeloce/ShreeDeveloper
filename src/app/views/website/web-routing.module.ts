@@ -230,7 +230,7 @@ const routes: Routes = [
       { path: 'Site_Work_Done', component: SiteWorkDoneMasterComponent },
       { path: 'Site_Work_Done_Details', component: SiteWorkDoneMasterDetailsComponent },
 
-      { path: 'Progress_Report', component: ProgressReportComponent },
+      // { path: 'Progress_Report', component: ProgressReportComponent },
     ]
 
 
