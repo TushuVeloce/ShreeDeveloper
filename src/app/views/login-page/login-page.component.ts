@@ -53,6 +53,7 @@ export class LoginPageComponent implements OnInit {
     // req.SenderURL;
 
     const response = await this.servercommunicator.LoginUser(req);
+    console.log('response :', response);
 
     if (!response.Successful) {
       await this.uiUtils.showErrorMessage('Error', response.Message);
@@ -62,7 +63,9 @@ export class LoginPageComponent implements OnInit {
     // this.appStateManage.setUserJSON(user);
     if (this.isMobile) {
       await this.router.navigate(['/app_homepage']);  // Navigate to mobile
-    } else {
+    } else if(response.LoginForFirstTime == 0){
+      await this.router.navigate(['/create_password']); 
+    }else{
       await this.router.navigate(['/homepage']);  // Navigate to web
     }
   }
