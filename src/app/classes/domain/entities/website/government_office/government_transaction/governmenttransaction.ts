@@ -20,7 +20,7 @@ export class GovernmentTransactionProps {
   public SiteRef: number = 0;
   public SiteName: string = '';
   public TransactionJson: string = '';
-  public TransactionJson1: [] = [];
+  // public TransactionJson1: [] = [];
   public CompanyRef: number = 0;
   public CompanyName: string = '';
 
@@ -36,6 +36,12 @@ export class GovernmentTransactionProps {
 }
 
 export class GovernmentTransaction implements IPersistable<GovernmentTransaction> {
+  TransactionJson(TransactionJson: any) {
+    throw new Error('Method not implemented.');
+  }
+
+  public IsComplete: boolean = false;
+
   public static readonly Db_Table_Name: string = 'GovernmentTransaction';
 
   private constructor(public readonly p: GovernmentTransactionProps, public readonly AllowEdit: boolean) {

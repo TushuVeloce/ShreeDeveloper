@@ -1,19 +1,8 @@
-.status {
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-weight: 500;
-    font-size: 14px;
-    border: 1px solid;
-    display: inline-block;
-    color: black;
-
-    &.completed {
-        border-color: green;
-        background-color: #e6ffe6;
-    }
-
-    &.pending {
-        border-color: red;
-        background-color: #ffe6e6;
-    }
-}
+.status.completed {
+    color: green;
+    font-weight: bold;
+  }
+  .status.pending {
+    color: red;
+    font-weight: bold;
+  }

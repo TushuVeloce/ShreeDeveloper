@@ -46,7 +46,7 @@
   </div>
   <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
     <nz-steps [nzCurrent]="i+1" nzDirection="vertical" class="custom-steps"
-      *ngFor="let step of TransactionJson;index as i">
+      *ngFor="let step of TransactionJsonArray;index as i">
       <nz-step nzTitle={{step.SiteWorkGroupName}} nzDescription=""
         (click)="getSiteWorkGroupName(step.SiteWorkGroupName)"></nz-step>
 

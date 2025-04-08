@@ -473,7 +473,7 @@ export class SidebarlayoutComponent implements OnInit {
       },
       {
         Name: 'Progress Report',
-        RouterLink: '/homepage/Website/Progress_Report',
+        RouterLink: '/homepage/Website/Site_Progress_Report',
         LogoPath: '',
       },
       {

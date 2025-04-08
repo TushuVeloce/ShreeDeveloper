@@ -41,8 +41,9 @@ export class GovernmentTransactionMasterComponent implements OnInit {
     await this.FormulateGovernmentTransactionList();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
-  }
 
+  }
+  groupCompletionStatus: { [groupName: string]: boolean } = {};
   FormulateGovernmentTransactionList = async () => {
     // let lst = await GovernmentTransaction.FetchEntireListByCompanyRef(
     //   this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
@@ -51,7 +52,40 @@ export class GovernmentTransactionMasterComponent implements OnInit {
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     console.log('GovernmentTransactionList', this.MasterList);
+    // let isComplete = true; // assume complete until proven otherwise
 
+    for (let i = 0; i < this.MasterList.length; i++) {
+      debugger
+      let obj = this.MasterList[i];
+      let transactionJson = obj.p.TransactionJson;
+
+      let groups: any[] = JSON.parse(transactionJson);
+      console.log(`Transaction #${obj.p.Ref} => Parsed Groups:`, groups);
+
+      for (let group of groups) {
+        let isGroupComplete = true;
+
+        for (let siteWork of group.SiteWorks) {
+          if (siteWork.ApplicableTypes.length > 0) {
+            for (let applicable of siteWork.ApplicableTypes) {
+              const val = applicable.Value;
+              if (val === null || val === undefined || val === "" || val === false) {
+                isGroupComplete = false;
+                break;
+              }
+            }
+            if (isGroupComplete) break;
+          }
+          else {
+            isGroupComplete = false;
+            break;
+          }
+        } // Store result in map
+        this.groupCompletionStatus[group.SiteWorkGroupName] = isGroupComplete;
+        // this.Entity.IsComplete = isGroupComplete;
+        console.log(`Transaction #${obj.p.Ref} → SiteWorkGroupName: ${group.SiteWorkGroupName} → IsComplete: ${isGroupComplete}`);
+      }
+    }
   }
 
   onEditClicked = async (item: GovernmentTransaction) => {
@@ -194,5 +228,8 @@ export class GovernmentTransactionMasterComponent implements OnInit {
         return ''; // Default return value
     }
   }
+
+
+
 
 }
