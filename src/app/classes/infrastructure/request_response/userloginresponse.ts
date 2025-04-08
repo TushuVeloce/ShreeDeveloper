@@ -11,4 +11,5 @@ export class UserLoginResponse
     public LastSelectedCompanyName: string = '';
     public LoginEmployeeRef: number = 0;
     public LoginEmployeeName: string = '';
+    public LoginForFirstTime: number = 0;
 }

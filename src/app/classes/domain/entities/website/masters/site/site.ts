@@ -22,7 +22,7 @@ export class SiteProps {
   public AddressLine1 : string = '';
   public AddressLine2 : string = '';
   public PinCode : string = '';
-  public CountryRef: number = 0;
+  public CountryRef: number = 9163;
   public readonly CountryName: boolean = false;
   public StateRef: number = 0;
   public readonly StateName: boolean = false;
