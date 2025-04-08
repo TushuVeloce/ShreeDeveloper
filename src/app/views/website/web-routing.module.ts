@@ -97,6 +97,12 @@ import { GovernmentTransactionMasterComponent } from './government_transaction/g
 import { GovernmentTransactionDetailsComponent } from './government_transaction/government-transaction-details/government-transaction-details.component';
 import { SalaryGenerationComponent } from './hr_payroll_management/salary_generation/salary-generation/salary-generation.component';
 import { SalaryGenerationDetailsComponent } from './hr_payroll_management/salary_generation/salary-generation-details/salary-generation-details.component';
+import { LeaveApprovalComponent } from './hr_payroll_management/leave-approval/leave-approval.component';
+import { SalarySlipApprovalComponent } from './hr_payroll_management/salary-slip-approval/salary-slip-approval.component';
+import { LeaveRequestComponent } from './request/leave_request/leave-request/leave-request.component';
+import { LeaveRequestDetailsComponent } from './request/leave_request/leave-request-details/leave-request-details.component';
+import { SalarySlipRequestComponent } from './request/salary_slip_request/salary-slip-request/salary-slip-request.component';
+import { SalarySlipRequestDetailsComponent } from './request/salary_slip_request/salary-slip-request-details/salary-slip-request-details.component';
 
 
 const routes: Routes = [
@@ -106,34 +112,49 @@ const routes: Routes = [
       { path: 'Dashboard', component: DashboardComponent },
       { path: 'Unit_Master', component: UnitMasterComponent },
       { path: 'Unit_Master_Details', component: UnitMasterDetailsComponent },
+
       { path: 'Material_Master', component: MaterialMasterComponent },
       { path: 'Material_Master_Details', component: MaterialMasterDetailsComponent },
+
       { path: 'Stage_Master', component: StageMasterComponent },
       { path: 'Stage_Master_Details', component: StageMasterDetailsComponent },
+
       { path: 'Account_Main_Ledger', component: AccountMainLedgerComponent },
       { path: 'Account_Main_Ledger_Details', component: AccountMainLedgerDetailsComponent },
+
       { path: 'Account_Sub_Ledger', component: AccountSubLedgerComponent },
       { path: 'Account_Sub_Ledger_Details', component: AccountSubLedgerDetailsComponent },
+
       { path: 'Marketing_Type_Master', component: MarketingTypeMasterComponent },
       { path: 'Marketing_Type_Master_Details', component: MarketingTypeMasterDetailsComponent },
+
       { path: 'Vendor_Master', component: VendorMasterComponent },
       { path: 'Vendor_Master_Details', component: VendorMasterDetailsComponent },
+
       { path: 'Vendor_Services_Master', component: VendorServicesMasterComponent },
       { path: 'Vendor_Services_Master_Details', component: VendorServicesMasterDetailsComponent },
+
       { path: 'Vehicle_Master', component: VehicleMasterComponent },
       { path: 'Vehicle_Master_Details', component: VehicleMasterDetailsComponent },
+
       { path: 'Bank_Account_Master', component: BankAccountMasterComponent },
       { path: 'Bank_Account_Master_Details', component: BankAccountMasterDetailsComponent },
+
       { path: 'External_Users', component: ExternalUsersComponent },
       { path: 'External_Users_Details', component: ExternalUsersMasterDetailsComponent },
+
       { path: 'Company_Master', component: CompanyMasterComponent },
       { path: 'Company_Master_Details', component: CompanyMasterDetailsComponent },
+
       { path: 'Department_Master', component: DepartmentMasterComponent },
       { path: 'Department_Master_Details', component: DepartmentMasterDetailsComponent },
+
       { path: 'Designation_Master', component: DesignationMasterComponent },
       { path: 'Designation_Master_Details', component: DesignationMasterDetailsComponent },
+
       { path: 'User_Role_Master', component: UserRoleMasterComponent },
       { path: 'User_Role_Master_Details', component: UserRoleMasterDetailsComponent },
+
       { path: 'Employee_Master', component: EmployeeMasterComponent },
       { path: 'Employee_Master_Details', component: EmployeeMasterDetailsComponent },
 
@@ -154,7 +175,6 @@ const routes: Routes = [
       { path: 'Financial_Year_Master', component: FinancialYearMasterComponent },
 
       // Site management
-
       { path: 'Plot_Master', component: PlotMasterComponent },
       { path: 'Plot_Master_Details', component: PlotMasterDetailsComponent },
 
@@ -184,19 +204,18 @@ const routes: Routes = [
       { path: 'Registered_Customer_Details', component: RegisteredCustomerDetailsComponent },
 
 
-      //Registrar Office //
+      //Registrar Office
 
       { path: 'Registrar_Office', component: RegistrarOfficeComponent },
       { path: 'Registrar_Office_Details', component: RegistrarOfficeDetailComponent },
 
       { path: 'Plot_Resell_By_Third_Party', component: PlotResellByThirdPartyComponent },
-
       { path: 'Marketing_Management', component: MarketingManagementComponent },
-
       { path: 'Accounting_Transaction', component: AccountTransactionsComponent },
       { path: 'Expense_Transactions', component: ExpenseTransactionsComponent },
       { path: 'Client_Income', component: ClientIncomeComponent },
 
+      // Reports
       { path: 'Billing_Report', component: BillingReportComponent },
       { path: 'Office_Report', component: OfficeReportComponent },
       { path: 'Booking_Report', component: BookingReportComponent },
@@ -210,10 +229,23 @@ const routes: Routes = [
 
       // HR Payroll Management
       { path: 'Attendance_and_Salary', component: AttendanceAndSalaryComponent },
+
       { path: 'Office_Duty_Time', component: OfficeDutyTimeComponent },
       { path: 'Office_Duty_Time_Details', component: OfficeDutyTimeDetailsComponent },
+
       { path: 'Salary_Generation', component: SalaryGenerationComponent },
       { path: 'Salary_Generation_Details', component: SalaryGenerationDetailsComponent },
+
+      { path: 'Leave_Approval', component: LeaveApprovalComponent },
+
+      { path: 'Salary_Slip_Approval', component: SalarySlipApprovalComponent },
+
+      // Request
+      { path: 'Leave_Request', component: LeaveRequestComponent },
+      { path: 'Leave_Request_Details', component: LeaveRequestDetailsComponent },
+
+      { path: 'Salary_Slip_Request', component: SalarySlipRequestComponent },
+      { path: 'Salary_Slip_Request_Details', component: SalarySlipRequestDetailsComponent },
 
       // Government Office
       { path: 'Document', component: DocumentListComponent },

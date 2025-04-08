@@ -494,6 +494,7 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '',
       },
     ]
+
     let HrPayrollManagement = [
       {
         Name: 'Office Duty & Time',
@@ -509,7 +510,31 @@ export class SidebarlayoutComponent implements OnInit {
         Name: 'Salary Generation',
         RouterLink: '/homepage/Website/Salary_Generation',
         LogoPath: '',
+      },
+      {
+        Name: 'Leave Approval',
+        RouterLink: '/homepage/Website/Leave_Approval',
+        LogoPath: '',
+      },
+      {
+        Name: 'Salary Slip Approval',
+        RouterLink: '/homepage/Website/Salary_Slip_Approval',
+        LogoPath: '',
       }
+
+    ]
+
+    let RequestSubModulelist = [
+      {
+        Name: 'Leave Request',
+        RouterLink: '/homepage/Website/Leave_Request',
+        LogoPath: '',
+      },
+      {
+        Name: 'Salary Slip Request',
+        RouterLink: '/homepage/Website/Salary_Slip_Request',
+        LogoPath: '',
+      },
     ]
 
     let moduleListInternal = [
@@ -560,6 +585,12 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '',
         WhiteLogo: '/assets/icons/gov office.png',
         SubModuleList: HrPayrollManagement,
+      },
+      {
+        Name: 'Request',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/gov office.png',
+        SubModuleList: RequestSubModulelist,
       }
     ].filter(e => e.SubModuleList.length > 0);
 
