@@ -71,6 +71,7 @@ export class UnitMasterDetailsComponent  implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Unit Master saved successfully!');
         this.Entity = Unit.CreateNewInstance();
+        this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster('Unit Master Updated successfully!');
         await this.router.navigate(['/homepage/Website/Unit_Master']);

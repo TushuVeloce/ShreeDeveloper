@@ -39,7 +39,7 @@ export class MaterialMasterDetailsComponent implements OnInit {
     private appStateManage: AppStateManageService,
     private utils: Utils,
     private companystatemanagement: CompanyStateManagement
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -76,9 +76,9 @@ export class MaterialMasterDetailsComponent implements OnInit {
   };
 
   SaveMaterialMaster = async () => {
-    this.Entity.p.CompanyRef =this.companystatemanagement.getCurrentCompanyRef();
-    this.Entity.p.CompanyName =this.companystatemanagement.getCurrentCompanyName();
-    if(this.Entity.p.CreatedBy == 0){
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+    if (this.Entity.p.CreatedBy == 0) {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
     let entityToSave = this.Entity.GetEditableVersion();
@@ -89,20 +89,17 @@ export class MaterialMasterDetailsComponent implements OnInit {
 
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error',tr.Message);
+      this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     } else {
       this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster(
-          'Material Master saved successfully!'
-        );
+        await this.uiUtils.showSuccessToster('Material Master saved successfully!');
         this.Entity = Material.CreateNewInstance();
+        this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster(
-          'Material Master Updated successfully!'
-        );
+        await this.uiUtils.showSuccessToster('Material Master Updated successfully!');
         await this.router.navigate(['/homepage/Website/Material_Master']);
       }
     }

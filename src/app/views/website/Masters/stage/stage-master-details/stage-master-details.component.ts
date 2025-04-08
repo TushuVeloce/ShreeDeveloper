@@ -21,10 +21,14 @@ export class StageMasterDetailsComponent implements OnInit {
   Entity: Stage = Stage.CreateNewInstance();
   DetailsFormTitle: 'New Stage' | 'Edit Stage' = 'New Stage';
   InitialEntity: Stage = null as any;
-  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
-   @ViewChild('NameCtrl') NameInputControl!: NgModel;
-   @ViewChild('DisplayOrderCtrl') DisplayOrderInputControl!: NgModel;
+  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
+
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
+  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
+
+  @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('DisplayOrderCtrl') DisplayOrderInputControl!: NgModel;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
@@ -48,7 +52,7 @@ export class StageMasterDetailsComponent implements OnInit {
   SaveStageMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-    if(!this.Entity.p.DisplayOrder){
+    if (!this.Entity.p.DisplayOrder) {
       this.Entity.p.DisplayOrder = 0;
     }
     let entityToSave = this.Entity.GetEditableVersion();
@@ -58,7 +62,7 @@ export class StageMasterDetailsComponent implements OnInit {
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error',tr.Message);
+      this.uiUtils.showErrorMessage('Error', tr.Message);
       return
     }
     else {
@@ -67,12 +71,19 @@ export class StageMasterDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Stage saved successfully!');
         this.Entity = Stage.CreateNewInstance();
+        this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Stage Updated successfully!');
         await this.router.navigate(['/homepage/Website/Stage_Master']);
 
       }
     }
+  }
+
+  // for value 0 selected while click on Input //
+  selectAllValue(event: MouseEvent): void {
+    const input = event.target as HTMLInputElement;
+    input.select();
   }
 
   BackMaterial = () => {

@@ -41,12 +41,14 @@ export class VendorMasterDetailsComponent implements OnInit {
   // VendorServicesOptions: { label: string, value: number }[] = [];
 
 
+  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
   PinCodePattern: string = ValidationPatterns.PinCode;
   IFSCPattern: string = ValidationPatterns.IFSC;
   PANPattern: string = ValidationPatterns.PAN;
   GSTINPattern: string = ValidationPatterns.GSTIN;
 
 
+  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   PinCodeMsg: string = ValidationMessages.PinCodeMsg;
   IFSCMsg: string = ValidationMessages.IFSCMsg;
   GSTINMsg: string = ValidationMessages.GSTINMsg;
@@ -74,6 +76,7 @@ export class VendorMasterDetailsComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(true);
     this.MaterialList = await Material.FetchEntireList();
     this.ServiceList = await VendorService.FetchEntireList();
+
 
     // if (this.VendorServicesList.length > 0) {
     //   this.VendorServicesOptions = this.VendorServicesList.map(item => ({
@@ -158,7 +161,7 @@ export class VendorMasterDetailsComponent implements OnInit {
     this.Entity.p.MaterialListSuppliedByVendor = selectedvalue;
   }
 
-  onServiceProviceChange = (Selectedservice:any) => {
+  onServiceProviceChange = (Selectedservice: any) => {
     this.Entity.p.MaterialListSuppliedByVendor = Selectedservice;
   }
 
@@ -173,7 +176,7 @@ export class VendorMasterDetailsComponent implements OnInit {
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error',tr.Message);
+      this.uiUtils.showErrorMessage('Error', tr.Message);
       return
     }
     else {

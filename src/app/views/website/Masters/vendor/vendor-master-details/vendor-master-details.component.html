@@ -15,10 +15,10 @@
         <div class="col-md-6 col-md-4 col-sm-12">
           <label for="Code">Vendor Code</label>
           <input type="text" [(ngModel)]="Entity.p.Code" name="Code" class="form-control" id="Code" required
-            placeholder="Enter Vendor Code"  #CodeCtrl="ngModel" required (blur)="CodeCtrl.control.markAsTouched()" />
-            <div *ngIf="(CodeCtrl.invalid && (CodeCtrl.touched || CodeCtrl.dirty))">
-              <span class="validation-text" *ngIf="CodeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+            placeholder="Enter Vendor Code" #CodeCtrl="ngModel" required (blur)="CodeCtrl.control.markAsTouched()" />
+          <div *ngIf="(CodeCtrl.invalid && (CodeCtrl.touched || CodeCtrl.dirty))">
+            <span class="validation-text" *ngIf="CodeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
         <div class="col-lg-6 col-md-4 col-sm-12">
           <label for="CompanyType">Company Type</label>
@@ -33,36 +33,41 @@
         <div class="col-md-6 col-md-4 col-sm-12">
           <label for="Name">Name</label>
           <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
-            placeholder="Enter Name"  #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()" />
-            <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
-              <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+            placeholder="Enter Name" [pattern]="NameWithNosAndSpace" #NameCtrl="ngModel" required
+            (blur)="NameCtrl.control.markAsTouched()" />
+          <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
+            <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithNosAndSpaceMsg}}</span>
+            <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
         <div class="col-md-6 col-md-4 col-sm-12">
           <label for="TradeName">Trade Name</label>
-          <input type="text" [(ngModel)]="Entity.p.TradeName" name="TradeName" class="form-control" id="TradeName" required
-            placeholder="Enter Trade Name"  #TradeNameCtrl="ngModel" required (blur)="TradeNameCtrl.control.markAsTouched()" />
-            <div *ngIf="(TradeNameCtrl.invalid && (TradeNameCtrl.touched || TradeNameCtrl.dirty))">
-              <span class="validation-text" *ngIf="TradeNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+          <input type="text" [(ngModel)]="Entity.p.TradeName" name="TradeName" class="form-control" id="TradeName"
+            required placeholder="Enter Trade Name" #TradeNameCtrl="ngModel" required
+            (blur)="TradeNameCtrl.control.markAsTouched()" />
+          <div *ngIf="(TradeNameCtrl.invalid && (TradeNameCtrl.touched || TradeNameCtrl.dirty))">
+            <span class="validation-text" *ngIf="TradeNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4 col-md-4 col-sm-12">
           <label for="MobileNo">Phone Number</label>
           <input type="text" [(ngModel)]="Entity.p.MobileNo" name="MobileNo" class="form-control" id="MobileNo" required
-            placeholder="Enter Phone No."  #MobileNoCtrl="ngModel" required (blur)="MobileNoCtrl.control.markAsTouched()" />
-            <div *ngIf="(MobileNoCtrl.invalid && (MobileNoCtrl.touched || MobileNoCtrl.dirty))">
-              <span class="validation-text" *ngIf="MobileNoCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+            placeholder="Enter Phone No." #MobileNoCtrl="ngModel" required
+            (blur)="MobileNoCtrl.control.markAsTouched()" />
+          <div *ngIf="(MobileNoCtrl.invalid && (MobileNoCtrl.touched || MobileNoCtrl.dirty))">
+            <span class="validation-text" *ngIf="MobileNoCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
           <label for="AddressLine1">Address Line1</label>
           <input type="text" [(ngModel)]="Entity.p.AddressLine1" name="AddressLine1" class="form-control"
-            id="AddressLine1" required placeholder="Enter Address Line1"  #AddressLine1Ctrl="ngModel" required (blur)="AddressLine1Ctrl.control.markAsTouched()" />
-            <div *ngIf="(AddressLine1Ctrl.invalid && (AddressLine1Ctrl.touched || AddressLine1Ctrl.dirty))">
-              <span class="validation-text" *ngIf="AddressLine1Ctrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+            id="AddressLine1" required placeholder="Enter Address Line1" #AddressLine1Ctrl="ngModel" required
+            (blur)="AddressLine1Ctrl.control.markAsTouched()" />
+          <div *ngIf="(AddressLine1Ctrl.invalid && (AddressLine1Ctrl.touched || AddressLine1Ctrl.dirty))">
+            <span class="validation-text" *ngIf="AddressLine1Ctrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
           <label for="AddressLine2">Address Line2</label>
@@ -100,42 +105,47 @@
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>Pin Code</label>
           <input type="text" [(ngModel)]="Entity.p.PinCode" name="PinCode" class="form-control" id="PinCode" required
-            placeholder="Enter Pin Code" pattern="{{PinCodePattern}}" #PinCodeCtrl="ngModel" required (blur)="PinCodeCtrl.control.markAsTouched()" />
-            <div *ngIf="(PinCodeCtrl.invalid && (PinCodeCtrl.touched || PinCodeCtrl.dirty))">
-              <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['pattern']">{{PinCodeMsg}}</span>
-              <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+            placeholder="Enter Pin Code" pattern="{{PinCodePattern}}" #PinCodeCtrl="ngModel" required
+            (blur)="PinCodeCtrl.control.markAsTouched()" />
+          <div *ngIf="(PinCodeCtrl.invalid && (PinCodeCtrl.touched || PinCodeCtrl.dirty))">
+            <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['pattern']">{{PinCodeMsg}}</span>
+            <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>Bank Name</label>
           <input type="text" [(ngModel)]="Entity.p.BankName" name="Name" class="form-control" id="Name" required
-            placeholder="Enter Bank Name"  #BankNameCtrl="ngModel" required (blur)="BankNameCtrl.control.markAsTouched()" />
-            <div *ngIf="(BankNameCtrl.invalid && (BankNameCtrl.touched || BankNameCtrl.dirty))">
-              <span class="validation-text" *ngIf="BankNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+            placeholder="Enter Bank Name" #BankNameCtrl="ngModel" required
+            (blur)="BankNameCtrl.control.markAsTouched()" />
+          <div *ngIf="(BankNameCtrl.invalid && (BankNameCtrl.touched || BankNameCtrl.dirty))">
+            <span class="validation-text" *ngIf="BankNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>Branch Name</label>
           <input type="text" [(ngModel)]="Entity.p.BranchName" name="BranchName" class="form-control" id="BranchName"
-            required placeholder="Enter Branch Name"  #BranchNameCtrl="ngModel" required (blur)="BranchNameCtrl.control.markAsTouched()" />
-            <div *ngIf="(BranchNameCtrl.invalid && (BranchNameCtrl.touched || BranchNameCtrl.dirty))">
-              <span class="validation-text" *ngIf="BranchNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+            required placeholder="Enter Branch Name" #BranchNameCtrl="ngModel" required
+            (blur)="BranchNameCtrl.control.markAsTouched()" />
+          <div *ngIf="(BranchNameCtrl.invalid && (BranchNameCtrl.touched || BranchNameCtrl.dirty))">
+            <span class="validation-text" *ngIf="BranchNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>Account No</label>
           <input type="text" [(ngModel)]="Entity.p.AccountNumber" name="AccountNo" class="form-control" id="AccountNo"
-            required placeholder="Enter Bank Account Number"  #AccountNumberCtrl="ngModel" required (blur)="AccountNumberCtrl.control.markAsTouched()" />
-            <div *ngIf="(AccountNumberCtrl.invalid && (AccountNumberCtrl.touched || AccountNumberCtrl.dirty))">
-              <span class="validation-text" *ngIf="AccountNumberCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+            required placeholder="Enter Bank Account Number" #AccountNumberCtrl="ngModel" required
+            (blur)="AccountNumberCtrl.control.markAsTouched()" />
+          <div *ngIf="(AccountNumberCtrl.invalid && (AccountNumberCtrl.touched || AccountNumberCtrl.dirty))">
+            <span class="validation-text" *ngIf="AccountNumberCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
           <label for="IFSC">IFSC</label>
-          <input type="text" [(ngModel)]="Entity.p.IFSC" name="IFSC" class="form-control" id="IFSC" pattern="{{IFSCPattern}}"
-            placeholder="Enter IFSC" #IFSCCtrl="ngModel" required (blur)="IFSCCtrl.control.markAsTouched()" />
+          <input type="text" [(ngModel)]="Entity.p.IFSC" name="IFSC" class="form-control" id="IFSC"
+            pattern="{{IFSCPattern}}" placeholder="Enter IFSC" #IFSCCtrl="ngModel" required
+            (blur)="IFSCCtrl.control.markAsTouched()" />
           <div *ngIf="(IFSCCtrl.invalid && (IFSCCtrl.touched || IFSCCtrl.dirty))">
             <span class="validation-text" *ngIf="IFSCCtrl.errors?.['pattern']">{{IFSCMsg}}</span>
             <span class="validation-text" *ngIf="IFSCCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -143,22 +153,24 @@
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>GSTIN</label>
-          <input type="text" [(ngModel)]="Entity.p.GSTIN" name="GSTIN" class="form-control" id="GSTIN" pattern="{{GSTINPattern}}"
-            placeholder="Enter GST" #GSTINCtrl="ngModel" (blur)="GSTINCtrl.control.markAsTouched()"/>
-            <div *ngIf="(GSTINCtrl.invalid && (GSTINCtrl.touched || GSTINCtrl.dirty))">
-              <span class="validation-text" *ngIf="GSTINCtrl.errors?.['pattern']">{{GSTINMsg}}</span>
-            </div>
+          <input type="text" [(ngModel)]="Entity.p.GSTIN" name="GSTIN" class="form-control" id="GSTIN"
+            pattern="{{GSTINPattern}}" placeholder="Enter GST" #GSTINCtrl="ngModel"
+            (blur)="GSTINCtrl.control.markAsTouched()" />
+          <div *ngIf="(GSTINCtrl.invalid && (GSTINCtrl.touched || GSTINCtrl.dirty))">
+            <span class="validation-text" *ngIf="GSTINCtrl.errors?.['pattern']">{{GSTINMsg}}</span>
+          </div>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>PAN </label>
-          <input type="text" [(ngModel)]="Entity.p.Pan" name="Pan" class="form-control" id="Pan" pattern="{{PANPattern}}"
-            placeholder="Enter Pan"  #PANCtrl="ngModel" required (blur)="PANCtrl.control.markAsTouched()" />
-            <div *ngIf="(PANCtrl.invalid && (PANCtrl.touched || PANCtrl.dirty))">
-              <span class="validation-text" *ngIf="PANCtrl.errors?.['pattern']">{{PANMsg}}</span>
-              <span class="validation-text" *ngIf="PANCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+          <input type="text" [(ngModel)]="Entity.p.Pan" name="Pan" class="form-control" id="Pan"
+            pattern="{{PANPattern}}" placeholder="Enter Pan" #PANCtrl="ngModel" required
+            (blur)="PANCtrl.control.markAsTouched()" />
+          <div *ngIf="(PANCtrl.invalid && (PANCtrl.touched || PANCtrl.dirty))">
+            <span class="validation-text" *ngIf="PANCtrl.errors?.['pattern']">{{PANMsg}}</span>
+            <span class="validation-text" *ngIf="PANCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>CIN</label>
@@ -179,22 +191,19 @@
         </div>
         <div class="col-md-6 col-md-4 col-sm-12">
           <label for="ServiceListSuppliedByVendor"><b>Services Provided Services</b></label>
-          <nz-select [(ngModel)]="Entity.p.ServiceListSuppliedByVendor" nzMode="multiple" id="ServiceListSuppliedByVendor"
-            name="ServiceListSuppliedByVendor" nzShowSearch nzAllowClear nzPlaceHolder="Select services"
+          <nz-select [(ngModel)]="Entity.p.ServiceListSuppliedByVendor" nzMode="multiple"
+            id="ServiceListSuppliedByVendor" name="ServiceListSuppliedByVendor" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select services"
             (ngModalChange)="onServiceProviceChange(Entity.p.ServiceListSuppliedByVendor)">
             <nz-option *ngFor="let service of ServiceList" [nzValue]="service.p.Ref"
               [nzLabel]="service.p.Name"></nz-option>
           </nz-select>
         </div>
       </div>
-      <!-- <div class="col-md-6">
-        <label>Company Name</label>
-        <input class="form-control" type="text" [attr.value]="companyName()" placeholder="Company Name" readonly />
-      </div> -->
     </div>
     <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
       <div>
-        <button type="button" class="btn" (click)="SaveVendorMaster()" [disabled]="isSaveDisabled || VendorForm.invalid">Save</button>
+        <button type="button" class="btn" (click)="SaveVendorMaster()" [disabled]="isSaveDisabled">Save</button>
       </div>
       <div>
         <button type="button" class="btn" (click)="BackVendor()">Back</button>

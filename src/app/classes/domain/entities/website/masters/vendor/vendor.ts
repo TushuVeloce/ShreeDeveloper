@@ -11,6 +11,7 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { VendorFetchRequest } from "./vendorfetchrequest";
+import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 
 export class MaterialListSuppliedByVendorProps {
   public MaterialRef: number = 0;
@@ -40,19 +41,19 @@ export class VendorProps {
   public IFSC: string = '';
 
   public PinCode: string = '';
-  public GSTIN:  string='';
-  public Pan:  string='';
-  public CINNO:  string='';
+  public GSTIN: string = '';
+  public Pan: string = '';
+  public CINNO: string = '';
 
-  public CountryRef:  number = 9163;
-  public readonly CountryName: string='';
-  public StateRef:  number = 10263;
-  public readonly StateName: string='';
-  public CityRef:  number = 10374;
-  public readonly CityName: string='';
+  public CountryRef: number = 9163;
+  public readonly CountryName: string = '';
+  public StateRef: number = 10263;
+  public readonly StateName: string = '';
+  public CityRef: number = 10374;
+  public readonly CityName: string = '';
 
-  public MaterialListSuppliedByVendor : MaterialListSuppliedByVendorProps [] = [];
-  public ServiceListSuppliedByVendor : ServiceSuppliedByVendorProps [] = [];
+  public MaterialListSuppliedByVendor: MaterialListSuppliedByVendorProps[] = [];
+  public ServiceListSuppliedByVendor: ServiceSuppliedByVendorProps[] = [];
 
   public CompanyRef: number = 0;
   public CompanyName: string = '';
@@ -79,8 +80,8 @@ export class Vendor implements IPersistable<Vendor> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -104,7 +105,11 @@ export class Vendor implements IPersistable<Vendor> {
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
     if (this.p.Code == '') vra.add('Code', 'Vendor Code cannot be blank.');
     if (this.p.CompanyType == 0) vra.add('CompanyType', 'Company Type cannot be blank.');
-    if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
+    if (this.p.Name == '') {
+      vra.add('Name', 'Name cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
+      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg);
+    }
     if (this.p.TradeName == '') vra.add('TradeName', 'Trade Name cannot be blank.');
     if (this.p.MobileNo == '') vra.add('MobileNo', 'Mobile No cannot be blank.');
     if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'AddressLine1 cannot be blank.');
@@ -112,13 +117,29 @@ export class Vendor implements IPersistable<Vendor> {
     if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country cannot be blank.');
     if (this.p.StateRef == 0) vra.add('StateRef', 'State cannot be blank.');
     if (this.p.CityRef == 0) vra.add('CityRef', 'City cannot be blank.');
-    if (this.p.PinCode == '') vra.add('PinCode', 'Pin cannot be blank.');
+    if (this.p.PinCode == '') {
+      vra.add('PinCode', 'Pin cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.PinCode).test(this.p.PinCode)) {
+      vra.add('PinCode', ValidationMessages.PinCodeMsg);
+    }
     if (this.p.BankName == '') vra.add('BankName', 'Bank cannot be blank.');
     if (this.p.BranchName == '') vra.add('BranchName', 'Branch cannot be blank.');
     if (this.p.AccountNumber == '') vra.add('AccountNumber', 'Account Number cannot be blank.');
-    if (this.p.IFSC == '') vra.add('IFSC', 'IFSC cannot be blank.');
-    if (this.p.GSTIN == '') vra.add('GSTIN', 'GST IN cannot be blank.');
-    if (this.p.Pan == '') vra.add('Pan', 'PAN cannot be blank.');
+    if (this.p.IFSC == '') {
+      vra.add('IFSC', 'Pin cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.IFSC).test(this.p.IFSC)) {
+      vra.add('IFSC', ValidationMessages.IFSCMsg);
+    }
+    if (this.p.GSTIN == '') {
+      vra.add('GSTIN', 'Pin cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN)) {
+      vra.add('GSTIN', ValidationMessages.GSTINMsg);
+    }
+    if (this.p.Pan == '') {
+      vra.add('Pan', 'Pin cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan)) {
+      vra.add('Pan', ValidationMessages.PANMsg);
+    }
     if (this.p.CINNO == '') vra.add('CINNO', 'CIN cannot be blank.');
     if (this.p.MaterialListSuppliedByVendor.length < 0) vra.add('MaterialListSuppliedByVendor', ' Vendor Material Supply list cannot be blank.');
     if (this.p.ServiceListSuppliedByVendor.length < 0) vra.add('ServiceListSuppliedByVendor', 'Vendor Service Supply list cannot be blank.');
@@ -215,7 +236,7 @@ export class Vendor implements IPersistable<Vendor> {
     return Vendor.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new VendorFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await Vendor.FetchTransportData(req, errorHandler) as TransportData;

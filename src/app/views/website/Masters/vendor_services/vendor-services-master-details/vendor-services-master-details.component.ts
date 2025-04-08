@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ValidationMessages } from 'src/app/classes/domain/constants';
+import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -14,17 +14,22 @@ import { Utils } from 'src/app/services/utils.service';
   templateUrl: './vendor-services-master-details.component.html',
   styleUrls: ['./vendor-services-master-details.component.scss'],
 })
-export class VendorServicesMasterDetailsComponent  implements OnInit {
-   Entity: VendorService = VendorService.CreateNewInstance();
-    private IsNewEntity: boolean = true;
-    isSaveDisabled: boolean = false;
-    DetailsFormTitle: 'New Vendor Service' | 'Edit Vendor Service' = 'New Vendor Service';
-    IsDropdownDisabled: boolean = false
-    InitialEntity: VendorService = null as any;
-    RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
+export class VendorServicesMasterDetailsComponent implements OnInit {
+  Entity: VendorService = VendorService.CreateNewInstance();
+  private IsNewEntity: boolean = true;
+  isSaveDisabled: boolean = false;
+  DetailsFormTitle: 'New Vendor Service' | 'Edit Vendor Service' = 'New Vendor Service';
+  IsDropdownDisabled: boolean = false
+  InitialEntity: VendorService = null as any;
+
+  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
+
+  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
+
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
 
-   @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('NameCtrl') NameInputControl!: NgModel;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
@@ -43,7 +48,7 @@ export class VendorServicesMasterDetailsComponent  implements OnInit {
 
     }
     this.InitialEntity = Object.assign(VendorService.CreateNewInstance(),
-    this.utils.DeepCopy(this.Entity)) as VendorService;
+      this.utils.DeepCopy(this.Entity)) as VendorService;
     // this.focusInput();
   }
 
@@ -56,7 +61,7 @@ export class VendorServicesMasterDetailsComponent  implements OnInit {
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error',tr.Message);
+      this.uiUtils.showErrorMessage('Error', tr.Message);
       return
     }
     else {
