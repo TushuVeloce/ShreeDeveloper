@@ -861,10 +861,10 @@ export class DomainEnums {
         Ref: Month.January, Name: DomainEnums.MonthName(Month.January)
       },
       {
-         Ref: Month.January, Name: DomainEnums.MonthName(Month.January) 
+         Ref: Month.January, Name: DomainEnums.MonthName(Month.January)
         },
       {
-         Ref: Month.February, Name: DomainEnums.MonthName(Month.February) 
+         Ref: Month.February, Name: DomainEnums.MonthName(Month.February)
         },
       {
          Ref: Month.March, Name: DomainEnums.MonthName(Month.March)
@@ -873,7 +873,7 @@ export class DomainEnums {
          Ref: Month.April, Name: DomainEnums.MonthName(Month.April)
          },
       {
-         Ref: Month.May, Name: DomainEnums.MonthName(Month.May) 
+         Ref: Month.May, Name: DomainEnums.MonthName(Month.May)
         },
       {
          Ref: Month.June, Name: DomainEnums.MonthName(Month.June)
@@ -881,20 +881,20 @@ export class DomainEnums {
       {
          Ref: Month.July, Name: DomainEnums.MonthName(Month.July)
          },
-      { 
-        Ref: Month.August, Name: DomainEnums.MonthName(Month.August) 
+      {
+        Ref: Month.August, Name: DomainEnums.MonthName(Month.August)
       },
       {
-         Ref: Month.September, Name: DomainEnums.MonthName(Month.September) 
+         Ref: Month.September, Name: DomainEnums.MonthName(Month.September)
         },
       {
-         Ref: Month.October, Name: DomainEnums.MonthName(Month.October) 
+         Ref: Month.October, Name: DomainEnums.MonthName(Month.October)
         },
       {
-         Ref: Month.November, Name: DomainEnums.MonthName(Month.November) 
+         Ref: Month.November, Name: DomainEnums.MonthName(Month.November)
         },
       {
-         Ref: Month.December, Name: DomainEnums.MonthName(Month.December) 
+         Ref: Month.December, Name: DomainEnums.MonthName(Month.December)
         }
 
     ]
@@ -910,9 +910,9 @@ export class DomainEnums {
 
   public static LeaveRequestTypeName(itemType: LeaveRequestType) {
     switch (itemType) {
-      case LeaveRequestType.PersonalLeave: return 'PersonalLeave';
-      case LeaveRequestType.SickLeave: return 'SickLeave';
-      case LeaveRequestType.HalfDay: return 'HalfDay';
+      case LeaveRequestType.PersonalLeave: return 'Personal Leave';
+      case LeaveRequestType.SickLeave: return 'Sick Leave';
+      case LeaveRequestType.HalfDay: return 'Half Day';
       default: return '';
     }
   }
@@ -923,10 +923,10 @@ export class DomainEnums {
         Ref: LeaveRequestType.PersonalLeave, Name: DomainEnums.LeaveRequestTypeName(LeaveRequestType.PersonalLeave)
       },
       {
-         Ref: LeaveRequestType.SickLeave, Name: DomainEnums.LeaveRequestTypeName(LeaveRequestType.SickLeave) 
+         Ref: LeaveRequestType.SickLeave, Name: DomainEnums.LeaveRequestTypeName(LeaveRequestType.SickLeave)
         },
       {
-         Ref: LeaveRequestType.HalfDay, Name: DomainEnums.LeaveRequestTypeName(LeaveRequestType.HalfDay) 
+         Ref: LeaveRequestType.HalfDay, Name: DomainEnums.LeaveRequestTypeName(LeaveRequestType.HalfDay)
         }
     ]
     if (withAllOption) {

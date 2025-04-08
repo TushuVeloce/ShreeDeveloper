@@ -1,3 +1,59 @@
-<p>
-  leave-request works!
-</p>
+<div>
+  <div class="row">
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2">
+      <h5 style="padding-top: 3px;" class="title title_light">Leave Request</h5>
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
+      <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus
+        [(ngModel)]="SearchString" />
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
+      <nz-button nz-button class="btn1" (click)='AddLeaveRequest()'>
+        Add Leave Request
+      </nz-button>
+    </div>
+    <div>
+    </div>
+  </div>
+  <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+    <div class="table-container">
+      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
+        [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+        <thead>
+          <tr>
+            <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let leaverequest of paginatedList(); index as i">
+            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td Class="tbldata">{{leaverequest.p.EmployeeName}}</td>
+            <td Class="tbldata">{{leaverequest.p.LeaveRequestType}}</td>
+            <td Class="tbldata">{{leaverequest.p.FromDate}}</td>
+            <td Class="tbldata">{{leaverequest.p.ToDate}}</td>
+            <td Class="tbldata">{{leaverequest.p.Days}}</td>
+            <td Class="tbldata">{{leaverequest.p.LeaveHours}}</td>
+            <td Class="tbldata">{{leaverequest.p.IsApproval}}</td>
+            <td Class="tbldata">{{leaverequest.p.IsDeleted}}</td>
+            <td class="tbldata">
+              <!-- <span style="margin-left: 9px;" (click)="onEditClicked(leaverequest);">
+                <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+              </span> -->
+              <span style="margin-left: 9px;" (click)="onDeleteClicked(leaverequest);">
+                <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+    <div class="fixed-pagination">
+      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+        (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+      </nz-pagination>
+    </div>
+  </div>
+  <div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
+    <div style="height: 200px" class="d-flex align-items-center justify-content-center">
+      <span class="title_light"> Data Not Found</span>
+    </div>
+  </div>

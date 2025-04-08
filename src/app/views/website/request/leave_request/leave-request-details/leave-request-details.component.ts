@@ -1,15 +1,125 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { UIUtils } from 'src/app/services/uiutils.service';
+import { Utils } from 'src/app/services/utils.service';
+import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
+import { NgModel } from '@angular/forms';
+import { LeaveRequest } from 'src/app/classes/domain/entities/website/request/leaverequest/leaverequest';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+
 
 @Component({
-  selector: 'app-leave-request-details',
+  selector: 'app-leaverequest-master-details',
   standalone: false,
   templateUrl: './leave-request-details.component.html',
   styleUrls: ['./leave-request-details.component.scss'],
 })
-export class LeaveRequestDetailsComponent  implements OnInit {
+export class LeaveRequestDetailsComponent implements OnInit {
+  Entity: LeaveRequest = LeaveRequest.CreateNewInstance();
+  private IsNewEntity: boolean = true;
+  isSaveDisabled: boolean = false;
+  DetailsFormTitle: 'New Leave Request' | 'Edit Leave Request' = 'New Leave Request';
+  IsDropdownDisabled: boolean = false;
+  InitialEntity: LeaveRequest = null as any;
+  EmployeeList: Employee[] = [];
+  LeaveRequestTypeList = DomainEnums.LeaveRequestTypeList(true, '--Select Leave Type--');
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+  NameWithNos: string = ValidationPatterns.NameWithNos
 
-  constructor() { }
+  NameWithNosMsg: string = ValidationMessages.NameWithNosMsg
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
-  ngOnInit() {}
+  @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('CodeCtrl') CodeInputControl!: NgModel;
 
+  constructor(
+    private router: Router,
+    private uiUtils: UIUtils,
+    private appStateManage: AppStateManageService,
+    private utils: Utils,
+    private companystatemanagement: CompanyStateManagement
+  ) { }
+
+  async ngOnInit() {
+    this.appStateManage.setDropdownDisabled(true);
+    this.EmployeeList = await Employee.FetchEntireList();
+    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+      this.IsNewEntity = false;
+
+      this.DetailsFormTitle = this.IsNewEntity
+        ? 'New Leave Request'
+        : 'Edit Leave Request';
+      this.Entity = LeaveRequest.GetCurrentInstance();
+      this.appStateManage.StorageKey.removeItem('Editable');
+      // this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    } else {
+      this.Entity = LeaveRequest.CreateNewInstance();
+      LeaveRequest.SetCurrentInstance(this.Entity);
+      this.Entity.p.EmployeeRef = this.EmployeeList[0].p.Ref
+      this.Entity.p.LeaveRequestType = this.LeaveRequestTypeList[1].Ref
+    }
+    this.InitialEntity = Object.assign(
+      LeaveRequest.CreateNewInstance(),
+      this.utils.DeepCopy(this.Entity)
+    ) as LeaveRequest;
+    this.focusInput();
+    // await this.FormulateEmployeeList();
+  }
+
+  focusInput = () => {
+    let txtName = document.getElementById('FromDate')!;
+    txtName.focus();
+  }
+
+  SaveLeaveRequest = async () => {
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+    if (this.Entity.p.CreatedBy == 0) {
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    }
+    let entityToSave = this.Entity.GetEditableVersion();
+    let entitiesToSave = [entityToSave];
+    console.log('entityToSave :', entityToSave);
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
+    } else {
+      this.isSaveDisabled = false;
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('LeaveRequest Master saved successfully!');
+        this.Entity = LeaveRequest.CreateNewInstance();
+        this.resetAllControls();
+      } else {
+        await this.uiUtils.showSuccessToster('LeaveRequest Master Updated successfully!');
+        await this.router.navigate(['/homepage/Website/Leave_Request']);
+      }
+    }
+  };
+
+  // for value 0 selected while click on Input //
+  selectAllValue(event: MouseEvent): void {
+    const input = event.target as HTMLInputElement;
+    input.select();
+  }
+
+  BackLeaveRequest = () => {
+    this.router.navigate(['/homepage/Website/Leave_Request']);
+  }
+
+  resetAllControls = () => {
+    // reset touched
+    this.NameInputControl.control.markAsUntouched();
+    this.CodeInputControl.control.markAsUntouched();
+
+    // reset dirty
+
+    this.NameInputControl.control.markAsPristine();
+    this.CodeInputControl.control.markAsPristine();
+  }
 }

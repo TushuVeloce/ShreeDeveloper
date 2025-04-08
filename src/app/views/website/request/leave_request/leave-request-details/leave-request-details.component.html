@@ -1,3 +1,93 @@
-<p>
-  leave-request-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackLeaveRequest()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">{{DetailsFormTitle}}</span>
+      </div>
+    </div>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+          <label>Employee</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="EmployeeRef"
+            name="EmployeeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.EmployeeRef">
+            <nz-option *ngFor="let Employee of EmployeeList" [nzValue]="Employee.p.Ref"
+              [nzLabel]="Employee.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+          <label>Leave Request Type</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LeaveRequestType"
+            name="LeaveRequestType" [nzSize]="'large'" [(ngModel)]="Entity.p.LeaveRequestType">
+            <nz-option *ngFor="let LeaveRequestType of LeaveRequestTypeList" [nzValue]="LeaveRequestType.Ref"
+              [nzLabel]="LeaveRequestType.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+          <label>From Date</label>
+          <input type="date" [(ngModel)]="Entity.p.FromDate" name="FromDate" class="form-control" id="FromDate" required
+            placeholder="Enter From Date" #FromDateCtrl="ngModel" required
+            (blur)="FromDateCtrl.control.markAsTouched()" />
+          <div style="height: 25px;" *ngIf="(FromDateCtrl.invalid && (FromDateCtrl.touched || FromDateCtrl.dirty))">
+            <span class="validation-text" *ngIf="FromDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+          <label>To Date</label>
+          <input type="date" [(ngModel)]="Entity.p.ToDate" name="ToDate" class="form-control" id="ToDate" required
+            placeholder="Enter To Date" #ToDateCtrl="ngModel" required (blur)="ToDateCtrl.control.markAsTouched()" />
+          <div style="height: 25px;" *ngIf="(ToDateCtrl.invalid && (ToDateCtrl.touched || ToDateCtrl.dirty))">
+            <span class="validation-text" *ngIf="ToDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+          <label>Days</label>
+          <input type="number" [(ngModel)]="Entity.p.Days" name="Days" class="form-control" id="Days" required
+            placeholder="Enter Days" #DaysCtrl="ngModel" required (blur)="DaysCtrl.control.markAsTouched()"
+            (click)="selectAllValue($event)" />
+          <div style="height: 25px;" *ngIf="(DaysCtrl.invalid && (DaysCtrl.touched || DaysCtrl.dirty))">
+            <span class="validation-text" *ngIf="DaysCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+          <label>Leave Hours</label>
+          <input type="number" [(ngModel)]="Entity.p.LeaveHours" name="LeaveHours" class="form-control" id="LeaveHours"
+            required placeholder="Enter Leave Hours" pattern="{{NameWithNos}}" #LeaveHoursCtrl="ngModel" required
+            (blur)="LeaveHoursCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+          <div style="height: 25px;"
+            *ngIf="(LeaveHoursCtrl.invalid && (LeaveHoursCtrl.touched || LeaveHoursCtrl.dirty))">
+            <span class="validation-text" *ngIf="LeaveHoursCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
+            <span class="validation-text" *ngIf="LeaveHoursCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 1rem; ">
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <label>Description</label>
+            <input type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
+              id="Description" required placeholder="Enter Description" #DescriptionCtrl="ngModel" required
+              (blur)="DescriptionCtrl.control.markAsTouched()" />
+            <div style="height: 25px;"
+              *ngIf="(DescriptionCtrl.invalid && (DescriptionCtrl.touched || DescriptionCtrl.dirty))">
+              <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn" (click)="SaveLeaveRequest()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackLeaveRequest()">
+            Back
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
