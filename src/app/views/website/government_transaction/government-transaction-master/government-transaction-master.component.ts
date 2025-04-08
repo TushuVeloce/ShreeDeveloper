@@ -55,7 +55,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
     // let isComplete = true; // assume complete until proven otherwise
 
     for (let i = 0; i < this.MasterList.length; i++) {
-      debugger
+      // debugger
       let obj = this.MasterList[i];
       let transactionJson = obj.p.TransactionJson;
 
@@ -65,8 +65,17 @@ export class GovernmentTransactionMasterComponent implements OnInit {
       for (let group of groups) {
         let isGroupComplete = true;
 
-        for (let siteWork of group.SiteWorks) {
-          if (siteWork.ApplicableTypes.length > 0) {
+        // If no SiteWorks, it's incomplete
+        if (!group.SiteWorks || group.SiteWorks.length === 0) {
+          isGroupComplete = false;
+        } else {
+          for (let siteWork of group.SiteWorks) {
+            // If no ApplicableTypes, mark incomplete
+            if (!siteWork.ApplicableTypes || siteWork.ApplicableTypes.length === 0) {
+              isGroupComplete = false;
+              break;
+            }
+
             for (let applicable of siteWork.ApplicableTypes) {
               const val = applicable.Value;
               if (val === null || val === undefined || val === "" || val === false) {
@@ -74,16 +83,14 @@ export class GovernmentTransactionMasterComponent implements OnInit {
                 break;
               }
             }
-            if (isGroupComplete) break;
+
+            if (!isGroupComplete) break;
           }
-          else {
-            isGroupComplete = false;
-            break;
-          }
-        } // Store result in map
+        }
+
         this.groupCompletionStatus[group.SiteWorkGroupName] = isGroupComplete;
-        // this.Entity.IsComplete = isGroupComplete;
         console.log(`Transaction #${obj.p.Ref} → SiteWorkGroupName: ${group.SiteWorkGroupName} → IsComplete: ${isGroupComplete}`);
+        console.log(this.groupCompletionStatus[group.SiteWorkGroupName]);
       }
     }
   }

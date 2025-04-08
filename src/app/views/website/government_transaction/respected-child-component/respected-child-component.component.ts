@@ -36,13 +36,13 @@ export class RespectedChildComponentComponent implements OnInit {
   }
 
   onAddTransactionSubmit = async (value: any) => {
-    // console.log('onAddTransactionType value', value);
+    console.log('onAddTransactionType value', value);
     // console.log('SelectedArrayObj', this.SelectedArrayObj);
     let arr = await this.updatePreviousObjWithAfterAddValues(this.TransactionTypeArrayObj, value);
     let str = JSON.stringify(arr);
     this.Entity.p.TransactionJson = str;
     let entityToSave = this.Entity.GetEditableVersion();
-    // console.log('entityToSave :', entityToSave);
+    console.log('entityToSave :', entityToSave);
     let entitiesToSave = [entityToSave];
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);

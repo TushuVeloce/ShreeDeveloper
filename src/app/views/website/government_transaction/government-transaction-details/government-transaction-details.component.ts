@@ -35,13 +35,13 @@ export class GovernmentTransactionDetailsComponent implements OnInit {
     this.appStateManage.StorageKey.setItem('TransactionJson', JSON.stringify(arr));
     this.TransactionJsonArray = arr;
 
-    let siteWorksArray = arr["SiteWorks"] as [];
+    // let siteWorksArray = arr["SiteWorks"] as [];
 
-    let isAnyWorkIncomplete = siteWorksArray.some((siteWork: any) => {siteWork["Value"] == false});
+    // let isAnyWorkIncomplete = siteWorksArray.some((siteWork: any) => {siteWork["Value"] == false});
 
-    this.Entity.IsComplete = !isAnyWorkIncomplete;
+    // this.Entity.IsComplete = !isAnyWorkIncomplete;
 
-    console.log('Entity', arr);
+    // console.log('Entity', arr);
   }
 
   getSiteWorkGroupName = async (SiteWorkGroupName: string) => {

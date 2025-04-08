@@ -26,33 +26,33 @@
               <td Class="tbldata">{{gov.p.SiteName}}</td>
 
               <td>
-                <span [ngClass]="groupCompletionStatus['TP Office'] ? 'status-completed' : 'status-pending'">
-                  {{ groupCompletionStatus['TP Office'] ? 'Completed' : 'Pending' }}
+                <span [ngClass]="groupCompletionStatus['TP Office'] == true? 'status-completed' : 'status-pending'">
+                  {{ groupCompletionStatus['TP Office'] == true? 'Completed' : 'Pending' }}
                 </span>
               </td>
               <td>
-                <span [ngClass]="groupCompletionStatus['परिशिष्ठ A(NA)'] ? 'status-completed' : 'status-pending'">
-                  {{ groupCompletionStatus['परिशिष्ठ A(NA)'] ? 'Completed' : 'Pending' }}
+                <span [ngClass]="groupCompletionStatus['परिशिष्ठ A(NA)']? 'status-completed' : 'status-pending'">
+                  {{ groupCompletionStatus['परिशिष्ठ A(NA)']? 'Completed' : 'Pending' }}
                 </span>
               </td>
               <td>
-                <span [ngClass]="groupCompletionStatus['मोजणी'] ? 'status-completed' : 'status-pending'">
-                  {{ groupCompletionStatus['मोजणी'] ? 'Completed' : 'Pending' }}
+                <span [ngClass]="groupCompletionStatus['मोजणी'] == true? 'status-completed' : 'status-pending'">
+                  {{ groupCompletionStatus['मोजणी'] == true ? 'Completed' : 'Pending' }}
                 </span>
               </td>
               <td>
-                <span [ngClass]="groupCompletionStatus['ULC'] ? 'status-completed' : 'status-pending'">
-                  {{ groupCompletionStatus['ULC'] ? 'Completed' : 'Pending' }}
+                <span [ngClass]="groupCompletionStatus['ULC'] == true? 'status-completed' : 'status-pending'">
+                  {{ groupCompletionStatus['ULC'] == true ? 'Completed' : 'Pending' }}
                 </span>
               </td>
               <td>
-                <span [ngClass]="groupCompletionStatus['Final Layout'] ? 'status-completed' : 'status-pending'">
-                  {{ groupCompletionStatus['Final Layout'] ? 'Completed' : 'Pending' }}
+                <span [ngClass]="groupCompletionStatus['Final Layout']== true ? 'status-completed' : 'status-pending'">
+                  {{ groupCompletionStatus['Final Layout'] == true ? 'Completed' : 'Pending' }}
                 </span>
               </td>
               <td>
-                <span [ngClass]="groupCompletionStatus['KaJaPa'] ? 'status-completed' : 'status-pending'">
-                  {{ groupCompletionStatus['KaJaPa'] ? 'Completed' : 'Pending' }}
+                <span [ngClass]="groupCompletionStatus['KaJaPa'] == true? 'status-completed' : 'status-pending'">
+                  {{ groupCompletionStatus['KaJaPa'] == true ? 'Completed' : 'Pending' }}
                 </span>
               </td>
 
