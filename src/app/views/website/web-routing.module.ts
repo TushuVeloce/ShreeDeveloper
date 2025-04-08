@@ -82,7 +82,6 @@ import { RegistrarOfficeDetailComponent } from './registrar_office/registrar-off
 
 import { OfficeDutyTimeComponent } from './hr_payroll_management/office_duty_time/office-duty-time/office-duty-time.component';
 import { OfficeDutyTimeDetailsComponent } from './hr_payroll_management/office_duty_time/office-duty-time-details/office-duty-time-details.component';
-import { AttendanceAndSalaryComponent } from './hr_payroll_management/attendance-salary/attendance-and-salary/attendance-and-salary.component';
 import { DocumentListComponent } from './government_office_masters/document/document-list/document-list.component';
 import { DocumentDetailsComponent } from './government_office_masters/document/document-details/document-details.component';
 import { SiteWorkMasterComponent } from './government_office_masters/siteworkmaster/site-work-master/site-work-master.component';
@@ -103,6 +102,7 @@ import { LeaveRequestComponent } from './request/leave_request/leave-request/lea
 import { LeaveRequestDetailsComponent } from './request/leave_request/leave-request-details/leave-request-details.component';
 import { SalarySlipRequestComponent } from './request/salary_slip_request/salary-slip-request/salary-slip-request.component';
 import { SalarySlipRequestDetailsComponent } from './request/salary_slip_request/salary-slip-request-details/salary-slip-request-details.component';
+import { AttendanceLogsComponent } from './hr_payroll_management/attendance_logs/attendance-logs/attendance-logs.component';
 
 
 const routes: Routes = [
@@ -228,10 +228,11 @@ const routes: Routes = [
       { path: 'Account_Report', component: AccountReportComponent },
 
       // HR Payroll Management
-      { path: 'Attendance_and_Salary', component: AttendanceAndSalaryComponent },
 
       { path: 'Office_Duty_Time', component: OfficeDutyTimeComponent },
       { path: 'Office_Duty_Time_Details', component: OfficeDutyTimeDetailsComponent },
+
+      { path: 'Attendance_Logs', component: AttendanceLogsComponent },
 
       { path: 'Salary_Generation', component: SalaryGenerationComponent },
       { path: 'Salary_Generation_Details', component: SalaryGenerationDetailsComponent },
