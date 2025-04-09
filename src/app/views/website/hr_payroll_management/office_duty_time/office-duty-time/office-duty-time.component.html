@@ -26,10 +26,10 @@
       <tbody>
         <tr *ngFor="let workingtime of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) }}</td>
-          <td Class="tbldata">{{workingtime.p.WorkingTimeFrom}}</td>
-          <td Class="tbldata">{{workingtime.p.WorkingTimeTo}}</td>
-          <td Class="tbldata">{{workingtime.p.LateMarkGraceTime}}</td>
-          <td Class="tbldata">{{workingtime.p.OverTimeGraceTime}}</td>
+          <td Class="tbldata">{{workingtime.p.FromTime}}</td>
+          <td Class="tbldata">{{workingtime.p.ToTime}}</td>
+          <td Class="tbldata">{{workingtime.p.LateMarkGraceTimeInMins}}</td>
+          <td Class="tbldata">{{workingtime.p.OvertimeGraceTimeInMins }}</td>
           <td class="tbldata">
             <span style="margin-left: 9px;" (click)="onEditClicked(workingtime);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />

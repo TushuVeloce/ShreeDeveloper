@@ -6,7 +6,7 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class OfficeDutyandTimeFetchRequest
 {
-    public static readonly FetchRequestType: string = "OfficeDutyandTimeFetchRequest";
+    public static readonly FetchRequestType: string = "OfficeDutyTimeFetchRequest";
 
     CompanyRefs: number[] = [];
     OfficeDutyandTimeRefs: number[] = [];

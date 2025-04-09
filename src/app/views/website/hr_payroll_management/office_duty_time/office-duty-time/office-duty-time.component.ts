@@ -67,7 +67,7 @@ export class OfficeDutyTimeComponent  implements OnInit {
         async () => {
           await OfficeDutyandTime.DeleteInstance(async () => {
             await this.uiUtils.showSuccessToster(
-              `${OfficeDutyandTime.p.WorkingTimeFrom} to ${OfficeDutyandTime.p.WorkingTimeTo} has been deleted!`
+              `${OfficeDutyandTime.p.FromTime} to ${OfficeDutyandTime.p.ToTime} has been deleted!`
             );
             await this.getOfficeDutyandTimeListByCompanyRef();
             this.SearchString = '';
@@ -91,7 +91,7 @@ export class OfficeDutyTimeComponent  implements OnInit {
       this.currentPage = pageIndex; // Update the current page
     };
     
-  async AddOfficeTime() {
+   AddOfficeTime = async() => {
     this.router.navigate(['/homepage/Website/Office_Duty_Time_Details']);
   }
 
