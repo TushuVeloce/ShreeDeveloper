@@ -10,40 +10,39 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { OfficeDutyandTimeFetchRequest } from "./officedutyandtimefetchrequest";
+import { AttendanceLogsFetchRequest } from "./attendancelogsfetchrequest";
 
 
-export class OfficeDutyandTimeProps {
-  public readonly Db_Table_Name = "OfficeDutyTime";
+export class AttendanceLogsProps {
+  public readonly Db_Table_Name = "AttendanceLogsMaster";
   public Ref: number = 0;
-  public FromTime: string = '';
-  public ToTime: string = '';
-  public LateMarkGraceTimeInMins : string = '';
-  public ActualLateMarkTime: string = '';
-  public OvertimeGraceTimeInMins: string = '';
-  public ActualOvertime : string = '';
-  public ShortName : string = '';
-  public CompanyRef: number = 0;
-  public readonly CompanyName: string = '';
-  public CreatedBy: number = 0;
-  public UpdatedBy: number = 0;
+  public EmployeeRef: number = 0;
+  public TransDateTime: string = '';
+  public CheckInTime: string = '';
+  public CheckOutTime: string = '';
+  public TotalWorkingHours: string = '';
+  public TotalOvertimeHours: string = '';
+
+  // for photo uploaded
+  public attendacelogpath1 : string = '';
+  public attendacelogpath2 : string = '';
 
   public readonly IsNewlyCreated: boolean = false;
-  // public readonly AccountTypeName: string = '';
+  public readonly EmployeeName: string = '';
 
   private constructor(isNewlyCreated: boolean) {
     this.IsNewlyCreated = isNewlyCreated;
   }
 
   public static Blank() {
-    return new OfficeDutyandTimeProps(true);
+    return new AttendanceLogsProps(true);
   }
 }
 
-export class OfficeDutyandTime implements IPersistable<OfficeDutyandTime> {
-  public static readonly Db_Table_Name: string = 'OfficeDutyTime';
+export class AttendanceLogs implements IPersistable<AttendanceLogs> {
+  public static readonly Db_Table_Name: string = 'AttendanceLogsMaster';
 
-  private constructor(public readonly p: OfficeDutyandTimeProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: AttendanceLogsProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -56,46 +55,48 @@ export class OfficeDutyandTime implements IPersistable<OfficeDutyandTime> {
     }
   }
 
-  public GetEditableVersion(): OfficeDutyandTime {
-    let newState: OfficeDutyandTimeProps = Utils.GetInstance().DeepCopy(this.p);
-    return OfficeDutyandTime.CreateInstance(newState, true);
+  public GetEditableVersion(): AttendanceLogs {
+    let newState: AttendanceLogsProps = Utils.GetInstance().DeepCopy(this.p);
+    return AttendanceLogs.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new OfficeDutyandTime(OfficeDutyandTimeProps.Blank(), true);
+    return new AttendanceLogs(AttendanceLogsProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new OfficeDutyandTime(data as OfficeDutyandTimeProps, allowEdit);
+    return new AttendanceLogs(data as AttendanceLogsProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
+    if (this.p.CheckInTime == '') vra.add('CheckInTime', 'Check In Time cannot be blank.');
+    if (this.p.CheckOutTime == '') vra.add('CheckOutTime', 'Check Out Time cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, OfficeDutyandTime.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, AttendanceLogs.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: OfficeDutyandTime = OfficeDutyandTime.CreateNewInstance();
+  private static m_currentInstance: AttendanceLogs = AttendanceLogs.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return OfficeDutyandTime.m_currentInstance;
+    return AttendanceLogs.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: OfficeDutyandTime) {
-    OfficeDutyandTime.m_currentInstance = value;
+  public static SetCurrentInstance(value: AttendanceLogs) {
+    AttendanceLogs.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): OfficeDutyandTime {
+  public static SingleInstanceFromTransportData(td: TransportData): AttendanceLogs {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, OfficeDutyandTime.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, OfficeDutyandTime.Db_Table_Name)!.Entries) {
-        return OfficeDutyandTime.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, AttendanceLogs.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, AttendanceLogs.Db_Table_Name)!.Entries) {
+        return AttendanceLogs.CreateInstance(data, false);
       }
     }
 
@@ -104,13 +105,13 @@ export class OfficeDutyandTime implements IPersistable<OfficeDutyandTime> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): OfficeDutyandTime[] {
-    let result: OfficeDutyandTime[] = [];
+    sortPropertyName: string = "Name"): AttendanceLogs[] {
+    let result: AttendanceLogs[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, OfficeDutyandTime.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, OfficeDutyandTime.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, AttendanceLogs.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, AttendanceLogs.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -120,18 +121,18 @@ export class OfficeDutyandTime implements IPersistable<OfficeDutyandTime> {
       }
 
       for (let data of entries) {
-        result.push(OfficeDutyandTime.CreateInstance(data, false));
+        result.push(AttendanceLogs.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): OfficeDutyandTime[] {
-    return OfficeDutyandTime.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): AttendanceLogs[] {
+    return AttendanceLogs.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: OfficeDutyandTimeFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: AttendanceLogsFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -146,29 +147,29 @@ export class OfficeDutyandTime implements IPersistable<OfficeDutyandTime> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new OfficeDutyandTimeFetchRequest();
-    req.OfficeDutyandTimeRefs.push(ref);
+    let req = new AttendanceLogsFetchRequest();
+    req.AttendanceLogsRefs.push(ref);
 
-    let tdResponse = await OfficeDutyandTime.FetchTransportData(req, errorHandler) as TransportData;
-    return OfficeDutyandTime.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await AttendanceLogs.FetchTransportData(req, errorHandler) as TransportData;
+    return AttendanceLogs.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: OfficeDutyandTimeFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await OfficeDutyandTime.FetchTransportData(req, errorHandler) as TransportData;
-    return OfficeDutyandTime.ListFromTransportData(tdResponse);
+  public static async FetchList(req: AttendanceLogsFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await AttendanceLogs.FetchTransportData(req, errorHandler) as TransportData;
+    return AttendanceLogs.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new OfficeDutyandTimeFetchRequest();
-    let tdResponse = await OfficeDutyandTime.FetchTransportData(req, errorHandler) as TransportData;
-    return OfficeDutyandTime.ListFromTransportData(tdResponse);
+    let req = new AttendanceLogsFetchRequest();
+    let tdResponse = await AttendanceLogs.FetchTransportData(req, errorHandler) as TransportData;
+    return AttendanceLogs.ListFromTransportData(tdResponse);
   }
 
  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new OfficeDutyandTimeFetchRequest();
+    let req = new AttendanceLogsFetchRequest();
     req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await OfficeDutyandTime.FetchTransportData(req, errorHandler) as TransportData;
-    return OfficeDutyandTime.ListFromTransportData(tdResponse);
+    let tdResponse = await AttendanceLogs.FetchTransportData(req, errorHandler) as TransportData;
+    return AttendanceLogs.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
