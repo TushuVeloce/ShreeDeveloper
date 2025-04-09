@@ -7,7 +7,7 @@
       [(ngModel)]="SearchString" />
   </div>
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
-    <nz-button nz-button class="btn1" >
+    <nz-button nz-button class="btn1"  (click)="isPasswordModalOpen = true">
       <!-- (click)='AddNewFinancialYear()' -->
       Create New Financial Year
     </nz-button>
@@ -25,11 +25,8 @@
       <tbody>
         <tr *ngFor="let financialyear of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <!-- <td Class="tbldata">{{financialyear.p.Name}}</td> -->
           <td Class="tbldata">{{financialyear.p.FromDate}}</td>
           <td Class="tbldata">{{financialyear.p.ToDate}}</td>
-          <!-- <td Class="tbldata">{{financialyear.p.ShortName}}</td>
-          <td Class="tbldata">{{financialyear.p.CompanyName}}</td> -->
         </tr>
       </tbody>
     </nz-table>
@@ -45,3 +42,42 @@
     <span class="title_light"> Data Not Found</span>
   </div>
 </div> -->
+
+
+
+
+<div *ngIf="isPasswordModalOpen" class="custom-modal-overlay">
+  <div class="custom-modal">
+    <div class="custom-modal-header">
+      <h5> Create New Financial Year </h5>
+      <button type="button" class="btn-close" (click)="closeModal('password')"></button>
+    </div>
+    <div class="custom-modal-body">
+      <form autocomplete="off">
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-12 mb-3">
+            <label for="localpassword">Password</label>
+            <input type="text" name="localpassword" id="localpassword" class="form-control" [(ngModel)]="localpassword" required
+              placeholder="Enter Password" />
+          </div>
+          <span>
+            <strong>Note :</strong> To create a new financial year, you must enter your login password.
+          </span>
+        </div>
+        </form>
+    </div>
+    <div class="custom-modal-footer">
+      <!-- <button type="button" class="btn btn-secondary" (click)="isModalOpen = false">Close</button> -->
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
+        <div>
+          <nz-button nz-button class="btn1" (click)="addOwner()" (click)='AddNewFinancialYear()'>Save</nz-button>
+        </div>
+        <div>
+          <nz-button nz-button class="btn1" (click)="closeModal('owner')">
+            Close
+          </nz-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

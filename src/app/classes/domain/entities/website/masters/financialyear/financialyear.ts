@@ -15,10 +15,12 @@ import { FinancialYearFetchRequest } from "./financialyearfetchrequest";
 export class FinancialYearProps {
   public Ref: number = 0;
   public Name: string = '';
+  public Password: string = '';
   FromDate: string = ''; 
   ToDate: string = '';
   ShortName	: string = '';
   public CompanyRef: number = 0;
+
   // public FinancialYear: string = '';
 
   public readonly CompanyName: string = '';
