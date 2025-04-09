@@ -2,7 +2,7 @@
   <div class="card" style="padding: 1rem">
     <div class="row">
       <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
-        <button type="button" class="backbtn" (click)="BackOfficeTime()">
+        <button type="button" class="backbtn" (click)="BackSalaryGenaration()">
           <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
         </button>
       </div>
@@ -14,7 +14,7 @@
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
             <label>Employee Name</label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="EmployeeName
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="EmployeeName
               name="EmployeeName [nzSize]="'large'">
               <nz-option *ngFor="let employee of EmployeeList" [nzValue]="employee.p.Ref"
                 [nzLabel]="employee.p.Name"></nz-option>
@@ -62,7 +62,7 @@
         </div>
         <div class="col-md-4">
             <label>Overall Working Hours</label>
-            <input type="number" name="OverallWorkingHous" class="form-control" id="OverallWorkingHous" 
+            <input type="number" name="OverallWorkingHours" class="form-control" id="OverallWorkingHours" 
               placeholder="Enter Overall Working Hours" required />
         </div>
       </div>
@@ -110,7 +110,7 @@
         </div>
         <div class="col-md-4">
             <label>Advance Payment</label>
-            <input type="number" name="Advance Payment" class="form-control" id="Advance Payment" 
+            <input type="number" name="AdvancePayment" class="form-control" id="AdvancePayment" 
               placeholder="Enter Advance Payment" required />
         </div>
       </div>
@@ -130,7 +130,7 @@
           <button type="button" class="btn">Save</button>
         </div>
         <div>
-          <button type="button" class="btn" (click)="BackOfficeTime()">
+          <button type="button" class="btn" (click)="BackSalaryGenaration()">
             Back
           </button>
         </div>
