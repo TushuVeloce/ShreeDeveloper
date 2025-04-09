@@ -15,21 +15,21 @@
         <div class="col-md-4">
           <div>
             <label>Working Time From:</label>
-            <input type="time" name="workingFrom" required class="form-control" id="workingFrom"
-              placeholder="Enter Working From" required />
+            <input type="time" name="FromTime" required class="form-control" id="FromTime" [(ngModel)]="Entity.p.FromTime"
+              placeholder="Enter From Time " required />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Working Time To:</label>
-            <input type="time" name="workingTo" required class="form-control" id="workingTo"
-              placeholder="Enter Working To" required />
+            <input type="time" name="ToTime" required class="form-control" id="ToTime" [(ngModel)]="Entity.p.ToTime"
+              placeholder="Enter To Time" required />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Late Mark Grace Time (mins):</label>
-            <input type="number" name="lateMarkGrace" class="form-control" id="lateMarkGrace"
+            <input type="text" name="LateMarkGraceTimeInMins" class="form-control" id="LateMarkGraceTimeInMins" [(ngModel)]="Entity.p.LateMarkGraceTimeInMins"
               placeholder="Enter late Mark Grace" required />
           </div>
         </div>
@@ -38,14 +38,14 @@
         <div class="col-md-4">
           <div>
             <label>Overtime Grace Time (mins):</label>
-            <input type="number" name="overtimeGrace" class="form-control" id="lateMarkGrace" min="0"
+            <input type="text" name="OvertimeGraceTimeInMins " class="form-control" id="OvertimeGraceTimeInMins " [(ngModel)]="Entity.p.OvertimeGraceTimeInMins"
               placeholder="Enter over time Grace" required />
           </div>
         </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
-          <button type="button" class="btn">Save</button>
+          <button type="button" class="btn" (click)="SaveOfficeDutyTimeMaster()">Save</button>
         </div>
         <div>
           <button type="button" class="btn" (click)="BackOfficeTime()">

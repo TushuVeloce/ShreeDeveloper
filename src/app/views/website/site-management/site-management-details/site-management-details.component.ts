@@ -78,6 +78,9 @@ export class SiteManagementDetailsComponent implements OnInit {
         this.getCityListByStateRefforOwner(this.Entity.p.StateRef);
       }
     } else {
+      if (this.Entity.p.CountryRef != 0) {
+        this.getStateListByCountryRefforSite(this.Entity.p.CountryRef);
+      }
       this.Entity = Site.CreateNewInstance();
       Site.SetCurrentInstance(this.Entity);
     }

@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FinancialYear } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
+import { FinancialYear, FinancialYearProps } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
 import { GenerateNewFinancialYearCustomRequest } from 'src/app/classes/domain/entities/website/masters/financialyear/FinancialYearUserCustomRequest';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
@@ -32,9 +32,13 @@ export class FinancialYearMasterComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   companyName = this.companystatemanagement.SelectedCompanyName;
   isSaveDisabled: boolean = false;
+  isPasswordModalOpen: boolean = false;
   private IsNewEntity: boolean = true;
   FromDates: string[] = [];
   ToDates: string[] = [];
+  newOwner: FinancialYearProps = FinancialYearProps.Blank(); 
+  editingIndex: null | undefined | number ;
+  localpassword: string = '';
 
 
   headers: string[] = ['Sr.No.', 'From Date', 'To Date'];
@@ -78,6 +82,60 @@ export class FinancialYearMasterComponent implements OnInit {
     });
   }
 
+  openModal(type: string) {
+    if (type === 'password') this.isPasswordModalOpen = true;
+  }
+
+
+   closeModal = async (type: string) => {
+      // if (type === 'password') {
+      //   const keysToCheck = ['Password'] as const;
+    
+      //   const hasData = keysToCheck.some(
+      //     key => (this.newOwner as any)[key]?.toString().trim()
+      //   );
+    
+      //   if (hasData) {
+      //     await this.uiUtils.showConfirmationMessage(
+      //       'Close',
+      //       `This process is <strong>IRREVERSIBLE!</strong><br/>
+      //        Are you sure you want to close this modal?`,
+      //       async () => {
+      //         this.isPasswordModalOpen = false;
+      //         this.newOwner = FinancialYearProps.Blank();
+      //       }
+      //     );
+      //   } else {
+        //     this.newOwner = FinancialYearProps.Blank();
+        //   }
+        // }
+            this.isPasswordModalOpen = false;
+            this.localpassword = '';
+    };
+    
+
+      async addOwner() {
+    
+        // if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
+        //   this.Entity.p.SiteManagementOwnerDetails[this.editingIndex] = { ...this.newOwner };
+        //   await this.uiUtils.showSuccessToster('Owner details updated successfully!');
+        //   this.isPasswordModalOpen = false;
+    
+        // } else {
+        //   let ownerInstance = new Owner(this.newOwner, true);
+        //   let siteInstance = new Site(this.Entity.p, true);
+        //   await ownerInstance.EnsurePrimaryKeysWithValidValues(); 
+        //   await siteInstance.EnsurePrimaryKeysWithValidValues(); 
+    
+        //   this.newOwner.SiteManagementRef = this.Entity.p.Ref;
+        //   this.Entity.p.SiteManagementOwnerDetails.push({ ...ownerInstance.p });
+        //   await this.uiUtils.showSuccessToster('Owner added successfully!');
+        // }
+    
+        // this.newOwner = OwnerDetailProps.Blank();
+        // this.editingIndex = null; 
+      }
+
   // For Pagination  start ----
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
@@ -106,25 +164,31 @@ export class FinancialYearMasterComponent implements OnInit {
   // Financial Year Custom Request
   AddNewFinancialYear = async () => {
     debugger
-    let req = new GenerateNewFinancialYearCustomRequest();
-    req.CompanyRef = this.companyRef();
-    // req.Ref = this.Entity.p.Ref;
+    if (this.localpassword.trim().length > 0) {
 
-    let td = req.FormulateTransportData();
-    let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-
+      let req = new GenerateNewFinancialYearCustomRequest();
+      
+      req.CompanyRef = this.companyRef();
+      req.Password = this.localpassword;
+      console.log('req :', req);
+      
+      let td = req.FormulateTransportData();
+      let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+    
     let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-
     if (!tr.Successful) {
       await this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     }
-
     let tdResult = JSON.parse(tr.Tag) as TransportData;
-
     let NewFinancialYear = this.utils.GetString(tdResult);
-
     this.Entity.p.FromDate = NewFinancialYear;
+    this.closeModal('password');
+    this.getFinancialYearListByCompanyRef();
+  }
+  else{
+    await this.uiUtils.showWarningToster('Password Required');      
+  }
 
 
     // this.Entity.p.FromDate = NewFinancialYear.FromDate;

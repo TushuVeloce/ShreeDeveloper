@@ -8,6 +8,7 @@ export class GenerateNewFinancialYearCustomRequest
 {
     public static readonly FetchRequestType: string = "GenerateNewFinancialYearCustomRequest";
     CompanyRef:number = 0;
+    Password:string = '';
     // Ref:number = 0;
 
     public MergeIntoTransportData = (td: TransportData) =>

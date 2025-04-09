@@ -9,6 +9,7 @@ import { Utils } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-office-duty-time-details',
+  standalone: false,
   templateUrl: './office-duty-time-details.component.html',
   styleUrls: ['./office-duty-time-details.component.scss'],
 })
@@ -47,13 +48,14 @@ export class OfficeDutyTimeDetailsComponent  implements OnInit {
         let txtName = document.getElementById('EmployeeRef')!;
         txtName.focus();
       }
-      async BackOfficeTime() {
+      
+       BackOfficeTime= async() => {
         this.router.navigate(['/homepage/Website/Office_Duty_Time']);
       }
 
-       SaveMaterialMaster = async () => {
+       SaveOfficeDutyTimeMaster = async () => {
             this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-            this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+            // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
             if (this.Entity.p.CreatedBy == 0) {
               this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
             }
