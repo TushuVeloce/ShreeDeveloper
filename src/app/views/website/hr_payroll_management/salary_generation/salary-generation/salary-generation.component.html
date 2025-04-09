@@ -25,7 +25,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let salary of paginatedList(); index as i">
-          <td Class="tbldata">{{ (currentPage - 1) }}</td>
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{salary.p.EmployeeName}}</td>
           <td Class="tbldata">{{salary.p.Month}}</td>
           <td Class="tbldata">{{salary.p.TotalWorkingDays}}</td>
