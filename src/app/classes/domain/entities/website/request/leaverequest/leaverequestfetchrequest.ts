@@ -9,6 +9,7 @@ export class LeaveRequestFetchRequest
     public static readonly FetchRequestType: string = "LeaveRequestFetchRequest";
 
     LeaveRequestRefs: number[] = [];
+    EmployeeRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
