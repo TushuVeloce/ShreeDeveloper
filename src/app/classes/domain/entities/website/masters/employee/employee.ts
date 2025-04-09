@@ -48,6 +48,7 @@ export class EmployeeProps {
   public Gender: number = 0;
   // public EmpId: string = '';
   public DepartmentRef: number = 0;
+  public OfficeDutyandTimeRef: number = 0;
   public readonly DepartmentName: boolean = false;
   // public UserStatus: string = '';
   // public IsUser: boolean = false;

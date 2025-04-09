@@ -14,12 +14,14 @@ import { OfficeDutyandTimeFetchRequest } from "./officedutyandtimefetchrequest";
 
 
 export class OfficeDutyandTimeProps {
-  public readonly Db_Table_Name = "OfficeDutyandTimeMaster";
+  public readonly Db_Table_Name = "OfficeDutyTime";
   public Ref: number = 0;
-  public WorkingTimeFrom: string = '';
-  public WorkingTimeTo: string = '';
-  public LateMarkGraceTime: string = '';
-  public OverTimeGraceTime: string = '';
+  public FromTime: string = '';
+  public ToTime: string = '';
+  public LateMarkGraceTimeInMins : string = '';
+  public ActualLateMarkTime: string = '04:54';
+  public OvertimeGraceTimeInMins: string = '';
+  public ActualOvertime : string = '04:54';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
   public CreatedBy: number = 0;
@@ -38,7 +40,7 @@ export class OfficeDutyandTimeProps {
 }
 
 export class OfficeDutyandTime implements IPersistable<OfficeDutyandTime> {
-  public static readonly Db_Table_Name: string = 'OfficeDutyandTimeMaster';
+  public static readonly Db_Table_Name: string = 'OfficeDutyTime';
 
   private constructor(public readonly p: OfficeDutyandTimeProps, public readonly AllowEdit: boolean) {
 
