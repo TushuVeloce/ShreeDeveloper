@@ -861,9 +861,6 @@ export class DomainEnums {
         Ref: Month.January, Name: DomainEnums.MonthName(Month.January)
       },
       {
-         Ref: Month.January, Name: DomainEnums.MonthName(Month.January)
-        },
-      {
          Ref: Month.February, Name: DomainEnums.MonthName(Month.February)
         },
       {
