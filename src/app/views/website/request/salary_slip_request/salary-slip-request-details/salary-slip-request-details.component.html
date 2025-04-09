@@ -1,3 +1,70 @@
-<p>
-  salary-slip-request-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackSalarySlipRequest()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">{{DetailsFormTitle}}</span>
+      </div>
+    </div>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+          <label>Employee</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="EmployeeRef"
+            name="EmployeeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.EmployeeRef">
+            <nz-option *ngFor="let Employee of EmployeeList" [nzValue]="Employee.p.Ref"
+              [nzLabel]="Employee.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+          <label>From Month</label>
+          <input type="date" [(ngModel)]="frommonth" name="frommonth" class="form-control" id="frommonth" required
+            placeholder="Enter From Date" #frommonthCtrl="ngModel" required
+            (blur)="frommonthCtrl.control.markAsTouched()" />
+          <div style="height: 25px;" *ngIf="(frommonthCtrl.invalid && (frommonthCtrl.touched || frommonthCtrl.dirty))">
+            <span class="validation-text" *ngIf="frommonthCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+          <label>To Month</label>
+          <input type="date" [(ngModel)]="tomonth" name="tomonth" class="form-control" id="tomonth" required
+            placeholder="Enter To Date" #tomonthCtrl="ngModel" required (blur)="tomonthCtrl.control.markAsTouched()" />
+          <div style="height: 25px;" *ngIf="(tomonthCtrl.invalid && (tomonthCtrl.touched || tomonthCtrl.dirty))">
+            <span class="validation-text" *ngIf="tomonthCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+          <label>From Year</label>
+          <input type="date" [(ngModel)]="fromyear" name="fromyear" class="form-control" id="fromyear" required
+            placeholder="Enter From Date" #fromyearCtrl="ngModel" required
+            (blur)="fromyearCtrl.control.markAsTouched()" />
+          <div style="height: 25px;" *ngIf="(fromyearCtrl.invalid && (fromyearCtrl.touched || fromyearCtrl.dirty))">
+            <span class="validation-text" *ngIf="fromyearCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+          <label>To Year</label>
+          <input type="date" [(ngModel)]="toyear" name="toyear" class="form-control" id="toyear" required
+            placeholder="Enter To Date" #toyearCtrl="ngModel" required (blur)="toyearCtrl.control.markAsTouched()" />
+          <div style="height: 25px;" *ngIf="(toyearCtrl.invalid && (toyearCtrl.touched || toyearCtrl.dirty))">
+            <span class="validation-text" *ngIf="toyearCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn" (click)="SaveSalarySlipRequest()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackSalarySlipRequest()">
+            Back
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

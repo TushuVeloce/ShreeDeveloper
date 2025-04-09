@@ -9,10 +9,23 @@
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
       <nz-button nz-button class="btn1" (click)='AddLeaveRequest()'>
-        Add Leave Request
+        Add Request
       </nz-button>
     </div>
-    <div>
+    <div class="card-body" style="margin-left: 14px;">
+      <form autocomplete="off">
+        <div class="row">
+          <div class="col-md-4">
+            <label for="EmployeeRef"><b>Employee Name</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.EmployeeRef" name="EmployeeRef" required id="EmployeeRef"
+              (ngModelChange)="getLeaveRequestListByEmployeeRef()">
+              <nz-option *ngFor="let Employee of EmployeeList" [nzLabel]="Employee.p.Name"
+                [nzValue]="Employee.p.Ref"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
   <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">

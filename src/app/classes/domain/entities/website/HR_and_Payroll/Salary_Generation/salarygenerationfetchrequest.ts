@@ -4,16 +4,16 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class SalarySlipRequestFetchRequest
+export class SalaryGenerationFetchRequest
 {
-    public static readonly FetchRequestType: string = "SalarySlipRequestFetchRequest";
+    public static readonly FetchRequestType: string = "SalaryGenerationFetchRequest";
 
-    SalarySlipRequestRefs: number[] = [];
-    EmployeeRefs: number[] = [];
+    CompanyRefs: number[] = [];
+    SalaryGenerationRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, SalarySlipRequestFetchRequest.FetchRequestType) as DataCollection;
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, SalaryGenerationFetchRequest.FetchRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 
