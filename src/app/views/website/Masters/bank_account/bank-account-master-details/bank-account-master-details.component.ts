@@ -1,6 +1,8 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -21,11 +23,26 @@ export class BankAccountMasterDetailsComponent implements OnInit {
   Entity: BankAccount = BankAccount.CreateNewInstance();
   DetailsFormTitle: 'New Bank Account' | 'Edit Bank Account' = 'New Bank Account';
   InitialEntity: BankAccount = null as any;
-  dateofopening: string | null = null;
+  dateofopening: string = '';
+
+  IFSCPattern: string = ValidationPatterns.IFSC;
+  LargeInputNumber: string = ValidationPatterns.LargeInputNumber;
+
+  IFSCMsg: string = ValidationMessages.IFSCMsg;
+  LargeInputNumberMsg: string = ValidationMessages.LargeInputNumberMsg;
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
+
+  @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('BranchNameCtrl') BranchNameInputControl!: NgModel;
+  @ViewChild('AccountNumberCtrl') AccountNumberInputControl!: NgModel;
+  @ViewChild('IFSCCodeCtrl') IFSCInputControl!: NgModel;
+  @ViewChild('OpeningBalanceCtrl') OpeningBalanceInputControl!: NgModel;
+  @ViewChild('DateOfOpeningCtrl') DateOfOpeningInputControl!: NgModel;
+
 
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private dtu: DTU,
-      private datePipe: DatePipe, ) { }
+    private datePipe: DatePipe,) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -35,9 +52,8 @@ export class BankAccountMasterDetailsComponent implements OnInit {
       this.Entity = BankAccount.GetCurrentInstance();
 
       // While Edit Converting date String into Date Format //
-      this.dateofopening = this.datePipe.transform(
-        this.dtu.FromString(this.Entity.p.DateofOpening),
-        'yyyy-MM-dd'
+      this.dateofopening = this.dtu.ConvertStringDateToShortFormat(
+        this.Entity.p.DateofOpening
       );
       this.appStateManage.StorageKey.removeItem('Editable')
     } else {
@@ -52,9 +68,15 @@ export class BankAccountMasterDetailsComponent implements OnInit {
   SaveBankAccountMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+
+    this.Entity.p.DateofOpening = this.dtu.ConvertStringDateToFullFormat(this.dateofopening);
+
     let entityToSave = this.Entity.GetEditableVersion();
-     // ------ Code For Save Date Of InCorporation Year Format ---------------//
-     if (this.dateofopening) {
+    if (!this.Entity.p.OpeningBalance) {
+      this.Entity.p.OpeningBalance = 0;
+    }
+    // ------ Code For Save Date Of InCorporation Year Format ---------------//
+    if (this.dateofopening) {
       let dateValue = new Date(this.dateofopening);
 
       if (!isNaN(dateValue.getTime())) {
@@ -68,7 +90,7 @@ export class BankAccountMasterDetailsComponent implements OnInit {
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error',tr.Message)
+      this.uiUtils.showErrorMessage('Error', tr.Message)
       return
     }
     else {
@@ -77,6 +99,7 @@ export class BankAccountMasterDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster('Bank Account saved successfully!');
         this.dateofopening = '';
         this.Entity = BankAccount.CreateNewInstance();
+        this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Bank Account Updated successfully!');
         await this.router.navigate(['/homepage/Website/Bank_Account_Master']);
@@ -85,6 +108,23 @@ export class BankAccountMasterDetailsComponent implements OnInit {
     }
   }
 
+  resetAllControls = () => {
+    // reset touched
+    this.NameInputControl.control.markAsUntouched();
+    this.BranchNameInputControl.control.markAsUntouched();
+    this.AccountNumberInputControl.control.markAsUntouched();
+    this.IFSCInputControl.control.markAsUntouched();
+    this.OpeningBalanceInputControl.control.markAsUntouched();
+    this.DateOfOpeningInputControl.control.markAsUntouched();
+
+    // reset dirty
+    this.IFSCInputControl.control.markAsPristine();
+    this.BranchNameInputControl.control.markAsPristine();
+    this.AccountNumberInputControl.control.markAsPristine();
+    this.IFSCInputControl.control.markAsPristine();
+    this.OpeningBalanceInputControl.control.markAsPristine();
+    this.DateOfOpeningInputControl.control.markAsPristine();
+  }
 
   BackBankAccount = () => {
     this.router.navigate(['/homepage/Website/Bank_Account_Master']);

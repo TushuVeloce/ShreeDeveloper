@@ -33,16 +33,8 @@ export class VendorMasterComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    // await this.FormulateMasterList();
     this.loadPaginationData();
   }
-
-  // private FormulateMasterList = async () => {
-  //   let lst = await Vendor.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.MasterList = lst;
-  //   this.DisplayMasterList = this.MasterList
-  //   this.loadPaginationData();
-  // }
 
   getVendorListByCompanyRef = async () => {
     this.MasterList = [];

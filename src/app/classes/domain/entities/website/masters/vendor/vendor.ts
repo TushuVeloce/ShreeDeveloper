@@ -27,38 +27,37 @@ export class ServiceSuppliedByVendorProps {
 export class VendorProps {
   public readonly Db_Table_Name = "VendorMaster";
   public Ref: number = 0;
-  public Name: string = '';
   public Code: string = '';
+  public CompanyType: number = 0;
+  public Name: string = '';
+  public TradeName: string = '';
+  public MobileNo: string = '';
   public AddressLine1: string = '';
   public AddressLine2: string = '';
-  public MobileNo: string = '';
-  public CompanyType: number = 0;
-  public TradeName: string = '';
 
+  public CountryRef: number = 9163;
+  public readonly CountryName: string = '';
+
+  public StateRef: number = 10263;
+  public readonly StateName: string = '';
+
+  public CityRef: number = 10374;
+  public readonly CityName: string = '';
+
+  public PinCode: string = '';
   public BankName: string = '';
   public BranchName: string = '';
   public AccountNumber: string = '';
   public IFSC: string = '';
-
-  public PinCode: string = '';
   public GSTIN: string = '';
   public Pan: string = '';
   public CINNO: string = '';
-
-  public CountryRef: number = 9163;
-  public readonly CountryName: string = '';
-  public StateRef: number = 10263;
-  public readonly StateName: string = '';
-  public CityRef: number = 10374;
-  public readonly CityName: string = '';
 
   public MaterialListSuppliedByVendor: MaterialListSuppliedByVendorProps[] = [];
   public ServiceListSuppliedByVendor: ServiceSuppliedByVendorProps[] = [];
 
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-
-  // public readonly CompanyName: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
 
@@ -81,7 +80,6 @@ export class Vendor implements IPersistable<Vendor> {
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
       const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -158,7 +156,6 @@ export class Vendor implements IPersistable<Vendor> {
   public static SetCurrentInstance(value: Vendor) {
     Vendor.m_currentInstance = value;
   }
-
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;

@@ -15,6 +15,7 @@ export class ValidationPatterns {
   public static readonly CurrencySymbolRegex: string = "^[\\$€£¥₹₩₽₦₪฿₫₴₲₵₣₱؋]+|^[A-Za-z]{1,10}$";
   public static readonly CurrencyNameRegex: string = "^[A-Za-z\\s-]{1,30}$";
   public static readonly InputNumber: string = "^[0-9]{1,3}$"
+  public static readonly LargeInputNumber: string = "^[0-9]{1,15}$"
   public static readonly PinCode: string = "^[0-9]{6}$";
   public static readonly Website: string = "https?://.+";
   public static readonly IFSC: string = "[A-Z]{4}0[A-Z0-9]{6}";
@@ -37,6 +38,7 @@ export class ValidationMessages {
   public static readonly EmailMsg: string = "Please Enter a Valid Email Address.";
   public static readonly INDPhoneNoMsg: string = "Please Enter a Valid 10-digit Mobile Number starting with 6, 7, 8, or 9.";
   public static readonly InputNumberMsg: string = "Please enter a number between 0 and 999."
+  public static readonly LargeInputNumberMsg: string = "Please enter a number between 0 to 15 Digit."
   public static readonly IPAddressMsg: string = "Please enter a valid IPv4 address (e.g., 192.168.1.1)."
   public static readonly ONVIFPortMsg: string = "Please enter a valid port number between 0 and 65535."
 

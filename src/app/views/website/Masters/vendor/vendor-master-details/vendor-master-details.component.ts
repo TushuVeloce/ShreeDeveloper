@@ -38,15 +38,12 @@ export class VendorMasterDetailsComponent implements OnInit {
   CountryList: Country[] = [];
   StateList: State[] = [];
   CityList: City[] = [];
-  // VendorServicesOptions: { label: string, value: number }[] = [];
-
 
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
   PinCodePattern: string = ValidationPatterns.PinCode;
   IFSCPattern: string = ValidationPatterns.IFSC;
   PANPattern: string = ValidationPatterns.PAN;
   GSTINPattern: string = ValidationPatterns.GSTIN;
-
 
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   PinCodeMsg: string = ValidationMessages.PinCodeMsg;
@@ -78,13 +75,6 @@ export class VendorMasterDetailsComponent implements OnInit {
     this.ServiceList = await VendorService.FetchEntireList();
 
 
-    // if (this.VendorServicesList.length > 0) {
-    //   this.VendorServicesOptions = this.VendorServicesList.map(item => ({
-    //     label: item.p.Name, // Text displayed
-    //     value: item.p.Ref   // Value stored
-    //   }));
-    // }
-
     await this.FormulateCountryList();
 
     // Load State based on Default Country Ref
@@ -109,8 +99,7 @@ export class VendorMasterDetailsComponent implements OnInit {
       this.Entity = Vendor.CreateNewInstance();
       Vendor.SetCurrentInstance(this.Entity);
     }
-    this.InitialEntity = Object.assign(Vendor.CreateNewInstance(),
-      this.utils.DeepCopy(this.Entity)) as Vendor;
+    this.InitialEntity = Object.assign(Vendor.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Vendor;
   }
 
   FormulateCountryList = async () => {
@@ -166,6 +155,7 @@ export class VendorMasterDetailsComponent implements OnInit {
   }
 
   SaveVendorMaster = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
@@ -196,6 +186,7 @@ export class VendorMasterDetailsComponent implements OnInit {
   }
 
   resetAllControls = () => {
+     // reset touched
     this.NameInputControl.control.markAsUntouched();
     this.CodeInputControl.control.markAsUntouched();
     this.AddressLine1InputControl.control.markAsUntouched();
@@ -209,6 +200,7 @@ export class VendorMasterDetailsComponent implements OnInit {
     this.PANInputControl.control.markAsUntouched();
     this.GSTINInputControl.control.markAsUntouched();
 
+    // reset dirty
     this.NameInputControl.control.markAsPristine();
     this.CodeInputControl.control.markAsPristine();
     this.AddressLine1InputControl.control.markAsPristine();

@@ -11,6 +11,7 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { BankAccountFetchRequest } from "./bankaccountfetchrequest";
+import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 
 
 export class BankAccountProps {
@@ -24,8 +25,8 @@ export class BankAccountProps {
   public DateofOpening: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  
-  
+
+
   public readonly IsNewlyCreated: boolean = false;
 
   private constructor(isNewlyCreated: boolean) {
@@ -46,8 +47,8 @@ export class BankAccount implements IPersistable<BankAccount> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -70,9 +71,21 @@ export class BankAccount implements IPersistable<BankAccount> {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
     if (this.p.BranchName == '') vra.add('Branch', 'Branch cannot be blank.');
-    if (this.p.AccountNumber == '') vra.add('AccountNumber', 'Account No cannot be blank.');
-    if (this.p.IFSCCode == '') vra.add('IFSCCode', 'IFSC Code cannot be blank.');
-    if (this.p.OpeningBalance == 0) vra.add('OpeningBalance', 'Opening Balance cannot be blank.');
+    if (this.p.AccountNumber == '') {
+      vra.add('AccountNumber', 'Account Number cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.LargeInputNumber).test(this.p.AccountNumber)) {
+      vra.add('AccountNumber', ValidationMessages.LargeInputNumberMsg);
+    }
+    if (this.p.IFSCCode == '') {
+      vra.add('IFSCCode', 'IFSC cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.IFSC).test(this.p.IFSCCode)) {
+      vra.add('IFSCCode', ValidationMessages.IFSCMsg);
+    }
+    if (this.p.OpeningBalance == 0) {
+      vra.add('OpeningBalance', 'Opening Balance cannot be blank.');
+     } else if(this.p.OpeningBalance < 0) {
+      vra.add('OpeningBalance', 'Opening Balance cannot be less then 0.');
+    }
     if (this.p.DateofOpening == '') vra.add('DateofOpening', 'Date of Opening cannot be blank.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
 
@@ -169,13 +182,13 @@ export class BankAccount implements IPersistable<BankAccount> {
     return BankAccount.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-      let req = new BankAccountFetchRequest();
-      req.CompanyRefs.push(CompanyRef)
-      let tdResponse = await BankAccount.FetchTransportData(req, errorHandler) as TransportData;
-      return BankAccount.ListFromTransportData(tdResponse);
-    }
-  
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new BankAccountFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await BankAccount.FetchTransportData(req, errorHandler) as TransportData;
+    return BankAccount.ListFromTransportData(tdResponse);
+  }
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

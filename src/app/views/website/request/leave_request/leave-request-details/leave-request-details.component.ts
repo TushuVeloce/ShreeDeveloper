@@ -58,6 +58,13 @@ export class LeaveRequestDetailsComponent implements OnInit {
         : 'Edit Leave Request';
       this.Entity = LeaveRequest.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
+      // convert  2025-02-23-00-00-00-000 to 2025-02-23
+      this.fromdate = this.dtu.ConvertStringDateToShortFormat(
+        this.Entity.p.FromDate
+      );
+      this.todate = this.dtu.ConvertStringDateToShortFormat(
+        this.Entity.p.ToDate
+      );
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
       this.Entity = LeaveRequest.CreateNewInstance();

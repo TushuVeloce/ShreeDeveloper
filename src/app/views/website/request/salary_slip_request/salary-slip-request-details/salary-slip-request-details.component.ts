@@ -59,6 +59,18 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
         : 'Edit Salary Slip Request';
       this.Entity = SalarySlipRequest.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
+      this.frommonth = this.dtu.ConvertStringDateToShortFormat(
+        this.Entity.p.FromMonth
+      );
+      this.tomonth = this.dtu.ConvertStringDateToShortFormat(
+        this.Entity.p.ToMonth
+      );
+      this.fromyear = this.dtu.ConvertStringDateToShortFormat(
+        this.Entity.p.FromYear
+      );
+      this.toyear = this.dtu.ConvertStringDateToShortFormat(
+        this.Entity.p.ToYear
+      );
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
       this.Entity = SalarySlipRequest.CreateNewInstance();
