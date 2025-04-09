@@ -41,9 +41,10 @@ export class GovernmentTransactionMasterComponent implements OnInit {
     await this.FormulateGovernmentTransactionList();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
-
   }
-  groupCompletionStatus: { [groupName: string]: boolean } = {};
+
+  groupCompletionStatus: { [ref: string]: { [groupName: string]: boolean } } = {};
+
   FormulateGovernmentTransactionList = async () => {
     // let lst = await GovernmentTransaction.FetchEntireListByCompanyRef(
     //   this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
@@ -51,16 +52,17 @@ export class GovernmentTransactionMasterComponent implements OnInit {
     let lst = await GovernmentTransaction.FetchEntireList(async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    console.log('GovernmentTransactionList', this.MasterList);
+    // console.log('GovernmentTransactionList', this.MasterList);
     // let isComplete = true; // assume complete until proven otherwise
 
     for (let i = 0; i < this.MasterList.length; i++) {
       // debugger
       let obj = this.MasterList[i];
       let transactionJson = obj.p.TransactionJson;
+      let transactionRef = obj.p.Ref;
 
       let groups: any[] = JSON.parse(transactionJson);
-      console.log(`Transaction #${obj.p.Ref} => Parsed Groups:`, groups);
+      // console.log(`Transaction #${obj.p.Ref} => Parsed Groups:`, groups);
 
       for (let group of groups) {
         let isGroupComplete = true;
@@ -87,12 +89,22 @@ export class GovernmentTransactionMasterComponent implements OnInit {
             if (!isGroupComplete) break;
           }
         }
+        if (!this.groupCompletionStatus[obj.p.Ref]) {
+          this.groupCompletionStatus[obj.p.Ref] = {};
+        }
 
-        this.groupCompletionStatus[group.SiteWorkGroupName] = isGroupComplete;
-        console.log(`Transaction #${obj.p.Ref} → SiteWorkGroupName: ${group.SiteWorkGroupName} → IsComplete: ${isGroupComplete}`);
-        console.log(this.groupCompletionStatus[group.SiteWorkGroupName]);
+        this.groupCompletionStatus[obj.p.Ref][group.SiteWorkGroupName] = isGroupComplete;
+        this.getGroupStatus(transactionRef, group.SiteWorkGroupName);
+        // this.groupCompletionStatus[transactionRef][group.SiteWorkGroupName] = isGroupComplete;
+        // console.log(`Transaction #${transactionRef} → ${group.SiteWorkGroupName}: ${isGroupComplete}`);
       }
     }
+  }
+
+  getGroupStatus(ref: number, groupName: string): boolean {
+    // console.log('Looking for status → Ref:', ref, 'Group:', groupName);
+    // console.log('Data:', this.groupCompletionStatus[ref]);
+    return this.groupCompletionStatus[ref]?.[groupName] === true;
   }
 
   onEditClicked = async (item: GovernmentTransaction) => {
