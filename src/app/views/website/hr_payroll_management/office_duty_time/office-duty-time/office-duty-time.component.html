@@ -14,9 +14,9 @@
     <div>
     </div>
   </div>
-  <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem">
-  <div class="table-container">
-    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
+  <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+    <div class="table-container">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light"  [nzData]="paginatedList()"  [nzScroll]="{x:'auto' }"
       nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
@@ -24,16 +24,17 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr *ngFor="let workingtime of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) }}</td>
-          <td Class="tbldata">11:30</td>
-          <td Class="tbldata">11:30</td>
-          <td Class="tbldata">11:30</td>
+          <td Class="tbldata">{{workingtime.p.WorkingTimeFrom}}</td>
+          <td Class="tbldata">{{workingtime.p.WorkingTimeTo}}</td>
+          <td Class="tbldata">{{workingtime.p.LateMarkGraceTime}}</td>
+          <td Class="tbldata">{{workingtime.p.OverTimeGraceTime}}</td>
           <td class="tbldata">
-            <span style="margin-left: 9px;">
+            <span style="margin-left: 9px;" (click)="onEditClicked(workingtime);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
             </span>
-            <span style="margin-left: 9px;">
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(workingtime);">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
