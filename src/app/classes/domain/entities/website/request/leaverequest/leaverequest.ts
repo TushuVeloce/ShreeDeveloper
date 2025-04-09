@@ -173,12 +173,13 @@ export class LeaveRequest implements IPersistable<LeaveRequest> {
     let tdResponse = await LeaveRequest.FetchTransportData(req, errorHandler) as TransportData;
     return LeaveRequest.ListFromTransportData(tdResponse);
   }
-  // public static async FetchEntireListByProjectRef(ProjectRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-  //   let req = new LeaveRequestFetchRequest();
-  //   req.GAAProjectRefs.push(ProjectRef)
-  //   let tdResponse = await LeaveRequest.FetchTransportData(req, errorHandler) as TransportData;
-  //   return LeaveRequest.ListFromTransportData(tdResponse);
-  // }
+
+  public static async FetchEntireListByEmployeeRef(EmployeeRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new LeaveRequestFetchRequest();
+    req.EmployeeRefs.push(EmployeeRef)
+    let tdResponse = await LeaveRequest.FetchTransportData(req, errorHandler) as TransportData;
+    return LeaveRequest.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
