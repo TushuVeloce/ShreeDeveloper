@@ -39,8 +39,7 @@ export class SiteManagementDetailsComponent implements OnInit {
   BookingRemarkList = DomainEnums.BookingRemarkList(true, '---Select Booking Remark---');
   plotheaders: string[] = ['Sr.No.', 'Plot No', 'Area sq.m', 'Area sq.ft', 'Goverment Rate', 'Company Rate', 'Action'];
   ownerheaders: string[] = ['Sr.No.', 'Name ', 'Contact No ', 'Email Id ', 'Address', 'Pin Code ', 'Action'];
-  isModalOpen1: boolean = false;
-  isModalOpen2: boolean = false;
+  isOwnerModalOpen: boolean = false;
   newOwner: OwnerDetailProps = OwnerDetailProps.Blank(); 
   editingIndex: null | undefined | number
 
@@ -154,7 +153,7 @@ export class SiteManagementDetailsComponent implements OnInit {
   }
 
   openModal(type: string) {
-    if (type === 'owner') this.isModalOpen2 = true;
+    if (type === 'owner') this.isOwnerModalOpen = true;
   }
 
   closeModal = async (type: string) => {
@@ -171,12 +170,12 @@ export class SiteManagementDetailsComponent implements OnInit {
           `This process is <strong>IRREVERSIBLE!</strong><br/>
            Are you sure you want to close this modal?`,
           async () => {
-            this.isModalOpen2 = false;
+            this.isOwnerModalOpen = false;
             this.newOwner = OwnerDetailProps.Blank();
           }
         );
       } else {
-        this.isModalOpen2 = false;
+        this.isOwnerModalOpen = false;
         this.newOwner = OwnerDetailProps.Blank();
       }
     }
@@ -194,7 +193,7 @@ export class SiteManagementDetailsComponent implements OnInit {
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
       this.Entity.p.SiteManagementOwnerDetails[this.editingIndex] = { ...this.newOwner };
       await this.uiUtils.showSuccessToster('Owner details updated successfully!');
-      this.isModalOpen2 = false;
+      this.isOwnerModalOpen = false;
 
     } else {
       let ownerInstance = new Owner(this.newOwner, true);
@@ -213,7 +212,7 @@ export class SiteManagementDetailsComponent implements OnInit {
 
   editowner(index: number) {
     console.log('index :', index);
-    this.isModalOpen2 = true
+    this.isOwnerModalOpen = true
     this.newOwner = { ...this.Entity.p.SiteManagementOwnerDetails[index] }
     this.editingIndex = index;
   }

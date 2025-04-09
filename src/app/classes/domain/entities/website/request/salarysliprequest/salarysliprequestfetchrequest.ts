@@ -9,6 +9,7 @@ export class SalarySlipRequestFetchRequest
     public static readonly FetchRequestType: string = "SalarySlipRequestFetchRequest";
 
     SalarySlipRequestRefs: number[] = [];
+    EmployeeRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

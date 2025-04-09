@@ -11,6 +11,17 @@
   </div>
 
   <div class="row">
+    <div class="col-md-4">
+      <label for="SiteManagementRef"><b>Site Name</b></label>
+      <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteManagementRef"
+        name="SiteManagementRef" [nzSize]="'large'" [(ngModel)]="SiteManagementRef"
+        (ngModelChange)="onsitechange(SiteManagementRef)">
+        <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+      </nz-select>
+    </div>
+  </div>
+
+  <div class="row">
     <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
       <div class="table-container">
         <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"

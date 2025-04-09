@@ -9,7 +9,7 @@ import { EmployeeMasterComponent } from '../../../Masters/employee/employee-mast
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 
 @Component({
-  selector: 'app-leaverequest-master',
+  selector: 'app-leave-request',
   standalone: false,
   templateUrl: './leave-request.component.html',
   styleUrls: ['./leave-request.component.scss'],
@@ -30,7 +30,7 @@ export class LeaveRequestComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Leave Request Type', 'From Date', 'To Date', 'Days', 'Hours', 'Action'];
+  headers: string[] = ['Sr.No.', 'Leave Request Type', 'From Date', 'To Date', 'Days', 'Hours', 'Is Approved', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {

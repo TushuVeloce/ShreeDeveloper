@@ -17,9 +17,19 @@ import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/c
 export class SalarySlipRequestProps {
   public readonly Db_Table_Name = "SalarySlipRequestMaster";
   public Ref: number = 0;
-  public Name: string = '';
+  public CreatedBy: number = 0;
+  public UpdatedBy: number = 0;
   public CompanyRef: number = 0
   public CompanyName: string = ''
+  public EmployeeRef: number = 0;
+  public EmployeeName: string = '';
+  public FromMonth: string = '';
+  public ToMonth: string = '';
+  public FromYear: string = '';
+  public ToYear: string = '';
+  public IsApproval: boolean = false;
+  public IsDeleted: boolean = false;
+
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -66,10 +76,8 @@ export class SalarySlipRequest implements IPersistable<SalarySlipRequest> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
 
-    if (this.p.Name == '') {
+    if (this.p.EmployeeRef == 0) {
       vra.add('Name', 'Name cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.NameWithNos).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.NameWithNosMsg);
     }
   }
 
@@ -163,12 +171,13 @@ export class SalarySlipRequest implements IPersistable<SalarySlipRequest> {
     let tdResponse = await SalarySlipRequest.FetchTransportData(req, errorHandler) as TransportData;
     return SalarySlipRequest.ListFromTransportData(tdResponse);
   }
-  // public static async FetchEntireListByProjectRef(ProjectRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-  //   let req = new SalarySlipRequestFetchRequest();
-  //   req.GAAProjectRefs.push(ProjectRef)
-  //   let tdResponse = await SalarySlipRequest.FetchTransportData(req, errorHandler) as TransportData;
-  //   return SalarySlipRequest.ListFromTransportData(tdResponse);
-  // }
+
+  public static async FetchEntireListByEmployeeRef(EmployeeRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new SalarySlipRequestFetchRequest();
+    req.EmployeeRefs.push(EmployeeRef)
+    let tdResponse = await SalarySlipRequest.FetchTransportData(req, errorHandler) as TransportData;
+    return SalarySlipRequest.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

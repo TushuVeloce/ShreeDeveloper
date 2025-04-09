@@ -21,7 +21,7 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
     // console.log('SelectedTransactionType', this.SelectedTransactionType);
 
     this.TpOfficeList = arr.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
-    // console.log('TpOfficeList', this.TpOfficeList);
+    console.log('TpOfficeList', this.TpOfficeList);
   }
 
   ngOnInit() { }
@@ -39,9 +39,12 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
     }
   }
 
-  getReportNOCAirportNOC = (value: boolean) => {
-    console.log(value, 'value');
+  showReportNOCSection: boolean = false;
 
+  getReportNOCAirportNOC(value: boolean, siteWorkName: string) {
+    if (siteWorkName.trim() === 'Report NOC & Airport NOC') {
+      this.showReportNOCSection = value;
+    }
   }
 
   onSave = () => {
