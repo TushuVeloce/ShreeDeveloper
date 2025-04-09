@@ -1,6 +1,7 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GovernmentTransaction } from 'src/app/classes/domain/entities/website/government_office/government_transaction/governmenttransaction';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
@@ -44,16 +45,29 @@ export class GovernmentTransactionMasterComponent implements OnInit {
   }
 
   groupCompletionStatus: { [ref: string]: { [groupName: string]: boolean } } = {};
+  SiteList: Site[] = [];
 
   FormulateGovernmentTransactionList = async () => {
+    // fetching government transaction list by company ref
     // let lst = await GovernmentTransaction.FetchEntireListByCompanyRef(
     //   this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+
+    //  fetching entire government transaction list 
+
     this.DisplayMasterList = [];
     let lst = await GovernmentTransaction.FetchEntireList(async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    // console.log('GovernmentTransactionList', this.MasterList);
-    // let isComplete = true; // assume complete until proven otherwise
+
+    // fetching site list by company ref
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let SiteListbycompanyname = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SiteList = SiteListbycompanyname;
+
+    // get Transaction Type List Status 
 
     for (let i = 0; i < this.MasterList.length; i++) {
       // debugger
@@ -100,7 +114,18 @@ export class GovernmentTransactionMasterComponent implements OnInit {
       }
     }
   }
-
+  SiteManagementRef: number = 0;
+  onsitechange = (siteref: number) => {
+    if (siteref > 0 && this.MasterList.length > 0) {
+      this.SiteManagementRef = siteref;
+      const selectedSite = this.SiteList.find(site => site.p.Ref === siteref);
+      if (!selectedSite) {
+        return;
+      }
+      this.appStateManage.StorageKey.setItem('siteRf', String(siteref));
+      this.appStateManage.StorageKey.setItem('siteName', selectedSite.p.Name);
+    }
+  }
   getGroupStatus(ref: number, groupName: string): boolean {
     // console.log('Looking for status → Ref:', ref, 'Group:', groupName);
     // console.log('Data:', this.groupCompletionStatus[ref]);
@@ -127,7 +152,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
           await this.uiUtils.showSuccessToster(
             `GovernmentTransaction ${GovernmentTransaction.p.SiteName} has been deleted!`
           );
-          // await this.getGovernmentTransactionListByCompanyRef();
+          await this.FormulateGovernmentTransactionList();
           this.SearchString = '';
           this.loadPaginationData();
 
