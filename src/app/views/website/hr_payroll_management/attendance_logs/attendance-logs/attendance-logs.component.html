@@ -1,3 +1,69 @@
-<p>
-  attendance-logs works!
-</p>
+<div>
+  <h5 style="padding-top: 3px;" class="title title_light">Attendance Logs</h5>
+  <!-- Button Group -->
+  <div class="row d-flex flex-wrap justify-content-start gap-2">
+    <div class="col-12 col-sm-auto">
+      <nz-button nz-button type="button" class="btn btn-dark w-100">MY TEAM TODAY</nz-button>
+    </div>
+    <div class="col-12 col-sm-auto">
+      <nz-button nz-button type="button" class="btn btn-dark w-100">MY WEEKLY</nz-button>
+    </div>
+    <div class="col-12 col-sm-auto">
+      <nz-button nz-button type="button" class="btn btn-dark w-100">MY MONTHLY</nz-button>
+    </div>
+  </div>
+  <hr class="border border-dark border-2 opacity-100 mb-4">
+
+  <!-- Row with colored status buttons -->
+  <div class="row">
+    <div class="col-12 col-sm-6 col-md-4 mb-2 search-container_light">
+      <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus
+        [(ngModel)]="SearchString" />
+    </div>
+    <div class="col-6 col-sm-6 col-md-2 mb-2">
+      <button class="attbtn">Team Size : <strong>1</strong></button>
+    </div>
+    <div class="col-6 col-sm-6 col-md-2 mb-2">
+      <button class="attbtn">Present : <strong>1</strong></button>
+    </div>
+    <div class="col-6 col-sm-6 col-md-2 mb-2">
+      <button class="attbtn">On Leave : <strong>0</strong></button>
+    </div>
+    <div class="col-6 col-sm-6 col-md-2 mb-2">
+      <button class="attbtn">Absent : <strong>0</strong></button>
+    </div>
+  </div>
+
+  <div class="table-wrapper tblcard_light" style="margin-top: 2rem">
+    <div class="table-container">
+      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
+        nzFrontPagination="false" [nzShowSizeChanger]="false">
+        <thead>
+          <tr>
+            <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td Class="tbldata">{{ (currentPage - 1) }}</td>
+            <td Class="tbldata">11:30</td>
+            <td Class="tbldata">11:30</td>
+            <td Class="tbldata">11:30</td>
+            <td class="tbldata">
+              <span style="margin-left: 9px;">
+                <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+              </span>
+              <span style="margin-left: 9px;">
+                <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+    <div class="fixed-pagination">
+      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+        (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+      </nz-pagination>
+    </div>
+  </div>
+</div>
