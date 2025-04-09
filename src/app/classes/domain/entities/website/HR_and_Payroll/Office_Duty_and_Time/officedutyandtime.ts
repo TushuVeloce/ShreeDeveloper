@@ -19,11 +19,12 @@ export class OfficeDutyandTimeProps {
   public FromTime: string = '';
   public ToTime: string = '';
   public LateMarkGraceTimeInMins : string = '';
-  public ActualLateMarkTime: string = '04:54';
+  public ActualLateMarkTime: string = '';
   public OvertimeGraceTimeInMins: string = '';
-  public ActualOvertime : string = '04:54';
+  public ActualOvertime : string = '';
+  public ShortName : string = '';
   public CompanyRef: number = 0;
-  public CompanyName: string = '';
+  public readonly CompanyName: string = '';
   public CreatedBy: number = 0;
   public UpdatedBy: number = 0;
 
