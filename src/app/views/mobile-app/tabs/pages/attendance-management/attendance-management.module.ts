@@ -8,6 +8,7 @@ import { AttendanceManagementPageRoutingModule } from './attendance-management-r
 
 import { SharedModule } from "../../../shared/shared.module";
 import { AttendanceManagementPage } from './attendance-management.page';
+import { AttendanceDetailsComponent } from './attendance-details/attendance-details.component';
 
 @NgModule({
   imports: [
@@ -17,7 +18,7 @@ import { AttendanceManagementPage } from './attendance-management.page';
     AttendanceManagementPageRoutingModule,
     SharedModule
 ],
-declarations: [AttendanceManagementPage]
+declarations: [AttendanceManagementPage,AttendanceDetailsComponent]
 
 })
 export class AttendanceManagementPageModule {}

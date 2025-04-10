@@ -8,14 +8,16 @@
     </ion-buttons>
 
     <!-- App title -->
-    <ion-title class="mobile-app-title">{{ title }}</ion-title>
+    <!-- <ion-title class="mobile-app-title">{{ title }}</ion-title> -->
     <!-- <app-dropdown label="Select Company" [dataList]="departments" [(selectedValue)]="selectedDepartment"></app-dropdown> -->
-
+    <app-searchable-select [options]="options" [multiSelect]="false" placeholder="Select Company"
+      (selectionChange)="onSelectionChange($event)">
+    </app-searchable-select>
 
 
     <!-- Action buttons -->
     <ion-buttons slot="end">
-      <ion-button class="icon-button">
+      <ion-button class="icon-button" (click)="goToNotificationPage()">
         <ion-icon name="notifications-outline"></ion-icon>
       </ion-button>
       <ion-avatar class="user-avatar">

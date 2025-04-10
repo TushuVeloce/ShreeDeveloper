@@ -1,0 +1,135 @@
+.attendance-container {
+    padding: 16px;
+
+    .header-actions {
+        margin-bottom: 20px;
+
+        .current-date {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+
+            ion-icon {
+                margin-right: 6px;
+                color: var(--ion-color-primary);
+            }
+        }
+
+        .punch-buttons ion-button {
+            margin-left: 10px;
+        }
+    }
+
+    // .summary-grid {
+    //     ion-card {
+    //         border-radius: 16px;
+    //         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    //         text-align: center;
+    //     }
+
+    //     ion-card-title {
+    //         font-size: 16px;
+    //         color: var(--ion-color-dark);
+    //     }
+
+    //     ion-card-content {
+    //         font-size: 24px;
+    //         font-weight: bold;
+    //     }
+    // }
+    .stat-card {
+        border-radius: 16px;
+        text-align: center;
+
+        ion-card-subtitle {
+            font-size: 14px;
+            color: var(--ion-color-medium);
+        }
+
+        ion-card-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--ion-color-primary);
+        }
+    }
+
+    .recent-attendance {
+        .section-heading {
+            font-size: 18px;
+            margin: 20px 0 10px;
+            font-weight: 600;
+        }
+
+        .table-container {
+            border-radius: 12px;
+            background: #f4f4f4;
+            overflow: hidden;
+
+            .table-header,
+            .table-row {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                padding: 10px;
+                font-size: 13px;
+                font-weight: 500;
+            }
+
+            .table-header {
+                background: var(--ion-color-light);
+                font-weight: bold;
+            }
+
+            .table-row {
+                background: #fff;
+                border-bottom: 1px solid #eee;
+            }
+        }
+    }
+
+    // .photo-upload {
+    //     margin: 20px 0;
+
+    //     ion-label {
+    //         font-size: 14px;
+    //         margin-bottom: 6px;
+    //         display: block;
+    //     }
+
+    //     ion-button {
+    //         margin-bottom: 10px;
+    //     }
+    // }
+}
+.punch-modal::part(backdrop) {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.punch-modal::part(content) {
+    --width: 90%;
+    --height: 60%;
+    --max-width: 400px;
+    --border-radius: 20px;
+    --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.modal-toolbar {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.modal-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.photo-upload ion-button {
+    margin-bottom: 12px;
+}

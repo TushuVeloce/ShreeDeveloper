@@ -1,0 +1,38 @@
+<ion-header class="ion-no-border modern-header">
+  <ion-toolbar>
+    <ion-title class="custom-title">Select Option</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" color="medium" (click)="close()">
+        <ion-icon name="close-outline" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Search Bar -->
+  <ion-searchbar debounce="300" (ionInput)="filterOptions($event)" placeholder="Search..."
+    class="custom-search"></ion-searchbar>
+
+  <!-- List of Options -->
+  <ion-list class="custom-list">
+    <ion-item *ngFor="let option of loadedOptions" (click)="selectOption(option)" class="custom-item">
+      <ion-label class="custom-label" [ngClass]="{ 'selected': isSelected(option) }">
+        {{ option.value }}
+      </ion-label>
+      <ion-checkbox *ngIf="multiSelect" slot="end" [checked]="isSelected(option)"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+
+  <!-- Infinite Scroll -->
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+
+<!-- Confirm Button for Multi-Select -->
+<ion-footer *ngIf="multiSelect">
+  <ion-toolbar>
+    <ion-button expand="full" color="primary" (click)="confirmSelection()">Confirm</ion-button>
+  </ion-toolbar>
+</ion-footer>

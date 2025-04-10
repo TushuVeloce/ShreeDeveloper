@@ -1,0 +1,132 @@
+.attendance-content {
+    --background: var(--ion-background-color);
+    padding: 0 10px;
+}
+
+.month-segment {
+    padding: 10px 0;
+
+    ion-segment-button {
+        font-size: 14px;
+        text-transform: capitalize;
+        --indicator-color: transparent;
+        color: #444;
+
+        &.segment-button-checked {
+            background: var(--ion-color-primary);
+            color: var(--ion-background-color);
+            border-radius: 20px;
+            padding: 0 12px;
+        }
+    }
+}
+
+.attendance-grid {
+    padding: 10px 0;
+}
+
+.day-column {
+    text-align: center;
+
+    .date {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .day {
+        font-size: 12px;
+        color: gray;
+    }
+}
+
+.timing-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding-left: 10px;
+
+    .label {
+        font-size: 10px;
+        color: #999;
+    }
+
+    .value {
+        font-size: 14px;
+        font-weight: bold;
+        display: block;
+
+        &.absent {
+            color: #e74c3c;
+        }
+    }
+
+    .clock-in,
+    .clock-out,
+    .working-hrs {
+        flex: 1 1 33%;
+        margin-bottom: 5px;
+    }
+}
+
+.leave-text {
+    color: var(--ion-color-primary);
+    font-weight: 500;
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+
+    ion-icon {
+        margin-right: 5px;
+    }
+}
+
+ion-item {
+    background-color: var(--ion-background-color);
+}
+
+// ion-item.weekend {
+//     background-color: #e8f4ff;
+// }
+
+// ion-item.half-day {
+//     background-color: #fff7e6;
+// }
+
+// ion-item.no-data {
+//     background-color: #f0f0f0;
+// }
+
+.center-text {
+    text-align: center;
+    width: 100%;
+    color: #333;
+    font-weight: 500;
+    padding: 10px 0;
+}
+.no-data-text {
+    text-align: center;
+    padding: 20px;
+    color: #999;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    ion-icon {
+        font-size: 24px;
+        margin-bottom: 8px;
+        color: #ccc;
+    }
+}
+
+// @media screen and (max-width: 480px) {
+//     .timing-row {
+//         flex-direction: column;
+
+//         .clock-in,
+//         .clock-out,
+//         .working-hrs {
+//             flex: 1 1 100%;
+//         }
+//     }
+// }

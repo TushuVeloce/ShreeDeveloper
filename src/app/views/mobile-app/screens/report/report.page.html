@@ -1,11 +1,18 @@
 <!-- <app-header title="Reports" ></app-header> -->
 <app-header-with-back-handler title="Reports" ></app-header-with-back-handler>
 
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Report</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <!-- Quick Actions Grid -->
+  <div class="grid">
+    <ion-grid>
+      <ion-row>
+        <ion-col *ngFor="let item of gridItems" size="4">
+          <div class="grid-item" routerLink={{item.routerPath}}>
+            <ion-icon [name]="item.icon"></ion-icon>
+            <p>{{ item.label }}</p>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>

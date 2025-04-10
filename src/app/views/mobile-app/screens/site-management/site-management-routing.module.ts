@@ -7,7 +7,12 @@ const routes: Routes = [
   {
     path: '',
     component: SiteManagementPage
+  },
+  {
+    path: 'actual-stage',
+    loadChildren: () => import('./actual-stage/actual-stage.module').then( m => m.ActualStagePageModule)
   }
+
 ];
 
 @NgModule({
