@@ -47,18 +47,20 @@ export class OfficeDutyTimeComponent  implements OnInit {
       }
       let lst = await OfficeDutyandTime.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.MasterList = lst;
-  
+      console.log(lst);
+
+
       this.DisplayMasterList = this.MasterList;
       this.loadPaginationData();
     }
-  
+
     onEditClicked = async (item: OfficeDutyandTime) => {
       this.SelectedTime = item.GetEditableVersion();
       OfficeDutyandTime.SetCurrentInstance(this.SelectedTime);
       this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-      await this.router.navigate(['/homepage/Website/Material_Master_Details']);
+      await this.router.navigate(['/homepage/Website/Office_Duty_Time_Details']);
     };
-  
+
     onDeleteClicked = async (OfficeDutyandTime: OfficeDutyandTime) => {
       await this.uiUtils.showConfirmationMessage(
         'Delete',
@@ -76,21 +78,21 @@ export class OfficeDutyTimeComponent  implements OnInit {
         }
       );
     };
-  
+
     // For Pagination  start ----
     loadPaginationData = () => {
       this.total = this.DisplayMasterList.length; // Update total based on loaded data
     };
-  
+
     paginatedList = () => {
       const start = (this.currentPage - 1) * this.pageSize;
       return this.DisplayMasterList.slice(start, start + this.pageSize);
     }
-  
+
     onPageChange = (pageIndex: number): void => {
       this.currentPage = pageIndex; // Update the current page
     };
-    
+
    AddOfficeTime = async() => {
     this.router.navigate(['/homepage/Website/Office_Duty_Time_Details']);
   }

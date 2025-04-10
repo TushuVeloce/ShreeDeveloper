@@ -1,11 +1,35 @@
-<!-- <app-header title="Attendance Management">CRM</app-header> -->
 <app-header-with-back-handler title="CRM"></app-header-with-back-handler>
 
+<ion-content>
+  <div class="crm-container">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">CRM</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <!-- CRM Stats Overview -->
+    <div class="crm-stats">
+      <div class="stat-card" *ngFor="let stat of crmStats">
+        <div class="stat-icon">
+          <ion-icon [name]="stat.icon"></ion-icon>
+        </div>
+        <h3 class="stat-value">{{ stat.value }}</h3>
+        <p class="stat-title">{{ stat.title }}</p>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <ion-button expand="full" (click)="goToVisitedCustomer()">Visited Customer</ion-button>
+      <ion-button expand="full" color="secondary" (click)="goToCustomerFollowUp()">Customer Follow-Up</ion-button>
+    </div>
+
+    <!-- Reminders Section -->
+    <div class="reminders-section">
+      <h2 class="section-title">Reminder for Follow-Up</h2>
+      <div *ngFor="let reminder of reminders" class="reminder-item">
+        <ion-icon [name]="reminder.icon"></ion-icon>
+        <div class="reminder-details">
+          <p class="reminder-title">{{ reminder.title }}</p>
+          <p class="reminder-date">{{ reminder.date }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>

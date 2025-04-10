@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AttendanceLogs } from 'src/app/classes/domain/entities/website/customer_management/hr_payroll_management/attendancelogs';
+import { AttendanceLogs } from 'src/app/classes/domain/entities/website/HR_and_Payroll/hr_payroll_management/attendancelogs';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -21,21 +22,31 @@ export class AttendanceLogsComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   SearchString: string = '';
+  headers: string[] = ['Sr. no', 'Employee Name', 'Date', 'Check In', 'Check Out', 'Total Time'];
+
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
     private appStateManage: AppStateManageService,
-    private screenSizeService: ScreenSizeService
-  ) { }
+    private screenSizeService: ScreenSizeService,private companystatemanagement: CompanyStateManagement
+  ) {
+    effect(async () => {
+      await this.getattendancelogbycompanyref();
+    });
+  }
 
   ngOnInit() { }
 
-  headers: string[] = ['Sr. no','Employee Name', 'Date', 'Check In', 'Check Out', 'Total Time'];
-
-  async AddOfficeTime() {
-    this.router.navigate(['/homepage/Website/Office_Duty_Time_Details']);
+  getattendancelogbycompanyref = async () => {
+    let lst = await AttendanceLogs.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    console.log(lst);
   }
+  // async AddOfficeTime() {
+  //   this.router.navigate(['/homepage/Website/Office_Duty_Time_Details']);
+  // }
 
   filterTable = () => { };
 

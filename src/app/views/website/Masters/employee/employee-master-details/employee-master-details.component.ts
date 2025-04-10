@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { OfficeDutyandTime } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Office_Duty_and_Time/officedutyandtime';
 import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
 import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
 import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
@@ -32,6 +33,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   CityList: City[] = [];
   DesignationList: Designation[] = [];
   DepartmentList: Department[] = [];
+  OfficeDutyTimeList: OfficeDutyandTime [] = []
   GenderList = DomainEnums.GenderTypeList(true, '---Select Gender---');
   MaritalStatusList = DomainEnums.MaritalStatusesList(true, '---Select Marital Status ---');
   MarketingModesList = DomainEnums.MarketingModesList();
@@ -39,20 +41,24 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   dateofjoining: string | null = null;
   dob: string | null = null;
 
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+
 
   constructor(
     private router: Router,
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
-    private utils: Utils,private companystatemanagement: CompanyStateManagement
-  , private dtu: DTU,
-      private datePipe: DatePipe) {}
+    private utils: Utils, private companystatemanagement: CompanyStateManagement
+    , private dtu: DTU,
+    private datePipe: DatePipe) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.DesignationList = await Designation.FetchEntireList();
     this.CountryList = await Country.FetchEntireList();
     this.DepartmentList = await Department.FetchEntireList();
+
+    this.getOfficeDutyTime();
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
@@ -96,7 +102,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     this.CityList = [];
 
     if (CountryRef) {
-      if(CountryRef == 9163){
+      if (CountryRef == 9163) {
         this.Entity.p.StateRef = 10263
         this.Entity.p.CityRef = 10374
         this.getCityListByStateRef(10263)
@@ -113,6 +119,13 @@ export class EmployeeMasterDetailsComponent implements OnInit {
       this.Entity.p.StateRef = 0;
       this.Entity.p.CityRef = 0;
     }
+  }
+
+  getOfficeDutyTime = async () => {
+    let lst = await OfficeDutyandTime.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.OfficeDutyTimeList = lst;
+    console.log(this.OfficeDutyTimeList);
+
   }
 
   getCityListByStateRef = async (StateRef: number) => {
@@ -136,8 +149,9 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
-     // ------ Code For Save Date Of Joining Format ---------------//
-     if (this.dateofjoining) {
+
+    // ------ Code For Save Date Of Joining Format ---------------//
+    if (this.dateofjoining) {
       let dateValue = new Date(this.dateofjoining);
 
       if (!isNaN(dateValue.getTime())) {
@@ -147,8 +161,8 @@ export class EmployeeMasterDetailsComponent implements OnInit {
         entityToSave.p.DateOfJoining = '';
       }
     }
-     // ------ Code For Save DDate Of Birth Format ---------------//
-     if (this.dob) {
+    // ------ Code For Save DDate Of Birth Format ---------------//
+    if (this.dob) {
       let dateValue = new Date(this.dob);
 
       if (!isNaN(dateValue.getTime())) {
@@ -159,11 +173,12 @@ export class EmployeeMasterDetailsComponent implements OnInit {
       }
     }
     let entitiesToSave = [entityToSave];
+    console.log(entitiesToSave);
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error',tr.Message);
+      this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     } else {
       this.isSaveDisabled = false;

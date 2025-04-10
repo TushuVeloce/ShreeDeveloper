@@ -203,6 +203,15 @@
         </div>
         <div class="col-md-4">
           <div>
+            <label for="OfficeDutyandTimeRef">Office Duty Time</label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="OfficeDutyandTimeRef" name="OfficeDutyandTimeRef"
+              [nzSize]="'large'" [(ngModel)]="Entity.p.OfficeDutyandTimeRef">
+              <nz-option *ngFor="let OfficeDutyTime of OfficeDutyTimeList" [nzValue]="OfficeDutyTime.p.Ref" [nzLabel]="OfficeDutyTime.p.FromTime + ' - ' + OfficeDutyTime.p.ToTime"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div>
             <label>Date Of Joining</label>
             <input type="date" name="DateOfJoining " [(ngModel)]="dateofjoining " class="form-control"
               id="DateOfJoining " required />
@@ -215,20 +224,13 @@
               id="SalaryPerMonth  " required />
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
+      <!-- </div> -->
+      <!-- <div class="row" style="margin-top: 1rem; "> -->
         <div class="col-md-4">
           <div>
             <label>Salary Per Year</label>
             <input type="number" name="SalaryPerYear  " [(ngModel)]="Entity.p.SalaryPerYear  " class="form-control"
               id="SalaryPerYear  " required />
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div>
-            <label>Working Time</label>
-            <input type="number" name="WorkingTime " class="form-control"
-              id="WorkingTime " required />
           </div>
         </div>
         <div class="col-md-4">
