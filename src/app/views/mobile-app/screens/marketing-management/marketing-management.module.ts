@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { MarketingManagementPageRoutingModule } from './marketing-management-routing.module';
 import { MarketingManagementPage } from './marketing-management.page';
 import { SharedModule } from "../../shared/shared.module";
+import { AddEditMarketingManagementComponent } from './add-edit-marketing-management/add-edit-marketing-management.component';
 
 
 @NgModule({
@@ -17,6 +18,6 @@ import { SharedModule } from "../../shared/shared.module";
     MarketingManagementPageRoutingModule,
     SharedModule
 ],
-  declarations:[MarketingManagementPage]
+  declarations:[MarketingManagementPage,AddEditMarketingManagementComponent]
 })
 export class MarketingManagementPageModule {}

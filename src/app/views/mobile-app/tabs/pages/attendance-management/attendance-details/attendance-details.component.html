@@ -1,0 +1,70 @@
+<app-header-with-back-handler title="Attendance Details"></app-header-with-back-handler>
+
+<ion-content [fullscreen]="true" class="attendance-content">
+  <!-- Month Tabs -->
+  <ion-segment scrollable [(ngModel)]="selectedMonth" (ionChange)="getDataByMonth($event.detail.value)"
+    class="month-segment">
+    <ion-segment-button *ngFor="let month of months" [value]="month.value">
+      {{ month.label }}
+    </ion-segment-button>
+  </ion-segment>
+
+
+  <!-- Attendance List -->
+  <ion-list style="background-color: var(--ion-background-color);" *ngIf="attendanceData.length > 0; else noDataTemplate" >
+    <ion-item *ngFor="let day of attendanceData" lines="none" [class.weekend]="day.isWeekend" [class.leave]="day.leave"
+      [class.half-day]="day.isHalfDay" [class.no-data]="!day.clockIn && !day.clockOut && !day.leave && !day.isWeekend">
+      <ion-grid class="attendance-grid">
+        <ion-row>
+          <ion-col size="2" class="day-column">
+            <div class="date">{{ day.date }}</div>
+            <div class="day">{{ day.day }}</div>
+          </ion-col>
+
+          <ion-col size="10" [ngStyle]="{ 'background-color': day.leave && 'lightsalmon'}" style="border-radius: 10px;">
+            <div *ngIf="day.leave" class="center-text">
+              <ion-icon name="medkit-outline"></ion-icon>
+              {{ day.leave }}
+            </div>
+
+            <div *ngIf="day.isWeekend" class="center-text" [ngStyle]="{ 'background-color': day.isWeekend && 'lightblue'}" style="border-radius: 10px;">
+              Weekend: {{ day.day }} {{ day.date }}
+            </div>
+
+            <!-- <div *ngIf="day.isHalfDay && !day.isWeekend && !day.leave" class="center-text">
+              Half Day: {{ day.day }} {{ day.date }}
+            </div> -->
+
+            <div *ngIf="!day.leave && !day.isWeekend && (day.clockIn || day.clockOut)" class="timing-row"
+              [ngStyle]="{ 'background-color': day.isHalfDay && 'pink'}" style="border-radius: 10px;">
+              <div class="clock-in">
+                <span class="label">Clock In</span>
+                <span class="value" [class.absent]="!day.clockIn">{{ day.clockIn || '--' }}</span>
+              </div>
+              <div class="clock-out">
+                <span class="label">Clock Out</span>
+                <span class="value" [class.absent]="!day.clockOut">{{ day.clockOut || '--' }}</span>
+              </div>
+              <div class="working-hrs">
+                <span class="label">Working Hr's</span>
+                <span class="value" [class.absent]="!day.hours">{{ day.hours || '--' }}</span>
+              </div>
+            </div>
+
+            <!-- <div *ngIf="!day.clockIn && !day.clockOut && !day.leave && !day.isWeekend && !day.isHalfDay"
+              class="center-text">
+              No data found
+            </div> -->
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </ion-list>
+  <!-- Template to show when no data -->
+  <ng-template #noDataTemplate style="background-color: var(--ion-background-color);">
+    <div class="no-data-text">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      No attendance data found
+    </div>
+  </ng-template>
+</ion-content>

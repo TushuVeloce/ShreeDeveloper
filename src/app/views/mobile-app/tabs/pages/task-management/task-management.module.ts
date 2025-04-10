@@ -8,6 +8,7 @@ import { TaskManagementPageRoutingModule } from './task-management-routing.modul
 
 import { SharedModule } from "../../../shared/shared.module";
 import { TaskManagementPage } from './task-management.page';
+import { AddEditTaskManagementComponent } from './add-edit-task-management/add-edit-task-management.component';
 
 @NgModule({
   imports: [
@@ -15,9 +16,9 @@ import { TaskManagementPage } from './task-management.page';
     FormsModule,
     IonicModule,
     TaskManagementPageRoutingModule,
-    SharedModule
+    SharedModule,
 ],
-declarations: [TaskManagementPage]
+declarations: [TaskManagementPage,AddEditTaskManagementComponent]
 
 })
 export class TaskManagementPageModule {}
