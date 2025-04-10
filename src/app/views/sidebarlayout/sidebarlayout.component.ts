@@ -526,6 +526,11 @@ export class SidebarlayoutComponent implements OnInit {
 
     let RequestSubModulelist = [
       {
+        Name: 'Employee Attendance Logs',
+        RouterLink: '/homepage/Website/Employee_Attendance_Logs',
+        LogoPath: '',
+      },
+      {
         Name: 'Leave Request',
         RouterLink: '/homepage/Website/Leave_Request',
         LogoPath: '',
@@ -533,11 +538,6 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Salary Slip Request',
         RouterLink: '/homepage/Website/Salary_Slip_Request',
-        LogoPath: '',
-      },
-      {
-        Name: 'Employee Attendance Logs',
-        RouterLink: '/homepage/Website/Employee_Attendance_Logs',
         LogoPath: '',
       }
     ]

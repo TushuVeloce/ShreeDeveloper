@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AttendanceLogs } from 'src/app/classes/domain/entities/website/customer_management/hr_payroll_management/attendancelogs';
+import { AttendanceLogs } from 'src/app/classes/domain/entities/website/HR_and_Payroll/hr_payroll_management/attendancelogs';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -33,9 +33,9 @@ export class AttendanceLogsComponent implements OnInit {
 
   headers: string[] = ['Sr. no','Employee Name', 'Date', 'Check In', 'Check Out', 'Total Time'];
 
-  async AddOfficeTime() {
-    this.router.navigate(['/homepage/Website/Office_Duty_Time_Details']);
-  }
+  // async AddOfficeTime() {
+  //   this.router.navigate(['/homepage/Website/Office_Duty_Time_Details']);
+  // }
 
   filterTable = () => { };
 
