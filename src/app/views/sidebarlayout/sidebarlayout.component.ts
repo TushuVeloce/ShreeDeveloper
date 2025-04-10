@@ -535,6 +535,11 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Salary_Slip_Request',
         LogoPath: '',
       },
+      {
+        Name: 'Employee Attendance Logs',
+        RouterLink: '/homepage/Website/Employee_Attendance_Logs',
+        LogoPath: '',
+      }
     ]
 
     let moduleListInternal = [

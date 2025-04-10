@@ -98,11 +98,12 @@ import { SalaryGenerationComponent } from './hr_payroll_management/salary_genera
 import { SalaryGenerationDetailsComponent } from './hr_payroll_management/salary_generation/salary-generation-details/salary-generation-details.component';
 import { LeaveApprovalComponent } from './hr_payroll_management/leave-approval/leave-approval.component';
 import { SalarySlipApprovalComponent } from './hr_payroll_management/salary-slip-approval/salary-slip-approval.component';
-import { LeaveRequestComponent } from './request/leave_request/leave-request/leave-request.component';
-import { LeaveRequestDetailsComponent } from './request/leave_request/leave-request-details/leave-request-details.component';
-import { SalarySlipRequestComponent } from './request/salary_slip_request/salary-slip-request/salary-slip-request.component';
-import { SalarySlipRequestDetailsComponent } from './request/salary_slip_request/salary-slip-request-details/salary-slip-request-details.component';
 import { AttendanceLogsComponent } from './hr_payroll_management/attendance_logs/attendance-logs/attendance-logs.component';
+import { LeaveRequestComponent } from './employee_request/leave_request/leave-request/leave-request.component';
+import { LeaveRequestDetailsComponent } from './employee_request/leave_request/leave-request-details/leave-request-details.component';
+import { SalarySlipRequestComponent } from './employee_request/salary_slip_request/salary-slip-request/salary-slip-request.component';
+import { SalarySlipRequestDetailsComponent } from './employee_request/salary_slip_request/salary-slip-request-details/salary-slip-request-details.component';
+import { EmployeeAttendanceLogsComponent } from './employee_request/employee_attendance_logs/employee-attendance-logs/employee-attendance-logs.component';
 
 
 const routes: Routes = [
@@ -247,6 +248,8 @@ const routes: Routes = [
 
       { path: 'Salary_Slip_Request', component: SalarySlipRequestComponent },
       { path: 'Salary_Slip_Request_Details', component: SalarySlipRequestDetailsComponent },
+
+      { path: 'Employee_Attendance_Logs', component: EmployeeAttendanceLogsComponent },
 
       // Government Office
       { path: 'Document', component: DocumentListComponent },
