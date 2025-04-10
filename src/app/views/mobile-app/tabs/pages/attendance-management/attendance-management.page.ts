@@ -1,10 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { AttendanceLog } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelog';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DTU } from 'src/app/services/dtu.service';
+import { UIUtils } from 'src/app/services/uiutils.service';
+import { Utils } from 'src/app/services/utils.service';
 @Component({
   selector: 'app-attendance-management',
   templateUrl: './attendance-management.page.html',
   styleUrls: ['./attendance-management.page.scss'],
-  standalone:false
+  standalone: false
 })
 export class AttendanceManagementPage implements OnInit {
 
@@ -20,6 +29,21 @@ export class AttendanceManagementPage implements OnInit {
   totalHalfDays = 2;
   totalOvertime = '16 hrs';
 
+  isSaveDisabled: boolean = false;
+  private IsCheckIn: boolean = false;
+  isChecked = false; // Default value
+  Date: string  = "";
+  DateWithTime: string | null = null;
+  Entity: AttendanceLog = AttendanceLog.CreateNewInstance();
+  DetailsFormTitle: 'New Registrar Office' | 'Edit Registrar Office' = 'New Registrar Office';
+
+  currentCompanyRef = 0;
+
+  siteList: Site[] = [];
+
+  AttendanceLocationTypeList = DomainEnums.AttendenceLocationTypeList(true, '--Select--');
+
+
   recentAttendance = [
     { date: 'Apr 8', punchIn: '09:05 AM', punchOut: '06:00 PM', hours: '9h' },
     { date: 'Apr 7', leave: true },
@@ -30,9 +54,27 @@ export class AttendanceManagementPage implements OnInit {
     { date: 'Apr 2', punchIn: '09:10 AM', punchOut: '06:05 PM', hours: '9h' },
   ];
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private companystatemanagement: CompanyStateManagement, private uiUtils: UIUtils,
+    private appStateManage :AppStateManageService, private utils: Utils,private dtu: DTU
+  ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.currentCompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    console.log('CurrentCompanyRef() :', this.companystatemanagement.getCurrentCompanyRef());
+
+    //  this.siteList = await Site.FetchEntireListByCompanyRef(this.companystatemanagement.getCurrentCompanyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg))
+    this.siteList = await Site.FetchEntireListByCompanyRef(26881, async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg))
+
+    let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+
+    // this.BillDate = this.datePipe.transform(this.dtu.FromString(strCDT), 'yyyy-MM-dd');
+    this.Date = strCDT.substring(0, 10);
+    console.log('this.Date :', this.Date);
+
+    this.isPunchInTime = strCDT;
+    this.isPunchOutTime = strCDT;
+    console.log('this.DateWithTime :', this.isPunchInTime);
+
     this.isPunchInEnabled = true;
     this.isPunchOutEnabled = false;
   }
@@ -64,18 +106,54 @@ export class AttendanceManagementPage implements OnInit {
   //   console.log(`Take photo (${type})`);
   // }
 
-  submitPunch() {
-    console.log(`Punch ${this.currentPunchType} submitted at ${new Date().toLocaleTimeString()} from ${this.selectedLocation}`);
+  submitPunch = async ()=> {
+    console.log(`Punch ${this.currentPunchType} submitted at ${this.isPunchInTime} from ${this.selectedLocation} from site ${new Date().toLocaleTimeString()} from ${this.selectedLocation}`);
 
     if (this.currentPunchType === 'in') {
+      this.Entity.p.IsCheckIn = true;
       this.isPunchInEnabled = false;   // Disable Punch In
       this.isPunchOutEnabled = true;   // Enable Punch Out
     } else {
+      this.Entity.p.IsCheckIn = false;
       this.isPunchInEnabled = true;    // Enable Punch In
       this.isPunchOutEnabled = false;  // Disable Punch Out
     }
 
     this.punchModalOpen = false;
+
+          this.isSaveDisabled = true;
+          this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+          // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+          // this.Entity.p.UpdatedDate= await CurrentDateTimeRequest.GetCurrentDateTime();
+          this.Entity.p.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+          
+    
+          // convert date 2025-02-23 to 2025-02-23-00-00-00-000
+        this.Entity.p.TransDate = this.dtu.ConvertStringDateToFullFormat(this.Date!)
+        // this.Entity.p.SaleDeedDate = this.dtu.ConvertStringDateToFullFormat(this.localsaledeeddate)
+        // this.Entity.p.TalathiDate = this.dtu.ConvertStringDateToFullFormat(this.localtalathidate)
+    
+        let entityToSave = this.Entity.GetEditableVersion();
+          let entitiesToSave = [entityToSave]
+
+          // await this.Entity.EnsurePrimaryKeysWithValidValues()
+          let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+          if (!tr.Successful) {
+            this.isSaveDisabled = false;
+            this.uiUtils.showErrorMessage('Error',tr.Message);
+            return
+          }
+          else {
+            this.isSaveDisabled = false;
+            // this.onEntitySaved.emit(entityToSave);
+            if (this.IsCheckIn) {
+              await this.uiUtils.showSuccessToster('Punch in successfully!');
+              this.Entity = AttendanceLog.CreateNewInstance();
+            } else {
+              // await this.router.navigate(['/homepage/Website/Registrar_Office'])
+              await this.uiUtils.showSuccessToster('Punch out successfully!');
+            }
+          }
   }
 
   getSalarySlip() {

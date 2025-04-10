@@ -10,18 +10,23 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { AttendanceFetchRequest } from "./attendancefetchrequest";
+import { AttendanceLogFetchRequest } from "./attendancelogfetchrequest";
 
 
-export class AttendanceProps {
-  public readonly Db_Table_Name = "AttendanceMaster";
+export class AttendanceLogProps {
   public Ref: number = 0;
-  public Code: string = '';
-  public Name: string = '';
-  public UnitRef: number = 0;
-  public readonly UnitName: string = '';
   public CompanyRef: number = 0;
+  public AttendenceLocation :number = 0;
+  public SiteRef :number = 0;
+  public EmployeeRef: number = 0;
+  public TransDate: string = '';
+  public CheckInTime: string = '';
+  public CheckOutTime: string = '';
+  public AttendanceLogPath1: string = '';
+  public AttendanceLogPath2: string = '';
+  public readonly EmployeeName: string = '';
   public CompanyName: string = '';
+  public IsCheckIn = false;
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -31,14 +36,14 @@ export class AttendanceProps {
   }
 
   public static Blank() {
-    return new AttendanceProps(true);
+    return new AttendanceLogProps(true);
   }
 }
 
-export class Attendance implements IPersistable<Attendance> {
-  public static readonly Db_Table_Name: string = 'AttendanceMaster';
+export class AttendanceLog implements IPersistable<AttendanceLog> {
+  public static readonly Db_Table_Name: string = 'AttendanceLog';
 
-  private constructor(public readonly p: AttendanceProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: AttendanceLogProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -51,50 +56,47 @@ export class Attendance implements IPersistable<Attendance> {
     }
   }
 
-  public GetEditableVersion(): Attendance {
-    let newState: AttendanceProps = Utils.GetInstance().DeepCopy(this.p);
-    return Attendance.CreateInstance(newState, true);
+  public GetEditableVersion(): AttendanceLog {
+    let newState: AttendanceLogProps = Utils.GetInstance().DeepCopy(this.p);
+    return AttendanceLog.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new Attendance(AttendanceProps.Blank(), true);
+    return new AttendanceLog(AttendanceLogProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new Attendance(data as AttendanceProps, allowEdit);
+    return new AttendanceLog(data as AttendanceLogProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-    if (this.p.Code == '') vra.add('Code', 'Code cannot be blank.');
-    if (this.p.UnitRef == 0) vra.add('UnitRef', 'Unit cannot be blank.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Attendance.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, AttendanceLog.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: Attendance = Attendance.CreateNewInstance();
+  private static m_currentInstance: AttendanceLog = AttendanceLog.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return Attendance.m_currentInstance;
+    return AttendanceLog.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: Attendance) {
-    Attendance.m_currentInstance = value;
+  public static SetCurrentInstance(value: AttendanceLog) {
+    AttendanceLog.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): Attendance {
+  public static SingleInstanceFromTransportData(td: TransportData): AttendanceLog {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, Attendance.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, Attendance.Db_Table_Name)!.Entries) {
-        return Attendance.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, AttendanceLog.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, AttendanceLog.Db_Table_Name)!.Entries) {
+        return AttendanceLog.CreateInstance(data, false);
       }
     }
 
@@ -103,13 +105,13 @@ export class Attendance implements IPersistable<Attendance> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Attendance[] {
-    let result: Attendance[] = [];
+    sortPropertyName: string = "Name"): AttendanceLog[] {
+    let result: AttendanceLog[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, Attendance.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, Attendance.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, AttendanceLog.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, AttendanceLog.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -119,18 +121,18 @@ export class Attendance implements IPersistable<Attendance> {
       }
 
       for (let data of entries) {
-        result.push(Attendance.CreateInstance(data, false));
+        result.push(AttendanceLog.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): Attendance[] {
-    return Attendance.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): AttendanceLog[] {
+    return AttendanceLog.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: AttendanceFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: AttendanceLogFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -145,29 +147,29 @@ export class Attendance implements IPersistable<Attendance> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new AttendanceFetchRequest();
-    req.MaterialRefs.push(ref);
+    let req = new AttendanceLogFetchRequest();
+    req.CompanyRefs.push(ref);
 
-    let tdResponse = await Attendance.FetchTransportData(req, errorHandler) as TransportData;
-    return Attendance.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await AttendanceLog.FetchTransportData(req, errorHandler) as TransportData;
+    return AttendanceLog.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: AttendanceFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await Attendance.FetchTransportData(req, errorHandler) as TransportData;
-    return Attendance.ListFromTransportData(tdResponse);
+  public static async FetchList(req: AttendanceLogFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await AttendanceLog.FetchTransportData(req, errorHandler) as TransportData;
+    return AttendanceLog.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new AttendanceFetchRequest();
-    let tdResponse = await Attendance.FetchTransportData(req, errorHandler) as TransportData;
-    return Attendance.ListFromTransportData(tdResponse);
+    let req = new AttendanceLogFetchRequest();
+    let tdResponse = await AttendanceLog.FetchTransportData(req, errorHandler) as TransportData;
+    return AttendanceLog.ListFromTransportData(tdResponse);
   }
 
  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new AttendanceFetchRequest();
+    let req = new AttendanceLogFetchRequest();
     req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await Attendance.FetchTransportData(req, errorHandler) as TransportData;
-    return Attendance.ListFromTransportData(tdResponse);
+    let tdResponse = await AttendanceLog.FetchTransportData(req, errorHandler) as TransportData;
+    return AttendanceLog.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {

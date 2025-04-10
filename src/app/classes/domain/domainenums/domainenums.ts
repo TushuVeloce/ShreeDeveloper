@@ -156,6 +156,13 @@ export enum LeaveRequestType {
   HalfDay = 300,
 }
 
+export enum AttendenceLocationType {
+  None = 0,
+  Office = 100,
+  Site = 200,
+
+}
+
 
 
 export class DomainEnums {
@@ -929,6 +936,33 @@ export class DomainEnums {
     if (withAllOption) {
       let allEntry = {
         Ref: LeaveRequestType.None,
+        Name: allOptionName
+      }
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+  public static AttendenceLocationTypeName(itemType: AttendenceLocationType) {
+    switch (itemType) {
+      case AttendenceLocationType.Office: return 'Office';
+      case AttendenceLocationType.Site: return 'Site';
+      default: return '';
+    }
+  }
+
+  public static AttendenceLocationTypeList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+    let result = [
+      {
+        Ref: AttendenceLocationType.Office, Name: DomainEnums.AttendenceLocationTypeName(AttendenceLocationType.Office)
+      },
+      {
+         Ref: AttendenceLocationType.Site, Name: DomainEnums.AttendenceLocationTypeName(AttendenceLocationType.Site)
+        }
+    ]
+    if (withAllOption) {
+      let allEntry = {
+        Ref: AttendenceLocationType.None,
         Name: allOptionName
       }
       result.unshift(allEntry);
