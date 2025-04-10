@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GovernmentTransaction } from 'src/app/classes/domain/entities/website/government_office/government_transaction/governmenttransaction';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -19,7 +20,8 @@ export class RespectedChildComponentComponent implements OnInit {
   Entity: GovernmentTransaction = GovernmentTransaction.CreateNewInstance();
   SelectedArrayObj: any[] = [];
   TransactionTypeArrayObj: any[] = [];
-  constructor(private router: Router, private route: ActivatedRoute, private appStateManage: AppStateManageService, private utils: Utils, private uiUtils: UIUtils,) {
+  constructor(private router: Router, private route: ActivatedRoute, private appStateManage: AppStateManageService,
+    private utils: Utils, private uiUtils: UIUtils, private companystatemanagement: CompanyStateManagement) {
     let str = this.route.snapshot.params['queryParams'];
     // console.log('str :', str);
     this.SectionName = str;
@@ -33,18 +35,23 @@ export class RespectedChildComponentComponent implements OnInit {
 
   ngOnInit() {
     this.Entity = GovernmentTransaction.GetCurrentInstance();
+    // console.log('Entity', this.Entity);
+
   }
 
   onAddTransactionSubmit = async (value: any) => {
     console.log('onAddTransactionType value', value);
     // console.log('SelectedArrayObj', this.SelectedArrayObj);
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let arr = await this.updatePreviousObjWithAfterAddValues(this.TransactionTypeArrayObj, value);
     let str = JSON.stringify(arr);
     this.Entity.p.TransactionJson = str;
     let entityToSave = this.Entity.GetEditableVersion();
-    console.log('entityToSave :', entityToSave);
+    // await this.Entity.EnsurePrimaryKeysWithValidValues();
     let entitiesToSave = [entityToSave];
-    // await this.Entity.EnsurePrimaryKeysWithValidValues()
+    // console.log('entityToSave :', entityToSave);
+    // return
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
