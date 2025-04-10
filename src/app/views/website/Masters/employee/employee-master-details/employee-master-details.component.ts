@@ -148,7 +148,6 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   SaveEmployeeMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-    this.Entity.p.OfficeDutyandTimeRef = 28311;
     let entityToSave = this.Entity.GetEditableVersion();
 
     // ------ Code For Save Date Of Joining Format ---------------//
