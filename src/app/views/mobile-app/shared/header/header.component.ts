@@ -1,22 +1,41 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
+import { SessionValues } from 'src/app/services/sessionvalues.service';
+import { ThemeService } from 'src/app/services/theme.service';
+import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class HeaderComponent  implements OnInit {
+export class HeaderComponent implements OnInit {
+  CompnyList: Company[] = [];
+  CompnyListData: Company[] = [];
+  CompanyRef: number = 0;
 
   // constructor() { }
 
   // ngOnInit() {}
   @Input() title: string = 'Default Title';
-  constructor(private router: Router, private modalCtrl: ModalController) { }
+  constructor(public router: Router,
+    public appStateManagement: AppStateManageService,
+    private sessionValues: SessionValues, private cdr: ChangeDetectorRef,
+    private uiUtils: UIUtils, private companystatemanagement: CompanyStateManagement, private servercommunicator: ServerCommunicatorService,) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.ongetcompany();
+    this.FormulateCompanyList();
+    console.log(this.CompnyList);
+    
+    // this.CompnyListData=this.CompnyList[0].p;
+  }
   showHeader(): boolean {
     const hiddenRoutes = [
       '/app_homepage/task/add',
@@ -59,12 +78,49 @@ export class HeaderComponent  implements OnInit {
     { id: 20, value: 'Tomato' }
   ];
 
-  onSelectionChange(selected: { id: number; value: string }[]) {
+  private async FormulateCompanyList() {
+    let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.CompnyList = lst;
+    console.log('CompnyList :', this.CompnyList);
+
+    // Set default selection if there is no stored value
+    this.ongetcompany();
+  }
+
+  ongetcompany() {
+    const storedCompanyRef = this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
+    const storedCompanyName = this.appStateManagement.StorageKey.getItem('companyName');
+
+    if (storedCompanyRef && storedCompanyName) {
+      const ref = Number(storedCompanyRef);
+      this.CompanyRef = ref;
+      this.companystatemanagement.setCompanyRef(ref, storedCompanyName);
+    } else if (this.CompnyList && this.CompnyList.length > 0) {
+      // Select first company if no stored value is found
+      const firstCompany = this.CompnyList[0];
+      this.changecompany(firstCompany.p.Ref);
+    }
+  }
+
+  changecompany(ref: number) {
+    const selectedCompany = this.CompnyList.find(company => company.p.Ref === ref);
+    if (selectedCompany) {
+      this.appStateManagement.StorageKey.setItem('SelectedCompanyRef', selectedCompany.p.Ref.toString());
+      this.appStateManagement.StorageKey.setItem('companyName', selectedCompany.p.Name);
+
+      this.companystatemanagement.setCompanyRef(ref, selectedCompany.p.Name);
+      this.CompanyRef = ref;
+    } else {
+      console.warn('Selected company not found');
+    }
+  }
+
+  onSelectionChange(selected: Company[]) {
     console.log('Selected option:', selected);
   }
-  
+
   goToNotificationPage() {
-    console.log('Selected option:','/app_homepage/notifications');
+    console.log('Selected option:', '/app_homepage/notifications');
     this.router.navigate(['/app_homepage/notifications']);
     // this.router.navigate(['/notifications']);
   }

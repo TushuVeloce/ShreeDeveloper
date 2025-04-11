@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
 
 @Component({
   selector: 'app-select-modal',
@@ -8,12 +9,12 @@ import { ModalController } from '@ionic/angular';
   standalone:false
 })
 export class SelectModalComponent  implements OnInit {
-  @Input() options: { id: number; value: string }[] = [];
-  @Input() selectedOptions: { id: number; value: string }[] = [];
+  @Input() options: Company[] = [];
+  @Input() selectedOptions: Company[] = [];
   @Input() multiSelect: boolean = false;
 
   searchText: string = '';
-  loadedOptions: { id: number; value: string }[] = [];
+  loadedOptions: Company[] = [];
   itemsPerLoad: number = 20;
 
   constructor(private modalCtrl: ModalController) { }
@@ -26,7 +27,7 @@ export class SelectModalComponent  implements OnInit {
     const searchTerm = event.target.value.toLowerCase();
     if (searchTerm) {
       this.loadedOptions = this.options.filter(option =>
-        option.value.toLowerCase().includes(searchTerm)
+        option.p.Name.toLowerCase().includes(searchTerm)
       );
     } else {
       this.loadedOptions = this.options.slice(0, this.itemsPerLoad);
@@ -45,10 +46,10 @@ export class SelectModalComponent  implements OnInit {
     }, 500);
   }
 
-  selectOption(option: any) {
+  selectOption(option: Company) {
     if (this.multiSelect) {
       if (this.selectedOptions.includes(option)) {
-        this.selectedOptions = this.selectedOptions.filter(item => item !== option);
+        this.selectedOptions = this.selectedOptions.filter(item => item.p.Ref !== option.p.Ref);
       } else {
         this.selectedOptions.push(option);
       }
@@ -59,8 +60,8 @@ export class SelectModalComponent  implements OnInit {
   }
 
 
-  isSelected(option: { id: number; value: string }): boolean {
-    return this.selectedOptions.some(item => item.id === option.id);
+  isSelected(option: Company): boolean {
+    return this.selectedOptions.some(item => item.p.Ref === option.p.Ref);
   }
 
   confirmSelection() {

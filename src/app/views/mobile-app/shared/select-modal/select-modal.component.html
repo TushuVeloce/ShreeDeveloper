@@ -18,7 +18,7 @@
   <ion-list class="custom-list">
     <ion-item *ngFor="let option of loadedOptions" (click)="selectOption(option)" class="custom-item">
       <ion-label class="custom-label" [ngClass]="{ 'selected': isSelected(option) }">
-        {{ option.value }}
+        {{ option.p.Name }}
       </ion-label>
       <ion-checkbox *ngIf="multiSelect" slot="end" [checked]="isSelected(option)"></ion-checkbox>
     </ion-item>

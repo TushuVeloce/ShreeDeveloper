@@ -3,6 +3,7 @@ import { ModalController, Platform } from '@ionic/angular';
 import { SelectModalComponent } from '../select-modal/select-modal.component';
 import { Router, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
 
 @Component({
   selector: 'app-searchable-select',
@@ -11,12 +12,12 @@ import { Subscription } from 'rxjs';
   standalone: false
 })
 export class SearchableSelectComponent implements OnInit, OnDestroy {
-  @Input() options: { id: number; value: string }[] = [];
+  @Input() options: Company[] = [];
   @Input() placeholder: string = 'Select an option';
   @Input() multiSelect: boolean = false;
-  @Input() selectedOptions: { id: number; value: string }[] = [];
+  @Input() selectedOptions: Company[] = [];
 
-  @Output() selectionChange = new EventEmitter<{ id: number; value: string }[]>();
+  @Output() selectionChange = new EventEmitter<Company[]>();
 
   private backButtonSubscription: any;
   private routeSubscription: Subscription | null = null;

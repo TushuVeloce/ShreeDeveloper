@@ -1,7 +1,7 @@
 <ion-item button (click)="openSelectModal()">
   <ion-label>
     <span *ngIf="selectedOptions.length > 0">
-      <b>{{ multiSelect ? selectedOptions.length + ' selected' : selectedOptions[0].value }}</b>
+      <b>{{ multiSelect ? selectedOptions.length + ' selected' : selectedOptions[0].p.Name }}</b>
     </span>
     <span *ngIf="selectedOptions.length === 0">{{ placeholder }}</span>
   </ion-label>
