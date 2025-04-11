@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
 
 @Component({
   selector: 'app-select-modal',
@@ -9,12 +8,12 @@ import { Company } from 'src/app/classes/domain/entities/website/masters/company
   standalone:false
 })
 export class SelectModalComponent  implements OnInit {
-  @Input() options: Company[] = [];
-  @Input() selectedOptions: Company[] = [];
+  @Input() options: any[] = [];
+  @Input() selectedOptions: any[] = [];
   @Input() multiSelect: boolean = false;
 
   searchText: string = '';
-  loadedOptions: Company[] = [];
+  loadedOptions: any[] = [];
   itemsPerLoad: number = 20;
 
   constructor(private modalCtrl: ModalController) { }
@@ -46,7 +45,7 @@ export class SelectModalComponent  implements OnInit {
     }, 500);
   }
 
-  selectOption(option: Company) {
+  selectOption(option: any) {
     if (this.multiSelect) {
       if (this.selectedOptions.includes(option)) {
         this.selectedOptions = this.selectedOptions.filter(item => item.p.Ref !== option.p.Ref);
@@ -60,7 +59,7 @@ export class SelectModalComponent  implements OnInit {
   }
 
 
-  isSelected(option: Company): boolean {
+  isSelected(option: any): boolean {
     return this.selectedOptions.some(item => item.p.Ref === option.p.Ref);
   }
 

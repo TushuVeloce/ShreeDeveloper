@@ -169,7 +169,13 @@
                   }}</ion-select-option>
               </ion-select>
             </ion-item>
-
+            <ion-item>
+              <ion-label>Site</ion-label>
+              <app-searchable-select [options]="siteList" [multiSelect]="false" placeholder="Select Site"
+              (selectionChange)="onSelectionChange($event)">
+            </app-searchable-select>
+            </ion-item>
+ 
             <div class="photo-upload">
               <ion-label class="ion-padding-top">Your Photo </ion-label>
               <ion-button expand="block" color="secondary" fill="solid" (click)="takePhoto('before')">

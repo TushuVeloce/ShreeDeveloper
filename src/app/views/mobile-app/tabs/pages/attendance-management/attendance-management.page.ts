@@ -17,7 +17,6 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class AttendanceManagementPage implements OnInit {
 
-  todayDate = new Date().toDateString();
   punchModalOpen = false;
   currentPunchType = 'in';
   selectedLocation: string = '';
@@ -36,7 +35,7 @@ export class AttendanceManagementPage implements OnInit {
   DateWithTime: string | null = null;
   Entity: AttendanceLog = AttendanceLog.CreateNewInstance();
   DetailsFormTitle: 'New Registrar Office' | 'Edit Registrar Office' = 'New Registrar Office';
-  currentCompanyRef = 0;
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
   siteList: Site[] = [];
   AttendanceLocationTypeList = DomainEnums.AttendenceLocationTypeList(true, '--Select--');
 
@@ -62,11 +61,12 @@ export class AttendanceManagementPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.currentCompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    console.log('CurrentCompanyRef() :', this.companystatemanagement.getCurrentCompanyRef());
+    // this.currentCompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    console.log('CurrentCompanyRef() :', this.companyRef());
 
     //  this.siteList = await Site.FetchEntireListByCompanyRef(this.companystatemanagement.getCurrentCompanyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg))
-    this.siteList = await Site.FetchEntireListByCompanyRef(26881, async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg))
+    this.siteList = await Site.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg))
+    console.log('this.siteList :', this.siteList);
 
     let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
 
@@ -190,4 +190,7 @@ export class AttendanceManagementPage implements OnInit {
   viewMore() {
     this.router.navigate(['/app_homepage/tabs/attendance-management/attendance-details']);
   }
+    onSelectionChange(selected: Site[]) {
+      console.log('Selected option:', selected);
+    }
 }
