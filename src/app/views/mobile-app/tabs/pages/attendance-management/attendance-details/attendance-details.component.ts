@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 
 interface AttendanceDay {
   date: string;
@@ -19,34 +20,22 @@ interface AttendanceDay {
 })
 export class AttendanceDetailsComponent implements OnInit {
 
-  months = [
-    { label: 'January', value: 0 },
-    { label: 'February', value: 1 },
-    { label: 'March', value: 2 },
-    { label: 'April', value: 3 },
-    { label: 'May', value: 4 },
-    { label: 'June', value: 5 },
-    { label: 'July', value: 6 },
-    { label: 'August', value: 7 },
-    { label: 'September', value: 8 },
-    { label: 'October', value: 9 },
-    { label: 'November', value: 10 },
-    { label: 'December', value: 11 },
-  ];
   selectedMonth: number = new Date().getMonth();
   attendanceData: AttendanceDay[] = [];
+  months: any = [];
 
   constructor() { }
 
   ngOnInit() {
     this.getDataByMonth(this.selectedMonth);
+    this.months = DomainEnums.MonthList();
+    console.log("Month", this.months);
   }
 
   async getDataByMonth(month: any): Promise<void> {
     if (month === undefined) return;
     this.selectedMonth = month;
-    console.log("Selected Month:", month);
-    console.log("Fetching data for month:", this.months[month]?.label);
+    // console.log("Selected Month:", month);
 
     // Replace with API call in production
     this.attendanceData = [

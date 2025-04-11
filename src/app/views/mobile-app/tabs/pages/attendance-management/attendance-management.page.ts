@@ -23,7 +23,7 @@ export class AttendanceManagementPage implements OnInit {
   selectedLocation: string = '';
   isPunchInEnabled = false;
   isPunchOutEnabled = true;
-  locations = ['Office', 'Remote', 'Site'];
+  // locations = ['Office', 'Remote', 'Site'];
   isPunchInTime = "09:05 AM 09-04-2025";
   isPunchOutTime = "06:00 PM 09-04-2025";
   totalHalfDays = 2;
@@ -32,30 +32,33 @@ export class AttendanceManagementPage implements OnInit {
   isSaveDisabled: boolean = false;
   private IsCheckIn: boolean = false;
   isChecked = false; // Default value
-  Date: string  = "";
+  Date: string = "";
   DateWithTime: string | null = null;
   Entity: AttendanceLog = AttendanceLog.CreateNewInstance();
   DetailsFormTitle: 'New Registrar Office' | 'Edit Registrar Office' = 'New Registrar Office';
-
   currentCompanyRef = 0;
-
   siteList: Site[] = [];
-
   AttendanceLocationTypeList = DomainEnums.AttendenceLocationTypeList(true, '--Select--');
 
-
   recentAttendance = [
-    { date: 'Apr 8', punchIn: '09:05 AM', punchOut: '06:00 PM', hours: '9h' },
-    { date: 'Apr 7', leave: true },
-    { date: 'Apr 6', punchIn: '09:20 AM', punchOut: '06:10 PM', hours: '8.5h' },
-    { date: 'Apr 5', punchIn: '08:55 AM', punchOut: '06:30 PM', hours: '9.5h' },
-    { date: 'Apr 4', leave: true },
-    { date: 'Apr 3', punchIn: '09:15 AM', punchOut: '06:00 PM', hours: '8.75h' },
-    { date: 'Apr 2', punchIn: '09:10 AM', punchOut: '06:05 PM', hours: '9h' },
+    { date: '30', day: 'TUE', clockIn: '09:00am', clockOut: '06:00pm', hours: '09hr 00min', isHalfDay: false },
+    { date: '29', day: 'MON', clockIn: '09:10am', clockOut: '01:00pm', hours: '03hr 50min', isHalfDay: true },
+    { date: '28', day: 'SUN', isWeekend: true, isHalfDay: false },
+    { date: '27', day: 'SAT', isWeekend: true, isHalfDay: false },
+    { date: '26', day: 'FRI', clockIn: '09:15am', clockOut: '06:20pm', hours: '09hr 05min', isHalfDay: false },
+    { date: '25', day: 'THU', leave: 'Casual Leave', isHalfDay: false },
+    { date: '24', day: 'WED', clockIn: '09:05am', clockOut: '06:00pm', hours: '08hr 55min', isHalfDay: false },
+    { date: '23', day: 'TUE', clockIn: '09:30am', clockOut: '12:30pm', hours: '03hr 00min', isHalfDay: true },
+    { date: '22', day: 'MON', clockIn: '09:10am', clockOut: '06:10pm', hours: '09hr 00min', isHalfDay: false },
+    { date: '21', day: 'SUN', isWeekend: true, isHalfDay: false }
   ];
-
+  gridItems = [
+    { label: 'Salary Slip', icon: 'layers-outline', gridFunction:100 },
+    { label: 'Leave', icon: 'grid-outline', gridFunction: 200 },
+    { label: 'View All', icon: 'bar-chart-outline', gridFunction: 300 },
+  ];
   constructor(private router: Router, private companystatemanagement: CompanyStateManagement, private uiUtils: UIUtils,
-    private appStateManage :AppStateManageService, private utils: Utils,private dtu: DTU
+    private appStateManage: AppStateManageService, private utils: Utils, private dtu: DTU
   ) { }
 
   async ngOnInit() {
@@ -106,7 +109,7 @@ export class AttendanceManagementPage implements OnInit {
   //   console.log(`Take photo (${type})`);
   // }
 
-  submitPunch = async ()=> {
+  submitPunch = async () => {
     console.log(`Punch ${this.currentPunchType} submitted at ${this.isPunchInTime} from ${this.selectedLocation} from site ${new Date().toLocaleTimeString()} from ${this.selectedLocation}`);
 
     if (this.currentPunchType === 'in') {
@@ -121,53 +124,69 @@ export class AttendanceManagementPage implements OnInit {
 
     this.punchModalOpen = false;
 
-          this.isSaveDisabled = true;
-          this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-          // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-          // this.Entity.p.UpdatedDate= await CurrentDateTimeRequest.GetCurrentDateTime();
-          this.Entity.p.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-          
-    
-          // convert date 2025-02-23 to 2025-02-23-00-00-00-000
-        this.Entity.p.TransDate = this.dtu.ConvertStringDateToFullFormat(this.Date!)
-        // this.Entity.p.SaleDeedDate = this.dtu.ConvertStringDateToFullFormat(this.localsaledeeddate)
-        // this.Entity.p.TalathiDate = this.dtu.ConvertStringDateToFullFormat(this.localtalathidate)
-    
-        let entityToSave = this.Entity.GetEditableVersion();
-          let entitiesToSave = [entityToSave]
+    this.isSaveDisabled = true;
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+    // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    // this.Entity.p.UpdatedDate= await CurrentDateTimeRequest.GetCurrentDateTime();
+    this.Entity.p.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
 
-          // await this.Entity.EnsurePrimaryKeysWithValidValues()
-          let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-          if (!tr.Successful) {
-            this.isSaveDisabled = false;
-            this.uiUtils.showErrorMessage('Error',tr.Message);
-            return
-          }
-          else {
-            this.isSaveDisabled = false;
-            // this.onEntitySaved.emit(entityToSave);
-            if (this.IsCheckIn) {
-              await this.uiUtils.showSuccessToster('Punch in successfully!');
-              this.Entity = AttendanceLog.CreateNewInstance();
-            } else {
-              // await this.router.navigate(['/homepage/Website/Registrar_Office'])
-              await this.uiUtils.showSuccessToster('Punch out successfully!');
-            }
-          }
+
+    // convert date 2025-02-23 to 2025-02-23-00-00-00-000
+    this.Entity.p.TransDate = this.dtu.ConvertStringDateToFullFormat(this.Date!)
+    // this.Entity.p.SaleDeedDate = this.dtu.ConvertStringDateToFullFormat(this.localsaledeeddate)
+    // this.Entity.p.TalathiDate = this.dtu.ConvertStringDateToFullFormat(this.localtalathidate)
+
+    let entityToSave = this.Entity.GetEditableVersion();
+    let entitiesToSave = [entityToSave]
+
+    // await this.Entity.EnsurePrimaryKeysWithValidValues()
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return
+    }
+    else {
+      this.isSaveDisabled = false;
+      // this.onEntitySaved.emit(entityToSave);
+      if (this.IsCheckIn) {
+        await this.uiUtils.showSuccessToster('Punch in successfully!');
+        this.Entity = AttendanceLog.CreateNewInstance();
+      } else {
+        // await this.router.navigate(['/homepage/Website/Registrar_Office'])
+        await this.uiUtils.showSuccessToster('Punch out successfully!');
+      }
+    }
   }
-
+  gridItemsFunction(id:number) {
+    console.log('calling gridItemsFunction');
+    // this.viewMore();
+    switch(id){
+      case 100:
+        this.getSalarySlip();
+        break;
+      case 200:
+        this.requestLeave();
+        break;
+      case 300:
+        this.viewAllAttendance();
+        break;
+      default:
+        break;
+    }
+  }
   getSalarySlip() {
     console.log('Getting salary slip...');
-    this.viewMore();
+    // this.viewMore();
   }
 
   requestLeave() {
     console.log('Requesting leave...');
   }
-  viewMore() {
-    this.router.navigate(['/app_homepage/tabs/attendance-management/attendance-details']);
-  }
   viewAllAttendance() {
     console.log('Viewing full attendance...');
+  }
+  viewMore() {
+    this.router.navigate(['/app_homepage/tabs/attendance-management/attendance-details']);
   }
 }

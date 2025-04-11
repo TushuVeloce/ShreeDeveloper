@@ -4,8 +4,8 @@
   <!-- Month Tabs -->
   <ion-segment scrollable [(ngModel)]="selectedMonth" (ionChange)="getDataByMonth($event.detail.value)"
     class="month-segment">
-    <ion-segment-button *ngFor="let month of months" [value]="month.value">
-      {{ month.label }}
+    <ion-segment-button *ngFor="let month of months" [value]="month.Ref">
+      {{ month.Name }}
     </ion-segment-button>
   </ion-segment>
 
