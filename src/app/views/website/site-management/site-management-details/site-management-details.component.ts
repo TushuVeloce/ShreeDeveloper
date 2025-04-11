@@ -1,6 +1,8 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Modal } from 'bootstrap';
+import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
 import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
@@ -42,6 +44,25 @@ export class SiteManagementDetailsComponent implements OnInit {
   isOwnerModalOpen: boolean = false;
   newOwner: OwnerDetailProps = OwnerDetailProps.Blank(); 
   editingIndex: null | undefined | number
+
+  NameWithoutNos: string = ValidationPatterns.NameWithoutNos
+  PinCodePattern: string = ValidationPatterns.PinCode;
+
+  NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
+  PinCodeMsg: string = ValidationMessages.PinCodeMsg;
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
+
+  @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('AddressLine1Ctrl') AddressLine1InputControl!: NgModel;
+  @ViewChild('AddressLine2Ctrl') AddressLine2InputControl!: NgModel;
+  @ViewChild('PinCodeCtrl') PinCodeInputControl!: NgModel;
+  @ViewChild('TotalLandAreaInSqmCtrl') TotalLandAreaInSqmInputControl!: NgModel;
+  @ViewChild('TotalLandAreaInSqftCtrl') TotalLandAreaInSqftInputControl!: NgModel;
+  @ViewChild('NumberOfPlotsCtrl') NumberOfPlotsInputControl!: NgModel;
+  @ViewChild('OwnerNameCtrl') OwnerNameInputControl!: NgModel;
+  @ViewChild('OwnerContactNosCtrl') OwnerContactNosInputControl!: NgModel;
+  @ViewChild('OwnerAddressCtrl') OwnerAddressInputControl!: NgModel;
+  @ViewChild('OwnerPincodeCtrl') OwnerPincodeInputControl!: NgModel;
 
   constructor(
     private router: Router,
@@ -181,12 +202,10 @@ export class SiteManagementDetailsComponent implements OnInit {
     }
   };
   
-  
-  
 
   async addOwner() {
-    if (!this.newOwner.Name || !this.newOwner.ContactNo) {
-      await this.uiUtils.showWarningToster('All Fields are Required!');
+    if (!this.newOwner.Name || !this.newOwner.ContactNo || !this.newOwner.CountryRef || !this.newOwner.StateRef || !this.newOwner.CityRef || !this.newOwner.Address) {
+      await this.uiUtils.showErrorMessage('Error','Name, Contact No, Country, State, City, Adderss are Required!');
       return;
     }
 
@@ -204,6 +223,7 @@ export class SiteManagementDetailsComponent implements OnInit {
       this.newOwner.SiteManagementRef = this.Entity.p.Ref;
       this.Entity.p.SiteManagementOwnerDetails.push({ ...ownerInstance.p });
       await this.uiUtils.showSuccessToster('Owner added successfully!');
+      this.resetOwnerControls()
     }
 
     this.newOwner = OwnerDetailProps.Blank();
@@ -241,6 +261,7 @@ export class SiteManagementDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Site saved successfully!');
         this.Entity = Site.CreateNewInstance();
+        this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster('Site Updated successfully!');
       }
@@ -272,5 +293,36 @@ export class SiteManagementDetailsComponent implements OnInit {
     this.router.navigate(['/homepage/Website/site_management_Master']);
   }
 
+  resetAllControls = () => {
+    this.NameInputControl.control.markAsUntouched();
+    this.AddressLine1InputControl.control.markAsUntouched();
+    this.AddressLine2InputControl.control.markAsUntouched();
+    this.PinCodeInputControl.control.markAsUntouched();
+    this.TotalLandAreaInSqmInputControl.control.markAsUntouched();
+    this.TotalLandAreaInSqftInputControl.control.markAsUntouched();
+    this.NumberOfPlotsInputControl.control.markAsUntouched();
+  
 
+
+    this.NameInputControl.control.markAsPristine();
+    this.AddressLine1InputControl.control.markAsPristine();
+    this.AddressLine2InputControl.control.markAsPristine();
+    this.PinCodeInputControl.control.markAsPristine();
+    this.TotalLandAreaInSqmInputControl.control.markAsPristine();
+    this.TotalLandAreaInSqftInputControl.control.markAsPristine();
+    this.NumberOfPlotsInputControl.control.markAsPristine();
+
+  }
+
+  resetOwnerControls = () => {
+    this.OwnerNameInputControl.control.markAsUntouched();
+    this.OwnerContactNosInputControl.control.markAsUntouched();
+    this.OwnerAddressInputControl.control.markAsUntouched();
+    this.OwnerPincodeInputControl.control.markAsUntouched();
+
+    this.OwnerNameInputControl.control.markAsPristine();
+    this.OwnerContactNosInputControl.control.markAsPristine();
+    this.OwnerAddressInputControl.control.markAsPristine();
+    this.OwnerPincodeInputControl.control.markAsPristine();
+  }
 }

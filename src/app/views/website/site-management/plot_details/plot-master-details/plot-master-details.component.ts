@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ValidationMessages } from 'src/app/classes/domain/constants';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Owner } from 'src/app/classes/domain/entities/website/masters/site/owner/owner';
@@ -33,6 +35,13 @@ export class PlotMasterDetailsComponent implements OnInit {
   CoustomerState:string=''
   CoustomerCity:string=''
   CoustomerAddress:string=''
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
+  
+    @ViewChild('PlotNoCtrl') PlotNoInputControl!: NgModel;
+    @ViewChild('AreaInSqmCtrl') AreaInSqmInputControl!: NgModel;
+    @ViewChild('AreaInSqftCtrl') AreaInSqftInputControl!: NgModel;
+    @ViewChild('GovermentRatePerSqmCtrl') GovermentRatePerSqmInputControl!: NgModel;
+    @ViewChild('BasicRatePerSqftCtrl') BasicRatePerSqftInputControl!: NgModel;
 
   constructor(
     private router: Router,
@@ -123,6 +132,7 @@ export class PlotMasterDetailsComponent implements OnInit {
         this.CoustomerState=''
         this.CoustomerCity=''
         this.CoustomerAddress=''
+        this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster('Plot Updated successfully!');
       }
@@ -153,6 +163,22 @@ export class PlotMasterDetailsComponent implements OnInit {
 
   BackPlot= () => {
     this.router.navigate(['/homepage/Website/Plot_Master']);
+  }
+
+  resetAllControls = () => {
+    this.PlotNoInputControl.control.markAsUntouched();
+    this.AreaInSqmInputControl.control.markAsUntouched();
+    this.AreaInSqftInputControl.control.markAsUntouched();
+    this.GovermentRatePerSqmInputControl.control.markAsUntouched();
+    this.BasicRatePerSqftInputControl.control.markAsUntouched();
+  
+
+    this.PlotNoInputControl.control.markAsPristine();
+    this.AreaInSqmInputControl.control.markAsPristine();
+    this.AreaInSqftInputControl.control.markAsPristine();
+    this.GovermentRatePerSqmInputControl.control.markAsPristine();
+    this.BasicRatePerSqftInputControl.control.markAsPristine();
+
   }
 
 }

@@ -58,7 +58,7 @@ export class SalaryGenerationComponent  implements OnInit {
     this.SelectedSalary = item.GetEditableVersion();
     SalaryGeneration.SetCurrentInstance(this.SelectedSalary);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Material_Master_Details']);
+    await this.router.navigate(['/homepage/Website/Salary_Generation_Details']);
   };
 
   onDeleteClicked = async (SalaryGeneration: SalaryGeneration) => {
