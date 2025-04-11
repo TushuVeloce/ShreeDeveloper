@@ -9,8 +9,8 @@
     <div>
     </div>
   </div>
-  <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem">
-  <div class="table-container">
+  <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+    <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList" [nzScroll]="{x:'auto' }"
       nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
