@@ -132,7 +132,7 @@ export class AttendanceManagementPage implements OnInit {
 
 
     // convert date 2025-02-23 to 2025-02-23-00-00-00-000
-    this.Entity.p.TransDate = this.dtu.ConvertStringDateToFullFormat(this.Date!)
+    this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date!)
     // this.Entity.p.SaleDeedDate = this.dtu.ConvertStringDateToFullFormat(this.localsaledeeddate)
     // this.Entity.p.TalathiDate = this.dtu.ConvertStringDateToFullFormat(this.localtalathidate)
 

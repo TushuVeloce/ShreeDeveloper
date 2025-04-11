@@ -15,17 +15,28 @@ import { AttendanceLogFetchRequest } from "./attendancelogfetchrequest";
 
 export class AttendanceLogProps {
   public Ref: number = 0;
-  public CompanyRef: number = 0;
-  public AttendenceLocation :number = 0;
-  public SiteRef :number = 0;
   public EmployeeRef: number = 0;
-  public TransDate: string = '';
-  public CheckInTime: string = '';
+  public CompanyRef: number = 0;
+  public TransDateTime: string = '';
+  public SiteRef :number = 0;
+  public TotalWorkingHrs :number = 0;
+  public IsLateMark :number = 0;
+  public TotalLateMarkHrs :number = 0;
+  public IsOverTime :number = 0;
+  public TotalOvertimeHrs :number = 0;
+  public FirstCheckInTime: string = '';
   public CheckOutTime: string = '';
+  public CheckInTime: string = '';
+  public LastCheckOutTime: string = '';
   public AttendanceLogPath1: string = '';
   public AttendanceLogPath2: string = '';
+  public IsLeave :number = 0;
+  public IsHalfDay :number = 0;
+  public AttendenceLocationType :number = 0;
+  public WorkingHrs :number = 0;
   public readonly EmployeeName: string = '';
-  public CompanyName: string = '';
+  public readonly SiteName: string = '';
+  public readonly CompanyName: string = '';
   public IsCheckIn = false;
 
   public readonly IsNewlyCreated: boolean = false;

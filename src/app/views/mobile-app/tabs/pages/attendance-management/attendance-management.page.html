@@ -156,8 +156,8 @@
           <ion-content class="ion-padding modal-content">
             <ion-item>
               <ion-label>Location</ion-label>
-              <ion-select [(ngModel)]="Entity.p.AttendenceLocation" interface="popover" name="AttendenceLocation"
-                id="AttendenceLocation">
+              <ion-select [(ngModel)]="Entity.p.AttendenceLocationType" interface="popover" name="AttendenceLocationType"
+                id="AttendenceLocationType">
                 <ion-select-option *ngFor="let loc of AttendanceLocationTypeList" [value]="loc.Ref">{{ loc.Name
                   }}</ion-select-option>
               </ion-select>
