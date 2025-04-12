@@ -11,6 +11,7 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { MaterialFetchRequest } from "./materialfetchrequest";
+import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 
 
 export class MaterialProps {
@@ -46,8 +47,8 @@ export class Material implements IPersistable<Material> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -68,7 +69,11 @@ export class Material implements IPersistable<Material> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
+    if (this.p.Name == '') {
+      vra.add('Name', 'Name cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.NameWithNos).test(this.p.Name)) {
+      vra.add('Name', ValidationMessages.NameWithNosMsg + ' for Name');
+    }
     if (this.p.Code == '') vra.add('Code', 'Code cannot be blank.');
     if (this.p.UnitRef == 0) vra.add('UnitRef', 'Unit cannot be blank.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company cannot be blank.');
@@ -165,7 +170,7 @@ export class Material implements IPersistable<Material> {
     return Material.ListFromTransportData(tdResponse);
   }
 
- public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MaterialFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;

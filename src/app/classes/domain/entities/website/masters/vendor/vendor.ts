@@ -106,7 +106,7 @@ export class Vendor implements IPersistable<Vendor> {
     if (this.p.Name == '') {
       vra.add('Name', 'Name cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg);
+      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg  + ' for Name');
     }
     if (this.p.TradeName == '') vra.add('TradeName', 'Trade Name cannot be blank.');
     if (this.p.MobileNo == '') vra.add('MobileNo', 'Mobile No cannot be blank.');

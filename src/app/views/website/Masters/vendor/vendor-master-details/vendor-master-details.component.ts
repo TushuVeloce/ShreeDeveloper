@@ -93,6 +93,7 @@ export class VendorMasterDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Vendor' : 'Edit Vendor';
       this.Entity = Vendor.GetCurrentInstance();
+      console.log('this.Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable')
 
     } else {
@@ -177,6 +178,7 @@ export class VendorMasterDetailsComponent implements OnInit {
         this.Entity = Vendor.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster('Vendor Updated successfully!');
+        this.BackVendor();
       }
     }
   }

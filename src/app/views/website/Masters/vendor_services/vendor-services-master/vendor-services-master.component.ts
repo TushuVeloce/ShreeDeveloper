@@ -25,7 +25,7 @@ export class VendorServicesMasterComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'VendorService', 'Action'];
+  headers: string[] = ['Sr.No.', 'Vendor Service', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {

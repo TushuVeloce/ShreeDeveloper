@@ -69,7 +69,7 @@ export class Unit implements IPersistable<Unit> {
     if (this.p.Name == '') {
       vra.add('Name', 'Name cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.SIUnit).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.SIUnitMsg);
+      vra.add('Name', ValidationMessages.SIUnitMsg  + ' for Name');
     }
   }
 

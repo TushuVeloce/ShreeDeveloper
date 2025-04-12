@@ -28,12 +28,12 @@ export class ValidationPatterns {
 
 export class ValidationMessages {
   public static readonly RequiredFieldMsg: string = "This field is required!";
-  public static readonly SIUnitMsg: string = "Special char, _ , space not Allowed.";
-  public static readonly NameWithoutNosMsg: string = "Special char, _ ,Number not Allowed.";
-  public static readonly NameWithNosMsg: string = "Special char, _ and space not Allowed.";
-  public static readonly NameWithoutNoswith_Msg: string = "Special char,Number not Allowed.";
-  public static readonly NameWithNosAndSpaceMsg: string = "Special char & _ not Allowed.";
-  public static readonly NameWithNosAndSpaceAnd_Msg: string = "Special char not Allowed.";
+  public static readonly SIUnitMsg: string = "Special char, _ , space not allowed";
+  public static readonly NameWithoutNosMsg: string = "Special char, _ ,Number not allowed";
+  public static readonly NameWithNosMsg: string = "Special char, _ and space not allowed";
+  public static readonly NameWithoutNoswith_Msg: string = "Special char,Number not allowed";
+  public static readonly NameWithNosAndSpaceMsg: string = "Special char & _ not allowed";
+  public static readonly NameWithNosAndSpaceAnd_Msg: string = "Special char not allowed";
 
   public static readonly EmailMsg: string = "Please Enter a Valid Email Address.";
   public static readonly INDPhoneNoMsg: string = "Please Enter a Valid 10-digit Mobile Number starting with 6, 7, 8, or 9.";
@@ -46,7 +46,7 @@ export class ValidationMessages {
 
   public static readonly WebsiteMsg: string = "Please enter a valid URL starting with 'http://' or 'https://'.";
 
-  public static readonly CurrencyRegexMsg: string = "Please enter a valid currency name or symbol. Only letters, spaces, and currency symbols are allowed.";
+  public static readonly CurrencyRegexMsg: string = "Please enter a valid currency name or symbol. Only letters, spaces, and currency symbols are allowed";
   public static readonly CurrencySymbolRegexMsg: string = "Please enter a valid currency symbol or currency code (up to 10 letters)";
   public static readonly CurrencyNameRegexMsg: string = "Please enter a valid name (letters, spaces, and hyphens only, up to 30 characters)";
 

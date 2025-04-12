@@ -24,7 +24,7 @@ export class DepartmentMasterComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Name', 'Company Name', 'Action'];
+  headers: string[] = ['Sr.No.', 'Name', 'Action'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement) {
     effect(() => {
@@ -33,17 +33,9 @@ export class DepartmentMasterComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // await this.FormulateMasterList();
     this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
   }
-
-  // private FormulateMasterList = async () => {
-  //   let lst = await Department.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.MasterList = lst;
-  //   this.DisplayMasterList = this.MasterList
-  //   this.loadPaginationData();
-  // }
 
   getDepartmentListByCompanyRef = async () => {
     this.MasterList = [];

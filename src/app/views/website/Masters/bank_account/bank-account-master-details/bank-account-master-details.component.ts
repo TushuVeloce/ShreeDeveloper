@@ -39,10 +39,7 @@ export class BankAccountMasterDetailsComponent implements OnInit {
   @ViewChild('OpeningBalanceCtrl') OpeningBalanceInputControl!: NgModel;
   @ViewChild('DateOfOpeningCtrl') DateOfOpeningInputControl!: NgModel;
 
-
-
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private dtu: DTU,
-    private datePipe: DatePipe,) { }
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private dtu: DTU) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -106,6 +103,12 @@ export class BankAccountMasterDetailsComponent implements OnInit {
 
       }
     }
+  }
+
+  // for value 0 selected while click on Input //
+  selectAllValue(event: MouseEvent): void {
+    const input = event.target as HTMLInputElement;
+    input.select();
   }
 
   resetAllControls = () => {
