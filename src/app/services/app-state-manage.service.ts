@@ -8,6 +8,8 @@ export class AppStateManageService {
   private CurrentCompanyName = '';
   private CompanyRef = 0;
 
+  private EmployeeRef = 0
+
   private CurrentGAAProjectRefForProductVersion = 0;
   private CurrentGAAProjectNameForProductVersion = '';
 
@@ -36,16 +38,29 @@ export class AppStateManageService {
   public isDropdownDisabled = signal<boolean>(false);
 
   constructor() { }
-  
+
   setDropdownDisabled(value: boolean) {
     this.isDropdownDisabled.set(value);
   }
 
-  setSiteRef(value:number,Name:string){
-    this.StorageKey.setItem('siteRf',value.toString())
-    this.StorageKey.setItem('siteName',Name)
+  // EmployeeRef  start
+  getEmployeeRef(): number {
+    const EmployeeRef = this.localStorage.getItem('EmployeeRef');
+    return EmployeeRef ? +EmployeeRef : 0 // Return the Employee reference or 0 if not found
   }
-  
+  setEmployeeRef(val: number): void {
+    this.EmployeeRef = val;
+    this.localStorage.setItem('EmployeeRef', val.toString()); // Store Employee reference in local storage
+  }
+  resetEmployeeRef(): void {
+    this.localStorage.setItem('EmployeeRef', '0');
+  }
+
+  setSiteRef(value: number, Name: string) {
+    this.StorageKey.setItem('siteRf', value.toString())
+    this.StorageKey.setItem('siteName', Name)
+  }
+
   resetSiteRef(): void {
     this.StorageKey.setItem('siteRf', '0');
     this.StorageKey.setItem('siteName', '');
@@ -55,7 +70,6 @@ export class AppStateManageService {
 
   getCompanyRef(): number {
     const CompanyRef = this.localStorage.getItem('CompanyRef');
-    console.log('CompanyReflocalstorage :', CompanyRef);
     return CompanyRef ? +CompanyRef : 0 // Return the Company reference or 0 if not found
   }
   setCompanyRef(val: number): void {
@@ -133,11 +147,10 @@ export class AppStateManageService {
     this.StorageKey.setItem('UserJSON', '0');
   }
 
-  // for Department Ref Start 
+  // for Department Ref Start
 
- getDepartmentRef(): number {
+  getDepartmentRef(): number {
     const DepartmentRef = this.localStorage.getItem('DepartmentRef');
-    console.log('CompanyReflocalstorage :', DepartmentRef);
     return DepartmentRef ? +DepartmentRef : 0 // Return the Company reference or 0 if not found
   }
   setDepartmentRef(val: number): void {
@@ -148,20 +161,19 @@ export class AppStateManageService {
     this.localStorage.setItem('DepartmentRef', '0');
   }
 
-    // for Department Ref End 
+  // for Department Ref End
 
- getDesignationRef(): number {
-  const DesignationRef = this.localStorage.getItem('DesignationRef');
-  console.log('CompanyReflocalstorage :', DesignationRef);
-  return DesignationRef ? +DesignationRef : 0 // Return the Company reference or 0 if not found
-}
-setDesignationRef(val: number): void {
-  this.DesignationRef = val;
-  this.localStorage.setItem('DesignationRef', val.toString()); // Store Company reference in local storage
-}
-resetDesignationRef(): void {
-  this.localStorage.setItem('DesignationRef', '0');
-}
+  getDesignationRef(): number {
+    const DesignationRef = this.localStorage.getItem('DesignationRef');
+    return DesignationRef ? +DesignationRef : 0 // Return the Company reference or 0 if not found
+  }
+  setDesignationRef(val: number): void {
+    this.DesignationRef = val;
+    this.localStorage.setItem('DesignationRef', val.toString()); // Store Company reference in local storage
+  }
+  resetDesignationRef(): void {
+    this.localStorage.setItem('DesignationRef', '0');
+  }
 
 
 }

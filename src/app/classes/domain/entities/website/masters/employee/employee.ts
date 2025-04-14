@@ -43,6 +43,7 @@ export class EmployeeProps {
   public BankName: string = '';
   public BranchName: string = '';
   public IFSC: string = '';
+  public TotalWorkingHrs: number = 0;
   public BanckAccountNo: string = '';
   // public LoginStatus: string = '';
   public Gender: number = 0;

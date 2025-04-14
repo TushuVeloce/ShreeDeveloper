@@ -47,7 +47,7 @@ export class LeaveRequestProps {
 }
 
 export class LeaveRequest implements IPersistable<LeaveRequest> {
-  public static readonly Db_Table_Name: string = 'LeaveRequestMaster';
+  public static readonly Db_Table_Name: string = 'LeaveRequest';
 
   private constructor(public readonly p: LeaveRequestProps, public readonly AllowEdit: boolean) {
 

@@ -38,13 +38,13 @@ export class LoginPageComponent implements OnInit {
 
   ngOnInit() { }
   Login = async () => {
-     if (this.UserId === '') {
-       this.uiUtils.showErrorMessage('Error', 'Please Enter Email ID');
-       return
-     } else if (this.Password === '') {
-       this.uiUtils.showErrorMessage('Error', 'Please Enter Password');
-       return
-     }
+    if (this.UserId === '') {
+      this.uiUtils.showErrorMessage('Error', 'Please Enter Email ID');
+      return
+    } else if (this.Password === '') {
+      this.uiUtils.showErrorMessage('Error', 'Please Enter Password');
+      return
+    }
 
     let req = new UserLoginRequest();
     req.UserId = this.UserId;
@@ -53,21 +53,21 @@ export class LoginPageComponent implements OnInit {
     // req.SenderURL;
 
     const response = await this.servercommunicator.LoginUser(req);
-    console.log('response :', response);
+    this.appStateManage.setEmployeeRef(response.LoginEmployeeRef)
 
     if (!response.Successful) {
       await this.uiUtils.showErrorMessage('Error', response.Message);
       return
     } else {
-    //   const user = { UserDisplayName: response.UserDisplayName, EMailId: response.EMailId, PhoneNos: response.PhoneNos }
-    // this.appStateManage.setUserJSON(user);
-    if (this.isMobile) {
-      await this.router.navigate(['/app_homepage']);  // Navigate to mobile
-    } else if(response.LoginForFirstTime == 0){
-      await this.router.navigate(['/create_password']); 
-    }else{
-      await this.router.navigate(['/homepage']);  // Navigate to web
+      //   const user = { UserDisplayName: response.UserDisplayName, EMailId: response.EMailId, PhoneNos: response.PhoneNos }
+      // this.appStateManage.setUserJSON(user);
+      if (this.isMobile) {
+        await this.router.navigate(['/app_homepage']);  // Navigate to mobile
+      } else if (response.LoginForFirstTime == 0) {
+        await this.router.navigate(['/create_password']);
+      } else {
+        await this.router.navigate(['/homepage']);  // Navigate to web
+      }
     }
-  }
   }
 }

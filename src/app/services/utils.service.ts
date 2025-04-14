@@ -245,8 +245,7 @@ export class Utils {
     }
   }
 
-  public GetString(value: any)
-  {
+  public GetString(value: any) {
     if (isNullOrUndefined(value)) return '';
     return String(value);
   }

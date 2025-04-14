@@ -30,6 +30,8 @@ export class LeaveRequestDetailsComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   fromdate: string = '';
   todate: string = '';
+  EmployeeRef: number = 0;
+  TotalWorkingHrs: number = 0;
 
   NameWithNos: string = ValidationPatterns.NameWithNos
 
@@ -67,10 +69,11 @@ export class LeaveRequestDetailsComponent implements OnInit {
       );
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
+      this.EmployeeRef = this.appStateManage.getEmployeeRef();
       this.Entity = LeaveRequest.CreateNewInstance();
       LeaveRequest.SetCurrentInstance(this.Entity);
       this.Entity.p.LeaveRequestType = this.LeaveRequestTypeList[1].Ref
-      this.getEmployeeListByCompanyRef();
+      this.getSingleEmployeeDetails();
     }
     this.InitialEntity = Object.assign(
       LeaveRequest.CreateNewInstance(),
@@ -84,14 +87,19 @@ export class LeaveRequestDetailsComponent implements OnInit {
     txtName.focus();
   }
 
-  getEmployeeListByCompanyRef = async () => {
+  getSingleEmployeeDetails = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.EmployeeList = lst;
-    this.Entity.p.EmployeeRef = this.EmployeeList[0].p.Ref
+    let data = await Employee.FetchInstance(this.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.Entity.p.EmployeeRef = data.p.Ref;
+    this.Entity.p.EmployeeName = data.p.Name;
+    this.TotalWorkingHrs = data.p.TotalWorkingHrs;
+  }
+
+  handleLeavehours = () => {
+    this.Entity.p.LeaveHours = this.Entity.p.Days * this.TotalWorkingHrs;
   }
 
   SaveLeaveRequest = async () => {
@@ -110,29 +118,29 @@ export class LeaveRequestDetailsComponent implements OnInit {
     if (this.Entity.p.CreatedBy == 0) {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
-    // let entityToSave = this.Entity.GetEditableVersion();
-    // let entitiesToSave = [entityToSave];
-    // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    let entityToSave = this.Entity.GetEditableVersion();
+    let entitiesToSave = [entityToSave];
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
-    // if (!tr.Successful) {
-    //   this.isSaveDisabled = false;
-    //   this.uiUtils.showErrorMessage('Error', tr.Message);
-    //   return;
-    // } else {
-    //   this.isSaveDisabled = false;
-    //   if (this.IsNewEntity) {
-    //     await this.uiUtils.showSuccessToster('LeaveRequest Master saved successfully!');
-    //     this.Entity = LeaveRequest.CreateNewInstance();
-    //     this.resetAllControls();
-    //   } else {
-    //     await this.uiUtils.showSuccessToster('LeaveRequest Master Updated successfully!');
-    //     await this.router.navigate(['/homepage/Website/Leave_Request']);
-    //   }
-    // }
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
+    } else {
+      this.isSaveDisabled = false;
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('LeaveRequest Master saved successfully!');
+        this.Entity = LeaveRequest.CreateNewInstance();
+        this.resetAllControls();
+      } else {
+        await this.uiUtils.showSuccessToster('LeaveRequest Master Updated successfully!');
+        await this.router.navigate(['/homepage/Website/Leave_Request']);
+      }
+    }
   };
 
   // for value 0 selected while click on Input //
-  selectAllValue(event: MouseEvent): void {
+  selectAllValue = (event: MouseEvent): void => {
     const input = event.target as HTMLInputElement;
     input.select();
   }
