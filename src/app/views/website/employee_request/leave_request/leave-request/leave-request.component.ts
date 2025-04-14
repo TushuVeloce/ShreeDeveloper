@@ -35,7 +35,7 @@ export class LeaveRequestComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
-      await this.getEmployeeListByCompanyRef();
+      await this.getLeaveRequestListByEmployeeRef();
     });
   }
 
@@ -43,7 +43,6 @@ export class LeaveRequestComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(false);
     this.Entity.p.EmployeeRef = this.appStateManage.getEmployeeRef();
     this.getLeaveRequestListByEmployeeRef()
-    this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
@@ -64,10 +63,13 @@ export class LeaveRequestComponent implements OnInit {
     //   await this.uiUtils.showErrorToster('Employee not Selected');
     //   return;
     // }
+console.log(this.Entity.p.EmployeeRef);
+
     let lst = await LeaveRequest.FetchEntireListByEmployeeRef(this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
-
     this.DisplayMasterList = this.MasterList;
+    console.log(this.DisplayMasterList);
+
     this.loadPaginationData();
   }
 
