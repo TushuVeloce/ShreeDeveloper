@@ -99,7 +99,25 @@ export class LeaveRequestDetailsComponent implements OnInit {
   }
 
   handleLeavehours = () => {
-    this.Entity.p.LeaveHours = this.Entity.p.Days * this.TotalWorkingHrs;
+    if (this.Entity.p.Days != 0) {
+      this.Entity.p.LeaveHours = this.Entity.p.Days * this.TotalWorkingHrs;
+    }
+  }
+
+  setDaysandLeaveHours = () => {
+    if (this.fromdate && this.todate) {
+      const FromDate: any = new Date(this.fromdate);
+      const ToDate: any = new Date(this.todate);
+
+      // Calculate the difference in milliseconds
+      const diffInMs = Math.abs(ToDate - FromDate + 1);
+
+      // Convert milliseconds to days
+      this.Entity.p.Days = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+      this.Entity.p.LeaveHours = this.Entity.p.Days * this.TotalWorkingHrs;
+    } else {
+      this.Entity.p.Days = 0;
+    }
   }
 
   SaveLeaveRequest = async () => {
@@ -115,9 +133,11 @@ export class LeaveRequestDetailsComponent implements OnInit {
     if (!this.Entity.p.LeaveHours) {
       this.Entity.p.LeaveHours = 0;
     }
-    if (this.Entity.p.CreatedBy == 0) {
-      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+
+    if (this.Entity.p.UpdatedBy == 0) {
+      this.Entity.p.UpdatedBy = this.EmployeeRef;
     }
+
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
@@ -129,11 +149,11 @@ export class LeaveRequestDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('LeaveRequest Master saved successfully!');
+        await this.uiUtils.showSuccessToster('Leave Request Master saved successfully!');
         this.Entity = LeaveRequest.CreateNewInstance();
         this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster('LeaveRequest Master Updated successfully!');
+        await this.uiUtils.showSuccessToster('Leave Request Master Updated successfully!');
         await this.router.navigate(['/homepage/Website/Leave_Request']);
       }
     }
@@ -151,11 +171,7 @@ export class LeaveRequestDetailsComponent implements OnInit {
 
   resetAllControls = () => {
     // reset touched
-    this.NameInputControl.control.markAsUntouched();
-    this.CodeInputControl.control.markAsUntouched();
 
     // reset dirty
-    this.NameInputControl.control.markAsPristine();
-    this.CodeInputControl.control.markAsPristine();
   }
 }

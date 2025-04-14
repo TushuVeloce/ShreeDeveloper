@@ -41,7 +41,7 @@
         <div class="col-lg-4 col-md-4 col-sm-12">
           <label>From Date</label>
           <input type="date" [(ngModel)]="fromdate" name="fromdate" class="form-control" id="fromdate" required
-            placeholder="Enter From Date" #fromdateCtrl="ngModel" required
+            placeholder="Enter From Date" (change)="setDaysandLeaveHours()" #fromdateCtrl="ngModel" required
             (blur)="fromdateCtrl.control.markAsTouched()" />
           <div style="height: 25px;" *ngIf="(fromdateCtrl.invalid && (fromdateCtrl.touched || fromdateCtrl.dirty))">
             <span class="validation-text" *ngIf="fromdateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -50,7 +50,8 @@
         <div class="col-lg-4 col-md-4 col-sm-12">
           <label>To Date</label>
           <input type="date" [(ngModel)]="todate" name="todate" class="form-control" id="todate" required
-            placeholder="Enter To Date" #todateCtrl="ngModel" required (blur)="todateCtrl.control.markAsTouched()" />
+            placeholder="Enter To Date" (change)="setDaysandLeaveHours()" #todateCtrl="ngModel" required
+            (blur)="todateCtrl.control.markAsTouched()" />
           <div style="height: 25px;" *ngIf="(todateCtrl.invalid && (todateCtrl.touched || todateCtrl.dirty))">
             <span class="validation-text" *ngIf="todateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
@@ -58,9 +59,8 @@
         <div class="col-lg-4 col-md-4 col-sm-12">
           <label>Days</label>
           <input type="number" [(ngModel)]="Entity.p.Days" name="Days" class="form-control" id="Days" required
-            placeholder="Enter Days" #DaysCtrl="ngModel" pattern="{{NameWithNos}}" required
-            (blur)="DaysCtrl.control.markAsTouched()" (change)="handleLeavehours()"
-            (click)="selectAllValue($event); " />
+            placeholder="Enter Days" #DaysCtrl="ngModel" readonly pattern="{{NameWithNos}}" required
+            (blur)="DaysCtrl.control.markAsTouched()" (click)="selectAllValue($event); " />
           <div style="height: 25px;" *ngIf="(DaysCtrl.invalid && (DaysCtrl.touched || DaysCtrl.dirty))">
             <span class="validation-text" *ngIf="DaysCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             <span class="validation-text" *ngIf="DaysCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>

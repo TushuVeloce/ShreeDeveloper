@@ -41,6 +41,8 @@ export class LeaveRequestComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
+    this.Entity.p.EmployeeRef = this.appStateManage.getEmployeeRef();
+    this.getLeaveRequestListByEmployeeRef()
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
@@ -58,10 +60,10 @@ export class LeaveRequestComponent implements OnInit {
   getLeaveRequestListByEmployeeRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    if (this.Entity.p.EmployeeRef <= 0) {
-      await this.uiUtils.showErrorToster('Employee not Selected');
-      return;
-    }
+    // if (this.Entity.p.EmployeeRef <= 0) {
+    //   await this.uiUtils.showErrorToster('Employee not Selected');
+    //   return;
+    // }
     let lst = await LeaveRequest.FetchEntireListByEmployeeRef(this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
 

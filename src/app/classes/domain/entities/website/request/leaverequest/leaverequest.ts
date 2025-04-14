@@ -29,8 +29,7 @@ export class LeaveRequestProps {
   public Days: number = 0;
   public LeaveHours: number = 0;
   public Description: string = '';
-  public IsApproval: boolean = false;
-  public IsDeleted: boolean = false;
+  public IsApproval: number = 0;
 
 
 
