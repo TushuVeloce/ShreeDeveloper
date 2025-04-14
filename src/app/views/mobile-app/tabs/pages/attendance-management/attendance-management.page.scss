@@ -1,235 +1,237 @@
-.attendance-container {
-    padding: 16px;
-
-    .header-actions {
-        margin-bottom: 20px;
-
-        .current-date {
-            display: flex;
-            align-items: center;
-            font-size: 16px;
-
-            ion-icon {
-                margin-right: 6px;
-                color: var(--ion-color-primary);
-            }
-        }
-
-        .punch-buttons ion-button {
-            margin-left: 10px;
-        }
-    }
-
-    .stat-card {
-        border-radius: 16px;
-        text-align: center;
-
-        ion-card-subtitle {
-            font-size: 14px;
-            color: var(--ion-color-medium);
-        }
-
-        ion-card-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--ion-color-primary);
-        }
-
-        ion-button {
-            margin-top: 8px;
-        }
-    }
-
-    .recent-attendance {
-        .section-heading {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 6px;
-            margin-bottom: 8px;
-
-            h3 {
-                font-size: 20px;
-                font-weight: 600;
-            }
-
-            .see-all {
-                font-size: 14px;
-                color: var(--ion-color-primary);
-                cursor: pointer;
-
-                &:hover {
-                    text-decoration: underline;
-                }
-            }
-        }
-
-        .table-container {
-            background: var(--ion-background-color);
-            margin: 0 6px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-            max-height: 55vh;
-            overflow-y: auto;
-
-
-            .table-header {
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                background: lightseagreen;
-                padding: 12px 16px;
-                color: var(--ion-text-color-dark);
-                font-weight: bold;
-                position: sticky;
-                top: 0;
-                z-index: 10;
-            }
-
-            .scrollable-list {
-                overflow-y: auto;
-            }
-
-            .attendance-grid {
-                padding: 10px 0;
-            }
-
-            .day-column {
-                text-align: center;
-
-                .date {
-                    font-size: 16px;
-                    font-weight: bold;
-                }
-
-                .day {
-                    font-size: 12px;
-                    color: gray;
-                }
-            }
-
-            .table-row {
-                background: var(--ion-background-color);
-                color: #333;
-                border-bottom: 1px solid #f0f0f0;
-
-                &:last-child {
-                    border-bottom: none;
-                }
-
-                span {
-                    word-break: break-word;
-                }
-            }
-
-            .timing-row {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-between;
-                padding-left: 10px;
-
-                .label {
-                    font-size: 10px;
-                    color: #999;
-                }
-
-                .value {
-                    font-size: 12px;
-                    font-weight: bold;
-                    display: block;
-
-                    &.absent {
-                        color: var(--ion-color-primary);
-                    }
-                }
-
-                .clock-in,
-                .clock-out,
-                .working-hrs {
-                    flex: 1 1 33%;
-                    margin-bottom: 5px;
-                }
-            }
-
-            .center-text {
-                text-align: center;
-                font-size: 14px;
-                font-weight: 500;
-                color: var(--ion-text-color);
-                padding: 8px 0;
-
-                ion-icon {
-                    margin-right: 6px;
-                    color: var(--ion-text-color);
-                }
-            }
-
-            .no-data-text {
-                text-align: center;
-                padding: 20px;
-                color: #999;
-                font-size: 16px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-
-                ion-icon {
-                    font-size: 24px;
-                    margin-bottom: 8px;
-                    color: #ccc;
-                }
-            }
-        }
-    }
-
-    .quick-actions {
-        ion-col {
-            margin-top: 10px;
-        }
-    }
-}
-
-.punch-modal::part(backdrop) {
-    background: rgba(0, 0, 0, 0.5);
-}
-
-.punch-modal::part(content) {
-    --width: 90%;
-    --height: 60%;
-    --max-width: 400px;
-    --border-radius: 20px;
-    --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-}
-
-.modal-container {
-    display: flex;
-    flex-direction: column;
+.custom-content {
+    background: linear-gradient(to bottom, #0b0220, #8b1de3);
+    color: white;
     height: 100%;
 }
 
-.modal-toolbar {
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-}
-
-.modal-content {
-    flex: 1;
+.overview-header {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
-}
+    align-items: center;
+    margin-bottom: 16px;
 
-.photo-upload {
-    ion-label {
-        font-size: 14px;
-        margin: 8px 0 6px;
-        display: block;
+    h2 {
+        font-weight: bold;
     }
 
-    ion-button {
-        margin-bottom: 12px;
+    .date-text {
+        font-size: 0.9rem;
+        opacity: 0.7;
     }
 }
+
+.grid-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+
+    .card {
+        flex: 1;
+        border-radius: 20px;
+        padding: 12px;
+        color: white;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .check-in {
+        background: #ffffff;
+        color: #000;
+    }
+
+    .check-out {
+        background: #e3d7f7;
+        color: #000;
+    }
+
+    .absence {
+        background: #f46b80;
+    }
+
+    .presence {
+        background: #7265e3;
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: bold;
+        font-size: 1rem;
+    }
+
+    .card-time,
+    .card-schedule {
+        font-size: 0.8rem;
+        opacity: 0.8;
+    }
+
+    .card-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-top: 4px;
+    }
+
+    .card-label,
+    .card-month,
+    .card-number,
+    .card-days {
+        text-align: center;
+    }
+
+    .card-number {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .card-days {
+        font-size: 0.8rem;
+        opacity: 0.8;
+    }
+}
+
+.recent-attendance {
+    .section-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 6px;
+        margin-bottom: 8px;
+
+        h3 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .see-all {
+            font-size: 14px;
+            color: var(--ion-color-primary);
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .table-container {
+        background: var(--ion-background-color);
+        margin: 0 6px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        max-height: 55vh;
+        overflow-y: auto;
+
+
+        .table-header {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background: lightseagreen;
+            padding: 12px 16px;
+            color: var(--ion-text-color-dark);
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .scrollable-list {
+            overflow-y: auto;
+        }
+
+        .attendance-grid {
+            padding: 10px 0;
+        }
+
+        .day-column {
+            text-align: center;
+
+            .date {
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .day {
+                font-size: 12px;
+                color: gray;
+            }
+        }
+
+        .table-row {
+            background: var(--ion-background-color);
+            color: #333;
+            border-bottom: 1px solid #f0f0f0;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            span {
+                word-break: break-word;
+            }
+        }
+
+        .timing-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding-left: 10px;
+
+            .label {
+                font-size: 10px;
+                color: #999;
+            }
+
+            .value {
+                font-size: 12px;
+                font-weight: bold;
+                display: block;
+
+                &.absent {
+                    color: var(--ion-color-primary);
+                }
+            }
+
+            .clock-in,
+            .clock-out,
+            .working-hrs {
+                flex: 1 1 33%;
+                margin-bottom: 5px;
+            }
+        }
+
+        .center-text {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--ion-text-color);
+            padding: 8px 0;
+
+            ion-icon {
+                margin-right: 6px;
+                color: var(--ion-text-color);
+            }
+        }
+
+        .no-data-text {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            ion-icon {
+                font-size: 24px;
+                margin-bottom: 8px;
+                color: #ccc;
+            }
+        }
+    }
+}
+
 .grid {
     margin: 20px 10px;
 }
@@ -276,4 +278,70 @@
     /* Alternative for better support */
     max-width: 90%;
     /* Prevents excessive stretching */
+}
+
+.punch-modal::part(backdrop) {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.punch-modal::part(content) {
+    --width: 90%;
+    --height: 50%;
+    --max-width: 400px;
+    --border-radius: 20px;
+    --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.modal-toolbar {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.modal-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+// .photo-upload {
+//     ion-label {
+//         font-size: 14px;
+//         margin: 8px 0 6px;
+//         display: block;
+//     }
+
+//     ion-button {
+//         margin-bottom: 12px;
+//     }
+// }
+.photo-upload {
+    margin-top: 16px;
+}
+
+.section-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.photo-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.preview-img {
+    margin-top: 8px;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
 }

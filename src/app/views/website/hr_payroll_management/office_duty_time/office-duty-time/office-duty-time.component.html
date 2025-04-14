@@ -26,8 +26,8 @@
       <tbody>
         <tr *ngFor="let workingtime of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{workingtime.p.FromTime}}</td>
-          <td Class="tbldata">{{workingtime.p.ToTime}}</td>
+          <td Class="tbldata">{{getFormattedTime(workingtime.p.FromTime)}}</td>
+          <td Class="tbldata">{{getFormattedTime(workingtime.p.ToTime)}}</td>
           <td Class="tbldata">{{workingtime.p.LateMarkGraceTimeInMins}}</td>
           <td Class="tbldata">{{workingtime.p.OvertimeGraceTimeInMins }}</td>
           <td class="tbldata">

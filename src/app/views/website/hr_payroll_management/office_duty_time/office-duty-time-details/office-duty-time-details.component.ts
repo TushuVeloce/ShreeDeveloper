@@ -22,6 +22,9 @@ export class OfficeDutyTimeDetailsComponent  implements OnInit {
   InitialEntity: OfficeDutyandTime = null as any;
   companyName = this.companystatemanagement.SelectedCompanyName;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  localFromTime : string = ""
+  localToTime : string = ""
+
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
 
@@ -43,12 +46,12 @@ export class OfficeDutyTimeDetailsComponent  implements OnInit {
         ) as OfficeDutyandTime;
         this.focusInput();
       }
-    
+
       focusInput = () => {
         let txtName = document.getElementById('EmployeeRef')!;
         txtName.focus();
       }
-      
+
        BackOfficeTime= async() => {
         this.router.navigate(['/homepage/Website/Office_Duty_Time']);
       }
@@ -63,7 +66,7 @@ export class OfficeDutyTimeDetailsComponent  implements OnInit {
             let entitiesToSave = [entityToSave];
             console.log('entityToSave :', entityToSave);
             let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-        
+
             if (!tr.Successful) {
               this.isSaveDisabled = false;
               this.uiUtils.showErrorMessage('Error', tr.Message);
