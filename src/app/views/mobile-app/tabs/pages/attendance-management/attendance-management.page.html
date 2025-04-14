@@ -1,197 +1,264 @@
 <app-header title="Attendance Management"></app-header>
 
-<ion-content>
-  <ion-grid class="attendance-container">
-    <!-- Punch In/Out Cards -->
-    <ion-row>
-      <ion-col size="6">
-        <ion-card class="stat-card">
-          <ion-card-header>
-            <ion-card-subtitle>Punch In</ion-card-subtitle>
-            <ion-card-title>{{ isPunchInTime }}</ion-card-title>
-            <ion-button expand="block" shape="round" color="primary" (click)="openPunchModal('in')"
-              [disabled]="!isPunchInEnabled">
-              <ion-icon name="log-in-outline" slot="start"></ion-icon>
-              Punch In
-            </ion-button>
-          </ion-card-header>
-        </ion-card>
-      </ion-col>
+<ion-content class="ion-padding custom-content">
 
-      <ion-col size="6">
-        <ion-card class="stat-card">
-          <ion-card-header>
-            <ion-card-subtitle>Punch Out</ion-card-subtitle>
-            <ion-card-title>{{ isPunchOutTime }}</ion-card-title>
-            <ion-button expand="block" shape="round" color="secondary" (click)="openPunchModal('out')"
-              [disabled]="!isPunchOutEnabled">
-              <ion-icon name="log-out-outline" slot="start"></ion-icon>
-              Punch Out
-            </ion-button>
-          </ion-card-header>
-        </ion-card>
-      </ion-col>
-    </ion-row>
+  <!-- Top Bar -->
+  <div class="overview-header">
+    <h2>Overview</h2>
+    <span class="date-text">{{ isCurrentTime}}</span>
+  </div>
 
-
-    <!-- Stats Cards -->
-    <ion-row>
-      <ion-col size="6">
-        <ion-card class="stat-card">
-          <ion-card-header>
-            <ion-card-subtitle>Half Days</ion-card-subtitle>
-            <ion-card-title>{{ totalHalfDays }}</ion-card-title>
-          </ion-card-header>
-        </ion-card>
-      </ion-col>
-      <ion-col size="6">
-        <ion-card class="stat-card">
-          <ion-card-header>
-            <ion-card-subtitle>Overtime</ion-card-subtitle>
-            <ion-card-title>{{ totalOvertime }}</ion-card-title>
-          </ion-card-header>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-
-    <!-- Quick Actions -->
-    <!-- <ion-row class="quick-actions ion-padding-top">
-      <ion-col size="12">
-        <ion-button expand="block" fill="outline" (click)="getSalarySlip()" shape="round">Get Salary Slip</ion-button>
-      </ion-col>
-      <ion-col size="12">
-        <ion-button expand="block" fill="outline" (click)="requestLeave()" shape="round">Request Leave</ion-button>
-      </ion-col>
-    </ion-row> -->
-    <div class="grid">
-      <ion-grid>
-        <ion-row>
-          <ion-col *ngFor="let item of gridItems" size="4">
-            <div class="grid-item" (click)="gridItemsFunction(item.gridFunction)">
-              <ion-icon [name]="item.icon"></ion-icon>
-              <p>{{ item.label }}</p>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+  <!-- Punch Info Cards -->
+  <div class="grid-container">
+    <div class="card check-in">
+      <div class="card-header" (click)="openPunchModal('in')">
+        <ion-icon name="arrow-down-circle-outline"></ion-icon>
+        <span>Check In</span>
+      </div>
+      <div class="card-time">It is now {{ isCurrentTime }}</div>
+      <div class="card-schedule">Check In Time</div>
+      <div class="card-value">{{isPunchInTime}}</div>
     </div>
 
-    <!-- Recent Attendance Table -->
-    <ion-row class="recent-attendance">
-      <ion-col size="12">
-        <div class="section-heading">
-          <h3>Recent Records</h3>
-          <span class="see-all" (click)="viewMore()">See All</span>
-        </div>
+    <div class="card check-out">
+      <div class="card-header" (click)="submitPunchOut()">
+        <ion-icon name="arrow-up-circle-outline"></ion-icon>
+        <span>Check Out</span>
+      </div>
+      <div class="card-time">Not Yet</div>
+      <div class="card-schedule">Check Out Time</div>
+      <div class="card-value">{{isPunchOutTime}}</div>
+    </div>
+  </div>
+  <!-- Punch Info Cards -->
+  <!-- <div class="grid-container">
+    <div class="card" [ngClass]="card.type" *ngFor="let card of punchCards" (click)="openPunchModal('in')">
+      <div class="card-header">
+        <ion-icon [name]="card.icon"></ion-icon>
+        <span>{{ card.label }}</span>
+      </div>
+      <div class="card-time">{{ card.currentTime }}</div>
+      <div class="card-schedule">{{ card.schedule }}</div>
+      <div class="card-value">{{ card.time }}</div>
+    </div>
+  </div> -->
 
-        <div class="table-container">
-          <div class="table-header sticky-header">
-            <span>Date</span>
-            <span>In</span>
-            <span>Out</span>
-            <span>Hours</span>
+  <!-- Presence / Absence -->
+  <div class="grid-container">
+    <div class="card absence">
+      <div class="card-label">Total Overtime</div>
+      <div class="card-month">Month</div>
+      <div class="card-number">{{totalOvertime}}</div>
+      <div class="card-days">Hours</div>
+    </div>
+
+    <div class="card presence">
+      <div class="card-label">Total Half</div>
+      <div class="card-month">Month</div>
+      <div class="card-number">{{totalHalfDays}}</div>
+      <div class="card-days">Days</div>
+    </div>
+  </div>
+  <!-- Quick Actions -->
+  <div class="grid">
+    <ion-grid>
+      <ion-row>
+        <ion-col *ngFor="let item of gridItems" size="4">
+          <div class="grid-item" (click)="gridItemsFunction(item.gridFunction)">
+            <ion-icon [name]="item.icon"></ion-icon>
+            <p>{{ item.label }}</p>
           </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 
-          <ion-list class="scrollable-list" *ngIf="recentAttendance.length > 0;">
-            <ion-item *ngFor="let day of recentAttendance" lines="none" [class.weekend]="day.isWeekend"
-              [class.leave]="day.leave" [class.half-day]="day.isHalfDay"
-              [class.no-data]="!day.clockIn && !day.clockOut && !day.leave && !day.isWeekend">
+  <!-- Recent Attendance Table -->
+  <ion-row class="recent-attendance">
+    <ion-col size="12">
+      <div class="section-heading">
+        <h3>Recent Records</h3>
+        <span class="see-all" (click)="viewMore()">See All</span>
+      </div>
 
-              <ion-grid class="attendance-grid">
-                <ion-row>
-                  <ion-col size="2" class="day-column">
-                    <div class="date">{{ day.date }}</div>
-                    <div class="day">{{ day.day }}</div>
-                  </ion-col>
-
-                  <ion-col [ngStyle]="{ 'background-color': day.leave && 'lightsalmon','border-radius':' 14px'}">
-                    <div *ngIf="day.leave" class="center-text">
-                      <ion-icon name="medkit-outline"></ion-icon>
-                      {{ day.leave }}
-                    </div>
-
-                    <div *ngIf="day.isWeekend" class="center-text"
-                      style="background-color: lightblue; border-radius: 10px;">
-                      Weekend: {{ day.day }} {{ day.date }}
-                    </div>
-
-                    <div *ngIf="!day.leave && !day.isWeekend && (day.clockIn || day.clockOut)" class="timing-row"
-                      [ngStyle]="{ 'background-color': day.isHalfDay && 'pink','border-radius':' 10px'}">
-                      <div class="clock-in">
-                        <span class="label">Clock In</span>
-                        <span class="value" [class.absent]="!day.clockIn">{{ day.clockIn || '--' }}</span>
-                      </div>
-                      <div class="clock-out">
-                        <span class="label">Clock Out</span>
-                        <span class="value" [class.absent]="!day.clockOut">{{ day.clockOut || '--' }}</span>
-                      </div>
-                      <div class="working-hrs">
-                        <span class="label">Working Hr's</span>
-                        <span class="value" [class.absent]="!day.hours">{{ day.hours || '--' }}</span>
-                      </div>
-                    </div>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-item>
-          </ion-list>
+      <div class="table-container">
+        <div class="table-header sticky-header">
+          <span>Date</span>
+          <span>In</span>
+          <span>Out</span>
+          <span>Hours</span>
         </div>
-      </ion-col>
-    </ion-row>
-    <!-- Punch Modal -->
-    <ion-modal [isOpen]="punchModalOpen" (didDismiss)="punchModalOpen = false" class="punch-modal">
-      <ng-template>
-        <div class="modal-container">
-          <ion-header>
-            <ion-toolbar color="primary" class="modal-toolbar">
-              <ion-title>Punch {{ currentPunchType | titlecase }}</ion-title>
-              <ion-buttons slot="end">
-                <ion-button fill="clear" (click)="punchModalOpen = false">
-                  <ion-icon name="close-outline"></ion-icon>
-                </ion-button>
-              </ion-buttons>
-            </ion-toolbar>
-          </ion-header>
 
-          <ion-content class="ion-padding modal-content">
-            <ion-item>
-              <ion-label>Location</ion-label>
-              <ion-select [(ngModel)]="Entity.p.AttendenceLocationType" interface="popover" name="AttendenceLocationType"
-                id="AttendenceLocationType">
-                <ion-select-option *ngFor="let loc of AttendanceLocationTypeList" [value]="loc.Ref">{{ loc.Name
-                  }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-label>Site</ion-label>
-              <ion-select [(ngModel)]="Entity.p.SiteRef" interface="popover" name="SiteRef" id="SiteRef">
-                <ion-select-option *ngFor="let site of siteList" [value]="site.p.Ref">{{ site.p.Name
-                  }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-label>Site</ion-label>
-              <app-searchable-select [options]="siteList" [multiSelect]="false" placeholder="Select Site"
+        <ion-list class="scrollable-list" *ngIf="recentAttendance.length > 0;">
+          <ion-item *ngFor="let day of recentAttendance" lines="none" [class.weekend]="day.isWeekend"
+            [class.leave]="day.leave" [class.half-day]="day.isHalfDay"
+            [class.no-data]="!day.clockIn && !day.clockOut && !day.leave && !day.isWeekend">
+
+            <ion-grid class="attendance-grid">
+              <ion-row>
+                <ion-col size="2" class="day-column">
+                  <div class="date">{{ day.date }}</div>
+                  <div class="day">{{ day.day }}</div>
+                </ion-col>
+
+                <ion-col [ngStyle]="{ 'background-color': day.leave && 'lightsalmon','border-radius':' 14px'}">
+                  <div *ngIf="day.leave" class="center-text">
+                    <ion-icon name="medkit-outline"></ion-icon>
+                    {{ day.leave }}
+                  </div>
+
+                  <div *ngIf="day.isWeekend" class="center-text"
+                    style="background-color: lightblue; border-radius: 10px;">
+                    Weekend: {{ day.day }} {{ day.date }}
+                  </div>
+
+                  <div *ngIf="!day.leave && !day.isWeekend && (day.clockIn || day.clockOut)" class="timing-row"
+                    [ngStyle]="{ 'background-color': day.isHalfDay && 'pink','border-radius':' 10px'}">
+                    <div class="clock-in">
+                      <span class="label">Clock In</span>
+                      <span class="value" [class.absent]="!day.clockIn">{{ day.clockIn || '--' }}</span>
+                    </div>
+                    <div class="clock-out">
+                      <span class="label">Clock Out</span>
+                      <span class="value" [class.absent]="!day.clockOut">{{ day.clockOut || '--' }}</span>
+                    </div>
+                    <div class="working-hrs">
+                      <span class="label">Working Hr's</span>
+                      <span class="value" [class.absent]="!day.hours">{{ day.hours || '--' }}</span>
+                    </div>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <!-- Punch Modal -->
+  <!-- <ion-modal [isOpen]="punchModalOpen" (didDismiss)="punchModalOpen = false" class="punch-modal">
+    <ng-template>
+      <div class="modal-container">
+        <ion-header>
+          <ion-toolbar color="primary" class="modal-toolbar">
+            <ion-title>Punch {{ currentPunchType | titlecase }}</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" (click)="punchModalOpen = false">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <ion-content class="ion-padding modal-content">
+          <ion-item>
+            <ion-label>Location</ion-label>
+            <ion-select [(ngModel)]="Entity.p.AttendenceLocationType" interface="popover" name="AttendenceLocationType"
+              id="AttendenceLocationType">
+              <ion-select-option *ngFor="let loc of AttendanceLocationTypeList" [value]="loc.Ref">{{ loc.Name
+                }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label>Site</ion-label>
+            <ion-select [(ngModel)]="Entity.p.SiteRef" interface="popover" name="SiteRef" id="SiteRef">
+              <ion-select-option *ngFor="let site of siteList" [value]="site.p.Ref">{{ site.p.Name
+                }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label>Site</ion-label>
+            <app-searchable-select [options]="siteList" [multiSelect]="false" placeholder="Select Site"
               (selectionChange)="onSelectionChange($event)">
             </app-searchable-select>
-            </ion-item>
- 
-            <div class="photo-upload">
-              <ion-label class="ion-padding-top">Your Photo </ion-label>
-              <ion-button expand="block" color="secondary" fill="solid" (click)="takePhoto('before')">
-                <ion-icon name="camera-outline" slot="start"></ion-icon> Capture
-              </ion-button>
+          </ion-item>
 
-              <ion-label class="ion-padding-top">Work Location Photo</ion-label>
-              <ion-button expand="block" color="secondary" fill="solid" (click)="takePhoto('after')">
-                <ion-icon name="camera-outline" slot="start"></ion-icon> Capture
+          <div class="photo-upload">
+            <ion-label class="ion-padding-top">Your Photo </ion-label>
+            <ion-button expand="block" color="secondary" fill="solid" (click)="takePhoto('before')">
+              <ion-icon name="camera-outline" slot="start"></ion-icon> Capture
+            </ion-button>
+
+            <ion-label class="ion-padding-top">Work Location Photo</ion-label>
+            <ion-button expand="block" color="secondary" fill="solid" (click)="takePhoto('after')">
+              <ion-icon name="camera-outline" slot="start"></ion-icon> Capture
+            </ion-button>
+          </div>
+
+          <ion-button expand="block" color="primary" shape="round" (click)="submitPunch()">Submit Punch</ion-button>
+        </ion-content>
+      </div>
+    </ng-template>
+  </ion-modal> -->
+
+  <!-- Punch Modal -->
+  <ion-modal [isOpen]="punchModalOpen" (didDismiss)="punchModalOpen = false" class="punch-modal">
+    <ng-template>
+      <div class="modal-container">
+        <!-- Modal Header -->
+        <ion-header>
+          <ion-toolbar color="primary" class="modal-toolbar">
+            <ion-title>Punch {{ currentPunchType | titlecase }}</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" (click)="punchModalOpen = false">
+                <ion-icon name="close-outline"></ion-icon>
               </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <!-- Modal Content -->
+        <ion-content class="ion-padding modal-content">
+          <!-- Location Type -->
+          <ion-item>
+            <ion-label>Location Type</ion-label>
+            <ion-select [(ngModel)]="Entity.p.AttendenceLocationType" interface="popover">
+              <ion-select-option *ngFor="let loc of AttendanceLocationTypeList" [value]="loc.Ref">
+                {{ loc.Name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <!-- Site Selection -->
+          <ion-item *ngIf="Entity.p.AttendenceLocationType === 200">
+            <ion-label>Site</ion-label>
+            <app-searchable-select [options]="siteList" [multiSelect]="false" placeholder="Select Site"
+              (selectionChange)="onSelectionChange($event)">
+            </app-searchable-select>
+          </ion-item>
+
+          <!-- Photo Upload Section -->
+          <div class="photo-upload">
+            <ion-label class="section-title">Capture Photos</ion-label>
+
+            <div class="photo-row">
+              <div>
+                <ion-label>Self Photo</ion-label>
+                <ion-button expand="block" color="secondary" fill="solid" (click)="takePhoto('before')">
+                  <ion-icon name="camera-outline" slot="start"></ion-icon> Capture
+                </ion-button>
+                <img *ngIf="capturedBeforePhoto" [src]="capturedBeforePhoto" class="preview-img" />
+              </div>
+
+              <div>
+                <ion-label>Work Location</ion-label>
+                <ion-button expand="block" color="secondary" fill="solid" (click)="takePhoto('after')">
+                  <ion-icon name="camera-outline" slot="start"></ion-icon> Capture
+                </ion-button>
+                <img *ngIf="capturedAfterPhoto" [src]="capturedAfterPhoto" class="preview-img" />
+              </div>
             </div>
+          </div>
 
-            <ion-button expand="block" color="primary" shape="round" (click)="submitPunch()">Submit Punch</ion-button>
-          </ion-content>
-        </div>
-      </ng-template>
-    </ion-modal>
-  </ion-grid>
+          <!-- Submit Button -->
+          <ion-button expand="block" color="primary" shape="round" [disabled]="isSubmitting" (click)="submitPunchIn()">
+            <ion-spinner *ngIf="isSubmitting" slot="start"></ion-spinner>
+            Submit Punch
+          </ion-button>
+        </ion-content>
+      </div>
+    </ng-template>
+  </ion-modal>
+
 </ion-content>
