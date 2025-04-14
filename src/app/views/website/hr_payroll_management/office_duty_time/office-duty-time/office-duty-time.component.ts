@@ -37,6 +37,18 @@ export class OfficeDutyTimeComponent  implements OnInit {
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
+  getFormattedTime(time24: string): string {
+    if (!time24) return '';
+
+    const [hourStr, minuteStr] = time24.split(':');
+    let hour = parseInt(hourStr, 10);
+    const minute = parseInt(minuteStr, 10);
+
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    hour = hour % 12 || 12;
+
+    return `${hour}:${minute.toString().padStart(2, '0')} ${ampm}`;
+  }
 
    getOfficeDutyandTimeListByCompanyRef = async () => {
       this.MasterList = [];

@@ -193,7 +193,7 @@
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
-            <label>Designation</label>
+            <label for="DesignationRef">Designation</label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DesignationRef "
               name="DesignationRef " [nzSize]="'large'" [(ngModel)]="Entity.p.DesignationRef ">
               <nz-option *ngFor="let designation of DesignationList" [nzValue]="designation.p.Ref"
@@ -206,7 +206,7 @@
             <label for="OfficeDutyandTimeRef">Office Duty Time</label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="OfficeDutyandTimeRef" name="OfficeDutyandTimeRef"
               [nzSize]="'large'" [(ngModel)]="Entity.p.OfficeDutyandTimeRef">
-              <nz-option *ngFor="let OfficeDutyTime of OfficeDutyTimeList" [nzValue]="OfficeDutyTime.p.Ref" [nzLabel]="OfficeDutyTime.p.FromTime + ' - ' + OfficeDutyTime.p.ToTime"></nz-option>
+              <nz-option *ngFor="let OfficeDutyTime of OfficeDutyTimeList" [nzValue]="OfficeDutyTime.p.Ref" [nzLabel]="OfficeDutyTime.p.ShortName"></nz-option>
             </nz-select>
           </div>
         </div>
