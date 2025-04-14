@@ -62,7 +62,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.onGetCompany();
     this.FormulateCompanyList();
-    console.log(this.CompanyList);
+    // console.log(this.CompanyList);
   }
   private FormulateCompanyList = async ()=> {
     let lst = await Company.FetchEntireList(
