@@ -12,47 +12,46 @@
     </div>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
+        <div class="col-lg-4 col-md-4 col-sm-12">
+          <label>Name</label>
+          <input type="text" [(ngModel)]="Entity.p.EmployeeName" readonly name="EmployeeName" class="form-control"
+            id="EmployeeName" required #EmployeeNameCtrl="ngModel" required
+            (blur)="EmployeeNameCtrl.control.markAsTouched()" />
+          <div style="height: 25px;"
+            *ngIf="(EmployeeNameCtrl.invalid && (EmployeeNameCtrl.touched || EmployeeNameCtrl.dirty))">
+            <span class="validation-text" *ngIf="EmployeeNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
         <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
-          <label>Employee</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="EmployeeRef"
-            name="EmployeeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.EmployeeRef">
-            <nz-option *ngFor="let Employee of EmployeeList" [nzValue]="Employee.p.Ref"
-              [nzLabel]="Employee.p.Name"></nz-option>
+          <label>From Month</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="FromMonth"
+            name="FromMonth" [nzSize]="'large'" [(ngModel)]="Entity.p.FromMonth">
+            <nz-option *ngFor="let FromMonth of FromMonthList" [nzValue]="FromMonth.Ref"
+              [nzLabel]="FromMonth.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
-          <label>From Month</label>
-          <input type="date" [(ngModel)]="frommonth" name="frommonth" class="form-control" id="frommonth" required
-            placeholder="Enter From Date" #frommonthCtrl="ngModel" required
-            (blur)="frommonthCtrl.control.markAsTouched()" />
-          <div style="height: 25px;" *ngIf="(frommonthCtrl.invalid && (frommonthCtrl.touched || frommonthCtrl.dirty))">
-            <span class="validation-text" *ngIf="frommonthCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
+        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
           <label>To Month</label>
-          <input type="date" [(ngModel)]="tomonth" name="tomonth" class="form-control" id="tomonth" required
-            placeholder="Enter To Date" #tomonthCtrl="ngModel" required (blur)="tomonthCtrl.control.markAsTouched()" />
-          <div style="height: 25px;" *ngIf="(tomonthCtrl.invalid && (tomonthCtrl.touched || tomonthCtrl.dirty))">
-            <span class="validation-text" *ngIf="tomonthCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="ToMonth" name="ToMonth"
+            [nzSize]="'large'" [(ngModel)]="Entity.p.ToMonth">
+            <nz-option *ngFor="let ToMonth of ToMonthList" [nzValue]="ToMonth.Ref" [nzLabel]="ToMonth.Name"></nz-option>
+          </nz-select>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
+        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
           <label>From Year</label>
-          <input type="date" [(ngModel)]="fromyear" name="fromyear" class="form-control" id="fromyear" required
-            placeholder="Enter From Date" #fromyearCtrl="ngModel" required
-            (blur)="fromyearCtrl.control.markAsTouched()" />
-          <div style="height: 25px;" *ngIf="(fromyearCtrl.invalid && (fromyearCtrl.touched || fromyearCtrl.dirty))">
-            <span class="validation-text" *ngIf="fromyearCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="FromYear"
+            name="FromYear" [nzSize]="'large'" [(ngModel)]="Entity.p.FromYear">
+            <nz-option *ngFor="let FromYear of FinancialYearList" [nzValue]="FromYear.p.FromDate"
+              [nzLabel]="FromYear.p.FromDate"></nz-option>
+          </nz-select>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
+        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
           <label>To Year</label>
-          <input type="date" [(ngModel)]="toyear" name="toyear" class="form-control" id="toyear" required
-            placeholder="Enter To Date" #toyearCtrl="ngModel" required (blur)="toyearCtrl.control.markAsTouched()" />
-          <div style="height: 25px;" *ngIf="(toyearCtrl.invalid && (toyearCtrl.touched || toyearCtrl.dirty))">
-            <span class="validation-text" *ngIf="toyearCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="ToYear" name="ToYear"
+            [nzSize]="'large'" [(ngModel)]="Entity.p.ToYear">
+            <nz-option *ngFor="let ToYear of FinancialYearList" [nzValue]="ToYear.p.ToDate"
+              [nzLabel]="ToYear.p.ToDate"></nz-option>
+          </nz-select>
         </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
