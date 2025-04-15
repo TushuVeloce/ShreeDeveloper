@@ -16,8 +16,8 @@ import { SalaryGenerationFetchRequest } from "./salarygenerationfetchrequest";
 export class SalaryGenerationProps {
   public readonly Db_Table_Name = "SalarySlipGeneration";
   public Ref: number = 0;
-  public EmployeeNRef: string = '';
-  public EmployeeName: string = '';
+  public EmployeeRef: number = 0;
+  public readonly EmployeeName: string = '';
   public Month: string = '';
   public TotalDays: number = 0;
   public TotalWorkingDays: number = 0;

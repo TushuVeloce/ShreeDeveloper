@@ -58,6 +58,10 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     this.EmployeeList = lst;
   }
 
+  calculategrosstotal = ()=>{
+    
+  }
+
    SaveMaterialMaster = async () => {
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
       this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();

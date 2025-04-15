@@ -14,16 +14,16 @@
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
             <label>Employee Name</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nz [(ngModel)]="Entity.p.EmployeeName" placeholder="Select" id="EmployeeName
-              name="EmployeeName [nzSize]="'large'">
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+            name="EmployeeRef" required id="EmployeeRef" [(ngModel)]="Entity.p.EmployeeRef">
               <nz-option *ngFor="let employee of EmployeeList" [nzValue]="employee.p.Ref"
                 [nzLabel]="employee.p.Name"></nz-option>
             </nz-select>
         </div>
         <div class="col-md-4">
             <label>Month</label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nz [(ngModel)]="Entity.p.Month" placeholder="Select" id="Month
-            name="Month [nzSize]="'large'">
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+            name="Month" required id="Month" [(ngModel)]="Entity.p.Month">
             <nz-option *ngFor="let month of MonthList" [nzValue]="month.Ref"
               [nzLabel]="month.Name"></nz-option>
           </nz-select>
