@@ -43,7 +43,7 @@ export class SalarySlipRequestProps {
 }
 
 export class SalarySlipRequest implements IPersistable<SalarySlipRequest> {
-  public static readonly Db_Table_Name: string = 'SalarySlipRequestMaster';
+  public static readonly Db_Table_Name: string = 'SalarySlipRequest';
 
   private constructor(public readonly p: SalarySlipRequestProps, public readonly AllowEdit: boolean) {
 

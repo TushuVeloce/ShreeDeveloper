@@ -69,7 +69,8 @@ export class LeaveRequestDetailsComponent implements OnInit {
       );
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
-      this.EmployeeRef = this.appStateManage.getEmployeeRef();
+      // this.EmployeeRef = this.appStateManage.getEmployeeRef();
+      this.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       this.Entity = LeaveRequest.CreateNewInstance();
       LeaveRequest.SetCurrentInstance(this.Entity);
       this.Entity.p.LeaveRequestType = this.LeaveRequestTypeList[1].Ref

@@ -34,10 +34,7 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
   FinancialYearList: FinancialYear[] = [];
   FromDates: string[] = [];
   ToDates: string[] = [];
-  frommonth: string = '';
-  tomonth: string = '';
-  fromyear: string = '';
-  toyear: string = '';
+  EmployeeRef: number = 0;
 
   NameWithNos: string = ValidationPatterns.NameWithNos
 
@@ -66,22 +63,12 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
         : 'Edit Salary Slip Request';
       this.Entity = SalarySlipRequest.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
-      this.frommonth = this.dtu.ConvertStringDateToShortFormat(
-        this.Entity.p.FromMonth
-      );
-      this.tomonth = this.dtu.ConvertStringDateToShortFormat(
-        this.Entity.p.ToMonth
-      );
-      this.fromyear = this.dtu.ConvertStringDateToShortFormat(
-        this.Entity.p.FromYear
-      );
-      this.toyear = this.dtu.ConvertStringDateToShortFormat(
-        this.Entity.p.ToYear
-      );
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
+      this.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       this.Entity = SalarySlipRequest.CreateNewInstance();
       SalarySlipRequest.SetCurrentInstance(this.Entity);
+      this.getSingleEmployeeDetails();
     }
     this.InitialEntity = Object.assign(
       SalarySlipRequest.CreateNewInstance(),
@@ -121,7 +108,7 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
   }
 
   getSingleEmployeeDetails = async () => {
-    let data = await Employee.FetchInstance(this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let data = await Employee.FetchInstance(this.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.Entity.p.EmployeeRef = data.p.Ref;
     this.Entity.p.EmployeeName = data.p.Name;
   }
@@ -130,33 +117,29 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
 
-    this.Entity.p.FromMonth = this.dtu.ConvertStringDateToFullFormat(this.frommonth);
-    this.Entity.p.ToMonth = this.dtu.ConvertStringDateToFullFormat(this.tomonth);
-    this.Entity.p.FromYear = this.dtu.ConvertStringDateToFullFormat(this.fromyear);
-    this.Entity.p.ToYear = this.dtu.ConvertStringDateToFullFormat(this.toyear);
 
     if (this.Entity.p.CreatedBy == 0) {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
-    // let entityToSave = this.Entity.GetEditableVersion();
-    // let entitiesToSave = [entityToSave];
-    // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    let entityToSave = this.Entity.GetEditableVersion();
+    let entitiesToSave = [entityToSave];
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
-    // if (!tr.Successful) {
-    //   this.isSaveDisabled = false;
-    //   this.uiUtils.showErrorMessage('Error', tr.Message);
-    //   return;
-    // } else {
-    //   this.isSaveDisabled = false;
-    //   if (this.IsNewEntity) {
-    //     await this.uiUtils.showSuccessToster('SalarySlipRequest Master saved successfully!');
-    //     this.Entity = SalarySlipRequest.CreateNewInstance();
-    //     this.resetAllControls();
-    //   } else {
-    //     await this.uiUtils.showSuccessToster('SalarySlipRequest Master Updated successfully!');
-    //     await this.router.navigate(['/homepage/Website/Salary_Slip_Request']);
-    //   }
-    // }
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
+    } else {
+      this.isSaveDisabled = false;
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('SalarySlipRequest Master saved successfully!');
+        this.Entity = SalarySlipRequest.CreateNewInstance();
+        this.resetAllControls();
+      } else {
+        await this.uiUtils.showSuccessToster('SalarySlipRequest Master Updated successfully!');
+        await this.router.navigate(['/homepage/Website/Salary_Slip_Request']);
+      }
+    }
   };
 
   // for value 0 selected while click on Input //
