@@ -87,27 +87,6 @@ export class AttendanceManagementPage implements OnInit {
         break;
     }
   }
-  punchCards = [
-    {
-      type: 'check-in',
-      icon: 'arrow-down-circle-outline',
-      label: 'Check In',
-      currentTime: 'It is now ' + this.isPunchInTime,
-      schedule: 'Check In Schedule',
-      time: '08:00',
-      punchType: 'in',
-    },
-    {
-      type: 'check-out',
-      icon: 'arrow-up-circle-outline',
-      label: 'Check Out',
-      currentTime: 'Not Yet',
-      schedule: 'Check Out Schedule',
-      time: '17:00',
-      punchType: 'out',
-    }
-  ];
-
   openPunchModal = async (type: 'in' | 'out') => {
     this.currentPunchType = type;
     this.punchModalOpen = true;
@@ -163,7 +142,7 @@ export class AttendanceManagementPage implements OnInit {
         this.isPunchOutEnabled = true;   // Enable Punch Out
       } else {
         this.Entity.p.IsCheckIn = false;
-        this.isPunchInEnabled = true;    // Enable Punch In
+        this.isPunchInEnabled = true;    // E nable Punch In
         this.isPunchOutEnabled = false;  // Disable Punch Out
       }
       this.punchModalOpen = false;
@@ -173,7 +152,9 @@ export class AttendanceManagementPage implements OnInit {
       // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
       // this.Entity.p.UpdatedDate= await CurrentDateTimeRequest.GetCurrentDateTime();
       this.Entity.p.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.Entity.p.SiteRef = this.selectedSite[0].p.Ref;
+      if (this.selectedSite[0].p.Ref) {
+        this.Entity.p.SiteRef = this.selectedSite[0].p.Ref;
+      }
       // convert date 2025-02-23 to 2025-02-23-00-00-00-000
       this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date!)
       // this.Entity.p.SaleDeedDate = this.dtu.ConvertStringDateToFullFormat(this.localsaledeeddate)

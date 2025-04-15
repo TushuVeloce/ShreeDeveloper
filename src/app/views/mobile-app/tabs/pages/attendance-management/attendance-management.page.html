@@ -30,19 +30,6 @@
       <div class="card-value">{{isPunchOutTime}}</div>
     </div>
   </div>
-  <!-- Punch Info Cards -->
-  <!-- <div class="grid-container">
-    <div class="card" [ngClass]="card.type" *ngFor="let card of punchCards" (click)="openPunchModal('in')">
-      <div class="card-header">
-        <ion-icon [name]="card.icon"></ion-icon>
-        <span>{{ card.label }}</span>
-      </div>
-      <div class="card-time">{{ card.currentTime }}</div>
-      <div class="card-schedule">{{ card.schedule }}</div>
-      <div class="card-value">{{ card.time }}</div>
-    </div>
-  </div> -->
-
   <!-- Presence / Absence -->
   <div class="grid-container">
     <div class="card absence">
@@ -221,13 +208,11 @@
           </ion-item>
 
           <!-- Site Selection -->
-          <ion-item *ngIf="Entity.p.AttendenceLocationType === 200">
-            <ion-label>Site</ion-label>
+          <div *ngIf="Entity.p.AttendenceLocationType === 200">
             <app-searchable-select [options]="siteList" [multiSelect]="false" placeholder="Select Site"
               (selectionChange)="onSelectionChange($event)">
             </app-searchable-select>
-          </ion-item>
-
+          </div>
           <!-- Photo Upload Section -->
           <div class="photo-upload">
             <ion-label class="section-title">Capture Photos</ion-label>

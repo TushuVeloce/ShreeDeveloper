@@ -1,0 +1,27 @@
+<ion-list *ngFor="let cardData of cardListData">
+  <ion-card class="teacher-card">
+    <ion-card-content class="card-content">
+      <div class="top-row">
+        <img [src]="cardData.image" alt="Profile" class="profile-pic" />
+        <div>
+          <div class="location">{{ cardData.location }}</div>
+          <div class="name">{{ cardData.name }}</div>
+          <div class="languages">
+            <ion-badge *ngFor="let lang of cardData.languages">{{ lang }}</ion-badge>
+          </div>
+        </div>
+        <div class="rating">
+          <ion-icon name="star" class="star-icon"></ion-icon> {{ cardData.rating }}
+        </div>
+      </div>
+
+      <p class="description">{{ cardData.description }}</p>
+
+      <div class="actions">
+        <ion-checkbox></ion-checkbox>
+        <span>Check Availability</span>
+        <ion-button size="small" color="primary" class="book-btn">Book a Trial</ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-list>
