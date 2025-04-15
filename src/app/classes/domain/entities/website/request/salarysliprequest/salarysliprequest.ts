@@ -27,13 +27,11 @@ export class SalarySlipRequestProps {
   public ToMonth: string = '';
   public FromYear: string = '';
   public ToYear: string = '';
-  public IsApproval: boolean = false;
+  public IsApproved: boolean = false;
   public IsDeleted: boolean = false;
 
 
-
   public readonly IsNewlyCreated: boolean = false;
-  // public readonly AccountTypeName: string = '';
 
   private constructor(isNewlyCreated: boolean) {
     this.IsNewlyCreated = isNewlyCreated;
@@ -54,7 +52,6 @@ export class SalarySlipRequest implements IPersistable<SalarySlipRequest> {
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
       const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }

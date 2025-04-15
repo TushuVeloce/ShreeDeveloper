@@ -10,6 +10,7 @@ import { NgModel } from '@angular/forms';
 import { SalarySlipRequest } from 'src/app/classes/domain/entities/website/request/salarysliprequest/salarysliprequest';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { DTU } from 'src/app/services/dtu.service';
+import { FinancialYear } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
 
 
 @Component({
@@ -18,6 +19,7 @@ import { DTU } from 'src/app/services/dtu.service';
   templateUrl: './salary-slip-request-details.component.html',
   styleUrls: ['./salary-slip-request-details.component.scss'],
 })
+
 export class SalarySlipRequestDetailsComponent implements OnInit {
   Entity: SalarySlipRequest = SalarySlipRequest.CreateNewInstance();
   private IsNewEntity: boolean = true;
@@ -25,8 +27,13 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Salary Slip Request' | 'Edit Salary Slip Request' = 'New Salary Slip Request';
   IsDropdownDisabled: boolean = false;
   InitialEntity: SalarySlipRequest = null as any;
+  FromMonthList = DomainEnums.MonthList(true, '--Select Month Type--');
+  ToMonthList = DomainEnums.MonthList(true, '--Select Month Type--');
   EmployeeList: Employee[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  FinancialYearList: FinancialYear[] = [];
+  FromDates: string[] = [];
+  ToDates: string[] = [];
   frommonth: string = '';
   tomonth: string = '';
   fromyear: string = '';
@@ -75,28 +82,48 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
     } else {
       this.Entity = SalarySlipRequest.CreateNewInstance();
       SalarySlipRequest.SetCurrentInstance(this.Entity);
-      this.getEmployeeListByCompanyRef();
     }
     this.InitialEntity = Object.assign(
       SalarySlipRequest.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as SalarySlipRequest;
     this.focusInput();
+    this.getFinancialYearListByCompanyRef();
   }
 
   focusInput = () => {
-    let txtName = document.getElementById('fromdate')!;
-    txtName.focus();
+    // let txtName = document.getElementById('fromdate')!;
+    // txtName.focus();
   }
 
-  getEmployeeListByCompanyRef = async () => {
+  getFinancialYearListByCompanyRef = async () => {
+    this.FinancialYearList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.EmployeeList = lst;
-    this.Entity.p.EmployeeRef = this.EmployeeList[0].p.Ref
+    let lst = await FinancialYear.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.FinancialYearList = lst;
+    this.convertdate();
+  }
+
+  convertdate = () => {
+    this.FinancialYearList.forEach(item => {
+      let convertedDate = this.dtu.GetIndianDate(item.p.FromDate,);
+      this.FromDates.push(convertedDate);
+      item.p.FromDate = convertedDate;
+    });
+    this.FinancialYearList.forEach(item => {
+      let convertedDate = this.dtu.GetIndianDate(item.p.ToDate,);
+      this.ToDates.push(convertedDate);
+      item.p.ToDate = convertedDate;
+    });
+  }
+
+  getSingleEmployeeDetails = async () => {
+    let data = await Employee.FetchInstance(this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.Entity.p.EmployeeRef = data.p.Ref;
+    this.Entity.p.EmployeeName = data.p.Name;
   }
 
   SaveSalarySlipRequest = async () => {
