@@ -32,8 +32,11 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
       case 'Submit': return 'checkbox';
       case 'Inward No': return 'number';
       case 'Inward Date': return 'date';
+      case 'Outward No': return 'number';
+      case 'Outward Date': return 'date';
       case 'Scrutiny Fees': return 'checkbox';
       case 'Yes No': return 'radio';
+      case 'Received': return 'checkbox';
       default:
         return ''; // Default return value
     }
@@ -42,7 +45,7 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
   // hide show content using radio button
   showReportNOCSection: boolean = false;
   getReportNOCAirportNOC(value: boolean, siteWorkName: string) {
-    if (siteWorkName.trim() === 'Report NOC & Airport NOC') {
+    if (siteWorkName.trim() === 'इनामपत्र') {
       this.showReportNOCSection = value;
     }
   }

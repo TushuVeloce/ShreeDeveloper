@@ -45,7 +45,7 @@ export class GovernmentTransactionDetailsComponent implements OnInit {
   }
 
   getSiteWorkGroupName = async (SiteWorkGroupName: string) => {
-    // console.log('SiteWorkGroupName', SiteWorkGroupName);
+    console.log('SiteWorkGroupName', SiteWorkGroupName);
     await this.router.navigate(['/homepage/Website/Respected_child', { queryParams: SiteWorkGroupName }]);
   }
 

@@ -93,9 +93,9 @@ export class Site implements IPersistable<Site> {
         }
     if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'AddressLine cannot be blank.');
     if (this.p.AddressLine2 == '') vra.add('AddressLine2', 'Site Location cannot be blank.');
-    if (this.p.PinCode == '') vra.add('PinCode', 'PinCode cannot be blank.');else if (!new RegExp(ValidationPatterns.PinCode).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.PinCodeMsg);
-    }
+    // if (this.p.PinCode == '') vra.add('PinCode', 'PinCode cannot be blank.');else if (!new RegExp(ValidationPatterns.PinCode).test(this.p.Name)) {
+    //   vra.add('Name', ValidationMessages.PinCodeMsg);
+    // }
     if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country Name cannot be blank.');
     if (this.p.StateRef == 0) vra.add('StateRef', 'State Name cannot be blank.');
     if (this.p.CityRef == 0) vra.add('CityRef', 'City Name cannot be blank.');
