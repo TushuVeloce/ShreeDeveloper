@@ -59,7 +59,25 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   }
 
   calculategrosstotal = ()=>{
-    
+    const GrossTotal = Math.ceil(this.Entity.p.BasicSalary + this.Entity.p.TotalAllowance + this.Entity.p.TotalIncentive + this.Entity.p.Other)
+     this.Entity.p.GrossTotal = GrossTotal
+     this.calculatenetsalary()
+  }
+
+  calculatetotaldeduction = ()=>{
+    const TotalDeduction = Math.ceil(this.Entity.p.TDS + this.Entity.p.PF + this.Entity.p.TotalLeaveDeduction + this.Entity.p.AdvancePayment)
+     this.Entity.p.TotalDeduction = TotalDeduction
+     this.calculatenetsalary()
+  }
+
+  calculatenetsalary = ()=>{
+    const NetSalary = Math.ceil(this.Entity.p.GrossTotal - this.Entity.p.TotalDeduction )
+     this.Entity.p.NetSalary = NetSalary
+  }
+
+  selectAllValue(event: MouseEvent): void {
+    const input = event.target as HTMLInputElement;
+    input.select();
   }
 
    SaveMaterialMaster = async () => {
