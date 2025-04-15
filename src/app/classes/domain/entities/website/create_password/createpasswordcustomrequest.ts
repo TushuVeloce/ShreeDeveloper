@@ -4,24 +4,23 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class SalaryGenerationFetchRequest
+export class CraetePasswordCustomRequest
 {
-    public static readonly FetchRequestType: string = "SalarySlipGenerationFetchRequest";
+    public static readonly CustomProcessRequestType: string = "CraetePasswordCustomRequest";
 
-    CompanyRefs: number[] = [];
-    SalaryGenerationRefs: number[] = [];
+    Password: string = '';
+    ConfirmPassword: string = '';
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, SalaryGenerationFetchRequest.FetchRequestType) as DataCollection;
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CraetePasswordCustomRequest.CustomProcessRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 
     public FormulateTransportData = () => {
-        let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.Fetch);
+        let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.CustomProcess);
         this.MergeIntoTransportData(td);
 
         return td;
     }
 }
-

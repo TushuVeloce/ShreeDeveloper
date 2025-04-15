@@ -7,6 +7,7 @@ import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { EmployeeMasterComponent } from '../../../Masters/employee/employee-master/employee-master.component';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 
 @Component({
   selector: 'app-leave-request',
@@ -30,9 +31,9 @@ export class LeaveRequestComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Leave Request Type', 'From Date', 'To Date', 'Days', 'Hours', 'Is Approved', 'Action'];
+  headers: string[] = ['Sr.No.', 'Leave Request Type', 'From Date', 'To Date', 'Days', 'Leave Hours', 'Is Approved', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService
   ) {
     effect(async () => {
       await this.getLeaveRequestListByEmployeeRef();
@@ -59,36 +60,30 @@ export class LeaveRequestComponent implements OnInit {
   getLeaveRequestListByEmployeeRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    // if (this.Entity.p.EmployeeRef <= 0) {
-    //   await this.uiUtils.showErrorToster('Employee not Selected');
-    //   return;
-    // }
-console.log(this.Entity.p.EmployeeRef);
-
+    if (this.Entity.p.EmployeeRef <= 0) {
+      await this.uiUtils.showErrorToster('Employee not Selected');
+      return;
+    }
     let lst = await LeaveRequest.FetchEntireListByEmployeeRef(this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    console.log(this.DisplayMasterList);
-
     this.loadPaginationData();
   }
 
-  onEditClicked = async (item: LeaveRequest) => {
-    this.SelectedLeaveRequest = item.GetEditableVersion();
-    LeaveRequest.SetCurrentInstance(this.SelectedLeaveRequest);
-    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Leave_Request_Details']);
-  };
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
+  }
 
   onDeleteClicked = async (leaverequest: LeaveRequest) => {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-    Are you sure that you want to DELETE this LeaveRequest?`,
+    Are you sure that you want to DELETE this Leave Request?`,
       async () => {
         await leaverequest.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `LeaveRequest ${leaverequest.p.EmployeeName} has been deleted!`
+            `Leave Request of ${leaverequest.p.EmployeeName} has been deleted!`
           );
           await this.getLeaveRequestListByEmployeeRef();
           this.SearchString = '';
@@ -115,7 +110,7 @@ console.log(this.Entity.p.EmployeeRef);
   filterTable = () => {
     if (this.SearchString != '') {
       this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
+        return data.p.LeaveRequestName.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
       })
     }
     else {

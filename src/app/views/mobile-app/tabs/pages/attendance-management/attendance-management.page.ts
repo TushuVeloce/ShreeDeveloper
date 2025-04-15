@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
-import { AttendanceLog } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelog';
+import { AttendanceLog, AttendanceLogProps } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelog';
+import { AttendanceLogCheckInCustomRequest } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelogcheckincustomrequest';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
+import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
+import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 @Component({
@@ -30,6 +34,8 @@ export class AttendanceManagementPage implements OnInit {
   siteList: Site[] = [];
   selectedSite: Site[] = [];
 
+  isCheckInDisabled:boolean = false;
+
   isSubmitting = false;
 
   capturedBeforePhoto: string | null = null;
@@ -41,6 +47,9 @@ export class AttendanceManagementPage implements OnInit {
   DateWithTime: string | null = null;
   Entity: AttendanceLog = AttendanceLog.CreateNewInstance();
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  employeeRef = 0;
+
+
   AttendanceLocationTypeList = DomainEnums.AttendenceLocationTypeList(true, '--Select--');
   gridItems = [
     { label: 'Salary Slip', icon: 'layers-outline', gridFunction: 100 },
@@ -60,17 +69,20 @@ export class AttendanceManagementPage implements OnInit {
     { date: '21', day: 'SUN', isWeekend: true, isHalfDay: false }
   ];
   constructor(private router: Router, private companystatemanagement: CompanyStateManagement, private uiUtils: UIUtils,
-    private appStateManage: AppStateManageService, private utils: Utils, private dtu: DTU
+    private appStateManage: AppStateManageService, private utils: Utils, private dtu: DTU,
+    private payloadPacketFacade: PayloadPacketFacade,
+        private serverCommunicator: ServerCommunicatorService
   ) { }
 
   async ngOnInit() {
+    this.employeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
     let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
     this.Date = strCDT.substring(0, 10);
     this.isCurrentTime = strCDT;
     this.isPunchInTime = strCDT;
     this.isPunchOutTime = strCDT;
-    this.isPunchInEnabled = true;
-    this.isPunchOutEnabled = false;
+    await this.getCheckInData();
+    if(this.Entity.p.FirstCheckInTime != "") this.isCheckInDisabled = true
   }
   gridItemsFunction(id: number) {
     switch (id) {
@@ -87,9 +99,36 @@ export class AttendanceManagementPage implements OnInit {
         break;
     }
   }
+
+  getCheckInData = async ()=>{
+    let tranDate = this.dtu.ConvertStringDateToFullFormat(this.Date!)
+    let req = new AttendanceLogCheckInCustomRequest();
+    req.TransDateTime = tranDate;
+    req.CompanyRef = this.companyRef();
+    req.EmployeeRef = this.employeeRef;
+
+    let td = req.FormulateTransportData();
+    let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+
+    if(!tr.Successful){
+      await this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
+    }
+    let tdResult = JSON.parse(tr.Tag) as TransportData;
+    let res = AttendanceLogCheckInCustomRequest.FromTransportData(tdResult)
+    if(res.Data.length > 0){
+      let checkInData:AttendanceLogProps = res.Data[0] as AttendanceLogProps
+      Object.assign(this.Entity.p,checkInData)
+    }
+
+
+  }
   openPunchModal = async (type: 'in' | 'out') => {
     this.currentPunchType = type;
-    this.punchModalOpen = true;
+    if (!this.isCheckInDisabled) {
+      this.punchModalOpen = true; 
+    }
 
     // this.currentCompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     console.log('CurrentCompanyRef() :', this.companyRef());

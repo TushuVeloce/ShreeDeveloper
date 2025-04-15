@@ -14,10 +14,10 @@ import { SalaryGenerationFetchRequest } from "./salarygenerationfetchrequest";
 
 
 export class SalaryGenerationProps {
-  public readonly Db_Table_Name = "SalaryGenerationMaster";
+  public readonly Db_Table_Name = "SalarySlipGeneration";
   public Ref: number = 0;
-  public EmployeeNRef: string = '';
-  public EmployeeName: string = '';
+  public EmployeeRef: number = 0;
+  public readonly EmployeeName: string = '';
   public Month: string = '';
   public TotalDays: number = 0;
   public TotalWorkingDays: number = 0;
@@ -41,6 +41,7 @@ export class SalaryGenerationProps {
   public CompanyName: string = '';
   public CreatedBy: number = 0;
   public UpdatedBy: number = 0;
+  public SalarySlipMonthIndicator: string = 'A';
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -55,7 +56,7 @@ export class SalaryGenerationProps {
 }
 
 export class SalaryGeneration implements IPersistable<SalaryGeneration> {
-  public static readonly Db_Table_Name: string = 'SalaryGenerationMaster';
+  public static readonly Db_Table_Name: string = 'SalarySlipGeneration';
 
   private constructor(public readonly p: SalaryGenerationProps, public readonly AllowEdit: boolean) {
 

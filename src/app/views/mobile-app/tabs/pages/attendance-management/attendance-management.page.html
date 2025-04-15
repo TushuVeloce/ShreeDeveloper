@@ -10,7 +10,8 @@
 
   <!-- Punch Info Cards -->
   <div class="grid-container">
-    <div class="card check-in">
+    <!-- check in start -->
+    <div class="card check-in" >
       <div class="card-header" (click)="openPunchModal('in')">
         <ion-icon name="arrow-down-circle-outline"></ion-icon>
         <span>Check In</span>
@@ -19,7 +20,9 @@
       <div class="card-schedule">Check In Time</div>
       <div class="card-value">{{isPunchInTime}}</div>
     </div>
+    <!-- check in end -->
 
+    <!-- check out start -->
     <div class="card check-out">
       <div class="card-header" (click)="submitPunchOut()">
         <ion-icon name="arrow-up-circle-outline"></ion-icon>
@@ -30,6 +33,8 @@
       <div class="card-value">{{isPunchOutTime}}</div>
     </div>
   </div>
+      <!-- check out end -->
+
   <!-- Presence / Absence -->
   <div class="grid-container">
     <div class="card absence">
