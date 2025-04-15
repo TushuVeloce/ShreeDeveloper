@@ -24,12 +24,13 @@ export class LeaveRequestProps {
   public EmployeeRef: number = 0;
   public EmployeeName: string = '';
   public LeaveRequestType: number = 0;
+  public LeaveRequestName: string = '';
   public FromDate: string = '';
   public ToDate: string = '';
   public Days: number = 0;
   public LeaveHours: number = 0;
   public Description: string = '';
-  public IsApproval: number = 0;
+  public IsApproved: number = 0;
 
 
 
