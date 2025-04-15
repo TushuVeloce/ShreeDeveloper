@@ -1,4 +1,4 @@
-import { Component, effect, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SiteWorkGroup } from 'src/app/classes/domain/entities/website/government_office/siteworkgroup/siteworkgroup';
 import { SiteWorkMaster } from 'src/app/classes/domain/entities/website/government_office/siteworkmaster/siteworkmaster';
@@ -33,7 +33,8 @@ export class SiteWorkMasterComponent implements OnInit {
     private router: Router,
     private appStateManage: AppStateManageService,
     private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement,
+    private cdr: ChangeDetectorRef
   ) {
     effect(() => {
       // this.getSiteWorkMasterListByCompanyRef()
@@ -84,7 +85,7 @@ export class SiteWorkMasterComponent implements OnInit {
     this.MasterList = lst;
     console.log('SiteWorkMasterList :', this.MasterList);
 
-    //this.DisplayMasterList = this.MasterList;
+    this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
 
@@ -174,5 +175,6 @@ export class SiteWorkMasterComponent implements OnInit {
       // this.appStateManage.StorageKey.setItem('sitegroup', String(sitegroup));
       this.DisplayMasterList = this.MasterList.filter(e=> e.p.SiteWorkGroupRef == siteGroupRef)
     }
+    this.loadPaginationData()
   }
 }
