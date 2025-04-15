@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'pagination',
+  selector: 'Pagination',
   standalone: false ,
   template: `
   <div class="fixed-pagination">

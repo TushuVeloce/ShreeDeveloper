@@ -3,7 +3,7 @@ import { NgModel } from '@angular/forms';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
 
 @Component({
-  selector: 'validation',
+  selector: 'Validation',
   standalone: false ,
   template: `
   

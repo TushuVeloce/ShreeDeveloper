@@ -17,7 +17,7 @@
             <label>Code</label>
             <input type="text" [(ngModel)]="Entity.p.Code" name="Code" class="form-control" id="Code" required
               placeholder="Enter Code" #CodeCtrl="ngModel" required (blur)="CodeCtrl.control.markAsTouched()" />
-              <validation  [control]="CodeCtrl" ></validation>
+              <Validation  [control]="CodeCtrl" />
 
             <!-- <div *ngIf="(CodeCtrl.invalid && (CodeCtrl.touched || CodeCtrl.dirty))">
               <span class="validation-text" *ngIf="CodeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -30,7 +30,7 @@
             <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
               placeholder="Enter Name" pattern="{{NameWithNos}}" #NameCtrl="ngModel" required
               (blur)="NameCtrl.control.markAsTouched()" />
-          <validation  [control]="NameCtrl" [patternMessage]="NameWithNosMsg"></validation>
+          <Validation  [control]="NameCtrl" [patternMessage]="NameWithNosMsg" />
 
             <!-- <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
               <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
