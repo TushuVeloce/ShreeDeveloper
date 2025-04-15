@@ -75,6 +75,11 @@ export class SalaryGenerationDetailsComponent implements OnInit {
      this.Entity.p.NetSalary = NetSalary
   }
 
+  selectAllValue(event: MouseEvent): void {
+    const input = event.target as HTMLInputElement;
+    input.select();
+  }
+
    SaveMaterialMaster = async () => {
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
       this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();

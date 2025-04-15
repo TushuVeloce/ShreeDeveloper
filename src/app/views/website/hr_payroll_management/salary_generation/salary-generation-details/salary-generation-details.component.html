@@ -31,55 +31,55 @@
         <div class="col-md-4">
             <label>Total Days</label>
             <input type="number" name="TotalDays" class="form-control" id="TotalDays" 
-               [(ngModel)]="Entity.p.TotalDays" placeholder="Enter TotalDays" required />
+               [(ngModel)]="Entity.p.TotalDays" placeholder="Enter TotalDays" required (click)="selectAllValue($event)" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
             <label>Total Working Days</label>
-            <input type="number" name="TotalWorkingDays" class="form-control" id="TotalWorkingDays"  [(ngModel)]="Entity.p.TotalWorkingDays" placeholder="Enter Total Working Days" required />
+            <input type="number" name="TotalWorkingDays" class="form-control" id="TotalWorkingDays"  [(ngModel)]="Entity.p.TotalWorkingDays" placeholder="Enter Total Working Days" required (click)="selectAllValue($event)" />
         </div>
         <div class="col-md-4">
             <label>Total Leaves</label>
-            <input type="number" name="TotalLeaves" class="form-control" id="TotalLeaves" [(ngModel)]="Entity.p.TotalLeaves" placeholder="Enter Total Leaves" required />
+            <input type="number" name="TotalLeaves" class="form-control" id="TotalLeaves" [(ngModel)]="Entity.p.TotalLeaves" placeholder="Enter Total Leaves" required (click)="selectAllValue($event)" />
         </div>
         <div class="col-md-4">
             <label>Total Over Time Hours</label>
-            <input type="number" name="TotalOverTimeHours" class="form-control" id="TotalOverTimeHours" [(ngModel)]="Entity.p.TotalOverTimeHours"  placeholder="Enter Total Over Time Hours" required />
+            <input type="number" name="TotalOverTimeHours" class="form-control" id="TotalOverTimeHours" [(ngModel)]="Entity.p.TotalOverTimeHours"  placeholder="Enter Total Over Time Hours" required (click)="selectAllValue($event)" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
             <label>Total Working Hours</label>
-            <input type="number" name="TotalWorkingHours" class="form-control" id="TotalWorkingHours" [(ngModel)]="Entity.p.TotalWorkingHours" placeholder="Enter Total Working Hours" required />
+            <input type="number" name="TotalWorkingHours" class="form-control" id="TotalWorkingHours" [(ngModel)]="Entity.p.TotalWorkingHours" placeholder="Enter Total Working Hours" required (click)="selectAllValue($event)" />
         </div>
         <div class="col-md-4">
             <label>Total Leaves Hours</label>
-            <input type="number" name="TotalLeavesHours" class="form-control" id="TotalLeavesHours" [(ngModel)]="Entity.p.TotalLeavesHours" placeholder="Enter Total Leaves Hours" required />
+            <input type="number" name="TotalLeavesHours" class="form-control" id="TotalLeavesHours" [(ngModel)]="Entity.p.TotalLeavesHours" placeholder="Enter Total Leaves Hours" required (click)="selectAllValue($event)" />
         </div>
         <div class="col-md-4">
             <label>Overall Working Hours</label>
-            <input type="number" name="OverallWorkingHours" class="form-control" id="OverallWorkingHours" [(ngModel)]="Entity.p.OverallWorkingHours" placeholder="Enter Overall Working Hours" required />
+            <input type="number" name="OverallWorkingHours" class="form-control" id="OverallWorkingHours" [(ngModel)]="Entity.p.OverallWorkingHours" placeholder="Enter Overall Working Hours" required (click)="selectAllValue($event)" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
             <label>Basic Salary</label>
-            <input type="number" name="BasicSalary" class="form-control" id="BasicSalary"  [(ngModel)]="Entity.p.BasicSalary" placeholder="Enter Basic Salary" required (ngModelChange)="calculategrosstotal()" />
+            <input type="number" name="BasicSalary" class="form-control" id="BasicSalary"  [(ngModel)]="Entity.p.BasicSalary" placeholder="Enter Basic Salary" required (click)="selectAllValue($event)" (ngModelChange)="calculategrosstotal()" />
         </div>
         <div class="col-md-4">
             <label>Total Allowance</label>
-            <input type="number" name="TotalAllowance" class="form-control" id="TotalAllowance" [(ngModel)]="Entity.p.TotalAllowance" placeholder="Enter Total Allowance" required (ngModelChange)="calculategrosstotal()"/>
+            <input type="number" name="TotalAllowance" class="form-control" id="TotalAllowance" [(ngModel)]="Entity.p.TotalAllowance" placeholder="Enter Total Allowance" required (click)="selectAllValue($event)" (ngModelChange)="calculategrosstotal()"/>
         </div>
         <div class="col-md-4">
             <label>Total Incentive</label>
-            <input type="number" name="TotalIncentive" class="form-control" id="TotalIncentive" [(ngModel)]="Entity.p.TotalIncentive" placeholder="Enter Total Incentive" required (ngModelChange)="calculategrosstotal()" />
+            <input type="number" name="TotalIncentive" class="form-control" id="TotalIncentive" [(ngModel)]="Entity.p.TotalIncentive" placeholder="Enter Total Incentive" required (click)="selectAllValue($event)" (ngModelChange)="calculategrosstotal()" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
             <label>Other</label>
-            <input type="number" name="Other" class="form-control" id="Other"  [(ngModel)]="Entity.p.Other" placeholder="Enter Other" required (ngModelChange)="calculategrosstotal()"/>
+            <input type="number" name="Other" class="form-control" id="Other"  [(ngModel)]="Entity.p.Other" placeholder="Enter Other" required (click)="selectAllValue($event)" (ngModelChange)="calculategrosstotal()"/>
         </div>
         <div class="col-md-4">
             <label>Gross Total</label>
@@ -87,21 +87,21 @@
         </div>
         <div class="col-md-4">
             <label>TDS</label>
-            <input type="number" name="TDS" class="form-control" id="TDS" [(ngModel)]="Entity.p.TDS" placeholder="Enter TDS" required (ngModelChange)="calculatetotaldeduction()"/>
+            <input type="number" name="TDS" class="form-control" id="TDS" [(ngModel)]="Entity.p.TDS" placeholder="Enter TDS" required (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()"/>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
             <label>PF</label>
-            <input type="number" name="PF" class="form-control" id="PF"  [(ngModel)]="Entity.p.PF" placeholder="Enter PF" required (ngModelChange)="calculatetotaldeduction()"/>
+            <input type="number" name="PF" class="form-control" id="PF"  [(ngModel)]="Entity.p.PF" placeholder="Enter PF" required (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()"/>
         </div>
         <div class="col-md-4">
             <label>Total Leave Deduction</label>
-            <input type="number" name="TotalLeaveDeduction" class="form-control" id="TotalLeaveDeduction" [(ngModel)]="Entity.p.TotalLeaveDeduction" placeholder="Enter Total Leave Deduction" required (ngModelChange)="calculatetotaldeduction()"/>
+            <input type="number" name="TotalLeaveDeduction" class="form-control" id="TotalLeaveDeduction" [(ngModel)]="Entity.p.TotalLeaveDeduction" placeholder="Enter Total Leave Deduction" required (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()"/>
         </div>
         <div class="col-md-4">
             <label>Advance Payment</label>
-            <input type="number" name="AdvancePayment" class="form-control" id="AdvancePayment" [(ngModel)]="Entity.p.AdvancePayment" placeholder="Enter Advance Payment" required (ngModelChange)="calculatetotaldeduction()"/>
+            <input type="number" name="AdvancePayment" class="form-control" id="AdvancePayment" [(ngModel)]="Entity.p.AdvancePayment" placeholder="Enter Advance Payment" required (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()"/>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
