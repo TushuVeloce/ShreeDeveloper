@@ -1,4 +1,4 @@
-<app-header-with-back-handler title="Customer Enquiry"></app-header-with-back-handler>
+<app-header-with-back-handler title="Leave Request"></app-header-with-back-handler>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
@@ -6,7 +6,7 @@
       <ion-title size="large">TaskManagement</ion-title>
     </ion-toolbar>
   </ion-header>
-  <!-- <ion-list>
+  <ion-list>
     <ion-item *ngFor="let task of tasks">
       <ion-label>
         <h2>{{ task.title }}</h2>
@@ -16,9 +16,7 @@
         <ion-icon name="create-outline"></ion-icon>
       </ion-button>
     </ion-item>
-  </ion-list> -->
-  <app-card-list [cardListData]="EnquiryData"></app-card-list>
-
+  </ion-list>
   <ion-fab>
     <ion-fab-button (click)="addTask()">
       <ion-icon name="add"></ion-icon>
@@ -31,4 +29,3 @@
     </ion-fab-button>
   </ion-fab>
 </ion-content>
- 

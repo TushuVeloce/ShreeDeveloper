@@ -13,6 +13,13 @@
     </div>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
+        <!-- Todays Date  -->
+        <div class="col-md-4 mt-2">
+          <div>
+            <label>Date</label>
+            <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Date" required readonly />
+          </div>
+        </div>
         <!-- Contact Mode Field  -->
         <div class="col-md-4">
           <div>
@@ -38,10 +45,10 @@
               [(ngModel)]="Entity.p.CustomerName" required placeholder="Enter Customer Name" readonly />
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
+        <!-- </div>
+      <div class="row" style="margin-top: 1rem; "> -->
         <!-- Contact Nos  -->
-        <div class="col-md-4">
+        <div class="col-md-4 mt-2">
           <div>
             <label>Contact Nos</label>
             <input type="text" name="ContactNos" class="form-control" id="ContactNos" required
@@ -56,7 +63,7 @@
           </div>
         </div> -->
         <!-- Country  -->
-        <div class="col-md-4">
+        <div class="col-md-4 mt-2">
           <div>
             <label for="CountryRef"><b>Country</b></label>
             <input type="text" name="CountryRef" class="form-control" id="CountryRef" [(ngModel)]="Entity.p.CountryName"
@@ -117,6 +124,8 @@
               [(ngModel)]="Entity.p.CustomerRequirement" required placeholder="Enter Customer Requirement" />
           </div>
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem;">
         <!-- Intrested Site  -->
         <div class="col-md-4">
           <div>
@@ -128,8 +137,6 @@
             </nz-select>
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem;">
         <!-- Intrested Plots  -->
         <div class="col-md-4">
           <div>
@@ -224,7 +231,7 @@
         <div class="col-md-4" *ngIf="!showAgentBrokerInput">
           <label>Remark</label>
           <input type="text" name="Remark" class="form-control" id="Remark " required placeholder="Enter Remark"
-            [(ngModel)]="Entity.p.Remark" (focus)="selectAll($event)"/>
+            [(ngModel)]="Entity.p.Remark" (focus)="selectAll($event)" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem;">

@@ -37,18 +37,30 @@ export class OfficeDutyTimeComponent  implements OnInit {
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
+  
   getFormattedTime(time24: string): string {
     if (!time24) return '';
-
+  
+    // Check if the system uses 12-hour format
+    const is12HourFormat = new Intl.DateTimeFormat(undefined, {
+      hour: 'numeric'
+    }).formatToParts(new Date()).some(part => part.type === 'dayPeriod');
+  
+    if (!is12HourFormat) {
+      // If system uses 24-hour format, return the original time
+      return time24;
+    }
+  
+    // Convert to 12-hour format
     const [hourStr, minuteStr] = time24.split(':');
     let hour = parseInt(hourStr, 10);
     const minute = parseInt(minuteStr, 10);
-
     const ampm = hour >= 12 ? 'PM' : 'AM';
     hour = hour % 12 || 12;
-
+  
     return `${hour}:${minute.toString().padStart(2, '0')} ${ampm}`;
   }
+  
 
    getOfficeDutyandTimeListByCompanyRef = async () => {
       this.MasterList = [];

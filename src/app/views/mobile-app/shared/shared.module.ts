@@ -9,14 +9,15 @@ import { SearchableSelectComponent } from './searchable-select/searchable-select
 import { SelectModalComponent } from './select-modal/select-modal.component';
 import { FilterBottomsheetComponent } from './filter-bottomsheet/filter-bottomsheet.component';
 import { DynamicFilterBottomsheetComponent } from './dynamic-filter-bottomsheet/dynamic-filter-bottomsheet.component';
+import { CardListComponent } from './card-list/card-list.component';
 
 @NgModule({
-  declarations: [HeaderComponent, HeaderWithBackHandlerComponent, SearchableSelectComponent, SelectModalComponent,FilterBottomsheetComponent,DynamicFilterBottomsheetComponent],
+  declarations: [HeaderComponent, HeaderWithBackHandlerComponent, SearchableSelectComponent, SelectModalComponent, FilterBottomsheetComponent, DynamicFilterBottomsheetComponent, CardListComponent],
   imports: [
     CommonModule,
     IonicModule,
     FormsModule,
   ],
-  exports: [HeaderComponent, HeaderWithBackHandlerComponent,SearchableSelectComponent,SelectModalComponent,FilterBottomsheetComponent,DynamicFilterBottomsheetComponent]
+  exports: [HeaderComponent, HeaderWithBackHandlerComponent,SearchableSelectComponent,SelectModalComponent,FilterBottomsheetComponent,DynamicFilterBottomsheetComponent,CardListComponent]
 })
 export class SharedModule { }

@@ -31,24 +31,32 @@
             <td Class="tbldata">{{material.p.Name}}</td>
             <td Class="tbldata">{{material.p.UnitName}}</td>
             <td class="tbldata">
-              <span style="margin-left: 9px;" (click)="onEditClicked(material);">
+              <!-- <span style="margin-left: 9px;" (click)="onEditClicked(material);">
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-              </span>
-              <span style="margin-left: 9px;" (click)="onDeleteClicked(material);">
-                <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+              </span> -->
+              <!-- <span style="margin-left: 9px;" (click)="onDeleteClicked(material);">
+                <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span> -->
+
+              <Edit-Icon (editClick)="onEditClicked(material)" />
+              <Delete-Icon (deleteClicked)="onDeleteClicked(material)" />
             </td>
           </tr>
         </tbody>
       </nz-table>
     </div>
-    <div class="fixed-pagination">
+    <!-- <div class="fixed-pagination">
       <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
         (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
       </nz-pagination>
-    </div>
+    </div> -->
+    <Pagination [pageSize]="pageSize" [total]="total" [(currentPage)]="currentPage" (pageChange)="onPageChange($event)"/>
   </div>
-  <div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
+  <!-- <div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
     <div style="height: 200px" class="d-flex align-items-center justify-content-center">
       <span class="title_light"> Data Not Found</span>
     </div>
+  </div> -->
+  <div *ngIf="DisplayMasterList.length === 0">
+    <Data-Not-Found />
   </div>
+  

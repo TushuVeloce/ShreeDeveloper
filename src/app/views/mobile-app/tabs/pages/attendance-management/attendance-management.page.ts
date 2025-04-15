@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
-import { AttendanceLog } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelog';
+import { AttendanceLog, AttendanceLogProps } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelog';
+import { AttendanceLogCheckInCustomRequest } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelogcheckincustomrequest';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
+import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
+import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 @Component({
@@ -28,6 +32,9 @@ export class AttendanceManagementPage implements OnInit {
   totalHalfDays: number = 2;
   totalOvertime: string = '16';
   siteList: Site[] = [];
+  selectedSite: Site[] = [];
+
+  isCheckInDisabled:boolean = false;
 
   isSubmitting = false;
 
@@ -40,15 +47,15 @@ export class AttendanceManagementPage implements OnInit {
   DateWithTime: string | null = null;
   Entity: AttendanceLog = AttendanceLog.CreateNewInstance();
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  employeeRef = 0;
+
+
   AttendanceLocationTypeList = DomainEnums.AttendenceLocationTypeList(true, '--Select--');
   gridItems = [
     { label: 'Salary Slip', icon: 'layers-outline', gridFunction: 100 },
     { label: 'Leave', icon: 'grid-outline', gridFunction: 200 },
     { label: 'View All', icon: 'bar-chart-outline', gridFunction: 300 },
   ];
-  
-  
-
   recentAttendance = [
     { date: '30', day: 'TUE', clockIn: '09:00am', clockOut: '06:00pm', hours: '09hr 00min', isHalfDay: false },
     { date: '29', day: 'MON', clockIn: '09:10am', clockOut: '01:00pm', hours: '03hr 50min', isHalfDay: true },
@@ -62,17 +69,20 @@ export class AttendanceManagementPage implements OnInit {
     { date: '21', day: 'SUN', isWeekend: true, isHalfDay: false }
   ];
   constructor(private router: Router, private companystatemanagement: CompanyStateManagement, private uiUtils: UIUtils,
-    private appStateManage: AppStateManageService, private utils: Utils, private dtu: DTU
+    private appStateManage: AppStateManageService, private utils: Utils, private dtu: DTU,
+    private payloadPacketFacade: PayloadPacketFacade,
+        private serverCommunicator: ServerCommunicatorService
   ) { }
 
   async ngOnInit() {
+    this.employeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
     let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
     this.Date = strCDT.substring(0, 10);
     this.isCurrentTime = strCDT;
     this.isPunchInTime = strCDT;
     this.isPunchOutTime = strCDT;
-    this.isPunchInEnabled = true;
-    this.isPunchOutEnabled = false;
+    await this.getCheckInData();
+    if(this.Entity.p.FirstCheckInTime != "") this.isCheckInDisabled = true
   }
   gridItemsFunction(id: number) {
     switch (id) {
@@ -89,30 +99,36 @@ export class AttendanceManagementPage implements OnInit {
         break;
     }
   }
-  punchCards = [
-    {
-      type: 'check-in',
-      icon: 'arrow-down-circle-outline',
-      label: 'Check In',
-      currentTime: 'It is now ' + this.isPunchInTime,
-      schedule: 'Check In Schedule',
-      time: '08:00',
-      punchType: 'in',
-    },
-    {
-      type: 'check-out',
-      icon: 'arrow-up-circle-outline',
-      label: 'Check Out',
-      currentTime: 'Not Yet',
-      schedule: 'Check Out Schedule',
-      time: '17:00',
-      punchType: 'out',
-    }
-  ];
 
+  getCheckInData = async ()=>{
+    let tranDate = this.dtu.ConvertStringDateToFullFormat(this.Date!)
+    let req = new AttendanceLogCheckInCustomRequest();
+    req.TransDateTime = tranDate;
+    req.CompanyRef = this.companyRef();
+    req.EmployeeRef = this.employeeRef;
+
+    let td = req.FormulateTransportData();
+    let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+
+    if(!tr.Successful){
+      await this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
+    }
+    let tdResult = JSON.parse(tr.Tag) as TransportData;
+    let res = AttendanceLogCheckInCustomRequest.FromTransportData(tdResult)
+    if(res.Data.length > 0){
+      let checkInData:AttendanceLogProps = res.Data[0] as AttendanceLogProps
+      Object.assign(this.Entity.p,checkInData)
+    }
+
+
+  }
   openPunchModal = async (type: 'in' | 'out') => {
     this.currentPunchType = type;
-    this.punchModalOpen = true;
+    if (!this.isCheckInDisabled) {
+      this.punchModalOpen = true; 
+    }
 
     // this.currentCompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     console.log('CurrentCompanyRef() :', this.companyRef());
@@ -124,9 +140,10 @@ export class AttendanceManagementPage implements OnInit {
   }
   onSelectionChange(selected: Site[]) {
     console.log('Selected option:', selected);
+    this.selectedSite= selected;
   }
 
-  takePhoto = async (type: 'before' | 'after')=> {
+  takePhoto = async (type: 'before' | 'after') => {
     try {
       // const image = await Camera.getPhoto({
       //   quality: 90,
@@ -156,106 +173,109 @@ export class AttendanceManagementPage implements OnInit {
   // }
 
   submitPunchIn = async () => {
-    this.isSubmitting = true;
-
-    console.log(`Punch ${this.currentPunchType} submitted at ${this.isPunchInTime} from ${this.selectedLocation} from site ${new Date().toLocaleTimeString()} from ${this.selectedLocation}`);
-
-    if (this.currentPunchType === 'in') {
-      this.Entity.p.IsCheckIn = true;
-      this.isPunchInEnabled = false;   // Disable Punch In
-      this.isPunchOutEnabled = true;   // Enable Punch Out
-    } else {
-      this.Entity.p.IsCheckIn = false;
-      this.isPunchInEnabled = true;    // Enable Punch In
-      this.isPunchOutEnabled = false;  // Disable Punch Out
-    }
-
-    this.punchModalOpen = false;
-
-    this.isSaveDisabled = true;
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-    // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-    // this.Entity.p.UpdatedDate= await CurrentDateTimeRequest.GetCurrentDateTime();
-    this.Entity.p.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-
-
-    // convert date 2025-02-23 to 2025-02-23-00-00-00-000
-    this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date!)
-    // this.Entity.p.SaleDeedDate = this.dtu.ConvertStringDateToFullFormat(this.localsaledeeddate)
-    // this.Entity.p.TalathiDate = this.dtu.ConvertStringDateToFullFormat(this.localtalathidate)
-
-    let entityToSave = this.Entity.GetEditableVersion();
-    let entitiesToSave = [entityToSave]
-    console.log('entitiesToSave :', entitiesToSave);
-
-    // await this.Entity.EnsurePrimaryKeysWithValidValues()
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-    if (!tr.Successful) {
-      this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error', tr.Message);
-      return
-    }
-    else {
-      this.isSaveDisabled = false;
-      // this.onEntitySaved.emit(entityToSave);
-      if (this.IsCheckIn) {
-        await this.uiUtils.showSuccessToster('Punch in successfully!');
-        this.Entity = AttendanceLog.CreateNewInstance();
+    try {
+      this.isSubmitting = true;
+      if (this.currentPunchType === 'in') {
+        this.Entity.p.IsCheckIn = true;
+        this.isPunchInEnabled = false;   // Disable Punch In
+        this.isPunchOutEnabled = true;   // Enable Punch Out
       } else {
-        // await this.router.navigate(['/homepage/Website/Registrar_Office'])
-        await this.uiUtils.showSuccessToster('Punch out successfully!');
+        this.Entity.p.IsCheckIn = false;
+        this.isPunchInEnabled = true;    // E nable Punch In
+        this.isPunchOutEnabled = false;  // Disable Punch Out
       }
-    }
+      this.punchModalOpen = false;
+      this.isSaveDisabled = true;
+      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+      // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+      // this.Entity.p.UpdatedDate= await CurrentDateTimeRequest.GetCurrentDateTime();
+      this.Entity.p.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      if (this.selectedSite[0].p.Ref) {
+        this.Entity.p.SiteRef = this.selectedSite[0].p.Ref;
+      }
+      // convert date 2025-02-23 to 2025-02-23-00-00-00-000
+      this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date!)
+      // this.Entity.p.SaleDeedDate = this.dtu.ConvertStringDateToFullFormat(this.localsaledeeddate)
+      // this.Entity.p.TalathiDate = this.dtu.ConvertStringDateToFullFormat(this.localtalathidate)
+      let entityToSave = this.Entity.GetEditableVersion();
+      let entitiesToSave = [entityToSave]
+      console.log('entitiesToSave :', entitiesToSave);
+      // await this.Entity.EnsurePrimaryKeysWithValidValues()
+      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+      if (!tr.Successful) {
+        this.isSaveDisabled = false;
+        this.uiUtils.showErrorMessage('Error', tr.Message);
+        return
+      }
+      else {
+        this.isSaveDisabled = false;
+        // this.onEntitySaved.emit(entityToSave);
+        if (this.IsCheckIn) {
+          await this.uiUtils.showSuccessToster('Punch in successfully!');
+          this.Entity = AttendanceLog.CreateNewInstance();
+        } else {
+          // await this.router.navigate(['/homepage/Website/Registrar_Office'])
+          await this.uiUtils.showSuccessToster('Punch out successfully!');
+        }
+      }
+
+    } catch (error) {
+      console.log(error);
+    } finally {
       this.isSubmitting = false;
+    }
 
   }
   submitPunchOut = async () => {
+    try {
+      if (this.currentPunchType === 'in') {
+        this.Entity.p.IsCheckIn = true;
+        this.isPunchInEnabled = false;   // Disable Punch In
+        this.isPunchOutEnabled = true;   // Enable Punch Out
+      } else {
+        this.Entity.p.IsCheckIn = false;
+        this.isPunchInEnabled = true;    // Enable Punch In
+        this.isPunchOutEnabled = false;  // Disable Punch Out
+      }
 
-    console.log(`Punch ${this.currentPunchType} submitted at ${this.isPunchInTime} from ${this.selectedLocation} from site ${new Date().toLocaleTimeString()} from ${this.selectedLocation}`);
+      this.punchModalOpen = false;
 
-    if (this.currentPunchType === 'in') {
-      this.Entity.p.IsCheckIn = true;
-      this.isPunchInEnabled = false;   // Disable Punch In
-      this.isPunchOutEnabled = true;   // Enable Punch Out
-    } else {
-      this.Entity.p.IsCheckIn = false;
-      this.isPunchInEnabled = true;    // Enable Punch In
-      this.isPunchOutEnabled = false;  // Disable Punch Out
+      this.isSaveDisabled = true;
+      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+      // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+      // this.Entity.p.UpdatedDate= await CurrentDateTimeRequest.GetCurrentDateTime();
+      this.Entity.p.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+
+
+      // convert date 2025-02-23 to 2025-02-23-00-00-00-000
+      this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date!)
+      // this.Entity.p.SaleDeedDate = this.dtu.ConvertStringDateToFullFormat(this.localsaledeeddate)
+      // this.Entity.p.TalathiDate = this.dtu.ConvertStringDateToFullFormat(this.localtalathidate)
+
+      let entityToSave = this.Entity.GetEditableVersion();
+      let entitiesToSave = [entityToSave]
+      console.log('entitiesToSave :', entitiesToSave);
+
+      // await this.Entity.EnsurePrimaryKeysWithValidValues()
+      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+      if (!tr.Successful) {
+        this.isSaveDisabled = false;
+        this.uiUtils.showErrorMessage('Error', tr.Message);
+        return
+      }
+      else {
+        this.isSaveDisabled = false;
+        // this.onEntitySaved.emit(entityToSave);
+        this.Entity = AttendanceLog.CreateNewInstance();
+
+        await this.uiUtils.showSuccessToster('Punch out successfully!');
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.isSubmitting = false;
     }
-
-    this.punchModalOpen = false;
-
-    this.isSaveDisabled = true;
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-    // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-    // this.Entity.p.UpdatedDate= await CurrentDateTimeRequest.GetCurrentDateTime();
-    this.Entity.p.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-
-
-    // convert date 2025-02-23 to 2025-02-23-00-00-00-000
-    this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date!)
-    // this.Entity.p.SaleDeedDate = this.dtu.ConvertStringDateToFullFormat(this.localsaledeeddate)
-    // this.Entity.p.TalathiDate = this.dtu.ConvertStringDateToFullFormat(this.localtalathidate)
-
-    let entityToSave = this.Entity.GetEditableVersion();
-    let entitiesToSave = [entityToSave]
-    console.log('entitiesToSave :', entitiesToSave);
-
-    // await this.Entity.EnsurePrimaryKeysWithValidValues()
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-    if (!tr.Successful) {
-      this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error', tr.Message);
-      return
-    }
-    else {
-      this.isSaveDisabled = false;
-      // this.onEntitySaved.emit(entityToSave);
-      this.Entity = AttendanceLog.CreateNewInstance();
-
-      await this.uiUtils.showSuccessToster('Punch out successfully!');
-    }
-    this.isSubmitting = false;
 
   }
   // submitPunch() {
@@ -267,11 +287,10 @@ export class AttendanceManagementPage implements OnInit {
   //   }, 2000); // simulate API
   // }
   getSalarySlip() {
-    console.log('Getting salary slip...');
-    // this.viewMore();
+    this.router.navigate(['/app_homepage/tabs/attendance-management/salary-slip']);
   }
   requestLeave() {
-    console.log('Requesting leave...');
+    this.router.navigate(['/app_homepage/tabs/attendance-management/leave-request']);
   }
   viewAllAttendance() {
     console.log('Viewing full attendance...');

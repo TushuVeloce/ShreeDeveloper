@@ -14,7 +14,7 @@ import { SalaryGenerationFetchRequest } from "./salarygenerationfetchrequest";
 
 
 export class SalaryGenerationProps {
-  public readonly Db_Table_Name = "SalaryGenerationMaster";
+  public readonly Db_Table_Name = "SalarySlipGeneration";
   public Ref: number = 0;
   public EmployeeNRef: string = '';
   public EmployeeName: string = '';
@@ -55,7 +55,7 @@ export class SalaryGenerationProps {
 }
 
 export class SalaryGeneration implements IPersistable<SalaryGeneration> {
-  public static readonly Db_Table_Name: string = 'SalaryGenerationMaster';
+  public static readonly Db_Table_Name: string = 'SalarySlipGeneration';
 
   private constructor(public readonly p: SalaryGenerationProps, public readonly AllowEdit: boolean) {
 
