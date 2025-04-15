@@ -65,53 +65,53 @@
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
             <label>Basic Salary</label>
-            <input type="number" name="BasicSalary" class="form-control" id="BasicSalary"  [(ngModel)]="Entity.p.BasicSalary" placeholder="Enter Basic Salary" required />
+            <input type="number" name="BasicSalary" class="form-control" id="BasicSalary"  [(ngModel)]="Entity.p.BasicSalary" placeholder="Enter Basic Salary" required (ngModelChange)="calculategrosstotal()" />
         </div>
         <div class="col-md-4">
             <label>Total Allowance</label>
-            <input type="number" name="TotalAllowance" class="form-control" id="TotalAllowance" [(ngModel)]="Entity.p.TotalAllowance" placeholder="Enter Total Allowance" required />
+            <input type="number" name="TotalAllowance" class="form-control" id="TotalAllowance" [(ngModel)]="Entity.p.TotalAllowance" placeholder="Enter Total Allowance" required (ngModelChange)="calculategrosstotal()"/>
         </div>
         <div class="col-md-4">
             <label>Total Incentive</label>
-            <input type="number" name="TotalIncentive" class="form-control" id="TotalIncentive" [(ngModel)]="Entity.p.TotalIncentive" placeholder="Enter Total Incentive" required />
+            <input type="number" name="TotalIncentive" class="form-control" id="TotalIncentive" [(ngModel)]="Entity.p.TotalIncentive" placeholder="Enter Total Incentive" required (ngModelChange)="calculategrosstotal()" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
             <label>Other</label>
-            <input type="number" name="Other" class="form-control" id="Other"  [(ngModel)]="Entity.p.Other" placeholder="Enter Other" required />
+            <input type="number" name="Other" class="form-control" id="Other"  [(ngModel)]="Entity.p.Other" placeholder="Enter Other" required (ngModelChange)="calculategrosstotal()"/>
         </div>
         <div class="col-md-4">
             <label>Gross Total</label>
-            <input type="number" name="GrossTotal" class="form-control" id="GrossTotal" [(ngModel)]="Entity.p.GrossTotal" placeholder="Enter Gross Total" required />
+            <input type="number" name="GrossTotal" class="form-control" id="GrossTotal" [(ngModel)]="Entity.p.GrossTotal" placeholder="Enter Gross Total" readonly />
         </div>
         <div class="col-md-4">
             <label>TDS</label>
-            <input type="number" name="TDS" class="form-control" id="TDS" [(ngModel)]="Entity.p.TDS" placeholder="Enter TDS" required />
+            <input type="number" name="TDS" class="form-control" id="TDS" [(ngModel)]="Entity.p.TDS" placeholder="Enter TDS" required (ngModelChange)="calculatetotaldeduction()"/>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
             <label>PF</label>
-            <input type="number" name="PF" class="form-control" id="PF"  [(ngModel)]="Entity.p.PF" placeholder="Enter PF" required />
+            <input type="number" name="PF" class="form-control" id="PF"  [(ngModel)]="Entity.p.PF" placeholder="Enter PF" required (ngModelChange)="calculatetotaldeduction()"/>
         </div>
         <div class="col-md-4">
             <label>Total Leave Deduction</label>
-            <input type="number" name="TotalLeaveDeduction" class="form-control" id="TotalLeaveDeduction" [(ngModel)]="Entity.p.TotalLeaveDeduction" placeholder="Enter Total Leave Deduction" required />
+            <input type="number" name="TotalLeaveDeduction" class="form-control" id="TotalLeaveDeduction" [(ngModel)]="Entity.p.TotalLeaveDeduction" placeholder="Enter Total Leave Deduction" required (ngModelChange)="calculatetotaldeduction()"/>
         </div>
         <div class="col-md-4">
             <label>Advance Payment</label>
-            <input type="number" name="AdvancePayment" class="form-control" id="AdvancePayment" [(ngModel)]="Entity.p.AdvancePayment" placeholder="Enter Advance Payment" required />
+            <input type="number" name="AdvancePayment" class="form-control" id="AdvancePayment" [(ngModel)]="Entity.p.AdvancePayment" placeholder="Enter Advance Payment" required (ngModelChange)="calculatetotaldeduction()"/>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
             <label>Total Deduction</label>
-            <input type="number" name="TotalDeduction" class="form-control" id="TotalDeduction"  [(ngModel)]="Entity.p.TotalDeduction" placeholder="Enter Total Deduction" required />
+            <input type="number" name="TotalDeduction" class="form-control" id="TotalDeduction"  [(ngModel)]="Entity.p.TotalDeduction" placeholder="Enter Total Deduction" readonly />
         </div>
         <div class="col-md-4">
             <label>Net Salary</label>
-            <input type="number" name="NetSalary" class="form-control" id="NetSalary" [(ngModel)]="Entity.p.NetSalary" placeholder="Enter Net Salary" required />
+            <input type="number" name="NetSalary" class="form-control" id="NetSalary" [(ngModel)]="Entity.p.NetSalary" placeholder="Enter Net Salary" readonly />
         </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
