@@ -37,19 +37,19 @@
         <tbody>
           <tr *ngFor="let leaverequest of paginatedList(); index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td Class="tbldata">{{leaverequest.p.EmployeeName}}</td>
-            <td Class="tbldata">{{leaverequest.p.LeaveRequestType}}</td>
-            <td Class="tbldata">{{leaverequest.p.FromDate}}</td>
-            <td Class="tbldata">{{leaverequest.p.ToDate}}</td>
+            <td Class="tbldata">{{leaverequest.p.LeaveRequestName}}</td>
+            <td class="tbldata">{{ formatDate(leaverequest.p.FromDate) }}</td>
+            <td class="tbldata">{{ formatDate(leaverequest.p.ToDate) }}</td>
             <td Class="tbldata">{{leaverequest.p.Days}}</td>
             <td Class="tbldata">{{leaverequest.p.LeaveHours}}</td>
-            <td Class="tbldata">{{leaverequest.p.IsApproval}}</td>
-            <td class="tbldata">
-              <!-- <span style="margin-left: 9px;" (click)="onEditClicked(leaverequest);">
-                <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-              </span> -->
-              <span style="margin-left: 9px;" (click)="onDeleteClicked(leaverequest);">
-                <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            <td Class="tbldata">
+              <button class="status" [disabled]="isSaveDisabled" *ngIf="leaverequest.p.IsApproved == 0"
+                (click)="handleApproval(leaverequest)" ngClass="pending">
+                Pending
+              </button>
+              <button class="status" *ngIf="leaverequest.p.IsApproved == 1" ngClass="approved">
+                Approved
+              </button>
             </td>
           </tr>
         </tbody>
