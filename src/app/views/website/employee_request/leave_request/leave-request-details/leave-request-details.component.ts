@@ -30,6 +30,7 @@ export class LeaveRequestDetailsComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   fromdate: string = '';
   todate: string = '';
+  EmployeeRef: number = 0;
   TotalWorkingHrs: number = 0;
 
   NameWithNos: string = ValidationPatterns.NameWithNos
@@ -68,7 +69,7 @@ export class LeaveRequestDetailsComponent implements OnInit {
       );
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
-      this.Entity.p.EmployeeRef = this.appStateManage.getEmployeeRef();
+      this.EmployeeRef = this.appStateManage.getEmployeeRef();
       this.Entity = LeaveRequest.CreateNewInstance();
       LeaveRequest.SetCurrentInstance(this.Entity);
       this.Entity.p.LeaveRequestType = this.LeaveRequestTypeList[1].Ref
@@ -87,7 +88,11 @@ export class LeaveRequestDetailsComponent implements OnInit {
   }
 
   getSingleEmployeeDetails = async () => {
-    let data = await Employee.FetchInstance(this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let data = await Employee.FetchInstance(this.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.Entity.p.EmployeeRef = data.p.Ref;
     this.Entity.p.EmployeeName = data.p.Name;
     this.TotalWorkingHrs = data.p.TotalWorkingHrs;
@@ -130,7 +135,7 @@ export class LeaveRequestDetailsComponent implements OnInit {
     }
 
     if (this.Entity.p.UpdatedBy == 0) {
-      this.Entity.p.UpdatedBy = this.Entity.p.EmployeeRef;
+      this.Entity.p.UpdatedBy = this.EmployeeRef;
     }
 
     let entityToSave = this.Entity.GetEditableVersion();
