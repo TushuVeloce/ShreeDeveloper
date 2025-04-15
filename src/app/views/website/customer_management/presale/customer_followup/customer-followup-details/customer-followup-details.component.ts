@@ -62,6 +62,10 @@ export class CustomerFollowupDetailsComponent implements OnInit {
   localOfficeVisitDate: string = '';
   localSiteVisitDate: string = '';
   todayDate: string = '';
+
+  Date: string | null = null;
+  DateWithTime: string | null = null;
+
   ContactModesList = DomainEnums.ContactModeList(
     true,
     '--Select Contact Mode --'
@@ -155,6 +159,24 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       this.utils.DeepCopy(this.Entity)
     ) as CustomerFollowUp;
     // this.focusInput();
+
+    if (this.Entity.p.TransDateTime.trim().length <= 0) {
+      let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+
+      // this.BillDate = this.datePipe.transform(this.dtu.FromString(strCDT), 'yyyy-MM-dd');
+      this.Date = strCDT.substring(0, 10);
+      this.DateWithTime = strCDT;
+    } else {
+      this.Date = this.datePipe.transform(
+        this.dtu.FromString(this.Entity.p.TransDateTime),
+        'yyyy-MM-dd'
+      );
+      this.Date = this.Entity.p.TransDateTime.substring(
+        0,
+        10
+      );
+      this.DateWithTime = this.Entity.p.TransDateTime;
+    }
   }
   // For country, state, city dropdowns
   getStateListByCountryRef = async (CountryRef: number) => {

@@ -203,9 +203,9 @@
         </div>
         <div class="col-md-4">
           <div>
-            <label for="OfficeDutyandTimeRef">Office Duty Time</label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="OfficeDutyandTimeRef" name="OfficeDutyandTimeRef"
-              [nzSize]="'large'" [(ngModel)]="Entity.p.OfficeDutyandTimeRef">
+            <label for="OfficeDutyTimeRef">Office Duty Time</label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="OfficeDutyTimeRef" name="OfficeDutyTimeRef"
+              [nzSize]="'large'" [(ngModel)]="Entity.p.OfficeDutyTimeRef">
               <nz-option *ngFor="let OfficeDutyTime of OfficeDutyTimeList" [nzValue]="OfficeDutyTime.p.Ref" [nzLabel]="OfficeDutyTime.p.ShortName"></nz-option>
             </nz-select>
           </div>
