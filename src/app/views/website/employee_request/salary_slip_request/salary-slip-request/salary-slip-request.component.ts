@@ -5,7 +5,6 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
-import { EmployeeMasterComponent } from '../../../Masters/employee/employee-master/employee-master.component';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 
 @Component({
@@ -35,24 +34,15 @@ export class SalarySlipRequestComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
-      await this.getEmployeeListByCompanyRef();
+      await this.getSalarySlipRequestListByEmployeeRef();
     });
   }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
+    this.Entity.p.EmployeeRef = this.appStateManage.getEmployeeRef();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
-  }
-
-  getEmployeeListByCompanyRef = async () => {
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.EmployeeList = lst;
-    this.Entity.p.EmployeeRef = this.EmployeeList[0].p.Ref
   }
 
   getSalarySlipRequestListByEmployeeRef = async () => {
@@ -69,22 +59,15 @@ export class SalarySlipRequestComponent implements OnInit {
     this.loadPaginationData();
   }
 
-  onEditClicked = async (item: SalarySlipRequest) => {
-    this.SelectedSalarySlipRequest = item.GetEditableVersion();
-    SalarySlipRequest.SetCurrentInstance(this.SelectedSalarySlipRequest);
-    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Salary_Slip_Request_Details']);
-  };
-
   onDeleteClicked = async (salarysliprequest: SalarySlipRequest) => {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-    Are you sure that you want to DELETE this SalarySlipRequest?`,
+    Are you sure that you want to DELETE this Salary Slip Request?`,
       async () => {
         await salarysliprequest.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `SalarySlipRequest ${salarysliprequest.p.EmployeeName} has been deleted!`
+            `Salary Slip Request ${salarysliprequest.p.EmployeeName} has been deleted!`
           );
           await this.getSalarySlipRequestListByEmployeeRef();
           this.SearchString = '';

@@ -91,10 +91,10 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
     }
     let lst = await FinancialYear.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.FinancialYearList = lst;
-    this.convertdate();
+    this.convertDateFormat();
   }
 
-  convertdate = () => {
+  convertDateFormat = () => {
     this.FinancialYearList.forEach(item => {
       let convertedDate = this.dtu.GetIndianDate(item.p.FromDate,);
       this.FromDates.push(convertedDate);

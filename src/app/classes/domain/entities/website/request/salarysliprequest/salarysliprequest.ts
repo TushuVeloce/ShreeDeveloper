@@ -15,7 +15,6 @@ import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/c
 
 
 export class SalarySlipRequestProps {
-  public readonly Db_Table_Name = "SalarySlipRequestMaster";
   public Ref: number = 0;
   public CreatedBy: number = 0;
   public UpdatedBy: number = 0;
@@ -27,8 +26,8 @@ export class SalarySlipRequestProps {
   public ToMonth: string = '';
   public FromYear: string = '';
   public ToYear: string = '';
-  public IsApproved: boolean = false;
-  public IsDeleted: boolean = false;
+  public IsApproved: number = 0;
+  public IsDeleted: number = 0;
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -43,7 +42,7 @@ export class SalarySlipRequestProps {
 }
 
 export class SalarySlipRequest implements IPersistable<SalarySlipRequest> {
-  public static readonly Db_Table_Name: string = 'SalarySlipRequest';
+  public static readonly Db_Table_Name: string = 'SalaryRequest';
 
   private constructor(public readonly p: SalarySlipRequestProps, public readonly AllowEdit: boolean) {
 
