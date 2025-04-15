@@ -36,8 +36,6 @@ export class OfficeDutyTimeDetailsComponent  implements OnInit {
           this.Entity = OfficeDutyandTime.GetCurrentInstance();
           this.appStateManage.StorageKey.removeItem('Editable');
           this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-          this.Entity.p.FromTime = this.convertTo12Hour(this.Entity.p.FromTime);
-          this.Entity.p.ToTime = this.convertTo12Hour(this.Entity.p.ToTime);
           console.log('this.Entity  :', this.Entity );
         } else {
           this.Entity = OfficeDutyandTime.CreateNewInstance();
@@ -49,30 +47,6 @@ export class OfficeDutyTimeDetailsComponent  implements OnInit {
         ) as OfficeDutyandTime;
         this.focusInput();
       }
-
-      convertTo12Hour(time24: string): string {
-        if (!time24) return '';
-        const [hourStr, minute] = time24.split(':');
-        let hour = parseInt(hourStr, 10);
-        const ampm = hour >= 12 ? 'PM' : 'AM';
-        hour = hour % 12 || 12; // convert 0 to 12
-        return `${hour}:${minute} ${ampm}`;
-      }
-
-      convertTo24Hour(time12: string): string {
-        const [time, modifier] = time12.split(' ');
-        let [hours, minutes] = time.split(':').map(Number);
-      
-        if (modifier === 'PM' && hours < 12) {
-          hours += 12;
-        }
-        if (modifier === 'AM' && hours === 12) {
-          hours = 0;
-        }
-      
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-      }
-      
 
       focusInput = () => {
         let txtName = document.getElementById('EmployeeRef')!;
@@ -89,9 +63,6 @@ export class OfficeDutyTimeDetailsComponent  implements OnInit {
             if (this.Entity.p.CreatedBy == 0) {
               this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
             }
-            this.Entity.p.FromTime = this.convertTo24Hour(this.Entity.p.FromTime);
-            this.Entity.p.ToTime = this.convertTo24Hour(this.Entity.p.ToTime);
-
             let entityToSave = this.Entity.GetEditableVersion();
             let entitiesToSave = [entityToSave];
             console.log('entityToSave :', entityToSave);

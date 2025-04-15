@@ -107,8 +107,8 @@
             id="PinCode"
             [(ngModel)]="Entity.p.PinCode"
             pattern="{{ PinCodePattern }}"
-            #PinCodeCtrl="ngModel"
-            required
+            #PinCodeCtrl="ngModel" required
+            (blur)="PinCodeCtrl.control.markAsTouched()"
             placeholder="Enter PinCode"
           />
           <div
