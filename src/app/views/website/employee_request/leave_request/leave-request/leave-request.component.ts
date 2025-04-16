@@ -47,16 +47,6 @@ export class LeaveRequestComponent implements OnInit {
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
-  getEmployeeListByCompanyRef = async () => {
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.EmployeeList = lst;
-    this.Entity.p.EmployeeRef = this.EmployeeList[0].p.Ref
-  }
-
   getLeaveRequestListByEmployeeRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];

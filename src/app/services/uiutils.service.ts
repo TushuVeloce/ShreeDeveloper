@@ -106,19 +106,19 @@ export class UIUtils {
     const currentTheme = this.themeService.getCurrentTheme();
 
     // Determine background and text color based on the current theme
-   // const backgroundColor = currentTheme === 'dark' ? 'white' : 'black'; // White background if dark theme, black otherwise
-   // const textColor = currentTheme === 'dark' ? 'black' : 'white'; // Black text if dark theme, white otherwise
+    // const backgroundColor = currentTheme === 'dark' ? 'white' : 'black'; // White background if dark theme, black otherwise
+    // const textColor = currentTheme === 'dark' ? 'black' : 'white'; // Black text if dark theme, white otherwise
 
     // Use the toast mixin to show the toast
     this.toastMixin.fire({
       title: title,
       icon: 'success',
-    //  background: backgroundColor, // Set background color based on theme
-    //  color: textColor // Set text color based on theme
+      //  background: backgroundColor, // Set background color based on theme
+      //  color: textColor // Set text color based on theme
     });
   }
 
-  private isAlertOpen = false; 
+  private isAlertOpen = false;
   public async showConfirmationMessage(
     title: string,
     msg: string,
@@ -156,6 +156,55 @@ export class UIUtils {
       this.isAlertOpen = false; // Reset flag when alert is closed
     }
   }
+
+  // status confirmation message
+  public async showStatusConfirmationMessage(
+    title: string,
+    msg: string,
+    statusOptions: string[], // Example: ['Pending', 'Approved', 'Cancel']
+    handler: (selectedStatus: string) => Promise<void>
+  ) {
+    if (this.isAlertOpen) return;
+    this.isAlertOpen = true;
+
+    try {
+      const inputOptions: any = {};
+      statusOptions.forEach((status) => {
+        inputOptions[status] = status;
+      });
+
+      const result = await Swal.fire({
+        title: title,
+        html: msg,
+        icon: 'question',
+        showCancelButton: true,
+        showDenyButton: statusOptions.length >= 2,
+        confirmButtonText: statusOptions[0],
+        denyButtonText: statusOptions[1] || '',
+        cancelButtonText: statusOptions[2] || 'Cancel',
+        allowOutsideClick: false,
+        backdrop: false,
+        position: 'center',
+        customClass: {
+          popup: 'custom-popup',
+        },
+      });
+
+      if (result.isConfirmed) {
+        await handler(statusOptions[0]);
+      } else if (result.isDenied && statusOptions[1]) {
+        await handler(statusOptions[1]);
+      } else if (result.dismiss === Swal.DismissReason.cancel && statusOptions[2]) {
+        await handler(statusOptions[2]);
+      }
+
+    } catch (error) {
+      console.error("Error handling SweetAlert:", error);
+    } finally {
+      this.isAlertOpen = false;
+    }
+  }
+
 
 
 

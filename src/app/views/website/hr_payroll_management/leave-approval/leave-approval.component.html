@@ -39,6 +39,8 @@
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{leaverequest.p.LeaveRequestName}}</td>
             <td class="tbldata">{{ formatDate(leaverequest.p.FromDate) }}</td>
+            <td Class="tbldata" nzTooltipTitle="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iusto nemo aspernatur ab, suscipit odio natus illum ut perspiciatis magnam quo, amet error soluta accusantium dicta tenetur perferendis minus quam unde quia eius quae voluptatibus. Quas necessitatibus ex sunt, facere ipsum sapiente corporis voluptas repellat et consectetur, iure officiis! Expedita suscipit ut nulla quam distinctio deserunt sed nostrum asperiores, quos molestiae animi a dolores ipsa, laborum exercitationem omnis alias voluptatibus ducimus. Consequatur minima, architecto dolores debitis officiis, sed corrupti nisi sit esse modi, fuga excepturi veritatis ipsa libero. Veniam veritatis, maxime sint amet, qui, modi neque est dolores quis iste quae.
+            " nzTooltipPlacement="top" nz-button nz-tooltip>{{leaverequest.p.Description}}</td>
             <td class="tbldata">{{ formatDate(leaverequest.p.ToDate) }}</td>
             <td Class="tbldata">{{leaverequest.p.Days}}</td>
             <td Class="tbldata">{{leaverequest.p.LeaveHours}}</td>

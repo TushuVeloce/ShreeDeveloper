@@ -31,6 +31,8 @@ export class LeaveRequestProps {
   public LeaveHours: number = 0;
   public Description: string = '';
   public IsApproved: number = 0;
+  public LeaveApprovedBy: number = 0;
+  public LeaveCancelledBy: number = 0;
 
 
 

@@ -6,7 +6,7 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class SalarySlipRequestFetchRequest
 {
-    public static readonly FetchRequestType: string = "SalarySlipRequestFetchRequest";
+    public static readonly FetchRequestType: string = "SalaryRequestFetchRequest";
 
     SalarySlipRequestRefs: number[] = [];
     EmployeeRefs: number[] = [];
