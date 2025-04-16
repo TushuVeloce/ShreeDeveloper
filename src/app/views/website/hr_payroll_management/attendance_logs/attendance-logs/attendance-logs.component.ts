@@ -40,13 +40,12 @@ export class AttendanceLogsComponent implements OnInit {
   ngOnInit() { }
 
   getattendancelogbycompanyref = async () => {
-    console.log(this.companyRef());
-
     let lst = await AttendanceLogs.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
-    console.log(lst);
   }
-  filterTable = () => { };
+  filterTable = () => {
+
+   };
 
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
