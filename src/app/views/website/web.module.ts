@@ -116,6 +116,7 @@ import { SalarySlipRequestDetailsComponent } from './employee_request/salary_sli
 import { EmployeeAttendanceLogsComponent } from './employee_request/employee_attendance_logs/employee-attendance-logs/employee-attendance-logs.component';
 import { ValidationMessageComponent } from './Helpers/Validation-Message/validation-message.component';
 import { PaginationComponent } from './Helpers/pagination/pagination';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 
 @NgModule({
@@ -127,12 +128,12 @@ import { PaginationComponent } from './Helpers/pagination/pagination';
     VendorServicesMasterComponent, VendorServicesMasterDetailsComponent, SiteManagementDetailsComponent, EmployeeAppraisalDetailsComponent, ProgressReportComponent, GovernmentOfficeComponent,
     EmployeeAppraisalMasterComponent, EmployeeExitDetailsComponent, EmployeeExitMasterComponent, PlotMasterComponent, DocumentListComponent, DocumentDetailsComponent,
     PlotMasterDetailsComponent, CustomerEnquiryComponent, CustomerEnquiryDetailsComponent, CustomerFollowupComponent, CustomerFollowupDetailsComponent, RegisteredCustomerComponent, RegisteredCustomerDetailsComponent, RegistrarOfficeComponent, RegistrarOfficeDetailComponent, SiteWorkMasterDetailComponent, SiteWorkMasterComponent,
-     OfficeDutyTimeComponent,OfficeDutyTimeDetailsComponent, SiteWorkDoneMasterDetailsComponent, SiteWorkDoneMasterComponent, GovernmentTransactionDetailsComponent, GovernmentTransactionMasterComponent, TpOfficeDetailsComponent, NaLetterDetailsComponent, MojaniDetailsComponent,SalaryGenerationComponent,SalaryGenerationDetailsComponent,LeaveApprovalComponent,LeaveRequestComponent,LeaveRequestDetailsComponent,SalarySlipApprovalComponent,SalarySlipRequestComponent,SalarySlipRequestDetailsComponent,
-    UlcDetailsComponent, FinalLayoutDetailsComponent, KJaPaDetailsComponent, RespectedChildComponentComponent,AttendanceLogsComponent,EmployeeAttendanceLogsComponent,ValidationMessageComponent,PaginationComponent],
+    OfficeDutyTimeComponent, OfficeDutyTimeDetailsComponent, SiteWorkDoneMasterDetailsComponent, SiteWorkDoneMasterComponent, GovernmentTransactionDetailsComponent, GovernmentTransactionMasterComponent, TpOfficeDetailsComponent, NaLetterDetailsComponent, MojaniDetailsComponent, SalaryGenerationComponent, SalaryGenerationDetailsComponent, LeaveApprovalComponent, LeaveRequestComponent, LeaveRequestDetailsComponent, SalarySlipApprovalComponent, SalarySlipRequestComponent, SalarySlipRequestDetailsComponent,
+    UlcDetailsComponent, FinalLayoutDetailsComponent, KJaPaDetailsComponent, RespectedChildComponentComponent, AttendanceLogsComponent, EmployeeAttendanceLogsComponent, ValidationMessageComponent, PaginationComponent],
   imports: [
     CommonModule, WebRoutingModule, FormsModule, NzDropDownModule, NzTableModule, IonicModule.forRoot(),
     NzPaginationModule, NzUploadModule, NzModalModule, NzCheckboxModule,
-    CommonModule, NzTableModule, NzIconModule, NzLayoutModule, NzMenuModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzStepsModule
+    CommonModule, NzTableModule, NzIconModule, NzLayoutModule, NzMenuModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzStepsModule, NzButtonModule, NzToolTipModule
   ],
   providers: [DatePipe]
 })

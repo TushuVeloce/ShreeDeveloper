@@ -1,11 +1,11 @@
 import { Component, effect, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { SalarySlipRequest } from 'src/app/classes/domain/entities/website/request/salarysliprequest/salarysliprequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
+import { Utils } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-salary-slip-approval',
@@ -22,6 +22,7 @@ export class SalarySlipApprovalComponent implements OnInit {
   SearchString: string = '';
   SelectedSalarySlipApproval: SalarySlipRequest = SalarySlipRequest.CreateNewInstance();
   CustomerRef: number = 0;
+  isSaveDisabled: boolean = false;
   EmployeeList: Employee[] = [];
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
@@ -29,9 +30,14 @@ export class SalarySlipApprovalComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'From Month', 'To Month', 'From Year', 'To Year', 'Is Approved', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+  headers: string[] = ['Sr.No.', 'From Month', 'To Month', 'From Year', 'To Year', 'Is Approved'];
+
+  constructor(
+    private uiUtils: UIUtils,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement,
+    private utils: Utils,
   ) {
     effect(async () => {
       await this.getEmployeeListByCompanyRef();
@@ -68,12 +74,33 @@ export class SalarySlipApprovalComponent implements OnInit {
     this.loadPaginationData();
   }
 
-  onEditClicked = async (item: SalarySlipRequest) => {
-    this.SelectedSalarySlipApproval = item.GetEditableVersion();
-    SalarySlipRequest.SetCurrentInstance(this.SelectedSalarySlipApproval);
-    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Salary_Slip_Request_Details']);
-  };
+
+  handleApproval = async (salaryslipapproval: SalarySlipRequest) => {
+    await this.uiUtils.showConfirmationMessage(
+      'Approval',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+      Are you sure that you want to Approve this Leave?`,
+      async () => {
+        this.Entity = salaryslipapproval;
+        this.Entity.p.IsApproved = 1;
+        this.Entity.p.LeaveApprovedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+        let entityToSave = this.Entity.GetEditableVersion();
+
+        let entitiesToSave = [entityToSave];
+        let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+
+        if (!tr.Successful) {
+          this.isSaveDisabled = false;
+          this.uiUtils.showErrorMessage('Error', tr.Message);
+          return;
+        } else {
+          this.isSaveDisabled = false;
+          await this.uiUtils.showSuccessToster('Leave Approval Successfully Approved');
+          this.getSalarySlipApprovalListByEmployeeRef();
+        }
+      }
+    );
+  }
 
   onDeleteClicked = async (salaryslipapproval: SalarySlipRequest) => {
     await this.uiUtils.showConfirmationMessage(
