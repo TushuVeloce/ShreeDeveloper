@@ -92,6 +92,7 @@ export class LeaveApprovalComponent implements OnInit {
         this.Entity = leaveapproval;
         this.Entity.p.IsApproved = 1;
         this.Entity.p.LeaveApprovedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+        this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
         let entityToSave = this.Entity.GetEditableVersion();
 
         let entitiesToSave = [entityToSave];

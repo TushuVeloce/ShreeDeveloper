@@ -11,7 +11,6 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { SalarySlipRequestFetchRequest } from "./salarysliprequestfetchrequest";
-import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 
 
 export class SalarySlipRequestProps {
