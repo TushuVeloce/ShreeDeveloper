@@ -19,7 +19,7 @@ export class FinalLayoutDetailsComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     let arr = JSON.parse(this.appStateManage.StorageKey.getItem('TransactionJson') ?? '[]');
     this.FinalLayoutList = arr.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
-    // console.log('FinalLayoutList', this.FinalLayoutList);
+    console.log('FinalLayoutList', this.FinalLayoutList);
   }
 
   ngOnInit() { }
@@ -43,7 +43,7 @@ export class FinalLayoutDetailsComponent implements OnInit {
   // hide show content using radio button
   showReportNOCSection: boolean = false;
   getReportNOCAirportNOC(value: boolean, siteWorkName: string) {
-    if (siteWorkName.trim() === 'Report NOC & Airport NOC') {
+    if (siteWorkName.trim() === 'रोड NOC 2') {
       this.showReportNOCSection = value;
     }
   }

@@ -5,7 +5,7 @@
       <ul style="margin-top: 1rem;">
         <li *ngFor="let siteWork of group.SiteWorks">
           <ng-container
-            *ngIf="siteWork.SiteWorkName.trim() !== 'Report NOC' && siteWork.SiteWorkName.trim() !== 'Airport NOC' || showReportNOCSection">
+            *ngIf="siteWork.SiteWorkName.trim() !== 'अर्ज' && siteWork.SiteWorkName.trim() !== '7/12 (2)'&& siteWork.SiteWorkName.trim() !== 'Tentative Order व नकाशा' || showReportNOCSection">
             <strong class="SiteWorkNameStyle">{{ siteWork.SiteWorkName }}:-</strong>
             <ul>
               <div class="row" style="margin-top: 1rem;margin-bottom: 1rem">

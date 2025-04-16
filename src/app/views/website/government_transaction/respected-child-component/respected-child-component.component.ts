@@ -29,7 +29,7 @@ export class RespectedChildComponentComponent implements OnInit {
 
     this.TransactionTypeArrayObj = JSON.parse(this.appStateManage.StorageKey.getItem('TransactionJson') ?? '[]');
     this.SelectedArrayObj = this.TransactionTypeArrayObj.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
-    // console.log('TpOfficeList', this.SelectedArrayObj);
+    console.log('SelectedArrayObj', this.SelectedArrayObj);
     console.log(this.SelectedTransactionType);
   }
 
@@ -41,7 +41,7 @@ export class RespectedChildComponentComponent implements OnInit {
 
   onAddTransactionSubmit = async (value: any) => {
     console.log('onAddTransactionType value', value);
-    // console.log('SelectedArrayObj', this.SelectedArrayObj);
+    console.log('SelectedArrayObj', this.SelectedArrayObj);
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let arr = await this.updatePreviousObjWithAfterAddValues(this.TransactionTypeArrayObj, value);
@@ -50,8 +50,8 @@ export class RespectedChildComponentComponent implements OnInit {
     let entityToSave = this.Entity.GetEditableVersion();
     // await this.Entity.EnsurePrimaryKeysWithValidValues();
     let entitiesToSave = [entityToSave];
-    // console.log('entityToSave :', entityToSave);
-    // return
+    console.log('entityToSave :', entityToSave);
+    return
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {

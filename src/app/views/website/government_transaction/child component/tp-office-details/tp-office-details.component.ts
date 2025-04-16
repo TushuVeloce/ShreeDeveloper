@@ -45,7 +45,8 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
   // hide show content using radio button
   showReportNOCSection: boolean = false;
   getReportNOCAirportNOC(value: boolean, siteWorkName: string) {
-    if (siteWorkName.trim() === 'इनामपत्र') {
+    console.log('getReportNOCAirportNOC', value, siteWorkName);
+    if (siteWorkName.trim() === 'Report NOC & Airport NOC') {
       this.showReportNOCSection = value;
     }
   }

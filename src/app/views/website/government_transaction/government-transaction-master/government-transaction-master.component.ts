@@ -70,7 +70,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
     // get Transaction Type List Status 
 
     for (let i = 0; i < this.MasterList.length; i++) {
-      // debugger
+      debugger
       let obj = this.MasterList[i];
       let transactionJson = obj.p.TransactionJson;
       let transactionRef = obj.p.Ref;
@@ -88,7 +88,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
           for (let siteWork of group.SiteWorks) {
             // If no ApplicableTypes, mark incomplete
             if (!siteWork.ApplicableTypes || siteWork.ApplicableTypes.length === 0) {
-              isGroupComplete = false;
+              isGroupComplete = true;
               break;
             }
 
@@ -108,9 +108,11 @@ export class GovernmentTransactionMasterComponent implements OnInit {
         }
 
         this.groupCompletionStatus[obj.p.Ref][group.SiteWorkGroupName] = isGroupComplete;
-        this.getGroupStatus(transactionRef, group.SiteWorkGroupName);
+        if (this.groupCompletionStatus[obj.p.Ref][group.SiteWorkGroupName] = isGroupComplete) {
+          this.getGroupStatus(transactionRef, group.SiteWorkGroupName);
+        }
         // this.groupCompletionStatus[transactionRef][group.SiteWorkGroupName] = isGroupComplete;
-        // console.log(`Transaction #${transactionRef} → ${group.SiteWorkGroupName}: ${isGroupComplete}`);
+        console.log(`Transaction #${transactionRef} → ${group.SiteWorkGroupName}: ${isGroupComplete}`);
       }
     }
   }
