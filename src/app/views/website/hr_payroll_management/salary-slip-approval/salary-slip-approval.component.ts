@@ -30,7 +30,7 @@ export class SalarySlipApprovalComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'From Month', 'To Month', 'From Year', 'To Year', 'Is Approved'];
+  headers: string[] = ['Sr.No.', 'From Month', 'To Month', 'From Year', 'To Year', 'Approval Status'];
 
   constructor(
     private uiUtils: UIUtils,

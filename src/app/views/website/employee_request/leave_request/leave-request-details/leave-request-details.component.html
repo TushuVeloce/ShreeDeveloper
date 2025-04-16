@@ -59,8 +59,8 @@
         <div class="col-lg-4 col-md-4 col-sm-12">
           <label>Days</label>
           <input type="number" [(ngModel)]="Entity.p.Days" name="Days" class="form-control" id="Days" required
-            placeholder="Enter Days" #DaysCtrl="ngModel" readonly pattern="{{NameWithNos}}" required
-            (blur)="DaysCtrl.control.markAsTouched()" (click)="selectAllValue($event); " />
+            placeholder="Enter Days" #DaysCtrl="ngModel" pattern="{{NameWithNos}}" required
+            (blur)="DaysCtrl.control.markAsTouched()" (ngModelChange)="onDaysChanged()" (click)="selectAllValue($event); " />
           <div style="height: 25px;" *ngIf="(DaysCtrl.invalid && (DaysCtrl.touched || DaysCtrl.dirty))">
             <span class="validation-text" *ngIf="DaysCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             <span class="validation-text" *ngIf="DaysCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>

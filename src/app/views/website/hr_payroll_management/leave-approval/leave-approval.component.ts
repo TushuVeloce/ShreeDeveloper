@@ -31,7 +31,7 @@ export class LeaveApprovalComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Leave Request Type', 'From Date', 'To Date', 'Days', 'Leave Hours', 'Description', 'Is Approved'];
+  headers: string[] = ['Sr.No.', 'Leave Request Type', 'Description', 'From Date', 'To Date', 'Days', 'Approval Status'];
   constructor(
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
@@ -83,28 +83,54 @@ export class LeaveApprovalComponent implements OnInit {
   }
 
 
+  // handleApproval = async (leaveapproval: LeaveRequest) => {
+  //   await this.uiUtils.showConfirmationMessage(
+  //     'Approval',
+  //     `This process is <strong>IRREVERSIBLE!</strong> <br/>
+  //   Are you sure that you want to Approve this Leave?`,
+  //     async () => {
+  //       this.Entity = leaveapproval;
+  //       this.Entity.p.IsApproved = 1;
+  //       this.Entity.p.LeaveApprovedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+  //       this.Entity.p.LeaveCancelledBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+  //       let entityToSave = this.Entity.GetEditableVersion();
+
+  //       let entitiesToSave = [entityToSave];
+  //       let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+
+  //       if (!tr.Successful) {
+  //         this.isSaveDisabled = false;
+  //         this.uiUtils.showErrorMessage('Error', tr.Message);
+  //         return;
+  //       } else {
+  //         this.isSaveDisabled = false;
+  //         await this.uiUtils.showSuccessToster('Leave Request Successfully Approved');
+  //         this.getLeaveApprovalListByEmployeeRef();
+  //       }
+  //     }
+  //   );
+  // }
+
+
   handleApproval = async (leaveapproval: LeaveRequest) => {
-    await this.uiUtils.showConfirmationMessage(
-      'Approval',
-      `This process is <strong>IRREVERSIBLE!</strong> <br/>
-    Are you sure that you want to Approve this Leave?`,
-      async () => {
+    await this.uiUtils.showStatusConfirmationMessage(
+      'Update Leave Status',
+      `Please confirm the new status for this leave request.`,
+      ['Approved', 'Rejected', 'Cancel'],
+       // Order matters: Confirm, Deny, Cancel
+      async (selectedStatus: string) => {
         this.Entity = leaveapproval;
         this.Entity.p.IsApproved = 1;
         this.Entity.p.LeaveApprovedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
-        this.Entity.p.LeaveCancelledBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
-        let entityToSave = this.Entity.GetEditableVersion();
+        this.Entity.p.LeaveCancelledBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));;
+        const entityToSave = this.Entity.GetEditableVersion();
 
-        let entitiesToSave = [entityToSave];
-        let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+        const tr = await this.utils.SavePersistableEntities([entityToSave]);
 
         if (!tr.Successful) {
-          this.isSaveDisabled = false;
           this.uiUtils.showErrorMessage('Error', tr.Message);
-          return;
         } else {
-          this.isSaveDisabled = false;
-          await this.uiUtils.showSuccessToster('Leave Request Successfully Approved');
+          await this.uiUtils.showSuccessToster(`Leave marked as ${selectedStatus}`);
           this.getLeaveApprovalListByEmployeeRef();
         }
       }

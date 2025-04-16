@@ -99,8 +99,20 @@ export class LeaveRequestDetailsComponent implements OnInit {
     this.TotalWorkingHrs = data.p.TotalWorkingHrs;
   }
 
-  handleLeavehours = () => {
-    if (this.Entity.p.Days != 0) {
+  formatDateToYYYYMMDD(date: Date): string {
+    const year = date.getFullYear();
+    const month = (`0${date.getMonth() + 1}`).slice(-2);
+    const day = (`0${date.getDate()}`).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
+  
+  onDaysChanged() {
+    if (this.fromdate && this.Entity.p.Days) {
+      const fromDate = new Date(this.fromdate);
+      const newToDate = new Date(fromDate);
+      newToDate.setDate(fromDate.getDate() + this.Entity.p.Days - 1);
+
+      this.todate = this.formatDateToYYYYMMDD(newToDate); // format needed for input[type="date"]
       this.Entity.p.LeaveHours = this.Entity.p.Days * this.TotalWorkingHrs;
     }
   }
