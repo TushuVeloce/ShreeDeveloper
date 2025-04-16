@@ -81,17 +81,26 @@ export class GovernmentTransactionMasterComponent implements OnInit {
       for (let group of groups) {
         let isGroupComplete = true;
 
-        // If no SiteWorks, it's incomplete
         if (!group.SiteWorks || group.SiteWorks.length === 0) {
           isGroupComplete = false;
         } else {
           for (let siteWork of group.SiteWorks) {
-            // If no ApplicableTypes, mark incomplete
             if (!siteWork.ApplicableTypes || siteWork.ApplicableTypes.length === 0) {
-              isGroupComplete = true;
+              isGroupComplete = false;
               break;
             }
 
+            //  Check for 'Yes No' first
+            const hasYesNo = siteWork.ApplicableTypes.some((app: any) =>
+              app.SiteWorkApplicableTypeName?.toLowerCase() === 'yes no'
+            );
+
+            if (hasYesNo) {
+              isGroupComplete = true;
+              break; // Exit the siteWork loop early
+            }
+
+            // Check all values
             for (let applicable of siteWork.ApplicableTypes) {
               const val = applicable.Value;
               if (val === null || val === undefined || val === "" || val === false) {
@@ -103,17 +112,20 @@ export class GovernmentTransactionMasterComponent implements OnInit {
             if (!isGroupComplete) break;
           }
         }
+
         if (!this.groupCompletionStatus[obj.p.Ref]) {
           this.groupCompletionStatus[obj.p.Ref] = {};
         }
 
         this.groupCompletionStatus[obj.p.Ref][group.SiteWorkGroupName] = isGroupComplete;
-        if (this.groupCompletionStatus[obj.p.Ref][group.SiteWorkGroupName] = isGroupComplete) {
+
+        if (isGroupComplete) {
           this.getGroupStatus(transactionRef, group.SiteWorkGroupName);
         }
-        // this.groupCompletionStatus[transactionRef][group.SiteWorkGroupName] = isGroupComplete;
+
         console.log(`Transaction #${transactionRef} → ${group.SiteWorkGroupName}: ${isGroupComplete}`);
       }
+
     }
   }
   SiteManagementRef: number = 0;

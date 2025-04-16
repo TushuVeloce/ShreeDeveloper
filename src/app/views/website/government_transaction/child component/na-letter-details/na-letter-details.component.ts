@@ -50,8 +50,8 @@ export class NaLetterDetailsComponent implements OnInit {
   onSave = () => {
     // this.appStateManage.StorageKey.setItem('TpOfficeList', JSON.stringify(this.TpOfficeList));
     this.onEntitySaved.emit(this.NALetterList);
+    console.log('onSave NALetterList', this.NALetterList);
     this.router.navigate(['/homepage/Website/Site_Progress_Report_Details']);
-    // console.log('onSave TpOfficeList', this.TpOfficeList);
   }
 
   onCancel = async () => {

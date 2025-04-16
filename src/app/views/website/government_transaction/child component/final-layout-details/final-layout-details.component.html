@@ -3,8 +3,8 @@
     <div *ngFor="let group of FinalLayoutList">
       <h4 class="SiteWorkGroupNamestyle">{{ group.SiteWorkGroupName }}</h4>
       <ul style="margin-top: 1rem;">
-        <li *ngFor="let siteWork of group.SiteWorks">
-          <ng-container
+        <ng-container *ngFor="let siteWork of group.SiteWorks">
+          <li
             *ngIf="siteWork.SiteWorkName.trim() !== 'अर्ज' && siteWork.SiteWorkName.trim() !== '7/12 (2)'&& siteWork.SiteWorkName.trim() !== 'Tentative Order व नकाशा' || showReportNOCSection">
             <strong class="SiteWorkNameStyle">{{ siteWork.SiteWorkName }}:-</strong>
             <ul>
@@ -50,8 +50,8 @@
                 </div>
               </div>
             </ul>
-          </ng-container>
-        </li>
+          </li>
+        </ng-container>
       </ul>
     </div>
     <div class="row">

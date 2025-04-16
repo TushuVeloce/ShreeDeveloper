@@ -51,7 +51,7 @@ export class RespectedChildComponentComponent implements OnInit {
     // await this.Entity.EnsurePrimaryKeysWithValidValues();
     let entitiesToSave = [entityToSave];
     console.log('entityToSave :', entityToSave);
-    return
+    // return
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
