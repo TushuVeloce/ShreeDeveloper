@@ -31,10 +31,9 @@ export class LeaveApprovalComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Leave Request Type', 'From Date', 'To Date', 'Days', 'Leave Hours', 'Is Approved'];
+  headers: string[] = ['Sr.No.', 'Leave Request Type', 'From Date', 'To Date', 'Days', 'Leave Hours', 'Description', 'Is Approved'];
   constructor(
     private uiUtils: UIUtils,
-    private router: Router,
     private appStateManage: AppStateManageService,
     private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement,
@@ -92,7 +91,7 @@ export class LeaveApprovalComponent implements OnInit {
       async () => {
         this.Entity = leaveapproval;
         this.Entity.p.IsApproved = 1;
-        this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+        this.Entity.p.LeaveApprovedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
         let entityToSave = this.Entity.GetEditableVersion();
 
         let entitiesToSave = [entityToSave];

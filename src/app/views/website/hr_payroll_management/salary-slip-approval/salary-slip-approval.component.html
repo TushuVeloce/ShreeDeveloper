@@ -1,7 +1,7 @@
 <div>
   <div class="row">
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2">
-      <h5 style="padding-top: 3px;" class="title title_light">Salary Slip Request</h5>
+      <h5 style="padding-top: 3px;" class="title title_light">Salary Slip Approval</h5>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
       <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus
@@ -37,19 +37,18 @@
         <tbody>
           <tr *ngFor="let salaryslipapproval of paginatedList(); index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td Class="tbldata">{{salaryslipapproval.p.EmployeeName}}</td>
             <td Class="tbldata">{{salaryslipapproval.p.FromMonth}}</td>
             <td Class="tbldata">{{salaryslipapproval.p.ToMonth}}</td>
             <td Class="tbldata">{{salaryslipapproval.p.FromYear}}</td>
             <td Class="tbldata">{{salaryslipapproval.p.ToYear}}</td>
-            <td Class="tbldata">{{salaryslipapproval.p.IsApproved}}</td>
-            <td Class="tbldata">{{salaryslipapproval.p.IsDeleted}}</td>
-            <td class="tbldata">
-              <!-- <span style="margin-left: 9px;" (click)="onEditClicked(salaryslipapproval);">
-                <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-              </span> -->
-              <span style="margin-left: 9px;" (click)="onDeleteClicked(salaryslipapproval);">
-                <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            <td Class="tbldata">
+              <button class="status" [disabled]="isSaveDisabled" *ngIf="salaryslipapproval.p.IsApproved == 0"
+                (click)="handleApproval(salaryslipapproval)" ngClass="pending">
+                Pending
+              </button>
+              <button class="status" *ngIf="salaryslipapproval.p.IsApproved == 1" ngClass="approved">
+                Approved
+              </button>
             </td>
           </tr>
         </tbody>

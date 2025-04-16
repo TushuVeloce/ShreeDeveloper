@@ -42,6 +42,10 @@
             <td class="tbldata">{{ formatDate(leaverequest.p.ToDate) }}</td>
             <td Class="tbldata">{{leaverequest.p.Days}}</td>
             <td Class="tbldata">{{leaverequest.p.LeaveHours}}</td>
+            <td Class="tbldata tooltip">
+              {{leaverequest.p.Description}}
+              <span class="tooltiptext">{{leaverequest.p.Description}}</span>
+            </td>
             <td Class="tbldata">
               <button class="status" [disabled]="isSaveDisabled" *ngIf="leaverequest.p.IsApproved == 0"
                 (click)="handleApproval(leaverequest)" ngClass="pending">
