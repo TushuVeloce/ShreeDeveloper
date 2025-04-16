@@ -15,7 +15,7 @@
         <div class="col-lg-4 col-md-4 col-sm-12">
           <label>Name</label>
           <input type="text" [(ngModel)]="Entity.p.EmployeeName" readonly name="EmployeeName" class="form-control"
-            id="EmployeeName" required #EmployeeNameCtrl="ngModel" required
+            id="EmployeeName" required #EmployeeNameCtrl="ngModel"
             (blur)="EmployeeNameCtrl.control.markAsTouched()" />
           <div style="height: 25px;"
             *ngIf="(EmployeeNameCtrl.invalid && (EmployeeNameCtrl.touched || EmployeeNameCtrl.dirty))">
@@ -31,6 +31,14 @@
           </nz-select>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
+          <label>From Year</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="FromYear"
+            name="FromYear" [nzSize]="'large'" [(ngModel)]="Entity.p.FromYear">
+            <nz-option *ngFor="let FromYear of FinancialYearList" [nzValue]="FromYear.p.FromDate"
+              [nzLabel]="FromYear.FromDate"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
           <label>To Month</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="ToMonth" name="ToMonth"
             [nzSize]="'large'" [(ngModel)]="Entity.p.ToMonth">
@@ -38,19 +46,11 @@
           </nz-select>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
-          <label>From Year</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="FromYear"
-            name="FromYear" [nzSize]="'large'" [(ngModel)]="Entity.p.FromYear">
-            <nz-option *ngFor="let FromYear of FinancialYearList" [nzValue]="FromYear.p.FromDate"
-              [nzLabel]="FromYear.p.FromDate"></nz-option>
-          </nz-select>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
           <label>To Year</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="ToYear" name="ToYear"
             [nzSize]="'large'" [(ngModel)]="Entity.p.ToYear">
             <nz-option *ngFor="let ToYear of FinancialYearList" [nzValue]="ToYear.p.ToDate"
-              [nzLabel]="ToYear.p.ToDate"></nz-option>
+              [nzLabel]="ToYear.ToDate"></nz-option>
           </nz-select>
         </div>
       </div>

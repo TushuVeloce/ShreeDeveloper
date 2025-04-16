@@ -23,7 +23,7 @@
         <div class="col-lg-4 col-md-4 col-sm-12">
           <label>Name</label>
           <input type="text" [(ngModel)]="Entity.p.EmployeeName" readonly name="EmployeeName" class="form-control"
-            id="EmployeeName" required #EmployeeNameCtrl="ngModel" required
+            id="EmployeeName" required #EmployeeNameCtrl="ngModel"
             (blur)="EmployeeNameCtrl.control.markAsTouched()" />
           <div style="height: 25px;"
             *ngIf="(EmployeeNameCtrl.invalid && (EmployeeNameCtrl.touched || EmployeeNameCtrl.dirty))">
@@ -41,7 +41,7 @@
         <div class="col-lg-4 col-md-4 col-sm-12">
           <label>From Date</label>
           <input type="date" [(ngModel)]="fromdate" name="fromdate" class="form-control" id="fromdate" required
-            placeholder="Enter From Date" (change)="setDaysandLeaveHours()" #fromdateCtrl="ngModel" required
+            placeholder="Enter From Date" (change)="setDaysandLeaveHours()" #fromdateCtrl="ngModel"
             (blur)="fromdateCtrl.control.markAsTouched()" />
           <div style="height: 25px;" *ngIf="(fromdateCtrl.invalid && (fromdateCtrl.touched || fromdateCtrl.dirty))">
             <span class="validation-text" *ngIf="fromdateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -49,8 +49,8 @@
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12">
           <label>To Date</label>
-          <input type="date" [(ngModel)]="todate" name="todate" class="form-control" id="todate" required
-            placeholder="Enter To Date" (change)="setDaysandLeaveHours()" #todateCtrl="ngModel" required
+          <input type="date" [disabled]="!fromdate" [(ngModel)]="todate" name="todate" class="form-control" id="todate" required
+            placeholder="Enter To Date" (change)="setDaysandLeaveHours()" #todateCtrl="ngModel"
             (blur)="todateCtrl.control.markAsTouched()" />
           <div style="height: 25px;" *ngIf="(todateCtrl.invalid && (todateCtrl.touched || todateCtrl.dirty))">
             <span class="validation-text" *ngIf="todateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -58,8 +58,8 @@
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12">
           <label>Days</label>
-          <input type="number" [(ngModel)]="Entity.p.Days" name="Days" class="form-control" id="Days" required
-            placeholder="Enter Days" #DaysCtrl="ngModel" pattern="{{NameWithNos}}" required
+          <input type="number" [disabled]="!todate" [(ngModel)]="Entity.p.Days" name="Days" class="form-control" id="Days" required
+            placeholder="Enter Days" #DaysCtrl="ngModel" pattern="{{NameWithNos}}"
             (blur)="DaysCtrl.control.markAsTouched()" (ngModelChange)="onDaysChanged()" (click)="selectAllValue($event); " />
           <div style="height: 25px;" *ngIf="(DaysCtrl.invalid && (DaysCtrl.touched || DaysCtrl.dirty))">
             <span class="validation-text" *ngIf="DaysCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -80,7 +80,7 @@
           <div class="col-lg-4 col-md-4 col-sm-12">
             <label>Description</label>
             <input type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
-              id="Description" required placeholder="Enter Description" #DescriptionCtrl="ngModel" required
+              id="Description" required placeholder="Enter Description" #DescriptionCtrl="ngModel"
               (blur)="DescriptionCtrl.control.markAsTouched()" />
             <div style="height: 25px;"
               *ngIf="(DescriptionCtrl.invalid && (DescriptionCtrl.touched || DescriptionCtrl.dirty))">

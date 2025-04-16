@@ -31,7 +31,7 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
   ToMonthList = DomainEnums.MonthList(true, '--Select Month Type--');
   EmployeeList: Employee[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  FinancialYearList: FinancialYear[] = [];
+  FinancialYearList: any = [];
   FromDates: string[] = [];
   ToDates: string[] = [];
   EmployeeRef: number = 0;
@@ -90,22 +90,30 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
       return;
     }
     let lst = await FinancialYear.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.FinancialYearList = lst;
-    this.convertDateFormat();
+    const updatedArray = lst.map(item => ({
+      ...item,
+      FromDate: item.p.FromDate.substring(0, 4),
+      ToDate: item.p.ToDate.substring(0, 4)
+    }));
+
+    this.FinancialYearList = updatedArray;
+    console.log('updatedArray :', updatedArray);
+
+    // this.convertDateFormat();
   }
 
-  convertDateFormat = () => {
-    this.FinancialYearList.forEach(item => {
-      let convertedDate = this.dtu.GetIndianDate(item.p.FromDate,);
-      this.FromDates.push(convertedDate);
-      item.p.FromDate = convertedDate;
-    });
-    this.FinancialYearList.forEach(item => {
-      let convertedDate = this.dtu.GetIndianDate(item.p.ToDate,);
-      this.ToDates.push(convertedDate);
-      item.p.ToDate = convertedDate;
-    });
-  }
+  // convertDateFormat = () => {
+  //   this.FinancialYearList.forEach(item => {
+  //     let convertedDate = this.dtu.GetIndianDate(item.p.FromDate,);
+  //     this.FromDates.push(convertedDate);
+  //     item.p.FromDate = convertedDate;
+  //   });
+  //   this.FinancialYearList.forEach(item => {
+  //     let convertedDate = this.dtu.GetIndianDate(item.p.ToDate,);
+  //     this.ToDates.push(convertedDate);
+  //     item.p.ToDate = convertedDate;
+  //   });
+  // }
 
   getSingleEmployeeDetails = async () => {
     let data = await Employee.FetchInstance(this.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
@@ -123,23 +131,24 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
-    if (!tr.Successful) {
-      this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error', tr.Message);
-      return;
-    } else {
-      this.isSaveDisabled = false;
-      if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('SalarySlipRequest Master saved successfully!');
-        this.Entity = SalarySlipRequest.CreateNewInstance();
-        this.resetAllControls();
-      } else {
-        await this.uiUtils.showSuccessToster('SalarySlipRequest Master Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Salary_Slip_Request']);
-      }
-    }
+    // if (!tr.Successful) {
+    //   this.isSaveDisabled = false;
+    //   this.uiUtils.showErrorMessage('Error', tr.Message);
+    //   return;
+    // } else {
+    //   this.isSaveDisabled = false;
+    //   if (this.IsNewEntity) {
+    //     await this.uiUtils.showSuccessToster('SalarySlipRequest Master saved successfully!');
+    //     this.Entity = SalarySlipRequest.CreateNewInstance();
+    //     this.resetAllControls();
+    //   } else {
+    //     await this.uiUtils.showSuccessToster('SalarySlipRequest Master Updated successfully!');
+    //     await this.router.navigate(['/homepage/Website/Salary_Slip_Request']);
+    //   }
+    // }
   };
 
   // for value 0 selected while click on Input //

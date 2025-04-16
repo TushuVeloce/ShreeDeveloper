@@ -38,8 +38,8 @@
           <tr *ngFor="let leaverequest of paginatedList(); index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{leaverequest.p.LeaveRequestName}}</td>
-            <td Class="tbldata" style="cursor: pointer;" nzTooltipTitle="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iusto nemo aspernatur ab, suscipit odio natus illum ut perspiciatis magnam quo,fuga excepturi veritatis ipsa libero. Veniam veritatis, maxime sint amet, qui, modi neque est dolores quis iste quae.
-            " nzTooltipPlacement="top" nzTooltipColor="#A52A2A" nz-button nz-tooltip>{{leaverequest.p.Description}}</td>
+            <td Class="tbldata" style="cursor: pointer;" [nzTooltipTitle]="leaverequest.p.Description" nzTooltipPlacement="top"
+              nzTooltipColor="#A52A2A" nz-button nz-tooltip>{{leaverequest.p.Description}}</td>
             <td class="tbldata">{{ formatDate(leaverequest.p.FromDate) }}</td>
             <td class="tbldata">{{ formatDate(leaverequest.p.ToDate) }}</td>
             <td Class="tbldata">{{leaverequest.p.Days}}</td>
