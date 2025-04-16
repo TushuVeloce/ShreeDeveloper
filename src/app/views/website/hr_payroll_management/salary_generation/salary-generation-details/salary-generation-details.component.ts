@@ -2,12 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { SalaryGeneration } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Salary_Generation/salarygeneration';
+import { SalaryGenerationCustomRequest } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Salary_Generation/salarygenerationcustomrequest';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
+import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
+import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
+import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 
 @Component({
   selector: 'app-salary-generation-details',
@@ -26,7 +30,8 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   MonthList = DomainEnums.MonthList(true, '---Select Month---');
   companyName = this.companystatemanagement.SelectedCompanyName;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement,private serverCommunicator: ServerCommunicatorService,private payloadPacketFacade: PayloadPacketFacade) { }
+  
 
   ngOnInit() {
     this.getEmployeeListByCompanyRef()
@@ -80,7 +85,27 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     input.select();
   }
 
-   SaveMaterialMaster = async () => {
+   EmployeeData = async (employee:number, month: number) => {
+      let req = new SalaryGenerationCustomRequest();  
+      req.EmployeeRef = employee
+      req.Month = month
+      console.log('req :', req);
+      let td = req.FormulateTransportData();
+      let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+      let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+    
+      if (!tr.Successful) {
+        await this.uiUtils.showErrorMessage('Error', tr.Message);
+        return;
+      }
+
+      await this.uiUtils.showSuccessToster('Password Created Successfully');
+      let tdResult = JSON.parse(tr.Tag) as TransportData;
+      console.log('tdResult:', tdResult);
+    };
+    
+
+   SaveSalaryGeneration = async () => {
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
       this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
       if (this.Entity.p.CreatedBy == 0) {

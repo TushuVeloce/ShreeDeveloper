@@ -4,18 +4,16 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class CraetePasswordCustomRequest
+export class SalaryGenerationCustomRequest
 {
-    public static readonly CustomProcessRequestType: string = "CraetePasswordCustomRequest";
-    CompanyRef:Number=0;
+    public static readonly CustomProcessRequestType: string = "SalaryGenerationCustomRequest";
+    // CompanyRef:Number=0;
     EmployeeRef:Number=0;
-    OldPassword:string = '';
-    Password: string = '';
-    ConfirmPassword: string = '';
+    Month:Number = 0;
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CraetePasswordCustomRequest.CustomProcessRequestType) as DataCollection;
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, SalaryGenerationCustomRequest.CustomProcessRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 
