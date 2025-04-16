@@ -15,7 +15,7 @@
         <div class="col-md-4">
             <label>Employee Name</label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-            name="EmployeeRef" required id="EmployeeRef" [(ngModel)]="Entity.p.EmployeeRef">
+            name="EmployeeRef" required id="EmployeeRef" [(ngModel)]="Entity.p.EmployeeRef" (ngModelChange)="EmployeeData(Entity.p.EmployeeRef,Entity.p.Month)">
               <nz-option *ngFor="let employee of EmployeeList" [nzValue]="employee.p.Ref"
                 [nzLabel]="employee.p.Name"></nz-option>
             </nz-select>
@@ -23,7 +23,7 @@
         <div class="col-md-4">
             <label>Month</label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-            name="Month" required id="Month" [(ngModel)]="Entity.p.Month">
+            name="Month" required id="Month" [(ngModel)]="Entity.p.Month" (ngModelChange)="EmployeeData(Entity.p.EmployeeRef,Entity.p.Month)">
             <nz-option *ngFor="let month of MonthList" [nzValue]="month.Ref"
               [nzLabel]="month.Name"></nz-option>
           </nz-select>
@@ -116,7 +116,7 @@
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
-          <button type="button" class="btn" (click)="SaveMaterialMaster()">Save</button>
+          <button type="button" class="btn" (click)="SaveSalaryGeneration()">Save</button>
         </div>
         <div>
           <button type="button" class="btn" (click)="BackSalaryGenaration()">

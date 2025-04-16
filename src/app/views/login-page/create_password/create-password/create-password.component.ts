@@ -7,6 +7,7 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { CraetePasswordCustomRequest } from 'src/app/classes/domain/entities/website/create_password/createpasswordcustomrequest';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -18,27 +19,38 @@ import { UIUtils } from 'src/app/services/uiutils.service';
       NzMenuModule, FormsModule] 
     })
 export class CreatePasswordComponent  implements OnInit {
-password: string='';
-confirmpassword:string='';
-  constructor(private router: Router,private uiUtils: UIUtils,private payloadPacketFacade: PayloadPacketFacade,private serverCommunicator: ServerCommunicatorService) {}
+OldPassword: string = '';
+NewPassword: string='';
+ConfirmPassword:string='';
+EmployeeRef:number=0;
+CompanyRef:number=0;
 
-  ngOnInit() {}
+constructor(private router: Router,private uiUtils: UIUtils,private payloadPacketFacade: PayloadPacketFacade,private serverCommunicator: ServerCommunicatorService,private appStateManage: AppStateManageService,) {}
+
+  ngOnInit() {
+    this.EmployeeRef=  Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    this.CompanyRef=  Number(this.appStateManage.StorageKey.getItem('SelectedCompanyRef'))
+  }
 
 
-  Save = async (password: string, confirmpassword: string) => {
-    if (password !== confirmpassword) {
+  Save = async (oldpassword:string, newpassword: string, confirmpassword: string,) => {
+    if (newpassword !== confirmpassword) {
       await this.uiUtils.showErrorMessage('Error', 'Password and Confirm Password are not the same');
       return;
-    }else if(password == ''){
+    }else if(newpassword == ''){
       await this.uiUtils.showErrorMessage('Error', 'Password cannot be empty');
     }else if(confirmpassword == ''){
       await this.uiUtils.showErrorMessage('Error', 'Confirm Password cannot be empty');
+    }else if(oldpassword == ''){
+      await this.uiUtils.showErrorMessage('Error', 'Old Password cannot be empty');
     }
   
     let req = new CraetePasswordCustomRequest();  
-    req.Password = password;
+    req.CompanyRef = this.CompanyRef
+    req.EmployeeRef = this.EmployeeRef
+    req.OldPassword = oldpassword;
+    req.Password = newpassword;
     req.ConfirmPassword = confirmpassword;
-    
     console.log('req :', req);
     let td = req.FormulateTransportData();
     let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);

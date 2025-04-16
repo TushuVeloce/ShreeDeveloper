@@ -18,7 +18,7 @@ export class SalaryGenerationProps {
   public Ref: number = 0;
   public EmployeeRef: number = 0;
   public readonly EmployeeName: string = '';
-  public Month: string = '';
+  public Month: number = 0;
   public TotalDays: number = 0;
   public TotalWorkingDays: number = 0;
   public TotalLeaves: number = 0;
