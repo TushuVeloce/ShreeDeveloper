@@ -117,7 +117,7 @@ import { EmployeeAttendanceLogsComponent } from './employee_request/employee_att
 import { ValidationMessageComponent } from './Helpers/Validation-Message/validation-message.component';
 import { PaginationComponent } from './Helpers/pagination/pagination';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-
+import { NzCardModule } from 'ng-zorro-antd/card';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent, StageMasterComponent, StageMasterDetailsComponent, AccountMainLedgerComponent, AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent, MarketingTypeMasterDetailsComponent,
@@ -132,7 +132,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     UlcDetailsComponent, FinalLayoutDetailsComponent, KJaPaDetailsComponent, RespectedChildComponentComponent, AttendanceLogsComponent, EmployeeAttendanceLogsComponent, ValidationMessageComponent, PaginationComponent],
   imports: [
     CommonModule, WebRoutingModule, FormsModule, NzDropDownModule, NzTableModule, IonicModule.forRoot(),
-    NzPaginationModule, NzUploadModule, NzModalModule, NzCheckboxModule,
+    NzPaginationModule, NzUploadModule, NzModalModule, NzCheckboxModule,NzCardModule,
     CommonModule, NzTableModule, NzIconModule, NzLayoutModule, NzMenuModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzStepsModule, NzButtonModule, NzToolTipModule
   ],
   providers: [DatePipe]

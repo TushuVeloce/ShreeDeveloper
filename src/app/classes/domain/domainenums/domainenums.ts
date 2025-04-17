@@ -42,7 +42,8 @@ export enum Company {
   Company1 = 10,
   Company2 = 20,
   Company3 = 30,
-  Company4 = 40
+  Company4 = 40,
+  FetchEntireList
 }
 
 export enum CompanyType {

@@ -18,7 +18,7 @@ export class EmployeeProps {
   public readonly Db_Table_Name = "EmployeeMaster";
   public Ref: number = 0;
   public DesignationRef: number = 0;
-  public readonly DesignationName: boolean = false;
+  public readonly DesignationName: string = '';
   public Name: string = '';
   public DOB: string = '';
   // public FirstName: string = '';

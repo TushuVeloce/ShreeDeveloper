@@ -1,10 +1,12 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SalaryGeneration } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Salary_Generation/salarygeneration';
+import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
+import { SalaryGeneration, SalaryGenerationProps } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Salary_Generation/salarygeneration';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 
 @Component({
   selector: 'app-salary-generation',
@@ -22,9 +24,19 @@ export class SalaryGenerationComponent  implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-
+  CompnyList: Company[] = [];
+  EmployeeList: Employee[] = [];
+  CompanyAddress : string = ''
+  CompanyEmail : string = ''
+  EmployeeDesignation : string = ''
+  EmployeeBankName : string = ''
+  EmployeeBankBranch : string = ''
+  EmployeeBankAccountNo : string = ''
+  EmployeeBankIFSCCode : string = ''
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  isModalVisible = false;
 
+ 
   headers: string[] = ['Sr.No.', 'Employee Name', 'Month', 'Total Working Days','Basic Salary','Gross Total','Total Deduction','Net Salary', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
@@ -35,9 +47,33 @@ export class SalaryGenerationComponent  implements OnInit {
   }
 
   async ngOnInit() {
+    this.CompnyList = await  Company.FetchEntireList();
+    this.EmployeeList = await  Employee.FetchEntireList();
     this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+  }
+
+  openSalarySlipModal = (SalaryGeneration:SalaryGeneration) => {
+  this.isModalVisible = true;
+  console.log('SalaryGeneration :', SalaryGeneration);
+  this.Entity = SalaryGeneration
+  if(this.Entity.p.CompanyRef != 0){
+    const companydetails = this.CompnyList.find(item => item.p.Ref == this.Entity.p.CompanyRef);{
+      this.CompanyAddress = companydetails?.p?.AddressLine1 || '';    
+      this.CompanyEmail = companydetails?.p?.EmailId || '';
+    }
+  }
+  if(this.Entity.p.EmployeeRef != 0){
+    const employeedetails = this.EmployeeList.find(item => item.p.Ref == this.Entity.p.EmployeeRef);{
+    console.log('employeedetails :', employeedetails);
+      this.EmployeeDesignation = employeedetails?.p.DesignationName || '';    
+      this.EmployeeBankName = employeedetails?.p?.BankName || '';
+      this.EmployeeBankBranch = employeedetails?.p?.BranchName || '';
+      this.EmployeeBankAccountNo = employeedetails?.p?.BanckAccountNo || '';
+      this.EmployeeBankIFSCCode = employeedetails?.p?.IFSC || '';
+    }
+  }
   }
 
   getSalaryListByCompanyRef = async () => {

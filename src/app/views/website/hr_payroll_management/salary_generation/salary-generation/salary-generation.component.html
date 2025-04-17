@@ -27,7 +27,7 @@
         <tr *ngFor="let salary of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{salary.p.EmployeeName}}</td>
-          <td Class="tbldata">{{salary.p.Month}}</td>
+          <td Class="tbldata">{{salary.p.MonthName}}</td>
           <td Class="tbldata">{{salary.p.TotalWorkingDays}}</td>
           <td Class="tbldata">{{salary.p.BasicSalary}}</td>
           <td Class="tbldata">{{salary.p.GrossTotal}}</td>
@@ -39,6 +39,8 @@
             </span>
             <span style="margin-left: 9px;" (click)="onDeleteClicked(salary);">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            <span style="margin-left: 9px;"  (click)="openSalarySlipModal(salary)">
+              <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
       </tbody>
@@ -55,3 +57,142 @@
     <span class="title_light"> Data Not Found</span>
   </div>
 </div>
+
+
+<div *ngIf="isModalVisible" class="custom-modal-overlay d-flex justify-content-center align-items-center">
+  <div class="custom-modal bg-white rounded shadow p-4">
+    
+    <!-- Modal Header -->
+    <div class="custom-modal-header mb-3">
+      <div class="d-flex justify-content-between align-items-center flex-wrap">
+        <div class="d-flex align-items-center mb-2 mb-md-0">
+          <img src="/assets/images/shreelogo.png" alt="Company Logo" style="width: 40px; height: 40px; margin-right: 10px;">
+          <h4 class="text-primary mb-0">{{ Entity.p.CompanyName }}</h4>
+        </div>
+        <h6 class="text-muted mb-0">Date: 17/04/2025</h6>
+      </div>
+      <h6 class="mt-2">{{ CompanyAddress }}</h6>
+      <h6>{{ CompanyEmail }}</h6>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="custom-modal-body">
+      <!-- Employee & Attendance Details -->
+      <div class="row mb-3" style="font-size: 15px;">
+        <div class="col-md-3 mb-2">
+          <strong>Employee Name :</strong> 
+        </div>
+        <div class="col-md-3 mb-2">
+          {{ Entity.p.EmployeeName }}
+        </div>
+        <div class="col-md-3 mb-2">
+          <strong>Designation :</strong> 
+        </div>
+        <div class="col-md-3 mb-2">
+          {{EmployeeDesignation}}
+        </div>
+        <div class="col-md-3 mb-2">
+          <strong>Salary per Month :</strong> 
+        </div>
+        <div class="col-md-3 mb-2">
+          {{ Entity.p.BasicSalary }}
+        </div>
+        <div class="col-md-3 mb-2">
+          <strong>Total Worked Days :</strong> 
+        </div>
+        <div class="col-md-3 mb-2">
+          {{ Entity.p.TotalWorkingDays }}
+        </div>
+        <div class="col-md-3 mb-2">
+          <strong>Banck Name :</strong> 
+        </div>
+        <div class="col-md-3 mb-2">
+          {{EmployeeBankName}}
+        </div>
+        <div class="col-md-3 mb-2">
+          <strong>Banck Branch :</strong> 
+        </div>
+        <div class="col-md-3 mb-2">
+          {{EmployeeBankBranch}}
+        </div>
+        <div class="col-md-3 mb-2">
+          <strong>Banck Account No :</strong> 
+        </div>
+        <div class="col-md-3 mb-2">
+          {{EmployeeBankAccountNo}}
+        </div>
+        <div class="col-md-3 mb-2">
+          <strong>TFSC Code :</strong> 
+        </div>
+        <div class="col-md-3 mb-2">
+          {{EmployeeBankIFSCCode}}
+        </div>
+      </div>
+      <div class="table-container">
+        <table class="table table-bordered text-center">
+          <thead class="bg-light">
+            <tr>
+              <th colspan="2">Earnings</th>
+              <th colspan="2">Deductions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Basic Salary</td>
+              <td>{{ Entity.p.BasicSalary | currency:'INR' }}</td>
+              <td>TDS</td>
+              <td>{{ Entity.p.TDS | currency:'INR' }}</td>
+            </tr>
+            <tr>
+              <td>Travel Allowance</td>
+              <td>{{ Entity.p.TotalAllowance | currency:'INR' }}</td>
+              <td>PF</td>
+              <td>{{ Entity.p.PF | currency:'INR' }}</td>
+            </tr>
+            <tr>
+              <td>Incentives</td>
+              <td>{{ Entity.p.TotalIncentive | currency:'INR' }}</td>
+              <td>Leaves</td>
+              <td>{{ Entity.p.TotalLeaves | number }}</td>
+            </tr>
+            <tr>
+              <td>Other</td>
+              <td>{{ Entity.p.Other | currency:'INR' }}</td>
+              <td colspan="2"></td>
+            </tr>
+            <tr class="fw-bold">
+              <td>Gross Salary</td>
+              <td>{{ Entity.p.GrossTotal | currency:'INR' }}</td>
+              <td>Total Deduction</td>
+              <td>{{ Entity.p.TotalDeduction | currency:'INR' }}</td>
+            </tr>
+            <tr class="bg-secondary text-white fw-bold">
+              <td>Net Salary</td>
+              <td>{{ Entity.p.NetSalary | currency:'INR' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    <!-- Footer Details -->
+    <div class="custom-modal-footer mt-4">
+      <!-- Signatures -->
+      <div class="row mt-8">
+        <div class="col-md-6 text-center d-flex flex-column align-items-center">
+          <hr class="my-2 w-100" style="max-width: 200px; border: 1px solid #0d6efd;">
+          <h6 class="mb-0">Employer Signature</h6>
+        </div>
+        <div class="col-md-6 text-center d-flex flex-column align-items-center">
+          <hr class="my-2 w-100" style="max-width: 200px; border: 1px solid #0d6efd;">
+          <h6 class="mb-0">Employee Signature</h6>
+        </div>
+      </div>
+      <!-- Close Button -->
+      <div class="text-end mt-1">
+        <button nz-button nzType="primary" (click)="isModalVisible = false">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
