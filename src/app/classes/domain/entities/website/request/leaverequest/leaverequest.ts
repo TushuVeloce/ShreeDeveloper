@@ -15,7 +15,6 @@ import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/c
 
 
 export class LeaveRequestProps {
-  public readonly Db_Table_Name = "LeaveRequestMaster";
   public Ref: number = 0;
   public CreatedBy: number = 0;
   public UpdatedBy: number = 0;
@@ -27,12 +26,15 @@ export class LeaveRequestProps {
   public LeaveRequestName: string = '';
   public FromDate: string = '';
   public ToDate: string = '';
+  public HalfDayDate: string = '';
+  public LeaveCancel: string = '';
   public Days: number = 0;
   public LeaveHours: number = 0;
   public Description: string = '';
   public IsApproved: number = 0;
   public LeaveApprovedBy: number = 0;
   public LeaveCancelledBy: number = 0;
+  public IsCancelled: number = 0;
 
 
 
@@ -82,6 +84,30 @@ export class LeaveRequest implements IPersistable<LeaveRequest> {
 
     if (this.p.EmployeeRef == 0) {
       vra.add('Name', 'Name cannot be blank.');
+    }
+    if (this.p.LeaveRequestType == 0) {
+      vra.add('Request Type', 'Request Type cannot be blank.');
+    }
+    if (this.p.LeaveRequestType == 300) {
+      if (this.p.HalfDayDate == '') {
+        vra.add('Date', 'Date cannot be blank.');
+      }
+    } else {
+      if (this.p.FromDate == '') {
+        vra.add('From Date', 'From Date cannot be blank.');
+      }
+      if (this.p.ToDate == '') {
+        vra.add('To Date', 'To Date cannot be blank.');
+      }
+      if (this.p.Days == 0) {
+        vra.add('Days', 'Days cannot be blank.');
+      }
+    }
+    if (this.p.LeaveHours == 0) {
+      vra.add('Hours', 'Hours cannot be blank.');
+    }
+    if (this.p.Description == '') {
+      vra.add('Description', 'Description cannot be blank.');
     }
   }
 

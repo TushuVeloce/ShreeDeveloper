@@ -117,13 +117,24 @@ export class LeaveApprovalComponent implements OnInit {
       'Update Leave Status',
       `Please confirm the new status for this leave request.`,
       ['Approved', 'Rejected', 'Cancel'],
-       // Order matters: Confirm, Deny, Cancel
+      // Order matters: Confirm, Deny, Cancel
       async (selectedStatus: string) => {
         this.Entity = leaveapproval;
-        this.Entity.p.IsApproved = 1;
-        this.Entity.p.LeaveApprovedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
-        this.Entity.p.LeaveCancelledBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));;
+
+        if (selectedStatus === 'Approved') {
+          this.Entity.p.IsApproved = 1;
+          this.Entity.p.LeaveApprovedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+          this.Entity.p.LeaveCancelledBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+          this.Entity.p.IsCancelled = 0;
+        }
+        else if (selectedStatus === 'Rejected') {
+          this.Entity.p.IsApproved = 0;
+          this.Entity.p.LeaveApprovedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+          this.Entity.p.LeaveCancelledBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+          this.Entity.p.IsCancelled = 1;
+        }
         const entityToSave = this.Entity.GetEditableVersion();
+        console.log(entityToSave);
 
         const tr = await this.utils.SavePersistableEntities([entityToSave]);
 
