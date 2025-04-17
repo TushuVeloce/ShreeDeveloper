@@ -32,7 +32,7 @@
         <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
           <label>Request Type</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LeaveRequestType"
-            name="LeaveRequestType" [nzSize]="'large'" [(ngModel)]="Entity.p.LeaveRequestType">
+            name="LeaveRequestType" [nzSize]="'large'" [(ngModel)]="Entity.p.LeaveRequestType" (ngModelChange)="onLeaveRequestTypeChanged()">
             <nz-option *ngFor="let LeaveRequestType of LeaveRequestTypeList" [nzValue]="LeaveRequestType.Ref"
               [nzLabel]="LeaveRequestType.Name"></nz-option>
           </nz-select>

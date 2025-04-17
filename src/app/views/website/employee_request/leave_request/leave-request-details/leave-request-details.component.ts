@@ -5,13 +5,18 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
-import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
+import {
+  ValidationMessages,
+  ValidationPatterns,
+} from 'src/app/classes/domain/constants';
 import { NgModel } from '@angular/forms';
 import { LeaveRequest } from 'src/app/classes/domain/entities/website/request/leaverequest/leaverequest';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  DomainEnums,
+  LeaveRequestType,
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { DTU } from 'src/app/services/dtu.service';
 import { entries } from 'lodash';
-
 
 @Component({
   selector: 'app-leaverequest-master-details',
@@ -23,11 +28,16 @@ export class LeaveRequestDetailsComponent implements OnInit {
   Entity: LeaveRequest = LeaveRequest.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
-  DetailsFormTitle: 'New Leave Request' | 'Edit Leave Request' = 'New Leave Request';
+  DetailsFormTitle: 'New Leave Request' | 'Edit Leave Request' =
+    'New Leave Request';
   IsDropdownDisabled: boolean = false;
   InitialEntity: LeaveRequest = null as any;
   EmployeeList: Employee[] = [];
-  LeaveRequestTypeList = DomainEnums.LeaveRequestTypeList(true, '--Select Leave Type--');
+  LeaveRequestTypeList = DomainEnums.LeaveRequestTypeList(
+    true,
+    '--Select Leave Type--'
+  );
+  LeaveRequestType = LeaveRequestType;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   fromdate: string = '';
   halfdaydate: string = '';
@@ -35,8 +45,7 @@ export class LeaveRequestDetailsComponent implements OnInit {
   EmployeeRef: number = 0;
   TotalWorkingHrs: number = 0;
 
-
-  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
   @ViewChild('CodeCtrl') CodeInputControl!: NgModel;
@@ -48,7 +57,7 @@ export class LeaveRequestDetailsComponent implements OnInit {
     private utils: Utils,
     private dtu: DTU,
     private companystatemanagement: CompanyStateManagement
-  ) { }
+  ) {}
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -67,13 +76,17 @@ export class LeaveRequestDetailsComponent implements OnInit {
       this.todate = this.dtu.ConvertStringDateToShortFormat(
         this.Entity.p.ToDate
       );
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
     } else {
       // this.EmployeeRef = this.appStateManage.getEmployeeRef();
-      this.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.EmployeeRef = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
       this.Entity = LeaveRequest.CreateNewInstance();
       LeaveRequest.SetCurrentInstance(this.Entity);
-      this.Entity.p.LeaveRequestType = this.LeaveRequestTypeList[1].Ref
+      this.Entity.p.LeaveRequestType = this.LeaveRequestTypeList[1].Ref;
       this.getSingleEmployeeDetails();
     }
     this.InitialEntity = Object.assign(
@@ -86,25 +99,28 @@ export class LeaveRequestDetailsComponent implements OnInit {
   focusInput = () => {
     // let txtName = document.getElementById('fromdate')!;
     // txtName.focus();
-  }
+  };
 
   getSingleEmployeeDetails = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let data = await Employee.FetchInstance(this.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let data = await Employee.FetchInstance(
+      this.EmployeeRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.Entity.p.EmployeeRef = data.p.Ref;
     this.Entity.p.EmployeeName = data.p.Name;
     this.TotalWorkingHrs = data.p.TotalWorkingHrs;
-  }
+  };
 
   formatDateToYYYYMMDD = (date: Date): string => {
     const year = date.getFullYear();
-    const month = (`0${date.getMonth() + 1}`).slice(-2);
-    const day = (`0${date.getDate()}`).slice(-2);
+    const month = `0${date.getMonth() + 1}`.slice(-2);
+    const day = `0${date.getDate()}`.slice(-2);
     return `${year}-${month}-${day}`;
-  }
+  };
 
   onDaysChanged = () => {
     if (this.fromdate && this.Entity.p.Days) {
@@ -115,15 +131,15 @@ export class LeaveRequestDetailsComponent implements OnInit {
       this.todate = this.formatDateToYYYYMMDD(newToDate); // format needed for input[type="date"]
       this.Entity.p.LeaveHours = this.Entity.p.Days * this.TotalWorkingHrs;
     }
-  }
+  };
 
   handleLeaveRequest = () => {
     console.log('Request', this.Entity.p.LeaveRequestType);
-
-  }
+  };
 
   setDaysandLeaveHours = () => {
-    if (this.Entity.p.LeaveRequestType == 300) {
+    //
+    if (this.Entity.p.LeaveRequestType == LeaveRequestType.HalfDay) {
       this.Entity.p.LeaveHours = this.TotalWorkingHrs * 0.5;
     } else if (this.fromdate && this.todate) {
       const FromDate: any = new Date(this.fromdate);
@@ -138,19 +154,33 @@ export class LeaveRequestDetailsComponent implements OnInit {
     } else {
       this.Entity.p.Days = 0;
     }
-  }
+  };
 
+  isHalfDay: boolean = false;
+  onLeaveRequestTypeChanged = () => {
+    alert(this.Entity.p.LeaveRequestType);
+    if (this.Entity.p.LeaveRequestType == LeaveRequestType.HalfDay)
+      this.isHalfDay = true;
+    else this.isHalfDay = false;
+  };
   SaveLeaveRequest = async () => {
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+    this.Entity.p.CompanyRef =
+      this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CompanyName =
+      this.companystatemanagement.getCurrentCompanyName();
 
     if (this.Entity.p.LeaveRequestType == 300) {
-      this.Entity.p.HalfDayDate = this.dtu.ConvertStringDateToFullFormat(this.halfdaydate);
+      this.Entity.p.HalfDayDate = this.dtu.ConvertStringDateToFullFormat(
+        this.halfdaydate
+      );
     } else {
-      this.Entity.p.FromDate = this.dtu.ConvertStringDateToFullFormat(this.fromdate);
-      this.Entity.p.ToDate = this.dtu.ConvertStringDateToFullFormat(this.todate);
+      this.Entity.p.FromDate = this.dtu.ConvertStringDateToFullFormat(
+        this.fromdate
+      );
+      this.Entity.p.ToDate = this.dtu.ConvertStringDateToFullFormat(
+        this.todate
+      );
     }
-
 
     if (!this.Entity.p.Days) {
       this.Entity.p.Days = 0;
@@ -189,15 +219,14 @@ export class LeaveRequestDetailsComponent implements OnInit {
   selectAllValue = (event: MouseEvent): void => {
     const input = event.target as HTMLInputElement;
     input.select();
-  }
+  };
 
   BackLeaveRequest = () => {
     this.router.navigate(['/homepage/Website/Leave_Request']);
-  }
+  };
 
   resetAllControls = () => {
     // reset touched
-
     // reset dirty
-  }
+  };
 }
