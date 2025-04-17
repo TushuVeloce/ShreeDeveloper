@@ -23,22 +23,31 @@
         <div class="col-lg-4 col-md-4 col-sm-12">
           <label>Name</label>
           <input type="text" [(ngModel)]="Entity.p.EmployeeName" readonly name="EmployeeName" class="form-control"
-            id="EmployeeName" required #EmployeeNameCtrl="ngModel"
-            (blur)="EmployeeNameCtrl.control.markAsTouched()" />
+            id="EmployeeName" required #EmployeeNameCtrl="ngModel" (blur)="EmployeeNameCtrl.control.markAsTouched()" />
           <div style="height: 25px;"
             *ngIf="(EmployeeNameCtrl.invalid && (EmployeeNameCtrl.touched || EmployeeNameCtrl.dirty))">
             <span class="validation-text" *ngIf="EmployeeNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
-          <label>Leave Request Type</label>
+          <label>Request Type</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LeaveRequestType"
             name="LeaveRequestType" [nzSize]="'large'" [(ngModel)]="Entity.p.LeaveRequestType">
             <nz-option *ngFor="let LeaveRequestType of LeaveRequestTypeList" [nzValue]="LeaveRequestType.Ref"
               [nzLabel]="LeaveRequestType.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
+        <div *ngIf="Entity.p.LeaveRequestType == 300" class="col-lg-4 col-md-4 col-sm-12">
+          <label>Date</label>
+          <input type="date" [(ngModel)]="halfdaydate" name="halfdaydate" class="form-control" id="halfdaydate" required
+            placeholder="Enter To Date" (change)="setDaysandLeaveHours()" #halfdaydateCtrl="ngModel"
+            (blur)="halfdaydateCtrl.control.markAsTouched()" />
+          <div style="height: 25px;"
+            *ngIf="(halfdaydateCtrl.invalid && (halfdaydateCtrl.touched || halfdaydateCtrl.dirty))">
+            <span class="validation-text" *ngIf="halfdaydateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+        <div *ngIf="Entity.p.LeaveRequestType != 300" class="col-lg-4 col-md-4 col-sm-12">
           <label>From Date</label>
           <input type="date" [(ngModel)]="fromdate" name="fromdate" class="form-control" id="fromdate" required
             placeholder="Enter From Date" (change)="setDaysandLeaveHours()" #fromdateCtrl="ngModel"
@@ -47,45 +56,42 @@
             <span class="validation-text" *ngIf="fromdateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
+        <div *ngIf="Entity.p.LeaveRequestType != 300" class="col-lg-4 col-md-4 col-sm-12">
           <label>To Date</label>
-          <input type="date" [disabled]="!fromdate" [(ngModel)]="todate" name="todate" class="form-control" id="todate" required
-            placeholder="Enter To Date" (change)="setDaysandLeaveHours()" #todateCtrl="ngModel"
+          <input type="date" [(ngModel)]="todate" [disabled]="!fromdate" name="todate" class="form-control" id="todate"
+            required placeholder="Enter To Date" (change)="setDaysandLeaveHours()" #todateCtrl="ngModel"
             (blur)="todateCtrl.control.markAsTouched()" />
           <div style="height: 25px;" *ngIf="(todateCtrl.invalid && (todateCtrl.touched || todateCtrl.dirty))">
             <span class="validation-text" *ngIf="todateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-12">
+        <div *ngIf="Entity.p.LeaveRequestType != 300" class="col-lg-4 col-md-4 col-sm-12">
           <label>Days</label>
-          <input type="number" [disabled]="!todate" [(ngModel)]="Entity.p.Days" name="Days" class="form-control" id="Days" required
-            placeholder="Enter Days" #DaysCtrl="ngModel" pattern="{{NameWithNos}}"
-            (blur)="DaysCtrl.control.markAsTouched()" (ngModelChange)="onDaysChanged()" (click)="selectAllValue($event); " />
+          <input type="number" [(ngModel)]="Entity.p.Days" [disabled]="!todate" name="Days" class="form-control"
+            id="Days" required placeholder="Enter Days" #DaysCtrl="ngModel" (blur)="DaysCtrl.control.markAsTouched()"
+            (ngModelChange)="onDaysChanged()" (click)="selectAllValue($event); " />
           <div style="height: 25px;" *ngIf="(DaysCtrl.invalid && (DaysCtrl.touched || DaysCtrl.dirty))">
             <span class="validation-text" *ngIf="DaysCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            <span class="validation-text" *ngIf="DaysCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
           </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12">
           <label>Leave Hours</label>
           <input type="number" [(ngModel)]="Entity.p.LeaveHours" readonly name="LeaveHours" class="form-control"
-            id="LeaveHours" required placeholder="Enter Leave Hours" pattern="{{NameWithNos}}" #LeaveHoursCtrl="ngModel"
+            id="LeaveHours" required placeholder="Enter Leave Hours" #LeaveHoursCtrl="ngModel"
             (blur)="LeaveHoursCtrl.control.markAsTouched()" (click)="selectAllValue($event);" />
           <div style="height: 25px;"
             *ngIf="(LeaveHoursCtrl.invalid && (LeaveHoursCtrl.touched || LeaveHoursCtrl.dirty))">
-            <span class="validation-text" *ngIf="LeaveHoursCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
           </div>
         </div>
-        <div class="row" style="margin-top: 1rem; ">
-          <div class="col-lg-4 col-md-4 col-sm-12">
-            <label>Description</label>
-            <input type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
-              id="Description" required placeholder="Enter Description" #DescriptionCtrl="ngModel"
-              (blur)="DescriptionCtrl.control.markAsTouched()" />
-            <div style="height: 25px;"
-              *ngIf="(DescriptionCtrl.invalid && (DescriptionCtrl.touched || DescriptionCtrl.dirty))">
-              <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+
+        <div class="col-lg-8 col-md-8 col-sm-12">
+          <label>Description</label>
+          <textarea type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
+            id="Description" rows="4" required placeholder="Enter Description" #DescriptionCtrl="ngModel"
+            (blur)="DescriptionCtrl.control.markAsTouched()"></textarea>
+          <div style="height: 25px;"
+            *ngIf="(DescriptionCtrl.invalid && (DescriptionCtrl.touched || DescriptionCtrl.dirty))">
+            <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
       </div>
