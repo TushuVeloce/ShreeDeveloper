@@ -34,6 +34,7 @@ export class LeaveRequestProps {
   public IsApproved: number = 0;
   public LeaveApprovedBy: number = 0;
   public LeaveCancelledBy: number = 0;
+  public IsCancelled: number = 0;
 
 
 

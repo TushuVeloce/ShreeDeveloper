@@ -43,13 +43,23 @@
             <td class="tbldata">{{ formatDate(leaverequest.p.FromDate) }}</td>
             <td class="tbldata">{{ formatDate(leaverequest.p.ToDate) }}</td>
             <td Class="tbldata">{{leaverequest.p.Days}}</td>
-            <td Class="tbldata">
-              <button class="status" [disabled]="isSaveDisabled" *ngIf="leaverequest.p.IsApproved == 0"
-                (click)="handleApproval(leaverequest)" ngClass="pending">
+            <td class="tbldata">
+              <!-- PENDING -->
+              <button class="status" *ngIf="leaverequest.p.IsApproved == 0 && leaverequest.p.IsCancelled == 0"
+                [disabled]="isSaveDisabled" (click)="handleApproval(leaverequest)" ngClass="pending">
                 Pending
               </button>
-              <button class="status" *ngIf="leaverequest.p.IsApproved == 1" ngClass="approved">
+
+              <!-- APPROVED -->
+              <button class="status" *ngIf="leaverequest.p.IsApproved == 1 && leaverequest.p.IsCancelled == 0"
+                ngClass="approved">
                 Approved
+              </button>
+
+              <!-- REJECTED -->
+              <button class="status" *ngIf="leaverequest.p.IsApproved == 0 && leaverequest.p.IsCancelled == 1"
+                ngClass="rejected">
+                Rejected
               </button>
             </td>
           </tr>
