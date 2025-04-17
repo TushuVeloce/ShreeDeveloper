@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { AddsalarySlipMobileAppComponent } from './addsalary-slip-mobile-app.component';
+import { AddSalarySlipMobileAppComponent } from './add-salary-slip-mobile-app.component';
 
-describe('AddsalarySlipMobileAppComponent', () => {
-  let component: AddsalarySlipMobileAppComponent;
-  let fixture: ComponentFixture<AddsalarySlipMobileAppComponent>;
+describe('AddSalarySlipMobileAppComponent', () => {
+  let component: AddSalarySlipMobileAppComponent;
+  let fixture: ComponentFixture<AddSalarySlipMobileAppComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddsalarySlipMobileAppComponent ],
+      declarations: [ AddSalarySlipMobileAppComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AddsalarySlipMobileAppComponent);
+    fixture = TestBed.createComponent(AddSalarySlipMobileAppComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

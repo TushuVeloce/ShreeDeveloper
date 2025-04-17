@@ -1,31 +1,121 @@
-<app-header-with-back-handler title="Leave Request"></app-header-with-back-handler>
+<app-header-with-back-handler title="Leave Requests"></app-header-with-back-handler>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">TaskManagement</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-list>
-    <ion-item *ngFor="let task of tasks">
-      <ion-label>
-        <h2>{{ task.title }}</h2>
-        <p>{{ task.description }}</p>
-      </ion-label>
-      <ion-button fill="clear" (click)="editTask(task.id)">
-        <ion-icon name="create-outline"></ion-icon>
-      </ion-button>
-    </ion-item>
-  </ion-list>
-  <ion-fab>
-    <ion-fab-button (click)="addTask()">
-      <ion-icon name="add"></ion-icon>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <!-- Status Filter -->
+  <ion-segment [(ngModel)]="selectedStatus" (ionChange)="filterApprovedLeaveData()" class="modern-segment">
+    <ion-segment-button *ngFor="let status of statusOptions" [value]="status.value">
+      <ion-label>{{ status.label }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- Leave Requests List -->
+  <div class="Leaves">
+    <ion-card *ngFor="let leave of filteredLeaveRequestData" class="Leaves-card">
+      <ion-card-header>
+        <div class="card-header-flex">
+          <ion-card-title class="leave-title">
+            <ion-icon name="document-text-outline" class="title-icon"></ion-icon>
+            {{ leave?.p?.Description }}
+          </ion-card-title>
+          <div class="button-group">
+            <ion-button fill="clear" size="small" color="primary" (click)="openModal(leave)">
+              <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="Leave-details">
+          <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
+          <small><strong>Start:</strong> {{ leave?.p?.FromDate }}</small><br />
+          <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
+          <small><strong>End:</strong> {{ leave?.p?.ToDate }}</small><br />
+          <ion-icon name="person-outline" class="detail-icon"></ion-icon>
+          <small><strong>Type:</strong>{{ leave?.p?.IsApproved == 1?'Approved':'Pending'}}</small>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+
+  <!-- FAB -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="primary" (click)="addTask()">
+      <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
-  <ion-fab class="filterFab">
-    <ion-fab-button (click)="''">
-      <ion-icon name="filter"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+  <!-- Leave Details Modal -->
+  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="modal-card">
+    <ng-template>
+      <div class="modal-container">
+        <ion-header>
+          <ion-toolbar color="primary" class="modal-toolbar">
+            <ion-title>Leave Details</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" (click)="closeModal()">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <!-- Scrollable Body -->
+        <div class="modal-body">
+          <ion-content scroll-y="true" class="modal-scroll-content ion-padding">
+
+            <div class="info-row-of-model">
+              <strong class="label">Employee Name:</strong>
+              <span class="value">{{ selectedLeave?.p?.EmployeeName }}</span>
+            </div>
+
+            <div class="info-row-of-model">
+              <strong class="label">start date:</strong>
+              <span class="value">{{ selectedLeave?.p?.FromDate }}</span>
+            </div>
+
+            <div class="info-row-of-model">
+              <strong class="label">start date:</strong>
+              <span class="value">{{ selectedLeave?.p?.ToDate }}</span>
+            </div>
+            <div class="info-row-of-model">
+              <strong class="label">Days:</strong>
+              <span class="value">{{ selectedLeave?.p?.Days ? selectedLeave?.p?.Days : '-' }}</span>
+            </div>
+            <div class="info-row-of-model">
+              <strong class="label">Leave Hours:</strong>
+              <span class="value">{{ selectedLeave?.p?.LeaveHours ? selectedLeave?.p?.LeaveHours : '-' }}</span>
+            </div>
+
+            <div class="info-row-of-model">
+              <strong class="label">Status</strong>
+              <span class="value">{{ selectedLeave?.p?.IsApproved == 1?'Approved':'Pending'}}</span>
+            </div>
+
+            <div class="info-row-of-model" *ngIf="selectedLeave?.p?.IsApproved == 1">
+              <strong class="label">Leave Approved By:</strong>
+              <span class="value">{{ selectedLeave?.p?.LeaveApprovedBy ? selectedLeave?.p?.LeaveApprovedBy : '-'
+                }}</span>
+            </div>
+            <div class="info-row-of-model" *ngIf="selectedLeave?.p?.IsApproved != 1">
+              <strong class="label">Leave Cancelled By:</strong>
+              <span class="value">{{ selectedLeave?.p?.LeaveCancelledBy ? selectedLeave?.p?.LeaveCancelledBy : '-'
+                }}</span>
+            </div>
+            <div class="info-row-of-model">
+              <strong class="label">Description:</strong>
+              <span class="value">{{ selectedLeave?.p?.Description ? selectedLeave?.p?.Description : '-' }}</span>
+            </div>
+          </ion-content>
+        </div>
+
+        <ion-footer class="modal-footer">
+          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
+            Close
+          </ion-button>
+        </ion-footer>
+      </div>
+    </ng-template>
+  </ion-modal>
 </ion-content>

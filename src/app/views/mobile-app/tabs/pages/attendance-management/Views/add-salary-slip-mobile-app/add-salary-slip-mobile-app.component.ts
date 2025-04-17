@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-addsalary-slip-mobile-app',
-  templateUrl: './addsalary-slip-mobile-app.component.html',
-  styleUrls: ['./addsalary-slip-mobile-app.component.scss'],
-  standalone: false
+  selector: 'app-add-salary-slip-mobile-app',
+  templateUrl: './add-salary-slip-mobile-app.component.html',
+  styleUrls: ['./add-salary-slip-mobile-app.component.scss'],
+  standalone:false
 })
-export class AddsalarySlipMobileAppComponent implements OnInit {
+export class AddSalarySlipMobileAppComponent  implements OnInit {
 
 
-  title: string = '';
-  description: string = '';
+  title: string = '';  // ✅ Add missing property
+  description: string = ''; // ✅ Add missing property
   isEditMode: boolean = false;
   taskId: string | null = null;
 
@@ -34,10 +34,11 @@ export class AddsalarySlipMobileAppComponent implements OnInit {
     } else {
       console.log('Creating new task');
     }
-    this.router.navigate(['/app_homepage/tabs/attendance-management/salary-slip']); // ✅ Fix router access
+    this.router.navigate(['/app_homepage/tabs/attendance-management/leave-request']); // ✅ Fix router access
   }
   goBack() {
-    this.router.navigate(['/app_homepage/tabs/attendance-management/salary-slip']);
+    this.router.navigate(['/app_homepage/tabs/crm/attendance-management/leave-request']);
   }
+
 
 }

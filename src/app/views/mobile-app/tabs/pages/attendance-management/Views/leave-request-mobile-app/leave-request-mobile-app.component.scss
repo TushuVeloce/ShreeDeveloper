@@ -1,15 +1,100 @@
-ion-fab {
-    position: fixed;
-    bottom: 16px;
-    right: 16px;
-    z-index: 10;
-    /* Ensure the button stays on top of other content */
+.Leaves {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
 }
 
-.filterFab {
-    position: fixed;
-    bottom: 80px;
-    right: 16px;
-    z-index: 10;
-    /* Ensure the button stays on top of other content */
+.Leaves-card {
+    flex: 1 1 320px;
+    max-width: 360px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.Leaves-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+ion-card {
+    min-width: 300px;
+    scroll-snap-align: start;
+    border-left: 4px solid var(--ion-color-danger);
+    border-radius: 12px;
+    background-color: var(--ion-background-color-step-50);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+.card-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.leave-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    gap: 6px;
+}
+.Leave-details {
+    flex-direction: column;
+    font-size: 0.85rem;
+    color: #444;
+}
+.detail-icon {
+    font-size: 1rem;
+    margin-right: 10px;
+    vertical-align: middle;
+    color: var(--ion-color-medium);
+}
+
+.modern-segment .selected {
+    background-color: #007bff;
+    color: white;
+}
+
+.modal-card {
+    --height: 60%;
+    --width: 90%;
+    --border-radius: 20px;
+
+    .modal-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .modal-toolbar {
+        border-radius: 20px 20px 0 0;
+    }
+
+    .modal-body {
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .info-row-of-model {
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+
+        .label {
+            font-weight: 600;
+        }
+
+        .value {
+            font-weight: 500;
+        }
+    }
+
+    .text-danger {
+        color: var(--ion-color-danger);
+    }
+
+    .text-success {
+        color: var(--ion-color-success);
+    }
+
+    .modal-footer {
+        padding: 12px;
+    }
 }
