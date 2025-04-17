@@ -21,17 +21,26 @@
             <ion-button fill="clear" size="small" color="primary" (click)="openModal(leave)">
               <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
             </ion-button>
+            <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(leave)">
+              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+            </ion-button>
           </div>
         </div>
       </ion-card-header>
 
       <ion-card-content>
         <div class="Leave-details">
-          <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
-          <small><strong>Start:</strong> {{ leave?.p?.FromDate }}</small><br />
-          <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
-          <small><strong>End:</strong> {{ leave?.p?.ToDate }}</small><br />
-          <ion-icon name="person-outline" class="detail-icon"></ion-icon>
+          <div *ngIf="leave.p.HalfDayDate===''">
+            <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
+            <small><strong>Start:</strong> {{ LocalFromDate }}</small><br />
+            <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
+            <small><strong>End:</strong> {{ LocalToDate }}</small><br />
+            <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
+          </div>
+          <div *ngIf="leave.p.HalfDayDate!==''">
+            <small><strong>Date:</strong> {{ localDate }}</small><br />
+            <ion-icon name="person-outline" class="detail-icon"></ion-icon>
+          </div>
           <small><strong>Type:</strong>{{ leave?.p?.IsApproved == 1?'Approved':'Pending'}}</small>
         </div>
       </ion-card-content>
@@ -41,7 +50,7 @@
 
   <!-- FAB -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="primary" (click)="addTask()">
+    <ion-fab-button color="primary" (click)="addLeaveRequest()">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
@@ -70,14 +79,18 @@
               <span class="value">{{ selectedLeave?.p?.EmployeeName }}</span>
             </div>
 
-            <div class="info-row-of-model">
+            <div class="info-row-of-model" *ngIf="selectedLeave?.p?.HalfDayDate===''">
               <strong class="label">start date:</strong>
-              <span class="value">{{ selectedLeave?.p?.FromDate }}</span>
+              <span class="value">{{LocalFromDate}}</span>
             </div>
 
-            <div class="info-row-of-model">
-              <strong class="label">start date:</strong>
-              <span class="value">{{ selectedLeave?.p?.ToDate }}</span>
+            <div class="info-row-of-model" *ngIf="selectedLeave?.p?.HalfDayDate===''">
+              <strong class="label">From date:</strong>
+              <span class="value">{{ LocalToDate}}</span>
+            </div>
+            <div class="info-row-of-model" *ngIf="selectedLeave?.p?.HalfDayDate!=''">
+              <strong class="label">Date:</strong>
+              <span class="value">{{ localDate }}</span>
             </div>
             <div class="info-row-of-model">
               <strong class="label">Days:</strong>
