@@ -1,15 +1,98 @@
-ion-fab {
-    position: fixed;
-    bottom: 16px;
-    right: 16px;
-    z-index: 10;
-    /* Ensure the button stays on top of other content */
+.salary-slip-list {
+    background: var(--ion-background-color);
+
+    .salary-slip-card {
+        border-radius: 16px;
+        margin-bottom: 16px;
+        background: var(--ion-item-background);
+
+        ion-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            ion-card-title {
+                font-size: 1.1rem;
+                font-weight: 600;
+            }
+
+            ion-badge {
+                font-size: 0.75rem;
+                padding: 6px 12px;
+                text-transform: uppercase;
+            }
+        }
+
+        ion-card-content {
+            font-size: 0.9rem;
+
+            .action-buttons {
+                display: flex;
+                gap: 12px;
+                margin-top: 12px;
+
+                ion-button {
+                    --padding-start: 10px;
+                    --padding-end: 10px;
+                    font-size: 0.85rem;
+                }
+            }
+        }
+    }
 }
 
-.filterFab {
-    position: fixed;
-    bottom: 80px;
-    right: 16px;
-    z-index: 10;
-    /* Ensure the button stays on top of other content */
+.modern-segment {
+    margin-bottom: 16px;
+
+    ion-segment-button {
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+}
+
+.modal-card {
+    --height: 60%;
+    --width: 90%;
+    --border-radius: 20px;
+
+    .modal-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .modal-toolbar {
+        border-radius: 20px 20px 0 0;
+    }
+
+    .modal-body {
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .info-row-of-model {
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+
+        .label {
+            font-weight: 600;
+        }
+
+        .value {
+            font-weight: 500;
+        }
+    }
+
+    .text-danger {
+        color: var(--ion-color-danger);
+    }
+
+    .text-success {
+        color: var(--ion-color-success);
+    }
+
+    .modal-footer {
+        padding: 12px;
+    }
 }

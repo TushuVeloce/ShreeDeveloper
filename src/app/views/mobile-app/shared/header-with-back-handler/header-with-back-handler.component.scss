@@ -1,8 +1,12 @@
 /* Modern Header */
 .modern-header {
-    --background: linear-gradient(to right, var(--ion-color-primary), var(--ion-color-secondary));
+    // --background: linear-gradient(to right, var(--ion-color-primary), var(--ion-color-secondary));
+    --background: var(--ion-color-primary);
     display: flex;
     align-items: center;
+    color: var(--ion-text-color-dark);
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
 }
 
 /* Logo Styling */
@@ -35,6 +39,5 @@
 
 /* Action Buttons */
 .icon-button {
-    color: var(--ion-color-dark);
     font-size: 1.4rem;
 }
