@@ -54,6 +54,7 @@ export class LoginPageComponent implements OnInit {
 
     const response = await this.servercommunicator.LoginUser(req);
     this.appStateManage.setEmployeeRef(response.LoginEmployeeRef)
+    this.appStateManage.setLoginToken(response.LoginToken)
 
     if (!response.Successful) {
       await this.uiUtils.showErrorMessage('Error', response.Message);
