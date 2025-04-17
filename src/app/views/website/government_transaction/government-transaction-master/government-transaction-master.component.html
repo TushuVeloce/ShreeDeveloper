@@ -35,34 +35,32 @@
             <tr *ngFor="let gov of paginatedList; index as i">
               <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
               <td Class="tbldata">{{gov.p.SiteName}}</td>
-              <td Class="tbldata"><span
-                  [ngClass]="getGroupStatus(gov.p.Ref, 'TP Office') ? 'status-completed' : 'status-pending'">
-                  {{ getGroupStatus(gov.p.Ref, 'TP Office') ? 'Completed' : 'Pending' }}
+              <td Class="tbldata"><span [ngClass]="Entity.p.TpOfficeStatus ? 'status-completed' : 'status-pending'">
+                  {{ Entity.p.TpOfficeStatus ? 'Completed' : 'Pending' }}
+                </span>
+              </td>
+              <td Class="tbldata"><span [ngClass]="Entity.p.NaLetterStatus ? 'status-completed' : 'status-pending'">
+                  {{ Entity.p.NaLetterStatus ? 'Completed' : 'Pending' }}
                 </span>
               </td>
               <td Class="tbldata"><span
-                  [ngClass]="getGroupStatus(gov.p.Ref, 'परिशिष्ठ A(NA)') ? 'status-completed' : 'status-pending'">
-                  {{ getGroupStatus(gov.p.Ref, 'परिशिष्ठ A(NA)') ? 'Completed' : 'Pending' }}
+                  [ngClass]="Entity.p.MojaniStatus ? 'status-completed' : 'status-pending'">
+                  {{ Entity.p.MojaniStatus ? 'Completed' : 'Pending' }}
                 </span>
               </td>
               <td Class="tbldata"><span
-                  [ngClass]="getGroupStatus(gov.p.Ref, 'मोजणी') ? 'status-completed' : 'status-pending'">
-                  {{ getGroupStatus(gov.p.Ref, 'मोजणी') ? 'Completed' : 'Pending' }}
+                  [ngClass]="Entity.p.ULCStatus ? 'status-completed' : 'status-pending'">
+                  {{ Entity.p.ULCStatus ? 'Completed' : 'Pending' }}
                 </span>
               </td>
               <td Class="tbldata"><span
-                  [ngClass]="getGroupStatus(gov.p.Ref, 'ULC') ? 'status-completed' : 'status-pending'">
-                  {{ getGroupStatus(gov.p.Ref, 'ULC') ? 'Completed' : 'Pending' }}
+                  [ngClass]="Entity.p.FinalLayoutStatus ? 'status-completed' : 'status-pending'">
+                  {{ Entity.p.FinalLayoutStatus ? 'Completed' : 'Pending' }}
                 </span>
               </td>
               <td Class="tbldata"><span
-                  [ngClass]="getGroupStatus(gov.p.Ref, 'Final Layout') ? 'status-completed' : 'status-pending'">
-                  {{ getGroupStatus(gov.p.Ref, 'Final Layout') ? 'Completed' : 'Pending' }}
-                </span>
-              </td>
-              <td Class="tbldata"><span
-                  [ngClass]="getGroupStatus(gov.p.Ref, 'KaJaPa') ? 'status-completed' : 'status-pending'">
-                  {{ getGroupStatus(gov.p.Ref, 'KaJaPa') ? 'Completed' : 'Pending' }}
+                  [ngClass]="Entity.p.KaJaPaStatus ? 'status-completed' : 'status-pending'">
+                  {{ Entity.p.KaJaPaStatus ? 'Completed' : 'Pending' }}
                 </span>
               </td>
               <td class="tbldata">

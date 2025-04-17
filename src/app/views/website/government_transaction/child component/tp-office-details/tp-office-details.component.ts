@@ -22,10 +22,25 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
 
     this.TpOfficeList = arr.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
     console.log('TpOfficeList', this.TpOfficeList);
+    this.BindApplicableTypeValueStatusToRadioButton();
   }
 
-  ngOnInit() { }
+  ngOnInit() {
 
+  }
+
+  BindApplicableTypeValueStatusToRadioButton = () => {
+    // debugger
+    for (let i = 0; i < this.TpOfficeList.length; i++) {
+      let SiteWorksList = this.TpOfficeList[i].SiteWorks;
+      let ApplicableTypesList = SiteWorksList.filter((item: { SiteWorkName: string }) => item.SiteWorkName == 'Report NOC & Airport NOC');
+
+      let ApplicableTypeValueList = ApplicableTypesList[0].ApplicableTypes.filter((item: { SiteWorkApplicableTypeName: string }) => item.SiteWorkApplicableTypeName == 'Yes No');
+      this.getReportNOCAirportNOC(ApplicableTypeValueList[0].Value, ApplicableTypesList[0].SiteWorkName);
+      // console.log('arr3', ApplicableTypeValueList[0].Value, ApplicableTypesList[0].SiteWorkName);
+    }
+
+  }
 
   getTypeOnApplicableTypeName = (ApplicableTypesName: string): '' | 'checkbox' | 'number' | 'date' | 'radio' | 'text' => {
     switch (ApplicableTypesName) {
@@ -44,7 +59,8 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
 
   // hide show content using radio button
   showReportNOCSection: boolean = false;
-  getReportNOCAirportNOC(value: boolean, siteWorkName: string) {
+  getReportNOCAirportNOC = async (value: boolean, siteWorkName: string) => {
+    debugger
     console.log('getReportNOCAirportNOC', value, siteWorkName);
     if (siteWorkName.trim() === 'Report NOC & Airport NOC') {
       this.showReportNOCSection = value;

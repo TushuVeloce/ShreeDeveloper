@@ -24,7 +24,13 @@ export class GovernmentTransactionProps {
   public CompanyRef: number = 0;
   public CompanyName: string = '';
 
-  public readonly IsNewlyCreated: boolean = false;
+  public TpOfficeStatus: boolean = false;
+  public ULCStatus: boolean = false;
+  public NaLetterStatus: boolean = false;
+  public MojaniStatus: boolean = false;
+  public FinalLayoutStatus: boolean = false;
+  public KaJaPaStatus: boolean = false;
+  public IsNewlyCreated: boolean = false;
 
   private constructor(isNewlyCreated: boolean) {
     this.IsNewlyCreated = isNewlyCreated;
