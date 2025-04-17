@@ -15,13 +15,13 @@
         <div class="card-header-flex">
           <ion-card-title class="leave-title">
             <ion-icon name="document-text-outline" class="title-icon"></ion-icon>
-            {{ leave?.p?.Description }}
+            {{ leave?.p?.LeaveRequestName }}
           </ion-card-title>
           <div class="button-group">
             <ion-button fill="clear" size="small" color="primary" (click)="openModal(leave)">
               <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
             </ion-button>
-            <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(leave)">
+            <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(leave)" *ngIf="(leave?.p?.IsCancelled == 0 && leave?.p?.IsApproved == 0)">
               <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
             </ion-button>
           </div>
@@ -30,18 +30,18 @@
 
       <ion-card-content>
         <div class="Leave-details">
-          <div *ngIf="leave.p.HalfDayDate===''">
+          <div *ngIf="leave.p.LeaveRequestType != LeaveRequestTypeEnum.HalfDay">
             <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
-            <small><strong>Start:</strong> {{ LocalFromDate }}</small><br />
+            <small><strong>From Date:</strong> {{ formatDate(leave.p.FromDate) }}</small><br />
             <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
-            <small><strong>End:</strong> {{ LocalToDate }}</small><br />
-            <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
+            <small><strong>To Date:</strong> {{ formatDate(leave.p.ToDate) }}</small><br />
           </div>
-          <div *ngIf="leave.p.HalfDayDate!==''">
-            <small><strong>Date:</strong> {{ localDate }}</small><br />
-            <ion-icon name="person-outline" class="detail-icon"></ion-icon>
+          <div *ngIf="leave.p.LeaveRequestType == LeaveRequestTypeEnum.HalfDay">
+            <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
+            <small><strong>Date:</strong> {{ formatDate(leave.p.HalfDayDate) }}</small><br />
           </div>
-          <small><strong>Type:</strong>{{ leave?.p?.IsApproved == 1?'Approved':'Pending'}}</small>
+          <ion-icon name="person-outline" class="detail-icon"></ion-icon>
+          <small><strong>Status:</strong>{{ (leave?.p?.IsApproved == 1)?'Approved':(leave?.p?.IsCancelled == 1 && leave?.p?.IsApproved == 0)?'Rejected':'Pending'}}</small>
         </div>
       </ion-card-content>
     </ion-card>
@@ -76,49 +76,49 @@
 
             <div class="info-row-of-model">
               <strong class="label">Employee Name:</strong>
-              <span class="value">{{ selectedLeave?.p?.EmployeeName }}</span>
+              <span class="value">{{ SelectedLeaveRequest?.p?.EmployeeName }}</span>
             </div>
 
-            <div class="info-row-of-model" *ngIf="selectedLeave?.p?.HalfDayDate===''">
-              <strong class="label">start date:</strong>
-              <span class="value">{{LocalFromDate}}</span>
-            </div>
-
-            <div class="info-row-of-model" *ngIf="selectedLeave?.p?.HalfDayDate===''">
+            <div class="info-row-of-model" *ngIf="SelectedLeaveRequest.p.LeaveRequestType != LeaveRequestTypeEnum.HalfDay">
               <strong class="label">From date:</strong>
-              <span class="value">{{ LocalToDate}}</span>
+              <span class="value">{{formatDate(SelectedLeaveRequest.p.FromDate)}}</span>
             </div>
-            <div class="info-row-of-model" *ngIf="selectedLeave?.p?.HalfDayDate!=''">
+
+            <div class="info-row-of-model" *ngIf="SelectedLeaveRequest.p.LeaveRequestType != LeaveRequestTypeEnum.HalfDay">
+              <strong class="label">To date:</strong>
+              <span class="value">{{ formatDate(SelectedLeaveRequest.p.ToDate)}}</span>
+            </div>
+            <div class="info-row-of-model" *ngIf="SelectedLeaveRequest.p.LeaveRequestType == LeaveRequestTypeEnum.HalfDay">
               <strong class="label">Date:</strong>
-              <span class="value">{{ localDate }}</span>
+              <span class="value">{{ formatDate(SelectedLeaveRequest.p.HalfDayDate) }}</span>
             </div>
             <div class="info-row-of-model">
               <strong class="label">Days:</strong>
-              <span class="value">{{ selectedLeave?.p?.Days ? selectedLeave?.p?.Days : '-' }}</span>
+              <span class="value">{{ SelectedLeaveRequest?.p?.Days ? SelectedLeaveRequest?.p?.Days : '-' }}</span>
             </div>
             <div class="info-row-of-model">
               <strong class="label">Leave Hours:</strong>
-              <span class="value">{{ selectedLeave?.p?.LeaveHours ? selectedLeave?.p?.LeaveHours : '-' }}</span>
+              <span class="value">{{ SelectedLeaveRequest?.p?.LeaveHours ? SelectedLeaveRequest?.p?.LeaveHours : '-' }}</span>
             </div>
 
             <div class="info-row-of-model">
               <strong class="label">Status</strong>
-              <span class="value">{{ selectedLeave?.p?.IsApproved == 1?'Approved':'Pending'}}</span>
+              <span class="value">{{ SelectedLeaveRequest?.p?.IsApproved == 1?'Approved':'Pending'}}</span>
             </div>
 
-            <div class="info-row-of-model" *ngIf="selectedLeave?.p?.IsApproved == 1">
+            <div class="info-row-of-model" *ngIf="SelectedLeaveRequest?.p?.IsApproved == 1">
               <strong class="label">Leave Approved By:</strong>
-              <span class="value">{{ selectedLeave?.p?.LeaveApprovedBy ? selectedLeave?.p?.LeaveApprovedBy : '-'
+              <span class="value">{{ SelectedLeaveRequest?.p?.LeaveApprovedBy ? SelectedLeaveRequest?.p?.LeaveApprovedBy : '-'
                 }}</span>
             </div>
-            <div class="info-row-of-model" *ngIf="selectedLeave?.p?.IsApproved != 1">
+            <div class="info-row-of-model" *ngIf="SelectedLeaveRequest?.p?.IsApproved != 1">
               <strong class="label">Leave Cancelled By:</strong>
-              <span class="value">{{ selectedLeave?.p?.LeaveCancelledBy ? selectedLeave?.p?.LeaveCancelledBy : '-'
+              <span class="value">{{ SelectedLeaveRequest?.p?.LeaveCancelledBy ? SelectedLeaveRequest?.p?.LeaveCancelledBy : '-'
                 }}</span>
             </div>
             <div class="info-row-of-model">
               <strong class="label">Description:</strong>
-              <span class="value">{{ selectedLeave?.p?.Description ? selectedLeave?.p?.Description : '-' }}</span>
+              <span class="value">{{ SelectedLeaveRequest?.p?.Description ? SelectedLeaveRequest?.p?.Description : '-' }}</span>
             </div>
           </ion-content>
         </div>

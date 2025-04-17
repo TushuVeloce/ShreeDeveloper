@@ -1,5 +1,6 @@
 import { Component, OnInit, effect, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { LeaveRequestType } from 'src/app/classes/domain/domainenums/domainenums';
 import { LeaveRequest } from 'src/app/classes/domain/entities/website/request/leaverequest/leaverequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -19,16 +20,16 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
   LeaveRequestList: LeaveRequest[] = [];
   filteredLeaveRequestData: LeaveRequest[] = [];
 
-  LocalFromDate: string = '';
-  LocalToDate: string = '';
-  localDate: string = '';
+  // LocalFromDate: string = '';
+  // LocalToDate: string = '';
+  // localDate: string = '';
 
   CustomerRef: number = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   selectedStatus: number = 1;
   modalOpen: boolean = false;
-  selectedLeave: LeaveRequest | null = null;
+  // selectedLeave: LeaveRequest | = null;
 
   statusOptions = [
     { label: 'Approved', value: 1 },
@@ -36,12 +37,15 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
     { label: 'Rejected', value: 2 }
   ];
 
+  LeaveRequestTypeEnum = LeaveRequestType;
+
   constructor(
     private router: Router,
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
     private companystatemanagement: CompanyStateManagement,
-    private dtu: DTU
+    private dtu: DTU,
+    private DateconversionService: DateconversionService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -53,28 +57,33 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
       this.filterApprovedLeaveData();
     });
 
-    // While Edit Converting From date String into Date Format //
-    if (this.Entity.p.FromDate) {
-      this.LocalFromDate = this.dtu.ConvertStringDateToShortFormat(
-        this.Entity.p.FromDate
-      );
-    }
+    // // While Edit Converting From date String into Date Format //
+    // if (this.Entity.p.FromDate) {
+    //   this.LocalFromDate = this.dtu.ConvertStringDateToShortFormat(
+    //     this.Entity.p.FromDate
+    //   );
+    // }
 
-    // While Edit Converting To date String into Date Format //
-    if (this.Entity.p.ToDate) {
-      this.LocalToDate = this.dtu.ConvertStringDateToShortFormat(
-        this.Entity.p.ToDate
-      );
-    }
+    // // While Edit Converting To date String into Date Format //
+    // if (this.Entity.p.ToDate) {
+    //   this.LocalToDate = this.dtu.ConvertStringDateToShortFormat(
+    //     this.Entity.p.ToDate
+    //   );
+    // }
 
-    // While Edit Converting To date String into Date Format //
-    if (this.Entity.p.HalfDayDate) {
-      this.localDate = this.dtu.ConvertStringDateToShortFormat(
-        this.Entity.p.HalfDayDate
-      );
-    }
+    // // While Edit Converting To date String into Date Format //
+    // if (this.Entity.p.HalfDayDate) {
+    //   this.localDate = this.dtu.ConvertStringDateToShortFormat(
+    //     this.Entity.p.HalfDayDate
+    //   );
+    // }
 
   }
+
+    // Extracted from services date conversion //
+    formatDate = (date: string | Date): string => {
+      return this.DateconversionService.formatDate(date);
+    }
 
   async getLeaveRequestListByEmployeeRef(): Promise<void> {
     this.LeaveRequestList = [];
@@ -107,13 +116,13 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
   }
 
   openModal(leave: LeaveRequest): void {
-    this.selectedLeave = leave;
+    this.SelectedLeaveRequest = leave;
     this.modalOpen = true;
   }
 
   closeModal(): void {
     this.modalOpen = false;
-    this.selectedLeave = null;
+    this.SelectedLeaveRequest.DeleteInstance;
   }
 
   async onDeleteClicked(request: LeaveRequest): Promise<void> {
@@ -138,5 +147,5 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     // Cleanup logic if needed
   }
-  
+
 }

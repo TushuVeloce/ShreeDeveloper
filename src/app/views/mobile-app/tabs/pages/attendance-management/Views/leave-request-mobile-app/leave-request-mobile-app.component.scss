@@ -39,6 +39,12 @@ ion-card {
     flex-direction: column;
     font-size: 0.85rem;
     color: #444;
+    small{
+      strong{
+        justify-content: space-between;
+        padding: 10px;
+      }
+    }
 }
 .detail-icon {
     font-size: 1rem;
