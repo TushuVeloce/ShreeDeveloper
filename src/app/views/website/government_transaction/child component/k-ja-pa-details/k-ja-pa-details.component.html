@@ -3,55 +3,75 @@
     <div *ngFor="let group of KJAPAList">
       <h4 class="SiteWorkGroupNamestyle">{{ group.SiteWorkGroupName }}</h4>
       <ul style="margin-top: 1rem;">
-        <li *ngFor="let siteWork of group.SiteWorks">
-          <ng-container
-          *ngIf="siteWork.SiteWorkName.trim() !== 'Report NOC' && siteWork.SiteWorkName.trim() !== 'Airport NOC' || showReportNOCSection">
-          <strong class="SiteWorkNameStyle">{{ siteWork.SiteWorkName }}:-</strong>
-          <ul>
-            <div class="row" style="margin-top: 1rem;margin-bottom: 1rem">
-              <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12"
-                *ngFor="let type of siteWork.ApplicableTypes; let i = index">
-                <label for="SiteWorkApplicableTypeName"><b>{{ type.SiteWorkApplicableTypeName=="Yes No" ?
-                    '' : type.SiteWorkApplicableTypeName}}
-                  </b>&nbsp;&nbsp; </label>
-                <!-- <div>{{ type.SiteWorkApplicableTypeName }}</div> -->
-                <!-- Checkbox -->
-                <input *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'checkbox'"
-                  class="form-check-input dark-border" type="checkbox"
-                  name="{{siteWork.SiteWorkName.trim() + '_' + i + 100}}" [(ngModel)]="type.Value"
-                  [checked]="type.Value === 'true'">
+        <ng-container *ngFor="let siteWork of group.SiteWorks">
+          <li
+            *ngIf="siteWork.SiteWorkName.trim() !== 'Report NOC' && siteWork.SiteWorkName.trim() !== 'Airport NOC' || showReportNOCSection">
 
-                <div *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'radio'"
-                  style="display: flex;">
-                  <div class="form-check">
-                    <input type="radio" class="form-check-input dark-border" id="radio1"
-                      name="{{ siteWork.SiteWorkName }}" name="{{ siteWork.SiteWorkName }}" [value]="true"
-                      [(ngModel)]="type.Value" (change)="getReportNOCAirportNOC(type.Value,siteWork.SiteWorkName)">Yes
-                    <label class="form-check-label" for="radio1"></label>
-                  </div>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <div class="form-check">
-                    <input type="radio" class="form-check-input dark-border" id="radio2"
-                      name="{{ siteWork.SiteWorkName }}" name="{{ siteWork.SiteWorkName }}" [value]="false"
-                      [(ngModel)]="type.Value" (change)="getReportNOCAirportNOC(type.Value,siteWork.SiteWorkName)">No
-                    <label class="form-check-label" for="radio2"></label>
-                  </div>
+            <!-- Inline SiteWorkName + Checkbox/Radio -->
+            <div class="row" style="margin-bottom: 1rem;">
+              <div class="col-md-9 col-sm-12 col-xs-12">
+                <strong class="SiteWorkNameStyle" style="min-width: 200px; margin-right: 1rem;">
+                  {{ siteWork.SiteWorkName }}:
+                </strong>
+              </div>
+              <div class="col-md-3 col-sm-12 col-xs-12" *ngFor="let type of siteWork.ApplicableTypes; let i = index">
+                <!-- Checkbox -->
+                <div *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'checkbox'"
+                  style="margin-right: 1.5rem;">
+                  <label>
+                    <input class="form-check-input dark-border" type="checkbox"
+                      name="{{siteWork.SiteWorkName.trim() + '_' + i + 100}}" [(ngModel)]="type.Value"
+                      [checked]="type.Value === 'true'">
+                    {{ type.SiteWorkApplicableTypeName !== 'Yes No' ? type.SiteWorkApplicableTypeName : '' }}
+                  </label>
                 </div>
 
+                <!-- Radio -->
+                <div *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'radio'"
+                  style="display: flex; align-items: center; gap: 1rem; margin-right: 1.5rem;">
+                  <label *ngIf="type.SiteWorkApplicableTypeName !== 'Yes No'" style="margin-right: 0.5rem;">
+                    {{ type.SiteWorkApplicableTypeName }}
+                  </label>
+                  <label>
+                    <input type="radio" class="form-check-input dark-border" name="{{ siteWork.SiteWorkName }}"
+                      [value]="true" [(ngModel)]="type.Value"
+                      (ngModelChange)="IsYesNoStatus(type.Value, siteWork.SiteWorkName)"> Yes
+                  </label>
+                  <label>
+                    <input type="radio" class="form-check-input dark-border" name="{{ siteWork.SiteWorkName }}"
+                      [value]="false" [(ngModel)]="type.Value"
+                      (ngModelChange)="IsYesNoStatus(type.Value, siteWork.SiteWorkName)"> No
+                  </label>
+                </div>
+              </div>
+              <!-- Inline Checkboxes and Radios -->
+            </div>
+
+            <!-- Grid layout for Date and Number Inputs -->
+            <div class="row" style="margin-bottom: 1rem;">
+              <ng-container *ngFor="let type of siteWork.ApplicableTypes; let i = index">
                 <!-- Number Input -->
-                <input *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'number'"
-                  class="form-control dark-border" name="{{siteWork.SiteWorkName.trim() + '_' + i + 100}}"
-                  [(ngModel)]="type.Value" type="number">
+                <div class="col-md-5 col-sm-6 col-xs-12"
+                  *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'number'"
+                  style="margin-bottom: 1rem;">
+                  <label>{{ type.SiteWorkApplicableTypeName }}</label>
+                  <input class="form-control dark-border" name="{{siteWork.SiteWorkName.trim() + '_' + i + 100}}"
+                    [(ngModel)]="type.Value" type="number">
+                </div>
 
                 <!-- Date Input -->
-                <input *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'date'"
-                  class="form-control dark-border" name="{{siteWork.SiteWorkName.trim() + '_' + i + 100}}"
-                  [(ngModel)]="type.Value" type="date">
-              </div>
+                <div class="col-md-5 col-sm-6 col-xs-12"
+                  *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'date'"
+                  style="margin-bottom: 1rem;">
+                  <label>{{ type.SiteWorkApplicableTypeName }}</label>
+                  <input class="form-control dark-border" name="{{siteWork.SiteWorkName.trim() + '_' + i + 100}}"
+                    [(ngModel)]="type.Value" type="date">
+                </div>
+              </ng-container>
             </div>
-          </ul>
+
+          </li>
         </ng-container>
-        </li>
       </ul>
     </div>
     <div class="row">

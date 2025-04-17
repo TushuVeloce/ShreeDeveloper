@@ -41,10 +41,10 @@ export class UlcDetailsComponent implements OnInit {
 
   // hide show content using radio button
   showReportNOCSection: boolean = false;
-  getReportNOCAirportNOC(value: boolean, siteWorkName: string) {
-    if (siteWorkName.trim() === 'Report NOC & Airport NOC') {
-      this.showReportNOCSection = value;
-    }
+  IsYesNoStatus(value: boolean, siteWorkName: string) {
+    // if (siteWorkName.trim() === 'Report NOC & Airport NOC') {
+    //   this.showReportNOCSection = value;
+    // }
   }
   
   onSave = () => {

@@ -86,8 +86,8 @@ export class GovernmentTransactionMasterComponent implements OnInit {
         } else {
           for (let siteWork of group.SiteWorks) {
             if (!siteWork.ApplicableTypes || siteWork.ApplicableTypes.length === 0) {
-              isGroupComplete = false;
-              break;
+              // isGroupComplete = false;
+              continue;
             }
 
             //  Check for 'Yes No' first
@@ -118,9 +118,10 @@ export class GovernmentTransactionMasterComponent implements OnInit {
         }
 
         this.groupCompletionStatus[obj.p.Ref][group.SiteWorkGroupName] = isGroupComplete;
+        console.log(this.groupCompletionStatus[obj.p.Ref][group.SiteWorkGroupName]);
 
         if (isGroupComplete) {
-          this.getGroupStatus(transactionRef, group.SiteWorkGroupName);
+          this.getGroupStatus(isGroupComplete, group.SiteWorkGroupName);
         }
 
         console.log(`Transaction #${transactionRef} → ${group.SiteWorkGroupName}: ${isGroupComplete}`);
@@ -128,6 +129,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
 
     }
   }
+
   SiteManagementRef: number = 0;
   onsitechange = (siteref: number) => {
     if (siteref > 0 && this.MasterList.length > 0) {
@@ -140,10 +142,23 @@ export class GovernmentTransactionMasterComponent implements OnInit {
       this.appStateManage.StorageKey.setItem('siteName', selectedSite.p.Name);
     }
   }
-  getGroupStatus(ref: number, groupName: string): boolean {
+
+  getGroupStatus(groupStatus: boolean, groupName: string): boolean {
     // console.log('Looking for status → Ref:', ref, 'Group:', groupName);
     // console.log('Data:', this.groupCompletionStatus[ref]);
-    return this.groupCompletionStatus[ref]?.[groupName] === true;
+    // return this.groupCompletionStatus[ref]?.[groupName] === true;
+
+    switch (groupName) {
+      case 'TP Office': return this.Entity.p.TpOfficeStatus = groupStatus;
+      case 'परिशिष्ठ A(NA)': return this.Entity.p.NaLetterStatus = groupStatus;
+      case 'मोजणी': return this.Entity.p.MojaniStatus = groupStatus;
+      case 'ULC': return this.Entity.p.ULCStatus = groupStatus;
+      case 'Final Layout': return this.Entity.p.FinalLayoutStatus = groupStatus;
+      case 'क जा पा': return this.Entity.p.KaJaPaStatus = groupStatus;
+      default:
+        return false; // Default return value
+    }
+
   }
 
   onEditClicked = async (item: GovernmentTransaction) => {

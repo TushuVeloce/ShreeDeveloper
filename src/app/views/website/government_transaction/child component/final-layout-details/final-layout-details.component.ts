@@ -19,7 +19,8 @@ export class FinalLayoutDetailsComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     let arr = JSON.parse(this.appStateManage.StorageKey.getItem('TransactionJson') ?? '[]');
     this.FinalLayoutList = arr.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
-    console.log('FinalLayoutList', this.FinalLayoutList);
+    // console.log('FinalLayoutList', this.FinalLayoutList);
+    this.BindApplicableTypeValueStatusToRadioButton();
   }
 
   ngOnInit() { }
@@ -42,10 +43,23 @@ export class FinalLayoutDetailsComponent implements OnInit {
 
   // hide show content using radio button
   showReportNOCSection: boolean = false;
-  getReportNOCAirportNOC(value: boolean, siteWorkName: string) {
+  IsRoadNOCStatus(value: boolean, siteWorkName: string) {
     if (siteWorkName.trim() === 'रोड NOC 2') {
       this.showReportNOCSection = value;
     }
+  }
+  
+  BindApplicableTypeValueStatusToRadioButton = () => {
+    // debugger
+    for (let i = 0; i < this.FinalLayoutList.length; i++) {
+      let SiteWorksList = this.FinalLayoutList[i].SiteWorks;
+      let ApplicableTypesList = SiteWorksList.filter((item: { SiteWorkName: string }) => item.SiteWorkName == 'रोड NOC 2');
+
+      let ApplicableTypeValueList = ApplicableTypesList[0].ApplicableTypes.filter((item: { SiteWorkApplicableTypeName: string }) => item.SiteWorkApplicableTypeName == 'Yes No');
+      this.IsRoadNOCStatus(ApplicableTypeValueList[0].Value, ApplicableTypesList[0].SiteWorkName);
+      // console.log('arr3', ApplicableTypeValueList[0].Value, ApplicableTypesList[0].SiteWorkName);
+    }
+
   }
   onSave = () => {
     // this.appStateManage.StorageKey.setItem('TpOfficeList', JSON.stringify(this.TpOfficeList));

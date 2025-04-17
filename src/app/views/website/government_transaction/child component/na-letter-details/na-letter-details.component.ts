@@ -20,6 +20,7 @@ export class NaLetterDetailsComponent implements OnInit {
 
     this.NALetterList = arr.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
     // console.log('NALetterList', this.NALetterList);
+    this.BindApplicableTypeValueStatusToRadioButton();
   }
 
   ngOnInit() { }
@@ -40,17 +41,28 @@ export class NaLetterDetailsComponent implements OnInit {
 
   // hide show content using radio button
   showReportNOCSection: boolean = false;
-  getReportNOCAirportNOC(value: boolean, siteWorkName: string) {
+  getInampatrStatus(value: boolean, siteWorkName: string) {
     // console.log('getReportNOCAirportNOC', value, siteWorkName);
     if (siteWorkName.trim() === 'इनामपत्र 2') {
       this.showReportNOCSection = value;
     }
   }
+  BindApplicableTypeValueStatusToRadioButton = () => {
+    // debugger
+    for (let i = 0; i < this.NALetterList.length; i++) {
+      let SiteWorksList = this.NALetterList[i].SiteWorks;
+      let ApplicableTypesList = SiteWorksList.filter((item: { SiteWorkName: string }) => item.SiteWorkName == 'इनामपत्र 2');
 
+      let ApplicableTypeValueList = ApplicableTypesList[0].ApplicableTypes.filter((item: { SiteWorkApplicableTypeName: string }) => item.SiteWorkApplicableTypeName == 'Yes No');
+      this.getInampatrStatus(ApplicableTypeValueList[0].Value, ApplicableTypesList[0].SiteWorkName);
+      // console.log('arr3', ApplicableTypeValueList[0].Value, ApplicableTypesList[0].SiteWorkName);
+    }
+
+  }
   onSave = () => {
     // this.appStateManage.StorageKey.setItem('TpOfficeList', JSON.stringify(this.TpOfficeList));
     this.onEntitySaved.emit(this.NALetterList);
-    console.log('onSave NALetterList', this.NALetterList);
+    // console.log('onSave NALetterList', this.NALetterList);
     this.router.navigate(['/homepage/Website/Site_Progress_Report_Details']);
   }
 
