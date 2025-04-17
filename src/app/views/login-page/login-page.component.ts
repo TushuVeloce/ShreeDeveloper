@@ -33,7 +33,7 @@ export class LoginPageComponent implements OnInit {
     });
   }
 
-  UserId: string = 'admin@gmail.com';
+  UserId: string = 'shweta@veloce.com';
   Password: string = '123';
 
   ngOnInit() { }
