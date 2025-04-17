@@ -9,6 +9,7 @@ export class AppStateManageService {
   private CompanyRef = 0;
 
   private EmployeeRef = 0
+  private LoginToken = '';
 
   private CurrentGAAProjectRefForProductVersion = 0;
   private CurrentGAAProjectNameForProductVersion = '';
@@ -174,6 +175,25 @@ export class AppStateManageService {
   resetDesignationRef(): void {
     this.localStorage.setItem('DesignationRef', '0');
   }
+
+    // ==================================== Login Token Start =========================================================
+
+    getLoginToken(): string {
+      const logtoken = this.StorageKey.getItem('LoginToken');
+      return logtoken ? logtoken : ''; // Return the project reference or 0 if not found
+    }
+
+    setLoginToken(val: string): void {
+      this.LoginToken = val;
+      this.StorageKey.setItem('LoginToken', val); // Store project reference in local storage
+    }
+
+    resetLoginToken(): void {
+      this.StorageKey.setItem('LoginToken', '');
+    }
+
+    // ==================================== Login Token End =========================================================
+
 
 
 }

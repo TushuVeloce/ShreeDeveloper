@@ -36,7 +36,7 @@ export class FinancialYearMasterComponent implements OnInit {
   private IsNewEntity: boolean = true;
   FromDates: string[] = [];
   ToDates: string[] = [];
-  newOwner: FinancialYearProps = FinancialYearProps.Blank(); 
+  newOwner: FinancialYearProps = FinancialYearProps.Blank();
   editingIndex: null | undefined | number ;
   localpassword: string = '';
 
@@ -90,11 +90,11 @@ export class FinancialYearMasterComponent implements OnInit {
    closeModal = async (type: string) => {
       // if (type === 'password') {
       //   const keysToCheck = ['Password'] as const;
-    
+
       //   const hasData = keysToCheck.some(
       //     key => (this.newOwner as any)[key]?.toString().trim()
       //   );
-    
+
       //   if (hasData) {
       //     await this.uiUtils.showConfirmationMessage(
       //       'Close',
@@ -112,28 +112,28 @@ export class FinancialYearMasterComponent implements OnInit {
             this.isPasswordModalOpen = false;
             this.localpassword = '';
     };
-    
+
 
       async addOwner() {
-    
+
         // if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
         //   this.Entity.p.SiteManagementOwnerDetails[this.editingIndex] = { ...this.newOwner };
         //   await this.uiUtils.showSuccessToster('Owner details updated successfully!');
         //   this.isPasswordModalOpen = false;
-    
+
         // } else {
         //   let ownerInstance = new Owner(this.newOwner, true);
         //   let siteInstance = new Site(this.Entity.p, true);
-        //   await ownerInstance.EnsurePrimaryKeysWithValidValues(); 
-        //   await siteInstance.EnsurePrimaryKeysWithValidValues(); 
-    
+        //   await ownerInstance.EnsurePrimaryKeysWithValidValues();
+        //   await siteInstance.EnsurePrimaryKeysWithValidValues();
+
         //   this.newOwner.SiteManagementRef = this.Entity.p.Ref;
         //   this.Entity.p.SiteManagementOwnerDetails.push({ ...ownerInstance.p });
         //   await this.uiUtils.showSuccessToster('Owner added successfully!');
         // }
-    
+
         // this.newOwner = OwnerDetailProps.Blank();
-        // this.editingIndex = null; 
+        // this.editingIndex = null;
       }
 
   // For Pagination  start ----
@@ -163,18 +163,22 @@ export class FinancialYearMasterComponent implements OnInit {
 
   // Financial Year Custom Request
   AddNewFinancialYear = async () => {
-    debugger
+    // debugger
     if (this.localpassword.trim().length > 0) {
 
       let req = new GenerateNewFinancialYearCustomRequest();
-      
+
       req.CompanyRef = this.companyRef();
       req.Password = this.localpassword;
-      console.log('req :', req);
-      
+      req.LoginEmployeeRef = this.appStateManage.getEmployeeRef();
+      req.LoginToken = this.appStateManage.getLoginToken();
+
       let td = req.FormulateTransportData();
       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-    
+
+      console.log(td);
+      console.log(pkt);
+
     let tr = await this.serverCommunicator.sendHttpRequest(pkt);
     if (!tr.Successful) {
       await this.uiUtils.showErrorMessage('Error', tr.Message);
@@ -183,11 +187,13 @@ export class FinancialYearMasterComponent implements OnInit {
     let tdResult = JSON.parse(tr.Tag) as TransportData;
     let NewFinancialYear = this.utils.GetString(tdResult);
     this.Entity.p.FromDate = NewFinancialYear;
+    console.log(tdResult);
+
     this.closeModal('password');
     this.getFinancialYearListByCompanyRef();
   }
   else{
-    await this.uiUtils.showWarningToster('Password Required');      
+    await this.uiUtils.showWarningToster('Password Required');
   }
 
 
