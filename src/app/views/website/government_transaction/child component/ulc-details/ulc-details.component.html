@@ -4,17 +4,17 @@
       <h4 class="SiteWorkGroupNamestyle">{{ group.SiteWorkGroupName }}</h4>
       <ul style="margin-top: 1rem;">
         <ng-container *ngFor="let siteWork of group.SiteWorks">
-          <li
+          <div style="border: brown 2px solid; padding: 1rem; margin-top: 10px;border-radius: 5px;"
             *ngIf="siteWork.SiteWorkName.trim() !== 'Report NOC' && siteWork.SiteWorkName.trim() !== 'Airport NOC' || showReportNOCSection">
-            
+
             <!-- Inline SiteWorkName + Checkbox/Radio -->
-            <div class="row" style="margin-bottom: 1rem;">
+            <div class="row SiteWorkNameStyle" style="margin-bottom: 1rem;">
               <div class="col-md-9 col-sm-12 col-xs-12">
-                <strong class="SiteWorkNameStyle" style="min-width: 200px; margin-right: 1rem;">
+                <strong style="min-width: 200px; margin-right: 1rem;">
                   {{ siteWork.SiteWorkName }}:
                 </strong>
               </div>
-              <div class="col-md-3 col-sm-12 col-xs-12" *ngFor="let type of siteWork.ApplicableTypes; let i = index">
+              <div class="col-md-3 col-sm-12 col-xs-12" style="justify-items: end;" *ngFor="let type of siteWork.ApplicableTypes; let i = index">
                 <!-- Checkbox -->
                 <div *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'checkbox'"
                   style="margin-right: 1.5rem;">
@@ -51,7 +51,7 @@
             <div class="row" style="margin-bottom: 1rem;">
               <ng-container *ngFor="let type of siteWork.ApplicableTypes; let i = index">
                 <!-- Number Input -->
-                <div class="col-md-5 col-sm-6 col-xs-12"
+                <div class="col-md-6 col-sm-12 col-xs-12"
                   *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'number'"
                   style="margin-bottom: 1rem;">
                   <label>{{ type.SiteWorkApplicableTypeName }}</label>
@@ -60,7 +60,7 @@
                 </div>
 
                 <!-- Date Input -->
-                <div class="col-md-5 col-sm-6 col-xs-12"
+                <div class="col-md-6 col-sm-12 col-xs-12"
                   *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'date'"
                   style="margin-bottom: 1rem;">
                   <label>{{ type.SiteWorkApplicableTypeName }}</label>
@@ -69,7 +69,7 @@
                 </div>
               </ng-container>
             </div>
-          </li>
+          </div>
         </ng-container>
       </ul>
     </div>
