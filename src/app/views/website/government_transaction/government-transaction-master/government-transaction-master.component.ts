@@ -133,13 +133,10 @@ export class GovernmentTransactionMasterComponent implements OnInit {
   SiteManagementRef: number = 0;
   onsitechange = (siteref: number) => {
     if (siteref > 0 && this.MasterList.length > 0) {
-      this.SiteManagementRef = siteref;
-      const selectedSite = this.SiteList.find(site => site.p.Ref === siteref);
-      if (!selectedSite) {
-        return;
-      }
-      this.appStateManage.StorageKey.setItem('siteRf', String(siteref));
-      this.appStateManage.StorageKey.setItem('siteName', selectedSite.p.Name);
+      this.DisplayMasterList = this.MasterList.filter(e => (e.p.SiteRef == siteref));
+    }
+    else {
+      this.DisplayMasterList = this.MasterList;
     }
   }
 

@@ -23,7 +23,7 @@ export class SiteWorkDoneProps {
   public CompanyRef: number = 0;
   public CompanyName: string = '';
   public ListOfApplicableTypes: ApplicableTypeProps[] = [];
-
+  public DisplayOrder: number = 0;
   public readonly IsNewlyCreated: boolean = false;
   public readonly SiteWorkName: string = '';
   public readonly SiteWorkGroupName: string = '';

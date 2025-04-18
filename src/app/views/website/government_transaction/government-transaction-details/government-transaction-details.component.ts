@@ -49,7 +49,7 @@ export class GovernmentTransactionDetailsComponent implements OnInit {
     await this.router.navigate(['/homepage/Website/Respected_child', { queryParams: SiteWorkGroupName }]);
   }
 
-  onCancel = async () => {
+  onBack = async () => {
     await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
   }
 }

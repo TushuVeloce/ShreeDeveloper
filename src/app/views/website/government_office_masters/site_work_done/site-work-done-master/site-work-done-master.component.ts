@@ -43,7 +43,7 @@ export class SiteWorkDoneMasterComponent implements OnInit {
   ) {
     effect(async () => {
       // this.getSiteWorkDoneListByCompanyRef()
-     await this.getSiteWorkDoneListByCompanyRef();
+      await this.getSiteWorkDoneListByCompanyRef();
     });
   }
 
@@ -87,11 +87,11 @@ export class SiteWorkDoneMasterComponent implements OnInit {
       this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.MasterList = lst;
-
-    //this.DisplayMasterList = this.MasterList;
+    this.MasterList = lst.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
+    this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
+
   onSiteGroupChange(siteGroupRef: number) {
     this.DisplayMasterList = [];
     this.DisplaySiteWorkMasterList = [];
@@ -104,7 +104,7 @@ export class SiteWorkDoneMasterComponent implements OnInit {
       // if (!selectedSiteWorkref) {
       //   return;
       // }
-      this.DisplaySiteWorkMasterList = this.SiteWorkMasterList.filter(e=> e.p.SiteWorkGroupRef == siteGroupRef)
+      this.DisplaySiteWorkMasterList = this.SiteWorkMasterList.filter(e => e.p.SiteWorkGroupRef == siteGroupRef);
     }
   }
 
@@ -190,7 +190,9 @@ export class SiteWorkDoneMasterComponent implements OnInit {
       // if (!selectedSiteWorkref) {
       //   return;
       // }
-      this.DisplayMasterList = this.MasterList.filter(e=> e.p.SiteWorkRef == sitework)
+      let List = this.MasterList.filter(e => e.p.SiteWorkRef == sitework)
+      this.DisplayMasterList = List.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
+
       this.appStateManage.StorageKey.setItem('siteRf', String(sitework));
     }
   }

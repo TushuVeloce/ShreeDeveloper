@@ -73,7 +73,7 @@ export class SiteWorkMasterComponent implements OnInit {
   getSiteWorkMasterListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    console.log('companyRef :', this.companyRef());
+    // console.log('companyRef :', this.companyRef());
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -82,8 +82,8 @@ export class SiteWorkMasterComponent implements OnInit {
       this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.MasterList = lst;
-    console.log('SiteWorkMasterList :', this.MasterList);
+    this.MasterList = lst.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
+    // console.log('SiteWorkMasterList :', this.MasterList);
 
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -173,8 +173,9 @@ export class SiteWorkMasterComponent implements OnInit {
       //   return;
       // }
       // this.appStateManage.StorageKey.setItem('sitegroup', String(sitegroup));
-      this.DisplayMasterList = this.MasterList.filter(e=> e.p.SiteWorkGroupRef == siteGroupRef)
+      let List = this.MasterList.filter(e => e.p.SiteWorkGroupRef == siteGroupRef)
+      this.DisplayMasterList = List.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
+      this.loadPaginationData()
     }
-    this.loadPaginationData()
   }
 }
