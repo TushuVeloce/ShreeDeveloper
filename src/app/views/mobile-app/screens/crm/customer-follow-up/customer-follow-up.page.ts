@@ -85,6 +85,7 @@ export class CustomerFollowUpPage implements OnInit {
     );
 
     this.followupList = FollowUp;
+    this.FilterFollowupList = this.followupList;
     console.log('followup', this.followupList);
   };
 
