@@ -44,6 +44,7 @@ export class LeaveRequestDetailsComponent implements OnInit {
   todate: string = '';
   EmployeeRef: number = 0;
   TotalWorkingHrs: number = 0;
+  isHalfDay: boolean = false;
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
@@ -57,7 +58,7 @@ export class LeaveRequestDetailsComponent implements OnInit {
     private utils: Utils,
     private dtu: DTU,
     private companystatemanagement: CompanyStateManagement
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -137,11 +138,8 @@ export class LeaveRequestDetailsComponent implements OnInit {
     console.log('Request', this.Entity.p.LeaveRequestType);
   };
 
-  setDaysandLeaveHours = () => {
-    //
-    if (this.Entity.p.LeaveRequestType == LeaveRequestType.HalfDay) {
-      this.Entity.p.LeaveHours = this.TotalWorkingHrs * 0.5;
-    } else if (this.fromdate && this.todate) {
+  onDateChangeSetDaysandLeaveHours = () => {
+    if (this.fromdate && this.todate) {
       const FromDate: any = new Date(this.fromdate);
       const ToDate: any = new Date(this.todate);
 
@@ -156,30 +154,30 @@ export class LeaveRequestDetailsComponent implements OnInit {
     }
   };
 
-  isHalfDay: boolean = false;
   onLeaveRequestTypeChanged = () => {
-    alert(this.Entity.p.LeaveRequestType);
-    if (this.Entity.p.LeaveRequestType == LeaveRequestType.HalfDay)
+    if (this.Entity.p.LeaveRequestType == LeaveRequestType.HalfDay) {
       this.isHalfDay = true;
-    else this.isHalfDay = false;
-  };
-  SaveLeaveRequest = async () => {
-    this.Entity.p.CompanyRef =
-      this.companystatemanagement.getCurrentCompanyRef();
-    this.Entity.p.CompanyName =
-      this.companystatemanagement.getCurrentCompanyName();
-
-    if (this.Entity.p.LeaveRequestType == 300) {
-      this.Entity.p.HalfDayDate = this.dtu.ConvertStringDateToFullFormat(
-        this.halfdaydate
-      );
+      this.Entity.p.LeaveHours = this.TotalWorkingHrs * 0.5;
+      this.Entity.p.FromDate = '';
+      this.fromdate = '';
+      this.Entity.p.ToDate = ''
+      this.todate = '';
+      this.Entity.p.Days = 0;
     } else {
-      this.Entity.p.FromDate = this.dtu.ConvertStringDateToFullFormat(
-        this.fromdate
-      );
-      this.Entity.p.ToDate = this.dtu.ConvertStringDateToFullFormat(
-        this.todate
-      );
+      this.isHalfDay = false;
+      this.halfdaydate = '';
+    }
+  };
+
+  SaveLeaveRequest = async () => {
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+
+    if (this.Entity.p.LeaveRequestType == LeaveRequestType.HalfDay) {
+      this.Entity.p.HalfDayDate = this.dtu.ConvertStringDateToFullFormat(this.halfdaydate);
+    } else {
+      this.Entity.p.FromDate = this.dtu.ConvertStringDateToFullFormat(this.fromdate);
+      this.Entity.p.ToDate = this.dtu.ConvertStringDateToFullFormat(this.todate);
     }
 
     if (!this.Entity.p.Days) {
@@ -195,24 +193,21 @@ export class LeaveRequestDetailsComponent implements OnInit {
 
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
-    // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
-    // if (!tr.Successful) {
-    //   this.isSaveDisabled = false;
-    //   this.uiUtils.showErrorMessage('Error', tr.Message);
-    //   return;
-    // } else {
-    //   this.isSaveDisabled = false;
-    //   if (this.IsNewEntity) {
-    //     await this.uiUtils.showSuccessToster('Leave Request Master saved successfully!');
-    //     this.Entity = LeaveRequest.CreateNewInstance();
-    //     this.resetAllControls();
-    //   } else {
-    //     await this.uiUtils.showSuccessToster('Leave Request Master Updated successfully!');
-    //     await this.router.navigate(['/homepage/Website/Leave_Request']);
-    //   }
-    // }
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
+    } else {
+      this.isSaveDisabled = false;
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('Leave Request Master saved successfully!');
+        this.Entity = LeaveRequest.CreateNewInstance();
+        this.resetAllControls();
+        await this.router.navigate(['/homepage/Website/Leave_Request']);
+      }
+    }
   };
 
   // for value 0 selected while click on Input //

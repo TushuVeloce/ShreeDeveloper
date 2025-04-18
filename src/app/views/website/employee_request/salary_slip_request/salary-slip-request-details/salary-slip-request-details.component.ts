@@ -97,8 +97,6 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
     }));
 
     this.FinancialYearList = updatedArray;
-    console.log('updatedArray :', updatedArray);
-
     // this.convertDateFormat();
   }
 
@@ -131,24 +129,23 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
-    // if (!tr.Successful) {
-    //   this.isSaveDisabled = false;
-    //   this.uiUtils.showErrorMessage('Error', tr.Message);
-    //   return;
-    // } else {
-    //   this.isSaveDisabled = false;
-    //   if (this.IsNewEntity) {
-    //     await this.uiUtils.showSuccessToster('SalarySlipRequest Master saved successfully!');
-    //     this.Entity = SalarySlipRequest.CreateNewInstance();
-    //     this.resetAllControls();
-    //   } else {
-    //     await this.uiUtils.showSuccessToster('SalarySlipRequest Master Updated successfully!');
-    //     await this.router.navigate(['/homepage/Website/Salary_Slip_Request']);
-    //   }
-    // }
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
+    } else {
+      this.isSaveDisabled = false;
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('SalarySlipRequest Master saved successfully!');
+        this.Entity = SalarySlipRequest.CreateNewInstance();
+        this.resetAllControls();
+      } else {
+        await this.uiUtils.showSuccessToster('SalarySlipRequest Master Updated successfully!');
+        await this.router.navigate(['/homepage/Website/Salary_Slip_Request']);
+      }
+    }
   };
 
   // for value 0 selected while click on Input //

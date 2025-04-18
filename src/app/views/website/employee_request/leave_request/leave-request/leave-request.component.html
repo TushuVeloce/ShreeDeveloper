@@ -26,8 +26,10 @@
           <tr *ngFor="let leaverequest of paginatedList(); index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{leaverequest.p.LeaveRequestName}}</td>
-            <td class="tbldata">{{ formatDate(leaverequest.p.FromDate) }}</td>
-            <td class="tbldata">{{ formatDate(leaverequest.p.ToDate) }}</td>
+            <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType != 300">
+              {{ formatDate(leaverequest.p.FromDate) }} - {{ formatDate(leaverequest.p.ToDate) }}</td>
+
+            <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType == 300">{{formatDate(leaverequest.p.HalfDayDate)}}</td>
             <td Class="tbldata">{{leaverequest.p.Days}}</td>
             <td Class="tbldata">{{leaverequest.p.LeaveHours}}</td>
             <td Class="tbldata">

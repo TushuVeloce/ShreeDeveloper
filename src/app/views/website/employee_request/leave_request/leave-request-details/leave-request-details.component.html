@@ -12,14 +12,6 @@
     </div>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-        <!-- <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
-          <label>Employee</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="EmployeeRef"
-            name="EmployeeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.EmployeeRef">
-            <nz-option *ngFor="let Employee of EmployeeList" [nzValue]="Employee.p.Ref"
-              [nzLabel]="Employee.p.Name"></nz-option>
-          </nz-select>
-        </div> -->
         <div class="col-lg-4 col-md-4 col-sm-12">
           <label>Name</label>
           <input type="text" [(ngModel)]="Entity.p.EmployeeName" readonly name="EmployeeName" class="form-control"
@@ -37,35 +29,35 @@
               [nzLabel]="LeaveRequestType.Name"></nz-option>
           </nz-select>
         </div>
-        <div *ngIf="Entity.p.LeaveRequestType == 300" class="col-lg-4 col-md-4 col-sm-12">
+        <div *ngIf="isHalfDay" class="col-lg-4 col-md-4 col-sm-12">
           <label>Date</label>
           <input type="date" [(ngModel)]="halfdaydate" name="halfdaydate" class="form-control" id="halfdaydate" required
-            placeholder="Enter To Date" (change)="setDaysandLeaveHours()" #halfdaydateCtrl="ngModel"
+            placeholder="Enter To Date" #halfdaydateCtrl="ngModel"
             (blur)="halfdaydateCtrl.control.markAsTouched()" />
           <div style="height: 25px;"
             *ngIf="(halfdaydateCtrl.invalid && (halfdaydateCtrl.touched || halfdaydateCtrl.dirty))">
             <span class="validation-text" *ngIf="halfdaydateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div *ngIf="Entity.p.LeaveRequestType != 300" class="col-lg-4 col-md-4 col-sm-12">
+        <div *ngIf="!isHalfDay" class="col-lg-4 col-md-4 col-sm-12">
           <label>From Date</label>
           <input type="date" [(ngModel)]="fromdate" name="fromdate" class="form-control" id="fromdate" required
-            placeholder="Enter From Date" (change)="setDaysandLeaveHours()" #fromdateCtrl="ngModel"
+            placeholder="Enter From Date" (change)="onDateChangeSetDaysandLeaveHours()" #fromdateCtrl="ngModel"
             (blur)="fromdateCtrl.control.markAsTouched()" />
           <div style="height: 25px;" *ngIf="(fromdateCtrl.invalid && (fromdateCtrl.touched || fromdateCtrl.dirty))">
             <span class="validation-text" *ngIf="fromdateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div *ngIf="Entity.p.LeaveRequestType != 300" class="col-lg-4 col-md-4 col-sm-12">
+        <div *ngIf="!isHalfDay" class="col-lg-4 col-md-4 col-sm-12">
           <label>To Date</label>
           <input type="date" [(ngModel)]="todate" [disabled]="!fromdate" name="todate" class="form-control" id="todate"
-            required placeholder="Enter To Date" (change)="setDaysandLeaveHours()" #todateCtrl="ngModel"
+            required placeholder="Enter To Date" (change)="onDateChangeSetDaysandLeaveHours()" #todateCtrl="ngModel"
             (blur)="todateCtrl.control.markAsTouched()" />
           <div style="height: 25px;" *ngIf="(todateCtrl.invalid && (todateCtrl.touched || todateCtrl.dirty))">
             <span class="validation-text" *ngIf="todateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div *ngIf="Entity.p.LeaveRequestType != 300" class="col-lg-4 col-md-4 col-sm-12">
+        <div *ngIf="!isHalfDay" class="col-lg-4 col-md-4 col-sm-12">
           <label>Days</label>
           <input type="number" [(ngModel)]="Entity.p.Days" [disabled]="!todate" name="Days" class="form-control"
             id="Days" required placeholder="Enter Days" #DaysCtrl="ngModel" (blur)="DaysCtrl.control.markAsTouched()"
