@@ -38,8 +38,8 @@
           <tr *ngFor="let leaverequest of paginatedList(); index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{leaverequest.p.LeaveRequestName}}</td>
-            <!-- <td Class="tbldata" style="cursor: pointer;" [nzTooltipTitle]="leaverequest.p.Description"
-              nzTooltipPlacement="top" nzTooltipColor="#A52A2A" nz-button nz-tooltip>{{leaverequest.p.Description}}</td> -->
+            <td Class="tbldata" style="cursor: pointer;" [nzTooltipTitle]="leaverequest.p.Description"
+              nzTooltipPlacement="top" nzTooltipColor="#A52A2A" nz-button nz-tooltip>{{leaverequest.p.Description}}</td>
             <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType != 300">
               {{ formatDate(leaverequest.p.FromDate) }} - {{ formatDate(leaverequest.p.ToDate) }}</td>
 

@@ -3,6 +3,7 @@
   border-radius: 12px;
   font-weight: 500;
   font-size: 14px;
+  width: 100px;
   border: 1px solid;
   display: inline-block;
   color: black;
@@ -13,7 +14,23 @@
   }
 
   &.pending {
+    border-color: rgb(180, 180, 2);
+    background-color: rgb(252, 252, 213);
+  }
+
+  &.rejected {
     border-color: red;
     background-color: #ffe6e6;
   }
+}
+
+th,
+td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 50px;
+  /* Minimum width for all columns */
+  max-width: 400px;
+  /* Maximum width for all columns */
 }

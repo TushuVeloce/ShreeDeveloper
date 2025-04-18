@@ -10,6 +10,7 @@ export class LeaveRequestFetchRequest
 
     LeaveRequestRefs: number[] = [];
     EmployeeRefs: number[] = [];
+    CompanyRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

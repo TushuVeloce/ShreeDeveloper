@@ -202,6 +202,13 @@ export class LeaveRequest implements IPersistable<LeaveRequest> {
     return LeaveRequest.ListFromTransportData(tdResponse);
   }
 
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new LeaveRequestFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await LeaveRequest.FetchTransportData(req, errorHandler) as TransportData;
+    return LeaveRequest.ListFromTransportData(tdResponse);
+  }
+
   public static async FetchEntireListByEmployeeRef(EmployeeRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new LeaveRequestFetchRequest();
     req.EmployeeRefs.push(EmployeeRef)

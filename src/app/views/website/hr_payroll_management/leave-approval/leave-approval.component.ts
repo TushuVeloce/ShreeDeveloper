@@ -31,8 +31,8 @@ export class LeaveApprovalComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  // headers: string[] = ['Sr.No.', 'Leave Request Type', 'Description', 'Date', 'Days', 'Approval Status'];
-  headers: string[] = ['Sr.No.', 'Leave Request Type', 'Date', 'Days', 'Approval Status'];
+  headers: string[] = ['Sr.No.', 'Leave Request Type', 'Description', 'Date', 'Days', 'Approval Status'];
+  // headers: string[] = ['Sr.No.', 'Leave Request Type', 'Date', 'Days', 'Approval Status'];
   constructor(
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
@@ -65,8 +65,22 @@ export class LeaveApprovalComponent implements OnInit {
     }
     let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.EmployeeList = lst;
-    this.Entity.p.EmployeeRef = this.EmployeeList[0].p.Ref
-    this.getLeaveApprovalListByEmployeeRef();
+    // this.Entity.p.EmployeeRef = this.EmployeeList[0].p.Ref
+    // this.getLeaveApprovalListByEmployeeRef();
+  }
+
+  getLeaveApprovalListByCompanyRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await LeaveRequest.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
   }
 
   getLeaveApprovalListByEmployeeRef = async () => {

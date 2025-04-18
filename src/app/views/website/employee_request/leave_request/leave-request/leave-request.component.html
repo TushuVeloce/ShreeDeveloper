@@ -26,18 +26,31 @@
           <tr *ngFor="let leaverequest of paginatedList(); index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{leaverequest.p.LeaveRequestName}}</td>
+            <td Class="tbldata" style="cursor: pointer;" [nzTooltipTitle]="leaverequest.p.Description"
+              nzTooltipPlacement="top" nzTooltipColor="#A52A2A" nz-button nz-tooltip>{{leaverequest.p.Description}}</td>
             <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType != 300">
               {{ formatDate(leaverequest.p.FromDate) }} - {{ formatDate(leaverequest.p.ToDate) }}</td>
 
-            <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType == 300">{{formatDate(leaverequest.p.HalfDayDate)}}</td>
+            <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType == 300">
+              {{formatDate(leaverequest.p.HalfDayDate)}}</td>
             <td Class="tbldata">{{leaverequest.p.Days}}</td>
-            <td Class="tbldata">{{leaverequest.p.LeaveHours}}</td>
-            <td Class="tbldata">
-              <span class="status" *ngIf="leaverequest.p.IsApproved == 0" ngClass="pending">
+            <td class="tbldata">
+              <!-- PENDING -->
+              <span class="status" *ngIf="leaverequest.p.IsApproved == 0 && leaverequest.p.IsCancelled == 0"
+                ngClass="pending">
                 Pending
               </span>
-              <span class="status" *ngIf="leaverequest.p.IsApproved == 1" ngClass="approved">
+
+              <!-- APPROVED -->
+              <span class="status" *ngIf="leaverequest.p.IsApproved == 1 && leaverequest.p.IsCancelled == 0"
+                ngClass="approved">
                 Approved
+              </span>
+
+              <!-- REJECTED -->
+              <span class="status" *ngIf="leaverequest.p.IsApproved == 0 && leaverequest.p.IsCancelled == 1"
+                ngClass="rejected">
+                Rejected
               </span>
             </td>
             <td class="tbldata">
