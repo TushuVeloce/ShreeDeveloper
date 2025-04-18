@@ -34,7 +34,7 @@
           <label>From Year</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="FromYear"
             name="FromYear" [nzSize]="'large'" [(ngModel)]="Entity.p.FromYear">
-            <nz-option *ngFor="let FromYear of FinancialYearList" [nzValue]="FromYear.p.FromDate"
+            <nz-option *ngFor="let FromYear of FinancialYearList" [nzValue]="FromYear.FromDate"
               [nzLabel]="FromYear.FromDate"></nz-option>
           </nz-select>
         </div>
@@ -49,7 +49,7 @@
           <label>To Year</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="ToYear" name="ToYear"
             [nzSize]="'large'" [(ngModel)]="Entity.p.ToYear">
-            <nz-option *ngFor="let ToYear of FinancialYearList" [nzValue]="ToYear.p.ToDate"
+            <nz-option *ngFor="let ToYear of FinancialYearList" [nzValue]="ToYear.ToDate"
               [nzLabel]="ToYear.ToDate"></nz-option>
           </nz-select>
         </div>
