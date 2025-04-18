@@ -1,43 +1,11 @@
-<!-- <div class="row">
-  <div class="col-md-1"></div>
-  <div class="col-md-10">
-    <span class="title title_light" (click)="getSiteWorkGroupName('T.P Office')">TP Office</span>
-  </div>
-  <div class="col-md-1"></div>
-
-  <div class="col-md-1"></div>
-  <div class="col-md-10">
-    <span class="title title_light" (click)="getSiteWorkGroupName('परिशिष्ठ A(NA)')">NA Letter</span>
-  </div>
-  <div class="col-md-1"></div>
-
-  <div class="col-md-1"></div>
-  <div class="col-md-10">
-    <span class="title title_light" (click)="getSiteWorkGroupName('Mojani')">Mojani</span>
-  </div>
-  <div class="col-md-1"></div>
-
-  <div class="col-md-1"></div>
-  <div class="col-md-10">
-    <span class="title title_light" (click)="getSiteWorkGroupName('ULC')">ULC</span>
-  </div>
-  <div class="col-md-1"></div>
-
-  <div class="col-md-1"></div>
-  <div class="col-md-10">
-    <span class="title title_light" (click)="getSiteWorkGroupName('Final Layout')">Final Layout</span>
-  </div>
-  <div class="col-md-1"></div>
-
-  <div class="col-md-1"></div>
-  <div class="col-md-10">
-    <span class="title title_light" (click)="getSiteWorkGroupName('क जा पा')">क जा पा</span>
-  </div>
-  <div class="col-md-1"></div>
-</div> -->
 <div class="row">
-  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12 mb-2">
-    <h5 style="padding-top: 3px;" class="title title_light">{{DetailsFormTitle}}</h5>
+  <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+    <button type="button" class="backbtn" (click)="onBack()">
+      <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+    </button>
+  </div>
+  <div class="col-md-11">
+    <span class="detail_title">{{DetailsFormTitle}}</span>
   </div>
 </div>
 
@@ -59,18 +27,5 @@
   </div>
   <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 col-12">
 
-  </div>
-
-</div>
-<div class="row">
-  <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
-    <!-- <div>
-      <button type="button" class="btn" (click)="onSave()">Save</button>
-    </div> -->
-    <div>
-      <button type="button" class="btn" (click)="onCancel()">
-        Back
-      </button>
-    </div>
   </div>
 </div>
