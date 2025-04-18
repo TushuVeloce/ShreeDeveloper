@@ -1,19 +1,20 @@
 <app-header-with-back-handler title="Customer Enquiry"></app-header-with-back-handler>
 
 <ion-content [fullscreen]="true">
+  <!-- Status Filter -->
+  <ion-segment [(ngModel)]="selectedStatus" (ionChange)="filterCustomerList()" class="modern-segment">
+    <ion-segment-button *ngFor="let status of statusOptions" [value]="status.value">
+      <ion-label>{{ status.label }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
 
   <!-- Customer List -->
   <ion-list class="Data-list">
     <ion-card *ngFor="let item of FilteredCustomerEnquiryList" class="Data-card">
       <ion-card-content>
-        <!-- <div class="info-row"><strong>Date:</strong> {{ item.p.Name }}</div> -->
         <div class="info-row"><strong>Name:</strong> {{ item.p.Name }}</div>
         <div class="info-row"><strong>Contact No:</strong> {{ item.p.ContactNos }}</div>
-        <div class="info-row"><strong>Customer Status:</strong> {{ item.p.CustomerStatusName }}</div>
-        <div class="info-row"><strong>Office Visit Date:</strong> {{ item.p.CustomerFollowUps[0].OfficeVisitDate }}
-        </div>
-        <!-- <div class="info-row"><strong>Plot No:</strong> {{ item.p.EmailId }}</div> -->
-
+        <div class="info-row"><strong>Status:</strong> {{ item.p.CustomerStatusName }}</div>
         <div class="btn-row">
           <ion-button size="small" fill="outline" color="primary" (click)="onViewClicked(item)">
             <ion-icon name="eye-outline" slot="start"></ion-icon> View
@@ -29,7 +30,7 @@
     </ion-card>
   </ion-list>
 
-  <!-- Floating Button (FAB) -->
+  <!-- FAB -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button>
       <ion-icon name="ellipsis-vertical"></ion-icon>
@@ -45,45 +46,41 @@
   </ion-fab>
 
   <!-- Modal -->
-  <ion-modal [isOpen]="ModalOpen" (didDismiss)="ModelClose()" class="modal-card">
-    <ng-template>
-      <div class="modal-container">
-        <ion-header>
-          <ion-toolbar color="primary" class="modal-toolbar">
-            <ion-title>Customer Details</ion-title>
-            <ion-buttons slot="end">
-              <ion-button fill="clear" (click)="ModelClose()">
-                <ion-icon name="close-outline"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-
-        <!-- Scrollable area -->
-        <div class="modal-body">
-          <ion-content scroll-y="true" class="modal-scroll-content ion-padding">
-            <div class="info-row-of-model"><strong class="label">Name:</strong> <span class="value">{{
-                SelectedCustomerEnquiry.p.Name }}</span></div>
-            <div class="info-row-of-model"><strong class="label">Contact No:</strong> <span class="value">{{
-                SelectedCustomerEnquiry.p.ContactNos }}</span></div>
-            <div class="info-row-of-model"><strong class="label">Email Id:</strong> <span class="value">{{
-                SelectedCustomerEnquiry.p.EmailId }}</span></div>
-            <div class="info-row-of-model"><strong class="label">Status:</strong><span class="value">{{
-                SelectedCustomerEnquiry.p.CustomerStatusName }}</span> </div>
-            <div class="info-row-of-model"><strong class="label">Office Visit Date :</strong> <span class="value">{{
-                SelectedCustomerEnquiry.p.CustomerFollowUps[0].OfficeVisitDate }}</span></div>
-            <div class="info-row-of-model"><strong class="label">Remark :</strong> <span class="value">{{
-                SelectedCustomerEnquiry.p.CustomerFollowUps[0].Remark }}</span></div>
-          </ion-content>
-        </div>
-        <ion-footer class="modal-footer">
-          <ion-button expand="block" color="primary" shape="round" (click)="ModelClose()">
-            Close
-          </ion-button>
-        </ion-footer>
-      </div>
-    </ng-template>
+  <ion-modal [isOpen]="ModalOpen" (didDismiss)="closeModal()" class="modal-card">
+    <ng-container *ngIf="SelectedCustomerEnquiry">
+      <ion-header>
+        <ion-toolbar color="primary" class="modal-toolbar">
+          <ion-title>Customer Details</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="closeModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content scroll-y="true" class="modal-scroll-content ion-padding">
+        <div class="info-row-of-model"><strong class="label">Name:</strong> <span class="value">{{
+            SelectedCustomerEnquiry.p.Name }}</span></div>
+        <div class="info-row-of-model"><strong class="label">Contact No:</strong> <span class="value">{{
+            SelectedCustomerEnquiry.p.ContactNos }}</span></div>
+        <div class="info-row-of-model"><strong class="label">Status:</strong> <span class="value">{{
+            SelectedCustomerEnquiry.p.CustomerStatusName }}</span></div>
+        <div class="info-row-of-model"><strong class="label">Address:</strong> <span class="value">{{
+            SelectedCustomerEnquiry.p.Address }}</span></div>
+        <div class="info-row-of-model"><strong class="label">City:</strong> <span class="value">{{
+            SelectedCustomerEnquiry.p.CityName }}</span></div>
+        <div class="info-row-of-model"><strong class="label">State:</strong> <span class="value">{{
+            SelectedCustomerEnquiry.p.StateName }}</span></div>
+        <div class="info-row-of-model"><strong class="label">Country:</strong> <span class="value">{{
+            SelectedCustomerEnquiry.p.CountryName }}</span></div>
+        <div class="info-row-of-model"><strong class="label">Pin Code:</strong> <span class="value">{{
+            SelectedCustomerEnquiry.p.PinCode }}</span></div>
+      </ion-content>
+      <ion-footer class="modal-footer">
+        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
+          Close
+        </ion-button>
+      </ion-footer>
+    </ng-container>
   </ion-modal>
-
-
 </ion-content>

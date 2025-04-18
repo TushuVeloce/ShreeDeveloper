@@ -31,7 +31,10 @@
         }
     }
 }
-
+.modern-segment .selected {
+    background-color: #007bff;
+    color: white;
+}
 .modal-card::part(content) {
     --width: 90%;
     --height: 60%;

@@ -1,10 +1,10 @@
-import { Component, effect, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CustomerStatus } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUpProps } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
-import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -17,143 +17,90 @@ export class CustomerEnquiryPage implements OnInit {
   Entity: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
   CustomerEnquiryList: CustomerEnquiry[] = [];
   FilteredCustomerEnquiryList: CustomerEnquiry[] = [];
-  SearchString: string = '';
   SelectedCustomerEnquiry: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
-  CustomerRef: number = 0;
+  SearchString: string = '';
+  ModalOpen: boolean = false;
 
+  CustomerStatusEnum = CustomerStatus;
+  selectedStatus: number = this.CustomerStatusEnum.Interested;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  ModalOpen = false;
-  selectedItem: any = [];
-
-  // customerList = [
-  //   {
-  //     date: '2024-04-14',
-  //     name: 'John Doe',
-  //     contact: '9876543210',
-  //     status: 'Active',
-  //     siteName: 'Skyline Villas',
-  //     plotNo: 'A-12',
-  //   },
-  //   {
-  //     date: '2024-04-13',
-  //     name: 'Jane Smith',
-  //     contact: '8765432109',
-  //     status: 'Inactive',
-  //     siteName: 'Green Heights',
-  //     plotNo: 'B-7',
-  //   }
-  // ];
+  statusOptions = [
+    { label: 'Interested', value: this.CustomerStatusEnum.Interested },
+    { label: 'In-process', value: this.CustomerStatusEnum.LeadInprocess },
+    { label: 'Closed', value: this.CustomerStatusEnum.LeadClosed },
+    { label: 'Converted', value: this.CustomerStatusEnum.ConvertToDeal }
+  ];
 
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
     private appStateManage: AppStateManageService,
     private companystatemanagement: CompanyStateManagement
-  ) {
-    effect(() => {
-      this.getCustomerEnquiryListByCompanyRef();
-    });
+  ) { }
+
+  ngOnInit(): void {
+    this.getCustomerEnquiryListByCompanyRef();
   }
 
-  ngOnInit() { }
-
-
-  getCustomerEnquiryListByCompanyRef = async () => {
+  async getCustomerEnquiryListByCompanyRef() {
     this.CustomerEnquiryList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await CustomerEnquiry.FetchEntireListByCompanyRef(
+
+    let list = await CustomerEnquiry.FetchEntireListByCompanyRef(
       this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.CustomerEnquiryList = lst;
-    this.CustomerEnquiryList.forEach(e => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()))
-    this.FilteredCustomerEnquiryList = this.CustomerEnquiryList;
-  };
+
+    list.forEach((e) => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()));
+    this.CustomerEnquiryList = list;
+    this.filterCustomerList(); // Default filter
+  }
 
   onEditClicked = async (item: CustomerEnquiry) => {
-    item.p.CustomerFollowUps = [];
-    item.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank())
-
+    item.p.CustomerFollowUps = [CustomerFollowUpProps.Blank()];
     this.SelectedCustomerEnquiry = item.GetEditableVersion();
-
     CustomerEnquiry.SetCurrentInstance(this.SelectedCustomerEnquiry);
-
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-
     this.router.navigate(['/app_homepage/tabs/crm/customer-enquiry/edit']);
   };
 
-  onDeleteClicked = async (customerenquiry: CustomerEnquiry) => {
+  onDeleteClicked = async (item: CustomerEnquiry) => {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
-      `This process is <strong>IRREVERSIBLE!</strong> <br/>
-    Are you sure that you want to DELETE this CustomerEnquiry?`,
+      `This process is <strong>IRREVERSIBLE!</strong><br/>Are you sure that you want to DELETE this Customer Enquiry?`,
       async () => {
-        await customerenquiry.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(
-            `Customer Enquiry ${customerenquiry.p.Name} has been deleted!`
-          );
+        await item.DeleteInstance(async () => {
+          await this.uiUtils.showSuccessToster(`Customer Enquiry ${item.p.Name} has been deleted!`);
           await this.getCustomerEnquiryListByCompanyRef();
         });
       }
     );
   };
-  onViewClicked = async (customerenquiry: CustomerEnquiry) => {
-    console.log('Viewing', customerenquiry);
-    this.SelectedCustomerEnquiry = customerenquiry;
-    this.openModal();
+
+  onViewClicked = (item: CustomerEnquiry) => {
+    this.SelectedCustomerEnquiry = item;
+    this.ModalOpen = true;
   };
 
   async AddCustomerEnquiryForm() {
     if (this.companyRef() <= 0) {
-      this.uiUtils.showErrorToster('Company not Selected');
+      await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
     this.router.navigate(['/app_homepage/tabs/crm/customer-enquiry/add']);
   }
-  // Open Modal
-  openModal = () => {
-    this.ModalOpen = true;
+
+  filterCustomerList() {
+    this.FilteredCustomerEnquiryList = this.CustomerEnquiryList.filter(
+      (customer) => customer.p.CustomerStatus === this.selectedStatus
+    );
   }
 
-  // Close Modal
-  ModelClose = () => {
+  closeModal() {
     this.ModalOpen = false;
   }
-
-  // Handle View Action
-  // onViewClicked(item: any) {
-  //   console.log('Viewing', item);
-  //   this.selectedItem = item;
-  //   this.openModal();
-  // }
-
-
-  // Handle Edit
-  // onEdit(item: any) {
-  //   console.log('Editing', item);
-  //   this.router.navigate(['/app_homepage/tabs/crm/customer-enquiry/edit', item.plotNo]);
-  // }
-
-  // Handle Delete
-  // onDelete(item: any) {
-  //   console.log('Deleting', item);
-  //   // Add actual delete logic here
-  // }
-
-  // Navigate to Add Page
-  // NavigateToRgbPicker() {
-  //   this.router.navigate(['/app_homepage/tabs/crm/customer-enquiry/smart-light']);
-  // }
-
-  // Example filter action
-  filterCustomerList() {
-    console.log('Filtering customers...');
-    // You can later implement actual filters here
-  }
-
 }
