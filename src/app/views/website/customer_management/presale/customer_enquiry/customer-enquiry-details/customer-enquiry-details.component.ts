@@ -123,6 +123,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
         ? 'New Customer'
         : 'Edit Customer';
       this.Entity = CustomerEnquiry.GetCurrentInstance();
+      console.log('Entity :', this.Entity);
       // Site Visit Date
       if (this.Entity.p.CustomerFollowUps[0].SiteVisitDate != '') {
         // While Edit Converting date String into Date Format //

@@ -42,6 +42,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       this.Entity = SalaryGeneration.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      console.log('Entity :', this.Entity);
     } else {
       this.Entity = SalaryGeneration.CreateNewInstance();
       SalaryGeneration.SetCurrentInstance(this.Entity);
@@ -98,8 +99,6 @@ export class SalaryGenerationDetailsComponent implements OnInit {
         await this.uiUtils.showErrorMessage('Error', tr.Message);
         return;
       }
-
-      await this.uiUtils.showSuccessToster('Password Created Successfully');
       let tdResult = JSON.parse(tr.Tag) as TransportData;
       console.log('tdResult:', tdResult);
     };

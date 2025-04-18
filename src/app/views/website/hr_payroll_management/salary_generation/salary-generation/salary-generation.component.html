@@ -29,7 +29,7 @@
           <td Class="tbldata">{{salary.p.EmployeeName}}</td>
           <td Class="tbldata">{{salary.p.MonthName}}</td>
           <td Class="tbldata">{{salary.p.TotalWorkingDays}}</td>
-          <td Class="tbldata">{{salary.p.BasicSalary}}</td>
+          <td Class="tbldata">{{salary.p.BasicSalary }}</td>
           <td Class="tbldata">{{salary.p.GrossTotal}}</td>
           <td Class="tbldata">{{salary.p.TotalDeduction}}</td>
           <td Class="tbldata">{{salary.p.NetSalary}}</td>
@@ -152,8 +152,8 @@
             <tr>
               <td>Incentives</td>
               <td>{{ Entity.p.TotalIncentive | currency:'INR' }}</td>
-              <td>Leaves</td>
-              <td>{{ Entity.p.TotalLeaves | number }}</td>
+              <td>Total Leaves Deduction</td>
+              <td>{{ Entity.p.TotalLeaveDeduction | currency:'INR'  }}</td>
             </tr>
             <tr>
               <td>Other</td>
@@ -177,19 +177,22 @@
     <div class="custom-modal-footer mt-4">
       <!-- Signatures -->
       <div class="row mt-8">
-        <div class="col-md-6 text-center d-flex flex-column align-items-center">
-          <hr class="my-2 w-100" style="max-width: 200px; border: 1px solid #0d6efd;">
-          <h6 class="mb-0">Employer Signature</h6>
+        <div class="col-md-6 text-start d-flex flex-column align-items-left justify-content-center">
+          <!-- <hr class="my-2 w-100" style="max-width: 200px; border: 1px solid #0d6efd;"> -->
+          <h6 class="mb-0"> Signature :</h6>
         </div>
-        <div class="col-md-6 text-center d-flex flex-column align-items-center">
+        <!-- <div class="col-md-6 text-center d-flex flex-column align-items-center">
           <hr class="my-2 w-100" style="max-width: 200px; border: 1px solid #0d6efd;">
           <h6 class="mb-0">Employee Signature</h6>
+        </div> -->
+        <div class=" col-md-6 text-end mt-1">
+          <button nz-button nzType="primary" (click)="isModalVisible = false">Close</button>
         </div>
       </div>
       <!-- Close Button -->
-      <div class="text-end mt-1">
+      <!-- <div class="text-end mt-1">
         <button nz-button nzType="primary" (click)="isModalVisible = false">Close</button>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
