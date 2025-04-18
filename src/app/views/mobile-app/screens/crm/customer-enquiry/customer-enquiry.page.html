@@ -4,23 +4,24 @@
 
   <!-- Customer List -->
   <ion-list class="Data-list">
-    <ion-card *ngFor="let item of customerList" class="Data-card">
+    <ion-card *ngFor="let item of FilteredCustomerEnquiryList" class="Data-card">
       <ion-card-content>
-        <div class="info-row"><strong>Date:</strong> {{ item.date }}</div>
-        <div class="info-row"><strong>Name:</strong> {{ item.name }}</div>
-        <div class="info-row"><strong>Contact No:</strong> {{ item.contact }}</div>
-        <div class="info-row"><strong>Status:</strong> {{ item.status }}</div>
-        <div class="info-row"><strong>Site Name:</strong> {{ item.siteName }}</div>
-        <div class="info-row"><strong>Plot No:</strong> {{ item.plotNo }}</div>
+        <!-- <div class="info-row"><strong>Date:</strong> {{ item.p.Name }}</div> -->
+        <div class="info-row"><strong>Name:</strong> {{ item.p.Name }}</div>
+        <div class="info-row"><strong>Contact No:</strong> {{ item.p.ContactNos }}</div>
+        <div class="info-row"><strong>Customer Status:</strong> {{ item.p.CustomerStatusName }}</div>
+        <div class="info-row"><strong>Office Visit Date:</strong> {{ item.p.CustomerFollowUps[0].OfficeVisitDate }}
+        </div>
+        <!-- <div class="info-row"><strong>Plot No:</strong> {{ item.p.EmailId }}</div> -->
 
         <div class="btn-row">
-          <ion-button size="small" fill="outline" color="primary" (click)="onView(item)">
+          <ion-button size="small" fill="outline" color="primary" (click)="onViewClicked(item)">
             <ion-icon name="eye-outline" slot="start"></ion-icon> View
           </ion-button>
-          <ion-button size="small" fill="outline" color="secondary" (click)="onEdit(item)">
+          <ion-button size="small" fill="outline" color="secondary" (click)="onEditClicked(item)">
             <ion-icon name="create-outline" slot="start"></ion-icon> Edit
           </ion-button>
-          <ion-button size="small" fill="outline" color="danger" (click)="onDelete(item)">
+          <ion-button size="small" fill="outline" color="danger" (click)="onDeleteClicked(item)">
             <ion-icon name="trash-outline" slot="start"></ion-icon> Delete
           </ion-button>
         </div>
@@ -34,7 +35,7 @@
       <ion-icon name="ellipsis-vertical"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button color="primary" (click)="addTask()">
+      <ion-fab-button color="primary" (click)="AddCustomerEnquiryForm()">
         <ion-icon name="add-outline"></ion-icon>
       </ion-fab-button>
       <ion-fab-button color="tertiary" (click)="filterCustomerList()">
@@ -61,21 +62,20 @@
         <!-- Scrollable area -->
         <div class="modal-body">
           <ion-content scroll-y="true" class="modal-scroll-content ion-padding">
-            <div class="info-row-of-model"><strong class="label">Date:</strong><span class="value">{{ selectedItem?.date
-                }}</span></div>
             <div class="info-row-of-model"><strong class="label">Name:</strong> <span class="value">{{
-                selectedItem?.name }}</span></div>
+                SelectedCustomerEnquiry.p.Name }}</span></div>
             <div class="info-row-of-model"><strong class="label">Contact No:</strong> <span class="value">{{
-                selectedItem?.contact }}</span></div>
+                SelectedCustomerEnquiry.p.ContactNos }}</span></div>
+            <div class="info-row-of-model"><strong class="label">Email Id:</strong> <span class="value">{{
+                SelectedCustomerEnquiry.p.EmailId }}</span></div>
             <div class="info-row-of-model"><strong class="label">Status:</strong><span class="value">{{
-                selectedItem?.status }}</span> </div>
-            <div class="info-row-of-model"><strong class="label">Site Name:</strong> <span class="value">{{
-                selectedItem?.siteName }}</span></div>
-            <div class="info-row-of-model"><strong class="label">Plot No:</strong> <span class="value">{{
-                selectedItem?.plotNo }}</span></div>
+                SelectedCustomerEnquiry.p.CustomerStatusName }}</span> </div>
+            <div class="info-row-of-model"><strong class="label">Office Visit Date :</strong> <span class="value">{{
+                SelectedCustomerEnquiry.p.CustomerFollowUps[0].OfficeVisitDate }}</span></div>
+            <div class="info-row-of-model"><strong class="label">Remark :</strong> <span class="value">{{
+                SelectedCustomerEnquiry.p.CustomerFollowUps[0].Remark }}</span></div>
           </ion-content>
         </div>
-
         <ion-footer class="modal-footer">
           <ion-button expand="block" color="primary" shape="round" (click)="ModelClose()">
             Close
