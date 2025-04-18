@@ -31,7 +31,8 @@ export class LeaveApprovalComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Leave Request Type', 'Description', 'From Date', 'To Date', 'Days', 'Approval Status'];
+  // headers: string[] = ['Sr.No.', 'Leave Request Type', 'Description', 'Date', 'Days', 'Approval Status'];
+  headers: string[] = ['Sr.No.', 'Leave Request Type', 'Date', 'Days', 'Approval Status'];
   constructor(
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
@@ -119,8 +120,11 @@ export class LeaveApprovalComponent implements OnInit {
       ['Approved', 'Rejected', 'Cancel'],
       // Order matters: Confirm, Deny, Cancel
       async (selectedStatus: string) => {
+        // Exit when select cancle
+        if (selectedStatus === 'Cancel') {
+          return;
+        }
         this.Entity = leaveapproval;
-
         if (selectedStatus === 'Approved') {
           this.Entity.p.IsApproved = 1;
           this.Entity.p.LeaveApprovedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
