@@ -18,18 +18,17 @@ export class CustomerEnquiryPage implements OnInit {
   CustomerEnquiryList: CustomerEnquiry[] = [];
   FilteredCustomerEnquiryList: CustomerEnquiry[] = [];
   SelectedCustomerEnquiry: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
+
   SearchString: string = '';
   ModalOpen: boolean = false;
+  selectedStatus: number = CustomerStatus.Interested;
 
   CustomerStatusEnum = CustomerStatus;
-  selectedStatus: number = this.CustomerStatusEnum.Interested;
-  companyRef = this.companystatemanagement.SelectedCompanyRef;
-
   statusOptions = [
-    { label: 'Interested', value: this.CustomerStatusEnum.Interested },
-    { label: 'In-process', value: this.CustomerStatusEnum.LeadInprocess },
-    { label: 'Closed', value: this.CustomerStatusEnum.LeadClosed },
-    { label: 'Converted', value: this.CustomerStatusEnum.ConvertToDeal }
+    { label: 'Interested', value: CustomerStatus.Interested },
+    { label: 'In-process', value: CustomerStatus.LeadInprocess },
+    { label: 'Closed', value: CustomerStatus.LeadClosed },
+    { label: 'Converted', value: CustomerStatus.ConvertToDeal }
   ];
 
   constructor(
@@ -37,27 +36,39 @@ export class CustomerEnquiryPage implements OnInit {
     private router: Router,
     private appStateManage: AppStateManageService,
     private companystatemanagement: CompanyStateManagement
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getCustomerEnquiryListByCompanyRef();
   }
 
+  companyRef(): number {
+    return this.companystatemanagement.SelectedCompanyRef();
+  }
+
   async getCustomerEnquiryListByCompanyRef() {
     this.CustomerEnquiryList = [];
+
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
 
-    let list = await CustomerEnquiry.FetchEntireListByCompanyRef(
+    const list = await CustomerEnquiry.FetchEntireListByCompanyRef(
       this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
 
     list.forEach((e) => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()));
+
     this.CustomerEnquiryList = list;
-    this.filterCustomerList(); // Default filter
+    this.filterCustomerList();
+  }
+
+  filterCustomerList() {
+    this.FilteredCustomerEnquiryList = this.CustomerEnquiryList.filter(
+      (customer) => customer.p.CustomerStatus === this.selectedStatus
+    );
   }
 
   onEditClicked = async (item: CustomerEnquiry) => {
@@ -81,10 +92,14 @@ export class CustomerEnquiryPage implements OnInit {
     );
   };
 
-  onViewClicked = (item: CustomerEnquiry) => {
+  onViewClicked(item: CustomerEnquiry) {
     this.SelectedCustomerEnquiry = item;
     this.ModalOpen = true;
-  };
+  }
+
+  closeModal() {
+    this.ModalOpen = false;
+  }
 
   async AddCustomerEnquiryForm() {
     if (this.companyRef() <= 0) {
@@ -92,15 +107,5 @@ export class CustomerEnquiryPage implements OnInit {
       return;
     }
     this.router.navigate(['/app_homepage/tabs/crm/customer-enquiry/add']);
-  }
-
-  filterCustomerList() {
-    this.FilteredCustomerEnquiryList = this.CustomerEnquiryList.filter(
-      (customer) => customer.p.CustomerStatus === this.selectedStatus
-    );
-  }
-
-  closeModal() {
-    this.ModalOpen = false;
   }
 }
