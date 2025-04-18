@@ -1,35 +1,29 @@
-<app-header-with-back-handler title="Customer Follow-Up"></app-header-with-back-handler>
-
+<app-header-with-back-handler title="Customer Follow-Up" ></app-header-with-back-handler>
 <ion-content [fullscreen]="true">
   <!-- Customer List -->
-  <ng-container *ngIf="FilterFollowupList.length; else noData">
-    <ion-list class="Data-list">
-      <ion-card *ngFor="let item of FilterFollowupList" class="Data-card">
-        <ion-card-content>
-          <div class="info-row"><strong>Name:</strong> {{ item.p.CustomerName }}</div>
-          <div class="info-row"><strong>Contact No:</strong> {{ item.p.ContactNos }}</div>
-          <div class="info-row"><strong>Contact Mode:</strong> {{ item.p.ContactMode }}</div>
-          <div class="info-row"><strong>Plot Name:</strong> {{ item.p.CustomerFollowUpPlotDetails[0]?.PlotName }}</div>
-          <div class="info-row"><strong>Customer Status:</strong> {{ item.p.CustomerStatusName }}</div>
-          <div class="info-row"><strong>Office Visit Date:</strong> {{ item.p.OfficeVisitDate }}</div>
-          <div class="btn-row">
-            <ion-button size="small" fill="outline" color="primary" (click)="onFollowUPClicked(item)">
-              <ion-icon name="eye-outline" slot="start"></ion-icon> View
-            </ion-button>
-          </div>
-        </ion-card-content>
-      </ion-card>
-    </ion-list>
-  </ng-container>
+  <ion-list class="Data-list">
+    <ion-card *ngFor="let item of FilterFollowupList" class="Data-card">
+      <ion-card-content>
+        <div class="info-row"><strong>Name:</strong> {{ item.p.CustomerName }}</div>
+        <div class="info-row"><strong>Contact No:</strong> {{ item.p.ContactNos }}</div>
+        <div class="info-row"><strong>Contact Mode:</strong> {{ item.p.ContactMode }}</div>
+        <div class="info-row"><strong>Plot Name:</strong> {{ item.p.CustomerFollowUpPlotDetails[0].PlotName }}</div>
+        <div class="info-row"><strong>Customer Status:</strong> {{ item.p.CustomerStatusName }}</div>
+        <div class="info-row"><strong>Plot Name:</strong> {{ item.p.OfficeVisitDate }}</div>
+        <div class="btn-row">
+          <ion-button size="small" fill="outline" color="primary" (click)="onFollowUPClicked(item)">
+            <ion-icon name="eye-outline" slot="start"></ion-icon> View
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
 
-  <ng-template #noData>
-    <ion-text class="ion-padding">No follow-ups found for the selected date.</ion-text>
-  </ng-template>
-
-  <!-- FAB Button -->
+  <!-- FAB -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="primary" (click)="AddCustomerEnquiryForm()">
-      <ion-icon name="person-add-outline"></ion-icon>
+      <ion-icon name="filter-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
 </ion-content>
