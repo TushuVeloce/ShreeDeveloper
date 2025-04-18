@@ -119,8 +119,11 @@ export class LeaveApprovalComponent implements OnInit {
       ['Approved', 'Rejected', 'Cancel'],
       // Order matters: Confirm, Deny, Cancel
       async (selectedStatus: string) => {
+        // Exit when select cancle
+        if (selectedStatus === 'Cancel') {
+          return;
+        }
         this.Entity = leaveapproval;
-
         if (selectedStatus === 'Approved') {
           this.Entity.p.IsApproved = 1;
           this.Entity.p.LeaveApprovedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
