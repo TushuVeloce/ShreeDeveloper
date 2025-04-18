@@ -37,20 +37,20 @@
   <div class="table-wrapper tblcard_light" style="margin-top: 2rem">
     <div class="table-container">
       <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
-        nzFrontPagination="false" [nzShowSizeChanger]="false">
+        nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedList()">
         <thead>
           <tr>
             <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td Class="tbldata">{{ (currentPage - 1) }}</td>
-            <td Class="tbldata">Shweta</td>
-            <td Class="tbldata">11/04/2025</td>
-            <td Class="tbldata">11:30</td>
-            <td Class="tbldata">11:30</td>
-            <td Class="tbldata">11</td>
+          <tr *ngFor="let attendancelog of paginatedList(); index as i">
+            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td Class="tbldata">{{attendancelog.p.EmployeeName}}</td>
+            <td Class="tbldata">{{attendancelog.p.TransDateTime}}</td>
+            <td Class="tbldata">{{attendancelog.p.FirstCheckInTime}}</td>
+            <td Class="tbldata">{{attendancelog.p.LastCheckOutTime}}</td>
+            <td Class="tbldata">{{attendancelog.p.TotalWorkingHrs}}</td>
             <!-- <td class="tbldata">
               <span style="margin-left: 9px;">
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />

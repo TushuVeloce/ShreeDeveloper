@@ -30,28 +30,48 @@ export class AttendanceLogsComponent implements OnInit {
     private uiUtils: UIUtils,
     private router: Router,
     private appStateManage: AppStateManageService,
-    private screenSizeService: ScreenSizeService,private companystatemanagement: CompanyStateManagement
+    private screenSizeService: ScreenSizeService, private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
       await this.getattendancelogbycompanyref();
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.loadPaginationData();
+    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+  }
 
   getattendancelogbycompanyref = async () => {
     let lst = await AttendanceLogs.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
-  }
-  filterTable = () => {
+    this.DisplayMasterList = this.MasterList;
+    console.log(this.DisplayMasterList);
 
-   };
+    this.loadPaginationData();
+  }
+  // For Pagination  start ----
+  loadPaginationData = () => {
+    this.total = this.DisplayMasterList.length; // Update total based on loaded data
+  };
+
+  paginatedList = () => {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
 
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
   };
 
-    // async AddOfficeTime() {
-  //   this.router.navigate(['/homepage/Website/Office_Duty_Time_Details']);
-  // }
+  filterTable = () => {
+    if (this.SearchString != '') {
+      this.DisplayMasterList = this.MasterList.filter((data: any) => {
+        return data.p.LeaveRequestName.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
+      })
+    }
+    else {
+      this.DisplayMasterList = this.MasterList
+    }
+  }
 }

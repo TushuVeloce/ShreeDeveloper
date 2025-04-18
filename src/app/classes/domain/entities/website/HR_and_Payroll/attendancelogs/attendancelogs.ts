@@ -18,9 +18,9 @@ export class AttendanceLogsProps {
   public Ref: number = 0;
   public EmployeeRef: number = 0;
   public TransDateTime: string = '';
-  public CheckInTime: string = '';
-  public CheckOutTime: string = '';
-  public TotalWorkingHours: string = '';
+  public FirstCheckInTime: string = '';
+  public LastCheckOutTime: string = '';
+  public TotalWorkingHrs: string = '';
   public TotalOvertimeHours: string = '';
 
   // for photo uploaded
@@ -40,7 +40,7 @@ export class AttendanceLogsProps {
 }
 
 export class AttendanceLogs implements IPersistable<AttendanceLogs> {
-  public static readonly Db_Table_Name: string = 'AttendanceLogsMaster';
+  public static readonly Db_Table_Name: string = 'AttendanceLog';
 
   private constructor(public readonly p: AttendanceLogsProps, public readonly AllowEdit: boolean) {
 
@@ -70,8 +70,8 @@ export class AttendanceLogs implements IPersistable<AttendanceLogs> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.CheckInTime == '') vra.add('CheckInTime', 'Check In Time cannot be blank.');
-    if (this.p.CheckOutTime == '') vra.add('CheckOutTime', 'Check Out Time cannot be blank.');
+    if (this.p.FirstCheckInTime == '') vra.add('CheckInTime', 'Check In Time cannot be blank.');
+    if (this.p.LastCheckOutTime == '') vra.add('CheckOutTime', 'Check Out Time cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
