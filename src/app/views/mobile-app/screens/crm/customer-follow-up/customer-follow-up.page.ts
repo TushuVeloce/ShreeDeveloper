@@ -1,8 +1,8 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { BookingRemark, CustomerStatus } from 'src/app/classes/domain/domainenums/domainenums';
+import { BookingRemark } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
-import { CustomerFollowUp, CustomerFollowUpProps } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
+import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
@@ -24,13 +24,14 @@ export class CustomerFollowUpPage implements OnInit {
   followupList: CustomerFollowUp[] = [];
   FilterFollowupList: CustomerFollowUp[] = [];
   SelectedFollowUp: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
+
   CustomerRef: number = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  InterestedPlotRef: number = 0
+  InterestedPlotRef: number = 0;
   SiteManagementRef: number = 0;
-  date: string = ''
-  strCDT: string = ''
-  ModalOpen: boolean = false
+  date: string = '';
+  strCDT: string = '';
+  ModalOpen: boolean = false;
 
   constructor(
     private uiUtils: UIUtils,
@@ -46,12 +47,14 @@ export class CustomerFollowUpPage implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
+
     if (this.date == '') {
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       let parts = this.strCDT.substring(0, 16).split('-');
-      // Construct the new date format
+
       this.date = `${parts[0]}-${parts[1]}-${parts[2]}`;
       this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+
       if (this.strCDT != '') {
         this.getCustomerFollowUpListByDateandPlotRef();
       }
@@ -61,53 +64,62 @@ export class CustomerFollowUpPage implements OnInit {
   DateToStandardDateTime = async (date: string) => {
     if (date != '') {
       let parts = date.substring(0, 16).split('-');
-      // Construct the new date format
       this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
     } else {
-      this.date = ''; // Clears the date variable when input is cleared
+      this.date = '';
       this.strCDT = '';
     }
+
     this.getCustomerFollowUpListByDateandPlotRef();
   }
 
-  // Extracted from services date conversion //
   formatDate(date: string | Date): string {
     return this.DateconversionService.formatDate(date);
   }
 
   getCustomerFollowUpListByDateandPlotRef = async () => {
-    let FollowUp = await CustomerFollowUp.FetchEntireListByDateandPlotRef(this.strCDT, this.InterestedPlotRef,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.followupList = FollowUp
-    console.log('followup', this.followupList);
+    const FollowUp = await CustomerFollowUp.FetchEntireListByDateandPlotRef(
+      this.strCDT,
+      this.InterestedPlotRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
 
+    this.followupList = FollowUp;
+    console.log('followup', this.followupList);
   };
 
   formulateSiteListByCompanyRef = async () => {
     this.followupList = [];
     this.FilterFollowupList = [];
     this.SiteList = [];
+
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+
+    const lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
     this.SiteList = lst;
   }
 
-
   getPlotBySiteRefList = async (siteRef: number) => {
-    let BookingRemarkRef = BookingRemark.Booked;
     if (siteRef <= 0) {
       await this.uiUtils.showWarningToster(`Please Select Site`);
       return;
     }
+
     this.InterestedPlotRef = 0;
 
-    let lst = await Plot.FetchEntireListBySiteandbookingremarkRef(
-      siteRef, BookingRemarkRef,
+    const lst = await Plot.FetchEntireListBySiteandbookingremarkRef(
+      siteRef,
+      BookingRemark.Booked,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
+
     this.PlotList = lst;
   };
 
@@ -117,12 +129,13 @@ export class CustomerFollowUpPage implements OnInit {
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/app_homepage/tabs/crm/customer-follow-up/edit']);
   };
-  
+
   async AddCustomerEnquiryForm() {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
+
     this.router.navigate(['/app_homepage/tabs/crm/customer-follow-up/add']);
   }
 }

@@ -6,13 +6,14 @@
       <ion-card-content>
         <div class="info-row"><strong>Name:</strong> {{ item.p.CustomerName }}</div>
         <div class="info-row"><strong>Contact No:</strong> {{ item.p.ContactNos }}</div>
-        <div class="info-row"><strong>Contact Mode:</strong> {{ item.p.ContactMode }}</div>
-        <div class="info-row"><strong>Plot Name:</strong> {{ item.p.CustomerFollowUpPlotDetails[0].PlotName }}</div>
+        <div class="info-row"><strong>Date :</strong> {{formatDate( item.p.ReminderDate)}}</div>
         <div class="info-row"><strong>Customer Status:</strong> {{ item.p.CustomerStatusName }}</div>
-        <div class="info-row"><strong>Plot Name:</strong> {{ item.p.OfficeVisitDate }}</div>
+        <div class="info-row"><strong>Customer Requirement:</strong> {{ item.p.CustomerRequirement }}</div>
+        <div class="info-row"><strong>Lead Source:</strong> {{ item.p.LeadSource }}</div>
+        <div class="info-row"><strong>Lead Handle By:</strong> {{ item.p.LeadHandleBy }}</div>
         <div class="btn-row">
           <ion-button size="small" fill="outline" color="primary" (click)="onFollowUPClicked(item)">
-            <ion-icon name="eye-outline" slot="start"></ion-icon> View
+            <ion-icon name="add-outline" slot="start"></ion-icon> View
           </ion-button>
         </div>
       </ion-card-content>
