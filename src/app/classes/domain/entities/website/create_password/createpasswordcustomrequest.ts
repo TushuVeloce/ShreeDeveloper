@@ -6,7 +6,7 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class CraetePasswordCustomRequest
 {
-    public static readonly CustomProcessRequestType: string = "CraetePasswordCustomRequest";
+    public static readonly CustomProcessRequestType: string = "ChangeEmployeePasswordCustomRequest";
     CompanyRef:Number=0;
     EmployeeRef:Number=0;
     OldPassword:string = '';
