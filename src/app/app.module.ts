@@ -10,7 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginPageComponent } from './views/login-page/login-page.component';
 import { NzTableModule } from 'ng-zorro-antd/table';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { ImageInterceptor } from './ImageInterceptor';
 
 
 @NgModule({
@@ -18,7 +19,13 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [CommonModule, IonicModule.forRoot(), AppRoutingModule, FormsModule, BrowserAnimationsModule,
     NzTableModule,HttpClientModule
    ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, DatePipe],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, DatePipe,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ImageInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })

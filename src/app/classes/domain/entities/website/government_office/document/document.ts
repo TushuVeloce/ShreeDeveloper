@@ -33,7 +33,7 @@ export class DocumentProps {
 }
 
 export class Document implements IPersistable<Document> {
-  public static readonly Db_Table_Name: string = 'Document';
+  public static readonly Db_Table_Name: string = 'GovernmentDocumentList';
 
   private constructor(public readonly p: DocumentProps, public readonly AllowEdit: boolean) {
 

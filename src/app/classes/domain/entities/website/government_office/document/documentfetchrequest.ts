@@ -6,7 +6,7 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class DocumentFetchRequest
 {
-    public static readonly FetchRequestType: string = "DocumentFetchRequest";
+    public static readonly FetchRequestType: string = "GovernmentDocumentListFetchRequest";
 
     DocumentRefs: number[] = [];
     CompanyRefs: number[] = [];
