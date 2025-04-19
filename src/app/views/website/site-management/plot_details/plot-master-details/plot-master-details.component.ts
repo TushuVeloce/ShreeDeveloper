@@ -61,6 +61,8 @@ export class PlotMasterDetailsComponent implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity ? 'New Plot' : 'Edit Plot';
       this.Entity = Plot.GetCurrentInstance();
       console.log('Entity :', this.Entity);
+      this.SiteName = this.Entity.p.SiteName 
+      this.SiteRf = this.Entity.p.SiteManagementRef 
       this.appStateManage.StorageKey.removeItem('Editable');
       if(this.Entity.p.CurrentBookingRemark == 50){
       this.isSaveDisabled =true
