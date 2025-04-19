@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { AttendenceLocationType, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { AttendanceLog, AttendanceLogProps } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelog';
 import { AttendanceLogCheckInCustomRequest } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelogcheckincustomrequest';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -34,7 +34,7 @@ export class AttendanceManagementPage implements OnInit {
   siteList: Site[] = [];
   selectedSite: Site[] = [];
 
-  isCheckInDisabled:boolean = false;
+  isCheckInEnabled: boolean = false;
 
   isSubmitting = false;
 
@@ -48,6 +48,7 @@ export class AttendanceManagementPage implements OnInit {
   Entity: AttendanceLog = AttendanceLog.CreateNewInstance();
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   employeeRef = 0;
+  AttendanceLocationTypes = AttendenceLocationType
 
 
   AttendanceLocationTypeList = DomainEnums.AttendenceLocationTypeList(true, '--Select--');
@@ -71,7 +72,7 @@ export class AttendanceManagementPage implements OnInit {
   constructor(private router: Router, private companystatemanagement: CompanyStateManagement, private uiUtils: UIUtils,
     private appStateManage: AppStateManageService, private utils: Utils, private dtu: DTU,
     private payloadPacketFacade: PayloadPacketFacade,
-        private serverCommunicator: ServerCommunicatorService
+    private serverCommunicator: ServerCommunicatorService
   ) { }
 
   async ngOnInit() {
@@ -82,7 +83,6 @@ export class AttendanceManagementPage implements OnInit {
     this.isPunchInTime = strCDT;
     this.isPunchOutTime = strCDT;
     await this.getCheckInData();
-    if(this.Entity.p.FirstCheckInTime != "") this.isCheckInDisabled = true
   }
   gridItemsFunction(id: number) {
     switch (id) {
@@ -100,7 +100,7 @@ export class AttendanceManagementPage implements OnInit {
     }
   }
 
-  getCheckInData = async ()=>{
+  getCheckInData = async () => {
     let tranDate = this.dtu.ConvertStringDateToFullFormat(this.Date!)
     let req = new AttendanceLogCheckInCustomRequest();
     req.TransDateTime = tranDate;
@@ -111,23 +111,38 @@ export class AttendanceManagementPage implements OnInit {
     let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
     let tr = await this.serverCommunicator.sendHttpRequest(pkt);
 
-    if(!tr.Successful){
+    if (!tr.Successful) {
       await this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     }
+    debugger
     let tdResult = JSON.parse(tr.Tag) as TransportData;
     let res = AttendanceLogCheckInCustomRequest.FromTransportData(tdResult)
-    if(res.Data.length > 0){
-      let checkInData:AttendanceLogProps = res.Data[0] as AttendanceLogProps
-      Object.assign(this.Entity.p,checkInData)
+    console.log('res :', res);
+    if (res.Data.length > 0) {
+      let checkInData: AttendanceLogProps[] = res.Data as AttendanceLogProps[]
+      let lastCheckInData = checkInData.filter(e => e.CheckOutTime == '')
+      if (lastCheckInData.length > 0) Object.assign(this.Entity.p, lastCheckInData[0])
+      else {
+        let secondLastCheckInData = checkInData.filter(e => e.CheckOutTime != '')
+        if (secondLastCheckInData.length > 0) Object.assign(this.Entity.p, secondLastCheckInData[0])
+      }
     }
-
+    if (this.Entity.p.FirstCheckInTime == '' && this.Entity.p.CheckInTime == '' && this.Entity.p.CheckOutTime == '') {
+      this.isCheckInEnabled = true;
+    }
+    else if (this.Entity.p.FirstCheckInTime != '' && this.Entity.p.CheckInTime != '' && this.Entity.p.CheckOutTime == '') {
+      this.isCheckInEnabled = false;
+    }
+    else if (this.Entity.p.FirstCheckInTime != '' && this.Entity.p.CheckInTime != '' && this.Entity.p.CheckOutTime != '') {
+      this.isCheckInEnabled = true;
+    }
 
   }
   openPunchModal = async (type: 'in' | 'out') => {
     this.currentPunchType = type;
-    if (!this.isCheckInDisabled) {
-      this.punchModalOpen = true; 
+    if (this.isCheckInEnabled) {
+      this.punchModalOpen = true;
     }
 
     // this.currentCompanyRef = this.companystatemanagement.getCurrentCompanyRef()
@@ -140,7 +155,7 @@ export class AttendanceManagementPage implements OnInit {
   }
   onSelectionChange(selected: Site[]) {
     console.log('Selected option:', selected);
-    this.selectedSite= selected;
+    this.selectedSite = selected;
   }
 
   takePhoto = async (type: 'before' | 'after') => {
@@ -175,6 +190,7 @@ export class AttendanceManagementPage implements OnInit {
   submitPunchIn = async () => {
     try {
       this.isSubmitting = true;
+      debugger
       if (this.currentPunchType === 'in') {
         this.Entity.p.IsCheckIn = true;
         this.isPunchInEnabled = false;   // Disable Punch In
@@ -191,7 +207,7 @@ export class AttendanceManagementPage implements OnInit {
       // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
       // this.Entity.p.UpdatedDate= await CurrentDateTimeRequest.GetCurrentDateTime();
       this.Entity.p.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      if (this.selectedSite[0].p.Ref) {
+      if (this.selectedSite.length > 0) {
         this.Entity.p.SiteRef = this.selectedSite[0].p.Ref;
       }
       // convert date 2025-02-23 to 2025-02-23-00-00-00-000
@@ -218,6 +234,7 @@ export class AttendanceManagementPage implements OnInit {
           // await this.router.navigate(['/homepage/Website/Registrar_Office'])
           await this.uiUtils.showSuccessToster('Punch out successfully!');
         }
+        await this.getCheckInData()
       }
 
     } catch (error) {
@@ -270,6 +287,7 @@ export class AttendanceManagementPage implements OnInit {
         this.Entity = AttendanceLog.CreateNewInstance();
 
         await this.uiUtils.showSuccessToster('Punch out successfully!');
+        await this.getCheckInData();
       }
     } catch (error) {
       console.log(error);

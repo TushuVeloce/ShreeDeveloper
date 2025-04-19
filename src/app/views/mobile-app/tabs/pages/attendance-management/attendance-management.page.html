@@ -18,7 +18,7 @@
       </div>
       <div class="card-time">It is now {{ isCurrentTime }}</div>
       <div class="card-schedule">Check In Time</div>
-      <div class="card-value">{{isPunchInTime}}</div>
+      <div class="card-value">{{Entity.p.CheckInTime}}</div>
     </div>
     <!-- check in end -->
 
@@ -30,7 +30,7 @@
       </div>
       <div class="card-time">Not Yet</div>
       <div class="card-schedule">Check Out Time</div>
-      <div class="card-value">{{isPunchOutTime}}</div>
+      <div class="card-value">{{Entity.p.CheckOutTime}}</div>
     </div>
   </div>
       <!-- check out end -->
@@ -213,7 +213,7 @@
           </ion-item>
 
           <!-- Site Selection -->
-          <div *ngIf="Entity.p.AttendenceLocationType === 200">
+          <div *ngIf="Entity.p.AttendenceLocationType === AttendanceLocationTypes.Site">
             <app-searchable-select [options]="siteList" [multiSelect]="false" placeholder="Select Site"
               (selectionChange)="onSelectionChange($event)">
             </app-searchable-select>
