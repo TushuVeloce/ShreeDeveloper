@@ -11,7 +11,7 @@ export class GenerateNewFinancialYearCustomRequest
     Password:string = '';
     LoginEmployeeRef = 0;
     LoginToken = ''
-    // Ref:number = 0;
+     Ref:number = 0;
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
