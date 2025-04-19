@@ -1,7 +1,9 @@
 /* Modern Header */
 .modern-header {
     // --background: linear-gradient(to right, var(--ion-color-primary), var(--ion-color-secondary));
-    --background: var(--ion-color-primary);
+    // --background: var(--ion-color-primary);
+    --background:linear-gradient(to bottom right, #7c2424, #c0392b);
+    
     display: flex;
     align-items: center;
     color: var(--ion-text-color-dark);

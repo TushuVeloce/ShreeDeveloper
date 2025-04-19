@@ -1,94 +1,54 @@
-.custom-content {
-    background: linear-gradient(to bottom, #0b0220, #8b1de3);
-    color: white;
-    height: 100%;
+.top-card {
+    // background: linear-gradient(135deg, var(--ion-color-tertiary), var(--ion-color-primary));
+    background: linear-gradient(to bottom right, #7c2424, #c0392b);
+    color: var(--ion-background-color);
+    border-radius: 0 0 24px 24px;
+    padding: 16px;
+
+    h2 {
+        margin-bottom: 16px;
+        font-size: 20px;
+    }
+
+    .row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 16px;
+
+        .label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+    }
+
+    .btn-group {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 16px;
+
+        .label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+    }
 }
 
-.overview-header {
+.section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
-
-    h2 {
-        font-weight: bold;
-    }
-
-    .date-text {
-        font-size: 0.9rem;
-        opacity: 0.7;
-    }
-}
-
-.grid-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 12px;
-
-    .card {
-        flex: 1;
-        border-radius: 20px;
-        padding: 12px;
-        color:var(--ion-item-background);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .check-in {
-        background: #f9f9f9;
-        color: #000;
-    }
-
-    .check-out {
-        background: lightgray;
-        color: #000;
-    }
-
-    .absence {
-        background: #f46b80;
-    }
-
-    .presence {
-        background: #7265e3;
-    }
-
-    .card-header {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-weight: bold;
-        font-size: 1rem;
-        border-radius: 10px;
-    }
-
-    .card-time,
-    .card-schedule {
-        font-size: 0.8rem;
-        opacity: 0.8;
-    }
-
-    .card-value {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-top: 4px;
-    }
-
-    .card-label,
-    .card-month,
-    .card-number,
-    .card-days {
-        text-align: center;
-    }
-
-    .card-number {
-        font-size: 2rem;
-        font-weight: bold;
-    }
-
-    .card-days {
-        font-size: 0.8rem;
-        opacity: 0.8;
-    }
+    margin-top: 16px;
+    padding: 0 8px;
 }
 
 .recent-attendance {
@@ -128,7 +88,7 @@
         .table-header {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            background: lightseagreen;
+            background: var(--ion-color-primary);
             padding: 12px 16px;
             color: var(--ion-text-color-dark);
             font-weight: bold;
@@ -146,7 +106,7 @@
         }
 
         .day-column {
-            text-align: center;
+            text-align: left;
 
             .date {
                 font-size: 16px;
@@ -178,6 +138,7 @@
             flex-wrap: wrap;
             justify-content: space-between;
             padding-left: 10px;
+            text-align: left;
 
             .label {
                 font-size: 10px;
@@ -290,7 +251,7 @@
     --height: 50%;
     --max-width: 400px;
     --border-radius: 20px;
-    --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
 }
 
 .modal-container {
@@ -310,10 +271,12 @@
     flex-direction: column;
     justify-content: space-between;
 }
-ion-item{
+
+ion-item {
     --background: var(--ion-background-color);
     border-radius: 10px;
 }
+
 // .photo-upload {
 //     ion-label {
 //         font-size: 14px;

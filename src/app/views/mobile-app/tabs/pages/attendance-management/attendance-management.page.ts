@@ -9,10 +9,12 @@ import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_r
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
+
 @Component({
   selector: 'app-attendance-management',
   templateUrl: './attendance-management.page.html',
@@ -20,14 +22,13 @@ import { Utils } from 'src/app/services/utils.service';
   standalone: false
 })
 export class AttendanceManagementPage implements OnInit {
-
   punchModalOpen = false;
   currentPunchType: string = 'in';
   isPunchInEnabled: boolean = false;
   isPunchOutEnabled: boolean = true;
-  isCurrentTime: string = "";
-  isPunchInTime: string = "";
-  isPunchOutTime: string = "";
+  isCurrentTimeDate: string = "";
+  isCheckInTime: string = "";
+  isCheckOutTime: string = "";
   selectedLocation: string = '';
   totalHalfDays: number = 2;
   totalOvertime: string = '16';
@@ -35,28 +36,28 @@ export class AttendanceManagementPage implements OnInit {
   selectedSite: Site[] = [];
 
   isCheckInEnabled: boolean = false;
-
   isSubmitting = false;
 
   capturedBeforePhoto: string | null = null;
   capturedAfterPhoto: string | null = null;
   isSaveDisabled: boolean = false;
   private IsCheckIn: boolean = false;
-  isChecked: boolean = false; // Default value
+  isChecked: boolean = false;
   Date: string = "";
   DateWithTime: string | null = null;
   Entity: AttendanceLog = AttendanceLog.CreateNewInstance();
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   employeeRef = 0;
-  AttendanceLocationTypes = AttendenceLocationType
-
-
+  AttendanceLocationTypes = AttendenceLocationType;
+  
   AttendanceLocationTypeList = DomainEnums.AttendenceLocationTypeList(true, '--Select--');
+
   gridItems = [
     { label: 'Salary Slip', icon: 'layers-outline', gridFunction: 100 },
     { label: 'Leave', icon: 'grid-outline', gridFunction: 200 },
     { label: 'View All', icon: 'bar-chart-outline', gridFunction: 300 },
   ];
+
   recentAttendance = [
     { date: '30', day: 'TUE', clockIn: '09:00am', clockOut: '06:00pm', hours: '09hr 00min', isHalfDay: false },
     { date: '29', day: 'MON', clockIn: '09:10am', clockOut: '01:00pm', hours: '03hr 50min', isHalfDay: true },
@@ -69,39 +70,41 @@ export class AttendanceManagementPage implements OnInit {
     { date: '22', day: 'MON', clockIn: '09:10am', clockOut: '06:10pm', hours: '09hr 00min', isHalfDay: false },
     { date: '21', day: 'SUN', isWeekend: true, isHalfDay: false }
   ];
-  constructor(private router: Router, private companystatemanagement: CompanyStateManagement, private uiUtils: UIUtils,
-    private appStateManage: AppStateManageService, private utils: Utils, private dtu: DTU,
+
+  constructor(
+    private router: Router,
+    private companystatemanagement: CompanyStateManagement,
+    private uiUtils: UIUtils,
+    private appStateManage: AppStateManageService,
+    private utils: Utils,
+    private dtu: DTU,
     private payloadPacketFacade: PayloadPacketFacade,
-    private serverCommunicator: ServerCommunicatorService
+    private serverCommunicator: ServerCommunicatorService,
+    private dateconversionService: DateconversionService
   ) { }
 
   async ngOnInit() {
     this.employeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
     let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
     this.Date = strCDT.substring(0, 10);
-    this.isCurrentTime = strCDT;
-    this.isPunchInTime = strCDT;
-    this.isPunchOutTime = strCDT;
+    this.isCurrentTimeDate = strCDT;
     await this.getCheckInData();
   }
+
+  formatDate(date: string | Date): string {
+    return this.dateconversionService.formatDate(date);
+  }
+
   gridItemsFunction(id: number) {
     switch (id) {
-      case 100:
-        this.getSalarySlip();
-        break;
-      case 200:
-        this.requestLeave();
-        break;
-      case 300:
-        this.viewAllAttendance();
-        break;
-      default:
-        break;
+      case 100: this.getSalarySlip(); break;
+      case 200: this.requestLeave(); break;
+      case 300: this.viewAllAttendance(); break;
     }
   }
 
   getCheckInData = async () => {
-    let tranDate = this.dtu.ConvertStringDateToFullFormat(this.Date!)
+    let tranDate = this.dtu.ConvertStringDateToFullFormat(this.Date!);
     let req = new AttendanceLogCheckInCustomRequest();
     req.TransDateTime = tranDate;
     req.CompanyRef = this.companyRef();
@@ -115,79 +118,84 @@ export class AttendanceManagementPage implements OnInit {
       await this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     }
-    debugger
+
     let tdResult = JSON.parse(tr.Tag) as TransportData;
-    let res = AttendanceLogCheckInCustomRequest.FromTransportData(tdResult)
-    console.log('res :', res);
+    let res = AttendanceLogCheckInCustomRequest.FromTransportData(tdResult);
     if (res.Data.length > 0) {
-      let checkInData: AttendanceLogProps[] = res.Data as AttendanceLogProps[]
-      let lastCheckInData = checkInData.filter(e => e.CheckOutTime == '')
-      if (lastCheckInData.length > 0) Object.assign(this.Entity.p, lastCheckInData[0])
+      let checkInData: AttendanceLogProps[] = res.Data as AttendanceLogProps[];
+      let lastCheckInData = checkInData.find(e => e.CheckOutTime == '');
+      if (lastCheckInData) Object.assign(this.Entity.p, lastCheckInData);
       else {
-        let secondLastCheckInData = checkInData.filter(e => e.CheckOutTime != '')
-        if (secondLastCheckInData.length > 0) Object.assign(this.Entity.p, secondLastCheckInData[0])
+        let secondLast = checkInData.find(e => e.CheckOutTime != '');
+        if (secondLast) Object.assign(this.Entity.p, secondLast);
       }
     }
+
     if (this.Entity.p.FirstCheckInTime == '' && this.Entity.p.CheckInTime == '' && this.Entity.p.CheckOutTime == '') {
       this.isCheckInEnabled = true;
-    }
-    else if (this.Entity.p.FirstCheckInTime != '' && this.Entity.p.CheckInTime != '' && this.Entity.p.CheckOutTime == '') {
+    } else if (this.Entity.p.CheckInTime && !this.Entity.p.CheckOutTime) {
       this.isCheckInEnabled = false;
-    }
-    else if (this.Entity.p.FirstCheckInTime != '' && this.Entity.p.CheckInTime != '' && this.Entity.p.CheckOutTime != '') {
+    } else {
       this.isCheckInEnabled = true;
     }
-
   }
+
   openPunchModal = async (type: 'in' | 'out') => {
     this.currentPunchType = type;
     if (this.isCheckInEnabled) {
       this.punchModalOpen = true;
     }
-
-    // this.currentCompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    console.log('CurrentCompanyRef() :', this.companyRef());
-
-    //  this.siteList = await Site.FetchEntireListByCompanyRef(this.companystatemanagement.getCurrentCompanyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg))
-    this.siteList = await Site.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg))
-    console.log('this.siteList :', this.siteList);
-
+    this.siteList = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
   }
+
   onSelectionChange(selected: Site[]) {
-    console.log('Selected option:', selected);
     this.selectedSite = selected;
   }
 
-  takePhoto = async (type: 'before' | 'after') => {
-    try {
-      // const image = await Camera.getPhoto({
-      //   quality: 90,
-      //   allowEditing: false,
-      //   resultType: CameraResultType.DataUrl,
-      //   source: CameraSource.Camera
-      // });
+  // submitPunchIn = async () => {
+  //   try {
+  //     this.isSubmitting = true;
+  //     this.Entity.p.IsCheckIn = this.currentPunchType === 'in';
 
-      // console.log(`Captured ${type} photo:`, image.dataUrl);
-      // Optionally store it for preview or upload
-      // this[type + 'Photo'] = image.dataUrl;
+  //     this.isPunchInEnabled = !this.Entity.p.IsCheckIn;
+  //     this.isPunchOutEnabled = this.Entity.p.IsCheckIn;
 
-    } catch (error) {
-      console.error(`Error taking ${type} photo`, error);
-    }
-  }
-  // takePhoto(type: 'before' | 'after') {
-  //   // Replace with your camera logic
-  //   const dummyPhoto = 'assets/dummy-photo.jpg'; // use real image URI from camera
-  //   if (type === 'before') this.capturedBeforePhoto = dummyPhoto;
-  //   else this.capturedAfterPhoto = dummyPhoto;
+  //     this.punchModalOpen = false;
+  //     this.isSaveDisabled = true;
+
+  //     this.Entity.p.CompanyRef = this.companyRef();
+  //     this.Entity.p.EmployeeRef = this.employeeRef;
+
+  //     if (this.selectedSite.length > 0) {
+  //       this.Entity.p.SiteRef = this.selectedSite[0].p.Ref;
+  //     }
+
+  //     this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date!);
+
+  //     let entityToSave = this.Entity.GetEditableVersion();
+  //     let entitiesToSave = [entityToSave];
+  //     let td = TransportData.CreateTransportData(entitiesToSave);
+  //     let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+  //     let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+
+  //     if (!tr.Successful) {
+  //       await this.uiUtils.showErrorMessage('Error', tr.Message);
+  //       return;
+  //     }
+
+  //     await this.uiUtils.showSuccessToster('Check In successfully');
+  //     await this.getCheckInData();
+  //   } catch (err) {
+  //     await this.uiUtils.showErrorMessage('Error', 'An error occurred during punch submission.');
+  //   } finally {
+  //     this.isSubmitting = false;
+  //   }
   // }
 
-
-  // takePhoto(type: 'before' | 'after') {
-  //   console.log(`Take photo (${type})`);
-  // }
-
-  submitPunchIn = async () => {
+   submitPunchIn = async () => {
     try {
       this.isSubmitting = true;
       debugger
@@ -235,6 +243,8 @@ export class AttendanceManagementPage implements OnInit {
           await this.uiUtils.showSuccessToster('Punch out successfully!');
         }
         await this.getCheckInData()
+        this.isCheckInTime = this.Entity.p.CheckInTime;
+        this.isCheckOutTime = this.Entity.p.CheckOutTime;
       }
 
     } catch (error) {
@@ -288,6 +298,8 @@ export class AttendanceManagementPage implements OnInit {
 
         await this.uiUtils.showSuccessToster('Punch out successfully!');
         await this.getCheckInData();
+        this.isCheckInTime = this.Entity.p.CheckInTime;
+        this.isCheckOutTime = this.Entity.p.CheckOutTime;
       }
     } catch (error) {
       console.log(error);
@@ -296,24 +308,33 @@ export class AttendanceManagementPage implements OnInit {
     }
 
   }
-  // submitPunch() {
-  //   this.isSubmitting = true;
-  //   setTimeout(() => {
-  //     this.isSubmitting = false;
-  //     this.punchModalOpen = false;
-  //     console.log('Punch Submitted ✅');
-  //   }, 2000); // simulate API
-  // }
+
+  takePhoto = async (type: 'before' | 'after') => {
+    try {
+      // const image = await Camera.getPhoto({
+      //   quality: 90,
+      //   allowEditing: false,
+      //   resultType: CameraResultType.DataUrl,
+      //   source: CameraSource.Camera
+      // });
+
+      // console.log(Captured ${type} photo:, image.dataUrl);
+      // Optionally store it for preview or upload
+      // this[type + 'Photo'] = image.dataUrl;
+
+    } catch (error) {
+      // console.error(\);
+    }
+  }
   getSalarySlip() {
     this.router.navigate(['/app_homepage/tabs/attendance-management/salary-slip']);
   }
+
   requestLeave() {
     this.router.navigate(['/app_homepage/tabs/attendance-management/leave-request']);
   }
+
   viewAllAttendance() {
-    console.log('Viewing full attendance...');
-  }
-  viewMore() {
     this.router.navigate(['/app_homepage/tabs/attendance-management/attendance-details']);
   }
 }
