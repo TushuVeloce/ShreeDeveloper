@@ -15,7 +15,6 @@ export class ImageInterceptor implements HttpInterceptor {
   constructor(private sessionValues: SessionValues) { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    debugger
     let authToken = this.sessionValues.CurrentLoginToken;
 
     // cloned headers, updated with the authorization.
