@@ -18,7 +18,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   standalone: false
 })
 export class CustomerFollowUpPage implements OnInit {
-  Entity: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
+  Entity: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
   SiteList: Site[] = [];
   PlotList: Plot[] = [];
   followupList: CustomerFollowUp[] = [];

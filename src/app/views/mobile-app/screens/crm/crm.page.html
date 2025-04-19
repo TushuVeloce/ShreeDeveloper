@@ -2,7 +2,6 @@
 
 <ion-content>
   <div class="crm-container">
-
     <!-- CRM Stats Overview -->
     <div class="crm-stats">
       <div class="stat-card" *ngFor="let stat of crmStats">
@@ -16,18 +15,19 @@
 
     <!-- Action Buttons -->
     <div class="action-buttons">
-      <ion-button expand="full" (click)="goToVisitedCustomer()">Visited Customer</ion-button>
+      <ion-button expand="full" (click)="goToVisitedCustomer()">Customer Enquiry</ion-button>
       <ion-button expand="full" color="secondary" (click)="goToCustomerFollowUp()">Customer Follow-Up</ion-button>
     </div>
 
     <!-- Reminders Section -->
-    <div class="reminders-section">
+    <div class="reminders-section" *ngIf="FilterFollowupList.length">
       <h2 class="section-title">Reminder for Follow-Up</h2>
-      <div *ngFor="let reminder of reminders" class="reminder-item">
-        <ion-icon [name]="reminder.icon"></ion-icon>
+      <div *ngFor="let reminder of FilterFollowupList" class="reminder-item" (click)="onFollowUpClick(reminder)">
+        <ion-icon name="people-outline"></ion-icon>
         <div class="reminder-details">
-          <p class="reminder-title">{{ reminder.title }}</p>
-          <p class="reminder-date">{{ reminder.date }}</p>
+          <p class="reminder-title">{{ reminder.p.CustomerName }}</p>
+          <p class="reminder-title">{{ reminder.p.ContactNos }}</p>
+          <p class="reminder-date">{{ formatDate(reminder.p.TransDateTime) }}</p>
         </div>
       </div>
     </div>
