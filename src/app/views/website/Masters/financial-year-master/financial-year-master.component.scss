@@ -35,4 +35,92 @@
     margin-top: 15px;
     text-align: right;
   }
-  
+  /* Background */
+.login-page {
+  background-image: url('/assets/images/login.png');
+  /* Add your custom background image here */
+  // background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Login Box */
+.login-box {
+  background-color: transparent;
+  /* Semi-transparent background */
+  border-radius: 8px;
+  padding: 2rem;
+  width: 470px;
+  text-align: center;
+  position: relative;
+  border: 2px solid white;
+}
+
+/* Logo and Title */
+.login-logo img {
+  max-width: 300px;
+}
+
+.login-title {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 1rem;
+  letter-spacing: 2px;
+}
+
+/* Labels */
+.input-label {
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  display: block;
+  text-align: left;
+}
+
+/* Input Fields */
+.input-field {
+  position: relative;
+  margin: 1.5rem 0;
+
+}
+
+// .input-icon[_ngcontent-ng-c3206458711] {
+//   position: absolute;
+//   right: -21px;
+//   top: 68%;
+//   transform: translateY(-50%);
+//   color: white;
+// }
+
+.form-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: transparent;
+  color: white;
+
+}
+
+
+
+
+
+@media (max-width: 576px) {
+
+
+  .form-input {
+    font-size: 14px;
+  }
+
+  .login-button {
+    width: 100%;
+    font-size: 14px;
+  }
+}
+

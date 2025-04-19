@@ -27,6 +27,12 @@
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{financialyear.p.FromDate}}</td>
           <td Class="tbldata">{{financialyear.p.ToDate}}</td>
+          <td Class="tbldata">
+             <nz-button nz-button class="btn1"  (click)="isSetFinancialYearModalOpen = true">
+              Set Financial Year
+            </nz-button>
+
+       </td>
         </tr>
       </tbody>
     </nz-table>
@@ -54,7 +60,25 @@
     </div>
     <div class="custom-modal-body">
       <form autocomplete="off">
-        <div class="row" style="margin-top: 1rem">
+
+
+         <!-- Password Field -->
+      <div >
+        <label for="password">Password</label>
+        <div style="display: flex">
+          <input [type]="showPassword ? 'text' : 'password'" id="password" class="form-control" name="Password" required
+            [(ngModel)]="localpassword" />
+          <span (click)="togglePasswordVisibility()" class="input-icon"
+            style="margin-top: 0.4rem; margin-left: 0.2rem; color: rgb(255, 255, 255); cursor: pointer;">
+            <i class="fa-regular fa-eye" *ngIf="showPassword"></i>
+            <i class="fa-regular fa-eye-slash" *ngIf="!showPassword"></i>
+          </span>
+        </div>
+      </div>
+      <span>
+        <strong>Note :</strong> To create/set a new financial year, you must enter your login password.
+      </span>
+        <!-- <div class="row" style="margin-top: 1rem">
           <div class="col-md-12 mb-3">
             <label for="localpassword">Password</label>
             <input type="text" name="localpassword" id="localpassword" class="form-control" [(ngModel)]="localpassword" required
@@ -63,14 +87,70 @@
           <span>
             <strong>Note :</strong> To create a new financial year, you must enter your login password.
           </span>
-        </div>
+        </div> -->
         </form>
     </div>
     <div class="custom-modal-footer">
       <!-- <button type="button" class="btn btn-secondary" (click)="isModalOpen = false">Close</button> -->
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
         <div>
-          <nz-button nz-button class="btn1" (click)="addOwner()" (click)='AddNewFinancialYear()'>Save</nz-button>
+          <nz-button nz-button class="btn1" (click)='AddNewFinancialYear()'>Save</nz-button>
+        </div>
+        <div>
+          <nz-button nz-button class="btn1" (click)="closeModal('owner')">
+            Close
+          </nz-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div *ngIf="isSetFinancialYearModalOpen" class="custom-modal-overlay">
+  <div class="custom-modal">
+    <div class="custom-modal-header">
+      <h5> Set New Financial Year </h5>
+      <button type="button" class="btn-close" (click)="closeModal('password')"></button>
+    </div>
+    <div class="custom-modal-body">
+      <form autocomplete="off">
+
+
+         <!-- Password Field -->
+      <div >
+        <label for="password">Password</label>
+        <div style="display: flex">
+          <input [type]="showPassword ? 'text' : 'password'" id="password" class="form-control" name="Password" required
+            [(ngModel)]="localpassword" />
+          <span (click)="togglePasswordVisibility()" class="input-icon"
+            style="margin-top: 0.4rem; margin-left: 0.2rem; color: rgb(255, 255, 255); cursor: pointer;">
+            <i class="fa-regular fa-eye" *ngIf="showPassword"></i>
+            <i class="fa-regular fa-eye-slash" *ngIf="!showPassword"></i>
+          </span>
+        </div>
+      </div>
+      <span>
+        <strong>Note :</strong> To set a new financial year, you must enter your login password.
+      </span>
+        <!-- <div class="row" style="margin-top: 1rem">
+          <div class="col-md-12 mb-3">
+            <label for="localpassword">Password</label>
+            <input type="text" name="localpassword" id="localpassword" class="form-control" [(ngModel)]="localpassword" required
+              placeholder="Enter Password" />
+          </div>
+          <span>
+            <strong>Note :</strong> To create a new financial year, you must enter your login password.
+          </span>
+        </div> -->
+        </form>
+    </div>
+    <div class="custom-modal-footer">
+      <!-- <button type="button" class="btn btn-secondary" (click)="isModalOpen = false">Close</button> -->
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
+        <div>
+          <nz-button nz-button class="btn1"  (click)='SetNewFinancialYear()'>Set</nz-button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="closeModal('owner')">
