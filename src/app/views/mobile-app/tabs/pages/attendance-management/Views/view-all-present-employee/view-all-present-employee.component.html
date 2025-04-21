@@ -1,0 +1,73 @@
+<app-header-with-back-handler title="Today's Attendance"></app-header-with-back-handler>
+
+<ion-content class="ion-padding">
+  <div class="section-title">Today's Attendance</div>
+
+  <div class="attendance-wrapper">
+    <ion-card *ngFor="let log of TodayAttendanceLogList" class="attendance-card">
+      <ion-card-header>
+        <div class="card-header">
+          <ion-card-title>{{ log.p.EmployeeName }}</ion-card-title>
+          <ion-button fill="clear" size="small" color="primary" (click)="openModal(log)">
+            <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="details">
+          <small>
+            Start: {{ log.p.FirstCheckInTime || '-' }} |
+            End: {{ log.p.LastCheckOutTime || '-' }} <br />
+            Total Working Hrs: {{ log.p.TotalWorkingHrs || '-' }}
+          </small>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Modal -->
+  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="modal-card">
+    <ng-template>
+      <div class="modal-container">
+        <ion-header>
+          <ion-toolbar color="primary">
+            <ion-title>Leave Details</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" (click)="closeModal()">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <ion-content class="ion-padding">
+          <div class="info-row" *ngFor="let info of attendanceInfo">
+            <strong class="label">{{ info.label }}</strong>
+            <span class="value">{{ info.value }}</span>
+          </div>
+
+          <ion-label class="section-title">Uploaded Photos</ion-label>
+          <div class="photo-row">
+            <div>
+              <ion-label>Self Photo</ion-label>
+              <img [src]="SelectedAttendanceLogs.p.attendacelogpath1"
+                *ngIf="SelectedAttendanceLogs.p.attendacelogpath1; else noImg" class="preview-img" />
+              <ng-template #noImg><span class="value">Not available</span></ng-template>
+            </div>
+
+            <div>
+              <ion-label>Work Location</ion-label>
+              <img [src]="SelectedAttendanceLogs.p.attendacelogpath2"
+                *ngIf="SelectedAttendanceLogs.p.attendacelogpath2; else noImg2" class="preview-img" />
+              <ng-template #noImg2><span class="value">Not available</span></ng-template>
+            </div>
+          </div>
+        </ion-content>
+
+        <ion-footer>
+          <ion-button expand="block" color="primary" (click)="closeModal()">Close</ion-button>
+        </ion-footer>
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>

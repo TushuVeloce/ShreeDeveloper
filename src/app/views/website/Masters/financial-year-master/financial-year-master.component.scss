@@ -101,32 +101,24 @@
 
 }
 
-.status {
+.yearstatus {
   padding: 4px 8px;
   border-radius: 6px;
   font-weight: 500;
   font-size: 14px;
   width: 200px;
   border: 1px solid;
-  cursor: copy;
   display: inline-block;
   color: white;
 
-  &.approved {
+  &.current {
     border-color: green;
-    background-color: #00ad00;
+    background-color: #44a744;
   }
 
-  &.pending {
+  &.set {
     border-color: brown;
     background-color: brown;
   }
 }
 
-th, td {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 50px;   /* Minimum width for all columns */
-  max-width: 400px;  /* Maximum width for all columns */
-}

@@ -27,17 +27,11 @@
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{financialyear.p.FromDate}}</td>
           <td Class="tbldata">{{financialyear.p.ToDate}}</td>
-          <!-- <td Class="tbldata">
-             <button  class="status" [ngClass]="financialyear.p.IsCurrentYear === 1 ? 'Approved' : 'Pending'  (click)="isSetFinancialYearModalOpen = true; onSelectedFinanacialYear(financialyear); ">
-              Set Financial Year
+          <td class="tbldata">
+            <button class="yearstatus" [disabled]="financialyear.p.IsCurrentYear === 1" [ngClass]="financialyear.p.IsCurrentYear === 1 ? 'current' : 'set'" (click)="isSetFinancialYearModalOpen = true; onSelectedFinanacialYear(financialyear);">
+             {{financialyear.p.IsCurrentYear === 1 ? 'Current Financial Year' : 'Set Financial Year'}}
             </button>
-       </td> -->
-       <td class="tbldata">
-  <button class="status" [ngClass]="financialyear.p.IsCurrentYear === 1 ? 'approved' : 'pending'"
-    (click)="isSetFinancialYearModalOpen = true; onSelectedFinanacialYear(financialyear);">
-    {{financialyear.p.IsCurrentYear === 1 ? 'Current Financial Year' : 'Set Financial Year'}}
-  </button>
-</td>
+          </td>
         </tr>
       </tbody>
     </nz-table>
@@ -56,7 +50,7 @@
 
 
 
-
+<!-- Modal Code for Both  Password Modal  Set Financial Year Modal  -->
 <div *ngIf="isPasswordModalOpen || isSetFinancialYearModalOpen " class="custom-modal-overlay">
   <div class="custom-modal">
     <div class="custom-modal-header">
@@ -65,10 +59,8 @@
     </div>
     <div class="custom-modal-body">
       <form autocomplete="off">
-
-
          <!-- Password Field -->
-      <div >
+      <div style="margin-top: 12px;">
         <label for="password">Password</label>
         <div style="display: flex">
           <input [type]="showPassword ? 'text' : 'password'" id="password" class="form-control" name="Password" required
@@ -77,12 +69,13 @@
             style="margin-top: 0.4rem; margin-left: 0.2rem; color: rgb(255, 255, 255); cursor: pointer;">
             <i class="fa-regular fa-eye" *ngIf="showPassword"></i>
             <i class="fa-regular fa-eye-slash" *ngIf="!showPassword"></i>
+            <i class="fa-solid fa-eye"></i>
           </span>
         </div>
       </div>
-      <span>
-        <strong>Note :</strong> To {{isSetFinancialYearModalOpen ? 'set ' : 'create a new '}}financial year, you must enter your login password.
-      </span>
+      <div style="margin-top: 8px;">
+        <strong>Note :</strong> To {{isSetFinancialYearModalOpen ? 'set new ' : 'create a new '}}financial year, you must enter your login password.
+      </div>
         <!-- <div class="row" style="margin-top: 1rem">
           <div class="col-md-12 mb-3">
             <label for="localpassword">Password</label>
