@@ -7,6 +7,7 @@ import { SalarySlipMobileAppComponent } from './Views/salary-slip-mobile-app/sal
 import { LeaveRequestMobileAppComponent } from './Views/leave-request-mobile-app/leave-request-mobile-app.component';
 import { AddLeaveRequestMobileAppComponent } from './Views/add-leave-request-mobile-app/add-leave-request-mobile-app.component';
 import { AddSalarySlipMobileAppComponent } from './Views/add-salary-slip-mobile-app/add-salary-slip-mobile-app.component';
+import { ViewAllPresentEmployeeComponent } from './Views/view-all-present-employee/view-all-present-employee.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'add-salary-slip', component: AddSalarySlipMobileAppComponent },
   { path: 'leave-request', component: LeaveRequestMobileAppComponent },
   { path: 'add-leave-request', component: AddLeaveRequestMobileAppComponent },
+  { path: 'present-employee', component: ViewAllPresentEmployeeComponent },
   // Add Page
 ];
 

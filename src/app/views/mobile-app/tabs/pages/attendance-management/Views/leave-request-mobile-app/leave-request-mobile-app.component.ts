@@ -122,7 +122,8 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
 
   closeModal(): void {
     this.modalOpen = false;
-    this.SelectedLeaveRequest.DeleteInstance;
+    // this.SelectedLeaveRequest.DeleteInstance;
+    this.SelectedLeaveRequest = LeaveRequest.CreateNewInstance();
   }
 
   async onDeleteClicked(request: LeaveRequest): Promise<void> {

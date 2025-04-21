@@ -250,6 +250,6 @@ export class AttendanceManagementPage implements OnInit {
   }
 
   viewAllAttendance() {
-    this.router.navigate(['/app_homepage/tabs/attendance-management/attendance-details']);
+    this.router.navigate(['/app_homepage/tabs/attendance-management/present-employee']);
   }
 }
