@@ -28,10 +28,9 @@
           <td Class="tbldata">{{financialyear.p.FromDate}}</td>
           <td Class="tbldata">{{financialyear.p.ToDate}}</td>
           <td Class="tbldata">
-             <nz-button nz-button class="btn1"  (click)="isSetFinancialYearModalOpen = true">
+             <button nz-button class="status"  (click)="isSetFinancialYearModalOpen = true" ngClass="pending">
               Set Financial Year
-            </nz-button>
-
+            </button>
        </td>
         </tr>
       </tbody>

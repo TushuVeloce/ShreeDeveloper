@@ -9,7 +9,7 @@ export class GenerateNewFinancialYearCustomRequest
     public static readonly FetchRequestType: string = "GenerateNewFinancialYearCustomRequest";
     CompanyRef:number = 0;
     Password:string = '';
-    LoginEmployeeRef = 0;
+    EmployeeRef = 0;
     LoginToken = ''
      Ref:number = 0;
 

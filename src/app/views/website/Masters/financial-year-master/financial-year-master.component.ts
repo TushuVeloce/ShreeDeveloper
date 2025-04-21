@@ -3,6 +3,7 @@ import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FinancialYear, FinancialYearProps } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
 import { GenerateNewFinancialYearCustomRequest } from 'src/app/classes/domain/entities/website/masters/financialyear/FinancialYearUserCustomRequest copy';
+
 import { SetCurrentFinancialYearCustomRequest } from 'src/app/classes/domain/entities/website/masters/financialyear/SetCurrentFinancialYearCustomRequest';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
@@ -43,6 +44,8 @@ export class FinancialYearMasterComponent implements OnInit {
   localpassword: string = '';
   showPassword: boolean = false;
 
+  localRef : number = 0
+
 
   headers: string[] = ['Sr.No.', 'From Date', 'To Date', 'Status '];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private utils: Utils,
@@ -54,7 +57,7 @@ export class FinancialYearMasterComponent implements OnInit {
     });
   }
 
-  async ngOnInit() {
+  async ngOnInit() {    
     // await this.FormulateMasterList();
   }
 
@@ -71,6 +74,8 @@ export class FinancialYearMasterComponent implements OnInit {
     console.log('DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
     this.convertdate();
+    console.log(this.Entity.p.Ref)
+    
   }
 
   convertdate = () => {
@@ -91,32 +96,9 @@ export class FinancialYearMasterComponent implements OnInit {
     if (type === 'password') this.isSetFinancialYearModalOpen = true;
   }
 
-
-
    closeModal = async (type: string) => {
-      // if (type === 'password') {
-      //   const keysToCheck = ['Password'] as const;
-
-      //   const hasData = keysToCheck.some(
-      //     key => (this.newOwner as any)[key]?.toString().trim()
-      //   );
-
-      //   if (hasData) {
-      //     await this.uiUtils.showConfirmationMessage(
-      //       'Close',
-      //       `This process is <strong>IRREVERSIBLE!</strong><br/>
-      //        Are you sure you want to close this modal?`,
-      //       async () => {
-      //         this.isPasswordModalOpen = false;
-      //         this.newOwner = FinancialYearProps.Blank();
-      //       }
-      //     );
-      //   } else {
-        //     this.newOwner = FinancialYearProps.Blank();
-        //   }
-        // }
-            this.isPasswordModalOpen = false;
-            this.isSetFinancialYearModalOpen = false;
+      this.isPasswordModalOpen = false;
+      this.isSetFinancialYearModalOpen = false;
             this.localpassword = '';
     };
 
@@ -154,15 +136,15 @@ export class FinancialYearMasterComponent implements OnInit {
     if (this.localpassword.trim().length > 0) {
 
       let req = new GenerateNewFinancialYearCustomRequest();
-
       req.CompanyRef = this.companyRef();
-      console.log('req.CompanyRef :', req.CompanyRef);
-      req.Password = this.localpassword;
-      console.log('req.Password :', req.Password);
-      req.LoginEmployeeRef = this.appStateManage.getEmployeeRef();
-      console.log('req.LoginEmployeeRef :', req.LoginEmployeeRef);
+      req.Password = this.localpassword;     
+      req.EmployeeRef = this.appStateManage.getEmployeeRef();
       req.LoginToken = this.appStateManage.getLoginToken();
-      console.log('req.LoginToken :', req.LoginToken);
+
+      console.log('CompanyRef :', req.CompanyRef);
+      console.log('Password :', req.Password);
+      console.log('LoginEmployeeRef :', req.EmployeeRef);
+      console.log('LoginToken :', req.LoginToken);
 
       let td = req.FormulateTransportData();
       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
@@ -195,18 +177,22 @@ export class FinancialYearMasterComponent implements OnInit {
    // To Set New Financial Year Custom Request
    SetNewFinancialYear = async () => {
     // debugger
+
+    console.log(this.localRef);
+    
     if (this.localpassword.trim().length > 0) {
 
       let req = new SetCurrentFinancialYearCustomRequest();
-
-      req.Ref = this.Entity.p.Ref;
-      console.log('req.Ref :', req.Ref);
+      
       req.CompanyRef = this.companyRef();
-      console.log('req.CompanyRef :', req.CompanyRef);
       req.Password = this.localpassword;
-      console.log('req.Password :', req.Password);
-      req.LoginEmployeeRef = this.appStateManage.getEmployeeRef();
+      req.EmployeeRef = this.appStateManage.getEmployeeRef();
       req.LoginToken = this.appStateManage.getLoginToken();
+
+      console.log('req.CompanyRef :', req.CompanyRef);
+      console.log('req.Password :', req.Password);
+      console.log('LoginEmployeeRef :', req.EmployeeRef);
+      console.log('LoginToken :', req.LoginToken);
 
       let td = req.FormulateTransportData();
       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);

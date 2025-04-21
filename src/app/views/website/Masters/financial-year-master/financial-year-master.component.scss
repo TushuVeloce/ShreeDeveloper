@@ -88,13 +88,7 @@
 
 }
 
-// .input-icon[_ngcontent-ng-c3206458711] {
-//   position: absolute;
-//   right: -21px;
-//   top: 68%;
-//   transform: translateY(-50%);
-//   color: white;
-// }
+
 
 .form-input {
   width: 100%;
@@ -107,20 +101,32 @@
 
 }
 
+.status {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  width: 200px;
+  border: 1px solid;
+  cursor: copy;
+  display: inline-block;
+  color: white;
 
-
-
-
-@media (max-width: 576px) {
-
-
-  .form-input {
-    font-size: 14px;
+  &.approved {
+    border-color: green;
+    background-color: #e6ffe6;
   }
 
-  .login-button {
-    width: 100%;
-    font-size: 14px;
+  &.pending {
+    border-color: brown;
+    background-color: brown;
   }
 }
 
+th, td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 50px;   /* Minimum width for all columns */
+  max-width: 400px;  /* Maximum width for all columns */
+}
