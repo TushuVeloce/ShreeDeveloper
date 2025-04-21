@@ -90,7 +90,6 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       let req = new SalaryGenerationCustomRequest();  
       req.EmployeeRef = employee
       req.Month = month
-      console.log('req :', req);
       let td = req.FormulateTransportData();
       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
       let tr = await this.serverCommunicator.sendHttpRequest(pkt);

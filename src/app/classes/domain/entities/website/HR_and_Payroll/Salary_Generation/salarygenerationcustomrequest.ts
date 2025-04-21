@@ -6,7 +6,7 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class SalaryGenerationCustomRequest
 {
-    public static readonly CustomProcessRequestType: string = "SalaryGenerationCustomRequest";
+    public static readonly CustomProcessRequestType: string = "SalarySlipGenerationFetchCustomRequest";
     // CompanyRef:Number=0;
     EmployeeRef:Number=0;
     Month:Number = 0;
