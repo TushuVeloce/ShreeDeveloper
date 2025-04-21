@@ -27,8 +27,7 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Salary Slip Request' | 'Edit Salary Slip Request' = 'New Salary Slip Request';
   IsDropdownDisabled: boolean = false;
   InitialEntity: SalarySlipRequest = null as any;
-  FromMonthList = DomainEnums.MonthList(true, '--Select Month Type--');
-  ToMonthList = DomainEnums.MonthList(true, '--Select Month Type--');
+  MonthList = DomainEnums.MonthList(true, '--Select Month Type--');
   EmployeeList: Employee[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   FinancialYearList: any = [];
@@ -90,34 +89,36 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
       return;
     }
     let lst = await FinancialYear.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+
     const updatedArray = lst.map(item => ({
       ...item,
       FromDate: item.p.FromDate.substring(0, 4),
       ToDate: item.p.ToDate.substring(0, 4)
     }));
 
-    this.FinancialYearList = updatedArray;
-    // this.convertDateFormat();
-  }
+    const years: string[] = [];
 
-  // convertDateFormat = () => {
-  //   this.FinancialYearList.forEach(item => {
-  //     let convertedDate = this.dtu.GetIndianDate(item.p.FromDate,);
-  //     this.FromDates.push(convertedDate);
-  //     item.p.FromDate = convertedDate;
-  //   });
-  //   this.FinancialYearList.forEach(item => {
-  //     let convertedDate = this.dtu.GetIndianDate(item.p.ToDate,);
-  //     this.ToDates.push(convertedDate);
-  //     item.p.ToDate = convertedDate;
-  //   });
-  // }
+    updatedArray.forEach(item => {
+      years.push(item.FromDate);
+      years.push(item.ToDate);
+    });
+
+    // Step 2: Sort and remove duplicates
+    const uniqueYears = Array.from(new Set(years)).sort();
+
+    this.FinancialYearList = uniqueYears;
+  }
 
   getSingleEmployeeDetails = async () => {
     let data = await Employee.FetchInstance(this.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.Entity.p.EmployeeRef = data.p.Ref;
     this.Entity.p.EmployeeName = data.p.Name;
   }
+
+  onMonthChange = (Selectedservice: any) => {
+    this.Entity.p.Month = Selectedservice;
+  }
+
 
   SaveSalarySlipRequest = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
@@ -129,6 +130,7 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
