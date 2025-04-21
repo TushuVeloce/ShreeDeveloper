@@ -16,8 +16,8 @@
     </div>
 
     <div class="btn-group">
-      <ion-button fill="outline" color="light" (click)="openPunchModal('in')">CHECKIN</ion-button>
-      <ion-button color="warning" (click)="openPunchModal('out')">CHECKOUT</ion-button>
+      <ion-button fill="outline" color="light" (click)="openPunchModal()" [disabled]="!isCheckInEnabled || IsLeave==1" >CHECKIN</ion-button>
+      <ion-button color="warning" (click)="submitPunchOut()" [disabled]="isCheckInEnabled || IsLeave==1" >CHECKOUT</ion-button>
     </div>
   </div>
 
@@ -103,7 +103,7 @@
         <!-- Modal Header -->
         <ion-header>
           <ion-toolbar color="primary" class="modal-toolbar">
-            <ion-title>Punch {{ currentPunchType | titlecase }}</ion-title>
+            <ion-title>Punch In</ion-title>
             <ion-buttons slot="end">
               <ion-button fill="clear" (click)="punchModalOpen = false">
                 <ion-icon name="close-outline"></ion-icon>

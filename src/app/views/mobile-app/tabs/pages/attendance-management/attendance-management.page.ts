@@ -23,9 +23,6 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class AttendanceManagementPage implements OnInit {
   punchModalOpen = false;
-  currentPunchType: string = 'in';
-  isPunchInEnabled: boolean = false;
-  isPunchOutEnabled: boolean = true;
   isCurrentTimeDate: string = "";
   isCheckInTime: string = "";
   isCheckOutTime: string = "";
@@ -40,8 +37,7 @@ export class AttendanceManagementPage implements OnInit {
 
   capturedBeforePhoto: string | null = null;
   capturedAfterPhoto: string | null = null;
-  isSaveDisabled: boolean = false;
-  private IsCheckIn: boolean = false;
+  IsLeave: number = 0;
   isChecked: boolean = false;
   Date: string = "";
   DateWithTime: string | null = null;
@@ -121,27 +117,32 @@ export class AttendanceManagementPage implements OnInit {
 
     let tdResult = JSON.parse(tr.Tag) as TransportData;
     let res = AttendanceLogCheckInCustomRequest.FromTransportData(tdResult);
+    console.log('res :', res);
     if (res.Data.length > 0) {
       let checkInData: AttendanceLogProps[] = res.Data as AttendanceLogProps[];
-      let lastCheckInData = checkInData.find(e => e.CheckOutTime == '');
-      if (lastCheckInData) Object.assign(this.Entity.p, lastCheckInData);
+      let lastCheckInData = checkInData.filter(e => e.CheckOutTime == '')
+      if (lastCheckInData.length > 0) Object.assign(this.Entity.p, lastCheckInData[0])
       else {
-        let secondLast = checkInData.find(e => e.CheckOutTime != '');
-        if (secondLast) Object.assign(this.Entity.p, secondLast);
+        let secondLastCheckInData = checkInData.filter(e => e.CheckOutTime != '')
+        if (secondLastCheckInData.length > 0) Object.assign(this.Entity.p, secondLastCheckInData[0])
       }
+      this.IsLeave=this.Entity.p.IsLeave;
+      this.isCheckInTime = this.Entity.p.CheckInTime;
+      this.isCheckOutTime = this.Entity.p.CheckOutTime;
     }
-
     if (this.Entity.p.FirstCheckInTime == '' && this.Entity.p.CheckInTime == '' && this.Entity.p.CheckOutTime == '') {
       this.isCheckInEnabled = true;
-    } else if (this.Entity.p.CheckInTime && !this.Entity.p.CheckOutTime) {
+    }
+    else if (this.Entity.p.FirstCheckInTime != '' && this.Entity.p.CheckInTime != '' && this.Entity.p.CheckOutTime == '') {
       this.isCheckInEnabled = false;
-    } else {
+    }
+    else if (this.Entity.p.FirstCheckInTime != '' && this.Entity.p.CheckInTime != '' && this.Entity.p.CheckOutTime != '') {
       this.isCheckInEnabled = true;
     }
   }
 
-  openPunchModal = async (type: 'in' | 'out') => {
-    this.currentPunchType = type;
+  openPunchModal = async () => {
+    // this.currentPunchType = type;
     if (this.isCheckInEnabled) {
       this.punchModalOpen = true;
     }
@@ -155,151 +156,65 @@ export class AttendanceManagementPage implements OnInit {
     this.selectedSite = selected;
   }
 
-  // submitPunchIn = async () => {
-  //   try {
-  //     this.isSubmitting = true;
-  //     this.Entity.p.IsCheckIn = this.currentPunchType === 'in';
-
-  //     this.isPunchInEnabled = !this.Entity.p.IsCheckIn;
-  //     this.isPunchOutEnabled = this.Entity.p.IsCheckIn;
-
-  //     this.punchModalOpen = false;
-  //     this.isSaveDisabled = true;
-
-  //     this.Entity.p.CompanyRef = this.companyRef();
-  //     this.Entity.p.EmployeeRef = this.employeeRef;
-
-  //     if (this.selectedSite.length > 0) {
-  //       this.Entity.p.SiteRef = this.selectedSite[0].p.Ref;
-  //     }
-
-  //     this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date!);
-
-  //     let entityToSave = this.Entity.GetEditableVersion();
-  //     let entitiesToSave = [entityToSave];
-  //     let td = TransportData.CreateTransportData(entitiesToSave);
-  //     let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-  //     let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-
-  //     if (!tr.Successful) {
-  //       await this.uiUtils.showErrorMessage('Error', tr.Message);
-  //       return;
-  //     }
-
-  //     await this.uiUtils.showSuccessToster('Check In successfully');
-  //     await this.getCheckInData();
-  //   } catch (err) {
-  //     await this.uiUtils.showErrorMessage('Error', 'An error occurred during punch submission.');
-  //   } finally {
-  //     this.isSubmitting = false;
-  //   }
-  // }
-
    submitPunchIn = async () => {
     try {
       this.isSubmitting = true;
-      debugger
-      if (this.currentPunchType === 'in') {
-        this.Entity.p.IsCheckIn = true;
-        this.isPunchInEnabled = false;   // Disable Punch In
-        this.isPunchOutEnabled = true;   // Enable Punch Out
-      } else {
-        this.Entity.p.IsCheckIn = false;
-        this.isPunchInEnabled = true;    // E nable Punch In
-        this.isPunchOutEnabled = false;  // Disable Punch Out
-      }
-      this.punchModalOpen = false;
-      this.isSaveDisabled = true;
+      this.Entity.p.IsCheckIn = true;
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-      // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-      // this.Entity.p.UpdatedDate= await CurrentDateTimeRequest.GetCurrentDateTime();
       this.Entity.p.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.selectedSite.length > 0) {
         this.Entity.p.SiteRef = this.selectedSite[0].p.Ref;
       }
       // convert date 2025-02-23 to 2025-02-23-00-00-00-000
       this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date!)
-      // this.Entity.p.SaleDeedDate = this.dtu.ConvertStringDateToFullFormat(this.localsaledeeddate)
-      // this.Entity.p.TalathiDate = this.dtu.ConvertStringDateToFullFormat(this.localtalathidate)
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave]
       console.log('entitiesToSave :', entitiesToSave);
-      // await this.Entity.EnsurePrimaryKeysWithValidValues()
       let tr = await this.utils.SavePersistableEntities(entitiesToSave);
       if (!tr.Successful) {
-        this.isSaveDisabled = false;
         this.uiUtils.showErrorMessage('Error', tr.Message);
         return
       }
       else {
-        this.isSaveDisabled = false;
-        // this.onEntitySaved.emit(entityToSave);
-        if (this.IsCheckIn) {
-          await this.uiUtils.showSuccessToster('Punch in successfully!');
-          this.Entity = AttendanceLog.CreateNewInstance();
-        } else {
-          // await this.router.navigate(['/homepage/Website/Registrar_Office'])
-          await this.uiUtils.showSuccessToster('Punch out successfully!');
-        }
-        await this.getCheckInData()
-        this.isCheckInTime = this.Entity.p.CheckInTime;
-        this.isCheckOutTime = this.Entity.p.CheckOutTime;
+        // if (this.IsCheckIn) {
+     
+        // }
+        await this.uiUtils.showSuccessToster('Punch in successfully!');
+        this.Entity = AttendanceLog.CreateNewInstance();
+        await this.getCheckInData();
+        // this.isCheckInTime = this.Entity.p.CheckInTime;
+        // this.isCheckOutTime = this.Entity.p.CheckOutTime;
       }
-
     } catch (error) {
       console.log(error);
     } finally {
       this.isSubmitting = false;
+      this.punchModalOpen = false;
     }
 
   }
   submitPunchOut = async () => {
     try {
-      if (this.currentPunchType === 'in') {
-        this.Entity.p.IsCheckIn = true;
-        this.isPunchInEnabled = false;   // Disable Punch In
-        this.isPunchOutEnabled = true;   // Enable Punch Out
-      } else {
-        this.Entity.p.IsCheckIn = false;
-        this.isPunchInEnabled = true;    // Enable Punch In
-        this.isPunchOutEnabled = false;  // Disable Punch Out
-      }
-
-      this.punchModalOpen = false;
-
-      this.isSaveDisabled = true;
+      this.Entity.p.IsCheckIn = false;
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-      // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-      // this.Entity.p.UpdatedDate= await CurrentDateTimeRequest.GetCurrentDateTime();
       this.Entity.p.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-
-
       // convert date 2025-02-23 to 2025-02-23-00-00-00-000
       this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date!)
-      // this.Entity.p.SaleDeedDate = this.dtu.ConvertStringDateToFullFormat(this.localsaledeeddate)
-      // this.Entity.p.TalathiDate = this.dtu.ConvertStringDateToFullFormat(this.localtalathidate)
-
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave]
       console.log('entitiesToSave :', entitiesToSave);
 
-      // await this.Entity.EnsurePrimaryKeysWithValidValues()
       let tr = await this.utils.SavePersistableEntities(entitiesToSave);
       if (!tr.Successful) {
-        this.isSaveDisabled = false;
         this.uiUtils.showErrorMessage('Error', tr.Message);
         return
       }
       else {
-        this.isSaveDisabled = false;
-        // this.onEntitySaved.emit(entityToSave);
         this.Entity = AttendanceLog.CreateNewInstance();
-
         await this.uiUtils.showSuccessToster('Punch out successfully!');
         await this.getCheckInData();
-        this.isCheckInTime = this.Entity.p.CheckInTime;
-        this.isCheckOutTime = this.Entity.p.CheckOutTime;
+        // this.isCheckInTime = this.Entity.p.CheckInTime;
+        // this.isCheckOutTime = this.Entity.p.CheckOutTime;
       }
     } catch (error) {
       console.log(error);

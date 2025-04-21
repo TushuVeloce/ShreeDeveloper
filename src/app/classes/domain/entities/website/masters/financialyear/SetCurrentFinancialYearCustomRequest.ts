@@ -9,9 +9,9 @@ export class SetCurrentFinancialYearCustomRequest
     public static readonly FetchRequestType: string = "SetCurrentFinancialYearCustomRequest";
     CompanyRef:number = 0;
     Password:string = '';
-    LoginEmployeeRef = 0;
-    LoginToken = ''
-     Ref:number = 0;
+    EmployeeRef = 0;
+    LoginToken = '';
+    Ref:number = 0;
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
