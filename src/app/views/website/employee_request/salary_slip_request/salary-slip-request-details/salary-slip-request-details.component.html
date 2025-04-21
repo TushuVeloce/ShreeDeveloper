@@ -12,45 +12,25 @@
     </div>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-        <div class="col-lg-4 col-md-4 col-sm-12">
+        <div class="col-lg-6 col-md-4 col-sm-12">
           <label>Name</label>
           <input type="text" [(ngModel)]="Entity.p.EmployeeName" readonly name="EmployeeName" class="form-control"
-            id="EmployeeName" required #EmployeeNameCtrl="ngModel"
-            (blur)="EmployeeNameCtrl.control.markAsTouched()" />
-          <div style="height: 25px;"
-            *ngIf="(EmployeeNameCtrl.invalid && (EmployeeNameCtrl.touched || EmployeeNameCtrl.dirty))">
-            <span class="validation-text" *ngIf="EmployeeNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+            id="EmployeeName" required #EmployeeNameCtrl="ngModel" (blur)="EmployeeNameCtrl.control.markAsTouched()" />
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
-          <label>From Month</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="FromMonth"
-            name="FromMonth" [nzSize]="'large'" [(ngModel)]="Entity.p.FromMonth">
-            <nz-option *ngFor="let FromMonth of FromMonthList" [nzValue]="FromMonth.Ref"
-              [nzLabel]="FromMonth.Name"></nz-option>
+        <div class="col-lg-6 col-md-4 col-sm-12">
+          <label>Year</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="Year" name="Year"
+            [nzSize]="'large'" [(ngModel)]="Entity.p.Year">
+            <nz-option *ngFor="let Year of FinancialYearList" [nzValue]="Year" [nzLabel]="Year"></nz-option>
           </nz-select>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
-          <label>From Year</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="FromYear"
-            name="FromYear" [nzSize]="'large'" [(ngModel)]="Entity.p.FromYear">
-            <nz-option *ngFor="let FromYear of FinancialYearList" [nzValue]="FromYear.FromDate"
-              [nzLabel]="FromYear.FromDate"></nz-option>
-          </nz-select>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
-          <label>To Month</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="ToMonth" name="ToMonth"
-            [nzSize]="'large'" [(ngModel)]="Entity.p.ToMonth">
-            <nz-option *ngFor="let ToMonth of ToMonthList" [nzValue]="ToMonth.Ref" [nzLabel]="ToMonth.Name"></nz-option>
-          </nz-select>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
-          <label>To Year</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="ToYear" name="ToYear"
-            [nzSize]="'large'" [(ngModel)]="Entity.p.ToYear">
-            <nz-option *ngFor="let ToYear of FinancialYearList" [nzValue]="ToYear.ToDate"
-              [nzLabel]="ToYear.ToDate"></nz-option>
+        <div class="col-md-6 col-md-4 col-sm-12">
+          <label for="SelectedMonths"><b>Month</b></label>
+          <nz-select [(ngModel)]="Entity.p.SelectedMonths" nzMode="multiple" id="SelectedMonths" name="SelectedMonths"
+            nzShowSearch nzAllowClear (ngModalChange)="onSelectedMonthsChange(Entity.p.SelectedMonths)"
+            nzPlaceHolder="Select services">
+            <nz-option *ngFor="let SelectedMonths of MonthList" [nzValue]="SelectedMonths.Ref"
+              [nzLabel]="SelectedMonths.Name"></nz-option>
           </nz-select>
         </div>
       </div>

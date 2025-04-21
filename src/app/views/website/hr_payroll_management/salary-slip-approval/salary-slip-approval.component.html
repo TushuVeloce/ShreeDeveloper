@@ -37,10 +37,8 @@
         <tbody>
           <tr *ngFor="let salaryslipapproval of paginatedList(); index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td Class="tbldata">{{salaryslipapproval.p.FromMonth}}</td>
-            <td Class="tbldata">{{salaryslipapproval.p.ToMonth}}</td>
-            <td Class="tbldata">{{salaryslipapproval.p.FromYear}}</td>
-            <td Class="tbldata">{{salaryslipapproval.p.ToYear}}</td>
+            <!-- <td Class="tbldata">{{salaryslipapproval.p.Month}}</td> -->
+            <td Class="tbldata">{{salaryslipapproval.p.Year}}</td>
             <td Class="tbldata">
               <button class="status" [disabled]="isSaveDisabled" *ngIf="salaryslipapproval.p.IsApproved == 0"
                 (click)="handleApproval(salaryslipapproval)" ngClass="pending">

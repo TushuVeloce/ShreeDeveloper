@@ -26,10 +26,8 @@
           <tr *ngFor="let salarysliprequest of paginatedList(); index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{salarysliprequest.p.EmployeeName}}</td>
-            <td Class="tbldata">{{salarysliprequest.p.FromMonth}}</td>
-            <td Class="tbldata">{{salarysliprequest.p.ToMonth}}</td>
-            <td Class="tbldata">{{salarysliprequest.p.FromYear}}</td>
-            <td Class="tbldata">{{salarysliprequest.p.ToYear}}</td>
+            <!-- <td Class="tbldata">{{salarysliprequest.p.Month}}</td> -->
+            <td Class="tbldata">{{salarysliprequest.p.Year}}</td>
             <td Class="tbldata">
               <span class="status" *ngIf="salarysliprequest.p.IsApproved == 0" ngClass="pending">
                 Pending
