@@ -2,8 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FinancialYear, FinancialYearProps } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
-import { GenerateNewFinancialYearCustomRequest } from 'src/app/classes/domain/entities/website/masters/financialyear/FinancialYearUserCustomRequest copy';
-
+import { GenerateNewFinancialYearCustomRequest } from 'src/app/classes/domain/entities/website/masters/financialyear/FinancialYearUserCustomRequest';
 import { SetCurrentFinancialYearCustomRequest } from 'src/app/classes/domain/entities/website/masters/financialyear/SetCurrentFinancialYearCustomRequest';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
@@ -27,7 +26,7 @@ export class FinancialYearMasterComponent implements OnInit {
   MasterList: FinancialYear[] = [];
   DisplayMasterList: FinancialYear[] = [];
   SearchString: string = '';
-  SelectedMarketing: FinancialYear = FinancialYear.CreateNewInstance();
+  SelectedFinancialYear: FinancialYear = FinancialYear.CreateNewInstance();
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
@@ -45,7 +44,6 @@ export class FinancialYearMasterComponent implements OnInit {
   showPassword: boolean = false;
 
   localRef : number = 0
-
 
   headers: string[] = ['Sr.No.', 'From Date', 'To Date', 'Status '];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private utils: Utils,
@@ -130,6 +128,11 @@ export class FinancialYearMasterComponent implements OnInit {
     this.showPassword = !this.showPassword;
   };
 
+  onSelectedFinanacialYear = async (item: FinancialYear) => {
+    this.SelectedFinancialYear = item.GetEditableVersion();
+    FinancialYear.SetCurrentInstance(this.SelectedFinancialYear);
+  }
+
   // To Create New Financial Year Custom Request
   AddNewFinancialYear = async () => {
     // debugger
@@ -140,7 +143,8 @@ export class FinancialYearMasterComponent implements OnInit {
       req.Password = this.localpassword;     
       req.EmployeeRef = this.appStateManage.getEmployeeRef();
       req.LoginToken = this.appStateManage.getLoginToken();
-
+      
+   
       console.log('CompanyRef :', req.CompanyRef);
       console.log('Password :', req.Password);
       console.log('LoginEmployeeRef :', req.EmployeeRef);
@@ -183,12 +187,15 @@ export class FinancialYearMasterComponent implements OnInit {
     if (this.localpassword.trim().length > 0) {
 
       let req = new SetCurrentFinancialYearCustomRequest();
-      
+      this.Entity = FinancialYear.GetCurrentInstance()
+    
+      req.FinancialYearRef = this.Entity.p.Ref
       req.CompanyRef = this.companyRef();
       req.Password = this.localpassword;
       req.EmployeeRef = this.appStateManage.getEmployeeRef();
       req.LoginToken = this.appStateManage.getLoginToken();
-
+      
+      console.log('req.FinancialYearRef :', req.FinancialYearRef);
       console.log('req.CompanyRef :', req.CompanyRef);
       console.log('req.Password :', req.Password);
       console.log('LoginEmployeeRef :', req.EmployeeRef);

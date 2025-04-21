@@ -27,11 +27,17 @@
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{financialyear.p.FromDate}}</td>
           <td Class="tbldata">{{financialyear.p.ToDate}}</td>
-          <td Class="tbldata">
-             <button nz-button class="status"  (click)="isSetFinancialYearModalOpen = true" ngClass="pending">
+          <!-- <td Class="tbldata">
+             <button  class="status" [ngClass]="financialyear.p.IsCurrentYear === 1 ? 'Approved' : 'Pending'  (click)="isSetFinancialYearModalOpen = true; onSelectedFinanacialYear(financialyear); ">
               Set Financial Year
             </button>
-       </td>
+       </td> -->
+       <td class="tbldata">
+  <button class="status" [ngClass]="financialyear.p.IsCurrentYear === 1 ? 'approved' : 'pending'"
+    (click)="isSetFinancialYearModalOpen = true; onSelectedFinanacialYear(financialyear);">
+    {{financialyear.p.IsCurrentYear === 1 ? 'Current Financial Year' : 'Set Financial Year'}}
+  </button>
+</td>
         </tr>
       </tbody>
     </nz-table>

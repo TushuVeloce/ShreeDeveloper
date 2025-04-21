@@ -5,13 +5,14 @@ import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class AttendanceLogCountCustomRequest {
-    public static readonly CustomProcessRequestType: string = "AttendanceLogCountCustomRequest";
+    public static readonly CustomProcessRequestType: string = "TodaysAttendanceLogCustomRequest";
     public static readonly MasterTableName: string = "AttendanceLog";
 
     TransDateTime: string = '';
     EmployeeRef: number = 0;
     CompanyRef: number = 0;
     Count: number = 0;
+    Ref: number = 0;
 
     Data: any[] = []
 
