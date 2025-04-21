@@ -162,7 +162,7 @@ export class FinancialYearMasterComponent implements OnInit {
     let tdResult = JSON.parse(tr.Tag) as TransportData;
     let NewFinancialYear = this.utils.GetString(tdResult);
     this.Entity.p.FromDate = NewFinancialYear;
-    console.log('tdResult :', tdResult);
+    await this.uiUtils.showSuccessToster('New Financial Year Created Successfully');
 
     this.closeModal('password');
     this.getFinancialYearListByCompanyRef();
@@ -213,6 +213,7 @@ export class FinancialYearMasterComponent implements OnInit {
     let NewFinancialYear = this.utils.GetString(tdResult);
     this.Entity.p.FromDate = NewFinancialYear;
     this.closeModal('password');
+    await this.uiUtils.showSuccessToster('This Financial Year Set Successfully');
     this.getFinancialYearListByCompanyRef();
   }
   else{
