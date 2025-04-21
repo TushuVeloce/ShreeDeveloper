@@ -20,6 +20,7 @@ export class FinancialYearProps {
   ToDate: string = '';
   ShortName	: string = '';
   public CompanyRef: number = 0;
+  public IsCurrentYear: number = 0;
 
   // public FinancialYear: string = '';
 
