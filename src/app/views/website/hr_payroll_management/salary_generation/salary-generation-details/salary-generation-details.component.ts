@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
-import { SalaryGeneration } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Salary_Generation/salarygeneration';
+import { SalaryGeneration, SalaryGenerationProps } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Salary_Generation/salarygeneration';
 import { SalaryGenerationCustomRequest } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Salary_Generation/salarygenerationcustomrequest';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
@@ -87,7 +87,6 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     input.select();
   }
 
-  employeeData: any[] = []; 
   EmployeeData = async (employee: number, month: number) => {
     if (employee === 0 || month === 0) {
       return;
@@ -106,19 +105,12 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     }
   
     let tdResult = JSON.parse(tr.Tag) as TransportData;
-    console.log('tdResult:', tdResult);
-  
-    const collections = tdResult.MainData?.Collections || [];
-    const employeeDataCollection = collections.find((c: any) => c.Name === 'EmployeeData');
-    const employeeDataEntries = employeeDataCollection?.Entries || [];
-    console.log('Employee Entries:', employeeDataEntries);
-    this.employeeData = employeeDataEntries;
-    this.Entity.p.TotalLeaves = this.employeeData[0].TotalLeaves
-    this.Entity.p.OverallWorkingHours = this.employeeData[0].OverallWorkingHours
-    this.Entity.p.TotalLeavesHours = this.employeeData[0].TotalLeavesHours
-    this.Entity.p.TotalOverTimeHours = this.employeeData[0].TotalOvertimeHrs
-    this.Entity.p.TotalWorkingDays = this.employeeData[0].TotalWorkingDays
-    this.Entity.p.TotalWorkingHours = this.employeeData[0].TotalWorkingHrs
+    let res = SalaryGenerationCustomRequest.FromTransportData(tdResult);
+    console.log('res :', res);
+    if (res.Data.length > 0) {
+        let checkInData: SalaryGenerationProps[] = res.Data as SalaryGenerationProps[];
+        Object.assign(this.Entity.p, checkInData[0]);
+    }
   };
   
 
