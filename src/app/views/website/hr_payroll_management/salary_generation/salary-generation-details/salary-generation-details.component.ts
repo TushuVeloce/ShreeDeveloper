@@ -43,7 +43,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       this.Entity = SalaryGeneration.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      console.log('Entity :', this.Entity);
+      this.EmployeeData(this.Entity.p.EmployeeRef,this.Entity.p.Month)
     } else {
       this.Entity = SalaryGeneration.CreateNewInstance();
       SalaryGeneration.SetCurrentInstance(this.Entity);
@@ -87,25 +87,40 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     input.select();
   }
 
+  employeeData: any[] = []; 
   EmployeeData = async (employee: number, month: number) => {
-    if(employee == 0 || month == 0){
+    if (employee === 0 || month === 0) {
       return;
     }
+  
     let req = new SalaryGenerationCustomRequest();
-    req.EmployeeRef = employee
-    req.Month = month
+    req.EmployeeRef = employee;
+    req.Month = month;
     let td = req.FormulateTransportData();
     let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
     let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-
+  
     if (!tr.Successful) {
       await this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     }
+  
     let tdResult = JSON.parse(tr.Tag) as TransportData;
     console.log('tdResult:', tdResult);
+  
+    const collections = tdResult.MainData?.Collections || [];
+    const employeeDataCollection = collections.find((c: any) => c.Name === 'EmployeeData');
+    const employeeDataEntries = employeeDataCollection?.Entries || [];
+    console.log('Employee Entries:', employeeDataEntries);
+    this.employeeData = employeeDataEntries;
+    this.Entity.p.TotalLeaves = this.employeeData[0].TotalLeaves
+    this.Entity.p.OverallWorkingHours = this.employeeData[0].OverallWorkingHours
+    this.Entity.p.TotalLeavesHours = this.employeeData[0].TotalLeavesHours
+    this.Entity.p.TotalOverTimeHours = this.employeeData[0].TotalOvertimeHrs
+    this.Entity.p.TotalWorkingDays = this.employeeData[0].TotalWorkingDays
+    this.Entity.p.TotalWorkingHours = this.employeeData[0].TotalWorkingHrs
   };
-
+  
 
   SaveSalaryGeneration = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
