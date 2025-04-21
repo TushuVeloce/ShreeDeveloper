@@ -41,7 +41,7 @@
         </ion-header>
 
         <ion-content class="ion-padding">
-          <div class="info-row" *ngFor="let info of attendanceInfo">
+          <div class="info-row-of-model" *ngFor="let info of attendanceInfo">
             <strong class="label">{{ info.label }}</strong>
             <span class="value">{{ info.value }}</span>
           </div>
@@ -49,16 +49,16 @@
           <ion-label class="section-title">Uploaded Photos</ion-label>
           <div class="photo-row">
             <div>
-              <ion-label>Self Photo</ion-label>
-              <img [src]="SelectedAttendanceLogs.p.attendacelogpath1"
-                *ngIf="SelectedAttendanceLogs.p.attendacelogpath1; else noImg" class="preview-img" />
-              <ng-template #noImg><span class="value">Not available</span></ng-template>
+              <ion-label class="label-of-photo">Self Photo</ion-label>
+              <img src="../../../../../../../../assets/images/shreelogo.png"
+                *ngIf="!SelectedAttendanceLogs.p.attendacelogpath1; else noImg" class="preview-img" />
+              <ng-template #noImg><span class="value-of-photo">Not available</span></ng-template>
             </div>
 
             <div>
               <ion-label>Work Location</ion-label>
-              <img [src]="SelectedAttendanceLogs.p.attendacelogpath2"
-                *ngIf="SelectedAttendanceLogs.p.attendacelogpath2; else noImg2" class="preview-img" />
+              <img src="../../../../../../../../assets/images/shreelogo.png"
+                *ngIf="!SelectedAttendanceLogs.p.attendacelogpath2; else noImg2" class="preview-img" />
               <ng-template #noImg2><span class="value">Not available</span></ng-template>
             </div>
           </div>

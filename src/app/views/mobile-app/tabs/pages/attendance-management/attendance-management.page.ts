@@ -95,7 +95,7 @@ export class AttendanceManagementPage implements OnInit {
     switch (id) {
       case 100: this.getSalarySlip(); break;
       case 200: this.requestLeave(); break;
-      case 300: this.viewAllAttendance(); break;
+      case 300: this.viewAllPresentEmployee(); break;
     }
   }
 
@@ -138,6 +138,9 @@ export class AttendanceManagementPage implements OnInit {
     }
     else if (this.Entity.p.FirstCheckInTime != '' && this.Entity.p.CheckInTime != '' && this.Entity.p.CheckOutTime != '') {
       this.isCheckInEnabled = true;
+    }else{
+      this.isCheckInEnabled = true;
+      // await this.uiUtils.showErrorToster('some thing went wrong!');
     }
   }
 
@@ -248,8 +251,10 @@ export class AttendanceManagementPage implements OnInit {
   requestLeave() {
     this.router.navigate(['/app_homepage/tabs/attendance-management/leave-request']);
   }
-
-  viewAllAttendance() {
+  viewAllPresentEmployee() {
     this.router.navigate(['/app_homepage/tabs/attendance-management/present-employee']);
+  }
+  viewAllAttendance() {
+    this.router.navigate(['/app_homepage/tabs/attendance-management/attendance-details']);
   }
 }
