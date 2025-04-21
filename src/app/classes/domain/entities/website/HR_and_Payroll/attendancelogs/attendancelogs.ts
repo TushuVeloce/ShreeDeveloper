@@ -167,7 +167,14 @@ export class AttendanceLogs implements IPersistable<AttendanceLogs> {
 
  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new AttendanceLogsFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
+    req.CompanyRefs.push(CompanyRef);
+    let tdResponse = await AttendanceLogs.FetchTransportData(req, errorHandler) as TransportData;
+    return AttendanceLogs.ListFromTransportData(tdResponse);
+  }
+  public static async FetchEntireListByCompanyRefAndAttendanceLogType(CompanyRef:number,AttendanceLogTypeRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new AttendanceLogsFetchRequest();
+    req.CompanyRefs.push(CompanyRef);
+    req.AttendanceLogTypeRefs.push(AttendanceLogTypeRef);
     let tdResponse = await AttendanceLogs.FetchTransportData(req, errorHandler) as TransportData;
     return AttendanceLogs.ListFromTransportData(tdResponse);
   }

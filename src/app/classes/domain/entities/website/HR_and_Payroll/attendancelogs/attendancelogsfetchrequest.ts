@@ -10,6 +10,7 @@ export class AttendanceLogsFetchRequest
 
     CompanyRefs: number[] = [];
     AttendanceLogsRefs: number[] = [];
+    AttendanceLogTypeRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

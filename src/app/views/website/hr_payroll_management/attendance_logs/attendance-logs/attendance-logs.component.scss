@@ -28,3 +28,25 @@
     justify-content: center !important;
   }
 }
+
+.summary-label {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #6c757d; /* Bootstrap's text-muted */
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+  padding-left: 4px;
+  border-left: 3px solid #0d6efd; /* Primary-colored accent bar */
+}
+
+.table-wrapper {
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+.fixed-pagination {
+  border-top: none !important;
+  margin-top: 0px !important;
+  box-shadow: none !important;
+}
