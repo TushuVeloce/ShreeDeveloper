@@ -25,10 +25,12 @@
           </nz-select>
         </div>
         <div class="col-md-6 col-md-4 col-sm-12">
-          <label for="Month"><b>Month</b></label>
-          <nz-select [(ngModel)]="Entity.p.Month" nzMode="multiple" id="Month" name="Month" nzShowSearch nzAllowClear
-            (ngModalChange)="onMonthChange(Entity.p.Month)" nzPlaceHolder="Select services">
-            <nz-option *ngFor="let Month of MonthList" [nzValue]="Month.Name" [nzLabel]="Month.Name"></nz-option>
+          <label for="SelectedMonths"><b>Month</b></label>
+          <nz-select [(ngModel)]="Entity.p.SelectedMonths" nzMode="multiple" id="SelectedMonths" name="SelectedMonths"
+            nzShowSearch nzAllowClear (ngModalChange)="onSelectedMonthsChange(Entity.p.SelectedMonths)"
+            nzPlaceHolder="Select services">
+            <nz-option *ngFor="let SelectedMonths of MonthList" [nzValue]="SelectedMonths.Ref"
+              [nzLabel]="SelectedMonths.Name"></nz-option>
           </nz-select>
         </div>
       </div>

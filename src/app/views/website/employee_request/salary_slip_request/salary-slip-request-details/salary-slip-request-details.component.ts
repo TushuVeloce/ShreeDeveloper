@@ -115,15 +115,14 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
     this.Entity.p.EmployeeName = data.p.Name;
   }
 
-  onMonthChange = (Selectedservice: any) => {
-    this.Entity.p.Month = Selectedservice;
+  onSelectedMonthsChange = (Selectedservice: any) => {
+    this.Entity.p.SelectedMonths = Selectedservice;
   }
 
 
   SaveSalarySlipRequest = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
-
 
     if (this.Entity.p.CreatedBy == 0) {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
