@@ -85,8 +85,6 @@
           <thead>
             <tr>
               <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
-              <th *ngIf="isTodayView" class="tblheader">On Leave</th>
-              <th *ngIf="isTodayView" class="tblheader">Leave Type</th>
             </tr>
           </thead>
           <tbody>
@@ -97,6 +95,10 @@
               <td Class="tbldata">{{attendancelog.p.FirstCheckInTime}}</td>
               <td Class="tbldata">{{attendancelog.p.LastCheckOutTime}}</td>
               <td Class="tbldata">{{attendancelog.p.TotalWorkingHrs}}</td>
+
+              <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.InOfficeHrs}}</td>
+              <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.OnLeave}}</td>
+              <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.LeaveType}}</td>
               <!-- <td class="tbldata">
             <span style="margin-left: 9px;">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />

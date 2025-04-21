@@ -22,6 +22,9 @@ export class AttendanceLogsProps {
   public LastCheckOutTime: string = '';
   public TotalWorkingHrs: string = '';
   public TotalOvertimeHours: string = '';
+  public InOfficeHrs: string = '';
+  public OnLeave: string = '';
+  public LeaveType: string = '';
 
   // for photo uploaded
   public attendacelogpath1 : string = '';
