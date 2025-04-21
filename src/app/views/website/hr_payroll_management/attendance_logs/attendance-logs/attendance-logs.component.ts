@@ -29,9 +29,8 @@ export class AttendanceLogsComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   SearchString: string = '';
-  headers: string[] = ['Sr. no', 'Employee Name', 'Date', 'Check In Time', 'Check Out Time', 'Total Time','In OfficeHours','On leave',''];
 
-  employeeDataList : [] = []
+  employeeDataList: [] = []
 
   AttendanceLogTypeList = DomainEnums.AttendenceLogTypeList(
     true,
@@ -42,7 +41,7 @@ export class AttendanceLogsComponent implements OnInit {
 
   ToDispayMonthlyRequirement: boolean = false
   ToDispayWeeklyRequirement: boolean = false
-  isTodayView: boolean = false;
+  isTodayAttendanceView: boolean = false;
 
   constructor(
     private uiUtils: UIUtils,
@@ -62,7 +61,7 @@ export class AttendanceLogsComponent implements OnInit {
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
     this.getAttendanceCount()
-    this.isTodayView = true;
+    this.isTodayAttendanceView = true;
   }
 
   getattendancelogbycompanyref = async () => {
@@ -75,7 +74,7 @@ export class AttendanceLogsComponent implements OnInit {
   getTodayAttendanceLogByAttendanceListType = async () => {
     this.ToDispayMonthlyRequirement = false;
     this.ToDispayWeeklyRequirement = false;
-    this.isTodayView = true;
+    this.isTodayAttendanceView = true;
     let TodaysAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = TodaysAttendanceLog
   }
@@ -83,14 +82,14 @@ export class AttendanceLogsComponent implements OnInit {
   getWeekWiseAttendanceLogByAttendanceListType = async () => {
     this.ToDispayMonthlyRequirement = false;
     this.ToDispayWeeklyRequirement = true;
-    this.isTodayView = false;
+    this.isTodayAttendanceView = false;
     let WeeklyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.WeeklyAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = WeeklyAttendanceLog
   }
   getMonthWiseAttendanceLogByAttendanceListType = async () => {
     this.ToDispayMonthlyRequirement = true;
     this.ToDispayWeeklyRequirement = false;
-    this.isTodayView = false;
+    this.isTodayAttendanceView = false;
     let MonthlyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.MonthlyAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = MonthlyAttendanceLog
   }
@@ -117,6 +116,15 @@ export class AttendanceLogsComponent implements OnInit {
     else {
       this.DisplayMasterList = this.MasterList
     }
+  }
+
+  // headers as per required
+  baseHeaders: string[] = ['Sr. no', 'Employee Name', 'Date', 'Check In Time', 'Check Out Time', 'Total Time', 'In OfficeHours'];
+  get headers(): string[] {
+    if (this.isTodayAttendanceView) {
+      return [...this.baseHeaders, 'On Leave', 'Leave Type'];
+    }
+    return this.baseHeaders;
   }
 
   // CustomFetchRequest

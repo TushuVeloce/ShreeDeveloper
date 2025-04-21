@@ -30,15 +30,16 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   MonthList = DomainEnums.MonthList(true, '---Select Month---');
   companyName = this.companystatemanagement.SelectedCompanyName;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement,private serverCommunicator: ServerCommunicatorService,private payloadPacketFacade: PayloadPacketFacade) { }
-  
+  kk: any = ''
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private serverCommunicator: ServerCommunicatorService, private payloadPacketFacade: PayloadPacketFacade) { }
+
 
   ngOnInit() {
     this.getEmployeeListByCompanyRef()
     this.appStateManage.setDropdownDisabled(true);
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity? 'New Salary': 'Edit Salary';
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Salary' : 'Edit Salary';
       this.Entity = SalaryGeneration.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
@@ -64,21 +65,21 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     this.EmployeeList = lst;
   }
 
-  calculategrosstotal = ()=>{
+  calculategrosstotal = () => {
     const GrossTotal = Math.ceil(this.Entity.p.BasicSalary + this.Entity.p.TotalAllowance + this.Entity.p.TotalIncentive + this.Entity.p.Other)
-     this.Entity.p.GrossTotal = GrossTotal
-     this.calculatenetsalary()
+    this.Entity.p.GrossTotal = GrossTotal
+    this.calculatenetsalary()
   }
 
-  calculatetotaldeduction = ()=>{
+  calculatetotaldeduction = () => {
     const TotalDeduction = Math.ceil(this.Entity.p.TDS + this.Entity.p.PF + this.Entity.p.TotalLeaveDeduction + this.Entity.p.AdvancePayment)
-     this.Entity.p.TotalDeduction = TotalDeduction
-     this.calculatenetsalary()
+    this.Entity.p.TotalDeduction = TotalDeduction
+    this.calculatenetsalary()
   }
 
-  calculatenetsalary = ()=>{
-    const NetSalary = Math.ceil(this.Entity.p.GrossTotal - this.Entity.p.TotalDeduction )
-     this.Entity.p.NetSalary = NetSalary
+  calculatenetsalary = () => {
+    const NetSalary = Math.ceil(this.Entity.p.GrossTotal - this.Entity.p.TotalDeduction)
+    this.Entity.p.NetSalary = NetSalary
   }
 
   selectAllValue(event: MouseEvent): void {
@@ -86,49 +87,52 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     input.select();
   }
 
-   EmployeeData = async (employee:number, month: number) => {
-      let req = new SalaryGenerationCustomRequest();  
-      req.EmployeeRef = employee
-      req.Month = month
-      let td = req.FormulateTransportData();
-      let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-      let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-    
-      if (!tr.Successful) {
-        await this.uiUtils.showErrorMessage('Error', tr.Message);
-        return;
-      }
-      let tdResult = JSON.parse(tr.Tag) as TransportData;
-      console.log('tdResult:', tdResult);
-    };
-    
+  EmployeeData = async (employee: number, month: number) => {
+    if(employee == 0 || month == 0){
+      return;
+    }
+    let req = new SalaryGenerationCustomRequest();
+    req.EmployeeRef = employee
+    req.Month = month
+    let td = req.FormulateTransportData();
+    let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
 
-   SaveSalaryGeneration = async () => {
-      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-      this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
-      if (this.Entity.p.CreatedBy == 0) {
-        this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      }
-      let entityToSave = this.Entity.GetEditableVersion();
-      let entitiesToSave = [entityToSave];
-      console.log('entityToSave :', entityToSave);
-      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-  
-      if (!tr.Successful) {
-        this.isSaveDisabled = false;
-        this.uiUtils.showErrorMessage('Error', tr.Message);
-        return;
+    if (!tr.Successful) {
+      await this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
+    }
+    let tdResult = JSON.parse(tr.Tag) as TransportData;
+    console.log('tdResult:', tdResult);
+  };
+
+
+  SaveSalaryGeneration = async () => {
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+    if (this.Entity.p.CreatedBy == 0) {
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    }
+    let entityToSave = this.Entity.GetEditableVersion();
+    let entitiesToSave = [entityToSave];
+    console.log('entityToSave :', entityToSave);
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
+    } else {
+      this.isSaveDisabled = false;
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('Salary Details saved successfully!');
+        this.Entity = SalaryGeneration.CreateNewInstance();
       } else {
-        this.isSaveDisabled = false;
-        if (this.IsNewEntity) {
-          await this.uiUtils.showSuccessToster('Salary Details saved successfully!');
-          this.Entity = SalaryGeneration.CreateNewInstance();
-        } else {
-          await this.uiUtils.showSuccessToster('Salary Details  Updated successfully!');
-          await this.router.navigate(['/homepage/Website/Salary_Generation']);
-        }
+        await this.uiUtils.showSuccessToster('Salary Details  Updated successfully!');
+        await this.router.navigate(['/homepage/Website/Salary_Generation']);
       }
-    };
+    }
+  };
 
   async BackSalaryGenaration() {
     this.router.navigate(['/homepage/Website/Salary_Generation']);
