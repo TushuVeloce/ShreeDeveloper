@@ -165,6 +165,14 @@ export enum AttendenceLocationType {
 
 }
 
+export enum AttendenceLogType {
+  None = 0,
+  TodaysAttendanceLog = 100,
+  WeeklyAttendanceLog = 200,
+  MonthlyAttendanceLog = 300,
+
+}
+
 
 
 export class DomainEnums {
@@ -969,6 +977,38 @@ export class DomainEnums {
     if (withAllOption) {
       let allEntry = {
         Ref: AttendenceLocationType.None,
+        Name: allOptionName
+      }
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+  // Attendance log type
+  public static AttendenceLogName(itemType: AttendenceLogType) {
+    switch (itemType) {
+      case AttendenceLogType.TodaysAttendanceLog: return 'Todays Attendance Log';
+      case AttendenceLogType.WeeklyAttendanceLog: return 'Weekly Attendance Log';
+      case AttendenceLogType.MonthlyAttendanceLog: return 'Monthly Attendance Log';
+      default: return '';
+    }
+  }
+
+  public static AttendenceLogTypeList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+    let result = [
+      {
+        Ref: AttendenceLogType.TodaysAttendanceLog, Name: DomainEnums.AttendenceLogName(AttendenceLogType.TodaysAttendanceLog)
+      },
+      {
+        Ref: AttendenceLogType.WeeklyAttendanceLog, Name: DomainEnums.AttendenceLogName(AttendenceLogType.WeeklyAttendanceLog)
+      },
+      {
+        Ref: AttendenceLogType.MonthlyAttendanceLog, Name: DomainEnums.AttendenceLogName(AttendenceLogType.MonthlyAttendanceLog)
+      }
+    ]
+    if (withAllOption) {
+      let allEntry = {
+        Ref: AttendenceLogType.None,
         Name: allOptionName
       }
       result.unshift(allEntry);
