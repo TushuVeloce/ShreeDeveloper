@@ -64,7 +64,6 @@ export class SalarySlipApprovalComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     let lst = await SalarySlipRequest.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.MasterList = lst;
 
     this.DisplayMasterList = this.MasterList;
@@ -150,7 +149,7 @@ export class SalarySlipApprovalComponent implements OnInit {
   filterTable = () => {
     if (this.SearchString != '') {
       this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
+        return data.p.Year.indexOf(this.SearchString) > -1
       })
     }
     else {

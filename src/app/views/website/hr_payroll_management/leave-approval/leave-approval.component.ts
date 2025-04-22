@@ -152,7 +152,6 @@ export class LeaveApprovalComponent implements OnInit {
           this.Entity.p.IsCancelled = 1;
         }
         const entityToSave = this.Entity.GetEditableVersion();
-        console.log(entityToSave);
 
         const tr = await this.utils.SavePersistableEntities([entityToSave]);
 
