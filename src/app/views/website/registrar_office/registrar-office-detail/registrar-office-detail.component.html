@@ -22,7 +22,7 @@
  <!-- Customer Details -->  
  <div class="row mb-4" style=" background-color: #fbe6e6; border-radius: 8px 8px 0px 0px;">
   <div class="col-md-4 justify-content-around d-flex">
-    <label style="justify-content: baseline; align-items: baseline;"> Customer Details</label>
+    <label> Customer Details</label>
   </div>
  </div>
       <!-- Plot No -->
@@ -136,7 +136,6 @@
       </div>
     </div>
         <!-- Witness 1 Box -->
-
        <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px;">
       <!-- Witness 1 -->
        <div class="row mb-4" style=" background-color: #fbe6e6; border-radius: 8px 8px 0px 0px;">
@@ -148,10 +147,7 @@
                 class="custom-checkbox"
                 id="Witness1Submit"
                 name="Witness1Submit"
-                [checked]="isWitness1Complete()"
-                disabled
-              />
-              
+                [checked]="isWitness1Complete()"disabled              />
               </div>
         </div>
        </div>
@@ -195,7 +191,7 @@
           <div class="col-md-8 d-flex">
             <input
               type="file"
-              [(ngModel)]="Entity.p.Name"
+              [(ngModel)]="Entity.p.Witness1AadharPath"
               name="Aadhar"
               class="form-control"
               id="Aadhar"
@@ -220,7 +216,7 @@
           <div class="col-md-8 d-flex">
             <input
               type="file"
-              [(ngModel)]="Entity.p.Name"
+              [(ngModel)]="Entity.p.Witness1PanPath"
               name="Pan"
               class="form-control"
               id="Pan"
@@ -296,7 +292,7 @@
          <div class="col-md-8 d-flex">
            <input
              type="file"
-             [(ngModel)]="Entity.p.Name"
+             [(ngModel)]="Entity.p.Witness2AadharPath"
              name="Aadhar"
              class="form-control"
              id="Aadhar"
@@ -320,7 +316,7 @@
          <div class="col-md-8 d-flex">
            <input
              type="file"
-             [(ngModel)]="Entity.p.Name"
+             [(ngModel)]="Entity.p.Witness2PanPath"
              name="Pan"
              class="form-control"
              id="Pan"
@@ -344,21 +340,15 @@
       <div class="col-md-4 justify-content-center d-flex">
         <label  for="IsAgreementToSaleSubmit"> Agreement to Sale</label>
             <div style="margin-left: 25px;">
-              <input
-      type="checkbox"
-      class="custom-checkbox"
-      id="IsAgreementToSaleSubmit"
-      name="IsAgreementToSaleSubmit"
-      [checked]="isAgreementtoSaleComplete()"
-      disabled
-    />
+              <input   type="checkbox" class="custom-checkbox" id="IsAgreementToSaleSubmit" name="IsAgreementToSaleSubmit" [checked]="isAgreementtoSaleComplete()"
+      disabled/>
             </div>
       </div>
      
        <div class="col-md-4 d-flex">
          <input
            type="file"
-           [(ngModel)]="Entity.p.Name"
+           [(ngModel)]="Entity.p.AgreementDocumentPath"
            name="Name"
            class="form-control"
            id="Name"
@@ -423,7 +413,7 @@
   <div class="col-md-4 d-flex ">
       <input
         type="file"
-        [(ngModel)]="Entity.p.Name"
+        [(ngModel)]="Entity.p.SaleDeedtDocumentPath"
         name="Name"
         class="form-control"
         id="Name"
@@ -495,7 +485,7 @@
      <div class="col-md-8 d-flex">
        <input
          type="file"
-         [(ngModel)]="Entity.p.Name"
+         [(ngModel)]="Entity.p.IndexOriginalDocumentPath"
          name="Index Original"
          class="form-control"
          id="Index Original"
@@ -520,7 +510,7 @@
      <div class="col-md-8 d-flex">
        <input
          type="file"
-         [(ngModel)]="Entity.p.Name"
+         [(ngModel)]="Entity.p.DastZeroxDocumentPath"
          name="दस्त Zerox"
          class="form-control"
          id="दस्त Zerox"
@@ -625,7 +615,7 @@
 
 <!-- Spiral 7/12 -->
  <div class="row mt-3">
-  <div class="col-md-6 d-flex justify-content-center  ">
+  <div class="col-md-6 d-flex justify-content-center mb-3 ">
     <label for="IsSpiral712Submit"> Spiral 7/12</label>
     <input type="checkbox" id="IsSpiral712Submit"  [(ngModel)]="Entity.p.IsSpiral712Submit" name="IsSpiral712Submit" class="custom-checkbox">
 </div>
