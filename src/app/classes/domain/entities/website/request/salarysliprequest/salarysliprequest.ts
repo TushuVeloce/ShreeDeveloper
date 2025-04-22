@@ -22,6 +22,7 @@ export class SalarySlipRequestProps {
   public EmployeeRef: number = 0;
   public EmployeeName: string = '';
   public SelectedMonths: [] = [];
+  public SelectedMonthsName: [] = [];
   public Year: string = '';
   public IsApproved: number = 0;
   public LeaveApprovedBy: number = 0;
@@ -73,6 +74,15 @@ export class SalarySlipRequest implements IPersistable<SalarySlipRequest> {
 
     if (this.p.EmployeeRef == 0) {
       vra.add('Name', 'Name cannot be blank.');
+    }
+    if (this.p.Year == '') {
+      vra.add('Year', 'Year cannot be blank.');
+    }
+    if (this.p.SelectedMonths.length <= 0) {
+      vra.add('SelectedMonths', 'Months cannot be blank.');
+    }
+    if (this.p.SelectedMonths.length > 3) {
+      vra.add('SelectedMonths', 'Max 3 months are allowed.');
     }
   }
 
@@ -163,6 +173,13 @@ export class SalarySlipRequest implements IPersistable<SalarySlipRequest> {
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new SalarySlipRequestFetchRequest();
+    let tdResponse = await SalarySlipRequest.FetchTransportData(req, errorHandler) as TransportData;
+    return SalarySlipRequest.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new SalarySlipRequestFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
     let tdResponse = await SalarySlipRequest.FetchTransportData(req, errorHandler) as TransportData;
     return SalarySlipRequest.ListFromTransportData(tdResponse);
   }

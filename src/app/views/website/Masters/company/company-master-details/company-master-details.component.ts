@@ -1,11 +1,12 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
 import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
 import { Country } from 'src/app/classes/domain/entities/website/masters/country/country';
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
+import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -98,18 +99,47 @@ export class CompanyMasterDetailsComponent implements OnInit {
     ) as Company;
     // this.focusInput();
   }
+  Image: File = null as any;
+  selectedImage: string | undefined;
+  @ViewChild('imageInput') imageInput: any;
+  uploadbtn: boolean = true;
 
   // Handle file selection
   handleFileChange = (event: any) => {
-    const fileInput = event.target.files[0];
+    // const fileInput = event.target.files[0];
 
-    if (fileInput) {
-      if (this.allowedImageTypes.includes(fileInput.type)) {
-        this.file = fileInput;
+    // if (fileInput) {
+    //   if (this.allowedImageTypes.includes(fileInput.type)) {
+    //     this.file = fileInput;
+    //     this.errors.company_image = '';
+    //     if (this.file) {
+    //       this.imageUrl = this.createObjectURL(this.file);
+    //     }
+    //     console.log(this.imageUrl);
+
+    //     this.cdr.detectChanges();
+    //   } else {
+    //     this.errors.company_image =
+    //       'Only image files (JPG, PNG, GIF) are allowed';
+    //     this.file = null;
+    //     this.imageUrl = null;
+    //   }
+    // }
+
+
+    const files: FileList = event.target.files;
+    const file: File | null = files.item(0);
+
+    if (file) {
+      const reader = new FileReader();
+      if (this.allowedImageTypes.includes(file.type)) {
+        this.file = file;
         this.errors.company_image = '';
         if (this.file) {
           this.imageUrl = this.createObjectURL(this.file);
         }
+        console.log(this.imageUrl);
+
         this.cdr.detectChanges();
       } else {
         this.errors.company_image =
@@ -117,7 +147,37 @@ export class CompanyMasterDetailsComponent implements OnInit {
         this.file = null;
         this.imageUrl = null;
       }
+
+      reader.onload = () => {
+        this.selectedImage = reader.result as string;
+      };
+
+      reader.readAsDataURL(file);
     }
+    // if (files.length > 0) {
+    //   this.uploadbtn = false;
+    // }
+    // else {
+    //   this.uploadbtn = true;
+    // }
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files.item(i);
+      // this.formData = new FormData();
+
+      if (file) {
+        // this.Entity.p.Images.push(file);\
+        // this.formData.append('images', file);
+        this.Entity.p.CompanyLogo = file;
+        // let obj = FileTransferObject.FromFileWithoutId(file, this.Entity.p.Caption)
+        // this.Entity.p.Images.push(obj)
+        console.log(this.Entity.p.CompanyLogo);
+
+        // this.Image.push(file);
+
+      }
+    }
+    this.imageInput = null;
   }
 
   FormulateCountryList = async () => {
@@ -189,9 +249,11 @@ export class CompanyMasterDetailsComponent implements OnInit {
         entityToSave.p.LastDateOfFirstFinancialYear = '';
       }
     }
-
+    let lstFTO: FileTransferObject[] = [FileTransferObject.FromFileWithoutId(this.Entity.p.CompanyLogo, this.Entity.p.CompanyLogo.name)];
+    console.log(lstFTO, 'lstFTO');
+    // return
     let entitiesToSave = [entityToSave];
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
 
     if (!tr.Successful) {
       this.isSaveDisabled = false;
