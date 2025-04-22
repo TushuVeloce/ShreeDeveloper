@@ -1,6 +1,6 @@
 <div class="card-body">
   <div class="card" style="padding: 1rem">
-    <div class="row">
+    <div class="row mb-3">
       <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
         <button type="button" class="backbtn" (click)="BackRegistrarOffice()">
           <img
@@ -16,6 +16,15 @@
       </div>
     </div>
     <form autocomplete="off">
+    <!-- Customer Box -->
+    <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px;">
+        
+ <!-- Customer Details -->  
+ <div class="row mb-4" style=" background-color: #fbe6e6; border-radius: 8px 8px 0px 0px;">
+  <div class="col-md-4 justify-content-around d-flex">
+    <label style="justify-content: baseline; align-items: baseline;"> Customer Details</label>
+  </div>
+ </div>
       <!-- Plot No -->
       <div class="row mb-4" style="margin-top: 1rem; ">
         <div class="col-md-4">
@@ -64,7 +73,7 @@
       </div>
 
 <!-- Cheque -->
-       <div class="row ">
+ <div class="row">
         <div class="col-md-4 d-flex justify-content-center ">
           <label>Cheque</label>
             <input type="checkbox" id="IsChequeSubmit"  [(ngModel)]="Entity.p.IsChequeSubmit" name="IsChequeSubmit" class="custom-checkbox">
@@ -124,12 +133,13 @@
             </div>
 
         </div>
-
+      </div>
+    </div>
         <!-- Witness 1 Box -->
 
-       <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px;">
+       <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px;">
       <!-- Witness 1 -->
-       <div class="row mb-4" style="margin-top: 1rem; background-color: #fbe6e6; ">
+       <div class="row mb-4" style=" background-color: #fbe6e6; border-radius: 8px 8px 0px 0px;">
         <div class="col-md-4 justify-content-center d-flex">
           <label  for="Witness1Submit"> Witness 1</label>
               <div style="margin-left: 25px;">
@@ -229,9 +239,9 @@
 
         <!--------------------- Witness 2 Box ------------------>
     
-    <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px;">
+    <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px;">
       <!-- Witness 2 -->
-      <div class="row mb-4" style="margin-top: 1rem; background-color: #fbe6e6; ">
+      <div class="row mb-4" style=" background-color: #fbe6e6; border-radius: 8px 8px 0px 0px;">
        <div class="col-md-4 justify-content-center d-flex">
          <label  for="Witness2Submit"> Witness 2</label>
              <div style="margin-left: 25px;">
@@ -329,8 +339,8 @@
 
         <!--------------------- Agreement to Sale Box ------------------------>
 
-   <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px;">
-    <div class="row mb-4" style="margin-top: 1rem; background-color: #fbe6e6; ">
+   <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px;">
+    <div class="row mb-4" style=" background-color: #fbe6e6; border-radius: 8px 8px 0px 0px;">
       <div class="col-md-4 justify-content-center d-flex">
         <label  for="IsAgreementToSaleSubmit"> Agreement to Sale</label>
             <div style="margin-left: 25px;">
@@ -394,9 +404,9 @@
 
         <!---------------------- Sale Deed Box  ----------------------------->
 
- <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px;">
+ <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px;">
       <!-- Sale Deed -->
-  <div class="row mb-4" style="margin-top: 1rem; background-color: #fbe6e6; ">
+  <div class="row mb-4" style=" background-color: #fbe6e6; border-radius: 8px 8px 0px 0px;">
    <div class="col-md-4 justify-content-center d-flex">
      <label  for="IsSaledeedSubmit"> Sale Deed</label>
          <div style="margin-left: 25px;">
@@ -457,9 +467,9 @@
 </div>
 
 <!---------------------- Talathi Box ----------------->
-<div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px;">
+<div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px;">
       <!-- Talathi -->
-  <div class="row mb-4" style="margin-top: 1rem; background-color: #fbe6e6; ">
+  <div class="row mb-4" style=" background-color: #fbe6e6; border-radius: 8px 8px 0px 0px;">
    <div class="col-md-4 justify-content-center d-flex">
      <label  for="IsTalathiSubmit"> Talathi</label>
          <div style="margin-left: 25px;">
@@ -611,7 +621,7 @@
 </div>
 </div>
 
-<div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px;">
+<div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px;">
 
 <!-- Spiral 7/12 -->
  <div class="row mt-3">
@@ -628,7 +638,6 @@
  </div>
   
 </div>
-      </div>
             <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
           <div>
             <button type="button" class="btn" (click)="SaveRegistrarOfficeMaster()" [disabled]="isSaveDisabled">Save</button>
