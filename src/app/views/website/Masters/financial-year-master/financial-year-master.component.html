@@ -91,7 +91,7 @@
       <!-- <button type="button" class="btn btn-secondary" (click)="isModalOpen = false">Close</button> -->
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
         <div>
-          <nz-button nz-button class="btn1" (click)="AddNewFinancialYear() ; SetNewFinancialYear()" > {{isSetFinancialYearModalOpen ? 'Set ' : 'Save '}}</nz-button>
+          <nz-button nz-button class="btn1" (click)="handleFinancialYearFunctionCall()"> {{isSetFinancialYearModalOpen ? 'Set ' : 'Save '}}</nz-button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="closeModal('owner')">

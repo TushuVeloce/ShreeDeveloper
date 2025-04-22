@@ -71,9 +71,7 @@ export class FinancialYearMasterComponent implements OnInit {
     this.DisplayMasterList = this.MasterList;
     console.log('DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
-    this.convertdate();
-    console.log(this.Entity.p.Ref)
-    
+    this.convertdate();    
   }
 
   convertdate = () => {
@@ -97,36 +95,21 @@ export class FinancialYearMasterComponent implements OnInit {
    closeModal = async (type: string) => {
       this.isPasswordModalOpen = false;
       this.isSetFinancialYearModalOpen = false;
-            this.localpassword = '';
+      this.localpassword = '';
     };
 
-  // For Pagination  start ----
-  loadPaginationData = () => {
-    this.total = this.DisplayMasterList.length; // Update total based on loaded data
-  }
+    togglePasswordVisibility = () => {
+      this.showPassword = !this.showPassword;
+    };
 
-  paginatedList = () => {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
-
-  onPageChange = (pageIndex: number): void => {
-    this.currentPage = pageIndex; // Update the current page
-  }
-
-  filterTable = () => {
-    if (this.SearchString != '') {
-      this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.Description.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
-      })
-    }
-    else {
-      this.DisplayMasterList = this.MasterList
-    }
-  }
-  togglePasswordVisibility = () => {
-    this.showPassword = !this.showPassword;
-  };
+    // Handle Function call For Create Or Set //
+      handleFinancialYearFunctionCall(): void {
+        if (this.isSetFinancialYearModalOpen) {
+          this.SetNewFinancialYear();
+        } else {
+          this.AddNewFinancialYear();
+        }
+      }
 
   onSelectedFinanacialYear = async (item: FinancialYear) => {
     this.SelectedFinancialYear = item.GetEditableVersion();
@@ -143,16 +126,9 @@ export class FinancialYearMasterComponent implements OnInit {
       req.Password = this.localpassword;     
       req.EmployeeRef = this.appStateManage.getEmployeeRef();
       req.LoginToken = this.appStateManage.getLoginToken();
-      
-   
-      console.log('CompanyRef :', req.CompanyRef);
-      console.log('Password :', req.Password);
-      console.log('LoginEmployeeRef :', req.EmployeeRef);
-      console.log('LoginToken :', req.LoginToken);
 
       let td = req.FormulateTransportData();
       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-      console.log('pkt :', pkt);
 
     let tr = await this.serverCommunicator.sendHttpRequest(pkt);
     if (!tr.Successful) {
@@ -170,20 +146,12 @@ export class FinancialYearMasterComponent implements OnInit {
   else{
     await this.uiUtils.showWarningToster('Password Required');
   }
-
-
- 
-    // this.Entity.p.FromDate = NewFinancialYear.FromDate;
-    // this.Entity.p.ToDate = NewFinancialYear.ToDate;
   }
 
 
    // To Set New Financial Year Custom Request
    SetNewFinancialYear = async () => {
     // debugger
-
-    console.log(this.localRef);
-    
     if (this.localpassword.trim().length > 0) {
 
       let req = new SetCurrentFinancialYearCustomRequest();
@@ -194,12 +162,6 @@ export class FinancialYearMasterComponent implements OnInit {
       req.Password = this.localpassword;
       req.EmployeeRef = this.appStateManage.getEmployeeRef();
       req.LoginToken = this.appStateManage.getLoginToken();
-      
-      console.log('req.FinancialYearRef :', req.FinancialYearRef);
-      console.log('req.CompanyRef :', req.CompanyRef);
-      console.log('req.Password :', req.Password);
-      console.log('LoginEmployeeRef :', req.EmployeeRef);
-      console.log('LoginToken :', req.LoginToken);
 
       let td = req.FormulateTransportData();
       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
@@ -220,5 +182,31 @@ export class FinancialYearMasterComponent implements OnInit {
     await this.uiUtils.showWarningToster('Password Required');
   }
   }
+
+    // For Pagination  start ----
+    loadPaginationData = () => {
+      this.total = this.DisplayMasterList.length; // Update total based on loaded data
+    }
+  
+    paginatedList = () => {
+      const start = (this.currentPage - 1) * this.pageSize;
+      return this.DisplayMasterList.slice(start, start + this.pageSize);
+    }
+  
+    onPageChange = (pageIndex: number): void => {
+      this.currentPage = pageIndex; // Update the current page
+    }
+  
+    filterTable = () => {
+      if (this.SearchString != '') {
+        this.DisplayMasterList = this.MasterList.filter((data: any) => {
+          return data.p.Description.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
+        })
+      }
+      else {
+        this.DisplayMasterList = this.MasterList
+      }
+    }
+  
 
 }
