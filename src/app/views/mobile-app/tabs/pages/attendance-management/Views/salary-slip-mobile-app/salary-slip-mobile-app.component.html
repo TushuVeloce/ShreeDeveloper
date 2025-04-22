@@ -1,127 +1,51 @@
+<app-loader *ngIf="isLoading"></app-loader>
 <app-header-with-back-handler title="Salary Slip Requests"></app-header-with-back-handler>
 
 <ion-content [fullscreen]="true" class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <!-- Status Filter -->
-  <ion-segment [(ngModel)]="selectedStatus" (ionChange)="filterSalarySlips()" class="modern-segment">
-    <ion-segment-button value="approved">
-      <ion-label>Approved</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="pending">
-      <ion-label>Pending</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="rejected">
-      <ion-label>Rejected</ion-label>
+  <ion-segment [(ngModel)]="selectedStatus" (ngModelChange)="filterSalarySlipsByStatus()" class="modern-segment">
+    <ion-segment-button *ngFor="let status of statusOptions" [value]="status.value">
+      <ion-label>{{ status.label }}</ion-label>
     </ion-segment-button>
   </ion-segment>
 
+
   <!-- Salary Slip Requests List -->
   <ion-list class="salary-slip-list">
-    <ion-card *ngFor="let slip of filteredSlips" class="salary-slip-card">
+    <ion-card *ngFor="let slip of filteredSalarySlipRequestList" class="salary-slip-card">
       <ion-card-header>
-        <ion-card-title>{{ slip.month }} {{ slip.year }}</ion-card-title>
-        <ion-badge [color]="getStatusColor(slip.status)" slot="end">{{ slip.status | titlecase }}</ion-badge>
+        <ion-card-title>{{ slip.p.SelectedMonths }} {{ slip.p.Year }}</ion-card-title>
+        <ion-badge [color]="getStatusColor(slip.p.IsApproved)" slot="end">{{ slip.p.IsApproved==1 ? 'Approved' :
+          'Pending' }}</ion-badge>
       </ion-card-header>
 
       <ion-card-content>
-        <p><strong>Requested On:</strong> {{ slip.requestDate | date }}</p>
-        <p><strong>Employee:</strong> {{ slip.employeeName }}</p>
-        <div class="action-buttons" *ngIf="slip.status === 'approved'">
-          <ion-button fill="clear" color="primary" (click)="viewSlip(slip)">
-            <ion-icon name="document-outline" slot="start"></ion-icon>
-            View Slip
-          </ion-button>
-          <ion-button fill="clear" color="success" (click)="downloadSlip(slip)">
+        <!-- <p><strong>Requested On:</strong> {{ slip.p }}</p> -->
+        <p><strong>Employee:</strong> {{ slip.p.EmployeeName }}</p>
+        <div class="action-buttons" *ngIf="slip.p.IsApproved">
+          <ion-button fill="clear" color="success" (click)="onDeleteClicked(slip)">
             <ion-icon name="download-outline" slot="start"></ion-icon>
-            Download
+            Delete
           </ion-button>
         </div>
       </ion-card-content>
     </ion-card>
   </ion-list>
+
+  <!-- Show "Data not found" if list is empty -->
+  <div *ngIf="filteredSalarySlipRequestList.length === 0 && !isLoading" class="no-data-mobile-app">
+    <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+    <p>No Salary Slip records found</p>
+  </div>
+
   <!-- FAB -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button>
-      <ion-icon name="ellipsis-vertical"></ion-icon>
+    <ion-fab-button  (click)="addSalarySlipRequest()">
+      <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
-    <ion-fab-list side="top">
-      <ion-fab-button color="primary" (click)="addTask()">
-        <ion-icon name="add-outline"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button color="tertiary" (click)="addTask()">
-        <ion-icon name="filter-outline"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
   </ion-fab>
-
-  <!-- Salary Slip Modal -->
-  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="modal-card">
-    <ng-template>
-      <div class="modal-container">
-        <ion-header>
-          <ion-toolbar color="primary" class="modal-toolbar">
-            <ion-title>Salary Slip</ion-title>
-            <ion-buttons slot="end">
-              <ion-button fill="clear" (click)="closeModal()">
-                <ion-icon name="close-outline"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-  
-        <!-- Scrollable Body -->
-        <div class="modal-body">
-          <ion-content scroll-y="true" class="modal-scroll-content ion-padding">
-  
-            <div class="info-row-of-model">
-              <strong class="label">Employee Name:</strong>
-              <span class="value">{{ selectedSlip?.employeeName }}</span>
-            </div>
-  
-            <div class="info-row-of-model">
-              <strong class="label">Month & Year:</strong>
-              <span class="value">{{ selectedSlip?.month }} {{ selectedSlip?.year }}</span>
-            </div>
-  
-            <div class="info-row-of-model">
-              <strong class="label">Basic Salary:</strong>
-              <span class="value">{{ selectedSlip.basicSalary ? selectedSlip?.basicSalary : '-' }}</span>
-            </div>
-  
-            <div class="info-row-of-model">
-              <strong class="label">HRA:</strong>
-              <span class="value">{{ selectedSlip.hra ? selectedSlip?.hra : '-' }}</span>
-            </div>
-  
-            <div class="info-row-of-model">
-              <strong class="label">Other Allowance:</strong>
-              <span class="value">{{ selectedSlip.otherAllowance ? selectedSlip?.otherAllowance : '-' }}</span>
-            </div>
-  
-            <div class="info-row-of-model">
-              <strong class="label">Deductions:</strong>
-              <span class="value text-danger">{{ selectedSlip?.deductions ? selectedSlip?.deductions : '-' }}</span>
-            </div>
-  
-            <div class="info-row-of-model">
-              <strong class="label">Net Salary:</strong>
-              <span class="value text-success">{{ selectedSlip?.netSalary ? selectedSlip?.netSalary : '-' }}</span>
-            </div>
-  
-            <div class="info-row-of-model">
-              <strong class="label">Generated Date:</strong>
-              <span class="value">{{ selectedSlip?.generatedDate ? selectedSlip?.generatedDate : '-' }}</span>
-            </div>
-  
-          </ion-content>
-        </div>
-  
-        <ion-footer class="modal-footer">
-          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
-            Close
-          </ion-button>
-        </ion-footer>
-      </div>
-    </ng-template>
-  </ion-modal>
-
 </ion-content>

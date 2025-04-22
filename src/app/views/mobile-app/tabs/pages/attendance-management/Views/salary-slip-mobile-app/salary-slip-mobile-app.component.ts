@@ -1,6 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
+import { SalarySlipRequest } from 'src/app/classes/domain/entities/website/request/salarysliprequest/salarysliprequest';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
   selector: 'app-salary-slip-mobile-app',
@@ -8,97 +13,106 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./salary-slip-mobile-app.component.scss'],
   standalone: false
 })
-
 export class SalarySlipMobileAppComponent implements OnInit {
   modalOpen = false;
-  selectedSlip: any = null;
+  selectedSlip: SalarySlipRequest = SalarySlipRequest.CreateNewInstance();
+  isLoading = false;
 
-  openSalarySlipModal(slip: any) {
-    this.selectedSlip = slip;
-    this.modalOpen = true;
-  }
-
-  closeModal() {
-    this.modalOpen = false;
-    this.selectedSlip = null;
-  }
-
-  selectedStatus = 'approved';
-  salarySlips = [
-    {
-      id: 1,
-      month: 'March',
-      year: 2024,
-      requestDate: new Date(),
-      status: 'pending',
-      employeeName: 'John Doe'
-    },
-    {
-      id: 4,
-      month: 'March',
-      year: 2024,
-      requestDate: new Date(),
-      status: 'pending',
-      employeeName: 'John Doe'
-    },
-    {
-      id: 2,
-      month: 'February',
-      year: 2024,
-      requestDate: new Date(),
-      status: 'approved',
-      employeeName: 'Jane Smith'
-    },
-    {
-      id: 3,
-      month: 'January',
-      year: 2024,
-      requestDate: new Date(),
-      status: 'rejected',
-      employeeName: 'Alice Johnson'
-    }
+  selectedStatus = -1;
+  statusOptions = [
+    { label: 'All', value: -1 },
+    { label: 'Approved', value: 1 },
+    { label: 'Pending', value: 0 }
   ];
 
-  filteredSlips: any = [];
+  companyRef = this.companyStateManagement.SelectedCompanyRef;
+  employeeList: Employee[] = [];
+  employeeRef: number = 0;
 
-  ngOnInit() {
-    this.filterSalarySlips();
+  entity: SalarySlipRequest = SalarySlipRequest.CreateNewInstance();
+  salarySlipRequestList: SalarySlipRequest[] = [];
+  filteredSalarySlipRequestList: SalarySlipRequest[] = [];
+
+  constructor(
+    private modalController: ModalController,
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private companyStateManagement: CompanyStateManagement
+  ) {
+    effect(() => {
+      this.getSalarySlipRequestListByEmployeeRef();
+    });
   }
 
-  filterSalarySlips() {
-    this.filteredSlips = this.salarySlips.filter(slip => slip.status === this.selectedStatus);
+  ngOnInit(): void {
+    this.entity.p.EmployeeRef = this.appStateManage.getEmployeeRef();
   }
 
-  getStatusColor(status: string): string {
-    switch (status) {
-      case 'approved': return 'success';
-      case 'pending': return 'warning';
-      case 'rejected': return 'danger';
-      default: return 'medium';
+  async handleRefresh(event: CustomEvent): Promise<void> {
+    await this.getSalarySlipRequestListByEmployeeRef();
+    (event.target as HTMLIonRefresherElement).complete();
+  }
+
+  async getSalarySlipRequestListByEmployeeRef(): Promise<void> {
+    try {
+      this.isLoading = true;
+      this.salarySlipRequestList = [];
+      this.filteredSalarySlipRequestList = [];
+
+      if (this.entity.p.EmployeeRef <= 0) {
+        await this.uiUtils.showErrorToster('Employee not Selected');
+        this.isLoading = false;
+        return;
+      }
+      this.salarySlipRequestList = await SalarySlipRequest.FetchEntireListByEmployeeRef(
+        this.entity.p.EmployeeRef,
+        async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+      this.filterSalarySlipsByStatus();
+    } catch (error) {
+    console.log('error :', error);
+    }finally{
+      this.isLoading = false;
     }
   }
 
-  viewSlip(slip: any) {
-    console.log('Viewing slip', slip);
-    this.openSalarySlipModal(slip);
-    // Navigate or open modal
+  async onDeleteClicked(slip: SalarySlipRequest): Promise<void> {
+    await this.uiUtils.showConfirmationMessage(
+      'Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Salary Slip Request?`,
+      async () => {
+        await slip.DeleteInstance(async () => {
+          await this.uiUtils.showSuccessToster(
+            `Salary Slip Request ${slip.p.EmployeeName} has been deleted!`
+          );
+          await this.getSalarySlipRequestListByEmployeeRef();
+        });
+      }
+    );
+  }
+  filterSalarySlipsByStatus(): void {
+    this.filteredSalarySlipRequestList =
+      this.selectedStatus === -1
+        ? this.salarySlipRequestList
+        : this.salarySlipRequestList.filter(
+          slip => slip.p.IsApproved === this.selectedStatus
+        );
   }
 
-  downloadSlip(slip: any) {
-    console.log('Downloading slip', slip);
-    // Handle file download logic
+  getStatusColor(status: number): string {
+    switch (status) {
+      case 1:
+        return 'success';
+      case 0:
+        return 'warning';
+      default:
+        return 'medium';
+    }
   }
-
-  constructor(private modalController: ModalController, private router: Router) { }
-
-
-  addTask() {
-    this.router.navigate(['/app_homepage/tabs/attendance-management/add-salary-slip']); // ✅ Navigate to Add Page
+  addSalarySlipRequest(): void {
+    this.router.navigate([
+      '/app_homepage/tabs/attendance-management/add-salary-slip',
+    ]);
   }
-
-  editTask(id: string) {
-    this.router.navigate(['/app_homepage/tabs/attendance-management/add-salary-slip']); // ✅ Navigate to Edit Page
-  }
-
-
 }

@@ -1,8 +1,12 @@
+<app-loader *ngIf="isLoading"></app-loader>
 <app-header-with-back-handler title="Leave Requests"></app-header-with-back-handler>
 
 <ion-content [fullscreen]="true" class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <!-- Status Filter -->
-  <ion-segment [(ngModel)]="selectedStatus" (ionChange)="filterApprovedLeaveData()" class="modern-segment">
+  <ion-segment [(ngModel)]="selectedStatus" class="modern-segment">
     <ion-segment-button *ngFor="let status of statusOptions" [value]="status.value">
       <ion-label>{{ status.label }}</ion-label>
     </ion-segment-button>
@@ -21,7 +25,8 @@
             <ion-button fill="clear" size="small" color="primary" (click)="openModal(leave)">
               <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
             </ion-button>
-            <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(leave)" *ngIf="(leave.p.IsCancelled == 0 && leave.p.IsApproved == 0)">
+            <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(leave)"
+              *ngIf="(leave.p.IsCancelled == 0 && leave.p.IsApproved == 0)">
               <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
             </ion-button>
           </div>
@@ -41,10 +46,16 @@
             <small><strong>Date:</strong> {{ formatDate(leave.p.HalfDayDate) }}</small><br />
           </div>
           <ion-icon name="person-outline" class="detail-icon"></ion-icon>
-          <small><strong>Status:</strong>{{ (leave.p.IsApproved == 1)?'Approved':(leave.p.IsCancelled == 1 && leave.p.IsApproved == 0)?'Rejected':'Pending'}}</small>
+          <small><strong>Status:</strong>{{ (leave.p.IsApproved == 1)?'Approved':(leave.p.IsCancelled == 1 &&
+            leave.p.IsApproved == 0)?'Rejected':'Pending'}}</small>
         </div>
       </ion-card-content>
     </ion-card>
+    <!-- Show "Data not found" if list is empty -->
+    <div *ngIf="filteredLeaveRequestData.length === 0 && !isLoading" class="no-data-mobile-app">
+      <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+      <p>No Leave Request records found.</p>
+    </div>
   </div>
 
 
@@ -79,16 +90,19 @@
               <span class="value">{{ SelectedLeaveRequest.p.EmployeeName }}</span>
             </div>
 
-            <div class="info-row-of-model" *ngIf="SelectedLeaveRequest.p.LeaveRequestType != LeaveRequestTypeEnum.HalfDay">
+            <div class="info-row-of-model"
+              *ngIf="SelectedLeaveRequest.p.LeaveRequestType != LeaveRequestTypeEnum.HalfDay">
               <strong class="label">From date:</strong>
               <span class="value">{{formatDate(SelectedLeaveRequest.p.FromDate)}}</span>
             </div>
 
-            <div class="info-row-of-model" *ngIf="SelectedLeaveRequest.p.LeaveRequestType != LeaveRequestTypeEnum.HalfDay">
+            <div class="info-row-of-model"
+              *ngIf="SelectedLeaveRequest.p.LeaveRequestType != LeaveRequestTypeEnum.HalfDay">
               <strong class="label">To date:</strong>
               <span class="value">{{ formatDate(SelectedLeaveRequest.p.ToDate)}}</span>
             </div>
-            <div class="info-row-of-model" *ngIf="SelectedLeaveRequest.p.LeaveRequestType == LeaveRequestTypeEnum.HalfDay">
+            <div class="info-row-of-model"
+              *ngIf="SelectedLeaveRequest.p.LeaveRequestType == LeaveRequestTypeEnum.HalfDay">
               <strong class="label">Date:</strong>
               <span class="value">{{ formatDate(SelectedLeaveRequest.p.HalfDayDate) }}</span>
             </div>
@@ -98,7 +112,8 @@
             </div>
             <div class="info-row-of-model">
               <strong class="label">Leave Hours:</strong>
-              <span class="value">{{ SelectedLeaveRequest.p.LeaveHours ? SelectedLeaveRequest.p.LeaveHours : '-' }}</span>
+              <span class="value">{{ SelectedLeaveRequest.p.LeaveHours ? SelectedLeaveRequest.p.LeaveHours : '-'
+                }}</span>
             </div>
 
             <div class="info-row-of-model">
@@ -108,17 +123,20 @@
 
             <div class="info-row-of-model" *ngIf="SelectedLeaveRequest.p.IsApproved == 1">
               <strong class="label">Leave Approved By:</strong>
-              <span class="value">{{ SelectedLeaveRequest.p.LeaveApprovedBy ? SelectedLeaveRequest.p.LeaveApprovedBy : '-'
+              <span class="value">{{ SelectedLeaveRequest.p.LeaveApprovedBy ? SelectedLeaveRequest.p.LeaveApprovedBy :
+                '-'
                 }}</span>
             </div>
             <div class="info-row-of-model" *ngIf="SelectedLeaveRequest.p.IsApproved != 1">
               <strong class="label">Leave Cancelled By:</strong>
-              <span class="value">{{ SelectedLeaveRequest.p.LeaveCancelledBy  ? SelectedLeaveRequest.p.LeaveCancelledBy : '-'
+              <span class="value">{{ SelectedLeaveRequest.p.LeaveCancelledBy ? SelectedLeaveRequest.p.LeaveCancelledBy :
+                '-'
                 }}</span>
             </div>
             <div class="info-row-of-model">
               <strong class="label">Description:</strong>
-              <span class="value">{{ SelectedLeaveRequest.p.Description ? SelectedLeaveRequest.p.Description : '-' }}</span>
+              <span class="value">{{ SelectedLeaveRequest.p.Description ? SelectedLeaveRequest.p.Description : '-'
+                }}</span>
             </div>
           </ion-content>
         </div>

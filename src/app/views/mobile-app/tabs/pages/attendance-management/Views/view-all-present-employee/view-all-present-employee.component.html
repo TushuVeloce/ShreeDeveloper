@@ -1,9 +1,14 @@
+<app-loader *ngIf="isLoading"></app-loader>
 <app-header-with-back-handler title="Today's Attendance"></app-header-with-back-handler>
 
 <ion-content class="ion-padding">
-  <div class="section-title">Today's Attendance</div>
+  <!-- <div class="section-title">Today's Attendance</div> -->
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 
   <div class="attendance-wrapper">
+    <!-- Show cards if data is available -->
     <ion-card *ngFor="let log of TodayAttendanceLogList" class="attendance-card">
       <ion-card-header>
         <div class="card-header">
@@ -23,7 +28,14 @@
         </div>
       </ion-card-content>
     </ion-card>
+
+    <!-- Show "Data not found" if list is empty -->
+    <div *ngIf="TodayAttendanceLogList.length === 0 && !isLoading" class="no-data-mobile-app">
+      <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+      <p>No attendance records found for today.</p>
+    </div>
   </div>
+
 
   <!-- Modal -->
   <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="modal-card">
@@ -48,20 +60,29 @@
 
           <ion-label class="section-title">Uploaded Photos</ion-label>
           <div class="photo-row">
-            <div>
+            <!-- Self Photo -->
+            <div class="photo-col">
               <ion-label class="label-of-photo">Self Photo</ion-label>
-              <img src="../../../../../../../../assets/images/shreelogo.png"
-                *ngIf="!SelectedAttendanceLogs.p.attendacelogpath1; else noImg" class="preview-img" />
-              <ng-template #noImg><span class="value-of-photo">Not available</span></ng-template>
+              <ng-container *ngIf="SelectedAttendanceLogs.p.attendacelogpath1; else noSelfPhoto">
+                <img [src]="SelectedAttendanceLogs.p.attendacelogpath1" class="preview-img" />
+              </ng-container>
+              <ng-template #noSelfPhoto>
+                <span class="value-of-photo">Not available</span>
+              </ng-template>
             </div>
 
-            <div>
-              <ion-label>Work Location</ion-label>
-              <img src="../../../../../../../../assets/images/shreelogo.png"
-                *ngIf="!SelectedAttendanceLogs.p.attendacelogpath2; else noImg2" class="preview-img" />
-              <ng-template #noImg2><span class="value">Not available</span></ng-template>
+            <!-- Work Location Photo -->
+            <div class="photo-col">
+              <ion-label class="label-of-photo">Work Location</ion-label>
+              <ng-container *ngIf="SelectedAttendanceLogs.p.attendacelogpath2; else noWorkPhoto">
+                <img [src]="SelectedAttendanceLogs.p.attendacelogpath2" class="preview-img" />
+              </ng-container>
+              <ng-template #noWorkPhoto>
+                <span class="value-of-photo">Not available</span>
+              </ng-template>
             </div>
           </div>
+
         </ion-content>
 
         <ion-footer>

@@ -14,6 +14,7 @@ import { LeaveRequestMobileAppComponent } from './Views/leave-request-mobile-app
 import { AddLeaveRequestMobileAppComponent } from './Views/add-leave-request-mobile-app/add-leave-request-mobile-app.component';
 import { AddSalarySlipMobileAppComponent } from './Views/add-salary-slip-mobile-app/add-salary-slip-mobile-app.component';
 import { ViewAllPresentEmployeeComponent } from './Views/view-all-present-employee/view-all-present-employee.component';
+import { LoaderComponent } from "../../../shared/loader/loader.component";
 
 @NgModule({
   imports: [
@@ -21,8 +22,9 @@ import { ViewAllPresentEmployeeComponent } from './Views/view-all-present-employ
     FormsModule,
     IonicModule,
     AttendanceManagementPageRoutingModule,
-    SharedModule
-  ],
+    SharedModule,
+    LoaderComponent
+],
   declarations: [AttendanceManagementPage, AttendanceDetailsComponent, AddSalarySlipMobileAppComponent, SalarySlipMobileAppComponent, LeaveRequestMobileAppComponent, AddLeaveRequestMobileAppComponent,ViewAllPresentEmployeeComponent]
 
 })

@@ -10,7 +10,6 @@ import { DTU } from 'src/app/services/dtu.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
-
 @Component({
   selector: 'app-view-all-present-employee',
   templateUrl: './view-all-present-employee.component.html',
@@ -24,6 +23,7 @@ export class ViewAllPresentEmployeeComponent implements OnInit {
   SelectedAttendanceLogs: AttendanceLogs = AttendanceLogs.CreateNewInstance();
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   modalOpen: boolean = false;
+  isLoading = false;
 
   constructor(
     private router: Router,
@@ -40,15 +40,30 @@ export class ViewAllPresentEmployeeComponent implements OnInit {
 
   ngOnInit() {
     this.getTodayAttendanceLogByAttendanceListType();
-  // let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-   }
+    // let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+  }
+
+  handleRefresh(event: CustomEvent) {
+    setTimeout(() => {
+      // Any calls to load data go here
+      this.getTodayAttendanceLogByAttendanceListType();
+      (event.target as HTMLIonRefresherElement).complete();
+    }, 2000);
+  }
 
   formatDate(date: string | Date): string {
     return this.dateconversionService.formatDate(date);
   }
   getTodayAttendanceLogByAttendanceListType = async () => {
-    let TodaysAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.TodayAttendanceLogList = TodaysAttendanceLog
+    try {
+      this.isLoading = true;
+      let TodaysAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.TodayAttendanceLogList = TodaysAttendanceLog
+    } catch (error) {
+      // console.log(error);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   openModal(Attendance: AttendanceLogs): void {
@@ -60,7 +75,7 @@ export class ViewAllPresentEmployeeComponent implements OnInit {
     this.modalOpen = false;
     this.SelectedAttendanceLogs = AttendanceLogs.CreateNewInstance();
   }
-  
+
   get attendanceInfo() {
     const p = this.SelectedAttendanceLogs.p;
     return [
@@ -70,8 +85,6 @@ export class ViewAllPresentEmployeeComponent implements OnInit {
       { label: 'Last Check Out:', value: p.LastCheckOutTime || '-' },
       { label: 'Working Hours:', value: p.TotalWorkingHrs || '-' },
       { label: 'Overtime Hours:', value: p.TotalOvertimeHours || '-' },
-      { label: 'Photo 1:', value: p.attendacelogpath1 || '-' },
-      { label: 'Photo 2:', value: p.attendacelogpath2 || '-' }
     ];
   }
 

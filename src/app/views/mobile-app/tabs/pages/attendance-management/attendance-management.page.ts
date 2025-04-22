@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AttendenceLocationType, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { AttendenceLocationType, AttendenceLogType, DomainEnums, LeaveRequestType } from 'src/app/classes/domain/domainenums/domainenums';
 import { AttendanceLog, AttendanceLogProps } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelog';
 import { AttendanceLogCheckInCustomRequest } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelogcheckincustomrequest';
+import { AttendanceLogs } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogs';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
@@ -33,7 +34,9 @@ export class AttendanceManagementPage implements OnInit {
   selectedSite: Site[] = [];
 
   isCheckInEnabled: boolean = false;
+  isBothButtonEnabled: boolean = true;
   isSubmitting = false;
+  isLoading = false;
 
   capturedBeforePhoto: string | null = null;
   capturedAfterPhoto: string | null = null;
@@ -45,9 +48,12 @@ export class AttendanceManagementPage implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   employeeRef = 0;
   AttendanceLocationTypes = AttendenceLocationType;
-  
   AttendanceLocationTypeList = DomainEnums.AttendenceLocationTypeList(true, '--Select--');
 
+  WeeklyAttendanceLogsList: AttendanceLogs[] = [];
+  FilteredWeeklyAttendanceLogsList: AttendanceLogs[] = [];
+  SelectedWeeklyAttendanceLog: AttendanceLogs = AttendanceLogs.CreateNewInstance();
+  readonly LeaveRequestTypeEnum = LeaveRequestType;
   gridItems = [
     { label: 'Salary Slip', icon: 'layers-outline', gridFunction: 100 },
     { label: 'Leave', icon: 'grid-outline', gridFunction: 200 },
@@ -85,6 +91,7 @@ export class AttendanceManagementPage implements OnInit {
     this.Date = strCDT.substring(0, 10);
     this.isCurrentTimeDate = strCDT;
     await this.getCheckInData();
+    await this.getWeekWiseAttendanceLogByAttendanceListType();
   }
 
   formatDate(date: string | Date): string {
@@ -98,50 +105,72 @@ export class AttendanceManagementPage implements OnInit {
       case 300: this.viewAllPresentEmployee(); break;
     }
   }
+  handleRefresh(event: CustomEvent) {
+    setTimeout(async() => {
+      // Any calls to load data go here
+      await this.getCheckInData();
+      await this.getWeekWiseAttendanceLogByAttendanceListType();
+      (event.target as HTMLIonRefresherElement).complete();
+    }, 2000);
+  }
 
   getCheckInData = async () => {
-    let tranDate = this.dtu.ConvertStringDateToFullFormat(this.Date!);
-    let req = new AttendanceLogCheckInCustomRequest();
-    req.TransDateTime = tranDate;
-    req.CompanyRef = this.companyRef();
-    req.EmployeeRef = this.employeeRef;
+    try {
+      this.isLoading = true;
+      let tranDate = this.dtu.ConvertStringDateToFullFormat(this.Date!);
+      let req = new AttendanceLogCheckInCustomRequest();
+      req.TransDateTime = tranDate;
+      req.CompanyRef = this.companyRef();
+      req.EmployeeRef = this.employeeRef;
 
-    let td = req.FormulateTransportData();
-    let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+      let td = req.FormulateTransportData();
+      let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+      let tr = await this.serverCommunicator.sendHttpRequest(pkt);
 
-    if (!tr.Successful) {
-      await this.uiUtils.showErrorMessage('Error', tr.Message);
-      return;
-    }
-
-    let tdResult = JSON.parse(tr.Tag) as TransportData;
-    let res = AttendanceLogCheckInCustomRequest.FromTransportData(tdResult);
-    console.log('res :', res);
-    if (res.Data.length > 0) {
-      let checkInData: AttendanceLogProps[] = res.Data as AttendanceLogProps[];
-      let lastCheckInData = checkInData.filter(e => e.CheckOutTime == '')
-      if (lastCheckInData.length > 0) Object.assign(this.Entity.p, lastCheckInData[0])
-      else {
-        let secondLastCheckInData = checkInData.filter(e => e.CheckOutTime != '')
-        if (secondLastCheckInData.length > 0) Object.assign(this.Entity.p, secondLastCheckInData[0])
+      if (!tr.Successful) {
+        this.isBothButtonEnabled = false;
+        await this.uiUtils.showErrorMessage('Error', tr.Message);
+        return;
       }
-      this.IsLeave=this.Entity.p.IsLeave;
-      this.isCheckInTime = this.Entity.p.CheckInTime;
-      this.isCheckOutTime = this.Entity.p.CheckOutTime;
+
+      let tdResult = JSON.parse(tr.Tag) as TransportData;
+      let res = AttendanceLogCheckInCustomRequest.FromTransportData(tdResult);
+      console.log('res :', res);
+      if (res.Data.length > 0) {
+        let checkInData: AttendanceLogProps[] = res.Data as AttendanceLogProps[];
+        let lastCheckInData = checkInData.filter(e => e.CheckOutTime == '')
+        if (lastCheckInData.length > 0) Object.assign(this.Entity.p, lastCheckInData[0])
+        else {
+          let secondLastCheckInData = checkInData.filter(e => e.CheckOutTime != '')
+          if (secondLastCheckInData.length > 0) Object.assign(this.Entity.p, secondLastCheckInData[0])
+        }
+        this.IsLeave = this.Entity.p.IsLeave;
+        this.isCheckInTime = this.Entity.p.CheckInTime;
+        this.isCheckOutTime = this.Entity.p.CheckOutTime;
+      }
+      if (!this.Entity.p.FirstCheckInTime && !this.Entity.p.CheckInTime && !this.Entity.p.CheckOutTime) {
+        // No activity yet
+        this.isCheckInEnabled = true;
+        this.isBothButtonEnabled = true;
+      } else if (this.Entity.p.CheckInTime && !this.Entity.p.CheckOutTime) {
+        // Checked in, but not checked out
+        this.isCheckInEnabled = false;
+        this.isBothButtonEnabled = true;
+      } else if (this.Entity.p.CheckInTime && this.Entity.p.CheckOutTime) {
+        // Completed check-in and check-out
+        this.isCheckInEnabled = true;
+        this.isBothButtonEnabled = false; // Disable both after full cycle
+      } else {
+        // Unusual state
+        this.isCheckInEnabled = false;
+        this.isBothButtonEnabled = false;
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.isLoading = false;
     }
-    if (this.Entity.p.FirstCheckInTime == '' && this.Entity.p.CheckInTime == '' && this.Entity.p.CheckOutTime == '') {
-      this.isCheckInEnabled = true;
-    }
-    else if (this.Entity.p.FirstCheckInTime != '' && this.Entity.p.CheckInTime != '' && this.Entity.p.CheckOutTime == '') {
-      this.isCheckInEnabled = false;
-    }
-    else if (this.Entity.p.FirstCheckInTime != '' && this.Entity.p.CheckInTime != '' && this.Entity.p.CheckOutTime != '') {
-      this.isCheckInEnabled = true;
-    }else{
-      this.isCheckInEnabled = true;
-      // await this.uiUtils.showErrorToster('some thing went wrong!');
-    }
+
   }
 
   openPunchModal = async () => {
@@ -159,7 +188,7 @@ export class AttendanceManagementPage implements OnInit {
     this.selectedSite = selected;
   }
 
-   submitPunchIn = async () => {
+  submitPunchIn = async () => {
     try {
       this.isSubmitting = true;
       this.Entity.p.IsCheckIn = true;
@@ -180,11 +209,12 @@ export class AttendanceManagementPage implements OnInit {
       }
       else {
         // if (this.IsCheckIn) {
-     
+
         // }
         await this.uiUtils.showSuccessToster('Punch in successfully!');
         this.Entity = AttendanceLog.CreateNewInstance();
         await this.getCheckInData();
+        await this.getWeekWiseAttendanceLogByAttendanceListType();
         // this.isCheckInTime = this.Entity.p.CheckInTime;
         // this.isCheckOutTime = this.Entity.p.CheckOutTime;
       }
@@ -216,6 +246,7 @@ export class AttendanceManagementPage implements OnInit {
         this.Entity = AttendanceLog.CreateNewInstance();
         await this.uiUtils.showSuccessToster('Punch out successfully!');
         await this.getCheckInData();
+        await this.getWeekWiseAttendanceLogByAttendanceListType();
         // this.isCheckInTime = this.Entity.p.CheckInTime;
         // this.isCheckOutTime = this.Entity.p.CheckOutTime;
       }
@@ -243,6 +274,10 @@ export class AttendanceManagementPage implements OnInit {
     } catch (error) {
       // console.error(\);
     }
+  }
+  getWeekWiseAttendanceLogByAttendanceListType = async () => {
+    let WeeklyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.WeeklyAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.WeeklyAttendanceLogsList = WeeklyAttendanceLog
   }
   getSalarySlip() {
     this.router.navigate(['/app_homepage/tabs/attendance-management/salary-slip']);

@@ -1,5 +1,11 @@
+<app-loader *ngIf="isLoading"></app-loader>
+
 <app-header title="Attendance Management"></app-header>
 <ion-content class="ion-padding">
+
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 
   <!-- Top Card -->
   <div class="top-card">
@@ -16,9 +22,13 @@
     </div>
 
     <div class="btn-group">
-      <ion-button fill="outline" color="light" (click)="openPunchModal()" [disabled]="!isCheckInEnabled || IsLeave==1" >CHECKIN</ion-button>
-      <ion-button color="warning" (click)="submitPunchOut()" [disabled]="isCheckInEnabled || IsLeave==1" >CHECKOUT</ion-button>
+      <ion-button fill="outline" color="light" (click)="openPunchModal()"
+        [disabled]="!isCheckInEnabled || IsLeave == 1 || !isBothButtonEnabled">CHECKIN</ion-button>
+
+      <ion-button color="warning" (click)="submitPunchOut()"
+        [disabled]="isCheckInEnabled || IsLeave == 1 || !isBothButtonEnabled">CHECKOUT</ion-button>
     </div>
+
   </div>
 
   <!-- Quick Actions -->
@@ -49,42 +59,42 @@
           <span>Hours</span>
         </div>
 
-        <ion-list class="scrollable-list" *ngIf="recentAttendance.length > 0">
-          <ion-item *ngFor="let day of recentAttendance" lines="none" [class.weekend]="day.isWeekend"
-            [class.leave]="day.leave" [class.half-day]="day.isHalfDay"
-            [class.no-data]="!day.clockIn && !day.clockOut && !day.leave && !day.isWeekend">
+        <ion-list class="scrollable-list" *ngIf="FilteredWeeklyAttendanceLogsList.length > 0">
+          <ion-item *ngFor="let day of FilteredWeeklyAttendanceLogsList" lines="none"
+            [class.leave]="day.p.OnLeave" [class.half-day]="day.p.LeaveType"
+            [class.no-data]="!day.p.FirstCheckInTime && !day.p.LastCheckOutTime && !day.p.OnLeave">
 
             <ion-grid class="attendance-grid">
               <ion-row>
                 <ion-col size="2" class="day-column">
-                  <div class="date">{{ day.date }}</div>
-                  <div class="day">{{ day.day }}</div>
+                  <div class="date">{{formatDate(day.p.TransDateTime)}}</div>
+                  <!-- <div class="day">{{ day.day }}</div> -->
                 </ion-col>
 
-                <ion-col [ngStyle]="{ 'background-color': day.leave && 'lightsalmon', 'border-radius': '14px' }">
-                  <div *ngIf="day.leave" class="center-text">
+                <ion-col [ngStyle]="{ 'background-color': day.p.OnLeave && 'lightsalmon', 'border-radius': '14px' }">
+                  <div *ngIf="day.p.OnLeave" class="center-text">
                     <ion-icon name="medkit-outline"></ion-icon>
-                    {{ day.leave }}
+                    {{ day.p.OnLeave }}
                   </div>
 
-                  <div *ngIf="day.isWeekend" class="center-text"
+                  <!-- <div *ngIf="day.isWeekend" class="center-text"
                     style="background-color: lightblue; border-radius: 10px;">
                     Weekend: {{ day.day }} {{ day.date }}
-                  </div>
+                  </div> -->
 
-                  <div *ngIf="!day.leave && !day.isWeekend && (day.clockIn || day.clockOut)" class="timing-row"
-                    [ngStyle]="{ 'background-color': day.isHalfDay && 'pink', 'border-radius': '10px' }">
+                  <div *ngIf="!day.p.OnLeave && (day.p.FirstCheckInTime || day.p.LastCheckOutTime)" class="timing-row"
+                    [ngStyle]="{ 'background-color': day.p.OnLeave && 'pink', 'border-radius': '10px' }">
                     <div class="clock-in">
                       <span class="label">Clock In</span>
-                      <span class="value" [class.absent]="!day.clockIn">{{ day.clockIn || '--' }}</span>
+                      <span class="value" [class.absent]="!day.p.FirstCheckInTime">{{ day.p.FirstCheckInTime || '--' }}</span>
                     </div>
                     <div class="clock-out">
                       <span class="label">Clock Out</span>
-                      <span class="value" [class.absent]="!day.clockOut">{{ day.clockOut || '--' }}</span>
+                      <span class="value" [class.absent]="!day.p.LastCheckOutTime">{{ day.p.LastCheckOutTime || '--' }}</span>
                     </div>
                     <div class="working-hrs">
                       <span class="label">Working Hr's</span>
-                      <span class="value" [class.absent]="!day.hours">{{ day.hours || '--' }}</span>
+                      <span class="value" [class.absent]="!day.p.TotalWorkingHrs">{{ day.p.TotalWorkingHrs || '--' }}</span>
                     </div>
                   </div>
                 </ion-col>

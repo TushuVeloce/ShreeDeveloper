@@ -457,3 +457,33 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   --moz-appearance: textfield;
 }
+
+// Mobile app global css
+.no-data-mobile-app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  height: 60vh; // centers vertically
+  width: 100%;
+  text-align: center;
+  color: var(--ion-color-medium);
+  font-size: 16px;
+
+  ion-icon {
+    font-size: 40px;
+    margin-bottom: 8px;
+    color: var(--ion-color-warning); // optional: makes it more visible
+  }
+
+  p {
+    margin: 0;
+    font-weight: 500;
+  }
+}
+    // <!-- Show "Data not found" if list is empty -->
+    // <div *ngIf="TodayAttendanceLogList.length === 0 && !isLoading" class="no-data-mobile-app">
+    //   <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+    //   <p>No attendance records found for today.</p>
+    // </div>
