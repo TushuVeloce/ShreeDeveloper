@@ -30,7 +30,7 @@ export class SalarySlipApprovalComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'From Month', 'To Month', 'From Year', 'To Year', 'Approval Status'];
+  headers: string[] = ['Sr.No.', 'Year', 'Month', 'Approval Status'];
 
   constructor(
     private uiUtils: UIUtils,
@@ -47,6 +47,7 @@ export class SalarySlipApprovalComponent implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
+    this.getSalarySlipApprovalListByCompanyRef();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
@@ -57,7 +58,17 @@ export class SalarySlipApprovalComponent implements OnInit {
     }
     let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.EmployeeList = lst;
-    this.Entity.p.EmployeeRef = this.EmployeeList[0].p.Ref
+  }
+
+  getSalarySlipApprovalListByCompanyRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    let lst = await SalarySlipRequest.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    this.MasterList = lst;
+
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
   }
 
   getSalarySlipApprovalListByEmployeeRef = async () => {
@@ -79,12 +90,14 @@ export class SalarySlipApprovalComponent implements OnInit {
     await this.uiUtils.showConfirmationMessage(
       'Approval',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-      Are you sure that you want to Approve this Leave?`,
+      Are you sure that you want to Approve this Salary Slip?`,
       async () => {
         this.Entity = salaryslipapproval;
         this.Entity.p.IsApproved = 1;
         this.Entity.p.LeaveApprovedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
         let entityToSave = this.Entity.GetEditableVersion();
+        // let entityToSave = Object.assign(SalarySlipRequest.CreateNewInstance(),
+        //   this.utils.DeepCopy(this.Entity)) as SalarySlipRequest;
 
         let entitiesToSave = [entityToSave];
         let tr = await this.utils.SavePersistableEntities(entitiesToSave);

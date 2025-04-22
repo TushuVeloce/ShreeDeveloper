@@ -10,6 +10,7 @@ export class SalarySlipRequestFetchRequest
 
     SalarySlipRequestRefs: number[] = [];
     EmployeeRefs: number[] = [];
+    CompanyRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

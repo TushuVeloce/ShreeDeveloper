@@ -134,10 +134,6 @@ export class LeaveRequestDetailsComponent implements OnInit {
     }
   };
 
-  handleLeaveRequest = () => {
-    console.log('Request', this.Entity.p.LeaveRequestType);
-  };
-
   onDateChangeSetDaysandLeaveHours = () => {
     if (this.fromdate && this.todate) {
       const FromDate: any = new Date(this.fromdate);
