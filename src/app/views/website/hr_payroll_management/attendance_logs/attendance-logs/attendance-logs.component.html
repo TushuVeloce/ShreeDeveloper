@@ -3,15 +3,18 @@
   <!-- Button Group -->
   <div class="row d-flex flex-wrap justify-content-start gap-2">
     <div class="col-12 col-sm-auto">
-      <nz-button nz-button type="button" class="btn btn-dark w-100" (click)="getTodayAttendanceLogByAttendanceListType()">MY TEAM
+      <nz-button nz-button type="button" class="btn btn-dark w-100"
+        (click)="getTodayAttendanceLogByAttendanceListType()">MY TEAM
         TODAY</nz-button>
     </div>
     <div class="col-12 col-sm-auto">
-      <nz-button nz-button type="button" class="btn btn-dark w-100" (click)="getWeekWiseAttendanceLogByAttendanceListType()">MY TEAM
+      <nz-button nz-button type="button" class="btn btn-dark w-100"
+        (click)="getWeekWiseAttendanceLogByAttendanceListType()">MY TEAM
         WEEKLY</nz-button>
     </div>
     <div class="col-12 col-sm-auto">
-      <nz-button nz-button type="button" class="btn btn-dark w-100" (click)="getMonthWiseAttendanceLogByAttendanceListType()">MY TEAM
+      <nz-button nz-button type="button" class="btn btn-dark w-100"
+        (click)="getMonthWiseAttendanceLogByAttendanceListType()">MY TEAM
         MONTHLY</nz-button>
     </div>
   </div>
@@ -54,120 +57,65 @@
       </div>
     </div>
   </div>
+  <div *ngFor="let empName of groupedAttendanceLogs | keyvalue">
+    <div class="mb-5 p-3 border rounded shadow-sm bg-light">
+      <h5 class="mb-3">{{ empName.key }}</h5>
+      <div class="summary-label">Summary</div>
 
-  <div class="mb-5 p-3 border rounded shadow-sm bg-light">
-    <h5 class="mb-3">Employee Name</h5>
-    <!-- Summary Label -->
-    <div class="summary-label">Summary</div>
-
-    <!-- ROW 2: Stat Buttons -->
-    <div class="p-3 rounded border bg-white shadow-sm">
-      <div class="row g-3">
-        <div class="col-6 col-md-3">
-          <button class="attbtn w-100">Days: <strong>1</strong></button>
-        </div>
-        <div class="col-6 col-md-3">
-          <button class="attbtn w-100">Present: <strong>1</strong></button>
-        </div>
-        <div class="col-6 col-md-3">
-          <button class="attbtn w-100">Absent: <strong>0</strong></button>
-        </div>
-        <div class="col-6 col-md-3">
-          <button class="attbtn w-100">On Leave: <strong>0</strong></button>
+      <!-- ROW 2: Stat Buttons -->
+      <div class="p-3 rounded border bg-white shadow-sm">
+        <div class="row g-3">
+          <div class="col-6 col-md-3">
+            <button class="attbtn w-100">Days: <strong>1</strong></button>
+          </div>
+          <div class="col-6 col-md-3">
+            <button class="attbtn w-100">Present: <strong>1</strong></button>
+          </div>
+          <div class="col-6 col-md-3">
+            <button class="attbtn w-100">Absent: <strong>0</strong></button>
+          </div>
+          <div class="col-6 col-md-3">
+            <button class="attbtn w-100">On Leave: <strong>0</strong></button>
+          </div>
         </div>
       </div>
-    </div>
-    <!-- For table  -->
-    <div class="table-wrapper tblcard_light" style="margin-top: 2rem">
-      <div class="table-container">
-        <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
-          nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedList()">
-          <thead>
-            <tr>
-              <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let attendancelog of paginatedList(); index as i">
-              <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-              <td Class="tbldata">{{attendancelog.p.EmployeeName}}</td>
-              <td Class="tbldata">{{attendancelog.p.TransDateTime}}</td>
-              <td Class="tbldata">{{attendancelog.p.FirstCheckInTime}}</td>
-              <td Class="tbldata">{{attendancelog.p.LastCheckOutTime}}</td>
-              <td Class="tbldata">{{attendancelog.p.TotalWorkingHrs}}</td>
+      <!-- For table  -->
+      <div class="table-wrapper tblcard_light" style="margin-top: 2rem">
+        <div class="table-container">
+          <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
+            nzFrontPagination="false" [nzShowSizeChanger]="false" [nzTotal]="total" [nzPageSize]="pageSize"
+            [nzPageIndex]="currentPage" (nzPageIndexChange)="onPageChange($event)">
+            <thead>
+              <tr>
+                <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let attendancelog of empName.value; let i = index">
+                <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                <td Class="tbldata">{{attendancelog.p.EmployeeName}}</td>
+                <td Class="tbldata">{{attendancelog.p.TransDateTime}}</td>
+                <td Class="tbldata">{{attendancelog.p.FirstCheckInTime}}</td>
+                <td Class="tbldata">{{attendancelog.p.LastCheckOutTime}}</td>
+                <td Class="tbldata">{{attendancelog.p.TotalWorkingHrs}}</td>
 
-              <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.InOfficeHrs}}</td>
-              <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.OnLeave}}</td>
-              <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.LeaveType}}</td>
-              <!-- <td class="tbldata">
+                <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.InOfficeHrs}}</td>
+                <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.OnLeave}}</td>
+                <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.LeaveType}}</td>
+                <!-- <td class="tbldata">
             <span style="margin-left: 9px;">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
             </span>
             <span style="margin-left: 9px;">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td> -->
-            </tr>
-          </tbody>
-        </nz-table>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
       </div>
     </div>
   </div>
-
-  <!-- second  -->
-  <div class="mb-5 p-3 border rounded shadow-sm bg-light">
-    <h5 class="mb-3">Employee Name</h5>
-    <!-- Summary Label -->
-    <div class="summary-label">Summary</div>
-
-    <!-- ROW 2: Stat Buttons -->
-    <div class="p-3 rounded border bg-white shadow-sm">
-      <div class="row g-3">
-        <div class="col-6 col-md-3">
-          <button class="attbtn w-100">Days: <strong>1</strong></button>
-        </div>
-        <div class="col-6 col-md-3">
-          <button class="attbtn w-100">Present: <strong>1</strong></button>
-        </div>
-        <div class="col-6 col-md-3">
-          <button class="attbtn w-100">Absent: <strong>0</strong></button>
-        </div>
-        <div class="col-6 col-md-3">
-          <button class="attbtn w-100">On Leave: <strong>0</strong></button>
-        </div>
-      </div>
-    </div>
-    <!-- For table  -->
-    <div class="table-wrapper tblcard_light" style="margin-top: 2rem">
-      <div class="table-container">
-        <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
-          nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedList()">
-          <thead>
-            <tr>
-              <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let attendancelog of paginatedList(); index as i">
-              <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-              <td Class="tbldata">{{attendancelog.p.EmployeeName}}</td>
-              <td Class="tbldata">{{attendancelog.p.TransDateTime}}</td>
-              <td Class="tbldata">{{attendancelog.p.FirstCheckInTime}}</td>
-              <td Class="tbldata">{{attendancelog.p.LastCheckOutTime}}</td>
-              <td Class="tbldata">{{attendancelog.p.TotalWorkingHrs}}</td>
-              <!-- <td class="tbldata">
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span>
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-          </td> -->
-            </tr>
-          </tbody>
-        </nz-table>
-      </div>
-    </div>
-  </div>
-
   <div class="fixed-pagination">
     <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
       (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
