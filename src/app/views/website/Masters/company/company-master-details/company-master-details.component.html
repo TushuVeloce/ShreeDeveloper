@@ -3,12 +3,7 @@
     <div class="row">
       <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
         <button type="button" class="backbtn" (click)="BackCompany()">
-          <img
-            src="/assets/icons/arrow-button.png"
-            alt=""
-            width="34px"
-            height="34px"
-          />
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
         </button>
       </div>
       <div class="col-md-11">
@@ -19,211 +14,95 @@
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Company Name</label>
-          <input
-            type="text"
-            [(ngModel)]="Entity.p.Name"
-            name="Name"
-            class="form-control"
-            id="Name"
-            required
-            placeholder="Enter Company Name"
-          />
+          <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
+            placeholder="Enter Company Name" />
         </div>
         <div class="col-md-4">
           <label>Contact Nos</label>
-          <input
-            type="text"
-            [(ngModel)]="Entity.p.Contacts"
-            name="ContactNos"
-            class="form-control"
-            id="ContactNos"
-            required
-            placeholder="Enter Contact Nos"
-          />
+          <input type="text" [(ngModel)]="Entity.p.Contacts" name="ContactNos" class="form-control" id="ContactNos"
+            required placeholder="Enter Contact Nos" />
         </div>
         <div class="col-md-4">
           <label>Company Email Id </label>
-          <input
-            type="email"
-            [(ngModel)]="Entity.p.EmailId"
-            name="EmailId"
-            class="form-control"
-            id="EmailId"
-            required
-            placeholder="Enter Company Email Id"
-          />
+          <input type="email" [(ngModel)]="Entity.p.EmailId" name="EmailId" class="form-control" id="EmailId" required
+            placeholder="Enter Company Email Id" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-lg-4 col-md-4 col-sm-12">
           <label>Company Type</label>
-          <nz-select
-            class="nzSelect-light"
-            nzShowSearch
-            nzAllowClear
-            nzPlaceHolder="Select"
-            id="CompanyTypeRef"
-            name="CompanyTypeRef"
-            [nzSize]="'large'"
-            [(ngModel)]="Entity.p.CompanyType"
-          >
-            <nz-option
-              *ngFor="let company of CompanyTypeList"
-              [nzValue]="company.Ref"
-              [nzLabel]="company.Name"
-            ></nz-option>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CompanyTypeRef"
+            name="CompanyTypeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CompanyType">
+            <nz-option *ngFor="let company of CompanyTypeList" [nzValue]="company.Ref"
+              [nzLabel]="company.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4">
           <label>Owner Names</label>
-          <input
-            type="text"
-            [(ngModel)]="Entity.p.OwnerName"
-            name="OwnerName"
-            class="form-control"
-            id="OwnerName"
-            required
-            placeholder="Enter Owner Names"
-          />
+          <input type="text" [(ngModel)]="Entity.p.OwnerName" name="OwnerName" class="form-control" id="OwnerName"
+            required placeholder="Enter Owner Names" />
         </div>
         <div class="col-md-4">
           <label>Pin Code</label>
-          <input
-            type="text"
-            [(ngModel)]="Entity.p.PinCode"
-            name="PinCode"
-            class="form-control"
-            id="PinCode"
-            required
-            placeholder="Enter Pin Code"
-          />
+          <input type="text" [(ngModel)]="Entity.p.PinCode" name="PinCode" class="form-control" id="PinCode" required
+            placeholder="Enter Pin Code" />
         </div>
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Address Line 1</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.AddressLine1"
-              name="AddressLine1"
-              class="form-control"
-              id="AddressLine1"
-              required
-              placeholder="Enter Address Line 1"
-            />
+            <input type="text" [(ngModel)]="Entity.p.AddressLine1" name="AddressLine1" class="form-control"
+              id="AddressLine1" required placeholder="Enter Address Line 1" />
           </div>
           <div class="col-md-6">
             <label>Address Line 2</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.AddressLine2"
-              name="AddressLine2"
-              class="form-control"
-              id="AddressLine2"
-              required
-              placeholder="Enter Address Line 2"
-            />
+            <input type="text" [(ngModel)]="Entity.p.AddressLine2" name="AddressLine2" class="form-control"
+              id="AddressLine2" required placeholder="Enter Address Line 2" />
           </div>
         </div>
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-4">
             <label for="CountryRef"><b>Country</b></label>
-            <nz-select
-              class="nzSelect-light"
-              nzShowSearch
-              nzAllowClear
-              nzPlaceHolder="Select"
-              [nzSize]="'large'"
-              name="CountryRef"
-              id="CountryRef"
-              [(ngModel)]="Entity.p.CountryRef"
-              (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)"
-            >
-              <nz-option
-                *ngFor="let country of CountryList"
-                [nzLabel]="country.p.Name"
-                [nzValue]="country.p.Ref"
-              ></nz-option>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+              name="CountryRef" id="CountryRef" [(ngModel)]="Entity.p.CountryRef"
+              (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
+              <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
+                [nzValue]="country.p.Ref"></nz-option>
             </nz-select>
           </div>
 
           <div class="col-md-4">
             <label for="StateRef"><b>State</b></label>
-            <nz-select
-              class="nzSelect-light"
-              nzShowSearch
-              nzAllowClear
-              nzPlaceHolder="Select"
-              id="StateRef"
-              name="StateRef"
-              [nzSize]="'large'"
-              [(ngModel)]="Entity.p.StateRef"
-              (ngModelChange)="getCityListByStateRef(Entity.p.StateRef)"
-            >
-              <nz-option
-                *ngFor="let state of StateList"
-                [nzValue]="state.p.Ref"
-                [nzLabel]="state.p.Name"
-              ></nz-option>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
+              name="StateRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StateRef"
+              (ngModelChange)="getCityListByStateRef(Entity.p.StateRef)">
+              <nz-option *ngFor="let state of StateList" [nzValue]="state.p.Ref" [nzLabel]="state.p.Name"></nz-option>
             </nz-select>
           </div>
 
           <div class="col-md-4">
             <label for="CityRef"><b>City</b></label>
-            <nz-select
-              class="nzSelect-light"
-              nzShowSearch
-              nzAllowClear
-              nzPlaceHolder="Select"
-              id="CityRef"
-              name="CityRef"
-              [nzSize]="'large'"
-              [(ngModel)]="Entity.p.CityRef"
-            >
-              <nz-option
-                *ngFor="let city of CityList"
-                [nzValue]="city.p.Ref"
-                [nzLabel]="city.p.Name"
-              ></nz-option>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
+              name="CityRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CityRef">
+              <nz-option *ngFor="let city of CityList" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
             </nz-select>
           </div>
         </div>
         <div class="row mb-3" style="margin-top: 1rem">
           <div class="col-md-4">
             <label>GSTIN</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.GSTIN"
-              name="GSTIN"
-              class="form-control"
-              id="GSTIN"
-              required
-              placeholder="Enter GSTIN"
-            />
+            <input type="text" [(ngModel)]="Entity.p.GSTIN" name="GSTIN" class="form-control" id="GSTIN" required
+              placeholder="Enter GSTIN" />
           </div>
           <div class="col-md-4">
             <label>PAN </label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.Pan"
-              name="Pan"
-              class="form-control"
-              id="Pan"
-              required
-              placeholder="Enter Pan"
-            />
+            <input type="text" [(ngModel)]="Entity.p.Pan" name="Pan" class="form-control" id="Pan" required
+              placeholder="Enter Pan" />
           </div>
 
           <div class="col-md-4">
             <label>CIN</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.CINNO"
-              name="CINNO"
-              class="form-control"
-              id="CINNO"
-              required
-              placeholder="Enter CIN"
-            />
+            <input type="text" [(ngModel)]="Entity.p.CINNO" name="CINNO" class="form-control" id="CINNO" required
+              placeholder="Enter CIN" />
           </div>
         </div>
       </div>
@@ -232,44 +111,22 @@
         <div class="col-6">
           <div class="col-md-12 mb-3">
             <label>Notes</label>
-            <textarea
-              type="text"
-              [(ngModel)]="Entity.p.Notes"
-              name="Notes"
-              class="form-control"
-              id="Notes"
-              rows="2"
-              required
-              placeholder="Enter Notes"
-            ></textarea>
+            <textarea type="text" [(ngModel)]="Entity.p.Notes" name="Notes" class="form-control" id="Notes" rows="2"
+              required placeholder="Enter Notes"></textarea>
           </div>
           <div class="col-md-12 mb-3">
             <label><b>Date Of Incorporation</b></label>
-            <input
-              type="date"
-              name="DateOfInCorporation"
-              [(ngModel)]="dateOfInCorporation"
-              class="form-control date-input"
-              id="DateOfInCorporation"
-              required
-              placeholder="Select Date"
-            />
+            <input type="date" name="DateOfInCorporation" [(ngModel)]="dateOfInCorporation"
+              class="form-control date-input" id="DateOfInCorporation" required placeholder="Select Date" />
           </div>
           <div class="col-md-12">
             <label><b>Last Date Of First Financial Year </b></label>
-            <input
-              type="date"
-              name="LastDateOfFirstFinancialYear "
-              [(ngModel)]="lastDateOfFirstFinancialYear"
-              class="form-control date-input"
-              id="LastDateOfFirstFinancialYear "
-              required
-              placeholder="Select Date"
-            />
+            <input type="date" name="LastDateOfFirstFinancialYear " [(ngModel)]="lastDateOfFirstFinancialYear"
+              class="form-control date-input" id="LastDateOfFirstFinancialYear " required placeholder="Select Date" />
           </div>
         </div>
 
-        <div class="col-6" style="flex: content; justify-content: center; justify-items: center" >
+        <div class="col-6" style="flex: content; justify-content: center; justify-items: center">
           <div class="col-lg-5 col-md-5 col-sm-12">
             <div class="text-align-center">
               <label><b>Company Logo </b></label>
@@ -287,18 +144,10 @@
                 <img [src]="imageUrl" alt="Company Logo" class="Company-Logo" />
               </ng-container>
               <ng-template #defaultImage>
-                <img
-                  src="/assets/images/noimage.png"
-                  alt="No Image"
-                  class="Company-Logo"
-                />
+                <img src="/assets/images/noimage.png" alt="No Image" class="Company-Logo" />
               </ng-template>
-              <input
-                type="file"
-                (change)="handleFileChange($event)"
-                id="CompanyLogo"
-                class="file-upload"
-              />
+              <input type="file" (change)="handleFileChange($event)" id="CompanyLogo" class="file-upload"
+                accept="image/*" name="image" />
               <p *ngIf="errors.company_image" class="validation-error">
                 {{ errors.company_image }}
               </p>
@@ -381,14 +230,12 @@
         </div>
       </div> -->
 
-      <div
-        style="
+      <div style="
           justify-content: center;
           display: flex;
           gap: 2rem;
           margin-top: 2rem;
-        "
-      >
+        ">
         <div>
           <button type="button" class="btn" (click)="SaveCompanyMaster()">
             Save

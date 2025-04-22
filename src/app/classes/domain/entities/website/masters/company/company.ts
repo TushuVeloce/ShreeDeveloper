@@ -25,18 +25,19 @@ export class CompanyProps {
   public AddressLine1: string = '';
   public AddressLine2: string = '';
   public PinCode: string = '';
-  public GSTIN:  string='';
-  public Pan:  string='';
-  public CINNO:  string='';
-  public DateOfInCorporation:string = '';
-  public LastDateOfFirstFinancialYear:  string='';
-  public Notes:  string='';
-  public CountryRef:  number = CountryStateCityRefs.IndiaRef; 
-  public readonly CountryName: string='';
-  public StateRef:  number = CountryStateCityRefs.MaharashtraRef;
-  public readonly StateName: string='';
-  public CityRef:  number = CountryStateCityRefs.KolhapurRef ;
-  public readonly CityName: string='';
+  public GSTIN: string = '';
+  public Pan: string = '';
+  public CINNO: string = '';
+  public DateOfInCorporation: string = '';
+  public LastDateOfFirstFinancialYear: string = '';
+  public Notes: string = '';
+  public CountryRef: number = CountryStateCityRefs.IndiaRef;
+  public readonly CountryName: string = '';
+  public StateRef: number = CountryStateCityRefs.MaharashtraRef;
+  public readonly StateName: string = '';
+  public CityRef: number = CountryStateCityRefs.KolhapurRef;
+  public readonly CityName: string = '';
+  public CompanyLogo: File = null as any
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -60,8 +61,8 @@ export class Company implements IPersistable<Company> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -188,7 +189,7 @@ export class Company implements IPersistable<Company> {
     let tdResponse = await Company.FetchTransportData(req, errorHandler) as TransportData;
     return Company.ListFromTransportData(tdResponse);
   }
-  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new CompanyFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await Company.FetchTransportData(req, errorHandler) as TransportData;
