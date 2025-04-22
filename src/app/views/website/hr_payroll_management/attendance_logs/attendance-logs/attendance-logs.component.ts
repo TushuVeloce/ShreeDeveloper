@@ -25,8 +25,8 @@ export class AttendanceLogsComponent implements OnInit {
   DisplayMasterList: AttendanceLogs[] = [];
   SelectedAttendanceLogs: AttendanceLogs = AttendanceLogs.CreateNewInstance();
 
-  pageSize = 10; // Items per page
-  currentPage = 1; // Initialize current page
+  pageSize: number = 10; // Items per page
+  currentPage: number = 1; // Initialize current page
   total = 0;
   SearchString: string = '';
 
@@ -53,30 +53,34 @@ export class AttendanceLogsComponent implements OnInit {
     private serverCommunicator: ServerCommunicatorService
   ) {
     effect(async () => {
-      await this.getattendancelogbycompanyref();
+      await this.getTodayAttendanceLogByAttendanceListType();
     });
   }
 
   ngOnInit() {
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
-    this.getAttendanceCount()
     this.isTodayAttendanceView = true;
   }
 
-  getattendancelogbycompanyref = async () => {
-    let lst = await AttendanceLogs.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList;
-    console.log(this.DisplayMasterList);
-    this.loadPaginationData();
-  }
+  // getattendancelogbycompanyref = async () => {
+  //   let lst = await AttendanceLogs.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.MasterList = lst;
+  //   this.DisplayMasterList = this.MasterList;
+  //   console.log(this.DisplayMasterList);
+  //   this.loadPaginationData();
+  // }
+
   getTodayAttendanceLogByAttendanceListType = async () => {
     this.ToDispayMonthlyRequirement = false;
     this.ToDispayWeeklyRequirement = false;
     this.isTodayAttendanceView = true;
     let TodaysAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = TodaysAttendanceLog
+    this.groupByEmployee();
+    this.getAttendanceCount()
+    console.log(this.DisplayMasterList);
+
   }
 
   getWeekWiseAttendanceLogByAttendanceListType = async () => {
@@ -85,6 +89,9 @@ export class AttendanceLogsComponent implements OnInit {
     this.isTodayAttendanceView = false;
     let WeeklyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.WeeklyAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = WeeklyAttendanceLog
+    this.groupByEmployee();
+    console.log('weekly', this.DisplayMasterList);
+
   }
   getMonthWiseAttendanceLogByAttendanceListType = async () => {
     this.ToDispayMonthlyRequirement = true;
@@ -92,6 +99,8 @@ export class AttendanceLogsComponent implements OnInit {
     this.isTodayAttendanceView = false;
     let MonthlyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.MonthlyAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = MonthlyAttendanceLog
+    this.groupByEmployee();
+    console.log('weekly', this.DisplayMasterList);
   }
   // For Pagination  start ----
   loadPaginationData = () => {
@@ -146,9 +155,24 @@ export class AttendanceLogsComponent implements OnInit {
     }
     let tdResult = JSON.parse(tr.Tag) as TransportData;
     let res = AttendanceLogCountCustomRequest.FromTransportData(tdResult)
-
     console.log("Total Attendance Logs:", res.Count);
+    console.log("Total Attendance Logs tdResult:", tdResult);
     // You can also bind this count to your component state
     this.attendanceCount = res.Count;
   }
+
+  groupedAttendanceLogs: { [employeeName: string]: any[] } = {};
+
+  groupByEmployee = () => {
+    this.groupedAttendanceLogs = {};
+    for (let log of this.DisplayMasterList) {
+      const empName = log.p.EmployeeName;
+      if (!this.groupedAttendanceLogs[empName]) {
+        this.groupedAttendanceLogs[empName] = [];
+      }
+      this.groupedAttendanceLogs[empName].push(log);
+      console.log(this.groupedAttendanceLogs);
+
+    }
+  };
 }
