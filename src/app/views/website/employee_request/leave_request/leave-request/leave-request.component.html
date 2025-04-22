@@ -56,7 +56,7 @@
             <td class="tbldata">
               <span style="margin-left: 9px;" *ngIf="leaverequest.p.IsApproved == 0 && leaverequest.p.IsCancelled == 0"
                 (click)="onDeleteClicked(leaverequest);">
-                <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+                <img src="\assets\icons\delete.png" alt="logo" style="cursor: pointer;" title="Delete" width="20px" height="20px" /></span>
 
               <span style="margin-left: 9px;" *ngIf="leaverequest.p.IsApproved != 0 || leaverequest.p.IsCancelled == 1">
                 <img src="\assets\icons\GreyDustbin.png" alt="logo" title="Delete" width="20px" height="20px" /></span>

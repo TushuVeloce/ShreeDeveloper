@@ -100,7 +100,7 @@ export class SalarySlipRequestComponent implements OnInit {
   filterTable = () => {
     if (this.SearchString != '') {
       this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
+        return data.p.Year.indexOf(this.SearchString) > -1
       })
     }
     else {
