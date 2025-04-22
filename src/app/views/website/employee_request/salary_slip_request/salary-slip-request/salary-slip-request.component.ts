@@ -6,6 +6,7 @@ import { CompanyStateManagement } from 'src/app/services/companystatemanagement'
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 
 @Component({
   selector: 'app-salarysliprequest-master',
@@ -23,13 +24,14 @@ export class SalarySlipRequestComponent implements OnInit {
   SelectedSalarySlipRequest: SalarySlipRequest = SalarySlipRequest.CreateNewInstance();
   CustomerRef: number = 0;
   EmployeeList: Employee[] = [];
+  MonthList = DomainEnums.MonthList(true, '--Select Month Type--');
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'From Month', 'To Month', 'From Year', 'To Year', 'Approval Status', 'Action'];
+  headers: string[] = ['Sr.No.', 'Year', 'Months', 'Approval Status', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
@@ -43,6 +45,10 @@ export class SalarySlipRequestComponent implements OnInit {
     this.Entity.p.EmployeeRef = this.appStateManage.getEmployeeRef();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+  }
+
+  getMonthName(): string {
+    return this.MonthList[1].Name;
   }
 
   getSalarySlipRequestListByEmployeeRef = async () => {
