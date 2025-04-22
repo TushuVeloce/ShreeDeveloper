@@ -8,7 +8,6 @@
   </div>
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
     <nz-button nz-button class="btn1"  (click)="isPasswordModalOpen = true">
-      <!-- (click)='AddNewFinancialYear()' -->
       Create New Financial Year
     </nz-button>
   </div>
@@ -66,11 +65,12 @@
           <input [type]="showPassword ? 'text' : 'password'" id="password" class="form-control" name="Password" required
             [(ngModel)]="localpassword" />
           <span (click)="togglePasswordVisibility()" class="input-icon"
-            style="margin-top: 0.4rem; margin-left: 0.2rem; color: rgb(255, 255, 255); cursor: pointer;">
-            <i class="fa-regular fa-eye" *ngIf="showPassword"></i>
-            <i class="fa-regular fa-eye-slash" *ngIf="!showPassword"></i>
+            style="margin-top: 0.4rem; margin-left: 0.2rem; color: rgb(24, 23, 23); cursor: pointer;">
+            <i class="fas fa-eye" *ngIf="showPassword"></i>
+            <i class="fas fa-eye-slash" *ngIf="!showPassword"></i>
           </span>
         </div>
+
       </div>
       <div style="margin-top: 8px;">
         <strong>Note :</strong> To {{isSetFinancialYearModalOpen ? 'set new ' : 'create a new '}}financial year, you must enter your login password.

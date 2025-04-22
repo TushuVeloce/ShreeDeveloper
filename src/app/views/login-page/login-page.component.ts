@@ -19,6 +19,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 export class LoginPageComponent implements OnInit {
   isIosPlatform: boolean = false;
   isAndroidPlatform: boolean = false;
+  showPassword: boolean = false;
 
 
   isMobile: boolean = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -72,4 +73,8 @@ export class LoginPageComponent implements OnInit {
       }
     }
   }
+
+  togglePasswordVisibility = () => {
+    this.showPassword = !this.showPassword;
+  };
 }
