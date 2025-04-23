@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
 import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -21,6 +23,15 @@ export class DepartmentMasterDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Department' | 'Edit Department' = 'New Department';
   InitialEntity: Department = null as any;
   companyName = this.companystatemanagement.SelectedCompanyName;
+
+  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
+
+  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
+
+  @ViewChild('NameCtrl') NameInputControl!: NgModel;
+
+
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
   async ngOnInit() {
@@ -38,6 +49,12 @@ export class DepartmentMasterDetailsComponent implements OnInit {
     }
     this.InitialEntity = Object.assign(Department.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)) as Department;
+    this.focusInput();
+  }
+
+  focusInput = () => {
+    let txtName = document.getElementById('Name')!;
+    txtName.focus();
   }
 
   SaveDepartmentMaster = async () => {
@@ -59,8 +76,8 @@ export class DepartmentMasterDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster('Department saved successfully!');
         this.Entity = Department.CreateNewInstance();
       } else {
-        await this.router.navigate(['/homepage/Website/Department_Master'])
         await this.uiUtils.showSuccessToster('Department Updated successfully!');
+        this.BackDepartment();
       }
     }
   }
@@ -69,4 +86,11 @@ export class DepartmentMasterDetailsComponent implements OnInit {
     this.router.navigate(['/homepage/Website/Department_Master']);
   }
 
+  resetAllControls = () => {
+    // reset touched
+    this.NameInputControl.control.markAsUntouched();
+
+    // reset dirty
+    this.NameInputControl.control.markAsPristine();
+  }
 }

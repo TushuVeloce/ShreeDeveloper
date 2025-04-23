@@ -3,12 +3,7 @@
     <div class="row">
       <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
         <button type="button" class="backbtn" (click)="BackMarketingType()">
-          <img
-            src="/assets/icons/arrow-button.png"
-            alt=""
-            width="34px"
-            height="34px"
-          />
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
         </button>
       </div>
       <div class="col-md-11">
@@ -17,51 +12,41 @@
     </div>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem">
-        <div class="col-md-6">
+        <div class="col-md-6 col-sm-12">
           <label>Marketing Mode</label>
-          <nz-select
-            class="nzSelect-light"
-            nzShowSearch
-            nzAllowClear
-            nzPlaceHolder="Select"
-            id="MarketingModeRef"
-            name="MarketingModeRef"
-            [nzSize]="'large'"
-            [(ngModel)]="Entity.p.MarketingMode"
-          >
-            <nz-option
-              *ngFor="let Mode of MarketingModesList"
-              [nzValue]="Mode.Ref"
-              [nzLabel]="Mode.Name"
-            ></nz-option>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="MarketingModeRef"
+            name="MarketingModeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.MarketingMode">
+            <nz-option *ngFor="let Mode of MarketingModesList" [nzValue]="Mode.Ref" [nzLabel]="Mode.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-6">
+        <!-- <div class="col-md-6">
           <div>
             <label>Description</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.Description"
-              name="Description"
-              class="form-control"
-              id="Description"
-              required
-              placeholder="Enter Description"
-              #DescriptionCtrl="ngModel" required (blur)="DescriptionCtrl.control.markAsTouched()" />
-              <div *ngIf="(DescriptionCtrl.invalid && (DescriptionCtrl.touched || DescriptionCtrl.dirty))">
-                <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-              </div>
+            <input type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
+              id="Description" required placeholder="Enter Description" #DescriptionCtrl="ngModel" required
+              (blur)="DescriptionCtrl.control.markAsTouched()" />
+            <div *ngIf="(DescriptionCtrl.invalid && (DescriptionCtrl.touched || DescriptionCtrl.dirty))">
+              <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
+        </div> -->
+        <div class="col-md-6 col-sm-12">
+          <label>Description</label>
+          <textarea type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
+            id="Description" rows="4" required placeholder="Enter Description" #DescriptionCtrl="ngModel"
+            (blur)="DescriptionCtrl.control.markAsTouched()"></textarea>
+          <div style="height: 25px;"
+            *ngIf="(DescriptionCtrl.invalid && (DescriptionCtrl.touched || DescriptionCtrl.dirty))">
+            <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
       </div>
-      <div
-        style="
+      <div style="
           justify-content: center;
           display: flex;
           gap: 2rem;
           margin-top: 2rem;
-        "
-      >
+        ">
         <div>
           <button type="button" class="btn" (click)="SaveMarketingTypeMaster()">
             Save

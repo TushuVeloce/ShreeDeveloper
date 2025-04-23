@@ -25,9 +25,9 @@ export class MaterialMasterDetailsComponent implements OnInit {
   InitialEntity: Material = null as any;
   UnitList: Unit[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  NameWithNos: string = ValidationPatterns.NameWithNos
+  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
-  NameWithNosMsg: string = ValidationMessages.NameWithNosMsg
+  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
@@ -63,8 +63,8 @@ export class MaterialMasterDetailsComponent implements OnInit {
       Material.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as Material;
+    this.FormulateUnitList();
     this.focusInput();
-    await this.FormulateUnitList();
   }
 
   focusInput = () => {
@@ -76,6 +76,7 @@ export class MaterialMasterDetailsComponent implements OnInit {
     let lst = await Unit.FetchEntireList(
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
+    console.log('lst :', lst);
     this.UnitList = lst;
   };
 

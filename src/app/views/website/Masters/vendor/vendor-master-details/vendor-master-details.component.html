@@ -15,7 +15,7 @@
         <div class="col-md-6 col-md-4 col-sm-12">
           <label for="Code">Vendor Code</label>
           <input type="text" [(ngModel)]="Entity.p.Code" name="Code" class="form-control" id="Code" required
-            placeholder="Enter Vendor Code" #CodeCtrl="ngModel" required (blur)="CodeCtrl.control.markAsTouched()" />
+            placeholder="Enter Vendor Code" #CodeCtrl="ngModel" (blur)="CodeCtrl.control.markAsTouched()" />
           <div *ngIf="(CodeCtrl.invalid && (CodeCtrl.touched || CodeCtrl.dirty))">
             <span class="validation-text" *ngIf="CodeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
@@ -43,7 +43,7 @@
         <div class="col-md-6 col-md-4 col-sm-12">
           <label for="TradeName">Trade Name</label>
           <input type="text" [(ngModel)]="Entity.p.TradeName" name="TradeName" class="form-control" id="TradeName"
-            required placeholder="Enter Trade Name" #TradeNameCtrl="ngModel" required
+            placeholder="Enter Trade Name" #TradeNameCtrl="ngModel" required
             (blur)="TradeNameCtrl.control.markAsTouched()" />
           <div *ngIf="(TradeNameCtrl.invalid && (TradeNameCtrl.touched || TradeNameCtrl.dirty))">
             <span class="validation-text" *ngIf="TradeNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -54,8 +54,7 @@
         <div class="col-md-4 col-md-4 col-sm-12">
           <label for="MobileNo">Mobile Number</label>
           <input type="text" [(ngModel)]="Entity.p.MobileNo" name="MobileNo" class="form-control" id="MobileNo" required
-            placeholder="Enter Phone No." #MobileNoCtrl="ngModel" required
-            (blur)="MobileNoCtrl.control.markAsTouched()" />
+            placeholder="Enter Phone No." #MobileNoCtrl="ngModel" (blur)="MobileNoCtrl.control.markAsTouched()" />
           <div *ngIf="(MobileNoCtrl.invalid && (MobileNoCtrl.touched || MobileNoCtrl.dirty))">
             <span class="validation-text" *ngIf="MobileNoCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
@@ -63,7 +62,7 @@
         <div class="col-md-4 col-md-4 col-sm-12">
           <label for="AddressLine1">Address Line1</label>
           <input type="text" [(ngModel)]="Entity.p.AddressLine1" name="AddressLine1" class="form-control"
-            id="AddressLine1" required placeholder="Enter Address Line1" #AddressLine1Ctrl="ngModel" required
+            id="AddressLine1" placeholder="Enter Address Line1" #AddressLine1Ctrl="ngModel" required
             (blur)="AddressLine1Ctrl.control.markAsTouched()" />
           <div *ngIf="(AddressLine1Ctrl.invalid && (AddressLine1Ctrl.touched || AddressLine1Ctrl.dirty))">
             <span class="validation-text" *ngIf="AddressLine1Ctrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -72,7 +71,7 @@
         <div class="col-md-4 col-md-4 col-sm-12">
           <label for="AddressLine2">Address Line2</label>
           <input type="text" [(ngModel)]="Entity.p.AddressLine2" name="AddressLine2" class="form-control"
-            id="AddressLine2" required placeholder="Enter Address Line2" />
+            id="AddressLine2" placeholder="Enter Address Line2" />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
@@ -115,18 +114,20 @@
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>Bank Name</label>
           <input type="text" [(ngModel)]="Entity.p.BankName" name="BankName" class="form-control" id="BankName"
-            placeholder="Enter Bank Name" #BankNameCtrl="ngModel" required
+            placeholder="Enter Bank Name" pattern="{{NameWithNosAndSpace}}" #BankNameCtrl="ngModel" required
             (blur)="BankNameCtrl.control.markAsTouched()" />
           <div *ngIf="(BankNameCtrl.invalid && (BankNameCtrl.touched || BankNameCtrl.dirty))">
+            <span class="validation-text" *ngIf="BankNameCtrl.errors?.['pattern']">{{NameWithNosAndSpaceMsg}}</span>
             <span class="validation-text" *ngIf="BankNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>Branch Name</label>
           <input type="text" [(ngModel)]="Entity.p.BranchName" name="BranchName" class="form-control" id="BranchName"
-            required placeholder="Enter Branch Name" #BranchNameCtrl="ngModel" required
-            (blur)="BranchNameCtrl.control.markAsTouched()" />
+            required placeholder="Enter Branch Name" pattern="{{NameWithNosAndSpace}}" #BranchNameCtrl="ngModel"
+             (blur)="BranchNameCtrl.control.markAsTouched()" />
           <div *ngIf="(BranchNameCtrl.invalid && (BranchNameCtrl.touched || BranchNameCtrl.dirty))">
+            <span class="validation-text" *ngIf="BankNameCtrl.errors?.['pattern']">{{NameWithNosAndSpaceMsg}}</span>
             <span class="validation-text" *ngIf="BranchNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
@@ -135,9 +136,10 @@
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>Account No</label>
           <input type="number" [(ngModel)]="Entity.p.AccountNumber" name="AccountNo" class="form-control" id="AccountNo"
-            required placeholder="Enter Bank Account Number" #AccountNumberCtrl="ngModel" required
-            (blur)="AccountNumberCtrl.control.markAsTouched()" />
+            placeholder="Enter Bank Account Number" #AccountNumberCtrl="ngModel" required
+            pattern="{{LargeInputNumber}}" (blur)="AccountNumberCtrl.control.markAsTouched()" />
           <div *ngIf="(AccountNumberCtrl.invalid && (AccountNumberCtrl.touched || AccountNumberCtrl.dirty))">
+            <span class="validation-text" *ngIf="AccountNumberCtrl.errors?.['pattern']">{{LargeInputNumberMsg}}</span>
             <span class="validation-text" *ngIf="AccountNumberCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
@@ -174,7 +176,7 @@
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>CIN</label>
-          <input type="text" [(ngModel)]="Entity.p.CINNO" name="CINNO" class="form-control" id="CINNO" required
+          <input type="text" [(ngModel)]="Entity.p.CINNO" name="CINNO" class="form-control" id="CINNO"
             placeholder="Enter CIN" />
         </div>
       </div>

@@ -67,13 +67,15 @@ export class Stage implements IPersistable<Stage> {
     if (this.p.Name == '') {
       vra.add('Name', 'Name cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg  + ' for Name');
+      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     }
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
     if (this.p.DisplayOrder == 0) {
       vra.add('DisplayOrder', 'Display Order cannot be blank.');
-    } else if(this.p.DisplayOrder < 0) {
+    } else if (this.p.DisplayOrder < 0) {
       vra.add('DisplayOrder', 'Display Order cannot be less then 0.');
+    } else if (!new RegExp(ValidationPatterns.IsRationalNumber).test(this.p.Name)) {
+      vra.add('Name', ValidationMessages.IsRationalNumberMsg + ' for Display Order');
     }
   }
 

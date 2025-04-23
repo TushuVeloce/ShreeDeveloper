@@ -13,14 +13,15 @@
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-6">
-           <label>Name</label>
-            <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name"
-              placeholder="Enter Name" pattern="{{Unit}}" #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()" />
-              <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
-                <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{UnitMsg}}</span>
-                <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-              </div>
-            </div>
+          <label>Name</label>
+          <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name"
+            placeholder="Enter Name" pattern="{{Unit}}" #NameCtrl="ngModel" required
+            (blur)="NameCtrl.control.markAsTouched()" />
+          <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
+            <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{UnitMsg}}</span>
+            <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>

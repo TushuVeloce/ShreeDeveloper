@@ -111,7 +111,6 @@ export class Vendor implements IPersistable<Vendor> {
     if (this.p.TradeName == '') vra.add('TradeName', 'Trade Name cannot be blank.');
     if (this.p.MobileNo == '') vra.add('MobileNo', 'Mobile No cannot be blank.');
     if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'AddressLine1 cannot be blank.');
-    if (this.p.AddressLine2 == '') vra.add('AddressLine2', 'AddressLine2 cannot be blank.');
     if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country cannot be blank.');
     if (this.p.StateRef == 0) vra.add('StateRef', 'State cannot be blank.');
     if (this.p.CityRef == 0) vra.add('CityRef', 'City cannot be blank.');
@@ -123,18 +122,19 @@ export class Vendor implements IPersistable<Vendor> {
     if (this.p.BankName == '') vra.add('BankName', 'Bank cannot be blank.');
     if (this.p.BranchName == '') vra.add('BranchName', 'Branch cannot be blank.');
     if (this.p.AccountNumber == '') vra.add('AccountNumber', 'Account Number cannot be blank.');
+    if (this.p.AccountNumber.length > 15) vra.add('AccountNumber', 'Account Number Should be less then 15.');
     if (this.p.IFSC == '') {
-      vra.add('IFSC', 'Pin cannot be blank.');
+      vra.add('IFSC', 'IFSC cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.IFSC).test(this.p.IFSC)) {
       vra.add('IFSC', ValidationMessages.IFSCMsg);
     }
     if (this.p.GSTIN == '') {
-      vra.add('GSTIN', 'Pin cannot be blank.');
+      vra.add('GSTIN', 'GST IN cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN)) {
       vra.add('GSTIN', ValidationMessages.GSTINMsg);
     }
     if (this.p.Pan == '') {
-      vra.add('Pan', 'Pin cannot be blank.');
+      vra.add('Pan', 'Pan cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan)) {
       vra.add('Pan', ValidationMessages.PANMsg);
     }
