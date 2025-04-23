@@ -82,7 +82,6 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   getTodayAttendanceLogByAttendanceListType = async () => {
-    this.DisplayMasterList = [];
     this.ToDispayMonthlyRequirement = false;
     this.ToDisplayWeeklyRequirement = false;
     this.isTodayAttendanceView = true;
@@ -90,48 +89,45 @@ export class AttendanceLogsComponent implements OnInit {
 
     let TodaysAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = TodaysAttendanceLog
-    this.groupByEmployee();
+    // this.groupByEmployee();
     this.getAttendanceCount()
-    console.log('Todays',this.DisplayMasterList);
+    console.log('Todays', this.DisplayMasterList);
   }
 
-  getWeekWiseAttendanceLogByAttendanceListType = async () => {
+  // On Week Selected 
+  selectWeek = async () => {
     this.Entity.p.EmployeeRef = 0;
     this.DisplayMasterList = [];
+    // this.groupedAttendanceLogs = {};
     this.ToDispayMonthlyRequirement = false;
     this.ToDisplayWeeklyRequirement = true;
     this.isTodayAttendanceView = false;
+    this.isShowMonthlyData = false
+  }
+
+  getWeekWiseAttendanceLogByAttendanceListType = async () => {
+    this.ToDispayMonthlyRequirement = false;
+    this.isTodayAttendanceView = false;
     this.isShowMonthlyData = false;
 
-    let WeeklyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.WeeklyAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let employeeref = this.Entity.p.EmployeeRef
+
+    let WeeklyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(this.companyRef(), AttendenceLogType.WeeklyAttendanceLog, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = WeeklyAttendanceLog
-    this.groupByEmployee();
+    // this.groupByEmployee();
     console.log('weekly', this.DisplayMasterList);
   }
 
-  OnSelectedEmployee = async () => {
-    const selectedEmpRef = this.Entity.p.EmployeeRef;
-
-    // If no employee is selected, clear grouped data
-    if (!selectedEmpRef) {
-      this.groupedAttendanceLogs = {};
-      return;
-    }
-    // Get selected employee's name from dropdown list
-    const selectedEmployee = this.EmployeeList.find(emp => emp.p.Ref === selectedEmpRef);
-    const selectedEmpName = selectedEmployee?.p?.Name || 'Selected Employee';
-    // Filter logs
-    const filteredLogs = this.DisplayMasterList.filter(log => log.p.EmployeeRef === selectedEmpRef);
-    // Always show selected employee's name, even if there's no data
-    this.groupedAttendanceLogs = {
-      [selectedEmpName]: filteredLogs
-    };
+  // On Month selected 
+  onEmployeeChange(): void {
+    this.Entity.p.Months = 0;
   }
 
   selectMonth = async () => {
     this.Entity.p.EmployeeRef = 0;
+    this.Entity.p.Months = 0;
     this.DisplayMasterList = [];
-    this.groupedAttendanceLogs = {};
+    // this.groupedAttendanceLogs = {};
     this.ToDispayMonthlyRequirement = true;
     this.ToDisplayWeeklyRequirement = false;
     this.isTodayAttendanceView = false;
@@ -152,7 +148,7 @@ export class AttendanceLogsComponent implements OnInit {
     let MonthlyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendenceLogType.MonthlyAttendanceLog,
       month, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = MonthlyAttendanceLog
-    this.groupByEmployee();
+    // this.groupByEmployee();
     console.log('Monthly', this.DisplayMasterList);
   }
 
@@ -222,16 +218,16 @@ export class AttendanceLogsComponent implements OnInit {
     }
   }
 
-  groupedAttendanceLogs: { [employeeName: string]: any[] } = {};
+  // groupedAttendanceLogs: { [employeeName: string]: any[] } = {};
 
-  groupByEmployee = () => {
-    this.groupedAttendanceLogs = {};
-    for (let log of this.DisplayMasterList) {
-      const empName = log.p.EmployeeName;
-      if (!this.groupedAttendanceLogs[empName]) {
-        this.groupedAttendanceLogs[empName] = [];
-      }
-      this.groupedAttendanceLogs[empName].push(log);
-    }
-  };
+  // groupByEmployee = () => {
+  //   this.groupedAttendanceLogs = {};
+  //   for (let log of this.DisplayMasterList) {
+  //     const empName = log.p.EmployeeName;
+  //     if (!this.groupedAttendanceLogs[empName]) {
+  //       this.groupedAttendanceLogs[empName] = [];
+  //     }
+  //     this.groupedAttendanceLogs[empName].push(log);
+  //   }
+  // };
 }
