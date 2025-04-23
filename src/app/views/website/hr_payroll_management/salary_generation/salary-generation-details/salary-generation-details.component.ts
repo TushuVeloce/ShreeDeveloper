@@ -106,7 +106,6 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   
     let tdResult = JSON.parse(tr.Tag) as TransportData;
     let res = SalaryGenerationCustomRequest.FromTransportData(tdResult);
-    console.log('res :', res);
     if (res.Data.length > 0) {
         let checkInData: SalaryGenerationProps[] = res.Data as SalaryGenerationProps[];
         Object.assign(this.Entity.p, checkInData[0]);

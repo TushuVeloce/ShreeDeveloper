@@ -37,6 +37,7 @@
     --height: 60%;
     --max-width: 500px;
     --border-radius: 20px;
+    --background: var(--ion-background-color-step-50);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -46,6 +47,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    --background: var(--ion-background-color-step-50);
 }
 
 .modal-toolbar {

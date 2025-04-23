@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AttendenceLocationType, AttendenceLogType, DomainEnums, LeaveRequestType } from 'src/app/classes/domain/domainenums/domainenums';
+import {
+  AttendenceLocationType,
+  AttendenceLogType,
+  DomainEnums,
+  LeaveRequestType
+} from 'src/app/classes/domain/domainenums/domainenums';
 import { AttendanceLog, AttendanceLogProps } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelog';
 import { AttendanceLogCheckInCustomRequest } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelogcheckincustomrequest';
 import { AttendanceLogs } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogs';
@@ -20,39 +25,35 @@ import { Utils } from 'src/app/services/utils.service';
   selector: 'app-attendance-management',
   templateUrl: './attendance-management.page.html',
   styleUrls: ['./attendance-management.page.scss'],
-  standalone: false
+  standalone:false
 })
 export class AttendanceManagementPage implements OnInit {
+  // State and UI flags
   punchModalOpen = false;
-  isCurrentTimeDate: string = "";
-  isCheckInTime: string = "";
-  isCheckOutTime: string = "";
-  selectedLocation: string = '';
-  totalHalfDays: number = 2;
-  totalOvertime: string = '16';
-  siteList: Site[] = [];
-  selectedSite: Site[] = [];
-
-  isCheckInEnabled: boolean = false;
-  isBothButtonEnabled: boolean = true;
-  isSubmitting = false;
   isLoading = false;
+  isSubmitting = false;
 
+  // Data fields
+  currentDateTime: string = "";
+  checkInTime: string = "";
+  checkOutTime: string = "";
+  DateValue: string = "";
   capturedBeforePhoto: string | null = null;
   capturedAfterPhoto: string | null = null;
-  IsLeave: number = 0;
-  isChecked: boolean = false;
-  Date: string = "";
-  DateWithTime: string | null = null;
-  Entity: AttendanceLog = AttendanceLog.CreateNewInstance();
-  companyRef = this.companystatemanagement.SelectedCompanyRef;
-  employeeRef = 0;
-  AttendanceLocationTypes = AttendenceLocationType;
-  AttendanceLocationTypeList = DomainEnums.AttendenceLocationTypeList(true, '--Select--');
+  isOnLeave: boolean = false;
+  isCheckInEnabled: boolean = false;
+  bothButtonsEnabled: boolean = true;
 
-  WeeklyAttendanceLogsList: AttendanceLogs[] = [];
-  FilteredWeeklyAttendanceLogsList: AttendanceLogs[] = [];
-  SelectedWeeklyAttendanceLog: AttendanceLogs = AttendanceLogs.CreateNewInstance();
+  // Attendance and site data
+  attendanceLog: AttendanceLog = AttendanceLog.CreateNewInstance();
+  siteList: Site[] = [];
+  selectedSite: Site[] = [];
+  filteredWeeklyAttendanceLogs: AttendanceLogs[] = [];
+  weeklyAttendanceLogs: AttendanceLogs[] = [];
+  
+  // Enums and Lists
+  AttendanceLocationTypes = AttendenceLocationType;
+  attendanceLocationTypeList = DomainEnums.AttendenceLocationTypeList(true, '--Select--');
   readonly LeaveRequestTypeEnum = LeaveRequestType;
   gridItems = [
     { label: 'Salary Slip', icon: 'layers-outline', gridFunction: 100 },
@@ -60,236 +61,256 @@ export class AttendanceManagementPage implements OnInit {
     { label: 'View All', icon: 'bar-chart-outline', gridFunction: 300 },
   ];
 
-  recentAttendance = [
-    { date: '30', day: 'TUE', clockIn: '09:00am', clockOut: '06:00pm', hours: '09hr 00min', isHalfDay: false },
-    { date: '29', day: 'MON', clockIn: '09:10am', clockOut: '01:00pm', hours: '03hr 50min', isHalfDay: true },
-    { date: '28', day: 'SUN', isWeekend: true, isHalfDay: false },
-    { date: '27', day: 'SAT', isWeekend: true, isHalfDay: false },
-    { date: '26', day: 'FRI', clockIn: '09:15am', clockOut: '06:20pm', hours: '09hr 05min', isHalfDay: false },
-    { date: '25', day: 'THU', leave: 'Casual Leave', isHalfDay: false },
-    { date: '24', day: 'WED', clockIn: '09:05am', clockOut: '06:00pm', hours: '08hr 55min', isHalfDay: false },
-    { date: '23', day: 'TUE', clockIn: '09:30am', clockOut: '12:30pm', hours: '03hr 00min', isHalfDay: true },
-    { date: '22', day: 'MON', clockIn: '09:10am', clockOut: '06:10pm', hours: '09hr 00min', isHalfDay: false },
-    { date: '21', day: 'SUN', isWeekend: true, isHalfDay: false }
-  ];
+  // Company and employee references
+  employeeRef: number = 0;
 
   constructor(
     private router: Router,
-    private companystatemanagement: CompanyStateManagement,
+    private companyState: CompanyStateManagement,
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
     private utils: Utils,
     private dtu: DTU,
     private payloadPacketFacade: PayloadPacketFacade,
     private serverCommunicator: ServerCommunicatorService,
-    private dateconversionService: DateconversionService
+    private dateConversionService: DateconversionService
   ) { }
 
   async ngOnInit() {
+    // Retrieve employee reference from storage (ensure proper type conversion)
     this.employeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
-    let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-    this.Date = strCDT.substring(0, 10);
-    this.isCurrentTimeDate = strCDT;
-    await this.getCheckInData();
-    await this.getWeekWiseAttendanceLogByAttendanceListType();
+
+    // Get current date time and set state
+    try {
+      const strCurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
+      this.DateValue = strCurrentDateTime.substring(0, 10);
+      this.currentDateTime = strCurrentDateTime;
+    } catch (error) {
+      console.error('Error obtaining current date/time:', error);
+    }
+
+    // Load check-in data and weekly attendance logs
+    await Promise.all([
+      this.getCheckInData(),
+      this.getWeekWiseAttendanceLogByAttendanceListType()
+    ]);
   }
 
   formatDate(date: string | Date): string {
-    return this.dateconversionService.formatDate(date);
+    return this.dateConversionService.formatDate(date);
   }
 
-  gridItemsFunction(id: number) {
+  gridItemsFunction(id: number): void {
     switch (id) {
-      case 100: this.getSalarySlip(); break;
-      case 200: this.requestLeave(); break;
-      case 300: this.viewAllPresentEmployee(); break;
+      case 100: 
+        this.getSalarySlip();
+        break;
+      case 200:
+        this.requestLeave();
+        break;
+      case 300:
+        this.viewAllPresentEmployee();
+        break;
+      default:
+        break;
     }
   }
-  handleRefresh(event: CustomEvent) {
-    setTimeout(async() => {
-      // Any calls to load data go here
-      await this.getCheckInData();
-      await this.getWeekWiseAttendanceLogByAttendanceListType();
+
+  async handleRefresh(event: CustomEvent): Promise<void> {
+    setTimeout(async () => {
+      await Promise.all([
+        this.getCheckInData(),
+        this.getWeekWiseAttendanceLogByAttendanceListType()
+      ]);
       (event.target as HTMLIonRefresherElement).complete();
     }, 2000);
   }
 
-  getCheckInData = async () => {
+  async getCheckInData(): Promise<void> {
+    this.isLoading = true;
     try {
-      this.isLoading = true;
-      let tranDate = this.dtu.ConvertStringDateToFullFormat(this.Date!);
-      let req = new AttendanceLogCheckInCustomRequest();
+      const tranDate = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
+      const req = new AttendanceLogCheckInCustomRequest();
       req.TransDateTime = tranDate;
-      req.CompanyRef = this.companyRef();
+      // Instead of calling companyRef as a function, use the proper method from the service
+      req.CompanyRef = this.companyState.getCurrentCompanyRef();
       req.EmployeeRef = this.employeeRef;
 
-      let td = req.FormulateTransportData();
-      let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-      let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+      const transportData = req.FormulateTransportData();
+      const payload = this.payloadPacketFacade.CreateNewPayloadPacket2(transportData);
+      const response = await this.serverCommunicator.sendHttpRequest(payload);
 
-      if (!tr.Successful) {
-        this.isBothButtonEnabled = false;
-        await this.uiUtils.showErrorMessage('Error', tr.Message);
+      if (!response.Successful) {
+        this.bothButtonsEnabled = false;
+        await this.uiUtils.showErrorMessage('Error', response.Message);
         return;
       }
 
-      let tdResult = JSON.parse(tr.Tag) as TransportData;
-      let res = AttendanceLogCheckInCustomRequest.FromTransportData(tdResult);
-      console.log('res :', res);
+      const tdResult = JSON.parse(response.Tag) as TransportData;
+      const res = AttendanceLogCheckInCustomRequest.FromTransportData(tdResult);
+      console.log('Check-in response:', res);
+
       if (res.Data.length > 0) {
-        let checkInData: AttendanceLogProps[] = res.Data as AttendanceLogProps[];
-        let lastCheckInData = checkInData.filter(e => e.CheckOutTime == '')
-        if (lastCheckInData.length > 0) Object.assign(this.Entity.p, lastCheckInData[0])
-        else {
-          let secondLastCheckInData = checkInData.filter(e => e.CheckOutTime != '')
-          if (secondLastCheckInData.length > 0) Object.assign(this.Entity.p, secondLastCheckInData[0])
+        const checkInData: AttendanceLogProps[] = res.Data as AttendanceLogProps[];
+        const pendingCheckIn = checkInData.filter(e => e.CheckOutTime === '');
+        if (pendingCheckIn.length > 0) {
+          Object.assign(this.attendanceLog.p, pendingCheckIn[0]);
+        } else {
+          const completedCheckIns = checkInData.filter(e => e.CheckOutTime !== '');
+          if (completedCheckIns.length > 0) {
+            Object.assign(this.attendanceLog.p, completedCheckIns[0]);
+          }
         }
-        this.IsLeave = this.Entity.p.IsLeave;
-        this.isCheckInTime = this.Entity.p.CheckInTime;
-        this.isCheckOutTime = this.Entity.p.CheckOutTime;
+        this.isOnLeave = Boolean(this.attendanceLog.p.IsLeave);
+        this.checkInTime = this.attendanceLog.p.CheckInTime;
+        this.checkOutTime = this.attendanceLog.p.CheckOutTime;
       }
-      if (!this.Entity.p.FirstCheckInTime && !this.Entity.p.CheckInTime && !this.Entity.p.CheckOutTime) {
-        // No activity yet
+      // Set button statuses based on attendanceLog properties
+      if (!this.attendanceLog.p.FirstCheckInTime && !this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime) {
         this.isCheckInEnabled = true;
-        this.isBothButtonEnabled = true;
-      } else if (this.Entity.p.CheckInTime && !this.Entity.p.CheckOutTime) {
-        // Checked in, but not checked out
+        this.bothButtonsEnabled = true;
+      } else if (this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime) {
         this.isCheckInEnabled = false;
-        this.isBothButtonEnabled = true;
-      } else if (this.Entity.p.CheckInTime && this.Entity.p.CheckOutTime) {
-        // Completed check-in and check-out
+        this.bothButtonsEnabled = true;
+      } else if (this.attendanceLog.p.CheckInTime && this.attendanceLog.p.CheckOutTime) {
         this.isCheckInEnabled = true;
-        this.isBothButtonEnabled = false; // Disable both after full cycle
+        this.bothButtonsEnabled = false;
       } else {
-        // Unusual state
         this.isCheckInEnabled = false;
-        this.isBothButtonEnabled = false;
+        this.bothButtonsEnabled = false;
       }
     } catch (error) {
-      console.log(error);
+      console.error('Error in getCheckInData:', error);
     } finally {
       this.isLoading = false;
     }
-
   }
 
-  openPunchModal = async () => {
-    // this.currentPunchType = type;
+  async openPunchModal(): Promise<void> {
     if (this.isCheckInEnabled) {
       this.punchModalOpen = true;
     }
-    this.siteList = await Site.FetchEntireListByCompanyRef(
-      this.companyRef(),
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
+    try {
+      this.siteList = await Site.FetchEntireListByCompanyRef(
+        this.companyState.getCurrentCompanyRef(),
+        async (errMsg: string) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+    } catch (error) {
+      console.error('Error fetching site list:', error);
+    }
   }
 
-  onSelectionChange(selected: Site[]) {
+  onSelectionChange(selected: Site[]): void {
     this.selectedSite = selected;
   }
 
-  submitPunchIn = async () => {
+  async submitPunchIn(): Promise<void> {
+    this.isSubmitting = true;
     try {
-      this.isSubmitting = true;
-      this.Entity.p.IsCheckIn = true;
-      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-      this.Entity.p.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.attendanceLog.p.IsCheckIn = true;
+      this.attendanceLog.p.CompanyRef = this.companyState.getCurrentCompanyRef();
+      this.attendanceLog.p.EmployeeRef = this.employeeRef;
       if (this.selectedSite.length > 0) {
-        this.Entity.p.SiteRef = this.selectedSite[0].p.Ref;
+        this.attendanceLog.p.SiteRef = this.selectedSite[0].p.Ref;
       }
-      // convert date 2025-02-23 to 2025-02-23-00-00-00-000
-      this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date!)
-      let entityToSave = this.Entity.GetEditableVersion();
-      let entitiesToSave = [entityToSave]
-      console.log('entitiesToSave :', entitiesToSave);
-      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+      // Convert date to full format
+      this.attendanceLog.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
+      const entityToSave = this.attendanceLog.GetEditableVersion();
+      const entitiesToSave = [entityToSave];
+      console.log('entitiesToSave:', entitiesToSave);
+      
+      const tr = await this.utils.SavePersistableEntities(entitiesToSave);
       if (!tr.Successful) {
-        this.uiUtils.showErrorMessage('Error', tr.Message);
-        return
+        await this.uiUtils.showErrorMessage('Error', tr.Message);
+        return;
       }
-      else {
-        // if (this.IsCheckIn) {
-
-        // }
-        await this.uiUtils.showSuccessToster('Punch in successfully!');
-        this.Entity = AttendanceLog.CreateNewInstance();
-        await this.getCheckInData();
-        await this.getWeekWiseAttendanceLogByAttendanceListType();
-        // this.isCheckInTime = this.Entity.p.CheckInTime;
-        // this.isCheckOutTime = this.Entity.p.CheckOutTime;
-      }
+      await this.uiUtils.showSuccessToster('Punch in successfully!');
+      // Reset state and refresh data
+      this.attendanceLog = AttendanceLog.CreateNewInstance();
+      await Promise.all([
+        this.getCheckInData(),
+        this.getWeekWiseAttendanceLogByAttendanceListType()
+      ]);
     } catch (error) {
-      console.log(error);
+      console.error('Error in submitPunchIn:', error);
     } finally {
       this.isSubmitting = false;
       this.punchModalOpen = false;
     }
-
   }
-  submitPunchOut = async () => {
-    try {
-      this.Entity.p.IsCheckIn = false;
-      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-      this.Entity.p.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      // convert date 2025-02-23 to 2025-02-23-00-00-00-000
-      this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date!)
-      let entityToSave = this.Entity.GetEditableVersion();
-      let entitiesToSave = [entityToSave]
-      console.log('entitiesToSave :', entitiesToSave);
 
-      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+  async submitPunchOut(): Promise<void> {
+    try {
+      this.attendanceLog.p.IsCheckIn = false;
+      this.attendanceLog.p.CompanyRef = this.companyState.getCurrentCompanyRef();
+      this.attendanceLog.p.EmployeeRef = this.employeeRef;
+      // Convert date to full format
+      this.attendanceLog.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
+      const entityToSave = this.attendanceLog.GetEditableVersion();
+      const entitiesToSave = [entityToSave];
+      console.log('entitiesToSave:', entitiesToSave);
+
+      const tr = await this.utils.SavePersistableEntities(entitiesToSave);
       if (!tr.Successful) {
-        this.uiUtils.showErrorMessage('Error', tr.Message);
-        return
+        await this.uiUtils.showErrorMessage('Error', tr.Message);
+        return;
       }
-      else {
-        this.Entity = AttendanceLog.CreateNewInstance();
-        await this.uiUtils.showSuccessToster('Punch out successfully!');
-        await this.getCheckInData();
-        await this.getWeekWiseAttendanceLogByAttendanceListType();
-        // this.isCheckInTime = this.Entity.p.CheckInTime;
-        // this.isCheckOutTime = this.Entity.p.CheckOutTime;
-      }
+      await this.uiUtils.showSuccessToster('Punch out successfully!');
+      // Reset and refresh data
+      this.attendanceLog = AttendanceLog.CreateNewInstance();
+      await Promise.all([
+        this.getCheckInData(),
+        this.getWeekWiseAttendanceLogByAttendanceListType()
+      ]);
     } catch (error) {
-      console.log(error);
+      console.error('Error in submitPunchOut:', error);
     } finally {
       this.isSubmitting = false;
     }
-
   }
 
-  takePhoto = async (type: 'before' | 'after') => {
+  // Note: Actual photo capture code should be implemented per your requirements.
+  async takePhoto(type: 'before' | 'after'): Promise<void> {
     try {
-      // const image = await Camera.getPhoto({
-      //   quality: 90,
-      //   allowEditing: false,
-      //   resultType: CameraResultType.DataUrl,
-      //   source: CameraSource.Camera
-      // });
-
-      // console.log(Captured ${type} photo:, image.dataUrl);
-      // Optionally store it for preview or upload
-      // this[type + 'Photo'] = image.dataUrl;
-
+      // Implement camera functionality here.
+      // For example, using Capacitor Camera plugin.
+      // const image = await Camera.getPhoto({ ... });
+      // this.capturedBeforePhoto = type === 'before' ? image.dataUrl : this.capturedBeforePhoto;
+      // this.capturedAfterPhoto = type === 'after' ? image.dataUrl : this.capturedAfterPhoto;
     } catch (error) {
-      // console.error(\);
+      console.error(`Error capturing ${type} photo:`, error);
     }
   }
-  getWeekWiseAttendanceLogByAttendanceListType = async () => {
-    let WeeklyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.WeeklyAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.WeeklyAttendanceLogsList = WeeklyAttendanceLog
+
+  async getWeekWiseAttendanceLogByAttendanceListType(): Promise<void> {
+    try {
+      const logs = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(
+        this.companyState.getCurrentCompanyRef(),
+        AttendenceLogType.WeeklyAttendanceLog,
+        async (errMsg: string) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+      this.weeklyAttendanceLogs = logs;
+      // Optionally, apply further filtering before assigning to filteredWeeklyAttendanceLogs
+      this.filteredWeeklyAttendanceLogs = logs;
+      console.log('Weekly Attendance Logs:', logs);
+    } catch (error) {
+      console.error('Error fetching weekly attendance logs:', error);
+    }
   }
-  getSalarySlip() {
+
+  getSalarySlip(): void {
     this.router.navigate(['/app_homepage/tabs/attendance-management/salary-slip']);
   }
 
-  requestLeave() {
+  requestLeave(): void {
     this.router.navigate(['/app_homepage/tabs/attendance-management/leave-request']);
   }
-  viewAllPresentEmployee() {
+
+  viewAllPresentEmployee(): void {
     this.router.navigate(['/app_homepage/tabs/attendance-management/present-employee']);
   }
-  viewAllAttendance() {
+
+  viewAllAttendance(): void {
     this.router.navigate(['/app_homepage/tabs/attendance-management/attendance-details']);
   }
 }

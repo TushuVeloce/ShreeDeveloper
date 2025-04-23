@@ -50,9 +50,9 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
     }
 
     // Auto update filtered data on state change
-    effect(() => {
-      this.filterLeaveRequests();
-    });
+    // effect(() => {
+    //   this.filterLeaveRequests();
+    // });
   }
 
   ngOnDestroy(): void {

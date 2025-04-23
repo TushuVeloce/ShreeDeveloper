@@ -6,7 +6,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <!-- Status Filter -->
-  <ion-segment [(ngModel)]="selectedStatus" class="modern-segment">
+  <ion-segment [(ngModel)]="selectedStatus" class="modern-segment" (ngModelChange)="filterLeaveRequests()">
     <ion-segment-button *ngFor="let status of statusOptions" [value]="status.value">
       <ion-label>{{ status.label }}</ion-label>
     </ion-segment-button>

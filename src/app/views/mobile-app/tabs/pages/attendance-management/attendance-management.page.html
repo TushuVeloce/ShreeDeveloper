@@ -2,33 +2,42 @@
 
 <app-header title="Attendance Management"></app-header>
 <ion-content class="ion-padding">
-
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
   <!-- Top Card -->
   <div class="top-card">
-    <h2>Today, {{ isCurrentTimeDate ? formatDate(isCurrentTimeDate) : '--' }}</h2>
+    <h2>Today, {{ currentDateTime ? formatDate(currentDateTime) : '--' }}</h2>
     <div class="btn-group">
       <div>
         <p class="label">Check In</p>
-        <h1>{{ isCheckInTime || '--' }}</h1>
+        <h1>{{ checkInTime || '--' }}</h1>
       </div>
       <div>
         <p class="label">Check Out</p>
-        <h1>{{ isCheckOutTime || '--' }}</h1>
+        <h1>{{ checkOutTime || '--' }}</h1>
       </div>
     </div>
 
     <div class="btn-group">
-      <ion-button fill="outline" color="light" (click)="openPunchModal()"
-        [disabled]="!isCheckInEnabled || IsLeave == 1 || !isBothButtonEnabled">CHECKIN</ion-button>
+      <ion-button
+        fill="outline"
+        color="light"
+        (click)="openPunchModal()"
+        [disabled]="!isCheckInEnabled || isOnLeave || !bothButtonsEnabled"
+      >
+        CHECKIN
+      </ion-button>
 
-      <ion-button color="warning" (click)="submitPunchOut()"
-        [disabled]="isCheckInEnabled || IsLeave == 1 || !isBothButtonEnabled">CHECKOUT</ion-button>
+      <ion-button
+        color="warning"
+        (click)="submitPunchOut()"
+        [disabled]="isCheckInEnabled || isOnLeave || !bothButtonsEnabled"
+      >
+        CHECKOUT
+      </ion-button>
     </div>
-
   </div>
 
   <!-- Quick Actions -->
@@ -53,48 +62,71 @@
 
       <div class="table-container">
         <div class="table-header sticky-header">
-          <span>Date</span>
+          <!-- <span>Date</span> -->
           <span>In</span>
           <span>Out</span>
           <span>Hours</span>
         </div>
 
-        <ion-list class="scrollable-list" *ngIf="FilteredWeeklyAttendanceLogsList.length > 0">
-          <ion-item *ngFor="let day of FilteredWeeklyAttendanceLogsList" lines="none"
-            [class.leave]="day.p.OnLeave" [class.half-day]="day.p.LeaveType"
-            [class.no-data]="!day.p.FirstCheckInTime && !day.p.LastCheckOutTime && !day.p.OnLeave">
-
+        <ion-list
+          class="scrollable-list"
+          *ngIf="filteredWeeklyAttendanceLogs.length > 0"
+        >
+          <ion-item
+            *ngFor="let day of filteredWeeklyAttendanceLogs"
+            lines="none"
+            [class.leave]="day?.p?.OnLeave"
+            [class.half-day]="day?.p?.LeaveType && !day?.p?.OnLeave"
+            [class.no-data]="!day?.p?.FirstCheckInTime && !day?.p?.LastCheckOutTime && !day?.p?.OnLeave"
+          >
             <ion-grid class="attendance-grid">
               <ion-row>
-                <ion-col size="2" class="day-column">
-                  <div class="date">{{formatDate(day.p.TransDateTime)}}</div>
-                  <!-- <div class="day">{{ day.day }}</div> -->
-                </ion-col>
+                <!-- Date Column -->
+                <!-- <ion-col size="3" class="day-column">
+                  <div class="date">
+                    {{ formatDate(day.p.TransDateTime) }}
+                  </div>
+                </ion-col> -->
 
-                <ion-col [ngStyle]="{ 'background-color': day.p.OnLeave && 'lightsalmon', 'border-radius': '14px' }">
-                  <div *ngIf="day.p.OnLeave" class="center-text">
+                <!-- Attendance Info -->
+                <ion-col size="9">
+                  <!-- Leave -->
+                  <div *ngIf="day?.p?.OnLeave" class="center-text">
                     <ion-icon name="medkit-outline"></ion-icon>
-                    {{ day.p.OnLeave }}
+                    {{ day?.p?.OnLeave }}
                   </div>
 
-                  <!-- <div *ngIf="day.isWeekend" class="center-text"
-                    style="background-color: lightblue; border-radius: 10px;">
-                    Weekend: {{ day.day }} {{ day.date }}
-                  </div> -->
-
-                  <div *ngIf="!day.p.OnLeave && (day.p.FirstCheckInTime || day.p.LastCheckOutTime)" class="timing-row"
-                    [ngStyle]="{ 'background-color': day.p.OnLeave && 'pink', 'border-radius': '10px' }">
+                  <!-- Attendance Times -->
+                  <div
+                    *ngIf="!day?.p?.OnLeave && (day?.p?.FirstCheckInTime || day?.p?.LastCheckOutTime)"
+                    class="timing-row"
+                  >
                     <div class="clock-in">
                       <span class="label">Clock In</span>
-                      <span class="value" [class.absent]="!day.p.FirstCheckInTime">{{ day.p.FirstCheckInTime || '--' }}</span>
+                      <span
+                        class="value"
+                        [class.absent]="!day?.p?.FirstCheckInTime"
+                      >
+                        {{ day?.p?.FirstCheckInTime || '--' }}
+                      </span>
                     </div>
                     <div class="clock-out">
                       <span class="label">Clock Out</span>
-                      <span class="value" [class.absent]="!day.p.LastCheckOutTime">{{ day.p.LastCheckOutTime || '--' }}</span>
+                      <span
+                        class="value"
+                        [class.absent]="!day?.p?.LastCheckOutTime"
+                      >
+                        {{ day?.p?.LastCheckOutTime || '--' }}
+                      </span>
                     </div>
                     <div class="working-hrs">
                       <span class="label">Working Hr's</span>
-                      <span class="value" [class.absent]="!day.p.TotalWorkingHrs">{{ day.p.TotalWorkingHrs || '--' }}</span>
+                      <span
+                        class="value"
+                        [class.absent]="!day?.p?.TotalWorkingHrs"
+                      >
+                        {{ day?.p?.TotalWorkingHrs || '--' }}
+                      </span>
                     </div>
                   </div>
                 </ion-col>
@@ -102,12 +134,29 @@
             </ion-grid>
           </ion-item>
         </ion-list>
+
+        <!-- No Data Message -->
+        <div
+          *ngIf="filteredWeeklyAttendanceLogs.length === 0 && !isLoading"
+          class="no-data-mobile-app"
+        >
+          <ion-icon
+            name="alert-circle-outline"
+            size="large"
+            color="medium"
+          ></ion-icon>
+          <p>No attendance records found for today.</p>
+        </div>
       </div>
     </ion-col>
   </ion-row>
 
   <!-- Punch Modal -->
-  <ion-modal [isOpen]="punchModalOpen" (didDismiss)="punchModalOpen = false" class="punch-modal">
+  <ion-modal
+    [isOpen]="punchModalOpen"
+    (didDismiss)="punchModalOpen = false"
+    class="punch-modal"
+  >
     <ng-template>
       <div class="modal-container">
         <!-- Modal Header -->
@@ -127,45 +176,79 @@
           <!-- Location Type -->
           <ion-item>
             <ion-label>Location Type</ion-label>
-            <ion-select [(ngModel)]="Entity.p.AttendenceLocationType" interface="popover">
-              <ion-select-option *ngFor="let loc of AttendanceLocationTypeList" [value]="loc.Ref">
+            <ion-select
+              [(ngModel)]="attendanceLog.p.AttendenceLocationType"
+              interface="popover"
+            >
+              <ion-select-option
+                *ngFor="let loc of attendanceLocationTypeList"
+                [value]="loc.Ref"
+              >
                 {{ loc.Name }}
               </ion-select-option>
             </ion-select>
           </ion-item>
 
           <!-- Site Selection -->
-          <div *ngIf="Entity.p.AttendenceLocationType === AttendanceLocationTypes.Site">
-            <app-searchable-select [options]="siteList" [multiSelect]="false" placeholder="Select Site"
-              (selectionChange)="onSelectionChange($event)">
+          <div
+            *ngIf="attendanceLog.p.AttendenceLocationType === AttendanceLocationTypes.Site"
+          >
+            <app-searchable-select
+              [options]="siteList"
+              [multiSelect]="false"
+              placeholder="Select Site"
+              (selectionChange)="onSelectionChange($event)"
+            >
             </app-searchable-select>
           </div>
 
           <!-- Photo Upload Section -->
           <div class="photo-upload">
             <ion-label class="section-title">Capture Photos</ion-label>
-
             <div class="photo-row">
               <div>
                 <ion-label>Self Photo</ion-label>
-                <ion-button expand="block" color="secondary" (click)="takePhoto('before')">
-                  <ion-icon name="camera-outline" slot="start"></ion-icon> Capture
+                <ion-button
+                  expand="block"
+                  color="secondary"
+                  (click)="takePhoto('before')"
+                >
+                  <ion-icon name="camera-outline" slot="start"></ion-icon>
+                  Capture
                 </ion-button>
-                <img *ngIf="capturedBeforePhoto" [src]="capturedBeforePhoto" class="preview-img" />
+                <img
+                  *ngIf="capturedBeforePhoto"
+                  [src]="capturedBeforePhoto"
+                  class="preview-img"
+                />
               </div>
-
               <div>
                 <ion-label>Work Location</ion-label>
-                <ion-button expand="block" color="secondary" (click)="takePhoto('after')">
-                  <ion-icon name="camera-outline" slot="start"></ion-icon> Capture
+                <ion-button
+                  expand="block"
+                  color="secondary"
+                  (click)="takePhoto('after')"
+                >
+                  <ion-icon name="camera-outline" slot="start"></ion-icon>
+                  Capture
                 </ion-button>
-                <img *ngIf="capturedAfterPhoto" [src]="capturedAfterPhoto" class="preview-img" />
+                <img
+                  *ngIf="capturedAfterPhoto"
+                  [src]="capturedAfterPhoto"
+                  class="preview-img"
+                />
               </div>
             </div>
           </div>
 
           <!-- Submit Button -->
-          <ion-button expand="block" color="primary" shape="round" [disabled]="isSubmitting" (click)="submitPunchIn()">
+          <ion-button
+            expand="block"
+            color="primary"
+            shape="round"
+            [disabled]="isSubmitting"
+            (click)="submitPunchIn()"
+          >
             <ion-spinner *ngIf="isSubmitting" slot="start"></ion-spinner>
             Submit Punch
           </ion-button>
@@ -173,5 +256,4 @@
       </div>
     </ng-template>
   </ion-modal>
-
 </ion-content>
