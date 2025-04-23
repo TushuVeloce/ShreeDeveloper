@@ -44,6 +44,7 @@ export class SiteManagementDetailsComponent implements OnInit {
   isOwnerModalOpen: boolean = false;
   newOwner: OwnerDetailProps = OwnerDetailProps.Blank(); 
   editingIndex: null | undefined | number
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos
   PinCodePattern: string = ValidationPatterns.PinCode;
@@ -73,10 +74,10 @@ export class SiteManagementDetailsComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+     this.getEmployeeListByCompanyRef()
     this.appStateManage.setDropdownDisabled(true);
     this.CountryListforSite = await Country.FetchEntireList();
     this.CountryListforOwner = await Country.FetchEntireList();
-    this.EmployeeList = await Employee.FetchEntireList();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Site' : 'Edit Site';
@@ -114,11 +115,10 @@ export class SiteManagementDetailsComponent implements OnInit {
     ) as Site;
   }
 
-  // getEmployeeList = async() =>{
-  //   let lst = await Employee.FetchEntireListByCompanyRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.StateListforSite = lst;
-
-  // }
+  getEmployeeListByCompanyRef = async () => {
+    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.EmployeeList = lst;
+  }
 
   getStateListByCountryRefforSite = async (CountryRef: number) => {
     this.StateListforSite = [];

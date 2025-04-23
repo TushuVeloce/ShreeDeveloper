@@ -30,7 +30,6 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   MonthList = DomainEnums.MonthList(true, '---Select Month---');
   companyName = this.companystatemanagement.SelectedCompanyName;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  kk: any = ''
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private serverCommunicator: ServerCommunicatorService, private payloadPacketFacade: PayloadPacketFacade) { }
 
 
@@ -43,7 +42,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       this.Entity = SalaryGeneration.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.EmployeeData(this.Entity.p.EmployeeRef,this.Entity.p.Month)
+      // this.EmployeeData(this.Entity.p.EmployeeRef,this.Entity.p.Month)
     } else {
       this.Entity = SalaryGeneration.CreateNewInstance();
       SalaryGeneration.SetCurrentInstance(this.Entity);
