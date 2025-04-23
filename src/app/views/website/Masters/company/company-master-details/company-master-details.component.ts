@@ -36,6 +36,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
   dateOfInCorporation: string | null = null;
   lastDateOfFirstFinancialYear: string | null = null;
   //  lastDateOfFirstFinancialYear: Date = null as any;
+  ImageBaseUrl :string = "";
 
   constructor(
     private router: Router,
@@ -49,6 +50,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
 
 
   async ngOnInit() {
+    this.ImageBaseUrl = this.appStateManage.BaseImageUrl;
     this.appStateManage.setDropdownDisabled(true);
     await this.FormulateCountryList();
 
@@ -79,6 +81,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
         this.dtu.FromString(this.Entity.p.LastDateOfFirstFinancialYear),
         'yyyy-MM-dd'
       );
+      this.imageUrl = this.Entity.p.Notes
 
       this.appStateManage.StorageKey.removeItem('Editable');
       if (this.Entity.p.CountryRef) {
