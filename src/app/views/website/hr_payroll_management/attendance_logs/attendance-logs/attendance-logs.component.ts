@@ -116,18 +116,19 @@ export class AttendanceLogsComponent implements OnInit {
 
   getMonthWiseAttendanceLogByAttendanceListType = async () => {
     this.DisplayMasterList = [];
-    if (!this.Entity.p.EmployeeRef || !this.Entity.p.Month) return;
+    if (!this.Entity.p.EmployeeRef || !this.Entity.p.Months) return;
 
     this.ToDispayMonthlyRequirement = true;
     this.ToDisplayWeeklyRequirement = false;
     this.isTodayAttendanceView = false;
 
-    let employeeref = this.appStateManage.getEmployeeRef()
-    console.log(employeeref);
-    const month = this.Entity.p.Month;
+    // let employeeref = this.appStateManage.getEmployeeRef()
+    // console.log(employeeref);
+    const month = this.Entity.p.Months;
+    const employeeref = this.Entity.p.EmployeeRef;
 
     let MonthlyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendenceLogType.MonthlyAttendanceLog,
-    employeeref, month, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      month, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = MonthlyAttendanceLog
     this.groupByEmployee();
     console.log('Monthly', this.DisplayMasterList);

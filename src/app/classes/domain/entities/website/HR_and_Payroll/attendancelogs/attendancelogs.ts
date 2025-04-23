@@ -31,7 +31,7 @@ export class AttendanceLogsProps {
   public Absent: number = 0;
   public OnLeaveDaily: number = 0;
   
-  public Month: number = 0;
+  public Months: number = 0;
 
   // for photo uploaded
   public attendacelogpath1 : string = '';
@@ -158,7 +158,7 @@ export class AttendanceLogs implements IPersistable<AttendanceLogs> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new AttendanceLogsFetchRequest();
-    req.AttendanceLogsRefs.push(ref);
+    req.AttendanceLogTypeRefs.push(ref);
 
     let tdResponse = await AttendanceLogs.FetchTransportData(req, errorHandler) as TransportData;
     return AttendanceLogs.SingleInstanceFromTransportData(tdResponse);
@@ -193,7 +193,7 @@ export class AttendanceLogs implements IPersistable<AttendanceLogs> {
     let req = new AttendanceLogsFetchRequest();
     req.CompanyRefs.push(CompanyRef);
     req.AttendanceLogTypeRefs.push(AttendanceLogTypeRef);
-    req.MonthRefs.push(monthref);
+    req.Months.push(monthref);
     req.EmployeeRefs.push(employeeref);
     let tdResponse = await AttendanceLogs.FetchTransportData(req, errorHandler) as TransportData;
     return AttendanceLogs.ListFromTransportData(tdResponse);
