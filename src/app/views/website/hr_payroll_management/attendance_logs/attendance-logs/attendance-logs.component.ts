@@ -90,7 +90,7 @@ export class AttendanceLogsComponent implements OnInit {
     let TodaysAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = TodaysAttendanceLog
     // this.groupByEmployee();
-    this.getAttendanceCount()
+    this.getAttendanceCount(AttendenceLogType.TodaysAttendanceLog)
     console.log('Todays', this.DisplayMasterList);
   }
 
@@ -115,6 +115,7 @@ export class AttendanceLogsComponent implements OnInit {
     let WeeklyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(this.companyRef(), AttendenceLogType.WeeklyAttendanceLog, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = WeeklyAttendanceLog
     // this.groupByEmployee();
+    this.getAttendanceCount(AttendenceLogType.WeeklyAttendanceLog);
     console.log('weekly', this.DisplayMasterList);
   }
 
@@ -149,6 +150,7 @@ export class AttendanceLogsComponent implements OnInit {
       month, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = MonthlyAttendanceLog
     // this.groupByEmployee();
+    this.getAttendanceCount(AttendenceLogType.MonthlyAttendanceLog)
     console.log('Monthly', this.DisplayMasterList);
   }
 
@@ -187,14 +189,14 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   // CustomFetchRequest
-  getAttendanceCount = async () => {
+  getAttendanceCount = async (AttendenceLogType :number) => {
     // let tranDate = this.dtu.ConvertStringDateToFullFormat(this.Date!)
     let req = new AttendanceLogCountCustomRequest();
     // req.TransDateTime = tranDate;
     req.CompanyRef = this.companyRef();
     req.EmployeeRef = this.Entity.p.EmployeeRef;
     req.Months = this.Entity.p.Months
-    req.AttendanceLogTypes = AttendenceLogType.WeeklyAttendanceLog
+    req.AttendanceLogTypes = AttendenceLogType
 
     let td = req.FormulateTransportData();
     let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
@@ -219,7 +221,6 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   // groupedAttendanceLogs: { [employeeName: string]: any[] } = {};
-
   // groupByEmployee = () => {
   //   this.groupedAttendanceLogs = {};
   //   for (let log of this.DisplayMasterList) {
