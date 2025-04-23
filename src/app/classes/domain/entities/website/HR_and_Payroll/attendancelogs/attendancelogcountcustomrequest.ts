@@ -9,10 +9,10 @@ export class AttendanceLogCountCustomRequest {
     public static readonly MasterTableName: string = "AttendanceLog";
 
     // TransDateTime: string = '';
-    // EmployeeRef: number = 0;
+    EmployeeRef: number = 0;
     CompanyRef: number = 0;
-    // Count: number = 0;
-    // Ref: number = 0;
+    Months : number = 0;
+    AttendanceLogTypes : number = 0;
 
     Data: any[] = []
 

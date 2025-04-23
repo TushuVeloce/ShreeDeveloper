@@ -64,9 +64,10 @@
       </div> -->
     </div>
   </div>
+  <!-- for table  -->
   <div *ngFor="let empName of groupedAttendanceLogs | keyvalue">
     <div class="mb-5 p-3 border rounded shadow-sm bg-light">
-      <h5 class="mb-3">{{ empName.key  }}</h5>
+      <h5 class="mb-3">{{ empName.key }}</h5>
       <div class="summary-label">Summary</div>
 
       <!-- ROW 2: Stat Buttons -->
@@ -91,7 +92,8 @@
         <div class="table-container">
           <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
             nzFrontPagination="false" [nzShowSizeChanger]="false" [nzTotal]="total" [nzPageSize]="pageSize"
-            [nzPageIndex]="currentPage" (nzPageIndexChange)="onPageChange($event)" [nzNoResult]="'No data found'">
+            [nzPageIndex]="currentPage" (nzPageIndexChange)="onPageChange($event)" [nzData]="empName.value"
+            [nzNoResult]="''">
             <thead>
               <tr>
                 <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
@@ -123,6 +125,7 @@
       </div>
     </div>
   </div>
+  <!-- for pagination  -->
   <div class="fixed-pagination">
     <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
       (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">

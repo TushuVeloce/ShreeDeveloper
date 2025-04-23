@@ -92,7 +92,7 @@ export class AttendanceLogsComponent implements OnInit {
     this.DisplayMasterList = TodaysAttendanceLog
     this.groupByEmployee();
     this.getAttendanceCount()
-    console.log(this.DisplayMasterList);
+    console.log('Todays',this.DisplayMasterList);
   }
 
   getWeekWiseAttendanceLogByAttendanceListType = async () => {
@@ -139,9 +139,7 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   getMonthWiseAttendanceLogByAttendanceListType = async () => {
-    this.Entity.p.EmployeeRef = 0;
     this.DisplayMasterList = [];
-    if (!this.Entity.p.EmployeeRef || !this.Entity.p.Months) return;
     this.ToDispayMonthlyRequirement = true;
     this.ToDisplayWeeklyRequirement = false;
     this.isTodayAttendanceView = false;
@@ -198,7 +196,9 @@ export class AttendanceLogsComponent implements OnInit {
     let req = new AttendanceLogCountCustomRequest();
     // req.TransDateTime = tranDate;
     req.CompanyRef = this.companyRef();
-    // req.EmployeeRef = this.employeeRef;
+    req.EmployeeRef = this.Entity.p.EmployeeRef;
+    req.Months = this.Entity.p.Months
+    req.AttendanceLogTypes = AttendenceLogType.WeeklyAttendanceLog
 
     let td = req.FormulateTransportData();
     let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
