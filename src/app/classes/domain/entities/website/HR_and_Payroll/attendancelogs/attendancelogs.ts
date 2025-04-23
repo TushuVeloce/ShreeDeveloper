@@ -26,6 +26,13 @@ export class AttendanceLogsProps {
   public OnLeave: string = '';
   public LeaveType: string = '';
 
+  public TeamSize: number = 0;
+  public Present: number = 0;
+  public Absent: number = 0;
+  public OnLeaveDaily: number = 0;
+  
+  public Month: number = 0;
+
   // for photo uploaded
   public attendacelogpath1 : string = '';
   public attendacelogpath2 : string = '';
@@ -174,10 +181,20 @@ export class AttendanceLogs implements IPersistable<AttendanceLogs> {
     let tdResponse = await AttendanceLogs.FetchTransportData(req, errorHandler) as TransportData;
     return AttendanceLogs.ListFromTransportData(tdResponse);
   }
-  public static async FetchEntireListByCompanyRefAndAttendanceLogType(CompanyRef:number,AttendanceLogTypeRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRefAndAttendanceLogType(CompanyRef:number,AttendanceLogTypeRef:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new AttendanceLogsFetchRequest();
     req.CompanyRefs.push(CompanyRef);
     req.AttendanceLogTypeRefs.push(AttendanceLogTypeRef);
+    let tdResponse = await AttendanceLogs.FetchTransportData(req, errorHandler) as TransportData;
+    return AttendanceLogs.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(CompanyRef:number,AttendanceLogTypeRef:number, monthref:number, employeeref:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new AttendanceLogsFetchRequest();
+    req.CompanyRefs.push(CompanyRef);
+    req.AttendanceLogTypeRefs.push(AttendanceLogTypeRef);
+    req.MonthRefs.push(monthref);
+    req.EmployeeRefs.push(employeeref);
     let tdResponse = await AttendanceLogs.FetchTransportData(req, errorHandler) as TransportData;
     return AttendanceLogs.ListFromTransportData(tdResponse);
   }

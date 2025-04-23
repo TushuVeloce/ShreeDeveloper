@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AttendenceLogType, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { AttendanceLogCountCustomRequest } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogcountcustomrequest';
 import { AttendanceLogs, AttendanceLogsProps } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogs';
+import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -36,12 +37,19 @@ export class AttendanceLogsComponent implements OnInit {
     true,
     '--Select Attendance Log Type--'
   );
+  MonthList = DomainEnums.MonthList(
+    true,
+    '--Select Month List--'
+  );
+  EmployeeList: Employee[] = [];
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   ToDispayMonthlyRequirement: boolean = false
-  ToDispayWeeklyRequirement: boolean = false
+  ToDisplayWeeklyRequirement: boolean = false
   isTodayAttendanceView: boolean = false;
+
+  isShowMonthlyData: boolean = false;
 
   constructor(
     private uiUtils: UIUtils,
@@ -59,49 +67,72 @@ export class AttendanceLogsComponent implements OnInit {
 
   ngOnInit() {
     this.loadPaginationData();
+    this.getEmployeeListByCompanyRef()
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
     this.isTodayAttendanceView = true;
   }
 
-  // getattendancelogbycompanyref = async () => {
-  //   let lst = await AttendanceLogs.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.MasterList = lst;
-  //   this.DisplayMasterList = this.MasterList;
-  //   console.log(this.DisplayMasterList);
-  //   this.loadPaginationData();
-  // }
+  getEmployeeListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.EmployeeList = lst;
+  }
 
   getTodayAttendanceLogByAttendanceListType = async () => {
     this.ToDispayMonthlyRequirement = false;
-    this.ToDispayWeeklyRequirement = false;
+    this.ToDisplayWeeklyRequirement = false;
     this.isTodayAttendanceView = true;
+    this.isShowMonthlyData = false;
+
     let TodaysAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = TodaysAttendanceLog
     this.groupByEmployee();
     this.getAttendanceCount()
     console.log(this.DisplayMasterList);
-
   }
 
   getWeekWiseAttendanceLogByAttendanceListType = async () => {
     this.ToDispayMonthlyRequirement = false;
-    this.ToDispayWeeklyRequirement = true;
+    this.ToDisplayWeeklyRequirement = true;
     this.isTodayAttendanceView = false;
+    this.isShowMonthlyData = false;
+
     let WeeklyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.WeeklyAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = WeeklyAttendanceLog
     this.groupByEmployee();
     console.log('weekly', this.DisplayMasterList);
-
   }
-  getMonthWiseAttendanceLogByAttendanceListType = async () => {
+
+  selectMonth = async () => {
+    this.DisplayMasterList = [];
     this.ToDispayMonthlyRequirement = true;
-    this.ToDispayWeeklyRequirement = false;
+    this.ToDisplayWeeklyRequirement = false;
     this.isTodayAttendanceView = false;
-    let MonthlyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.MonthlyAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.isShowMonthlyData = true
+  }
+
+  getMonthWiseAttendanceLogByAttendanceListType = async () => {
+    this.DisplayMasterList = [];
+    if (!this.Entity.p.EmployeeRef || !this.Entity.p.Month) return;
+
+    this.ToDispayMonthlyRequirement = true;
+    this.ToDisplayWeeklyRequirement = false;
+    this.isTodayAttendanceView = false;
+
+    let employeeref = this.appStateManage.getEmployeeRef()
+    console.log(employeeref);
+    const month = this.Entity.p.Month;
+
+    let MonthlyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendenceLogType.MonthlyAttendanceLog,
+    employeeref, month, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = MonthlyAttendanceLog
     this.groupByEmployee();
-    console.log('weekly', this.DisplayMasterList);
+    console.log('Monthly', this.DisplayMasterList);
   }
+
   // For Pagination  start ----
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
@@ -137,7 +168,6 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   // CustomFetchRequest
-  attendanceCount: number = 0;
   getAttendanceCount = async () => {
     // let tranDate = this.dtu.ConvertStringDateToFullFormat(this.Date!)
     let req = new AttendanceLogCountCustomRequest();
@@ -154,11 +184,16 @@ export class AttendanceLogsComponent implements OnInit {
       return;
     }
     let tdResult = JSON.parse(tr.Tag) as TransportData;
-    let res = AttendanceLogCountCustomRequest.FromTransportData(tdResult)
-    console.log("Total Attendance Logs:", res.Count);
-    console.log("Total Attendance Logs tdResult:", tdResult);
-    // You can also bind this count to your component state
-    this.attendanceCount = res.Count;
+    let res = AttendanceLogCountCustomRequest.FromTransportData(tdResult);
+
+    const summaryCollection = tdResult.MainData?.Collections?.find((c: any) =>
+      c?.Entries?.[0]?.TeamSize !== undefined
+    );
+
+    if (summaryCollection && summaryCollection.Entries.length > 0) {
+      let DailyRecord: AttendanceLogsProps[] = res.Data as AttendanceLogsProps[];
+      Object.assign(this.Entity.p, summaryCollection.Entries[0]);
+    }
   }
 
   groupedAttendanceLogs: { [employeeName: string]: any[] } = {};
@@ -171,8 +206,6 @@ export class AttendanceLogsComponent implements OnInit {
         this.groupedAttendanceLogs[empName] = [];
       }
       this.groupedAttendanceLogs[empName].push(log);
-      console.log(this.groupedAttendanceLogs);
-
     }
   };
 }

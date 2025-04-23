@@ -9,6 +9,8 @@ export class AttendanceLogsFetchRequest
     public static readonly FetchRequestType: string = "AttendanceLogFetchRequest";
 
     CompanyRefs: number[] = [];
+    MonthRefs: number[] = [];
+    EmployeeRefs: number[] = [];
     AttendanceLogsRefs: number[] = [];
     AttendanceLogTypeRefs: number[] = [];
 
