@@ -16,8 +16,8 @@
   </div>
   <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
     <div class="table-container">
-    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light"  [nzData]="paginatedList()" [nzScroll]="{x:'auto' }"
-      nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
@@ -52,10 +52,8 @@
     </nz-pagination>
   </div>
 </div>
-<div class="card-body_light">
-  <div style="height: 200px" class="d-flex align-items-center justify-content-center">
-    <span class="title_light"> Data Not Found</span>
-  </div>
+<div *ngIf="DisplayMasterList.length === 0">
+  <Data-Not-Found />
 </div>
 
 
@@ -186,7 +184,7 @@
           <h6 class="mb-0">Employee Signature</h6>
         </div> -->
         <div class=" col-md-6 text-end mt-1">
-          <button nz-button nzType="primary" (click)="isModalVisible = false">Close</button>
+          <button nz-button nzType="primary"  (click)="printPage()">Print</button>
         </div>
       </div>
       <!-- Close Button -->

@@ -1,40 +1,129 @@
+// :host {
+//     --background: var(--ion-color-light);
+// }
+
+// .custom-search {
+//     --border-radius: 10px;
+//     --background: #f4f4f4;
+//     --color: #333;
+// }
+
+// .custom-list {
+//     margin-top: 10px;
+//     border-radius: 12px;
+// }
+
+// .custom-item {
+//     transition: --background 0.3s ease;
+//     border-radius: 8px;
+//     margin: 5px 10px;
+// }
+
+// .custom-item:hover {
+//     background: #f0f0f0;
+// }
+
+// .custom-label {
+//     font-size: 16px;
+// }
+
+// .selected {
+//     font-weight: bold;
+//     color: var(--ion-color-primary);
+// }
+
+// .custom-title {
+//     align-items: center;
+//     text-align: center;
+//     font-weight: bold;
+//     color: var(--ion-color-primary);
+// }
 :host {
-    --background: var(--ion-color-light);
+    --background: var(--ion-item-background);
+    display: block;
+    background:var(--ion-item-background);
+    /* Ensure solid fallback */
+}
+
+ion-header.modern-header {
+    // --background: transparent;
+    --background: var(--ion-item-background);
+    box-shadow: none;
+    padding: 0 12px;
+}
+
+ion-toolbar {
+    --background: transparent;
+    --min-height: 56px;
+    display: flex;
+    align-items: center;
+}
+ion-content {
+    --background: var(--ion-item-background);
+}
+.custom-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ion-color-primary);
+    text-align: center;
+    width: 100%;
+}
+
+ion-button[fill='clear'] {
+    font-size: 22px;
 }
 
 .custom-search {
     --border-radius: 10px;
-    --background: #f4f4f4;
+    --background: var(--ion-background-color-step-100);
+    // --background: var(--ion-item-background);
     --color: #333;
+    margin-bottom: 10px;
 }
 
 .custom-list {
     margin-top: 10px;
     border-radius: 12px;
+    overflow: hidden;
 }
 
 .custom-item {
-    transition: --background 0.3s ease;
-    border-radius: 8px;
-    margin: 5px 10px;
+    // --background: transparent;
+    --background: var(--ion-item-background);
+    border-radius: 10px;
+    margin: 5px 12px;
+    padding: 8px 12px;
+    transition: --background 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
 }
 
 .custom-item:hover {
-    background: #f0f0f0;
+    // --background: #ececec;
+    --background: var(--ion-background-color-step-50);
 }
 
 .custom-label {
     font-size: 16px;
+    color: #333;
 }
 
 .selected {
-    font-weight: bold;
+    font-weight: 600;
     color: var(--ion-color-primary);
 }
 
-.custom-title {
-    align-items: center;
+ion-checkbox {
+    --checkbox-background-checked: var(--ion-color-primary);
+    --border-radius: 6px;
+}
+
+ion-footer {
+    padding: 10px;
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+}
+.no-data {
     text-align: center;
-    font-weight: bold;
-    color: var(--ion-color-primary);
+    padding: 20px;
+    color: var(--ion-color-medium);
+    font-size: 16px;
 }

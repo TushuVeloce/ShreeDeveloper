@@ -11,7 +11,7 @@ export class SelectModalComponent  implements OnInit {
   @Input() options: any[] = [];
   @Input() selectedOptions: any[] = [];
   @Input() multiSelect: boolean = false;
-
+  @Input() bottomsheetTitle: string = 'select options';
   searchText: string = '';
   loadedOptions: any[] = [];
   itemsPerLoad: number = 20;

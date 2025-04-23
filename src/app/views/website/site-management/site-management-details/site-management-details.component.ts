@@ -44,6 +44,7 @@ export class SiteManagementDetailsComponent implements OnInit {
   isOwnerModalOpen: boolean = false;
   newOwner: OwnerDetailProps = OwnerDetailProps.Blank(); 
   editingIndex: null | undefined | number
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos
   PinCodePattern: string = ValidationPatterns.PinCode;
@@ -73,10 +74,10 @@ export class SiteManagementDetailsComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+     this.getEmployeeListByCompanyRef()
     this.appStateManage.setDropdownDisabled(true);
     this.CountryListforSite = await Country.FetchEntireList();
     this.CountryListforOwner = await Country.FetchEntireList();
-    this.EmployeeList = await Employee.FetchEntireList();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Site' : 'Edit Site';
@@ -89,26 +90,34 @@ export class SiteManagementDetailsComponent implements OnInit {
       if(this.Entity.p.EstimatedEndDate != ''){
         this.localEstimatedEndDate= this.dtu.ConvertStringDateToShortFormat(this.Entity.p.EstimatedEndDate)
        }
-
       if (this.Entity.p.CountryRef) {
         this.getStateListByCountryRefforSite(this.Entity.p.CountryRef);
-        this.getStateListByCountryRefforOwner(this.Entity.p.CountryRef);
       }
       if (this.Entity.p.StateRef) {
         this.getCityListByStateRefforSite(this.Entity.p.StateRef);
-        this.getCityListByStateRefforOwner(this.Entity.p.StateRef);
+      }
+      if(this.Entity.p.SiteManagementOwnerDetails[0].CountryRef){
+        this.getStateListByCountryRefforOwner(this.Entity.p.SiteManagementOwnerDetails[0].CountryRef);
+      }
+      if(this.Entity.p.SiteManagementOwnerDetails[0].StateRef){
+        this.getCityListByStateRefforOwner(this.Entity.p.SiteManagementOwnerDetails[0].StateRef);
       }
     } else {
+      this.Entity = Site.CreateNewInstance();
+      Site.SetCurrentInstance(this.Entity);
       if (this.Entity.p.CountryRef != 0) {
         this.getStateListByCountryRefforSite(this.Entity.p.CountryRef);
       }
-      this.Entity = Site.CreateNewInstance();
-      Site.SetCurrentInstance(this.Entity);
     }
     this.InitialEntity = Object.assign(
       Site.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as Site;
+  }
+
+  getEmployeeListByCompanyRef = async () => {
+    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.EmployeeList = lst;
   }
 
   getStateListByCountryRefforSite = async (CountryRef: number) => {
@@ -144,33 +153,24 @@ export class SiteManagementDetailsComponent implements OnInit {
   }
 
   getStateListByCountryRefforOwner = async (CountryRef: number) => {
+  console.log('CountryRef :', CountryRef);
     this.StateListforOwner = [];
     this.CityListforOwner = [];
+    this.newOwner.StateRef = 0;
+    this.newOwner.CityRef = 0;
     if (CountryRef) {
       let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.StateListforOwner = lst;
-      if (CountryRef !== this.newOwner.CountryRef) {
-        this.newOwner.StateRef = 0;
-        this.newOwner.CityRef = 0;
-      }
-    } else {
-      this.newOwner.StateRef = 0;
-      this.newOwner.CityRef = 0;
-    }
   }
+}
 
   getCityListByStateRefforOwner = async (StateRef: number) => {
     this.CityListforOwner = [];
+    this.newOwner.CityRef = 0;
     if (StateRef) {
       let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.CityListforOwner = lst;
-      if (StateRef !== this.newOwner.StateRef) {
-        this.newOwner.CityRef = 0;
-      }
-    } else {
-      this.newOwner.CityRef = 0;
     }
-
   }
 
   openModal(type: string) {
@@ -234,6 +234,7 @@ export class SiteManagementDetailsComponent implements OnInit {
     console.log('index :', index);
     this.isOwnerModalOpen = true
     this.newOwner = { ...this.Entity.p.SiteManagementOwnerDetails[index] }
+    console.log('this.newOwner  :', this.newOwner );
     this.editingIndex = index;
   }
 

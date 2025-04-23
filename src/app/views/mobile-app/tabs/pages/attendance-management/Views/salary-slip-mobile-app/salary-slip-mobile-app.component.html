@@ -18,7 +18,9 @@
   <ion-list class="salary-slip-list">
     <ion-card *ngFor="let slip of filteredSalarySlipRequestList" class="salary-slip-card">
       <ion-card-header>
-        <ion-card-title>{{ slip.p.SelectedMonths }} {{ slip.p.Year }}</ion-card-title>
+        <ion-card-title>
+          <b *ngFor="let month of slip.p.SelectedMonthsName">{{ month + ' ' }}</b>
+          {{ slip.p.Year }}</ion-card-title>
         <ion-badge [color]="getStatusColor(slip.p.IsApproved)" slot="end">{{ slip.p.IsApproved==1 ? 'Approved' :
           'Pending' }}</ion-badge>
       </ion-card-header>
@@ -26,8 +28,8 @@
       <ion-card-content>
         <!-- <p><strong>Requested On:</strong> {{ slip.p }}</p> -->
         <p><strong>Employee:</strong> {{ slip.p.EmployeeName }}</p>
-        <div class="action-buttons" *ngIf="slip.p.IsApproved">
-          <ion-button fill="clear" color="success" (click)="onDeleteClicked(slip)">
+        <div class="action-buttons" *ngIf="!slip.p.IsApproved">
+          <ion-button fill="clear" color="denger" (click)="onDeleteClicked(slip)">
             <ion-icon name="download-outline" slot="start"></ion-icon>
             Delete
           </ion-button>

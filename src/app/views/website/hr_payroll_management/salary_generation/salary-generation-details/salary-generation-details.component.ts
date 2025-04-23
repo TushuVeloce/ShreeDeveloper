@@ -28,9 +28,9 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   InitialEntity: SalaryGeneration = null as any;
   EmployeeList: Employee[] = [];
   MonthList = DomainEnums.MonthList(true, '---Select Month---');
+  isEmployeeDisabled: boolean = false;
   companyName = this.companystatemanagement.SelectedCompanyName;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  kk: any = ''
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private serverCommunicator: ServerCommunicatorService, private payloadPacketFacade: PayloadPacketFacade) { }
 
 
@@ -39,11 +39,12 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(true);
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
+      this.isEmployeeDisabled = true
       this.DetailsFormTitle = this.IsNewEntity ? 'New Salary' : 'Edit Salary';
       this.Entity = SalaryGeneration.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.EmployeeData(this.Entity.p.EmployeeRef,this.Entity.p.Month)
+      console.log('Entity :', this.Entity);
     } else {
       this.Entity = SalaryGeneration.CreateNewInstance();
       SalaryGeneration.SetCurrentInstance(this.Entity);
@@ -91,6 +92,12 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     if (employee === 0 || month === 0) {
       return;
     }
+    this.Entity.p.TotalWorkingDays = 0
+    this.Entity.p.TotalLeaves = 0
+    this.Entity.p.TotalOverTimeHrs = 0
+    this.Entity.p.TotalWorkingHrs = 0
+    this.Entity.p.TotalLeavesHrs = 0
+    this.Entity.p.OverAllWorkingHrs = 0
   
     let req = new SalaryGenerationCustomRequest();
     req.EmployeeRef = employee;
@@ -106,7 +113,6 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   
     let tdResult = JSON.parse(tr.Tag) as TransportData;
     let res = SalaryGenerationCustomRequest.FromTransportData(tdResult);
-    console.log('res :', res);
     if (res.Data.length > 0) {
         let checkInData: SalaryGenerationProps[] = res.Data as SalaryGenerationProps[];
         Object.assign(this.Entity.p, checkInData[0]);

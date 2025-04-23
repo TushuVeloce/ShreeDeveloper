@@ -8,11 +8,11 @@ export class AttendanceLogCountCustomRequest {
     public static readonly CustomProcessRequestType: string = "TodaysAttendanceLogCustomRequest";
     public static readonly MasterTableName: string = "AttendanceLog";
 
-    TransDateTime: string = '';
+    // TransDateTime: string = '';
     EmployeeRef: number = 0;
     CompanyRef: number = 0;
-    Count: number = 0;
-    Ref: number = 0;
+    Months : number = 0;
+    AttendanceLogTypes : number = 0;
 
     Data: any[] = []
 

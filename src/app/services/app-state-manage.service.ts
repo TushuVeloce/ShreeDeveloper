@@ -38,6 +38,12 @@ export class AppStateManageService {
   private IsForgetPasswordClickedValue = false
   public isDropdownDisabled = signal<boolean>(false);
 
+  private _BaseImageUrl: string = "http://localhost:5111/uploads/";
+
+  public get BaseImageUrl(): string {
+    return this._BaseImageUrl;
+  }
+
   constructor() { }
 
   setDropdownDisabled(value: boolean) {

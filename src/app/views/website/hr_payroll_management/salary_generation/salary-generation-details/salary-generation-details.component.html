@@ -15,7 +15,7 @@
         <div class="col-md-4">
             <label>Employee Name</label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-            name="EmployeeRef" required id="EmployeeRef" [(ngModel)]="Entity.p.EmployeeRef" (ngModelChange)="EmployeeData(Entity.p.EmployeeRef,Entity.p.Month)">
+            name="EmployeeRef" required id="EmployeeRef" [(ngModel)]="Entity.p.EmployeeRef" (ngModelChange)="EmployeeData(Entity.p.EmployeeRef,Entity.p.Month)" [disabled] = "isEmployeeDisabled">
               <nz-option *ngFor="let employee of EmployeeList" [nzValue]="employee.p.Ref"
                 [nzLabel]="employee.p.Name"></nz-option>
             </nz-select>
@@ -45,7 +45,7 @@
         </div>
         <div class="col-md-4">
             <label>Total Over Time Hours</label>
-            <input type="number" name="TotalOvertimeHrs" class="form-control" id="TotalOvertimeHrs" [(ngModel)]="Entity.p.TotalOvertimeHrs"  placeholder="Enter Total Over Time Hours" required readonly/>
+            <input type="number" name="TotalOverTimeHrs" class="form-control" id="TotalOverTimeHrs" [(ngModel)]="Entity.p.TotalOverTimeHrs"  placeholder="Enter Total Over Time Hours" required readonly/>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
@@ -59,7 +59,7 @@
         </div>
         <div class="col-md-4">
             <label>Overall Working Hours</label>
-            <input type="number" name="OverallWorkingHrs" class="form-control" id="OverallWorkingHrs" [(ngModel)]="Entity.p.OverallWorkingHrs" placeholder="Enter Overall Working Hours" required readonly/>
+            <input type="number" name="OverAllWorkingHrs" class="form-control" id="OverAllWorkingHrs" [(ngModel)]="Entity.p.OverAllWorkingHrs" placeholder="Enter Overall Working Hours" required readonly/>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">

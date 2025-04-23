@@ -18,31 +18,24 @@
           <h4 style="text-align: center; margin-bottom: 4%;">Login your account</h4>
           <form autocomplete="off">
 
-
-            <div>
-              <label for="userId" class="input-label">User ID</label>
-              <div style="display: flex;">
-                <input type="text" id="inputField" type="text" id="userId" name="UserId" placeholder="Enter your Mail Id" required [(ngModel)]="UserId">
-                <span class="input-icon" style="margin-top: 0.4rem; margin-left: 0.4rem; color: brown;">
-                  <i class="fas fa-user"></i>
-                </span>
-              </div>
+              <!-- User input -->
+            <div style="position: relative; margin-bottom: 1rem;">
+              <label for="userId">User ID</label>
+              <input type="text" id="userId"name="UserId" class="form-control" placeholder="Enter your Mail ID" required [(ngModel)]="UserId"
+                style="padding-right: 2.5rem;" />
+              <i class="fas fa-user" style="position: absolute; top: 70%; right: 10px; transform: translateY(-50%); color: brown;"></i>
             </div>
-
-            <!-- <input id="inputField" type="text" id="userId" name="UserId" placeholder="Enter your Mail Id" [(ngModel)]="UserId" /> -->
-            <div>
+            
+            <!-- Password Input -->
+            <div style="position: relative;margin-bottom: 2rem;">
               <label for="password">Password</label>
-              <div style="display: flex">
-                <input  id="inputField" type="password" id="password" [type]="showPassword ? 'text' : 'password'" id="password" class="form-control" name="Password" placeholder="Enter your Password"  required
-                  [(ngModel)]="Password" />
-                <span (click)="togglePasswordVisibility()" class="input-icon"
-                  style="margin-top: 0.4rem; margin-left: 0.2rem; color: brown; cursor: pointer;">
-                  <i class="fas fa-eye" *ngIf="showPassword"></i>
-                  <i class="fas fa-eye-slash" *ngIf="!showPassword"></i>
-                </span>
-              </div>
-      
+              <input [type]="showPassword ? 'text' : 'password'" id="password" name="Password" class="form-control"
+                placeholder="Enter your Password" required [(ngModel)]="Password" style="padding-right: 2.5rem;" />
+              <i class="{{ showPassword ? 'fas fa-eye' : 'fas fa-eye-slash' }}"
+                (click)="togglePasswordVisibility()" style="position: absolute; top: 70%; right: 10px; transform: translateY(-50%); cursor: pointer; color: brown;"></i>
             </div>
+            
+          <!-- <input id="inputField" type="text" id="userId" name="UserId" placeholder="Enter your Mail Id" [(ngModel)]="UserId" /> -->
             <!-- <input id="inputField" type="password" id="password" name="password" placeholder="Enter your Password" [(ngModel)]="Password" /> -->
             <div>
               <button type="button"

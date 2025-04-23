@@ -147,4 +147,8 @@ export class SalaryGenerationComponent  implements OnInit {
       this.DisplayMasterList = this.MasterList
     }
   }
+
+  printPage() {
+    window.print();
+  }
 }

@@ -39,38 +39,38 @@
 
 // global css for Table
 * {
-    font-family: 'Poppins';
+  font-family: 'Poppins';
 }
 
 
 .bgtable_light {
-    background-color: rgb(229, 231, 235);
-  }
-
-  .tblheader {
-    text-align: center !important;
-    font-weight: bold !important;
-    background-color: #FBD1D1 !important;
-    color: #A52A2A !important;
-    font-size: 14px !important;
-  }
-
-  .tblheadersecond{
-    background-color: #FAFAFA;
-    text-align: center !important;
-    font-weight: bold !important;
-    font-size: 14px !important;
+  background-color: rgb(229, 231, 235);
 }
 
-  .tbldata {
-    text-align: center !important;
-    font-size: medium !important;
-    border-bottom: 1.5px solid rgba(200, 186, 186, 0.2) !important;
-    background-color: white !important;
-    color: black !important;
-  }
+.tblheader {
+  text-align: center !important;
+  font-weight: bold !important;
+  background-color: #FBD1D1 !important;
+  color: #A52A2A !important;
+  font-size: 14px !important;
+}
 
-  // Alignment classes
+.tblheadersecond {
+  background-color: #FAFAFA;
+  text-align: center !important;
+  font-weight: bold !important;
+  font-size: 14px !important;
+}
+
+.tbldata {
+  text-align: center !important;
+  font-size: medium !important;
+  border-bottom: 1.5px solid rgba(200, 186, 186, 0.2) !important;
+  background-color: white !important;
+  color: black !important;
+}
+
+// Alignment classes
 .left-align {
   padding-left: 10px !important;
   font-size: medium !important;
@@ -91,39 +91,39 @@
 
 .btn {
   background-color: brown !important;
-    color: white !important;
-    padding: 0.4rem 2.1rem !important;
-    border: none !important;
-    border-radius: 6px !important;
-    cursor: pointer !important;
-    font-size: 16px !important;
-    font-weight: 600 !important;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
-    transition: background-color 0.1s ease, transform 0.2s ease, box-shadow 0.3s ease !important ;
-    position: relative !important;
-    overflow: hidden !important;
+  color: white !important;
+  padding: 0.4rem 2.1rem !important;
+  border: none !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
+  transition: background-color 0.1s ease, transform 0.2s ease, box-shadow 0.3s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
 }
 
 
-  /* Hover Effect */
+/* Hover Effect */
 .btn:hover {
-    transform: translateY(-3px) !important;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
 // ========================== Input Class CSS Start =========================== //
 
 .form-control:focus {
   outline: 0;
-  box-shadow: none ;
-  border: solid 1px ;
+  box-shadow: none;
+  border: solid 1px;
   border-color: brown;
 }
 
 .form-control:hover {
   outline: 0;
-  box-shadow: none ;
-  border: solid 1px ;
+  box-shadow: none;
+  border: solid 1px;
   border-color: brown;
 }
 
@@ -133,9 +133,9 @@
 // ========================== Input Class CSS End =========================== //
 
 
-.btn:hover{
-    background-color: brown;
-    color: white;
+.btn:hover {
+  background-color: brown;
+  color: white;
 }
 
 .backbtn {
@@ -146,23 +146,24 @@
   border-radius: 6px;
 }
 
-.backbtn:hover{
+.backbtn:hover {
   color: white;
 }
 
 .detail_title {
-    color: brown;
-    font-size: large;
-    font-weight: 600;
-    font-size: 22px;
+  color: brown;
+  font-size: large;
+  font-weight: 600;
+  font-size: 22px;
 }
 
 form {
-    label {
-        margin-bottom: 0.5rem;
-        font-weight: bold;
-    }
+  label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
 }
+
 .table-heading {
   display: flex;
   align-items: center;
@@ -210,7 +211,7 @@ form {
 /* Responsive styles */
 @media only screen and (max-width: 667px) {
   .modalbtn {
-      text-align: left;
+    text-align: left;
   }
 }
 
@@ -232,7 +233,7 @@ form {
 }
 
 /* ------------------------- Search Box Styles End ------------------------- */
-.mobile-btn{
+.mobile-btn {
   cursor: pointer;
   border-radius: 5px;
 }
@@ -246,6 +247,7 @@ form {
   font-size: larger;
   font-weight: bold;
 }
+
 // For Date Input
 input[type="date"] {
   position: relative;
@@ -255,7 +257,7 @@ input[type="date"] {
   background-size: 20px 20px;
   padding-right: 35px;
   cursor: pointer;
-  background-color: white!important;
+  background-color: white !important;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
@@ -272,7 +274,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .nzSelect-light {
   .ant-select-selector {
-    background-color: #ffffff; /* White background */
+    background-color: #ffffff;
+    /* White background */
     color: #000000;
     border: 0.2px solid rgb(133, 130, 130);
     border-radius: 7px !important;
@@ -322,33 +325,41 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 nz-select {
   width: 100%;
 }
+
 .nzSelect-light ::ng-deep.ant-select-selector {
-  background-color: #ffffff; /* White background */
-  color: #000000;            /* Black text */
+  background-color: #ffffff;
+  /* White background */
+  color: #000000;
+  /* Black text */
   // border-color: rgb(34, 34, 34);     /* Light border */
-  border: 0.2px solid rgb(133, 130, 130); /* Darker border */
+  border: 0.2px solid rgb(133, 130, 130);
+  /* Darker border */
   border-radius: 7px !important;
 }
 
 .nzSelect-light ::ng-deep .ant-select-focused .ant-select-selector,
 .nzSelect-light ::ng-deep .ant-select-selector:focus-within {
-  border-color: orangered !important; /* Change border color on focus for light theme */
+  border-color: orangered !important;
+  /* Change border color on focus for light theme */
 }
 
 .nzSelect-light ::ng-deep .ant-select-clear {
-  color: black !important; /* Change clear icon color in light theme */
+  color: black !important;
+  /* Change clear icon color in light theme */
 }
 
 .nzSelect-light ::ng-deep .anticon {
-  color: black !important; /* Change icon color in light theme */
+  color: black !important;
+  /* Change icon color in light theme */
 }
 
 ::ng-deep .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
-  background-color: #8dd0f0!important
+  background-color: #8dd0f0 !important
 }
 
 ::ng-deep .ant-empty-description {
-  color: black !important; /* Color for light theme */
+  color: black !important;
+  /* Color for light theme */
 }
 
 // nz-table .ant-empty-image {
@@ -368,16 +379,17 @@ nz-select {
 
 /* Dark theme disabled state */
 .nzSelect-dark-disabled ::ng-deep .ant-select-selector {
-  background-color: rgb(34, 34, 34)!important;
+  background-color: rgb(34, 34, 34) !important;
   color: white !important;
   border: 0.2px solid rgb(133, 130, 130) !important;
   border-radius: 7px !important;
 }
 
-.nzSelect-dark:hover ::ng-deep.ant-select-selector{
+.nzSelect-dark:hover ::ng-deep.ant-select-selector {
   border-color: orangered !important;
 }
-.nzSelect-light:hover ::ng-deep.ant-select-selector{
+
+.nzSelect-light:hover ::ng-deep.ant-select-selector {
   border-color: orangered !important;
 }
 
@@ -386,20 +398,24 @@ nz-select {
 // for sweetalert2
 
 .custom-popup {
-  max-width: 50% !important; /* Ensures it doesn't exceed screen width */
+  max-width: 50% !important;
+  /* Ensures it doesn't exceed screen width */
   border-radius: 8px !important;
 }
 
 @media (max-width: 768px) {
   .custom-popup {
-    width: 85% !important; /* Adjust width for mobile */
+    width: 85% !important;
+    /* Adjust width for mobile */
   }
 }
 
 @media (max-width: 480px) {
   .custom-popup {
-    width: 90% !important; /* Slightly larger on small mobile screens */
-    font-size: 12px !important; /* Smaller text for better fit */
+    width: 90% !important;
+    /* Slightly larger on small mobile screens */
+    font-size: 12px !important;
+    /* Smaller text for better fit */
   }
 }
 
@@ -482,8 +498,125 @@ input[type=number] {
     font-weight: 500;
   }
 }
-    // <!-- Show "Data not found" if list is empty -->
-    // <div *ngIf="TodayAttendanceLogList.length === 0 && !isLoading" class="no-data-mobile-app">
-    //   <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
-    //   <p>No attendance records found for today.</p>
-    // </div>
+
+// <!-- Show "Data not found" if list is empty -->
+// <div *ngIf="TodayAttendanceLogList.length === 0 && !isLoading" class="no-data-mobile-app">
+//   <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+//   <p>No attendance records found for today.</p>
+// </div>
+.form-container {
+  --background: #f9f9f9;
+  padding: 16px;
+}
+
+.input-item {
+  --background: var(--ion-background-color);
+  --border-radius: 15px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --margin-bottom: 16px;
+  --border-color: #dcdcdc;
+  --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.input-item:focus-within {
+  --border-color: var(--ion-color-primary-shade);
+  --box-shadow: 0 0 8px var(--ion-color-primary-rgb);
+}
+
+.input-item ion-label {
+  font-weight: 600;
+  color: #333;
+}
+
+// .submit-button {
+//   --background: var(--ion-color-primary);
+//   --color: var(--ion-text-color:);
+//   --border-radius: 50px;
+//   --padding-top: 14px;
+//   --padding-bottom: 14px;
+//   transition: --background 0.3s ease;
+// }
+
+// .submit-button:hover {
+//   --background: var(--ion-color-primary-shade);
+// }
+
+// .submit-button:focus {
+//   --background: var(--ion-color-primary-tint);
+// }
+
+ion-item {
+  margin-bottom: 16px;
+  border-radius: 12px;
+  transition: --background 0.3s ease, box-shadow 0.3s ease;
+}
+
+ion-item:focus-within {
+  --background: #f2f2f2;
+  box-shadow: 0 0 0 2px var(--ion-color-primary-rgb);
+}
+
+ion-input,
+ion-textarea {
+  --padding: 14px;
+  --border-radius: 8px;
+}
+
+ion-input:focus,
+ion-textarea:focus {
+  box-shadow: 0 0 0 2px var(--ion-color-primary-rgb);
+}
+
+ion-textarea {
+  padding: 12px;
+  font-size: 14px;
+}
+.button-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 0 16px;
+}
+
+.submit-button {
+  flex: 1;
+  --border-radius: 30px;
+  --padding-top: 14px;
+  --padding-bottom: 14px;
+  font-weight: 600;
+  font-size: 16px;
+  transition: --background 0.3s ease;
+}
+
+.primary-button {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-text-color-dark);
+}
+
+.primary-button:hover,
+.primary-button:focus {
+  --background: var(--ion-color-primary-shade);
+}
+
+.cancel-button {
+  --background: var(--ion-color-secondary);
+  --color: var(--ion-text-color-dark);;
+}
+
+.cancel-button:hover,
+.cancel-button:focus {
+  --background: var(--ion-color-secondary-shade);
+}
+
+@media (max-width: 767px) {
+  .form-container {
+    padding: 8px;
+  }
+
+  .input-item {
+    --padding-start: 12px;
+    --padding-end: 12px;
+  }
+}
