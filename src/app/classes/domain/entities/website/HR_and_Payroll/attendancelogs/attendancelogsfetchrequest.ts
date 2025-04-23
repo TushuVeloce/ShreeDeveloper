@@ -9,8 +9,10 @@ export class AttendanceLogsFetchRequest
     public static readonly FetchRequestType: string = "AttendanceLogFetchRequest";
 
     CompanyRefs: number[] = [];
-    AttendanceLogsRefs: number[] = [];
-    AttendanceLogTypeRefs: number[] = [];
+    Months: number[] = [];
+    EmployeeRefs: number[] = [];
+    // AttendanceLogsRefs: number[] = [];
+    AttendanceLogTypes: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
