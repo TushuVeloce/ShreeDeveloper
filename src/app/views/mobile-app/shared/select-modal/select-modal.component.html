@@ -1,6 +1,6 @@
 <ion-header class="ion-no-border modern-header">
   <ion-toolbar>
-    <ion-title class="custom-title">Select Option</ion-title>
+    <ion-title class="custom-title">{{ bottomsheetTitle }}</ion-title>
     <ion-buttons slot="end">
       <ion-button fill="clear" color="medium" (click)="close()">
         <ion-icon name="close-outline" size="large"></ion-icon>
@@ -23,6 +23,14 @@
       <ion-checkbox *ngIf="multiSelect" slot="end" [checked]="isSelected(option)"></ion-checkbox>
     </ion-item>
   </ion-list>
+
+  <!-- No Data Message -->
+  <div *ngIf="loadedOptions.length === 0" class="no-data">
+    <ion-text color="medium">
+      <p style="text-align: center; margin-top: 20px;">No options available</p>
+    </ion-text>
+  </div>
+
 
   <!-- Infinite Scroll -->
   <ion-infinite-scroll (ionInfinite)="loadMore($event)">
