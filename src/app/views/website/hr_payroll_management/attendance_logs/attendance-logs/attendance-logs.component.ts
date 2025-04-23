@@ -82,6 +82,7 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   getTodayAttendanceLogByAttendanceListType = async () => {
+    this.DisplayMasterList = [];
     this.ToDispayMonthlyRequirement = false;
     this.ToDisplayWeeklyRequirement = false;
     this.isTodayAttendanceView = true;
@@ -95,6 +96,8 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   getWeekWiseAttendanceLogByAttendanceListType = async () => {
+    this.Entity.p.EmployeeRef = 0;
+    this.DisplayMasterList = [];
     this.ToDispayMonthlyRequirement = false;
     this.ToDisplayWeeklyRequirement = true;
     this.isTodayAttendanceView = false;
@@ -106,8 +109,29 @@ export class AttendanceLogsComponent implements OnInit {
     console.log('weekly', this.DisplayMasterList);
   }
 
+  OnSelectedEmployee = async () => {
+    const selectedEmpRef = this.Entity.p.EmployeeRef;
+
+    // If no employee is selected, clear grouped data
+    if (!selectedEmpRef) {
+      this.groupedAttendanceLogs = {};
+      return;
+    }
+    // Get selected employee's name from dropdown list
+    const selectedEmployee = this.EmployeeList.find(emp => emp.p.Ref === selectedEmpRef);
+    const selectedEmpName = selectedEmployee?.p?.Name || 'Selected Employee';
+    // Filter logs
+    const filteredLogs = this.DisplayMasterList.filter(log => log.p.EmployeeRef === selectedEmpRef);
+    // Always show selected employee's name, even if there's no data
+    this.groupedAttendanceLogs = {
+      [selectedEmpName]: filteredLogs
+    };
+  }
+
   selectMonth = async () => {
+    this.Entity.p.EmployeeRef = 0;
     this.DisplayMasterList = [];
+    this.groupedAttendanceLogs = {};
     this.ToDispayMonthlyRequirement = true;
     this.ToDisplayWeeklyRequirement = false;
     this.isTodayAttendanceView = false;
@@ -115,9 +139,9 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   getMonthWiseAttendanceLogByAttendanceListType = async () => {
+    this.Entity.p.EmployeeRef = 0;
     this.DisplayMasterList = [];
     if (!this.Entity.p.EmployeeRef || !this.Entity.p.Months) return;
-
     this.ToDispayMonthlyRequirement = true;
     this.ToDisplayWeeklyRequirement = false;
     this.isTodayAttendanceView = false;
@@ -186,6 +210,7 @@ export class AttendanceLogsComponent implements OnInit {
     }
     let tdResult = JSON.parse(tr.Tag) as TransportData;
     let res = AttendanceLogCountCustomRequest.FromTransportData(tdResult);
+    console.log(tdResult);
 
     const summaryCollection = tdResult.MainData?.Collections?.find((c: any) =>
       c?.Entries?.[0]?.TeamSize !== undefined

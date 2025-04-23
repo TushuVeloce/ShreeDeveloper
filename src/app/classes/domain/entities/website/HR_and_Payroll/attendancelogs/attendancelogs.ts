@@ -30,7 +30,7 @@ export class AttendanceLogsProps {
   public Present: number = 0;
   public Absent: number = 0;
   public OnLeaveDaily: number = 0;
-  
+
   public Months: number = 0;
 
   // for photo uploaded
@@ -158,7 +158,7 @@ export class AttendanceLogs implements IPersistable<AttendanceLogs> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new AttendanceLogsFetchRequest();
-    req.AttendanceLogTypeRefs.push(ref);
+    req.AttendanceLogTypes.push(ref);
 
     let tdResponse = await AttendanceLogs.FetchTransportData(req, errorHandler) as TransportData;
     return AttendanceLogs.SingleInstanceFromTransportData(tdResponse);
@@ -181,10 +181,10 @@ export class AttendanceLogs implements IPersistable<AttendanceLogs> {
     let tdResponse = await AttendanceLogs.FetchTransportData(req, errorHandler) as TransportData;
     return AttendanceLogs.ListFromTransportData(tdResponse);
   }
-  public static async FetchEntireListByCompanyRefAndAttendanceLogType(CompanyRef:number,AttendanceLogTypeRef:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRefAndAttendanceLogType(CompanyRef:number,AttendanceLogTypes:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new AttendanceLogsFetchRequest();
     req.CompanyRefs.push(CompanyRef);
-    req.AttendanceLogTypeRefs.push(AttendanceLogTypeRef);
+    req.AttendanceLogTypes.push(AttendanceLogTypes);
     let tdResponse = await AttendanceLogs.FetchTransportData(req, errorHandler) as TransportData;
     return AttendanceLogs.ListFromTransportData(tdResponse);
   }
@@ -192,7 +192,7 @@ export class AttendanceLogs implements IPersistable<AttendanceLogs> {
   public static async FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(CompanyRef:number,AttendanceLogTypeRef:number, monthref:number, employeeref:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new AttendanceLogsFetchRequest();
     req.CompanyRefs.push(CompanyRef);
-    req.AttendanceLogTypeRefs.push(AttendanceLogTypeRef);
+    req.AttendanceLogTypes.push(AttendanceLogTypeRef);
     req.Months.push(monthref);
     req.EmployeeRefs.push(employeeref);
     let tdResponse = await AttendanceLogs.FetchTransportData(req, errorHandler) as TransportData;

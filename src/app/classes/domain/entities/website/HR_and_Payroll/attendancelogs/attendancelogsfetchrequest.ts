@@ -12,7 +12,7 @@ export class AttendanceLogsFetchRequest
     Months: number[] = [];
     EmployeeRefs: number[] = [];
     // AttendanceLogsRefs: number[] = [];
-    AttendanceLogTypeRefs: number[] = [];
+    AttendanceLogTypes: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
