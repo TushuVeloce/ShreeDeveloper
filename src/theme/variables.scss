@@ -1,55 +1,55 @@
 :root {
-    /* Primary Color - Deep Maroon */
+    /*  Primary Color - Deep Maroon */
     --ion-color-primary: #7c2424;
     --ion-color-primary-rgb: 124, 36, 36;
     --ion-color-primary-contrast: #ffffff;
     --ion-color-primary-contrast-rgb: 255, 255, 255;
     --ion-color-primary-shade: #6e2020;
-    /* Darker Maroon */
     --ion-color-primary-tint: #8d2e2e;
-    /* Lighter Maroon */
 
-    /* Secondary Color - Muted Gold */
+    /*  Secondary Color - Muted Gold */
     --ion-color-secondary: #d4af37;
     --ion-color-secondary-rgb: 212, 175, 55;
     --ion-color-secondary-contrast: #ffffff;
     --ion-color-secondary-shade: #b4942f;
     --ion-color-secondary-tint: #e2bf4a;
 
-    /* Tertiary Color - Warm Beige */
+    /*  Tertiary Color - Warm Beige */
     --ion-color-tertiary: #c4a484;
     --ion-color-tertiary-rgb: 196, 164, 132;
     --ion-color-tertiary-contrast: #000000;
     --ion-color-tertiary-shade: #a98f71;
     --ion-color-tertiary-tint: #d3b798;
 
-    /* Backgrounds & Surface */
-    --ion-background-color: #f5f5f5;
-    /* Light Mode */
+    /* Background - Modern Soft Gradient */
+    --ion-background-color: linear-gradient(145deg,
+            rgba(124, 36, 36, 0.03),
+            rgba(255, 255, 255, 0.5));
     --ion-background-color-step-50: #f9f9f9;
     --ion-background-color-step-100: #f2f2f2;
     --ion-item-background: #f7f7f7;
 
-    /* Dark Mode */
-    [data-theme='dark'] {
-        --ion-background-color: #212121;
-        --ion-background-color-step-50: #2a2a2a;
-        --ion-background-color-step-100: #333333;
-        --ion-item-background: #292929;
-        --ion-text-color: #ffffff;
-        --ion-color-primary: #9e4545;
-        --ion-color-secondary: #b4942f;
-        --ion-color-tertiary: #a98f71;
-    }
-
-    /* Text Colors */
+    /*  Text Colors */
     --ion-text-color: #333333;
-    --ion-text-color-rgb: 51,
-    51,
-    51;
+    --ion-text-color-rgb: 51, 51, 51;
     --ion-text-color-dark: #ffffff;
 
-    /* Accent Color */
+    /*  Accent */
     --ion-color-accent: #e67e22;
     /* Warm Orange */
+}
+
+/*  Dark Theme */
+[data-theme='dark'] {
+    --ion-background-color: #212121;
+    --ion-background-color-step-50: #2a2a2a;
+    --ion-background-color-step-100: #333333;
+    --ion-item-background: #292929;
+
+    --ion-text-color: #ffffff;
+
+    /* Adjusted for dark theme harmony */
+    --ion-color-primary: #9e4545;
+    --ion-color-secondary: #b4942f;
+    --ion-color-tertiary: #a98f71;
 }
