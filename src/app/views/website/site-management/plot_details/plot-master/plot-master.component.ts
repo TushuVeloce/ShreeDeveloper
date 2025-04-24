@@ -28,7 +28,7 @@ export class PlotMasterComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   siteref : number=0
   bookigremark: number=0
-  BookingRemarkList = DomainEnums.BookingRemarkList(true, '---Select Booking Remark---');
+  BookingRemarkList = DomainEnums.BookingRemarkList(true,);
   BookingRemarkEnum = BookingRemark; 
   shouldDestroy: boolean = true;
 
