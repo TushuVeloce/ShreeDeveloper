@@ -10,11 +10,11 @@
         font-size: 14px;
         text-transform: capitalize;
         --indicator-color: transparent;
-        color: #444;
+        color: var(--ion-text-color);
 
         &.segment-button-checked {
             background: var(--ion-color-primary);
-            color: var(--ion-background-color);
+            color: var(--ion-text-color-dark);
             border-radius: 20px;
             padding: 0 12px;
         }
