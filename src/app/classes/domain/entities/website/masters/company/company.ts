@@ -172,7 +172,6 @@ export class Company implements IPersistable<Company> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    debugger
     let req = new CompanyFetchRequest();
     req.CompanyRefs.push(ref);
 

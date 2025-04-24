@@ -52,7 +52,6 @@ export class PlotMasterDetailsComponent implements OnInit {
   ) { }
   
   async ngOnInit() {
-    console.log('BookingRemark :', this.BookingRemark);
     this.CompanyList = await Company.FetchEntireList();
     const siteref = this.appStateManage.StorageKey.getItem('siteRf')
     const siteName = this.appStateManage.StorageKey.getItem('siteName')
@@ -63,6 +62,7 @@ export class PlotMasterDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Plot' : 'Edit Plot';
       this.Entity = Plot.GetCurrentInstance();
+      console.log('Entity :', this.Entity);
       this.SiteName = this.Entity.p.SiteName
       this.SiteRf = this.Entity.p.SiteManagementRef
       this.appStateManage.StorageKey.removeItem('Editable');
@@ -70,7 +70,7 @@ export class PlotMasterDetailsComponent implements OnInit {
         this.isSaveDisabled = true
       }
       if (this.Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked) {
-        this.getCompanySingleRecord(this.CompanyRef())
+        this.getCompanySingleRecord()
       }
     } else {
       this.Entity = Plot.CreateNewInstance();
@@ -106,14 +106,9 @@ export class PlotMasterDetailsComponent implements OnInit {
     this.CustomerEntity = CuctomerData;
   }
 
-  getCompanySingleRecord = async (BookingremarkRef: number) => {
-    // this.CompanyEntity = Company.CreateNewInstance();
-    console.log('this.CompanyRef() :', this.CompanyRef());
-    if (BookingremarkRef == BookingRemark.Shree_Booked) {
-      if (this.CompanyRef() <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
-        return;
-      }
+  getCompanySingleRecord = async () => {
+    this.CompanyEntity = Company.CreateNewInstance();
+    if (this.Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked) {
       let CompanyData = await Company.FetchInstance(this.CompanyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       console.log('CompanyData :', CompanyData);
       this.CompanyEntity = CompanyData;
