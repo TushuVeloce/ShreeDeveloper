@@ -136,6 +136,7 @@
             name="CurrentBookingRemark"
             [nzSize]="'large'"
             [(ngModel)]="Entity.p.CurrentBookingRemark"
+            (ngModelChange)="getCompanySingleRecord(Entity.p.CurrentBookingRemark)"
           >
             <nz-option
               *ngFor="let bookingremark of BookingRemarkList"
@@ -144,7 +145,18 @@
             ></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked">
+          <label>Company Name</label>
+          <input
+            type="text"
+            name="CompanyName"
+            class="form-control date-input"
+            id="CompanyName"
+           value={{CompanyName()}}
+           readonly
+          />
+        </div>
+        <div class="col-md-4" *ngIf="Entity.p.CurrentBookingRemark != BookingRemark.Shree_Booked">
           <label>Customer Name</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
           [(ngModel)]="Entity.p.CurrentOwnerRef" name="CurrentOwnerRef" required id="CurrentOwnerRef" (ngModelChange) = "getCustomerDataBycustomerRef(Entity.p.CurrentOwnerRef)">
@@ -152,33 +164,58 @@
             [nzValue]="customer.p.Ref"></nz-option>
         </nz-select>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked">
           <label>Mobile No</label>
-          <input  class="form-control date-input"  value={{this.CoustomerMob}} readonly
+          <input  class="form-control date-input"  value={{this.CompanyEntity.p.Contacts}} readonly
+          />
+        </div>
+        <div class="col-md-4" *ngIf="Entity.p.CurrentBookingRemark != BookingRemark.Shree_Booked">
+          <label>Mobile No</label>
+          <input  class="form-control date-input"  value={{CustomerEntity.p.ContactNo}} readonly
           />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">     
-       <div class="col-md-4">
+       <div class="col-md-4" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked">
           <label>Country</label>
-          <input  class="form-control date-input"  value={{CoustomerCountry}} readonly
+          <input  class="form-control date-input"  value={{this.CompanyEntity.p.CountryName}} readonly
           />
         </div>
-        <div class="col-md-4">
+       <div class="col-md-4" *ngIf="Entity.p.CurrentBookingRemark != BookingRemark.Shree_Booked">
+          <label>Country</label>
+          <input  class="form-control date-input"  value={{CustomerEntity.p.CountryName}} readonly
+          />
+        </div>
+        <div class="col-md-4" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked">
           <label>State</label>
-          <input  class="form-control date-input"  value={{CoustomerState}} readonly
+          <input  class="form-control date-input"  value={{this.CompanyEntity.p.StateName}} readonly
           />
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" *ngIf="Entity.p.CurrentBookingRemark != BookingRemark.Shree_Booked">
+          <label>State</label>
+          <input  class="form-control date-input"  value={{CustomerEntity.p.StateName}} readonly
+          />
+        </div>
+        <div class="col-md-4"  *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked">
           <label>City</label>
-          <input  class="form-control date-input"  value={{this.CoustomerCity}} readonly
+          <input  class="form-control date-input"  value={{this.CompanyEntity.p.CityName}} readonly
+          />
+        </div>
+        <div class="col-md-4" *ngIf="Entity.p.CurrentBookingRemark != BookingRemark.Shree_Booked">
+          <label>City</label>
+          <input  class="form-control date-input"  value={{CustomerEntity.p.CityName}} readonly
           />
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4">
+      <div class="row" style="margin-top: 1rem"  >
+        <div class="col-md-4" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked">
           <label>Address</label>
-          <input  class="form-control date-input"  value={{CoustomerAddress}} readonly
+          <input  class="form-control date-input"  value={{this.CompanyEntity.p.AddressLine1}} readonly
+          />
+        </div>
+        <div class="col-md-4" *ngIf="Entity.p.CurrentBookingRemark != BookingRemark.Shree_Booked">
+          <label>Address</label>
+          <input  class="form-control date-input"  value={{CustomerEntity.p.Address}} readonly
           />
         </div>
         <!-- <div class="col-md-4">

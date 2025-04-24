@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { BookingRemark, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Owner } from 'src/app/classes/domain/entities/website/masters/site/owner/owner';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -20,37 +21,39 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class PlotMasterDetailsComponent implements OnInit {
   Entity: Plot = Plot.CreateNewInstance();
+  CustomerEntity: Owner = Owner.CreateNewInstance();
+  CompanyEntity: Company = Company.CreateNewInstance();
   private IsNewEntity: boolean = true;
   DetailsFormTitle: 'New Plot' | 'Edit Plot' = 'New Plot';
   isSaveDisabled: boolean = false;
   IsDropdownDisabled: boolean = false;
   InitialEntity: Plot = null as any;
   BookingRemarkList = DomainEnums.BookingRemarkList(true, '---Select Booking Remark---');
+  BookingRemark = BookingRemark
   SiteRf: number = 0
   SiteName: string = ''
   CustomerList: Owner[] = [];
-  CoustomerName:string=''
-  CoustomerMob:string=''
-  CoustomerCountry:string=''
-  CoustomerState:string=''
-  CoustomerCity:string=''
-  CoustomerAddress:string=''
+  CompanyList: Company[] = [];
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
+  CompanyName = this.companystatemanagement.SelectedCompanyName;
+  CompanyRef = this.companystatemanagement.SelectedCompanyRef;
   
-    @ViewChild('PlotNoCtrl') PlotNoInputControl!: NgModel;
-    @ViewChild('AreaInSqmCtrl') AreaInSqmInputControl!: NgModel;
-    @ViewChild('AreaInSqftCtrl') AreaInSqftInputControl!: NgModel;
-    @ViewChild('GovermentRatePerSqmCtrl') GovermentRatePerSqmInputControl!: NgModel;
-    @ViewChild('BasicRatePerSqftCtrl') BasicRatePerSqftInputControl!: NgModel;
-
+  @ViewChild('PlotNoCtrl') PlotNoInputControl!: NgModel;
+  @ViewChild('AreaInSqmCtrl') AreaInSqmInputControl!: NgModel;
+  @ViewChild('AreaInSqftCtrl') AreaInSqftInputControl!: NgModel;
+  @ViewChild('GovermentRatePerSqmCtrl') GovermentRatePerSqmInputControl!: NgModel;
+  @ViewChild('BasicRatePerSqftCtrl') BasicRatePerSqftInputControl!: NgModel;
+  
   constructor(
     private router: Router,
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
     private utils: Utils, private companystatemanagement: CompanyStateManagement
   ) { }
-
+  
   async ngOnInit() {
+    console.log('BookingRemark :', this.BookingRemark);
+    this.CompanyList = await Company.FetchEntireList();
     const siteref = this.appStateManage.StorageKey.getItem('siteRf')
     const siteName = this.appStateManage.StorageKey.getItem('siteName')
     this.SiteRf = siteref ? Number(siteref) : 0;
@@ -60,12 +63,14 @@ export class PlotMasterDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Plot' : 'Edit Plot';
       this.Entity = Plot.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
-      this.SiteName = this.Entity.p.SiteName 
-      this.SiteRf = this.Entity.p.SiteManagementRef 
+      this.SiteName = this.Entity.p.SiteName
+      this.SiteRf = this.Entity.p.SiteManagementRef
       this.appStateManage.StorageKey.removeItem('Editable');
-      if(this.Entity.p.CurrentBookingRemark == 50){
-      this.isSaveDisabled =true
+      if (this.Entity.p.CurrentBookingRemark == BookingRemark.Booked) {
+        this.isSaveDisabled = true
+      }
+      if (this.Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked) {
+        this.getCompanySingleRecord(this.CompanyRef())
       }
     } else {
       this.Entity = Plot.CreateNewInstance();
@@ -78,7 +83,7 @@ export class PlotMasterDetailsComponent implements OnInit {
     this.getCustomerListBySiteandBookingRef(this.SiteRf)
   }
 
-  getCustomerListBySiteandBookingRef = async (SiteRf:number) => {
+  getCustomerListBySiteandBookingRef = async (SiteRf: number) => {
     this.CustomerList = [];
     if (SiteRf <= 0) {
       await this.uiUtils.showErrorToster('Site not Selected');
@@ -86,38 +91,45 @@ export class PlotMasterDetailsComponent implements OnInit {
     }
     let lst = await Owner.FetchEntireListBySiteRef(SiteRf, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.CustomerList = lst;
-    if(this.CustomerList.length == 1){
+    if (this.CustomerList.length == 1) {
       this.Entity.p.CurrentOwnerRef = this.CustomerList[0].p.Ref
       this.getCustomerDataBycustomerRef(this.Entity.p.CurrentOwnerRef)
     }
-    if(this.Entity.p.CurrentOwnerRef > 0 && this.CustomerList.length > 0){
+    if (this.Entity.p.CurrentOwnerRef > 0 && this.CustomerList.length > 0) {
       this.getCustomerDataBycustomerRef(this.Entity.p.CurrentOwnerRef)
     }
   }
 
-  getCustomerDataBycustomerRef = (customerref:number) => {
-  console.log('customerref :', customerref);
-    let customer = this.CustomerList.find(customer => customer.p.Ref == customerref)
-    console.log('CustomerList :', this.CustomerList);
-    if(customer){
-      this.CoustomerAddress= customer.p.Address;
-      this.CoustomerMob = customer.p.ContactNo;
-      this.CoustomerCountry= customer.p.CountryName
-      this.CoustomerState= customer.p.StateName
-      this.CoustomerCity= customer.p.CityName
+  getCustomerDataBycustomerRef = async (customerref: number) => {
+    this.CustomerEntity = Owner.CreateNewInstance();
+    let CuctomerData = await Owner.FetchInstance(customerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.CustomerEntity = CuctomerData;
+  }
+
+  getCompanySingleRecord = async (BookingremarkRef: number) => {
+    // this.CompanyEntity = Company.CreateNewInstance();
+    console.log('this.CompanyRef() :', this.CompanyRef());
+    if (BookingremarkRef == BookingRemark.Shree_Booked) {
+      if (this.CompanyRef() <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
+      let CompanyData = await Company.FetchInstance(this.CompanyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      console.log('CompanyData :', CompanyData);
+      this.CompanyEntity = CompanyData;
     }
   }
+
 
   SavePlot = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.SiteManagementRef = this.SiteRf
-    this.Entity.p.AreaInSqft = this.Entity.p.AreaInSqm * 10.7639 
+    this.Entity.p.AreaInSqft = this.Entity.p.AreaInSqm * 10.7639
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entityToSave :', entityToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
@@ -129,11 +141,8 @@ export class PlotMasterDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Plot saved successfully!');
         this.Entity = Plot.CreateNewInstance();
-        this.CoustomerMob=''
-        this.CoustomerCountry=''
-        this.CoustomerState=''
-        this.CoustomerCity=''
-        this.CoustomerAddress=''
+        this.CustomerEntity = Owner.CreateNewInstance();
+        this.CompanyEntity = Company.CreateNewInstance();
         this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster('Plot Updated successfully!');
@@ -148,8 +157,8 @@ export class PlotMasterDetailsComponent implements OnInit {
       this.Entity.p.AreaInSqft = 0;
     }
   }
-  
-  convertSqftToSqm= () => {
+
+  convertSqftToSqm = () => {
     if (this.Entity.p.AreaInSqft) {
       this.Entity.p.AreaInSqm = parseFloat((this.Entity.p.AreaInSqft / 10.7639).toFixed(3));
     } else {
@@ -163,7 +172,7 @@ export class PlotMasterDetailsComponent implements OnInit {
   }
 
 
-  BackPlot= () => {
+  BackPlot = () => {
     this.router.navigate(['/homepage/Website/Plot_Master']);
   }
 
@@ -173,7 +182,7 @@ export class PlotMasterDetailsComponent implements OnInit {
     this.AreaInSqftInputControl.control.markAsUntouched();
     this.GovermentRatePerSqmInputControl.control.markAsUntouched();
     this.BasicRatePerSqftInputControl.control.markAsUntouched();
-  
+
 
     this.PlotNoInputControl.control.markAsPristine();
     this.AreaInSqmInputControl.control.markAsPristine();
