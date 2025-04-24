@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AttendenceLogType, DomainEnums, LeaveRequestType } from 'src/app/classes/domain/domainenums/domainenums';
 import { AttendanceLogs } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogs';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -23,10 +24,12 @@ export class AttendanceDetailsComponent implements OnInit {
 
   constructor(
     private uiUtils: UIUtils,
-    private companystatemanagement: CompanyStateManagement,
+    private companystatemanagement: CompanyStateManagement, private appState: AppStateManageService
+    
   ) { }
 
   ngOnInit() {
+    this.Entity.p.EmployeeRef = this.appState.getEmployeeRef();
     this.getDataByMonth(this.selectedMonth);
     this.months = DomainEnums.MonthList();
   }
@@ -54,5 +57,6 @@ export class AttendanceDetailsComponent implements OnInit {
 
     this.monthlyAttendanceLogsList = MonthlyAttendanceLog;
     this.filteredMonthlyAttendanceLogsList = MonthlyAttendanceLog;
+    console.log('MonthlyAttendanceLog :', MonthlyAttendanceLog,month,employeeref);
   };
 }
