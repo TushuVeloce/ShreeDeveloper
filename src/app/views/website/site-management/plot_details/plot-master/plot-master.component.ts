@@ -1,6 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { BookingRemark, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -29,6 +29,7 @@ export class PlotMasterComponent implements OnInit {
   siteref : number=0
   bookigremark: number=0
   BookingRemarkList = DomainEnums.BookingRemarkList(true, '---Select Booking Remark---');
+  BookingRemarkEnum = BookingRemark; 
   shouldDestroy: boolean = true;
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
@@ -79,6 +80,7 @@ export class PlotMasterComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if(this.siteref == 0){
+      this.Entity.p.CurrentBookingRemark = this.BookingRemarkEnum.All;
       this.getPlotList()
     }
     if(siteref > 0 && this.SiteList.length > 0){

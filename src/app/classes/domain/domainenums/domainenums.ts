@@ -21,11 +21,12 @@ export enum GoodsAndServicesTax {
 
 export enum BookingRemark {
   None = 0,
+  All=60,
   Owner_Booked = 10,
   Shree_Booked = 20,
   Owner_Saledeed = 30,
   Shree_Saledeed = 40,
-  Booked = 50
+  Booked = 50,
 }
 
 export enum MarketingModes {
@@ -325,6 +326,7 @@ export class DomainEnums {
       case BookingRemark.Owner_Saledeed: return 'Owner Saledeed ';
       case BookingRemark.Shree_Saledeed: return 'Shree Saledeed ';
       case BookingRemark.Booked: return 'Booked ';
+      case BookingRemark.All: return 'All ';
       default: return '';
     }
   }
@@ -345,6 +347,9 @@ export class DomainEnums {
       },
       {
         Ref: BookingRemark.Booked, Name: DomainEnums.BookingRemarkName(BookingRemark.Booked)
+      },
+      {
+        Ref: BookingRemark.All, Name: DomainEnums.BookingRemarkName(BookingRemark.All)
       }
     ]
     if (withAllOption) {
