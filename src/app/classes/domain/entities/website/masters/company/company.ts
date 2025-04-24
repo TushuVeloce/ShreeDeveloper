@@ -39,6 +39,8 @@ export class CompanyProps {
   public readonly CityName: string = '';
   public CompanyLogo: File = null as any
 
+  public readonly LogoPath:string = "";
+
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
