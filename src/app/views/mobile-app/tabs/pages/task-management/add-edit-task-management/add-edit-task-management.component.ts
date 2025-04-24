@@ -85,7 +85,7 @@ export class AddEditTaskManagementComponent implements OnInit {
     this.openSelectModal(
       this.siteList,
       this.selectedOptions,
-      'Select Site',
+      this.bottomsheetTitle,
       (selected) => {
         this.selectedOptions = selected;
         this.siteName = selected[0]?.p?.Name || '';
