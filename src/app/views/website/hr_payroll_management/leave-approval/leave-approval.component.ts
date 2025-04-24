@@ -8,6 +8,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { Utils } from 'src/app/services/utils.service';
+import { LeaveRequestType } from 'src/app/classes/domain/domainenums/domainenums';
 
 @Component({
   selector: 'app-leave-approval',
@@ -28,6 +29,7 @@ export class LeaveApprovalComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
+  LeaveRequesttype = LeaveRequestType;
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
