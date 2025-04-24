@@ -10,16 +10,22 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { UserRoleFetchRequest } from "./userrolefetchrequest";
 import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
+import { EstimateStagesFetchRequest } from "./estimatestagesfetchrequest";
 
 
-export class UserRoleProps {
-  public readonly Db_Table_Name = "UserRoleMaster";
+export class EstimateStagesProps {
+  public readonly Db_Table_Name = "EstimateStagesMaster";
   public Ref: number = 0;
   public Name: string = '';
-  public CompanyRef: number = 0
-  public CompanyName: string = ''
+  public SiteManagementRef: number = 0;
+  public SiteManagementName: string = '';
+  public StageRef: number = 0;
+  public StageName: string = '';
+  public CompanyRef: number = 0;
+  public CompanyName: string = '';
+  public Amount: number = 0;
+  public Description: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
 
@@ -28,14 +34,14 @@ export class UserRoleProps {
   }
 
   public static Blank() {
-    return new UserRoleProps(true);
+    return new EstimateStagesProps(true);
   }
 }
 
-export class UserRole implements IPersistable<UserRole> {
-  public static readonly Db_Table_Name: string = 'UserRoleMaster';
+export class EstimateStages implements IPersistable<EstimateStages> {
+  public static readonly Db_Table_Name: string = 'EstimateStagesMaster';
 
-  private constructor(public readonly p: UserRoleProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: EstimateStagesProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -48,52 +54,61 @@ export class UserRole implements IPersistable<UserRole> {
     }
   }
 
-  public GetEditableVersion(): UserRole {
-    let newState: UserRoleProps = Utils.GetInstance().DeepCopy(this.p);
-    return UserRole.CreateInstance(newState, true);
+  public GetEditableVersion(): EstimateStages {
+    let newState: EstimateStagesProps = Utils.GetInstance().DeepCopy(this.p);
+    return EstimateStages.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new UserRole(UserRoleProps.Blank(), true);
+    return new EstimateStages(EstimateStagesProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new UserRole(data as UserRoleProps, allowEdit);
+    return new EstimateStages(data as EstimateStagesProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') vra.add('Name', 'User Role cannot be blank.');
-    else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
-    }
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
-
+    if (this.p.SiteManagementRef == 0) vra.add('SiteManagementRef', 'Site Name cannot be blank.');
+    if (this.p.StageRef == 0) vra.add('StageRef', 'Stage Name cannot be blank.');
+    if (this.p.Description == '') {
+      vra.add('Description', 'Description cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Description)) {
+      vra.add('Description', ValidationMessages.NameWithNosAndSpaceMsg + ' for Description');
+    }
+    if (this.p.Amount == 0) {
+      vra.add('Amount', 'Amount cannot be blank.');
+    } else if (this.p.Amount < 0) {
+      vra.add('Amount', 'Amount cannot be less then 0.');
+    } else if (this.p.Amount.toString().includes('.')) {
+      vra.add('Amount', 'Rational Number not allowed for Amount');
+    }
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, UserRole.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, EstimateStages.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: UserRole = UserRole.CreateNewInstance();
+  private static m_currentInstance: EstimateStages = EstimateStages.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return UserRole.m_currentInstance;
+    return EstimateStages.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: UserRole) {
-    UserRole.m_currentInstance = value;
+  public static SetCurrentInstance(value: EstimateStages) {
+    EstimateStages.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): UserRole {
+  public static SingleInstanceFromTransportData(td: TransportData): EstimateStages {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, UserRole.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, UserRole.Db_Table_Name)!.Entries) {
-        return UserRole.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, EstimateStages.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, EstimateStages.Db_Table_Name)!.Entries) {
+        return EstimateStages.CreateInstance(data, false);
       }
     }
 
@@ -102,13 +117,13 @@ export class UserRole implements IPersistable<UserRole> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): UserRole[] {
-    let result: UserRole[] = [];
+    sortPropertyName: string = "Name"): EstimateStages[] {
+    let result: EstimateStages[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, UserRole.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, UserRole.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, EstimateStages.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, EstimateStages.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -118,18 +133,18 @@ export class UserRole implements IPersistable<UserRole> {
       }
 
       for (let data of entries) {
-        result.push(UserRole.CreateInstance(data, false));
+        result.push(EstimateStages.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): UserRole[] {
-    return UserRole.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): EstimateStages[] {
+    return EstimateStages.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: UserRoleFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: EstimateStagesFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -144,29 +159,29 @@ export class UserRole implements IPersistable<UserRole> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new UserRoleFetchRequest();
-    req.UserRoleRefs.push(ref);
+    let req = new EstimateStagesFetchRequest();
+    req.EstimateStagesRefs.push(ref);
 
-    let tdResponse = await UserRole.FetchTransportData(req, errorHandler) as TransportData;
-    return UserRole.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await EstimateStages.FetchTransportData(req, errorHandler) as TransportData;
+    return EstimateStages.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: UserRoleFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await UserRole.FetchTransportData(req, errorHandler) as TransportData;
-    return UserRole.ListFromTransportData(tdResponse);
+  public static async FetchList(req: EstimateStagesFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await EstimateStages.FetchTransportData(req, errorHandler) as TransportData;
+    return EstimateStages.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new UserRoleFetchRequest();
-    let tdResponse = await UserRole.FetchTransportData(req, errorHandler) as TransportData;
-    return UserRole.ListFromTransportData(tdResponse);
+    let req = new EstimateStagesFetchRequest();
+    let tdResponse = await EstimateStages.FetchTransportData(req, errorHandler) as TransportData;
+    return EstimateStages.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new UserRoleFetchRequest();
+    let req = new EstimateStagesFetchRequest();
     req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await UserRole.FetchTransportData(req, errorHandler) as TransportData;
-    return UserRole.ListFromTransportData(tdResponse);
+    let tdResponse = await EstimateStages.FetchTransportData(req, errorHandler) as TransportData;
+    return EstimateStages.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {

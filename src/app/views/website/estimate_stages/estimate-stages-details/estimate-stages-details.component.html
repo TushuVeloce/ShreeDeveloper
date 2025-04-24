@@ -12,53 +12,44 @@
     </div>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-6 mb-2">
-          <label><b>Site Name</b></label>
-          <input type="text" name="sitename" class="form-control" id="sitename" required
-            placeholder="Enter Site Name" />
+        <div class="col-md-6 col-sm-12 mb-3">
+          <label for="SiteManagementRef"><b>Site Name</b></label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteManagementRef"
+            name="SiteManagementRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteManagementRef">
+            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+          </nz-select>
         </div>
-        <div class="col-md-6 mb-2">
-          <label><b>Date</b></label>
-          <input type="date" name="startdate" class="form-control date-input" id="startdate" required
-            placeholder="Select Date" />
+        <div class="col-md-6 col-sm-12 mb-3">
+          <label for="StageRef"><b>Stages</b></label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StageRef"
+            name="StageRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef">
+            <nz-option *ngFor="let Stage of StageList" [nzValue]="Stage.p.Ref" [nzLabel]="Stage.p.Name"></nz-option>
+          </nz-select>
         </div>
-        <div class="col-md-6 mb-2">
-          <div>
-            <label><b>Main Ledger</b></label>
-            <select type="text" name="MainLedger" class="form-control" id="MainLedger" required>
-              <option>--Select Type--</option>
-              <option>Customer</option>
-              <option>Loan</option>
-              <option>Gov off Exp</option>
-            </select>
+        <div class="col-md-6 col-sm-12 mb-3">
+          <label for="Amount">Amount</label>
+          <input type="number" [(ngModel)]="Entity.p.Amount" name="Amount" class="form-control" id="Amount" required
+            placeholder="Enter Display Order" #AmountCtrl="ngModel" required (blur)="AmountCtrl.control.markAsTouched()"
+            (click)="selectAllValue($event)" />
+          <div *ngIf="(AmountCtrl.invalid && (AmountCtrl.touched || AmountCtrl.dirty))">
+            <span class="validation-text" *ngIf="AmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-md-6 mb-2">
-          <div>
-            <label><b>Sub Ledger</b></label>
-            <select type="text" name="SubLedger" class="form-control" id="SubLedger" required>
-              <option>--Select Type--</option>
-              <option>Customer</option>
-              <option>Loan</option>
-              <option>Gov off Exp</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-6 mb-2">
-          <label><b>Amount</b></label>
-          <input type="number" name="Amount" class="form-control" id="Amount" required
-            placeholder="Enter Plot Number" />
-        </div>
-        <div class="col-md-6 mb-2">
+        <div class="col-md-6 col-sm-12 mb-3">
           <label><b>Description</b></label>
-          <input type="number" name="Description" class="form-control" id="Description" required
-            placeholder="Enter Plot Number" />
+          <textarea type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
+            id="Description" rows="4" required placeholder="Enter Description" #DescriptionCtrl="ngModel"
+            (blur)="DescriptionCtrl.control.markAsTouched()"></textarea>
+          <div style="height: 25px;"
+            *ngIf="(DescriptionCtrl.invalid && (DescriptionCtrl.touched || DescriptionCtrl.dirty))">
+            <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
         <div>
           <button type="button" class="btn">Save</button>
-        </div>  
+        </div>
         <div>
           <button type="button" class="btn" (click)="BackEstimateStage()">Back</button>
         </div>

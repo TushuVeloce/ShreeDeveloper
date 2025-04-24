@@ -42,7 +42,6 @@
         <tbody>
           <tr *ngFor="let designation of paginatedList(); index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td Class="tbldata">{{designation.p.DepartmentName}}</td>
             <td Class="tbldata">{{designation.p.Name}}</td>
             <td Class="tbldata">{{designation.p.SeniorityLevel}}</td>
             <td class="tbldata">

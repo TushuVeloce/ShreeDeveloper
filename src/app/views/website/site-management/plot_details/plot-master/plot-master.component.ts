@@ -1,6 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { BookingRemark, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -28,7 +28,9 @@ export class PlotMasterComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   siteref : number=0
   bookigremark: number=0
-  BookingRemarkList = DomainEnums.BookingRemarkList(true, '---Select Booking Remark---');
+  BookingRemarkList = DomainEnums.BookingRemarkList(true,);
+  BookingRemarkEnum = BookingRemark; 
+  shouldDestroy: boolean = true;
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
       private companystatemanagement: CompanyStateManagement,) {
@@ -53,7 +55,7 @@ export class PlotMasterComponent implements OnInit {
       });
     }
     if(this.siteref == 0 && this.bookigremark == 0){
-      this.getPlotListBy()
+      this.getPlotList()
     }
   }
 
@@ -77,6 +79,10 @@ export class PlotMasterComponent implements OnInit {
     this.bookigremark = 0
     this.MasterList = [];
     this.DisplayMasterList = [];
+    if(this.siteref == 0){
+      // this.Entity.p.CurrentBookingRemark = this.BookingRemarkEnum.All;
+      this.getPlotList()
+    }
     if(siteref > 0 && this.SiteList.length > 0){
       this.Entity.p.SiteManagementRef = siteref;
       const selectedSite= this.SiteList.find(site => site.p.Ref === siteref);
@@ -109,7 +115,7 @@ export class PlotMasterComponent implements OnInit {
     this.loadPaginationData();
   }
 
-  getPlotListBy = async () => {
+  getPlotList = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     this.siteref = 0
@@ -172,11 +178,18 @@ export class PlotMasterComponent implements OnInit {
 
   AddPlot = async () => {
     if(this.siteref > 0){
+      this.shouldDestroy = false;
       await this.router.navigate(['/homepage/Website/Plot_Master_Details']);
     }else{
       this.uiUtils.showWarningToster('Please select a site first');
     }
   }
 
-
+  ngOnDestroy(): void {
+    if (this.shouldDestroy) {
+      this.appStateManage.StorageKey.removeItem('siteRf');
+      this.appStateManage.StorageKey.removeItem('siteName');
+      this.appStateManage.StorageKey.removeItem('bookingremarkRef');
+    }
+  }
 }
