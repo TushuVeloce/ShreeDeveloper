@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
@@ -28,6 +29,9 @@ export class DesignationMasterDetailsComponent implements OnInit {
 
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
+
+  @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('SeniorityLevelCtrl') SeniorityLevelInputControl!: NgModel;
 
   constructor(
     private router: Router,
@@ -84,9 +88,9 @@ export class DesignationMasterDetailsComponent implements OnInit {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     let entityToSave = this.Entity.GetEditableVersion();
+    let DepartmentRef = this.Entity.p.DepartmentRef;
 
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
@@ -95,23 +99,30 @@ export class DesignationMasterDetailsComponent implements OnInit {
       return;
     } else {
       this.isSaveDisabled = false;
-      // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster(
-          'Designation Master saved successfully!'
-        );
+        await this.uiUtils.showSuccessToster('Designation Master saved successfully!');
         this.Entity = Designation.CreateNewInstance();
+        this.resetAllControls();
+        this.Entity.p.DepartmentRef = DepartmentRef;
       } else {
-        await this.uiUtils.showSuccessToster(
-          'Designation Master Updated successfully!'
-        );
-        await this.router.navigate(['/homepage/Website/Designation_Master']);
+        await this.uiUtils.showSuccessToster('Designation Master Updated successfully!');
+        this.BackDesignation();
       }
     }
   };
 
   BackDesignation = () => {
     this.router.navigate(['/homepage/Website/Designation_Master']);
+  }
+
+  resetAllControls = () => {
+    // reset touched
+    this.NameInputControl.control.markAsUntouched();
+    this.SeniorityLevelInputControl.control.markAsUntouched();
+
+    // reset dirty
+    this.NameInputControl.control.markAsPristine();
+    this.SeniorityLevelInputControl.control.markAsPristine();
   }
 
 }

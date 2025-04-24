@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
 import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
@@ -35,8 +36,22 @@ export class CompanyMasterDetailsComponent implements OnInit {
   allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
   dateOfInCorporation: string | null = null;
   lastDateOfFirstFinancialYear: string | null = null;
-  //  lastDateOfFirstFinancialYear: Date = null as any;
-  ImageBaseUrl :string = "";
+  ImageBaseUrl: string = "";
+
+
+  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
+  Email: string = ValidationPatterns.Email
+  PinCode: string = ValidationPatterns.PinCode;
+  GSTIN: string = ValidationPatterns.GSTIN;
+  PAN: string = ValidationPatterns.PAN;
+
+
+  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
+  PinCodeMsg: string = ValidationMessages.PinCodeMsg;
+  PANMsg: string = ValidationMessages.PANMsg;
+  EmailMsg: string = ValidationMessages.EmailMsg
+  GSTINMsg: string = ValidationMessages.GSTINMsg
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
   constructor(
     private router: Router,
@@ -52,6 +67,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
   async ngOnInit() {
     this.ImageBaseUrl = this.appStateManage.BaseImageUrl;
     this.appStateManage.setDropdownDisabled(true);
+
     await this.FormulateCountryList();
 
     // Load State based on Default Country Ref
@@ -94,12 +110,9 @@ export class CompanyMasterDetailsComponent implements OnInit {
       this.Entity = Company.CreateNewInstance();
       this.dateOfInCorporation = ''; // Clear Date
       this.lastDateOfFirstFinancialYear = ''; // Clear Date
-      Company.SetCurrentInstance(this.Entity);
     }
-    this.InitialEntity = Object.assign(
-      Company.CreateNewInstance(),
-      this.utils.DeepCopy(this.Entity)
-    ) as Company;
+    this.InitialEntity = Object.assign(Company.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Company;
+
     // this.focusInput();
   }
   Image: File = null as any;
@@ -109,25 +122,25 @@ export class CompanyMasterDetailsComponent implements OnInit {
 
   // Handle file selection
   handleFileChange = (event: any) => {
-    // const fileInput = event.target.files[0];
+    const fileInput = event.target.files[0];
 
-    // if (fileInput) {
-    //   if (this.allowedImageTypes.includes(fileInput.type)) {
-    //     this.file = fileInput;
-    //     this.errors.company_image = '';
-    //     if (this.file) {
-    //       this.imageUrl = this.createObjectURL(this.file);
-    //     }
-    //     console.log(this.imageUrl);
+    if (fileInput) {
+      if (this.allowedImageTypes.includes(fileInput.type)) {
+        this.file = fileInput;
+        this.errors.company_image = '';
+        if (this.file) {
+          this.imageUrl = this.createObjectURL(this.file);
+        }
+        console.log(this.imageUrl);
 
-    //     this.cdr.detectChanges();
-    //   } else {
-    //     this.errors.company_image =
-    //       'Only image files (JPG, PNG, GIF) are allowed';
-    //     this.file = null;
-    //     this.imageUrl = null;
-    //   }
-    // }
+        this.cdr.detectChanges();
+      } else {
+        this.errors.company_image =
+          'Only image files (JPG, PNG, GIF) are allowed';
+        this.file = null;
+        this.imageUrl = null;
+      }
+    }
 
 
     const files: FileList = event.target.files;
@@ -197,6 +210,20 @@ export class CompanyMasterDetailsComponent implements OnInit {
       await this.getStateListByCountryRef(this.Entity.p.CountryRef);
     }
   }
+
+  getCityListByStateRef = async (StateRef: number) => {
+    this.CityList = await City.FetchEntireListByStateRef(
+      StateRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
+    // Set default city if exists
+    if (this.CityList.length) {
+      const defaultCity = this.CityList.find(c => c.p.Ref === this.Entity.p.CityRef);
+      this.Entity.p.CityRef = defaultCity ? defaultCity.p.Ref : this.CityList[0].p.Ref;
+    }
+  }
+
   getStateListByCountryRef = async (CountryRef: number) => {
     this.StateList = await State.FetchEntireListByCountryRef(
       CountryRef,
@@ -210,19 +237,6 @@ export class CompanyMasterDetailsComponent implements OnInit {
 
       // Fetch the corresponding cities
       await this.getCityListByStateRef(this.Entity.p.StateRef);
-    }
-  }
-
-  getCityListByStateRef = async (StateRef: number) => {
-    this.CityList = await City.FetchEntireListByStateRef(
-      StateRef,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-
-    // Set default city if exists
-    if (this.CityList.length) {
-      const defaultCity = this.CityList.find(c => c.p.Ref === this.Entity.p.CityRef);
-      this.Entity.p.CityRef = defaultCity ? defaultCity.p.Ref : this.CityList[0].p.Ref;
     }
   }
 
@@ -252,11 +266,9 @@ export class CompanyMasterDetailsComponent implements OnInit {
         entityToSave.p.LastDateOfFirstFinancialYear = '';
       }
     }
-    let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("Company_Logo", this.Entity.p.CompanyLogo, this.Entity.p.CompanyLogo.name)];
-    console.log(lstFTO, 'lstFTO');
-    // return
+    // let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("Company_Logo", this.Entity.p.CompanyLogo, this.Entity.p.CompanyLogo.name)];
     let entitiesToSave = [entityToSave];
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
       this.isSaveDisabled = false;
@@ -274,8 +286,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster('Company Updated successfully!');
         this.dateOfInCorporation = '';
         this.lastDateOfFirstFinancialYear = '';
-        await this.router.navigate(['/homepage/Website/Company_Master']);
-
+        this.BackCompany();
       }
     }
   };

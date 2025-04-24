@@ -30,7 +30,7 @@ export class DesignationMasterComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Department', 'Designation', 'Seniority Level', 'Action'];
+  headers: string[] = ['Sr.No.', 'Designation', 'Seniority Level', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
@@ -48,13 +48,11 @@ export class DesignationMasterComponent implements OnInit {
   }
 
   public getDepartmentListByCompanyRef = async () => {
-    this.MasterList = [];
-    this.DisplayMasterList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Department.FetchEntireList(
+    let lst = await Department.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.DepartmentList = lst;
