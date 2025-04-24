@@ -22,6 +22,7 @@
                 <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteManagementRef"
                   name="SiteManagementRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteManagementRef" (ngModelChange)="onsitechange(Entity.p.SiteManagementRef)"
                  >
+                 <nz-option [nzValue]="0" nzLabel="All"></nz-option>
                   <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
                 </nz-select>
               </div>
@@ -30,7 +31,7 @@
                 <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CurrentBookingRemark"
                   name="CurrentBookingRemark" [nzSize]="'large'" [(ngModel)]="Entity.p.CurrentBookingRemark"  (ngModelChange)="getPlotListBySiteRef(Entity.p.SiteManagementRef,Entity.p.CurrentBookingRemark)">
                   <nz-option *ngFor="let bookingremark of BookingRemarkList" [nzValue]="bookingremark.Ref"
-                    [nzLabel]="bookingremark.Name"></nz-option>
+                  [nzLabel]="bookingremark.Name"></nz-option>
                 </nz-select>
               </div>
           </div>

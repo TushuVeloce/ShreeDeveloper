@@ -25,7 +25,7 @@ export enum BookingRemark {
   Shree_Booked = 20,
   Owner_Saledeed = 30,
   Shree_Saledeed = 40,
-  Booked = 50
+  Booked = 50,
 }
 
 export enum MarketingModes {
