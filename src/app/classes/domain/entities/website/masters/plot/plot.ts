@@ -30,7 +30,7 @@ export class PlotProps {
   public CompanyName: string = '';
   public SiteManagementRef: number = 0;
   public CurrentOwnerRef: number = 0;
-  public OwnerName: number = 0;
+  public OwnerName: string = '';
   public LoginEmployeeRef:  number = 26893;
 
   public readonly SiteName: string = '';

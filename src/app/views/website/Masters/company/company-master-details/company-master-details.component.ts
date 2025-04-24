@@ -81,7 +81,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
         this.dtu.FromString(this.Entity.p.LastDateOfFirstFinancialYear),
         'yyyy-MM-dd'
       );
-      this.imageUrl = this.Entity.p.LogoPath;
+      // this.imageUrl = this.Entity.p.LogoPath;
 
       this.appStateManage.StorageKey.removeItem('Editable');
       if (this.Entity.p.CountryRef) {
