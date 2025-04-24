@@ -86,7 +86,7 @@ export class DesignationMasterDetailsComponent implements OnInit {
     let entityToSave = this.Entity.GetEditableVersion();
 
     let entitiesToSave = [entityToSave];
-    // await this.Entity.EnsurePrimaryKeysWithValidValues()
+    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {

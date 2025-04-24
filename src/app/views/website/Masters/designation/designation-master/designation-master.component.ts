@@ -6,6 +6,7 @@ import { CompanyStateManagement } from 'src/app/services/companystatemanagement'
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import Swal from 'sweetalert2';
+import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
 
 @Component({
   selector: 'app-designation-master',
@@ -24,6 +25,8 @@ export class DesignationMasterComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
+  DepartmentList: Department[] = [];
+
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -32,47 +35,41 @@ export class DesignationMasterComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(() => {
-      // this.getDesignationListByCompanyRef()
-      this.getDesignationListByCompanyRef();
+      this.getDepartmentListByCompanyRef();
     });
   }
-
-  // effect(() => {
-  //   // this.getDesignationListByCompanyRef()
-  //   setTimeout(() => {
-  //     if (this.companyRef() > 0) {
-  //       this.getDesignationListByCompanyRef();
-  //     }
-  //   }, 300);
-  // });
-
 
 
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    // await this.FormulateDesignationList();
-    // this.DisplayMasterList = [];
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
-  // private FormulateDesignationList = async () => {
-  //   let lst = await Designation.FetchEntireList(
-  //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-  //   );
-  //   this.MasterList = lst;
-  //   this.DisplayMasterList = this.MasterList;
-  //   this.loadPaginationData();
-  // };
 
-  getDesignationListByCompanyRef = async () => {
+  public getDepartmentListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Designation.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Department.FetchEntireList(
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.DepartmentList = lst;
+    this.Entity.p.DepartmentRef = this.DepartmentList[0].p.Ref;
+    this.getDesignationListByDepartmentRef();
+  };
+
+  getDesignationListByDepartmentRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.Entity.p.DepartmentRef <= 0) {
+      await this.uiUtils.showErrorToster('Department not Selected');
+      return;
+    }
+    let lst = await Designation.FetchEntireListByDepartmentRef(this.Entity.p.DepartmentRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -101,7 +98,7 @@ export class DesignationMasterComponent implements OnInit {
           await this.uiUtils.showSuccessToster(
             `Designation ${Designation.p.Name} has been deleted!`
           );
-          await this.getDesignationListByCompanyRef();
+          await this.getDesignationListByDepartmentRef();
           this.SearchString = '';
           this.loadPaginationData();
           // await this.FormulateDesignationList();

@@ -74,8 +74,8 @@ export class Stage implements IPersistable<Stage> {
       vra.add('DisplayOrder', 'Display Order cannot be blank.');
     } else if (this.p.DisplayOrder < 0) {
       vra.add('DisplayOrder', 'Display Order cannot be less then 0.');
-    } else if (!new RegExp(ValidationPatterns.IsRationalNumber).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.IsRationalNumberMsg + ' for Display Order');
+    } else if (this.p.DisplayOrder.toString().includes('.')) {
+      vra.add('DisplayOrder', 'Rational Number not allowed for Display Order');
     }
   }
 

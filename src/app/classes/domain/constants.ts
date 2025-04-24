@@ -3,7 +3,6 @@ export class ValidationPatterns {
   public static readonly NameWithoutNos: string = "^[a-zA-Z\\s]+$";
   public static readonly NameWithNos: string = "^[a-zA-Z0-9]+$";
   public static readonly NameWithoutNoswith_: string = "^[a-zA-Z\\s_]+$";
-  public static readonly IsRationalNumber: string = "/^-?\d+(\.\d+)?$|^-?\d+\/[1-9]\d*$/";
   public static readonly Email: string = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
   public static readonly INDPhoneNo: string = "^[6789][0-9]{9}$";
   public static readonly Address: string = "^[a-zA-Z0-9 ,./#-]{5,100}$";
@@ -33,7 +32,6 @@ export class ValidationMessages {
   public static readonly NameWithoutNosMsg: string = "Special char, _ ,Number not allowed";
   public static readonly NameWithNosMsg: string = "Special char, _ and space not allowed";
   public static readonly NameWithoutNoswith_Msg: string = "Special char,Number not allowed";
-  public static readonly IsRationalNumberMsg: string = "Rational Number not allowed";
   public static readonly NameWithNosAndSpaceMsg: string = "Special char & _ not allowed";
   public static readonly NameWithNosAndSpaceAnd_Msg: string = "Special char not allowed";
 

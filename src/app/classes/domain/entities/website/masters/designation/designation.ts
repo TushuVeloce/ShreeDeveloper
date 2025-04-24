@@ -44,8 +44,8 @@ export class Designation implements IPersistable<Designation> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -68,7 +68,13 @@ export class Designation implements IPersistable<Designation> {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
     if (this.p.DepartmentRef == 0) vra.add('DepartmentRef', 'Department cannot be blank.');
-    if (this.p.SeniorityLevel == 0) vra.add('SeniorityLevel', 'Level cannot be blank.');
+    if (this.p.SeniorityLevel == 0) {
+      vra.add('SeniorityLevel', 'Seniority Level cannot be blank.');
+    } else if (this.p.SeniorityLevel < 0) {
+      vra.add('SeniorityLevel', 'Seniority Level cannot be less then 0.');
+    } else if (this.p.SeniorityLevel.toString().includes('.')) {
+      vra.add('SeniorityLevel', 'Rational Number not allowed for Seniority Level');
+    }
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -162,14 +168,21 @@ export class Designation implements IPersistable<Designation> {
     return Designation.ListFromTransportData(tdResponse);
   }
 
- public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new DesignationFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await Designation.FetchTransportData(req, errorHandler) as TransportData;
     return Designation.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCompanyAndDepartmentRef(CompanyRef:number,departmentref:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByDepartmentRef(DepartmentRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new DesignationFetchRequest();
+    req.DepartmentRefs.push(DepartmentRef)
+    let tdResponse = await Designation.FetchTransportData(req, errorHandler) as TransportData;
+    return Designation.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByCompanyAndDepartmentRef(CompanyRef: number, departmentref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new DesignationFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     req.DepartmentRefs.push(departmentref)
