@@ -80,7 +80,7 @@ export class PlotMasterComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if(this.siteref == 0){
-      this.Entity.p.CurrentBookingRemark = this.BookingRemarkEnum.All;
+      // this.Entity.p.CurrentBookingRemark = this.BookingRemarkEnum.All;
       this.getPlotList()
     }
     if(siteref > 0 && this.SiteList.length > 0){
