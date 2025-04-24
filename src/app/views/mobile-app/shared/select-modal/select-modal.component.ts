@@ -20,6 +20,7 @@ export class SelectModalComponent  implements OnInit {
 
   ngOnInit() {
     this.loadedOptions = this.options.slice(0, this.itemsPerLoad);
+    console.log('options :', this.options);
   }
 
   filterOptions(event: any) {

@@ -169,15 +169,23 @@ export class AttendanceManagementPage implements OnInit {
       if (!this.attendanceLog.p.FirstCheckInTime && !this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime) {
         this.isCheckInEnabled = true;
         this.bothButtonsEnabled = true;
+        console.log("call condition 1");
+        
       } else if (this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime) {
         this.isCheckInEnabled = false;
         this.bothButtonsEnabled = true;
+        console.log("call condition 2");
+
       } else if (this.attendanceLog.p.CheckInTime && this.attendanceLog.p.CheckOutTime) {
         this.isCheckInEnabled = true;
-        this.bothButtonsEnabled = false;
+        this.bothButtonsEnabled = true;
+        console.log("call condition 3");
+
       } else {
         this.isCheckInEnabled = false;
         this.bothButtonsEnabled = false;
+        console.log("call condition 4");
+
       }
     } catch (error) {
       console.error('Error in getCheckInData:', error);
