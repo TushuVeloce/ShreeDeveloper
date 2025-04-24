@@ -81,7 +81,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
         this.dtu.FromString(this.Entity.p.LastDateOfFirstFinancialYear),
         'yyyy-MM-dd'
       );
-      this.imageUrl = this.Entity.p.Notes
+      this.imageUrl = this.Entity.p.LogoPath;
 
       this.appStateManage.StorageKey.removeItem('Editable');
       if (this.Entity.p.CountryRef) {
@@ -252,7 +252,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
         entityToSave.p.LastDateOfFirstFinancialYear = '';
       }
     }
-    let lstFTO: FileTransferObject[] = [FileTransferObject.FromFileWithoutId(this.Entity.p.CompanyLogo, this.Entity.p.CompanyLogo.name)];
+    let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("Company_Logo", this.Entity.p.CompanyLogo, this.Entity.p.CompanyLogo.name)];
     console.log(lstFTO, 'lstFTO');
     // return
     let entitiesToSave = [entityToSave];

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { Department } from 'src/app/classes/domain/entities/website/masters/department/department';
 import { Designation } from 'src/app/classes/domain/entities/website/masters/designation/designation';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -22,6 +23,11 @@ export class DesignationMasterDetailsComponent implements OnInit {
   IsDropdownDisabled: boolean = false;
   InitialEntity: Designation = null as any;
   DepartmentList: Department[] = [];
+
+  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
+
+  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
   constructor(
     private router: Router,
@@ -51,9 +57,13 @@ export class DesignationMasterDetailsComponent implements OnInit {
       Designation.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as Designation;
-    // this.focusInput();
-
+    this.focusInput();
     await this.FormulateDepartmentList();
+  }
+
+  focusInput = () => {
+    let txtName = document.getElementById('Name')!;
+    txtName.focus();
   }
 
   public FormulateDepartmentList = async () => {
@@ -61,7 +71,14 @@ export class DesignationMasterDetailsComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.DepartmentList = lst;
+    this.Entity.p.DepartmentRef = this.DepartmentList[0].p.Ref;
   };
+
+  // for value 0 selected while click on Input //
+  selectAllValue(event: MouseEvent): void {
+    const input = event.target as HTMLInputElement;
+    input.select();
+  }
 
   SaveDesignationMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();

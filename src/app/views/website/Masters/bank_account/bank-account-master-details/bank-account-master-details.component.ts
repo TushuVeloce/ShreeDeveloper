@@ -27,9 +27,11 @@ export class BankAccountMasterDetailsComponent implements OnInit {
 
   IFSCPattern: string = ValidationPatterns.IFSC;
   LargeInputNumber: string = ValidationPatterns.LargeInputNumber;
+  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace;
 
   IFSCMsg: string = ValidationMessages.IFSCMsg;
   LargeInputNumberMsg: string = ValidationMessages.LargeInputNumberMsg;
+  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
@@ -60,6 +62,12 @@ export class BankAccountMasterDetailsComponent implements OnInit {
     }
     this.InitialEntity = Object.assign(BankAccount.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)) as BankAccount;
+      this.focusInput();
+  }
+
+  focusInput = () => {
+    let txtName = document.getElementById('Name')!;
+    txtName.focus();
   }
 
   SaveBankAccountMaster = async () => {
@@ -114,6 +122,7 @@ export class BankAccountMasterDetailsComponent implements OnInit {
   resetAllControls = () => {
     // reset touched
     this.NameInputControl.control.markAsUntouched();
+    this.IFSCInputControl.control.markAsUntouched();
     this.BranchNameInputControl.control.markAsUntouched();
     this.AccountNumberInputControl.control.markAsUntouched();
     this.IFSCInputControl.control.markAsUntouched();
@@ -121,6 +130,7 @@ export class BankAccountMasterDetailsComponent implements OnInit {
     this.DateOfOpeningInputControl.control.markAsUntouched();
 
     // reset dirty
+    this.NameInputControl.control.markAsPristine();
     this.IFSCInputControl.control.markAsPristine();
     this.BranchNameInputControl.control.markAsPristine();
     this.AccountNumberInputControl.control.markAsPristine();

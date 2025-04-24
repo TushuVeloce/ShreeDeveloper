@@ -16,31 +16,22 @@
           <div>
             <label>Code</label>
             <input type="text" [(ngModel)]="Entity.p.Code" name="Code" class="form-control" id="Code" required
-              placeholder="Enter Code" #CodeCtrl="ngModel" required (blur)="CodeCtrl.control.markAsTouched()" />
-              <Validation  [control]="CodeCtrl" />
-
-            <!-- <div *ngIf="(CodeCtrl.invalid && (CodeCtrl.touched || CodeCtrl.dirty))">
-              <span class="validation-text" *ngIf="CodeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div> -->
+              placeholder="Enter Code" #CodeCtrl="ngModel" (blur)="CodeCtrl.control.markAsTouched()" />
+            <Validation [control]="CodeCtrl" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Name</label>
             <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
-              placeholder="Enter Name" pattern="{{NameWithNos}}" #NameCtrl="ngModel" required
+              placeholder="Enter Name" pattern="{{NameWithNosAndSpace}}" #NameCtrl="ngModel"
               (blur)="NameCtrl.control.markAsTouched()" />
-          <Validation  [control]="NameCtrl" [patternMessage]="NameWithNosMsg" />
-
-            <!-- <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
-              <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
-              <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div> -->
+            <Validation [control]="NameCtrl" [patternMessage]="NameWithNosAndSpaceMsg" />
           </div>
         </div>
 
         <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
-          <label> Unit</label>
+          <label>Unit</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UnitRef" name="UnitRef"
             [nzSize]="'large'" [(ngModel)]="Entity.p.UnitRef">
             <nz-option *ngFor="let unit of UnitList" [nzValue]="unit.p.Ref" [nzLabel]="unit.p.Name"></nz-option>

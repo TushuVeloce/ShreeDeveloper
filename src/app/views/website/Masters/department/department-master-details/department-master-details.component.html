@@ -3,12 +3,7 @@
     <div class="row">
       <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
         <button type="button" class="backbtn" (click)="BackDepartment()">
-          <img
-            src="/assets/icons/arrow-button.png"
-            alt=""
-            width="34px"
-            height="34px"
-          />
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
         </button>
       </div>
       <div class="col-md-11">
@@ -17,30 +12,24 @@
     </div>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-6">
-           <label>Name</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.Name"
-              name="Name"
-              class="form-control"
-              id="Name"
-              required
-              placeholder="Enter Name"
-            />
+        <div class="col-md-6 col-md-4 col-sm-12">
+          <label for="Name">Name</label>
+          <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name"
+            placeholder="Enter Name" [pattern]="NameWithNosAndSpace" #NameCtrl="ngModel" required
+            (blur)="NameCtrl.control.markAsTouched()" />
+          <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
+            <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithNosAndSpaceMsg}}</span>
+            <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
-        <!-- <div class="col-md-6">
-          <label>Company</label>
-          <input  class="form-control" type="text" [attr.value]="companyName()" placeholder="Company Name" readonly />
-        </div> -->
+        </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
-          <div>
-            <button type="button" class="btn" (click)="SaveDepartmentMaster()">Save</button>
-          </div>
-          <div>
-            <button type="button" class="btn"  (click)="BackDepartment()">Back</button>
-          </div>
+        <div>
+          <button type="button" class="btn" (click)="SaveDepartmentMaster()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackDepartment()">Back</button>
+        </div>
       </div>
     </form>
   </div>

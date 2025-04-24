@@ -73,13 +73,7 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
       SalarySlipRequest.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as SalarySlipRequest;
-    this.focusInput();
     this.getFinancialYearListByCompanyRef();
-  }
-
-  focusInput = () => {
-    // let txtName = document.getElementById('fromdate')!;
-    // txtName.focus();
   }
 
   getFinancialYearListByCompanyRef = async () => {
@@ -140,10 +134,8 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('SalarySlipRequest Master saved successfully!');
         this.Entity = SalarySlipRequest.CreateNewInstance();
-        this.resetAllControls();
-      } else {
-        await this.uiUtils.showSuccessToster('SalarySlipRequest Master Updated successfully!');
         await this.router.navigate(['/homepage/Website/Salary_Slip_Request']);
+        this.resetAllControls();
       }
     }
   };

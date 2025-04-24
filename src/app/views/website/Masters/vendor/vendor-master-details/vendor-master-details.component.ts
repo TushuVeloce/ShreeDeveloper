@@ -44,8 +44,11 @@ export class VendorMasterDetailsComponent implements OnInit {
   IFSCPattern: string = ValidationPatterns.IFSC;
   PANPattern: string = ValidationPatterns.PAN;
   GSTINPattern: string = ValidationPatterns.GSTIN;
+  LargeInputNumber: string = ValidationPatterns.LargeInputNumber;
+
 
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
+  LargeInputNumberMsg: string = ValidationMessages.LargeInputNumberMsg;
   PinCodeMsg: string = ValidationMessages.PinCodeMsg;
   IFSCMsg: string = ValidationMessages.IFSCMsg;
   GSTINMsg: string = ValidationMessages.GSTINMsg;
@@ -101,6 +104,12 @@ export class VendorMasterDetailsComponent implements OnInit {
       Vendor.SetCurrentInstance(this.Entity);
     }
     this.InitialEntity = Object.assign(Vendor.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Vendor;
+    this.focusInput();
+  }
+
+  focusInput = () => {
+    let txtName = document.getElementById('Code')!;
+    txtName.focus();
   }
 
   FormulateCountryList = async () => {

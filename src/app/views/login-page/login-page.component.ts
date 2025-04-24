@@ -36,7 +36,7 @@ export class LoginPageComponent implements OnInit {
 
   // UserId: string = 'shweta@veloce.com';
   UserId: string = 'admin@gmail.com';
-  Password: string = '123';
+  Password: string = '1234';
 
   ngOnInit() { }
   Login = async () => {
