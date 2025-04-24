@@ -95,6 +95,7 @@ export class LeaveApprovalComponent implements OnInit {
   }
 
   handleApproval = async (leaveapproval: LeaveRequest) => {
+    debugger
     await this.uiUtils.showStatusConfirmationMessage(
       'Update Leave Status',
       `Please confirm the new status for this leave request.`,
@@ -103,29 +104,50 @@ export class LeaveApprovalComponent implements OnInit {
       async (selectedStatus: string) => {
         // Exit when select cancle
         if (selectedStatus === 'Cancel') {
+          await this.uiUtils.showErrorToster('Request Cancelled');
           return;
         }
         this.Entity = leaveapproval;
+        // Save original state in case backend fails
+        const originalApprovalStatus = this.Entity.p.IsApproved;
+        const originalCancelStatus = this.Entity.p.IsCancelled;
+        const originalApprovedBy = this.Entity.p.LeaveApprovedBy;
+        const originalCancelledBy = this.Entity.p.LeaveCancelledBy;
+
+        const currentEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+        this.Entity.p.LeaveApprovedBy = currentEmployeeRef;
+        this.Entity.p.LeaveCancelledBy = currentEmployeeRef;
+
         if (selectedStatus === 'Approved') {
+          debugger
           this.Entity.p.IsApproved = 1;
-          this.Entity.p.LeaveApprovedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
-          this.Entity.p.LeaveCancelledBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+          this.Entity.p.LeaveApprovedBy = currentEmployeeRef
+          this.Entity.p.LeaveCancelledBy = currentEmployeeRef
           this.Entity.p.IsCancelled = 0;
         }
         else if (selectedStatus === 'Rejected') {
+          debugger
           this.Entity.p.IsApproved = 0;
-          this.Entity.p.LeaveApprovedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
-          this.Entity.p.LeaveCancelledBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+          this.Entity.p.LeaveApprovedBy = currentEmployeeRef
+          this.Entity.p.LeaveCancelledBy = currentEmployeeRef
           this.Entity.p.IsCancelled = 1;
         }
         const entityToSave = this.Entity.GetEditableVersion();
-
         const tr = await this.utils.SavePersistableEntities([entityToSave]);
-
         if (!tr.Successful) {
+          this.Entity.p.IsApproved = originalApprovalStatus;
+          this.Entity.p.IsCancelled = originalCancelStatus;
+          this.Entity.p.LeaveApprovedBy = originalApprovedBy;
+          this.Entity.p.LeaveCancelledBy = originalCancelledBy;
           this.uiUtils.showErrorMessage('Error', tr.Message);
+          return;
         } else {
-          await this.uiUtils.showSuccessToster(`Leave marked as ${selectedStatus}`);
+          if (selectedStatus === 'Approved') {
+            await this.uiUtils.showSuccessToster(`Leave has been approved successfully`);
+          }
+          else if (selectedStatus === 'Rejected') {
+            await this.uiUtils.showErrorToster(`Leave has been rejected  successfully`);
+          }
           this.getLeaveApprovalListByEmployeeRef();
         }
       }
