@@ -11,7 +11,7 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { VendorFetchRequest } from "./vendorfetchrequest";
-import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
+import { CountryStateCityRefs, ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 
 export class MaterialListSuppliedByVendorProps {
   public MaterialRef: number = 0;
@@ -35,14 +35,11 @@ export class VendorProps {
   public AddressLine1: string = '';
   public AddressLine2: string = '';
 
-  public CountryRef: number = 9163;
+  public CountryRef: number = CountryStateCityRefs.IndiaRef;
   public readonly CountryName: string = '';
-
-  public StateRef: number = 10263;
+  public StateRef: number = CountryStateCityRefs.MaharashtraRef;
   public readonly StateName: string = '';
-
-  public CityRef: number = 10374;
-  public readonly CityName: string = '';
+  public CityRef: number = CountryStateCityRefs.KolhapurRef;
 
   public PinCode: string = '';
   public BankName: string = '';
@@ -106,7 +103,7 @@ export class Vendor implements IPersistable<Vendor> {
     if (this.p.Name == '') {
       vra.add('Name', 'Name cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg  + ' for Name');
+      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     }
     if (this.p.TradeName == '') vra.add('TradeName', 'Trade Name cannot be blank.');
     if (this.p.MobileNo == '') vra.add('MobileNo', 'Mobile No cannot be blank.');

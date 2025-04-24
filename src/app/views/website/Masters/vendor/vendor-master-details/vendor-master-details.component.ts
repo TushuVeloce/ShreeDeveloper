@@ -77,7 +77,7 @@ export class VendorMasterDetailsComponent implements OnInit {
     this.MaterialList = await Material.FetchEntireList();
     this.ServiceList = await VendorService.FetchEntireList();
 
-
+    Vendor.SetCurrentInstance(this.Entity);
     await this.FormulateCountryList();
 
     // Load State based on Default Country Ref
@@ -96,7 +96,6 @@ export class VendorMasterDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Vendor' : 'Edit Vendor';
       this.Entity = Vendor.GetCurrentInstance();
-      console.log('this.Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable')
 
     } else {
