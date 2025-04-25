@@ -52,15 +52,15 @@
 }
 
 @media print {
-  body * {
+  custom-modal-overlay  * {
     visibility: hidden;
   }
 
-  .modal-content, .modal-content * {
+  .custom-modal, .custom-modal * {
     visibility: visible;
   }
 
-  .modal-content {
+  .custom-modal {
     position: absolute;
     top: 0;
     left: 0;
