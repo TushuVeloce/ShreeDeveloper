@@ -85,7 +85,10 @@ export class CompanyMasterDetailsComponent implements OnInit {
 
       this.DetailsFormTitle = this.IsNewEntity ? 'New Company' : 'Edit Company';
       this.Entity = Company.GetCurrentInstance();
-
+      console.log(this.Entity);
+      this.imageUrl = this.Entity.p.LogoPath;
+      console.log(this.Entity.p.LogoPath);
+      
       // While Edit Converting date String into Date Format //
       this.dateOfInCorporation = this.datePipe.transform(
         this.dtu.FromString(this.Entity.p.DateOfInCorporation),
@@ -97,7 +100,6 @@ export class CompanyMasterDetailsComponent implements OnInit {
         this.dtu.FromString(this.Entity.p.LastDateOfFirstFinancialYear),
         'yyyy-MM-dd'
       );
-      // this.imageUrl = this.Entity.p.LogoPath;
 
       this.appStateManage.StorageKey.removeItem('Editable');
       if (this.Entity.p.CountryRef) {
@@ -115,85 +117,24 @@ export class CompanyMasterDetailsComponent implements OnInit {
 
     // this.focusInput();
   }
-  Image: File = null as any;
-  selectedImage: string | undefined;
-  @ViewChild('imageInput') imageInput: any;
-  uploadbtn: boolean = true;
+  onImageUpload = async (event: any) => {
+    const result = await this.utils.handleImageSelection(
+      event,
+      this.allowedImageTypes
+    );
 
-  // Handle file selection
-  handleFileChange = (event: any) => {
-    const fileInput = event.target.files[0];
-
-    if (fileInput) {
-      if (this.allowedImageTypes.includes(fileInput.type)) {
-        this.file = fileInput;
-        this.errors.company_image = '';
-        if (this.file) {
-          this.imageUrl = this.createObjectURL(this.file);
-        }
-        console.log(this.imageUrl);
-
-        this.cdr.detectChanges();
-      } else {
-        this.errors.company_image =
-          'Only image files (JPG, PNG, GIF) are allowed';
-        this.file = null;
-        this.imageUrl = null;
-      }
+    if (result.error) {
+      // If there is an error, show it and reset values
+      this.file = null;
+      this.imageUrl = null;
+      this.errors.company_image = result.error;
+    } else {
+      // If valid, assign values
+      this.file = result.file;
+      this.imageUrl = result.imageUrl;
+      this.errors.company_image = '';
+      this.Entity.p.CompanyLogo = this.file!;
     }
-
-
-    const files: FileList = event.target.files;
-    const file: File | null = files.item(0);
-
-    if (file) {
-      const reader = new FileReader();
-      if (this.allowedImageTypes.includes(file.type)) {
-        this.file = file;
-        this.errors.company_image = '';
-        if (this.file) {
-          this.imageUrl = this.createObjectURL(this.file);
-        }
-        console.log(this.imageUrl);
-
-        this.cdr.detectChanges();
-      } else {
-        this.errors.company_image =
-          'Only image files (JPG, PNG, GIF) are allowed';
-        this.file = null;
-        this.imageUrl = null;
-      }
-
-      reader.onload = () => {
-        this.selectedImage = reader.result as string;
-      };
-
-      reader.readAsDataURL(file);
-    }
-    // if (files.length > 0) {
-    //   this.uploadbtn = false;
-    // }
-    // else {
-    //   this.uploadbtn = true;
-    // }
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files.item(i);
-      // this.formData = new FormData();
-
-      if (file) {
-        // this.Entity.p.Images.push(file);\
-        // this.formData.append('images', file);
-        this.Entity.p.CompanyLogo = file;
-        // let obj = FileTransferObject.FromFileWithoutId(file, this.Entity.p.Caption)
-        // this.Entity.p.Images.push(obj)
-        console.log(this.Entity.p.CompanyLogo);
-
-        // this.Image.push(file);
-
-      }
-    }
-    this.imageInput = null;
   }
 
   FormulateCountryList = async () => {
@@ -266,9 +207,11 @@ export class CompanyMasterDetailsComponent implements OnInit {
         entityToSave.p.LastDateOfFirstFinancialYear = '';
       }
     }
-    // let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("Company_Logo", this.Entity.p.CompanyLogo, this.Entity.p.CompanyLogo.name)];
+    let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("Company_Logo", this.Entity.p.CompanyLogo, this.Entity.p.CompanyLogo.name)];
     let entitiesToSave = [entityToSave];
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    console.log(entitiesToSave);
+    console.log(lstFTO);
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
 
     if (!tr.Successful) {
       this.isSaveDisabled = false;

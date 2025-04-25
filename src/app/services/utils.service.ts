@@ -249,4 +249,72 @@ export class Utils {
     if (isNullOrUndefined(value)) return '';
     return String(value);
   }
+
+ // for file uploading
+public async handleImageSelection(
+  event: any,
+  allowedTypes: string[] = ['image/jpeg', 'image/png', 'image/gif']
+): Promise<{
+  file: File | null;
+  imageUrl: string | null;
+  selectedImage: string | null;
+  error: string;
+}> {
+  return new Promise((resolve) => {
+    const files: FileList = event.target.files;
+    const file: File | null = files.item(0);
+
+    if (!file) {
+      resolve({
+        file: null,
+        imageUrl: null,
+        selectedImage: null,
+        error: 'No file selected',
+      });
+      return;
+    }
+
+    // Validate the file type (MIME type)
+    if (!allowedTypes.includes(file.type)) {
+      resolve({
+        file: null,
+        imageUrl: null,
+        selectedImage: null,
+        error: 'Only image files (JPG, PNG, GIF) are allowed',
+      });
+      return;
+    }
+
+    // Validate the file extension
+    const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+    const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif','pdf'];
+
+    if (!allowedExtensions.includes(fileExtension)) {
+      resolve({
+        file: null,
+        imageUrl: null,
+        selectedImage: null,
+        error: 'Invalid file extension. Only JPG, PNG, and GIF,pdf are allowed.',
+      });
+      return;
+    }
+
+    // Proceed with image preview if file is valid
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const selectedImage = reader.result as string;
+      const imageUrl = URL.createObjectURL(file);
+      resolve({
+        file,
+        imageUrl,
+        selectedImage,
+        error: '', // No error
+      });
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
 }

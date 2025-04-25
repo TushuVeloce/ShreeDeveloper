@@ -50,6 +50,8 @@ export class AttendanceLogsComponent implements OnInit {
   isTodayAttendanceView: boolean = false;
 
   isShowMonthlyData: boolean = false;
+  isDaysShow: boolean = false;
+  isDaysShowMonth: boolean = false;
 
   constructor(
     private uiUtils: UIUtils,
@@ -82,6 +84,9 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   getTodayAttendanceLogByAttendanceListType = async () => {
+    this.isDaysShowMonth = false
+    this.isDaysShow = false
+    this.resetSummaryStats();
     this.ToDispayMonthlyRequirement = false;
     this.ToDisplayWeeklyRequirement = false;
     this.isTodayAttendanceView = true;
@@ -92,9 +97,10 @@ export class AttendanceLogsComponent implements OnInit {
     // this.groupByEmployee();
     this.getAttendanceCount(AttendenceLogType.TodaysAttendanceLog)
     console.log('Todays', this.DisplayMasterList);
+    console.log('All Entity', this.Entity.p.TeamSize);
   }
 
-  // On Week Selected 
+  // On Week Selected
   selectWeek = async () => {
     this.Entity.p.EmployeeRef = 0;
     this.DisplayMasterList = [];
@@ -103,9 +109,12 @@ export class AttendanceLogsComponent implements OnInit {
     this.ToDisplayWeeklyRequirement = true;
     this.isTodayAttendanceView = false;
     this.isShowMonthlyData = false
+    this.isDaysShow = true
+    this.isDaysShowMonth = false
   }
 
   getWeekWiseAttendanceLogByAttendanceListType = async () => {
+    this.resetSummaryStats();
     this.ToDispayMonthlyRequirement = false;
     this.isTodayAttendanceView = false;
     this.isShowMonthlyData = false;
@@ -118,8 +127,7 @@ export class AttendanceLogsComponent implements OnInit {
     this.getAttendanceCount(AttendenceLogType.WeeklyAttendanceLog);
     console.log('weekly', this.DisplayMasterList);
   }
-
-  // On Month selected 
+  // On Month selected
   onEmployeeChange(): void {
     this.Entity.p.Months = 0;
   }
@@ -133,9 +141,12 @@ export class AttendanceLogsComponent implements OnInit {
     this.ToDisplayWeeklyRequirement = false;
     this.isTodayAttendanceView = false;
     this.isShowMonthlyData = true
+    this.isDaysShow = false
+    this.isDaysShowMonth = true
   }
 
   getMonthWiseAttendanceLogByAttendanceListType = async () => {
+    this.resetSummaryStats();
     this.DisplayMasterList = [];
     this.ToDispayMonthlyRequirement = true;
     this.ToDisplayWeeklyRequirement = false;
@@ -152,21 +163,22 @@ export class AttendanceLogsComponent implements OnInit {
     // this.groupByEmployee();
     this.getAttendanceCount(AttendenceLogType.MonthlyAttendanceLog)
     console.log('Monthly', this.DisplayMasterList);
+    console.log('All Entity', this.Entity);
   }
 
   // For Pagination  start ----
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
-  };
+  }
 
-  paginatedList = () => {
+  get paginatedList() {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
 
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
-  };
+  }
 
   filterTable = () => {
     if (this.SearchString != '') {
@@ -189,7 +201,7 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   // CustomFetchRequest
-  getAttendanceCount = async (AttendenceLogType :number) => {
+  getAttendanceCount = async (AttendenceLogType: number) => {
     // let tranDate = this.dtu.ConvertStringDateToFullFormat(this.Date!)
     let req = new AttendanceLogCountCustomRequest();
     // req.TransDateTime = tranDate;
@@ -211,13 +223,26 @@ export class AttendanceLogsComponent implements OnInit {
     console.log(tdResult);
 
     const summaryCollection = tdResult.MainData?.Collections?.find((c: any) =>
-      c?.Entries?.[0]?.TeamSize !== undefined
+      c?.Name === '' && c?.Entries?.length > 0
     );
 
     if (summaryCollection && summaryCollection.Entries.length > 0) {
       let DailyRecord: AttendanceLogsProps[] = res.Data as AttendanceLogsProps[];
       Object.assign(this.Entity.p, summaryCollection.Entries[0]);
+      console.log(this.Entity.p.TeamSize);
+      console.log(this.Entity.p.TotalDaysInMonth);
+      console.log(this.Entity.p.TotalDaysInWeek);
+
     }
+  }
+
+  resetSummaryStats() {
+    this.Entity.p.TeamSize = 0;
+    this.Entity.p.Present = 0;
+    this.Entity.p.Absent = 0;
+    this.Entity.p.OnLeaveDaily = 0;
+    this.Entity.p.TotalDaysInWeek = 0;
+    this.Entity.p.TotalDaysInMonth = 0;
   }
 
   // groupedAttendanceLogs: { [employeeName: string]: any[] } = {};

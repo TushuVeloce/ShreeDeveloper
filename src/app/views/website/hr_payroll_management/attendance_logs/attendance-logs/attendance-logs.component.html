@@ -26,14 +26,13 @@
         <label for="EmployeeRef"><b>Employee Name</b></label>
         <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
           [(ngModel)]="Entity.p.EmployeeRef" name="EmployeeRef" required id="EmployeeRef"
-          (ngModelChange)="getWeekWiseAttendanceLogByAttendanceListType()">
+          (ngModelChange)="getWeekWiseAttendanceLogByAttendanceListType()" [nzNotFoundContent]="'No data'">
           <nz-option *ngFor="let Employee of EmployeeList" [nzLabel]="Employee.p.Name"
             [nzValue]="Employee.p.Ref"></nz-option>
         </nz-select>
       </div>
     </div>
   </div>
-
   <!-- For Monthly -->
   <div class="p-3 rounded bg-light shadow-sm mb-3" *ngIf="ToDispayMonthlyRequirement">
     <div class="row align-items-end g-3">
@@ -41,9 +40,10 @@
       <div class="col-12 col-md-4">
         <label class="form-label">Employee</label>
         <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-          [(ngModel)]="Entity.p.EmployeeRef" name="EmployeeRef" required id="EmployeeRef" (ngModelChange)="onEmployeeChange()">
+          [(ngModel)]="Entity.p.EmployeeRef" name="EmployeeRef" required id="EmployeeRef"
+          (ngModelChange)="onEmployeeChange()" [nzNotFoundContent]="'No data'">
           <nz-option *ngFor=" let Employee of EmployeeList" [nzLabel]="Employee.p.Name"
-          [nzValue]="Employee.p.Ref"></nz-option>
+            [nzValue]="Employee.p.Ref"></nz-option>
         </nz-select>
       </div>
       <!-- From Months -->
@@ -67,12 +67,17 @@
   <div class="mb-5 p-3 border rounded shadow-sm bg-light">
     <h5 class="mb-3">{{ Entity.p.EmployeeName }}</h5>
     <div class="summary-label">Summary</div>
-
-    <!-- ROW 2: Stat Buttons -->
+    <!-- ROW 2: Attendance Count -->
     <div class="p-3 rounded border bg-white shadow-sm">
       <div class="row g-3">
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-md-3" *ngIf="!isDaysShow && !isDaysShowMonth">
           <button class="attbtn w-100">Team Size: <strong>{{ Entity.p.TeamSize }}</strong></button>
+        </div>
+        <div class="col-6 col-md-3" *ngIf="isDaysShow">
+          <button class="attbtn w-100">Days: <strong>{{ Entity.p.TotalDaysInWeek }}</strong></button>
+        </div>
+        <div class="col-6 col-md-3" *ngIf="isDaysShowMonth">
+          <button class="attbtn w-100">Days: <strong>{{ Entity.p.TotalDaysInMonth }}</strong></button>
         </div>
         <div class="col-6 col-md-3">
           <button class="attbtn w-100">Present: <strong>{{ Entity.p.Present }}</strong></button>
@@ -86,47 +91,50 @@
       </div>
     </div>
     <!-- For table  -->
-    <div class="table-wrapper tblcard_light" style="margin-top: 2rem">
-      <div class="table-container">
-        <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
-          nzFrontPagination="false" [nzShowSizeChanger]="false" [nzTotal]="total" [nzPageSize]="pageSize"
-          [nzPageIndex]="currentPage" (nzPageIndexChange)="onPageChange($event)" [nzData]="DisplayMasterList"
-          [nzNoResult]="''">
-          <thead>
-            <tr>
-              <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let attendancelog of DisplayMasterList; let i = index">
-              <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-              <td Class="tbldata">{{attendancelog.p.EmployeeName}}</td>
-              <td Class="tbldata">{{attendancelog.p.TransDateTime}}</td>
-              <td Class="tbldata">{{attendancelog.p.FirstCheckInTime}}</td>
-              <td Class="tbldata">{{attendancelog.p.LastCheckOutTime}}</td>
-              <td Class="tbldata">{{attendancelog.p.TotalWorkingHrs}}</td>
+    <div class="table-wrapper tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+      <!-- <div class="table-container"> -->
+      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
+        nzFrontPagination="false" [nzShowSizeChanger]="false" [nzTotal]="total" [nzPageSize]="pageSize"
+        [nzPageIndex]="currentPage" (nzPageIndexChange)="onPageChange($event)" [nzData]="paginatedList"
+        [nzNoResult]="''">
+        <thead>
+          <tr>
+            <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let attendancelog of paginatedList; let i = index">
+            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td Class="tbldata">{{attendancelog.p.EmployeeName}}</td>
+            <td Class="tbldata">{{attendancelog.p.TransDateTime}}</td>
+            <td Class="tbldata">{{attendancelog.p.FirstCheckInTime}}</td>
+            <td Class="tbldata">{{attendancelog.p.LastCheckOutTime}}</td>
+            <td Class="tbldata">{{attendancelog.p.TotalWorkingHrs}}</td>
 
-              <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.InOfficeHrs}}</td>
-              <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.OnLeave}}</td>
-              <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.LeaveType}}</td>
-              <!-- <td class="tbldata">
+            <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.InOfficeHrs}}</td>
+            <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.OnLeave}}</td>
+            <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.LeaveType}}</td>
+            <!-- <td class="tbldata">
             <span style="margin-left: 9px;">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
             </span>
             <span style="margin-left: 9px;">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td> -->
-            </tr>
-          </tbody>
-        </nz-table>
+          </tr>
+        </tbody>
+      </nz-table>
+      <!-- </div> -->
+    </div>
+    <div class="fixed-pagination">
+      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+        (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+      </nz-pagination>
+    </div>
+    <div *ngIf="DisplayMasterList.length === 0">
+      <div style="height: 200px;" class="d-flex align-items-center justify-content-center">
+        <span Class="title_light"> Data Not Found</span>
       </div>
     </div>
-  </div>
-  <!-- </div> -->
-  <!-- for pagination  -->
-  <div class="fixed-pagination">
-    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
-      (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
-    </nz-pagination>
   </div>
 </div>

@@ -65,7 +65,7 @@ export class CustomerEnquiryComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
-     this.MasterList.forEach(e => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()))
+    this.MasterList.forEach(e => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()))
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
@@ -106,7 +106,8 @@ export class CustomerEnquiryComponent implements OnInit {
   // For Pagination  start ----
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
-  };
+  }
+
   get paginatedList() {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
@@ -114,7 +115,8 @@ export class CustomerEnquiryComponent implements OnInit {
 
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
-  };
+  }
+  
   async AddCustomerEnquiryForm() {
     if (this.companyRef() <= 0) {
       this.uiUtils.showErrorToster('Company not Selected');

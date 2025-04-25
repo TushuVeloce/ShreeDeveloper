@@ -125,14 +125,14 @@
             </div>
           </div>
           <div class="col-md-4">
-              <label for="Pan">PAN</label>
-              <input type="text" [(ngModel)]="Entity.p.Pan" name="Pan" class="form-control" id="Pan"
-                placeholder="Enter Pan" pattern="{{PAN}}" #PanCtrl="ngModel" required
-                (blur)="PanCtrl.control.markAsTouched()" />
-              <div *ngIf="(PanCtrl.invalid && (PanCtrl.touched || PanCtrl.dirty))">
-                <span class="validation-text" *ngIf="PanCtrl.errors?.['pattern']">{{PANMsg}}</span>
-                <span class="validation-text" *ngIf="PanCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-              </div>
+            <label for="Pan">PAN</label>
+            <input type="text" [(ngModel)]="Entity.p.Pan" name="Pan" class="form-control" id="Pan"
+              placeholder="Enter Pan" pattern="{{PAN}}" #PanCtrl="ngModel" required
+              (blur)="PanCtrl.control.markAsTouched()" />
+            <div *ngIf="(PanCtrl.invalid && (PanCtrl.touched || PanCtrl.dirty))">
+              <span class="validation-text" *ngIf="PanCtrl.errors?.['pattern']">{{PANMsg}}</span>
+              <span class="validation-text" *ngIf="PanCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
           </div>
           <div class="col-md-4">
             <label>CIN</label>
@@ -173,8 +173,8 @@
               <ng-template #defaultImage>
                 <img src="/assets/images/noimage.png" alt="No Image" class="Company-Logo" />
               </ng-template>
-              <input type="file" (change)="handleFileChange($event)" id="CompanyLogo" class="file-upload"
-                accept="image/*" name="image" />
+              <input type="file" (change)="onImageUpload($event)" id="CompanyLogo" class="file-upload" accept="image/*"
+                name="image" accept=".jpg, .jpeg, .png, .gif" />
               <p *ngIf="errors.company_image" class="validation-error">
                 {{ errors.company_image }}
               </p>
