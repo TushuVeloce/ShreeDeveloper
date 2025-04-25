@@ -1,4 +1,4 @@
-import { Component, effect, OnInit } from '@angular/core';
+import { Component, effect, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
 import { SalaryGeneration, SalaryGenerationProps } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Salary_Generation/salarygeneration';
@@ -15,6 +15,9 @@ import { Employee } from 'src/app/classes/domain/entities/website/masters/employ
   styleUrls: ['./salary-generation.component.scss'],
 })
 export class SalaryGenerationComponent  implements OnInit {
+  
+  @ViewChild('printSection') printSection!: ElementRef;
+
   Entity: SalaryGeneration = SalaryGeneration.CreateNewInstance();
   MasterList: SalaryGeneration[] = [];
   DisplayMasterList: SalaryGeneration[] = [];

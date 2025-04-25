@@ -70,7 +70,7 @@ export class EstimateStagesDetailsComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
-    this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
+    // this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
   }
 
 
