@@ -104,6 +104,7 @@ import { LeaveRequestDetailsComponent } from './employee_request/leave_request/l
 import { SalarySlipRequestComponent } from './employee_request/salary_slip_request/salary-slip-request/salary-slip-request.component';
 import { SalarySlipRequestDetailsComponent } from './employee_request/salary_slip_request/salary-slip-request-details/salary-slip-request-details.component';
 import { EmployeeAttendanceLogsComponent } from './employee_request/employee_attendance_logs/employee-attendance-logs/employee-attendance-logs.component';
+import { RazorpayComponent } from './Razorpay/razorpay/razorpay.component';
 
 
 const routes: Routes = [
@@ -268,6 +269,9 @@ const routes: Routes = [
 
       { path: 'Site_Work_Done', component: SiteWorkDoneMasterComponent },
       { path: 'Site_Work_Done_Details', component: SiteWorkDoneMasterDetailsComponent },
+
+      // Razorpay
+      { path: 'Razorpay', component: RazorpayComponent },
 
       // { path: 'Progress_Report', component: ProgressReportComponent },
     ]
