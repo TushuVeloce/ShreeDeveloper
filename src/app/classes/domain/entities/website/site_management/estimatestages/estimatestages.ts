@@ -15,17 +15,19 @@ import { EstimateStagesFetchRequest } from "./estimatestagesfetchrequest";
 
 
 export class EstimateStagesProps {
-  public readonly Db_Table_Name = "EstimateStagesMaster";
+  public readonly Db_Table_Name = "EstimateStage";
   public Ref: number = 0;
-  public Name: string = '';
-  public SiteManagementRef: number = 0;
-  public SiteManagementName: string = '';
-  public StageRef: number = 0;
-  public StageName: string = '';
-  public CompanyRef: number = 0;
-  public CompanyName: string = '';
+  public SiteRef: number = 0;
+  public readonly SiteName: string = '';
+  public TransDateTime: string = '';
   public Amount: number = 0;
   public Description: string = '';
+  public CompanyRef: number = 0;
+  public CompanyName: string = '';
+  public CreatedBy: number = 0;
+  public CreatedDate: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedDate: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
 
@@ -39,7 +41,7 @@ export class EstimateStagesProps {
 }
 
 export class EstimateStages implements IPersistable<EstimateStages> {
-  public static readonly Db_Table_Name: string = 'EstimateStagesMaster';
+  public static readonly Db_Table_Name: string = 'EstimateStage';
 
   private constructor(public readonly p: EstimateStagesProps, public readonly AllowEdit: boolean) {
 
@@ -70,8 +72,6 @@ export class EstimateStages implements IPersistable<EstimateStages> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
-    if (this.p.SiteManagementRef == 0) vra.add('SiteManagementRef', 'Site Name cannot be blank.');
-    if (this.p.StageRef == 0) vra.add('StageRef', 'Stage Name cannot be blank.');
     if (this.p.Description == '') {
       vra.add('Description', 'Description cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Description)) {
@@ -177,9 +177,9 @@ export class EstimateStages implements IPersistable<EstimateStages> {
     return EstimateStages.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListBySiteRef(SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new EstimateStagesFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
+    req.SiteRefs.push(SiteRef)
     let tdResponse = await EstimateStages.FetchTransportData(req, errorHandler) as TransportData;
     return EstimateStages.ListFromTransportData(tdResponse);
   }

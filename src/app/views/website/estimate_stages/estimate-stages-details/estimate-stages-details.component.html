@@ -13,18 +13,19 @@
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-6 col-sm-12 mb-3">
-          <label for="SiteManagementRef"><b>Site Name</b></label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteManagementRef"
-            name="SiteManagementRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteManagementRef">
+          <label for="SiteRef"><b>Site Name</b></label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteRef"
+            name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-6 col-sm-12 mb-3">
-          <label for="StageRef"><b>Stages</b></label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StageRef"
-            name="StageRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef">
-            <nz-option *ngFor="let Stage of StageList" [nzValue]="Stage.p.Ref" [nzLabel]="Stage.p.Name"></nz-option>
-          </nz-select>
+          <label for="TransDateTime">Transaction Date</label>
+          <input type="date" [(ngModel)]="Entity.p.TransDateTime" name="TransDateTime" class="form-control" id="TransDateTime" required
+            placeholder="Enter Date" #TransDateTimeCtrl="ngModel" required (blur)="TransDateTimeCtrl.control.markAsTouched()"/>
+          <div *ngIf="(TransDateTimeCtrl.invalid && (TransDateTimeCtrl.touched || TransDateTimeCtrl.dirty))">
+            <span class="validation-text" *ngIf="TransDateTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
         <div class="col-md-6 col-sm-12 mb-3">
           <label for="Amount">Amount</label>
@@ -38,7 +39,7 @@
         <div class="col-md-6 col-sm-12 mb-3">
           <label><b>Description</b></label>
           <textarea type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
-            id="Description" rows="4" required placeholder="Enter Description" #DescriptionCtrl="ngModel"
+            id="Description" rows="3" required placeholder="Enter Description" #DescriptionCtrl="ngModel"
             (blur)="DescriptionCtrl.control.markAsTouched()"></textarea>
           <div style="height: 25px;"
             *ngIf="(DescriptionCtrl.invalid && (DescriptionCtrl.touched || DescriptionCtrl.dirty))">
@@ -48,7 +49,7 @@
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
         <div>
-          <button type="button" class="btn">Save</button>
+          <button type="button" class="btn" (click)="SaveStageMaster()">Save</button>
         </div>
         <div>
           <button type="button" class="btn" (click)="BackEstimateStage()">Back</button>

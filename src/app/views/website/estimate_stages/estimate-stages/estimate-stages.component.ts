@@ -25,12 +25,10 @@ export class EstimateStagesComponent implements OnInit {
   pageSize = 8; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  headers: string[] = ['Sr.No.', 'Date', 'Site', 'Main Ledger', 'Sub Ledger', 'Description', 'Amount', 'Action'];
+  headers: string[] = ['Sr.No.', 'Site Name', 'Description', 'Amount','Action'];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   SiteRef: number = 0
-  StageRef: number = 0
-  bookigremark: number = 0
-
+  shouldDestroy: boolean = true;
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement,) { }
@@ -39,16 +37,17 @@ export class EstimateStagesComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
     this.getSiteListByCompanyRef();
-    this.getStageListByCompanyRef();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
-    const SiteRef = Number(this.appStateManage.StorageKey.getItem('SiteRef'));
-    const StageRef = Number(this.appStateManage.StorageKey.getItem('StageRef'));
-    this.SiteRef = SiteRef
-    if (SiteRef > 0) {
+    const storedSiteRef = Number(this.appStateManage.StorageKey.getItem('SiteRef'));
+    this.SiteRef = storedSiteRef
+    if (storedSiteRef > 0)  {
       setTimeout(async () => {
-        this.SiteRef = SiteRef;
-        await this.getEstimateListBySiteRef(SiteRef);
+        this.Entity.p.SiteRef = storedSiteRef;
+        await this.getEstimateListBySiteRef(storedSiteRef);
       });
+    }
+    if(this.SiteRef == 0){
+      this.getEstimatedStagesList()
     }
   }
 
@@ -56,7 +55,7 @@ export class EstimateStagesComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     this.SiteList = [];
-    this.SiteRef = 0;
+    this.Entity.p.SiteRef = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -64,44 +63,39 @@ export class EstimateStagesComponent implements OnInit {
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
     this.loadPaginationData();
-    this.SiteRef = this.SiteList[0].p.Ref;
   }
-
-  getStageListByCompanyRef = async () => {
-    this.MasterList = [];
-    this.DisplayMasterList = [];
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(),
-      async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-    this.StageList = lst;
-    this.Entity.p.StageRef = this.StageList[0].p.Ref;
-  };
 
   onSiteChange = (siteref: number) => {
     this.SiteRef = siteref
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (siteref > 0 && this.SiteList.length > 0) {
-      this.SiteRef = siteref;
+      this.Entity.p.SiteRef = siteref;
       const selectedSite = this.SiteList.find(site => site.p.Ref === siteref);
       if (!selectedSite) {
         return;
       }
       this.appStateManage.StorageKey.setItem('siteRf', String(siteref));
       this.appStateManage.StorageKey.setItem('siteName', selectedSite.p.Name);
+      this.getEstimateListBySiteRef(siteref)
     }
   }
 
+
+    getEstimatedStagesList = async () => {
+      this.MasterList = [];
+      this.DisplayMasterList = [];
+      let lst = await EstimateStages.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.MasterList = lst;
+      this.DisplayMasterList = this.MasterList;
+      this.loadPaginationData();
+    }
+  
   getEstimateListBySiteRef = async (siteref: number) => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     this.SiteRef = siteref
-
-    let lst = await EstimateStages.FetchEntireListByCompanyRef(siteref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await EstimateStages.FetchEntireListBySiteRef(siteref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
@@ -123,7 +117,7 @@ export class EstimateStagesComponent implements OnInit {
       async () => {
         await plot.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `Material ${plot.p.SiteManagementRef} has been deleted!`
+            `Material ${plot.p.SiteRef} has been deleted!`
           );
           this.SearchString = '';
           this.loadPaginationData();
@@ -160,11 +154,19 @@ export class EstimateStagesComponent implements OnInit {
 
   AddEstimateStages = async () => {
     if (this.SiteRef > 0) {
+      this.shouldDestroy = false;
       await this.router.navigate(['/homepage/Website/Estimate_Stages_details']);
     } else {
       this.uiUtils.showWarningToster('Please select a site first');
     }
   }
 
+  ngOnDestroy(): void {
+    if (this.shouldDestroy) {
+      this.appStateManage.StorageKey.removeItem('siteRf');
+      this.appStateManage.StorageKey.removeItem('siteName');
+      this.appStateManage.StorageKey.removeItem('bookingremarkRef');
+    }
+  }
 
 }
