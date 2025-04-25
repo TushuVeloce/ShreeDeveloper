@@ -38,7 +38,7 @@ export class EstimateStagesComponent implements OnInit {
     this.loadPaginationData();
     this.getSiteListByCompanyRef();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
-    const storedSiteRef = Number(this.appStateManage.StorageKey.getItem('SiteRef'));
+    const storedSiteRef = Number(this.appStateManage.StorageKey.getItem('EstSiteRef'));
     this.SiteRef = storedSiteRef
     if (storedSiteRef > 0)  {
       setTimeout(async () => {
@@ -69,14 +69,19 @@ export class EstimateStagesComponent implements OnInit {
     this.SiteRef = siteref
     this.MasterList = [];
     this.DisplayMasterList = [];
+    if(this.SiteRef == 0){
+      this.appStateManage.StorageKey.removeItem('EstSiteRef');
+      this.appStateManage.StorageKey.removeItem('EstSiteName');
+      this.getEstimatedStagesList()
+    }
     if (siteref > 0 && this.SiteList.length > 0) {
       this.Entity.p.SiteRef = siteref;
       const selectedSite = this.SiteList.find(site => site.p.Ref === siteref);
       if (!selectedSite) {
         return;
       }
-      this.appStateManage.StorageKey.setItem('siteRf', String(siteref));
-      this.appStateManage.StorageKey.setItem('siteName', selectedSite.p.Name);
+      this.appStateManage.StorageKey.setItem('EstSiteRef', String(siteref));
+      this.appStateManage.StorageKey.setItem('EstSiteName', selectedSite.p.Name);
       this.getEstimateListBySiteRef(siteref)
     }
   }
@@ -106,7 +111,7 @@ export class EstimateStagesComponent implements OnInit {
     this.SelectedEstimateStages = item.GetEditableVersion();
     EstimateStages.SetCurrentInstance(this.SelectedEstimateStages);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Plot_Master_Details']);
+    await this.router.navigate(['/homepage/Website/Estimate_Stages_details']);
   };
 
   onDeleteClicked = async (plot: EstimateStages) => {
@@ -163,9 +168,8 @@ export class EstimateStagesComponent implements OnInit {
 
   ngOnDestroy(): void {
     if (this.shouldDestroy) {
-      this.appStateManage.StorageKey.removeItem('siteRf');
-      this.appStateManage.StorageKey.removeItem('siteName');
-      this.appStateManage.StorageKey.removeItem('bookingremarkRef');
+      this.appStateManage.StorageKey.removeItem('EstSiteRef');
+      this.appStateManage.StorageKey.removeItem('EstSiteName');
     }
   }
 
