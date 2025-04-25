@@ -1,4 +1,5 @@
 import { DatePipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
@@ -52,6 +53,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
   EmailMsg: string = ValidationMessages.EmailMsg
   GSTINMsg: string = ValidationMessages.GSTINMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
+  imageBlobUrl: string | null = null;
 
   constructor(
     private router: Router,
@@ -60,12 +62,14 @@ export class CompanyMasterDetailsComponent implements OnInit {
     private utils: Utils,
     private cdr: ChangeDetectorRef,
     private dtu: DTU,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private http: HttpClient
   ) { }
 
 
   async ngOnInit() {
     this.ImageBaseUrl = this.appStateManage.BaseImageUrl;
+
     this.appStateManage.setDropdownDisabled(true);
 
     await this.FormulateCountryList();
@@ -116,6 +120,11 @@ export class CompanyMasterDetailsComponent implements OnInit {
     this.InitialEntity = Object.assign(Company.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Company;
 
     // this.focusInput();
+    const fullUrl = this.ImageBaseUrl + this.imageUrl;
+
+    this.http.get(fullUrl, { responseType: 'blob' }).subscribe(blob => {
+      this.imageBlobUrl = URL.createObjectURL(blob);
+    });
   }
   onImageUpload = async (event: any) => {
     const result = await this.utils.handleImageSelection(

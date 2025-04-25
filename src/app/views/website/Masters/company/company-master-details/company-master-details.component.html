@@ -168,7 +168,8 @@
             </div>
             <div class="Company-Logo-container">
               <ng-container *ngIf="imageUrl; else defaultImage">
-                <img [src]="ImageBaseUrl + imageUrl" alt="Company Logo" class="Company-Logo" />
+                <!-- <img [src]="ImageBaseUrl + imageUrl" alt="Company Logo" class="Company-Logo" /> -->
+                <img [src]="imageBlobUrl" alt="Company Logo" class="Company-Logo" />
               </ng-container>
               <ng-template #defaultImage>
                 <img src="/assets/images/noimage.png" alt="No Image" class="Company-Logo" />
