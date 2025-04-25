@@ -83,7 +83,10 @@ export class PlotMasterComponent implements OnInit {
       this.appStateManage.StorageKey.removeItem('siteRf');
       this.appStateManage.StorageKey.removeItem('siteName');
       this.appStateManage.StorageKey.removeItem('bookingremarkRef');
+      this.BookingRemarkList = DomainEnums.BookingRemarkList(true,);
       this.getPlotList()
+    }else{
+      this.BookingRemarkList = DomainEnums.BookingRemarkList(true,'--select--');
     }
     if(siteref > 0 && this.SiteList.length > 0){
       this.Entity.p.SiteManagementRef = siteref;
