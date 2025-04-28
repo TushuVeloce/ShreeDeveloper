@@ -33,6 +33,8 @@ export class EstimateStagesDetailsComponent implements OnInit {
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('AmountCtrl') AmountInputControl!: NgModel;
+  @ViewChild('DescriptionCtrl') DescriptionInputControl!: NgModel;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement,private dtu: DTU,) { }
 
@@ -45,6 +47,7 @@ export class EstimateStagesDetailsComponent implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity ? 'New Estimate Stage' : 'Edit Estimate Stage';
       this.Entity = EstimateStages.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable')
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if(this.Entity.p.TransDateTime != ''){
         this.Entity.p.TransDateTime  = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.TransDateTime)
        }
@@ -102,7 +105,7 @@ export class EstimateStagesDetailsComponent implements OnInit {
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Estimate Stage Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Estimate_Stages_details']);
+        await this.router.navigate(['/homepage/Website/Estimate_Stages']);
 
       }
     }
@@ -121,9 +124,13 @@ export class EstimateStagesDetailsComponent implements OnInit {
   resetAllControls = () => {
     // reset touched
     this.NameInputControl.control.markAsUntouched();
+    this.AmountInputControl.control.markAsUntouched();
+    this.DescriptionInputControl.control.markAsUntouched();
 
     // reset dirty
     this.NameInputControl.control.markAsPristine();
+    this.AmountInputControl.control.markAsPristine();
+    this.DescriptionInputControl.control.markAsPristine();
   }
 }
 

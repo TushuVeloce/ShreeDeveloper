@@ -189,12 +189,8 @@ export class EstimateStagesComponent implements OnInit {
   };
 
   AddEstimateStages = async () => {
-    if (this.SiteRef > 0) {
       this.shouldDestroy = false;
       await this.router.navigate(['/homepage/Website/Estimate_Stages_details']);
-    } else {
-      this.uiUtils.showWarningToster('Please select a site first');
-    }
   }
 
   ngOnDestroy(): void {

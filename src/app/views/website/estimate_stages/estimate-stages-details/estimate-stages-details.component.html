@@ -19,14 +19,14 @@
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-6 col-sm-12 mb-3">
+        <!-- <div class="col-md-6 col-sm-12 mb-3">
           <label for="TransDateTime">Transaction Date</label>
           <input type="date" [(ngModel)]="Entity.p.TransDateTime" name="TransDateTime" class="form-control" id="TransDateTime" required
             placeholder="Enter Date" #TransDateTimeCtrl="ngModel" required (blur)="TransDateTimeCtrl.control.markAsTouched()"/>
           <div *ngIf="(TransDateTimeCtrl.invalid && (TransDateTimeCtrl.touched || TransDateTimeCtrl.dirty))">
             <span class="validation-text" *ngIf="TransDateTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
-        </div>
+        </div> -->
         <div class="col-md-6 col-sm-12 mb-3">
           <label for="Amount">Amount</label>
           <input type="number" [(ngModel)]="Entity.p.Amount" name="Amount" class="form-control" id="Amount" required
@@ -36,7 +36,7 @@
             <span class="validation-text" *ngIf="AmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-md-6 col-sm-12 mb-3">
+        <div class="col-md-12 col-sm-12 mb-3">
           <label><b>Description</b></label>
           <textarea type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
             id="Description" rows="3" required placeholder="Enter Description" #DescriptionCtrl="ngModel"
