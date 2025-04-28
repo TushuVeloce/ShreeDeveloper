@@ -105,6 +105,8 @@ import { SalarySlipRequestComponent } from './employee_request/salary_slip_reque
 import { SalarySlipRequestDetailsComponent } from './employee_request/salary_slip_request/salary-slip-request-details/salary-slip-request-details.component';
 import { EmployeeAttendanceLogsComponent } from './employee_request/employee_attendance_logs/employee-attendance-logs/employee-attendance-logs.component';
 import { RazorpayComponent } from './Razorpay/razorpay/razorpay.component';
+import { SubStageMasterComponent } from './Masters/sub_stage/sub-stage-master/sub-stage-master.component';
+import { SubStageMasterDetailsComponent } from './Masters/sub_stage/sub-stage-master-details/sub-stage-master-details.component';
 
 
 const routes: Routes = [
@@ -120,6 +122,9 @@ const routes: Routes = [
 
       { path: 'Stage_Master', component: StageMasterComponent },
       { path: 'Stage_Master_Details', component: StageMasterDetailsComponent },
+
+      { path: 'Sub_Stage_Master', component: SubStageMasterComponent},
+      { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent},
 
       { path: 'Account_Main_Ledger', component: AccountMainLedgerComponent },
       { path: 'Account_Main_Ledger_Details', component: AccountMainLedgerDetailsComponent },
