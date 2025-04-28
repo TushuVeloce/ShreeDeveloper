@@ -2,12 +2,24 @@
   <div class="headers">
     <div class="row">
       <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
-        <h5 style="padding-top: 3px;" class="title title_light">Estimate Stages</h5>
+        <h5 style="padding-top: 3px" class="title title_light">
+          Estimate Stages
+        </h5>
       </div>
-      <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light">
-        <input type="text" Class="search-box_light" placeholder="Search..." autofocus />
+      <div
+        class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light"
+      >
+        <input
+          type="text"
+          Class="search-box_light"
+          placeholder="Search..."
+          autofocus
+        />
       </div>
-      <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
+      <div
+        class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
+        routerLinkActive="active"
+      >
         <nz-button nz-button class="btn1" (click)="AddEstimateStages()">
           Add Estimate Stages
         </nz-button>
@@ -15,16 +27,28 @@
     </div>
 
     <div class="row">
-      <div class="card-body" style="margin-left: 14px;">
+      <div class="card-body" style="margin-left: 14px">
         <form autocomplete="off">
           <div class="row">
             <div class="col-md-4">
               <label for="SiteRef"><b>Site Name</b></label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteRef"
-                name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
-                (ngModelChange)="onSiteChange(Entity.p.SiteRef)">
+              <nz-select
+                class="nzSelect-light"
+                nzShowSearch
+                nzAllowClear
+                nzPlaceHolder="Select"
+                id="SiteRef"
+                name="SiteRef"
+                [nzSize]="'large'"
+                [(ngModel)]="Entity.p.SiteRef"
+                (ngModelChange)="onSiteChange(Entity.p.SiteRef)"
+              >
                 <nz-option [nzValue]="0" nzLabel="All"></nz-option>
-                <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+                <nz-option
+                  *ngFor="let site of SiteList"
+                  [nzValue]="site.p.Ref"
+                  [nzLabel]="site.p.Name"
+                ></nz-option>
               </nz-select>
             </div>
           </div>
@@ -33,47 +57,69 @@
     </div>
   </div>
   <!-- Machinary Expense -->
-  <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+  <!-- Machinery Expense Table -->
+  <div
+    class="table-wrapper tblcard_light"
+    style="margin-top: 2rem"
+    *ngIf="DisplayMasterList.length > 0"
+  >
     <div class="table-container">
-      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
-        [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <nz-table
+        #basicTable
+        nzSize="small"
+        class="no-hover-table bgtable_light"
+        [nzData]="paginatedList"
+        [nzScroll]="{ x: 'auto' }"
+        nzFrontPagination="false"
+        [nzShowSizeChanger]="false"
+      >
         <thead>
           <tr>
-            <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+            <th *ngFor="let header of headers" class="tblheader">
+              {{ header }}
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let estimatestage of paginatedList; index as i">
-            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td Class="tbldata">{{estimatestage.p.SiteName}}</td>
-            <td Class="tbldata">{{estimatestage.p.Description}}</td>
-            <td Class="tbldata">{{estimatestage.p.Amount}}</td>
+            <td class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td class="tbldata">{{ estimatestage.p.SiteName }}</td>
+            <td class="tbldata">{{ estimatestage.p.Description }}</td>
+            <td class="tbldata" style="text-align: right">
+              {{ estimatestage.p.Amount | currency : "INR" }}
+            </td>
             <td class="tbldata">
-              <!-- <span style="margin-left: 9px;" (click)="onEditClicked(estimatestage);">
-                <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-              </span> -->
-              <!-- <span style="margin-left: 9px;" (click)="onDeleteClicked(estimatestage);">
-                <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span> -->
-
               <Edit-Icon (editClick)="onEditClicked(estimatestage)" />
               <Delete-Icon (deleteClicked)="onDeleteClicked(estimatestage)" />
             </td>
           </tr>
+          <tr>
+            <td class="tbldata"></td>
+            <td class="tbldata"></td>
+            <td class="tbldata"><b>Total</b></td>
+            <td class="tbldata"><b> {{ totalAmount | currency : "INR" }}</b></td>
+            </tr>
+          <tr>
+            <td class="tbldata"></td>
+            <td class="tbldata"></td>
+            <td class="tbldata"></td>
+            <td class="tbldata"><b>{{ totalAmountInWords }}</b></td>
+            </tr>
         </tbody>
-      </nz-table>
+      </nz-table>  
     </div>
-    <!-- <div class="fixed-pagination">
-      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
-        (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
-      </nz-pagination>
-    </div> -->
-    <Pagination [pageSize]="pageSize" [total]="total" [(currentPage)]="currentPage" (pageChange)="onPageChange($event)"/>
+
+    <!-- Pagination Component -->
+    <Pagination
+      [pageSize]="pageSize"
+      [total]="total"
+      [(currentPage)]="currentPage"
+      (pageChange)="onPageChange($event)"
+    />
   </div>
-  <!-- <div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
-    <div style="height: 200px" class="d-flex align-items-center justify-content-center">
-      <span class="title_light"> Data Not Found</span>
-    </div>
-  </div> -->
+
+  <!-- If No Data Found -->
   <div *ngIf="DisplayMasterList.length === 0">
     <Data-Not-Found />
   </div>
+</div>

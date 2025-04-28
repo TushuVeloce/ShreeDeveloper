@@ -124,6 +124,7 @@ export class EstimateStagesComponent implements OnInit {
           await this.uiUtils.showSuccessToster(
             `Material ${plot.p.SiteRef} has been deleted!`
           );
+          await this.getEstimateListBySiteRef(this.SiteRef);
           this.SearchString = '';
           this.loadPaginationData();
         });
@@ -137,6 +138,36 @@ export class EstimateStagesComponent implements OnInit {
   get paginatedList() {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  get totalAmount(): number {
+    return this.paginatedList.reduce((sum, item) => sum + (item.p.Amount || 0), 0);
+  }
+
+  get totalAmountInWords(): string {
+    return this.convertNumberToWords(this.totalAmount);
+  }
+
+  convertNumberToWords(amount: number): string {
+    const a = [
+      '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+      'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+    ];
+    const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+  
+    if ((amount = amount || 0) === 0) return 'Zero Rupees Only';
+    if (amount.toString().length > 9) return 'Overflow';
+  
+    let n = ('000000000' + amount).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{3})$/);
+    if (!n) return '';
+  
+    let str = '';
+    str += (Number(n[1]) !== 0) ? (a[Number(n[1])] || (b[Number(n[1][0])] + ' ' + a[Number(n[1][1])])) + ' Crore ' : '';
+    str += (Number(n[2]) !== 0) ? (a[Number(n[2])] || (b[Number(n[2][0])] + ' ' + a[Number(n[2][1])])) + ' Lakh ' : '';
+    str += (Number(n[3]) !== 0) ? (a[Number(n[3])] || (b[Number(n[3][0])] + ' ' + a[Number(n[3][1])])) + ' Thousand ' : '';
+    str += (Number(n[4]) !== 0) ? (a[Number(n[4])] || (b[Number(n[4][0])] + ' ' + a[Number(n[4][1])])) + ' ' : '';
+  
+    return str.trim() + ' Rupees Only';
   }
 
   onPageChange = (pageIndex: number): void => {
