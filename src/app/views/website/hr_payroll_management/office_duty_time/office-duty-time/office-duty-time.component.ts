@@ -38,29 +38,26 @@ export class OfficeDutyTimeComponent  implements OnInit {
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
   
-  getFormattedTime(time24: string): string {
-    if (!time24) return '';
+  getFormattedTime(time: string): string {
+    if (!time) return '';
   
-    // Check if the system uses 12-hour format
-    const is12HourFormat = new Intl.DateTimeFormat(undefined, {
-      hour: 'numeric'
-    }).formatToParts(new Date()).some(part => part.type === 'dayPeriod');
+    const date = new Date();
+    const [hours, minutes] = time.split(':').map(Number);
+    date.setHours(hours, minutes);
   
-    if (!is12HourFormat) {
-      // If system uses 24-hour format, return the original time
-      return time24;
-    }
+    const options: Intl.DateTimeFormatOptions = {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: this.isSystemUsing12HourFormat()
+    };
   
-    // Convert to 12-hour format
-    const [hourStr, minuteStr] = time24.split(':');
-    let hour = parseInt(hourStr, 10);
-    const minute = parseInt(minuteStr, 10);
-    const ampm = hour >= 12 ? 'PM' : 'AM';
-    hour = hour % 12 || 12;
-  
-    return `${hour}:${minute.toString().padStart(2, '0')} ${ampm}`;
+    return date.toLocaleTimeString([], options);
   }
   
+  isSystemUsing12HourFormat(): boolean {
+    const format = new Intl.DateTimeFormat([], { hour: 'numeric' }).format(new Date(2020, 0, 1, 13));
+    return format.includes('PM') || format.includes('pm');
+  }
 
    getOfficeDutyandTimeListByCompanyRef = async () => {
       this.MasterList = [];
