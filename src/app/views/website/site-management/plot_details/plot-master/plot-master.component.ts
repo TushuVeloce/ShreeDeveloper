@@ -54,7 +54,7 @@ export class PlotMasterComponent implements OnInit {
         await this.getPlotListBySiteandBookingRemarkRef(storedSiteRef,bookingRemarkeRef);
       });
     }
-    if(this.siteref == 0 && this.bookigremark == 0){
+    if(this.siteref == 0){
       this.getPlotList()
     }
   }
@@ -62,8 +62,9 @@ export class PlotMasterComponent implements OnInit {
   FormulateSiteListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    this.SiteList = [];
-    this.Entity.p.SiteManagementRef = 0;
+    this.Entity.p.SiteManagementRef = 0
+    this.Entity.p.CurrentBookingRemark = 0
+    this.SiteList = []; 
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
