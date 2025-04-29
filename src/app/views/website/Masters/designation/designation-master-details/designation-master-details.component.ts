@@ -25,6 +25,8 @@ export class DesignationMasterDetailsComponent implements OnInit {
   InitialEntity: Designation = null as any;
   DepartmentList: Department[] = [];
 
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
@@ -71,7 +73,7 @@ export class DesignationMasterDetailsComponent implements OnInit {
   }
 
   public FormulateDepartmentList = async () => {
-    let lst = await Department.FetchEntireList(
+    let lst = await Department.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.DepartmentList = lst;
