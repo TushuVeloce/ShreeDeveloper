@@ -51,7 +51,7 @@ export class PlotMasterComponent implements OnInit {
       setTimeout(async () => {
         this.Entity.p.SiteManagementRef = storedSiteRef;
         this.Entity.p.CurrentBookingRemark = bookingRemarkeRef;
-        await this.getPlotListBySiteRef(storedSiteRef,bookingRemarkeRef);
+        await this.getPlotListBySiteandBookingRemarkRef(storedSiteRef,bookingRemarkeRef);
       });
     }
     if(this.siteref == 0 && this.bookigremark == 0){
@@ -98,12 +98,12 @@ export class PlotMasterComponent implements OnInit {
       this.appStateManage.StorageKey.setItem('siteName', selectedSite.p.Name);
       this.appStateManage.StorageKey.setItem('bookingremarkRef', String(this.bookigremark));
       if(this.bookigremark > 0){
-        this.getPlotListBySiteRef(siteref,this.bookigremark)
+        this.getPlotListBySiteandBookingRemarkRef(siteref,this.bookigremark)
       }
     }
   }
 
-  getPlotListBySiteRef = async (siteref: number,  bookingremarkref: number) => {
+  getPlotListBySiteandBookingRemarkRef = async (siteref: number,  bookingremarkref: number) => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     this.siteref = siteref
