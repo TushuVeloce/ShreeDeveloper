@@ -159,21 +159,26 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
 
-    if (this.Entity.p.CreatedBy === 0) {
-      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+    if (this.Entity.p.CreatedBy == 0) {
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
-
-    const entityToSave = this.Entity.GetEditableVersion();
-    const tr = await this.utils.SavePersistableEntities([entityToSave]);
+    let entityToSave = this.Entity.GetEditableVersion();
+    let entitiesToSave = [entityToSave];
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
+      this.isSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
+    } else {
+      this.isSaveDisabled = false;
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('SalarySlipRequest Master saved successfully!');
+        this.Entity = SalarySlipRequest.CreateNewInstance();
+        this.resetForm();
+        await this.router.navigate(['/homepage/Website/Salary_Slip_Request']);
+      }
     }
-
-    await this.uiUtils.showSuccessToster('Salary Slip Request saved successfully!');
-    this.resetForm();
-    await this.router.navigate(['/homepage/Website/Salary_Slip_Request']);
   }
 
   private resetForm(): void {
