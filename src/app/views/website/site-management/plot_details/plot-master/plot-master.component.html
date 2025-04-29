@@ -29,7 +29,7 @@
               <div class="col-md-4">
                 <label>Booking Remark</label>
                 <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CurrentBookingRemark"
-                  name="CurrentBookingRemark" [nzSize]="'large'" [(ngModel)]="Entity.p.CurrentBookingRemark"  (ngModelChange)="getPlotListBySiteRef(Entity.p.SiteManagementRef,Entity.p.CurrentBookingRemark)">
+                  name="CurrentBookingRemark" [nzSize]="'large'" [(ngModel)]="Entity.p.CurrentBookingRemark"  (ngModelChange)="getPlotListBySiteandBookingRemarkRef(Entity.p.SiteManagementRef,Entity.p.CurrentBookingRemark)">
                   <nz-option *ngFor="let bookingremark of BookingRemarkList" [nzValue]="bookingremark.Ref"
                   [nzLabel]="bookingremark.Name"></nz-option>
                 </nz-select>
