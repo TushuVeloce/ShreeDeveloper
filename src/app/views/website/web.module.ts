@@ -118,6 +118,8 @@ import { ValidationMessageComponent } from './Helpers/Validation-Message/validat
 import { PaginationComponent } from './Helpers/pagination/pagination';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { SubStageMasterComponent } from './Masters/sub_stage/sub-stage-master/sub-stage-master.component';
+import { SubStageMasterDetailsComponent } from './Masters/sub_stage/sub-stage-master-details/sub-stage-master-details.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent, StageMasterComponent, StageMasterDetailsComponent, AccountMainLedgerComponent, AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent, MarketingTypeMasterDetailsComponent,
@@ -129,7 +131,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
     EmployeeAppraisalMasterComponent, EmployeeExitDetailsComponent, EmployeeExitMasterComponent, PlotMasterComponent, DocumentListComponent, DocumentDetailsComponent,
     PlotMasterDetailsComponent, CustomerEnquiryComponent, CustomerEnquiryDetailsComponent, CustomerFollowupComponent, CustomerFollowupDetailsComponent, RegisteredCustomerComponent, RegisteredCustomerDetailsComponent, RegistrarOfficeComponent, RegistrarOfficeDetailComponent, SiteWorkMasterDetailComponent, SiteWorkMasterComponent,
     OfficeDutyTimeComponent, OfficeDutyTimeDetailsComponent, SiteWorkDoneMasterDetailsComponent, SiteWorkDoneMasterComponent, GovernmentTransactionDetailsComponent, GovernmentTransactionMasterComponent, TpOfficeDetailsComponent, NaLetterDetailsComponent, MojaniDetailsComponent, SalaryGenerationComponent, SalaryGenerationDetailsComponent, LeaveApprovalComponent, LeaveRequestComponent, LeaveRequestDetailsComponent, SalarySlipApprovalComponent, SalarySlipRequestComponent, SalarySlipRequestDetailsComponent,
-    UlcDetailsComponent, FinalLayoutDetailsComponent, KJaPaDetailsComponent, RespectedChildComponentComponent, AttendanceLogsComponent, EmployeeAttendanceLogsComponent, ValidationMessageComponent, PaginationComponent],
+    UlcDetailsComponent, FinalLayoutDetailsComponent, KJaPaDetailsComponent, RespectedChildComponentComponent, AttendanceLogsComponent, EmployeeAttendanceLogsComponent, ValidationMessageComponent, PaginationComponent,SubStageMasterComponent,SubStageMasterDetailsComponent],
   imports: [
     CommonModule, WebRoutingModule, FormsModule, NzDropDownModule, NzTableModule, IonicModule.forRoot(),
     NzPaginationModule, NzUploadModule, NzModalModule, NzCheckboxModule,NzCardModule,

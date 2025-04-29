@@ -11,23 +11,19 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
-import { EstimateStagesFetchRequest } from "./estimatestagesfetchrequest";
+import { SubStageFetchRequest } from "./substagefetchrequest";
 
 
-export class EstimateStagesProps {
-  public readonly Db_Table_Name = "EstimateStage";
+export class SubStageProps {
+  public readonly Db_Table_Name = "SubStageMaster";
   public Ref: number = 0;
-  public SiteRef: number = 0;
-  public readonly SiteName: string = '';
-  public TransDateTime: string = '';
-  public Amount: number = 0;
-  public Description: string = '';
+  public StageRef: number = 0;
+  public readonly StageName: number = 0;
+  public Name: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
   public CreatedBy: number = 0;
-  public CreatedDate: string = '';
   public UpdatedBy: number = 0;
-  public UpdatedDate: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
 
@@ -36,14 +32,14 @@ export class EstimateStagesProps {
   }
 
   public static Blank() {
-    return new EstimateStagesProps(true);
+    return new SubStageProps(true);
   }
 }
 
-export class EstimateStages implements IPersistable<EstimateStages> {
-  public static readonly Db_Table_Name: string = 'EstimateStage';
+export class SubStage implements IPersistable<SubStage> {
+  public static readonly Db_Table_Name: string = 'SubStageMaster';
 
-  private constructor(public readonly p: EstimateStagesProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: SubStageProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -56,59 +52,52 @@ export class EstimateStages implements IPersistable<EstimateStages> {
     }
   }
 
-  public GetEditableVersion(): EstimateStages {
-    let newState: EstimateStagesProps = Utils.GetInstance().DeepCopy(this.p);
-    return EstimateStages.CreateInstance(newState, true);
+  public GetEditableVersion(): SubStage {
+    let newState: SubStageProps = Utils.GetInstance().DeepCopy(this.p);
+    return SubStage.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new EstimateStages(EstimateStagesProps.Blank(), true);
+    return new SubStage(SubStageProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new EstimateStages(data as EstimateStagesProps, allowEdit);
+    return new SubStage(data as SubStageProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
-    if (this.p.Description == '') {
-      vra.add('Description', 'Description cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Description)) {
-      vra.add('Description', ValidationMessages.NameWithNosAndSpaceMsg + ' for Description');
+    if (this.p.Name == '') {
+      vra.add('Name', 'Name cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
+      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     }
-    if (this.p.Amount == 0) {
-      vra.add('Amount', 'Amount cannot be blank.');
-    } else if (this.p.Amount < 0) {
-      vra.add('Amount', 'Amount cannot be less then 0.');
-    } else if (this.p.Amount.toString().includes('.')) {
-      vra.add('Amount', 'Rational Number not allowed for Amount');
-    }
+    
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, EstimateStages.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, SubStage.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: EstimateStages = EstimateStages.CreateNewInstance();
+  private static m_currentInstance: SubStage = SubStage.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return EstimateStages.m_currentInstance;
+    return SubStage.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: EstimateStages) {
-    EstimateStages.m_currentInstance = value;
+  public static SetCurrentInstance(value: SubStage) {
+    SubStage.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): EstimateStages {
+  public static SingleInstanceFromTransportData(td: TransportData): SubStage {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, EstimateStages.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, EstimateStages.Db_Table_Name)!.Entries) {
-        return EstimateStages.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, SubStage.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, SubStage.Db_Table_Name)!.Entries) {
+        return SubStage.CreateInstance(data, false);
       }
     }
 
@@ -117,13 +106,13 @@ export class EstimateStages implements IPersistable<EstimateStages> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): EstimateStages[] {
-    let result: EstimateStages[] = [];
+    sortPropertyName: string = "Name"): SubStage[] {
+    let result: SubStage[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, EstimateStages.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, EstimateStages.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, SubStage.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, SubStage.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -133,18 +122,18 @@ export class EstimateStages implements IPersistable<EstimateStages> {
       }
 
       for (let data of entries) {
-        result.push(EstimateStages.CreateInstance(data, false));
+        result.push(SubStage.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): EstimateStages[] {
-    return EstimateStages.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): SubStage[] {
+    return SubStage.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: EstimateStagesFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: SubStageFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -159,29 +148,29 @@ export class EstimateStages implements IPersistable<EstimateStages> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new EstimateStagesFetchRequest();
-    req.EstimateStagesRefs.push(ref);
+    let req = new SubStageFetchRequest();
+    req.SubStageRefs.push(ref);
 
-    let tdResponse = await EstimateStages.FetchTransportData(req, errorHandler) as TransportData;
-    return EstimateStages.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await SubStage.FetchTransportData(req, errorHandler) as TransportData;
+    return SubStage.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: EstimateStagesFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await EstimateStages.FetchTransportData(req, errorHandler) as TransportData;
-    return EstimateStages.ListFromTransportData(tdResponse);
+  public static async FetchList(req: SubStageFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await SubStage.FetchTransportData(req, errorHandler) as TransportData;
+    return SubStage.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new EstimateStagesFetchRequest();
-    let tdResponse = await EstimateStages.FetchTransportData(req, errorHandler) as TransportData;
-    return EstimateStages.ListFromTransportData(tdResponse);
+    let req = new SubStageFetchRequest();
+    let tdResponse = await SubStage.FetchTransportData(req, errorHandler) as TransportData;
+    return SubStage.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListBySiteRef(SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new EstimateStagesFetchRequest();
-    req.SiteRefs.push(SiteRef)
-    let tdResponse = await EstimateStages.FetchTransportData(req, errorHandler) as TransportData;
-    return EstimateStages.ListFromTransportData(tdResponse);
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new SubStageFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await SubStage.FetchTransportData(req, errorHandler) as TransportData;
+    return SubStage.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {

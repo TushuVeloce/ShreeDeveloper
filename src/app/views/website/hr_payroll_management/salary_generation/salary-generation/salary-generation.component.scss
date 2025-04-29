@@ -50,3 +50,21 @@
   vertical-align: middle;  /* Vertical centering */
   padding: 0;              /* Ensure no extra space */
 }
+
+@media print {
+  custom-modal-overlay  * {
+    visibility: hidden;
+  }
+
+  .custom-modal, .custom-modal * {
+    visibility: visible;
+  }
+
+  .custom-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}
+

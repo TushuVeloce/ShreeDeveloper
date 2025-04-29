@@ -284,6 +284,11 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '',
       },
       {
+        Name: 'Sub Stage Master',
+        RouterLink: '/homepage/Website/Sub_Stage_Master',
+        LogoPath: '',
+      },
+      {
         Name: 'Account Main Ledger',
         RouterLink: '/homepage/Website/Account_Main_Ledger',
         LogoPath: '',
@@ -541,6 +546,13 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '',
       }
     ]
+    let RazorpaySubModulelist = [
+      {
+        Name: 'Razorpay',
+        RouterLink: '/homepage/Website/Razorpay',
+        LogoPath: '',
+      }
+    ]
 
     let moduleListInternal = [
       {
@@ -596,7 +608,13 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '',
         WhiteLogo: '/assets/icons/gov office.png',
         SubModuleList: RequestSubModulelist,
-      }
+      },
+      {
+        Name: 'RazorPay',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/gov office.png',
+        SubModuleList: RazorpaySubModulelist,
+      },
     ].filter(e => e.SubModuleList.length > 0);
 
     this.ModuleList = moduleListInternal;

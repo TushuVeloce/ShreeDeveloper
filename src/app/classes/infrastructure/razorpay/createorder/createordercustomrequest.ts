@@ -4,21 +4,22 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class EstimateStagesFetchRequest
+export class CreateOrderCustomProcessRequest
 {
-    public static readonly FetchRequestType: string = "EstimateStageFetchRequest";
-
-    SiteRefs: number[] = [];
-    EstimateStagesRefs: number[] = [];
+    public static readonly CustomProcessRequestType: string = "CreateOrderCustomProcessRequest";
+    
+    Amount: number = 0;
+    EmployeeRef: number = 0;
+    
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, EstimateStagesFetchRequest.FetchRequestType) as DataCollection;
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CreateOrderCustomProcessRequest.CustomProcessRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 
     public FormulateTransportData = () => {
-        let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.Fetch);
+        let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.CustomProcess);
         this.MergeIntoTransportData(td);
 
         return td;
