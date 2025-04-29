@@ -42,7 +42,7 @@ export class SiteManagementDetailsComponent implements OnInit {
   plotheaders: string[] = ['Sr.No.', 'Plot No', 'Area sq.m', 'Area sq.ft', 'Goverment Rate', 'Company Rate', 'Action'];
   ownerheaders: string[] = ['Sr.No.', 'Name ', 'Contact No ', 'Email Id ', 'Address', 'Pin Code ', 'Action'];
   isOwnerModalOpen: boolean = false;
-  newOwner: OwnerDetailProps = OwnerDetailProps.Blank(); 
+  newOwner: OwnerDetailProps = OwnerDetailProps.Blank();
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -180,11 +180,11 @@ export class SiteManagementDetailsComponent implements OnInit {
   closeModal = async (type: string) => {
     if (type === 'owner') {
       const keysToCheck = ['Name', 'Address', 'ContactNo', 'EmailId', 'PinCode', 'CityName', 'StateName', 'CountryName'] as const;
-  
+
       const hasData = keysToCheck.some(
         key => (this.newOwner as any)[key]?.toString().trim()
       );
-  
+
       if (hasData) {
         await this.uiUtils.showConfirmationMessage(
           'Close',
@@ -201,7 +201,7 @@ export class SiteManagementDetailsComponent implements OnInit {
       }
     }
   };
-  
+
 
   async addOwner() {
     if (!this.newOwner.Name || !this.newOwner.ContactNo || !this.newOwner.CountryRef || !this.newOwner.StateRef || !this.newOwner.CityRef || !this.newOwner.Address) {
@@ -217,8 +217,8 @@ export class SiteManagementDetailsComponent implements OnInit {
     } else {
       let ownerInstance = new Owner(this.newOwner, true);
       let siteInstance = new Site(this.Entity.p, true);
-      await ownerInstance.EnsurePrimaryKeysWithValidValues(); 
-      await siteInstance.EnsurePrimaryKeysWithValidValues(); 
+      await ownerInstance.EnsurePrimaryKeysWithValidValues();
+      await siteInstance.EnsurePrimaryKeysWithValidValues();
 
       this.newOwner.SiteManagementRef = this.Entity.p.Ref;
       this.Entity.p.SiteManagementOwnerDetails.push({ ...ownerInstance.p });
@@ -227,7 +227,7 @@ export class SiteManagementDetailsComponent implements OnInit {
     }
 
     this.newOwner = OwnerDetailProps.Blank();
-    this.editingIndex = null; 
+    this.editingIndex = null;
   }
 
   editowner(index: number) {
@@ -291,7 +291,7 @@ export class SiteManagementDetailsComponent implements OnInit {
   }
 
   BackSiteManagement() {
-    this.router.navigate(['/homepage/Website/site_management_Master']);
+    this.router.navigate(['/homepage/Website/Site_Management_Master']);
   }
 
   resetAllControls = () => {
@@ -302,7 +302,7 @@ export class SiteManagementDetailsComponent implements OnInit {
     this.TotalLandAreaInSqmInputControl.control.markAsUntouched();
     this.TotalLandAreaInSqftInputControl.control.markAsUntouched();
     this.NumberOfPlotsInputControl.control.markAsUntouched();
-  
+
 
 
     this.NameInputControl.control.markAsPristine();

@@ -394,7 +394,7 @@ export class SidebarlayoutComponent implements OnInit {
     let SiteManagementSubModuleList = [
       {
         Name: 'New Site',
-        RouterLink: '/homepage/Website/site_management_Master',
+        RouterLink: '/homepage/Website/Site_Management_Master',
         LogoPath: '',
       },
       {
@@ -404,7 +404,7 @@ export class SidebarlayoutComponent implements OnInit {
       },
       {
         Name: 'Actual Stages',
-        RouterLink: '/homepage/Website/site_management_actual_stage',
+        RouterLink: '/homepage/Website/Site_Management_Actual_Stage',
         LogoPath: '',
       },
       {
