@@ -6,20 +6,10 @@
           Estimate Stages
         </h5>
       </div>
-      <div
-        class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light"
-      >
-        <input
-          type="text"
-          Class="search-box_light"
-          placeholder="Search..."
-          autofocus
-        />
+      <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light">
+        <input type="text" Class="search-box_light" placeholder="Search..." autofocus />
       </div>
-      <div
-        class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
-        routerLinkActive="active"
-      >
+      <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
         <nz-button nz-button class="btn1" (click)="AddEstimateStages()">
           Add Estimate Stages
         </nz-button>
@@ -32,23 +22,11 @@
           <div class="row">
             <div class="col-md-4">
               <label for="SiteRef"><b>Site Name</b></label>
-              <nz-select
-                class="nzSelect-light"
-                nzShowSearch
-                nzAllowClear
-                nzPlaceHolder="Select"
-                id="SiteRef"
-                name="SiteRef"
-                [nzSize]="'large'"
-                [(ngModel)]="Entity.p.SiteRef"
-                (ngModelChange)="onSiteChange(Entity.p.SiteRef)"
-              >
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteRef"
+                name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
+                (ngModelChange)="onSiteChange(Entity.p.SiteRef)">
                 <nz-option [nzValue]="0" nzLabel="All"></nz-option>
-                <nz-option
-                  *ngFor="let site of SiteList"
-                  [nzValue]="site.p.Ref"
-                  [nzLabel]="site.p.Name"
-                ></nz-option>
+                <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
               </nz-select>
             </div>
           </div>
@@ -58,21 +36,10 @@
   </div>
   <!-- Machinary Expense -->
   <!-- Machinery Expense Table -->
-  <div
-    class="table-wrapper tblcard_light"
-    style="margin-top: 2rem"
-    *ngIf="DisplayMasterList.length > 0"
-  >
+  <div class="table-wrapper tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
     <div class="table-container">
-      <nz-table
-        #basicTable
-        nzSize="small"
-        class="no-hover-table bgtable_light"
-        [nzData]="paginatedList"
-        [nzScroll]="{ x: 'auto' }"
-        nzFrontPagination="false"
-        [nzShowSizeChanger]="false"
-      >
+      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
+        [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
         <thead>
           <tr>
             <th *ngFor="let header of headers" class="tblheader">
@@ -84,7 +51,9 @@
           <tr *ngFor="let estimatestage of paginatedList; index as i">
             <td class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td class="tbldata">{{ estimatestage.p.SiteName }}</td>
-            <td class="tbldata">{{ estimatestage.p.Description }}</td>
+            <!-- <td class="tbldata">{{ estimatestage.p.Description }}</td> -->
+            <td Class="tbldata" style="cursor: pointer;" [nzTooltipTitle]="estimatestage.p.Description"
+            nzTooltipPlacement="top" nzTooltipColor="#A52A2A" nz-button nz-tooltip>{{estimatestage.p.Description}}</td>
             <td class="tbldata" style="text-align: right">
               {{ estimatestage.p.Amount | currency : "INR" }}
             </td>
@@ -98,24 +67,20 @@
             <td class="tbldata"></td>
             <td class="tbldata"><b>Total</b></td>
             <td class="tbldata"><b> {{ totalAmount | currency : "INR" }}</b></td>
-            </tr>
+          </tr>
           <tr>
             <td class="tbldata"></td>
             <td class="tbldata"></td>
             <td class="tbldata"></td>
             <td class="tbldata"><b>{{ totalAmountInWords }}</b></td>
-            </tr>
+          </tr>
         </tbody>
-      </nz-table>  
+      </nz-table>
     </div>
 
     <!-- Pagination Component -->
-    <Pagination
-      [pageSize]="pageSize"
-      [total]="total"
-      [(currentPage)]="currentPage"
-      (pageChange)="onPageChange($event)"
-    />
+    <Pagination [pageSize]="pageSize" [total]="total" [(currentPage)]="currentPage"
+      (pageChange)="onPageChange($event)" />
   </div>
 
   <!-- If No Data Found -->

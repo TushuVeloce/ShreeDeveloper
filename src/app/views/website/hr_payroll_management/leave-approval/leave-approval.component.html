@@ -17,6 +17,7 @@
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
               [(ngModel)]="Entity.p.EmployeeRef" name="EmployeeRef" required id="EmployeeRef"
               (ngModelChange)="getLeaveApprovalListByEmployeeRef()">
+              <nz-option [nzValue]="0" nzLabel="All"></nz-option>
               <nz-option *ngFor="let Employee of EmployeeList" [nzLabel]="Employee.p.Name"
                 [nzValue]="Employee.p.Ref"></nz-option>
             </nz-select>
