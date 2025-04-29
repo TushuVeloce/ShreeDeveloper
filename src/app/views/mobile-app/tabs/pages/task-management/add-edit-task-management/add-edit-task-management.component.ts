@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { ModalController, Platform } from '@ionic/angular';
@@ -5,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateTimePickerService } from 'src/app/services/date-time-picker.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { SelectModalComponent } from 'src/app/views/mobile-app/shared/select-modal/select-modal.component';
 
@@ -20,7 +22,10 @@ export class AddEditTaskManagementComponent implements OnInit {
   isEditMode: boolean = false;
   taskId: string | null = null;
   siteName: string = '';
-  email: string = '';
+  startDate: string | null= '';
+  endDate: string| null = '';
+  priority: string = '';
+  status: string = '';
   message: string = '';
   selectedOptions: any[] = [];
   options: any[] = [];
@@ -35,8 +40,10 @@ export class AddEditTaskManagementComponent implements OnInit {
     private router: Router,
     private companystatemanagement: CompanyStateManagement,
     private uiUtils: UIUtils,
-    private bottomsheetMobileAppService: BottomsheetMobileAppService
-  ) {}
+    private bottomsheetMobileAppService: BottomsheetMobileAppService,
+    private dateTimePickerService: DateTimePickerService,
+    private datePipe: DatePipe
+  ) { }
 
   ngOnInit() {
     this.taskId = this.route.snapshot.paramMap.get('id');
@@ -81,6 +88,32 @@ export class AddEditTaskManagementComponent implements OnInit {
   //     this.siteName=selected[0].p.Name;
   //   }
   // }
+  async selectStartDate() {
+    const pickedDate = await this.dateTimePickerService.open({
+      mode: 'date',
+      label: 'Select Start Date',
+      value: this.startDate,
+    });
+
+    if (pickedDate) {
+      this.startDate = this.datePipe.transform(pickedDate, 'yyyy-MM-dd');
+      console.log('Selected:', pickedDate);
+    }
+  }
+  async selectEndDate() {
+    const pickedDate = await this.dateTimePickerService.open({
+      mode: 'date',
+      label: 'Select End Date',
+      value: this.endDate,
+    });
+
+    if (pickedDate) {
+      this.endDate = this.datePipe.transform(pickedDate, 'yyyy-MM-dd');
+      // this.endDate = pickedDate;
+      console.log('Selected:', this.endDate);
+    }
+  }
+
   selectSite() {
     this.openSelectModal(
       this.siteList,
@@ -93,7 +126,7 @@ export class AddEditTaskManagementComponent implements OnInit {
       }
     );
   }
-  
+
   async openSelectModal(
     dataList: any[],
     selectedItems: any[],

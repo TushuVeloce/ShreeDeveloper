@@ -1,0 +1,23 @@
+<ion-content class="transparent-backdrop" scroll-y="false">
+  <div class="popup-wrapper">
+    <div class="popup-container">
+      <div class="popup-header">
+        <h2>{{ label }}</h2>
+        <ion-icon name="close" class="close-icon" (click)="cancel()"></ion-icon>
+      </div>
+
+      <ion-datetime
+        [value]="value"
+        [presentation]="mode"
+        [(ngModel)]="selectedValue"
+        preferWheel="false"
+        showDefaultButtons="false">
+      </ion-datetime>
+
+      <div class="popup-actions">
+        <ion-button fill="clear" color="medium" (click)="cancel()">Cancel</ion-button>
+        <ion-button fill="solid" color="primary" (click)="confirm()">OK</ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>

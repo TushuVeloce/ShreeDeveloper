@@ -10,14 +10,15 @@ import { SelectModalComponent } from './select-modal/select-modal.component';
 import { FilterBottomsheetComponent } from './filter-bottomsheet/filter-bottomsheet.component';
 import { DynamicFilterBottomsheetComponent } from './dynamic-filter-bottomsheet/dynamic-filter-bottomsheet.component';
 import { CardListComponent } from './card-list/card-list.component';
+import { DateTimeModelComponent } from './date-time-model/date-time-model.component';
 
 @NgModule({
-  declarations: [HeaderComponent, HeaderWithBackHandlerComponent, SearchableSelectComponent, SelectModalComponent, FilterBottomsheetComponent, DynamicFilterBottomsheetComponent, CardListComponent],
+  declarations: [HeaderComponent, HeaderWithBackHandlerComponent, SearchableSelectComponent, SelectModalComponent, FilterBottomsheetComponent, DynamicFilterBottomsheetComponent, CardListComponent, DateTimeModelComponent],
   imports: [
     CommonModule,
     IonicModule,
     FormsModule,
   ],
-  exports: [HeaderComponent, HeaderWithBackHandlerComponent,SearchableSelectComponent,SelectModalComponent,FilterBottomsheetComponent,DynamicFilterBottomsheetComponent,CardListComponent]
+  exports: [HeaderComponent, HeaderWithBackHandlerComponent,SearchableSelectComponent,SelectModalComponent,FilterBottomsheetComponent,DynamicFilterBottomsheetComponent,CardListComponent,DateTimeModelComponent]
 })
 export class SharedModule { }

@@ -505,24 +505,27 @@ input[type=number] {
 //   <p>No attendance records found for today.</p>
 // </div>
 .form-container {
-  --background: #f9f9f9;
+  --background: var(--ion-background-color);
   padding: 16px;
 }
 
 .input-item {
-  --background: var(--ion-background-color);
-  --border-radius: 15px;
+  --background: var(--ion-background-color-step-50);
+  --border-radius: 12px;
   --padding-start: 16px;
   --padding-end: 16px;
   --margin-bottom: 16px;
-  --border-color: #dcdcdc;
-  --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+  background: var(--background);
+  border: 1px solid #dcdcdc;
+  /* Light grey by default */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  // transition: border-color 0.3s ease, box-shadow 0.3s ease, --background 0.3s ease;
+  border-radius: var(--border-radius);
 }
 
 .input-item:focus-within {
   --border-color: var(--ion-color-primary-shade);
-  --box-shadow: 0 0 8px var(--ion-color-primary-rgb);
+  --box-shadow: 0 0 6px rgba(var(--ion-color-primary-rgb), 0.6);
 }
 
 .input-item ion-label {

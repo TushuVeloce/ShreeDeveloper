@@ -1,34 +1,63 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>{{ isEditMode ? 'Edit Task' : 'Add Task' }}</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="goBack()">
-        <ion-icon name="close-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header> -->
-<app-header-with-back-handler
-  title="{{ isEditMode ? 'Edit Leave Request' : 'Add Leave Request' }}"></app-header-with-back-handler>
+<app-header-with-back-handler [title]="DetailsFormTitle"></app-header-with-back-handler>
 
-<ion-content>
-  <ion-list>
-    <ion-item>
-      <ion-label position="floating">Title</ion-label>
-      <ion-input [(ngModel)]="title"></ion-input>
+<ion-content class="form-container ">
+  <ion-list lines="none" class="ion-padding">
+    <!-- Task Name -->
+    <ion-item class="input-item">
+      <ion-label position="floating">Name</ion-label>
+      <ion-input [(ngModel)]="Entity.p.EmployeeName" required></ion-input>
     </ion-item>
 
-    <ion-item>
+    <!-- Select Request Type -->
+    <ion-item class="input-item" button (click)="selectLeaveType()">
+      <ion-label position="floating">Select Request Type</ion-label>
+      <ion-input [(ngModel)]="Entity.p.LeaveRequestName" disabled required></ion-input>
+    </ion-item>
+
+    <!-- From Date -->
+    <ion-item class="input-item" button (click)="selectFromDate()" *ngIf="!isHalfDay">
+      <ion-label position="floating">From Date</ion-label>
+      <ion-input [(ngModel)]="Entity.p.FromDate" disabled required></ion-input>
+    </ion-item>
+
+    <!-- To Date -->
+    <ion-item class="input-item" button (click)="selectToDate()" *ngIf="!isHalfDay">
+      <ion-label position="floating">To Date</ion-label>
+      <ion-input [(ngModel)]="Entity.p.ToDate" disabled required></ion-input>
+    </ion-item>
+
+    <!-- Half Day Date -->
+    <ion-item class="input-item" button (click)="selectHalfDayDate()" *ngIf="isHalfDay">
+      <ion-label position="floating">Half Day Date</ion-label>
+      <ion-input [(ngModel)]="Entity.p.HalfDayDate" disabled required></ion-input>
+    </ion-item>
+
+    <!-- Day -->
+    <ion-item class="input-item" >
+      <ion-label position="floating">Day</ion-label>
+      <ion-input [(ngModel)]="Entity.p.Days" required disabled></ion-input>
+    </ion-item>
+
+    <!-- Leave Hours -->
+    <ion-item class="input-item">
+      <ion-label position="floating">Leave Hours</ion-label>
+      <ion-input [(ngModel)]="Entity.p.LeaveHours" required></ion-input>
+    </ion-item>
+    <!-- Description -->
+    <ion-item class="input-item">
       <ion-label position="floating">Description</ion-label>
-      <ion-textarea [(ngModel)]="description"></ion-textarea>
+      <ion-textarea [(ngModel)]="Entity.p.Description" rows="4" required></ion-textarea>
     </ion-item>
-  </ion-list>
 
-  <ion-footer>
-    <ion-toolbar>
-      <ion-button expand="full" (click)="save()">
-        {{ isEditMode ? 'Update' : 'Add' }}
+    <!-- Buttons -->
+    <div class="button-row">
+      <ion-button expand="block" (click)="SaveLeaveRequest()" class="submit-button primary-button">
+        {{ Entity.p.EmployeeName ? 'Update' : 'Add' }}
       </ion-button>
-    </ion-toolbar>
-  </ion-footer>
+      <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
+        Cancel
+      </ion-button>
+    </div>
+
+  </ion-list>
 </ion-content>
