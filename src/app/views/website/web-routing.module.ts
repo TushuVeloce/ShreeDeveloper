@@ -125,6 +125,9 @@ const routes: Routes = [
 
       { path: 'Sub_Stage_Master', component: SubStageMasterComponent},
       { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent},
+      
+      { path: 'Sub_Stage_Master', component: SubStageMasterComponent},
+      { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent},
 
       { path: 'Account_Main_Ledger', component: AccountMainLedgerComponent },
       { path: 'Account_Main_Ledger_Details', component: AccountMainLedgerDetailsComponent },
