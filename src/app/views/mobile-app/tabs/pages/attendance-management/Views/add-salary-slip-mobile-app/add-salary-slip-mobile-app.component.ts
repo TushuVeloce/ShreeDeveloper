@@ -1,5 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { ValidationMessages } from 'src/app/classes/domain/constants';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
+import { FinancialYear } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
+import { SalarySlipRequest } from 'src/app/classes/domain/entities/website/request/salarysliprequest/salarysliprequest';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { UIUtils } from 'src/app/services/uiutils.service';
+import { Utils } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-add-salary-slip-mobile-app',
@@ -7,38 +17,172 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./add-salary-slip-mobile-app.component.scss'],
   standalone:false
 })
-export class AddSalarySlipMobileAppComponent  implements OnInit {
+export class AddSalarySlipMobileAppComponent implements OnInit {
+  public Entity: SalarySlipRequest = SalarySlipRequest.CreateNewInstance();
+  public InitialEntity: SalarySlipRequest = null as any;
+  public DetailsFormTitle: 'New Salary Slip Request' | 'Edit Salary Slip Request' = 'New Salary Slip Request';
 
+  public isSaveDisabled = false;
+  public EmployeeRef = 0;
+  public SelectedMonth: any[] = [];
+  public SelectedYear: any[] = [];
+  public FinancialYearList: string[] = [];
 
-  title: string = '';  // ✅ Add missing property
-  description: string = ''; // ✅ Add missing property
-  isEditMode: boolean = false;
-  taskId: string | null = null;
+  public RequiredFieldMsg = ValidationMessages.RequiredFieldMsg;
+  public monthList = DomainEnums.MonthList();
 
-  constructor(private route: ActivatedRoute, private router: Router) { }
+  private IsNewEntity = true;
 
-  ngOnInit() {
-    this.taskId = this.route.snapshot.paramMap.get('id');
-    this.isEditMode = !!this.taskId;
+  constructor(
+    private router: Router,
+    private uiUtils: UIUtils,
+    private appStateManage: AppStateManageService,
+    private utils: Utils,
+    private companystatemanagement: CompanyStateManagement,
+    private bottomsheetMobileAppService: BottomsheetMobileAppService
+  ) { }
 
-    if (this.isEditMode) {
-      // Fetch existing data based on `taskId` if needed
-      this.title = 'Sample Task'; // Replace with actual data
-      this.description = 'Task description'; // Replace with actual data
-    }
-  }
+  async ngOnInit(): Promise<void> {
+    const editMode = this.appStateManage.StorageKey.getItem('Editable') === 'Edit';
 
-  save() {
-    if (this.isEditMode) {
-      console.log('Updating task:', this.taskId);
+    this.IsNewEntity = !editMode;
+    this.DetailsFormTitle = editMode ? 'Edit Salary Slip Request' : 'New Salary Slip Request';
+
+    if (editMode) {
+      this.Entity = SalarySlipRequest.GetCurrentInstance();
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+      this.appStateManage.StorageKey.removeItem('Editable');
     } else {
-      console.log('Creating new task');
+      this.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+      this.Entity = SalarySlipRequest.CreateNewInstance();
+      SalarySlipRequest.SetCurrentInstance(this.Entity);
+      await this.getSingleEmployeeDetails();
+      await this.getFinancialYearListByCompanyRef();
     }
-    this.router.navigate(['/app_homepage/tabs/attendance-management/leave-request']); // ✅ Fix router access
+
+    this.InitialEntity = Object.assign(
+      SalarySlipRequest.CreateNewInstance(),
+      this.utils.DeepCopy(this.Entity)
+    );
   }
-  goBack() {
+
+  private async getSingleEmployeeDetails(): Promise<void> {
+    const companyRef = this.companystatemanagement.SelectedCompanyRef();
+    if (companyRef <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+
+    const employee = await Employee.FetchInstance(this.EmployeeRef, async (errMsg) =>
+      await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
+    this.Entity.p.EmployeeRef = employee.p.Ref;
+    this.Entity.p.EmployeeName = employee.p.Name;
+  }
+
+  public async selectMonthBottomsheet(): Promise<void> {
+    const options = this.monthList.map((item) => ({ p: item }));
+    this.openSelectModal(options, this.SelectedMonth, 'Select Month', (selected) => {
+      this.SelectedMonth = selected;
+      this.Entity.p.SelectedMonths = selected[0]?.p?.Ref;
+      this.Entity.p.SelectedMonthsName = selected[0]?.p?.Name;
+    });
+  }
+
+  public async selectYearBottomsheet(): Promise<void> {
+    const options = this.FinancialYearList.map(year => ({ p: { Ref: year, Name: year } }));
+    this.openSelectModal(options, this.SelectedYear, 'Select Year', (selected) => {
+      this.SelectedYear = selected;
+      this.Entity.p.Year = selected[0]?.p?.Ref;
+    });
+  }
+
+  // private async getFinancialYearListByCompanyRef(): Promise<void> {
+  //   const companyRef = this.companystatemanagement.SelectedCompanyRef();
+  //   if (companyRef <= 0) {
+  //     await this.uiUtils.showErrorToster('Company not Selected');
+  //     return;
+  //   }
+
+  //   const lst = await FinancialYear.FetchEntireListByCompanyRef(companyRef, async errMsg =>
+  //     await this.uiUtils.showErrorMessage('Error', errMsg)
+  //   );
+
+  //   const years = lst.flatMap(item => [
+  //     item.p.FromDate.substring(0, 4),
+  //     item.p.ToDate.substring(0, 4)
+  //   ]);
+
+  //   this.FinancialYearList = Array.from(new Set(years)).sort();
+  // }
+
+    getFinancialYearListByCompanyRef = async () => {
+      const companyRef = this.companystatemanagement.SelectedCompanyRef();
+      this.FinancialYearList = [];
+      if (companyRef <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
+      let lst = await FinancialYear.FetchEntireListByCompanyRef(companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  
+      const updatedArray = lst.map(item => ({
+        ...item,
+        FromDate: item.p.FromDate.substring(0, 4),
+        ToDate: item.p.ToDate.substring(0, 4)
+      }));
+  
+      const years: string[] = [];
+  
+      updatedArray.forEach(item => {
+        years.push(item.FromDate);
+        years.push(item.ToDate);
+      });
+  
+      // Step 2: Sort and remove duplicates
+      const uniqueYears = Array.from(new Set(years)).sort();
+  
+      this.FinancialYearList = uniqueYears;
+    }
+
+  private async openSelectModal(
+    dataList: any[],
+    selectedItems: any[],
+    title: string,
+    updateCallback: (selected: any[]) => void
+  ): Promise<void> {
+    const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, false, title);
+    if (selected) updateCallback(selected);
+  }
+
+  public async SaveSalarySlipRequest(): Promise<void> {
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+
+    if (this.Entity.p.CreatedBy === 0) {
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+    }
+
+    const entityToSave = this.Entity.GetEditableVersion();
+    const tr = await this.utils.SavePersistableEntities([entityToSave]);
+
+    if (!tr.Successful) {
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
+    }
+
+    await this.uiUtils.showSuccessToster('Salary Slip Request saved successfully!');
+    this.resetForm();
+    await this.router.navigate(['/homepage/Website/Salary_Slip_Request']);
+  }
+
+  private resetForm(): void {
+    this.SelectedMonth = [];
+    this.SelectedYear = [];
+    this.Entity = SalarySlipRequest.CreateNewInstance();
+  }
+
+  public goBack(): void {
     this.router.navigate(['/app_homepage/tabs/crm/attendance-management/leave-request']);
   }
-
-
 }

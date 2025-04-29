@@ -1,25 +1,33 @@
+<app-header-with-back-handler [title]="DetailsFormTitle"></app-header-with-back-handler>
 
-<app-header-with-back-handler
-  title="{{ isEditMode ? 'Edit Salary Slip Request' : 'Add Salary Slip Request' }}"></app-header-with-back-handler>
-
-<ion-content>
-  <ion-list>
-    <ion-item>
-      <ion-label position="floating">Title</ion-label>
-      <ion-input [(ngModel)]="title"></ion-input>
+<ion-content class="form-container ">
+  <ion-list lines="none" class="ion-padding">
+    <!-- Task Name -->
+    <ion-item class="input-item">
+      <ion-label position="floating">Name</ion-label>
+      <ion-input [(ngModel)]="Entity.p.EmployeeName" required></ion-input>
     </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Description</ion-label>
-      <ion-textarea [(ngModel)]="description"></ion-textarea>
+    <!-- Select Request Type -->
+    <ion-item class="input-item" button (click)="selectMonthBottomsheet()">
+      <ion-label position="floating">Select Month</ion-label>
+      <ion-input [(ngModel)]="Entity.p.SelectedMonthsName" disabled required></ion-input>
     </ion-item>
-  </ion-list>
 
-  <ion-footer>
-    <ion-toolbar>
-      <ion-button expand="full" (click)="save()">
-        {{ isEditMode ? 'Update' : 'Add' }}
+    <!-- Select Request Type -->
+    <ion-item class="input-item" button (click)="selectYearBottomsheet()">
+      <ion-label position="floating">Select Year</ion-label>
+      <ion-input [(ngModel)]="Entity.p.Year" disabled required></ion-input>
+    </ion-item>
+    <!-- Buttons -->
+    <div class="button-row">
+      <ion-button expand="block" (click)="SaveSalarySlipRequest()" class="submit-button primary-button">
+        {{ Entity.p.EmployeeName ? 'Update' : 'Add' }}
       </ion-button>
-    </ion-toolbar>
-  </ion-footer>
+      <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
+        Cancel
+      </ion-button>
+    </div>
+
+  </ion-list>
 </ion-content>
