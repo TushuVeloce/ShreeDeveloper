@@ -165,6 +165,7 @@
 }
 
 .punch-modal::part(content) {
+    --background: var(--ion-background-color-step-50);
     --width: 90%;
     --height: 50%;
     --max-width: 400px;

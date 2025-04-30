@@ -133,6 +133,7 @@
                   Capture
                 </ion-button>
                 <img *ngIf="capturedBeforePhoto" [src]="capturedBeforePhoto" class="preview-img" />
+                <ion-icon name="image-outline" *ngIf="!capturedBeforePhoto" class="preview-img"></ion-icon>
               </div>
               <div>
                 <ion-label>Work Location</ion-label>
@@ -141,6 +142,7 @@
                   Capture
                 </ion-button>
                 <img *ngIf="capturedAfterPhoto" [src]="capturedAfterPhoto" class="preview-img" />
+                <ion-icon name="image-outline" *ngIf="!capturedAfterPhoto" class="preview-img"></ion-icon>
               </div>
             </div>
           </div>

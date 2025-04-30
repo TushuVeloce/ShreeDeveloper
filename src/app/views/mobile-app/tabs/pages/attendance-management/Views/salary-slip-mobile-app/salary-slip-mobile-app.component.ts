@@ -48,6 +48,7 @@ export class SalarySlipMobileAppComponent implements OnInit {
   ngOnInit(): void {
     this.entity.p.EmployeeRef = this.appStateManage.getEmployeeRef();
     this.getSalarySlipRequestListByEmployeeRef();
+    console.log("ngOnInit is calling in salary slip dashBoard");
   }
 
   async handleRefresh(event: CustomEvent): Promise<void> {

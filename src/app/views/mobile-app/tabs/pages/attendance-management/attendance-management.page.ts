@@ -59,7 +59,7 @@ export class AttendanceManagementPage implements OnInit {
   gridItems = [
     { label: 'Salary Slip', icon: 'layers-outline', gridFunction: 100 },
     { label: 'Leave', icon: 'grid-outline', gridFunction: 200 },
-    { label: 'View Attendance', icon: 'bar-chart-outline', gridFunction: 300 },
+    { label: 'Attendance', icon: 'bar-chart-outline', gridFunction: 300 },
   ];
 
   // Company and employee references
