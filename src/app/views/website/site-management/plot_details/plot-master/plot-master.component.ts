@@ -138,9 +138,6 @@ export class PlotMasterComponent implements OnInit {
     this.SelectedPlot = item.GetEditableVersion();
     Plot.SetCurrentInstance(this.SelectedPlot);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    this.appStateManage.StorageKey.setItem('siteRf', String(this.SelectedPlot.p.SiteManagementRef));
-    this.appStateManage.StorageKey.setItem('siteName', this.SelectedPlot.p.SiteName);
-    this.appStateManage.StorageKey.setItem('bookingremarkRef', String(this.SelectedPlot.p.CurrentBookingRemark));
     await this.router.navigate(['/homepage/Website/Plot_Master_Details']);
   };
 
