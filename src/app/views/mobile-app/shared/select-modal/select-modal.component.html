@@ -25,7 +25,8 @@
       <ion-label class="custom-label" [ngClass]="{ 'selected': isSelected(option) }">
         {{ option.p.Name }}
       </ion-label>
-      <ion-checkbox *ngIf="multiSelect" slot="end" [checked]="isSelected(option)"></ion-checkbox>
+      <ion-checkbox *ngIf="multiSelect" slot="end" [checked]="isSelected(option)" [disabled]="isDisabled(option)">
+      </ion-checkbox>
     </ion-item>
   </ion-list>
 

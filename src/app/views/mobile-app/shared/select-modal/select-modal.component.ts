@@ -1,17 +1,19 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
   selector: 'app-select-modal',
   templateUrl: './select-modal.component.html',
   styleUrls: ['./select-modal.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class SelectModalComponent  implements OnInit {
+export class SelectModalComponent implements OnInit {
   @Input() options: any[] = [];
   @Input() selectedOptions: any[] = [];
   @Input() multiSelect: boolean = false;
   @Input() bottomsheetTitle: string = 'select options';
+  @Input() MaxSelection: number = 1;
   searchText: string = '';
   loadedOptions: any[] = [];
   itemsPerLoad: number = 20;
@@ -45,18 +47,32 @@ export class SelectModalComponent  implements OnInit {
       }
     }, 500);
   }
-
   selectOption(option: any) {
     if (this.multiSelect) {
-      if (this.selectedOptions.includes(option)) {
+      const exists = this.selectedOptions.some(item => item.p.Ref === option.p.Ref);
+
+      if (exists) {
         this.selectedOptions = this.selectedOptions.filter(item => item.p.Ref !== option.p.Ref);
       } else {
-        this.selectedOptions.push(option);
+        if (this.selectedOptions.length >= this.MaxSelection) {
+          // Optional: Inform the user (you can replace alert with toastController if needed)
+          UIUtils.GetInstance().showWarningToster(`You can select up to ${this.MaxSelection} options only.`);
+          // alert(`You can select up to ${this.MaxSelection} options only.`);
+          return;
+        }
+
+        this.selectedOptions = [...this.selectedOptions, option];
       }
     } else {
       this.selectedOptions = [option];
       this.confirmSelection(); // Close modal and pass the selection
     }
+  }
+
+
+  isDisabled(option: any): boolean {
+    const isSelected = this.selectedOptions.some(item => item.p.Ref === option.p.Ref);
+    return !isSelected && this.selectedOptions.length >= this.MaxSelection;
   }
 
 

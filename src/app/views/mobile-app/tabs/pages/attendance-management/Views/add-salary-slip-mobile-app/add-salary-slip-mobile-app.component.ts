@@ -67,9 +67,9 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
   }
 
   private async getSingleEmployeeDetails(): Promise<void> {
-    const companyRef = this.companystatemanagement.SelectedCompanyRef();
+    const companyRef = await this.companystatemanagement.SelectedCompanyRef();
     if (companyRef <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
+      // await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
 
@@ -83,20 +83,17 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
 
   public async selectMonthBottomsheet(): Promise<void> {
     const options = this.monthList.map((item) => ({ p: item }));
-    this.openSelectModal(options,this.SelectedMonth, true, 'Select Month', (selected) => {
+    this.openSelectModal(options, this.SelectedMonth, true, 'Select Month', 3, (selected) => {
       this.SelectedMonth = selected;
-      console.log('selected :', selected.map(item => item.p.Ref));
-      // this.SelectedMonth = selected.map(item => item.p.Ref);
-      
+      // console.log('selected :', selected.map(item => item.p.Ref));      
       this.Entity.p.SelectedMonths = selected.map(item => item.p.Ref);
       this.Entity.p.SelectedMonthsName = selected.map(item => item.p.Name);
-      // this.Entity.p.SelectedMonthsName = selected[0]?.p?.Name;
     });
   }
 
   public async selectYearBottomsheet(): Promise<void> {
     const options = this.FinancialYearList.map(year => ({ p: { Ref: year, Name: year } }));
-    this.openSelectModal(options, this.SelectedYear,false, 'Select Year', (selected) => {
+    this.openSelectModal(options, this.SelectedYear,false, 'Select Year',1, (selected) => {
       this.SelectedYear = selected;
       this.Entity.p.Year = selected[0]?.p?.Ref;
     });
@@ -154,9 +151,10 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
     selectedItems: any[],
     multiSelect: boolean,
     title: string,
+    MaxSelection:number,
     updateCallback: (selected: any[]) => void
   ): Promise<void> {
-    const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, multiSelect, title);
+    const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, multiSelect, title, MaxSelection);
     if (selected) updateCallback(selected);
   }
 
@@ -193,6 +191,6 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
   }
 
   public goBack(): void {
-    this.router.navigate(['/app_homepage/tabs/crm/attendance-management/leave-request']);
+    this.router.navigate(['app_homepage/tabs/attendance-management/salary-slip']);
   }
 }

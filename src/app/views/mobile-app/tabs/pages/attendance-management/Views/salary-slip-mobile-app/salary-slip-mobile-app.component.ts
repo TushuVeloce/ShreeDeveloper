@@ -47,6 +47,7 @@ export class SalarySlipMobileAppComponent implements OnInit {
 
   ngOnInit(): void {
     this.entity.p.EmployeeRef = this.appStateManage.getEmployeeRef();
+    this.getSalarySlipRequestListByEmployeeRef();
   }
 
   async handleRefresh(event: CustomEvent): Promise<void> {
