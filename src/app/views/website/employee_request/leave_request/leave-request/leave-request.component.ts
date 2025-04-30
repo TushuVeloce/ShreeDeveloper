@@ -8,6 +8,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 import { EmployeeMasterComponent } from '../../../Masters/employee/employee-master/employee-master.component';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { LeaveRequestType } from 'src/app/classes/domain/domainenums/domainenums';
 
 @Component({
   selector: 'app-leave-request',
@@ -28,6 +29,8 @@ export class LeaveRequestComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
+  LeaveRequesttype = LeaveRequestType;
+
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 

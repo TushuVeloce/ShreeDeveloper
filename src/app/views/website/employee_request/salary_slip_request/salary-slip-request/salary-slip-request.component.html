@@ -29,19 +29,19 @@
             <td Class="tbldata"> <b *ngFor="let month of salarysliprequest.p.SelectedMonthsName">{{ month + ' ' }}</b>
             </td>
             <td Class="tbldata">
-              <span class="status" *ngIf="salarysliprequest.p.IsApproved == 0" ngClass="pending">
+              <span class="status" *ngIf="!salarysliprequest.p.IsApproved" ngClass="pending">
                 Pending
               </span>
-              <span class="status" *ngIf="salarysliprequest.p.IsApproved == 1" ngClass="approved">
+              <span class="status" *ngIf="salarysliprequest.p.IsApproved" ngClass="approved">
                 Approved
               </span>
             </td>
             <td class="tbldata">
               <span style="margin-left: 9px;" (click)="onDeleteClicked(salarysliprequest);"
-                *ngIf="salarysliprequest.p.IsApproved == 0">
+                *ngIf="!salarysliprequest.p.IsApproved">
                 <img src="\assets\icons\delete.png" alt="logo" style="cursor: pointer;" title="Delete" width="20px" height="20px" /></span>
 
-              <span style="margin-left: 9px;" *ngIf="salarysliprequest.p.IsApproved != 0">
+              <span style="margin-left: 9px;" *ngIf="salarysliprequest.p.IsApproved">
                 <img src="\assets\icons\GreyDustbin.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
             </td>
           </tr>
@@ -54,7 +54,7 @@
       </nz-pagination>
     </div>
   </div>
-  <div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
+  <div *ngIf="DisplayMasterList.length == 0" class="card-body_light">
     <div style="height: 200px" class="d-flex align-items-center justify-content-center">
       <span class="title_light"> Data Not Found</span>
     </div>
