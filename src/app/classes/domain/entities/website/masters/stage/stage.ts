@@ -18,7 +18,12 @@ export class StageProps {
   public readonly Db_Table_Name = "StageMaster";
   public Ref: number = 0;
   public Name: string = '';
+  public StageType: number = 0;
   public DisplayOrder: number = 0;
+  public IsSubStage: Boolean = false;
+  public IsMachinaryexpense: Boolean = false;
+  public IsLabourExpense: Boolean = false;
+  public IsOther: Boolean = false;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
 

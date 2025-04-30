@@ -12,7 +12,7 @@
     </div>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div>
             <label>Name</label>
             <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
@@ -24,7 +24,19 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
+          <label>Stage Type</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StageType"
+            name="StageType" [nzSize]="'large'" [(ngModel)]="Entity.p.StageType" >
+            <nz-option *ngFor="let stage of StageTypeList" [nzValue]="stage.Ref"
+            [nzLabel]="stage.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4 d-flex align-items-center">
+          <input type="checkbox" id="IsSubStage" [(ngModel)]="Entity.p.IsSubStage" name="IsSubStage" class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
+          <label for="IsSubStage" class="form-check-label mb-0">Sub Stage</label>
+        </div>
+        <!-- <div class="col-md-4">
           <div>
             <label>Display Order</label>
             <input type="number" [(ngModel)]="Entity.p.DisplayOrder" name="DisplayOrder" class="form-control"
@@ -34,6 +46,20 @@
               <span class="validation-text" *ngIf="DisplayOrderCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
+        </div> -->
+      </div>
+      <div class="row" style="margin-top: 2rem; ">
+        <div class="col-md-4">
+          <input type="checkbox" id="IsMachinaryexpense" [(ngModel)]="Entity.p.IsMachinaryexpense" name="IsMachinaryexpense" class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
+          <label for="IsMachinaryexpense" class="form-check-label mb-0">Machinary expense</label>
+        </div>
+        <div class="col-md-4">
+          <input type="checkbox" id="IsLabourExpense" [(ngModel)]="Entity.p.IsLabourExpense" name="IsLabourExpense" class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
+          <label for="IsLabourExpense" class="form-check-label mb-0">Labour Expense</label>
+        </div>
+        <div class="col-md-4">
+          <input type="checkbox" id="IsOther" [(ngModel)]="Entity.p.IsOther" name="IsOther" class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
+          <label for="IsOther" class="form-check-label mb-0">Other</label>
         </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">

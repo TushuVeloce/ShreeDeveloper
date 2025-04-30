@@ -173,6 +173,15 @@ export enum AttendenceLogType {
 
 }
 
+export enum StageType {
+  None = 0,
+  Road = 100,
+  HalfRoundGutterNale = 200,
+  SidePattiChira = 300,
+  SolarStreetLight = 400,
+  OfficialExpenditure = 500,
+}
+
 
 
 export class DomainEnums {
@@ -1009,6 +1018,45 @@ export class DomainEnums {
     if (withAllOption) {
       let allEntry = {
         Ref: AttendenceLogType.None,
+        Name: allOptionName
+      }
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+  public static StageTypeName(itemType: StageType) {
+    switch (itemType) {
+      case StageType.Road: return 'Road';
+      case StageType.HalfRoundGutterNale: return 'Half Round Gutter Nale';
+      case StageType.SidePattiChira: return 'Side Patti Chira';
+      case StageType.SolarStreetLight: return 'Solar Street Light';
+      case StageType.OfficialExpenditure: return 'Official Expenditure';
+      default: return '';
+    }
+  }
+
+  public static StageTypeList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+    let result = [
+      {
+        Ref: StageType.Road, Name: DomainEnums.StageTypeName(StageType.Road)
+      },
+      {
+        Ref: StageType.HalfRoundGutterNale, Name: DomainEnums.StageTypeName(StageType.HalfRoundGutterNale)
+      },
+      {
+        Ref: StageType.SidePattiChira, Name: DomainEnums.StageTypeName(StageType.SidePattiChira)
+      },
+      {
+        Ref: StageType.SolarStreetLight, Name: DomainEnums.StageTypeName(StageType.SolarStreetLight)
+      },
+      {
+        Ref: StageType.OfficialExpenditure, Name: DomainEnums.StageTypeName(StageType.OfficialExpenditure)
+      },
+    ]
+    if (withAllOption) {
+      let allEntry = {
+        Ref: StageType.None,
         Name: allOptionName
       }
       result.unshift(allEntry);

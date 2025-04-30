@@ -107,6 +107,8 @@ import { EmployeeAttendanceLogsComponent } from './employee_request/employee_att
 import { RazorpayComponent } from './Razorpay/razorpay/razorpay.component';
 import { SubStageMasterComponent } from './Masters/sub_stage/sub-stage-master/sub-stage-master.component';
 import { SubStageMasterDetailsComponent } from './Masters/sub_stage/sub-stage-master-details/sub-stage-master-details.component';
+import { ExpenseTypeMasterComponent } from './Masters/expense _type/expense-type-master/expense-type-master.component';
+import { ExpenseTypeMasterDetailsComponent } from './Masters/expense _type/expense-type-master-details/expense-type-master-details.component';
 
 
 const routes: Routes = [
@@ -125,6 +127,9 @@ const routes: Routes = [
 
       { path: 'Sub_Stage_Master', component: SubStageMasterComponent},
       { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent},
+
+      { path: 'Expense_Type_Master', component: ExpenseTypeMasterComponent},
+      { path: 'Expense_Type_Master_Details', component: ExpenseTypeMasterDetailsComponent},
       
       { path: 'Sub_Stage_Master', component: SubStageMasterComponent},
       { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent},

@@ -9,6 +9,7 @@ import { Utils } from 'src/app/services/utils.service';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { NgModel } from '@angular/forms';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 
 @Component({
   selector: 'app-sub-stage-master-details',
@@ -25,6 +26,7 @@ export class SubStageMasterDetailsComponent  implements OnInit {
   InitialEntity: SubStage = null as any;
   StageList: Stage[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  StageTypeList = DomainEnums.StageTypeList(true,'select stage');
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
@@ -43,7 +45,6 @@ export class SubStageMasterDetailsComponent  implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.StageList = await Stage.FetchEntireListByCompanyRef(this.companyRef());
-
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
 
