@@ -93,7 +93,6 @@ export class SalarySlipApprovalComponent implements OnInit {
       async () => {
         this.Entity = salaryslipapproval;
         this.Entity.p.IsApproved = 1;
-        this.Entity.p.LeaveApprovedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
         let entityToSave = this.Entity.GetEditableVersion();
         // let entityToSave = Object.assign(SalarySlipRequest.CreateNewInstance(),
         //   this.utils.DeepCopy(this.Entity)) as SalarySlipRequest;

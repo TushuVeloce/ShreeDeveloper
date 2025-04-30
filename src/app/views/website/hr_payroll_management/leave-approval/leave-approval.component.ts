@@ -52,6 +52,7 @@ export class LeaveApprovalComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    this.getLeaveApprovalListByCompanyRef();
   }
 
   // Extracted from services date conversion //
@@ -86,7 +87,7 @@ export class LeaveApprovalComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.Entity.p.EmployeeRef <= 0) {
-      await this.uiUtils.showErrorToster('Employee not Selected');
+      this.getLeaveApprovalListByCompanyRef();
       return;
     }
     let lst = await LeaveRequest.FetchEntireListByEmployeeRef(this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));

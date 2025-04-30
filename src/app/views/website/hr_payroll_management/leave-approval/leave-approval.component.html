@@ -41,7 +41,7 @@
             <td Class="tbldata">{{leaverequest.p.LeaveRequestName}}</td>
             <td Class="tbldata" style="cursor: pointer;" [nzTooltipTitle]="leaverequest.p.Description"
               nzTooltipPlacement="top" nzTooltipColor="#A52A2A" nz-button nz-tooltip>{{leaverequest.p.Description}}</td>
-            <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType != 300">
+            <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType != LeaveRequesttype.HalfDay">
               {{ formatDate(leaverequest.p.FromDate) }} - {{ formatDate(leaverequest.p.ToDate) }}</td>
 
             <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType == LeaveRequesttype.HalfDay">
@@ -49,19 +49,19 @@
             <td Class="tbldata">{{leaverequest.p.Days}}</td>
             <td class="tbldata">
               <!-- PENDING -->
-              <button class="status" *ngIf="leaverequest.p.IsApproved == 0 && leaverequest.p.IsCancelled == 0"
+              <button class="status" *ngIf="!leaverequest.p.IsApproved && !leaverequest.p.IsCancelled"
                 [disabled]="isSaveDisabled" (click)="handleApproval(leaverequest)" ngClass="pending">
                 Pending
               </button>
 
               <!-- APPROVED -->
-              <button class="status" *ngIf="leaverequest.p.IsApproved == 1 && leaverequest.p.IsCancelled == 0"
+              <button class="status" *ngIf="leaverequest.p.IsApproved && !leaverequest.p.IsCancelled"
                 ngClass="approved">
                 Approved
               </button>
 
               <!-- REJECTED -->
-              <button class="status" *ngIf="leaverequest.p.IsApproved == 0 && leaverequest.p.IsCancelled == 1"
+              <button class="status" *ngIf="!leaverequest.p.IsApproved && leaverequest.p.IsCancelled"
                 ngClass="rejected">
                 Rejected
               </button>
