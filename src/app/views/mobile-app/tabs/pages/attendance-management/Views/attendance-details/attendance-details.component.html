@@ -10,19 +10,20 @@
   </ion-segment>
 
   <!-- Attendance List -->
-  <ion-list style="background-color: var(--ion-background-color);"
-    *ngIf="filteredMonthlyAttendanceLogsList.length > 0; else noDataTemplate">
+  <ion-list *ngIf="filteredMonthlyAttendanceLogsList.length > 0; else noDataTemplate" class="attendance-list">
     <ion-item *ngFor="let day of filteredMonthlyAttendanceLogsList" lines="none"
       [class.no-data]="!day.p.FirstCheckInTime && !day.p.LastCheckOutTime && !day.p.OnLeave && !day.p.TotalWorkingHrs">
 
       <ion-grid class="attendance-grid">
         <ion-row>
-          <ion-col size="2" class="day-column">
+          <!-- Date Column -->
+          <ion-col size="3" class="day-column">
             <div class="date">{{ day.p.TransDateTime ? (day.p.TransDateTime | date:'dd') : '--' }}</div>
             <div class="day">{{ day.p.TransDateTime ? (day.p.TransDateTime | date:'EEE') : '--' }}</div>
           </ion-col>
 
-          <ion-col size="10" style="border-radius: 10px;"
+          <!-- Details Column -->
+          <ion-col size="9" class="info-column"
             [ngStyle]="{ 'background-color': day.p.OnLeave ? '#ffe0e0' : 'transparent' }">
             <div *ngIf="day.p.OnLeave" class="center-text">
               <ion-icon name="medkit-outline"></ion-icon>
@@ -30,27 +31,28 @@
             </div>
 
             <div *ngIf="!day.p.OnLeave && (day.p.FirstCheckInTime || day.p.LastCheckOutTime || day.p.TotalWorkingHrs)"
-              class="timing-row" [ngStyle]="{ 'background-color': day.p.LeaveType ? '#ffe4e1' : '#e7f5ff' }"
-              style="border-radius: 10px;">
-              <div class="clock-in-out">
-                <strong>In:</strong> {{ day.p.FirstCheckInTime || '--' }}
+              class="timing-row" [ngStyle]="{ 'background-color': day.p.LeaveType ? '#ffe4e1' : '#e7f5ff' }">
+              <div class="timing-box">
+                <label>In</label>
+                <span>{{ day.p.FirstCheckInTime || '--' }}</span>
               </div>
-              <div class="clock-in-out">
-                <strong>Out:</strong> {{ day.p.LastCheckOutTime || '--' }}
+              <div class="timing-box">
+                <label>Out</label>
+                <span>{{ day.p.LastCheckOutTime || '--' }}</span>
               </div>
-              <div class="working-hours">
-                <strong>Hours:</strong> {{ day.p.TotalWorkingHrs || '--' }}
+              <div class="timing-box">
+                <label>Hours</label>
+                <span>{{ day.p.TotalWorkingHrs || '--' }}</span>
               </div>
             </div>
           </ion-col>
         </ion-row>
       </ion-grid>
-
     </ion-item>
   </ion-list>
 
-  <!-- Template to show when no data -->
-  <ng-template #noDataTemplate style="background-color: var(--ion-background-color);">
+  <!-- No Data Template -->
+  <ng-template #noDataTemplate>
     <div class="no-data-text">
       <ion-icon name="alert-circle-outline"></ion-icon>
       No attendance data found

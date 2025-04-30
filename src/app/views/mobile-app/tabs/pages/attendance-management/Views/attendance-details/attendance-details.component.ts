@@ -22,6 +22,7 @@ export class AttendanceDetailsComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   leaveTypeEnum = LeaveRequestType;
 
+
   constructor(
     private uiUtils: UIUtils,
     private companystatemanagement: CompanyStateManagement, private appState: AppStateManageService
@@ -43,6 +44,48 @@ export class AttendanceDetailsComponent implements OnInit {
 
   getMonthWiseAttendanceLogByAttendanceListType = async () => {
     this.filteredMonthlyAttendanceLogsList = [];
+    // this.filteredMonthlyAttendanceLogsList = [
+    //   {
+    //     p: {
+    //       TransDateTime: '2025-04-01T00:00:00',
+    //       FirstCheckInTime: '09:05 AM',
+    //       LastCheckOutTime: '05:30 PM',
+    //       TotalWorkingHrs: '8:25',
+    //       OnLeave: '',
+    //       LeaveType: '',
+    //     }
+    //   },
+    //   {
+    //     p: {
+    //       TransDateTime: '2025-04-02T00:00:00',
+    //       FirstCheckInTime: '09:20 AM',
+    //       LastCheckOutTime: '05:10 PM',
+    //       TotalWorkingHrs: '7:50',
+    //       OnLeave: '',
+    //       LeaveType: '',
+    //     }
+    //   },
+    //   {
+    //     p: {
+    //       TransDateTime: '2025-04-03T00:00:00',
+    //       FirstCheckInTime: '',
+    //       LastCheckOutTime: '',
+    //       TotalWorkingHrs: '',
+    //       OnLeave: 'Sick Leave',
+    //       LeaveType: 'Sick',
+    //     }
+    //   },
+    //   {
+    //     p: {
+    //       TransDateTime: '2025-04-04T00:00:00',
+    //       FirstCheckInTime: '',
+    //       LastCheckOutTime: '',
+    //       TotalWorkingHrs: '',
+    //       OnLeave: '',
+    //       LeaveType: '',
+    //     }
+    //   }
+    // ];
     this.monthlyAttendanceLogsList = [];
     const month = this.Entity.p.Months;
     const employeeref = this.Entity.p.EmployeeRef;
