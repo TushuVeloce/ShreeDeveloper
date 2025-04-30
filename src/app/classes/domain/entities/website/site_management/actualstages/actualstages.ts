@@ -15,7 +15,7 @@ import { ActualStagesFetchRequest } from "./actualstagesfetchrequest";
 
 
 export class ActualStagesProps {
-  public readonly Db_Table_Name = "EstimateStage";
+  public readonly Db_Table_Name = "ActualStage";
   public Ref: number = 0;
   public SiteRef: number = 0;
   public readonly SiteName: string = '';
@@ -24,10 +24,23 @@ export class ActualStagesProps {
   public Description: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
+  public VendorRef: number = 0;
+  public VendorName: string = '';
+  public VendorServicesRef: number = 0;
+  public VendorServicesName: string = '';
+  public StageRef: number = 0;
+  public StageName: string = '';
+  public UnitRef: number = 0;
+  public UnitName: string = '';
   public CreatedBy: number = 0;
   public CreatedDate: string = '';
   public UpdatedBy: number = 0;
   public UpdatedDate: string = '';
+  public DieselLtr: number = 0;
+  public AmountPerLtr: number = 0;
+  public TotalAmount: number = 0;
+  public StartDate: string = '';
+  public ChalanNo: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
 
@@ -41,7 +54,7 @@ export class ActualStagesProps {
 }
 
 export class ActualStages implements IPersistable<ActualStages> {
-  public static readonly Db_Table_Name: string = 'EstimateStage';
+  public static readonly Db_Table_Name: string = 'ActualStage';
 
   private constructor(public readonly p: ActualStagesProps, public readonly AllowEdit: boolean) {
 

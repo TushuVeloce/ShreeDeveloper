@@ -3,6 +3,9 @@ import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
+import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
+import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { ActualStages } from 'src/app/classes/domain/entities/website/site_management/actualstages/actualstages';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -24,9 +27,12 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Stage' | 'Edit Stage' = 'New Stage';
   InitialEntity: ActualStages = null as any;
   StageTypeList = DomainEnums.StageTypeList(true, 'select stage');
-  dieselLtr: number = 0;
-  amountPerLtr: number = 0;
-  totalAmount: number = 0;
+  VendorList: Vendor[] = [];
+  StageList: Stage[] = [];
+  UnitList: Unit[] = [];
+  VendorServicesList: Unit[] = [];
+
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
@@ -49,19 +55,49 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     } else {
       this.Entity = ActualStages.CreateNewInstance();
       ActualStages.SetCurrentInstance(this.Entity);
+      this.getStageListByCompanyRef();
+      this.getVendorListByCompanyRef();
+      this.FormulateUnitList();
     }
     this.InitialEntity = Object.assign(ActualStages.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as ActualStages;
     this.focusInput();
   }
 
   focusInput = () => {
-    let txtName = document.getElementById('Name')!;
-    txtName.focus();
+    // let txtName = document.getElementById('Name')!;
+    // txtName.focus();
   }
 
+  public FormulateUnitList = async () => {
+    let lst = await Unit.FetchEntireList(
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.UnitList = lst;
+  };
+
+  getVendorListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    this.VendorList = lst;
+    this.Entity.p.VendorRef = this.VendorList[0].p.Ref;
+  }
+
+  getStageListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.StageList = lst;
+    this.Entity.p.VendorRef = this.VendorList[0].p.Ref;
+  }
 
   calculateTotal() {
-    this.totalAmount = (this.dieselLtr * this.amountPerLtr);
+    this.Entity.p.TotalAmount = (this.Entity.p.DieselLtr * this.Entity.p.AmountPerLtr);
   }
 
 
@@ -70,8 +106,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
-    console.log('entitiesToSave :', entitiesToSave);
-
     await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
