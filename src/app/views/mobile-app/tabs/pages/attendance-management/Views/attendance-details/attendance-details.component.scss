@@ -55,6 +55,8 @@
     border-radius: 10px;
     padding: 10px;
     gap: 10px;
+    background: var(--ion-background-color);
+    border: 1px solid #ccc;
 
     .timing-box {
         flex: 1;

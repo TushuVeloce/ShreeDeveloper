@@ -48,8 +48,8 @@ export class AttendanceManagementPage implements OnInit {
   attendanceLog: AttendanceLog = AttendanceLog.CreateNewInstance();
   siteList: Site[] = [];
   selectedSite: Site[] = [];
-  filteredWeeklyAttendanceLogs: any[] = [];
-  weeklyAttendanceLogs: any[] = [];
+  filteredWeeklyAttendanceLogs: AttendanceLogs[] = [];
+  weeklyAttendanceLogs: AttendanceLogs[] = [];
 
   
   // Enums and Lists
@@ -59,7 +59,7 @@ export class AttendanceManagementPage implements OnInit {
   gridItems = [
     { label: 'Salary Slip', icon: 'layers-outline', gridFunction: 100 },
     { label: 'Leave', icon: 'grid-outline', gridFunction: 200 },
-    { label: 'View All', icon: 'bar-chart-outline', gridFunction: 300 },
+    { label: 'View Attendance', icon: 'bar-chart-outline', gridFunction: 300 },
   ];
 
   // Company and employee references
@@ -78,6 +78,49 @@ export class AttendanceManagementPage implements OnInit {
   ) { }
 
   async ngOnInit() {
+    // this.filteredWeeklyAttendanceLogs = [
+    //   {
+    //     p: {
+    //       TransDateTime: '2025-04-01T00:00:00',
+    //       FirstCheckInTime: '09:05 AM',
+    //       LastCheckOutTime: '05:30 PM',
+    //       TotalWorkingHrs: '8:25',
+    //       OnLeave: '',
+    //       LeaveType: '',
+    //     }
+    //   },
+    //   {
+    //     p: {
+    //       TransDateTime: '2025-04-02T00:00:00',
+    //       FirstCheckInTime: '09:20 AM',
+    //       LastCheckOutTime: '05:10 PM',
+    //       TotalWorkingHrs: '7:50',
+    //       OnLeave: '',
+    //       LeaveType: '',
+    //     }
+    //   },
+    //   {
+    //     p: {
+    //       TransDateTime: '2025-04-03T00:00:00',
+    //       FirstCheckInTime: '',
+    //       LastCheckOutTime: '',
+    //       TotalWorkingHrs: '',
+    //       OnLeave: 'Sick Leave',
+    //       LeaveType: 'Sick',
+    //     }
+    //   },
+    //   {
+    //     p: {
+    //       TransDateTime: '2025-04-04T00:00:00',
+    //       FirstCheckInTime: '',
+    //       LastCheckOutTime: '',
+    //       TotalWorkingHrs: '',
+    //       OnLeave: '',
+    //       LeaveType: '',
+    //     }
+    //   }
+    // ];
+
     // Retrieve employee reference from storage (ensure proper type conversion)
     this.employeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
 
@@ -110,7 +153,7 @@ export class AttendanceManagementPage implements OnInit {
         this.requestLeave();
         break;
       case 300:
-        this.viewAllPresentEmployee();
+        this.viewAllAttendance();
         break;
       default:
         break;
@@ -321,9 +364,9 @@ export class AttendanceManagementPage implements OnInit {
     this.router.navigate(['/app_homepage/tabs/attendance-management/leave-request']);
   }
 
-  viewAllPresentEmployee(): void {
-    this.router.navigate(['/app_homepage/tabs/attendance-management/present-employee']);
-  }
+  // viewAllPresentEmployee(): void {
+  //   this.router.navigate(['/app_homepage/tabs/attendance-management/present-employee']);
+  // }
 
   viewAllAttendance(): void {
     this.router.navigate(['/app_homepage/tabs/attendance-management/attendance-details']);

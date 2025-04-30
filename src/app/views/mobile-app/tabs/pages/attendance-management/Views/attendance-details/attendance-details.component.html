@@ -18,8 +18,8 @@
         <ion-row>
           <!-- Date Column -->
           <ion-col size="3" class="day-column">
-            <div class="date">{{ day.p.TransDateTime ? (day.p.TransDateTime) : '--' }}</div>
-            <div class="day">{{ day.p.TransDateTime ? (day.p.TransDateTime) : '--' }}</div>
+            <div class="date">{{ day.p.TransDateTime ? formatDate(day.p.TransDateTime) : '--' }}</div>
+            <div class="day">{{ day.p.TransDateTime ? formatDate(day.p.TransDateTime) : '--' }}</div>
           </ion-col>
 
           <!-- Details Column -->

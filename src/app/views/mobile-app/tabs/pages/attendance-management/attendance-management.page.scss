@@ -55,263 +55,56 @@
     margin-top: 16px;
     padding: 0 8px;
 }
+.attendance-table-card {
+    margin: 12px;
+    border-radius: 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 
-.recent-attendance {
-    .section-heading {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 6px;
-        margin-bottom: 8px;
+    ion-card-header {
+        background: linear-gradient(to bottom right, #7c2424, #c0392b);
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
 
-        h3 {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .see-all {
-            font-size: 14px;
-            color: var(--ion-color-primary);
-            cursor: pointer;
-
-            &:hover {
-                text-decoration: underline;
-            }
-        }
-    }
-
-    .table-container {
-        background: var(--ion-background-color);
-        margin: 0 6px;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        max-height: 55vh;
-        overflow-y: auto;
-
-        .table-header {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            background: var(--ion-color-primary);
-            padding: 12px 16px;
-            color: #fff;
-            font-weight: 600;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            font-size: 14px;
-        }
-
-        .scrollable-list {
-            overflow-y: auto;
-
-            ion-item:nth-child(even) {
-                background-color: #f9f9f9;
-            }
-        }
-
-        .attendance-grid {
-            padding: 12px 8px;
-        }
-
-        .day-column {
-            .date {
-                font-size: 16px;
-                font-weight: bold;
-                font-weight: 600;
-            }
-
-            .day {
-                font-size: 12px;
-                color: gray;
-                font-weight: 600;
-            }
-        }
-
-        .timing-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            padding-left: 10px;
-            text-align: left;
-
-            .label {
-                font-size: 10px;
-                color: #999;
-            }
-
-            .value {
-                font-size: 12px;
-                font-weight: bold;
-                display: block;
-                font-weight: 600;
-
-                &.absent {
-                    color: #ccc;
-                    font-style: italic;
-                }
-            }
-
-            .clock-in,
-            .clock-out,
-            .working-hrs {
-                margin-bottom: 5px;
-            }
-        }
-
-        .center-text {
-            text-align: center;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--ion-text-color);
-            padding: 8px 0;
-
-            ion-icon {
-                margin-right: 6px;
-                color: var(--ion-text-color);
-            }
-        }
-
-        .no-data-mobile-app {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 20px;
-            text-align: center;
-            color: #999;
-
-            ion-icon {
-                font-size: 32px;
-                margin-bottom: 12px;
-                color: #ccc;
-            }
-
-            p {
-                font-size: 16px;
-                margin: 0;
-                font-weight: 600;
-            }
-        }
-    }
-
-    @media (max-width: 600px) {
-
-        .table-header span,
-        .timing-row .label,
-        .timing-row .value {
-            font-size: 11px;
-        }
-
-        .section-heading h3 {
+        ion-card-title {
             font-size: 18px;
-        }
-    }
-}
-
-.attendance-list {
-    padding-bottom: 10px;
-}
-
-.attendance-grid {
-    padding: 8px 0;
-}
-
-.day-column {
-    text-align: center;
-
-    .date {
-        font-size: 18px;
-        font-weight: bold;
-        color: #333;
-    }
-
-    .day {
-        font-size: 13px;
-        color: #666;
-    }
-}
-
-.info-column {
-    border-radius: 10px;
-    padding: 6px 10px;
-}
-
-.timing-row {
-    display: flex;
-    justify-content: space-between;
-    border-radius: 10px;
-    padding: 10px;
-    gap: 10px;
-
-    .timing-box {
-        flex: 1;
-        text-align: center;
-
-        label {
-            display: block;
-            font-size: 12px;
-            color: #555;
-        }
-
-        span {
-            font-size: 15px;
             font-weight: 600;
-            color: #000;
+            padding: 10px;
+            color: var(--ion-text-color-dark);
         }
     }
-}
 
-.center-text {
-    text-align: center;
-    padding: 10px 0;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    justify-content: center;
-    color: #444;
-}
-
-.no-data-text {
-    text-align: center;
-    padding: 30px 20px;
-    color: #999;
-    font-size: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    ion-icon {
-        font-size: 28px;
-        margin-bottom: 10px;
-        color: #ccc;
+    .attendance-table-header ion-row {
+        background: var(--ion-background-color);
+        border-radius: 8px;
+        border: #7c2424 1px solid;
+        padding: 6px 0;
+        font-size: 14px;
     }
-}
-
-/* Responsive Adjustments */
-@media screen and (max-width: 480px) {
-    .timing-row {
-        flex-direction: column;
+    .attendance-table-body .attendance-row {
+        background: var(--ion-item-background);
+        padding: 6px 0;
+        border-bottom: 1px solid #ececec;
+        font-size: 13px;
         align-items: center;
 
-        .timing-box {
-            width: 100%;
-            margin-bottom: 8px;
+        .date-cell {
+            font-weight: 500;
         }
     }
 
-    .day-column {
-        .date {
-            font-size: 16px;
-        }
-
-        .day {
-            font-size: 11px;
-        }
+    .text-center {
+        text-align: center;
     }
 
-    .month-segment ion-segment-button {
-        font-size: 12px;
-        padding: 0 10px;
+    .no-data-box {
+        text-align: center;
+        padding: 16px;
+        color: #888;
+
+        ion-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
     }
 }
 

@@ -3,6 +3,7 @@ import { AttendenceLogType, DomainEnums, LeaveRequestType } from 'src/app/classe
 import { AttendanceLogs } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogs';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -25,14 +26,59 @@ export class AttendanceDetailsComponent implements OnInit {
 
   constructor(
     private uiUtils: UIUtils,
-    private companystatemanagement: CompanyStateManagement, private appState: AppStateManageService
-    
+    private companystatemanagement: CompanyStateManagement, private appState: AppStateManageService,
+     private dateConversionService: DateconversionService
   ) { }
 
   ngOnInit() {
     this.Entity.p.EmployeeRef = this.appState.getEmployeeRef();
     this.getDataByMonth(this.selectedMonth);
     this.months = DomainEnums.MonthList();
+    // this.filteredMonthlyAttendanceLogsList = [
+    //   {
+    //     p: {
+    //       TransDateTime: '2025-04-01T00:00:00',
+    //       FirstCheckInTime: '09:05 AM',
+    //       LastCheckOutTime: '05:30 PM',
+    //       TotalWorkingHrs: '8:25',
+    //       OnLeave: '',
+    //       LeaveType: '',
+    //     }
+    //   },
+    //   {
+    //     p: {
+    //       TransDateTime: '2025-04-02T00:00:00',
+    //       FirstCheckInTime: '09:20 AM',
+    //       LastCheckOutTime: '05:10 PM',
+    //       TotalWorkingHrs: '7:50',
+    //       OnLeave: '',
+    //       LeaveType: '',
+    //     }
+    //   },
+    //   {
+    //     p: {
+    //       TransDateTime: '2025-04-03T00:00:00',
+    //       FirstCheckInTime: '',
+    //       LastCheckOutTime: '',
+    //       TotalWorkingHrs: '',
+    //       OnLeave: 'Sick Leave',
+    //       LeaveType: 'Sick',
+    //     }
+    //   },
+    //   {
+    //     p: {
+    //       TransDateTime: '2025-04-04T00:00:00',
+    //       FirstCheckInTime: '',
+    //       LastCheckOutTime: '',
+    //       TotalWorkingHrs: '',
+    //       OnLeave: '',
+    //       LeaveType: '',
+    //     }
+    //   }
+    // ];
+  }
+  formatDate(date: string | Date): string {
+    return this.dateConversionService.formatDate(date);
   }
 
   async getDataByMonth(month: any): Promise<void> {
