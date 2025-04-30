@@ -86,7 +86,7 @@ export class Plot implements IPersistable<Plot> {
     if (this.p.GovermentRatePerSqm == 0) vra.add('GovermentRatePerSqm', 'Goverment Rate Per Sqm cannot be blank.');
     if (this.p.BasicRatePerSqft == 0) vra.add('BasicRatePerSqft', 'Basic Rate Per Sqft cannot be blank.');
     if (this.p.CurrentBookingRemark == 0) vra.add('CurrentBookingRemark', 'Booking Remark cannot be blank.');
-    if (this.p.CurrentOwnerRef == 0) vra.add('CurrentOwnerRef', 'Customer Name cannot be blank.');
+    // if (this.p.CurrentOwnerRef == 0) vra.add('CurrentOwnerRef', 'Customer Name cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
