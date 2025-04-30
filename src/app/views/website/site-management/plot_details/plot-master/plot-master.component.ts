@@ -86,11 +86,9 @@ export class PlotMasterComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.siteref == 0) {
-      this.appStateManage.StorageKey.removeItem('siteRf');
-      this.appStateManage.StorageKey.removeItem('siteName');
-      this.appStateManage.StorageKey.removeItem('bookingremarkRef');
-      this.BookingRemarkList = DomainEnums.BookingRemarkList(true,);
+      this.clearStorage();
       this.getPlotList()
+      this.BookingRemarkList = DomainEnums.BookingRemarkList(true,);
     } else {
       this.BookingRemarkList = DomainEnums.BookingRemarkList(true, '--select--');
     }
@@ -198,9 +196,13 @@ export class PlotMasterComponent implements OnInit {
 
   ngOnDestroy(): void {
     if (this.shouldDestroy) {
-      this.appStateManage.StorageKey.removeItem('siteRf');
-      this.appStateManage.StorageKey.removeItem('siteName');
-      this.appStateManage.StorageKey.removeItem('bookingremarkRef');
+      this.clearStorage();
     }
+  }
+
+   clearStorage() {
+    this.appStateManage.StorageKey.removeItem('siteRf');
+    this.appStateManage.StorageKey.removeItem('siteName');
+    this.appStateManage.StorageKey.removeItem('bookingremarkRef');
   }
 }
