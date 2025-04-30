@@ -12,26 +12,29 @@
   <!-- Attendance List -->
   <ion-list *ngIf="filteredMonthlyAttendanceLogsList.length > 0; else noDataTemplate" class="attendance-list">
     <ion-item *ngFor="let day of filteredMonthlyAttendanceLogsList" lines="none"
-      [class.no-data]="!day.p.FirstCheckInTime && !day.p.LastCheckOutTime && !day.p.OnLeave && !day.p.TotalWorkingHrs">
+      [class.no-data]="!day.p.FirstCheckInTime && !day.p.LastCheckOutTime && !day.p.TotalWorkingHrs">
 
       <ion-grid class="attendance-grid">
         <ion-row>
           <!-- Date Column -->
           <ion-col size="3" class="day-column">
-            <div class="date">{{ day.p.TransDateTime ? (day.p.TransDateTime | date:'dd') : '--' }}</div>
-            <div class="day">{{ day.p.TransDateTime ? (day.p.TransDateTime | date:'EEE') : '--' }}</div>
+            <div class="date">{{ day.p.TransDateTime ? (day.p.TransDateTime) : '--' }}</div>
+            <div class="day">{{ day.p.TransDateTime ? (day.p.TransDateTime) : '--' }}</div>
           </ion-col>
 
           <!-- Details Column -->
-          <ion-col size="9" class="info-column"
+          <!-- <ion-col size="9" class="info-column"
             [ngStyle]="{ 'background-color': day.p.OnLeave ? '#ffe0e0' : 'transparent' }">
             <div *ngIf="day.p.OnLeave" class="center-text">
               <ion-icon name="medkit-outline"></ion-icon>
               {{ day.p.OnLeave }}
-            </div>
+            </div> -->
+          <ion-col size="9" class="info-column"
+            [ngStyle]="{ 'background-color': 'transparent' }">
 
-            <div *ngIf="!day.p.OnLeave && (day.p.FirstCheckInTime || day.p.LastCheckOutTime || day.p.TotalWorkingHrs)"
-              class="timing-row" [ngStyle]="{ 'background-color': day.p.LeaveType ? '#ffe4e1' : '#e7f5ff' }">
+
+            <div *ngIf="(day.p.FirstCheckInTime || day.p.LastCheckOutTime || day.p.TotalWorkingHrs)"
+              class="timing-row" [ngStyle]="{ 'background-color': '#e7f5ff' }">
               <div class="timing-box">
                 <label>In</label>
                 <span>{{ day.p.FirstCheckInTime || '--' }}</span>
