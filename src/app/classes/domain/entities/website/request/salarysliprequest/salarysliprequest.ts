@@ -21,8 +21,8 @@ export class SalarySlipRequestProps {
   public CompanyName: string = ''
   public EmployeeRef: number = 0;
   public EmployeeName: string = '';
-  public SelectedMonths: [] = [];
-  public SelectedMonthsName: [] = [];
+  public SelectedMonths: any[] = [];
+  public SelectedMonthsName: any[] = [];
   public Year: string = '';
   public IsApproved: number = 0;
   public LeaveApprovedBy: number = 0;

@@ -70,5 +70,6 @@ export class SelectModalComponent  implements OnInit {
 
   close() {
     this.modalCtrl.dismiss();
+    this.confirmSelection();
   }
 }

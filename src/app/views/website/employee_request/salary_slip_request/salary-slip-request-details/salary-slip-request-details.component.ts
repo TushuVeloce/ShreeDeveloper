@@ -112,8 +112,7 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
   onSelectedMonthsChange = (Selectedservice: any) => {
     this.Entity.p.SelectedMonths = Selectedservice;
   }
-
-
+    
   SaveSalarySlipRequest = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();

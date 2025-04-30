@@ -612,6 +612,11 @@ ion-textarea {
 .cancel-button:focus {
   --background: var(--ion-color-secondary-shade);
 }
+.chip-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
 
 @media (max-width: 767px) {
   .form-container {

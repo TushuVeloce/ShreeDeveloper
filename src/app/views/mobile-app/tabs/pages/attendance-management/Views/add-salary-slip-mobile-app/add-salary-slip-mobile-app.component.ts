@@ -83,16 +83,20 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
 
   public async selectMonthBottomsheet(): Promise<void> {
     const options = this.monthList.map((item) => ({ p: item }));
-    this.openSelectModal(options, this.SelectedMonth, 'Select Month', (selected) => {
+    this.openSelectModal(options,this.SelectedMonth, true, 'Select Month', (selected) => {
       this.SelectedMonth = selected;
-      this.Entity.p.SelectedMonths = selected[0]?.p?.Ref;
-      this.Entity.p.SelectedMonthsName = selected[0]?.p?.Name;
+      console.log('selected :', selected.map(item => item.p.Ref));
+      // this.SelectedMonth = selected.map(item => item.p.Ref);
+      
+      this.Entity.p.SelectedMonths = selected.map(item => item.p.Ref);
+      this.Entity.p.SelectedMonthsName = selected.map(item => item.p.Name);
+      // this.Entity.p.SelectedMonthsName = selected[0]?.p?.Name;
     });
   }
 
   public async selectYearBottomsheet(): Promise<void> {
     const options = this.FinancialYearList.map(year => ({ p: { Ref: year, Name: year } }));
-    this.openSelectModal(options, this.SelectedYear, 'Select Year', (selected) => {
+    this.openSelectModal(options, this.SelectedYear,false, 'Select Year', (selected) => {
       this.SelectedYear = selected;
       this.Entity.p.Year = selected[0]?.p?.Ref;
     });
@@ -148,10 +152,11 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
   private async openSelectModal(
     dataList: any[],
     selectedItems: any[],
+    multiSelect: boolean,
     title: string,
     updateCallback: (selected: any[]) => void
   ): Promise<void> {
-    const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, false, title);
+    const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, multiSelect, title);
     if (selected) updateCallback(selected);
   }
 
@@ -176,7 +181,7 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
         await this.uiUtils.showSuccessToster('SalarySlipRequest Master saved successfully!');
         this.Entity = SalarySlipRequest.CreateNewInstance();
         this.resetForm();
-        await this.router.navigate(['/homepage/Website/Salary_Slip_Request']);
+        this.router.navigate(['/app_homepage/tabs/crm/attendance-management/leave-request']);
       }
     }
   }

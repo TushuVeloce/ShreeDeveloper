@@ -1,9 +1,14 @@
 <ion-header class="ion-no-border modern-header">
   <ion-toolbar>
-    <ion-title class="custom-title">{{bottomsheetTitle}}</ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons slot="start">
       <ion-button fill="clear" color="medium" (click)="close()">
         <ion-icon name="close-outline" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="custom-title">{{bottomsheetTitle}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" color="medium" (click)="confirmSelection()">
+        <ion-icon name="checkmark-done-outline" size="large"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -39,8 +44,8 @@
 </ion-content>
 
 <!-- Confirm Button for Multi-Select -->
-<ion-footer *ngIf="multiSelect">
+<!-- <ion-footer *ngIf="multiSelect">
   <ion-toolbar>
     <ion-button expand="full" color="primary" (click)="confirmSelection()">Confirm</ion-button>
   </ion-toolbar>
-</ion-footer>
+</ion-footer> -->
