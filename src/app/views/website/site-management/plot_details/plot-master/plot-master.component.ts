@@ -75,6 +75,8 @@ export class PlotMasterComponent implements OnInit {
     if(this.siteref == 0){
       // this.getPlotList()
       this.onsitechange(this.siteref)
+    }else{
+      this.BookingRemarkList = DomainEnums.BookingRemarkList(true, '--select--');
     }
     this.loadPaginationData();
   }
