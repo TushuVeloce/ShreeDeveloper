@@ -73,7 +73,7 @@ export class PlotMasterComponent implements OnInit {
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
     if(this.siteref == 0){
-      this.getPlotList()
+      // this.getPlotList()
       this.onsitechange(this.siteref)
     }
     this.loadPaginationData();
@@ -115,10 +115,8 @@ export class PlotMasterComponent implements OnInit {
     if (bookingremarkref <= 0 || siteref <= 0) {
       return
     }
-
     this.appStateManage.StorageKey.setItem('bookingremarkRef', String(bookingremarkref));
     let lst = await Plot.FetchEntireListBySiteandbookingremarkRef(siteref, bookingremarkref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -173,14 +171,11 @@ export class PlotMasterComponent implements OnInit {
 
   filterTable = () => {
     const searchTerm = this.SearchString?.trim().toLowerCase();
-
     if (searchTerm) {
       this.DisplayMasterList = this.MasterList.filter((data: any) => {
-        // Check if data.p and data.p.Name exist before accessing
         return data?.p?.Name?.toLowerCase().includes(searchTerm);
       });
     } else {
-      // If no search string, reset to the full list
       this.DisplayMasterList = [...this.MasterList];
     }
   };
