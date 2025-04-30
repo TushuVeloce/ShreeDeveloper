@@ -14,6 +14,7 @@ import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacke
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
@@ -74,7 +75,8 @@ export class AttendanceManagementPage implements OnInit {
     private dtu: DTU,
     private payloadPacketFacade: PayloadPacketFacade,
     private serverCommunicator: ServerCommunicatorService,
-    private dateConversionService: DateconversionService
+    private dateConversionService: DateconversionService,    
+    private bottomsheetMobileAppService: BottomsheetMobileAppService
   ) { }
 
   async ngOnInit() {
@@ -147,7 +149,7 @@ export class AttendanceManagementPage implements OnInit {
   gridItemsFunction(id: number): void {
     switch (id) {
       case 100: 
-        this.getSalarySlip();
+        this.getSalarySlip(); 
         break;
       case 200:
         this.requestLeave();
@@ -160,6 +162,28 @@ export class AttendanceManagementPage implements OnInit {
     }
   }
 
+  
+  private async openSelectModal(
+    dataList: any[],
+    selectedItems: any[],
+    multiSelect: boolean,
+    title: string,
+    MaxSelection:number,
+    updateCallback: (selected: any[]) => void
+  ): Promise<void> {
+    const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, multiSelect, title, MaxSelection);
+    if (selected) updateCallback(selected);
+  }
+
+  public async selectMonthBottomsheet(): Promise<void> {
+    const options = this.attendanceLocationTypeList.map((item) => ({ p: item }));
+    this.openSelectModal(options, this.selectedSite, false, 'Select Month', 1, (selected) => {
+      this.selectedSite = selected;
+      // // console.log('selected :', selected.map(item => item.p.Ref));      
+      // this.Entity.p.SelectedMonths = selected.map(item => item.p.Ref);
+      // this.Entity.p.SelectedMonthsName = selected.map(item => item.p.Name);
+    });
+  }
   async handleRefresh(event: CustomEvent): Promise<void> {
     setTimeout(async () => {
       await Promise.all([

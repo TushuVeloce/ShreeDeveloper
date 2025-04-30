@@ -24,8 +24,9 @@
       </thead>
       <tbody>
         <tr *ngFor="let stage of paginatedList(); index as i">
-          <td Class="tbldata">{{stage.p.DisplayOrder}}</td>
+          <!-- <td Class="tbldata">{{stage.p.DisplayOrder}}</td> -->
           <td Class="tbldata">{{stage.p.Name}}</td>
+          <td Class="tbldata">{{stage.p.StageType}}</td>
           <td class="tbldata">
             <span style="margin-left: 9px;" (click)="onEditClicked(stage);">
               <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />

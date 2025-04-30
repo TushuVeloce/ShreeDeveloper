@@ -24,7 +24,7 @@ export class StageMasterComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Stage No.', 'Stage Name', 'Action'];
+  headers: string[] = ['Sr No.', 'Stage Name','Stage Type', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private screenSizeService: ScreenSizeService, private companystatemanagement: CompanyStateManagement) {
     effect(() => {
       this.getStageListByCompanyRef()
@@ -44,12 +44,12 @@ export class StageMasterComponent implements OnInit {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
     }
-    let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(),
+    let lst = await Stage.FetchEntireList(
     async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
   );
-    // Sort the list by DisplayOrder in ascending order
     this.MasterList = lst.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
     this.DisplayMasterList = this.MasterList;
+    console.log('DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
 };
 

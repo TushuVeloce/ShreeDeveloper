@@ -74,14 +74,13 @@ export class Stage implements IPersistable<Stage> {
     } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
       vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     }
-    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
-    if (this.p.DisplayOrder == 0) {
-      vra.add('DisplayOrder', 'Display Order cannot be blank.');
-    } else if (this.p.DisplayOrder < 0) {
-      vra.add('DisplayOrder', 'Display Order cannot be less then 0.');
-    } else if (this.p.DisplayOrder.toString().includes('.')) {
-      vra.add('DisplayOrder', 'Rational Number not allowed for Display Order');
-    }
+    // if (this.p.DisplayOrder == 0) {
+    //   vra.add('DisplayOrder', 'Display Order cannot be blank.');
+    // } else if (this.p.DisplayOrder < 0) {
+    //   vra.add('DisplayOrder', 'Display Order cannot be less then 0.');
+    // } else if (this.p.DisplayOrder.toString().includes('.')) {
+    //   vra.add('DisplayOrder', 'Rational Number not allowed for Display Order');
+    // }
   }
 
   public MergeIntoTransportData(td: TransportData) {
