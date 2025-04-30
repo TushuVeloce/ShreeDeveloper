@@ -11,20 +11,23 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
-import { SubStageFetchRequest } from "./substagefetchrequest";
+import { ActualStagesFetchRequest } from "./actualstagesfetchrequest";
 
 
-export class SubStageProps {
-  public readonly Db_Table_Name = "SubStageMaster";
+export class ActualStagesProps {
+  public readonly Db_Table_Name = "EstimateStage";
   public Ref: number = 0;
-  public StageRef: number = 0;
-  public readonly StageName: number = 0;
-  public StageType: number = 0;
-  public Name: string = '';
+  public SiteRef: number = 0;
+  public readonly SiteName: string = '';
+  public TransDateTime: string = '';
+  public Amount: number = 0;
+  public Description: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
   public CreatedBy: number = 0;
+  public CreatedDate: string = '';
   public UpdatedBy: number = 0;
+  public UpdatedDate: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
 
@@ -33,14 +36,14 @@ export class SubStageProps {
   }
 
   public static Blank() {
-    return new SubStageProps(true);
+    return new ActualStagesProps(true);
   }
 }
 
-export class SubStage implements IPersistable<SubStage> {
-  public static readonly Db_Table_Name: string = 'SubStageMaster';
+export class ActualStages implements IPersistable<ActualStages> {
+  public static readonly Db_Table_Name: string = 'EstimateStage';
 
-  private constructor(public readonly p: SubStageProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: ActualStagesProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -53,52 +56,59 @@ export class SubStage implements IPersistable<SubStage> {
     }
   }
 
-  public GetEditableVersion(): SubStage {
-    let newState: SubStageProps = Utils.GetInstance().DeepCopy(this.p);
-    return SubStage.CreateInstance(newState, true);
+  public GetEditableVersion(): ActualStages {
+    let newState: ActualStagesProps = Utils.GetInstance().DeepCopy(this.p);
+    return ActualStages.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new SubStage(SubStageProps.Blank(), true);
+    return new ActualStages(ActualStagesProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new SubStage(data as SubStageProps, allowEdit);
+    return new ActualStages(data as ActualStagesProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') {
-      vra.add('Name', 'Name cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
+    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
+    if (this.p.Description == '') {
+      vra.add('Description', 'Description cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Description)) {
+      vra.add('Description', ValidationMessages.NameWithNosAndSpaceMsg + ' for Description');
     }
-
+    if (this.p.Amount == 0) {
+      vra.add('Amount', 'Amount cannot be blank.');
+    } else if (this.p.Amount < 0) {
+      vra.add('Amount', 'Amount cannot be less then 0.');
+    } else if (this.p.Amount.toString().includes('.')) {
+      vra.add('Amount', 'Rational Number not allowed for Amount');
+    }
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, SubStage.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, ActualStages.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: SubStage = SubStage.CreateNewInstance();
+  private static m_currentInstance: ActualStages = ActualStages.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return SubStage.m_currentInstance;
+    return ActualStages.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: SubStage) {
-    SubStage.m_currentInstance = value;
+  public static SetCurrentInstance(value: ActualStages) {
+    ActualStages.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): SubStage {
+  public static SingleInstanceFromTransportData(td: TransportData): ActualStages {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, SubStage.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, SubStage.Db_Table_Name)!.Entries) {
-        return SubStage.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, ActualStages.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, ActualStages.Db_Table_Name)!.Entries) {
+        return ActualStages.CreateInstance(data, false);
       }
     }
 
@@ -107,13 +117,13 @@ export class SubStage implements IPersistable<SubStage> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): SubStage[] {
-    let result: SubStage[] = [];
+    sortPropertyName: string = "Name"): ActualStages[] {
+    let result: ActualStages[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, SubStage.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, SubStage.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, ActualStages.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, ActualStages.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -123,18 +133,18 @@ export class SubStage implements IPersistable<SubStage> {
       }
 
       for (let data of entries) {
-        result.push(SubStage.CreateInstance(data, false));
+        result.push(ActualStages.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): SubStage[] {
-    return SubStage.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): ActualStages[] {
+    return ActualStages.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: SubStageFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: ActualStagesFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -149,29 +159,29 @@ export class SubStage implements IPersistable<SubStage> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new SubStageFetchRequest();
-    req.SubStageRefs.push(ref);
+    let req = new ActualStagesFetchRequest();
+    req.ActualStagesRefs.push(ref);
 
-    let tdResponse = await SubStage.FetchTransportData(req, errorHandler) as TransportData;
-    return SubStage.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await ActualStages.FetchTransportData(req, errorHandler) as TransportData;
+    return ActualStages.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: SubStageFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await SubStage.FetchTransportData(req, errorHandler) as TransportData;
-    return SubStage.ListFromTransportData(tdResponse);
+  public static async FetchList(req: ActualStagesFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await ActualStages.FetchTransportData(req, errorHandler) as TransportData;
+    return ActualStages.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new SubStageFetchRequest();
-    let tdResponse = await SubStage.FetchTransportData(req, errorHandler) as TransportData;
-    return SubStage.ListFromTransportData(tdResponse);
+    let req = new ActualStagesFetchRequest();
+    let tdResponse = await ActualStages.FetchTransportData(req, errorHandler) as TransportData;
+    return ActualStages.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new SubStageFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await SubStage.FetchTransportData(req, errorHandler) as TransportData;
-    return SubStage.ListFromTransportData(tdResponse);
+  public static async FetchEntireListBySiteRef(SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new ActualStagesFetchRequest();
+    req.SiteRefs.push(SiteRef)
+    let tdResponse = await ActualStages.FetchTransportData(req, errorHandler) as TransportData;
+    return ActualStages.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {

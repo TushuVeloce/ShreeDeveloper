@@ -2,7 +2,7 @@
   <div class="card" style="padding: 1rem">
     <div class="row">
       <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
-        <button type="button" class="backbtn" (click)="BackMaterial()">
+        <button type="button" class="backbtn" (click)="BackStage()">
           <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
         </button>
       </div>
@@ -27,38 +27,31 @@
         <div class="col-md-4">
           <label>Stage Type</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StageType"
-            name="StageType" [nzSize]="'large'" [(ngModel)]="Entity.p.StageType" >
-            <nz-option *ngFor="let stage of StageTypeList" [nzValue]="stage.Ref"
-            [nzLabel]="stage.Name"></nz-option>
+            name="StageType" [nzSize]="'large'" [(ngModel)]="Entity.p.StageType">
+            <nz-option *ngFor="let stage of StageTypeList" [nzValue]="stage.Ref" [nzLabel]="stage.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4 d-flex align-items-center">
-          <input type="checkbox" id="IsSubStage" [(ngModel)]="Entity.p.IsSubStage" name="IsSubStage" class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
+          <input type="checkbox" id="IsSubStage" [(ngModel)]="Entity.p.IsSubStage" name="IsSubStage"
+            class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
           <label for="IsSubStage" class="form-check-label mb-0">Sub Stage</label>
         </div>
-        <!-- <div class="col-md-4">
-          <div>
-            <label>Stage No.</label>
-            <input type="number" [(ngModel)]="Entity.p.DisplayOrder" name="DisplayOrder" class="form-control"
-              id="DisplayOrder" required placeholder="Enter Stage No." #DisplayOrderCtrl="ngModel" required
-              (blur)="DisplayOrderCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>
-            <div *ngIf="(DisplayOrderCtrl.invalid && (DisplayOrderCtrl.touched || DisplayOrderCtrl.dirty))">
-              <span class="validation-text" *ngIf="DisplayOrderCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
-          </div>
-        </div> -->
       </div>
       <div class="row" style="margin-top: 2rem; ">
         <div class="col-md-4">
-          <input type="checkbox" id="IsMachinaryexpense" [(ngModel)]="Entity.p.IsMachinaryexpense" name="IsMachinaryexpense" class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
+          <input type="checkbox" id="IsMachinaryexpense" [(ngModel)]="Entity.p.IsMachinaryexpense"
+            name="IsMachinaryexpense" class="form-check-input me-2 large-dark-checkbox"
+            style="width: 20px; height: 20px;">
           <label for="IsMachinaryexpense" class="form-check-label mb-0">Machinary expense</label>
         </div>
         <div class="col-md-4">
-          <input type="checkbox" id="IsLabourExpense" [(ngModel)]="Entity.p.IsLabourExpense" name="IsLabourExpense" class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
+          <input type="checkbox" id="IsLabourExpense" [(ngModel)]="Entity.p.IsLabourExpense" name="IsLabourExpense"
+            class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
           <label for="IsLabourExpense" class="form-check-label mb-0">Labour Expense</label>
         </div>
         <div class="col-md-4">
-          <input type="checkbox" id="IsOther" [(ngModel)]="Entity.p.IsOther" name="IsOther" class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
+          <input type="checkbox" id="IsOther" [(ngModel)]="Entity.p.IsOther" name="IsOther"
+            class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
           <label for="IsOther" class="form-check-label mb-0">Other</label>
         </div>
       </div>
@@ -67,7 +60,7 @@
           <button type="button" class="btn" (click)="SaveStageMaster()">Save</button>
         </div>
         <div>
-          <button type="button" class="btn" (click)="BackMaterial()">Back</button>
+          <button type="button" class="btn" (click)="BackStage()">Back</button>
         </div>
       </div>
     </form>

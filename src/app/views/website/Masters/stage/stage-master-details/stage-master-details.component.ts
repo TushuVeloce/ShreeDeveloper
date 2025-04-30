@@ -92,7 +92,7 @@ export class StageMasterDetailsComponent implements OnInit {
     input.select();
   }
 
-  BackMaterial = () => {
+  BackStage = () => {
     this.router.navigate(['/homepage/Website/Stage_Master']);
   }
 
