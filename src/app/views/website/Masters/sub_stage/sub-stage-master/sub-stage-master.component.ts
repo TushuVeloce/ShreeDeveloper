@@ -1,5 +1,6 @@
 import { Component, effect, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { SubStage } from 'src/app/classes/domain/entities/website/masters/SubStage/SubStage';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -22,7 +23,6 @@ export class SubStageMasterComponent  implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   headers: string[] = ['Sr.No.', 'Code', 'SubStage Name', 'SubStage Unit', 'Action'];
