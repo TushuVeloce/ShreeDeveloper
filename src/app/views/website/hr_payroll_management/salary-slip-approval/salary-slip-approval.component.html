@@ -41,11 +41,11 @@
             <td Class="tbldata">{{salaryslipapproval.p.Year}}</td>
             <td Class="tbldata"> <b *ngFor="let month of salaryslipapproval.p.SelectedMonthsName">{{ month + ' ' }}</b>
             <td Class="tbldata">
-              <button class="status" [disabled]="isSaveDisabled" *ngIf="salaryslipapproval.p.IsApproved == 0"
+              <button class="status" [disabled]="isSaveDisabled" *ngIf="!salaryslipapproval.p.IsApproved"
                 (click)="handleApproval(salaryslipapproval)" ngClass="pending">
                 Pending
               </button>
-              <button class="status" *ngIf="salaryslipapproval.p.IsApproved == 1" ngClass="approved">
+              <button class="status" *ngIf="salaryslipapproval.p.IsApproved" ngClass="approved">
                 Approved
               </button>
             </td>

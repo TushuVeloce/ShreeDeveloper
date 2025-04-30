@@ -25,8 +25,6 @@ export class SalarySlipRequestProps {
   public SelectedMonthsName: any[] = [];
   public Year: string = '';
   public IsApproved: number = 0;
-  public LeaveApprovedBy: number = 0;
-  public LeaveCancelledBy: number = 0;
   public IsDeleted: number = 0;
 
 

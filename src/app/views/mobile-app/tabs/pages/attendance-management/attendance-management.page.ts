@@ -48,8 +48,9 @@ export class AttendanceManagementPage implements OnInit {
   attendanceLog: AttendanceLog = AttendanceLog.CreateNewInstance();
   siteList: Site[] = [];
   selectedSite: Site[] = [];
-  filteredWeeklyAttendanceLogs: AttendanceLogs[] = [];
-  weeklyAttendanceLogs: AttendanceLogs[] = [];
+  filteredWeeklyAttendanceLogs: any[] = [];
+  weeklyAttendanceLogs: any[] = [];
+
   
   // Enums and Lists
   AttendanceLocationTypes = AttendenceLocationType;
@@ -129,6 +130,11 @@ export class AttendanceManagementPage implements OnInit {
   async getCheckInData(): Promise<void> {
     this.isLoading = true;
     try {
+      this.isOnLeave = false;
+      this.checkInTime ='';
+      this.checkOutTime = '';
+      this.attendanceLog = AttendanceLog.CreateNewInstance();
+      
       const tranDate = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
       const req = new AttendanceLogCheckInCustomRequest();
       req.TransDateTime = tranDate;
@@ -300,6 +306,7 @@ export class AttendanceManagementPage implements OnInit {
       this.weeklyAttendanceLogs = logs;
       // Optionally, apply further filtering before assigning to filteredWeeklyAttendanceLogs
       this.filteredWeeklyAttendanceLogs = logs;
+
       console.log('Weekly Attendance Logs:', logs);
     } catch (error) {
       console.error('Error fetching weekly attendance logs:', error);

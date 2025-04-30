@@ -28,37 +28,37 @@
             <td Class="tbldata">{{leaverequest.p.LeaveRequestName}}</td>
             <td Class="tbldata" style="cursor: pointer;" [nzTooltipTitle]="leaverequest.p.Description"
               nzTooltipPlacement="top" nzTooltipColor="#A52A2A" nz-button nz-tooltip>{{leaverequest.p.Description}}</td>
-            <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType != 300">
+            <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType != LeaveRequesttype.HalfDay">
               {{ formatDate(leaverequest.p.FromDate) }} - {{ formatDate(leaverequest.p.ToDate) }}</td>
 
-            <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType == 300">
+            <td class="tbldata" *ngIf="leaverequest.p.LeaveRequestType == LeaveRequesttype.HalfDay">
               {{formatDate(leaverequest.p.HalfDayDate)}}</td>
             <td Class="tbldata">{{leaverequest.p.Days}}</td>
             <td class="tbldata">
               <!-- PENDING -->
-              <span class="status" *ngIf="leaverequest.p.IsApproved == 0 && leaverequest.p.IsCancelled == 0"
+              <span class="status" *ngIf="!leaverequest.p.IsApproved && !leaverequest.p.IsCancelled"
                 ngClass="pending">
                 Pending
               </span>
 
               <!-- APPROVED -->
-              <span class="status" *ngIf="leaverequest.p.IsApproved == 1 && leaverequest.p.IsCancelled == 0"
+              <span class="status" *ngIf="leaverequest.p.IsApproved && !leaverequest.p.IsCancelled"
                 ngClass="approved">
                 Approved
               </span>
 
               <!-- REJECTED -->
-              <span class="status" *ngIf="leaverequest.p.IsApproved == 0 && leaverequest.p.IsCancelled == 1"
+              <span class="status" *ngIf="!leaverequest.p.IsApproved && leaverequest.p.IsCancelled"
                 ngClass="rejected">
                 Rejected
               </span>
             </td>
             <td class="tbldata">
-              <span style="margin-left: 9px;" *ngIf="leaverequest.p.IsApproved == 0 && leaverequest.p.IsCancelled == 0"
+              <span style="margin-left: 9px;" *ngIf="!leaverequest.p.IsApproved && !leaverequest.p.IsCancelled"
                 (click)="onDeleteClicked(leaverequest);">
                 <img src="\assets\icons\delete.png" alt="logo" style="cursor: pointer;" title="Delete" width="20px" height="20px" /></span>
 
-              <span style="margin-left: 9px;" *ngIf="leaverequest.p.IsApproved != 0 || leaverequest.p.IsCancelled == 1">
+              <span style="margin-left: 9px;" *ngIf="leaverequest.p.IsApproved || leaverequest.p.IsCancelled">
                 <img src="\assets\icons\GreyDustbin.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
             </td>
           </tr>
