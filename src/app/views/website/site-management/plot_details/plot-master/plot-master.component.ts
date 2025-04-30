@@ -24,20 +24,20 @@ export class PlotMasterComponent implements OnInit {
   pageSize = 8; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  headers: string[] = ['Sr.No.', 'Plot No','Area /sqm','Area /sqft','Gov Rate/Sqm','Basic Rate/Sqft','Booking Remark','Action',];
+  headers: string[] = ['Sr.No.', 'Plot No', 'Area /sqm', 'Area /sqft', 'Gov Rate/Sqm', 'Basic Rate/Sqft', 'Booking Remark', 'Action',];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  siteref : number=0
-  bookigremark: number=0
+  siteref: number = 0
+  bookigremark: number = 0
   BookingRemarkList = DomainEnums.BookingRemarkList(true,);
-  BookingRemarkEnum = BookingRemark; 
+  BookingRemarkEnum = BookingRemark;
   shouldDestroy: boolean = true;
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-      private companystatemanagement: CompanyStateManagement,) {
-        effect(async() => {
-            await  this.FormulateSiteListByCompanyRef();
-        });
-      }
+    private companystatemanagement: CompanyStateManagement,) {
+    effect(async () => {
+      await this.FormulateSiteListByCompanyRef();
+    });
+  }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
@@ -47,14 +47,14 @@ export class PlotMasterComponent implements OnInit {
     const bookingRemarkeRef = Number(this.appStateManage.StorageKey.getItem('bookingremarkRef'));
     this.siteref = storedSiteRef
     this.bookigremark = bookingRemarkeRef
-    if (storedSiteRef > 0)  {
+    if (storedSiteRef > 0) {
       setTimeout(async () => {
         this.Entity.p.SiteManagementRef = storedSiteRef;
         this.Entity.p.CurrentBookingRemark = bookingRemarkeRef;
-        await this.getPlotListBySiteandBookingRemarkRef(storedSiteRef,bookingRemarkeRef);
+        await this.getPlotListBySiteandBookingRemarkRef(storedSiteRef, bookingRemarkeRef);
       });
     }
-    if(this.siteref == 0){
+    if (this.siteref == 0) {
       this.getPlotList()
     }
   }
@@ -62,15 +62,20 @@ export class PlotMasterComponent implements OnInit {
   FormulateSiteListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    this.Entity.p.SiteManagementRef = 0
+    this.Entity.p.SiteManagementRef = 0;
+    this.siteref = 0;
     this.Entity.p.CurrentBookingRemark = 0
-    this.SiteList = []; 
+    this.SiteList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
+    if(this.siteref == 0){
+      this.getPlotList()
+      this.onsitechange(this.siteref)
+    }
     this.loadPaginationData();
   }
 
@@ -80,39 +85,39 @@ export class PlotMasterComponent implements OnInit {
     this.bookigremark = 0
     this.MasterList = [];
     this.DisplayMasterList = [];
-    if(this.siteref == 0){
+    if (this.siteref == 0) {
       this.appStateManage.StorageKey.removeItem('siteRf');
       this.appStateManage.StorageKey.removeItem('siteName');
       this.appStateManage.StorageKey.removeItem('bookingremarkRef');
       this.BookingRemarkList = DomainEnums.BookingRemarkList(true,);
       this.getPlotList()
-    }else{
-      this.BookingRemarkList = DomainEnums.BookingRemarkList(true,'--select--');
+    } else {
+      this.BookingRemarkList = DomainEnums.BookingRemarkList(true, '--select--');
     }
-    if(siteref > 0 && this.SiteList.length > 0){
+    if (siteref > 0 && this.SiteList.length > 0) {
       this.Entity.p.SiteManagementRef = siteref;
-      const selectedSite= this.SiteList.find(site => site.p.Ref === siteref);
-      if (!selectedSite) { 
-        return; 
-    }
+      const selectedSite = this.SiteList.find(site => site.p.Ref === siteref);
+      if (!selectedSite) {
+        return;
+      }
       this.appStateManage.StorageKey.setItem('siteRf', String(siteref));
       this.appStateManage.StorageKey.setItem('siteName', selectedSite.p.Name);
       this.appStateManage.StorageKey.setItem('bookingremarkRef', String(this.bookigremark));
-      if(this.bookigremark > 0){
-        this.getPlotListBySiteandBookingRemarkRef(siteref,this.bookigremark)
+      if (this.bookigremark > 0) {
+        this.getPlotListBySiteandBookingRemarkRef(siteref, this.bookigremark)
       }
     }
   }
 
-  getPlotListBySiteandBookingRemarkRef = async (siteref: number,  bookingremarkref: number) => {
+  getPlotListBySiteandBookingRemarkRef = async (siteref: number, bookingremarkref: number) => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     this.siteref = siteref
     this.bookigremark = bookingremarkref
-        if(bookingremarkref <= 0 || siteref <= 0){
-          return
-        }
-        
+    if (bookingremarkref <= 0 || siteref <= 0) {
+      return
+    }
+
     this.appStateManage.StorageKey.setItem('bookingremarkRef', String(bookingremarkref));
     let lst = await Plot.FetchEntireListBySiteandbookingremarkRef(siteref, bookingremarkref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
@@ -125,7 +130,7 @@ export class PlotMasterComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     this.siteref = 0
-    let lst = await Plot.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Plot.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -137,7 +142,7 @@ export class PlotMasterComponent implements OnInit {
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/homepage/Website/Plot_Master_Details']);
   };
-  
+
 
   onDeleteClicked = async (plot: Plot) => {
     await this.uiUtils.showConfirmationMessage(
@@ -183,10 +188,10 @@ export class PlotMasterComponent implements OnInit {
   };
 
   AddPlot = async () => {
-    if(this.siteref > 0){
+    if (this.siteref > 0) {
       this.shouldDestroy = false;
       await this.router.navigate(['/homepage/Website/Plot_Master_Details']);
-    }else{
+    } else {
       this.uiUtils.showWarningToster('Please select a site first');
     }
   }

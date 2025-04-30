@@ -16,22 +16,22 @@ import { PlotFetchRequest } from "./plotfetchrequest";
 export class PlotProps {
   public readonly Db_Table_Name = "SiteManagementPlotDetails";
   public Ref: number = 0;
-  public PlotNo: string ='';
-  public AreaInSqm: number =0;
-  public AreaInSqft: number =0;
-  public GovermentRatePerSqm: number =0;
-  public GovermentRatePerSqft:number =0;
-  public BasicRatePerSqm : number =0;
-  public BasicRatePerSqft : number =0;
-  public BookingRemarkName : string = '';
-  public CurrentBookingRemark : number =0;
-  public Reference: string ='';
+  public PlotNo: string = '';
+  public AreaInSqm: number = 0;
+  public AreaInSqft: number = 0;
+  public GovermentRatePerSqm: number = 0;
+  public GovermentRatePerSqft: number = 0;
+  public BasicRatePerSqm: number = 0;
+  public BasicRatePerSqft: number = 0;
+  public BookingRemarkName: string = '';
+  public CurrentBookingRemark: number = 0;
+  public Reference: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
   public SiteManagementRef: number = 0;
   public CurrentOwnerRef: number = 0;
   public OwnerName: string = '';
-  public LoginEmployeeRef:  number = 26893;
+  public LoginEmployeeRef: number = 26893;
 
   public readonly SiteName: string = '';
   public PlotName: number = 0;
@@ -58,8 +58,8 @@ export class Plot implements IPersistable<Plot> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -180,20 +180,27 @@ export class Plot implements IPersistable<Plot> {
     return Plot.ListFromTransportData(tdResponse);
   }
 
-    public static async FetchEntireListBySiteandbookingremarkRef(siteref:number,bookingremarkref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-      let req = new PlotFetchRequest();
-      req.SiteManagementRefs.push(siteref)
-      req.BookingRemarks.push(bookingremarkref)
-      let tdResponse = await Plot.FetchTransportData(req, errorHandler) as TransportData;
-      return Plot.ListFromTransportData(tdResponse);
-    }
-  
-    public static async FetchEntireListBySiteRef(siteref:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-      let req = new PlotFetchRequest();
-      req.SiteManagementRefs.push(siteref)
-      let tdResponse = await Plot.FetchTransportData(req, errorHandler) as TransportData;
-      return Plot.ListFromTransportData(tdResponse);
-    }
+  public static async FetchEntireListBySiteandbookingremarkRef(siteref: number, bookingremarkref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new PlotFetchRequest();
+    req.SiteManagementRefs.push(siteref)
+    req.BookingRemarks.push(bookingremarkref)
+    let tdResponse = await Plot.FetchTransportData(req, errorHandler) as TransportData;
+    return Plot.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new PlotFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Plot.FetchTransportData(req, errorHandler) as TransportData;
+    return Plot.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListBySiteRef(siteref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new PlotFetchRequest();
+    req.SiteManagementRefs.push(siteref)
+    let tdResponse = await Plot.FetchTransportData(req, errorHandler) as TransportData;
+    return Plot.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
