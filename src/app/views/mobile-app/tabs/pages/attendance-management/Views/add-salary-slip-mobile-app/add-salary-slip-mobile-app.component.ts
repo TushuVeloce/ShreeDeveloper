@@ -220,10 +220,10 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
       } else {
         this.isSaveDisabled = false;
         if (this.IsNewEntity) {
-          await this.uiUtils.showSuccessToster('Salary Slip Request successfully!');
+          await this.uiUtils.showSuccessToster('Salary Slip successfully!');
           this.Entity = SalarySlipRequest.CreateNewInstance();
           this.resetForm();
-        this.router.navigate(['app_homepage/tabs/attendance-management/salary-slip'], { replaceUrl: true });
+          this.router.navigate(['app_homepage/tabs/attendance-management/salary-slip'], { replaceUrl: true });
         }
       }
     } catch (error) {
