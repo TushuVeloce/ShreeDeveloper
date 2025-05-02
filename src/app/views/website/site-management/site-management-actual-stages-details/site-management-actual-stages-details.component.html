@@ -21,13 +21,6 @@
           </div>
         </div>
         <div class="col-md-6 mb-2">
-          <label><b>Stage</b></label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StageRef"
-            name="StageRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef">
-            <nz-option *ngFor="let Stage of StageList" [nzValue]="Stage.p.Ref" [nzLabel]="Stage.p.Name"></nz-option>
-          </nz-select>
-        </div>
-        <div class="col-md-6 mb-2">
           <label><b>Date</b></label>
           <input type="date" [(ngModel)]="Entity.p.StartDate" name="StartDate" class="form-control" id="StartDate"
             required (input)="calculateTotal()" #DieselCtrl="ngModel" (blur)="DieselCtrl.control.markAsTouched()" />
@@ -46,15 +39,20 @@
           </div>
         </div>
         <div class="col-md-6 mb-2">
-          <div>
-            <label><b>Expense Type</b></label>
-            <select type="text" name="Expensetype" class="form-control" id="Expensetype" required>
-              <option>--Select Type--</option>
-              <option>Machinary Expense</option>
-              <option>Labour Expense</option>
-              <option>Other</option>
-            </select>
-          </div>
+          <label><b>Stage</b></label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StageRef"
+            name="StageRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef">
+            <nz-option *ngFor="let Stage of StageList" [nzValue]="Stage.p.Ref" [nzLabel]="Stage.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-6 mb-2">
+          <label><b>Expense Type</b></label>
+          <select type="text" name="Expensetype" class="form-control" id="Expensetype" required>
+            <option>--Select Type--</option>
+            <option>Machinary Expense</option>
+            <option>Labour Expense</option>
+            <option>Other</option>
+          </select>
         </div>
       </div>
       <div style="width: 100%;" class="d-flex justify-content-center">
@@ -65,17 +63,38 @@
           <label>Vendor</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorRef"
             name="VendorRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorRef">
-            <nz-option *ngFor="let vendor of VendorList" [nzValue]="vendor.p.Ref" [nzLabel]="vendor.p.Name"></nz-option>
+            <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-6 mb-2">
           <label>Vendor Services</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorServicesRef"
             name="VendorServicesRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorServicesRef">
-            <nz-option *ngFor="let VendorServices of VendorServicesList" [nzValue]="VendorServices.p.Ref" [nzLabel]="VendorServices.p.Name"></nz-option>
+            <nz-option *ngFor="let VendorServices of VendorServicesList" [nzValue]="VendorServices.p.Ref"
+              [nzLabel]="VendorServices.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+      </div>
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+          <label>Sub Stage</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorServicesRef"
+            name="VendorServicesRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorServicesRef">
+            <nz-option *ngFor="let VendorServices of VendorServicesList" [nzValue]="VendorServices.p.Ref"
+              [nzLabel]="VendorServices.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+          <label><b>Gutter Nale</b></label>
+          <input type="number" [(ngModel)]="Entity.p.ExtraQuantity" name="ExtraQuantity" class="form-control"
+            id="ExtraQuantity" required placeholder="Enter Extra Quantity" required [pattern]="NameWithNosAndSpace"
+            #ExtraQuantityCtrl="ngModel" (blur)="ExtraQuantityCtrl.control.markAsTouched()"
+            (click)="selectAllValue($event)" />
+          <div *ngIf="(ExtraQuantityCtrl.invalid && (ExtraQuantityCtrl.touched || ExtraQuantityCtrl.dirty))">
+            <span class="validation-text" *ngIf="ExtraQuantityCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
           <label>Unit</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UnitRef" name="UnitRef"
             [nzSize]="'large'" [(ngModel)]="Entity.p.UnitRef">
@@ -83,7 +102,6 @@
           </nz-select>
         </div>
       </div>
-
       <div class="row" style="margin-top: 1rem;">
         <label><b>Diesel Calculation</b></label>
         <div class="col-md-4  mb-2">
@@ -119,38 +137,53 @@
           </div>
         </div>
       </div>
-      <div class="Row">
-        <div class="col-md-6 mb-2">
-          <label><b>Quantity</b></label>
-          <input type="number" name="plotnumber" class="form-control" id="plotnumber" required
-            placeholder="Enter Plot Number" />
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+          <label>Unit</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UnitRef" name="UnitRef"
+            [nzSize]="'large'" [(ngModel)]="Entity.p.UnitRef">
+            <nz-option *ngFor="let unit of UnitList" [nzValue]="unit.p.Ref" [nzLabel]="unit.p.Name"></nz-option>
+          </nz-select>
         </div>
-        <div class="col-md-6 mb-2">
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
           <label><b>Rate</b></label>
-          <input type="number" name="plotnumber" class="form-control" id="plotnumber" required
-            placeholder="Enter Plot Number" />
+          <input type="number" [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate" required
+            placeholder="Enter Rate" required [pattern]="NameWithNosAndSpace" #RateCtrl="ngModel"
+            (blur)="RateCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+          <div *ngIf="(RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty))">
+            <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+          <label><b>Quantity</b></label>
+          <input type="number" [(ngModel)]="Entity.p.Quantity" name="Quantity" class="form-control" id="Quantity"
+            required placeholder="Enter Quantity" required [pattern]="NameWithNosAndSpace" #QuantityCtrl="ngModel"
+            (blur)="QuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+          <div *ngIf="(QuantityCtrl.invalid && (QuantityCtrl.touched || QuantityCtrl.dirty))">
+            <span class="validation-text" *ngIf="QuantityCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
       </div>
       <div style="width: 100%;" class="d-flex justify-content-center">
         <hr style="border: 2px solid brown;" width="20%">
       </div>
-      <!-- <div class="row" style="margin-top: 1rem;">
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-md-6 mb-2">
           <label><b>Amount</b></label>
           <input type="number" name="plotnumber" class="form-control" id="plotnumber" required
-          placeholder="Enter Plot Number" />
+            placeholder="Enter Plot Number" />
         </div>
         <div class="col-md-6 mb-2">
           <label><b>Description</b></label>
           <input type="number" name="plotnumber" class="form-control" id="plotnumber" required
-          placeholder="Enter Plot Number" />
+            placeholder="Enter Plot Number" />
         </div>
         <div class="col-md-6 mb-2">
           <label><b>Sign</b></label>
           <input type="number" name="plotnumber" class="form-control" id="plotnumber" required
-          placeholder="Enter Plot Number" />
+            placeholder="Enter Plot Number" />
         </div>
-      </div> -->
+      </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
         <div>
           <button type="button" class="btn">Save</button>

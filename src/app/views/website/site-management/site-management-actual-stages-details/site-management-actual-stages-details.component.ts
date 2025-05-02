@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
+import { SubStage } from 'src/app/classes/domain/entities/website/masters/substage/subStage';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { ActualStages } from 'src/app/classes/domain/entities/website/site_management/actualstages/actualstages';
@@ -27,8 +28,10 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Stage' | 'Edit Stage' = 'New Stage';
   InitialEntity: ActualStages = null as any;
   StageTypeList = DomainEnums.StageTypeList(true, 'select stage');
+  ExpenseList = DomainEnums.StageTypeList(true, 'select stage');
   VendorList: Vendor[] = [];
   StageList: Stage[] = [];
+  SubStageList: SubStage[] = [];
   UnitList: Unit[] = [];
   VendorServicesList: Unit[] = [];
 
@@ -81,9 +84,10 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       return;
     }
     let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.VendorList = lst;
-    this.Entity.p.VendorRef = this.VendorList[0].p.Ref;
+    if (this.VendorList.length > 0) {
+      this.Entity.p.VendorRef = this.VendorList[0].p.Ref;
+    }
   }
 
   getStageListByCompanyRef = async () => {
@@ -93,7 +97,21 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     }
     let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.StageList = lst;
-    this.Entity.p.VendorRef = this.VendorList[0].p.Ref;
+    if (this.StageList.length > 0) {
+      this.Entity.p.StageRef = this.StageList[0].p.Ref;
+    }
+  }
+
+  getSubStageListByStageRef = async () => {
+    if (this.Entity.p.StageRef <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await SubStage.FetchEntireListByStageRef(this.Entity.p.StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SubStageList = lst;
+    if (this.SubStageList.length > 0) {
+      this.Entity.p.SubStageRef = this.SubStageList[0].p.Ref;
+    }
   }
 
   calculateTotal() {

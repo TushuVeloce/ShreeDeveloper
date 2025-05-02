@@ -30,8 +30,13 @@ export class ActualStagesProps {
   public VendorServicesName: string = '';
   public StageRef: number = 0;
   public StageName: string = '';
+  public SubStageRef: number = 0;
+  public SubStageName: string = '';
   public UnitRef: number = 0;
   public UnitName: string = '';
+  public Quantity: number = 0;
+  public Rate: number = 0;
+  public ExtraQuantity: number = 0;
   public CreatedBy: number = 0;
   public CreatedDate: string = '';
   public UpdatedBy: number = 0;
