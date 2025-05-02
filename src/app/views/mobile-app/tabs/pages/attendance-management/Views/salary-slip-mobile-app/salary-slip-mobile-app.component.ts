@@ -37,22 +37,22 @@ export class SalarySlipMobileAppComponent implements OnInit {
     private router: Router,
     private appStateManage: AppStateManageService,
     private companyStateManagement: CompanyStateManagement
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.entity.p.EmployeeRef = this.appStateManage.getEmployeeRef();
     this.getSalarySlipRequestListByEmployeeRef();
-    console.log("ngOnInit is calling in salary slip dashBoard");
+    // console.log("ngOnInit is calling in salary slip dashBoard");
   }
 
-  ionViewWillEnter = async ()=> {
+  ionViewWillEnter = async () => {
     await this.getSalarySlipRequestListByEmployeeRef(); // ← Called every time user comes back
-    console.log('api calling of getSalarySlipRequestListByEmployeeRef',);
+    // console.log('api calling of getSalarySlipRequestListByEmployeeRef',);
   }
   ngOnDestroy(): void {
     // cleanup logic if needed later
   }
-  
+
   async handleRefresh(event: CustomEvent): Promise<void> {
     await this.getSalarySlipRequestListByEmployeeRef();
     (event.target as HTMLIonRefresherElement).complete();
@@ -74,27 +74,31 @@ export class SalarySlipMobileAppComponent implements OnInit {
         this.entity.p.EmployeeRef,
         async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
-      this.filterSalarySlipsByStatus();
+      await this.filterSalarySlipsByStatus();
     } catch (error) {
-    console.log('error :', error);
-    }finally{
+      // console.log('error :', error);
+    } finally {
       this.isLoading = false;
     }
   }
 
   async onDeleteClicked(slip: SalarySlipRequest): Promise<void> {
-    await this.uiUtils.showConfirmationMessage(
-      'Delete',
-      `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Salary Slip Request?`,
-      async () => {
-        await slip.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(
-            `Salary Slip Request ${slip.p.EmployeeName} has been deleted!`
-          );
-          await this.getSalarySlipRequestListByEmployeeRef();
-        });
-      }
-    );
+    try {
+      await this.uiUtils.showConfirmationMessage(
+        'Delete',
+        `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Salary Slip Request?`,
+        async () => {
+          await slip.DeleteInstance(async () => {
+            await this.uiUtils.showSuccessToster(
+              `Salary Slip Request ${slip.p.EmployeeName} has been deleted!`
+            );
+            await this.getSalarySlipRequestListByEmployeeRef();
+          });
+        }
+      );
+    } catch (error) {
+      // console.log('error :', error);
+    }
   }
   filterSalarySlipsByStatus(): void {
     this.filteredSalarySlipRequestList =

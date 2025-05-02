@@ -112,13 +112,17 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
 
   private async getSingleEmployeeDetails(): Promise<void> {
     try {
-      if (this.companyRef() <= 0) {
+      // if (this.companyRef() <= 0) {
+      //   await this.uiUtils.showErrorToster('Company not Selected');
+      //   return;
+      // }
+      const companyRef = await this.companystatemanagement.SelectedCompanyRef();
+      if (companyRef <= 0) {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
       }
-
       const employee = await Employee.FetchInstance(
-        this.EmployeeRef, this.companyRef(),
+        this.EmployeeRef, companyRef,
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
 

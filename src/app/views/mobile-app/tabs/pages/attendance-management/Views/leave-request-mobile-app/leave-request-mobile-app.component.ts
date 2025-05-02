@@ -118,18 +118,22 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
   }
 
   async onDeleteClicked(request: LeaveRequest): Promise<void> {
-    await this.uiUtils.showConfirmationMessage(
-      'Delete',
-      `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure you want to DELETE this Leave Request?`,
-      async () => {
-        await request.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(
-            `Leave request for ${request.p.EmployeeName} deleted!`
-          );
-          await this.getLeaveRequests();
-        });
-      }
-    );
+    try {
+      await this.uiUtils.showConfirmationMessage(
+        'Delete',
+        `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure you want to DELETE this Leave Request?`,
+        async () => {
+          await request.DeleteInstance(async () => {
+            await this.uiUtils.showSuccessToster(
+              `Leave request for ${request.p.EmployeeName} deleted!`
+            );
+            await this.getLeaveRequests();
+          });
+        }
+      );
+    } catch (error) {
+    // console.log('error :', error);
+    }
   }
 
   addLeaveRequest(): void {

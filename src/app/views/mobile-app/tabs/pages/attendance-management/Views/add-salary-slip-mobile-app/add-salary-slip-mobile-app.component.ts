@@ -53,7 +53,7 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
 
   ngOnDestroy(): void {
     // cleanup logic if needed later
-  }
+  } 
 
   private async loadSalarySlipRequestsIfEmployeeExists(): Promise<void> {
     try {
