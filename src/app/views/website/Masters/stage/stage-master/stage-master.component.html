@@ -25,10 +25,7 @@
       <tbody>
         <tr *ngFor="let stage of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-<<<<<<< Updated upstream
-=======
           <!-- <td Class="tbldata">{{stage.p.DisplayOrder}}</td> -->
->>>>>>> Stashed changes
           <td Class="tbldata">{{stage.p.Name}}</td>
           <td Class="tbldata">{{stage.p.StageTypeName}}</td>
           <td class="tbldata">
