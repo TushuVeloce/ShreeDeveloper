@@ -30,21 +30,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td Class="tbldata">1</td>
-          <td Class="tbldata">SMAPLE1</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
+        <tr *ngFor="let digital of DigitalList; index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{digital.p.SiteName}}</td>
+          <td Class="tbldata">{{digital.p.Date}}</td>
+          <td Class="tbldata">{{digital.p.MarketingTypeName}}</td> 
+          <td Class="tbldata">{{digital.p.VendorName}}</td> 
+          <td Class="tbldata">{{digital.p.Rate}}</td> 
+          <td Class="tbldata">{{digital.p.Quantity}}</td> 
+          <td Class="tbldata">{{digital.p.Total}}</td> 
           <td class="tbldata">
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span>
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            <Edit-Icon (editClick)="onEditClicked(digital)" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(digital)" />
           </td>
         </tr>
       </tbody>
@@ -67,21 +64,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td Class="tbldata">1</td>
-          <td Class="tbldata">SAMAPLE1</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
+       <tr *ngFor="let electronics of ElectronicsList; index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{electronics.p.SiteName}}</td>
+          <td Class="tbldata">{{electronics.p.Date}}</td>
+          <td Class="tbldata">{{electronics.p.MarketingTypeName}}</td> 
+          <td Class="tbldata">{{electronics.p.VendorName}}</td> 
+          <td Class="tbldata">{{electronics.p.Rate}}</td> 
+          <td Class="tbldata">{{electronics.p.Quantity}}</td> 
+          <td Class="tbldata">{{electronics.p.Total}}</td> 
           <td class="tbldata">
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span>
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            <Edit-Icon (editClick)="onEditClicked(electronics)" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(electronics)" />
           </td>
         </tr>
       </tbody>
@@ -104,21 +98,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td Class="tbldata">1</td>
-          <td Class="tbldata">SAMAPLE1</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
+       <tr *ngFor="let outdoor of OutdoorList; index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{outdoor.p.SiteName}}</td>
+          <td Class="tbldata">{{outdoor.p.Date}}</td>
+          <td Class="tbldata">{{outdoor.p.MarketingTypeName}}</td> 
+          <td Class="tbldata">{{outdoor.p.VendorName}}</td> 
+          <td Class="tbldata">{{outdoor.p.Rate}}</td> 
+          <td Class="tbldata">{{outdoor.p.Quantity}}</td> 
+          <td Class="tbldata">{{outdoor.p.Total}}</td> 
           <td class="tbldata">
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span>
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            <Edit-Icon (editClick)="onEditClicked(outdoor)" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(outdoor)" />
           </td>
         </tr>
       </tbody>
@@ -141,21 +132,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td Class="tbldata">1</td>
-          <td Class="tbldata">SAMAPLE1</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
+       <tr *ngFor="let printingmedia of PrintingMediaList; index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{printingmedia.p.SiteName}}</td>
+          <td Class="tbldata">{{printingmedia.p.Date}}</td>
+          <td Class="tbldata">{{printingmedia.p.MarketingTypeName}}</td> 
+          <td Class="tbldata">{{printingmedia.p.VendorName}}</td> 
+          <td Class="tbldata">{{printingmedia.p.Rate}}</td> 
+          <td Class="tbldata">{{printingmedia.p.Quantity}}</td> 
+          <td Class="tbldata">{{printingmedia.p.Total}}</td> 
           <td class="tbldata">
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span>
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            <Edit-Icon (editClick)="onEditClicked(printingmedia)" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(printingmedia)" />
           </td>
         </tr>
       </tbody>
@@ -179,21 +167,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td Class="tbldata">1</td>
-          <td Class="tbldata">SAMAPLE1</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
+       <tr *ngFor="let broker of BrokerList; index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{broker.p.SiteName}}</td>
+          <td Class="tbldata">{{broker.p.Date}}</td>
+          <td Class="tbldata">{{broker.p.MarketingTypeName}}</td> 
+          <td Class="tbldata">{{broker.p.VendorName}}</td> 
+          <td Class="tbldata">{{broker.p.Rate}}</td> 
+          <td Class="tbldata">{{broker.p.Quantity}}</td> 
+          <td Class="tbldata">{{broker.p.Total}}</td> 
           <td class="tbldata">
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span>
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            <Edit-Icon (editClick)="onEditClicked(broker)" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(broker)" />
           </td>
         </tr>
       </tbody>

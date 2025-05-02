@@ -29,9 +29,9 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
   SiteList: Site[] = [];
   VendorList: Vendor[] = [];
   MarketingModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
+  MarketingType = MarketingModes
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
-  MarketingType = MarketingModes
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
   serviceNamesString: string = '';
@@ -119,13 +119,13 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('MarketingManagement Master Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Marketing_Management_Master']);
+        await this.router.navigate(['/homepage/Website/Marketing_Management']);
       }
     }
   };
 
   BackMarketingManagement = () => {
-    this.router.navigate(['/homepage/Website/Marketing_Management_Master']);
+    this.router.navigate(['/homepage/Website/Marketing_Management']);
   }
 
   resetAllControls = () => {

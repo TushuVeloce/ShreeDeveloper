@@ -227,8 +227,8 @@ const routes: Routes = [
       { path: 'Registrar_Office_Details', component: RegistrarOfficeDetailComponent },
 
       { path: 'Plot_Resell_By_Third_Party', component: PlotResellByThirdPartyComponent },
-      { path: 'Marketing_Management_Master', component:MarketingManagementMasterComponent},
-      { path: 'Marketing_Management_Master_Details', component:MarketingManagementMasterDetailsComponent},
+      { path: 'Marketing_Management', component:MarketingManagementMasterComponent},
+      { path: 'Marketing_Management_Details', component:MarketingManagementMasterDetailsComponent},
       { path: 'Accounting_Transaction', component: AccountTransactionsComponent },
       { path: 'Expense_Transactions', component: ExpenseTransactionsComponent },
       { path: 'Client_Income', component: ClientIncomeComponent },
