@@ -40,6 +40,7 @@ export class StageMasterDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stage' : 'Edit Stage';
       this.Entity = Stage.GetCurrentInstance();
+      console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable')
 
     } else {

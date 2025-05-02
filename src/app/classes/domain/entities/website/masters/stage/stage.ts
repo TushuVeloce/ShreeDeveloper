@@ -19,11 +19,12 @@ export class StageProps {
   public Ref: number = 0;
   public Name: string = '';
   public StageType: number = 0;
+  public readonly StageTypeName: string = '';
   public DisplayOrder: number = 0;
-  public IsSubStage: Boolean = false;
-  public IsMachinaryexpense: Boolean = false;
-  public IsLabourExpense: Boolean = false;
-  public IsOther: Boolean = false;
+  public IsSubStageApplicable: Boolean = false;
+  public IsMachinaryexpenseApplicable: Boolean = false;
+  public IsLabourExpenseApplicable: Boolean = false;
+  public IsOtherApplicable: Boolean = false;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
 

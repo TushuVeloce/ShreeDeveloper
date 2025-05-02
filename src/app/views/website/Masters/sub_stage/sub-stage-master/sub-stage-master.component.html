@@ -27,9 +27,13 @@
         <tbody>
           <tr *ngFor="let SubStage of paginatedList(); index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <!-- <td Class="tbldata">{{SubStage.p.Code}}</td>
-            <td Class="tbldata">{{SubStage.p.Name}}</td>
-            <td Class="tbldata">{{SubStage.p.UnitName}}</td> -->
+            <td Class="tbldata">{{SubStage.p.StageName}}</td>
+<<<<<<< Updated upstream
+            <td Class="tbldata">{{SubStage.p.StageTypeName}}</td>
+=======
+            <td Class="tbldata">{{SubStage.p.StageType}}</td>
+>>>>>>> Stashed changes
+            <td Class="tbldata">{{SubStage.p.Name}}</td> 
             <td class="tbldata">
               <!-- <span style="margin-left: 9px;" (click)="onEditClicked(SubStage);">
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
