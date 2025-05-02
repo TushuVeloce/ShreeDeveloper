@@ -223,7 +223,7 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
           await this.uiUtils.showSuccessToster('SalarySlipRequest Master saved successfully!');
           this.Entity = SalarySlipRequest.CreateNewInstance();
           this.resetForm();
-          this.router.navigate(['/app_homepage/tabs/crm/attendance-management/leave-request']);
+          this.router.navigate(['/app_homepage/tabs/crm/attendance-management/leave-request'], { replaceUrl: true });
         }
       }
     } catch (error) {
@@ -240,6 +240,6 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
   }
 
   public goBack(): void {
-    this.router.navigate(['app_homepage/tabs/attendance-management/salary-slip']);
+    this.router.navigate(['app_homepage/tabs/attendance-management/salary-slip'], { replaceUrl: true });
   }
 }

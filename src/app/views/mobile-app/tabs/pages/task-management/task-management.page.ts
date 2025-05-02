@@ -216,7 +216,7 @@ export class TaskManagementPage implements OnInit {
   }
 
   addTask() {
-    this.router.navigate(['/app_homepage/tabs/task-management/add']);
+    this.router.navigate(['/app_homepage/tabs/task-management/add'], { replaceUrl: true });
   }
 
   editTask(taskId: string) {

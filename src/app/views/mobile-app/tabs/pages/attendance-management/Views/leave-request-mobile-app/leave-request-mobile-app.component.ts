@@ -135,6 +135,6 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
   addLeaveRequest(): void {
     this.router.navigate([
       '/app_homepage/tabs/attendance-management/add-leave-request',
-    ]);
+    ], { replaceUrl: true });
   }
 }

@@ -276,7 +276,7 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
       this.Entity = LeaveRequest.CreateNewInstance();
       this.SelectedLeaveType = [];
       this.resetForm();
-      await this.router.navigate(['app_homepage/tabs/attendance-management/leave-request']);
+      await this.router.navigate(['app_homepage/tabs/attendance-management/leave-request'],{ replaceUrl: true });
     } catch (error) {
       // console.log('error :', error);
     }finally{
@@ -294,7 +294,7 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['app_homepage/tabs/attendance-management/leave-request']);
+    this.router.navigate(['app_homepage/tabs/attendance-management/leave-request'], { replaceUrl: true });
   }
 
 }

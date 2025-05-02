@@ -343,11 +343,11 @@ export class AttendanceManagementPage implements OnInit {
   }
 
   getSalarySlip(): void {
-    this.router.navigate(['/app_homepage/tabs/attendance-management/salary-slip']);
+    this.router.navigate(['/app_homepage/tabs/attendance-management/salary-slip'], { replaceUrl: true });
   }
 
   requestLeave(): void {
-    this.router.navigate(['/app_homepage/tabs/attendance-management/leave-request']);
+    this.router.navigate(['/app_homepage/tabs/attendance-management/leave-request'], { replaceUrl: true });
   }
 
   // viewAllPresentEmployee(): void {
@@ -355,6 +355,6 @@ export class AttendanceManagementPage implements OnInit {
   // }
 
   viewAllAttendance(): void {
-    this.router.navigate(['/app_homepage/tabs/attendance-management/attendance-details']);
+    this.router.navigate(['/app_homepage/tabs/attendance-management/attendance-details'], { replaceUrl: true });
   }
 }

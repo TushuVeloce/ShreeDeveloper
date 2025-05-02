@@ -52,7 +52,7 @@ export class HeaderWithBackHandlerComponent implements OnInit {
 
 
   goToNotificationPage() {
-    this.router.navigate(['/app_homepage/notifications']);
+    this.router.navigate(['/app_homepage/notifications'], { replaceUrl: true });
   }
   
   ngOnDestroy() {
