@@ -29,6 +29,7 @@ export class ExpenseTypeProps {
   public UpdatedBy: number = 0;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
+  public ExpenseType: number = 0;
 
   public readonly IsNewlyCreated: boolean = false;
 
@@ -164,6 +165,13 @@ export class ExpenseType implements IPersistable<ExpenseType> {
   }
 
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new ExpenseTypeFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await ExpenseType.FetchTransportData(req, errorHandler) as TransportData;
+    return ExpenseType.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByStageRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new ExpenseTypeFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await ExpenseType.FetchTransportData(req, errorHandler) as TransportData;

@@ -30,7 +30,7 @@ export class ActualStagesProps {
   public UpdatedDate: string = '';
 
   public SiteRef: number = 0;
-  public readonly SiteName: string = '';
+  public SiteName: string = '';
 
   public Date: string = '';
   public ChalanNo: string = '';

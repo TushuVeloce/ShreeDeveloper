@@ -15,7 +15,9 @@ export class SiteManagementActualStagesComponent implements OnInit {
   Government_Details: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Expense Type', 'Description', 'Receiver Name', 'Amount', 'Action'];
   constructor(private router: Router) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+
+  }
   Title: string = 'Site Management Actual Stages';
 
   AddStages = async () => {
@@ -26,8 +28,8 @@ export class SiteManagementActualStagesComponent implements OnInit {
   StageRef: number = 0;
   OwnerList: string[] = ['Owner1', 'Owner2', 'Owner3'];
   StagesList: string[] = ['Stage1', 'Stage2', 'Stage3'];
-  getOwnerRef(Ref:any) {
-    // code here 
+  getOwnerRef(Ref: any) {
+    // code here
     console.log('OwnerRef');
   }
 
