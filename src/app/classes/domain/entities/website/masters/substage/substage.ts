@@ -20,6 +20,7 @@ export class SubStageProps {
   public StageRef: number = 0;
   public readonly StageName: number = 0;
   public StageType: number = 0;
+  public readonly StageTypeName: String = '';
   public Name: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';

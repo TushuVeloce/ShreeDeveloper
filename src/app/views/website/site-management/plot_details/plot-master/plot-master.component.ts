@@ -138,7 +138,8 @@ export class PlotMasterComponent implements OnInit {
     this.SelectedPlot = item.GetEditableVersion();
     Plot.SetCurrentInstance(this.SelectedPlot);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Plot_Master_Details']);
+      this.shouldDestroy = false;
+      await this.router.navigate(['/homepage/Website/Plot_Master_Details']);
   };
 
 

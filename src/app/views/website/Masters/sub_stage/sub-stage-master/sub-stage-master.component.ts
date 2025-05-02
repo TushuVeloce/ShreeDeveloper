@@ -25,7 +25,7 @@ export class SubStageMasterComponent  implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Code', 'SubStage Name', 'SubStage Unit', 'Action'];
+  headers: string[] = ['Sr.No.','Stage','Stage Type', 'Name', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
@@ -49,8 +49,8 @@ export class SubStageMasterComponent  implements OnInit {
     }
     let lst = await SubStage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
-
     this.DisplayMasterList = this.MasterList;
+    console.log('DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
   }
 
@@ -58,7 +58,7 @@ export class SubStageMasterComponent  implements OnInit {
     this.SelectedSubStage = item.GetEditableVersion();
     SubStage.SetCurrentInstance(this.SelectedSubStage);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/SubStage_Master_Details']);
+    await this.router.navigate(['/homepage/Website/Sub_Stage_Master_Details']);
   };
 
   onDeleteClicked = async (SubStage: SubStage) => {
