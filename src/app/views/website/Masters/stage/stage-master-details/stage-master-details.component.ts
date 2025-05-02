@@ -59,8 +59,8 @@ export class StageMasterDetailsComponent implements OnInit {
   SaveStageMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-    if (!this.Entity.p.DisplayOrder) {
-      this.Entity.p.DisplayOrder = 0;
+    if(!this.Entity.p.IsSubStageApplicable){
+      this.Entity.p.StageType = 0;
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]

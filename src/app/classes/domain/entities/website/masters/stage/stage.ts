@@ -22,7 +22,7 @@ export class StageProps {
   public readonly StageTypeName: string = '';
   public DisplayOrder: number = 0;
   public IsSubStageApplicable: Boolean = false;
-  public IsMachinaryexpenseApplicable: Boolean = false;
+  public IsMachinaryExpenseApplicable: Boolean = false;
   public IsLabourExpenseApplicable: Boolean = false;
   public IsOtherApplicable: Boolean = false;
   public CompanyRef: number = 0;
@@ -75,13 +75,9 @@ export class Stage implements IPersistable<Stage> {
     } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
       vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     }
-    // if (this.p.DisplayOrder == 0) {
-    //   vra.add('DisplayOrder', 'Display Order cannot be blank.');
-    // } else if (this.p.DisplayOrder < 0) {
-    //   vra.add('DisplayOrder', 'Display Order cannot be less then 0.');
-    // } else if (this.p.DisplayOrder.toString().includes('.')) {
-    //   vra.add('DisplayOrder', 'Rational Number not allowed for Display Order');
-    // }
+    if(this.p.IsSubStageApplicable == true && this.p.StageType <= 0){
+      vra.add('StageType', 'StageType is required');
+    }
   }
 
   public MergeIntoTransportData(td: TransportData) {
