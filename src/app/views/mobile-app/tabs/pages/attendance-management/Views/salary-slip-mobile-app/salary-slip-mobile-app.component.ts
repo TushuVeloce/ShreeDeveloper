@@ -122,6 +122,6 @@ export class SalarySlipMobileAppComponent implements OnInit {
   addSalarySlipRequest(): void {
     this.router.navigate([
       '/app_homepage/tabs/attendance-management/add-salary-slip',
-    ], { replaceUrl: true });
+    ]);
   }
 }

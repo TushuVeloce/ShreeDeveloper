@@ -14,7 +14,7 @@
     <ion-item class="input-item" button (click)="selectMonthBottomsheet()">
       <div slot="start">
       <ion-label position="floating">Select Month</ion-label>
-      <ion-input [(ngModel)]="Entity.p.Year" disabled required></ion-input>
+      <ion-input  disabled required></ion-input>
       </div>
       <div slot="end" class="chip-container">
         <ion-chip *ngFor="let item of Entity.p.SelectedMonthsName">

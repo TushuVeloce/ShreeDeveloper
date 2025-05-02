@@ -1,3 +1,101 @@
-<p>
-  marketing-management-master-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackMarketingManagement()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">{{DetailsFormTitle}}</span>
+      </div>
+    </div>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem; ">
+          <label for="SiteRef"><b>Site Name</b></label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteRef" name="SiteRef"
+            [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
+            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem; ">
+          <div>
+            <label>Date</label>
+            <input type="date" [(ngModel)]="Entity.p.Date" name="Date" class="form-control" id="Date" required
+              placeholder="Enter Date" />
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem; ">
+          <label>Marketing Type</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="MarketingTypeRef"
+            name="MarketingTypeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.MarketingTypeRef">
+            <nz-option *ngFor="let Mode of MarketingModesList" [nzValue]="Mode.Ref" [nzLabel]="Mode.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem; ">
+          <label for="VendorRef"><b>Vendor Name</b></label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorRef"
+            name="VendorRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorRef"  (ngModelChange)="onVendorChange(Entity.p.VendorRef)">
+            <nz-option *ngFor="let vendor of VendorList" [nzValue]="vendor.p.Ref" [nzLabel]="vendor.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;">
+          <label>Service Materials</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="serviceNamesString"
+            name="serviceNamesString"
+            placeholder="Services"
+          />
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.MarketingTypeRef == MarketingType.PrintingMedia">
+          <label>Page</label>
+          <input type="text" [(ngModel)]="Entity.p.Page" name="Page" class="form-control" id="Page" required
+            placeholder="Enter Page" />
+        </div>
+      <div class="col-md-4" style="margin-top: 1rem; ">
+        <label>Place</label>
+        <input type="text" [(ngModel)]="Entity.p.Place" name="Place" class="form-control" id="Place" required
+          placeholder="Enter Place" />
+      </div>
+      <div class="col-md-4" style="margin-top: 1rem; ">
+        <label>Rate</label>
+        <input type="text" [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate" required (ngModelChange)="calculateTotal()" (click)="selectAllValue($event)"
+          placeholder="Enter Rate" />
+      </div>
+      <div class="col-md-4" style="margin-top: 1rem; ">
+        <label>Quantity</label>
+        <input type="text" [(ngModel)]="Entity.p.Quantity" name="Quantity" class="form-control" id="Quantity" required (ngModelChange)="calculateTotal()" (click)="selectAllValue($event)"
+          placeholder="Enter Quantity" />
+      </div>
+      <div class="col-md-4" style="margin-top: 1rem; ">
+        <label>Total</label>
+        <input type="text" [(ngModel)]="Entity.p.Total" name="Total" class="form-control" id="Total" required
+          placeholder="Total" readonly />
+      </div>
+      <div class="col-md-4" style="margin-top: 1rem; ">
+        <label>Name</label>
+        <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
+          placeholder="Enter Name" />
+      </div>
+      <div class="col-md-4" style="margin-top: 1rem; ">
+        <label>Narration</label>
+        <input type="text" [(ngModel)]="Entity.p.Narration" name="Narration" class="form-control" id="Narration"
+          required placeholder="Enter Narration" />
+      </div>
+      </div>
+<div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+  <div>
+    <button type="button" class="btn" (click)="SaveMarketingManagementMaster()">Save</button>
+  </div>
+  <div>
+    <button type="button" class="btn" (click)="BackMarketingManagement()">
+      Back
+    </button>
+  </div>
+</div>
+</form>
+</div>
+</div>
