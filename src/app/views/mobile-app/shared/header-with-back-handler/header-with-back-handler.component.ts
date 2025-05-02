@@ -14,8 +14,7 @@ import { filter } from 'rxjs/operators';
 export class HeaderWithBackHandlerComponent implements OnInit {
   @Input() title: string = 'Page Title';
   @Input() showBackButton: boolean = true;
-  @Input() mainPagePath: string = '/app_homepage/tabs/home'; //Set dynamically based on module
-  @Input() subPagePath: string = '/app_homepage/tabs/home'; //Set dynamically based on module
+  @Input() backRoute: string | null = null; //  input for back navigation
 
   private backButtonSubscription!: Subscription;
   private navigationStack: string[] = []; // Track navigation history
@@ -44,20 +43,13 @@ export class HeaderWithBackHandlerComponent implements OnInit {
   }
 
   goBack() {
-    const currentUrl = this.router.url;
-
-    // If on 'add' or 'edit' page, navigate back to the main page and clear stack
-    if (currentUrl.includes(this.mainPagePath)) {
-      this.navigationStack = [this.subPagePath]; // Reset stack
-      this.navCtrl.navigateBack(this.subPagePath);
-    }
-    // If already at the main page, follow default back behavior
-    else if (window.history.length > 1) {
-      this.location.back();
+    if (this.backRoute) {
+      this.router.navigate([this.backRoute], { replaceUrl: true }); // Smart back
     } else {
-      this.navCtrl.navigateRoot('/home'); // Fallback for deep navigation
+      this.location.back(); // Fallback
     }
   }
+
 
   goToNotificationPage() {
     this.router.navigate(['/app_homepage/notifications']);

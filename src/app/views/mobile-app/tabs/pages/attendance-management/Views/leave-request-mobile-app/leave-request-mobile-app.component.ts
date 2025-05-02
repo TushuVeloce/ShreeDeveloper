@@ -5,7 +5,6 @@ import { LeaveRequest } from 'src/app/classes/domain/entities/website/request/le
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
-import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -39,35 +38,38 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
     private uiUtils: UIUtils,
     private appState: AppStateManageService,
     private companyState: CompanyStateManagement,
-    private dtu: DTU,
     private dateService: DateconversionService
   ) { }
 
   async ngOnInit(): Promise<void> {
+    await this.loadLeaveRequestsIfEmployeeExists();
+  }
+
+  ionViewWillEnter = async () => {
+    await this.loadLeaveRequestsIfEmployeeExists();
+    // console.log('Leave request refreshed on view enter');
+  };
+
+  ngOnDestroy(): void {
+    // cleanup logic if needed later
+  }
+
+  async handleRefresh(event: CustomEvent): Promise<void> {
+    await this.getLeaveRequests();
+    (event.target as HTMLIonRefresherElement).complete();
+  }
+
+  private async loadLeaveRequestsIfEmployeeExists(): Promise<void> {
     this.Entity.p.EmployeeRef = this.appState.getEmployeeRef();
     if (this.Entity.p.EmployeeRef > 0) {
       await this.getLeaveRequests();
+    } else {
+      await this.uiUtils.showErrorToster('Employee not selected');
     }
-
-    // Auto update filtered data on state change
-    // effect(() => {
-    //   this.filterLeaveRequests();
-    // });
-  }
-
-  ngOnDestroy(): void {
-    // Optional cleanup logic
   }
 
   formatDate = (date: string | Date): string =>
     this.dateService.formatDate(date);
-
-  handleRefresh(event: CustomEvent): void {
-    setTimeout(async () => {
-      await this.getLeaveRequests();
-      (event.target as HTMLIonRefresherElement).complete();
-    }, 2000);
-  }
 
   async getLeaveRequests(): Promise<void> {
     this.isLoading = true;

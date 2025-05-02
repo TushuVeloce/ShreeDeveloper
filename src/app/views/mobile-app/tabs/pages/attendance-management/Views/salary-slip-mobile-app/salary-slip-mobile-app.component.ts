@@ -1,6 +1,5 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { SalarySlipRequest } from 'src/app/classes/domain/entities/website/request/salarysliprequest/salarysliprequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -34,16 +33,11 @@ export class SalarySlipMobileAppComponent implements OnInit {
   filteredSalarySlipRequestList: SalarySlipRequest[] = [];
 
   constructor(
-    private modalController: ModalController,
     private uiUtils: UIUtils,
     private router: Router,
     private appStateManage: AppStateManageService,
     private companyStateManagement: CompanyStateManagement
-  ) {
-    effect(() => {
-      this.getSalarySlipRequestListByEmployeeRef();
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.entity.p.EmployeeRef = this.appStateManage.getEmployeeRef();
@@ -51,10 +45,19 @@ export class SalarySlipMobileAppComponent implements OnInit {
     console.log("ngOnInit is calling in salary slip dashBoard");
   }
 
+  ionViewWillEnter = async ()=> {
+    await this.getSalarySlipRequestListByEmployeeRef(); // ← Called every time user comes back
+    console.log('api calling of getSalarySlipRequestListByEmployeeRef',);
+  }
+  ngOnDestroy(): void {
+    // cleanup logic if needed later
+  }
+  
   async handleRefresh(event: CustomEvent): Promise<void> {
     await this.getSalarySlipRequestListByEmployeeRef();
     (event.target as HTMLIonRefresherElement).complete();
   }
+
 
   async getSalarySlipRequestListByEmployeeRef(): Promise<void> {
     try {

@@ -28,6 +28,8 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
   public toDate = '';
   public halfDayDate = '';
   public isHalfDay = false;
+  public isLoading = false;
+
 
   public TotalWorkingHrs = 0;
   public isSaveDisabled = false;
@@ -56,45 +58,76 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    const editMode = this.appStateManage.StorageKey.getItem('Editable') === 'Edit';
+    await this.loadLeaveRequestsIfEmployeeExists();
+  }
 
-    this.IsNewEntity = !editMode;
-    this.DetailsFormTitle = editMode ? 'Edit Leave Request' : 'New Leave Request';
+  // ionViewWillEnter = async () => {
+  //   await this.loadLeaveRequestsIfEmployeeExists();
+  //   // console.log('Leave request refreshed on view enter');
+  // };
 
-    if (editMode) {
-      this.Entity = LeaveRequest.GetCurrentInstance();
-      this.fromDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.FromDate);
-      this.toDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.ToDate);
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
-      this.appStateManage.StorageKey.removeItem('Editable');
-    } else {
-      this.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
-      this.Entity = LeaveRequest.CreateNewInstance();
-      LeaveRequest.SetCurrentInstance(this.Entity);
-      this.Entity.p.LeaveRequestType = this.LeaveRequestTypeList[1].Ref;
-      await this.getSingleEmployeeDetails();
+  ngOnDestroy(): void {
+    // cleanup logic if needed later
+  }
+
+  private async loadLeaveRequestsIfEmployeeExists(): Promise<void> {
+    try {
+      this.isLoading = true;
+      this.Entity.p.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+      // this.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+      if (this.Entity.p.EmployeeRef > 0) {
+        const editMode = this.appStateManage.StorageKey.getItem('Editable') === 'Edit';
+
+        this.IsNewEntity = !editMode;
+        this.DetailsFormTitle = editMode ? 'Edit Leave Request' : 'New Leave Request';
+
+        if (editMode) {
+          this.Entity = LeaveRequest.GetCurrentInstance();
+          this.fromDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.FromDate);
+          this.toDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.ToDate);
+          this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+          this.appStateManage.StorageKey.removeItem('Editable');
+        } else {
+          this.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+          this.Entity = LeaveRequest.CreateNewInstance();
+          LeaveRequest.SetCurrentInstance(this.Entity);
+          this.Entity.p.LeaveRequestType = this.LeaveRequestTypeList[1].Ref;
+          await this.getSingleEmployeeDetails();
+        }
+
+        this.InitialEntity = Object.assign(
+          LeaveRequest.CreateNewInstance(),
+          this.utils.DeepCopy(this.Entity)
+        ) as LeaveRequest;
+      } else {
+        await this.uiUtils.showErrorToster('Employee not selected');
+      }
+    } catch (error) {
+      // console.log('error :', error);
+
+    } finally {
+      this.isLoading = false;
     }
-
-    this.InitialEntity = Object.assign(
-      LeaveRequest.CreateNewInstance(),
-      this.utils.DeepCopy(this.Entity)
-    ) as LeaveRequest;
   }
 
   private async getSingleEmployeeDetails(): Promise<void> {
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
+    try {
+      if (this.companyRef() <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
+
+      const employee = await Employee.FetchInstance(
+        this.EmployeeRef,
+        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+
+      this.Entity.p.EmployeeRef = employee.p.Ref;
+      this.Entity.p.EmployeeName = employee.p.Name;
+      this.TotalWorkingHrs = employee.p.TotalWorkingHrs;
+    } catch (error) {
+      // console.log('error :', error);
     }
-
-    const employee = await Employee.FetchInstance(
-      this.EmployeeRef,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-
-    this.Entity.p.EmployeeRef = employee.p.Ref;
-    this.Entity.p.EmployeeName = employee.p.Name;
-    this.TotalWorkingHrs = employee.p.TotalWorkingHrs;
   }
 
   private setLeaveHoursByDays(): void {
@@ -213,35 +246,42 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
   }
 
   public async SaveLeaveRequest(): Promise<void> {
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+    try {
+      this.isLoading=true;
+      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+      this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
 
-    if (this.Entity.p.LeaveRequestType === LeaveRequestType.HalfDay) {
-      this.Entity.p.HalfDayDate = this.dtu.ConvertStringDateToFullFormat(this.halfDayDate);
-    } else {
-      this.Entity.p.FromDate = this.dtu.ConvertStringDateToFullFormat(this.fromDate);
-      this.Entity.p.ToDate = this.dtu.ConvertStringDateToFullFormat(this.toDate);
-    }
+      if (this.Entity.p.LeaveRequestType === LeaveRequestType.HalfDay) {
+        this.Entity.p.HalfDayDate = this.dtu.ConvertStringDateToFullFormat(this.halfDayDate);
+      } else {
+        this.Entity.p.FromDate = this.dtu.ConvertStringDateToFullFormat(this.fromDate);
+        this.Entity.p.ToDate = this.dtu.ConvertStringDateToFullFormat(this.toDate);
+      }
 
-    if (!this.Entity.p.Days) this.Entity.p.Days = 0;
-    if (!this.Entity.p.LeaveHours) this.Entity.p.LeaveHours = 0;
-    if (this.Entity.p.UpdatedBy === 0) this.Entity.p.UpdatedBy = this.EmployeeRef;
+      if (!this.Entity.p.Days) this.Entity.p.Days = 0;
+      if (!this.Entity.p.LeaveHours) this.Entity.p.LeaveHours = 0;
+      if (this.Entity.p.UpdatedBy === 0) this.Entity.p.UpdatedBy = this.EmployeeRef;
 
-    const entityToSave = this.Entity.GetEditableVersion();
-    const tr = await this.utils.SavePersistableEntities([entityToSave]);
+      const entityToSave = this.Entity.GetEditableVersion();
+      const tr = await this.utils.SavePersistableEntities([entityToSave]);
 
-    if (!tr.Successful) {
+      if (!tr.Successful) {
+        this.isSaveDisabled = false;
+        this.uiUtils.showErrorMessage('Error', tr.Message);
+        return;
+      }
+
       this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error', tr.Message);
-      return;
+      await this.uiUtils.showSuccessToster('Leave Request saved successfully!');
+      this.Entity = LeaveRequest.CreateNewInstance();
+      this.SelectedLeaveType = [];
+      this.resetForm();
+      await this.router.navigate(['app_homepage/tabs/attendance-management/leave-request']);
+    } catch (error) {
+      // console.log('error :', error);
+    }finally{
+      this.isLoading = false;
     }
-
-    this.isSaveDisabled = false;
-    await this.uiUtils.showSuccessToster('Leave Request saved successfully!');
-    this.Entity = LeaveRequest.CreateNewInstance();
-    this.SelectedLeaveType = [];
-    this.resetForm();
-    await this.router.navigate(['/app_homepage/tabs/...']);
   }
 
   private resetForm(): void {
@@ -252,9 +292,9 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
     this.Entity.p.Days = 0;
     this.Entity.p.LeaveHours = 0;
   }
-   
+
   goBack() {
-    this.router.navigate(['/app_homepage/tabs/crm/attendance-management/leave-request']);
+    this.router.navigate(['app_homepage/tabs/attendance-management/leave-request']);
   }
-  
+
 }
