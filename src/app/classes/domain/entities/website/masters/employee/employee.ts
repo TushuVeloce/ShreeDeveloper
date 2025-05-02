@@ -195,9 +195,10 @@ export class Employee implements IPersistable<Employee> {
     return tdResponse;
   }
 
-  public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchInstance(ref: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new EmployeeFetchRequest();
     req.EmployeeRefs.push(ref);
+    req.CompanyRefs.push(CompanyRef);
 
     let tdResponse = await Employee.FetchTransportData(req, errorHandler) as TransportData;
     return Employee.SingleInstanceFromTransportData(tdResponse);

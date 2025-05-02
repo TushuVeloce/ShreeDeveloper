@@ -2,11 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, StageType } from 'src/app/classes/domain/domainenums/domainenums';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { SubStage } from 'src/app/classes/domain/entities/website/masters/substage/subStage';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
+import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { ActualStages } from 'src/app/classes/domain/entities/website/site_management/actualstages/actualstages';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -27,13 +28,15 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   Entity: ActualStages = ActualStages.CreateNewInstance();
   DetailsFormTitle: 'New Stage' | 'Edit Stage' = 'New Stage';
   InitialEntity: ActualStages = null as any;
+  StageTypeEnum = StageType;
+  StageType: number = 0;
   StageTypeList = DomainEnums.StageTypeList(true, 'select stage');
   ExpenseList = DomainEnums.StageTypeList(true, 'select stage');
   VendorList: Vendor[] = [];
+  VendorServiceList: VendorService[] = [];
   StageList: Stage[] = [];
   SubStageList: SubStage[] = [];
   UnitList: Unit[] = [];
-  VendorServicesList: Unit[] = [];
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -71,12 +74,44 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     // txtName.focus();
   }
 
-  public FormulateUnitList = async () => {
-    let lst = await Unit.FetchEntireList(
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-    this.UnitList = lst;
-  };
+  getStageListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.StageList = lst;
+    if (this.StageList.length > 0) {
+      this.Entity.p.StageRef = this.StageList[0].p.Ref;
+      this.StageType = this.StageList[0].p.StageType;
+    }
+    this.getSubStageListByStageRef();
+  }
+
+  getSubStageListByStageRef = async () => {
+    if (this.Entity.p.StageRef <= 0) {
+      await this.uiUtils.showErrorToster('Stage not Selected');
+      return;
+    }
+    let lst = await SubStage.FetchEntireListByStageRef(this.Entity.p.StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SubStageList = lst;
+    if (this.SubStageList.length > 0) {
+      this.Entity.p.SubStageRef = this.SubStageList[0].p.Ref;
+    }
+  }
+
+  getStageTypeOnStageRef = async (StageRef: number) => {
+    if (this.Entity.p.StageRef <= 0) {
+      await this.uiUtils.showErrorToster('Stage not Selected');
+      return;
+    }
+    let SingleRecord = this.StageList.find((data) => data.p.Ref == StageRef);;
+    if (SingleRecord?.p) {
+      this.StageType = SingleRecord.p.StageType;
+    }
+    // let SingleRecord = await Stage.FetchInstance(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    // this.StageType = SingleRecord.p.StageType;
+  }
 
   getVendorListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
@@ -88,36 +123,31 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     if (this.VendorList.length > 0) {
       this.Entity.p.VendorRef = this.VendorList[0].p.Ref;
     }
+    this.getVendorServiceListByVendorRef();
   }
 
-  getStageListByCompanyRef = async () => {
+  getVendorServiceListByVendorRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.StageList = lst;
-    if (this.StageList.length > 0) {
-      this.Entity.p.StageRef = this.StageList[0].p.Ref;
+    let lst = await VendorService.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.VendorServiceList = lst;
+    if (this.VendorList.length > 0) {
+      this.Entity.p.VendorServiceRef = this.VendorServiceList[0].p.Ref;
     }
   }
 
-  getSubStageListByStageRef = async () => {
-    if (this.Entity.p.StageRef <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await SubStage.FetchEntireListByStageRef(this.Entity.p.StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.SubStageList = lst;
-    if (this.SubStageList.length > 0) {
-      this.Entity.p.SubStageRef = this.SubStageList[0].p.Ref;
-    }
-  }
+  public FormulateUnitList = async () => {
+    let lst = await Unit.FetchEntireList(
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.UnitList = lst;
+  };
 
-  calculateTotal() {
-    this.Entity.p.TotalAmount = (this.Entity.p.DieselLtr * this.Entity.p.AmountPerLtr);
+  CalculateTotalOnDiselRateAndLtr = () => {
+    this.Entity.p.Amount = (this.Entity.p.DieselLtr * this.Entity.p.DieselRate);
   }
-
 
   SaveStageMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
@@ -146,7 +176,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   }
 
   // for value 0 selected while click on Input //
-  selectAllValue(event: MouseEvent): void {
+  selectAllValue = (event: MouseEvent): void => {
     const input = event.target as HTMLInputElement;
     input.select();
   }

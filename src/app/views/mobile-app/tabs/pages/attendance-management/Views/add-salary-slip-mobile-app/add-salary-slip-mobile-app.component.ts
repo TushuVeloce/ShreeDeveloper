@@ -100,7 +100,7 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
         return;
       }
 
-      const employee = await Employee.FetchInstance(this.EmployeeRef, async (errMsg) =>
+      const employee = await Employee.FetchInstance(this.EmployeeRef,companyRef, async (errMsg) =>
         await this.uiUtils.showErrorMessage('Error', errMsg)
       );
 
@@ -116,7 +116,7 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
       const options = this.monthList.map((item) => ({ p: item }));
       this.openSelectModal(options, this.SelectedMonth, true, 'Select Month', 3, (selected) => {
         this.SelectedMonth = selected;
-        // console.log('selected :', selected.map(item => item.p.Ref));      
+        // console.log('selected :', selected.map(item => item.p.Ref));
         this.Entity.p.SelectedMonths = selected.map(item => item.p.Ref);
         this.Entity.p.SelectedMonthsName = selected.map(item => item.p.Name);
       });
@@ -133,7 +133,7 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
         this.Entity.p.Year = selected[0]?.p?.Ref;
       });
     } catch (error) {
-      // console.log('error :', error); 
+      // console.log('error :', error);
     }
   }
 

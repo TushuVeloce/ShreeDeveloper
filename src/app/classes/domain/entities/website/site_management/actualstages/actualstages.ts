@@ -16,36 +16,77 @@ import { ActualStagesFetchRequest } from "./actualstagesfetchrequest";
 
 export class ActualStagesProps {
   public readonly Db_Table_Name = "ActualStage";
+
   public Ref: number = 0;
-  public SiteRef: number = 0;
-  public readonly SiteName: string = '';
   public TransDateTime: string = '';
-  public Amount: number = 0;
-  public Description: string = '';
-  public CompanyRef: number = 0;
-  public CompanyName: string = '';
-  public VendorRef: number = 0;
-  public VendorName: string = '';
-  public VendorServicesRef: number = 0;
-  public VendorServicesName: string = '';
-  public StageRef: number = 0;
-  public StageName: string = '';
-  public SubStageRef: number = 0;
-  public SubStageName: string = '';
-  public UnitRef: number = 0;
-  public UnitName: string = '';
-  public Quantity: number = 0;
-  public Rate: number = 0;
-  public ExtraQuantity: number = 0;
+
+  public IsDeleted: number = 0;
+
   public CreatedBy: number = 0;
+  public CreatedByName: string = '';
   public CreatedDate: string = '';
+
   public UpdatedBy: number = 0;
   public UpdatedDate: string = '';
-  public DieselLtr: number = 0;
-  public AmountPerLtr: number = 0;
-  public TotalAmount: number = 0;
-  public StartDate: string = '';
+
+  public SiteRef: number = 0;
+  public readonly SiteName: string = '';
+
+  public Date: string = '';
   public ChalanNo: string = '';
+
+  public CompanyRef: number = 0;
+  public CompanyName: string = '';
+
+  public VendorRef: number = 0;
+  public VendorName: string = '';
+
+  public VendorServiceRef: number = 0;
+  public VendorServiceName: string = '';
+
+  public StageRef: number = 0;
+  public StageName: string = '';
+
+  public SubStageRef: number = 0;
+  public SubStageName: string = '';
+
+  public ExpenseTypeRef: number = 0;
+  public ExpenseTypeName: string = '';
+
+  public UnitRef: number = 0;
+  public UnitName: string = '';
+
+  public GutterNaleUnitRef: number = 0;
+  public GutterNaleUnitName: string = '';
+
+  public Rate: number = 0;
+  public Quantity: number = 0;
+
+  public DieselLtr: number = 0;
+  public DieselQuantity: number = 0;
+  public DieselRate: number = 0;
+  public IsDieselPaid: number = 0;
+
+  public SkillQuantity: number = 0;
+  public SkillRate: number = 0;
+  public SkillAmount: number = 0;
+
+  public UnskillQuantity: number = 0;
+  public UnskillRate: number = 0;
+  public UnskillAmount: number = 0;
+
+  public LadiesQuantity: number = 0;
+  public LadiesRate: number = 0;
+  public LadiesAmount: number = 0;
+
+  public ExtraQuantity: number = 0;
+
+  public Description: string = '';
+
+  public VehicleNo: string = '';
+
+  public Amount: number = 0;
+
 
   public readonly IsNewlyCreated: boolean = false;
 

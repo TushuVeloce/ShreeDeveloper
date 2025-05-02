@@ -6,7 +6,7 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class ActualStagesFetchRequest
 {
-    public static readonly FetchRequestType: string = "EstimateStageFetchRequest";
+    public static readonly FetchRequestType: string = "ActualStageFetchRequest";
 
     SiteRefs: number[] = [];
     ActualStagesRefs: number[] = [];

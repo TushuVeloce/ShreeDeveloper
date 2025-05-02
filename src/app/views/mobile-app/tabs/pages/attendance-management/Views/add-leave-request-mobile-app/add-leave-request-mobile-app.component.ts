@@ -118,7 +118,7 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
       }
 
       const employee = await Employee.FetchInstance(
-        this.EmployeeRef,
+        this.EmployeeRef, this.companyRef(),
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
 
@@ -247,7 +247,7 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
 
   public async SaveLeaveRequest(): Promise<void> {
     try {
-      this.isLoading=true;
+      this.isLoading = true;
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
       this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
 
@@ -276,10 +276,10 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
       this.Entity = LeaveRequest.CreateNewInstance();
       this.SelectedLeaveType = [];
       this.resetForm();
-      await this.router.navigate(['app_homepage/tabs/attendance-management/leave-request'],{ replaceUrl: true });
+      await this.router.navigate(['app_homepage/tabs/attendance-management/leave-request'], { replaceUrl: true });
     } catch (error) {
       // console.log('error :', error);
-    }finally{
+    } finally {
       this.isLoading = false;
     }
   }

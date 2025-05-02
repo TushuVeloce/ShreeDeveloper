@@ -104,7 +104,7 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
   }
 
   getSingleEmployeeDetails = async () => {
-    let data = await Employee.FetchInstance(this.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let data = await Employee.FetchInstance(this.EmployeeRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.Entity.p.EmployeeRef = data.p.Ref;
     this.Entity.p.EmployeeName = data.p.Name;
   }

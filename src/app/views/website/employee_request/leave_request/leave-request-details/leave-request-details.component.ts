@@ -108,7 +108,7 @@ export class LeaveRequestDetailsComponent implements OnInit {
       return;
     }
     let data = await Employee.FetchInstance(
-      this.EmployeeRef,
+      this.EmployeeRef, this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.Entity.p.EmployeeRef = data.p.Ref;
