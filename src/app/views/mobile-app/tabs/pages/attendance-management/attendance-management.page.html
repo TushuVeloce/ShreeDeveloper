@@ -105,15 +105,11 @@
 
         <!-- Modal Content -->
         <ion-content class="ion-padding modal-content">
-          <!-- Location Type -->
-          <ion-item>
-            <ion-label>Location Type</ion-label>
-            <ion-select [(ngModel)]="attendanceLog.p.AttendenceLocationType" interface="popover">
-              <ion-select-option *ngFor="let loc of attendanceLocationTypeList" [value]="loc.Ref">
-                {{ loc.Name }}
-              </ion-select-option>
-            </ion-select>
-          </ion-item>
+            <!-- Select Location Type -->
+            <ion-item class="input-item" button (click)="selectAttendanceLocationBottomsheet()" [disabled]="isSubmitting">
+              <ion-label position="floating">Location Type</ion-label>
+              <ion-input [(ngModel)]="AttendenceLocationTypeName" disabled required></ion-input>
+            </ion-item>
 
           <!-- Site Selection -->
           <div *ngIf="attendanceLog.p.AttendenceLocationType === AttendanceLocationTypes.Site">
@@ -128,7 +124,7 @@
             <div class="photo-row">
               <div>
                 <ion-label>Self Photo</ion-label>
-                <ion-button expand="block" color="secondary" (click)="takePhoto('before')">
+                <ion-button expand="block" color="secondary" (click)="takePhoto('before')" [disabled]="isSubmitting">
                   <ion-icon name="camera-outline" slot="start"></ion-icon>
                   Capture
                 </ion-button>
@@ -137,7 +133,7 @@
               </div>
               <div>
                 <ion-label>Work Location</ion-label>
-                <ion-button expand="block" color="secondary" (click)="takePhoto('after')">
+                <ion-button expand="block" color="secondary" (click)="takePhoto('after')" [disabled]="isSubmitting">
                   <ion-icon name="camera-outline" slot="start"></ion-icon>
                   Capture
                 </ion-button>

@@ -66,6 +66,11 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
     );
   }
 
+  ngOnDestroy(): void {
+    console.log('Component destroyed');
+    // Perform cleanup or unsubscribe logic here
+  }
+
   private async getSingleEmployeeDetails(): Promise<void> {
     const companyRef = await this.companystatemanagement.SelectedCompanyRef();
     if (companyRef <= 0) {
