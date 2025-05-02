@@ -55,7 +55,8 @@ export class AttendanceManagementPage implements OnInit {
   
   // Enums and Lists
   AttendanceLocationTypes = AttendenceLocationType;
-  attendanceLocationTypeList = DomainEnums.AttendenceLocationTypeList(true, '--Select--');
+  attendanceLocationTypeList = DomainEnums.AttendenceLocationTypeList();
+  AttendenceLocationTypeName: string = '';
   readonly LeaveRequestTypeEnum = LeaveRequestType;
   gridItems = [
     { label: 'Salary Slip', icon: 'layers-outline', gridFunction: 100 },
@@ -80,49 +81,7 @@ export class AttendanceManagementPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    // this.filteredWeeklyAttendanceLogs = [
-    //   {
-    //     p: {
-    //       TransDateTime: '2025-04-01T00:00:00',
-    //       FirstCheckInTime: '09:05 AM',
-    //       LastCheckOutTime: '05:30 PM',
-    //       TotalWorkingHrs: '8:25',
-    //       OnLeave: '',
-    //       LeaveType: '',
-    //     }
-    //   },
-    //   {
-    //     p: {
-    //       TransDateTime: '2025-04-02T00:00:00',
-    //       FirstCheckInTime: '09:20 AM',
-    //       LastCheckOutTime: '05:10 PM',
-    //       TotalWorkingHrs: '7:50',
-    //       OnLeave: '',
-    //       LeaveType: '',
-    //     }
-    //   },
-    //   {
-    //     p: {
-    //       TransDateTime: '2025-04-03T00:00:00',
-    //       FirstCheckInTime: '',
-    //       LastCheckOutTime: '',
-    //       TotalWorkingHrs: '',
-    //       OnLeave: 'Sick Leave',
-    //       LeaveType: 'Sick',
-    //     }
-    //   },
-    //   {
-    //     p: {
-    //       TransDateTime: '2025-04-04T00:00:00',
-    //       FirstCheckInTime: '',
-    //       LastCheckOutTime: '',
-    //       TotalWorkingHrs: '',
-    //       OnLeave: '',
-    //       LeaveType: '',
-    //     }
-    //   }
-    // ];
-
+  
     // Retrieve employee reference from storage (ensure proper type conversion)
     this.employeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
 
@@ -175,10 +134,13 @@ export class AttendanceManagementPage implements OnInit {
     if (selected) updateCallback(selected);
   }
 
-  public async selectMonthBottomsheet(): Promise<void> {
+  public async selectAttendanceLocationBottomsheet(): Promise<void> {
     const options = this.attendanceLocationTypeList.map((item) => ({ p: item }));
     this.openSelectModal(options, this.selectedSite, false, 'Select Month', 1, (selected) => {
       this.selectedSite = selected;
+      this.attendanceLog.p.AttendenceLocationType = selected[0].p.Ref;
+      this.AttendenceLocationTypeName = selected[0].p.Name;
+      
       // // console.log('selected :', selected.map(item => item.p.Ref));      
       // this.Entity.p.SelectedMonths = selected.map(item => item.p.Ref);
       // this.Entity.p.SelectedMonthsName = selected.map(item => item.p.Name);

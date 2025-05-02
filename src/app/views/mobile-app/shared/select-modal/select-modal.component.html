@@ -7,7 +7,7 @@
     </ion-buttons>
     <ion-title class="custom-title">{{bottomsheetTitle}}</ion-title>
     <ion-buttons slot="end">
-      <ion-button fill="clear" color="medium" (click)="confirmSelection()">
+      <ion-button fill="clear" color="medium" (click)="confirmSelection()" *ngIf="multiSelect">
         <ion-icon name="checkmark-done-outline" size="large"></ion-icon>
       </ion-button>
     </ion-buttons>
