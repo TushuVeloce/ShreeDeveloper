@@ -122,6 +122,8 @@ import { SubStageMasterComponent } from './Masters/sub_stage/sub-stage-master/su
 import { SubStageMasterDetailsComponent } from './Masters/sub_stage/sub-stage-master-details/sub-stage-master-details.component';
 import { ExpenseTypeMasterComponent } from './Masters/expense _type/expense-type-master/expense-type-master.component';
 import { ExpenseTypeMasterDetailsComponent } from './Masters/expense _type/expense-type-master-details/expense-type-master-details.component';
+import { MarketingManagementMasterComponent } from './marketing_management/marketing-management/marketing-management-master/marketing-management-master.component';
+import { MarketingManagementMasterDetailsComponent } from './marketing_management/marketing-management/marketing-management-master-details/marketing-management-master-details.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent, StageMasterComponent, StageMasterDetailsComponent, AccountMainLedgerComponent, AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent, MarketingTypeMasterDetailsComponent,
@@ -133,7 +135,7 @@ import { ExpenseTypeMasterDetailsComponent } from './Masters/expense _type/expen
     EmployeeAppraisalMasterComponent, EmployeeExitDetailsComponent, EmployeeExitMasterComponent, PlotMasterComponent, DocumentListComponent, DocumentDetailsComponent,
     PlotMasterDetailsComponent, CustomerEnquiryComponent, CustomerEnquiryDetailsComponent, CustomerFollowupComponent, CustomerFollowupDetailsComponent, RegisteredCustomerComponent, RegisteredCustomerDetailsComponent, RegistrarOfficeComponent, RegistrarOfficeDetailComponent, SiteWorkMasterDetailComponent, SiteWorkMasterComponent,
     OfficeDutyTimeComponent, OfficeDutyTimeDetailsComponent, SiteWorkDoneMasterDetailsComponent, SiteWorkDoneMasterComponent, GovernmentTransactionDetailsComponent, GovernmentTransactionMasterComponent, TpOfficeDetailsComponent, NaLetterDetailsComponent, MojaniDetailsComponent, SalaryGenerationComponent, SalaryGenerationDetailsComponent, LeaveApprovalComponent, LeaveRequestComponent, LeaveRequestDetailsComponent, SalarySlipApprovalComponent, SalarySlipRequestComponent, SalarySlipRequestDetailsComponent,
-    UlcDetailsComponent, FinalLayoutDetailsComponent, KJaPaDetailsComponent, RespectedChildComponentComponent, AttendanceLogsComponent, EmployeeAttendanceLogsComponent, ValidationMessageComponent, PaginationComponent,SubStageMasterComponent,SubStageMasterDetailsComponent,ExpenseTypeMasterComponent,ExpenseTypeMasterDetailsComponent],
+    UlcDetailsComponent, FinalLayoutDetailsComponent, KJaPaDetailsComponent, RespectedChildComponentComponent, AttendanceLogsComponent, EmployeeAttendanceLogsComponent, ValidationMessageComponent, PaginationComponent,SubStageMasterComponent,SubStageMasterDetailsComponent,ExpenseTypeMasterComponent,ExpenseTypeMasterDetailsComponent,MarketingManagementMasterComponent,MarketingManagementMasterDetailsComponent],
   imports: [
     CommonModule, WebRoutingModule, FormsModule, NzDropDownModule, NzTableModule, IonicModule.forRoot(),
     NzPaginationModule, NzUploadModule, NzModalModule, NzCheckboxModule,NzCardModule,

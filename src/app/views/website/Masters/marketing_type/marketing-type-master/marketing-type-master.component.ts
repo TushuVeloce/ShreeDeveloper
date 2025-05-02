@@ -66,7 +66,7 @@ export class MarketingTypeMasterComponent implements OnInit {
     Are you sure that you want to DELETE this MarketingType Mode?`,
       async () => {
         await MarketingType.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(`MarketingType ${MarketingType.p.MarketingMode} has been deleted!`);
+          await this.uiUtils.showSuccessToster(`MarketingType ${MarketingType.p.MarketingModeName} has been deleted!`);
           await this.getMarketingTypeListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();

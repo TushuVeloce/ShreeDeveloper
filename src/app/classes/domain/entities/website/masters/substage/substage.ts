@@ -175,6 +175,13 @@ export class SubStage implements IPersistable<SubStage> {
     return SubStage.ListFromTransportData(tdResponse);
   }
 
+  public static async FetchEntireListByStageRef(StageRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new SubStageFetchRequest();
+    req.StageRefs.push(StageRef)
+    let tdResponse = await SubStage.FetchTransportData(req, errorHandler) as TransportData;
+    return SubStage.ListFromTransportData(tdResponse);
+  }
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

@@ -288,11 +288,11 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Sub_Stage_Master',
         LogoPath: '',
       },
-      {
-        Name: 'Expense Type Master',
-        RouterLink: '/homepage/Website/Expense_Type_Master',
-        LogoPath: '',
-      },
+      // {
+      //   Name: 'Expense Type Master',
+      //   RouterLink: '/homepage/Website/Expense_Type_Master',
+      //   LogoPath: '',
+      // },
       {
         Name: 'Account Main Ledger',
         RouterLink: '/homepage/Website/Account_Main_Ledger',
@@ -504,6 +504,13 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '',
       },
     ]
+    let MarketingManagementSubModuleList = [
+      {
+        Name: 'Marketing Management',
+        RouterLink: '/homepage/Website/Marketing_Management_Master',
+        LogoPath: '',
+      },
+    ]
 
     let HrPayrollManagement = [
       {
@@ -601,6 +608,12 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '',
         WhiteLogo: '/assets/icons/gov office.png',
         SubModuleList: RegistrarOfficeSubModuleList,
+      },
+      {
+        Name: 'Marketing Management',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/gov office.png',
+        SubModuleList: MarketingManagementSubModuleList,
       },
       {
         Name: 'Hr-Payroll Management',

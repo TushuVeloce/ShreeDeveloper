@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { SubStage } from 'src/app/classes/domain/entities/website/masters/SubStage/SubStage';
+import { SubStage } from 'src/app/classes/domain/entities/website/masters/substage/subStage';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
