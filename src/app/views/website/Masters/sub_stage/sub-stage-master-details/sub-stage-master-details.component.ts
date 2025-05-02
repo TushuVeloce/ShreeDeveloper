@@ -44,7 +44,7 @@ export class SubStageMasterDetailsComponent  implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    this.StageList = await Stage.FetchEntireListByCompanyRef(this.companyRef());
+    this.getStageListByCompanyRef()
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
 
@@ -64,6 +64,16 @@ export class SubStageMasterDetailsComponent  implements OnInit {
       this.utils.DeepCopy(this.Entity)
     ) as SubStage;
     this.focusInput();
+  }
+
+  getStageListByCompanyRef = async () => {
+    this.StageList = []
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.StageList = lst.filter(stage => stage.p.IsSubStageApplicable === true);
   }
 
   focusInput = () => {

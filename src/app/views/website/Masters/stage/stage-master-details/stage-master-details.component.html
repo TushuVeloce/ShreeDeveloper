@@ -12,7 +12,7 @@
     </div>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
+        <div class="col-md-4" style="margin-top: 2rem; ">
           <div>
             <label>Name</label>
             <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
@@ -24,7 +24,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" style="margin-top: 2rem; "  *ngIf="Entity.p.IsSubStageApplicable == true" >
           <label>Stage Type</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StageType"
             name="StageType" [nzSize]="'large'" [(ngModel)]="Entity.p.StageType">
@@ -36,26 +36,26 @@
             class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
           <label for="IsSubStageApplicable" class="form-check-label mb-0">Sub Stage</label>
         </div>
-      </div>
-      <div class="row" style="margin-top: 2rem; ">
-        <div class="col-md-4">
-          <input type="checkbox" id="IsMachinaryexpenseApplicable" [(ngModel)]="Entity.p.IsMachinaryexpenseApplicable"
-            name="IsMachinaryexpenseApplicable" class="form-check-input me-2 large-dark-checkbox"
-            style="width: 20px; height: 20px;">
-          <label for="IsMachinaryexpenseApplicable" class="form-check-label mb-0">Machinary expense</label>
         </div>
-        <div class="col-md-4">
+        <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 2rem; ">
+          <input type="checkbox" id="IsMachinaryExpenseApplicable" [(ngModel)]="Entity.p.IsMachinaryExpenseApplicable"
+            name="IsMachinaryExpenseApplicable" class="form-check-input me-2 large-dark-checkbox"
+            style="width: 20px; height: 20px;">
+          <label for="IsMachinaryExpenseApplicable" class="form-check-label mb-0">Machinary expense</label>
+        </div>
+        <div class="col-md-4" style="margin-top: 2rem; ">
           <input type="checkbox" id="IsLabourExpenseApplicable" [(ngModel)]="Entity.p.IsLabourExpenseApplicable" name="IsLabourExpenseApplicable"
             class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
           <label for="IsLabourExpenseApplicable" class="form-check-label mb-0">Labour Expense</label>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" style="margin-top: 2rem; ">
           <input type="checkbox" id="IsOtherApplicable" [(ngModel)]="Entity.p.IsOtherApplicable" name="IsOtherApplicable"
             class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
           <label for="IsOtherApplicable" class="form-check-label mb-0">Other</label>
         </div>
       </div>
-      <div class="row" style="margin-top: 2rem; ">
+      <!-- <div class="row" style="margin-top: 2rem; ">
         <div class="col-md-4 mt-8">
           <div>
             <label>Stage No.</label>
@@ -67,7 +67,7 @@
             </div>
           </div>
         </div>
-        </div>
+        </div> -->
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
           <button type="button" class="btn" (click)="SaveStageMaster()">Save</button>
