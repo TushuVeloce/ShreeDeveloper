@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { WebComponent } from './web.component';
 import { RegistrarOfficeComponent } from './registrar_office/registrar-office/registrar-office.component';
 import { PlotResellByThirdPartyComponent } from './plot_resell_by_third_party/plot-resell-by-third-party/plot-resell-by-third-party.component';
-import { MarketingManagementComponent } from './marketing_management/marketing-management/marketing-management.component';
+
 import { DashboardComponent } from './Dashboard/dashboard.component';
 import { SiteManagementMasterComponent } from './site-management/site-management-master/site-management-master.component';
 import { SiteManagementActualStagesComponent } from './site-management/site-management-actual-stages/site-management-actual-stages.component';
@@ -109,6 +109,8 @@ import { SubStageMasterComponent } from './Masters/sub_stage/sub-stage-master/su
 import { SubStageMasterDetailsComponent } from './Masters/sub_stage/sub-stage-master-details/sub-stage-master-details.component';
 import { ExpenseTypeMasterComponent } from './Masters/expense _type/expense-type-master/expense-type-master.component';
 import { ExpenseTypeMasterDetailsComponent } from './Masters/expense _type/expense-type-master-details/expense-type-master-details.component';
+import { MarketingManagementMasterComponent } from './marketing_management/marketing-management/marketing-management-master/marketing-management-master.component';
+import { MarketingManagementMasterDetailsComponent } from './marketing_management/marketing-management/marketing-management-master-details/marketing-management-master-details.component';
 
 
 const routes: Routes = [
@@ -225,7 +227,8 @@ const routes: Routes = [
       { path: 'Registrar_Office_Details', component: RegistrarOfficeDetailComponent },
 
       { path: 'Plot_Resell_By_Third_Party', component: PlotResellByThirdPartyComponent },
-      { path: 'Marketing_Management', component: MarketingManagementComponent },
+      { path: 'Marketing_Management_Master', component:MarketingManagementMasterComponent},
+      { path: 'Marketing_Management_Master_Details', component:MarketingManagementMasterDetailsComponent},
       { path: 'Accounting_Transaction', component: AccountTransactionsComponent },
       { path: 'Expense_Transactions', component: ExpenseTransactionsComponent },
       { path: 'Client_Income', component: ClientIncomeComponent },
