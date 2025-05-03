@@ -49,7 +49,7 @@ constructor(private router: Router,private uiUtils: UIUtils,private payloadPacke
     req.CompanyRef = this.CompanyRef
     req.EmployeeRef = this.EmployeeRef
     req.OldPassword = oldpassword;
-    req.Password = newpassword;
+    req.NewPassword = newpassword;
     req.ConfirmPassword = confirmpassword;
     console.log('req :', req);
     let td = req.FormulateTransportData();
