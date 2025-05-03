@@ -14,7 +14,7 @@ import { VendorServiceFetchRequest } from "./vendorservicefetchrequest";
 import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 
 
-export class VendorServices {
+export class VendorServicesPropes {
   public readonly Db_Table_Name = "VendorServiceMaster";
   public Ref: number = 0;
   public Name: string = '';
@@ -30,14 +30,14 @@ export class VendorServices {
   }
 
   public static Blank() {
-    return new VendorServices(true);
+    return new VendorServicesPropes(true);
   }
 }
 
 export class VendorService implements IPersistable<VendorService> {
   public static readonly Db_Table_Name: string = 'VendorServiceMaster';
 
-  private constructor(public readonly p: VendorServices, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: VendorServicesPropes, public readonly AllowEdit: boolean) {
 
   }
 
@@ -51,16 +51,16 @@ export class VendorService implements IPersistable<VendorService> {
   }
 
   public GetEditableVersion(): VendorService {
-    let newState: VendorServices = Utils.GetInstance().DeepCopy(this.p);
+    let newState: VendorServicesPropes = Utils.GetInstance().DeepCopy(this.p);
     return VendorService.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new VendorService(VendorServices.Blank(), true);
+    return new VendorService(VendorServicesPropes.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new VendorService(data as VendorServices, allowEdit);
+    return new VendorService(data as VendorServicesPropes, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
