@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { UIUtils } from 'src/app/services/uiutils.service';
+import { Utils } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-site-management-actual-stages',
@@ -13,10 +17,11 @@ export class SiteManagementActualStagesComponent implements OnInit {
   Other_Expense: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Description', 'Department', 'Owner Name', 'Rate', 'Quantity', 'Amount', 'Action'];
   Office_Details: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Expense Type', 'Description', 'Receiver Name', 'Amount', 'Action'];
   Government_Details: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Expense Type', 'Description', 'Receiver Name', 'Amount', 'Action'];
-  constructor(private router: Router) { }
+
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
   ngOnInit() {
-
+    this.appStateManage.setDropdownDisabled(false);
   }
   Title: string = 'Site Management Actual Stages';
 

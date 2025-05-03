@@ -61,6 +61,9 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stage' : 'Edit Stage';
       this.Entity = ActualStages.GetCurrentInstance();
+      this.Entity.p.CreatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
       this.appStateManage.StorageKey.removeItem('Editable')
     } else {
       this.Entity = ActualStages.CreateNewInstance();

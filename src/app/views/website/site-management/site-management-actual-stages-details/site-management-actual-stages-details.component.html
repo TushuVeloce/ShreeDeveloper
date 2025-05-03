@@ -294,7 +294,7 @@
         <div class="col-md-6 mb-2">
           <label><b>Sign</b></label>
           <input type="text" [(ngModel)]="Entity.p.CreatedByName" name="CreatedByName" class="form-control"
-            id="CreatedByName" required placeholder="Enter Sign" [pattern]=" NameWithNosAndSpace"
+            id="CreatedByName" required placeholder="Enter Sign" readonly [pattern]=" NameWithNosAndSpace"
             #CreatedByNameCtrl="ngModel" (blur)="CreatedByNameCtrl.control.markAsTouched()" />
           <div *ngIf="(CreatedByNameCtrl.invalid && (CreatedByNameCtrl.touched || CreatedByNameCtrl.dirty))">
             <span class="validation-text"
