@@ -3,6 +3,7 @@ import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { DomainEnums, StageType } from 'src/app/classes/domain/domainenums/domainenums';
+import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { ExpenseType } from 'src/app/classes/domain/entities/website/masters/expensetype/expensetype';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
@@ -35,6 +36,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   IsStage: Boolean = false;
   Expense: number = 0;
   StageTypeList = DomainEnums.StageTypeList(true, 'select stage');
+  MonthList = DomainEnums.MonthList(true, '--Select Month Type--');
   VendorList: Vendor[] = [];
   VendorServiceList: VendorService[] = [];
   StageList: Stage[] = [];
@@ -42,6 +44,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   SubStageList: SubStage[] = [];
   ExpenseTypeList: ExpenseType[] = [];
   UnitList: Unit[] = [];
+  UnitQuantityTotal: number = 0;
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -51,7 +54,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
-  @ViewChild('DisplayOrderCtrl') DisplayOrderInputControl!: NgModel;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
@@ -61,14 +63,17 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stage' : 'Edit Stage';
       this.Entity = ActualStages.GetCurrentInstance();
+
       this.appStateManage.StorageKey.removeItem('Editable')
     } else {
       this.Entity = ActualStages.CreateNewInstance();
       ActualStages.SetCurrentInstance(this.Entity);
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
       this.getStageListByCompanyRef();
       this.getVendorListByCompanyRef();
       this.FormulateUnitList();
       this.getSiteListByCompanyRef();
+      this.getSingleEmployeeDetails();
     }
     this.InitialEntity = Object.assign(ActualStages.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as ActualStages;
     this.focusInput();
@@ -78,6 +83,20 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     // let txtName = document.getElementById('Name')!;
     // txtName.focus();
   }
+
+  getSingleEmployeeDetails = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let data = await Employee.FetchInstance(
+      this.Entity.p.CreatedBy, this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.Entity.p.CreatedByName = data.p.Name;
+    this.Entity.p.UpdatedBy = data.p.Ref;
+  };
+
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
@@ -184,8 +203,20 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   };
 
   CalculateTotalOnDiselRateAndLtr = () => {
-    this.Entity.p.Amount = (this.Entity.p.DieselLtr * this.Entity.p.DieselRate);
+    this.Entity.p.DieselTotal = (this.Entity.p.DieselQuantity * this.Entity.p.DieselRate);
+    this.Entity.p.Amount = this.Entity.p.DieselTotal + this.UnitQuantityTotal
   }
+
+  CalculateAmountOnRateAndQuantity = () => {
+    this.UnitQuantityTotal = (this.Entity.p.Rate * this.Entity.p.Quantity);
+    this.Entity.p.Amount = this.Entity.p.DieselTotal + this.UnitQuantityTotal
+  }
+
+
+  onSelectedMonthsChange = (Selectedservice: any) => {
+    this.Entity.p.SelectedMonths = Selectedservice;
+  }
+
 
   SaveStageMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
@@ -193,25 +224,25 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
     console.log('entitiesToSave :', entitiesToSave);
-    // await this.Entity.EnsurePrimaryKeysWithValidValues()
-    // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-    // if (!tr.Successful) {
-    //   this.isSaveDisabled = false;
-    //   this.uiUtils.showErrorMessage('Error', tr.Message);
-    //   return
-    // }
-    // else {
-    //   this.isSaveDisabled = false;
-    //   if (this.IsNewEntity) {
-    //     await this.uiUtils.showSuccessToster('Stage saved successfully!');
-    //     this.Entity = ActualStages.CreateNewInstance();
-    //     this.resetAllControls();
-    //   } else {
-    //     await this.uiUtils.showSuccessToster('Stage Updated successfully!');
-    //     await this.router.navigate(['/homepage/Website/Stage_Master']);
+    await this.Entity.EnsurePrimaryKeysWithValidValues()
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return
+    }
+    else {
+      this.isSaveDisabled = false;
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('Stage saved successfully!');
+        this.Entity = ActualStages.CreateNewInstance();
+        this.resetAllControls();
+      } else {
+        await this.uiUtils.showSuccessToster('Stage Updated successfully!');
+        await this.router.navigate(['/homepage/Website/Stage_Master']);
 
-    //   }
-    // }
+      }
+    }
   }
 
   // for value 0 selected while click on Input //
@@ -226,12 +257,10 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
 
   resetAllControls = () => {
     // reset touched
-    this.NameInputControl.control.markAsUntouched();
-    this.DisplayOrderInputControl.control.markAsUntouched();
+    // this.NameInputControl.control.markAsUntouched();
 
-    // reset dirty
-    this.NameInputControl.control.markAsPristine();
-    this.DisplayOrderInputControl.control.markAsPristine();
+    // // reset dirty
+    // this.NameInputControl.control.markAsPristine();
   }
 }
 

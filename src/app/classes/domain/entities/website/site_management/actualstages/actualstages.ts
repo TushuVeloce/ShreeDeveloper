@@ -33,7 +33,7 @@ export class ActualStagesProps {
   public SiteName: string = '';
 
   public Date: string = '';
-  public ChalanNo: string = '';
+  public ChalanNo: number = 0;
 
   public CompanyRef: number = 0;
   public CompanyName: string = '';
@@ -62,9 +62,9 @@ export class ActualStagesProps {
   public Rate: number = 0;
   public Quantity: number = 0;
 
-  public DieselLtr: number = 0;
   public DieselQuantity: number = 0;
   public DieselRate: number = 0;
+  public DieselTotal: number = 0;
   public IsDieselPaid: number = 0;
 
   public SkillQuantity: number = 0;
@@ -80,6 +80,9 @@ export class ActualStagesProps {
   public LadiesAmount: number = 0;
 
   public ExtraQuantity: number = 0;
+
+  public SelectedMonths: any[] = [];
+  public SelectedMonthsName: any[] = [];
 
   public Description: string = '';
 
