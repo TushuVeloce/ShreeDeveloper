@@ -10,7 +10,7 @@ export class CraetePasswordCustomRequest
     CompanyRef:Number=0;
     EmployeeRef:Number=0;
     OldPassword:string = '';
-    Password: string = '';
+    NewPassword: string = '';
     ConfirmPassword: string = '';
 
     public MergeIntoTransportData = (td: TransportData) =>
