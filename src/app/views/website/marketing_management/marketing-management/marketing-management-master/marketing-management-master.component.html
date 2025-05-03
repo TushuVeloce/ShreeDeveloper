@@ -14,6 +14,41 @@
       </div>
     </div>
   </div>
+  <div class="row" style="margin-top: 1rem; ">
+ <div class="col-md-4" style="margin-top: 1rem; ">
+    <label for="FromDate"><b>From Date</b></label>
+    <input type="date" name="FromDate" class="form-control" id="FromDate" [(ngModel)]="FromDate"/>
+  </div>
+ <div class="col-md-4" style="margin-top: 1rem; ">
+    <label for="ToDate"><b>To Date</b></label>
+    <input type="date" name="ToDate" class="form-control" id="ToDate" [(ngModel)]="ToDate"/>
+  </div>
+ <div class="col-md-4" style="margin-top: 1rem; ">
+    <div>
+      <label for="SiteRef"><b>site</b></label>
+      <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+        name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef">
+        <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+      </nz-select>
+    </div>
+  </div>
+ <div class="col-md-4" style="margin-top: 1rem; ">
+    <div>
+      <label for="VendorRef"><b>Vendor</b></label>
+      <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+        name="VendorRef" [(ngModel)]="Entity.p.VendorRef" required id="VendorRef">
+        <nz-option *ngFor="let vendor of VendorList" [nzValue]="vendor.p.Ref" [nzLabel]="vendor.p.Name"></nz-option>
+      </nz-select>
+    </div>
+  </div>
+  <div class="col-md-4" style="margin-top: 1rem; ">
+    <label><b>Marketing Type</b></label>
+    <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="MarketingTypeRef"
+      name="MarketingTypeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.MarketingTypeRef">
+      <nz-option *ngFor="let Mode of MarketingModesList" [nzValue]="Mode.Ref" [nzLabel]="Mode.Name"></nz-option>
+    </nz-select>
+  </div>
+  </div>
   <!-- Digital -->
   <div class="table-container" style="margin-top: 2rem;">
     <div class="row">

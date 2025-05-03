@@ -72,9 +72,9 @@ export class VendorServicesMasterDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Vendor Service Saved successfully!');
         this.Entity = VendorService.CreateNewInstance();
+        this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Vendor Service Updated successfully!');
-        this.resetAllControls();
         this.BackVendorService();
       }
     }

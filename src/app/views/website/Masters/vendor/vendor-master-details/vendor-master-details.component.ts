@@ -96,6 +96,7 @@ export class VendorMasterDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Vendor' : 'Edit Vendor';
       this.Entity = Vendor.GetCurrentInstance();
+      console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable')
 
     } else {
@@ -170,7 +171,6 @@ export class VendorMasterDetailsComponent implements OnInit {
     let entityToSave = this.Entity.GetEditableVersion();
 
     let entitiesToSave = [entityToSave]
-
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
@@ -182,6 +182,7 @@ export class VendorMasterDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
+        this.resetAllControls()
         await this.uiUtils.showSuccessToster('Vendor saved successfully!');
         this.Entity = Vendor.CreateNewInstance();
       } else {

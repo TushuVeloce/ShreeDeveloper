@@ -2,6 +2,8 @@ import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums, MarketingModes } from 'src/app/classes/domain/domainenums/domainenums';
 import { MarketingManagement } from 'src/app/classes/domain/entities/website/MarketingManagement/marketingmanagement';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
@@ -22,12 +24,16 @@ export class MarketingManagementMasterComponent implements OnInit {
   OutdoorList: MarketingManagement[] = [];
   PrintingMediaList: MarketingManagement[] = [];
   BrokerList: MarketingManagement[] = [];
+  SiteList: Site[] = [];
+  VendorList: Vendor[] = [];
   SearchString: string = '';
   SelectedMarketingManagement: MarketingManagement = MarketingManagement.CreateNewInstance();
   MarketingModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
   pageSize = 8; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
+  FromDate = '';
+  ToDate = '';
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   Headers: string[] = ['Sr.No.', 'Site Name', 'Date', 'Marketing Type', 'Vendor Name', 'Rate', 'Quantity', 'Total', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
@@ -39,6 +45,9 @@ export class MarketingManagementMasterComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef(),
+    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');

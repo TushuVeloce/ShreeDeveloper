@@ -75,6 +75,7 @@ export class DepartmentMasterDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Department saved successfully!');
         this.Entity = Department.CreateNewInstance();
+        this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Department Updated successfully!');
         this.BackDepartment();
