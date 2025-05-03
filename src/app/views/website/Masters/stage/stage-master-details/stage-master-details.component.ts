@@ -56,6 +56,10 @@ export class StageMasterDetailsComponent implements OnInit {
     txtName.focus();
   }
 
+  ClearStageType =()=>{
+    this.Entity.p.StageType =0;
+  }
+
   SaveStageMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()

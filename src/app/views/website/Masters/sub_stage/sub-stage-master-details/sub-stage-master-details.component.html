@@ -15,21 +15,18 @@
         <div class="col-md-4">
           <label>Stage</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StageRef" name="StageRef"
-            [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef">
+            [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef" (ngModelChange)="onVendorChange(Entity.p.StageRef)">
             <nz-option *ngFor="let stage of StageList" [nzValue]="stage.p.Ref" [nzLabel]="stage.p.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4">
           <label>Stage Type</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StageType"
-            name="StageType" [nzSize]="'large'" [(ngModel)]="Entity.p.StageType" >
-            <nz-option *ngFor="let stage of StageTypeList" [nzValue]="stage.Ref"
-            [nzLabel]="stage.Name"></nz-option>
-          </nz-select>
+          <input type="text" [(ngModel)]="Entity.p.StageTypeName" name="StageTypeName" class="form-control" id="StageTypeName" readonly
+          placeholder="Stage Type"/>
         </div>
         <div class="col-md-4">
           <div>
-            <label>Name</label>
+            <label>Sub Stage Name</label>
             <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
               placeholder="Enter Name" pattern="{{NameWithNosAndSpace}}" #NameCtrl="ngModel"
               (blur)="NameCtrl.control.markAsTouched()" />

@@ -24,7 +24,7 @@ export class StageMasterComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No','Stage Name','Stage Type', 'Action'];
+  headers: string[] = ['Sr No','Display Order','Stage Name','Has Sub Stage', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private screenSizeService: ScreenSizeService, private companystatemanagement: CompanyStateManagement) {
     effect(() => {
       this.getStageListByCompanyRef()

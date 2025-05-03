@@ -7,6 +7,7 @@ import { MarketingManagement } from 'src/app/classes/domain/entities/website/Mar
 import { MarketingType } from 'src/app/classes/domain/entities/website/masters/marketingtype/marketingtype';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
+import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -27,7 +28,7 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
   IsDropdownDisabled: boolean = false;
   InitialEntity: MarketingManagement = null as any;
   SiteList: Site[] = [];
-  VendorList: VendorService[] = [];
+  VendorList: Vendor[] = [];
   MarketingModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
   MarketingType = MarketingModes
   companyRef = this.companystatemanagement.SelectedCompanyRef;
@@ -50,9 +51,8 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.VendorList = await VendorService.FetchEntireListByCompanyRef(this.companyRef(),
-    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-  );
+    this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef(),
+    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity? 'New Marketing': 'Edit Marketing';
@@ -82,13 +82,15 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
   }
 
   onVendorChange = async (vendorref: number) => {
-    this.serviceNamesString = ''
-    const services = await VendorService.FetchInstance(vendorref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    const list = services?.p?.Name || [];
-    console.log('list :', list);
-    // this.Entity.p.ServiceListSuppliedByVendor = list;
-    // this.serviceNamesString = list.join(', '); 
+    this.serviceNamesString = '';
+    const services = await VendorService.FetchInstance(vendorref, async errMsg =>
+      await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    console.log('services:', services);
+    const name = services?.p?.Name || '';
+    this.serviceNamesString = name;
   };
+  
  
   calculateTotal= () => {
     const Rate = Number(this.Entity.p.Rate);
