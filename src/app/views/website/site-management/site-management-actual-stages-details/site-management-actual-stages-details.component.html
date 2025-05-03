@@ -35,11 +35,10 @@
         </div>
         <div class="col-md-6 mb-2">
           <label><b>Chalan No.</b></label>
-          <input type="text" [(ngModel)]="Entity.p.ChalanNo" name="ChalanNo" class="form-control" id="ChalanNo" required
-            placeholder="Enter Chalan No" [pattern]="NameWithNosAndSpace" #ChalanNoCtrl="ngModel"
-            (blur)="ChalanNoCtrl.control.markAsTouched()" />
+          <input type="number" [(ngModel)]="Entity.p.ChalanNo" name="ChalanNo" class="form-control" id="ChalanNo"
+            required placeholder="Enter Chalan No" #ChalanNoCtrl="ngModel" (blur)="ChalanNoCtrl.control.markAsTouched()"
+            (click)="selectAllValue($event)" />
           <div *ngIf="(ChalanNoCtrl.invalid && (ChalanNoCtrl.touched || ChalanNoCtrl.dirty))">
-            <span class="validation-text" *ngIf="ChalanNoCtrl.errors?.['pattern']">{{NameWithNosAndSpaceMsg}}</span>
             <span class="validation-text" *ngIf="ChalanNoCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
@@ -92,7 +91,6 @@
         <div *ngIf="IsStage" class="col-lg-4 col-md-6 col-sm-12 mb-3">
           <label *ngIf="StageType == StageTypeEnum.HalfRoundGutterNale"><b>Gutter Nale</b></label>
           <label *ngIf="StageType == StageTypeEnum.Road"><b>/m2</b></label>
-          <label *ngIf="StageType == StageTypeEnum.OfficialExpenditure"><b>Official Expenditure</b></label>
           <label *ngIf="StageType == StageTypeEnum.SidePattiChira"><b>Side Patti Chira</b></label>
           <label *ngIf="StageType == StageTypeEnum.SolarStreetLight"><b>Solar Street Light</b></label>
 
@@ -104,10 +102,19 @@
             <span class="validation-text" *ngIf="ExtraQuantityCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
+        <div *ngIf="StageType == StageTypeEnum.OfficialExpenditure" class="col-md-6 col-md-4 col-sm-12">
+          <label for="SelectedMonths"><b>Months</b></label>
+          <nz-select [(ngModel)]="Entity.p.SelectedMonths" nzMode="multiple" id="SelectedMonths" name="SelectedMonths"
+            nzShowSearch nzAllowClear (ngModalChange)="onSelectedMonthsChange(Entity.p.SelectedMonths)"
+            nzPlaceHolder="Select services">
+            <nz-option *ngFor="let SelectedMonths of MonthList" [nzValue]="SelectedMonths.Ref"
+              [nzLabel]="SelectedMonths.Name"></nz-option>
+          </nz-select>
+        </div>
         <div *ngIf="IsStage && StageType == StageTypeEnum.HalfRoundGutterNale" class="col-lg-4 col-md-6 col-sm-12 mb-3">
-          <label>Unit</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UnitRef" name="UnitRef"
-            [nzSize]="'large'" [(ngModel)]="Entity.p.UnitRef">
+          <label>Gutter Nale Unit</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="GutterNaleUnitRef"
+            name="GutterNaleUnitRef" [nzSize]="'large'" [(ngModel)]="Entity.p.GutterNaleUnitRef">
             <nz-option *ngFor="let unit of UnitList" [nzValue]="unit.p.Ref" [nzLabel]="unit.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -117,12 +124,12 @@
         <div class="col-md-4  mb-2">
           <label>Diesel Ltr</label>
           <!-- Diesel Ltr. -->
-          <input type="number" [(ngModel)]="Entity.p.DieselLtr" name="DieselLtr" class="form-control" id="DieselLtr"
-            required placeholder="Enter Diesel Ltr" (input)="CalculateTotalOnDiselRateAndLtr()"
-            [pattern]="NameWithNosAndSpace" #DieselLtrCtrl="ngModel" (blur)="DieselLtrCtrl.control.markAsTouched()"
-            (click)="selectAllValue($event)" />
-          <div *ngIf="(DieselLtrCtrl.invalid && (DieselLtrCtrl.touched || DieselLtrCtrl.dirty))">
-            <span class="validation-text" *ngIf="DieselLtrCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <input type="number" [(ngModel)]="Entity.p.DieselQuantity" name="DieselQuantity" class="form-control"
+            id="DieselQuantity" required placeholder="Enter Diesel Ltr" (input)="CalculateTotalOnDiselRateAndLtr()"
+            [pattern]="NameWithNosAndSpace" #DieselQuantityCtrl="ngModel"
+            (blur)="DieselQuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+          <div *ngIf="(DieselQuantityCtrl.invalid && (DieselQuantityCtrl.touched || DieselQuantityCtrl.dirty))">
+            <span class="validation-text" *ngIf="DieselQuantityCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
         <div class="col-md-4  mb-2">
@@ -137,14 +144,16 @@
           </div>
         </div>
         <div class="col-md-4  mb-2">
-          <!-- Total Amount (Readonly) -->
-          <label><b>Total Amount</b></label>
-          <input type="number" [(ngModel)]="Entity.p.Amount" name="TotalAmount" class="form-control" id="TotalAmount"
-            required placeholder="Enter Amount" #TotalAmountCtrl="ngModel"
-            (blur)="TotalAmountCtrl.control.markAsTouched()" readonly />
-          <div *ngIf="(TotalAmountCtrl.invalid && (TotalAmountCtrl.touched || TotalAmountCtrl.dirty))">
-            <span class="validation-text" *ngIf="TotalAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+          <!-- Diesel Amount (Readonly) -->
+          <label><b>Diesel Amount</b></label>
+          <input type="number" [(ngModel)]="Entity.p.DieselTotal" name="DieselTotal" class="form-control"
+            id="DieselTotal" placeholder="Enter Amount" #DieselTotalCtrl="ngModel"
+            (blur)="DieselTotalCtrl.control.markAsTouched()" readonly />
+        </div>
+        <div class="col-md-4 d-flex align-items-center">
+          <input type="checkbox" id="IsDieselPaid" [(ngModel)]="Entity.p.IsDieselPaid" name="IsDieselPaid"
+            class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
+          <label for="IsDieselPaid" class="form-check-label mb-0">Is Diesel Paid</label>
         </div>
         <div class="col-md-4 mb-2">
           <label><b>Vehical No.</b></label>
@@ -167,8 +176,9 @@
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
           <label><b>Rate</b></label>
           <input type="number" [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate" required
-            placeholder="Enter Rate" required [pattern]="NameWithNosAndSpace" #RateCtrl="ngModel"
-            (blur)="RateCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+            placeholder="Enter Rate" (change)="CalculateAmountOnRateAndQuantity()" required
+            [pattern]="NameWithNosAndSpace" #RateCtrl="ngModel" (blur)="RateCtrl.control.markAsTouched()"
+            (click)="selectAllValue($event)" />
           <div *ngIf="(RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty))">
             <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
@@ -176,8 +186,9 @@
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
           <label><b>Quantity</b></label>
           <input type="number" [(ngModel)]="Entity.p.Quantity" name="Quantity" class="form-control" id="Quantity"
-            required placeholder="Enter Quantity" required [pattern]="NameWithNosAndSpace" #QuantityCtrl="ngModel"
-            (blur)="QuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+            required placeholder="Enter Quantity" (change)="CalculateAmountOnRateAndQuantity()" required
+            [pattern]="NameWithNosAndSpace" #QuantityCtrl="ngModel" (blur)="QuantityCtrl.control.markAsTouched()"
+            (click)="selectAllValue($event)" />
           <div *ngIf="(QuantityCtrl.invalid && (QuantityCtrl.touched || QuantityCtrl.dirty))">
             <span class="validation-text" *ngIf="QuantityCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
@@ -296,11 +307,6 @@
           <input type="text" [(ngModel)]="Entity.p.CreatedByName" name="CreatedByName" class="form-control"
             id="CreatedByName" required placeholder="Enter Sign" readonly [pattern]=" NameWithNosAndSpace"
             #CreatedByNameCtrl="ngModel" (blur)="CreatedByNameCtrl.control.markAsTouched()" />
-          <div *ngIf="(CreatedByNameCtrl.invalid && (CreatedByNameCtrl.touched || CreatedByNameCtrl.dirty))">
-            <span class="validation-text"
-              *ngIf="CreatedByNameCtrl.errors?.['pattern']">{{NameWithNosAndSpaceMsg}}</span>
-            <span class="validation-text" *ngIf="CreatedByNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
         </div>
         <div class="col-md-6 mb-2">
           <label><b>Description</b></label>
