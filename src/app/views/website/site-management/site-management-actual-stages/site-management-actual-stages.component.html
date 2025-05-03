@@ -13,28 +13,51 @@
         </nz-button>
       </div>
     </div>
-    <div class="row">
-       <div class="col-md-4 mb-2">
-        <label for="Date"><b>Date</b></label>
-        <input type="Date" class="form-control" id="Date" name="Date" />
-      </div>
-      <div class="col-md-4 mb-2">
-        <label for="OwnerName"><b>Owner Name</b></label>
-        <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="OwnerName" name="OwnerName" [nzSize]="'large'"
-          [(ngModel)]="OwnerRef" (ngModelChange)="getOwnerRef(OwnerRef)">
-          <nz-option *ngFor="let owner of OwnerList"
-          [nzValue]="owner" [nzLabel]="owner"></nz-option>
+    <div class="row" style="margin-top: 1rem; ">
+      <div class="col-md-4" style="margin-top: 1rem; ">
+         <label for="FromDate"><b>From Date</b></label>
+         <input type="date" name="FromDate" class="form-control" id="FromDate" [(ngModel)]="FromDate"/>
+       </div>
+      <div class="col-md-4" style="margin-top: 1rem; ">
+         <label for="ToDate"><b>To Date</b></label>
+         <input type="date" name="ToDate" class="form-control" id="ToDate" [(ngModel)]="ToDate"/>
+       </div>
+      <div class="col-md-4" style="margin-top: 1rem; ">
+         <div>
+           <label for="SiteRef"><b>site</b></label>
+           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+             name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef">
+             <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+           </nz-select>
+         </div>
+       </div>
+      <div class="col-md-4" style="margin-top: 1rem; ">
+         <div>
+           <label for="VendorRef"><b>Vendor</b></label>
+           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+             name="VendorRef" [(ngModel)]="Entity.p.VendorRef" required id="VendorRef">
+             <nz-option *ngFor="let vendor of VendorList" [nzValue]="vendor.p.Ref" [nzLabel]="vendor.p.Name"></nz-option>
+           </nz-select>
+         </div>
+       </div>
+      <div class="col-md-4" style="margin-top: 1rem; ">
+         <div>
+           <label for="StageRef"><b>Stage</b></label>
+           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+             name="StageRef" [(ngModel)]="Entity.p.StageRef" required id="StageRef">
+             <nz-option *ngFor="let stage of StageList" [nzValue]="stage.p.Ref" [nzLabel]="stage.p.Name"></nz-option>
+           </nz-select>
+         </div>
+       </div>
+       <div class="col-md-4" style="margin-top: 1rem; ">
+        <label><b>Expense Type</b></label>
+        <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="ExpenseTypeRef" name="ExpenseTypeRef"
+          [nzSize]="'large'" [(ngModel)]="Entity.p.ExpenseTypeRef">
+          <nz-option *ngFor="let Expense of ExpenseTypeList" [nzValue]="Expense.p.ExpenseType"
+            [nzLabel]="Expense.p.Name"></nz-option>
         </nz-select>
       </div>
-      <div class="col-md-4 mb-2">
-        <label for="stage"><b>Stage</b></label>
-        <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="stage" name="stage" [nzSize]="'large'"
-          [(ngModel)]="StageRef" (ngModelChange)="getOwnerRef(StageRef)">
-          <nz-option *ngFor="let stage of StagesList"
-          [nzValue]="stage" [nzLabel]="stage"></nz-option>
-        </nz-select>
-      </div> 
-    </div>
+       </div>
   </div>
   <!-- Machinary Expense -->
   <div class="table-container" style="margin-top: 2rem;">
