@@ -507,7 +507,7 @@ export class SidebarlayoutComponent implements OnInit {
     let MarketingManagementSubModuleList = [
       {
         Name: 'Marketing Management',
-        RouterLink: '/homepage/Website/Marketing_Management_Master',
+        RouterLink: '/homepage/Website/Marketing_Management',
         LogoPath: '',
       },
     ]
