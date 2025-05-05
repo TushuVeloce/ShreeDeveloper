@@ -44,17 +44,18 @@ export class SiteManagementActualStagesComponent implements OnInit {
   Other_Expense: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Description', 'Department', 'Owner Name', 'Rate', 'Quantity', 'Amount', 'Action'];
   Office_Details: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Expense Type', 'Description', 'Receiver Name', 'Amount', 'Action'];
   Government_Details: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Expense Type', 'Description', 'Receiver Name', 'Amount', 'Action'];
+  Title: string = 'Site Management Actual Stages';
 
- constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
-  ) {}
+  ) { }
 
 
   async ngOnInit() {
     this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.StageList = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef(),
-    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.appStateManage.setDropdownDisabled(false);
   }
 
@@ -71,7 +72,6 @@ export class SiteManagementActualStagesComponent implements OnInit {
     this.ExpenseTypeList = lst;
   }
 
-  Title: string = 'Site Management Actual Stages';
 
   AddStages = async () => {
     await this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage_Details']);
@@ -79,8 +79,10 @@ export class SiteManagementActualStagesComponent implements OnInit {
 
   OwnerRef: number = 0;
   StageRef: number = 0;
+
   OwnerList: string[] = ['Owner1', 'Owner2', 'Owner3'];
   StagesList: string[] = ['Stage1', 'Stage2', 'Stage3'];
+  
   getOwnerRef(Ref: any) {
     // code here
     console.log('OwnerRef');

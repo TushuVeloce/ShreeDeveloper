@@ -89,6 +89,10 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
+    if (this.Entity.p.CreatedBy == 1001) {
+      this.Entity.p.CreatedByName = 'Admin';
+      return;
+    }
     let data = await Employee.FetchInstance(
       this.Entity.p.CreatedBy, this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
@@ -202,6 +206,32 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     this.UnitList = lst;
   };
 
+  ClearInputsOnExpenseChange = () => {
+    this.Entity.p.Amount = 0;
+    if (this.Expense == 100) {
+      this.Entity.p.SkillRate = 0;
+      this.Entity.p.SkillQuantity = 0;
+      this.Entity.p.SkillAmount = 0;
+
+      this.Entity.p.UnskillRate = 0;
+      this.Entity.p.UnskillQuantity = 0;
+      this.Entity.p.UnskillAmount = 0;
+
+      this.Entity.p.LadiesRate = 0;
+      this.Entity.p.LadiesQuantity = 0;
+      this.Entity.p.LadiesAmount = 0;
+    }
+
+    if (this.Expense == 200) {
+      this.Entity.p.DieselRate = 0;
+      this.Entity.p.DieselQuantity = 0;
+      this.Entity.p.DieselTotal = 0;
+      this.Entity.p.IsDieselPaid = 0;
+      this.Entity.p.VehicleNo = '';
+
+    }
+  }
+
   CalculateTotalOnDiselRateAndLtr = () => {
     this.Entity.p.DieselTotal = (this.Entity.p.DieselQuantity * this.Entity.p.DieselRate);
     this.Entity.p.Amount = this.Entity.p.DieselTotal + this.UnitQuantityTotal
@@ -210,6 +240,21 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   CalculateAmountOnRateAndQuantity = () => {
     this.UnitQuantityTotal = (this.Entity.p.Rate * this.Entity.p.Quantity);
     this.Entity.p.Amount = this.Entity.p.DieselTotal + this.UnitQuantityTotal
+  }
+
+  CalculateAmountOnSkillRateAndQuantity = () => {
+    this.Entity.p.SkillAmount = (this.Entity.p.SkillRate * this.Entity.p.SkillQuantity);
+    this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
+  }
+
+  CalculateAmountOnUnSkillRateAndQuantity = () => {
+    this.Entity.p.UnskillAmount = (this.Entity.p.UnskillRate * this.Entity.p.UnskillQuantity);
+    this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
+  }
+
+  CalculateAmountOnLadiesRateAndQuantity = () => {
+    this.Entity.p.LadiesAmount = (this.Entity.p.LadiesRate * this.Entity.p.LadiesQuantity);
+    this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
   }
 
 

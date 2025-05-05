@@ -171,9 +171,9 @@ export class ExpenseType implements IPersistable<ExpenseType> {
     return ExpenseType.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByStageRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByStageRef(StageRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new ExpenseTypeFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
+    req.StageRefs.push(StageRef)
     let tdResponse = await ExpenseType.FetchTransportData(req, errorHandler) as TransportData;
     return ExpenseType.ListFromTransportData(tdResponse);
   }
