@@ -88,7 +88,7 @@
 
 
   <!-- Punch Modal -->
-  <ion-modal [isOpen]="true" (didDismiss)="punchModalOpen = false" class="punch-modal">
+  <ion-modal [isOpen]="punchModalOpen" (didDismiss)="punchModalOpen = false" class="punch-modal">
     <ng-template>
       <div class="modal-container">
         <!-- Modal Header -->
@@ -107,10 +107,6 @@
         <ion-content class="ion-padding modal-content">
           <ion-list lines="none">
             <!-- Select Location Type -->
-            <!-- <ion-item class="input-item" button (click)="selectAttendanceLocationBottomsheet()" [disabled]="isSubmitting">
-            <ion-label position="floating">Location Type</ion-label>
-            <ion-input [(ngModel)]="AttendenceLocationTypeName" disabled required></ion-input>
-          </ion-item> -->
 
             <!-- Select Location Type -->
             <ion-item class="input-item" button (click)="selectAttendanceLocationBottomsheet()">
