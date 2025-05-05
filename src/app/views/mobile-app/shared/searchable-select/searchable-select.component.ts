@@ -35,6 +35,7 @@ export class SearchableSelectComponent implements OnInit, OnDestroy {
         options: this.options,
         selectedOptions: this.selectedOptions,
         multiSelect: this.multiSelect,
+        bottomsheetTitle: this.placeholder,
       },
       breakpoints: [0, 0.3, 0.6, 1], // Define modal heights
       initialBreakpoint: 0.6, // Opens at 60% height

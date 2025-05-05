@@ -10,7 +10,7 @@
     <!-- App title -->
     <!-- <ion-title class="mobile-app-title">{{ title }}</ion-title> -->
     <!-- <app-dropdown label="Select Company" [dataList]="departments" [(selectedValue)]="selectedDepartment"></app-dropdown> -->
-    <app-searchable-select [options]="CompanyList" [selectedOptions]="selectedCompany" [multiSelect]="false" placeholder="Select Company"
+    <app-searchable-select [options]="CompanyList" [selectedOptions]="selectedCompany" [multiSelect]="false" [placeholder]="'Select Company'"
       (selectionChange)="onSelectionChange($event)">
     </app-searchable-select>
 
