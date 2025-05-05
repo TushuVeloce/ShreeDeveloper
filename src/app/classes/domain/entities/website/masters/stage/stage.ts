@@ -25,7 +25,7 @@ export class StageProps {
   public IsSubStageApplicable: Boolean = false;
   public IsMachinaryExpenseApplicable: Boolean = false;
   public IsLabourExpenseApplicable: Boolean = false;
-  public IsOtherApplicable: Boolean = false;
+  public IsOtherExpenseApplicable: Boolean = false;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
 

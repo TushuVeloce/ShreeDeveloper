@@ -3,638 +3,500 @@
     <div class="row mb-3">
       <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
         <button type="button" class="backbtn" (click)="BackRegistrarOffice()">
-          <img
-            src="/assets/icons/arrow-button.png"
-            alt=""
-            width="34px"
-            height="34px"
-          />
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
         </button>
       </div>
       <div class="col-md-11">
-        <span class="detail_title">{{DetailsFormTitle}}</span>
+        <span class="detail_title">{{ DetailsFormTitle }}</span>
       </div>
     </div>
     <form autocomplete="off">
-    <!-- Customer Box -->
-    <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px;">
-        
- <!-- Customer Details -->  
- <div class="row mb-4" style=" background-color: #fbe6e6; border-radius: 8px 8px 0px 0px;">
-  <div class="col-md-4 justify-content-around d-flex">
-    <label> Customer Details</label>
-  </div>
- </div>
-      <!-- Plot No -->
-      <div class="row mb-4" style="margin-top: 1rem; ">
-        <div class="col-md-4">
-           <label>Plot No</label>
-            <input
-              type="text"
-              [(ngModel)]="Entity.p.PlotName"
-              name="PlotRef"
-              class="form-control"
-              id="PlotRef"
-              required
-              placeholder="Enter Plot No"
-              (click)="selectAllValue($event)"
-              disabled
-            />
+      <!-- Customer Box -->
+      <div style="
+          border: solid;
+          border-color: brown;
+          border-width: 1px;
+          border-radius: 5px;
+          margin-bottom: 2px;
+          padding: 0px 12px;
+        ">
+        <!-- Customer Details -->
+        <div class="row mb-4" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+          <div class="col-md-4 justify-content-around d-flex">
+            <label> Customer Details</label>
+          </div>
         </div>
-        <!-- Name -->
-        <div class="col-md-4">
-          <label>Name</label>
-           <input
-             type="text"
-             [(ngModel)]="Entity.p.CustomerName"
-             name="CustomerName"
-             class="form-control"
-             id="CustomerName"
-             required
-             placeholder="Enter Name"
-             disabled
-           />
-       </div>
-       <!-- Contact No. -->
-       <div class="col-md-4">
-        <label>Contact No.</label>
-         <input
-           type="text"
-           [(ngModel)]="Entity.p.PhoneNumber"
-           name="PhoneNumber"
-           class="form-control"
-           id="PhoneNumber"
-           required
-           placeholder="Enter Contact No. "
-           (click)="selectAllValue($event)"
-           disabled
-         />
-     </div>
-      </div>
-
-<!-- Cheque -->
- <div class="row">
-        <div class="col-md-4 d-flex justify-content-center ">
-          <label>Cheque</label>
-            <input type="checkbox" id="IsChequeSubmit"  [(ngModel)]="Entity.p.IsChequeSubmit" name="IsChequeSubmit" class="custom-checkbox">
-      </div>
-<!-- Aadhar -->
-        <div class="col-md-8 d-flex mb-4">
-          <div class="col-md-8 d-flex ">
-            <div class="col-md-4 d-flex justify-content-center">
-              <label>Aadhar</label>
-            </div>
-            <div class="col-md-8 d-flex">
-              <input
-                type="file"
-                [(ngModel)]="Entity.p.Name"
-                name="Name"
-                class="form-control"
-                id="Name"
-                required
-                placeholder="Enter Name"
-              />
-            </div>
-            <div>
-              <img [src]="Entity.p.CustomerAadharPath">
-            </div>
+        <!-- Plot No -->
+        <div class="row mb-4" style="margin-top: 1rem">
+          <div class="col-md-4">
+            <label>Plot No</label>
+            <input type="text" [(ngModel)]="Entity.p.PlotName" name="PlotRef" class="form-control" id="PlotRef" required
+              placeholder="Enter Plot No" (click)="selectAllValue($event)" disabled />
           </div>
-          <!-- Submit -->
-          <div class="col-md-4 d-flex justify-content-center  ">
-            <label for="IsCustomerAadharSubmit">Submit</label>
-              <input type="checkbox" id="IsCustomerAadharSubmit" [(ngModel)]="Entity.p.IsCustomerAadharSubmit" name="IsCustomerAadharSubmit" class="custom-checkbox">
+          <!-- Name -->
+          <div class="col-md-4">
+            <label>Name</label>
+            <input type="text" [(ngModel)]="Entity.p.CustomerName" name="CustomerName" class="form-control"
+              id="CustomerName" required placeholder="Enter Name" disabled />
           </div>
-       </div>
+          <!-- Contact No. -->
+          <div class="col-md-4">
+            <label>Contact No.</label>
+            <input type="text" [(ngModel)]="Entity.p.PhoneNumber" name="PhoneNumber" class="form-control"
+              id="PhoneNumber" required placeholder="Enter Contact No. " (click)="selectAllValue($event)" disabled />
+          </div>
+        </div>
 
-       
-       <div class="col-md-4"> </div>
-       <!--  Pan   -->
+        <!-- Cheque -->
+        <div class="row">
+          <div class="col-md-4 d-flex justify-content-center">
+            <label>Cheque</label>
+            <input type="checkbox" id="IsChequeSubmit" [(ngModel)]="Entity.p.IsChequeSubmit" name="IsChequeSubmit"
+              class="custom-checkbox" />
+          </div>
+          <!-- Aadhar -->
           <div class="col-md-8 d-flex mb-4">
-            <div class="col-md-8 d-flex ">
+            <div class="col-md-8 d-flex">
+              <div class="col-md-4 d-flex justify-content-center">
+                <label>Aadhar</label>
+              </div>
+              <div class="col-md-8 d-flex">
+                <input type="file" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
+                  placeholder="Enter Name" />
+              </div>
+              <div>
+                <img [src]="Entity.p.CustomerAadharPath" />
+              </div>
+            </div>
+            <!-- Submit -->
+            <div class="col-md-4 d-flex justify-content-center">
+              <label for="IsCustomerAadharSubmit">Submit</label>
+              <input type="checkbox" id="IsCustomerAadharSubmit" [(ngModel)]="Entity.p.IsCustomerAadharSubmit"
+                name="IsCustomerAadharSubmit" class="custom-checkbox" />
+            </div>
+          </div>
+
+          <div class="col-md-4"></div>
+          <!--  Pan   -->
+          <div class="col-md-8 d-flex mb-4">
+            <div class="col-md-8 d-flex">
               <div class="col-md-4 d-flex justify-content-center">
                 <label>Pan</label>
               </div>
               <div class="col-md-8 d-flex">
-                <input
-                  type="file"
-                  [(ngModel)]="Entity.p.Name"
-                  name="Name"
-                  class="form-control"
-                  id="Name"
-                  required
-                  placeholder="Enter Name"
-                />
+                <input type="file" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
+                  placeholder="Enter Name" />
               </div>
             </div>
             <!-- Submit -->
-            <div class="col-md-4 d-flex justify-content-center  ">
+            <div class="col-md-4 d-flex justify-content-center">
               <label for="IsCustomerPanSubmit">Submit</label>
-                <input type="checkbox" id="IsCustomerPanSubmit"  [(ngModel)]="Entity.p.IsCustomerPanSubmit" name="IsCustomerPanSubmit" class="custom-checkbox">
+              <input type="checkbox" id="IsCustomerPanSubmit" [(ngModel)]="Entity.p.IsCustomerPanSubmit"
+                name="IsCustomerPanSubmit" class="custom-checkbox" />
             </div>
-
-        </div>
-      </div>
-    </div>
-        <!-- Witness 1 Box -->
-       <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px;">
-      <!-- Witness 1 -->
-       <div class="row mb-4" style=" background-color: #fbe6e6; border-radius: 8px 8px 0px 0px;">
-        <div class="col-md-4 justify-content-center d-flex">
-          <label  for="Witness1Submit"> Witness 1</label>
-              <div style="margin-left: 25px;">
-                <input
-                type="checkbox"
-                class="custom-checkbox"
-                id="Witness1Submit"
-                name="Witness1Submit"
-                [checked]="isWitness1Complete()"disabled              />
-              </div>
-        </div>
-       </div>
-<!-- Name -->
-       <div class="row mb-4" style="margin-top: 1rem; ">
-        <div class="col-md-6">
-          <label>Name</label>
-           <input
-             type="text"
-             [(ngModel)]="Entity.p.Witness1Name"
-             name="Witness1Name"
-             class="form-control"
-             id="Witness1Name"
-             required
-             placeholder="Enter Name"
-           />
-       </div>
-       <!-- Contact No. -->
-       <div class="col-md-6">
-        <label>Contact No.</label>
-         <input
-           type="text"
-           [(ngModel)]="Entity.p.Witness1ContactNo"
-           name="Witness1ContactNo"
-           class="form-control"
-           id="Witness1ContactNo"
-           maxlength="10"
-           required
-           placeholder="Enter Contact No."
-           (click)="selectAllValue($event)"
-         />
-     </div>
-      </div>
-
-<!-- Aadhar -->
-       <div class="row mb-4">
-        <div class="col-md-8 d-flex ">
-          <div class="col-md-4 d-flex justify-content-center">
-            <label>Aadhar</label>
           </div>
+        </div>
+      </div>
+      <!-- Witness 1 Box -->
+      <div style="
+          border: solid;
+          border-color: brown;
+          border-width: 1px;
+          border-radius: 5px;
+          margin-bottom: 2px;
+          padding: 0px 12px;
+        ">
+        <!-- Witness 1 -->
+        <div class="row mb-4" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+          <div class="col-md-4 justify-content-center d-flex">
+            <label for="Witness1Submit"> Witness 1</label>
+            <div style="margin-left: 25px">
+              <input type="checkbox" class="custom-checkbox" id="Witness1Submit" name="Witness1Submit"
+                [checked]="isWitness1Complete()" disabled />
+            </div>
+          </div>
+        </div>
+        <!-- Name -->
+        <div class="row mb-4" style="margin-top: 1rem">
+          <div class="col-md-6">
+            <label>Name</label>
+            <input type="text" [(ngModel)]="Entity.p.Witness1Name" name="Witness1Name" class="form-control"
+              id="Witness1Name" required placeholder="Enter Name" />
+          </div>
+          <!-- Contact No. -->
+          <div class="col-md-6">
+            <label>Contact No.</label>
+            <input type="text" [(ngModel)]="Entity.p.Witness1ContactNo" name="Witness1ContactNo" class="form-control"
+              id="Witness1ContactNo" maxlength="10" required placeholder="Enter Contact No."
+              (click)="selectAllValue($event)" />
+          </div>
+        </div>
+
+        <!-- Aadhar -->
+        <div class="row mb-4">
           <div class="col-md-8 d-flex">
-            <input
-              type="file"
-              [(ngModel)]="Entity.p.Witness1AadharPath"
-              name="Aadhar"
-              class="form-control"
-              id="Aadhar"
-              required
-              placeholder="Enter Aadhar"
-            />
+            <div class="col-md-4 d-flex justify-content-center">
+              <label>Aadhar</label>
+            </div>
+            <div class="col-md-8 d-flex">
+              <input type="file" [(ngModel)]="Entity.p.Witness1AadharPath" name="Aadhar" class="form-control"
+                id="Aadhar" required placeholder="Enter Aadhar" />
+            </div>
           </div>
-        </div>
-<!-- Submit -->
-        <div class="col-md-4 d-flex justify-content-center  ">
-          <label for="Witness1IsAadharSubmit">Submit</label>
-            <input type="checkbox" id="Witness1IsAadharSubmit"  [(ngModel)]="Entity.p.Witness1IsAadharSubmit" name="Witness1IsAadharSubmit" class="custom-checkbox">
-      </div>
-
-      </div>
-      <!-- Pan -->
-      <div class="row mb-4 ">
-        <div class="col-md-8 d-flex ">
+          <!-- Submit -->
           <div class="col-md-4 d-flex justify-content-center">
-            <label> Pan</label>
+            <label for="Witness1IsAadharSubmit">Submit</label>
+            <input type="checkbox" id="Witness1IsAadharSubmit" [(ngModel)]="Entity.p.Witness1IsAadharSubmit"
+              name="Witness1IsAadharSubmit" class="custom-checkbox" />
           </div>
+        </div>
+        <!-- Pan -->
+        <div class="row mb-4">
           <div class="col-md-8 d-flex">
-            <input
-              type="file"
-              [(ngModel)]="Entity.p.Witness1PanPath"
-              name="Pan"
-              class="form-control"
-              id="Pan"
-              required
-              placeholder="Enter Pan"
-            />
-          </div>
-        </div>
-<!-- Submit -->
-        <div class="col-md-4 d-flex justify-content-center  ">
-          <label for="Witness1IsPanSubmit">Submit</label>
-            <input type="checkbox" id="Witness1IsPanSubmit"  [(ngModel)]="Entity.p.Witness1IsPanSubmit" name="Witness1IsPanSubmit" class="custom-checkbox">
-      </div>
-      </div>
-    </div>
-
-        <!--------------------- Witness 2 Box ------------------>
-    
-    <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px;">
-      <!-- Witness 2 -->
-      <div class="row mb-4" style=" background-color: #fbe6e6; border-radius: 8px 8px 0px 0px;">
-       <div class="col-md-4 justify-content-center d-flex">
-         <label  for="Witness2Submit"> Witness 2</label>
-             <div style="margin-left: 25px;">
-              <input
-              type="checkbox"
-              class="custom-checkbox"
-              id="Witness2Submit"
-              name="Witness2Submit"
-              [checked]="isWitness2Complete()"
-              disabled
-            />
-             </div>
-       </div>
-      </div>
-<!-- Name -->
-      <div class="row mb-4" style="margin-top: 1rem; ">
-       <div class="col-md-6">
-         <label>Name</label>
-          <input
-            type="text"
-            [(ngModel)]="Entity.p.Witness2Name"
-            name="Witness2Name"
-            class="form-control"
-            id="Witness2Name"
-            required
-            placeholder="Enter Name"
-          />
-      </div>
-      <!-- Contact No. -->
-      <div class="col-md-6">
-       <label>Contact No.</label>
-        <input
-          type="text"
-          [(ngModel)]="Entity.p.Witness2ContactNo"
-          name="Witness2ContactNo"
-          class="form-control"
-          id="Witness2ContactNo"
-          required
-          placeholder="Enter Contact No."
-          (click)="selectAllValue($event)"
-          maxlength="10"
-        />
-    </div>
-     </div>
-
-<!-- Aadhar -->
-      <div class="row mb-4">
-       <div class="col-md-8 d-flex ">
-         <div class="col-md-4 d-flex justify-content-center">
-           <label>Aadhar</label>
-         </div>
-         <div class="col-md-8 d-flex">
-           <input
-             type="file"
-             [(ngModel)]="Entity.p.Witness2AadharPath"
-             name="Aadhar"
-             class="form-control"
-             id="Aadhar"
-             required
-             placeholder="Enter Aadhar"
-           />
-         </div>
-       </div>
-
-       <div class="col-md-4 d-flex justify-content-center  ">
-         <label for="Witness2IsAadharSubmit">Submit</label>
-           <input type="checkbox" id="Witness2IsAadharSubmit"  [(ngModel)]="Entity.p.Witness2IsAadharSubmit" name="Witness2IsAadharSubmit" class="custom-checkbox">
-     </div>
-     </div>
-     <!-- Pan -->
-     <div class="row mb-4 ">
-       <div class="col-md-8 d-flex ">
-         <div class="col-md-4 d-flex justify-content-center">
-           <label> Pan</label>
-         </div>
-         <div class="col-md-8 d-flex">
-           <input
-             type="file"
-             [(ngModel)]="Entity.p.Witness2PanPath"
-             name="Pan"
-             class="form-control"
-             id="Pan"
-             required
-             placeholder="Enter Pan"
-           />
-         </div>
-       </div>
-<!-- Submit -->
-       <div class="col-md-4 d-flex justify-content-center  ">
-         <label for="Witness2IsPanSubmit">Submit</label>
-           <input type="checkbox" id="Witness2IsPanSubmit"  [(ngModel)]="Entity.p.Witness2IsPanSubmit" name="Witness2IsPanSubmit" class="custom-checkbox">
-     </div>
-     </div>
-   </div>
-
-        <!--------------------- Agreement to Sale Box ------------------------>
-
-   <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px;">
-    <div class="row mb-4" style=" background-color: #fbe6e6; border-radius: 8px 8px 0px 0px;">
-      <div class="col-md-4 justify-content-center d-flex">
-        <label  for="IsAgreementToSaleSubmit"> Agreement to Sale</label>
-            <div style="margin-left: 25px;">
-              <input   type="checkbox" class="custom-checkbox" id="IsAgreementToSaleSubmit" name="IsAgreementToSaleSubmit" [checked]="isAgreementtoSaleComplete()"
-      disabled/>
+            <div class="col-md-4 d-flex justify-content-center">
+              <label> Pan</label>
             </div>
-      </div>
-     
-       <div class="col-md-4 d-flex">
-         <input
-           type="file"
-           [(ngModel)]="Entity.p.AgreementDocumentPath"
-           name="Name"
-           class="form-control"
-           id="Name"
-           required
-           placeholder="Enter Name"
-         />
-       </div>
-   </div> 
-   
-    <div class="row mb-4" style="margin-top: 1rem; ">
-     <div class="col-md-6">
-       <label>Document</label>
-        <input
-          type="text"
-          [(ngModel)]="Entity.p.AgreementDocumentNo"
-          name="AgreementDocumentNo"
-          class="form-control"
-          id="AgreementDocumentNo"
-          required
-          placeholder="Enter Document No."
-          pattern="^[a-zA-Z0-9]*$"
-          pattern="{{NameWithNos}}" #AgreementDocumentNoCtrl="ngModel"
-        />
-        <div *ngIf="(AgreementDocumentNoCtrl.invalid && (AgreementDocumentNoCtrl.touched || AgreementDocumentNoCtrl.dirty))">
-          <span class="validation-text" *ngIf="AgreementDocumentNoCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
-        </div>
-    </div>
-    <!-- Date -->
-    <div class="col-md-6">
-     <label>Date</label>
-      <input
-        type="date"
-        [(ngModel)]="localagreementdate"
-        name="AgreementDate"
-        class="form-control"
-        id="AgreementDate"
-        required
-        placeholder="Enter Name"
-      />
-  </div>
-   </div>
- </div>
-
-        <!---------------------- Sale Deed Box  ----------------------------->
-
- <div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px;">
-      <!-- Sale Deed -->
-  <div class="row mb-4" style=" background-color: #fbe6e6; border-radius: 8px 8px 0px 0px;">
-   <div class="col-md-4 justify-content-center d-flex">
-     <label  for="IsSaledeedSubmit"> Sale Deed</label>
-         <div style="margin-left: 25px;">
-          <input
-          type="checkbox"
-          class="custom-checkbox"
-          id="IsSaledeedSubmit"
-          name="IsSaledeedSubmit"
-          [checked]="isSaleDeedComplete()"
-          disabled
-        />
-         </div>
-   </div>
-  <div class="col-md-4 d-flex ">
-      <input
-        type="file"
-        [(ngModel)]="Entity.p.SaleDeedtDocumentPath"
-        name="Name"
-        class="form-control"
-        id="Name"
-        required
-        placeholder="Enter Name"
-      />
-    </div>
-</div>
-<!-- Document -->
-  <div class="row mb-4" style="margin-top: 1rem; ">
-   <div class="col-md-6">
-     <label>Document</label>
-      <input
-        type="text"
-        [(ngModel)]="Entity.p.SaleDeedDocumentNo"
-        name="SaleDeedDocumentNo"
-        class="form-control"
-        id="SaleDeedDocumentNo"
-        required
-        placeholder="Enter Document No."
-        pattern="{{NameWithNos}}" #SaleDeedDocumentNoCtrl="ngModel"
-        />
-        <div *ngIf="(SaleDeedDocumentNoCtrl.invalid && (SaleDeedDocumentNoCtrl.touched || SaleDeedDocumentNoCtrl.dirty))">
-          <span class="validation-text" *ngIf="SaleDeedDocumentNoCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
-        </div>
-  </div>
-  <!-- Date -->
-  <div class="col-md-6">
-   <label>Date</label>
-    <input
-      type="date"
-      [(ngModel)]="localsaledeeddate"
-      name="SaleDeedDate"
-      class="form-control"
-      id="SaleDeedDate"
-      required
-      placeholder="Enter Name"
-    />
-</div>
- </div>
-</div>
-
-<!---------------------- Talathi Box ----------------->
-<div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px;">
-      <!-- Talathi -->
-  <div class="row mb-4" style=" background-color: #fbe6e6; border-radius: 8px 8px 0px 0px;">
-   <div class="col-md-4 justify-content-center d-flex">
-     <label  for="IsTalathiSubmit"> Talathi</label>
-         <div style="margin-left: 25px;">
-          <input
-          type="checkbox"
-          class="custom-checkbox"
-          id="IsAgreementToSaleSubmit"
-          name="IsAgreementToSaleSubmit"
-          [checked]="isTalathiComplete()"
-          disabled
-        />
+            <div class="col-md-8 d-flex">
+              <input type="file" [(ngModel)]="Entity.p.Witness1PanPath" name="Pan" class="form-control" id="Pan"
+                required placeholder="Enter Pan" />
             </div>
-   </div>
-  </div>
-
-
-<!-- Index Original -->
-  <div class="row mb-4">
-   <div class="col-md-8 d-flex ">
-     <div class="col-md-4 d-flex justify-content-center">
-       <label>Index Original</label>
-     </div>
-     <div class="col-md-8 d-flex">
-       <input
-         type="file"
-         [(ngModel)]="Entity.p.IndexOriginalDocumentPath"
-         name="Index Original"
-         class="form-control"
-         id="Index Original"
-         required
-         placeholder="Enter Index Original"
-       />
-     </div>
-   </div>
-
-   <div class="col-md-4 d-flex justify-content-center  ">
-     <label for="IsIndexOriginalSubmit">Submit</label>
-       <input type="checkbox" id="IsIndexOriginalSubmit"  [(ngModel)]="Entity.p.IsIndexOriginalSubmit" name="IsIndexOriginalSubmit" class="custom-checkbox">
- </div>
-
- </div>
- <!-- दस्त Zerox -->
- <div class="row mb-4 ">
-   <div class="col-md-8 d-flex ">
-     <div class="col-md-4 d-flex justify-content-center">
-       <label> दस्त Zerox</label>
-     </div>
-     <div class="col-md-8 d-flex">
-       <input
-         type="file"
-         [(ngModel)]="Entity.p.DastZeroxDocumentPath"
-         name="दस्त Zerox"
-         class="form-control"
-         id="दस्त Zerox"
-         required
-         placeholder="Enter दस्त Zerox"
-       />
-     </div>
-   </div>
-
-   <div class="col-md-4 d-flex justify-content-center  ">
-     <label for="IsDastZeroxSubmit">Submit</label>
-       <input type="checkbox" id="IsDastZeroxSubmit"  [(ngModel)]="Entity.p.IsDastZeroxSubmit" name="IsDastZeroxSubmit" class="custom-checkbox">
- </div>
-
- </div>
-
-
- <!-- Inward No: -->
- <div class="row mb-4" style="margin-top: 1rem; ">
-  <div class="col-md-6">
-    <label>Inward No</label>
-     <input
-       type="text"
-       [(ngModel)]="Entity.p.TalathiInwardNo"
-       name="TalathiInwardNo"
-       class="form-control"
-       id="TalathiInwardNo"
-       required
-       placeholder="Enter Inward No"
-       pattern="{{NameWithNos}}" #TalathiInwardNoCtrl="ngModel"
-       />
-       <div *ngIf="(TalathiInwardNoCtrl.invalid && (TalathiInwardNoCtrl.touched || TalathiInwardNoCtrl.dirty))">
-         <span class="validation-text" *ngIf="TalathiInwardNoCtrl.errors?.['pattern']">{{NameWithNosMsg}}</span>
-       </div>
- </div>
- <div class="col-md-6">
-  <label>Date</label>
-   <input
-     type="date"
-     [(ngModel)]="localtalathidate"
-     name="TalathiDate"
-     class="form-control"
-     id="TalathiDate"
-     required
-     placeholder="Enter Date"
-   />
-</div>
-</div>
-
-<!-- फेरफार Notice घेणे -->
- <div class="row mb-4 ">
-  <div class="col-md-8 d-flex ">
-    <div class="col-md-4 d-flex justify-content-center">
-      <label> फेरफार Notice घेणे</label>
-    </div>
-    <div class="col-md-8 d-flex">
-      <input
-        type="file"
-        [(ngModel)]="Entity.p.Name"
-        name="फेरफार Notice घेणे"
-        class="form-control"
-        id="फेरफार Notice घेणे"
-        required
-        placeholder="Enter फेरफार Notice घेणे"
-      />
-    </div>
-  </div>
-
-  <div class="col-md-4 d-flex justify-content-center  ">
-    <label for="IsFerfarNoticeSubmit">Submit</label>
-      <input type="checkbox" id="IsFerfarNoticeSubmit"  [(ngModel)]="Entity.p.IsFerfarNoticeSubmit" name="IsFerfarNoticeSubmit" class="custom-checkbox">
-</div>
-
-</div>
-<!-- Final-Customer 7/12 -->
-<div class="row mb-4 ">
-  <div class="col-md-8 d-flex ">
-    <div class="col-md-4 d-flex justify-content-center">
-      <label> Final-Customer 7/12</label>
-    </div>
-    <div class="col-md-8 d-flex">
-      <input
-        type="file"
-        [(ngModel)]="Entity.p.Name"
-        name="Final-Customer 7/12"
-        class="form-control"
-        id="Final-Customer 7/12"
-        required
-        placeholder="Enter Final-Customer 7/12"
-      />
-    </div>
-  </div>
-
-  <div class="col-md-4 d-flex justify-content-center  ">
-    <label for="IsFinalCustomer712Submit">Submit</label>
-      <input type="checkbox" id="IsFinalCustomer712Submit"  [(ngModel)]="Entity.p.IsFinalCustomer712Submit" name="IsFinalCustomer712Submit" class="custom-checkbox">
-</div>
-</div>
-</div>
-
-<div style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px;">
-
-<!-- Spiral 7/12 -->
- <div class="row mt-3">
-  <div class="col-md-6 d-flex justify-content-center mb-3 ">
-    <label for="IsSpiral712Submit"> Spiral 7/12</label>
-    <input type="checkbox" id="IsSpiral712Submit"  [(ngModel)]="Entity.p.IsSpiral712Submit" name="IsSpiral712Submit" class="custom-checkbox">
-</div>
-
-<!-- Client Submit -->
-  <div class="col-md-6 d-flex justify-content-center  mb-3 ">
-    <label for="IsClientSubmit">Client Submit</label>
-      <input type="checkbox" id="IsClientSubmit"  [(ngModel)]="Entity.p.IsClientSubmit" name="IsClientSubmit" class="custom-checkbox">
-</div>
- </div>
-  
-</div>
-            <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
-          <div>
-            <button type="button" class="btn" (click)="SaveRegistrarOfficeMaster()" [disabled]="isSaveDisabled">Save</button>
           </div>
-          <div>
-            <button type="button" class="btn"  (click)="BackRegistrarOffice()">Back</button>
+          <!-- Submit -->
+          <div class="col-md-4 d-flex justify-content-center">
+            <label for="Witness1IsPanSubmit">Submit</label>
+            <input type="checkbox" id="Witness1IsPanSubmit" [(ngModel)]="Entity.p.Witness1IsPanSubmit"
+              name="Witness1IsPanSubmit" class="custom-checkbox" />
           </div>
+        </div>
+      </div>
+
+      <!--------------------- Witness 2 Box ------------------>
+
+      <div style="
+          border: solid;
+          border-color: brown;
+          border-width: 1px;
+          border-radius: 5px;
+          margin-bottom: 2px;
+          padding: 0px 12px;
+        ">
+        <!-- Witness 2 -->
+        <div class="row mb-4" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+          <div class="col-md-4 justify-content-center d-flex">
+            <label for="Witness2Submit"> Witness 2</label>
+            <div style="margin-left: 25px">
+              <input type="checkbox" class="custom-checkbox" id="Witness2Submit" name="Witness2Submit"
+                [checked]="isWitness2Complete()" disabled />
+            </div>
+          </div>
+        </div>
+        <!-- Name -->
+        <div class="row mb-4" style="margin-top: 1rem">
+          <div class="col-md-6">
+            <label>Name</label>
+            <input type="text" [(ngModel)]="Entity.p.Witness2Name" name="Witness2Name" class="form-control"
+              id="Witness2Name" required placeholder="Enter Name" />
+          </div>
+          <!-- Contact No. -->
+          <div class="col-md-6">
+            <label>Contact No.</label>
+            <input type="text" [(ngModel)]="Entity.p.Witness2ContactNo" name="Witness2ContactNo" class="form-control"
+              id="Witness2ContactNo" required placeholder="Enter Contact No." (click)="selectAllValue($event)"
+              maxlength="10" />
+          </div>
+        </div>
+
+        <!-- Aadhar -->
+        <div class="row mb-4">
+          <div class="col-md-8 d-flex">
+            <div class="col-md-4 d-flex justify-content-center">
+              <label>Aadhar</label>
+            </div>
+            <div class="col-md-8 d-flex">
+              <input type="file" [(ngModel)]="Entity.p.Witness2AadharPath" name="Aadhar" class="form-control"
+                id="Aadhar" required placeholder="Enter Aadhar" />
+            </div>
+          </div>
+
+          <div class="col-md-4 d-flex justify-content-center">
+            <label for="Witness2IsAadharSubmit">Submit</label>
+            <input type="checkbox" id="Witness2IsAadharSubmit" [(ngModel)]="Entity.p.Witness2IsAadharSubmit"
+              name="Witness2IsAadharSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+        <!-- Pan -->
+        <div class="row mb-4">
+          <div class="col-md-8 d-flex">
+            <div class="col-md-4 d-flex justify-content-center">
+              <label> Pan</label>
+            </div>
+            <div class="col-md-8 d-flex">
+              <input type="file" [(ngModel)]="Entity.p.Witness2PanPath" name="Pan" class="form-control" id="Pan"
+                required placeholder="Enter Pan" />
+            </div>
+          </div>
+          <!-- Submit -->
+          <div class="col-md-4 d-flex justify-content-center">
+            <label for="Witness2IsPanSubmit">Submit</label>
+            <input type="checkbox" id="Witness2IsPanSubmit" [(ngModel)]="Entity.p.Witness2IsPanSubmit"
+              name="Witness2IsPanSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+      </div>
+
+      <!--------------------- Agreement to Sale Box ------------------------>
+
+      <div style="
+          border: solid;
+          border-color: brown;
+          border-width: 1px;
+          border-radius: 5px;
+          margin-bottom: 2px;
+          padding: 0px 12px;
+        ">
+        <div class="row mb-4" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+          <div class="col-md-4 justify-content-center d-flex">
+            <label for="IsAgreementToSaleSubmit"> Agreement to Sale</label>
+            <div style="margin-left: 25px">
+              <input type="checkbox" class="custom-checkbox" id="IsAgreementToSaleSubmit" name="IsAgreementToSaleSubmit"
+                [checked]="isAgreementtoSaleComplete()" disabled />
+            </div>
+          </div>
+
+          <div class="col-md-4 d-flex">
+            <input type="file" [(ngModel)]="Entity.p.AgreementDocumentPath" name="Name" class="form-control" id="Name"
+              required placeholder="Enter Name" />
+          </div>
+        </div>
+
+        <div class="row mb-4" style="margin-top: 1rem">
+          <div class="col-md-6">
+            <label>Document</label>
+            <input type="text" [(ngModel)]="Entity.p.AgreementDocumentNo" name="AgreementDocumentNo"
+              class="form-control" id="AgreementDocumentNo" required placeholder="Enter Document No."
+              pattern="^[a-zA-Z0-9]*$" pattern="{{ NameWithNos }}" #AgreementDocumentNoCtrl="ngModel" />
+            <div *ngIf="
+                AgreementDocumentNoCtrl.invalid &&
+                (AgreementDocumentNoCtrl.touched ||
+                  AgreementDocumentNoCtrl.dirty)
+              ">
+              <span class="validation-text" *ngIf="AgreementDocumentNoCtrl.errors?.['pattern']">{{ NameWithNosMsg
+                }}</span>
+            </div>
+          </div>
+          <!-- Date -->
+          <div class="col-md-6">
+            <label>Date</label>
+            <input type="date" [(ngModel)]="localagreementdate" name="AgreementDate" class="form-control"
+              id="AgreementDate" required placeholder="Enter Name" />
+          </div>
+        </div>
+      </div>
+
+      <!---------------------- Sale Deed Box  ----------------------------->
+
+      <div style="
+          border: solid;
+          border-color: brown;
+          border-width: 1px;
+          border-radius: 5px;
+          margin-bottom: 2px;
+          padding: 0px 12px;
+        ">
+        <!-- Sale Deed -->
+        <div class="row mb-4" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+          <div class="col-md-4 justify-content-center d-flex">
+            <label for="IsSaledeedSubmit"> Sale Deed</label>
+            <div style="margin-left: 25px">
+              <input type="checkbox" class="custom-checkbox" id="IsSaledeedSubmit" name="IsSaledeedSubmit"
+                [checked]="isSaleDeedComplete()" disabled />
+            </div>
+          </div>
+          <div class="col-md-4 d-flex">
+            <input type="file" [(ngModel)]="Entity.p.SaleDeedtDocumentPath" name="Name" class="form-control" id="Name"
+              required placeholder="Enter Name" />
+          </div>
+        </div>
+        <!-- Document -->
+        <div class="row mb-4" style="margin-top: 1rem">
+          <div class="col-md-6">
+            <label>Document</label>
+            <input type="text" [(ngModel)]="Entity.p.SaleDeedDocumentNo" name="SaleDeedDocumentNo" class="form-control"
+              id="SaleDeedDocumentNo" required placeholder="Enter Document No." pattern="{{ NameWithNos }}"
+              #SaleDeedDocumentNoCtrl="ngModel" />
+            <div *ngIf="
+                SaleDeedDocumentNoCtrl.invalid &&
+                (SaleDeedDocumentNoCtrl.touched || SaleDeedDocumentNoCtrl.dirty)
+              ">
+              <span class="validation-text" *ngIf="SaleDeedDocumentNoCtrl.errors?.['pattern']">{{ NameWithNosMsg
+                }}</span>
+            </div>
+          </div>
+          <!-- Date -->
+          <div class="col-md-6">
+            <label>Date</label>
+            <input type="date" [(ngModel)]="localsaledeeddate" name="SaleDeedDate" class="form-control"
+              id="SaleDeedDate" required placeholder="Enter Name" />
+          </div>
+        </div>
+      </div>
+
+      <!---------------------- Talathi Box ----------------->
+      <div style="
+          border: solid;
+          border-color: brown;
+          border-width: 1px;
+          border-radius: 5px;
+          margin-bottom: 2px;
+          padding: 0px 12px;
+        ">
+        <!-- Talathi -->
+        <div class="row mb-4" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+          <div class="col-md-4 justify-content-center d-flex">
+            <label for="IsTalathiSubmit"> Talathi</label>
+            <div style="margin-left: 25px">
+              <input type="checkbox" class="custom-checkbox" id="IsAgreementToSaleSubmit" name="IsAgreementToSaleSubmit"
+                [checked]="isTalathiComplete()" disabled />
+            </div>
+          </div>
+        </div>
+
+        <!-- Index Original -->
+        <div class="row mb-4">
+          <div class="col-md-8 d-flex">
+            <div class="col-md-4 d-flex justify-content-center">
+              <label>Index Original</label>
+            </div>
+            <div class="col-md-8 d-flex">
+              <input type="file" [(ngModel)]="Entity.p.IndexOriginalDocumentPath" name="Index Original"
+                class="form-control" id="Index Original" required placeholder="Enter Index Original" />
+            </div>
+          </div>
+
+          <div class="col-md-4 d-flex justify-content-center">
+            <label for="IsIndexOriginalSubmit">Submit</label>
+            <input type="checkbox" id="IsIndexOriginalSubmit" [(ngModel)]="Entity.p.IsIndexOriginalSubmit"
+              name="IsIndexOriginalSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+        <!-- दस्त Zerox -->
+        <div class="row mb-4">
+          <div class="col-md-8 d-flex">
+            <div class="col-md-4 d-flex justify-content-center">
+              <label> दस्त Zerox</label>
+            </div>
+            <div class="col-md-8 d-flex">
+              <input type="file" [(ngModel)]="Entity.p.DastZeroxDocumentPath" name="दस्त Zerox" class="form-control"
+                id="दस्त Zerox" required placeholder="Enter दस्त Zerox" />
+            </div>
+          </div>
+
+          <div class="col-md-4 d-flex justify-content-center">
+            <label for="IsDastZeroxSubmit">Submit</label>
+            <input type="checkbox" id="IsDastZeroxSubmit" [(ngModel)]="Entity.p.IsDastZeroxSubmit"
+              name="IsDastZeroxSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+
+        <!-- Inward No: -->
+        <div class="row mb-4" style="margin-top: 1rem">
+          <div class="col-md-6">
+            <label>Inward No</label>
+            <input type="text" [(ngModel)]="Entity.p.TalathiInwardNo" name="TalathiInwardNo" class="form-control"
+              id="TalathiInwardNo" required placeholder="Enter Inward No" pattern="{{ NameWithNos }}"
+              #TalathiInwardNoCtrl="ngModel" />
+            <div *ngIf="
+                TalathiInwardNoCtrl.invalid &&
+                (TalathiInwardNoCtrl.touched || TalathiInwardNoCtrl.dirty)
+              ">
+              <span class="validation-text" *ngIf="TalathiInwardNoCtrl.errors?.['pattern']">{{ NameWithNosMsg }}</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label>Date</label>
+            <input type="date" [(ngModel)]="localtalathidate" name="TalathiDate" class="form-control" id="TalathiDate"
+              required placeholder="Enter Date" />
+          </div>
+        </div>
+
+        <!-- फेरफार Notice घेणे -->
+        <div class="row mb-4">
+          <div class="col-md-8 d-flex">
+            <div class="col-md-4 d-flex justify-content-center">
+              <label> फेरफार Notice घेणे</label>
+            </div>
+            <div class="col-md-8 d-flex">
+              <input type="file" [(ngModel)]="Entity.p.Name" name="फेरफार Notice घेणे" class="form-control"
+                id="फेरफार Notice घेणे" required placeholder="Enter फेरफार Notice घेणे" />
+            </div>
+          </div>
+
+          <div class="col-md-4 d-flex justify-content-center">
+            <label for="IsFerfarNoticeSubmit">Submit</label>
+            <input type="checkbox" id="IsFerfarNoticeSubmit" [(ngModel)]="Entity.p.IsFerfarNoticeSubmit"
+              name="IsFerfarNoticeSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+        <!-- Final-Customer 7/12 -->
+        <div class="row mb-4">
+          <div class="col-md-8 d-flex">
+            <div class="col-md-4 d-flex justify-content-center">
+              <label> Final-Customer 7/12</label>
+            </div>
+            <div class="col-md-8 d-flex">
+              <input type="file" [(ngModel)]="Entity.p.Name" name="Final-Customer 7/12" class="form-control"
+                id="Final-Customer 7/12" required placeholder="Enter Final-Customer 7/12" />
+            </div>
+          </div>
+
+          <div class="col-md-4 d-flex justify-content-center">
+            <label for="IsFinalCustomer712Submit">Submit</label>
+            <input type="checkbox" id="IsFinalCustomer712Submit" [(ngModel)]="Entity.p.IsFinalCustomer712Submit"
+              name="IsFinalCustomer712Submit" class="custom-checkbox" />
+          </div>
+        </div>
+      </div>
+
+      <div style="
+          border: solid;
+          border-color: brown;
+          border-width: 1px;
+          border-radius: 5px;
+          margin-bottom: 2px;
+          padding: 0px 12px;
+        ">
+        <!-- Spiral 7/12 -->
+        <div class="row mt-3">
+          <div class="col-md-6 d-flex justify-content-center mb-3">
+            <label for="IsSpiral712Submit"> Spiral 7/12</label>
+            <input type="checkbox" id="IsSpiral712Submit" [(ngModel)]="Entity.p.IsSpiral712Submit"
+              name="IsSpiral712Submit" class="custom-checkbox" />
+          </div>
+
+          <!-- Client Submit -->
+          <div class="col-md-6 d-flex justify-content-center mb-3">
+            <label for="IsClientSubmit">Client Submit</label>
+            <input type="checkbox" id="IsClientSubmit" [(ngModel)]="Entity.p.IsClientSubmit" name="IsClientSubmit"
+              class="custom-checkbox" />
+          </div>
+        </div>
+      </div>
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
+        <div>
+          <button type="button" class="btn" (click)="SaveRegistrarOfficeMaster()" [disabled]="isSaveDisabled">
+            Save
+          </button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackRegistrarOffice()">
+            Back
+          </button>
+        </div>
       </div>
     </form>
   </div>
