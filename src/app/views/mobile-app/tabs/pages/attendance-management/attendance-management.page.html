@@ -48,47 +48,47 @@
   </ion-grid>
 
   <!-- Recent Attendance Table -->
-<ion-card class="attendance-table-card">
-  <ion-card-header>
-    <ion-card-title>Recent Attendance</ion-card-title>
-  </ion-card-header>
+  <ion-card class="attendance-table-card">
+    <ion-card-header>
+      <ion-card-title>Recent Attendance</ion-card-title>
+    </ion-card-header>
 
-  <ion-card-content>
-    <ion-grid class="attendance-table-header">
-      <ion-row>
-        <ion-col size="4"><strong>Date</strong></ion-col>
-        <ion-col size="2" class="text-center"><strong>In</strong></ion-col>
-        <ion-col size="2" class="text-center"><strong>Out</strong></ion-col>
-        <ion-col size="4" class="text-center"><strong>Hours</strong></ion-col>
-      </ion-row>
-    </ion-grid>
-
-    <ng-container *ngIf="filteredWeeklyAttendanceLogs.length > 0; else noData">
-      <ion-grid class="attendance-table-body">
-        <ion-row *ngFor="let day of filteredWeeklyAttendanceLogs" class="attendance-row">
-          <ion-col size="4">
-            <div class="date-cell">{{ formatDate(day.p.TransDateTime) || '--' }}</div>
-          </ion-col>
-          <ion-col size="2" class="text-center">{{ day.p.FirstCheckInTime || '--' }}</ion-col>
-          <ion-col size="2" class="text-center">{{ day.p.LastCheckOutTime || '--' }}</ion-col>
-          <ion-col size="4" class="text-center">{{ day.p.TotalWorkingHrs || '--' }}</ion-col>
+    <ion-card-content>
+      <ion-grid class="attendance-table-header">
+        <ion-row>
+          <ion-col size="4"><strong>Date</strong></ion-col>
+          <ion-col size="2" class="text-center"><strong>In</strong></ion-col>
+          <ion-col size="2" class="text-center"><strong>Out</strong></ion-col>
+          <ion-col size="4" class="text-center"><strong>Hours</strong></ion-col>
         </ion-row>
       </ion-grid>
-    </ng-container>
 
-    <ng-template #noData>
-      <div class="no-data-box">
-        <ion-icon name="alert-circle-outline"></ion-icon>
-        <p>No attendance data found</p>
-      </div>
-    </ng-template>
-  </ion-card-content>
-</ion-card>
+      <ng-container *ngIf="filteredWeeklyAttendanceLogs.length > 0; else noData">
+        <ion-grid class="attendance-table-body">
+          <ion-row *ngFor="let day of filteredWeeklyAttendanceLogs" class="attendance-row">
+            <ion-col size="4">
+              <div class="date-cell">{{ formatDate(day.p.TransDateTime) || '--' }}</div>
+            </ion-col>
+            <ion-col size="2" class="text-center">{{ day.p.FirstCheckInTime || '--' }}</ion-col>
+            <ion-col size="2" class="text-center">{{ day.p.LastCheckOutTime || '--' }}</ion-col>
+            <ion-col size="4" class="text-center">{{ day.p.TotalWorkingHrs || '--' }}</ion-col>
+          </ion-row>
+        </ion-grid>
+      </ng-container>
+
+      <ng-template #noData>
+        <div class="no-data-box">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <p>No attendance data found</p>
+        </div>
+      </ng-template>
+    </ion-card-content>
+  </ion-card>
 
 
 
   <!-- Punch Modal -->
-  <ion-modal [isOpen]="punchModalOpen" (didDismiss)="punchModalOpen = false" class="punch-modal">
+  <ion-modal [isOpen]="true" (didDismiss)="punchModalOpen = false" class="punch-modal">
     <ng-template>
       <div class="modal-container">
         <!-- Modal Header -->
@@ -105,49 +105,72 @@
 
         <!-- Modal Content -->
         <ion-content class="ion-padding modal-content">
+          <ion-list lines="none">
             <!-- Select Location Type -->
-            <ion-item class="input-item" button (click)="selectAttendanceLocationBottomsheet()" [disabled]="isSubmitting">
-              <ion-label position="floating">Location Type</ion-label>
-              <ion-input [(ngModel)]="AttendenceLocationTypeName" disabled required></ion-input>
+            <!-- <ion-item class="input-item" button (click)="selectAttendanceLocationBottomsheet()" [disabled]="isSubmitting">
+            <ion-label position="floating">Location Type</ion-label>
+            <ion-input [(ngModel)]="AttendenceLocationTypeName" disabled required></ion-input>
+          </ion-item> -->
+
+            <!-- Select Location Type -->
+            <ion-item class="input-item" button (click)="selectAttendanceLocationBottomsheet()">
+              <ion-label>Location Type</ion-label>
+
+              <!-- Text showing the selected status -->
+              <ion-text slot="end" class="status-text">
+                {{AttendenceLocationTypeName}}
+              </ion-text>
+
+              <!-- Dropdown icon (chevron) on the right -->
+              <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
             </ion-item>
 
-          <!-- Site Selection -->
-          <div *ngIf="attendanceLog.p.AttendenceLocationType === AttendanceLocationTypes.Site">
-            <app-searchable-select [options]="siteList" [multiSelect]="false" placeholder="Select Site"
-              (selectionChange)="onSelectionChange($event)">
-            </app-searchable-select>
-          </div>
+            <!-- Site Selection -->
+            <ion-item class="input-item" button (click)="selectSiteBottomsheet()"
+              *ngIf="attendanceLog.p.AttendenceLocationType === AttendanceLocationTypes.Site">
+              <ion-label>Select Site</ion-label>
 
-          <!-- Photo Upload Section -->
-          <div class="photo-upload">
-            <ion-label class="section-title">Capture Photos</ion-label>
-            <div class="photo-row">
-              <div>
-                <ion-label>Self Photo</ion-label>
-                <ion-button expand="block" color="secondary" (click)="takePhoto('before')" [disabled]="isSubmitting">
-                  <ion-icon name="camera-outline" slot="start"></ion-icon>
-                  Capture
-                </ion-button>
-                <img *ngIf="capturedBeforePhoto" [src]="capturedBeforePhoto" class="preview-img" />
-                <ion-icon name="image-outline" *ngIf="!capturedBeforePhoto" class="preview-img"></ion-icon>
-              </div>
-              <div>
-                <ion-label>Work Location</ion-label>
-                <ion-button expand="block" color="secondary" (click)="takePhoto('after')" [disabled]="isSubmitting">
-                  <ion-icon name="camera-outline" slot="start"></ion-icon>
-                  Capture
-                </ion-button>
-                <img *ngIf="capturedAfterPhoto" [src]="capturedAfterPhoto" class="preview-img" />
-                <ion-icon name="image-outline" *ngIf="!capturedAfterPhoto" class="preview-img"></ion-icon>
+              <!-- Text showing the selected status -->
+              <ion-text slot="end" class="status-text">
+              {{SiteName}}
+              </ion-text>
+
+              <!-- Dropdown icon (chevron) on the right -->
+              <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+            </ion-item>
+
+            <!-- Photo Upload Section -->
+            <div class="photo-upload">
+              <ion-label class="section-title">Capture Photos</ion-label>
+              <div class="photo-row">
+                <div>
+                  <ion-label>Self Photo</ion-label>
+                  <ion-button expand="block" color="secondary" (click)="takePhoto('before')" [disabled]="isSubmitting">
+                    <ion-icon name="camera-outline" slot="start"></ion-icon>
+                    Capture
+                  </ion-button>
+                  <img *ngIf="capturedBeforePhoto" [src]="capturedBeforePhoto" class="preview-img" />
+                  <ion-icon name="image-outline" *ngIf="!capturedBeforePhoto" class="preview-img"></ion-icon>
+                </div>
+                <div>
+                  <ion-label>Work Location</ion-label>
+                  <ion-button expand="block" color="secondary" (click)="takePhoto('after')" [disabled]="isSubmitting">
+                    <ion-icon name="camera-outline" slot="start"></ion-icon>
+                    Capture
+                  </ion-button>
+                  <img *ngIf="capturedAfterPhoto" [src]="capturedAfterPhoto" class="preview-img" />
+                  <ion-icon name="image-outline" *ngIf="!capturedAfterPhoto" class="preview-img"></ion-icon>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Submit Button -->
-          <ion-button expand="block" color="primary" shape="round" [disabled]="isSubmitting" (click)="submitPunchIn()">
-            <ion-spinner *ngIf="isSubmitting" slot="start"></ion-spinner>
-            Submit Punch
-          </ion-button>
+            <!-- Submit Button -->
+            <ion-button expand="block" color="primary" shape="round" [disabled]="isSubmitting"
+              (click)="submitPunchIn()">
+              <ion-spinner *ngIf="isSubmitting" slot="start"></ion-spinner>
+              Submit Punch
+            </ion-button>
+          </ion-list>
         </ion-content>
       </div>
     </ng-template>

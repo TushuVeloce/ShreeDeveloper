@@ -35,6 +35,7 @@ export class AddEditMarketingManagementComponent implements OnInit {
   SiteName: string = '';
   MarketingTypeName: string = '';
   VendorName: string = '';
+  VendorServiceName: string = '';
 
   constructor(
     private router: Router,
@@ -65,18 +66,12 @@ export class AddEditMarketingManagementComponent implements OnInit {
       MarketingManagement.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as MarketingManagement;
-    // this.focusInput();
   }
 
   selectAllValue(event: MouseEvent): void {
     const input = event.target as HTMLInputElement;
     input.select();
   }
-
-  // focusInput = () => {
-  //   let txtName = document.getElementById('SiteRef')!;
-  //   txtName.focus();
-  // }
 
   onVendorChange = async (vendorref: number) => {
     this.serviceNamesString = '';
@@ -142,6 +137,7 @@ export class AddEditMarketingManagementComponent implements OnInit {
         // console.log('selected :', selected);
         // this.Entity.p.VendorRef = selected[0].p.Ref;
         this.serviceNamesString = selected[0].p.Name;
+        this.VendorServiceName = selected[0].p.Name;
         // this.getStateListByCountryRef(selected[0].p.Ref)
       });
     } catch (error) {

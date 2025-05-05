@@ -3,60 +3,86 @@
 
 <ion-content class="form-container ">
   <ion-list lines="none" class="ion-padding">
-    <!-- Task Name -->
+    <!--  Name -->
     <ion-item class="input-item">
-      <ion-label position="floating">Name</ion-label>
-      <ion-input [(ngModel)]="Entity.p.EmployeeName" required></ion-input>
+      <ion-input label="Employee Name" labelPlacement="floating" placeholder="Enter Employee Name"
+        [(ngModel)]="Entity.p.EmployeeName" readonly></ion-input>
     </ion-item>
 
     <!-- Select Request Type -->
-    <ion-item class="input-item" button (click)="selectLeaveType()">
-      <ion-label position="floating">Select Request Type</ion-label>
-      <ion-input [(ngModel)]="Entity.p.LeaveRequestName" disabled required></ion-input>
+    <ion-item class="input-item" button (click)="selectedLeaveTypeBottomsheet()">
+      <ion-label>Select Request Type</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ Entity.p.LeaveRequestName }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
     </ion-item>
 
-    <!-- From Date -->
-    <ion-item class="input-item" button (click)="selectFromDate()" *ngIf="!isHalfDay">
-      <ion-label position="floating">From Date</ion-label>
-      <ion-input [(ngModel)]="Entity.p.FromDate" disabled required></ion-input>
+    <!--From Date -->
+    <ion-item class="input-item" *ngIf="!isHalfDay">
+      <ion-label>From Date</ion-label>
+      <ion-datetime-button datetime="FromDate"></ion-datetime-button>
     </ion-item>
+    <ion-modal keepContentsMounted="true">
+      <ng-template>
+        <ion-datetime id="FromDate" presentation="date" [(ngModel)]="fromDate" show-default-buttons="true"
+          (ionChange)="onFromDateChange($event.detail.value)"></ion-datetime>
+      </ng-template>
+    </ion-modal>
 
-    <!-- To Date -->
-    <ion-item class="input-item" button (click)="selectToDate()" *ngIf="!isHalfDay">
-      <ion-label position="floating">To Date</ion-label>
-      <ion-input [(ngModel)]="Entity.p.ToDate" disabled required></ion-input>
+    <!--To Date -->
+    <ion-item class="input-item" *ngIf="!isHalfDay">
+      <ion-label>To Date</ion-label>
+      <ion-datetime-button datetime="ToDate"></ion-datetime-button>
     </ion-item>
+    <ion-modal keepContentsMounted="true">
+      <ng-template>
+        <ion-datetime id="ToDate" presentation="date" [(ngModel)]="toDate" show-default-buttons="true"
+          (ionChange)="onToDateChange($event.detail.value)"></ion-datetime>
+      </ng-template>
+    </ion-modal>
 
-    <!-- Half Day Date -->
-    <ion-item class="input-item" button (click)="selectHalfDayDate()" *ngIf="isHalfDay">
-      <ion-label position="floating">Half Day Date</ion-label>
-      <ion-input [(ngModel)]="Entity.p.HalfDayDate" disabled required></ion-input>
+    <!--Half Day Date -->
+    <ion-item class="input-item" *ngIf="isHalfDay">
+      <ion-label>Half Day Date</ion-label>
+      <ion-datetime-button datetime="HalfDayDate"></ion-datetime-button>
     </ion-item>
+    <ion-modal keepContentsMounted="true">
+      <ng-template>
+        <ion-datetime id="HalfDayDate" presentation="date" [(ngModel)]="halfDayDate" show-default-buttons="true"
+          (ionChange)="onHalfDateChange($event.detail.value)"></ion-datetime>
+      </ng-template>
+    </ion-modal>
 
     <!-- Day -->
-    <ion-item class="input-item" >
-      <ion-label position="floating">Day</ion-label>
-      <ion-input [(ngModel)]="Entity.p.Days" required disabled></ion-input>
+    <ion-item class="input-item" *ngIf="!isHalfDay">
+      <ion-input label="Days" labelPlacement="floating" placeholder="Enter Days"
+        [(ngModel)]="Entity.p.Days"></ion-input>
     </ion-item>
 
     <!-- Leave Hours -->
     <ion-item class="input-item">
-      <ion-label position="floating">Leave Hours</ion-label>
-      <ion-input [(ngModel)]="Entity.p.LeaveHours" required></ion-input>
+      <ion-input label="Leave Hours" labelPlacement="floating" placeholder="Enter Leave Hours"
+        [(ngModel)]="Entity.p.LeaveHours"></ion-input>
     </ion-item>
+
     <!-- Description -->
     <ion-item class="input-item">
-      <ion-label position="floating">Description</ion-label>
-      <ion-textarea [(ngModel)]="Entity.p.Description" rows="4" required></ion-textarea>
+      <ion-textarea label="Description" labelPlacement="floating" placeholder="Enter Description"
+        [(ngModel)]="Entity.p.Description"></ion-textarea>
     </ion-item>
 
     <!-- Buttons -->
     <div class="button-row">
-      <ion-button expand="block" (click)="SaveLeaveRequest()" class="submit-button primary-button">
-        Add
-      </ion-button>
       <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
         Cancel
+      </ion-button>
+      <ion-button expand="block" (click)="SaveLeaveRequest()" class="submit-button primary-button">
+        Apply
       </ion-button>
     </div>
 

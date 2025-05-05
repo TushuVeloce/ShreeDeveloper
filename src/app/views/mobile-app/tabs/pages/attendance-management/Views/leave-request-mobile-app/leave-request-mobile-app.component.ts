@@ -132,13 +132,22 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
         }
       );
     } catch (error) {
-    // console.log('error :', error);
+      // console.log('error :', error);
     }
   }
 
-  addLeaveRequest(): void {
-    this.router.navigate([
-      '/app_homepage/tabs/attendance-management/add-leave-request',
-    ]);
+  async addLeaveRequest() {
+    try {
+      if (this.companyRef() <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
+      this.router.navigate([
+        '/app_homepage/tabs/attendance-management/add-leave-request',
+      ]);
+    } catch (error: any) {
+      await this.uiUtils.showErrorMessage('Error', error?.message || 'Failed to open the add form.');
+    }
+
   }
 }

@@ -26,7 +26,7 @@ import { Utils } from 'src/app/services/utils.service';
   selector: 'app-attendance-management',
   templateUrl: './attendance-management.page.html',
   styleUrls: ['./attendance-management.page.scss'],
-  standalone:false
+  standalone: false
 })
 export class AttendanceManagementPage implements OnInit {
   // State and UI flags
@@ -49,10 +49,11 @@ export class AttendanceManagementPage implements OnInit {
   attendanceLog: AttendanceLog = AttendanceLog.CreateNewInstance();
   siteList: Site[] = [];
   selectedSite: Site[] = [];
+  SiteName: string = "";
   filteredWeeklyAttendanceLogs: AttendanceLogs[] = [];
   weeklyAttendanceLogs: AttendanceLogs[] = [];
 
-  
+
   // Enums and Lists
   AttendanceLocationTypes = AttendenceLocationType;
   attendanceLocationTypeList = DomainEnums.AttendenceLocationTypeList();
@@ -76,7 +77,7 @@ export class AttendanceManagementPage implements OnInit {
     private dtu: DTU,
     private payloadPacketFacade: PayloadPacketFacade,
     private serverCommunicator: ServerCommunicatorService,
-    private dateConversionService: DateconversionService,    
+    private dateConversionService: DateconversionService,
     private bottomsheetMobileAppService: BottomsheetMobileAppService
   ) { }
 
@@ -121,8 +122,8 @@ export class AttendanceManagementPage implements OnInit {
 
   async handleRefresh(event: CustomEvent): Promise<void> {
     await this.getCheckInData(),
-    await this.getWeekWiseAttendanceLogByAttendanceListType(),
-    (event.target as HTMLIonRefresherElement).complete();
+      await this.getWeekWiseAttendanceLogByAttendanceListType(),
+      (event.target as HTMLIonRefresherElement).complete();
   }
 
   async getCheckInData(): Promise<void> {
@@ -204,8 +205,8 @@ export class AttendanceManagementPage implements OnInit {
 
   gridItemsFunction(id: number): void {
     switch (id) {
-      case 100: 
-        this.getSalarySlip(); 
+      case 100:
+        this.getSalarySlip();
         break;
       case 200:
         this.requestLeave();
@@ -218,30 +219,62 @@ export class AttendanceManagementPage implements OnInit {
     }
   }
 
-  
+  public async selectAttendanceLocationBottomsheet(): Promise<void> {
+    try {
+      // Filter the list before mapping
+      // const filteredList = this.CustomerStatusList.filter(
+      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
+      // );
+
+      const options = this.attendanceLocationTypeList.map((item) => ({ p: item }));
+
+      let selectData: any[] = [];
+
+      this.openSelectModal(options, selectData, false, 'Select Location Type', 1, (selected) => {
+        selectData = selected;
+        // console.log('selected :', selected);
+        // this.selectedSite = selected;
+        this.attendanceLog.p.AttendenceLocationType = selected[0].p.Ref;
+        this.AttendenceLocationTypeName = selected[0].p.Name;
+      });
+    } catch (error) {
+      // console.log('error :', error);
+    }
+  }
+
+  public async selectSiteBottomsheet(): Promise<void> {
+    try {
+      // Filter the list before mapping
+      // const filteredList = this.CustomerStatusList.filter(
+      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
+      // );
+
+      // const options = this.attendanceLocationTypeList.map((item) => ({ p: item }));
+      const options = this.siteList;
+
+      let selectData: any[] = [];
+
+      this.openSelectModal(options, selectData, false, 'Select Site', 1, (selected) => {
+        selectData = selected;
+        console.log('selected :', selected);
+        this.selectedSite = selected;
+        this.SiteName = selected[0].p.Name;
+      });
+    } catch (error) {
+      // console.log('error :', error);
+    }
+  }
+
   private async openSelectModal(
     dataList: any[],
     selectedItems: any[],
     multiSelect: boolean,
     title: string,
-    MaxSelection:number,
+    MaxSelection: number,
     updateCallback: (selected: any[]) => void
   ): Promise<void> {
     const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, multiSelect, title, MaxSelection);
     if (selected) updateCallback(selected);
-  }
-
-  public async selectAttendanceLocationBottomsheet(): Promise<void> {
-    const options = this.attendanceLocationTypeList.map((item) => ({ p: item }));
-    this.openSelectModal(options, this.selectedSite, false, 'Select Month', 1, (selected) => {
-      this.selectedSite = selected;
-      this.attendanceLog.p.AttendenceLocationType = selected[0].p.Ref;
-      this.AttendenceLocationTypeName = selected[0].p.Name;
-      
-      // // console.log('selected :', selected.map(item => item.p.Ref));      
-      // this.Entity.p.SelectedMonths = selected.map(item => item.p.Ref);
-      // this.Entity.p.SelectedMonthsName = selected.map(item => item.p.Name);
-    });
   }
 
   async openPunchModal(): Promise<void> {
@@ -256,10 +289,6 @@ export class AttendanceManagementPage implements OnInit {
     } catch (error) {
       console.error('Error fetching site list:', error);
     }
-  }
-
-  onSelectionChange(selected: Site[]): void {
-    this.selectedSite = selected;
   }
 
   async submitPunchIn(): Promise<void> {
@@ -277,7 +306,7 @@ export class AttendanceManagementPage implements OnInit {
       const entityToSave = this.attendanceLog.GetEditableVersion();
       const entitiesToSave = [entityToSave];
       console.log('entitiesToSave:', entitiesToSave);
-      
+
       const tr = await this.utils.SavePersistableEntities(entitiesToSave);
       if (!tr.Successful) {
         await this.uiUtils.showErrorMessage('Error', tr.Message);
@@ -359,7 +388,7 @@ export class AttendanceManagementPage implements OnInit {
       // console.log('Weekly Attendance Logs:', logs);
     } catch (error) {
       // console.error('Error fetching weekly attendance logs:', error);
-    }finally{
+    } finally {
       this.isLoading = false;
     }
   }

@@ -24,9 +24,9 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
   public InitialEntity: LeaveRequest = null as any;
   public DetailsFormTitle: 'New Leave Request' | 'Edit Leave Request' = 'New Leave Request';
 
-  public fromDate = '';
-  public toDate = '';
-  public halfDayDate = '';
+  public fromDate: string | null = null;
+  public toDate: string | null = null;
+  public halfDayDate: string | null = null;
   public isHalfDay = false;
   public isLoading = false;
 
@@ -44,6 +44,7 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
   public companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   private IsNewEntity = true;
+  // FromDate:string | null = null;
 
   constructor(
     private router: Router,
@@ -176,19 +177,31 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
       this.halfDayDate = '';
     }
   }
+  // onDateChange(event: any) {
+  //   console.log('Selected date:', event.detail.value);
+  // }
+  public async onFromDateChange(date: any): Promise<void> {
+    this.fromDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
+    this.Entity.p.FromDate = this.fromDate;
+    this.onDateChangeSetDaysandLeaveHours();
+  }
+  public async onToDateChange(date: any): Promise<void> {
+    this.toDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
+    this.Entity.p.ToDate = this.toDate;
 
-  public async selectFromDate(): Promise<void> {
-    const pickedDate = await this.dateTimePickerService.open({
-      mode: 'date',
-      label: 'Select Start Date',
-      value: this.fromDate,
-    });
-
-    if (pickedDate) {
-      this.fromDate = this.datePipe.transform(pickedDate, 'yyyy-MM-dd') ?? '';
-      this.Entity.p.FromDate = this.fromDate;
+    if (this.fromDate) {
+      this.onDateChangeSetDaysandLeaveHours();
+    } else {
+      const today = new Date();
+      await this.onFromDateChange(today);
       this.onDateChangeSetDaysandLeaveHours();
     }
+  }
+
+  public async onHalfDateChange(date: any): Promise<void> {
+    this.halfDayDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
+    this.Entity.p.HalfDayDate = this.halfDayDate;
+    this.onDateChangeSetDaysandLeaveHours();
   }
 
   public async selectToDate(): Promise<void> {
@@ -218,34 +231,40 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
     }
   }
 
-  public selectLeaveType(): void {
-    const options = this.LeaveRequestTypeList.map(item => ({ p: item }));
-    this.openSelectModal(
-      options,
-      this.SelectedLeaveType,
-      this.LeaveTypeBottomSheetTitle,
-      (selected) => {
+  public async selectedLeaveTypeBottomsheet(): Promise<void> {
+    try {
+      // Filter the list before mapping
+      // const filteredList = this.CustomerStatusList.filter(
+      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
+      // );
+
+      const options = this.LeaveRequestTypeList.map((item) => ({ p: item }));
+
+      let selectData: any[] = [];
+
+      this.openSelectModal(options, selectData, false, 'Select Leave Type', 1, (selected) => {
+        selectData = selected;
+        // console.log('selected :', selected);
         this.SelectedLeaveType = selected;
         this.Entity.p.LeaveRequestType = selected[0]?.p?.Ref;
         this.Entity.p.LeaveRequestName = selected[0]?.p?.Name;
         this.onLeaveRequestTypeChanged();
-      }
-    );
+      });
+    } catch (error) {
+      // console.log('error :', error);
+    }
   }
+
 
   private async openSelectModal(
     dataList: any[],
     selectedItems: any[],
+    multiSelect: boolean,
     title: string,
+    MaxSelection: number,
     updateCallback: (selected: any[]) => void
   ): Promise<void> {
-    const selected = await this.bottomsheetMobileAppService.openSelectModal(
-      dataList,
-      selectedItems,
-      false,
-      title
-    );
-
+    const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, multiSelect, title, MaxSelection);
     if (selected) updateCallback(selected);
   }
 
@@ -256,10 +275,10 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
       this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
 
       if (this.Entity.p.LeaveRequestType === LeaveRequestType.HalfDay) {
-        this.Entity.p.HalfDayDate = this.dtu.ConvertStringDateToFullFormat(this.halfDayDate);
+        this.Entity.p.HalfDayDate = this.dtu.ConvertStringDateToFullFormat(this.halfDayDate ? this.halfDayDate : '');
       } else {
-        this.Entity.p.FromDate = this.dtu.ConvertStringDateToFullFormat(this.fromDate);
-        this.Entity.p.ToDate = this.dtu.ConvertStringDateToFullFormat(this.toDate);
+        this.Entity.p.FromDate = this.dtu.ConvertStringDateToFullFormat(this.fromDate ? this.fromDate : '');
+        this.Entity.p.ToDate = this.dtu.ConvertStringDateToFullFormat(this.toDate ? this.toDate : '');
       }
 
       if (!this.Entity.p.Days) this.Entity.p.Days = 0;

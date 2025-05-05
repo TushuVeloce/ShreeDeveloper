@@ -1,32 +1,122 @@
-<!-- <app-header title="Marketing Management"></app-header> -->
-<app-header-with-back-handler title="Marketing Management"></app-header-with-back-handler>
+<app-loader *ngIf="isLoading"></app-loader>
+<app-header-with-back-handler title="Customer Enquiry" backRoute="app_homepage/tabs/crm"></app-header-with-back-handler>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">TaskManagement</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-list>
-    <ion-item *ngFor="let task of tasks">
-      <ion-label>
-        <h2>{{ task.title }}</h2>
-        <p>{{ task.description }}</p>
-      </ion-label>
-      <ion-button fill="clear" (click)="editTask(task.id)">
-        <ion-icon name="create-outline"></ion-icon>
-      </ion-button>
-    </ion-item>
+  <!-- Marketing Data List -->
+  <ion-list class="Data-list">
+    <ng-container *ngIf="DisplayMasterList.length > 0; else noData">
+      <ion-card *ngFor="let item of DisplayMasterList" class="Data-card">
+        <ion-card-content>
+          <div class="info-row"><strong>Site :</strong> {{ item.p.SiteName }}</div>
+          <div class="info-row">
+            <strong>Date :</strong> {{ item.p.Date}}
+          </div>
+          <div class="info-row"><strong>Marketing Type:</strong> {{ item.p.MarketingTypeName }}</div>
+          <div class="info-row"><strong>Vendor Name:</strong> {{ item.p.MarketingTypeName }}</div>
+          <div class="info-row"><strong>Rate:</strong> {{ item.p.Rate }}</div>
+          <div class="info-row"><strong>Quantity:</strong> {{ item.p.Quantity }}</div>
+          <div class="info-row"><strong>Total:</strong> {{ item.p.Total }}</div>
+          <div class="btn-row">
+            <ion-button size="small" fill="outline" color="primary" (click)="onViewClicked(item)">
+              <ion-icon name="eye-outline" slot="start"></ion-icon> View
+            </ion-button>
+            <ion-button size="small" fill="outline" color="secondary" (click)="onEditClicked(item)">
+              <ion-icon name="create-outline" slot="start"></ion-icon> Edit
+            </ion-button>
+            <ion-button size="small" fill="outline" color="danger" (click)="onDeleteClicked(item)">
+              <ion-icon name="trash-outline" slot="start"></ion-icon> Delete
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+    <!-- No Data Template -->
+    <ng-template #noData>
+      <ion-card class="Data-card">
+        <ion-card-content class="text-center">
+          <ion-icon name="information-circle-outline" size="large" color="medium"></ion-icon>
+          <div class="info-row">No Marketing Data found.</div>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
   </ion-list>
-  <ion-fab>
-    <ion-fab-button (click)="addTask()">
-      <ion-icon name="add"></ion-icon>
+
+  <!-- FAB -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="primary" (click)="AddMarketing()">
+      <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
-  <ion-fab class="filterFab">
-    <ion-fab-button (click)="''">
-      <ion-icon name="filter"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+  <!-- Modal -->
+  <ion-modal [isOpen]="ModalOpen" (didDismiss)="closeModal()" class="modal-card">
+    <ng-container *ngIf="SelectedMarketingManagement">
+      <ion-header>
+        <ion-toolbar color="primary" class="modal-toolbar">
+          <ion-title>Details</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="closeModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content scroll-y="true" class="modal-scroll-content ion-padding">
+        <div class="info-row-of-model">
+          <strong class="label">Site:</strong>
+          <span class="value">{{ SelectedMarketingManagement.p.SiteName }}</span>
+        </div>
+        <div class="info-row-of-model">
+          <strong class="label">Date:</strong>
+          <span class="value">{{ SelectedMarketingManagement.p.Date }}</span>
+        </div>
+        <div class="info-row-of-model">
+          <strong class="label">Marketing Type:</strong>
+          <span class="value">{{ SelectedMarketingManagement.p.MarketingTypeName }}</span>
+        </div>
+        <div class="info-row-of-model">
+          <strong class="label">Vendor Name:</strong>
+          <span class="value">{{ SelectedMarketingManagement.p.VendorName }}</span>
+        </div>
+        <div class="info-row-of-model">
+          <strong class="label">Service:</strong>
+          <span class="value">{{ SelectedMarketingManagement.p.VendorName }}</span>
+        </div>
+        <div class="info-row-of-model">
+          <strong class="label">Place:</strong>
+          <span class="value">{{ SelectedMarketingManagement.p.Place }}</span>
+        </div>
+        <div class="info-row-of-model"
+          *ngIf="SelectedMarketingManagement.p.MarketingTypeRef==MarketingModes.PrintingMedia">
+          <strong class="label">Pages:</strong>
+          <span class="value">{{ SelectedMarketingManagement.p.Page }}</span>
+        </div>
+        <div class="info-row-of-model">
+          <strong class="label">Rate:</strong>
+          <span class="value">{{ SelectedMarketingManagement.p.Rate }}</span>
+        </div>
+        <div class="info-row-of-model">
+          <strong class="label">Quantity:</strong>
+          <span class="value">{{ SelectedMarketingManagement.p.Quantity }}</span>
+        </div>
+        <div class="info-row-of-model">
+          <strong class="label">Total:</strong>
+          <span class="value">{{ SelectedMarketingManagement.p.Total }}</span>
+        </div>
+        <div class="info-row-of-model">
+          <strong class="label">Name:</strong>
+          <span class="value">{{ SelectedMarketingManagement.p.Name }}</span>
+        </div>
+        <div class="info-row-of-model">
+          <strong class="label">Narration:</strong>
+          <span class="value">{{ SelectedMarketingManagement.p.Narration }}</span>
+        </div>
+      </ion-content>
+      <ion-footer class="modal-footer">
+        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
+          Close
+        </ion-button>
+      </ion-footer>
+    </ng-container>
+  </ion-modal>
 </ion-content>

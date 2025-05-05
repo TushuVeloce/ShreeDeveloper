@@ -53,7 +53,7 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
 
   ngOnDestroy(): void {
     // cleanup logic if needed later
-  } 
+  }
 
   private async loadSalarySlipRequestsIfEmployeeExists(): Promise<void> {
     try {
@@ -100,7 +100,7 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
         return;
       }
 
-      const employee = await Employee.FetchInstance(this.EmployeeRef,companyRef, async (errMsg) =>
+      const employee = await Employee.FetchInstance(this.EmployeeRef, companyRef, async (errMsg) =>
         await this.uiUtils.showErrorMessage('Error', errMsg)
       );
 
@@ -113,8 +113,16 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
 
   public async selectMonthBottomsheet(): Promise<void> {
     try {
+      // Filter the list before mapping
+      // const filteredList = this.CustomerStatusList.filter(
+      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
+      // );
+
       const options = this.monthList.map((item) => ({ p: item }));
-      this.openSelectModal(options, this.SelectedMonth, true, 'Select Month', 3, (selected) => {
+
+      let selectData: any[] = [];
+
+      this.openSelectModal(options, selectData, true, 'Select Leave Type', 3, (selected) => {
         this.SelectedMonth = selected;
         // console.log('selected :', selected.map(item => item.p.Ref));
         this.Entity.p.SelectedMonths = selected.map(item => item.p.Ref);
@@ -127,14 +135,36 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
 
   public async selectYearBottomsheet(): Promise<void> {
     try {
+      // Filter the list before mapping
+      // const filteredList = this.CustomerStatusList.filter(
+      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
+      // );
+
       const options = this.FinancialYearList.map(year => ({ p: { Ref: year, Name: year } }));
-      this.openSelectModal(options, this.SelectedYear, false, 'Select Year', 1, (selected) => {
+      // const options = this.monthList.map((item) => ({ p: item }));
+
+
+      let selectData: any[] = [];
+
+      this.openSelectModal(options, selectData, false, 'Select Year', 1, (selected) => {
         this.SelectedYear = selected;
         this.Entity.p.Year = selected[0]?.p?.Ref;
       });
     } catch (error) {
       // console.log('error :', error);
     }
+  }
+
+  private async openSelectModal(
+    dataList: any[],
+    selectedItems: any[],
+    multiSelect: boolean,
+    title: string,
+    MaxSelection: number,
+    updateCallback: (selected: any[]) => void
+  ): Promise<void> {
+    const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, multiSelect, title, MaxSelection);
+    if (selected) updateCallback(selected);
   }
 
   // private async getFinancialYearListByCompanyRef(): Promise<void> {
@@ -188,18 +218,6 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
     }
   }
 
-  private async openSelectModal(
-    dataList: any[],
-    selectedItems: any[],
-    multiSelect: boolean,
-    title: string,
-    MaxSelection: number,
-    updateCallback: (selected: any[]) => void
-  ): Promise<void> {
-    const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, multiSelect, title, MaxSelection);
-    if (selected) updateCallback(selected);
-  }
-
   public async SaveSalarySlipRequest(): Promise<void> {
     try {
       this.isLoading = false;
@@ -228,8 +246,8 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
       }
     } catch (error) {
       // console.log('error :', error);
-    }finally{
-      this.isLoading=false;
+    } finally {
+      this.isLoading = false;
     }
   }
 

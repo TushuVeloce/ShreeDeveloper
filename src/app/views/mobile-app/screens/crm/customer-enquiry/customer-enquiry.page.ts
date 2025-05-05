@@ -51,25 +51,38 @@ export class CustomerEnquiryPage implements OnInit {
     return this.companystatemanagement.SelectedCompanyRef();
   }
 
+  // getCustomerEnquiryListByCompanyRef = async () => {
+  //   this.MasterList = [];
+  //   this.DisplayMasterList = [];
+  //   if (this.companyRef() <= 0) {
+  //     await this.uiUtils.showErrorToster('Company not Selected');
+  //     return;
+  //   }
+  //   let lst = await CustomerEnquiry.FetchEntireListByCompanyRef(
+  //     this.companyRef(),
+  //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+  //   );
+  //   this.MasterList = lst;
+  //   this.MasterList.forEach(e => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()))
+  //   this.DisplayMasterList = this.MasterList;
+  //   this.loadPaginationData();
+  // };
   async getCustomerEnquiryListByCompanyRef() {
-    this.CustomerEnquiryList = [];
-    this.FilteredCustomerEnquiryList = [];
-    this.isLoading = true;
-
     try {
+      this.CustomerEnquiryList = [];
+      this.FilteredCustomerEnquiryList = [];
+      this.isLoading = true;
       if (this.companyRef() <= 0) {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
       }
-
-      const list = await CustomerEnquiry.FetchEntireListByCompanyRef(
-       await this.companyRef(),
+      let lst = await CustomerEnquiry.FetchEntireListByCompanyRef(
+        this.companyRef(),
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
-
-      list.forEach((e) => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()));
-
-      this.CustomerEnquiryList = list;
+      this.CustomerEnquiryList = lst;
+      this.CustomerEnquiryList.forEach(e => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()))
+      this.FilteredCustomerEnquiryList = this.CustomerEnquiryList;
       this.filterCustomerList();
     } catch (error: any) {
       await this.uiUtils.showErrorMessage('Unexpected Error', error?.message || 'Something went wrong');
@@ -90,7 +103,7 @@ export class CustomerEnquiryPage implements OnInit {
       this.SelectedCustomerEnquiry = item.GetEditableVersion();
       CustomerEnquiry.SetCurrentInstance(this.SelectedCustomerEnquiry);
       this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-      this.router.navigate(['/app_homepage/tabs/crm/customer-enquiry/edit']);
+      this.router.navigate(['app_homepage/tabs/crm/customer-enquiry/edit']);
     } catch (error: any) {
       await this.uiUtils.showErrorMessage('Error', error?.message || 'Could not open edit form.');
     }

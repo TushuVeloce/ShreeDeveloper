@@ -119,9 +119,17 @@ export class SalarySlipMobileAppComponent implements OnInit {
         return 'medium';
     }
   }
-  addSalarySlipRequest(): void {
-    this.router.navigate([
-      '/app_homepage/tabs/attendance-management/add-salary-slip',
-    ]);
+  async addSalarySlipRequest() {
+    try {
+      if (this.companyRef() <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
+      this.router.navigate([
+        '/app_homepage/tabs/attendance-management/add-salary-slip',
+      ]);
+    } catch (error: any) {
+      await this.uiUtils.showErrorMessage('Error', error?.message || 'Failed to open the add form.');
+    }
   }
 }

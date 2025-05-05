@@ -51,7 +51,7 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
   SiteManagementRef: number = 0;
   SiteManagementName: string | null = null;
   today: string = new Date().toISOString().split('T')[0];
-  DetailsFormTitle: 'New Customer' | 'Edit Customer' = 'New Customer';
+  DetailsFormTitle: 'New Customer Enquiry' | 'Edit Customer Enquiry' = 'New Customer Enquiry';
   public monthList = DomainEnums.MonthList();
   public SelectedMonth: any[] = [];
   public contactModeName: string | null = null;
@@ -112,8 +112,8 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
       if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
         this.IsNewEntity = false;
         this.DetailsFormTitle = this.IsNewEntity
-          ? 'New Customer'
-          : 'Edit Customer';
+          ? 'New Customer Enquiry'
+          : 'Edit Customer Enquiry';
         this.Entity = CustomerEnquiry.GetCurrentInstance();
         console.log('Entity :', this.Entity);
         // Site Visit Date
@@ -308,7 +308,7 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
         selectData = selected;
         // console.log('selected :', selected);
         this.InterestedPlotRef = selected[0].p.Ref;
-        this.InterestedPlotNo = selected[0].p.Name;
+        this.InterestedPlotNo = selected[0].p.PlotNo;
       });
     } catch (error) {
       // console.log('error :', error);
