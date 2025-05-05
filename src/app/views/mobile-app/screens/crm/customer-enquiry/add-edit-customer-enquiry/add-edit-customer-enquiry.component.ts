@@ -102,11 +102,10 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
       this.isLoading = true;
       this.appStateManage.setDropdownDisabled(true);
       console.log(this.CustomerStatusList);
-
       this.CountryList = await Country.FetchEntireList();
-      this.StateList = await State.FetchEntireList();
+      // this.StateList = await State.FetchEntireList();
 
-      this.CityList = await City.FetchEntireList();
+      // this.CityList = await City.FetchEntireList();
       await this.getSiteListByCompanyRef();
       await this.getEmployeeListByCompanyRef();
 
@@ -255,8 +254,8 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
       //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
       // );
 
-      const options = this.MarketingModesList.map((item) => ({ p: item }));
-      // const options = this.CityList;
+      // const options = this.MarketingModesList.map((item) => ({ p: item }));
+      const options = this.CityList;
 
       let selectData: any[] = [];
 
@@ -350,7 +349,7 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
       let selectData: any[] = [];
 
-      this.openSelectModal(options, selectData, false, 'Select Contact Mode', 1, (selected) => {
+      this.openSelectModal(options, selectData, false, 'Select Lead Handle By', 1, (selected) => {
         selectData = selected;
         // console.log('selected :', selected);
         this.Entity.p.CustomerFollowUps[0].LeadHandleBy = selected[0].p.Ref;

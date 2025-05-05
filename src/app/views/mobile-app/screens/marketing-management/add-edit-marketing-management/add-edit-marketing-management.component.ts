@@ -65,7 +65,7 @@ export class AddEditMarketingManagementComponent implements OnInit {
       MarketingManagement.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as MarketingManagement;
-    this.focusInput();
+    // this.focusInput();
   }
 
   selectAllValue(event: MouseEvent): void {
@@ -73,10 +73,10 @@ export class AddEditMarketingManagementComponent implements OnInit {
     input.select();
   }
 
-  focusInput = () => {
-    let txtName = document.getElementById('SiteRef')!;
-    txtName.focus();
-  }
+  // focusInput = () => {
+  //   let txtName = document.getElementById('SiteRef')!;
+  //   txtName.focus();
+  // }
 
   onVendorChange = async (vendorref: number) => {
     this.serviceNamesString = '';

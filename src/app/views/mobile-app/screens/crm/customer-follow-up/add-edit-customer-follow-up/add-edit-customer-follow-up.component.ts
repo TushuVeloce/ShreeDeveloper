@@ -111,7 +111,7 @@ export class AddEditCustomerFollowUpComponent implements OnInit {
          this.EmployeeList = await Employee.FetchEntireList();
          console.log(this.CustomerStatusList);
      
-         this.getSiteListByCompanyRef();
+           await this.getSiteListByCompanyRef();
          // Check if CountryRef is already set (e.g., India is preselected)
          if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
            // debugger

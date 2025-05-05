@@ -63,7 +63,7 @@ export class CustomerEnquiryPage implements OnInit {
       }
 
       const list = await CustomerEnquiry.FetchEntireListByCompanyRef(
-        this.companyRef(),
+       await this.companyRef(),
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
 
@@ -132,7 +132,7 @@ export class CustomerEnquiryPage implements OnInit {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
       }
-      this.router.navigate(['homepage/Website/Customer_Enquiry_Details']);
+      this.router.navigate(['app_homepage/tabs/crm/customer-enquiry/add']);
     } catch (error: any) {
       await this.uiUtils.showErrorMessage('Error', error?.message || 'Failed to open the add form.');
     }
