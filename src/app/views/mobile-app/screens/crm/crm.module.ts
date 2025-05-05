@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { CRMPageRoutingModule } from './crm-routing.module';
 import { CRMPage } from './crm.page';
 import { SharedModule } from "../../shared/shared.module";
+import { LoaderComponent } from "../../shared/loader/loader.component";
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { SharedModule } from "../../shared/shared.module";
     FormsModule,
     IonicModule,
     CRMPageRoutingModule,
-    SharedModule
+    SharedModule,
+    LoaderComponent
 ],
   declarations:[CRMPage]
 })

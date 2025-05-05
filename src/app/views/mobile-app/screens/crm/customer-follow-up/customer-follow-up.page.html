@@ -1,4 +1,6 @@
-<app-header-with-back-handler title="Customer Follow-Up"></app-header-with-back-handler>
+<app-loader *ngIf="isLoading"></app-loader>
+
+<app-header-with-back-handler title="Customer Follow-Up" backRoute="app_homepage/tabs/crm"></app-header-with-back-handler>
 
 <ion-content [fullscreen]="true">
   <!-- Customer List -->

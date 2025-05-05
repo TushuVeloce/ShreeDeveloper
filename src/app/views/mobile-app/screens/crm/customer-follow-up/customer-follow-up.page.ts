@@ -31,6 +31,7 @@ export class CustomerFollowUpPage implements OnInit {
   date: string = '';
   strCDT: string = '';
   ModalOpen: boolean = false;
+  isLoading: boolean = false;
 
   constructor(
     private uiUtils: UIUtils,
@@ -38,29 +39,39 @@ export class CustomerFollowUpPage implements OnInit {
     private appStateManage: AppStateManageService,
     private companystatemanagement: CompanyStateManagement,
     private dateconversionService: DateconversionService
-  ) {
-    effect(async() => {
-      await this.loadSitesByCompanyRef();
-    });
-  }
+  ) {}
   
   async ngOnInit() {
-
+    this.LoadAllData()
+  }
+  ionViewWillEnter = async () => {
+    await this.LoadAllData();
+    // console.log('Leave request refreshed on view enter');
+  };
+  private async LoadAllData() {
     if (!this.date) {
       await this.initializeDate();
+      await this.loadSitesByCompanyRef();
     }
   }
-
   private async initializeDate() {
-    this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-    const parts = this.strCDT.substring(0, 16).split('-');
+    this.isLoading = true;
+    try {
+      this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+      const parts = this.strCDT.substring(0, 16).split('-');
 
-    if (parts.length >= 3) {
-      this.date = `${parts[0]}-${parts[1]}-${parts[2]}`;
-      this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
-      await this.fetchFollowUps();
+      if (parts.length >= 3) {
+        this.date = `${parts[0]}-${parts[1]}-${parts[2]}`;
+        this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+        await this.fetchFollowUps();
+      }
+    } catch (error) {
+      await this.uiUtils.showErrorMessage('Error', 'Failed to initialize date');
+    } finally {
+      this.isLoading = false;
     }
   }
+
 
   async onDateChange(date: string) {
     if (date) {
@@ -81,52 +92,74 @@ export class CustomerFollowUpPage implements OnInit {
   }
 
   private async fetchFollowUps() {
-    const followUps = await CustomerFollowUp.FetchEntireListByDateandPlotRef(
-      this.strCDT,
-      this.InterestedPlotRef,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
+    this.isLoading = true;
+    try {
+      const followUps = await CustomerFollowUp.FetchEntireListByDateandPlotRef(
+        this.strCDT,
+        this.InterestedPlotRef,
+        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
 
-    this.followupList = followUps;
-    this.FilterFollowupList = followUps;
-    console.log('Follow-up list:', this.followupList);
+      this.followupList = followUps;
+      this.FilterFollowupList = followUps;
+      console.log('Follow-up list:', this.followupList);
+    } catch (error) {
+      await this.uiUtils.showErrorMessage('Error', 'Failed to fetch follow-ups');
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   private async loadSitesByCompanyRef() {
-    this.followupList = [];
-    this.FilterFollowupList = [];
-    this.SiteList = [];
+    this.isLoading = true;
+    try {
+      this.followupList = [];
+      this.FilterFollowupList = [];
+      this.SiteList = [];
 
-    const companyRef = await this.companystatemanagement.SelectedCompanyRef();
-    if (companyRef <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
+      const companyRef = await this.companystatemanagement.SelectedCompanyRef();
+      if (companyRef <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
+
+      const sites = await Site.FetchEntireListByCompanyRef(
+        companyRef,
+        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+
+      this.SiteList = sites;
+    } catch (error) {
+      await this.uiUtils.showErrorMessage('Error', 'Failed to load sites');
+    } finally {
+      this.isLoading = false;
     }
-
-    const sites = await Site.FetchEntireListByCompanyRef(
-      companyRef,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-
-    this.SiteList = sites;
   }
-
+ 
   async loadPlotsBySiteRef(siteRef: number) {
-    if (siteRef <= 0) {
-      await this.uiUtils.showWarningToster(`Please select a site`);
-      return;
+    this.isLoading = true;
+    try {
+      if (siteRef <= 0) {
+        await this.uiUtils.showWarningToster(`Please select a site`);
+        return;
+      }
+
+      this.InterestedPlotRef = 0;
+
+      const plots = await Plot.FetchEntireListBySiteandbookingremarkRef(
+        siteRef,
+        BookingRemark.Booked,
+        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+
+      this.PlotList = plots;
+    } catch (error) {
+      await this.uiUtils.showErrorMessage('Error','Failed to load plots');
+    } finally {
+      this.isLoading = false;
     }
-
-    this.InterestedPlotRef = 0;
-
-    const plots = await Plot.FetchEntireListBySiteandbookingremarkRef(
-      siteRef,
-      BookingRemark.Booked,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-
-    this.PlotList = plots;
   }
+
 
   async onFollowUpClick(followup: CustomerFollowUp) {
     this.SelectedFollowUp = followup.GetEditableVersion();

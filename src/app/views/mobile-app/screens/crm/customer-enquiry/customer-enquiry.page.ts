@@ -22,6 +22,7 @@ export class CustomerEnquiryPage implements OnInit {
   SearchString: string = '';
   ModalOpen: boolean = false;
   selectedStatus: number = CustomerStatus.Interested;
+  isLoading: boolean = false;
 
   CustomerStatusEnum = CustomerStatus;
   statusOptions = [
@@ -36,11 +37,15 @@ export class CustomerEnquiryPage implements OnInit {
     private router: Router,
     private appStateManage: AppStateManageService,
     private companystatemanagement: CompanyStateManagement
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getCustomerEnquiryListByCompanyRef();
   }
+
+  ionViewWillEnter = async () => {
+    await this.getCustomerEnquiryListByCompanyRef();
+  };
 
   companyRef(): number {
     return this.companystatemanagement.SelectedCompanyRef();
@@ -48,21 +53,29 @@ export class CustomerEnquiryPage implements OnInit {
 
   async getCustomerEnquiryListByCompanyRef() {
     this.CustomerEnquiryList = [];
+    this.FilteredCustomerEnquiryList = [];
+    this.isLoading = true;
 
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
+    try {
+      if (this.companyRef() <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
+
+      const list = await CustomerEnquiry.FetchEntireListByCompanyRef(
+        this.companyRef(),
+        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+
+      list.forEach((e) => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()));
+
+      this.CustomerEnquiryList = list;
+      this.filterCustomerList();
+    } catch (error: any) {
+      await this.uiUtils.showErrorMessage('Unexpected Error', error?.message || 'Something went wrong');
+    } finally {
+      this.isLoading = false;
     }
-
-    const list = await CustomerEnquiry.FetchEntireListByCompanyRef(
-      this.companyRef(),
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-
-    list.forEach((e) => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()));
-
-    this.CustomerEnquiryList = list;
-    this.filterCustomerList();
   }
 
   filterCustomerList() {
@@ -72,24 +85,36 @@ export class CustomerEnquiryPage implements OnInit {
   }
 
   onEditClicked = async (item: CustomerEnquiry) => {
-    item.p.CustomerFollowUps = [CustomerFollowUpProps.Blank()];
-    this.SelectedCustomerEnquiry = item.GetEditableVersion();
-    CustomerEnquiry.SetCurrentInstance(this.SelectedCustomerEnquiry);
-    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    this.router.navigate(['/app_homepage/tabs/crm/customer-enquiry/edit']);
+    try {
+      item.p.CustomerFollowUps = [CustomerFollowUpProps.Blank()];
+      this.SelectedCustomerEnquiry = item.GetEditableVersion();
+      CustomerEnquiry.SetCurrentInstance(this.SelectedCustomerEnquiry);
+      this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+      this.router.navigate(['/app_homepage/tabs/crm/customer-enquiry/edit']);
+    } catch (error: any) {
+      await this.uiUtils.showErrorMessage('Error', error?.message || 'Could not open edit form.');
+    }
   };
 
   onDeleteClicked = async (item: CustomerEnquiry) => {
-    await this.uiUtils.showConfirmationMessage(
-      'Delete',
-      `This process is <strong>IRREVERSIBLE!</strong><br/>Are you sure that you want to DELETE this Customer Enquiry?`,
-      async () => {
-        await item.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(`Customer Enquiry ${item.p.Name} has been deleted!`);
-          await this.getCustomerEnquiryListByCompanyRef();
-        });
-      }
-    );
+    try {
+      await this.uiUtils.showConfirmationMessage(
+        'Delete',
+        `This process is <strong>IRREVERSIBLE!</strong><br/>Are you sure that you want to DELETE this Customer Enquiry?`,
+        async () => {
+          try {
+            await item.DeleteInstance(async () => {
+              await this.uiUtils.showSuccessToster(`Customer Enquiry ${item.p.Name} has been deleted!`);
+              await this.getCustomerEnquiryListByCompanyRef();
+            });
+          } catch (deleteError: any) {
+            await this.uiUtils.showErrorMessage('Delete Failed', deleteError?.message || 'Could not delete.');
+          }
+        }
+      );
+    } catch (error: any) {
+      await this.uiUtils.showErrorMessage('Error', error?.message || 'Something went wrong.');
+    }
   };
 
   onViewClicked(item: CustomerEnquiry) {
@@ -102,10 +127,14 @@ export class CustomerEnquiryPage implements OnInit {
   }
 
   async AddCustomerEnquiryForm() {
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
+    try {
+      if (this.companyRef() <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
+      this.router.navigate(['homepage/Website/Customer_Enquiry_Details']);
+    } catch (error: any) {
+      await this.uiUtils.showErrorMessage('Error', error?.message || 'Failed to open the add form.');
     }
-    this.router.navigate(['/app_homepage/tabs/crm/customer-enquiry/add']);
   }
 }

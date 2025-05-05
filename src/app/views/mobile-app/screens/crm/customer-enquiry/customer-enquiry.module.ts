@@ -9,6 +9,7 @@ import { CustomerEnquiryPageRoutingModule } from './customer-enquiry-routing.mod
 import { CustomerEnquiryPage } from './customer-enquiry.page';
 import { SharedModule } from "../../../shared/shared.module";
 import { AddEditCustomerEnquiryComponent } from './add-edit-customer-enquiry/add-edit-customer-enquiry.component';
+import { LoaderComponent } from "../../../shared/loader/loader.component";
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { AddEditCustomerEnquiryComponent } from './add-edit-customer-enquiry/add
     FormsModule,
     IonicModule,
     CustomerEnquiryPageRoutingModule,
-    SharedModule
+    SharedModule,
+    LoaderComponent
 ],
   declarations: [CustomerEnquiryPage, AddEditCustomerEnquiryComponent]
 })

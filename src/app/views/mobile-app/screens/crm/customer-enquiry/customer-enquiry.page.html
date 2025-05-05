@@ -1,18 +1,11 @@
-<app-header-with-back-handler
-  title="Customer Enquiry"
-></app-header-with-back-handler>
+<app-loader *ngIf="isLoading"></app-loader>
+<app-header-with-back-handler title="Customer Enquiry"
+  backRoute="app_homepage/tabs/crm"></app-header-with-back-handler>
 
 <ion-content [fullscreen]="true">
   <!-- Status Filter -->
-  <ion-segment
-    [(ngModel)]="selectedStatus"
-    (ionChange)="filterCustomerList()"
-    class="modern-segment"
-  >
-    <ion-segment-button
-      *ngFor="let status of statusOptions"
-      [value]="status.value"
-    >
+  <ion-segment [(ngModel)]="selectedStatus" (ionChange)="filterCustomerList()" class="modern-segment">
+    <ion-segment-button *ngFor="let status of statusOptions" [value]="status.value">
       <ion-label>{{ status.label }}</ion-label>
     </ion-segment-button>
   </ion-segment>
@@ -20,10 +13,7 @@
   <!-- Customer List -->
   <ion-list class="Data-list">
     <ng-container *ngIf="FilteredCustomerEnquiryList.length > 0; else noData">
-      <ion-card
-        *ngFor="let item of FilteredCustomerEnquiryList"
-        class="Data-card"
-      >
+      <ion-card *ngFor="let item of FilteredCustomerEnquiryList" class="Data-card">
         <ion-card-content>
           <div class="info-row"><strong>Name:</strong> {{ item.p.Name }}</div>
           <div class="info-row">
@@ -31,28 +21,13 @@
           </div>
           <!-- <div class="info-row"><strong>Status:</strong> {{ item.p.CustomerStatusName }}</div> -->
           <div class="btn-row">
-            <ion-button
-              size="small"
-              fill="outline"
-              color="primary"
-              (click)="onViewClicked(item)"
-            >
+            <ion-button size="small" fill="outline" color="primary" (click)="onViewClicked(item)">
               <ion-icon name="eye-outline" slot="start"></ion-icon> View
             </ion-button>
-            <ion-button
-              size="small"
-              fill="outline"
-              color="secondary"
-              (click)="onEditClicked(item)"
-            >
+            <ion-button size="small" fill="outline" color="secondary" (click)="onEditClicked(item)">
               <ion-icon name="create-outline" slot="start"></ion-icon> Edit
             </ion-button>
-            <ion-button
-              size="small"
-              fill="outline"
-              color="danger"
-              (click)="onDeleteClicked(item)"
-            >
+            <ion-button size="small" fill="outline" color="danger" (click)="onDeleteClicked(item)">
               <ion-icon name="trash-outline" slot="start"></ion-icon> Delete
             </ion-button>
           </div>
@@ -63,11 +38,7 @@
     <ng-template #noData>
       <ion-card class="Data-card">
         <ion-card-content class="text-center">
-          <ion-icon
-            name="information-circle-outline"
-            size="large"
-            color="medium"
-          ></ion-icon>
+          <ion-icon name="information-circle-outline" size="large" color="medium"></ion-icon>
           <div class="info-row">No follow-up data found.</div>
         </ion-card-content>
       </ion-card>
@@ -82,11 +53,7 @@
   </ion-fab>
 
   <!-- Modal -->
-  <ion-modal
-    [isOpen]="ModalOpen"
-    (didDismiss)="closeModal()"
-    class="modal-card"
-  >
+  <ion-modal [isOpen]="ModalOpen" (didDismiss)="closeModal()" class="modal-card">
     <ng-container *ngIf="SelectedCustomerEnquiry">
       <ion-header>
         <ion-toolbar color="primary" class="modal-toolbar">
@@ -109,9 +76,7 @@
         </div>
         <div class="info-row-of-model">
           <strong class="label">Status:</strong>
-          <span class="value"
-            >{{ SelectedCustomerEnquiry.p.CustomerStatusName }}</span
-          >
+          <span class="value">{{ SelectedCustomerEnquiry.p.CustomerStatusName }}</span>
         </div>
         <div class="info-row-of-model">
           <strong class="label">Address:</strong>
@@ -135,12 +100,7 @@
         </div>
       </ion-content>
       <ion-footer class="modal-footer">
-        <ion-button
-          expand="block"
-          color="primary"
-          shape="round"
-          (click)="closeModal()"
-        >
+        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
           Close
         </ion-button>
       </ion-footer>

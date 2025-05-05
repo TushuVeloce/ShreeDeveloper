@@ -1,6 +1,9 @@
-<app-header-with-back-handler title="CRM"></app-header-with-back-handler>
+<app-loader *ngIf="isLoading"></app-loader>
+
+<app-header-with-back-handler title="CRM" backRoute="app_homepage/tabs/home"></app-header-with-back-handler>
 
 <ion-content>
+  <!-- Stats -->
   <div class="crm-container">
     <!-- CRM Stats Overview -->
     <div class="crm-stats">
@@ -12,15 +15,55 @@
         <p class="stat-title">{{ stat.title }}</p>
       </div>
     </div>
+  </div>
+  <ion-grid class="ion-padding">
 
     <!-- Action Buttons -->
-    <div class="action-buttons">
-      <ion-button expand="full" (click)="goToVisitedCustomer()">Customer Enquiry</ion-button>
-      <ion-button expand="full" color="secondary" (click)="goToCustomerFollowUp()">Customer Follow-Up</ion-button>
-    </div>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button expand="block" (click)="goToVisitedCustomer()" class="submit-button primary-button">Customer
+          Enquiry</ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="block" color="secondary" (click)="goToCustomerFollowUp()"
+          class="submit-button cancel-button">Customer Follow-Up</ion-button>
+      </ion-col>
+    </ion-row>
+    <!-- Main Buttons -->
+    <!-- <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <ion-button expand="block" (click)="goToVisitedCustomer()" class="submit-button primary-button">
+                Customer Enquiry
+              </ion-button>
+            </ion-col>
+            <ion-col size="6">
+              <ion-button expand="block" (click)="goToCustomerFollowUp()" class="submit-button cancel-button">
+                Customer Follow-Up
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid> -->
 
+    <!-- Follow-Up Reminders -->
+    <ion-row *ngIf="FilterFollowupList.length > 0">
+      <ion-col size="12">
+        <h2 class="section-title">Reminder for Follow-Up</h2>
+      </ion-col>
+      <ion-col size="12" size-md="6" *ngFor="let reminder of FilterFollowupList">
+        <ion-card (click)="onFollowUpClick(reminder)" class="reminder-card">
+          <ion-card-content>
+            <ion-icon name="people-outline"></ion-icon>
+            <div class="reminder-details">
+              <p class="reminder-title">{{ reminder.p.CustomerName }}</p>
+              <p class="reminder-title">{{ reminder.p.ContactNos }}</p>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
     <!-- Reminders Section -->
-    <div class="reminders-section" *ngIf="FilterFollowupList.length">
+    <!-- <div class="reminders-section" *ngIf="FilterFollowupList.length">
       <h2 class="section-title">Reminder for Follow-Up</h2>
       <div *ngFor="let reminder of FilterFollowupList" class="reminder-item" (click)="onFollowUpClick(reminder)">
         <ion-icon name="people-outline"></ion-icon>
@@ -29,6 +72,12 @@
           <p class="reminder-title">{{ reminder.p.ContactNos }}</p>
         </div>
       </div>
-    </div>
-  </div>
+    </div> -->
+
+    <ion-row *ngIf="!FilterFollowupList.length && !isLoading">
+      <ion-col size="12" class="ion-text-center">
+        <p>No follow-up reminders found for the Todays date.</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

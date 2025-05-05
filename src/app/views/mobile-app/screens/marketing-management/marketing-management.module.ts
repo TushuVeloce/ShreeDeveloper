@@ -8,6 +8,7 @@ import { MarketingManagementPageRoutingModule } from './marketing-management-rou
 import { MarketingManagementPage } from './marketing-management.page';
 import { SharedModule } from "../../shared/shared.module";
 import { AddEditMarketingManagementComponent } from './add-edit-marketing-management/add-edit-marketing-management.component';
+import { LoaderComponent } from "../../shared/loader/loader.component";
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { AddEditMarketingManagementComponent } from './add-edit-marketing-manage
     FormsModule,
     IonicModule,
     MarketingManagementPageRoutingModule,
-    SharedModule
+    SharedModule,
+    LoaderComponent
 ],
   declarations:[MarketingManagementPage,AddEditMarketingManagementComponent]
 })
