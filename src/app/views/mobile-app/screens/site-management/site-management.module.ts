@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { SiteManagementPageRoutingModule } from './site-management-routing.module';
 import { SiteManagementPage } from './site-management.page';
 import { SharedModule } from "../../shared/shared.module";
+import { LoaderComponent } from "../../shared/loader/loader.component";
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { SharedModule } from "../../shared/shared.module";
     FormsModule,
     IonicModule,
     SiteManagementPageRoutingModule,
-    SharedModule
+    SharedModule,
+    LoaderComponent
 ],
   declarations:[SiteManagementPage]
 })
