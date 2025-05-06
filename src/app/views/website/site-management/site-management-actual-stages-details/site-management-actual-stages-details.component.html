@@ -407,10 +407,10 @@
             <div class="col-8">
               <input
                 type="number"
-                [(ngModel)]="Entity.p.DieselTotal"
-                name="DieselTotal"
+                [(ngModel)]="Entity.p.DieselTotalAmount"
+                name="DieselTotalAmount"
                 class="form-control"
-                id="DieselTotal"
+                id="DieselTotalAmount"
                 placeholder="Enter Amount"
                 #DieselTotalCtrl="ngModel"
                 (blur)="DieselTotalCtrl.control.markAsTouched()"
@@ -777,6 +777,104 @@
           </div>
         </div>
       </div>
+
+      <!-- time table start -->
+
+      <div class="row" style="margin-top: 2rem; padding: 1rem">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+          <h5 style="padding-top: 3px; color: black">
+            <b>Add Time Details</b>
+          </h5>
+        </div>
+        <div
+          class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
+          style="display: flex; justify-content: end"
+          routerLinkActive="active"
+        >
+          <nz-button nz-button class="btn1" (click)="isModalOpen = true"
+            >Add Owner</nz-button
+          >
+        </div>
+      </div>
+
+      <div
+        class="table-wrapper"
+        class="tblcard_light"
+        style="margin-top: 2rem"
+        *ngIf="Entity.p.TimeDetails.length > 0"
+      >
+        <div class="table-container" style="margin-top: 2rem">
+          <div class="row">
+            <div class="col-12">
+              <label class="TableHeading"> Owner Details Table</label>
+            </div>
+          </div>
+          <nz-table
+            #basicTable
+            nzSize="small"
+            class="no-hover-table"
+            Class="bgtable_light"
+            [nzScroll]="{ x: 'auto' }"
+            nzFrontPagination="false"
+            [nzShowSizeChanger]="false"
+            [nzData]="Entity.p.TimeDetails"
+          >
+            <thead>
+              <tr>
+                <th *ngFor="let header of timeheaders" class="tblheadersecond">
+                  {{ header }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="
+                  let time of Entity.p.TimeDetails;
+                  let i = index
+                "
+              >
+                <td Class="tbldata">{{ i + 1 }}</td>
+                <td Class="tbldata">{{ time.StartTime}}</td>
+                <td Class="tbldata">{{ time.EndTime }}</td>
+                <td Class="tbldata">{{ time.WorkedHours }}</td>
+                <td class="tbldata">
+                  <span style="margin-left: 9px">
+                    <img
+                      src="\assets\icons\edit.png"
+                      alt="logo"
+                      title="Edit"
+                      width="20px"
+                      height="20px"
+                    />
+                  </span>
+                  <span style="margin-left: 9px">
+                    <img
+                      src="\assets\icons\delete.png"
+                      alt="logo"
+                      title="Delete"
+                      width="20px"
+                      height="20px"
+                  /></span>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </div>
+      <div
+        *ngIf="Entity.p.TimeDetails.length === 0"
+        class="card-body_light"
+      >
+        <div
+          style="height: 200px; background-color: white"
+          class="d-flex align-items-center justify-content-center"
+        >
+          <span class="title_light"> Data Not Found</span>
+        </div>
+      </div>
+
+      <!-- time table -->
+
       <div style="width: 100%" class="d-flex justify-content-center">
         <hr style="border: 2px solid brown" width="20%" />
       </div>
@@ -869,5 +967,90 @@
         </div>
       </div>
     </form>
+  </div>
+</div>
+
+<div *ngIf="isModalOpen" class="custom-modal-overlay">
+  <div class="custom-modal">
+    <div class="custom-modal-header">
+      <h5>Add Owner</h5>
+      <button
+        type="button"
+        class="btn-close"
+        (click)="isModalOpen = false"
+      ></button>
+    </div>
+    <div class="custom-modal-body">
+      <form autocomplete="off">
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-4">
+            <div>
+              <label for="StartTime">Start Time</label>
+              <input
+                type="time"
+                name="StartTime"
+                required
+                class="form-control"
+                id="StartTime"
+                [(ngModel)]="TimeEntity.p.StartTime"
+                placeholder="Enter Start Time "
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div>
+              <label for="EndTime">End Time </label>
+              <input
+                type="time"
+                name="EndTime"
+                required
+                class="form-control"
+                id="EndTime"
+                [(ngModel)]="TimeEntity.p.EndTime"
+                placeholder="Enter To Time"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div>
+              <label for="WorkedHours">Total Working Hours</label>
+              <input
+                type="text"
+                name="WorkedHours"
+                required
+                class="form-control"
+                id="WorkedHours"
+                [(ngModel)]="TimeEntity.p.WorkedHours"
+                placeholder="Total Working Hours"
+                required
+              />
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="custom-modal-footer">
+      <div
+        style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        "
+      >
+        <div>
+          <nz-button nz-button class="btn1" (click)="SaveTime()"
+            >Save</nz-button
+          >
+        </div>
+        <div>
+          <nz-button nz-button class="btn1" (click)="isModalOpen = false">
+            Close
+          </nz-button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -12,6 +12,7 @@ import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit'
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { ActualStages } from 'src/app/classes/domain/entities/website/site_management/actualstages/actualstages';
+import { Time, TimeDetailProps } from 'src/app/classes/domain/entities/website/site_management/time/time';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -29,6 +30,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   isSaveDisabled: boolean = false;
   private IsNewEntity: boolean = true;
   Entity: ActualStages = ActualStages.CreateNewInstance();
+  TimeEntity: Time = Time.CreateNewInstance();
   ExpenseTypeEntity: ExpenseType = ExpenseType.CreateNewInstance();
   DetailsFormTitle: 'New Stage' | 'Edit Stage' = 'New Stage';
   InitialEntity: ActualStages = null as any;
@@ -48,6 +50,8 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   isAddingExpense = false;
   isAdd = false;
   isOfficialExpenditureGov = false
+  isModalOpen: boolean = false;
+  timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time','Action'];
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -62,24 +66,26 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
+    await  this.getStageListByCompanyRef();
+    await  this.getVendorListByCompanyRef();
+    await this.FormulateUnitList();
+    await this.getSiteListByCompanyRef();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stage' : 'Edit Stage';
       this.Entity = ActualStages.GetCurrentInstance();
-
+      console.log('Entity :', this.Entity);
+      await this.OnStageChange(this.Entity.p.StageRef)
       this.appStateManage.StorageKey.removeItem('Editable')
     } else {
       this.Entity = ActualStages.CreateNewInstance();
       ActualStages.SetCurrentInstance(this.Entity);
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
-      this.getStageListByCompanyRef();
-      this.getVendorListByCompanyRef();
-      this.FormulateUnitList();
-      this.getSiteListByCompanyRef();
-      this.getSingleEmployeeDetails();
+      await this.getSingleEmployeeDetails();
     }
     this.InitialEntity = Object.assign(ActualStages.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as ActualStages;
     this.focusInput();
+    console.log("this.Entity.p.StageName,",this.Entity.p.StageName)
   }
 
   focusInput = () => {
@@ -112,9 +118,9 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
-    if (this.SiteList.length > 0) {
-      this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
-    }
+    // if (this.SiteList.length > 0) {
+    //   this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
+    // }
   }
 
   getStageListByCompanyRef = async () => {
@@ -124,12 +130,12 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     }
     let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.StageList = lst;
-    if (this.StageList.length > 0) {
-      this.Entity.p.StageRef = this.StageList[0].p.Ref;
-      this.OnStageChange( this.Entity.p.StageRef)
-      this.StageType = this.StageList[0].p.StageType;
-      this.IsStage = this.StageList[0].p.IsSubStageApplicable;
-    }
+    // if (this.StageList.length > 0) {
+    //   this.Entity.p.StageRef = this.StageList[0].p.Ref;
+    //   this.OnStageChange( this.Entity.p.StageRef)
+    //   this.StageType = this.StageList[0].p.StageType;
+    //   this.IsStage = this.StageList[0].p.IsSubStageApplicable;
+    // }
     this.getSubStageListByStageRef(this.Entity.p.StageRef);
     this.getExpenseListByStageRef(this.Entity.p.StageRef);
   }
@@ -154,35 +160,35 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   }
 
   getSubStageListByStageRef = async (StageRef: number) => {
-    if (StageRef <= 0) {
-      await this.uiUtils.showErrorToster('Stage not Selected');
-      return;
-    }
+    // if (StageRef <= 0) {
+    //   await this.uiUtils.showErrorToster('Stage not Selected');
+    //   return;
+    // }
     let lst = await SubStage.FetchEntireListByStageRef(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SubStageList = lst;
-    if (this.SubStageList.length > 0) {
-      this.Entity.p.SubStageRef = this.SubStageList[0].p.Ref;
-    }
+    // if (this.SubStageList.length > 0) {
+    //   this.Entity.p.SubStageRef = this.SubStageList[0].p.Ref;
+    // }
   }
 
   getExpenseListByStageRef = async (StageRef: number) => {
-    if (StageRef <= 0) {
-      await this.uiUtils.showErrorToster('Stage not Selected');
-      return;
-    }
+    // if (StageRef <= 0) {
+    //   await this.uiUtils.showErrorToster('Stage not Selected');
+    //   return;
+    // }
     let lst = await ExpenseType.FetchEntireListByStageRef(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.ExpenseTypeList = lst;
     console.log('ExpenseTypeList :', this.ExpenseTypeList);
-    if (this.SubStageList.length > 0) {
-      this.Entity.p.SubStageRef = this.SubStageList[0].p.Ref;
-    }
+    // if (this.SubStageList.length > 0) {
+    //   this.Entity.p.SubStageRef = this.SubStageList[0].p.Ref;
+    // }
   }
 
   getStageTypeOnStageRef = async (StageRef: number) => {
-    if (this.Entity.p.StageRef <= 0) {
-      await this.uiUtils.showErrorToster('Stage not Selected');
-      return;
-    }
+    // if (this.Entity.p.StageRef <= 0) {
+    //   await this.uiUtils.showErrorToster('Stage not Selected');
+    //   return;
+    // }
     let SingleRecord = this.StageList.find((data) => data.p.Ref == StageRef);;
     if (SingleRecord?.p) {
       this.StageType = SingleRecord.p.StageType;
@@ -199,9 +205,9 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     }
     let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.VendorList = lst;
-    if (this.VendorList.length > 0) {
-      this.Entity.p.VendorRef = this.VendorList[0].p.Ref;
-    }
+    // if (this.VendorList.length > 0) {
+    //   this.Entity.p.VendorRef = this.VendorList[0].p.Ref;
+    // }
     this.getVendorServiceListByVendorRef();
   }
 
@@ -212,9 +218,9 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     }
     let lst = await VendorService.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.VendorServiceList = lst;
-    if (this.VendorList.length > 0) {
-      this.Entity.p.VendorServiceRef = this.VendorServiceList[0].p.Ref;
-    }
+    // if (this.VendorList.length > 0) {
+    //   this.Entity.p.VendorServiceRef = this.VendorServiceList[0].p.Ref;
+    // }
   }
 
   public FormulateUnitList = async () => {
@@ -243,7 +249,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     if (this.Entity.p.ExpenseTypeRef  == 200) {
       this.Entity.p.DieselRate = 0;
       this.Entity.p.DieselQuantity = 0;
-      this.Entity.p.DieselTotal = 0;
+      this.Entity.p.DieselTotalAmount = 0;
       this.Entity.p.IsDieselPaid = 0;
       this.Entity.p.VehicleNo = '';
 
@@ -251,13 +257,13 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   }
 
   CalculateTotalOnDiselRateAndLtr = () => {
-    this.Entity.p.DieselTotal = (this.Entity.p.DieselQuantity * this.Entity.p.DieselRate);
-    this.Entity.p.Amount = this.Entity.p.DieselTotal + this.UnitQuantityTotal
+    this.Entity.p.DieselTotalAmount = (this.Entity.p.DieselQuantity * this.Entity.p.DieselRate);
+    this.Entity.p.Amount = this.Entity.p.DieselTotalAmount + this.UnitQuantityTotal
   }
 
   CalculateAmountOnRateAndQuantity = () => {
     this.UnitQuantityTotal = (this.Entity.p.Rate * this.Entity.p.Quantity);
-    this.Entity.p.Amount = this.Entity.p.DieselTotal + this.UnitQuantityTotal
+    this.Entity.p.Amount = this.Entity.p.DieselTotalAmount + this.UnitQuantityTotal
   }
 
   CalculateAmountOnSkillRateAndQuantity = () => {
@@ -302,7 +308,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Stage Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Stage_Master']);
+        await this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage']);
 
       }
     }
@@ -346,6 +352,36 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       this.ExpenseTypeEntity.p.Name = ''; 
     }
   }
+
+  SaveTime = async () => {
+    // this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    let entityToSave = this.TimeEntity.GetEditableVersion();
+    let entitiesToSave = [entityToSave]
+    console.log('entitiesToSave :', entitiesToSave);
+    await this.TimeEntity.EnsurePrimaryKeysWithValidValues()
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return
+    }
+    else {
+      this.isSaveDisabled = false;
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('Time saved successfully!');
+        this.TimeEntity = Time.CreateNewInstance();
+        this.isModalOpen = false
+        this.Entity.p.TimeDetails.push({ ...this.TimeEntity.p});
+        // this.resetAllControls();
+      } else {
+        await this.uiUtils.showSuccessToster('Time Updated successfully!');
+        await this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage']);
+
+      }
+    }
+  }
+
 
   resetAllControls = () => {
     // reset touched
