@@ -15,15 +15,18 @@ import { Utils } from 'src/app/services/utils.service';
   templateUrl: './expense-type-master-details.component.html',
   styleUrls: ['./expense-type-master-details.component.scss'],
 })
-export class ExpenseTypeMasterDetailsComponent  implements OnInit {
-Entity: ExpenseType = ExpenseType.CreateNewInstance();
+export class ExpenseTypeMasterDetailsComponent implements OnInit {
+  Entity: ExpenseType = ExpenseType.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Expense Type' | 'Edit Expense Type' = 'New Expense Type';
   IsDropdownDisabled: boolean = false;
   InitialEntity: ExpenseType = null as any;
   StageList: Stage[] = [];
+  isAdd = false;
+
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
@@ -44,6 +47,7 @@ Entity: ExpenseType = ExpenseType.CreateNewInstance();
     this.StageList = await Stage.FetchEntireListByCompanyRef(this.companyRef());
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
+      this.IsDropdownDisabled = true;
       this.DetailsFormTitle = this.IsNewEntity
         ? 'New Expense Type'
         : 'Edit Expense Type';
@@ -54,6 +58,7 @@ Entity: ExpenseType = ExpenseType.CreateNewInstance();
     } else {
       this.Entity = ExpenseType.CreateNewInstance();
       ExpenseType.SetCurrentInstance(this.Entity);
+      this.getStageListByCompanyRef()
     }
     this.InitialEntity = Object.assign(
       ExpenseType.CreateNewInstance(),
@@ -63,12 +68,25 @@ Entity: ExpenseType = ExpenseType.CreateNewInstance();
   }
 
   focusInput = () => {
-    let txtName = document.getElementById('Code')!;
+    let txtName = document.getElementById('Name')!;
     txtName.focus();
   }
 
-  onStageChange = (selectedvalue: any) => {
-    // this.Entity.p.SelectedStages = selectedvalue;
+  getStageListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.StageList = lst.filter((data) => data.p.IsOtherExpenseApplicable);
+    if (this.StageList.length > 0) {
+      this.Entity.p.StageRef = this.StageList[0].p.Ref;
+    }
+  }
+
+  AlertforStageSelection = () => {
+    this.uiUtils.showErrorMessage('Error', 'This Stage does not have Other Expense');
+
   }
 
   SaveExpenseTypeMaster = async () => {
@@ -79,7 +97,6 @@ Entity: ExpenseType = ExpenseType.CreateNewInstance();
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entityToSave :', entityToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
@@ -94,13 +111,13 @@ Entity: ExpenseType = ExpenseType.CreateNewInstance();
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Expense Type Master Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Sub_Stage_Master']);
+        await this.router.navigate(['/homepage/Website/Expense_Type_Master']);
       }
     }
   };
 
   BackExpenseType = () => {
-    this.router.navigate(['/homepage/Website/Sub_Stage_Master']);
+    this.router.navigate(['/homepage/Website/Expense_Type_Master']);
   }
 
   resetAllControls = () => {

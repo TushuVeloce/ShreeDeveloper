@@ -37,23 +37,23 @@ export class OfficeDutyTimeComponent  implements OnInit {
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
-  
+
   getFormattedTime(time: string): string {
     if (!time) return '';
-  
+
     const date = new Date();
     const [hours, minutes] = time.split(':').map(Number);
     date.setHours(hours, minutes);
-  
+
     const options: Intl.DateTimeFormatOptions = {
       hour: '2-digit',
       minute: '2-digit',
       hour12: this.isSystemUsing12HourFormat()
     };
-  
+
     return date.toLocaleTimeString([], options);
   }
-  
+
   isSystemUsing12HourFormat(): boolean {
     const format = new Intl.DateTimeFormat([], { hour: 'numeric' }).format(new Date(2020, 0, 1, 13));
     return format.includes('PM') || format.includes('pm');
@@ -68,8 +68,6 @@ export class OfficeDutyTimeComponent  implements OnInit {
       }
       let lst = await OfficeDutyandTime.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.MasterList = lst;
-      console.log(lst);
-
 
       this.DisplayMasterList = this.MasterList;
       this.loadPaginationData();

@@ -1,15 +1,119 @@
-ion-fab {
-    position: fixed;
-    bottom: 16px;
-    right: 16px;
-    z-index: 10;
-    /* Ensure the button stays on top of other content */
+.Data-list {
+    background: var(--ion-background-color);
+
+    .Data-card {
+        border-radius: 14px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        margin-bottom: 16px;
+        background-color: var(--ion-item-background);
+
+        ion-card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: #f3f4f6;
+
+            .info-row {
+                font-size: 14px;
+                color: #333;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .btn-row {
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 10px;
+            }
+        }
+    }
 }
 
-.filterFab {
-    position: fixed;
-    bottom: 80px;
-    right: 16px;
-    z-index: 10;
-    /* Ensure the button stays on top of other content */
+.modern-segment .selected {
+    background-color: #007bff;
+    color: white;
+}
+
+.modal-card::part(content) {
+    --width: 90%;
+    --height: 60%;
+    --max-width: 500px;
+    --border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--ion-item-background);
+}
+
+.modal-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.modal-toolbar {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.modal-body {
+    flex: 1;
+    overflow: hidden;
+}
+
+.modal-scroll-content {
+    height: 100%;
+    padding: 16px;
+    overflow-y: auto;
+}
+
+.info-row-of-model {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    font-size: 15px;
+    border-bottom: 1px solid #e0e0e0;
+
+    .label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .value {
+        text-align: right;
+        color: #666;
+        max-width: 60%; // optional, to prevent overflow
+        word-wrap: break-word;
+    }
+}
+
+.modal-footer {
+    padding: 12px;
+    border-top: 1px solid #ccc;
+
+    ion-button {
+        align-items: center;
+    }
+}
+
+/* Centering "No data found" content */
+ion-card-content.text-center {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 150px;
+    color: #888;
+    font-size: 16px;
+}
+
+ion-card-content.text-center ion-icon {
+    font-size: 32px;
+    margin-bottom: 0.5rem;
+    color: var(--ion-color-medium);
 }

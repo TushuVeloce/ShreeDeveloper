@@ -9,6 +9,7 @@ import { ActualStagePageRoutingModule } from './actual-stage-routing.module';
 import { ActualStagePage } from './actual-stage.page';
 import { SharedModule } from "../../../shared/shared.module";
 import { AddEditActualStageComponent } from './add-edit-actual-stage/add-edit-actual-stage.component';
+import { LoaderComponent } from "../../../shared/loader/loader.component";
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { AddEditActualStageComponent } from './add-edit-actual-stage/add-edit-ac
     FormsModule,
     IonicModule,
     ActualStagePageRoutingModule,
-    SharedModule
+    SharedModule,
+    LoaderComponent
 ],
   declarations: [ActualStagePage,AddEditActualStageComponent]
 })

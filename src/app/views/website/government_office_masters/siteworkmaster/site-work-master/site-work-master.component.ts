@@ -64,16 +64,13 @@ export class SiteWorkMasterComponent implements OnInit {
   //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
   //   );
   //   this.MasterList = lst;
-  //   console.log('MasterList :', this.MasterList);
   //   this.DisplayMasterList = this.MasterList;
   //   this.loadPaginationData();
-  //   // console.log(this.DisplayMasterList);
   // };
 
   getSiteWorkMasterListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    // console.log('companyRef :', this.companyRef());
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -83,7 +80,6 @@ export class SiteWorkMasterComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
-    // console.log('SiteWorkMasterList :', this.MasterList);
 
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();

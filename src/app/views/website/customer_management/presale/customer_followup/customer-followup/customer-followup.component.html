@@ -49,7 +49,7 @@
   </div>
   <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem">
     <div class="table-container">
-      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
+      <nz-table #basicTable nzSize="small" [nzData]="paginatedList()" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
         nzFrontPagination="false" [nzShowSizeChanger]="false">
         <thead>
           <tr>
@@ -57,7 +57,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let followup of followup; index as i">
+          <tr *ngFor="let followup of paginatedList(); index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{followup.p.CustomerName}}</td>
             <td Class="tbldata">{{followup.p.ContactNos}}</td>
