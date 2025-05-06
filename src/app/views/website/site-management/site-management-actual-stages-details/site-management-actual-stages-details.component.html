@@ -60,7 +60,7 @@
           <div class="d-flex align-items-center">
             <!-- Dropdown -->
             <nz-select *ngIf="!isAdd" class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-              id="Expense" name="Expense" [nzSize]="'large'" (ngModelChange)="ClearInputsOnExpenseChange()"
+              id="ExpenseTypeRef" name="ExpenseTypeRef" [nzSize]="'large'" (ngModelChange)="ClearInputsOnExpenseChange()"
               [(ngModel)]="Expense">
               <nz-option *ngFor="let Expense of ExpenseTypeList" [nzValue]="Expense.p.ExpenseType"
                 [nzLabel]="Expense.p.Name"></nz-option>

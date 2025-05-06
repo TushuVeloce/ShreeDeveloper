@@ -45,7 +45,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
-      await this.getMarketingListByCompanyRef();
+      await this.getActualStageListByCompanyRef();
     });
   }
 
@@ -71,7 +71,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
     this.ExpenseTypeList = lst;
   }
 
-  getMarketingListByCompanyRef = async () => {
+  getActualStageListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     this.MachinaryExpenseList = [];
@@ -84,6 +84,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
     let lst = await ActualStages.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
+    console.log('DisplayMasterList :', this.DisplayMasterList);
     for (const item of lst) {
       switch (item.p.ExpenseTypeName) {
         case "MachinaryExpense":
@@ -97,7 +98,6 @@ export class SiteManagementActualStagesComponent implements OnInit {
           break;
       }
     }
-    console.log(this.MachinaryExpenseList)
     this.loadPaginationData();
   }
 
@@ -118,7 +118,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
           await this.uiUtils.showSuccessToster(
             `Material ${material.p.SiteName} has been deleted!`
           );
-          await this.getMarketingListByCompanyRef();
+          await this.getActualStageListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
         });
