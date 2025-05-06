@@ -19,6 +19,7 @@ export class ActualStagesProps {
 
   public Ref: number = 0;
   public TransDateTime: string = '';
+  public DefaultExpenseTypeName: string = '';
 
   public IsDeleted: number = 0;
 
