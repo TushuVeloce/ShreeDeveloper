@@ -289,11 +289,11 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Sub_Stage_Master',
         LogoPath: '',
       },
-      // {
-      //   Name: 'Expense Type Master',
-      //   RouterLink: '/homepage/Website/Expense_Type_Master',
-      //   LogoPath: '',
-      // },
+      {
+        Name: 'Expense Type Master',
+        RouterLink: '/homepage/Website/Expense_Type_Master',
+        LogoPath: '',
+      },
       {
         Name: 'Account Main Ledger',
         RouterLink: '/homepage/Website/Account_Main_Ledger',

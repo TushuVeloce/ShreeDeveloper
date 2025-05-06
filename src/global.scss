@@ -439,6 +439,46 @@ nz-select {
   margin-bottom: 15px;
 }
 
+/* Active page */
+.try .ant-pagination-item-active {
+  border-color: brown !important;
+}
+
+.try .ant-pagination-item-active a {
+  color: brown !important;
+}
+
+/* Hover on page items */
+.try .ant-pagination-item:hover {
+  border-color: brown !important;
+}
+
+.try .ant-pagination-item:hover a {
+  color: brown !important;
+}
+
+/* Previous and Next buttons */
+.try .ant-pagination-prev,
+.try .ant-pagination-next {
+  color: brown !important;
+  border-color: brown !important;
+}
+
+/* Hover on Previous and Next */
+.try .ant-pagination-prev:hover,
+.try .ant-pagination-next:hover {
+  color: brown !important;
+  border-color: brown !important;
+}
+
+/* Disable button (optional - if you want a muted brown) */
+.try .ant-pagination-disabled {
+  color: #a0522d !important;
+  /* muted brown */
+  border-color: #a0522d !important;
+}
+
+
 
 // .fixed-pagination2 {
 //   width: 100%;
@@ -576,6 +616,7 @@ ion-textarea {
   padding: 12px;
   font-size: 14px;
 }
+
 .button-row {
   display: flex;
   gap: 12px;
@@ -605,13 +646,15 @@ ion-textarea {
 
 .cancel-button {
   --background: var(--ion-color-secondary);
-  --color: var(--ion-text-color-dark);;
+  --color: var(--ion-text-color-dark);
+  ;
 }
 
 .cancel-button:hover,
 .cancel-button:focus {
   --background: var(--ion-color-secondary-shade);
 }
+
 .chip-container {
   display: flex;
   flex-wrap: wrap;

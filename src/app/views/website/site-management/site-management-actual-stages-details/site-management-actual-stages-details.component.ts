@@ -35,7 +35,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   StageTypeEnum = StageType;
   StageType: number = 0;
   IsStage: Boolean = false;
-  Expense: number = 0;
   StageTypeList = DomainEnums.StageTypeList(true, 'select stage');
   MonthList = DomainEnums.MonthList(true, '--Select Month Type--');
   VendorList: Vendor[] = [];
@@ -227,7 +226,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
 
   ClearInputsOnExpenseChange = () => {
     this.Entity.p.Amount = 0;
-    if (this.Expense == 100) {
+    if (this.Entity.p.ExpenseTypeRef == 100) {
       this.Entity.p.SkillRate = 0;
       this.Entity.p.SkillQuantity = 0;
       this.Entity.p.SkillAmount = 0;
@@ -241,7 +240,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       this.Entity.p.LadiesAmount = 0;
     }
 
-    if (this.Expense == 200) {
+    if (this.Entity.p.ExpenseTypeRef  == 200) {
       this.Entity.p.DieselRate = 0;
       this.Entity.p.DieselQuantity = 0;
       this.Entity.p.DieselTotal = 0;

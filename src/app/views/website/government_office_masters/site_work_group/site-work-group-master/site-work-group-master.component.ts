@@ -31,14 +31,12 @@ export class SiteWorkGroupMasterComponent implements OnInit {
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
-  
+
   private FormulateSiteWorkGroupList = async () => {
     let lst = await SiteWorkGroup.FetchEntireList(
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    // console.log(lst);
     this.MasterList = lst.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
-    // console.log('MasterList :', this.MasterList);
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };

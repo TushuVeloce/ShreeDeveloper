@@ -113,10 +113,13 @@ export class CustomerFollowupComponent implements OnInit {
     let FollowUp = await CustomerFollowUp.FetchEntireListByDateandPlotRef(this.strCDT, this.InterestedPlotRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.followup = FollowUp
-    console.log('followup',this.followup);
-
     this.loadPaginationData();
   };
+
+  paginatedList = () => {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.followup.slice(start, start + this.pageSize);
+  }
 
   formulateSiteListByCompanyRef = async () => {
     this.MasterList = [];
@@ -169,10 +172,6 @@ export class CustomerFollowupComponent implements OnInit {
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   };
-  get paginatedList() {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.followup.slice(start, start + this.pageSize);
-  }
 
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page

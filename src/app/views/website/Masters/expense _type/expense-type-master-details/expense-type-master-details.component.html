@@ -10,37 +10,34 @@
         <span class="detail_title">{{DetailsFormTitle}}</span>
       </div>
     </div>
-    <!-- <form autocomplete="off">
+    <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-6 col-md-4 col-sm-12">
-          <label for="SelectedStages"><b>Stages</b></label>
-          <nz-select [(ngModel)]="Entity.p.SelectedStages" nzMode="multiple"
-            id="SelectedStages" name="SelectedStages" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select services">
-            <nz-option *ngFor="let stage of StageList" [nzValue]="stage.p.Ref"
-              [nzLabel]="stage.p.Name"></nz-option>
+        <div class="col-md-4">
+          <label for="StageRef"><b>Stage</b></label>
+          <nz-select class="nzSelect-light" [disabled]="IsDropdownDisabled" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.StageRef" name="StageRef" required id="StageRef">
+            <nz-option *ngFor="let Stage of StageList" [nzLabel]="Stage.p.Name" [nzValue]="Stage.p.Ref"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-6">
-          <div>
-            <label>Name</label>
-            <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
-              placeholder="Enter Name" pattern="{{NameWithNosAndSpace}}" #NameCtrl="ngModel"
-              (blur)="NameCtrl.control.markAsTouched()" />
-            <Validation [control]="NameCtrl" [patternMessage]="NameWithNosAndSpaceMsg" />
+        <div class="col-md-4">
+          <label>Name</label>
+          <input type="text" [readOnly]="isAdd" onclick="" [(ngModel)]="Entity.p.Name" name="Name" class="form-control"
+            id="Name" placeholder="Enter Name" pattern="{{NameWithNosAndSpace}}" #NameCtrl="ngModel" required
+            (blur)="NameCtrl.control.markAsTouched()" />
+          <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
+            <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithNosAndSpaceMsg}}</span>
+            <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
-          <button type="button" class="btn" (click)="SaveExpenseTypeMaster()">Save</button>
+          <button type="button" class="btn" (click)="SaveExpenseTypeMaster()" [disabled]="isSaveDisabled">Save</button>
         </div>
         <div>
-          <button type="button" class="btn" (click)="BackExpenseType()">
-            Back
-          </button>
+          <button type="button" class="btn" (click)="BackExpenseType()">Back</button>
         </div>
       </div>
-    </form> -->
+    </form>
   </div>
 </div>
