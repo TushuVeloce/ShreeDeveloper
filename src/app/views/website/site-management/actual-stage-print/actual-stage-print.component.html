@@ -1,0 +1,105 @@
+<div class="card-body">
+  <div class="card p-3">
+    <!-- Header Row: Back Button + Title -->
+    <div class="row mb-3 align-items-center">
+      <div class="col-md-1 col-sm-2">
+        <button type="button" class="backbtn" (click)="BackUnit()">
+          <img src="/assets/icons/arrow-button.png" alt="Back" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-10 text-center">
+        <span class="detail_title">{{ DetailsFormTitle }}</span>
+      </div>
+    </div>
+
+    <!-- Receipt Content -->
+    <div class="receipt-container px-3">
+      <!-- Company & Receipt Info Spread Full Width -->
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <img src="/assets/company-logo.png" alt="Company Logo" height="60" class="mb-2" />
+          <p class="mb-0"><strong>[Company Name]</strong></p>
+          <p class="mb-0">उमा ट्रॅकिंग सिव्हील, NKGSB बँक समोर</p>
+          <p class="mb-0">प्रगती हायड्रोक्सच्या वरती दुसरा मळा</p>
+          <p class="mb-0">[City, ST ZIP]</p>
+          <p>Phone: [000-000-0000]</p>
+        </div>
+        <div class="col-md-6 text-md-end text-start mt-3 mt-md-0">
+          <h2 class="text-danger fw-bold text-center text-md-end">Receipt</h2>
+          <p><strong>DATE:</strong> {{ receipt.date }}</p>
+          <p><strong>Challan No:</strong> [{{ receipt.challanNo }}]</p>
+        </div>
+      </div>
+
+      <!-- Bill To & Project Info -->
+      <div class="row border mb-3">
+        <div class="col-md-6 border-end p-2">
+          <h6 class="bg-danger text-white p-1">BILL TO</h6>
+          <p><strong>Vendor Name:</strong> {{ receipt.vendor }}</p>
+          <p><strong>Site Name:</strong> {{ receipt.siteName }}</p>
+          <p><strong>Address:</strong> {{ receipt.address }}</p>
+          <p><strong>Phone:</strong> {{ receipt.phone }}</p>
+        </div>
+        <div class="col-md-6 p-2">
+          <p><strong>Stage Name:</strong> {{ receipt.stageName }}</p>
+          <p><strong>Service Type:</strong> {{ receipt.serviceType }}</p>
+          <p><strong>Vehicle No:</strong> {{ receipt.vehicleNo }}</p>
+        </div>
+      </div>
+
+      <!-- Items Table Full Width -->
+      <div class="table-responsive">
+        <table class="table table-bordered text-center">
+          <thead class="bg-danger text-white">
+            <tr>
+              <th style="width: 5%;">Sr.No</th>
+              <th style="width: 45%;">DESCRIPTION</th>
+              <th style="width: 10%;">Qty.</th>
+              <th style="width: 10%;">UNIT</th>
+              <th style="width: 15%;">RATE</th>
+              <th style="width: 15%;">AMOUNT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of receipt.items; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td class="text-start">{{ item.description }}</td>
+              <td>{{ item.qty }}</td>
+              <td>{{ item.unit }}</td>
+              <td>{{ item.rate | currency:'INR' }}</td>
+              <td>{{ item.amount | currency:'INR' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Totals -->
+      <div class="row justify-content-end">
+        <div class="col-md-6">
+          <table class="table border">
+            <tr *ngFor="let row of receipt.totalRows">
+              <td class="text-end"><strong>{{ row.label }}</strong></td>
+              <td class="text-end">{{ row.value | currency:'INR' }}</td>
+            </tr>
+            <tr class="bg-light">
+              <td class="text-end"><strong>TOTAL</strong></td>
+              <td class="text-end text-danger fw-bold">{{ receipt.total | currency:'INR' }}</td>
+            </tr>
+            <tr>
+              <td colspan="2"><strong>Inwords:</strong> {{ receipt.inwords }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="mt-3 p-2 bg-light border">
+        <h6 class="text-danger">OTHER COMMENTS</h6>
+        <ol class="mb-0">
+          <li>खाली तपशिलात प्रमाणे माल ताब्यात मिळाला.</li>
+          <li>ही पावती सेवा पुरवठादाराच्या नोंदीसाठी प्रदान करण्यात आली आहे.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
