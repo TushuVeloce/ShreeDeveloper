@@ -12,6 +12,7 @@ import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 import { ActualStagesFetchRequest } from "./actualstagesfetchrequest";
+import { TimeDetailProps } from "../time/time";
 
 
 export class ActualStagesProps {
@@ -65,7 +66,7 @@ export class ActualStagesProps {
 
   public DieselQuantity: number = 0;
   public DieselRate: number = 0;
-  public DieselTotal: number = 0;
+  public DieselTotalAmount: number = 0;
   public IsDieselPaid: number = 0;
 
   public SkillQuantity: number = 0;
@@ -91,6 +92,7 @@ export class ActualStagesProps {
 
   public Amount: number = 0;
 
+  public TimeDetails: TimeDetailProps[] = [];
 
   public readonly IsNewlyCreated: boolean = false;
 

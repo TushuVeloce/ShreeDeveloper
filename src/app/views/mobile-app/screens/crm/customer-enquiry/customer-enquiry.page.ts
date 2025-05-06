@@ -47,6 +47,11 @@ export class CustomerEnquiryPage implements OnInit {
     await this.getCustomerEnquiryListByCompanyRef();
   };
 
+  async handleRefresh(event: CustomEvent): Promise<void> {
+    await this.getCustomerEnquiryListByCompanyRef();
+    (event.target as HTMLIonRefresherElement).complete();
+  }
+
   companyRef(): number {
     return this.companystatemanagement.SelectedCompanyRef();
   }

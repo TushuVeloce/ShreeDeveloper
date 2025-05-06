@@ -3,6 +3,9 @@
   backRoute="app_homepage/tabs/crm"></app-header-with-back-handler>
 
 <ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <!-- Status Filter -->
   <ion-segment [(ngModel)]="selectedStatus" (ionChange)="filterCustomerList()" class="modern-segment">
     <ion-segment-button *ngFor="let status of statusOptions" [value]="status.value">
@@ -12,7 +15,7 @@
 
   <!-- Customer List -->
   <ion-list class="Data-list">
-    <ng-container *ngIf="FilteredCustomerEnquiryList.length > 0; else noData">
+    <ng-container *ngIf="FilteredCustomerEnquiryList.length > 0 && isLoading===false; else noData">
       <ion-card *ngFor="let item of FilteredCustomerEnquiryList" class="Data-card">
         <ion-card-content>
           <div class="info-row"><strong>Name:</strong> {{ item.p.Name }}</div>
@@ -39,7 +42,7 @@
       <ion-card class="Data-card">
         <ion-card-content class="text-center">
           <ion-icon name="information-circle-outline" size="large" color="medium"></ion-icon>
-          <div class="info-row">No follow-up data found.</div>
+          <div class="info-row">No Customer Enquiry data found.</div>
         </ion-card-content>
       </ion-card>
     </ng-template>

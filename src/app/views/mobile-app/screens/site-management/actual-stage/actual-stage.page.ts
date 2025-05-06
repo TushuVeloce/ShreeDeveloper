@@ -51,6 +51,12 @@ export class ActualStagePage implements OnInit {
   ionViewWillEnter = async () => {
     await this.loadActualStageIfCompanyExists();
   };
+
+  async handleRefresh(event: CustomEvent): Promise<void> {
+    await this.loadActualStageIfCompanyExists();
+    (event.target as HTMLIonRefresherElement).complete();
+  }
+
   private async loadActualStageIfCompanyExists(): Promise<void> {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');

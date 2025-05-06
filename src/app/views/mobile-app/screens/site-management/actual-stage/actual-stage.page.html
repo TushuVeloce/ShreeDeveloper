@@ -1,7 +1,10 @@
 <app-loader *ngIf="isLoading"></app-loader>
-<app-header-with-back-handler title="Customer Enquiry" backRoute="app_homepage/tabs/crm"></app-header-with-back-handler>
+<app-header-with-back-handler title="Actual Stage" backRoute="app_homepage/tabs/site-management/actual-stage"></app-header-with-back-handler>
 
 <ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <!-- Customer List -->
   <ion-list class="Data-list">
     <ng-container *ngIf="FilteredActualStagesList.length > 0; else noData">
@@ -104,7 +107,7 @@
         </div>
         <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==100">
           <strong class="label">Diesel Total :</strong>
-          <span class="value">{{ SelectedActualStages.p.DieselTotal?SelectedActualStages.p.DieselTotal:'-'
+          <span class="value">{{ SelectedActualStages.p.DieselTotalAmount?SelectedActualStages.p.DieselTotalAmount:'-'
             }}</span>
         </div>
 
