@@ -57,7 +57,9 @@ export class StageMasterDetailsComponent implements OnInit {
   }
 
   ClearStageType =()=>{
-    this.Entity.p.StageType =0;
+    if(this.Entity.p.IsStageTypeApplicable == false){
+      this.Entity.p.StageType =0;
+    }
   }
 
   SaveStageMaster = async () => {

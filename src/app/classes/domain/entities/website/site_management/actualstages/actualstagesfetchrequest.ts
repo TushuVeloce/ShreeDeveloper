@@ -9,6 +9,7 @@ export class ActualStagesFetchRequest
     public static readonly FetchRequestType: string = "ActualStageFetchRequest";
 
     SiteRefs: number[] = [];
+    CompanyRefs: number[] = [];
     ActualStagesRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>

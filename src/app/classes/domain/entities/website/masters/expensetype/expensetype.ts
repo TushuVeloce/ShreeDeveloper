@@ -13,21 +13,16 @@ import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { CountryStateCityRefs, ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 import { ExpenseTypeFetchRequest } from "./expensetypefetchrequest";
 
-export class StageProps {
-  public StageRef: number = 0;
-  public StageName: string = '';
-}
-
 
 export class ExpenseTypeProps {
   public readonly Db_Table_Name = "ExpenseTypeMaster";
   public Ref: number = 0;
   public Name: string = '';
-  public SelectedStages: StageProps[] = [];
-
+  public ExpenseTypeName: string = '';
   public CreatedBy: number = 0;
   public UpdatedBy: number = 0;
   public CompanyRef: number = 0;
+  public StageRef: number = 0;
   public CompanyName: string = '';
   public ExpenseType: number = 0;
 

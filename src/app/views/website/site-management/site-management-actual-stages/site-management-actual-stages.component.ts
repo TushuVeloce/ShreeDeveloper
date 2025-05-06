@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { ExpenseType } from 'src/app/classes/domain/entities/website/masters/expensetype/expensetype';
@@ -22,11 +22,9 @@ export class SiteManagementActualStagesComponent implements OnInit {
   Entity: ActualStages = ActualStages.CreateNewInstance();
   MasterList: ActualStages[] = [];
   DisplayMasterList: ActualStages[] = [];
-  DigitalList: ActualStages[] = [];
-  ElectronicsList: ActualStages[] = [];
-  OutdoorList: ActualStages[] = [];
-  PrintingMediaList: ActualStages[] = [];
-  BrokerList: ActualStages[] = [];
+  MachinaryExpenseList: ActualStages[] = [];
+  LabourExpenseList: ActualStages[] = [];
+  OtherExpenseList: ActualStages[] = [];
   SiteList: Site[] = [];
   VendorList: Vendor[] = [];
   StageList: Stage[] = [];
@@ -39,16 +37,17 @@ export class SiteManagementActualStagesComponent implements OnInit {
   FromDate = '';
   ToDate = '';
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Vehicle Type', 'Description', 'Owner Name', 'Rate', 'Unit', 'Quantity', 'Amount', 'Action'];
-  Labour_Expense: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Description', 'Department', 'Owner Name', 'Quantity', 'Amount', 'Action'];
-  Other_Expense: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Description', 'Department', 'Owner Name', 'Rate', 'Quantity', 'Amount', 'Action'];
-  Office_Details: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Expense Type', 'Description', 'Receiver Name', 'Amount', 'Action'];
-  Government_Details: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Expense Type', 'Description', 'Receiver Name', 'Amount', 'Action'];
-  Title: string = 'Site Management Actual Stages';
+  MachinaryHeaders: string[] = ['Sr.No.','Date', 'Chalan No.', 'Vehicle No', 'Description', 'Vendor Name','Rate','Unit','Quantity','Amount', 'Action'];
+  Headers: string[] = ['Sr.No.','Date', 'Chalan No.','Description', 'Vendor Name','Rate','Quantity','Amount', 'Action'];
+
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
-  ) { }
+  ) {
+    effect(async () => {
+      await this.getMarketingListByCompanyRef();
+    });
+  }
 
 
   async ngOnInit() {
@@ -72,20 +71,89 @@ export class SiteManagementActualStagesComponent implements OnInit {
     this.ExpenseTypeList = lst;
   }
 
+  getMarketingListByCompanyRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    this.MachinaryExpenseList = [];
+    this.LabourExpenseList = [];
+    this.OtherExpenseList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await ActualStages.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    for (const item of lst) {
+      switch (item.p.ExpenseTypeName) {
+        case "MachinaryExpense":
+          this.MachinaryExpenseList.push(item);
+          break;
+        case "LabourExpense":
+          this.LabourExpenseList.push(item);
+          break;
+        case "OtherExpense":
+          this.OtherExpenseList.push(item);
+          break;
+      }
+    }
+    console.log(this.MachinaryExpenseList)
+    this.loadPaginationData();
+  }
+
+  onEditClicked = async (item: ActualStages) => {
+    this.SelectedActualStages = item.GetEditableVersion();
+    ActualStages.SetCurrentInstance(this.SelectedActualStages);
+    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+    await this.router.navigate(['/homepage/Website/Marketing_Management_Master']);
+  };
+
+  onDeleteClicked = async (material: ActualStages) => {
+    await this.uiUtils.showConfirmationMessage(
+      'Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+       Are you sure that you want to DELETE this Material?`,
+      async () => {
+        await material.DeleteInstance(async () => {
+          await this.uiUtils.showSuccessToster(
+            `Material ${material.p.SiteName} has been deleted!`
+          );
+          await this.getMarketingListByCompanyRef();
+          this.SearchString = '';
+          this.loadPaginationData();
+        });
+      }
+    );
+  };
+
+  // For Pagination  start ----
+  loadPaginationData = () => {
+    this.total = this.DisplayMasterList.length; // Update total based on loaded data
+  };
+
+  paginatedList = () => {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  onPageChange = (pageIndex: number): void => {
+    this.currentPage = pageIndex; // Update the current page
+  };
+
 
   AddStages = async () => {
     await this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage_Details']);
   }
 
-  OwnerRef: number = 0;
-  StageRef: number = 0;
-
-  OwnerList: string[] = ['Owner1', 'Owner2', 'Owner3'];
-  StagesList: string[] = ['Stage1', 'Stage2', 'Stage3'];
-  
-  getOwnerRef(Ref: any) {
-    // code here
-    console.log('OwnerRef');
+  filterTable = () => {
+    if (this.SearchString != '') {
+      this.DisplayMasterList = this.MasterList.filter((data: any) => {
+        return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
+      })
+    }
+    else {
+      this.DisplayMasterList = this.MasterList
+    }
   }
-
 }
+

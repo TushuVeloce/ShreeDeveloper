@@ -59,7 +59,6 @@
       </div>
        </div>
   </div>
-  <!-- Machinary Expense -->
   <div class="table-container" style="margin-top: 2rem;">
     <div class="row">
       <div class="col-12">
@@ -71,27 +70,24 @@
       nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
-          <th *ngFor="let header of headers" class="tblheadersecond">{{ header }}</th>
+          <th *ngFor="let Header of MachinaryHeaders" class="tblheadersecond">{{ Header }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td Class="tbldata">1</td>
-          <td Class="tbldata">SMAPLE1</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
+        <tr *ngFor="let MachinaryExpense of MachinaryExpenseList; index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{MachinaryExpense.p.Date}}</td>
+          <td Class="tbldata">{{MachinaryExpense.p.ChalanNo}}</td>
+          <td Class="tbldata">{{MachinaryExpense.p.VehicleNo}}</td> 
+          <td Class="tbldata">{{MachinaryExpense.p.Description}}</td> 
+          <td Class="tbldata">{{MachinaryExpense.p.VendorName}}</td> 
+          <td Class="tbldata">{{MachinaryExpense.p.Rate}}</td> 
+          <td Class="tbldata">{{MachinaryExpense.p.UnitName}}</td> 
+          <td Class="tbldata">{{MachinaryExpense.p.Quantity}}</td> 
+          <td Class="tbldata">{{MachinaryExpense.p.Amount}}</td> 
           <td class="tbldata">
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span>
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            <Edit-Icon (editClick)="onEditClicked(MachinaryExpense)" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(MachinaryExpense)" />
           </td>
         </tr>
       </tbody>
@@ -110,32 +106,29 @@
       nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
-          <th *ngFor="let Labour_Expense of Labour_Expense" class="tblheadersecond">{{ Labour_Expense }}</th>
+          <th *ngFor="let Header of Headers" class="tblheadersecond">{{ Header }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td Class="tbldata">1</td>
-          <td Class="tbldata">SAMAPLE1</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
+       <tr *ngFor="let LabourExpense of LabourExpenseList; index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{LabourExpense.p.Date}}</td>
+          <td Class="tbldata">{{LabourExpense.p.ChalanNo}}</td> 
+          <td Class="tbldata">{{LabourExpense.p.Description}}</td> 
+          <td Class="tbldata">{{LabourExpense.p.VendorName}}</td> 
+          <td Class="tbldata">{{LabourExpense.p.Rate}}</td> 
+          <td Class="tbldata">{{LabourExpense.p.Quantity}}</td> 
+          <td Class="tbldata">{{LabourExpense.p.Amount}}</td> 
           <td class="tbldata">
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span>
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            <Edit-Icon (editClick)="onEditClicked(LabourExpense)" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(LabourExpense)" />
           </td>
         </tr>
       </tbody>
     </nz-table>
   </div>
 
-  <!-- Other Expense  -->
+  <!-- Other Expense -->
   <div class="table-container" style="margin-top: 2rem;">
     <div class="row">
       <div class="col-12">
@@ -147,99 +140,22 @@
       nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
-          <th *ngFor="let Other_Expense of Other_Expense" class="tblheadersecond">{{ Other_Expense }}</th>
+          <th *ngFor="let Header of Headers" class="tblheadersecond">{{ Header }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td Class="tbldata">1</td>
-          <td Class="tbldata">SAMAPLE1</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
+       <tr *ngFor="let OtherExpense of OtherExpenseList; index as i">
+        <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{OtherExpense.p.Date}}</td>
+          <td Class="tbldata">{{OtherExpense.p.ChalanNo}}</td> 
+          <td Class="tbldata">{{OtherExpense.p.Description}}</td> 
+          <td Class="tbldata">{{OtherExpense.p.VendorName}}</td> 
+          <td Class="tbldata">{{OtherExpense.p.Rate}}</td> 
+          <td Class="tbldata">{{OtherExpense.p.Quantity}}</td> 
+          <td Class="tbldata">{{OtherExpense.p.Amount}}</td> 
           <td class="tbldata">
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span>
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-          </td>
-        </tr>
-      </tbody>
-    </nz-table>
-  </div>
-
-  <!-- Office Details  -->
-  <div class="table-container" style="margin-top: 2rem;">
-    <div class="row">
-      <div class="col-12">
-        <label class="TableHeading">
-          Other Expense</label>
-      </div>
-    </div>
-    <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
-      nzFrontPagination="false" [nzShowSizeChanger]="false">
-      <thead>
-        <tr>
-          <th *ngFor="let Office_Details of Office_Details" class="tblheadersecond">{{ Office_Details }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td Class="tbldata">1</td>
-          <td Class="tbldata">SAMAPLE1</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td class="tbldata">
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span>
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-          </td>
-        </tr>
-      </tbody>
-    </nz-table>
-  </div>
-
-  <!-- Government Details -->
-  <div class="table-container" style="margin-top: 2rem;">
-    <div class="row">
-      <div class="col-12">
-        <label class="TableHeading">
-          Government Details</label>
-      </div>
-    </div>
-    <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
-      nzFrontPagination="false" [nzShowSizeChanger]="false">
-      <thead>
-        <tr>
-          <th *ngFor="let Government_Details of Government_Details" class="tblheadersecond">{{ Government_Details }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td Class="tbldata">1</td>
-          <td Class="tbldata">SAMAPLE1</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td Class="tbldata">20</td>
-          <td class="tbldata">
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span>
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            <Edit-Icon (editClick)="onEditClicked(OtherExpense)" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(OtherExpense)" />
           </td>
         </tr>
       </tbody>

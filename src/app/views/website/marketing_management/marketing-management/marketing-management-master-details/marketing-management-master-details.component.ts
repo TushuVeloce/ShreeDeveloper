@@ -36,6 +36,7 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
   serviceNamesString: string = '';
+  VendorServiceList: VendorService[] = [];
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
   @ViewChild('CodeCtrl') CodeInputControl!: NgModel;
@@ -50,9 +51,8 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
+    this.getVendorListByCompanyRef()
     this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef(),
-    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity? 'New Marketing': 'Edit Marketing';
@@ -69,6 +69,32 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
       this.utils.DeepCopy(this.Entity)
     ) as MarketingManagement;
     this.focusInput();
+  }
+
+
+  getVendorListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.VendorList = lst;
+    // if (this.VendorList.length > 0) {
+    //   this.Entity.p.VendorRef = this.VendorList[0].p.Ref;
+    // }
+    this.getVendorServiceListByVendorRef();
+  }
+
+  getVendorServiceListByVendorRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await VendorService.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.VendorServiceList = lst;
+    // if (this.VendorList.length > 0) {
+    //   this.Entity.p.VendorServiceRef = this.VendorServiceList[0].p.Ref;
+    // }
   }
   
   selectAllValue(event: MouseEvent): void {

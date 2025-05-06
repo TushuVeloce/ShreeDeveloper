@@ -34,13 +34,25 @@
           </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
-          <label for="VendorRef"><b>Vendor Name</b></label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorRef"
-            name="VendorRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorRef"  (ngModelChange)="onVendorChange(Entity.p.VendorRef)">
-            <nz-option *ngFor="let vendor of VendorList" [nzValue]="vendor.p.Ref" [nzLabel]="vendor.p.Name"></nz-option>
+          <label>Vendor</label>
+          <nz-select
+            class="nzSelect-light"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Select"
+            id="VendorRef"
+            name="VendorRef"
+            [nzSize]="'large'"
+            [(ngModel)]="Entity.p.VendorRef"
+          >
+            <nz-option
+              *ngFor="let Vendor of VendorList"
+              [nzValue]="Vendor.p.Ref"
+              [nzLabel]="Vendor.p.Name"
+            ></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem;">
+        <!-- <div class="col-md-4" style="margin-top: 1rem;">
           <label>Services</label>
           <input
             type="text"
@@ -49,6 +61,25 @@
             name="serviceNamesString"
             placeholder="Services"
           />
+        </div> -->
+        <div class="col-md-4" style="margin-top: 1rem; ">
+          <label>Vendor Services</label>
+          <nz-select
+            class="nzSelect-light"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Select"
+            id="VendorServiceRef"
+            name="VendorServiceRef"
+            [nzSize]="'large'"
+            [(ngModel)]="Entity.p.VendorServiceRef"
+          >
+            <nz-option
+              *ngFor="let VendorServices of VendorServiceList"
+              [nzValue]="VendorServices.p.Ref"
+              [nzLabel]="VendorServices.p.Name"
+            ></nz-option>
+          </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.MarketingTypeRef == MarketingType.PrintingMedia">
           <label>Page</label>

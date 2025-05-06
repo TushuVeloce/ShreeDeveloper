@@ -29,6 +29,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   isSaveDisabled: boolean = false;
   private IsNewEntity: boolean = true;
   Entity: ActualStages = ActualStages.CreateNewInstance();
+  ExpenseTypeEntity: ExpenseType = ExpenseType.CreateNewInstance();
   DetailsFormTitle: 'New Stage' | 'Edit Stage' = 'New Stage';
   InitialEntity: ActualStages = null as any;
   StageTypeEnum = StageType;
@@ -45,6 +46,9 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   ExpenseTypeList: ExpenseType[] = [];
   UnitList: Unit[] = [];
   UnitQuantityTotal: number = 0;
+  isAddingExpense = false;
+  isAdd = false;
+  isOfficialExpenditureGov = false
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -123,6 +127,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     this.StageList = lst;
     if (this.StageList.length > 0) {
       this.Entity.p.StageRef = this.StageList[0].p.Ref;
+      this.OnStageChange( this.Entity.p.StageRef)
       this.StageType = this.StageList[0].p.StageType;
       this.IsStage = this.StageList[0].p.IsSubStageApplicable;
     }
@@ -131,6 +136,19 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   }
 
   OnStageChange = async (StageRef: number) => {
+    this.Entity.p.SubStageRef = 0
+    let stagedata = await Stage.FetchInstance(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('stagedata :', stagedata);
+    if(stagedata.p.IsOtherExpenseApplicable == true){
+      this.isAdd = true
+    }else{
+      this.isAdd = false
+    }
+    if(stagedata.p.StageTypeName == "Official Expenditure Gov"){
+      this.isOfficialExpenditureGov = true
+    }else{
+      this.isOfficialExpenditureGov = false
+    }
     await this.getSubStageListByStageRef(StageRef);
     await this.getExpenseListByStageRef(StageRef);
     await this.getStageTypeOnStageRef(StageRef);
@@ -155,6 +173,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     }
     let lst = await ExpenseType.FetchEntireListByStageRef(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.ExpenseTypeList = lst;
+    console.log('ExpenseTypeList :', this.ExpenseTypeList);
     if (this.SubStageList.length > 0) {
       this.Entity.p.SubStageRef = this.SubStageList[0].p.Ref;
     }
@@ -290,6 +309,28 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     }
   }
 
+  saveNewExpenseType = async () => {
+    this.ExpenseTypeEntity.p.StageRef = this.Entity.p.StageRef
+    let entityToSave = this.ExpenseTypeEntity.GetEditableVersion();
+    let entitiesToSave = [entityToSave]
+    console.log('entitiesToSave :', entitiesToSave);
+    await this.ExpenseTypeEntity.EnsurePrimaryKeysWithValidValues()
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return
+    }
+    else {
+        await this.uiUtils.showSuccessToster('Expense Type saved successfully!');
+        this.ExpenseTypeEntity= ExpenseType.CreateNewInstance();
+        this.ExpenseTypeEntity.p.Name = ''
+        this.isAddingExpense = false
+        this.getExpenseListByStageRef(this.Entity.p.StageRef)
+
+    }
+  }
+
   // for value 0 selected while click on Input //
   selectAllValue = (event: MouseEvent): void => {
     const input = event.target as HTMLInputElement;
@@ -298,6 +339,13 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
 
   BackActualStages = () => {
     this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage']);
+  }
+
+  toggleExpenseInput() {
+    this.isAddingExpense = !this.isAddingExpense;
+    if (!this.isAddingExpense) {
+      this.ExpenseTypeEntity.p.Name = ''; 
+    }
   }
 
   resetAllControls = () => {

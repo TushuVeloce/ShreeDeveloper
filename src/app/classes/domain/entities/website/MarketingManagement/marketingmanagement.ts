@@ -39,7 +39,8 @@ export class MarketingManagementProps {
   public UpdatedBy: number = 0;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public ServiceListSuppliedByVendor: ServiceSuppliedByVendorProps[] = [];
+  public VendorServiceRef: number = 0;
+  public VendorServiceName: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';

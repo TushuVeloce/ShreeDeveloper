@@ -11,7 +11,7 @@
       </div>
     </div>
     <form autocomplete="off">
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem">
         <div class="col-md-6 mb-2">
           <label><b>Site Name</b></label>
           <!-- <input type="text" [(ngModel)]="Entity.p.SiteName" name="SiteName" class="form-control" id="SiteName"
@@ -29,8 +29,8 @@
           <label><b>Date</b></label>
           <input type="date" [(ngModel)]="Entity.p.Date" name="Date" class="form-control" id="Date" #DateCtrl="ngModel"
             (blur)="DateCtrl.control.markAsTouched()" />
-          <div *ngIf="(DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty))">
-            <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div *ngIf="DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty)">
+            <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
         <div class="col-md-6 mb-2">
@@ -38,8 +38,11 @@
           <input type="number" [(ngModel)]="Entity.p.ChalanNo" name="ChalanNo" class="form-control" id="ChalanNo"
             placeholder="Enter Chalan No" #ChalanNoCtrl="ngModel" (blur)="ChalanNoCtrl.control.markAsTouched()"
             (click)="selectAllValue($event)" />
-          <div *ngIf="(ChalanNoCtrl.invalid && (ChalanNoCtrl.touched || ChalanNoCtrl.dirty))">
-            <span class="validation-text" *ngIf="ChalanNoCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div *ngIf="
+              ChalanNoCtrl.invalid &&
+              (ChalanNoCtrl.touched || ChalanNoCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="ChalanNoCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
         <div class="col-md-6 mb-2">
@@ -50,19 +53,48 @@
             <nz-option *ngFor="let Stage of StageList" [nzValue]="Stage.p.Ref" [nzLabel]="Stage.p.Name"></nz-option>
           </nz-select>
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem">
         <div class="col-md-6 mb-2">
           <label><b>Expense Type</b></label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="Expense" name="Expense"
-            [nzSize]="'large'" (ngModelChange)="ClearInputsOnExpenseChange()" [(ngModel)]="Expense">
-            <nz-option *ngFor="let Expense of ExpenseTypeList" [nzValue]="Expense.p.ExpenseType"
-              [nzLabel]="Expense.p.Name"></nz-option>
-          </nz-select>
+          <div class="d-flex align-items-center">
+            <!-- Dropdown -->
+            <nz-select *ngIf="!isAdd" class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+              id="Expense" name="Expense" [nzSize]="'large'" (ngModelChange)="ClearInputsOnExpenseChange()"
+              [(ngModel)]="Expense">
+              <nz-option *ngFor="let Expense of ExpenseTypeList" [nzValue]="Expense.p.ExpenseType"
+                [nzLabel]="Expense.p.Name"></nz-option>
+            </nz-select>
+            <nz-select *ngIf="!isAddingExpense && isAdd" class="nzSelect-light" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="ExpenseTypeRef" name="ExpenseTypeRef" [nzSize]="'large'"
+              (ngModelChange)="ClearInputsOnExpenseChange()" [(ngModel)]="Entity.p.ExpenseTypeRef">
+              <nz-option *ngFor="let Expense of ExpenseTypeList" [nzValue]="Expense.p.Ref"
+                [nzLabel]="Expense.p.Name"></nz-option>
+            </nz-select>
+            <!-- Input box for new expense -->
+            <input *ngIf="isAddingExpense && isAdd" type="text" class="form-control flex-grow-1" name="Name" id="Name"
+              placeholder="Enter new expense type" [(ngModel)]="ExpenseTypeEntity.p.Name" />
+
+            <!-- Right icon/button -->
+            <span *ngIf="!isAddingExpense && isAdd" (click)="toggleExpenseInput()"
+              class="ms-2 d-flex justify-content-center align-items-center border rounded"
+              style="width: 36px; height: 36px; cursor: pointer">
+              <i class="fa-solid fa-plus"></i>
+            </span>
+
+            <!-- Save icon: CHECKMARK when input is visible -->
+            <span *ngIf="isAddingExpense" (click)="saveNewExpenseType()"
+              class="ms-2 d-flex justify-content-center align-items-center border rounded text-success"
+              style="width: 36px; height: 36px; cursor: pointer">
+              <i class="fa-solid fa-check"></i>
+            </span>
+          </div>
         </div>
       </div>
-      <div style="width: 100%;" class="d-flex justify-content-center">
-        <hr style="border: 2px solid brown;" width="20%">
+      <div style="width: 100%" class="d-flex justify-content-center">
+        <hr style="border: 2px solid brown" width="20%" />
       </div>
-      <div class="row" style="margin-top: 1rem;">
+      <div class="row" style="margin-top: 1rem">
         <div class="col-md-6 mb-2">
           <label>Vendor</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorRef"
@@ -80,25 +112,22 @@
         </div>
       </div>
       <div class="row">
-        <div *ngIf="IsStage" class="col-lg-4 col-md-6 col-sm-12 mb-3">
+        <div *ngIf="IsStage && StageType != StageTypeEnum.OfficialExpenditure" [ngClass]="{
+            'col-lg-4 col-md-6 col-sm-12 mb-3':
+              StageType !== StageTypeEnum.Road &&
+              StageType !== StageTypeEnum.SidePattiChira &&
+              StageType !== StageTypeEnum.SolarStreetLight,
+            'col-lg-6 col-md-6 col-sm-12 mb-3':
+              StageType == StageTypeEnum.Road ||
+              StageType == StageTypeEnum.SidePattiChira ||
+              StageType == StageTypeEnum.SolarStreetLight
+          }">
           <label>Sub Stage</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SubStageRef"
             name="SubStageRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SubStageRef">
             <nz-option *ngFor="let SubStage of SubStageList" [nzValue]="SubStage.p.Ref"
               [nzLabel]="SubStage.p.Name"></nz-option>
           </nz-select>
-        </div>
-        <div *ngIf="IsStage && StageType != StageTypeEnum.SolarStreetLight && StageType != StageTypeEnum.SidePattiChira"
-          class="col-lg-4 col-md-6 col-sm-12 mb-3">
-          <label *ngIf="StageType == StageTypeEnum.HalfRoundGutterNale"><b>Gutter Nale</b></label>
-          <label *ngIf="StageType == StageTypeEnum.Road"><b>/m2</b></label>
-
-          <input type="number" [(ngModel)]="Entity.p.ExtraQuantity" name="ExtraQuantity" class="form-control"
-            id="ExtraQuantity" placeholder="Enter Quantity" #ExtraQuantityCtrl="ngModel"
-            (blur)="ExtraQuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
-          <div *ngIf="(ExtraQuantityCtrl.invalid && (ExtraQuantityCtrl.touched || ExtraQuantityCtrl.dirty))">
-            <span class="validation-text" *ngIf="ExtraQuantityCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
         </div>
         <div *ngIf="StageType == StageTypeEnum.OfficialExpenditure" class="col-md-6 col-md-4 col-sm-12" clss>
           <label for="SelectedMonths"><b>Months</b></label>
@@ -109,6 +138,30 @@
               [nzLabel]="SelectedMonths.Name"></nz-option>
           </nz-select>
         </div>
+        <div *ngIf="
+            IsStage &&
+            StageType !== StageTypeEnum.SolarStreetLight &&
+            StageType !== StageTypeEnum.SidePattiChira
+          " [ngClass]="{
+            'col-lg-4 col-md-6 col-sm-12 mb-3':
+              StageType !== StageTypeEnum.Road,
+            'col-md-6 col-sm-12 mb-3': StageType === StageTypeEnum.Road
+          }">
+          <label *ngIf="StageType == StageTypeEnum.HalfRoundGutterNale"><b>Gutter Nale</b></label>
+          <label *ngIf="StageType == StageTypeEnum.Road"><b>/m2</b></label>
+          <div *ngIf="StageType == StageTypeEnum.HalfRoundGutterNale || StageType == StageTypeEnum.Road">
+            <input type="number" [(ngModel)]="Entity.p.ExtraQuantity" name="ExtraQuantity" class="form-control"
+              id="ExtraQuantity" placeholder="Enter Quantity" #ExtraQuantityCtrl="ngModel"
+              (blur)="ExtraQuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+              <div *ngIf="
+              ExtraQuantityCtrl.invalid &&
+              (ExtraQuantityCtrl.touched || ExtraQuantityCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="ExtraQuantityCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+          </div>
+          </div>
+        </div>
+       
         <div *ngIf="IsStage && StageType == StageTypeEnum.HalfRoundGutterNale" class="col-lg-4 col-md-6 col-sm-12 mb-3">
           <label>Gutter Nale Unit</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="GutterNaleUnitRef"
@@ -117,30 +170,36 @@
           </nz-select>
         </div>
       </div>
-      <div *ngIf="Expense == 100" class="row" style="margin-top: 1rem;">
+      <div *ngIf="Expense == 100" class="row" style="margin-top: 1rem">
         <label><b>Diesel Calculation</b></label>
-        <div class="col-md-4  mb-2">
+        <div class="col-md-4 mb-2">
           <label>Diesel Ltr</label>
           <!-- Diesel Ltr. -->
           <input type="number" [(ngModel)]="Entity.p.DieselQuantity" name="DieselQuantity" class="form-control"
             id="DieselQuantity" placeholder="Enter Diesel Ltr" (input)="CalculateTotalOnDiselRateAndLtr()"
             #DieselQuantityCtrl="ngModel" (blur)="DieselQuantityCtrl.control.markAsTouched()"
             (click)="selectAllValue($event)" />
-          <div *ngIf="(DieselQuantityCtrl.invalid && (DieselQuantityCtrl.touched || DieselQuantityCtrl.dirty))">
-            <span class="validation-text" *ngIf="DieselQuantityCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div *ngIf="
+              DieselQuantityCtrl.invalid &&
+              (DieselQuantityCtrl.touched || DieselQuantityCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="DieselQuantityCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-        <div class="col-md-4  mb-2">
+        <div class="col-md-4 mb-2">
           <label>Diesel Rate</label>
           <!-- Diesel Rate -->
           <input type="number" [(ngModel)]="Entity.p.DieselRate" name="DieselRate" class="form-control" id="DieselRate"
             placeholder="Enter Diesel Rate" (input)="CalculateTotalOnDiselRateAndLtr()" #DieselRateCtrl="ngModel"
             (blur)="DieselRateCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
-          <div *ngIf="(DieselRateCtrl.invalid && (DieselRateCtrl.touched || DieselRateCtrl.dirty))">
-            <span class="validation-text" *ngIf="DieselRateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div *ngIf="
+              DieselRateCtrl.invalid &&
+              (DieselRateCtrl.touched || DieselRateCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="DieselRateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-        <div class="col-md-4  mb-2">
+        <div class="col-md-4 mb-2">
           <!-- Diesel Amount (Readonly) -->
           <label><b>Diesel Amount</b></label>
           <div class="row">
@@ -151,7 +210,7 @@
             </div>
             <div class="col-4">
               <input type="checkbox" id="IsDieselPaid" [(ngModel)]="Entity.p.IsDieselPaid" name="IsDieselPaid"
-                class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
+                class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px" />
               <label for="IsDieselPaid" class="form-check-label mb-0">Is Diesel Paid</label>
             </div>
           </div>
@@ -160,35 +219,41 @@
           <label><b>Vehical No.</b></label>
           <input type="text" [(ngModel)]="Entity.p.VehicleNo" name="VehicleNo" class="form-control" id="VehicleNo"
             placeholder="Enter Vehicle No" #VehicleNoCtrl="ngModel" (blur)="VehicleNoCtrl.control.markAsTouched()" />
-          <div *ngIf="(VehicleNoCtrl.invalid && (VehicleNoCtrl.touched || VehicleNoCtrl.dirty))">
-            <span class="validation-text" *ngIf="VehicleNoCtrl.errors?.['pattern']">{{NameWithNosAndSpaceMsg}}</span>
+          <div *ngIf="
+              VehicleNoCtrl.invalid &&
+              (VehicleNoCtrl.touched || VehicleNoCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="VehicleNoCtrl.errors?.['pattern']">{{ NameWithNosAndSpaceMsg }}</span>
           </div>
         </div>
       </div>
       <div *ngIf="Expense != 200" class="row">
-        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3"  style="margin-top: 1rem">
           <label>Unit</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UnitRef" name="UnitRef"
             [nzSize]="'large'" [(ngModel)]="Entity.p.UnitRef">
             <nz-option *ngFor="let unit of UnitList" [nzValue]="unit.p.Ref" [nzLabel]="unit.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3"  style="margin-top: 1rem">
           <label><b>Rate</b></label>
           <input type="number" [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate"
             placeholder="Enter Rate" (change)="CalculateAmountOnRateAndQuantity()" #RateCtrl="ngModel"
             (blur)="RateCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
-          <div *ngIf="(RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty))">
-            <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div *ngIf="RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty)">
+            <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3"  style="margin-top: 1rem">
           <label><b>Quantity</b></label>
           <input type="number" [(ngModel)]="Entity.p.Quantity" name="Quantity" class="form-control" id="Quantity"
             placeholder="Enter Quantity" (change)="CalculateAmountOnRateAndQuantity()" #QuantityCtrl="ngModel"
             (blur)="QuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
-          <div *ngIf="(QuantityCtrl.invalid && (QuantityCtrl.touched || QuantityCtrl.dirty))">
-            <span class="validation-text" *ngIf="QuantityCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div *ngIf="
+              QuantityCtrl.invalid &&
+              (QuantityCtrl.touched || QuantityCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="QuantityCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
       </div>
@@ -200,8 +265,11 @@
             id="SkillQuantity" placeholder="Enter Skill Quantity" #SkillQuantityCtrl="ngModel"
             (blur)="SkillQuantityCtrl.control.markAsTouched()" (input)="CalculateAmountOnSkillRateAndQuantity()"
             (click)="selectAllValue($event)" />
-          <div *ngIf="(SkillQuantityCtrl.invalid && (SkillQuantityCtrl.touched || SkillQuantityCtrl.dirty))">
-            <span class="validation-text" *ngIf="SkillQuantityCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div *ngIf="
+              SkillQuantityCtrl.invalid &&
+              (SkillQuantityCtrl.touched || SkillQuantityCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="SkillQuantityCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
@@ -209,8 +277,11 @@
           <input type="number" [(ngModel)]="Entity.p.SkillRate" name="SkillRate" class="form-control" id="SkillRate"
             placeholder="Enter Skill Rate" #SkillRateCtrl="ngModel" (blur)="SkillRateCtrl.control.markAsTouched()"
             (click)="selectAllValue($event)" (input)="CalculateAmountOnSkillRateAndQuantity()" />
-          <div *ngIf="(SkillRateCtrl.invalid && (SkillRateCtrl.touched || SkillRateCtrl.dirty))">
-            <span class="validation-text" *ngIf="SkillRateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div *ngIf="
+              SkillRateCtrl.invalid &&
+              (SkillRateCtrl.touched || SkillRateCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="SkillRateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
@@ -218,8 +289,11 @@
           <input type="number" readonly [(ngModel)]="Entity.p.SkillAmount" name="SkillAmount" class="form-control"
             id="SkillAmount" placeholder="Enter Skill Amount" #SkillAmountCtrl="ngModel"
             (blur)="SkillAmountCtrl.control.markAsTouched()" />
-          <div *ngIf="(SkillAmountCtrl.invalid && (SkillAmountCtrl.touched || SkillAmountCtrl.dirty))">
-            <span class="validation-text" *ngIf="SkillAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div *ngIf="
+              SkillAmountCtrl.invalid &&
+              (SkillAmountCtrl.touched || SkillAmountCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="SkillAmountCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
 
@@ -230,8 +304,11 @@
             id="UnskillQuantity" placeholder="Enter Skill Quantity" (input)="CalculateAmountOnUnSkillRateAndQuantity()"
             #UnskillQuantityCtrl="ngModel" (blur)="UnskillQuantityCtrl.control.markAsTouched()"
             (click)="selectAllValue($event)" />
-          <div *ngIf="(UnskillQuantityCtrl.invalid && (UnskillQuantityCtrl.touched || UnskillQuantityCtrl.dirty))">
-            <span class="validation-text" *ngIf="UnskillQuantityCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div *ngIf="
+              UnskillQuantityCtrl.invalid &&
+              (UnskillQuantityCtrl.touched || UnskillQuantityCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="UnskillQuantityCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
@@ -240,8 +317,11 @@
             id="UnSkillRate" placeholder="Enter UnSkill Rate" #UnSkillRateCtrl="ngModel"
             (blur)="UnSkillRateCtrl.control.markAsTouched()" (input)="CalculateAmountOnUnSkillRateAndQuantity()"
             (click)="selectAllValue($event)" />
-          <div *ngIf="(UnSkillRateCtrl.invalid && (UnSkillRateCtrl.touched || UnSkillRateCtrl.dirty))">
-            <span class="validation-text" *ngIf="UnSkillRateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div *ngIf="
+              UnSkillRateCtrl.invalid &&
+              (UnSkillRateCtrl.touched || UnSkillRateCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="UnSkillRateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
@@ -249,8 +329,11 @@
           <input type="number" readonly [(ngModel)]="Entity.p.UnskillAmount" name="UnSkillAmount" class="form-control"
             id="UnSkillAmount" placeholder="Enter UnSkill Amount" #UnSkillAmountCtrl="ngModel"
             (blur)="UnSkillAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
-          <div *ngIf="(UnSkillAmountCtrl.invalid && (UnSkillAmountCtrl.touched || UnSkillAmountCtrl.dirty))">
-            <span class="validation-text" *ngIf="UnSkillAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div *ngIf="
+              UnSkillAmountCtrl.invalid &&
+              (UnSkillAmountCtrl.touched || UnSkillAmountCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="UnSkillAmountCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
 
@@ -261,8 +344,11 @@
             id="LadiesQuantity" placeholder="Enter Ladies Quantity" #LadiesQuantityCtrl="ngModel"
             (blur)="LadiesQuantityCtrl.control.markAsTouched()" (input)="CalculateAmountOnLadiesRateAndQuantity()"
             (click)="selectAllValue($event)" />
-          <div *ngIf="(LadiesQuantityCtrl.invalid && (LadiesQuantityCtrl.touched || LadiesQuantityCtrl.dirty))">
-            <span class="validation-text" *ngIf="LadiesQuantityCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div *ngIf="
+              LadiesQuantityCtrl.invalid &&
+              (LadiesQuantityCtrl.touched || LadiesQuantityCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="LadiesQuantityCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
@@ -270,8 +356,11 @@
           <input type="number" [(ngModel)]="Entity.p.LadiesRate" name="LadiesRate" class="form-control" id="LadiesRate"
             placeholder="Enter Ladies Rate" #LadiesRateCtrl="ngModel" (blur)="LadiesRateCtrl.control.markAsTouched()"
             (click)="selectAllValue($event)" (input)="CalculateAmountOnLadiesRateAndQuantity()" />
-          <div *ngIf="(LadiesRateCtrl.invalid && (LadiesRateCtrl.touched || LadiesRateCtrl.dirty))">
-            <span class="validation-text" *ngIf="LadiesRateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div *ngIf="
+              LadiesRateCtrl.invalid &&
+              (LadiesRateCtrl.touched || LadiesRateCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="LadiesRateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
@@ -279,28 +368,33 @@
           <input type="number" readonly [(ngModel)]="Entity.p.LadiesAmount" name="LadiesAmount" class="form-control"
             id="LadiesAmount" placeholder="Enter Ladies Amount" #LadiesAmountCtrl="ngModel"
             (blur)="LadiesAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
-          <div *ngIf="(LadiesAmountCtrl.invalid && (LadiesAmountCtrl.touched || LadiesAmountCtrl.dirty))">
-            <span class="validation-text" *ngIf="LadiesAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div *ngIf="
+              LadiesAmountCtrl.invalid &&
+              (LadiesAmountCtrl.touched || LadiesAmountCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="LadiesAmountCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
       </div>
-      <div style="width: 100%;" class="d-flex justify-content-center">
-        <hr style="border: 2px solid brown;" width="20%">
+      <div style="width: 100%" class="d-flex justify-content-center">
+        <hr style="border: 2px solid brown" width="20%" />
       </div>
-      <div class="row" style="margin-top: 1rem;">
+      <div class="row" style="margin-top: 1rem">
         <div class="col-md-6 mb-2">
           <label><b>Amount</b></label>
           <input type="number" [(ngModel)]="Entity.p.Amount" name="Amount" class="form-control" id="Amount"
             placeholder="Enter Amount" #AmountCtrl="ngModel" (blur)="AmountCtrl.control.markAsTouched()"
             (click)="selectAllValue($event)" />
-          <div *ngIf="(AmountCtrl.invalid && (AmountCtrl.touched || AmountCtrl.dirty))">
-            <span class="validation-text" *ngIf="AmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div *ngIf="
+              AmountCtrl.invalid && (AmountCtrl.touched || AmountCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="AmountCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
         <div class="col-md-6 mb-2">
           <label><b>Sign</b></label>
           <input type="text" [(ngModel)]="Entity.p.CreatedByName" name="CreatedByName" class="form-control"
-            id="CreatedByName" placeholder="Enter Sign" readonly [pattern]=" NameWithNosAndSpace"
+            id="CreatedByName" placeholder="Enter Sign" readonly [pattern]="NameWithNosAndSpace"
             #CreatedByNameCtrl="ngModel" (blur)="CreatedByNameCtrl.control.markAsTouched()" />
         </div>
         <div class="col-md-6 mb-2">
@@ -308,18 +402,29 @@
           <textarea type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
             id="Description" rows="4" placeholder="Enter Description" #DescriptionCtrl="ngModel"
             (blur)="DescriptionCtrl.control.markAsTouched()"></textarea>
-          <div style="height: 25px;"
-            *ngIf="(DescriptionCtrl.invalid && (DescriptionCtrl.touched || DescriptionCtrl.dirty))">
-            <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div style="height: 25px" *ngIf="
+              DescriptionCtrl.invalid &&
+              (DescriptionCtrl.touched || DescriptionCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
       </div>
-      <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
         <div>
-          <button type="button" class="btn" (click)="SaveStageMaster()">Save</button>
+          <button type="button" class="btn" (click)="SaveStageMaster()">
+            Save
+          </button>
         </div>
         <div>
-          <button type="button" class="btn" (click)="BackActualStages()">Back</button>
+          <button type="button" class="btn" (click)="BackActualStages()">
+            Back
+          </button>
         </div>
       </div>
     </form>

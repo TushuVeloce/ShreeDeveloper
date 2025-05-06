@@ -68,7 +68,7 @@ Entity: ExpenseType = ExpenseType.CreateNewInstance();
   }
 
   onStageChange = (selectedvalue: any) => {
-    this.Entity.p.SelectedStages = selectedvalue;
+    // this.Entity.p.SelectedStages = selectedvalue;
   }
 
   SaveExpenseTypeMaster = async () => {

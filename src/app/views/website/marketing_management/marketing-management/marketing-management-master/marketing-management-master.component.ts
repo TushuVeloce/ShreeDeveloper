@@ -68,6 +68,7 @@ export class MarketingManagementMasterComponent implements OnInit {
     let lst = await MarketingManagement.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
+    console.log('DisplayMasterList :', this.DisplayMasterList);
     for (const item of lst) {
       switch (item.p.MarketingTypeRef) {
         case MarketingModes.Digital:
