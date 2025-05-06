@@ -80,6 +80,11 @@ export class CRMPage implements OnInit {
     await this.initializeDate(); // Ensures data refresh every time user re-enters
     await this.loadSitesByCompanyRef(); // Refresh site list
   }
+  async handleRefresh(event: CustomEvent): Promise<void> {
+    await this.loadSitesByCompanyRef();
+    await this.initializeDate();
+    (event.target as HTMLIonRefresherElement).complete();
+  }
 
   private async initializeDate() {
     try {

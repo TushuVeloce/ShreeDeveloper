@@ -3,9 +3,12 @@
 <app-header-with-back-handler title="Customer Follow-Up" backRoute="app_homepage/tabs/crm"></app-header-with-back-handler>
 
 <ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <!-- Customer List -->
   <ion-list class="Data-list">
-    <ng-container *ngIf="FilterFollowupList.length > 0; else noData">
+    <ng-container *ngIf="FilterFollowupList.length > 0 && isLoading===false; else noData">
       <ion-card *ngFor="let item of FilterFollowupList" class="Data-card">
         <ion-card-content>
           <div class="info-row"><strong>Name:</strong> {{ item.p.CustomerName }}</div>
