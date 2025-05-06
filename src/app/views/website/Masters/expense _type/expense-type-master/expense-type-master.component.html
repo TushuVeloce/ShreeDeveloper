@@ -8,11 +8,23 @@
         [(ngModel)]="SearchString" />
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
-      <nz-button nz-button class="btn1" (click)='AddExpenseType()'>
+      <nz-button  nz-button class="btn1" (click)='AddExpenseType()'>
         Add Expense Type
       </nz-button>
     </div>
-    <div>
+    <div class="card-body" style="margin-left: 14px;">
+      <form autocomplete="off">
+        <div class="row">
+          <div class="col-md-4">
+            <label for="StageRef"><b>Stage</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.StageRef" name="StageRef" required id="StageRef"
+              (ngModelChange)="getExpenseListByStageRef()">
+              <nz-option *ngFor="let Stage of StageList" [nzLabel]="Stage.p.Name" [nzValue]="Stage.p.Ref"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
   <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
@@ -27,16 +39,8 @@
         <tbody>
           <tr *ngFor="let ExpenseType of paginatedList(); index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <!-- <td Class="tbldata">{{ExpenseType.p.Code}}</td>
             <td Class="tbldata">{{ExpenseType.p.Name}}</td>
-            <td Class="tbldata">{{ExpenseType.p.UnitName}}</td> -->
             <td class="tbldata">
-              <!-- <span style="margin-left: 9px;" (click)="onEditClicked(ExpenseType);">
-                <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-              </span> -->
-              <!-- <span style="margin-left: 9px;" (click)="onDeleteClicked(ExpenseType);">
-                <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span> -->
-
               <Edit-Icon (editClick)="onEditClicked(ExpenseType)" />
               <Delete-Icon (deleteClicked)="onDeleteClicked(ExpenseType)" />
             </td>
@@ -49,7 +53,8 @@
         (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
       </nz-pagination>
     </div> -->
-    <Pagination [pageSize]="pageSize" [total]="total" [(currentPage)]="currentPage" (pageChange)="onPageChange($event)"/>
+    <Pagination [pageSize]="pageSize" [total]="total" [(currentPage)]="currentPage"
+      (pageChange)="onPageChange($event)" />
   </div>
   <!-- <div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
     <div style="height: 200px" class="d-flex align-items-center justify-content-center">
@@ -59,4 +64,3 @@
   <div *ngIf="DisplayMasterList.length === 0">
     <Data-Not-Found />
   </div>
-  
