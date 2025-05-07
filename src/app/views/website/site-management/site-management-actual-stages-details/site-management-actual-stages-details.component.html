@@ -134,7 +134,7 @@
               <nz-option
                 *ngFor="let Expense of ExpenseTypeList"
                 [nzValue]="Expense.p.ExpenseType"
-                [nzLabel]="Expense.p.Name"
+                [nzLabel]="Expense.p.ExpenseTypeName"
               ></nz-option>
             </nz-select>
             <!-- Input box for new expense -->
@@ -185,6 +185,7 @@
             name="VendorRef"
             [nzSize]="'large'"
             [(ngModel)]="Entity.p.VendorRef"
+            (ngModelChange)="getVendorServiceListByVendorRef(Entity.p.VendorRef)"
           >
             <nz-option
               *ngFor="let Vendor of VendorList"
@@ -975,7 +976,7 @@
 <div *ngIf="isModalOpen" class="custom-modal-overlay">
   <div class="custom-modal">
     <div class="custom-modal-header">
-      <h5>Add Owner</h5>
+      <h5>Add Machine Hours</h5>
       <button
         type="button"
         class="btn-close"

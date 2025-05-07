@@ -113,7 +113,7 @@ export class ActualStagesProps {
 export class ActualStages implements IPersistable<ActualStages> {
   public static readonly Db_Table_Name: string = 'ActualStage';
 
-  private constructor(public readonly p: ActualStagesProps, public readonly AllowEdit: boolean) {
+  public constructor(public readonly p: ActualStagesProps, public readonly AllowEdit: boolean) {
 
   }
 

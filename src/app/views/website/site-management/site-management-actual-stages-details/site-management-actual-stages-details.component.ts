@@ -11,10 +11,14 @@ import { SubStage } from 'src/app/classes/domain/entities/website/masters/substa
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
+import { ActualStagesChalanFetchRequest } from 'src/app/classes/domain/entities/website/site_management/actualstagechalan/actualstagechalanfetchrequest';
 import { ActualStages } from 'src/app/classes/domain/entities/website/site_management/actualstages/actualstages';
 import { Time, TimeDetailProps } from 'src/app/classes/domain/entities/website/site_management/time/time';
+import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
+import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -64,7 +68,8 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   @ViewChild('StartTimeCtrl') StartTimeInputControl!: NgModel;
   @ViewChild('EndTimeCtrl') EndTimeInputControl!: NgModel;
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement,private payloadPacketFacade: PayloadPacketFacade,
+      private serverCommunicator: ServerCommunicatorService) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -84,6 +89,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       ActualStages.SetCurrentInstance(this.Entity);
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
       await this.getSingleEmployeeDetails();
+      await this.ChalanNo()
     }
     this.InitialEntity = Object.assign(ActualStages.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as ActualStages;
     this.focusInput();
@@ -94,9 +100,21 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     // txtName.focus();
   }
 
-ChalanNo = () => {
-  
-}
+  ChalanNo = async () => {
+    // alert("Hii")
+    async () => {
+      let req = new ActualStagesChalanFetchRequest();  
+      let td = req.FormulateTransportData();
+      let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+      let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+      if (!tr.Successful) {
+        await this.uiUtils.showErrorMessage('Error', tr.Message);
+        return;
+      }
+     let tdResult = JSON.parse(tr.Tag) as TransportData;
+      console.log('tdResult :', tdResult);
+    }
+};
 
   getSingleEmployeeDetails = async () => {
     if (this.companyRef() <= 0) {
@@ -182,6 +200,7 @@ ChalanNo = () => {
     // }
     let lst = await ExpenseType.FetchEntireListByStageRef(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.ExpenseTypeList = lst;
+    console.log('ExpenseTypeList :', this.ExpenseTypeList);
     // if (this.SubStageList.length > 0) {
     //   this.Entity.p.SubStageRef = this.SubStageList[0].p.Ref;
     // }
@@ -211,15 +230,17 @@ ChalanNo = () => {
     // if (this.VendorList.length > 0) {
     //   this.Entity.p.VendorRef = this.VendorList[0].p.Ref;
     // }
-    this.getVendorServiceListByVendorRef();
+    // this.getVendorServiceListByVendorRef();
   }
 
-  getVendorServiceListByVendorRef = async () => {
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await VendorService.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  getVendorServiceListByVendorRef = async (VendorRef:number) => {
+    // if (this.companyRef() <= 0) {
+    //   await this.uiUtils.showErrorToster('Company not Selected');
+    //   return;
+    // }
+    this.VendorServiceList = []
+    this.Entity.p.VendorRef = 0
+    let lst = await VendorService.FetchEntireListByVendorRef(VendorRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.VendorServiceList = lst;
     // if (this.VendorList.length > 0) {
     //   this.Entity.p.VendorServiceRef = this.VendorServiceList[0].p.Ref;
@@ -231,7 +252,6 @@ ChalanNo = () => {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.UnitList = lst;
-    console.log('this.UnitList  :', this.UnitList );
   };
 
   ClearInputsOnExpenseChange = () => {
@@ -395,9 +415,9 @@ TotalAmount = () => {
  
      } else {
        let TimeInstance = new Time(this.TimeEntity, true);
-      //  let siteInstance = new ActualStages(this.Entity.p, true);
+       let actualstageInstance = new ActualStages(this.Entity.p, true);
        await TimeInstance.EnsurePrimaryKeysWithValidValues();
-      //  await siteInstance.EnsurePrimaryKeysWithValidValues();
+       await actualstageInstance.EnsurePrimaryKeysWithValidValues();
  
        this.TimeEntity.SiteManagementRef = this.Entity.p.Ref;
        this.Entity.p.TimeDetails.push({ ...TimeInstance.p });

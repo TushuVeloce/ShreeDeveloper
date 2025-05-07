@@ -5,6 +5,7 @@ import { ExpenseType } from 'src/app/classes/domain/entities/website/masters/exp
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
+import { ActualStagesChalanFetchRequest } from 'src/app/classes/domain/entities/website/site_management/actualstagechalan/actualstagechalanfetchrequest';
 import { ActualStages } from 'src/app/classes/domain/entities/website/site_management/actualstages/actualstages';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -54,7 +55,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
 
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement,
   ) {
     effect(async () => {
       await this.getActualStageListByCompanyRef();
@@ -112,6 +113,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
     }
     this.loadPaginationData();
   }
+
 
   navigateToPrint = async (item: ActualStages) => {
     // this.SelectedActualStages = item.GetEditableVersion();
