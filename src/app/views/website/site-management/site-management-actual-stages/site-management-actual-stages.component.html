@@ -66,7 +66,7 @@
           Machinary Expense</label>
       </div>
     </div>
-    <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
+    <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"  [nzData]="paginatedList('machinary')"
       nzFrontPagination="false" [nzShowSizeChanger]="false" >
       <thead>
         <tr>
@@ -74,8 +74,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let MachinaryExpense of MachinaryExpenseList; index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <tr *ngFor="let MachinaryExpense of paginatedList('machinary'); index as i">
+          <td class="tbldata">{{ (currentPage.machinary - 1) * pageSize.machinary + i + 1 }}</td>
           <td Class="tbldata">{{MachinaryExpense.p.Date}}</td>
           <td Class="tbldata">{{MachinaryExpense.p.ChalanNo}}</td>
           <td Class="tbldata">{{MachinaryExpense.p.VehicleNo}}</td>
@@ -88,10 +88,22 @@
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(MachinaryExpense)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(MachinaryExpense)" />
-            <span style="margin-left: 9px; cursor: pointer;" (click)="navigateToPrint()">
+            <span style="margin-left: 9px; cursor: pointer;" (click)="navigateToPrint(MachinaryExpense)">
               <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
+        <tr>
+            <td class="tbldata"></td>
+            <td class="tbldata"></td>
+            <td class="tbldata"></td>
+            <td class="tbldata"></td>
+            <td class="tbldata"></td>
+            <td class="tbldata"></td>
+            <td class="tbldata"></td>
+            <td class="tbldata"></td>
+            <td class="tbldata"><b>Total</b></td>
+            <td class="tbldata"><b> {{ totalMacinaryAmount | currency : "INR" }}</b></td>
+          </tr>
       </tbody>
     </nz-table>
   </div>
@@ -104,26 +116,28 @@
           Labour Expense</label>
       </div>
     </div>
-    <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
+    <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"  [nzData]="paginatedList('labour')"
       nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
-          <th *ngFor="let Header of Headers" class="tblheadersecond">{{ Header }}</th>
+          <th *ngFor="let Header of LabourHeaders" class="tblheadersecond">{{ Header }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let LabourExpense of LabourExpenseList; index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <tr *ngFor="let LabourExpense of  paginatedList('labour'); index as i">
+          <td class="tbldata">{{ (currentPage.labour - 1) * pageSize.labour + i + 1 }}</td>
           <td Class="tbldata">{{LabourExpense.p.Date}}</td>
           <td Class="tbldata">{{LabourExpense.p.ChalanNo}}</td>
           <td Class="tbldata">{{LabourExpense.p.Description}}</td>
           <td Class="tbldata">{{LabourExpense.p.VendorName}}</td>
-          <td Class="tbldata">{{LabourExpense.p.Rate}}</td>
-          <td Class="tbldata">{{LabourExpense.p.Quantity}}</td>
+          <!-- <td Class="tbldata">{{LabourExpense.p.Rate}}</td>
+          <td Class="tbldata">{{LabourExpense.p.Quantity}}</td> -->
           <td Class="tbldata">{{LabourExpense.p.Amount}}</td>
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(LabourExpense)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(LabourExpense)" />
+            <span style="margin-left: 9px; cursor: pointer;" (click)="navigateToPrint(LabourExpense)">
+              <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
       </tbody>
@@ -138,7 +152,7 @@
           Other Expense</label>
       </div>
     </div>
-    <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
+    <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"  [nzData]="paginatedList('other')" 
       nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
@@ -146,8 +160,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let OtherExpense of OtherExpenseList; index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <tr *ngFor="let OtherExpense of  paginatedList('other'); index as i">
+          <td class="tbldata">{{ (currentPage.other - 1) * pageSize.other + i + 1 }}</td>
           <td Class="tbldata">{{OtherExpense.p.Date}}</td>
           <td Class="tbldata">{{OtherExpense.p.ChalanNo}}</td>
           <td Class="tbldata">{{OtherExpense.p.Description}}</td>
@@ -158,6 +172,8 @@
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(OtherExpense)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(OtherExpense)" />
+            <span style="margin-left: 9px; cursor: pointer;" (click)="navigateToPrint(OtherExpense)">
+              <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
       </tbody>
