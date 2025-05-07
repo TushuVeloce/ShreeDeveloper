@@ -94,6 +94,10 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     // txtName.focus();
   }
 
+ChalanNo = () => {
+  
+}
+
   getSingleEmployeeDetails = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
@@ -262,9 +266,19 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   }
 
   CalculateAmountOnRateAndQuantity = () => {
-    this.UnitQuantityTotal = (this.Entity.p.Rate * this.Entity.p.Quantity);
-    this.Entity.p.Amount = this.Entity.p.DieselTotalAmount + this.UnitQuantityTotal
-  }
+    const rate = Number(this.Entity.p.Rate) || 0;
+    const quantity = Number(this.Entity.p.Quantity) || 0;
+    const diesel = Number(this.Entity.p.DieselTotalAmount) || 0;
+  
+    this.UnitQuantityTotal = rate * quantity;
+  
+    if (this.Entity.p.IsDieselPaid) {
+      this.Entity.p.Amount = this.UnitQuantityTotal - diesel;
+    } else {
+      this.Entity.p.Amount = this.UnitQuantityTotal;
+    }
+  };
+  
 
   CalculateAmountOnSkillRateAndQuantity = () => {
     this.Entity.p.SkillAmount = (this.Entity.p.SkillRate * this.Entity.p.SkillQuantity);
@@ -280,6 +294,21 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     this.Entity.p.LadiesAmount = (this.Entity.p.LadiesRate * this.Entity.p.LadiesQuantity);
     this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
   }
+
+  
+originalAmount: number = 0;
+TotalAmount = () => {
+  if (!this.originalAmount) {
+    this.originalAmount = this.Entity.p.Amount; // store initial
+  }
+
+  if (this.Entity.p.IsDieselPaid && this.Entity.p.DieselTotalAmount) {
+    this.Entity.p.Amount = this.originalAmount - Number(this.Entity.p.DieselTotalAmount);
+  } else {
+    this.Entity.p.Amount = this.originalAmount;
+  }
+};
+
 
 
   onSelectedMonthsChange = (Selectedservice: any) => {
