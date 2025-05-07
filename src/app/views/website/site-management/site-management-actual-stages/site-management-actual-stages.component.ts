@@ -98,14 +98,14 @@ export class SiteManagementActualStagesComponent implements OnInit {
     this.DisplayMasterList = this.MasterList;
     console.log('DisplayMasterList :', this.DisplayMasterList);
     for (const item of lst) {
-      switch (item.p.DefaultExpenseTypeName) {
-        case "Machinary Expense":
+      switch (item.p.ExpenseTypeRef) {
+        case 100:
           this.MachinaryExpenseList.push(item);
           break;
-        case "Labour Expense":
+        case 200:
           this.LabourExpenseList.push(item);
           break;
-        case "Other Expense":
+        default:
           this.OtherExpenseList.push(item);
           break;
       }
