@@ -61,6 +61,8 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('StartTimeCtrl') StartTimeInputControl!: NgModel;
+  @ViewChild('EndTimeCtrl') EndTimeInputControl!: NgModel;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
@@ -85,7 +87,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     }
     this.InitialEntity = Object.assign(ActualStages.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as ActualStages;
     this.focusInput();
-    console.log("this.Entity.p.StageName,",this.Entity.p.StageName)
   }
 
   focusInput = () => {
@@ -143,7 +144,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   OnStageChange = async (StageRef: number) => {
     this.Entity.p.SubStageRef = 0
     let stagedata = await Stage.FetchInstance(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('stagedata :', stagedata);
     if(stagedata.p.IsOtherExpenseApplicable == true){
       this.isAdd = true
     }else{
@@ -178,7 +178,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     // }
     let lst = await ExpenseType.FetchEntireListByStageRef(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.ExpenseTypeList = lst;
-    console.log('ExpenseTypeList :', this.ExpenseTypeList);
     // if (this.SubStageList.length > 0) {
     //   this.Entity.p.SubStageRef = this.SubStageList[0].p.Ref;
     // }
@@ -228,6 +227,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.UnitList = lst;
+    console.log('this.UnitList  :', this.UnitList );
   };
 
   ClearInputsOnExpenseChange = () => {
@@ -373,32 +373,38 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
        this.TimeEntity.SiteManagementRef = this.Entity.p.Ref;
        this.Entity.p.TimeDetails.push({ ...TimeInstance.p });
        await this.uiUtils.showSuccessToster('Owner added successfully!');
-      //  this.resetOwnerControls()
+       this.resetTimeControls()
      }
  
      this.TimeEntity = TimeDetailProps.Blank();
      this.editingIndex = null;
    }
 
-   editTime(index: number) {
-    console.log('index :', index);
+   EditTime(index: number) {
     this.isModalOpen = true
     this.TimeEntity = { ...this.Entity.p.TimeDetails[index] }
-    console.log('this.newOwner  :', this.TimeEntity );
     this.editingIndex = index;
   }
 
-  removeowner(index: number) {
+  RemoveTime(index: number) {
     this.Entity.p.TimeDetails.splice(index, 1); // Remove owner
   }
 
 
   resetAllControls = () => {
     // reset touched
-    // this.NameInputControl.control.markAsUntouched();
+    this.NameInputControl.control.markAsUntouched();
 
-    // // reset dirty
-    // this.NameInputControl.control.markAsPristine();
+    // reset dirty
+    this.NameInputControl.control.markAsPristine();
+  }
+
+  resetTimeControls = () => {
+    this.StartTimeInputControl.control.markAsUntouched();
+    this.EndTimeInputControl.control.markAsUntouched();
+
+    this.StartTimeInputControl.control.markAsPristine();
+    this.EndTimeInputControl.control.markAsPristine();
   }
 }
 
