@@ -17,13 +17,13 @@
       <!-- Company & Receipt Info Spread Full Width -->
       <div class="row mb-3">
         <div class="col-md-6">
-          <img src="/assets/images/shreelogo.png" style="margin-left: 40px;" alt=" Company Logo" height="60"
+          <img src="/assets/logos/ShreeIcon.png" style="margin-left: 30px;" alt=" Company Logo" height="80"
             class="mb-2" />
           <p class="mb-0"><strong>{{Entity.p.CompanyName}}</strong></p>
-          <p class="mb-0">उमा ट्रॅकिंग सिव्हील, NKGSB बँक समोर</p>
-          <p class="mb-0">प्रगती हायड्रोक्सच्या वरती दुसरा मळा</p>
-          <p class="mb-0">[City, ST ZIP]</p>
-          <p>Phone: [000-000-0000]</p>
+          <p class="mb-0">{{Entity.p.AddressLine1}}</p>
+          <p class="mb-0">{{Entity.p.AddressLine1}}</p>
+          <p class="mb-0">{{Entity.p.CityName}} - {{Entity.p.PinCode}}</p>
+          <p>Phone: {{Entity.p.Contacts}}</p>
         </div>
         <div class="col-md-6 text-md-end text-start mt-3 mt-md-0">
           <p><strong>DATE:</strong> {{ this.Entity.p.Date }}</p>
@@ -42,8 +42,8 @@
         </div>
         <div class="col-md-6 p-2">
           <p><strong>Stage Name:</strong> {{ Entity.p.StageName }}</p>
-          <p><strong>Service Type:</strong> {{ receipt.serviceType }}</p>
-          <p><strong>Vehicle No:</strong> {{ Entity.p.VehicleNo }}</p>
+          <p><strong>Service Type:</strong> {{ Entity.p.ExpenseTypeName }}</p>
+          <p *ngIf="Entity.p.ExpenseTypeRef == 100"><strong>Vehicle No:</strong> {{ Entity.p.VehicleNo }}</p>
         </div>
       </div>
 
@@ -55,19 +55,50 @@
               <th style="width: 5%;" class="MaroonBGHeading">Sr.No</th>
               <th style="width: 45%;" class="MaroonBGHeading">DESCRIPTION</th>
               <th style="width: 10%;" class="MaroonBGHeading">Qty.</th>
-              <th style="width: 10%;" class="MaroonBGHeading">UNIT</th>
+              <th *ngIf="Entity.p.ExpenseTypeRef == 100" style="width: 10%;" class="MaroonBGHeading">UNIT</th>
               <th style="width: 15%;" class="MaroonBGHeading">RATE</th>
               <th style="width: 15%;" class="MaroonBGHeading">AMOUNT</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of receipt.items; let i = index">
+            <!-- <tr *ngFor="let item of receipt.items; let i = index">
               <td>{{ i + 1 }}</td>
               <td class="text-start">{{ item.description }}</td>
               <td>{{ item.qty }}</td>
               <td>{{ item.unit }}</td>
               <td>{{ item.rate | currency:'INR' }}</td>
               <td>{{ item.amount | currency:'INR' }}</td>
+            </tr> -->
+            <tr *ngIf="Entity.p.ExpenseTypeRef == 100">
+              <td>1.</td>
+              <td>Disel</td>
+              <td>{{ Entity.p.DieselQuantity }}</td>
+              <td>{{ Entity.p.UnitName }}</td>
+              <td>{{ Entity.p.DieselRate }}</td>
+              <td>{{ Entity.p.DieselTotalAmount }}</td>
+            </tr>
+
+            <tr *ngIf="Entity.p.ExpenseTypeRef == 200">
+              <td>1.</td>
+              <td>Skilled</td>
+              <td>{{ Entity.p.SkillQuantity }}</td>
+              <td>{{ Entity.p.SkillRate }}</td>
+              <td>{{ Entity.p.SkillAmount }}</td>
+            </tr>
+
+            <tr *ngIf="Entity.p.ExpenseTypeRef == 200">
+              <td>2.</td>
+              <td>Unskilled</td>
+              <td>{{ Entity.p.UnskillQuantity }}</td>
+              <td>{{ Entity.p.UnskillRate }}</td>
+              <td>{{ Entity.p.UnskillAmount }}</td>
+            </tr>
+            <tr *ngIf="Entity.p.ExpenseTypeRef == 200">
+              <td>3.</td>
+              <td>Ladies</td>
+              <td>{{ Entity.p.LadiesQuantity }}</td>
+              <td>{{ Entity.p.LadiesRate }}</td>
+              <td>{{ Entity.p.LadiesAmount }}</td>
             </tr>
           </tbody>
         </table>
@@ -77,13 +108,13 @@
       <div class="row justify-content-end">
         <div class="col-md-6">
           <table class="table border">
-            <tr *ngFor="let row of receipt.totalRows">
+            <!-- <tr *ngFor="let row of receipt.totalRows">
               <td class="text-end"><strong>{{ row.label }}</strong></td>
               <td class="text-end">{{ row.value | currency:'INR' }}</td>
-            </tr>
+            </tr> -->
             <tr style="background-color: #e6b8af;">
               <td class="text-start"><strong style="background-color: #e6b8af;">TOTAL</strong></td>
-              <td class="text-end text-danger fw-bold">{{ receipt.total | currency:'INR' }}</td>
+              <td class="text-end text-danger fw-bold">{{ Entity.p.Amount| currency:'INR' }}</td>
             </tr>
             <tr>
               <td colspan="2"><strong>Inwords:</strong> {{ receipt.inwords }}</td>
@@ -108,7 +139,7 @@
       </div>
 
       <p class="text-center">If you have any questions about this invoice, please contact</p>
-      <p class="text-center">[Name, Phone #, E-mail]</p>
+      <p class="text-center">{{Entity.p.CompanyName}},{{Entity.p.Contacts}} , E-mail</p>
       <p class="text-center" style="font-style: italic;">
         <strong>Thank You For Your Business!</strong>
       </p>

@@ -22,6 +22,11 @@ export class ActualStagesProps {
   public TransDateTime: string = '';
   public DefaultExpenseTypeName: string = '';
 
+  public AddressLine1: string = '';
+  public Contacts: string = '';
+  public CityName: string = '';
+  public PinCode: string = '';
+
   public IsDeleted: number = 0;
 
   public CreatedBy: number = 0;

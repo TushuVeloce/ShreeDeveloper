@@ -3,9 +3,9 @@
   <nz-sider Class="menu-sidebar" [nzCollapsible]="true" nzWidth="18vw" [nzBreakpoint]="'md'"
     [(nzCollapsed)]="isCollapsed" [nzCollapsedWidth]="80" [nzZeroTrigger]="null" [nzTrigger]="null">
     <div Class="sidebar-logo">
-      <img src="/assets/images/shreelogo.png" alt="logo" *ngIf="!isCollapsed" class="theme_logo"
+      <img src="/assets/logos/ShreeIcon.png" alt="logo" *ngIf="!isCollapsed" class="theme_logo"
         (click)="navigatetodashboard()" />
-      <img src="/assets/images/shreelogo.png" alt="logo" *ngIf="isCollapsed" class="collapselogo"
+      <img src="/assets/logos/ShreeIcon.png" alt="logo" *ngIf="isCollapsed" class="collapselogo"
         (click)="navigatetodashboard()" />
     </div>
     <!-- -------- Module list start ----------- -->
@@ -85,7 +85,7 @@
       </div>
 
 
-    
+
         <!-- <a style="margin-top: 1rem">
           <label style="margin-right: 0.5rem; font-weight: bold" Class="togglebtn" > {{ Name }}</label >
         </a> -->
@@ -116,7 +116,7 @@
         <!-- <a style="margin-right: 15px">
           <i class="fa-solid fa-bell fa-xl" style="color: #6a788a"></i>
         </a> -->
-       
+
         <div style="display: flex; justify-content: end; align-items: center; ">
           <div style="padding-right: 1rem;">
             <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select" [nzSize]="'large'"
@@ -127,7 +127,7 @@
           </div>
           <div style="padding-right: 1rem;">
             <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" >
-              <img width="40px" class="rounded-circle sidebar-text" height="40px" src="/assets/images/shreelogo.png"
+              <img width="40px" class="rounded-circle sidebar-text" height="40px" src="/assets/logos/ShreeIcon.png"
                 alt="logo" />
             </a>
             <nz-dropdown-menu #menu="nzDropdownMenu" Class="profile_dropdwon_light">
@@ -140,10 +140,10 @@
               </ul>
             </nz-dropdown-menu>
           </div>
-       
+
         </div>
-       
-    
+
+
     </nz-header>
     <nz-content class="scrollable-content">
       <div class="inner-content inner-content_left">
