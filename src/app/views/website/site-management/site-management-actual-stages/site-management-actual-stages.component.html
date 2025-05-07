@@ -93,17 +93,11 @@
           </td>
         </tr>
         <tr>
-            <td class="tbldata"></td>
-            <td class="tbldata"></td>
-            <td class="tbldata"></td>
-            <td class="tbldata"></td>
-            <td class="tbldata"></td>
-            <td class="tbldata"></td>
-            <td class="tbldata"></td>
-            <td class="tbldata"></td>
-            <td class="tbldata"><b>Total</b></td>
-            <td class="tbldata"><b> {{ totalMacinaryAmount | currency : "INR" }}</b></td>
-          </tr>
+          <td class="tbldata" colspan="8" ></td>
+          <td class="tbldata"><b>Total</b></td>
+          <td class="tbldata"><b>{{ totalMachinaryAmount | currency: 'INR' }}</b></td>
+          <td class="tbldata"></td>
+        </tr>
       </tbody>
     </nz-table>
   </div>
@@ -140,6 +134,12 @@
               <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
+        <tr>
+          <td class="tbldata" colspan="4" ></td>
+          <td class="tbldata"><b>Total</b></td>
+          <td class="tbldata"><b>{{ totalLabourAmount | currency: 'INR' }}</b></td>
+          <td class="tbldata"></td>
+        </tr>
       </tbody>
     </nz-table>
   </div>
@@ -175,6 +175,12 @@
             <span style="margin-left: 9px; cursor: pointer;" (click)="navigateToPrint(OtherExpense)">
               <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
+        </tr>
+        <tr>
+          <td class="tbldata" colspan="6" ></td>
+          <td class="tbldata"><b>Total</b></td>
+          <td class="tbldata"><b>{{ totalOtherAmount | currency: 'INR' }}</b></td>
+          <td class="tbldata"></td>
         </tr>
       </tbody>
     </nz-table>

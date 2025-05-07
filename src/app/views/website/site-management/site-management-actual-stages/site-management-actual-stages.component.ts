@@ -169,8 +169,16 @@ export class SiteManagementActualStagesComponent implements OnInit {
   }
 
 
-  get totalMacinaryAmount(): number {
+  get totalMachinaryAmount(): number {
     return this.MachinaryExpenseList.reduce((sum, item) => sum + (item.p.Amount || 0), 0);
+  }
+
+  get totalLabourAmount(): number {
+    return this.LabourExpenseList.reduce((sum, item) => sum + (item.p.Amount || 0), 0);
+  }
+  
+  get totalOtherAmount(): number {
+    return this.OtherExpenseList.reduce((sum, item) => sum + (item.p.Amount || 0), 0);
   }
 
   // get totalMacinaryAmountInWords(): string {
