@@ -15,49 +15,49 @@
     </div>
     <div class="row" style="margin-top: 1rem; ">
       <div class="col-md-4" style="margin-top: 1rem; ">
-         <label for="FromDate"><b>From Date</b></label>
-         <input type="date" name="FromDate" class="form-control" id="FromDate" [(ngModel)]="FromDate"/>
-       </div>
+        <label for="FromDate"><b>From Date</b></label>
+        <input type="date" name="FromDate" class="form-control" id="FromDate" [(ngModel)]="FromDate" />
+      </div>
       <div class="col-md-4" style="margin-top: 1rem; ">
-         <label for="ToDate"><b>To Date</b></label>
-         <input type="date" name="ToDate" class="form-control" id="ToDate" [(ngModel)]="ToDate"/>
-       </div>
+        <label for="ToDate"><b>To Date</b></label>
+        <input type="date" name="ToDate" class="form-control" id="ToDate" [(ngModel)]="ToDate" />
+      </div>
       <div class="col-md-4" style="margin-top: 1rem; ">
-         <div>
-           <label for="SiteRef"><b>site</b></label>
-           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-             name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef">
-             <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
-           </nz-select>
-         </div>
-       </div>
+        <div>
+          <label for="SiteRef"><b>site</b></label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+            name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef">
+            <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+          </nz-select>
+        </div>
+      </div>
       <div class="col-md-4" style="margin-top: 1rem; ">
-         <div>
-           <label for="VendorRef"><b>Vendor</b></label>
-           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-             name="VendorRef" [(ngModel)]="Entity.p.VendorRef" required id="VendorRef">
-             <nz-option *ngFor="let vendor of VendorList" [nzValue]="vendor.p.Ref" [nzLabel]="vendor.p.Name"></nz-option>
-           </nz-select>
-         </div>
-       </div>
+        <div>
+          <label for="VendorRef"><b>Vendor</b></label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+            name="VendorRef" [(ngModel)]="Entity.p.VendorRef" required id="VendorRef">
+            <nz-option *ngFor="let vendor of VendorList" [nzValue]="vendor.p.Ref" [nzLabel]="vendor.p.Name"></nz-option>
+          </nz-select>
+        </div>
+      </div>
       <div class="col-md-4" style="margin-top: 1rem; ">
-         <div>
-           <label for="StageRef"><b>Stage</b></label>
-           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-             name="StageRef" [(ngModel)]="Entity.p.StageRef" required id="StageRef">
-             <nz-option *ngFor="let stage of StageList" [nzValue]="stage.p.Ref" [nzLabel]="stage.p.Name"></nz-option>
-           </nz-select>
-         </div>
-       </div>
-       <div class="col-md-4" style="margin-top: 1rem; ">
+        <div>
+          <label for="StageRef"><b>Stage</b></label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+            name="StageRef" [(ngModel)]="Entity.p.StageRef" required id="StageRef">
+            <nz-option *ngFor="let stage of StageList" [nzValue]="stage.p.Ref" [nzLabel]="stage.p.Name"></nz-option>
+          </nz-select>
+        </div>
+      </div>
+      <div class="col-md-4" style="margin-top: 1rem; ">
         <label><b>Expense Type</b></label>
-        <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="ExpenseTypeRef" name="ExpenseTypeRef"
-          [nzSize]="'large'" [(ngModel)]="Entity.p.ExpenseTypeRef">
+        <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="ExpenseTypeRef"
+          name="ExpenseTypeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.ExpenseTypeRef">
           <nz-option *ngFor="let Expense of ExpenseTypeList" [nzValue]="Expense.p.ExpenseType"
             [nzLabel]="Expense.p.Name"></nz-option>
         </nz-select>
       </div>
-       </div>
+    </div>
   </div>
   <div class="table-container" style="margin-top: 2rem;">
     <div class="row">
@@ -78,16 +78,18 @@
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{MachinaryExpense.p.Date}}</td>
           <td Class="tbldata">{{MachinaryExpense.p.ChalanNo}}</td>
-          <td Class="tbldata">{{MachinaryExpense.p.VehicleNo}}</td> 
-          <td Class="tbldata">{{MachinaryExpense.p.Description}}</td> 
-          <td Class="tbldata">{{MachinaryExpense.p.VendorName}}</td> 
-          <td Class="tbldata">{{MachinaryExpense.p.Rate}}</td> 
-          <td Class="tbldata">{{MachinaryExpense.p.UnitName}}</td> 
-          <td Class="tbldata">{{MachinaryExpense.p.Quantity}}</td> 
-          <td Class="tbldata">{{MachinaryExpense.p.Amount}}</td> 
+          <td Class="tbldata">{{MachinaryExpense.p.VehicleNo}}</td>
+          <td Class="tbldata">{{MachinaryExpense.p.Description}}</td>
+          <td Class="tbldata">{{MachinaryExpense.p.VendorName}}</td>
+          <td Class="tbldata">{{MachinaryExpense.p.Rate}}</td>
+          <td Class="tbldata">{{MachinaryExpense.p.UnitName}}</td>
+          <td Class="tbldata">{{MachinaryExpense.p.Quantity}}</td>
+          <td Class="tbldata">{{MachinaryExpense.p.Amount}}</td>
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(MachinaryExpense)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(MachinaryExpense)" />
+            <span style="margin-left: 9px; cursor: pointer;" (click)="navigateToPrint()">
+              <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
       </tbody>
@@ -110,15 +112,15 @@
         </tr>
       </thead>
       <tbody>
-       <tr *ngFor="let LabourExpense of LabourExpenseList; index as i">
+        <tr *ngFor="let LabourExpense of LabourExpenseList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{LabourExpense.p.Date}}</td>
-          <td Class="tbldata">{{LabourExpense.p.ChalanNo}}</td> 
-          <td Class="tbldata">{{LabourExpense.p.Description}}</td> 
-          <td Class="tbldata">{{LabourExpense.p.VendorName}}</td> 
-          <td Class="tbldata">{{LabourExpense.p.Rate}}</td> 
-          <td Class="tbldata">{{LabourExpense.p.Quantity}}</td> 
-          <td Class="tbldata">{{LabourExpense.p.Amount}}</td> 
+          <td Class="tbldata">{{LabourExpense.p.ChalanNo}}</td>
+          <td Class="tbldata">{{LabourExpense.p.Description}}</td>
+          <td Class="tbldata">{{LabourExpense.p.VendorName}}</td>
+          <td Class="tbldata">{{LabourExpense.p.Rate}}</td>
+          <td Class="tbldata">{{LabourExpense.p.Quantity}}</td>
+          <td Class="tbldata">{{LabourExpense.p.Amount}}</td>
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(LabourExpense)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(LabourExpense)" />
@@ -144,15 +146,15 @@
         </tr>
       </thead>
       <tbody>
-       <tr *ngFor="let OtherExpense of OtherExpenseList; index as i">
-        <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <tr *ngFor="let OtherExpense of OtherExpenseList; index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{OtherExpense.p.Date}}</td>
-          <td Class="tbldata">{{OtherExpense.p.ChalanNo}}</td> 
-          <td Class="tbldata">{{OtherExpense.p.Description}}</td> 
-          <td Class="tbldata">{{OtherExpense.p.VendorName}}</td> 
-          <td Class="tbldata">{{OtherExpense.p.Rate}}</td> 
-          <td Class="tbldata">{{OtherExpense.p.Quantity}}</td> 
-          <td Class="tbldata">{{OtherExpense.p.Amount}}</td> 
+          <td Class="tbldata">{{OtherExpense.p.ChalanNo}}</td>
+          <td Class="tbldata">{{OtherExpense.p.Description}}</td>
+          <td Class="tbldata">{{OtherExpense.p.VendorName}}</td>
+          <td Class="tbldata">{{OtherExpense.p.Rate}}</td>
+          <td Class="tbldata">{{OtherExpense.p.Quantity}}</td>
+          <td Class="tbldata">{{OtherExpense.p.Amount}}</td>
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(OtherExpense)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(OtherExpense)" />

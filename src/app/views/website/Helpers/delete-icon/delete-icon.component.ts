@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'Delete-Icon',
-  standalone:false,
+  standalone: false,
   template: `
-  <span style="margin-left: 9px;" (click)="onDeleteClicked()">
+  <span style="margin-left: 9px; cursor: pointer;" (click)="onDeleteClicked()">
   <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
 </span>
   `,

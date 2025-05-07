@@ -37,8 +37,8 @@ export class SiteManagementActualStagesComponent implements OnInit {
   FromDate = '';
   ToDate = '';
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  MachinaryHeaders: string[] = ['Sr.No.','Date', 'Chalan No.', 'Vehicle No', 'Description', 'Vendor Name','Rate','Unit','Quantity','Amount', 'Action'];
-  Headers: string[] = ['Sr.No.','Date', 'Chalan No.','Description', 'Vendor Name','Rate','Quantity','Amount', 'Action'];
+  MachinaryHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Vehicle No', 'Description', 'Vendor Name', 'Rate', 'Unit', 'Quantity', 'Amount', 'Action'];
+  Headers: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Description', 'Vendor Name', 'Rate', 'Quantity', 'Amount', 'Action'];
 
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
@@ -101,6 +101,10 @@ export class SiteManagementActualStagesComponent implements OnInit {
     this.loadPaginationData();
   }
 
+  navigateToPrint = async () => {
+    await this.router.navigate(['/homepage/Website/Actual_Stage_Print']);
+  }
+
   onEditClicked = async (item: ActualStages) => {
     this.SelectedActualStages = item.GetEditableVersion();
     ActualStages.SetCurrentInstance(this.SelectedActualStages);
@@ -155,6 +159,6 @@ export class SiteManagementActualStagesComponent implements OnInit {
       this.DisplayMasterList = this.MasterList
     }
   }
-  
+
 }
 
