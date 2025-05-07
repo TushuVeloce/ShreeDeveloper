@@ -661,13 +661,13 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
         await this.uiUtils.showSuccessToster(
           'Customer Enquiry Updated successfully!'
         );
-        this.router.navigate(['/homepage/Website/Customer_Enquiry']);
+        this.router.navigate(['pp_homepage/tabs/crm/customer-enquiry']);
       }
     }
   };
 
   public goBack(): void {
-    this.router.navigate(['/app_homepage/tabs/crm/customer-enquiry'], { replaceUrl: true });
+    this.router.navigate(['app_homepage/tabs/crm/customer-enquiry'], { replaceUrl: true });
   }
 }
 

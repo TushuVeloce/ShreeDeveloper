@@ -111,6 +111,7 @@ import { ExpenseTypeMasterComponent } from './Masters/expense _type/expense-type
 import { ExpenseTypeMasterDetailsComponent } from './Masters/expense _type/expense-type-master-details/expense-type-master-details.component';
 import { MarketingManagementMasterComponent } from './marketing_management/marketing-management/marketing-management-master/marketing-management-master.component';
 import { MarketingManagementMasterDetailsComponent } from './marketing_management/marketing-management/marketing-management-master-details/marketing-management-master-details.component';
+import { ActualStagePrintComponent } from './site-management/actual-stage-print/actual-stage-print.component';
 
 
 const routes: Routes = [
@@ -132,7 +133,7 @@ const routes: Routes = [
 
       { path: 'Expense_Type_Master', component: ExpenseTypeMasterComponent},
       { path: 'Expense_Type_Master_Details', component: ExpenseTypeMasterDetailsComponent},
-      
+
       { path: 'Sub_Stage_Master', component: SubStageMasterComponent},
       { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent},
 
@@ -202,6 +203,7 @@ const routes: Routes = [
       { path: 'Site_Management_Actual_Stage', component: SiteManagementActualStagesComponent },
       { path: 'Site_Management_Actual_Stage_Details', component: SiteManagementActualStagesDetailsComponent },
 
+      { path: 'Actual_Stage_Print', component: ActualStagePrintComponent },
 
       // Stock Management
       { path: 'Material_Requisition', component: MaterialRequisitionComponent },

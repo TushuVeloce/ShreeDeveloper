@@ -3,6 +3,9 @@
 <app-header-with-back-handler title="CRM" backRoute="app_homepage/tabs/home"></app-header-with-back-handler>
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <!-- Stats -->
   <div class="crm-container">
     <!-- CRM Stats Overview -->

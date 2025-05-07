@@ -48,6 +48,16 @@ export class CustomerFollowUpPage implements OnInit {
     await this.LoadAllData();
     // console.log('Leave request refreshed on view enter');
   };
+  async handleRefresh(event: CustomEvent): Promise<void> {
+    await this.LoadAllData();
+    (event.target as HTMLIonRefresherElement).complete();
+  }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    
+  }
+
   private async LoadAllData() {
     if (!this.date) {
       await this.initializeDate();
