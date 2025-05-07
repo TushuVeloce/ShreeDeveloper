@@ -17,47 +17,47 @@
       <!-- Company & Receipt Info Spread Full Width -->
       <div class="row mb-3">
         <div class="col-md-6">
-          <img src="/assets/company-logo.png" alt="Company Logo" height="60" class="mb-2" />
-          <p class="mb-0"><strong>[Company Name]</strong></p>
+          <img src="/assets/images/shreelogo.png" style="margin-left: 40px;" alt=" Company Logo" height="60"
+            class="mb-2" />
+          <p class="mb-0"><strong>{{Entity.p.CompanyName}}</strong></p>
           <p class="mb-0">उमा ट्रॅकिंग सिव्हील, NKGSB बँक समोर</p>
           <p class="mb-0">प्रगती हायड्रोक्सच्या वरती दुसरा मळा</p>
           <p class="mb-0">[City, ST ZIP]</p>
           <p>Phone: [000-000-0000]</p>
         </div>
         <div class="col-md-6 text-md-end text-start mt-3 mt-md-0">
-          <h2 class="text-danger fw-bold text-center text-md-end">Receipt</h2>
-          <p><strong>DATE:</strong> {{ receipt.date }}</p>
-          <p><strong>Challan No:</strong> [{{ receipt.challanNo }}]</p>
+          <p><strong>DATE:</strong> {{ this.Entity.p.Date }}</p>
+          <p><strong>Challan No:</strong> {{ Entity.p.ChalanNo }}</p>
         </div>
       </div>
 
       <!-- Bill To & Project Info -->
       <div class="row border mb-3">
         <div class="col-md-6 border-end p-2">
-          <h6 class="bg-danger text-white p-1">BILL TO</h6>
-          <p><strong>Vendor Name:</strong> {{ receipt.vendor }}</p>
-          <p><strong>Site Name:</strong> {{ receipt.siteName }}</p>
+          <h6 class="text-white p-1 MaroonBGHeading">BILL TO</h6>
+          <p><strong>Vendor Name:</strong> {{ Entity.p.VendorName }}</p>
+          <p><strong>Site Name:</strong> {{ Entity.p.SiteName }}</p>
           <p><strong>Address:</strong> {{ receipt.address }}</p>
           <p><strong>Phone:</strong> {{ receipt.phone }}</p>
         </div>
         <div class="col-md-6 p-2">
-          <p><strong>Stage Name:</strong> {{ receipt.stageName }}</p>
+          <p><strong>Stage Name:</strong> {{ Entity.p.StageName }}</p>
           <p><strong>Service Type:</strong> {{ receipt.serviceType }}</p>
-          <p><strong>Vehicle No:</strong> {{ receipt.vehicleNo }}</p>
+          <p><strong>Vehicle No:</strong> {{ Entity.p.VehicleNo }}</p>
         </div>
       </div>
 
       <!-- Items Table Full Width -->
       <div class="table-responsive">
         <table class="table table-bordered text-center">
-          <thead class="bg-danger text-white">
+          <thead class="text-white">
             <tr>
-              <th style="width: 5%;">Sr.No</th>
-              <th style="width: 45%;">DESCRIPTION</th>
-              <th style="width: 10%;">Qty.</th>
-              <th style="width: 10%;">UNIT</th>
-              <th style="width: 15%;">RATE</th>
-              <th style="width: 15%;">AMOUNT</th>
+              <th style="width: 5%;" class="MaroonBGHeading">Sr.No</th>
+              <th style="width: 45%;" class="MaroonBGHeading">DESCRIPTION</th>
+              <th style="width: 10%;" class="MaroonBGHeading">Qty.</th>
+              <th style="width: 10%;" class="MaroonBGHeading">UNIT</th>
+              <th style="width: 15%;" class="MaroonBGHeading">RATE</th>
+              <th style="width: 15%;" class="MaroonBGHeading">AMOUNT</th>
             </tr>
           </thead>
           <tbody>
@@ -81,8 +81,8 @@
               <td class="text-end"><strong>{{ row.label }}</strong></td>
               <td class="text-end">{{ row.value | currency:'INR' }}</td>
             </tr>
-            <tr class="bg-light">
-              <td class="text-end"><strong>TOTAL</strong></td>
+            <tr style="background-color: #e6b8af;">
+              <td class="text-start"><strong style="background-color: #e6b8af;">TOTAL</strong></td>
               <td class="text-end text-danger fw-bold">{{ receipt.total | currency:'INR' }}</td>
             </tr>
             <tr>
@@ -93,13 +93,25 @@
       </div>
 
       <!-- Comments Section -->
-      <div class="mt-3 p-2 bg-light border">
-        <h6 class="text-danger">OTHER COMMENTS</h6>
-        <ol class="mb-0">
-          <li>खाली तपशिलात प्रमाणे माल ताब्यात मिळाला.</li>
+      <div>
+        <h6 class="FaintMaroonBGHeading"> <strong>OTHER COMMENTS</strong></h6>
+        <ol>
+          <li>वरील तपशिला प्रमाणे माल ताब्यात मिळाला.</li>
           <li>ही पावती सेवा पुरवठादाराच्या नोंदीसाठी प्रदान करण्यात आली आहे.</li>
+          <li>ही पावती भविष्यातील लेखाजोखासाठी जतन करावी.</li>
         </ol>
       </div>
+      <br><br>
+      <div class="d-flex justify-content-between m-3">
+        <p>Sign: {{ Entity.p.VendorName }}</p>
+        <p>{{Entity.p.CompanyName}}</p>
+      </div>
+
+      <p class="text-center">If you have any questions about this invoice, please contact</p>
+      <p class="text-center">[Name, Phone #, E-mail]</p>
+      <p class="text-center" style="font-style: italic;">
+        <strong>Thank You For Your Business!</strong>
+      </p>
     </div>
   </div>
 </div>

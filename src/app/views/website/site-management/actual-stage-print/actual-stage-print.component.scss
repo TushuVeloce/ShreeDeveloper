@@ -1,37 +1,29 @@
-.bill-container {
-  max-width: 800px;
-  margin: auto;
-  background: #fff;
-
-  .bill-title {
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-
-  .bill-table {
-    th, td {
-      vertical-align: middle;
-    }
-
-    th {
-      background-color: #f8f9fa;
-    }
-  }
-
-  ul.list-group {
-    li {
-      background: #f9f9f9;
-      font-weight: 500;
-    }
+ul {
+  li {
+    background: #f9f9f9;
+    font-weight: 500;
+    font-size: small;
+    font-family: 'Courier New';
   }
 }
 
-
 .receipt-container {
-  .table th, .table td {
+
+  .table th,
+  .table td {
     vertical-align: middle;
     padding: 0.5rem;
     font-size: 0.95rem;
+  }
+
+  .MaroonBGHeading {
+    background-color: maroon;
+    color: white;
+  }
+
+  .FaintMaroonBGHeading {
+    background-color: #dd7e6b;
+    padding: 5px;
   }
 
   .bg-light {
@@ -39,6 +31,12 @@
   }
 
   .text-danger {
-    color: #a70000 !important;
+    color: maroon !important;
+  }
+
+  @media (max-width: 576px) {
+    .detail_title {
+      font-size: 1.2rem;
+    }
   }
 }

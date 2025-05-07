@@ -40,7 +40,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
     labour: 1,
     other: 1,
   };
-  
+
   pageSize = {
     master: 1,
     machinary: 5,
@@ -49,7 +49,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
   };
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   MachinaryHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Vehicle No', 'Description', 'Vendor Name', 'Rate', 'Unit', 'Quantity', 'Amount', 'Action'];
-  LabourHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Description', 'Vendor Name','Amount', 'Action'];
+  LabourHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Description', 'Vendor Name', 'Amount', 'Action'];
   Headers: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Description', 'Vendor Name', 'Rate', 'Quantity', 'Amount', 'Action'];
 
 
@@ -114,11 +114,13 @@ export class SiteManagementActualStagesComponent implements OnInit {
   }
 
   navigateToPrint = async (item: ActualStages) => {
-    await this.router.navigate(['/homepage/Website/Actual_Stage_Print']);
-    this.SelectedActualStages = item.GetEditableVersion();
-    ActualStages.SetCurrentInstance(this.SelectedActualStages);
+    // this.SelectedActualStages = item.GetEditableVersion();
+    // ActualStages.SetCurrentInstance(this.SelectedActualStages);
     // this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Actual_Stage_Print']);
+    // await this.router.navigate(['/homepage/Website/Actual_Stage_Print']);
+    this.router.navigate(['/homepage/Website/Actual_Stage_Print'], {
+      state: { printData: item.GetEditableVersion() }
+    });
   }
 
   onEditClicked = async (item: ActualStages) => {
@@ -159,7 +161,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
       labour: this.LabourExpenseList,
       other: this.OtherExpenseList,
     };
-  
+
     const start = (this.currentPage[type] - 1) * this.pageSize[type];
     return listMap[type].slice(start, start + this.pageSize[type]);
   }
@@ -176,7 +178,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
   get totalLabourAmount(): number {
     return this.LabourExpenseList.reduce((sum, item) => sum + (item.p.Amount || 0), 0);
   }
-  
+
   get totalOtherAmount(): number {
     return this.OtherExpenseList.reduce((sum, item) => sum + (item.p.Amount || 0), 0);
   }
