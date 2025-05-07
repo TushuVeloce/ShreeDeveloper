@@ -30,7 +30,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   isSaveDisabled: boolean = false;
   private IsNewEntity: boolean = true;
   Entity: ActualStages = ActualStages.CreateNewInstance();
-  TimeEntity: Time = Time.CreateNewInstance();
   ExpenseTypeEntity: ExpenseType = ExpenseType.CreateNewInstance();
   DetailsFormTitle: 'New Stage' | 'Edit Stage' = 'New Stage';
   InitialEntity: ActualStages = null as any;
@@ -52,7 +51,8 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   isOfficialExpenditureGov = false
   isModalOpen: boolean = false;
   timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time','Action'];
-
+  TimeEntity: TimeDetailProps = TimeDetailProps.Blank();
+  editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
@@ -353,33 +353,43 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     }
   }
 
-  SaveTime = async () => {
-    // this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-    let entityToSave = this.TimeEntity.GetEditableVersion();
-    let entitiesToSave = [entityToSave]
-    console.log('entitiesToSave :', entitiesToSave);
-    await this.TimeEntity.EnsurePrimaryKeysWithValidValues()
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-    if (!tr.Successful) {
-      this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error', tr.Message);
-      return
-    }
-    else {
-      this.isSaveDisabled = false;
-      if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Time saved successfully!');
-        this.TimeEntity = Time.CreateNewInstance();
-        this.isModalOpen = false
-        this.Entity.p.TimeDetails.push({ ...this.TimeEntity.p});
-        // this.resetAllControls();
-      } else {
-        await this.uiUtils.showSuccessToster('Time Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage']);
+ async SaveTime() {
+     if (!this.TimeEntity.StartTime || !this.TimeEntity.EndTime) {
+       await this.uiUtils.showErrorMessage('Error','Name, Contact No, Country, State, City, Adderss are Required!');
+       return;
+     }
+ 
+     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
+       this.Entity.p.TimeDetails[this.editingIndex] = { ...this.TimeEntity };
+       await this.uiUtils.showSuccessToster('Time updated successfully!');
+       this.isModalOpen = false;
+ 
+     } else {
+       let TimeInstance = new Time(this.TimeEntity, true);
+      //  let siteInstance = new ActualStages(this.Entity.p, true);
+       await TimeInstance.EnsurePrimaryKeysWithValidValues();
+      //  await siteInstance.EnsurePrimaryKeysWithValidValues();
+ 
+       this.TimeEntity.SiteManagementRef = this.Entity.p.Ref;
+       this.Entity.p.TimeDetails.push({ ...TimeInstance.p });
+       await this.uiUtils.showSuccessToster('Owner added successfully!');
+      //  this.resetOwnerControls()
+     }
+ 
+     this.TimeEntity = TimeDetailProps.Blank();
+     this.editingIndex = null;
+   }
 
-      }
-    }
+   editTime(index: number) {
+    console.log('index :', index);
+    this.isModalOpen = true
+    this.TimeEntity = { ...this.Entity.p.TimeDetails[index] }
+    console.log('this.newOwner  :', this.TimeEntity );
+    this.editingIndex = index;
+  }
+
+  removeowner(index: number) {
+    this.Entity.p.TimeDetails.splice(index, 1); // Remove owner
   }
 
 
