@@ -68,8 +68,19 @@ export class ActualStagePrintComponent implements OnInit {
     this.InitialEntity = Object.assign(ActualStages.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as ActualStages;
   }
 
+  printSection = (sectionId: string) => {
+    const printContents = document.getElementById(sectionId)?.innerHTML;
+    const originalContents = document.body.innerHTML;
 
-  BackUnit = () => {
+    if (printContents) {
+      document.body.innerHTML = printContents;
+      window.print();
+      document.body.innerHTML = originalContents;
+      window.location.reload(); // optional: refresh to reload Angular state
+    }
+  }
+
+  BackActualStage = () => {
     this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage']);
   }
 }
