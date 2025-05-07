@@ -120,6 +120,7 @@
                 [nzLabel]="Expense.p.Name"></nz-option>
             </nz-select> -->
             <nz-select
+              *ngIf="!isAddingExpense"
               class="nzSelect-light"
               nzShowSearch
               nzAllowClear
@@ -780,10 +781,10 @@
 
       <!-- time table start -->
 
-      <div class="row" style="margin-top: 2rem; padding: 1rem">
+      <div class="row" style="margin-top: 2rem; padding: 1rem"   *ngIf="Entity.p.ExpenseTypeRef == 100 && Entity.p.UnitRef == 30179">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
           <h5 style="padding-top: 3px; color: black">
-            <b>Add Time Details</b>
+            <b>Machinary Details</b>
           </h5>
         </div>
         <div
@@ -792,12 +793,12 @@
           routerLinkActive="active"
         >
           <nz-button nz-button class="btn1" (click)="isModalOpen = true"
-            >Add Owner</nz-button
+            >Add Machine Time </nz-button
           >
         </div>
       </div>
 
-      <div
+      <!-- <div
         class="table-wrapper"
         class="tblcard_light"
         style="margin-top: 2rem"
@@ -838,7 +839,7 @@
                 <td Class="tbldata">{{ time.EndTime }}</td>
                 <td Class="tbldata">{{ time.WorkedHours }}</td>
                 <td class="tbldata">
-                  <span style="margin-left: 9px">
+                  <span style="margin-left: 9px" (click)="Editowner(i)">
                     <img
                       src="\assets\icons\edit.png"
                       alt="logo"
@@ -847,7 +848,7 @@
                       height="20px"
                     />
                   </span>
-                  <span style="margin-left: 9px">
+                  <span style="margin-left: 9px" (click)="RemoveTime(i)">
                     <img
                       src="\assets\icons\delete.png"
                       alt="logo"
@@ -860,8 +861,8 @@
             </tbody>
           </nz-table>
         </div>
-      </div>
-      <div
+      </div> -->
+      <!-- <div
         *ngIf="Entity.p.TimeDetails.length === 0"
         class="card-body_light"
       >
@@ -871,7 +872,7 @@
         >
           <span class="title_light"> Data Not Found</span>
         </div>
-      </div>
+      </div> -->
 
       <!-- time table -->
 
@@ -989,13 +990,16 @@
               <input
                 type="time"
                 name="StartTime"
-                required
                 class="form-control"
                 id="StartTime"
-                [(ngModel)]="TimeEntity.p.StartTime"
+                [(ngModel)]="TimeEntity.StartTime"
                 placeholder="Enter Start Time "
-                required
+                #StartTimeCtrl="ngModel" required
+                (blur)="StartTimeCtrl.control.markAsTouched()"
               />
+              <div *ngIf="(StartTimeCtrl.invalid && (StartTimeCtrl.touched || StartTimeCtrl.dirty))">
+                <span class="validation-text" *ngIf="StartTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              </div>
             </div>
           </div>
           <div class="col-md-4">
@@ -1004,13 +1008,16 @@
               <input
                 type="time"
                 name="EndTime"
-                required
                 class="form-control"
                 id="EndTime"
-                [(ngModel)]="TimeEntity.p.EndTime"
+                [(ngModel)]="TimeEntity.EndTime"
                 placeholder="Enter To Time"
-                required
+                #EndTimeCtrl="ngModel" required
+                (blur)="EndTimeCtrl.control.markAsTouched()"
               />
+              <div *ngIf="(EndTimeCtrl.invalid && (EndTimeCtrl.touched || EndTimeCtrl.dirty))">
+                <span class="validation-text" *ngIf="EndTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              </div>
             </div>
           </div>
           <div class="col-md-4">
@@ -1019,10 +1026,9 @@
               <input
                 type="text"
                 name="WorkedHours"
-                required
                 class="form-control"
                 id="WorkedHours"
-                [(ngModel)]="TimeEntity.p.WorkedHours"
+                [(ngModel)]="TimeEntity.WorkedHours"
                 placeholder="Total Working Hours"
                 required
               />

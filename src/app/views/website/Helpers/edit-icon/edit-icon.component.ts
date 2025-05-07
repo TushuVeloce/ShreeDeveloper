@@ -5,7 +5,7 @@ import { ThemeService } from 'src/app/services/theme.service';
   selector: 'Edit-Icon',
   standalone: false,
   template: `
-  <span style="margin-left: 9px;" (click)="onEditClick()"  >
+  <span style="margin-left: 9px; cursor: pointer;" (click)="onEditClick()"  >
   <img src="/assets/icons/edit.png"  alt="Edit icon" title="Edit" width="20px" height="20px">
 </span>
   `,

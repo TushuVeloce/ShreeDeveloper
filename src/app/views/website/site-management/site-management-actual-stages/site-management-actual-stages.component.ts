@@ -31,14 +31,26 @@ export class SiteManagementActualStagesComponent implements OnInit {
   ExpenseTypeList: ExpenseType[] = [];
   SearchString: string = '';
   SelectedActualStages: ActualStages = ActualStages.CreateNewInstance();
-  pageSize = 8; // Items per page
-  currentPage = 1; // Initialize current page
   total = 0;
   FromDate = '';
   ToDate = '';
+  currentPage = {
+    master: 1,
+    machinary: 1,
+    labour: 1,
+    other: 1,
+  };
+  
+  pageSize = {
+    master: 1,
+    machinary: 5,
+    labour: 5,
+    other: 5,
+  };
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  MachinaryHeaders: string[] = ['Sr.No.','Date', 'Chalan No.', 'Vehicle No', 'Description', 'Vendor Name','Rate','Unit','Quantity','Amount', 'Action'];
-  Headers: string[] = ['Sr.No.','Date', 'Chalan No.','Description', 'Vendor Name','Rate','Quantity','Amount', 'Action'];
+  MachinaryHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Vehicle No', 'Description', 'Vendor Name', 'Rate', 'Unit', 'Quantity', 'Amount', 'Action'];
+  LabourHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Description', 'Vendor Name','Amount', 'Action'];
+  Headers: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Description', 'Vendor Name', 'Rate', 'Quantity', 'Amount', 'Action'];
 
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
@@ -101,12 +113,21 @@ export class SiteManagementActualStagesComponent implements OnInit {
     this.loadPaginationData();
   }
 
+  navigateToPrint = async (item: ActualStages) => {
+    await this.router.navigate(['/homepage/Website/Actual_Stage_Print']);
+    this.SelectedActualStages = item.GetEditableVersion();
+    ActualStages.SetCurrentInstance(this.SelectedActualStages);
+    // this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+    await this.router.navigate(['/homepage/Website/Actual_Stage_Print']);
+  }
+
   onEditClicked = async (item: ActualStages) => {
     this.SelectedActualStages = item.GetEditableVersion();
     ActualStages.SetCurrentInstance(this.SelectedActualStages);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage_Details']);
   };
+
 
   onDeleteClicked = async (material: ActualStages) => {
     await this.uiUtils.showConfirmationMessage(
@@ -131,15 +152,38 @@ export class SiteManagementActualStagesComponent implements OnInit {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   };
 
-  paginatedList = () => {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.DisplayMasterList.slice(start, start + this.pageSize);
+  paginatedList(type: 'master' | 'machinary' | 'labour' | 'other') {
+    const listMap = {
+      master: this.DisplayMasterList,
+      machinary: this.MachinaryExpenseList,
+      labour: this.LabourExpenseList,
+      other: this.OtherExpenseList,
+    };
+  
+    const start = (this.currentPage[type] - 1) * this.pageSize[type];
+    return listMap[type].slice(start, start + this.pageSize[type]);
   }
 
-  onPageChange = (pageIndex: number): void => {
-    this.currentPage = pageIndex; // Update the current page
-  };
+  onPageChange(type: 'master' | 'machinary' | 'labour' | 'other', pageIndex: number): void {
+    this.currentPage[type] = pageIndex;
+  }
 
+
+  get totalMachinaryAmount(): number {
+    return this.MachinaryExpenseList.reduce((sum, item) => sum + (item.p.Amount || 0), 0);
+  }
+
+  get totalLabourAmount(): number {
+    return this.LabourExpenseList.reduce((sum, item) => sum + (item.p.Amount || 0), 0);
+  }
+  
+  get totalOtherAmount(): number {
+    return this.OtherExpenseList.reduce((sum, item) => sum + (item.p.Amount || 0), 0);
+  }
+
+  // get totalMacinaryAmountInWords(): string {
+  //   return this.convertNumberToWords(this.totalMacinaryAmount);
+  // }
 
   AddStages = async () => {
     await this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage_Details']);
@@ -155,6 +199,6 @@ export class SiteManagementActualStagesComponent implements OnInit {
       this.DisplayMasterList = this.MasterList
     }
   }
-  
+
 }
 

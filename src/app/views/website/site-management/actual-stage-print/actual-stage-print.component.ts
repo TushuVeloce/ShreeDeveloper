@@ -116,13 +116,13 @@ export class ActualStagePrintComponent implements OnInit {
         this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster('Unit Master Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Unit_Master']);
+        await this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage']);
       }
     }
   }
 
   BackUnit = () => {
-    this.router.navigate(['/homepage/Website/Unit_Master']);
+    this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage']);
   }
 
   resetAllControls = () => {
