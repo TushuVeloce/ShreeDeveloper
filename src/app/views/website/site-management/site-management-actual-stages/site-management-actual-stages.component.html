@@ -66,8 +66,13 @@
           Machinary Expense</label>
       </div>
     </div>
+
+  <ng-template #noDataTpl>
+    <div class="no-data-text">No data found</div>
+  </ng-template>
+
     <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"  [nzData]="paginatedList('machinary')"
-      nzFrontPagination="false" [nzShowSizeChanger]="false" >
+      nzFrontPagination="false" [nzShowSizeChanger]="false" [nzNoResult]="noDataTpl">
       <thead>
         <tr>
           <th *ngFor="let Header of MachinaryHeaders" class="tblheadersecond">{{ Header }}</th>
@@ -111,7 +116,7 @@
       </div>
     </div>
     <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"  [nzData]="paginatedList('labour')"
-      nzFrontPagination="false" [nzShowSizeChanger]="false">
+      nzFrontPagination="false" [nzShowSizeChanger]="false" [nzNoResult]="noDataTpl">
       <thead>
         <tr>
           <th *ngFor="let Header of LabourHeaders" class="tblheadersecond">{{ Header }}</th>
@@ -153,7 +158,7 @@
       </div>
     </div>
     <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"  [nzData]="paginatedList('other')" 
-      nzFrontPagination="false" [nzShowSizeChanger]="false">
+      nzFrontPagination="false" [nzShowSizeChanger]="false" [nzNoResult]="noDataTpl">
       <thead>
         <tr>
           <th *ngFor="let Header of Headers" class="tblheadersecond">{{ Header }}</th>
