@@ -16,17 +16,21 @@
     <div class="row" style="margin-top: 1rem; ">
       <div class="col-md-4" style="margin-top: 1rem; ">
         <label for="FromDate"><b>From Date</b></label>
-        <input type="date" name="FromDate" class="form-control" id="FromDate" [(ngModel)]="FromDate" />
+        <input type="date" name="FromDate" class="form-control" id="FromDate" [(ngModel)]="FromDate"
+          (ngModelChange)="getActualStageListByAllFilters()" />
       </div>
       <div class="col-md-4" style="margin-top: 1rem; ">
         <label for="ToDate"><b>To Date</b></label>
-        <input type="date" name="ToDate" class="form-control" id="ToDate" [(ngModel)]="ToDate" />
+        <input type="date" name="ToDate" class="form-control" id="ToDate" [(ngModel)]="ToDate"
+          (ngModelChange)="getActualStageListByAllFilters()" />
       </div>
       <div class="col-md-4" style="margin-top: 1rem; ">
         <div>
           <label for="SiteRef"><b>site</b></label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-            name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef">
+            name="SiteRef" id="SiteRef" [(ngModel)]="Entity.p.SiteRef"
+            (ngModelChange)="getActualStageListByAllFilters()">
+            <nz-option  [nzValue]="0" nzLabel="All"></nz-option>
             <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -35,7 +39,9 @@
         <div>
           <label for="VendorRef"><b>Vendor</b></label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-            name="VendorRef" [(ngModel)]="Entity.p.VendorRef" required id="VendorRef">
+            name="VendorRef" id="VendorRef" [(ngModel)]="Entity.p.VendorRef"
+            (ngModelChange)="getActualStageListByAllFilters()">
+            <nz-option [nzValue]="0" nzLabel="All"></nz-option>
             <nz-option *ngFor="let vendor of VendorList" [nzValue]="vendor.p.Ref" [nzLabel]="vendor.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -44,7 +50,9 @@
         <div>
           <label for="StageRef"><b>Stage</b></label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-            name="StageRef" [(ngModel)]="Entity.p.StageRef" required id="StageRef">
+            name="StageRef" id="StageRef" [(ngModel)]="Entity.p.StageRef"
+            (ngModelChange)="getActualStageListByAllFilters()">
+            <nz-option [nzValue]="0" nzLabel="All"></nz-option>
             <nz-option *ngFor="let stage of StageList" [nzValue]="stage.p.Ref" [nzLabel]="stage.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -52,7 +60,9 @@
       <div class="col-md-4" style="margin-top: 1rem; ">
         <label><b>Expense Type</b></label>
         <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="ExpenseTypeRef"
-          name="ExpenseTypeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.ExpenseTypeRef">
+          name="ExpenseTypeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.ExpenseTypeRef"
+          (ngModelChange)="getActualStageListByAllFilters()">
+          <nz-option [nzValue]="0" nzLabel="All"></nz-option>
           <nz-option *ngFor="let Expense of ExpenseTypeList" [nzValue]="Expense.p.ExpenseType"
             [nzLabel]="Expense.p.Name"></nz-option>
         </nz-select>
@@ -93,10 +103,10 @@
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.Quantity}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.Amount}}</td>
           <td class="tbldata" style="white-space: nowrap;">
-              <Edit-Icon (editClick)="onEditClicked(MachinaryExpense)" />
-              <Delete-Icon (deleteClicked)="onDeleteClicked(MachinaryExpense)" />
-              <span style="margin-left: 9px; cursor: pointer;" (click)="navigateToPrint(MachinaryExpense)">
-                <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            <Edit-Icon (editClick)="onEditClicked(MachinaryExpense)" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(MachinaryExpense)" />
+            <span style="margin-left: 9px; cursor: pointer;" (click)="navigateToPrint(MachinaryExpense)">
+              <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
         <tr>
@@ -135,10 +145,10 @@
           <td Class="tbldata">{{LabourExpense.p.Quantity}}</td> -->
           <td Class="tbldata" style="white-space: nowrap;">{{LabourExpense.p.Amount}}</td>
           <td class="tbldata" style="white-space: nowrap;">
-              <Edit-Icon (editClick)="onEditClicked(LabourExpense)" />
-              <Delete-Icon (deleteClicked)="onDeleteClicked(LabourExpense)" />
-              <span style="margin-left: 9px; cursor: pointer;" (click)="navigateToPrint(LabourExpense)">
-                <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            <Edit-Icon (editClick)="onEditClicked(LabourExpense)" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(LabourExpense)" />
+            <span style="margin-left: 9px; cursor: pointer;" (click)="navigateToPrint(LabourExpense)">
+              <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
         <tr>
@@ -183,8 +193,8 @@
             <span>
               <Delete-Icon (deleteClicked)="onDeleteClicked(OtherExpense)" />
             </span>
-              <span style="margin-left: 9px; cursor: pointer;" (click)="navigateToPrint(OtherExpense)">
-                <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            <span style="margin-left: 9px; cursor: pointer;" (click)="navigateToPrint(OtherExpense)">
+              <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
         <tr>
