@@ -279,7 +279,9 @@ export class ActualStages implements IPersistable<ActualStages> {
     if (StageRef) {
       req.StageRefs.push(StageRef)
     }
-    req.ExpenseTypeRefs.push(ExpenseTypeRef)
+    if (ExpenseTypeRef) {
+      req.ExpenseTypeRefs.push(ExpenseTypeRef)
+    }
     let tdResponse = await ActualStages.FetchTransportData(req, errorHandler) as TransportData;
     return ActualStages.ListFromTransportData(tdResponse);
   }
