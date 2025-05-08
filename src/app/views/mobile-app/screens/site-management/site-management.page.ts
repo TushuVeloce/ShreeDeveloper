@@ -15,7 +15,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 export class SiteManagementPage implements OnInit {
   Entity: Site = Site.CreateNewInstance();
   MasterList: Site[] = [];
-  DisplayMasterList: any[] = [];
+  DisplayMasterList: Site[] = [];
   SearchString: string = '';
   SelectedSite: Site = Site.CreateNewInstance();
   CustomerRef: number = 0;
@@ -24,56 +24,22 @@ export class SiteManagementPage implements OnInit {
   total = 0;
   isLoading: boolean = false;
   modalOpen: boolean = false;
-  companyRef = this.companystatemanagement.SelectedCompanyRef;
-
+  companyRef:number=0;
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
     private companystatemanagement: CompanyStateManagement,
     private dateService: DateconversionService,
-  ) { }
+    private appStateManagement: AppStateManageService
+  ) {}
   async ngOnInit(): Promise<void> {
     await this.loadSiteIfCompanyExists();
+    console.log('companyRef :', await this.companyRef);
   }
 
   ionViewWillEnter = async () => {
+    this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
     await this.loadSiteIfCompanyExists();
-    // console.log('Leave request refreshed on view enter');
-    this.DisplayMasterList = [
-      {
-        p: {
-          Name: 'Site A',
-          CompanyName: 'ABC Constructions',
-          AddressLine1: '123 Main Street',
-          AddressLine2: 'Near Park Avenue',
-          CityName: 'Mumbai',
-          EstimatedStartingDate: '2025-05-01',
-          EstimatedEndDate: '2025-08-31',
-          NumberOfPlots: 12,
-          PinCode: '400001',
-          SiteInchargeName: 'Rahul Sharma',
-          TotalLandAreaInSqft: '15000',
-          TotalLandAreaInSqm: '1393.5'
-        }
-      },
-      {
-        p: {
-          Name: 'Site B',
-          CompanyName: 'XYZ Builders',
-          AddressLine1: '456 Lake View Road',
-          AddressLine2: 'Opposite City Mall',
-          CityName: 'Pune',
-          EstimatedStartingDate: '2025-06-15',
-          EstimatedEndDate: '2025-12-01',
-          NumberOfPlots: 8,
-          PinCode: '411001',
-          SiteInchargeName: 'Meera Kulkarni',
-          TotalLandAreaInSqft: '10000',
-          TotalLandAreaInSqm: '929.0'
-        }
-      }
-    ];
-
   };
 
   ngOnDestroy(): void {
@@ -94,7 +60,7 @@ export class SiteManagementPage implements OnInit {
 
 
   private async loadSiteIfCompanyExists(): Promise<void> {
-    if (this.companyRef() <= 0) {
+    if (this.companyRef <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
@@ -109,11 +75,11 @@ export class SiteManagementPage implements OnInit {
       this.isLoading = true;
       this.MasterList = [];
       this.DisplayMasterList = [];
-      if (this.companyRef() <= 0) {
+      if (this.companyRef <= 0) {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
       }
-      let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.MasterList = lst;
       console.log('Site :', this.MasterList);
       this.DisplayMasterList = this.MasterList;

@@ -1,5 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ExpenseTypeRefs } from 'src/app/classes/domain/constants';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { ExpenseType } from 'src/app/classes/domain/entities/website/masters/expensetype/expensetype';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -106,6 +107,8 @@ export class SiteManagementActualStagesComponent implements OnInit {
   }
 
   getActualStageListByAllFilters = async () => {
+    const ExpenseValue = ExpenseTypeRefs.MachinaryExpense
+    const LabourValue = ExpenseTypeRefs.LabourExpense
     this.MasterList = [];
     this.DisplayMasterList = [];
     this.MachinaryExpenseList = [];
@@ -120,10 +123,10 @@ export class SiteManagementActualStagesComponent implements OnInit {
     this.DisplayMasterList = this.MasterList;
     for (const item of lst) {
       switch (item.p.ExpenseTypeRef) {
-        case 100:
+        case ExpenseValue:
           this.MachinaryExpenseList.push(item);
           break;
-        case 200:
+        case LabourValue:
           this.LabourExpenseList.push(item);
           break;
         default:

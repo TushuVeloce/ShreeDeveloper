@@ -1,5 +1,6 @@
 <app-loader *ngIf="isLoading"></app-loader>
-<app-header-with-back-handler title="Actual Stage" backRoute="app_homepage/tabs/site-management/actual-stage"></app-header-with-back-handler>
+<app-header-with-back-handler title="Actual Stage"
+  backRoute="app_homepage/tabs/site-management"></app-header-with-back-handler>
 
 <ion-content [fullscreen]="true">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
@@ -14,19 +15,37 @@
           <div class="info-row">
             <strong>Site Name:</strong> {{ item.p.SiteName }}
           </div>
+          <div class="info-row">
+            <strong>Date :</strong> {{formatDate(item.p.Date)}}
+          </div>
+          <div class="info-row">
+            <strong>Vendor Name :</strong> {{ item.p.VendorName }}
+          </div>
+          <div class="info-row">
+            <strong>Vendor Service :</strong> {{ item.p.VendorServiceName }}
+          </div>
+          <div class="info-row">
+            <strong>Rate :</strong> {{ item.p.Rate }}
+          </div>
+          <div class="info-row">
+            <strong>Quantity :</strong> {{ item.p.Quantity }}
+          </div>
+          <div class="info-row">
+            <strong>Amount :</strong> {{ item.p.Amount }}
+          </div>
           <!-- <div class="info-row"><strong>Status:</strong> {{ item.p.CustomerStatusName }}</div> -->
           <div class="btn-row">
-            <ion-button size="small" fill="outline" color="primary" (click)="onViewClicked(item)">
+            <ion-button size="small" fill="solid" color="primary" (click)="onViewClicked(item)">
               <ion-icon name="eye-outline" slot="start"></ion-icon> View
             </ion-button>
-            <ion-button size="small" fill="outline" color="secondary" (click)="onEditClicked(item)">
+            <ion-button size="small" fill="solid" color="secondary" (click)="onEditClicked(item)">
               <ion-icon name="create-outline" slot="start"></ion-icon> Edit
             </ion-button>
-            <ion-button size="small" fill="outline" color="danger" (click)="onDeleteClicked(item)">
+            <ion-button size="small" fill="solid" color="danger" (click)="onDeleteClicked(item)">
               <ion-icon name="trash-outline" slot="start"></ion-icon> Delete
             </ion-button>
-            <ion-button size="small" fill="outline" color="danger" (click)="onDeleteClicked(item)">
-              <ion-icon name="print-outline" slot="start"></ion-icon> Delete
+            <ion-button size="small" fill="solid" color="warning" (click)="onViewClicked(item)">
+              <ion-icon name="print-outline" slot="start"></ion-icon> Print
             </ion-button>
           </div>
         </ion-card-content>

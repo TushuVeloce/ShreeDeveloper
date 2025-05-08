@@ -122,7 +122,7 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
 
       let selectData: any[] = [];
 
-      this.openSelectModal(options, selectData, true, 'Select Leave Type', 3, (selected) => {
+      this.openSelectModal(options, this.SelectedMonth, true, 'Select Leave Type', 3, (selected) => {
         this.SelectedMonth = selected;
         // console.log('selected :', selected.map(item => item.p.Ref));
         this.Entity.p.SelectedMonths = selected.map(item => item.p.Ref);

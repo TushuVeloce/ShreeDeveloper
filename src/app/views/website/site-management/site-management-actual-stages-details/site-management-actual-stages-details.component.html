@@ -73,6 +73,7 @@
             #ChalanNoCtrl="ngModel"
             (blur)="ChalanNoCtrl.control.markAsTouched()"
             (click)="selectAllValue($event)"
+            [disabled]="isChalanDisabled"
           />
           <div
             *ngIf="
@@ -794,7 +795,7 @@
           style="display: flex; justify-content: end"
           routerLinkActive="active"
         >
-          <nz-button nz-button class="btn1" (click)="isModalOpen = true"
+          <nz-button nz-button class="btn1" (click)="closeModal('time')"
             >Add Machine Time </nz-button
           >
         </div>
@@ -860,12 +861,18 @@
                   /></span>
                 </td>
               </tr>
+              <tr>
+                <td class="tbldata" colspan="2"></td>
+                <td class="tbldata"><b>Total Hours</b></td>
+                <td class="tbldata"><b>{{ getTotalWorkedHours() }}</b></td>
+                <td class="tbldata"><b></b></td>
+              </tr>
             </tbody>
           </nz-table>
         </div>
       </div> 
        <div
-        *ngIf="Entity.p.TimeDetails.length === 0"
+       *ngIf="Entity.p.TimeDetails.length === 0 && Entity.p.ExpenseTypeRef == 100 && Entity.p.UnitRef == 30179"
         class="card-body_light"
       >
         <div
@@ -1056,7 +1063,7 @@
           >
         </div>
         <div>
-          <nz-button nz-button class="btn1" (click)="isModalOpen = false">
+          <nz-button nz-button class="btn1" (click)="closeModal('time')">
             Close
           </nz-button>
         </div>
