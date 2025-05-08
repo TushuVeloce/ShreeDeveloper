@@ -167,7 +167,7 @@ export class ActualStagePage implements OnInit {
     this.SelectedActualStages = item.GetEditableVersion();
     ActualStages.SetCurrentInstance(this.SelectedActualStages);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Marketing_Management_Master']);
+    await this.router.navigate(['app_homepage/tabs/site-management/actual-stage/edit']);
   };
 
   onDeleteClicked = async (material: ActualStages) => {
