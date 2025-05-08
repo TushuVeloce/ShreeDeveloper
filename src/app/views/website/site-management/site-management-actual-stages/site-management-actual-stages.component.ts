@@ -96,7 +96,6 @@ export class SiteManagementActualStagesComponent implements OnInit {
     let lst = await ActualStages.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    console.log('DisplayMasterList :', this.DisplayMasterList);
     for (const item of lst) {
       switch (item.p.ExpenseTypeRef) {
         case 100:
@@ -113,7 +112,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
     this.loadPaginationData();
   }
 
-  getActualStageListByAllFilters = async (FromDate:string,ToDate:string,SiteRef:number,VendorRef:number,StageRef:number,ExpenseTypeRef:number) => {
+  getActualStageListByAllFilters = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     this.MachinaryExpenseList = [];
@@ -123,7 +122,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await ActualStages.FetchEntireListByAllFilters(this.companyRef(),FromDate,ToDate,SiteRef,VendorRef,StageRef,ExpenseTypeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await ActualStages.FetchEntireListByAllFilters(this.companyRef(), this.FromDate, this.ToDate, this.Entity.p.SiteRef, this.Entity.p.VendorRef, this.Entity.p.StageRef, this.Entity.p.ExpenseTypeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     console.log('DisplayMasterList :', this.DisplayMasterList);
@@ -143,7 +142,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
     this.loadPaginationData();
   }
 
-  
+
 
   navigateToPrint = async (item: ActualStages) => {
     // this.SelectedActualStages = item.GetEditableVersion();
