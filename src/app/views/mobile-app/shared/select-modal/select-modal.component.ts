@@ -23,6 +23,18 @@ export class SelectModalComponent implements OnInit {
   ngOnInit() {
     this.loadedOptions = this.options.slice(0, this.itemsPerLoad);
     console.log('options :', this.options);
+    // this.loadedOptions = this.options.slice(0, this.itemsPerLoad);
+
+    // Ensure selected options are preserved correctly by reference
+    // this.selectedOptions = this.options.filter(opt =>
+    //   this.selectedOptions.some(sel => sel.p.Ref === opt.p.Ref)
+    // );
+    // Normalize selected options to use the actual references from options
+    const selectedRefs = this.selectedOptions.map(item => item.p.Ref);
+    this.selectedOptions = this.options.filter(opt => selectedRefs.includes(opt.p.Ref));
+
+    console.log('Options:', this.options);
+    console.log('Selected Options:', this.selectedOptions);
   }
 
   filterOptions(event: any) {

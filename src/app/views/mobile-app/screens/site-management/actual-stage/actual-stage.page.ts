@@ -35,20 +35,27 @@ export class ActualStagePage implements OnInit {
   total = 0;
   FromDate: string | null = null;
   ToDate: string | null = null;
-  companyRef = this.companystatemanagement.SelectedCompanyRef;
+  companyRef: number = 0;
+  companyName: string| null = '';
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
     private appStateManage: AppStateManageService,
     private companystatemanagement: CompanyStateManagement,
-    private dateService: DateconversionService
+    private dateService: DateconversionService,
+    private appStateManagement:AppStateManageService
   ) { }
 
   ngOnInit(): void {
+    this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
+    this.companyName = this.appStateManagement.StorageKey.getItem('companyName') ? this.appStateManagement.StorageKey.getItem('companyName') : '';
     this.loadActualStageIfCompanyExists();
   }
 
   ionViewWillEnter = async () => {
+    this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
+    this.companyName = this.appStateManagement.StorageKey.getItem('companyName') ? this.appStateManagement.StorageKey.getItem('companyName') : '';
+    console.log('companyRef :', this.companyRef);
     await this.loadActualStageIfCompanyExists();
   };
 
@@ -58,14 +65,14 @@ export class ActualStagePage implements OnInit {
   }
 
   private async loadActualStageIfCompanyExists(): Promise<void> {
-    if (this.companyRef() <= 0) {
+    if (this.companyRef <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.StageList = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.getActualStagesListByCompanyRef();
+    this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.StageList = await Stage.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.getActualStageListByCompanyRef();
   }
 
   onViewClicked(item: ActualStages) {
@@ -92,35 +99,62 @@ export class ActualStagePage implements OnInit {
     this.ExpenseTypeList = lst;
   }
 
-  getActualStagesListByCompanyRef = async () => {
+  getActualStageListByCompanyRef = async () => {
     this.ActualStagesList = [];
     this.FilteredActualStagesList = [];
     this.MachinaryExpenseList = [];
     this.LabourExpenseList = [];
     this.OtherExpenseList = [];
-    if (this.companyRef() <= 0) {
+    if (this.companyRef <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await ActualStages.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await ActualStages.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.ActualStagesList = lst;
     this.FilteredActualStagesList = lst;
-    // for (const item of lst) {
-    //   switch (item.p.ExpenseTypeName) {
-    //     case "MachinaryExpense":
-    //       this.MachinaryExpenseList.push(item);
-    //       break;
-    //     case "LabourExpense":
-    //       this.LabourExpenseList.push(item);
-    //       break;
-    //     case "OtherExpense":
-    //       this.OtherExpenseList.push(item);
-    //       break;
-    //   }
-    // }
-    // console.log(this.MachinaryExpenseList)
+    for (const item of lst) {
+      switch (item.p.ExpenseTypeRef) {
+        case 100:
+          this.MachinaryExpenseList.push(item);
+          break;
+        case 200:
+          this.LabourExpenseList.push(item);
+          break;
+        default:
+          this.OtherExpenseList.push(item);
+          break;
+      }
+    }
   }
 
+  getActualStageListByAllFilters = async () => {
+    this.ActualStagesList = [];
+    this.FilteredActualStagesList = [];
+    this.MachinaryExpenseList = [];
+    this.LabourExpenseList = [];
+    this.OtherExpenseList = [];
+    if (this.companyRef <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await ActualStages.FetchEntireListByAllFilters(this.companyRef, this.FromDate??'', this.ToDate??'', this.Entity.p.SiteRef, this.Entity.p.VendorRef, this.Entity.p.StageRef, this.Entity.p.ExpenseTypeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.ActualStagesList = lst;
+    this.FilteredActualStagesList = lst;
+    console.log('DisplayMasterList :', this.FilteredActualStagesList);
+    for (const item of lst) {
+      switch (item.p.ExpenseTypeRef) {
+        case 100:
+          this.MachinaryExpenseList.push(item);
+          break;
+        case 200:
+          this.LabourExpenseList.push(item);
+          break;
+        default:
+          this.OtherExpenseList.push(item);
+          break;
+      }
+    }
+  }
   onEditClicked = async (item: ActualStages) => {
     this.SelectedActualStages = item.GetEditableVersion();
     ActualStages.SetCurrentInstance(this.SelectedActualStages);
@@ -138,7 +172,7 @@ export class ActualStagePage implements OnInit {
           await this.uiUtils.showSuccessToster(
             `Material ${material.p.SiteName} has been deleted!`
           );
-          await this.getActualStagesListByCompanyRef();
+          await this.getActualStageListByCompanyRef();
           this.SearchString = '';
         });
       }

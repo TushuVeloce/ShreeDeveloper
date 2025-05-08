@@ -21,6 +21,7 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class AddLeaveRequestMobileAppComponent implements OnInit {
   public Entity: LeaveRequest = LeaveRequest.CreateNewInstance();
+  public SelectedLeaveRequest: LeaveRequest = LeaveRequest.CreateNewInstance();
   public InitialEntity: LeaveRequest = null as any;
   public DetailsFormTitle: 'New Leave Request' | 'Edit Leave Request' = 'New Leave Request';
 
@@ -60,6 +61,17 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.loadLeaveRequestsIfEmployeeExists();
+    // this.selectedLeaveTypeBottomsheet()
+    // this.Entity.p.LeaveRequestType = 100;
+    // this.Entity.p.LeaveRequestName = 'Personal Leave';
+    // console.log(this.SelectedLeaveRequest);
+    
+    // [{
+    //   p: {
+    //     Ref: 100,
+    //     Name: 'Personal Leave'
+    //   }
+    // }];
   }
 
   // ionViewWillEnter = async () => {
@@ -239,6 +251,7 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
       // );
 
       const options = this.LeaveRequestTypeList.map((item) => ({ p: item }));
+
 
       let selectData: any[] = [];
 

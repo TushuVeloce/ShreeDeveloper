@@ -18,8 +18,8 @@ export class CompanyStateManagement {
   setCompanyRef(companyRef: number, companyName: string) {
     this.SelectedCompanyRef.set(companyRef);
     this.SelectedCompanyName.set(companyName);
-    //  this.appStateManagement.StorageKey.setItem('SelectedCompanyRef',companyRef.toString());
-    //  this.appStateManagement.StorageKey.setItem('companyName', companyName);
+    this.appStateManagement.StorageKey.setItem('SelectedCompanyRef',companyRef.toString());
+    this.appStateManagement.StorageKey.setItem('companyName', companyName);
   }
   getCurrentCompanyRef(): number {
     return this.SelectedCompanyRef();
