@@ -175,7 +175,11 @@
         <hr style="border: 2px solid brown" width="20%" />
       </div>
       <div class="row" style="margin-top: 1rem">
-        <div class="col-md-6 mb-2">
+        <div [ngClass]="{
+          'col-lg-4 col-md-6 col-sm-12 mb-3': !Entity.p.ExpenseTypeRef || Entity.p.ExpenseTypeRef === 200,
+          'col-lg-3 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef != 200,
+          
+        }">
           <label>Vendor</label>
           <nz-select
             class="nzSelect-light"
@@ -195,7 +199,10 @@
             ></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-6 mb-2">
+        <div [ngClass]="{
+          'col-lg-4 col-md-6 col-sm-12 mb-3': !Entity.p.ExpenseTypeRef || Entity.p.ExpenseTypeRef === 200,
+          'col-lg-3 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef != 200
+        }">
           <label>Vendor Services</label>
           <nz-select
             class="nzSelect-light"
@@ -214,8 +221,55 @@
             ></nz-option>
           </nz-select>
         </div>
+        <div class="col-md-3" *ngIf="Entity.p.ExpenseTypeRef == 100">
+          <label><b>Vehical No.</b></label>
+          <input
+            type="text"
+            [(ngModel)]="Entity.p.VehicleNo"
+            name="VehicleNo"
+            class="form-control"
+            id="VehicleNo"
+            placeholder="Enter Vehicle No"
+            #VehicleNoCtrl="ngModel"
+            (blur)="VehicleNoCtrl.control.markAsTouched()"
+          />
+          <div
+            *ngIf="
+              VehicleNoCtrl.invalid &&
+              (VehicleNoCtrl.touched || VehicleNoCtrl.dirty)
+            "
+          >
+            <span
+              class="validation-text"
+              *ngIf="VehicleNoCtrl.errors?.['pattern']"
+              >{{ NameWithNosAndSpaceMsg }}</span
+            >
+          </div>
+        </div>
+        <div [ngClass]="{
+          'col-lg-4 col-md-6 col-sm-12 mb-3': !Entity.p.ExpenseTypeRef || Entity.p.ExpenseTypeRef === 200,
+          'col-lg-3 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef != 200
+        }">
+          <label>Unit</label>
+          <nz-select
+            class="nzSelect-light"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Select"
+            id="UnitRef"
+            name="UnitRef"
+            [nzSize]="'large'"
+            [(ngModel)]="Entity.p.UnitRef"
+          >
+            <nz-option
+              *ngFor="let unit of UnitList"
+              [nzValue]="unit.p.Ref"
+              [nzLabel]="unit.p.Name"
+            ></nz-option>
+          </nz-select>
+        </div>
       </div>
-      <div class="row">
+      <div class="row" style="margin-top: 1rem">
         <div
           *ngIf="IsStage && StageType != StageTypeEnum.OfficialExpenditure"
           [ngClass]="{
@@ -431,79 +485,13 @@
                 style="width: 20px; height: 20px"
               />
               <label for="IsDieselPaid" class="form-check-label mb-0"
-                >Is Diesel Paid</label
+                >Is  Paid</label
               >
             </div>
           </div>
         </div>
-        <div class="col-md-4 mb-2">
-          <label><b>Vehical No.</b></label>
-          <input
-            type="text"
-            [(ngModel)]="Entity.p.VehicleNo"
-            name="VehicleNo"
-            class="form-control"
-            id="VehicleNo"
-            placeholder="Enter Vehicle No"
-            #VehicleNoCtrl="ngModel"
-            (blur)="VehicleNoCtrl.control.markAsTouched()"
-          />
-          <div
-            *ngIf="
-              VehicleNoCtrl.invalid &&
-              (VehicleNoCtrl.touched || VehicleNoCtrl.dirty)
-            "
-          >
-            <span
-              class="validation-text"
-              *ngIf="VehicleNoCtrl.errors?.['pattern']"
-              >{{ NameWithNosAndSpaceMsg }}</span
-            >
-          </div>
-        </div>
       </div>
       <div *ngIf="Entity.p.ExpenseTypeRef != 200" class="row">
-        <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem">
-          <label>Unit</label>
-          <nz-select
-            class="nzSelect-light"
-            nzShowSearch
-            nzAllowClear
-            nzPlaceHolder="Select"
-            id="UnitRef"
-            name="UnitRef"
-            [nzSize]="'large'"
-            [(ngModel)]="Entity.p.UnitRef"
-          >
-            <nz-option
-              *ngFor="let unit of UnitList"
-              [nzValue]="unit.p.Ref"
-              [nzLabel]="unit.p.Name"
-            ></nz-option>
-          </nz-select>
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem">
-          <label><b>Rate</b></label>
-          <input
-            type="number"
-            [(ngModel)]="Entity.p.Rate"
-            name="Rate"
-            class="form-control"
-            id="Rate"
-            placeholder="Enter Rate"
-            (ngModelChange)="CalculateAmountOnRateAndQuantity()"
-            #RateCtrl="ngModel"
-            (blur)="RateCtrl.control.markAsTouched()"
-            (click)="selectAllValue($event)"
-          />
-          <div *ngIf="RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty)">
-            <span
-              class="validation-text"
-              *ngIf="RateCtrl.errors?.['required']"
-              >{{ RequiredFieldMsg }}</span
-            >
-          </div>
-        </div>
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem">
           <label><b>Quantity</b></label>
           <input
@@ -531,10 +519,52 @@
             >
           </div>
         </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem">
+          <label><b>Rate</b></label>
+          <input
+            type="number"
+            [(ngModel)]="Entity.p.Rate"
+            name="Rate"
+            class="form-control"
+            id="Rate"
+            placeholder="Enter Rate"
+            (ngModelChange)="CalculateAmountOnRateAndQuantity()"
+            #RateCtrl="ngModel"
+            (blur)="RateCtrl.control.markAsTouched()"
+            (click)="selectAllValue($event)"
+          />
+          <div *ngIf="RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty)">
+            <span
+              class="validation-text"
+              *ngIf="RateCtrl.errors?.['required']"
+              >{{ RequiredFieldMsg }}</span
+            >
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label><b>Amount</b></label>
+          <input
+            type="number"
+            class="form-control"
+            placeholder="Amount"
+            [value] ='Amount'
+          />
+          <div
+            *ngIf="
+              AmountCtrl.invalid && (AmountCtrl.touched || AmountCtrl.dirty)
+            "
+          >
+            <span
+              class="validation-text"
+              *ngIf="AmountCtrl.errors?.['required']"
+              >{{ RequiredFieldMsg }}</span
+            >
+          </div>
+        </div>
       </div>
       <div *ngIf="Entity.p.ExpenseTypeRef == 200" class="row">
         <!-- Skilled Section -->
-        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem">
           <label><b>Skill Quantity</b></label>
           <input
             type="number"
@@ -561,7 +591,7 @@
             >
           </div>
         </div>
-        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem">
           <label><b>Skill Rate</b></label>
           <input
             type="number"
@@ -588,7 +618,7 @@
             >
           </div>
         </div>
-        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem">
           <label><b>Skill Amount</b></label>
           <input
             type="number"
@@ -795,7 +825,7 @@
           style="display: flex; justify-content: end"
           routerLinkActive="active"
         >
-          <nz-button nz-button class="btn1" (click)="closeModal('time')"
+          <nz-button nz-button class="btn1" (click)="isModalOpen = true"
             >Add Machine Time </nz-button
           >
         </div>
@@ -890,7 +920,7 @@
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-6 mb-2">
-          <label><b>Amount</b></label>
+          <label><b>Grand Total</b></label>
           <input
             type="number"
             [(ngModel)]="Entity.p.Amount"
@@ -915,21 +945,6 @@
           </div>
         </div>
         <div class="col-md-6 mb-2">
-          <label><b>Sign</b></label>
-          <input
-            type="text"
-            [(ngModel)]="Entity.p.CreatedByName"
-            name="CreatedByName"
-            class="form-control"
-            id="CreatedByName"
-            placeholder="Enter Sign"
-            readonly
-            [pattern]="NameWithNosAndSpace"
-            #CreatedByNameCtrl="ngModel"
-            (blur)="CreatedByNameCtrl.control.markAsTouched()"
-          />
-        </div>
-        <div class="col-md-6 mb-2">
           <label><b>Description</b></label>
           <textarea
             type="text"
@@ -937,7 +952,7 @@
             name="Description"
             class="form-control"
             id="Description"
-            rows="4"
+            rows="1"
             placeholder="Enter Description"
             #DescriptionCtrl="ngModel"
             (blur)="DescriptionCtrl.control.markAsTouched()"
@@ -955,6 +970,21 @@
               >{{ RequiredFieldMsg }}</span
             >
           </div>
+        </div>
+        <div class="col-md-6 mb-2">
+          <label><b>Sign</b></label>
+          <input
+            type="text"
+            [(ngModel)]="Entity.p.CreatedByName"
+            name="CreatedByName"
+            class="form-control"
+            id="CreatedByName"
+            placeholder="Enter Sign"
+            readonly
+            [pattern]="NameWithNosAndSpace"
+            #CreatedByNameCtrl="ngModel"
+            (blur)="CreatedByNameCtrl.control.markAsTouched()"
+          />
         </div>
       </div>
       <div
