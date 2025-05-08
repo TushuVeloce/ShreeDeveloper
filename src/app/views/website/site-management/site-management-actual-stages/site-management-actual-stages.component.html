@@ -9,7 +9,7 @@
       </div>
       <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
         <nz-button nz-button class="btn1" (click)="AddStages()">
-          Add Stages
+          Add Stage
         </nz-button>
       </div>
     </div>
@@ -26,7 +26,7 @@
       </div>
       <div class="col-md-4" style="margin-top: 1rem; ">
         <div>
-          <label for="SiteRef"><b>site</b></label>
+          <label for="SiteRef"><b>Site</b></label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
             name="SiteRef" id="SiteRef" [(ngModel)]="Entity.p.SiteRef"
             (ngModelChange)="getActualStageListByAllFilters()">
@@ -50,8 +50,7 @@
         <div>
           <label for="StageRef"><b>Stage</b></label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-            name="StageRef" id="StageRef" [(ngModel)]="Entity.p.StageRef"
-            (ngModelChange)="getActualStageListByAllFilters()">
+            name="StageRef" id="StageRef" [(ngModel)]="Entity.p.StageRef" (ngModelChange)="OnStageChange()">
             <nz-option [nzValue]="0" nzLabel="All"></nz-option>
             <nz-option *ngFor="let stage of StageList" [nzValue]="stage.p.Ref" [nzLabel]="stage.p.Name"></nz-option>
           </nz-select>
@@ -82,7 +81,7 @@
     </ng-template>
 
     <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
-      [nzData]="paginatedList('machinary')" nzFrontPagination="false" [nzShowSizeChanger]="false"
+      [nzData]="paginatedMachinaryList()" nzFrontPagination="false" [nzShowSizeChanger]="false"
       [nzNoResult]="noDataTpl">
       <thead>
         <tr>
@@ -90,8 +89,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let MachinaryExpense of paginatedList('machinary'); index as i">
-          <td class="tbldata" style="white-space: nowrap;">{{ (currentPage.machinary - 1) * pageSize.machinary + i + 1
+        <tr *ngFor="let MachinaryExpense of paginatedMachinaryList(); index as i">
+          <td class="tbldata" style="white-space: nowrap;">{{ (currentMachinaryPage - 1) * pageSize + i + 1
             }}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.Date}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.ChalanNo}}</td>
@@ -109,7 +108,7 @@
               <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
-        <tr *ngIf="paginatedList('machinary').length > 0">
+        <tr *ngIf="paginatedMachinaryList().length > 0">
           <td class="tbldata" colspan="8"></td>
           <td class="tbldata"><b>Total</b></td>
           <td class="tbldata"><b>{{ totalMachinaryAmount | currency: 'INR' }}</b></td>
@@ -118,8 +117,9 @@
       </tbody>
     </nz-table>
     <div class="pagination">
-      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
-        (nzPageIndexChange)="onPageChange('machinary',$event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="MachinaryPaginationTotal"
+        [(nzPageIndex)]="currentMachinaryPage" (nzPageIndexChange)="onMachinaryPageChange($event)"
+        [nzShowSizeChanger]="false" [nzResponsive]="true">
       </nz-pagination>
     </div>
   </div>
@@ -133,15 +133,15 @@
       </div>
     </div>
     <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
-      [nzData]="paginatedList('labour')" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzNoResult]="noDataTpl">
+      [nzData]="paginatedLabourList()" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzNoResult]="noDataTpl">
       <thead>
         <tr>
           <th *ngFor="let Header of LabourHeaders" class="tblheadersecond">{{ Header }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let LabourExpense of  paginatedList('labour'); index as i">
-          <td class="tbldata" style="white-space: nowrap;">{{ (currentPage.labour - 1) * pageSize.labour + i + 1 }}</td>
+        <tr *ngFor="let LabourExpense of  paginatedLabourList(); index as i">
+          <td class="tbldata" style="white-space: nowrap;">{{ (currentLabourPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{LabourExpense.p.Date}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{LabourExpense.p.ChalanNo}}</td>
           <td Class="tbldata">{{LabourExpense.p.Description}}</td>
@@ -156,7 +156,7 @@
               <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
-        <tr *ngIf="paginatedList('labour').length > 0">
+        <tr *ngIf="paginatedLabourList().length > 0">
           <td class="tbldata" colspan="4"></td>
           <td class="tbldata"><b>Total</b></td>
           <td class="tbldata"><b>{{ totalLabourAmount | currency: 'INR' }}</b></td>
@@ -164,6 +164,12 @@
         </tr>
       </tbody>
     </nz-table>
+    <div class="pagination">
+      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="LabourPaginationTotal"
+        [(nzPageIndex)]="currentLabourPage" (nzPageIndexChange)="onLabourPageChange($event)" [nzShowSizeChanger]="false"
+        [nzResponsive]="true">
+      </nz-pagination>
+    </div>
   </div>
 
   <!-- Other Expense -->
@@ -175,15 +181,15 @@
       </div>
     </div>
     <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
-      [nzData]="paginatedList('other')" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzNoResult]="noDataTpl">
+      [nzData]="paginatedOtherList()" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzNoResult]="noDataTpl">
       <thead>
         <tr>
           <th *ngFor="let Header of Headers" class="tblheadersecond">{{ Header }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let OtherExpense of  paginatedList('other'); index as i">
-          <td class="tbldata">{{ (currentPage.other - 1) * pageSize.other + i + 1 }}</td>
+        <tr *ngFor="let OtherExpense of  paginatedOtherList(); index as i">
+          <td class="tbldata">{{ (currentOtherPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.Date}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.ChalanNo}}</td>
           <td Class="tbldata">{{OtherExpense.p.Description}}</td>
@@ -202,7 +208,7 @@
               <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
-        <tr *ngIf="paginatedList('other').length > 0">
+        <tr *ngIf="paginatedOtherList().length > 0">
           <td class="tbldata" colspan="6"></td>
           <td class="tbldata"><b>Total</b></td>
           <td class="tbldata"><b>{{ totalOtherAmount | currency: 'INR' }}</b></td>
@@ -210,5 +216,11 @@
         </tr>
       </tbody>
     </nz-table>
+    <div class="pagination">
+      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="OtherPaginationTotal"
+        [(nzPageIndex)]="currentOtherPage" (nzPageIndexChange)="onOtherPageChange($event)" [nzShowSizeChanger]="false"
+        [nzResponsive]="true">
+      </nz-pagination>
+    </div>
   </div>
 </div>
