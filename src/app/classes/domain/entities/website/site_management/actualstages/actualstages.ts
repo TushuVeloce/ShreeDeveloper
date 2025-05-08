@@ -97,6 +97,7 @@ export class ActualStagesProps {
 
   public Amount: number = 0;
 
+  public Total: number = 0;
   public TimeDetails: TimeDetailProps[] = [];
 
   public readonly IsNewlyCreated: boolean = false;

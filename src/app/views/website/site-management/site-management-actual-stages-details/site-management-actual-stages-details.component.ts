@@ -12,7 +12,7 @@ import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit'
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { ActualStagesChalanFetchRequest } from 'src/app/classes/domain/entities/website/site_management/actualstagechalan/actualstagechalanfetchrequest';
-import { ActualStages } from 'src/app/classes/domain/entities/website/site_management/actualstages/actualstages';
+import { ActualStages, ActualStagesProps } from 'src/app/classes/domain/entities/website/site_management/actualstages/actualstages';
 import { Time, TimeDetailProps } from 'src/app/classes/domain/entities/website/site_management/time/time';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
@@ -21,6 +21,7 @@ import { CompanyStateManagement } from 'src/app/services/companystatemanagement'
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
+import { DTU } from 'src/app/services/dtu.service';
 
 @Component({
   selector: 'app-site-management-actual-stages-details',
@@ -58,7 +59,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   TimeEntity: TimeDetailProps = TimeDetailProps.Blank();
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-
+  isChalanDisabled=false
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
@@ -69,7 +70,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   @ViewChild('EndTimeCtrl') EndTimeInputControl!: NgModel;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement,private payloadPacketFacade: PayloadPacketFacade,
-      private serverCommunicator: ServerCommunicatorService) { }
+      private serverCommunicator: ServerCommunicatorService,private dtu: DTU,) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -81,10 +82,13 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stage' : 'Edit Stage';
       this.Entity = ActualStages.GetCurrentInstance();
+      this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
+      this.isChalanDisabled = true
       console.log('Entity :', this.Entity);
       await this.OnStageChange(this.Entity.p.StageRef)
       this.appStateManage.StorageKey.removeItem('Editable')
     } else {
+      this.isChalanDisabled = false
       this.Entity = ActualStages.CreateNewInstance();
       ActualStages.SetCurrentInstance(this.Entity);
       const CreatedBy =  Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
@@ -103,21 +107,62 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     // txtName.focus();
   }
 
-  ChalanNo = async () => {
-    // alert("Hii")
-    async () => {
-      let req = new ActualStagesChalanFetchRequest();  
-      let td = req.FormulateTransportData();
-      let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-      let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-      if (!tr.Successful) {
-        await this.uiUtils.showErrorMessage('Error', tr.Message);
-        return;
-      }
-     let tdResult = JSON.parse(tr.Tag) as TransportData;
-      console.log('tdResult :', tdResult);
+  // ChalanNo = async () => {  
+  //   let req = new ActualStagesChalanFetchRequest();  
+  
+  //   let td = req.FormulateTransportData();
+  //   let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+  
+  //     let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+
+  //     if (!tr.Successful) {
+  //       await this.uiUtils.showErrorMessage('Error', tr.Message);
+  //       return;
+  //     }
+  
+  //     let tdResult = JSON.parse(tr.Tag) as TransportData;
+  //     console.log('tdResult :', tdResult);
+   
+  // };
+  
+  ChalanNo = async () => {  
+    let req = new ActualStagesChalanFetchRequest();  
+    let td = req.FormulateTransportData();
+    let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+  
+    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+  
+    if (!tr.Successful) {
+      await this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
     }
-};
+  
+    let tdResult = JSON.parse(tr.Tag) as TransportData;
+    console.log('tdResult:', tdResult);
+  
+    // Extract NextChalanNo
+    let collections = tdResult?.MainData?.Collections;
+  
+    if (Array.isArray(collections)) {
+      for (const item of collections) {
+        if (
+          item.Name === 'ActualStage' &&
+          Array.isArray(item.Entries) &&
+          item.Entries.length > 0
+        ) {
+          const entry = item.Entries[0] as { NextChalanNo: number };
+          const nextChalanNo = entry.NextChalanNo;
+          this.Entity.p.ChalanNo = nextChalanNo
+          console.log('NextChalanNo:', nextChalanNo);
+          return;
+        }
+      }
+    }
+  
+    await this.uiUtils.showErrorMessage('Error', 'Chalan number could not be retrieved.');
+  };
+  
+  
 
   getSingleEmployeeDetails = async (CreatedBy:number) => {
   console.log('CreatedBy :', CreatedBy);
@@ -170,6 +215,10 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
 
   OnStageChange = async (StageRef: number) => {
     this.Entity.p.SubStageRef = 0
+    if(this.IsNewEntity){
+
+      this.Entity.p.ExpenseTypeRef=0
+    }
     let stagedata = await Stage.FetchInstance(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     if(stagedata.p.IsOtherExpenseApplicable == true){
       this.isAdd = true
@@ -244,7 +293,10 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     //   return;
     // }
     this.VendorServiceList = []
-    this.Entity.p.VendorRef = 0
+    if(this.IsNewEntity){
+
+      this.Entity.p.VendorServiceRef = 0
+    }
     let lst = await VendorService.FetchEntireListByVendorRef(VendorRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.VendorServiceList = lst;
     // if (this.VendorList.length > 0) {
@@ -288,19 +340,28 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   CalculateTotalOnDiselRateAndLtr = () => {
     this.Entity.p.DieselTotalAmount = (this.Entity.p.DieselQuantity * this.Entity.p.DieselRate);
     this.Entity.p.Amount = this.Entity.p.DieselTotalAmount + this.UnitQuantityTotal
+    this.CalculateAmountOnRateAndQuantity()
   }
 
   CalculateAmountOnRateAndQuantity = () => {
+
+    const TotalWorkedHours = this.getTotalWorkedHours()
     const rate = Number(this.Entity.p.Rate) || 0;
     const quantity = Number(this.Entity.p.Quantity) || 0;
-    const diesel = Number(this.Entity.p.DieselTotalAmount) || 0;
-  
-    this.UnitQuantityTotal = rate * quantity;
-  
-    if (this.Entity.p.IsDieselPaid) {
-      this.Entity.p.Amount = this.UnitQuantityTotal - diesel;
-    } else {
-      this.Entity.p.Amount = this.UnitQuantityTotal;
+    const dieselAmount = Number(this.Entity.p.DieselTotalAmount) || 0;
+    const isDieselPaid = !!this.Entity.p.IsDieselPaid;
+    
+    if(TotalWorkedHours > 0){
+      this.Entity.p.Amount= rate * TotalWorkedHours
+    }else{
+
+      // Calculate total from rate and quantity
+      this.UnitQuantityTotal = rate * quantity + dieselAmount;
+    
+      // Final amount calculation
+      this.Entity.p.Amount = isDieselPaid 
+        ? this.UnitQuantityTotal - dieselAmount 
+        : this.UnitQuantityTotal;
     }
   };
   
@@ -344,6 +405,8 @@ TotalAmount = () => {
   SaveStageMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    this.Entity.p.Total = this.getTotalWorkedHours()
+    this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
     console.log('entitiesToSave :', entitiesToSave);
@@ -494,6 +557,37 @@ calculateWorkedHours() {
 
   RemoveTime(index: number) {
     this.Entity.p.TimeDetails.splice(index, 1); // Remove owner
+  }
+
+   closeModal = async (type: string) => {
+      if (type === 'time') {
+        const keysToCheck = ['Start Time', 'End Time'] as const;
+  
+        const hasData = keysToCheck.some(
+          key => (this.TimeEntity as any)[key]?.toString().trim()
+        );
+  
+        if (hasData) {
+          await this.uiUtils.showConfirmationMessage(
+            'Close',
+            `This process is <strong>IRREVERSIBLE!</strong><br/>
+             Are you sure you want to close this modal?`,
+            async () => {
+              this.isModalOpen = false;
+              this.TimeEntity = TimeDetailProps.Blank();
+            }
+          );
+        } else {
+          this.isModalOpen = false;
+          this.TimeEntity = TimeDetailProps.Blank();
+        }
+      }
+    };
+
+  getTotalWorkedHours(): number {
+    return this.Entity.p.TimeDetails.reduce((total: number, item: any) => {
+      return total + Number(item.WorkedHours || 0);
+    }, 0);
   }
 
 

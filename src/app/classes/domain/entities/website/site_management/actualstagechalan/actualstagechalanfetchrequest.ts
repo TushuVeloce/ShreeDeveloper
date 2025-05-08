@@ -7,7 +7,9 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 export class ActualStagesChalanFetchRequest
 {
     public static readonly FetchRequestType: string = "ChalanNoFetchRequest";
+    public static readonly MasterTableName: string = "ChalanNo";
 
+    Data: any[] = []
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
@@ -21,5 +23,24 @@ export class ActualStagesChalanFetchRequest
 
         return td;
     }
+
+     public static FromTransportData(td: TransportData) {
+            let result: ActualStagesChalanFetchRequest =  new ActualStagesChalanFetchRequest();
+    
+            let dcs = DataContainerService.GetInstance();
+    
+            if (dcs.CollectionExists(td.MainData, ActualStagesChalanFetchRequest.MasterTableName)) {
+                let coll = dcs.GetCollection(td.MainData, ActualStagesChalanFetchRequest.MasterTableName)!;
+                // for (let data of coll.Entries) {
+                //     result.Data.push(data as any);
+                // }
+                result.Data = [... coll.Entries]
+            }
+            else {
+                result = new ActualStagesChalanFetchRequest();
+            }
+            return result;
+        }
+    
 }
 

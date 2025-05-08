@@ -105,3 +105,9 @@ export class AddressStateRefs {
   public static readonly OtherTerritory: number = 800088;
   public static readonly OtherCountry: number = 800089;
 }
+
+export class ExpenseTypeRefs{
+  public static readonly MachinaryExpense: number = 100;
+  public static readonly LabourExpense: number = 200;
+  public static readonly OtherExpense: number = 300;
+}
