@@ -85,6 +85,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
       this.isChalanDisabled = true
       console.log('Entity :', this.Entity);
+      this.Amount = this.Entity.p.Rate * this.Entity.p.Quantity
       await this.OnStageChange(this.Entity.p.StageRef)
       this.appStateManage.StorageKey.removeItem('Editable')
     } else {
@@ -214,11 +215,11 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   }
 
   OnStageChange = async (StageRef: number) => {
-    this.Entity.p.SubStageRef = 0
-    if(this.IsNewEntity){
+    // this.Entity.p.SubStageRef = 0
+    // if(this.IsNewEntity){
 
-      this.Entity.p.ExpenseTypeRef=0
-    }
+    //   this.Entity.p.ExpenseTypeRef=0
+    // }
     let stagedata = await Stage.FetchInstance(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     if(stagedata.p.IsOtherExpenseApplicable == true){
       this.isAdd = true
@@ -292,11 +293,10 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     //   await this.uiUtils.showErrorToster('Company not Selected');
     //   return;
     // }
-    this.VendorServiceList = []
-    if(this.IsNewEntity){
-
-      this.Entity.p.VendorServiceRef = 0
-    }
+    // if(this.IsNewEntity){
+    //   this.VendorServiceList = []
+    //   this.Entity.p.VendorServiceRef = 0
+    // }
     let lst = await VendorService.FetchEntireListByVendorRef(VendorRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.VendorServiceList = lst;
     // if (this.VendorList.length > 0) {
@@ -343,6 +343,9 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     this.CalculateAmountOnRateAndQuantity()
   }
 
+
+  Amount:number = 0
+
   CalculateAmountOnRateAndQuantity = () => {
 
     const TotalWorkedHours = this.getTotalWorkedHours()
@@ -363,6 +366,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
         ? this.UnitQuantityTotal - dieselAmount 
         : this.UnitQuantityTotal;
     }
+    this.Amount = rate * quantity
   };
   
 
