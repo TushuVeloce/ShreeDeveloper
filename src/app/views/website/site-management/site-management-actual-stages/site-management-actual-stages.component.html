@@ -21,7 +21,7 @@
       </div>
       <div class="col-md-4" style="margin-top: 1rem; ">
         <label for="ToDate"><b>To Date</b></label>
-        <input type="date" name="ToDate" class="form-control" id="ToDate" [(ngModel)]="ToDate"
+        <input type="date" name="ToDate" [min]="FromDate" class="form-control" id="ToDate" [(ngModel)]="ToDate"
           (ngModelChange)="getActualStageListByAllFilters()" />
       </div>
       <div class="col-md-4" style="margin-top: 1rem; ">
@@ -92,7 +92,7 @@
         <tr *ngFor="let MachinaryExpense of paginatedMachinaryList(); index as i">
           <td class="tbldata" style="white-space: nowrap;">{{ (currentMachinaryPage - 1) * pageSize + i + 1
             }}</td>
-          <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.Date}}</td>
+          <td Class="tbldata" style="white-space: nowrap;">{{formatDate(MachinaryExpense.p.Date)}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.ChalanNo}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.VehicleNo}}</td>
           <td Class="tbldata">{{MachinaryExpense.p.Description}}</td>
@@ -142,7 +142,7 @@
       <tbody>
         <tr *ngFor="let LabourExpense of  paginatedLabourList(); index as i">
           <td class="tbldata" style="white-space: nowrap;">{{ (currentLabourPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata" style="white-space: nowrap;">{{LabourExpense.p.Date}}</td>
+          <td Class="tbldata" style="white-space: nowrap;">{{formatDate(LabourExpense.p.Date)}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{LabourExpense.p.ChalanNo}}</td>
           <td Class="tbldata">{{LabourExpense.p.Description}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{LabourExpense.p.VendorName}}</td>
@@ -190,7 +190,7 @@
       <tbody>
         <tr *ngFor="let OtherExpense of  paginatedOtherList(); index as i">
           <td class="tbldata">{{ (currentOtherPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.Date}}</td>
+          <td Class="tbldata" style="white-space: nowrap;">{{formatDate(OtherExpense.p.Date)}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.ChalanNo}}</td>
           <td Class="tbldata">{{OtherExpense.p.Description}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.VendorName}}</td>

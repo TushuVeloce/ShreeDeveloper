@@ -9,6 +9,8 @@ import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/v
 import { ActualStages } from 'src/app/classes/domain/entities/website/site_management/actualstages/actualstages';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { DTU } from 'src/app/services/dtu.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
@@ -47,8 +49,14 @@ export class SiteManagementActualStagesComponent implements OnInit {
   LabourHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Description', 'Vendor Name', 'Amount', 'Action'];
   Headers: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Description', 'Vendor Name', 'Rate', 'Quantity', 'Amount', 'Action'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
+  constructor(private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private screenSizeService: ScreenSizeService,
+    private DateconversionService: DateconversionService,
     private companystatemanagement: CompanyStateManagement,
+    private dtu: DTU,
+
   ) {
     effect(async () => {
       await this.getActualStageListByCompanyRef();
@@ -61,6 +69,11 @@ export class SiteManagementActualStagesComponent implements OnInit {
     this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.appStateManage.setDropdownDisabled(false);
+  }
+
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
   }
 
   OnStageChange = async () => {
@@ -114,11 +127,13 @@ export class SiteManagementActualStagesComponent implements OnInit {
     this.MachinaryExpenseList = [];
     this.LabourExpenseList = [];
     this.OtherExpenseList = [];
+    let FromDate = this.dtu.ConvertStringDateToFullFormat(this.FromDate);
+    let ToDate = this.dtu.ConvertStringDateToFullFormat(this.ToDate);
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await ActualStages.FetchEntireListByAllFilters(this.companyRef(), this.FromDate, this.ToDate, this.Entity.p.SiteRef, this.Entity.p.VendorRef, this.Entity.p.StageRef, this.Entity.p.ExpenseTypeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await ActualStages.FetchEntireListByAllFilters(this.companyRef(), FromDate, ToDate, this.Entity.p.SiteRef, this.Entity.p.VendorRef, this.Entity.p.StageRef, this.Entity.p.ExpenseTypeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     for (const item of lst) {
