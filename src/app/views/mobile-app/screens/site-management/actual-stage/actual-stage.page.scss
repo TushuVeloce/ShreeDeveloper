@@ -117,3 +117,22 @@ ion-card-content.text-center ion-icon {
     margin-bottom: 0.5rem;
     color: var(--ion-color-medium);
 }
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+
+    ion-button {
+        --padding-start: 0;
+        --padding-end: 0;
+        --padding-top: 4px;
+        --padding-bottom: 4px;
+        border-radius: 8px;
+    }
+}
+
+.no-data-card {
+    margin-top: 100px;
+    padding: 20px;
+    border-radius: 12px;
+}

@@ -52,7 +52,9 @@ export class AddEditActualStageComponent implements OnInit {
   TimeEntity: TimeDetailProps = TimeDetailProps.Blank();
   editingIndex: null | undefined | number
   companyRef: number = 0;
-  companyName: any ='';
+  companyName: any = '';
+  siteRef: number = 0;
+  siteName: string | null = '';
   Date: string | null = null;
   SelectedMonth: any[] = [];
 
@@ -62,12 +64,12 @@ export class AddEditActualStageComponent implements OnInit {
     private utils: Utils,
     private companystatemanagement: CompanyStateManagement,
     private bottomsheetMobileAppService: BottomsheetMobileAppService,
-    private appStateManagement:AppStateManageService
+    private appStateManagement: AppStateManageService
   ) { }
 
   async ngOnInit(): Promise<void> {
     this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
-    this.companyName = this.appStateManagement.StorageKey.getItem('companyName') ? this.appStateManagement.StorageKey.getItem('companyName'):'';
+    this.companyName = this.appStateManagement.StorageKey.getItem('companyName') ? this.appStateManagement.StorageKey.getItem('companyName') : '';
     await this.loadCustomerEnquiryIfEmployeeExists();
   }
 
@@ -95,6 +97,10 @@ export class AddEditActualStageComponent implements OnInit {
       await this.getVendorListByCompanyRef();
       await this.FormulateUnitList();
       await this.getSiteListByCompanyRef();
+      this.siteRef = Number(this.appStateManagement.StorageKey.getItem('siteRf'));
+      this.siteName = this.appStateManagement.StorageKey.getItem('siteName') ? this.appStateManagement.StorageKey.getItem('siteName') : '';
+      this.Entity.p.SiteRef = this.siteRef;
+      this.Entity.p.SiteName = this.siteName??'';
       if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
         this.IsNewEntity = false;
         this.DetailsFormTitle = this.IsNewEntity ? 'New Actual Stage' : 'Edit Actual Stage';
@@ -585,7 +591,7 @@ export class AddEditActualStageComponent implements OnInit {
   }
 
   saveNewExpenseType = async () => {
-    if (this.ExpenseTypeEntity.p.StageRef <= 0 && this.ExpenseTypeEntity.p.Name =='') {
+    if (this.ExpenseTypeEntity.p.StageRef <= 0 && this.ExpenseTypeEntity.p.Name == '') {
       await this.uiUtils.showWarningToster('Expense Type is empty!');
       this.isAddingExpense = false
       return
@@ -615,10 +621,6 @@ export class AddEditActualStageComponent implements OnInit {
   selectAllValue = (event: MouseEvent): void => {
     const input = event.target as HTMLInputElement;
     input.select();
-  }
-
-  BackActualStages = () => {
-    this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage']);
   }
 
   toggleExpenseInput() {
@@ -664,6 +666,6 @@ export class AddEditActualStageComponent implements OnInit {
     this.Entity.p.TimeDetails.splice(index, 1); // Remove owner
   }
   public goBack(): void {
-    this.router.navigate(['app_homepage/tabs/crm/customer-enquiry'], { replaceUrl: true });
+    this.router.navigate(['app_homepage/tabs/site-management/actual-stage'], { replaceUrl: true });
   }
 }

@@ -10,7 +10,7 @@ const routes: Routes = [
     component: ActualStagePage
   },
   { path: 'add', component: AddEditActualStageComponent }, // Add Page
-  { path: 'edit/:id', component: AddEditActualStageComponent }, // Edit Page with ID
+  { path: 'edit', component: AddEditActualStageComponent }, // Edit Page with ID
 ];
 
 @NgModule({
