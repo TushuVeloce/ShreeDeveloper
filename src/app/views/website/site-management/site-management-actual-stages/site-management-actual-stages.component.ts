@@ -113,6 +113,37 @@ export class SiteManagementActualStagesComponent implements OnInit {
     this.loadPaginationData();
   }
 
+  getActualStageListByAllFilters = async (FromDate:string,ToDate:string,SiteRef:number,VendorRef:number,StageRef:number,ExpenseTypeRef:number) => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    this.MachinaryExpenseList = [];
+    this.LabourExpenseList = [];
+    this.OtherExpenseList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await ActualStages.FetchEntireListByAllFilters(this.companyRef(),FromDate,ToDate,SiteRef,VendorRef,StageRef,ExpenseTypeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    console.log('DisplayMasterList :', this.DisplayMasterList);
+    for (const item of lst) {
+      switch (item.p.ExpenseTypeRef) {
+        case 100:
+          this.MachinaryExpenseList.push(item);
+          break;
+        case 200:
+          this.LabourExpenseList.push(item);
+          break;
+        default:
+          this.OtherExpenseList.push(item);
+          break;
+      }
+    }
+    this.loadPaginationData();
+  }
+
+  
 
   navigateToPrint = async (item: ActualStages) => {
     // this.SelectedActualStages = item.GetEditableVersion();

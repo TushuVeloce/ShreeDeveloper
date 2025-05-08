@@ -134,7 +134,7 @@
               <nz-option
                 *ngFor="let Expense of ExpenseTypeList"
                 [nzValue]="Expense.p.ExpenseType"
-                [nzLabel]="Expense.p.ExpenseTypeName"
+                [nzLabel]="Expense.p.Name"
               ></nz-option>
             </nz-select>
             <!-- Input box for new expense -->
@@ -800,7 +800,7 @@
         </div>
       </div>
 
-      <!-- <div
+      <div
         class="table-wrapper"
         class="tblcard_light"
         style="margin-top: 2rem"
@@ -841,7 +841,7 @@
                 <td Class="tbldata">{{ time.EndTime }}</td>
                 <td Class="tbldata">{{ time.WorkedHours }}</td>
                 <td class="tbldata">
-                  <span style="margin-left: 9px" (click)="Editowner(i)">
+                  <span style="margin-left: 9px" (click)="EditTime(i)">
                     <img
                       src="\assets\icons\edit.png"
                       alt="logo"
@@ -863,8 +863,8 @@
             </tbody>
           </nz-table>
         </div>
-      </div> -->
-      <!-- <div
+      </div> 
+       <div
         *ngIf="Entity.p.TimeDetails.length === 0"
         class="card-body_light"
       >
@@ -874,7 +874,7 @@
         >
           <span class="title_light"> Data Not Found</span>
         </div>
-      </div> -->
+      </div>
 
       <!-- time table -->
 
@@ -1026,7 +1026,7 @@
             <div>
               <label for="WorkedHours">Total Working Hours</label>
               <input
-                type="text"
+                type="number"
                 name="WorkedHours"
                 class="form-control"
                 id="WorkedHours"

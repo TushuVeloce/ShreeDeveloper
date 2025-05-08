@@ -8,8 +8,13 @@ export class ActualStagesFetchRequest
 {
     public static readonly FetchRequestType: string = "ActualStageFetchRequest";
 
-    SiteRefs: number[] = [];
     CompanyRefs: number[] = [];
+    FromDate: string[] = [];
+    ToDate: string[] = [];
+    SiteRefs: number[] = [];
+    VendorRefs: number[] = [];
+    StageRefs: number[] = [];
+    ExpenseTypeRefs: number[] = [];
     ActualStagesRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>

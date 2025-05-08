@@ -261,6 +261,19 @@ export class ActualStages implements IPersistable<ActualStages> {
     return ActualStages.ListFromTransportData(tdResponse);
   }
 
+  public static async FetchEntireListByAllFilters(CompanyRef: number,FromDate:string,ToDate:string,SiteRef:number,VendorRef:number,StageRef:number,ExpenseTypeRef:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new ActualStagesFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    req.FromDate.push(FromDate)
+    req.ToDate.push(ToDate)
+    req.SiteRefs.push(SiteRef)
+    req.VendorRefs.push(VendorRef)
+    req.StageRefs.push(StageRef)
+    req.ExpenseTypeRefs.push(ExpenseTypeRef)
+    let tdResponse = await ActualStages.FetchTransportData(req, errorHandler) as TransportData;
+    return ActualStages.ListFromTransportData(tdResponse);
+  }
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

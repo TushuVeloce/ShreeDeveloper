@@ -402,32 +402,54 @@ TotalAmount = () => {
     }
   }
 
- async SaveTime() {
-     if (!this.TimeEntity.StartTime || !this.TimeEntity.EndTime) {
-       await this.uiUtils.showErrorMessage('Error','Name, Contact No, Country, State, City, Adderss are Required!');
-       return;
-     }
+//  async SaveTime() {
+//      if (!this.TimeEntity.StartTime || !this.TimeEntity.EndTime) {
+//        await this.uiUtils.showErrorMessage('Error','Name, Contact No, Country, State, City, Adderss are Required!');
+//        return;
+//      }
  
-     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
-       this.Entity.p.TimeDetails[this.editingIndex] = { ...this.TimeEntity };
-       await this.uiUtils.showSuccessToster('Time updated successfully!');
-       this.isModalOpen = false;
+//      if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
+//        this.Entity.p.TimeDetails[this.editingIndex] = { ...this.TimeEntity };
+//        await this.uiUtils.showSuccessToster('Time updated successfully!');
+//        this.isModalOpen = false;
  
-     } else {
-       let TimeInstance = new Time(this.TimeEntity, true);
-       let actualstageInstance = new ActualStages(this.Entity.p, true);
-       await TimeInstance.EnsurePrimaryKeysWithValidValues();
-       await actualstageInstance.EnsurePrimaryKeysWithValidValues();
+//      } else {
+//        let TimeInstance = new Time(this.TimeEntity, true);
+//        let actualstageInstance = new ActualStages(this.Entity.p, true);
+//        await TimeInstance.EnsurePrimaryKeysWithValidValues();
+//        await actualstageInstance.EnsurePrimaryKeysWithValidValues();
  
-       this.TimeEntity.SiteManagementRef = this.Entity.p.Ref;
-       this.Entity.p.TimeDetails.push({ ...TimeInstance.p });
-       await this.uiUtils.showSuccessToster('Owner added successfully!');
-       this.resetTimeControls()
-     }
+//        this.TimeEntity.SiteManagementRef = this.Entity.p.Ref;
+//        this.Entity.p.TimeDetails.push({ ...TimeInstance.p });
+//        await this.uiUtils.showSuccessToster('Owner added successfully!');
+//        this.resetTimeControls()
+//      }
  
-     this.TimeEntity = TimeDetailProps.Blank();
-     this.editingIndex = null;
-   }
+//      this.TimeEntity = TimeDetailProps.Blank();
+//      this.editingIndex = null;
+//    }
+
+async SaveTime() {
+  if (!this.TimeEntity.StartTime || !this.TimeEntity.EndTime) {
+    await this.uiUtils.showErrorMessage('Error', 'Start Time and End Time are required!');
+    return;
+  }
+
+  if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
+    this.Entity.p.TimeDetails[this.editingIndex] = { ...this.TimeEntity };
+    await this.uiUtils.showSuccessToster('Time updated successfully!');
+    this.isModalOpen = false;
+  } else {
+    this.TimeEntity.SiteManagementRef = this.Entity.p.Ref;
+    this.Entity.p.TimeDetails.push({ ...this.TimeEntity });
+    await this.uiUtils.showSuccessToster('Time added successfully!');
+    this.resetTimeControls();
+  }
+
+  this.TimeEntity = TimeDetailProps.Blank();
+  this.editingIndex = null;
+}
+
 
    EditTime(index: number) {
     this.isModalOpen = true

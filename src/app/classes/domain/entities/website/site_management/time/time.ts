@@ -19,6 +19,7 @@ export class TimeDetailProps {
   public StartTime: string ='';
   public EndTime : string ='';
   public WorkedHours : number =0;
+  public Total : number =0;
   public SiteManagementRef : number = 0;
 
   public readonly IsNewlyCreated: boolean = false;
