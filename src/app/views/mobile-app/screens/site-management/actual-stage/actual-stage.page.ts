@@ -36,19 +36,23 @@ export class ActualStagePage implements OnInit {
   FromDate: string | null = null;
   ToDate: string | null = null;
   companyRef: number = 0;
-  companyName: string| null = '';
+  companyName: string | null = '';
+  siteRef: number = 0;
+  siteName: string | null = '';
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
     private appStateManage: AppStateManageService,
     private companystatemanagement: CompanyStateManagement,
     private dateService: DateconversionService,
-    private appStateManagement:AppStateManageService
+    private appStateManagement: AppStateManageService
   ) { }
 
   ngOnInit(): void {
     this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
     this.companyName = this.appStateManagement.StorageKey.getItem('companyName') ? this.appStateManagement.StorageKey.getItem('companyName') : '';
+    this.siteRef = Number(this.appStateManagement.StorageKey.getItem('siteRf'));
+    this.siteName = this.appStateManagement.StorageKey.getItem('siteName') ? this.appStateManagement.StorageKey.getItem('siteName') : '';
     this.loadActualStageIfCompanyExists();
   }
 
@@ -56,6 +60,10 @@ export class ActualStagePage implements OnInit {
     this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
     this.companyName = this.appStateManagement.StorageKey.getItem('companyName') ? this.appStateManagement.StorageKey.getItem('companyName') : '';
     console.log('companyRef :', this.companyRef);
+    this.siteRef = Number(this.appStateManagement.StorageKey.getItem('siteRf'));
+    console.log('siteRef :', this.siteRef);
+    this.siteName = this.appStateManagement.StorageKey.getItem('siteName') ? this.appStateManagement.StorageKey.getItem('siteName') : '';
+
     await this.loadActualStageIfCompanyExists();
   };
 
@@ -72,7 +80,7 @@ export class ActualStagePage implements OnInit {
     this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.StageList = await Stage.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.getActualStageListByCompanyRef();
+    this.getActualStageListByAllFilters();
   }
 
   onViewClicked(item: ActualStages) {
@@ -137,10 +145,10 @@ export class ActualStagePage implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await ActualStages.FetchEntireListByAllFilters(this.companyRef, this.FromDate??'', this.ToDate??'', this.Entity.p.SiteRef, this.Entity.p.VendorRef, this.Entity.p.StageRef, this.Entity.p.ExpenseTypeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await ActualStages.FetchEntireListByAllFilters(this.companyRef, this.FromDate ?? '', this.ToDate ?? '', this.Entity.p.SiteRef, this.Entity.p.VendorRef, this.Entity.p.StageRef, this.Entity.p.ExpenseTypeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.ActualStagesList = lst;
     this.FilteredActualStagesList = lst;
-    console.log('DisplayMasterList :', this.FilteredActualStagesList);
+    console.log('FilteredActualStagesList :', this.FilteredActualStagesList);
     for (const item of lst) {
       switch (item.p.ExpenseTypeRef) {
         case 100:

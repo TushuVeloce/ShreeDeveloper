@@ -91,6 +91,7 @@ export class SiteManagementPage implements OnInit {
   }
 
   OpenActualStage = async (item: Site) => {
+    this.appStateManagement.setSiteRef(item.p.Ref,item.p.Name)
     await this.router.navigate(['app_homepage/tabs/site-management/actual-stage']);
   };
 }
