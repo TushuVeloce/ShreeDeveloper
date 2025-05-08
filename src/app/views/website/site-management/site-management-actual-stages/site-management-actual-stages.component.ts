@@ -77,7 +77,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
   }
 
   OnStageChange = async () => {
-    this.getActualStageListByCompanyRef();
+    this.getActualStageListByAllFilters();
     await this.getExpenseListByStageRef();
   }
 
