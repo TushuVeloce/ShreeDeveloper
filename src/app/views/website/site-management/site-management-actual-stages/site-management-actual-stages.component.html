@@ -30,7 +30,7 @@
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
             name="SiteRef" id="SiteRef" [(ngModel)]="Entity.p.SiteRef"
             (ngModelChange)="getActualStageListByAllFilters()">
-            <nz-option  [nzValue]="0" nzLabel="All"></nz-option>
+            <nz-option [nzValue]="0" nzLabel="All"></nz-option>
             <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -78,7 +78,7 @@
     </div>
 
     <ng-template #noDataTpl>
-      <div class="no-data-text">No data found</div>
+      <div class="no-data-text">Data Not Found</div>
     </ng-template>
 
     <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
@@ -109,7 +109,7 @@
               <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
-        <tr>
+        <tr *ngIf="paginatedList('machinary').length > 0">
           <td class="tbldata" colspan="8"></td>
           <td class="tbldata"><b>Total</b></td>
           <td class="tbldata"><b>{{ totalMachinaryAmount | currency: 'INR' }}</b></td>
@@ -117,6 +117,11 @@
         </tr>
       </tbody>
     </nz-table>
+    <div class="pagination">
+      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+        (nzPageIndexChange)="onPageChange('machinary',$event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+      </nz-pagination>
+    </div>
   </div>
 
   <!-- Labour Expense -->
@@ -151,7 +156,7 @@
               <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
-        <tr>
+        <tr *ngIf="paginatedList('labour').length > 0">
           <td class="tbldata" colspan="4"></td>
           <td class="tbldata"><b>Total</b></td>
           <td class="tbldata"><b>{{ totalLabourAmount | currency: 'INR' }}</b></td>
@@ -197,7 +202,7 @@
               <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
           </td>
         </tr>
-        <tr>
+        <tr *ngIf="paginatedList('other').length > 0">
           <td class="tbldata" colspan="6"></td>
           <td class="tbldata"><b>Total</b></td>
           <td class="tbldata"><b>{{ totalOtherAmount | currency: 'INR' }}</b></td>
