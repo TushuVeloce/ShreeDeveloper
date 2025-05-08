@@ -1,5 +1,17 @@
 .no-data-text {
-    font-weight: bold;
-    text-align: center;
-    padding: 1rem;
-  }
+  font-weight: bold;
+  text-align: center;
+  padding: 1rem;
+}
+
+.pagination {
+  padding: 10px 0;
+  text-align: right;
+  position: relative;
+  display: flex;
+  justify-content: end;
+  bottom: 0;
+  right: 0;
+  margin-right: 15px;
+  margin-bottom: 15px;
+}

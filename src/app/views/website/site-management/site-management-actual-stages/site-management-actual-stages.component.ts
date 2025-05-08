@@ -95,6 +95,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
       return;
     }
     let lst = await ActualStages.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     for (const item of lst) {
