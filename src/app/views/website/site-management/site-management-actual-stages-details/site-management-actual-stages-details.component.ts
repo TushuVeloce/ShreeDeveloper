@@ -54,7 +54,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   isAdd = false;
   isOfficialExpenditureGov = false
   isModalOpen: boolean = false;
-  timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time','Action'];
+  timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time','Worked Hours','Action'];
   TimeEntity: TimeDetailProps = TimeDetailProps.Blank();
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
@@ -87,8 +87,11 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     } else {
       this.Entity = ActualStages.CreateNewInstance();
       ActualStages.SetCurrentInstance(this.Entity);
-      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
-      await this.getSingleEmployeeDetails();
+      const CreatedBy =  Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+      if(CreatedBy != 0){
+        this.Entity.p.CreatedBy = CreatedBy
+        await this.getSingleEmployeeDetails(CreatedBy);
+      }
       await this.ChalanNo()
     }
     this.InitialEntity = Object.assign(ActualStages.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as ActualStages;
@@ -116,21 +119,23 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     }
 };
 
-  getSingleEmployeeDetails = async () => {
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
+  getSingleEmployeeDetails = async (CreatedBy:number) => {
+  console.log('CreatedBy :', CreatedBy);
+    // if (this.companyRef() <= 0) {
+    //   await this.uiUtils.showErrorToster('Company not Selected');
+    //   return;
+    // }
     if (this.Entity.p.CreatedBy == 1001) {
       this.Entity.p.CreatedByName = 'Admin';
       return;
     }
     let data = await Employee.FetchInstance(
-      this.Entity.p.CreatedBy, this.companyRef(),
+      CreatedBy, this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.Entity.p.CreatedByName = data.p.Name;
-    this.Entity.p.UpdatedBy = data.p.Ref;
+    console.log("data",data)
+    // this.Entity.p.CreatedByName = data.p.Name;
+    // this.Entity.p.UpdatedBy = data.p.Ref;
   };
 
 
@@ -449,6 +454,36 @@ async SaveTime() {
   this.TimeEntity = TimeDetailProps.Blank();
   this.editingIndex = null;
 }
+
+calculateWorkedHours() {
+  const start = this.TimeEntity.StartTime;
+  const end = this.TimeEntity.EndTime;
+
+  if (start && end) {
+    const [startHour, startMin] = start.split(':').map(Number);
+    const [endHour, endMin] = end.split(':').map(Number);
+
+    const startDate = new Date();
+    startDate.setHours(startHour, startMin, 0);
+
+    const endDate = new Date();
+    endDate.setHours(endHour, endMin, 0);
+
+    let diffMs = endDate.getTime() - startDate.getTime();
+
+    // If end time is before start time, assume it's the next day
+    if (diffMs < 0) {
+      endDate.setDate(endDate.getDate() + 1);
+      diffMs = endDate.getTime() - startDate.getTime();
+    }
+
+    const diffHrs = diffMs / (1000 * 60 * 60); // convert ms to hours
+    this.TimeEntity.WorkedHours = +diffHrs.toFixed(2); // round to 2 decimal places
+  } else {
+    this.TimeEntity.WorkedHours = 0;
+  }
+}
+
 
 
    EditTime(index: number) {

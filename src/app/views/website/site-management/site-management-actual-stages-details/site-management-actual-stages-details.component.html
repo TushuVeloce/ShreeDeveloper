@@ -995,6 +995,7 @@
                 class="form-control"
                 id="StartTime"
                 [(ngModel)]="TimeEntity.StartTime"
+                (ngModelChange)="calculateWorkedHours()"
                 placeholder="Enter Start Time "
                 #StartTimeCtrl="ngModel" required
                 (blur)="StartTimeCtrl.control.markAsTouched()"
@@ -1013,6 +1014,7 @@
                 class="form-control"
                 id="EndTime"
                 [(ngModel)]="TimeEntity.EndTime"
+                (ngModelChange)="calculateWorkedHours()"
                 placeholder="Enter To Time"
                 #EndTimeCtrl="ngModel" required
                 (blur)="EndTimeCtrl.control.markAsTouched()"
