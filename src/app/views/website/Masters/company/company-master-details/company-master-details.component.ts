@@ -54,6 +54,8 @@ export class CompanyMasterDetailsComponent implements OnInit {
   GSTINMsg: string = ValidationMessages.GSTINMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
   imageBlobUrl: string | null = null;
+  TimeStamp = Date.now()
+  LoginToken = '';
 
   constructor(
     private router: Router,
@@ -69,6 +71,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.ImageBaseUrl = this.appStateManage.BaseImageUrl;
+    this.LoginToken = this.appStateManage.getLoginToken();
 
     this.appStateManage.setDropdownDisabled(true);
 
@@ -121,10 +124,9 @@ export class CompanyMasterDetailsComponent implements OnInit {
 
     // this.focusInput();
     const fullUrl = this.ImageBaseUrl + this.imageUrl;
-
-    this.http.get(fullUrl, { responseType: 'blob' }).subscribe(blob => {
-      this.imageBlobUrl = URL.createObjectURL(blob);
-    });
+    // this.http.get(fullUrl, { responseType: 'blob' }).subscribe(blob => {
+    //   this.imageBlobUrl = URL.createObjectURL(blob);
+    // });
   }
   onImageUpload = async (event: any) => {
     const result = await this.utils.handleImageSelection(
@@ -140,7 +142,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
     } else {
       // If valid, assign values
       this.file = result.file;
-      this.imageUrl = result.imageUrl;
+      // this.imageUrl = result.imageUrl;
       this.errors.company_image = '';
       this.Entity.p.CompanyLogo = this.file!;
     }

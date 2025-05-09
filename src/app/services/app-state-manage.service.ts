@@ -38,7 +38,7 @@ export class AppStateManageService {
   private IsForgetPasswordClickedValue = false
   public isDropdownDisabled = signal<boolean>(false);
 
-  private _BaseImageUrl: string = "http://localhost:5111/api/Request/uploadeddocumentpath/";
+  private _BaseImageUrl: string = "http://localhost:5100/api/Request/uploadeddocumentpath/";
 
   public get BaseImageUrl(): string {
     return this._BaseImageUrl;

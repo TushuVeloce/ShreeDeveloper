@@ -23,10 +23,14 @@ export class RazorpayComponent  implements OnInit {
   ngOnInit() {}
 
   startPayment = async ()=>{
+
+    try {
+      
+
     let amount = 1000;
     let orderId = await this.getOrderIdByAmount(amount);
-    if(orderId == ''){
-      alert("order Id not generated");
+    if(orderId == '' || orderId == null || orderId == undefined){
+      await this.uiUtils.showErrorMessage('Error', 'order Id not generated');
       return
     } 
 
@@ -41,7 +45,9 @@ export class RazorpayComponent  implements OnInit {
       order_id: orderId,
       handler: async (response: any) => {
         // Send to backend for verification
-       await this.verifyPayment(response);
+      var res =   await this.verifyPayment(response);
+      if(res) await this.uiUtils.showSuccessToster( 'Payment Successful.');
+
       },
       prefill: {
         name: 'Test User',
@@ -55,7 +61,9 @@ export class RazorpayComponent  implements OnInit {
   
     const rzp = new Razorpay(options);
     rzp.open();
-
+  } catch (error) {
+    await this.uiUtils.showErrorMessage('Error', 'Error occur while generate order');
+  }
 
   }
 
@@ -78,8 +86,8 @@ export class RazorpayComponent  implements OnInit {
     console.log('tdResult :', tdResult);
     let res = CreateOrderResponse.FromTransportData(tdResult);
     console.log('res :', res);
-    if(res != null){
-      let orderId = res.OrderId;
+    if(res.Rows.length > 0){
+      let orderId = res.Rows[0].OrderId;
       return orderId;
     }
     return "";
@@ -104,6 +112,8 @@ debugger
     console.log('verifyPayment tdResult :', tdResult);
     let res = VerifyPaymentResponse.FromTransportData(tdResult);
     console.log('verifyPayment res :', res);
+
+    return tr.Successful;
   }
 
 
