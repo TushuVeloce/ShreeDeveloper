@@ -24,7 +24,7 @@ export class SalarySlipMobileAppComponent implements OnInit {
     { label: 'Pending', value: 0 }
   ];
 
-  companyRef = this.companyStateManagement.SelectedCompanyRef;
+  companyRef:number=0;
   employeeList: Employee[] = [];
   employeeRef: number = 0;
 
@@ -35,26 +35,31 @@ export class SalarySlipMobileAppComponent implements OnInit {
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
-    private appStateManage: AppStateManageService,
-    private companyStateManagement: CompanyStateManagement
+    private appStateManagement: AppStateManageService,
   ) { }
 
   ngOnInit(): void {
-    this.entity.p.EmployeeRef = this.appStateManage.getEmployeeRef();
-    this.getSalarySlipRequestListByEmployeeRef();
-    // console.log("ngOnInit is calling in salary slip dashBoard");
+    this.loadSalaryslipIfCompanyExists();
   }
 
   ionViewWillEnter = async () => {
-    await this.getSalarySlipRequestListByEmployeeRef(); // ← Called every time user comes back
-    // console.log('api calling of getSalarySlipRequestListByEmployeeRef',);
+    await this.loadSalaryslipIfCompanyExists(); // ← Called every time user comes back
   }
   ngOnDestroy(): void {
     // cleanup logic if needed later
   }
+  private async loadSalaryslipIfCompanyExists(): Promise<void> {
+    this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
+    this.entity.p.EmployeeRef = Number(this.appStateManagement.getEmployeeRef());
+    if (this.companyRef <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    await this.getSalarySlipRequestListByEmployeeRef();
+  }
 
   async handleRefresh(event: CustomEvent): Promise<void> {
-    await this.getSalarySlipRequestListByEmployeeRef();
+    await this.loadSalaryslipIfCompanyExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
@@ -121,7 +126,7 @@ export class SalarySlipMobileAppComponent implements OnInit {
   }
   async addSalarySlipRequest() {
     try {
-      if (this.companyRef() <= 0) {
+      if (this.companyRef <= 0) {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
       }

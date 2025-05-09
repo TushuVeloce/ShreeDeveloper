@@ -1,59 +1,56 @@
 <app-loader *ngIf="isLoading"></app-loader>
 
-<app-header-with-back-handler title="Attendance Details" backRoute="app_homepage/tabs/attendance-management"></app-header-with-back-handler>
+<app-header-with-back-handler title="Attendance Details"
+  backRoute="app_homepage/tabs/attendance-management"></app-header-with-back-handler>
 
 <ion-content [fullscreen]="true" class="attendance-content">
-  <!-- Month Tabs -->
-  <ion-segment scrollable [(ngModel)]="selectedMonth" (ionChange)="getDataByMonth($event.detail.value)"
-    class="month-segment">
-    <ion-segment-button *ngFor="let month of months" [value]="month.Ref">
-      {{ month.Name }}
-    </ion-segment-button>
-  </ion-segment>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 
-  <!-- Attendance List -->
-  <ion-list *ngIf="filteredMonthlyAttendanceLogsList.length > 0; else noDataTemplate" class="attendance-list">
-    <ion-item *ngFor="let day of filteredMonthlyAttendanceLogsList" lines="none"
-      [class.no-data]="!day.p.FirstCheckInTime && !day.p.LastCheckOutTime && !day.p.TotalWorkingHrs">
-
-      <ion-grid class="attendance-grid">
-        <ion-row>
-          <!-- Date Column -->
-          <ion-col size="3" class="day-column">
-            <div class="date">{{ day.p.TransDateTime ? formatDate(day.p.TransDateTime) : '--' }}</div>
-            <div class="day">{{ day.p.TransDateTime ? formatDate(day.p.TransDateTime) : '--' }}</div>
-          </ion-col>
-
-          <!-- Details Column -->
-          <!-- <ion-col size="9" class="info-column"
-            [ngStyle]="{ 'background-color': day.p.OnLeave ? '#ffe0e0' : 'transparent' }">
-            <div *ngIf="day.p.OnLeave" class="center-text">
-              <ion-icon name="medkit-outline"></ion-icon>
-              {{ day.p.OnLeave }}
-            </div> -->
-          <ion-col size="9" class="info-column"
-            [ngStyle]="{ 'background-color': 'transparent' }">
+<!-- Month Tabs -->
+<ion-segment scrollable [(ngModel)]="selectedMonth" (ionChange)="fetchAttendanceByMonth($event.detail.value)"
+  class="month-segment">
+  <ion-segment-button *ngFor="let month of months" [value]="month.Ref" class="month-button">
+    {{ month.Name }}
+  </ion-segment-button>
+</ion-segment>
 
 
-            <div *ngIf="(day.p.FirstCheckInTime || day.p.LastCheckOutTime || day.p.TotalWorkingHrs)"
-              class="timing-row" [ngStyle]="{ 'background-color': '#e7f5ff' }">
-              <div class="timing-box">
-                <label>In</label>
-                <span>{{ day.p.FirstCheckInTime || '--' }}</span>
-              </div>
-              <div class="timing-box">
-                <label>Out</label>
-                <span>{{ day.p.LastCheckOutTime || '--' }}</span>
-              </div>
-              <div class="timing-box">
-                <label>Hours</label>
-                <span>{{ day.p.TotalWorkingHrs || '--' }}</span>
-              </div>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-item>
+  <!-- Attendance Cards -->
+  <ion-list *ngIf="filteredMonthlyAttendanceLogsList.length > 0; else noDataTemplate" class="attendance-list ion-padding">
+    <ion-card *ngFor="let day of filteredMonthlyAttendanceLogsList" class="attendance-card"
+      [class.empty]="!day.p.FirstCheckInTime && !day.p.LastCheckOutTime">
+      <ion-card-header class="card-header">
+        <div class="date-box">
+          <div class="date">{{ day.p.TransDateTime ? formatDay(day.p.TransDateTime) : '--' }}</div>
+          <div class="day">{{ day.p.TransDateTime ? getDayName(day.p.TransDateTime) : '--' }}</div>
+        </div>
+        <div class="status-badge" [ngClass]="{
+          'present': day.p.FirstCheckInTime,
+          'leave': day.p.OnLeave,
+          'absent': !day.p.FirstCheckInTime && !day.p.OnLeave
+        }">
+          {{ day.p.OnLeave ? 'On Leave' : (day.p.FirstCheckInTime ? 'Present' : 'Absent') }}
+        </div>
+      </ion-card-header>
+
+      <ion-card-content *ngIf="day.p.FirstCheckInTime || day.p.LastCheckOutTime || day.p.TotalWorkingHrs"
+        class="timing-row">
+        <div class="timing-box">
+          <label>In</label>
+          <span>{{ day.p.FirstCheckInTime || '--' }}</span>
+        </div>
+        <div class="timing-box">
+          <label>Out</label>
+          <span>{{ day.p.LastCheckOutTime || '--' }}</span>
+        </div>
+        <div class="timing-box">
+          <label>Hours</label>
+          <span>{{ day.p.TotalWorkingHrs || '--' }}</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
   </ion-list>
 
   <!-- No Data Template -->

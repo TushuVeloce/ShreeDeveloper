@@ -121,18 +121,6 @@
               <span class="value">{{ SelectedLeaveRequest.p.IsApproved == 1?'Approved':'Pending'}}</span>
             </div>
 
-            <div class="info-row-of-model" *ngIf="SelectedLeaveRequest.p.IsApproved == 1">
-              <strong class="label">Leave Approved By:</strong>
-              <span class="value">{{ SelectedLeaveRequest.p.LeaveApprovedBy ? SelectedLeaveRequest.p.LeaveApprovedBy :
-                '-'
-                }}</span>
-            </div>
-            <div class="info-row-of-model" *ngIf="SelectedLeaveRequest.p.IsApproved != 1">
-              <strong class="label">Leave Cancelled By:</strong>
-              <span class="value">{{ SelectedLeaveRequest.p.LeaveCancelledBy ? SelectedLeaveRequest.p.LeaveCancelledBy :
-                '-'
-                }}</span>
-            </div>
             <div class="info-row-of-model">
               <strong class="label">Description:</strong>
               <span class="value">{{ SelectedLeaveRequest.p.Description ? SelectedLeaveRequest.p.Description : '-'

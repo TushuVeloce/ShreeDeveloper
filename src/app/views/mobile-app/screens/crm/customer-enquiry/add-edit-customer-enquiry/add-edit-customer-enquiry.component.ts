@@ -72,12 +72,12 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
   ContactModeList = DomainEnums.ContactModeList();
   CustomerStatusList = DomainEnums.CustomerStatusList();
 
-  companyRef = this.companystatemanagement.SelectedCompanyRef;
+  companyRef:number =0;
 
   constructor(
     private router: Router,
     private uiUtils: UIUtils,
-    private appStateManage: AppStateManageService,
+    private appStateManagement: AppStateManageService,
     private utils: Utils,
     private dtu: DTU,
     private datePipe: DatePipe,
@@ -100,7 +100,8 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
   private async loadCustomerEnquiryIfEmployeeExists(): Promise<void> {
     try {
       this.isLoading = true;
-      this.appStateManage.setDropdownDisabled(true);
+      this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
+      this.appStateManagement.setDropdownDisabled(true);
       console.log(this.CustomerStatusList);
       this.CountryList = await Country.FetchEntireList();
       // this.StateList = await State.FetchEntireList();
@@ -109,7 +110,7 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
       await this.getSiteListByCompanyRef();
       await this.getEmployeeListByCompanyRef();
 
-      if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+      if (this.appStateManagement.StorageKey.getItem('Editable') == 'Edit') {
         this.IsNewEntity = false;
         this.DetailsFormTitle = this.IsNewEntity
           ? 'New Customer Enquiry'
@@ -149,7 +150,7 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
           // );
         }
 
-        this.appStateManage.StorageKey.removeItem('Editable');
+        this.appStateManagement.StorageKey.removeItem('Editable');
         this.IsPlotDetails = true;
         if (this.Entity.p.CountryRef) {
           this.StateList = this.StateList.filter(
@@ -483,7 +484,7 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
   // for site and plot
   private getSiteListByCompanyRef = async () => {
     let lst = await Site.FetchEntireListByCompanyRef(
-      this.companyRef(),
+      this.companyRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.SiteList = lst;
@@ -491,7 +492,7 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
   // get employee list
   private getEmployeeListByCompanyRef = async () => {
     let lst = await Employee.FetchEntireListByCompanyRef(
-      this.companyRef(),
+      this.companyRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.EmployeeList = lst;
@@ -573,6 +574,8 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
       // console.log('Updated DisplayMasterList :', this.DisplayMasterList);
       this.SiteManagementRef = 0;
       this.InterestedPlotRef = 0;
+      this.SiteManagementName='';
+      this.InterestedPlotNo='';
     }
   }
 

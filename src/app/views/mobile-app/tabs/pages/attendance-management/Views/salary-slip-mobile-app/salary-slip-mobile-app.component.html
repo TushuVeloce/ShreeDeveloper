@@ -1,53 +1,63 @@
 <app-loader *ngIf="isLoading"></app-loader>
-<app-header-with-back-handler title="Salary Slip Requests" backRoute="app_homepage/tabs/attendance-management"></app-header-with-back-handler>
+<app-header-with-back-handler title="Salary Slip Requests"
+  backRoute="app_homepage/tabs/attendance-management"></app-header-with-back-handler>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true" class="salary-slip-content">
+
+  <!-- Pull-to-refresh -->
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
   <!-- Status Filter -->
-  <ion-segment [(ngModel)]="selectedStatus" (ngModelChange)="filterSalarySlipsByStatus()" class="modern-segment">
-    <ion-segment-button *ngFor="let status of statusOptions" [value]="status.value">
-      <ion-label>{{ status.label }}</ion-label>
-    </ion-segment-button>
-  </ion-segment>
+  <div class="segment-wrapper">
+    <ion-segment [(ngModel)]="selectedStatus" (ngModelChange)="filterSalarySlipsByStatus()" class="modern-segment">
+      <ion-segment-button *ngFor="let status of statusOptions" [value]="status.value">
+        <ion-label>{{ status.label }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
 
-
-  <!-- Salary Slip Requests List -->
+  <!-- Salary Slip Cards -->
   <ion-list class="salary-slip-list">
-    <ion-card *ngFor="let slip of filteredSalarySlipRequestList" class="salary-slip-card">
+    <ion-card *ngFor="let slip of filteredSalarySlipRequestList" class="salary-slip-card ion-no-margin">
       <ion-card-header>
-        <ion-card-title>
-          <b *ngFor="let month of slip.p.SelectedMonthsName">{{ month + ' ' }}</b>
-          {{ slip.p.Year }}</ion-card-title>
-        <ion-badge [color]="getStatusColor(slip.p.IsApproved)" slot="end">{{ slip.p.IsApproved==1 ? 'Approved' :
-          'Pending' }}</ion-badge>
+        <div class="title-section">
+          <h2 class="slip-title">
+            {{ slip.p.SelectedMonthsName.join(', ') }} {{ slip.p.Year }}
+          </h2>
+          <ion-badge [color]="getStatusColor(slip.p.IsApproved)">
+            {{ slip.p.IsApproved === 1 ? 'Approved' : 'Pending' }}
+          </ion-badge>
+        </div>
       </ion-card-header>
 
       <ion-card-content>
-        <!-- <p><strong>Requested On:</strong> {{ slip.p }}</p> -->
         <p><strong>Employee:</strong> {{ slip.p.EmployeeName }}</p>
+        <!-- <p><strong>Description:</strong> {{ slip.p }}</p> -->
+
         <div class="action-buttons" *ngIf="!slip.p.IsApproved">
-          <ion-button fill="clear" color="denger" (click)="onDeleteClicked(slip)">
-            <ion-icon name="download-outline" slot="start"></ion-icon>
-            Delete
+          <ion-button fill="outline" color="danger" (click)="onDeleteClicked(slip)">
+            <ion-icon name="trash-outline" slot="start"></ion-icon>
+            Delete Request
           </ion-button>
         </div>
       </ion-card-content>
     </ion-card>
   </ion-list>
 
-  <!-- Show "Data not found" if list is empty -->
+  <!-- Empty State -->
   <div *ngIf="filteredSalarySlipRequestList.length === 0 && !isLoading" class="no-data-mobile-app">
-    <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
-    <p>No Salary Slip records found</p>
+    <ion-icon name="file-tray-outline" size="large" color="medium"></ion-icon>
+    <p>No salary slip records found.</p>
+    <small>Try changing the status filter or refreshing the list.</small>
   </div>
 
-  <!-- FAB -->
+  <!-- Floating Action Button -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button  (click)="addSalarySlipRequest()">
+    <ion-fab-button color="primary" (click)="addSalarySlipRequest()">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
 </ion-content>

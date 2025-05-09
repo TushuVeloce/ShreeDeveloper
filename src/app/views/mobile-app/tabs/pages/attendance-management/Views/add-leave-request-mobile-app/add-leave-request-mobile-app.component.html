@@ -61,13 +61,13 @@
     <!-- Day -->
     <ion-item class="input-item" *ngIf="!isHalfDay">
       <ion-input label="Days" labelPlacement="floating" placeholder="Enter Days"
-        [(ngModel)]="Entity.p.Days"></ion-input>
+        [(ngModel)]="Entity.p.Days" readonly></ion-input>
     </ion-item>
 
     <!-- Leave Hours -->
     <ion-item class="input-item">
       <ion-input label="Leave Hours" labelPlacement="floating" placeholder="Enter Leave Hours"
-        [(ngModel)]="Entity.p.LeaveHours"></ion-input>
+        [(ngModel)]="Entity.p.LeaveHours" readonly></ion-input>
     </ion-item>
 
     <!-- Description -->

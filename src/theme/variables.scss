@@ -1,55 +1,81 @@
 :root {
-    /*  Primary Color - Deep Maroon */
-    --ion-color-primary: #7c2424;
-    --ion-color-primary-rgb: 124, 36, 36;
+    /* 🔴 PRIMARY: Brand Identity - Deep Reddish-Brown (Logo color) */
+    --ion-color-primary: #701f1f;
+    --ion-color-primary-rgb: 112, 31, 31;
     --ion-color-primary-contrast: #ffffff;
     --ion-color-primary-contrast-rgb: 255, 255, 255;
-    --ion-color-primary-shade: #6e2020;
-    --ion-color-primary-tint: #8d2e2e;
+    --ion-color-primary-shade: #631c1c;
+    --ion-color-primary-tint: #832828;
 
-    /*  Secondary Color - Muted Gold */
-    --ion-color-secondary: #d4af37;
-    --ion-color-secondary-rgb: 212, 175, 55;
+    /* 🟡 SECONDARY: Accent for Buttons/Highlights - Modern Earthy Gold */
+    --ion-color-secondary: #c99828;
+    --ion-color-secondary-rgb: 201, 152, 40;
     --ion-color-secondary-contrast: #ffffff;
-    --ion-color-secondary-shade: #b4942f;
-    --ion-color-secondary-tint: #e2bf4a;
+    --ion-color-secondary-shade: #af8523;
+    --ion-color-secondary-tint: #dbac3d;
 
-    /*  Tertiary Color - Warm Beige */
-    --ion-color-tertiary: #c4a484;
-    --ion-color-tertiary-rgb: 196, 164, 132;
-    --ion-color-tertiary-contrast: #000000;
-    --ion-color-tertiary-shade: #a98f71;
-    --ion-color-tertiary-tint: #d3b798;
+    /* 🟤 TERTIARY: For Cards, Tags, Informational UI Elements */
+    --ion-color-tertiary: #b08d6f;
+    --ion-color-tertiary-rgb: 176, 141, 111;
+    --ion-color-tertiary-contrast: #ffffff;
+    --ion-color-tertiary-shade: #98795f;
+    --ion-color-tertiary-tint: #c4a482;
 
-    /* Background - Modern Soft Gradient */
-    --ion-background-color: linear-gradient(145deg,
-            rgba(124, 36, 36, 0.03),
-            rgba(255, 255, 255, 0.5));
-    --ion-background-color-step-50: #f9f9f9;
-    --ion-background-color-step-100: #f2f2f2;
-    --ion-item-background: #f7f7f7;
+    /* ✅ SUCCESS: Positive Actions or Status */
+    --ion-color-success: #4caf50;
+    --ion-color-success-contrast: #ffffff;
 
-    /*  Text Colors */
-    --ion-text-color: #333333;
-    --ion-text-color-rgb: 51, 51, 51;
+    /* ⚠️ WARNING: Alerts or Confirmations */
+    --ion-color-warning: #f9a825;
+    --ion-color-warning-contrast: #000000;
+
+    /* ❌ DANGER: Delete, Error, etc. */
+    --ion-color-danger: #d32f2f;
+    --ion-color-danger-contrast: #ffffff;
+
+    /* 🎯 ACCENT: Used for Badges, Icons, or Hover States */
+    --ion-color-accent: #aa4c3b;
+
+    /* 🌫️ BACKGROUND: Smooth, Elegant App Backgrounds */
+    --ion-background-color: linear-gradient(145deg, rgba(112, 31, 31, 0.02), rgba(255, 255, 255, 0.6));
+    --ion-background-color-step-50: #f7f7f7;
+    --ion-background-color-step-100: #eeeeee;
+    --ion-item-background: #fcfcfc;
+
+    /* 🖋️ TEXT COLORS */
+    --ion-text-color: #2e2e2e;
+    /* General readable dark gray */
+    --ion-text-color-rgb: 46, 46, 46;
     --ion-text-color-dark: #ffffff;
-
-    /*  Accent */
-    --ion-color-accent: #e67e22;
-    /* Warm Orange */
+    /* Light on dark theme */
+    --ion-heading-color: #3a3a3a;
+    /* For titles/headings */
+    --ion-muted-text-color: #6f6f6f;
+    /* For secondary text or labels */
 }
 
-/*  Dark Theme */
+/* 🌙 DARK THEME */
 [data-theme='dark'] {
-    --ion-background-color: #212121;
-    --ion-background-color-step-50: #2a2a2a;
+    --ion-background-color: #1f1f1f;
+    --ion-background-color-step-50: #292929;
     --ion-background-color-step-100: #333333;
-    --ion-item-background: #292929;
+    --ion-item-background: #2c2c2c;
 
     --ion-text-color: #ffffff;
+    --ion-muted-text-color: #aaaaaa;
 
-    /* Adjusted for dark theme harmony */
-    --ion-color-primary: #9e4545;
-    --ion-color-secondary: #b4942f;
-    --ion-color-tertiary: #a98f71;
+    --ion-color-primary: #aa4c3b;
+    --ion-color-secondary: #c99828;
+    --ion-color-tertiary: #b08d6f;
 }
+
+// | Color Role | Purpose | Example Uses | 
+// |**Primary** | Your brand identity,navigation bar,main CTA buttons | App header,Submit/Next button | 
+// | **Secondary** | Attention-grabbing,alternative action buttons | Filters,toggles,highlights | 
+// | **Tertiary** | Soft UI decoration,tags,less dominant areas | Cards,badges,subtabs | 
+// | **Accent** | Minor elements like icons,active highlights | Icon hover,switch active states | 
+// | **Success** | Positive outcomes or feedback | Form submitted,status OK | 
+// | **Warning** | Soft caution,require attention but not critical | Confirm alerts,change password prompts | 
+// | **Danger** | Errors,destructive actions | Delete confirmation,failed API responses | 
+// | **Text Colors** | Readability across components | Paragraphs,labels,muted content | 
+// | **Background** | Calm,breathable experience,layered sections | Page backgrounds,cards |

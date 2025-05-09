@@ -20,10 +20,11 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
   SelectedLeaveRequest: LeaveRequest = LeaveRequest.CreateNewInstance();
   Entity: LeaveRequest = LeaveRequest.CreateNewInstance();
 
-  companyRef = this.companyState.SelectedCompanyRef;
-  selectedStatus = 1;
+  companyRef = 0;
+  selectedStatus: number = 1;
   modalOpen = false;
   isLoading = false;
+
 
   readonly LeaveRequestTypeEnum = LeaveRequestType;
 
@@ -36,8 +37,7 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private uiUtils: UIUtils,
-    private appState: AppStateManageService,
-    private companyState: CompanyStateManagement,
+    private appStateManagement: AppStateManageService,
     private dateService: DateconversionService
   ) { }
 
@@ -55,18 +55,22 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
   }
 
   async handleRefresh(event: CustomEvent): Promise<void> {
-    await this.getLeaveRequests();
+    await this.loadLeaveRequestsIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
   private async loadLeaveRequestsIfEmployeeExists(): Promise<void> {
-    this.Entity.p.EmployeeRef = this.appState.getEmployeeRef();
-    if (this.Entity.p.EmployeeRef > 0) {
+    const employeeRef = this.appStateManagement.getEmployeeRef();
+    this.Entity.p.EmployeeRef = employeeRef;
+    this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
+
+    if (employeeRef > 0) {
       await this.getLeaveRequests();
     } else {
       await this.uiUtils.showErrorToster('Employee not selected');
     }
   }
+
 
   formatDate = (date: string | Date): string =>
     this.dateService.formatDate(date);
@@ -95,17 +99,17 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
   }
 
   filterLeaveRequests(): void {
-    this.filteredLeaveRequestData = this.LeaveRequestList.filter((leave) => {
-      const { IsApproved, IsCancelled } = leave.p;
+    this.filteredLeaveRequestData = this.LeaveRequestList.filter(({ p }) => {
+      const { IsApproved, IsCancelled } = p;
 
-      switch (this.selectedStatus) {
-        case 1: return IsApproved === 1;
-        case 0: return IsApproved === 0 && IsCancelled !== 1;
-        case 2: return IsCancelled === 1;
-        default: return true;
-      }
+      if (this.selectedStatus === 1) return IsApproved === 1;
+      if (this.selectedStatus === 0) return IsApproved === 0 && IsCancelled !== 1;
+      if (this.selectedStatus === 2) return IsCancelled === 1;
+
+      return true;
     });
   }
+
 
   openModal(leave: LeaveRequest): void {
     this.SelectedLeaveRequest = leave;
@@ -132,22 +136,25 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
         }
       );
     } catch (error) {
-      // console.log('error :', error);
+      // console.error('Error deleting leave requests:', error);
+      await this.uiUtils.showErrorMessage('Error', 'Unable to deleting leave requests.');
     }
+
   }
 
   async addLeaveRequest() {
     try {
-      if (this.companyRef() <= 0) {
+      if (this.companyRef <= 0) {
         await this.uiUtils.showErrorToster('Company not Selected');
+        // console.log('Company not Selected :', this.companyRef);
         return;
       }
       this.router.navigate([
         '/app_homepage/tabs/attendance-management/add-leave-request',
       ]);
-    } catch (error: any) {
-      await this.uiUtils.showErrorMessage('Error', error?.message || 'Failed to open the add form.');
+    } catch (error) {
+      console.error('Error to move to add leave requests:', error);
+      await this.uiUtils.showErrorMessage('Error', 'Unable to move to add leave requests.');
     }
-
   }
 }

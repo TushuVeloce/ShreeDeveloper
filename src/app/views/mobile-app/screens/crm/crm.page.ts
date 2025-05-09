@@ -7,7 +7,6 @@ import { BookingRemark } from 'src/app/classes/domain/domainenums/domainenums';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
-import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 
 @Component({
@@ -28,7 +27,8 @@ export class CRMPage implements OnInit {
   PlotList: Plot[] = [];
   followupList: CustomerFollowUp[] = [];
   FilterFollowupList: CustomerFollowUp[] = [];
-  
+  companyRef: number = 0;
+
 
   SelectedFollowUp: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
 
@@ -40,50 +40,31 @@ export class CRMPage implements OnInit {
   constructor(
     private router: Router,
     private uiUtils: UIUtils,
-    private appStateManage: AppStateManageService,
-    private companystatemanagement: CompanyStateManagement,
+    private appStateManagement: AppStateManageService,
     private dateconversionService: DateconversionService
   ) { }
 
   async ngOnInit() {
-    await this.initializeDate();
-    // this.FilterFollowupList = [
-    //   {
-    //     p: {
-    //       CustomerName: 'John Doe',
-    //       ContactNos: '9876543210'
-    //     }
-    //   },
-    //   {
-    //     p: {
-    //       CustomerName: 'Jane Smith',
-    //       ContactNos: '9123456789'
-    //     }
-    //   },
-    //   {
-    //     p: {
-    //       CustomerName: 'Alice Johnson',
-    //       ContactNos: '9988776655'
-    //     }
-    //   },
-    //   {
-    //     p: {
-    //       CustomerName: 'Robert Brown',
-    //       ContactNos: '9112233445'
-    //     }
-    //   }
-    // ];
-
+    await this.loadCRMIfCompanyExists();
   }
 
   async ionViewWillEnter() {
-    await this.initializeDate(); // Ensures data refresh every time user re-enters
-    await this.loadSitesByCompanyRef(); // Refresh site list
+    await this.loadCRMIfCompanyExists();
   }
   async handleRefresh(event: CustomEvent): Promise<void> {
-    await this.loadSitesByCompanyRef();
-    await this.initializeDate();
+    await this.loadCRMIfCompanyExists();
     (event.target as HTMLIonRefresherElement).complete();
+  }
+
+  private async loadCRMIfCompanyExists(): Promise<void> {
+    this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
+
+    if (this.companyRef <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    await this.initializeDate(); // Ensures data refresh every time user re-enters
+    await this.loadSitesByCompanyRef(); // Refresh site list
   }
 
   private async initializeDate() {
@@ -149,15 +130,13 @@ export class CRMPage implements OnInit {
       this.isLoading = true;
       this.SiteList = [];
       this.PlotList = [];
-
-      const companyRef = await this.companystatemanagement.SelectedCompanyRef();
-      if (companyRef <= 0) {
+      if (this.companyRef <= 0) {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
       }
 
       this.SiteList = await Site.FetchEntireListByCompanyRef(
-        companyRef,
+        this.companyRef,
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
     } catch (error) {
