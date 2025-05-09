@@ -1,4 +1,4 @@
-<div class="card-body container-fluid" >
+<div class="card-body container-fluid">
   <div class="card p-3" id="print-section">
     <!-- Header Row: Back Button + Title -->
     <div class="row mb-3 align-items-center">
@@ -20,8 +20,8 @@
     <!-- Receipt Content -->
     <div class="receipt-container px-3">
       <!-- Company & Receipt Info Spread Full Width -->
-      <div class="row mb-3">
-        <div class="col-md-6">
+      <div class="row mb-3 d-flex align-items-start justify-content-between">
+        <div class="col-md-6 col-6">
           <img src="/assets/logos/ShreeIcon.png" style="margin-left: 30px;" alt=" Company Logo" height="80"
             class="mb-2" />
           <p class="mb-0"><strong>{{Entity.p.CompanyName}}</strong></p>
@@ -30,22 +30,23 @@
           <p class="mb-0">{{Entity.p.CityName}} - {{Entity.p.PinCode}}</p>
           <p>Phone: {{Entity.p.Contacts}}</p>
         </div>
-        <div class="col-md-6 text-md-end text-start mt-3 mt-md-0">
+        <!-- <div class="col-md-6 text-md-end text-start mt-3 mt-md-0"> -->
+        <div class="col-md-6 col-6 text-end">
           <p><strong>DATE:</strong> {{ this.Entity.p.Date }}</p>
           <p><strong>Challan No:</strong> {{ Entity.p.ChalanNo }}</p>
         </div>
       </div>
 
       <!-- Bill To & Project Info -->
-      <div class="row border mb-3">
-        <div class="col-md-6 border-end p-2">
+      <div class="row border mb-3 d-flex justify-content-between">
+        <div class="col-md-6 col-6 border-end p-2">
           <h6 class="text-white p-1 MaroonBGHeading">BILL TO</h6>
           <p><strong>Vendor Name:</strong> {{ Entity.p.VendorName }}</p>
           <p><strong>Site Name:</strong> {{ Entity.p.SiteName }}</p>
           <p><strong>Address:</strong> {{ receipt.address }}</p>
           <p><strong>Phone:</strong> {{ receipt.phone }}</p>
         </div>
-        <div class="col-md-6 p-2">
+        <div class="col-md-6 col-6 p-2">
           <p><strong>Stage Name:</strong> {{ Entity.p.StageName }}</p>
           <p><strong>Service Type:</strong> {{ Entity.p.ExpenseTypeName }}</p>
           <p *ngIf="Entity.p.ExpenseTypeRef == 100"><strong>Vehicle No:</strong> {{ Entity.p.VehicleNo }}</p>

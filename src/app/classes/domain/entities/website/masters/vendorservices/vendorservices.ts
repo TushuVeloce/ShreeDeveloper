@@ -29,6 +29,10 @@ export class VendorServicesPropes {
     this.IsNewlyCreated = isNewlyCreated;
   }
 
+  public static CreateFromProps(props: VendorServicesPropes): VendorService {
+    return new VendorService(Object.assign(VendorServicesPropes.Blank(), props), true);
+  }
+
   public static Blank() {
     return new VendorServicesPropes(true);
   }
@@ -37,7 +41,7 @@ export class VendorServicesPropes {
 export class VendorService implements IPersistable<VendorService> {
   public static readonly Db_Table_Name: string = 'VendorServiceMaster';
 
-  private constructor(public readonly p: VendorServicesPropes, public readonly AllowEdit: boolean) {
+  public constructor(public readonly p: VendorServicesPropes, public readonly AllowEdit: boolean) {
 
   }
 

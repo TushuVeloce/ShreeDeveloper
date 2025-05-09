@@ -7,22 +7,23 @@ export class CreateOrderResponse
     public static readonly EmbedCollectionName: string = "CreateOrderResponse";
 
     CustomRequest: CreateOrderCustomProcessRequest = null as any;
-    Rows: any
+    Rows:any = []
 
     public static FromTransportData(td: TransportData)
     {
-        // let result: CreateOrderResponse = null as any;
-        let result: any = null as any;
+        let result = new CreateOrderResponse();
+        // let result: any = null as any;
 
         let dcs = DataContainerService.GetInstance();
 
         if (dcs.CollectionExists(td.MainData, CreateOrderResponse.EmbedCollectionName))
         {
             let coll = dcs.GetCollection(td.MainData, CreateOrderResponse.EmbedCollectionName)!;
-            for(let data of coll.Entries)
-            {
-                result = data as any;
-            }
+            result.Rows = coll.Entries;
+            // for(let data of coll.Entries)
+            // {
+            //     result.Rows = data as any;
+            // }
         }
         else
         {

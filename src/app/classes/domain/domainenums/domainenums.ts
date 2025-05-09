@@ -182,6 +182,12 @@ export enum StageType {
   OfficialExpenditure = 500,
 }
 
+export enum Unit {
+  None = 0,
+  RMT = 100,
+  MTR = 200,
+}
+
 
 
 export class DomainEnums {
@@ -1057,6 +1063,33 @@ export class DomainEnums {
     if (withAllOption) {
       let allEntry = {
         Ref: StageType.None,
+        Name: allOptionName
+      }
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+  public static UnitName(itemType: Unit) {
+    switch (itemType) {
+      case Unit.RMT: return 'RMT';
+      case Unit.MTR: return 'MTR';
+      default: return '';
+    }
+  }
+
+  public static UnitList(withAllOption: boolean = false, allOptionName: string = '<All>') {
+    let result = [
+      {
+        Ref: Unit.RMT, Name: DomainEnums.UnitName(Unit.RMT)
+      },
+      {
+        Ref: Unit.MTR, Name: DomainEnums.UnitName(Unit.MTR)
+      }
+    ]
+    if (withAllOption) {
+      let allEntry = {
+        Ref: Unit.None,
         Name: allOptionName
       }
       result.unshift(allEntry);

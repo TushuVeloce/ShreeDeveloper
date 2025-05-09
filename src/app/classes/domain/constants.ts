@@ -111,3 +111,7 @@ export class ExpenseTypeRefs{
   public static readonly LabourExpense: number = 200;
   public static readonly OtherExpense: number = 300;
 }
+
+export class UnitRefs{
+  public static readonly TimeUnitRef: number = 100;
+}
