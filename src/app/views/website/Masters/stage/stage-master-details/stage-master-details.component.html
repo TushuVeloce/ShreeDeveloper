@@ -26,7 +26,7 @@
         </div>
         <div class="col-md-4">
           <div>
-            <label>Stage No.</label>
+            <label>Display Order</label>
             <input type="number" [(ngModel)]="Entity.p.DisplayOrder" name="DisplayOrder" class="form-control"
               id="DisplayOrder" required placeholder="Enter Stage No." #DisplayOrderCtrl="ngModel" required
               (blur)="DisplayOrderCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>

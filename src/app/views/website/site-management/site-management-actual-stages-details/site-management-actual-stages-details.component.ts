@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ExpenseTypeRefs, ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
+import { ExpenseTypeRefs, UnitRefs, ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { DomainEnums, StageType } from 'src/app/classes/domain/domainenums/domainenums';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { ExpenseType } from 'src/app/classes/domain/entities/website/masters/expensetype/expensetype';
@@ -50,6 +50,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   IsStage: Boolean = false;
   StageTypeList = DomainEnums.StageTypeList(true, 'select stage');
   MonthList = DomainEnums.MonthList(true, '--Select Month Type--');
+  GutterNaleUnitList = DomainEnums.UnitList(true,'--Select Unit--');
   StageTypeEnum = StageType;
   UnitQuantityTotal: number = 0;
   isAddingExpense = false;
@@ -67,6 +68,8 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   ExpenseTypeRef:number = ExpenseTypeRefs.MachinaryExpense
   LabourExpenseRef:number = ExpenseTypeRefs.LabourExpense
   OtherExpenseRef:number = ExpenseTypeRefs.OtherExpense
+  TimeUnitRef:number = UnitRefs.TimeUnitRef
+  isDiselPaid:boolean = false
 
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
@@ -90,10 +93,17 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stage' : 'Edit Stage';
       this.Entity = ActualStages.GetCurrentInstance();
-      this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
+      if(this.Entity.p.Date != ''){
+        this.Entity.p.Date= this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
+       }
       this.isChalanDisabled = true
       console.log('Entity :', this.Entity);
-      this.Amount = this.Entity.p.Rate * this.Entity.p.Quantity
+      if(this.Entity.p.TimeDetails.length>0){
+        this.Amount = this.getTotalWorkedHours()
+      }else{
+        this.Amount = this.Entity.p.Rate * this.Entity.p.Quantity
+      }
+      await this.DiselPaid(this.Entity.p.IsDieselPaid)
       await this.OnStageChange(this.Entity.p.StageRef)
       this.getVendorServiceListByVendorRef(this.Entity.p.VendorRef);
       this.appStateManage.StorageKey.removeItem('Editable')
@@ -199,6 +209,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   OnStageChange = async (StageRef: number) => {
     if(this.IsNewEntity){
       this.Entity.p.ExpenseTypeRef = 0
+      await this.AddExpenseTypeToOther( this.Entity.p.ExpenseTypeRef )
     }
     let stagedata = await Stage.FetchInstance(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     // if(stagedata.p.IsOtherExpenseApplicable == true){
@@ -211,6 +222,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     }else{
       this.isOfficialExpenditureGov = false
     }
+    
     await this.getSubStageListByStageRef(StageRef);
     await this.getExpenseListByStageRef(StageRef);
     await this.getStageTypeOnStageRef(StageRef);
@@ -225,6 +237,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     this.ExpenseTypeList = []
     let lst = await ExpenseType.FetchEntireListByStageRef(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.ExpenseTypeList = lst;
+    console.log('ExpenseTypeList :', this.ExpenseTypeList);
   }
 
   toggleExpenseInput() {
@@ -291,12 +304,16 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.UnitList = lst;
+    console.log('UnitList :', this.UnitList);
   };
 
   ClearInputsOnExpenseChange = (ExpenseTypeRef:number) => {
     this.AddExpenseTypeToOther(ExpenseTypeRef)
     this.Entity.p.Amount = 0;
     this.Entity.p.UnitRef = 0;
+    this.Entity.p.Quantity = 0;
+    this.Entity.p.Rate = 0;
+    this.Amount = 0;
     if (this.Entity.p.ExpenseTypeRef == this.ExpenseTypeRef) {
       this.Entity.p.SkillRate = 0;
       this.Entity.p.SkillQuantity = 0;
@@ -311,7 +328,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       this.Entity.p.LadiesAmount = 0;
     }
 
-    if (this.Entity.p.ExpenseTypeRef  == 200) {
+    if (this.Entity.p.ExpenseTypeRef  == this.LabourExpenseRef) {
       this.Entity.p.DieselRate = 0;
       this.Entity.p.DieselQuantity = 0;
       this.Entity.p.DieselTotalAmount = 0;
@@ -322,21 +339,21 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   }
 
   ClearValuesOnTimeSelection = (UnitRef:number) => {
-    if( UnitRef == 30179){
-      this.Entity.p.Quantity = 0
+    this.Entity.p.TimeDetails = []
+    if( UnitRef == this.TimeUnitRef){
       this.Entity.p.Rate = 0
+      this.Entity.p.Quantity = 0
       this.Entity.p.Amount = 0,
-      this.Entity.p.DieselQuantity = 0,
-      this.Entity.p.DieselRate = 0,
-      this.Entity.p.DieselTotalAmount = 0,
-      this.Entity.p.IsDieselPaid = 0,
       this.Amount = 0
     }
+    this.isDiselPaid = false
+    this.DiselPaid(0)
    
   }
 
   AddExpenseTypeToOther = async(ExpenseTypeRef:number) =>{
-    if (ExpenseTypeRef == this.ExpenseTypeRef){
+  console.log('ExpenseTypeRef :', ExpenseTypeRef);
+    if (ExpenseTypeRef == this.OtherExpenseRef){
       this.isAdd = true
     }else{
       this.isAdd = false
@@ -360,15 +377,9 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       this.Entity.p.Amount= rate * TotalWorkedHours - dieselAmount
       this.Amount = rate * TotalWorkedHours
     }else{
-
       this.Amount = rate * quantity
-      // Calculate total from rate and quantity
-      this.UnitQuantityTotal = rate * quantity + dieselAmount;
-    
-      // Final amount calculation
-      this.Entity.p.Amount = isDieselPaid 
-        ? this.UnitQuantityTotal - dieselAmount 
-        : this.UnitQuantityTotal;
+      this.Entity.p.Amount= rate * quantity - dieselAmount
+     
     }
   };
 
@@ -415,6 +426,20 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     } else {
       this.TimeEntity.WorkedHours = 0;
     }
+  }
+
+  DiselPaid = (DiselPaid:number) => {
+  if(DiselPaid == 1){
+    this.isDiselPaid = true
+    this.Entity.p.IsDieselPaid = 1;
+  }else{
+    this.Entity.p.DieselQuantity = 0;
+    this.Entity.p.DieselRate = 0;
+    this.Entity.p.DieselTotalAmount = 0;
+    this.Entity.p.IsDieselPaid = 0;
+    this.isDiselPaid = false
+  }
+  this.CalculateAmountOnRateAndQuantity()
   }
 
   getTotalWorkedHours(): number {

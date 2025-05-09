@@ -56,7 +56,7 @@ export class SubStageMasterDetailsComponent  implements OnInit {
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if(this.Entity.p.StageRef > 0){
-        this.onVendorChange(this.Entity.p.StageRef)
+        this.onStageChange(this.Entity.p.StageRef)
       }
     } else {
       this.Entity = SubStage.CreateNewInstance();
@@ -69,11 +69,12 @@ export class SubStageMasterDetailsComponent  implements OnInit {
     this.focusInput();
   }
 
-    onVendorChange = async (StageRef: number) => {
+    onStageChange = async (StageRef: number) => {
       const services = await Stage.FetchInstance(StageRef, async errMsg =>
         await this.uiUtils.showErrorMessage('Error', errMsg)
       );
       this.Entity.p.StageTypeName = services.p.StageTypeName
+      this.Entity.p.StageType = services.p.StageType
     };
 
 

@@ -54,7 +54,7 @@
           <div class="d-flex align-items-center">
             <nz-select *ngIf="!isAddingExpense" class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select"
               id="ExpenseTypeRef" name="ExpenseTypeRef" [nzSize]="'large'"
-              (ngModelChange)="ClearInputsOnExpenseChange(Entity.p.ExpenseTypeRef)" [(ngModel)]="Entity.p.ExpenseTypeRef">
+              [(ngModel)]="Entity.p.ExpenseTypeRef" (ngModelChange)="ClearInputsOnExpenseChange($event)">
               <nz-option *ngFor="let Expense of ExpenseTypeList" [nzValue]="Expense.p.ExpenseType"
                 [nzLabel]="Expense.p.Name"></nz-option>
             </nz-select>
@@ -97,8 +97,8 @@
           </nz-select>
         </div>
         <div [ngClass]="{
-          'col-lg-3 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef === 100,
-          'col-lg-4 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef !== 100 || !Entity.p.ExpenseTypeRef
+          'col-lg-3 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef === ExpenseTypeRef,
+          'col-lg-4 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef !== ExpenseTypeRef || !Entity.p.ExpenseTypeRef
         }">
           <label>Vendor Services</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorServiceRef"
@@ -107,7 +107,7 @@
               [nzLabel]="VendorServices.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-3" *ngIf="Entity.p.ExpenseTypeRef == 100">
+        <div class="col-md-3" *ngIf="Entity.p.ExpenseTypeRef == ExpenseTypeRef">
           <label><b>Vehical No.</b></label>
           <input type="text" [(ngModel)]="Entity.p.VehicleNo" name="VehicleNo" class="form-control" id="VehicleNo"
             placeholder="Enter Vehicle No" #VehicleNoCtrl="ngModel" (blur)="VehicleNoCtrl.control.markAsTouched()" />
@@ -119,8 +119,8 @@
           </div>
         </div>
         <div [ngClass]="{
-          'col-lg-3 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef === 100,
-          'col-lg-4 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef !== 100 || !Entity.p.ExpenseTypeRef
+          'col-lg-3 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef === ExpenseTypeRef,
+          'col-lg-4 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef !== ExpenseTypeRef || !Entity.p.ExpenseTypeRef
         }">
           <label>Unit</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UnitRef" name="UnitRef"
@@ -133,7 +133,7 @@
       <!-- time table start -->
 
       <div class="row" style="margin-top: 2rem; padding: 1rem"
-        *ngIf="Entity.p.ExpenseTypeRef == 100 && Entity.p.UnitRef == 30179">
+        *ngIf="Entity.p.ExpenseTypeRef == ExpenseTypeRef && Entity.p.UnitRef == TimeUnitRef">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
           <h5 style="padding-top: 3px; color: black">
             <b>Machinary Details</b>
@@ -144,7 +144,7 @@
           <nz-button nz-button class="btn1" (click)="isModalOpen = true">Add Machine Time </nz-button>
         </div>
       </div>
-      <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="Entity.p.TimeDetails.length > 0 && Entity.p.ExpenseTypeRef == 100 && Entity.p.UnitRef == 30179">
+      <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="Entity.p.TimeDetails.length > 0 && Entity.p.ExpenseTypeRef == ExpenseTypeRef && Entity.p.UnitRef == TimeUnitRef">
         <div class="table-container" style="margin-top: 2rem">
           <div class="row">
             <div class="col-12">
@@ -184,7 +184,7 @@
           </nz-table>
         </div>
       </div>
-      <div *ngIf="Entity.p.TimeDetails.length === 0 && Entity.p.ExpenseTypeRef == 100 && Entity.p.UnitRef == 30179"
+      <div *ngIf="Entity.p.TimeDetails.length === 0 && Entity.p.ExpenseTypeRef == ExpenseTypeRef && Entity.p.UnitRef == TimeUnitRef"
         class="card-body_light">
         <div style="height: 200px; background-color: white" class="d-flex align-items-center justify-content-center">
           <span class="title_light"> Data Not Found</span>
@@ -193,9 +193,9 @@
 
       <!-- time table Ends -->
 
-      <div class="row" *ngIf="Entity.p.ExpenseTypeRef != 200">
+      <div class="row" *ngIf="Entity.p.ExpenseTypeRef != LabourExpenseRef">
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem"
-          *ngIf="!(Entity.p.ExpenseTypeRef == 100 && Entity.p.UnitRef == 30179)">
+          *ngIf="!(Entity.p.ExpenseTypeRef == ExpenseTypeRef && Entity.p.UnitRef == TimeUnitRef)">
           <label><b>Quantity</b></label>
           <input type="number" [(ngModel)]="Entity.p.Quantity" name="Quantity" class="form-control" id="Quantity"
             placeholder="Enter Quantity" (ngModelChange)="CalculateAmountOnRateAndQuantity()" #QuantityCtrl="ngModel"
@@ -218,7 +218,7 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label><b>Amount</b></label>
-          <input type="number" class="form-control" placeholder="Amount" [value]='Amount' />
+          <input type="number" class="form-control" placeholder="Amount" [value]='Amount' readonly/>
           <div *ngIf="
               AmountCtrl.invalid && (AmountCtrl.touched || AmountCtrl.dirty)
             ">
@@ -226,9 +226,20 @@
           </div>
         </div>
       </div>
-      <div *ngIf="Entity.p.ExpenseTypeRef == 100" class="row" style="margin-top: 1rem">
-        <label><b>Diesel Calculation</b></label>
-        <div class="col-md-4 mb-2">
+      <div *ngIf="Entity.p.ExpenseTypeRef == ExpenseTypeRef" class="row" style="margin-top: 1rem">
+        <div class="d-flex align-items-center mb-2">
+          <label for="IsDieselPaid"><b>Diesel Paid</b></label>
+          <input
+            type="checkbox"
+            id="IsDieselPaid"
+            [(ngModel)]="Entity.p.IsDieselPaid"
+            name="IsDieselPaid"
+            (ngModelChange)="DiselPaid(Entity.p.IsDieselPaid)"
+            class="form-check-input me-4 mb-2 large-dark-checkbox"
+            style="width: 20px; height: 20px; margin-left: 1rem;"
+          />
+        </div>
+        <div class="col-md-4 mb-2" *ngIf="isDiselPaid">
           <label>Diesel Ltr</label>
           <!-- Diesel Ltr. -->
           <input type="number" [(ngModel)]="Entity.p.DieselQuantity" name="DieselQuantity" class="form-control"
@@ -242,7 +253,7 @@
             <span class="validation-text" *ngIf="DieselQuantityCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-        <div class="col-md-4 mb-2">
+        <div class="col-md-4 mb-2" *ngIf="isDiselPaid">
           <label>Diesel Rate</label>
           <!-- Diesel Rate -->
           <input type="number" [(ngModel)]="Entity.p.DieselRate" name="DieselRate" class="form-control" id="DieselRate"
@@ -255,22 +266,12 @@
             <span class="validation-text" *ngIf="DieselRateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-        <div class="col-md-4 mb-2">
+        <div class="col-md-4 mb-2" *ngIf="isDiselPaid">
           <!-- Diesel Amount (Readonly) -->
           <label><b>Diesel Amount</b></label>
-          <div class="row">
-            <div class="col-8">
               <input type="number" [(ngModel)]="Entity.p.DieselTotalAmount" name="DieselTotalAmount"
                 class="form-control" id="DieselTotalAmount" placeholder="Enter Amount" #DieselTotalCtrl="ngModel"
                 (blur)="DieselTotalCtrl.control.markAsTouched()" readonly />
-            </div>
-            <div class="col-4">
-              <input type="checkbox" id="IsDieselPaid" [(ngModel)]="Entity.p.IsDieselPaid" name="IsDieselPaid"
-                (ngModelChange)="CalculateAmountOnRateAndQuantity()" class="form-check-input me-2 large-dark-checkbox"
-                style="width: 20px; height: 20px" />
-              <label for="IsDieselPaid" class="form-check-label mb-0">Is Paid</label>
-            </div>
-          </div>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
@@ -325,7 +326,7 @@
           <label>Gutter Nale Unit</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="GutterNaleUnitRef"
             name="GutterNaleUnitRef" [nzSize]="'large'" [(ngModel)]="Entity.p.GutterNaleUnitRef">
-            <nz-option *ngFor="let unit of UnitList" [nzValue]="unit.p.Ref" [nzLabel]="unit.p.Name"></nz-option>
+            <nz-option *ngFor="let unit of GutterNaleUnitList" [nzValue]="unit.Ref" [nzLabel]="unit.Name"></nz-option>
           </nz-select>
         </div>
       </div>
@@ -333,7 +334,7 @@
 
       <!-- Labou Data Starts-->
 
-      <div *ngIf="Entity.p.ExpenseTypeRef == 200" class="row">
+      <div *ngIf="Entity.p.ExpenseTypeRef == LabourExpenseRef" class="row">
         <!-- Skilled Section -->
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem">
           <label><b>Skill Labour Quantity</b></label>
@@ -510,7 +511,7 @@
               <label for="StartTime">Start Time</label>
               <input type="time" name="StartTime" class="form-control" id="StartTime" [(ngModel)]="TimeEntity.StartTime"
                 (ngModelChange)="calculateWorkedHours()" placeholder="Enter Start Time " #StartTimeCtrl="ngModel"
-                required (blur)="StartTimeCtrl.control.markAsTouched()" />
+                required (blur)="StartTimeCtrl.control.markAsTouched()" style="background-color: black;"/>
               <div *ngIf="(StartTimeCtrl.invalid && (StartTimeCtrl.touched || StartTimeCtrl.dirty))">
                 <span class="validation-text" *ngIf="StartTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
               </div>

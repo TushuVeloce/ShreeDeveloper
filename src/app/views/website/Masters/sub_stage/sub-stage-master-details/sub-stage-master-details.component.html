@@ -15,7 +15,7 @@
         <div class="col-md-4">
           <label>Stage</label>
           <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StageRef" name="StageRef"
-            [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef" (ngModelChange)="onVendorChange(Entity.p.StageRef)">
+            [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef" (ngModelChange)="onStageChange(Entity.p.StageRef)">
             <nz-option *ngFor="let stage of StageList" [nzValue]="stage.p.Ref" [nzLabel]="stage.p.Name"></nz-option>
           </nz-select>
         </div>
