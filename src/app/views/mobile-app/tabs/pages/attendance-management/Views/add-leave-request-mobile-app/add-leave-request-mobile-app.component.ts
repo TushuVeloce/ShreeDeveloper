@@ -38,14 +38,11 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
   public SelectedLeaveType: any[] = [];
   public LeaveTypeBottomSheetTitle = 'Select Leave Type';
 
-  public RequiredFieldMsg = ValidationMessages.RequiredFieldMsg;
-
   public LeaveRequestType = LeaveRequestType;
   public LeaveRequestTypeList = DomainEnums.LeaveRequestTypeList();
-  public companyRef = this.companystatemanagement.SelectedCompanyRef;
+  public companyRef : number = 0;
 
   private IsNewEntity = true;
-  // FromDate:string | null = null;
 
   constructor(
     private router: Router,
@@ -54,6 +51,7 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
     private utils: Utils,
     private dtu: DTU,
     private companystatemanagement: CompanyStateManagement,
+    private appStateManagement: AppStateManageService,
     private bottomsheetMobileAppService: BottomsheetMobileAppService,
     private dateTimePickerService: DateTimePickerService,
     private datePipe: DatePipe
@@ -61,17 +59,6 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.loadLeaveRequestsIfEmployeeExists();
-    // this.selectedLeaveTypeBottomsheet()
-    // this.Entity.p.LeaveRequestType = 100;
-    // this.Entity.p.LeaveRequestName = 'Personal Leave';
-    // console.log(this.SelectedLeaveRequest);
-    
-    // [{
-    //   p: {
-    //     Ref: 100,
-    //     Name: 'Personal Leave'
-    //   }
-    // }];
   }
 
   // ionViewWillEnter = async () => {
@@ -86,8 +73,8 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
   private async loadLeaveRequestsIfEmployeeExists(): Promise<void> {
     try {
       this.isLoading = true;
+      this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
       this.Entity.p.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
-      // this.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
       if (this.Entity.p.EmployeeRef > 0) {
         const editMode = this.appStateManage.StorageKey.getItem('Editable') === 'Edit';
 
@@ -106,6 +93,7 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
           LeaveRequest.SetCurrentInstance(this.Entity);
           this.Entity.p.LeaveRequestType = this.LeaveRequestTypeList[1].Ref;
           await this.getSingleEmployeeDetails();
+          this.onToDateChange(new Date());
         }
 
         this.InitialEntity = Object.assign(
@@ -129,13 +117,12 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
       //   await this.uiUtils.showErrorToster('Company not Selected');
       //   return;
       // }
-      const companyRef = await this.companystatemanagement.SelectedCompanyRef();
-      if (companyRef <= 0) {
+      if (this.companyRef <= 0) {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
       }
       const employee = await Employee.FetchInstance(
-        this.EmployeeRef, companyRef,
+        this.EmployeeRef, this.companyRef,
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
 
@@ -164,6 +151,7 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
 
   public onDateChangeSetDaysandLeaveHours(): void {
     if (this.fromDate && this.toDate) {
+    console.log('this.fromDate && this.toDate :', this.fromDate ,this.toDate);
       const from = new Date(this.fromDate);
       const to = new Date(this.toDate);
       const diffInMs = Math.abs(to.getTime() - from.getTime()) + 1;
@@ -216,33 +204,6 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
     this.onDateChangeSetDaysandLeaveHours();
   }
 
-  public async selectToDate(): Promise<void> {
-    const pickedDate = await this.dateTimePickerService.open({
-      mode: 'date',
-      label: 'Select End Date',
-      value: this.toDate,
-    });
-
-    if (pickedDate) {
-      this.toDate = this.datePipe.transform(pickedDate, 'yyyy-MM-dd') ?? '';
-      this.Entity.p.ToDate = this.toDate;
-      this.onDateChangeSetDaysandLeaveHours();
-    }
-  }
-
-  public async selectHalfDayDate(): Promise<void> {
-    const pickedDate = await this.dateTimePickerService.open({
-      mode: 'date',
-      label: 'Select Half Day',
-      value: this.halfDayDate,
-    });
-
-    if (pickedDate) {
-      this.halfDayDate = this.datePipe.transform(pickedDate, 'yyyy-MM-dd') ?? '';
-      this.Entity.p.HalfDayDate = this.halfDayDate;
-    }
-  }
-
   public async selectedLeaveTypeBottomsheet(): Promise<void> {
     try {
       // Filter the list before mapping
@@ -268,7 +229,6 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
     }
   }
 
-
   private async openSelectModal(
     dataList: any[],
     selectedItems: any[],
@@ -284,7 +244,7 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
   public async SaveLeaveRequest(): Promise<void> {
     try {
       this.isLoading = true;
-      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+      this.Entity.p.CompanyRef = this.companyRef;
       this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
 
       if (this.Entity.p.LeaveRequestType === LeaveRequestType.HalfDay) {

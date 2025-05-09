@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { AttendenceLogType, DomainEnums, LeaveRequestType } from 'src/app/classes/domain/domainenums/domainenums';
 import { AttendanceLogs } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogs';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
-import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+import type { SegmentValue } from '@ionic/core';
+
 
 @Component({
   selector: 'app-attendance-details',
@@ -13,131 +14,132 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   standalone: false
 })
 export class AttendanceDetailsComponent implements OnInit {
-  selectedMonth: number = new Date().getMonth();
+  selectedMonth: number = 0;
   months: any[] = [];
-  isLoading:boolean = false;
+  isLoading: boolean = false;
+  companyRef: number = 0;
 
-  Entity: AttendanceLogs = AttendanceLogs.CreateNewInstance();
+  attendanceLogFilter: AttendanceLogs = AttendanceLogs.CreateNewInstance();
   monthlyAttendanceLogsList: AttendanceLogs[] = [];
   filteredMonthlyAttendanceLogsList: AttendanceLogs[] = [];
-  SelectedAttendanceLogs: AttendanceLogs = AttendanceLogs.CreateNewInstance();
-  companyRef = this.companystatemanagement.SelectedCompanyRef;
-  leaveTypeEnum = LeaveRequestType;
+  selectedAttendanceLog: AttendanceLogs = AttendanceLogs.CreateNewInstance();
 
+  readonly leaveTypeEnum = LeaveRequestType;
+  readonly DEFAULT_LOCALE = 'en-US';
 
   constructor(
     private uiUtils: UIUtils,
-    private companystatemanagement: CompanyStateManagement, private appState: AppStateManageService,
+    private appState: AppStateManageService,
     private dateConversionService: DateconversionService
-  ) {
-    // this.filteredMonthlyAttendanceLogsList = [
-    //   {
-    //     p: {
-    //       TransDateTime: '2025-04-01T00:00:00',
-    //       FirstCheckInTime: '09:05 AM',
-    //       LastCheckOutTime: '05:30 PM',
-    //       TotalWorkingHrs: '8:25',
-    //       OnLeave: '',
-    //       LeaveType: '',
-    //     }
-    //   },
-    //   {
-    //     p: {
-    //       TransDateTime: '2025-04-02T00:00:00',
-    //       FirstCheckInTime: '09:20 AM',
-    //       LastCheckOutTime: '05:10 PM',
-    //       TotalWorkingHrs: '7:50',
-    //       OnLeave: '',
-    //       LeaveType: '',
-    //     }
-    //   },
-    //   {
-    //     p: {
-    //       TransDateTime: '2025-04-03T00:00:00',
-    //       FirstCheckInTime: '',
-    //       LastCheckOutTime: '',
-    //       TotalWorkingHrs: '',
-    //       OnLeave: 'Sick Leave',
-    //       LeaveType: 'Sick',
-    //     }
-    //   },
-    //   {
-    //     p: {
-    //       TransDateTime: '2025-04-04T00:00:00',
-    //       FirstCheckInTime: '',
-    //       LastCheckOutTime: '',
-    //       TotalWorkingHrs: '',
-    //       OnLeave: '',
-    //       LeaveType: '',
-    //     }
-    //   }
-    // ];
-  }
+  ) { }
 
   async ngOnInit(): Promise<void> {
     await this.loadAttendanceDetailsIfEmployeeExists();
   }
 
+  ngOnDestroy(): void {
+    // cleanup if needed in the future
+  }
+
   ionViewWillEnter = async () => {
     await this.loadAttendanceDetailsIfEmployeeExists();
-    // console.log('Leave request refreshed on view enter');
   };
 
-  ngOnDestroy(): void {
-    // cleanup logic if needed later
+  async handleRefresh(event: CustomEvent): Promise<void> {
+    await this.loadAttendanceDetailsIfEmployeeExists();
+    (event.target as HTMLIonRefresherElement).complete();
   }
-  private async loadAttendanceDetailsIfEmployeeExists(): Promise<void> {
+
+  async loadAttendanceDetailsIfEmployeeExists(): Promise<void> {
     try {
       this.isLoading = true;
-      this.Entity.p.EmployeeRef = this.appState.getEmployeeRef();
-      if (this.Entity.p.EmployeeRef > 0) {
-        this.getDataByMonth(this.selectedMonth);
+      this.attendanceLogFilter.p.EmployeeRef = this.appState.getEmployeeRef();
+      this.companyRef = Number(this.appState.StorageKey.getItem('SelectedCompanyRef'));
+      if (this.attendanceLogFilter.p.EmployeeRef > 0) {
         this.months = DomainEnums.MonthList();
+        await this.fetchAttendanceByMonth(new Date().getMonth());
       } else {
         await this.uiUtils.showErrorToster('Employee not selected');
-      } 
+      }
     } catch (error) {
-    // console.log('error :', error);
-    }finally{
+      this.handleError(error, 'Loading attendance details');
+    } finally {
       this.isLoading = false;
     }
+  }
+
+  async fetchAttendanceByMonth(value: SegmentValue | undefined): Promise<void> {
+    try {
+      const SelectedMonth = Number(value);
+      console.log('SelectedMonth :', SelectedMonth);
+      if (isNaN(SelectedMonth)) return;
+      this.selectedMonth = SelectedMonth;
+      this.attendanceLogFilter.p.Months = SelectedMonth;
+      await this.fetchMonthlyLogs();
+    } catch (error) {
+      this.handleError(error, 'Fetching attendance for selected month');
+    }
+  }
+
+  async fetchMonthlyLogs(): Promise<void> {
+    try {
+      const month = this.attendanceLogFilter.p.Months;
+      const employeeRef = this.attendanceLogFilter.p.EmployeeRef;
+
+      const logs = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(
+        this.companyRef,
+        AttendenceLogType.MonthlyAttendanceLog,
+        month,
+        employeeRef,
+        async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+      console.log(`      this.companyRef,
+        AttendenceLogType.MonthlyAttendanceLog,
+        month,
+        employeeRef :`, this.companyRef,
+        AttendenceLogType.MonthlyAttendanceLog,
+        month,
+        employeeRef);
+      console.log('logs :', logs);
+
+      this.monthlyAttendanceLogsList = logs;
+      this.filteredMonthlyAttendanceLogsList = logs;
+    } catch (error) {
+      this.handleError(error, 'Fetching monthly logs');
+    }
+  }
+
+  // Custom date parsing for "DD-MM-YYYY"
+  private parseCustomDate(dateString: string): Date | null {
+    if (!dateString) return null;
+    const [day, month, year] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  }
+
+  getDayName(dateString: string): string {
+    const date = this.parseCustomDate(dateString);
+    return date
+      ? date.toLocaleDateString(this.DEFAULT_LOCALE, { weekday: 'long' })
+      : '--';
+  }
+
+  formatDay(dateString: string): string {
+    const date = this.parseCustomDate(dateString);
+    return date
+      ? date.toLocaleDateString(this.DEFAULT_LOCALE, {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      })
+      : '--';
   }
 
   formatDate(date: string | Date): string {
     return this.dateConversionService.formatDate(date);
   }
 
-  async getDataByMonth(month: any): Promise<void> {
-    try {
-      if (month === undefined) return;
-      this.selectedMonth = month;
-      this.Entity.p.Months = month;
-      await this.getMonthWiseAttendanceLogByAttendanceListType(); 
-    } catch (error) {
-    // console.log('error :', error);
-    }
+  private handleError(error: any, context: string): void {
+    console.error(`${context} failed:`, error);
+    this.uiUtils.showErrorToster(`${context} failed`);
   }
-
-  getMonthWiseAttendanceLogByAttendanceListType = async () => {
-    try {
-      this.filteredMonthlyAttendanceLogsList = [];
-      this.monthlyAttendanceLogsList = [];
-      const month = this.Entity.p.Months;
-      const employeeref = this.Entity.p.EmployeeRef;
-
-      const MonthlyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(
-        this.companyRef(),
-        AttendenceLogType.MonthlyAttendanceLog,
-        month,
-        employeeref,
-        async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
-      );
-
-      this.monthlyAttendanceLogsList = MonthlyAttendanceLog;
-      this.filteredMonthlyAttendanceLogsList = MonthlyAttendanceLog;
-      // console.log('MonthlyAttendanceLog :', MonthlyAttendanceLog, month, employeeref); 
-    } catch (error) {
-    // console.log('error :', error);
-    }
-  };
 }

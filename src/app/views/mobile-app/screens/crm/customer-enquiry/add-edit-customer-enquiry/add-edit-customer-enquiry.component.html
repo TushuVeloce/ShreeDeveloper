@@ -7,9 +7,9 @@
     <!-- Date -->
     <ion-item class="input-item" *ngIf="IsNewEntity">
       <ion-label>Select Date</ion-label>
-      <ion-datetime-button datetime="EntryDate" trigger="entry-date-modal"></ion-datetime-button>
+      <ion-datetime-button datetime="EntryDate"></ion-datetime-button>
     </ion-item>
-    <ion-modal keepContentsMounted="true" trigger="entry-date-modal">
+    <ion-modal keepContentsMounted="true">
       <ng-template>
         <ion-datetime id="EntryDate" presentation="date" [(ngModel)]="Date" show-default-buttons="true"></ion-datetime>
       </ng-template>
@@ -264,9 +264,9 @@
       <!-- Next Site Visit Date -->
       <ion-item class="input-item">
         <ion-label>Next Site Visit Date</ion-label>
-        <ion-datetime-button datetime="NextSiteVisitDate" trigger="site-visit-modal"></ion-datetime-button>
+        <ion-datetime-button datetime="NextSiteVisitDate"></ion-datetime-button>
       </ion-item>
-      <ion-modal keepContentsMounted="true" trigger="site-visit-modal">
+      <ion-modal keepContentsMounted="true">
         <ng-template>
           <ion-datetime id="NextSiteVisitDate" presentation="date" [(ngModel)]="localSiteVisitDate"
             show-default-buttons="true"></ion-datetime>
@@ -276,10 +276,10 @@
 
       <!-- Next Office Visit Date -->
       <ion-item class="input-item">
-        <ion-label>Next Site Visit Date</ion-label>
-        <ion-datetime-button datetime="NextSiteOfficeDate" trigger="office-visit-modal"></ion-datetime-button>
+        <ion-label>Next Site Office Date</ion-label>
+        <ion-datetime-button datetime="NextSiteOfficeDate"></ion-datetime-button>
       </ion-item>
-      <ion-modal keepContentsMounted="true" trigger="office-visit-modal">
+      <ion-modal keepContentsMounted="true">
         <ng-template>
           <ion-datetime id="NextSiteOfficeDate" presentation="date" [(ngModel)]="localOfficeVisitDate"
             show-default-buttons="true"></ion-datetime>

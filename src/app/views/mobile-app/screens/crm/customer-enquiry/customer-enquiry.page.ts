@@ -23,6 +23,7 @@ export class CustomerEnquiryPage implements OnInit {
   ModalOpen: boolean = false;
   selectedStatus: number = CustomerStatus.Interested;
   isLoading: boolean = false;
+  companyRef: number = 0;
 
   CustomerStatusEnum = CustomerStatus;
   statusOptions = [
@@ -35,54 +36,42 @@ export class CustomerEnquiryPage implements OnInit {
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
-    private appStateManage: AppStateManageService,
-    private companystatemanagement: CompanyStateManagement
+    private appStateManagement: AppStateManageService,
   ) { }
 
   ngOnInit(): void {
-    this.getCustomerEnquiryListByCompanyRef();
+    this.loadCRMIfCompanyExists();
   }
 
   ionViewWillEnter = async () => {
-    await this.getCustomerEnquiryListByCompanyRef();
+    await this.loadCRMIfCompanyExists();
   };
 
   async handleRefresh(event: CustomEvent): Promise<void> {
-    await this.getCustomerEnquiryListByCompanyRef();
+    await this.loadCRMIfCompanyExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
-  companyRef(): number {
-    return this.companystatemanagement.SelectedCompanyRef();
+  private async loadCRMIfCompanyExists(): Promise<void> {
+    this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
+    if (this.companyRef <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    await this.getCustomerEnquiryListByCompanyRef();
   }
 
-  // getCustomerEnquiryListByCompanyRef = async () => {
-  //   this.MasterList = [];
-  //   this.DisplayMasterList = [];
-  //   if (this.companyRef() <= 0) {
-  //     await this.uiUtils.showErrorToster('Company not Selected');
-  //     return;
-  //   }
-  //   let lst = await CustomerEnquiry.FetchEntireListByCompanyRef(
-  //     this.companyRef(),
-  //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-  //   );
-  //   this.MasterList = lst;
-  //   this.MasterList.forEach(e => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()))
-  //   this.DisplayMasterList = this.MasterList;
-  //   this.loadPaginationData();
-  // };
   async getCustomerEnquiryListByCompanyRef() {
     try {
       this.CustomerEnquiryList = [];
       this.FilteredCustomerEnquiryList = [];
       this.isLoading = true;
-      if (this.companyRef() <= 0) {
+      if (this.companyRef <= 0) {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
       }
       let lst = await CustomerEnquiry.FetchEntireListByCompanyRef(
-        this.companyRef(),
+        this.companyRef,
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
       this.CustomerEnquiryList = lst;
@@ -107,7 +96,7 @@ export class CustomerEnquiryPage implements OnInit {
       item.p.CustomerFollowUps = [CustomerFollowUpProps.Blank()];
       this.SelectedCustomerEnquiry = item.GetEditableVersion();
       CustomerEnquiry.SetCurrentInstance(this.SelectedCustomerEnquiry);
-      this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+      this.appStateManagement.StorageKey.setItem('Editable', 'Edit');
       this.router.navigate(['app_homepage/tabs/crm/customer-enquiry/edit']);
     } catch (error: any) {
       await this.uiUtils.showErrorMessage('Error', error?.message || 'Could not open edit form.');
@@ -146,7 +135,7 @@ export class CustomerEnquiryPage implements OnInit {
 
   async AddCustomerEnquiryForm() {
     try {
-      if (this.companyRef() <= 0) {
+      if (this.companyRef <= 0) {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
       }

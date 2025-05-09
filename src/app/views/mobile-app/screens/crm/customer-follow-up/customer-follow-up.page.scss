@@ -1,52 +1,63 @@
-.Data-list {
-    background: var(--ion-background-color);
+// .followup-content {
+//   --padding-start: 16px;
+//   --padding-end: 16px;
+// }
 
-    .Data-card {
-        border-radius: 14px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        margin-bottom: 16px;
-        background-color: var(--ion-item-background);
-
-        ion-card-content {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background: #f3f4f6;
-
-            .info-row {
-                font-size: 14px;
-                color: #333;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .btn-row {
-                display: flex;
-                justify-content: space-between;
-                flex-wrap: wrap;
-                gap: 8px;
-                margin-top: 10px;
-            }
-        }
-    }
+.followup-content {
+  --background: var(--ion-background-color);
 }
 
-  /* Centering "No data found" content */
-  ion-card-content.text-center {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 150px;
-    color: #888;
-    font-size: 16px;
+.data-list {
+  padding: 16px;
+
+  .data-card {
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    margin-bottom: 16px;
+    background: var(--ion-item-background);
+
+    ion-card-header {
+      background-color: #f5f5f5;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    ion-card-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #222;
+    }
+
+    ion-card-subtitle {
+      font-size: 14px;
+      color: #666;
+    }
+
+    ion-card-content {
+      display: flex;
+      flex-direction: column;
+      padding-top: 8px;
+
+      .btn-row {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+    }
   }
-  
-  ion-card-content.text-center ion-icon {
-    font-size: 32px;
-    margin-bottom: 0.5rem;
-    color: var(--ion-color-medium);
-  }
-  
+}
+.info-row {
+  font-size: 14px;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-row {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+}

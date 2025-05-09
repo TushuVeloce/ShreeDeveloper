@@ -31,13 +31,15 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
 
   public RequiredFieldMsg = ValidationMessages.RequiredFieldMsg;
   public monthList = DomainEnums.MonthList();
+  private CompanyRef: number = 0;
+  private CompanyName: string = '';
 
   private IsNewEntity = true;
 
   constructor(
     private router: Router,
     private uiUtils: UIUtils,
-    private appStateManage: AppStateManageService,
+    private appStateManagement: AppStateManageService,
     private utils: Utils,
     private companystatemanagement: CompanyStateManagement,
     private bottomsheetMobileAppService: BottomsheetMobileAppService
@@ -58,19 +60,21 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
   private async loadSalarySlipRequestsIfEmployeeExists(): Promise<void> {
     try {
       this.isLoading = true;
-      this.Entity.p.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+      this.CompanyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
+      this.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+      this.Entity.p.EmployeeRef = Number(this.appStateManagement.getEmployeeRef());
       if (this.Entity.p.EmployeeRef > 0) {
-        const editMode = this.appStateManage.StorageKey.getItem('Editable') === 'Edit';
+        const editMode = this.appStateManagement.StorageKey.getItem('Editable') === 'Edit';
 
         this.IsNewEntity = !editMode;
         this.DetailsFormTitle = editMode ? 'Edit Salary Slip Request' : 'New Salary Slip Request';
 
         if (editMode) {
           this.Entity = SalarySlipRequest.GetCurrentInstance();
-          this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
-          this.appStateManage.StorageKey.removeItem('Editable');
+          this.Entity.p.UpdatedBy = Number(this.appStateManagement.StorageKey.getItem('LoginEmployeeRef'));
+          this.appStateManagement.StorageKey.removeItem('Editable');
         } else {
-          this.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+          this.EmployeeRef = Number(this.appStateManagement.StorageKey.getItem('LoginEmployeeRef'));
           this.Entity = SalarySlipRequest.CreateNewInstance();
           SalarySlipRequest.SetCurrentInstance(this.Entity);
           await this.getSingleEmployeeDetails();
@@ -94,13 +98,12 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
 
   private async getSingleEmployeeDetails(): Promise<void> {
     try {
-      const companyRef = await this.companystatemanagement.SelectedCompanyRef();
-      if (companyRef <= 0) {
+      if (this.CompanyRef <= 0) {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
       }
 
-      const employee = await Employee.FetchInstance(this.EmployeeRef, companyRef, async (errMsg) =>
+      const employee = await Employee.FetchInstance(this.EmployeeRef, this.CompanyRef, async (errMsg) =>
         await this.uiUtils.showErrorMessage('Error', errMsg)
       );
 
@@ -167,34 +170,14 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
     if (selected) updateCallback(selected);
   }
 
-  // private async getFinancialYearListByCompanyRef(): Promise<void> {
-  //   const companyRef = this.companystatemanagement.SelectedCompanyRef();
-  //   if (companyRef <= 0) {
-  //     await this.uiUtils.showErrorToster('Company not Selected');
-  //     return;
-  //   }
-
-  //   const lst = await FinancialYear.FetchEntireListByCompanyRef(companyRef, async errMsg =>
-  //     await this.uiUtils.showErrorMessage('Error', errMsg)
-  //   );
-
-  //   const years = lst.flatMap(item => [
-  //     item.p.FromDate.substring(0, 4),
-  //     item.p.ToDate.substring(0, 4)
-  //   ]);
-
-  //   this.FinancialYearList = Array.from(new Set(years)).sort();
-  // }
-
   getFinancialYearListByCompanyRef = async () => {
     try {
-      const companyRef = this.companystatemanagement.SelectedCompanyRef();
       this.FinancialYearList = [];
-      if (companyRef <= 0) {
+      if (this.CompanyRef <= 0) {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
       }
-      let lst = await FinancialYear.FetchEntireListByCompanyRef(companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      let lst = await FinancialYear.FetchEntireListByCompanyRef(this.CompanyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
 
       const updatedArray = lst.map(item => ({
         ...item,
@@ -221,11 +204,11 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
   public async SaveSalarySlipRequest(): Promise<void> {
     try {
       this.isLoading = false;
-      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-      this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+      this.Entity.p.CompanyRef = this.CompanyRef;
+      this.Entity.p.CompanyName = this.CompanyName;
 
       if (this.Entity.p.CreatedBy == 0) {
-        this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+        this.Entity.p.CreatedBy = Number(this.appStateManagement.StorageKey.getItem('LoginEmployeeRef'))
       }
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];

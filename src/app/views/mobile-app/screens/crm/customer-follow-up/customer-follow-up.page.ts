@@ -22,7 +22,7 @@ export class CustomerFollowUpPage implements OnInit {
   SiteList: Site[] = [];
   PlotList: Plot[] = [];
   followupList: CustomerFollowUp[] = [];
-  FilterFollowupList: CustomerFollowUp[] = [];
+  FilterFollowupList: any[] = [];
   SelectedFollowUp: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
 
   CustomerRef: number = 0;
@@ -32,11 +32,11 @@ export class CustomerFollowUpPage implements OnInit {
   strCDT: string = '';
   ModalOpen: boolean = false;
   isLoading: boolean = false;
-
+  companyRef : number = 0
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
-    private appStateManage: AppStateManageService,
+    private appStateManagement: AppStateManageService,
     private companystatemanagement: CompanyStateManagement,
     private dateconversionService: DateconversionService
   ) {}
@@ -59,10 +59,41 @@ export class CustomerFollowUpPage implements OnInit {
   }
 
   private async LoadAllData() {
+    this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
     if (!this.date) {
       await this.initializeDate();
       await this.loadSitesByCompanyRef();
     }
+   this.FilterFollowupList = [
+      {
+        p: {
+          CustomerName: 'Rahul Sharma',
+          ContactNos: '9876543210',
+          ReminderDate: '2025-05-10T10:00:00Z',
+          CustomerStatusName: 'Interested',
+          CustomerRequirement: '3 BHK Apartment in Pune',
+        }
+      },
+      {
+        p: {
+          CustomerName: 'Priya Desai',
+          ContactNos: '9988776655',
+          ReminderDate: '2025-05-11T14:30:00Z',
+          CustomerStatusName: 'Follow-up Later',
+          CustomerRequirement: 'Commercial Office Space',
+        }
+      },
+      {
+        p: {
+          CustomerName: 'Amit Joshi',
+          ContactNos: '9123456789',
+          ReminderDate: '2025-05-12T09:00:00Z',
+          CustomerStatusName: 'Converted',
+          CustomerRequirement: '1 BHK Flat near Station',
+        }
+      }
+    ];
+
   }
   private async initializeDate() {
     this.isLoading = true;
@@ -127,14 +158,13 @@ export class CustomerFollowUpPage implements OnInit {
       this.FilterFollowupList = [];
       this.SiteList = [];
 
-      const companyRef = await this.companystatemanagement.SelectedCompanyRef();
-      if (companyRef <= 0) {
+      if (this.companyRef <= 0) {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
       }
 
       const sites = await Site.FetchEntireListByCompanyRef(
-        companyRef,
+        this.companyRef,
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
 
@@ -174,14 +204,13 @@ export class CustomerFollowUpPage implements OnInit {
   async onFollowUpClick(followup: CustomerFollowUp) {
     this.SelectedFollowUp = followup.GetEditableVersion();
     CustomerFollowUp.SetCurrentInstance(this.SelectedFollowUp);
-    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+    this.appStateManagement.StorageKey.setItem('Editable', 'Edit');
 
     await this.router.navigate(['/app_homepage/tabs/crm/customer-follow-up/add']);
   }
 
   async onAddCustomerEnquiry() {
-    const companyRef = this.companystatemanagement.SelectedCompanyRef();
-    if (companyRef <= 0) {
+    if (this.companyRef <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }

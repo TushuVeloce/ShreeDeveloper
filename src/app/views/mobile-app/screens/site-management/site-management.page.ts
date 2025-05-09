@@ -34,7 +34,7 @@ export class SiteManagementPage implements OnInit {
   ) {}
   async ngOnInit(): Promise<void> {
     await this.loadSiteIfCompanyExists();
-    console.log('companyRef :', await this.companyRef);
+    // console.log('companyRef :', await this.companyRef);
   }
 
   ionViewWillEnter = async () => {
