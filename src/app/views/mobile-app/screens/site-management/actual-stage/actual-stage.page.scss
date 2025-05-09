@@ -1,35 +1,55 @@
-.Data-list {
-    background: var(--ion-background-color);
+.actual-stage-content {
+    --background: var(--ion-background-color);
+}
 
-    .Data-card {
+.data-list {
+    padding: 16px;
+
+    .data-card {
         border-radius: 14px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
         margin-bottom: 16px;
-        background-color: var(--ion-item-background);
+        background: var(--ion-item-background);
+
+        ion-card-header {
+            background-color: #f5f5f5;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        ion-card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #222;
+        }
+
+        ion-card-subtitle {
+            font-size: 14px;
+            color: #666;
+        }
 
         ion-card-content {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            background: #f3f4f6;
-
-            .info-row {
-                font-size: 14px;
-                color: #333;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
+            padding-top: 8px;
 
             .btn-row {
                 display: flex;
                 justify-content: space-between;
                 flex-wrap: wrap;
                 gap: 8px;
-                margin-top: 10px;
+                margin-top: 8px;
             }
         }
     }
+}
+
+.info-row {
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .modern-segment .selected {
@@ -117,6 +137,7 @@ ion-card-content.text-center ion-icon {
     margin-bottom: 0.5rem;
     color: var(--ion-color-medium);
 }
+
 .button-group {
     display: flex;
     justify-content: space-between;

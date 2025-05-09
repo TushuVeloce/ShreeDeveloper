@@ -2,61 +2,54 @@
 <app-header-with-back-handler title="Actual Stage"
   backRoute="app_homepage/tabs/site-management"></app-header-with-back-handler>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="actual-stage-content">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <!-- Customer List -->
-  <ion-list class="Data-list">
-    <ng-container *ngIf="FilteredActualStagesList.length > 0; else noData">
-      <ion-card *ngFor="let item of FilteredActualStagesList" class="Data-card">
-        <ion-card-content>
-          <div class="info-row"><strong>Chalan No:</strong> {{ item.p.ChalanNo }}</div>
-          <div class="info-row">
-            <strong>Site Name:</strong> {{ item.p.SiteName }}
-          </div>
-          <div class="info-row">
-            <strong>Date :</strong> {{formatDate(item.p.Date)}}
-          </div>
-          <div class="info-row">
-            <strong>Vendor Name :</strong> {{ item.p.VendorName }}
-          </div>
-          <div class="info-row">
-            <strong>Vendor Service :</strong> {{ item.p.VendorServiceName }}
-          </div>
-          <div class="info-row">
-            <strong>Rate :</strong> {{ item.p.Rate }}
-          </div>
-          <div class="info-row">
-            <strong>Quantity :</strong> {{ item.p.Quantity }}
-          </div>
-          <div class="info-row">
-            <strong>Amount :</strong> {{ item.p.Amount }}
-          </div>
-          <!-- <div class="info-row"><strong>Status:</strong> {{ item.p.CustomerStatusName }}</div> -->
-            <div class="button-group">
-              <ion-button fill="solid" color="primary" size="small" (click)="onViewClicked(item)">
-                <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
+  <!-- actual List -->
+  <ion-list class="data-list">
+    <ng-container *ngIf="!isLoading">
+      <ng-container *ngIf="FilteredActualStagesList.length > 0 ; else noData">
+        <ion-card *ngFor="let item of FilteredActualStagesList" class="data-card">
+          <ion-card-header>
+            <ion-card-title class="info-row"><strong>Chalan No :</strong>{{ item.p.ChalanNo }}</ion-card-title>
+            <ion-card-subtitle class="info-row"><strong>Site Name :</strong>{{ item.p.SiteName }}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"><strong>Date :</strong>{{ formatDate(item.p.Date)
+              }}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"><strong>Vendor Name :</strong>{{ item.p.VendorName
+              }}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"><strong>Vendor Service :</strong>{{ item.p.VendorServiceName
+              }}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"><strong>Quantity :</strong>{{ item.p.Quantity }}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"><strong>Rate :</strong>{{ item.p.Rate }}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"><strong>Amount :</strong>{{ item.p.Amount }}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="btn-row">
+              <ion-button fill="clear" size="small" color="primary" (click)="onViewClicked(item)">
+                <ion-icon slot="start" name="eye-outline"></ion-icon> View
               </ion-button>
-              <ion-button fill="solid" color="secondary" size="small" (click)="onEditClicked(item)">
-                <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+              <ion-button fill="clear" size="small" color="secondary" (click)="onEditClicked(item)">
+                <ion-icon slot="start" name="create-outline"></ion-icon> Edit
               </ion-button>
-              <ion-button fill="solid" color="danger" size="small" (click)="onDeleteClicked(item)">
-                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+              <ion-button fill="clear" size="small" color="danger" (click)="onDeleteClicked(item)">
+                <ion-icon slot="start" name="trash-outline"></ion-icon> Delete
               </ion-button>
-              <ion-button fill="solid" color="warning" size="small" (click)="onViewClicked(item)">
-                <ion-icon name="print-outline" slot="icon-only"></ion-icon>
+              <ion-button fill="clear" size="small" color="warning" (click)="onViewClicked(item)">
+                <ion-icon slot="start" name="print-outline"></ion-icon> Print
               </ion-button>
             </div>
-        </ion-card-content>
-      </ion-card>
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
     </ng-container>
+
     <!-- No Data Template -->
     <ng-template #noData>
-      <ion-card class="Data-card">
+      <ion-card class="data-card">
         <ion-card-content class="text-center">
           <ion-icon name="information-circle-outline" size="large" color="medium"></ion-icon>
-          <div class="info-row">No Actual Stage data found.</div>
+          <div>No Customer Enquiry data found.</div>
         </ion-card-content>
       </ion-card>
     </ng-template>
