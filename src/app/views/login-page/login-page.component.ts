@@ -49,6 +49,7 @@ export class LoginPageComponent implements OnInit {
     }
 
     let req = new UserLoginRequest();
+    console.log('req :', req);
     req.UserId = this.UserId;
     req.Password = this.Password;
     req.LoginDeviceId = this.sessionValues.LoginDeviceId;
@@ -57,6 +58,7 @@ export class LoginPageComponent implements OnInit {
     const response = await this.servercommunicator.LoginUser(req);
     this.appStateManage.setEmployeeRef(response.LoginEmployeeRef)
     this.appStateManage.setLoginToken(response.LoginToken)
+    this.appStateManage.StorageKey.setItem("UserDisplayName",response.UserDisplayName)
 
     if (!response.Successful) {
       await this.uiUtils.showErrorMessage('Error', response.Message);

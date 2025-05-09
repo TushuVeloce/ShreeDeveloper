@@ -111,6 +111,10 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       this.Entity = ActualStages.CreateNewInstance();
       ActualStages.SetCurrentInstance(this.Entity);
       const CreatedBy =  Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+      if(this.appStateManage.StorageKey.getItem('UserDisplayName')){
+        const name = this.appStateManage.StorageKey.getItem('UserDisplayName') || ''
+        this.Entity.p.CreatedByName = name
+      }
      if (this.Entity.p.Date == '') {
           this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
           let parts = this.strCDT.substring(0, 16).split('-');
@@ -119,10 +123,10 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
           this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
         }    
       this.isChalanDisabled = false
-      if(CreatedBy != 0){
-        this.Entity.p.CreatedBy = CreatedBy
-        await this.getSingleEmployeeDetails(CreatedBy);
-      }
+      // if(CreatedBy != 0){
+      //   this.Entity.p.CreatedBy = CreatedBy
+      //   await this.getSingleEmployeeDetails(CreatedBy);
+      // }
       await this.ChalanNo()
     }
     this.InitialEntity = Object.assign(ActualStages.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as ActualStages;

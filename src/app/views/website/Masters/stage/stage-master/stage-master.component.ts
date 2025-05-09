@@ -54,6 +54,7 @@ export class StageMasterComponent implements OnInit {
 };
 
   onEditClicked = async (item: Stage) => {
+  console.log('item :', item);
     this.SelectedStage = item.GetEditableVersion();
     Stage.SetCurrentInstance(this.SelectedStage);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
