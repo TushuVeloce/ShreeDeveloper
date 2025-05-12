@@ -132,3 +132,17 @@
   background: linear-gradient(to right, #800000, #c77676);
   /* darken on hover */
 }
+
+.form-control {
+  border: none;
+  border-bottom: 2px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+  border-bottom: 2px solid maroon;
+  box-shadow: 0 4px 6px rgba(128, 0, 0, 0.2);
+  outline: none;
+}
