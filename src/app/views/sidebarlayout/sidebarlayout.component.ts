@@ -32,7 +32,7 @@ interface module {
   Name: string;
   RouterLink: string;
   WhiteLogo: string;
-  SubModuleList: SubModule[];
+  SubModuleList?: SubModule[];
 }
 
 
@@ -151,11 +151,11 @@ export class SidebarlayoutComponent implements OnInit {
 
     // Find the current module
     const currentModule = this.ModuleList.filter(module =>
-      module.SubModuleList.find(submodule => submodule.RouterLink === this.currentRoute)
+      module.SubModuleList?.find(submodule => submodule.RouterLink === this.currentRoute)
     );
 
     const previousModule = this.ModuleList.filter(module =>
-      module.SubModuleList.find(submodule => submodule.RouterLink === this.previousRoute)
+      module.SubModuleList?.find(submodule => submodule.RouterLink === this.previousRoute)
     );
 
     if (currentModule.length > 0) {
@@ -163,7 +163,7 @@ export class SidebarlayoutComponent implements OnInit {
       this.activeModule = currentModule[0].Name;
 
       // Find the current submodule
-      const currentSubmodule = currentModule[0].SubModuleList.find(
+      const currentSubmodule = currentModule[0]?.SubModuleList?.find(
         (submodule: SubModule) => this.currentRoute === submodule.RouterLink
       );
 
@@ -176,7 +176,7 @@ export class SidebarlayoutComponent implements OnInit {
       // Update the previous module
       this.previousActiveModule = previousModule[0].Name;
       // Find the previous submodule
-      const previousSubmodule = previousModule[0].SubModuleList.find(
+      const previousSubmodule = previousModule[0]?.SubModuleList?.find(
         (submodule: SubModule) => this.previousRoute === submodule.RouterLink
       );
 
@@ -498,20 +498,20 @@ export class SidebarlayoutComponent implements OnInit {
       //   LogoPath: '',
       // },
     ]
-    let RegistrarOfficeSubModuleList = [
-      {
-        Name: 'Registrar Office',
-        RouterLink: '/homepage/Website/Registrar_Office',
-        LogoPath: '',
-      },
-    ]
-    let MarketingManagementSubModuleList = [
-      {
-        Name: 'Marketing Management',
-        RouterLink: '/homepage/Website/Marketing_Management',
-        LogoPath: '',
-      },
-    ]
+    // let RegistrarOfficeSubModuleList = [
+    //   {
+    //     Name: 'Registrar Office',
+    //     RouterLink: '/homepage/Website/Registrar_Office',
+    //     LogoPath: '',
+    //   },
+    // ]
+    // let MarketingManagementSubModuleList = [
+    //   {
+    //     Name: 'Marketing Management',
+    //     RouterLink: '/homepage/Website/Marketing_Management',
+    //     LogoPath: '',
+    //   },
+    // ]
 
     let HrPayrollManagement = [
       {
@@ -606,15 +606,15 @@ export class SidebarlayoutComponent implements OnInit {
       },
       {
         Name: 'Registrar Office',
-        RouterLink: '',
+        RouterLink: '/homepage/Website/Registrar_Office',
         WhiteLogo: '/assets/icons/gov office.png',
-        SubModuleList: RegistrarOfficeSubModuleList,
+        // SubModuleList: RegistrarOfficeSubModuleList,
       },
       {
         Name: 'Marketing Management',
-        RouterLink: '',
+        RouterLink: '/homepage/Website/Marketing_Management',
         WhiteLogo: '/assets/icons/gov office.png',
-        SubModuleList: MarketingManagementSubModuleList,
+        // SubModuleList: MarketingManagementSubModuleList,
       },
       {
         Name: 'Hr-Payroll Management',
@@ -634,7 +634,7 @@ export class SidebarlayoutComponent implements OnInit {
         WhiteLogo: '/assets/icons/gov office.png',
         SubModuleList: RazorpaySubModulelist,
       },
-    ].filter(e => e.SubModuleList.length > 0);
+    ]
 
     this.ModuleList = moduleListInternal;
   }

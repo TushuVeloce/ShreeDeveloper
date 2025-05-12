@@ -213,15 +213,15 @@ export class SiteManagementActualStagesComponent implements OnInit {
     await this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage_Details']);
   };
 
-  onDeleteClicked = async (material: ActualStages) => {
+  onDeleteClicked = async (actualstage: ActualStages) => {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-       Are you sure that you want to DELETE this Material?`,
+       Are you sure that you want to DELETE this Actual Stage?`,
       async () => {
-        await material.DeleteInstance(async () => {
+        await actualstage.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `Material ${material.p.SiteName} has been deleted!`
+            `actualstage ${actualstage.p.SiteName} has been deleted!`
           );
           await this.getActualStageListByCompanyRef();
           this.SearchString = '';
@@ -238,7 +238,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
     this.OtherPaginationTotal = this.OtherExpenseList.length; // Update total based on loaded data
   };
 
-  AddStages = async () => {
+  AddActualStages = async () => {
     await this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage_Details']);
   }
 
