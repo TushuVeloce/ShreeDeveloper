@@ -1,6 +1,7 @@
 import { Component, effect, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { SubStage } from 'src/app/classes/domain/entities/website/masters/substage/subStage';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -18,6 +19,7 @@ export class SubStageMasterComponent  implements OnInit {
   MasterList: SubStage[] = [];
   DisplayMasterList: SubStage[] = [];
   SearchString: string = '';
+  StageList: Stage[] = [];
   SelectedSubStage: SubStage = SubStage.CreateNewInstance();
   CustomerRef: number = 0;
   pageSize = 10; // Items per page
@@ -36,8 +38,19 @@ export class SubStageMasterComponent  implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
+     this.getStageListByCompanyRef()
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+  }
+
+   getStageListByCompanyRef = async () => {
+    this.StageList = []
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.StageList = lst.filter(stage => stage.p.IsSubStageApplicable === true);
   }
 
   getSubStageListByCompanyRef = async () => {
@@ -50,6 +63,20 @@ export class SubStageMasterComponent  implements OnInit {
     let lst = await SubStage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
+    console.log('DisplayMasterList :', this.DisplayMasterList);
+    this.loadPaginationData();
+  }
+
+  getSubStageListByStageRef = async (stageref:number) => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if(stageref > 0){
+    let lst = await SubStage.FetchEntireListByStageRef(stageref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    }else{
+      this.getSubStageListByCompanyRef()
+    }
     console.log('DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
   }

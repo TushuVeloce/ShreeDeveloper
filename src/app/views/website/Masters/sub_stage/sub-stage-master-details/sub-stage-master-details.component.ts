@@ -112,7 +112,8 @@ export class SubStageMasterDetailsComponent  implements OnInit {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Sub Stage Master saved successfully!');
-        this.Entity = SubStage.CreateNewInstance();
+        // this.Entity = SubStage.CreateNewInstance();
+        this.Entity.p.Name = ''
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Sub Stage Master Updated successfully!');

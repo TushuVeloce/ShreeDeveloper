@@ -4,10 +4,11 @@ import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { DomainEnums, MarketingModes } from 'src/app/classes/domain/domainenums/domainenums';
 import { MarketingManagement } from 'src/app/classes/domain/entities/website/MarketingManagement/marketingmanagement';
+import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { MarketingType } from 'src/app/classes/domain/entities/website/masters/marketingtype/marketingtype';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
-import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
+import { ServiceSuppliedByVendorProps, Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -29,6 +30,8 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
   InitialEntity: MarketingManagement = null as any;
   SiteList: Site[] = [];
   VendorList: Vendor[] = [];
+  VendorServiceList: ServiceSuppliedByVendorProps[] = [];
+  EmployeeList: Employee[] = [];
   MarketingModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
   MarketingType = MarketingModes
   companyRef = this.companystatemanagement.SelectedCompanyRef;
@@ -36,7 +39,6 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
   serviceNamesString: string = '';
-  VendorServiceList: VendorService[] = [];
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
   @ViewChild('CodeCtrl') CodeInputControl!: NgModel;
@@ -52,6 +54,7 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.getVendorListByCompanyRef()
+    this.getEmployeeListByCompanyRef()
     this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
@@ -60,6 +63,7 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
       console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+       this.getVendorServiceListByVendorRef(this.Entity.p.VendorRef);
     } else {
       this.Entity = MarketingManagement.CreateNewInstance();
       MarketingManagement.SetCurrentInstance(this.Entity);
@@ -72,6 +76,11 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
   }
 
 
+  getEmployeeListByCompanyRef = async () => {
+    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.EmployeeList = lst;
+  }
+
   getVendorListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
@@ -82,19 +91,17 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
     // if (this.VendorList.length > 0) {
     //   this.Entity.p.VendorRef = this.VendorList[0].p.Ref;
     // }
-    this.getVendorServiceListByVendorRef();
+    // this.getVendorServiceListByVendorRef();
   }
 
-  getVendorServiceListByVendorRef = async () => {
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
+ getVendorServiceListByVendorRef = async (VendorRef:number) => {
+    if(this.IsNewEntity){
+      this.Entity.p.VendorServiceRef = 0
     }
-    let lst = await VendorService.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.VendorServiceList = lst;
-    // if (this.VendorList.length > 0) {
-    //   this.Entity.p.VendorServiceRef = this.VendorServiceList[0].p.Ref;
-    // }
+    this.VendorServiceList = []
+    let lst = await Vendor.FetchInstance(VendorRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.VendorServiceList = lst.p.ServiceListSuppliedByVendor;
+    console.log('VendorServiceList :', this.VendorServiceList);
   }
   
   selectAllValue(event: MouseEvent): void {

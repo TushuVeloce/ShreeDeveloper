@@ -94,12 +94,13 @@
             }}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{formatDate(MachinaryExpense.p.Date)}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.ChalanNo}}</td>
+          <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.SiteName}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.VehicleNo}}</td>
-          <td Class="tbldata">{{MachinaryExpense.p.Description}}</td>
+          <!-- <td Class="tbldata">{{MachinaryExpense.p.Description}}</td> -->
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.VendorName}}</td>
+          <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.Quantity}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.Rate}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.UnitName}}</td>
-          <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.Quantity}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.Amount}}</td>
           <td class="tbldata" style="white-space: nowrap;">
             <Edit-Icon (editClick)="onEditClicked(MachinaryExpense)" />
@@ -144,7 +145,8 @@
           <td class="tbldata" style="white-space: nowrap;">{{ (currentLabourPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{formatDate(LabourExpense.p.Date)}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{LabourExpense.p.ChalanNo}}</td>
-          <td Class="tbldata">{{LabourExpense.p.Description}}</td>
+          <td Class="tbldata" style="white-space: nowrap;">{{LabourExpense.p.SiteName}}</td>
+          <!-- <td Class="tbldata">{{LabourExpense.p.Description}}</td> -->
           <td Class="tbldata" style="white-space: nowrap;">{{LabourExpense.p.VendorName}}</td>
           <!-- <td Class="tbldata">{{LabourExpense.p.Rate}}</td>
           <td Class="tbldata">{{LabourExpense.p.Quantity}}</td> -->
@@ -192,10 +194,11 @@
           <td class="tbldata">{{ (currentOtherPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{formatDate(OtherExpense.p.Date)}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.ChalanNo}}</td>
-          <td Class="tbldata">{{OtherExpense.p.Description}}</td>
+          <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.SiteName}}</td>
+          <!-- <td Class="tbldata">{{OtherExpense.p.Description}}</td> -->
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.VendorName}}</td>
-          <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.Rate}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.Quantity}}</td>
+          <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.Rate}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.Amount}}</td>
           <td class="tbldata" style="white-space: nowrap;">
             <span>

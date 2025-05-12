@@ -36,3 +36,19 @@
     text-align: right;
   }
   
+  .input-with-icon {
+  position: relative;
+}
+
+.input-with-icon input {
+  padding-right: 30px; /* Space for the icon */
+}
+
+.input-with-icon i {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #aaa;
+}

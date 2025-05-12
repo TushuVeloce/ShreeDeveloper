@@ -15,6 +15,16 @@
     <div>
     </div>
   </div>
+  <div class="row">
+             <div class="col-md-4">
+          <label><b>Stage</b></label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StageRef" name="StageRef"
+            [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef" (ngModelChange)="getSubStageListByStageRef(Entity.p.StageRef)">
+              <nz-option [nzValue]="0" nzLabel="All"></nz-option>
+            <nz-option *ngFor="let stage of StageList" [nzValue]="stage.p.Ref" [nzLabel]="stage.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        </div>
   <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
     <div class="table-container">
       <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
