@@ -1,130 +1,115 @@
 // :host {
-//     --background: var(--ion-color-light);
+//     display: block;
+//     border-top-left-radius: 20px;
+//     border-top-right-radius: 20px;
+//     overflow: hidden;
+//     background: var(--ion-item-background);
+// }
+// /* Header */
+// ion-header.modern-header {
+//     padding: 10px 16px;
 // }
 
-// .custom-search {
-//     --border-radius: 10px;
-//     --background: #f4f4f4;
-//     --color: #333;
-// }
-
-// .custom-list {
-//     margin-top: 10px;
-//     border-radius: 12px;
-// }
-
-// .custom-item {
-//     transition: --background 0.3s ease;
-//     border-radius: 8px;
-//     margin: 5px 10px;
-// }
-
-// .custom-item:hover {
-//     background: #f0f0f0;
-// }
-
-// .custom-label {
-//     font-size: 16px;
-// }
-
-// .selected {
-//     font-weight: bold;
-//     color: var(--ion-color-primary);
-// }
-
-// .custom-title {
+// ion-toolbar {
+//     --min-height: 56px;
+//     display: flex;
 //     align-items: center;
-//     text-align: center;
-//     font-weight: bold;
-//     color: var(--ion-color-primary);
+//     --background: transparent;
 // }
+
 :host {
-    --background: var(--ion-item-background);
     display: block;
-    background:var(--ion-item-background);
-    /* Ensure solid fallback */
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    overflow: hidden;
+    background: var(--ion-item-background);
 }
 
-ion-header.modern-header {
-    // --background: transparent;
-    --background: var(--ion-item-background);
-    box-shadow: none;
-    padding: 0 12px;
+ion-modal::part(content) {
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    overflow: hidden;
+    background: var(--ion-item-background);
 }
 
+ion-header.modern-header,
 ion-toolbar {
-    --background: transparent;
-    --min-height: 56px;
-    display: flex;
-    align-items: center;
+    background: var(--ion-item-background);
+    box-shadow: none;
 }
-ion-content {
-    --background: var(--ion-item-background);
-}
+/* Title */
 .custom-title {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 22px;
+    font-weight: 700;
     color: var(--ion-color-primary);
     text-align: center;
     width: 100%;
 }
 
-ion-button[fill='clear'] {
-    font-size: 22px;
-}
-
+/* Search Bar */
 .custom-search {
-    --border-radius: 10px;
+    --border-radius: 12px;
     --background: var(--ion-background-color-step-100);
-    // --background: var(--ion-item-background);
     --color: #333;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
+/* List Container */
 .custom-list {
     margin-top: 10px;
+    margin-bottom: 30px;
     border-radius: 12px;
     overflow: hidden;
-    margin-bottom: 30px;
+    --background: var(--ion-item-background);
 }
 
+/* List Items */
 .custom-item {
-    // --background: transparent;
-    --background: var(--ion-item-background);
-    border-radius: 10px;
+    border-radius: 8px;
     margin: 5px 12px;
-    padding: 8px 12px;
-    transition: --background 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+    padding: 10px 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
 .custom-item:hover {
-    // --background: #ececec;
-    --background: var(--ion-background-color-step-50);
+    --background: #f0f0f0;
+    transform: translateY(-2px);
 }
 
-.custom-label {
-    font-size: 16px;
-    color: #333;
-}
-
-.selected {
+/* Label inside item */
+.custom-label.selected {
     font-weight: 600;
     color: var(--ion-color-primary);
 }
 
+/* No Data Message */
+.no-data {
+    text-align: center;
+    padding: 20px;
+    font-size: 16px;
+    color: var(--ion-color-medium);
+}
+
+/* Infinite Scroll */
+ion-infinite-scroll-content {
+    padding: 12px;
+    border-radius: 8px;
+}
+
+/* Footer */
+ion-footer {
+    padding: 10px;
+    background: var(--ion-item-background);
+    box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Checkbox */
 ion-checkbox {
     --checkbox-background-checked: var(--ion-color-primary);
     --border-radius: 6px;
 }
-
-ion-footer {
-    padding: 10px;
-    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
-}
-.no-data {
-    text-align: center;
-    padding: 20px;
-    color: var(--ion-color-medium);
-    font-size: 16px;
+.selected {
+    font-weight: bold;
+    color: var(--ion-color-primary);
 }

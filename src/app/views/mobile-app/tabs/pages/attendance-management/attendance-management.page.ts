@@ -49,6 +49,7 @@ export class AttendanceManagementPage implements OnInit {
   attendanceLog: AttendanceLog = AttendanceLog.CreateNewInstance();
   siteList: Site[] = [];
   selectedSite: Site[] = [];
+  selectedAttendanceLocationType: any[] = [];
   SiteName: string = "";
   filteredWeeklyAttendanceLogs: AttendanceLogs[] = [];
   weeklyAttendanceLogs: AttendanceLogs[] = [];
@@ -221,19 +222,11 @@ export class AttendanceManagementPage implements OnInit {
 
   public async selectAttendanceLocationBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
       const options = this.attendanceLocationTypeList.map((item) => ({ p: item }));
 
-      let selectData: any[] = [];
-
-      this.openSelectModal(options, selectData, false, 'Select Location Type', 1, (selected) => {
-        selectData = selected;
-        // console.log('selected :', selected);
-        // this.selectedSite = selected;
+      this.openSelectModal(options, this.selectedAttendanceLocationType, false, 'Select Location Type', 1, (selected) => {
+        this.selectedAttendanceLocationType = selected;
+        console.log('selectedAttendanceLocationType :', this.selectedAttendanceLocationType);
         this.attendanceLog.p.AttendenceLocationType = selected[0].p.Ref;
         this.AttendenceLocationTypeName = selected[0].p.Name;
       });
@@ -244,19 +237,12 @@ export class AttendanceManagementPage implements OnInit {
 
   public async selectSiteBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.attendanceLocationTypeList.map((item) => ({ p: item }));
       const options = this.siteList;
+      // const options = this.attendanceLocationTypeList.map((item) => ({ p: item }));
 
-      let selectData: any[] = [];
-
-      this.openSelectModal(options, selectData, false, 'Select Site', 1, (selected) => {
-        selectData = selected;
-        console.log('selected :', selected);
+      this.openSelectModal(options, this.selectedSite, false, 'Select Site', 1, (selected) => {
+        this.selectedSite = selected;
+        // console.log('selected :', selected);
         this.selectedSite = selected;
         this.SiteName = selected[0].p.Name;
       });

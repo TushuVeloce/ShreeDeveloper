@@ -34,7 +34,7 @@
     <!-- Chalan No -->
     <ion-item class="input-item">
       <ion-input type="number" label="Chalan No" labelPlacement="floating" placeholder="Enter Chalan No"
-        [(ngModel)]="Entity.p.ChalanNo"></ion-input>
+        [(ngModel)]="Entity.p.ChalanNo" [disabled]="isChalanDisabled"></ion-input>
     </ion-item>
 
     <!-- Select Stage -->
@@ -73,7 +73,7 @@
     </ion-item>
 
     <!-- Show Input Box -->
-    <ion-item class="input-item" *ngIf="isAddingExpense && isAdd">
+    <ion-item class="input-item" *ngIf="isAddingExpense && isAdd" >
       <ion-input slot="start" label="Add Expense Type" labelPlacement="floating" placeholder="Enter Expense Type"
         [(ngModel)]="ExpenseTypeEntity.p.Name">
       </ion-input>

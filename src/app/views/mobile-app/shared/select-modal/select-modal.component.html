@@ -23,7 +23,9 @@
   <ion-list class="custom-list">
     <ion-item *ngFor="let option of loadedOptions" (click)="selectOption(option)" class="custom-item">
       <ion-label class="custom-label" [ngClass]="{ 'selected': isSelected(option) }">
-        {{ option.p.Name? option.p.Name:option?.p?.PlotNo }}
+        <!-- {{ option.p.Name? option.p.Name:option?.p?.PlotNo }} -->
+        {{option?.p?.Name || option?.p?.PlotNo || 'Unnamed' }}
+
       </ion-label>
       <ion-checkbox *ngIf="multiSelect" slot="end" [checked]="isSelected(option)" [disabled]="isDisabled(option)">
       </ion-checkbox>
