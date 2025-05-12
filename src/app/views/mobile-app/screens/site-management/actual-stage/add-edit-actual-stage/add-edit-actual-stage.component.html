@@ -73,7 +73,7 @@
     </ion-item>
 
     <!-- Show Input Box -->
-    <ion-item class="input-item" *ngIf="isAddingExpense && isAdd" >
+    <ion-item class="input-item" *ngIf="isAddingExpense && isAdd">
       <ion-input slot="start" label="Add Expense Type" labelPlacement="floating" placeholder="Enter Expense Type"
         [(ngModel)]="ExpenseTypeEntity.p.Name">
       </ion-input>
@@ -111,76 +111,86 @@
       <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
     </ion-item>
 
-    <!-- Select Sub Stage -->
-    <ion-item class="input-item" button (click)="selectSubStageBottomsheet()"
-      *ngIf="IsStage && StageType != StageTypeEnum.OfficialExpenditure">
-      <ion-label>Sub Stage</ion-label>
-
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ Entity.p.SubStageName || 'Select' }}
-      </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-    </ion-item>
-
-    <!-- Select Months -->
-    <ion-item class="input-item" button (click)="selectMonthsBottomsheet()"
-      *ngIf="StageType == StageTypeEnum.OfficialExpenditure">
-      <ion-label slot="start">Select Months</ion-label>
-
-      <!-- Text showing the selected status -->
-      <div slot="end" class="chip-container">
-        <ion-chip *ngFor="let item of Entity.p.SelectedMonthsName">
-          <ion-label>{{ item }}</ion-label>
-        </ion-chip>
-      </div>
-      <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-    </ion-item>
-
-    <!-- ExtraQuantity -->
-    <ion-item class="input-item" *ngIf="
-            IsStage &&
-            StageType !== StageTypeEnum.SolarStreetLight &&
-            StageType !== StageTypeEnum.SidePattiChira
-          ">
-      <ion-input type="number" label="Gutter Nale" labelPlacement="floating" placeholder="Enter Quantity"
-        [(ngModel)]="Entity.p.ExtraQuantity" *ngIf="StageType == StageTypeEnum.HalfRoundGutterNale"></ion-input>
-      <ion-input type="number" label="/m2" labelPlacement="floating" placeholder="Enter Quantity"
-        [(ngModel)]="Entity.p.ExtraQuantity" *ngIf="StageType == StageTypeEnum.Road"></ion-input>
-    </ion-item>
-
-    <!-- Select Gutter Nale Unit -->
-    <ion-item class="input-item" button (click)="selectGutterNaleUnitBottomsheet()"
-      *ngIf="IsStage && StageType == StageTypeEnum.HalfRoundGutterNale">
-      <ion-label>Gutter Nale Unit</ion-label>
-
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ Entity.p.GutterNaleUnitName || 'Select' }}
-      </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-    </ion-item>
-
     <!-- Vehical No -->
-    <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeRef == 100">
+    <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeRef == ExpenseTypeRef">
       <ion-input label="Vehical No" labelPlacement="floating" placeholder="Enter Vehical No"
-        [(ngModel)]="Entity.p.VehicleNo"></ion-input>
+        [(ngModel)]="Entity.p.VehicleNo" maxlength="10"></ion-input>
+    </ion-item>
+
+    <!-- Select Unit -->
+    <ion-item class="input-item" button (click)="selectUnitBottomsheet()" *ngIf="Entity.p.ExpenseTypeRef != 200">
+      <ion-label>Unit</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ Entity.p.UnitName || 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
+    <!--Table For site and Plot details -->
+    <ion-list *ngIf="Entity.p.ExpenseTypeRef == ExpenseTypeRef && Entity.p.UnitRef == TimeUnitRef">
+      <ion-item lines="none">
+        <ion-label class="ion-text-center" style="font-weight: bold; font-size: 1.2rem;">
+          Machinary Details
+        </ion-label>
+        <ion-button>add</ion-button>
+      </ion-item>
+      <ion-card *ngFor="let Time of Entity.p.TimeDetails; let i = index">
+        <ion-card-header>
+          <ion-card-title>{{ i }}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-item>
+            <ion-label>Start Time</ion-label>
+            <ion-text>{{ Time.StartTime }}</ion-text>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>End Time</ion-label>
+            <ion-text>{{ Time.EndTime }}</ion-text>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Total Time</ion-label>
+            <ion-text>{{ Time.WorkedHours }}</ion-text>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
+
+    <!-- Quantity -->
+    <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeRef != LabourExpenseRef">
+      <!-- Entity.p.ExpenseTypeRef != LabourExpenseRef -->
+      <ion-input type="number" label="Quantity" labelPlacement="floating" placeholder="Enter Quantity"
+        [(ngModel)]="Entity.p.Quantity" (ngModelChange)="CalculateAmountOnRateAndQuantity()"
+        *ngIf="!(Entity.p.ExpenseTypeRef == ExpenseTypeRef && Entity.p.UnitRef == TimeUnitRef)"></ion-input>
+    </ion-item>
+
+    <!-- Rate -->
+    <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeRef != LabourExpenseRef">
+      <ion-input type="number" label="Rate" labelPlacement="floating" placeholder="Enter Rate"
+        [(ngModel)]="Entity.p.Rate" (ngModelChange)="CalculateAmountOnRateAndQuantity()"></ion-input>
+    </ion-item>
+
+    <!-- Amount -->
+    <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeRef != LabourExpenseRef">
+      <ion-input type="number" label="Amount" labelPlacement="floating" placeholder="Enter Amount"
+        [(ngModel)]="Entity.p.Amount" (ngModelChange)="CalculateAmountOnRateAndQuantity()" readonly></ion-input>
     </ion-item>
 
     <!-- Diesel Calculation -->
-    <ion-grid *ngIf="Entity.p.ExpenseTypeRef == 100">
+    <ion-grid *ngIf="Entity.p.ExpenseTypeRef == ExpenseTypeRef">
       <ion-row>
         <ion-col size="12">
-          <ion-checkbox [(ngModel)]="Entity.p.IsDieselPaid" (ionChange)="CalculateAmountOnRateAndQuantity()">Diesel
+          <ion-checkbox [(ngModel)]="Entity.p.IsDieselPaid" (ionChange)="DiselPaid(Entity.p.IsDieselPaid)">Diesel
             Calculation</ion-checkbox>
         </ion-col>
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="isDiselPaid">
         <ion-col size="4">
           <!-- Diesel Ltr -->
           <ion-item class="input-item">
@@ -205,13 +215,56 @@
       </ion-row>
     </ion-grid>
 
-    <!-- Select Unit -->
-    <ion-item class="input-item" button (click)="selectUnitBottomsheet()" *ngIf="Entity.p.ExpenseTypeRef != 200">
-      <ion-label>Unit</ion-label>
+    <!-- Select Sub Stage -->
+    <ion-item class="input-item" button (click)="selectSubStageBottomsheet()"
+      *ngIf="IsStage && StageType != StageTypeEnum.OfficialExpenditure">
+      <ion-label>Sub Stage</ion-label>
 
       <!-- Text showing the selected status -->
       <ion-text slot="end" class="status-text">
-        {{ Entity.p.UnitName || 'Select' }}
+        {{ Entity.p.SubStageName || 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
+    <!-- Select Months -->
+    <ion-item class="input-item" button (click)="selectMonthsBottomsheet()"
+    *ngIf="StageType == StageTypeEnum.OfficialExpenditure">
+      <ion-label slot="start">Select Months</ion-label>
+
+      <!-- Text showing the selected status -->
+      <div slot="end" class="chip-container">
+        <ion-chip *ngFor="let item of Entity.p.SelectedMonthsName">
+          <ion-label>{{ item }}</ion-label>
+        </ion-chip>
+      </div>
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
+    <!-- ExtraQuantity -->
+    <ion-item class="input-item" *ngIf="
+    IsStage &&
+    StageType !== StageTypeEnum.SolarStreetLight &&
+    StageType !== StageTypeEnum.SidePattiChira" 
+    >
+      <ion-input type="number" label="Gutter Nale" labelPlacement="floating" placeholder="Enter Quantity"
+        [(ngModel)]="Entity.p.ExtraQuantity" *ngIf="StageType == StageTypeEnum.HalfRoundGutterNale"></ion-input>
+      <ion-input type="number" label="/m2" labelPlacement="floating" placeholder="Enter Quantity"
+        [(ngModel)]="Entity.p.ExtraQuantity" *ngIf="StageType == StageTypeEnum.Road"></ion-input>
+    </ion-item>
+
+    <!-- Select Gutter Nale Unit -->
+    <ion-item class="input-item" button (click)="selectGutterNaleUnitBottomsheet()"
+    *ngIf="IsStage && StageType == StageTypeEnum.HalfRoundGutterNale"
+    >
+      <ion-label>Gutter Nale Unit</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ Entity.p.GutterNaleUnitName || 'Select' }}
       </ion-text>
 
       <!-- Dropdown icon (chevron) on the right -->
@@ -219,17 +272,10 @@
     </ion-item>
 
     <!-- Rate -->
-    <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeRef != 200">
+    <!-- <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeRef != 200">
       <ion-input type="number" label="Rate" labelPlacement="floating" placeholder="Enter Rate"
         [(ngModel)]="Entity.p.Rate" (ngModelChange)="CalculateAmountOnRateAndQuantity()"></ion-input>
-    </ion-item>
-
-    <!-- Quantity -->
-    <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeRef != 200">
-      <ion-input type="number" label="Quantity" labelPlacement="floating" placeholder="Enter Quantity"
-        [(ngModel)]="Entity.p.Quantity" (ngModelChange)="CalculateAmountOnRateAndQuantity()"
-        *ngIf="Entity.p.ExpenseTypeRef != 200"></ion-input>
-    </ion-item>
+    </ion-item> -->
 
     <ion-grid *ngIf="Entity.p.ExpenseTypeRef == 200">
       <ion-row>
@@ -312,37 +358,6 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    <!--Table For site and Plot details -->
-    <ion-list *ngIf="Entity.p.ExpenseTypeRef == 100 && Entity.p.UnitRef == 30179">
-      <ion-item lines="none">
-        <ion-label class="ion-text-center" style="font-weight: bold; font-size: 1.2rem;">
-          Machinary Details
-        </ion-label>
-        <ion-button>add</ion-button>
-      </ion-item>
-      <ion-card *ngFor="let Time of Entity.p.TimeDetails; let i = index">
-        <ion-card-header>
-          <ion-card-title>{{ i }}</ion-card-title>
-        </ion-card-header>
-
-        <ion-card-content>
-          <ion-item>
-            <ion-label>Start Time</ion-label>
-            <ion-text>{{ Time.StartTime }}</ion-text>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>End Time</ion-label>
-            <ion-text>{{ Time.EndTime }}</ion-text>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>Total Time</ion-label>
-            <ion-text>{{ Time.WorkedHours }}</ion-text>
-          </ion-item>
-        </ion-card-content>
-      </ion-card>
-    </ion-list>
 
     <!-- grand total Amount -->
     <ion-item class="input-item">

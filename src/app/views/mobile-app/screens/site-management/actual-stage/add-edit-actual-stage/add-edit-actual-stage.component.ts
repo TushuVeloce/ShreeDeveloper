@@ -78,6 +78,11 @@ export class AddEditActualStageComponent implements OnInit {
   selectedSite: any[] = [];
   selectedStage: any[] = [];
   selectedExpenseType: any[] = [];
+  selectedVendor: any[] = [];
+  selectedVendorService: any[] = [];
+  selectedSubStage: any[] = [];
+  selectedUnit: any[] = [];
+  selectedMonths: any[] = [];
 
   Date: string | null = null;
   SelectedMonth: any[] = [];
@@ -197,10 +202,11 @@ export class AddEditActualStageComponent implements OnInit {
 
       // let selectData: any[] = [];
 
-      this.openSelectModal(options, this.selectedStage, false, 'Select Unit', 1, (selected) => {
-        this.selectedStage = selected;
+      this.openSelectModal(options, this.selectedUnit, false, 'Select Unit', 1, (selected) => {
+        this.selectedUnit = selected;
         this.Entity.p.UnitName = selected[0].p.Name;
         this.Entity.p.UnitRef = selected[0].p.Ref;
+        this.ClearValuesOnTimeSelection(selected[0].p.Ref);
       });
     } catch (error) {
       // console.log('error :', error);
@@ -238,14 +244,14 @@ export class AddEditActualStageComponent implements OnInit {
 
       const options = this.MonthList.map((item) => ({ p: item }));
 
-      let selectData: any[] = [];
+      // let selectData: any[] = [];
 
       this.openSelectModal(options, this.SelectedMonth, true, 'Select months', 12, (selected) => {
         this.SelectedMonth = selected;
         // console.log('selected :', selected.map(item => item.p.Ref));
         this.Entity.p.SelectedMonths = selected.map(item => item.p.Ref);
         this.Entity.p.SelectedMonthsName = selected.map(item => item.p.Name);
-        // this.onSelectedMonthsChange(this.Entity.p.SelectedMonths)
+        this.onSelectedMonthsChange(this.Entity.p.SelectedMonths)
       });
     } catch (error) {
       // console.log('error :', error);
@@ -262,10 +268,10 @@ export class AddEditActualStageComponent implements OnInit {
       // const options = this.MonthList.map((item) => ({ p: item }));
       const options = this.SubStageList;
 
-      let selectData: any[] = [];
+      // let selectData: any[] = [];
 
-      this.openSelectModal(options, selectData, false, 'Select Vendor', 1, (selected) => {
-        selectData = selected;
+      this.openSelectModal(options, this.selectedSubStage, false, 'Select Vendor', 1, (selected) => {
+        this.selectedSubStage = selected;
         this.Entity.p.SubStageRef = selected[0].p.Ref;
         this.Entity.p.SubStageName = selected[0].p.Name;
       });
@@ -284,10 +290,10 @@ export class AddEditActualStageComponent implements OnInit {
       // const options = this.MonthList.map((item) => ({ p: item }));
       const options = this.VendorList;
 
-      let selectData: any[] = [];
+      // let selectData: any[] = [];
 
-      this.openSelectModal(options, selectData, false, 'Select Vendor', 1, (selected) => {
-        selectData = selected;
+      this.openSelectModal(options, this.selectedVendor, false, 'Select Vendor', 1, (selected) => {
+        this.selectedVendor = selected;
         this.Entity.p.VendorRef = selected[0].p.Ref;
         this.Entity.p.VendorName = selected[0].p.Name;
         this.getVendorServiceListByVendorRef(selected[0].p.Ref)
@@ -307,10 +313,10 @@ export class AddEditActualStageComponent implements OnInit {
       // const options = this.MonthList.map((item) => ({ p: item }));
       const options = this.VendorServiceList;
 
-      let selectData: any[] = [];
+      // let selectData: any[] = [];
 
-      this.openSelectModal(options, selectData, false, 'Select Vendor Service', 1, (selected) => {
-        selectData = selected;
+      this.openSelectModal(options, this.selectedVendorService, false, 'Select Vendor Service', 1, (selected) => {
+        this.selectedVendorService = selected;
         this.Entity.p.VendorServiceRef = selected[0].p.Ref;
         this.Entity.p.VendorServiceName = selected[0].p.Name;
         // this.ClearInputsOnExpenseChange();
@@ -724,6 +730,7 @@ export class AddEditActualStageComponent implements OnInit {
   saveNewExpenseType = async () => {
     if (!this.ExpenseTypeEntity.p.Name) {
       await this.uiUtils.showErrorMessage('Error', 'Expense Type name is required!');
+      this.isAddingExpense = false;
       return;
     }
     this.ExpenseTypeEntity.p.StageRef = this.Entity.p.StageRef
