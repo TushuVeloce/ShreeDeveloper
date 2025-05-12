@@ -20,22 +20,18 @@ export class SelectModalComponent implements OnInit {
 
   constructor(private modalCtrl: ModalController) { }
 
+  // ngOnInit() {
+  //   this.loadedOptions = this.options.slice(0, this.itemsPerLoad);
+  //   const selectedRefs = this.selectedOptions.map(item => item.p.Ref);
+  //   this.selectedOptions = this.options.filter(opt => selectedRefs.includes(opt.p.Ref));
+  // }
   ngOnInit() {
     this.loadedOptions = this.options.slice(0, this.itemsPerLoad);
-    console.log('options :', this.options);
-    // this.loadedOptions = this.options.slice(0, this.itemsPerLoad);
 
-    // Ensure selected options are preserved correctly by reference
-    // this.selectedOptions = this.options.filter(opt =>
-    //   this.selectedOptions.some(sel => sel.p.Ref === opt.p.Ref)
-    // );
-    // Normalize selected options to use the actual references from options
-    const selectedRefs = this.selectedOptions.map(item => item.p.Ref);
-    this.selectedOptions = this.options.filter(opt => selectedRefs.includes(opt.p.Ref));
-
-    console.log('Options:', this.options);
-    console.log('Selected Options:', this.selectedOptions);
+    const selectedRefs = this.selectedOptions.map(item => item?.p?.Ref);
+    this.selectedOptions = this.options.filter(opt => selectedRefs.includes(opt?.p?.Ref));
   }
+  
 
   filterOptions(event: any) {
     const searchTerm = event.target.value.toLowerCase();
@@ -59,6 +55,7 @@ export class SelectModalComponent implements OnInit {
       }
     }, 500);
   }
+
   selectOption(option: any) {
     if (this.multiSelect) {
       const exists = this.selectedOptions.some(item => item.p.Ref === option.p.Ref);
@@ -67,9 +64,7 @@ export class SelectModalComponent implements OnInit {
         this.selectedOptions = this.selectedOptions.filter(item => item.p.Ref !== option.p.Ref);
       } else {
         if (this.selectedOptions.length >= this.MaxSelection) {
-          // Optional: Inform the user (you can replace alert with toastController if needed)
           UIUtils.GetInstance().showWarningToster(`You can select up to ${this.MaxSelection} options only.`);
-          // alert(`You can select up to ${this.MaxSelection} options only.`);
           return;
         }
 
@@ -81,12 +76,15 @@ export class SelectModalComponent implements OnInit {
     }
   }
 
-
+  // isDisabled(option: any): boolean {
+  //   return this.selectedOptions.length >= this.MaxSelection && !this.isSelected(option);
+  // }
   isDisabled(option: any): boolean {
-    const isSelected = this.selectedOptions.some(item => item.p.Ref === option.p.Ref);
-    return !isSelected && this.selectedOptions.length >= this.MaxSelection;
+    return this.multiSelect &&
+      this.selectedOptions.length >= this.MaxSelection &&
+      !this.isSelected(option);
   }
-
+  
 
   isSelected(option: any): boolean {
     return this.selectedOptions.some(item => item.p.Ref === option.p.Ref);
@@ -97,7 +95,7 @@ export class SelectModalComponent implements OnInit {
   }
 
   close() {
-    this.modalCtrl.dismiss();
-    this.confirmSelection();
+    this.modalCtrl.dismiss(this.selectedOptions);
   }
+  
 }
