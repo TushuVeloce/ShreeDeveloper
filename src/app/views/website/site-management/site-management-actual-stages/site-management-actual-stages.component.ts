@@ -47,7 +47,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   MachinaryHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.','Site Name', 'Vehicle No',  'Vendor Name', 'Quantity', 'Rate', 'Unit', 'Amount', 'Action'];
   LabourHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.','Site Name',  'Vendor Name', 'Amount', 'Action'];
-  Headers: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Site Name', 'Vendor Name', 'Quantity','Rate', 'Amount', 'Action'];
+  Headers: string[] = ['Sr.No.', 'Date', 'Chalan No.','Expense Type', 'Site Name', 'Quantity','Rate', 'Amount', 'Action'];
 
   constructor(private uiUtils: UIUtils,
     private router: Router,
