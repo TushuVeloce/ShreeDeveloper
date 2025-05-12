@@ -140,7 +140,7 @@
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
-        <div *ngIf="Entity.p.ExpenseTypeRef !== OtherExpenseRef" [ngClass]="{
+        <div [ngClass]="{
        'col-lg-3 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef === ExpenseTypeRef,
        'col-lg-4 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef !== ExpenseTypeRef || !Entity.p.ExpenseTypeRef
      }">
@@ -151,7 +151,7 @@
             <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div *ngIf="Entity.p.ExpenseTypeRef !== OtherExpenseRef" [ngClass]="{
+        <div [ngClass]="{
           'col-lg-3 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef === ExpenseTypeRef,
           'col-lg-4 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef !== ExpenseTypeRef || !Entity.p.ExpenseTypeRef
         }">
