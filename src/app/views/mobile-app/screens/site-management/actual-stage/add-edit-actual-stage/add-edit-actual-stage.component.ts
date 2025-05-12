@@ -82,11 +82,11 @@ export class AddEditActualStageComponent implements OnInit {
   selectedVendorService: any[] = [];
   selectedSubStage: any[] = [];
   selectedUnit: any[] = [];
-  selectedMonths: any[] = [];
+  // selectedMonths: any[] = [];
+  selectedGutterNaleUnit : any[] = [];
 
   Date: string | null = null;
   SelectedMonth: any[] = [];
-
   selectedItems: any[] = [];
 
   constructor(private router: Router,
@@ -192,20 +192,11 @@ export class AddEditActualStageComponent implements OnInit {
 
   public async selectUnitBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.MonthList.map((item) => ({ p: item }));
       const options = this.UnitList;
-
-      // let selectData: any[] = [];
-
       this.openSelectModal(options, this.selectedUnit, false, 'Select Unit', 1, (selected) => {
         this.selectedUnit = selected;
-        this.Entity.p.UnitName = selected[0].p.Name;
-        this.Entity.p.UnitRef = selected[0].p.Ref;
+        this.Entity.p.UnitName = this.selectedUnit[0].p.Name;
+        this.Entity.p.UnitRef = this.selectedUnit[0].p.Ref;
         this.ClearValuesOnTimeSelection(selected[0].p.Ref);
       });
     } catch (error) {
@@ -215,20 +206,11 @@ export class AddEditActualStageComponent implements OnInit {
 
   public async selectGutterNaleUnitBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.MonthList.map((item) => ({ p: item }));
-      const options = this.UnitList;
-
-      let selectData: any[] = [];
-
-      this.openSelectModal(options, selectData, false, 'Select Gutter Nale Unit', 1, (selected) => {
-        selectData = selected;
-        this.Entity.p.GutterNaleUnitRef = selected[0].p.Ref;
-        this.Entity.p.GutterNaleUnitName = selected[0].p.Name;
+      const options = this.GutterNaleUnitList.map((item) => ({ p: item }));
+      this.openSelectModal(options, this.selectedGutterNaleUnit, false, 'Select Gutter Nale Unit', 1, (selected) => {
+        this.selectedGutterNaleUnit = selected;
+        this.Entity.p.GutterNaleUnitRef = this.selectedGutterNaleUnit[0].p.Ref;
+        this.Entity.p.GutterNaleUnitName = this.selectedGutterNaleUnit[0].p.Name;
       });
     } catch (error) {
       // console.log('error :', error);
@@ -237,20 +219,11 @@ export class AddEditActualStageComponent implements OnInit {
 
   public async selectMonthsBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
       const options = this.MonthList.map((item) => ({ p: item }));
-
-      // let selectData: any[] = [];
-
       this.openSelectModal(options, this.SelectedMonth, true, 'Select months', 12, (selected) => {
         this.SelectedMonth = selected;
-        // console.log('selected :', selected.map(item => item.p.Ref));
-        this.Entity.p.SelectedMonths = selected.map(item => item.p.Ref);
-        this.Entity.p.SelectedMonthsName = selected.map(item => item.p.Name);
+        this.Entity.p.SelectedMonths = this.SelectedMonth.map(item => item.p.Ref);
+        this.Entity.p.SelectedMonthsName = this.SelectedMonth.map(item => item.p.Name);
         this.onSelectedMonthsChange(this.Entity.p.SelectedMonths)
       });
     } catch (error) {
@@ -260,20 +233,11 @@ export class AddEditActualStageComponent implements OnInit {
 
   public async selectSubStageBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.MonthList.map((item) => ({ p: item }));
       const options = this.SubStageList;
-
-      // let selectData: any[] = [];
-
       this.openSelectModal(options, this.selectedSubStage, false, 'Select Vendor', 1, (selected) => {
         this.selectedSubStage = selected;
-        this.Entity.p.SubStageRef = selected[0].p.Ref;
-        this.Entity.p.SubStageName = selected[0].p.Name;
+        this.Entity.p.SubStageRef = this.selectedSubStage[0].p.Ref;
+        this.Entity.p.SubStageName = this.selectedSubStage[0].p.Name;
       });
     } catch (error) {
       // console.log('error :', error);
@@ -282,20 +246,11 @@ export class AddEditActualStageComponent implements OnInit {
 
   public async selectVendorBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.MonthList.map((item) => ({ p: item }));
       const options = this.VendorList;
-
-      // let selectData: any[] = [];
-
       this.openSelectModal(options, this.selectedVendor, false, 'Select Vendor', 1, (selected) => {
         this.selectedVendor = selected;
-        this.Entity.p.VendorRef = selected[0].p.Ref;
-        this.Entity.p.VendorName = selected[0].p.Name;
+        this.Entity.p.VendorRef = this.selectedVendor[0].p.Ref;
+        this.Entity.p.VendorName = this.selectedVendor[0].p.Name;
         this.getVendorServiceListByVendorRef(selected[0].p.Ref)
       });
     } catch (error) {
@@ -305,20 +260,15 @@ export class AddEditActualStageComponent implements OnInit {
 
   public async selectVendorServicesBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.MonthList.map((item) => ({ p: item }));
+      if (this.Entity.p.VendorRef <= 0) {
+        await this.uiUtils.showErrorToster('Vendor is not Selected');
+        return ;
+      }
       const options = this.VendorServiceList;
-
-      // let selectData: any[] = [];
-
       this.openSelectModal(options, this.selectedVendorService, false, 'Select Vendor Service', 1, (selected) => {
         this.selectedVendorService = selected;
-        this.Entity.p.VendorServiceRef = selected[0].p.Ref;
-        this.Entity.p.VendorServiceName = selected[0].p.Name;
+        this.Entity.p.VendorServiceRef = this.selectedVendorService[0].p.Ref;
+        this.Entity.p.VendorServiceName = this.selectedVendorService[0].p.Name;
         // this.ClearInputsOnExpenseChange();
       });
     } catch (error) {
@@ -328,21 +278,12 @@ export class AddEditActualStageComponent implements OnInit {
 
   public async selectExpenseTypeBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.MonthList.map((item) => ({ p: item }));
       const options = this.ExpenseTypeList;
-
-      // let selectData: any[] = [];
-
       this.openSelectModal(options, this.selectedExpenseType, false, 'Select Expense Type', 1, (selected) => {
         this.selectedExpenseType = selected;
         console.log('Expense Type selected :', selected);
-        this.Entity.p.ExpenseTypeRef = selected[0].p.ExpenseType;
-        this.Entity.p.ExpenseTypeName = selected[0].p.ExpenseTypeName ? selected[0].p.ExpenseTypeName : selected[0].p.Name;
+        this.Entity.p.ExpenseTypeRef = this.selectedExpenseType[0].p.ExpenseType;
+        this.Entity.p.ExpenseTypeName = this.selectedExpenseType[0].p.ExpenseTypeName ? selected[0].p.ExpenseTypeName : selected[0].p.Name;
         this.ClearInputsOnExpenseChange(this.Entity.p.ExpenseTypeRef);
       });
     } catch (error) {
@@ -351,22 +292,12 @@ export class AddEditActualStageComponent implements OnInit {
   }
   public async selectStageBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.MonthList.map((item) => ({ p: item }));
       const options = this.StageList;
-
-      let selectData: any[] = [];
-
       this.openSelectModal(options, this.selectedStage, false, 'Select Stage', 1, (selected) => {
         this.selectedStage = selected;
-        this.Entity.p.StageRef = selected[0].p.Ref;
-        this.Entity.p.StageName = selected[0].p.Name;
+        this.Entity.p.StageRef = this.selectedStage[0].p.Ref;
+        this.Entity.p.StageName = this.selectedStage[0].p.Name;
         this.OnStageChange(selected[0].p.Ref)
-        // console.log('selected :', selected);
       });
     } catch (error) {
       // console.log('error :', error);
@@ -375,21 +306,11 @@ export class AddEditActualStageComponent implements OnInit {
 
   public async selectSiteBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.MonthList.map((item) => ({ p: item }));
       const options = this.SiteList;
-
-      // let selectData: any[] = [];
-
       this.openSelectModal(options, this.selectedSite, false, 'Select Site', 1, (selected) => {
         this.selectedSite = selected;
-        this.Entity.p.SiteRef = selected[0].Ref;
-        this.Entity.p.SiteName = selected[0].p.Name;
-        // console.log('selected :', selected);
+        this.Entity.p.SiteRef = this.selectedSite[0].Ref;
+        this.Entity.p.SiteName = this.selectedSite[0].p.Name;
       });
     } catch (error) {
       // console.log('error :', error);
