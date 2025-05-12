@@ -261,6 +261,9 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     //   await this.uiUtils.showErrorToster('Stage not Selected');
     //   return;
     // }
+     if(this.IsNewEntity){
+      this.Entity.p.SubStageRef = 0
+    }
     let lst = await SubStage.FetchEntireListByStageRef(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SubStageList = lst;
   }

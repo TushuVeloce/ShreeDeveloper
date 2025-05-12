@@ -83,7 +83,62 @@
       </div>
 
       <!-- Changable Fields -->
-
+      <div class="row" style="margin-top: 1rem">
+        <div *ngIf="IsStage && StageType != StageTypeEnum.OfficialExpenditure" [ngClass]="{
+            'col-lg-4 col-md-6 col-sm-12 mb-3':
+              StageType !== StageTypeEnum.Road &&
+              StageType !== StageTypeEnum.SidePattiChira &&
+              StageType !== StageTypeEnum.SolarStreetLight,
+            'col-lg-6 col-md-6 col-sm-12 mb-3':
+              StageType == StageTypeEnum.Road ||
+              StageType == StageTypeEnum.SidePattiChira ||
+              StageType == StageTypeEnum.SolarStreetLight
+          }">
+          <label>Sub Stage</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SubStageRef"
+            name="SubStageRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SubStageRef">
+            <nz-option *ngFor="let SubStage of SubStageList" [nzValue]="SubStage.p.Ref"
+              [nzLabel]="SubStage.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div *ngIf="StageType == StageTypeEnum.OfficialExpenditure" class="col-md-6 col-md-4 col-sm-12" clss>
+          <label for="SelectedMonths"><b>Months</b></label>
+          <nz-select [(ngModel)]="Entity.p.SelectedMonths" nzMode="multiple" id="SelectedMonths" name="SelectedMonths"
+            nzShowSearch nzAllowClear (ngModalChange)="onSelectedMonthsChange(Entity.p.SelectedMonths)"
+            nzPlaceHolder="Select services">
+            <nz-option *ngFor="let SelectedMonths of MonthList" [nzValue]="SelectedMonths.Ref"
+              [nzLabel]="SelectedMonths.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div *ngIf="
+            IsStage &&
+            StageType !== StageTypeEnum.SolarStreetLight &&
+            StageType !== StageTypeEnum.SidePattiChira" [ngClass]="{
+            'col-lg-4 col-md-6 col-sm-12 mb-3': StageType !== StageTypeEnum.Road,
+            'col-md-6 col-sm-12 mb-3': StageType === StageTypeEnum.Road}">
+          <label *ngIf="StageType == StageTypeEnum.HalfRoundGutterNale"><b>Gutter Nale</b></label>
+          <label *ngIf="StageType == StageTypeEnum.Road"><b>/m2</b></label>
+          <div *ngIf="
+              StageType == StageTypeEnum.HalfRoundGutterNale ||
+              StageType == StageTypeEnum.Road">
+            <input type="number" [(ngModel)]="Entity.p.ExtraQuantity" name="ExtraQuantity" class="form-control"
+              id="ExtraQuantity" placeholder="Enter Quantity" #ExtraQuantityCtrl="ngModel"
+              (blur)="ExtraQuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+            <div *ngIf="
+                ExtraQuantityCtrl.invalid &&
+                (ExtraQuantityCtrl.touched || ExtraQuantityCtrl.dirty)">
+              <span class="validation-text" *ngIf="ExtraQuantityCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="IsStage && StageType == StageTypeEnum.HalfRoundGutterNale" class="col-lg-4 col-md-6 col-sm-12 mb-3">
+          <label>Gutter Nale Unit</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="GutterNaleUnitRef"
+            name="GutterNaleUnitRef" [nzSize]="'large'" [(ngModel)]="Entity.p.GutterNaleUnitRef">
+            <nz-option *ngFor="let unit of GutterNaleUnitList" [nzValue]="unit.Ref" [nzLabel]="unit.Name"></nz-option>
+          </nz-select>
+        </div>
+      </div>
       <div class="row" style="margin-top: 1rem">
         <div *ngIf="Entity.p.ExpenseTypeRef !== OtherExpenseRef" [ngClass]="{
        'col-lg-3 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef === ExpenseTypeRef,
@@ -96,7 +151,7 @@
             <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div  *ngIf="Entity.p.ExpenseTypeRef !== OtherExpenseRef" [ngClass]="{
+        <div *ngIf="Entity.p.ExpenseTypeRef !== OtherExpenseRef" [ngClass]="{
           'col-lg-3 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef === ExpenseTypeRef,
           'col-lg-4 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef !== ExpenseTypeRef || !Entity.p.ExpenseTypeRef
         }">
@@ -272,63 +327,6 @@
             (blur)="DieselTotalCtrl.control.markAsTouched()" readonly />
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem">
-        <div *ngIf="IsStage && StageType != StageTypeEnum.OfficialExpenditure" [ngClass]="{
-            'col-lg-4 col-md-6 col-sm-12 mb-3':
-              StageType !== StageTypeEnum.Road &&
-              StageType !== StageTypeEnum.SidePattiChira &&
-              StageType !== StageTypeEnum.SolarStreetLight,
-            'col-lg-6 col-md-6 col-sm-12 mb-3':
-              StageType == StageTypeEnum.Road ||
-              StageType == StageTypeEnum.SidePattiChira ||
-              StageType == StageTypeEnum.SolarStreetLight
-          }">
-          <label>Sub Stage</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SubStageRef"
-            name="SubStageRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SubStageRef">
-            <nz-option *ngFor="let SubStage of SubStageList" [nzValue]="SubStage.p.Ref"
-              [nzLabel]="SubStage.p.Name"></nz-option>
-          </nz-select>
-        </div>
-        <div *ngIf="StageType == StageTypeEnum.OfficialExpenditure" class="col-md-6 col-md-4 col-sm-12" clss>
-          <label for="SelectedMonths"><b>Months</b></label>
-          <nz-select [(ngModel)]="Entity.p.SelectedMonths" nzMode="multiple" id="SelectedMonths" name="SelectedMonths"
-            nzShowSearch nzAllowClear (ngModalChange)="onSelectedMonthsChange(Entity.p.SelectedMonths)"
-            nzPlaceHolder="Select services">
-            <nz-option *ngFor="let SelectedMonths of MonthList" [nzValue]="SelectedMonths.Ref"
-              [nzLabel]="SelectedMonths.Name"></nz-option>
-          </nz-select>
-        </div>
-        <div *ngIf="
-            IsStage &&
-            StageType !== StageTypeEnum.SolarStreetLight &&
-            StageType !== StageTypeEnum.SidePattiChira" [ngClass]="{
-            'col-lg-4 col-md-6 col-sm-12 mb-3': StageType !== StageTypeEnum.Road,
-            'col-md-6 col-sm-12 mb-3': StageType === StageTypeEnum.Road}">
-          <label *ngIf="StageType == StageTypeEnum.HalfRoundGutterNale"><b>Gutter Nale</b></label>
-          <label *ngIf="StageType == StageTypeEnum.Road"><b>/m2</b></label>
-          <div *ngIf="
-              StageType == StageTypeEnum.HalfRoundGutterNale ||
-              StageType == StageTypeEnum.Road">
-            <input type="number" [(ngModel)]="Entity.p.ExtraQuantity" name="ExtraQuantity" class="form-control"
-              id="ExtraQuantity" placeholder="Enter Quantity" #ExtraQuantityCtrl="ngModel"
-              (blur)="ExtraQuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
-            <div *ngIf="
-                ExtraQuantityCtrl.invalid &&
-                (ExtraQuantityCtrl.touched || ExtraQuantityCtrl.dirty)">
-              <span class="validation-text" *ngIf="ExtraQuantityCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="IsStage && StageType == StageTypeEnum.HalfRoundGutterNale" class="col-lg-4 col-md-6 col-sm-12 mb-3">
-          <label>Gutter Nale Unit</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="GutterNaleUnitRef"
-            name="GutterNaleUnitRef" [nzSize]="'large'" [(ngModel)]="Entity.p.GutterNaleUnitRef">
-            <nz-option *ngFor="let unit of GutterNaleUnitList" [nzValue]="unit.Ref" [nzLabel]="unit.Name"></nz-option>
-          </nz-select>
-        </div>
-      </div>
-
 
       <!-- Labou Data Starts-->
 
