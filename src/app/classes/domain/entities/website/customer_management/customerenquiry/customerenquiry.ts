@@ -16,6 +16,10 @@ import { CustomerFollowUpPlotDetailsProps } from '../customerfollowupplotdetails
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 
 export class CustomerEnquiryProps {
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public ContactNos: string = '';
@@ -59,7 +63,7 @@ export class CustomerEnquiry implements IPersistable<CustomerEnquiry> {
   private constructor(
     public readonly p: CustomerEnquiryProps,
     public readonly AllowEdit: boolean
-  ) {}
+  ) { }
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {

@@ -15,6 +15,10 @@ import { PlotFetchRequest } from "./plotfetchrequest";
 
 export class PlotProps {
   public readonly Db_Table_Name = "SiteManagementPlotDetails";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public PlotNo: string = '';
   public AreaInSqm: number = 0;

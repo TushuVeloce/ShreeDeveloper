@@ -16,6 +16,10 @@ import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/c
 
 export class UnitProps {
   public readonly Db_Table_Name = "UnitMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public CompanyRef: number = 0
@@ -69,7 +73,7 @@ export class Unit implements IPersistable<Unit> {
     if (this.p.Name == '') {
       vra.add('Name', 'Name cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.SIUnit).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.SIUnitMsg  + ' for Name');
+      vra.add('Name', ValidationMessages.SIUnitMsg + ' for Name');
     }
   }
 

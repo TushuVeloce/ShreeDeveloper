@@ -16,11 +16,13 @@ import { ExpenseTypeFetchRequest } from "./expensetypefetchrequest";
 
 export class ExpenseTypeProps {
   public readonly Db_Table_Name = "ExpenseTypeMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public ExpenseTypeName: string = '';
-  public CreatedBy: number = 0;
-  public UpdatedBy: number = 0;
   public CompanyRef: number = 0;
   public StageRef: number = 0;
   public CompanyName: string = '';

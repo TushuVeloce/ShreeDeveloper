@@ -16,6 +16,10 @@ import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/c
 
 export class BankAccountProps {
   public readonly Db_Table_Name = "BankAccountMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public BranchName: string = '';
@@ -87,7 +91,7 @@ export class BankAccount implements IPersistable<BankAccount> {
     }
     if (this.p.OpeningBalance == 0) {
       vra.add('OpeningBalance', 'Opening Balance cannot be blank.');
-     } else if(this.p.OpeningBalance < 0) {
+    } else if (this.p.OpeningBalance < 0) {
       vra.add('OpeningBalance', 'Opening Balance cannot be less then 0.');
     }
     if (this.p.DateofOpening == '') vra.add('DateofOpening', 'Date of Opening cannot be blank.');

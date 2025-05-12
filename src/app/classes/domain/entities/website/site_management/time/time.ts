@@ -15,12 +15,16 @@ import { TimeFetchRequest } from "./timefetchrequest";
 
 export class TimeDetailProps {
   public readonly Db_Table_Name = "SiteManagementTimeDetails";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
-  public StartTime: string ='';
-  public EndTime : string ='';
-  public WorkedHours : number =0;
-  public Total : number =0;
-  public SiteManagementRef : number = 0;
+  public StartTime: string = '';
+  public EndTime: string = '';
+  public WorkedHours: number = 0;
+  public Total: number = 0;
+  public SiteManagementRef: number = 0;
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -34,7 +38,7 @@ export class TimeDetailProps {
   }
 }
 
-export class  Time implements IPersistable<Time> {
+export class Time implements IPersistable<Time> {
   public static readonly Db_Table_Name: string = 'SiteManagementTimeDetails';
 
   public constructor(public readonly p: TimeDetailProps, public readonly AllowEdit: boolean) {
@@ -43,8 +47,8 @@ export class  Time implements IPersistable<Time> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -158,21 +162,21 @@ export class  Time implements IPersistable<Time> {
     return Time.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef:number,SiteRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-     let req = new TimeFetchRequest();
-     req.CompanyRefs.push(CompanyRef)
-     req.SiteManagementRefs.push(SiteRef)
-     let tdResponse = await Time.FetchTransportData(req, errorHandler) as TransportData;
-     return Time.ListFromTransportData(tdResponse);
-   }
+  public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new TimeFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    req.SiteManagementRefs.push(SiteRef)
+    let tdResponse = await Time.FetchTransportData(req, errorHandler) as TransportData;
+    return Time.ListFromTransportData(tdResponse);
+  }
 
-    public static async FetchEntireListBySiteRef(siteref:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-       let req = new TimeFetchRequest();
-       req.SiteManagementRefs.push(siteref)
-       let tdResponse = await Time.FetchTransportData(req, errorHandler) as TransportData;
-       return Time.ListFromTransportData(tdResponse);
-     }
-   
+  public static async FetchEntireListBySiteRef(siteref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new TimeFetchRequest();
+    req.SiteManagementRefs.push(siteref)
+    let tdResponse = await Time.FetchTransportData(req, errorHandler) as TransportData;
+    return Time.ListFromTransportData(tdResponse);
+  }
+
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

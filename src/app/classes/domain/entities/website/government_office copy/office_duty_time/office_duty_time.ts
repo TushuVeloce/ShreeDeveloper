@@ -14,6 +14,10 @@ import { office_duty_timeFetchRequest } from "./office_duty_time_fetchrequest";
 
 
 export class office_duty_timeProps {
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public OfficeName: string = '';
@@ -41,8 +45,8 @@ export class office_duty_time implements IPersistable<office_duty_time> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -164,19 +168,19 @@ export class office_duty_time implements IPersistable<office_duty_time> {
     let tdResponse = await office_duty_time.FetchTransportData(req, errorHandler) as TransportData;
     return office_duty_time.ListFromTransportData(tdResponse);
   }
-  public static async FetchEntireListByoffice_duty_timeRef(office_duty_timeRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByoffice_duty_timeRef(office_duty_timeRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new office_duty_timeFetchRequest();
     req.office_duty_timeRefs.push(office_duty_timeRef)
     let tdResponse = await office_duty_time.FetchTransportData(req, errorHandler) as TransportData;
     return office_duty_time.ListFromTransportData(tdResponse);
   }
 
-    public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-      let req = new office_duty_timeFetchRequest();
-      req.CompanyRefs.push(CompanyRef)
-      let tdResponse = await office_duty_time.FetchTransportData(req, errorHandler) as TransportData;
-      return office_duty_time.ListFromTransportData(tdResponse);
-    }
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new office_duty_timeFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await office_duty_time.FetchTransportData(req, errorHandler) as TransportData;
+    return office_duty_time.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

@@ -16,6 +16,10 @@ import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/c
 
 export class DepartmentProps {
   public readonly Db_Table_Name = "DepartmentMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public CompanyRef: number = 0;

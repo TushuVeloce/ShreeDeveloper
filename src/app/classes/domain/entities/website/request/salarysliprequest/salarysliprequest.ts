@@ -14,9 +14,11 @@ import { SalarySlipRequestFetchRequest } from "./salarysliprequestfetchrequest";
 
 
 export class SalarySlipRequestProps {
-  public Ref: number = 0;
   public CreatedBy: number = 0;
+  public CreatedByName: string = '';
   public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
+  public Ref: number = 0;
   public CompanyRef: number = 0
   public CompanyName: string = ''
   public EmployeeRef: number = 0;

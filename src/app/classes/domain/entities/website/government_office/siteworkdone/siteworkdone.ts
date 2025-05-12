@@ -16,6 +16,10 @@ import { ApplicableTypeProps } from "../siteworkmaster/siteworkmaster";
 
 export class SiteWorkDoneProps {
   public readonly Db_Table_Name = "SiteWorkDoneMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public SiteWorkRef: number = 0;
   public ApplicableTypeRef: number = 0;
@@ -27,7 +31,7 @@ export class SiteWorkDoneProps {
   public readonly IsNewlyCreated: boolean = false;
   public readonly SiteWorkName: string = '';
   public readonly SiteWorkGroupName: string = '';
-  public readonly SiteWorkApplicableTypeName : string = '';
+  public readonly SiteWorkApplicableTypeName: string = '';
 
   private constructor(isNewlyCreated: boolean) {
     this.IsNewlyCreated = isNewlyCreated;

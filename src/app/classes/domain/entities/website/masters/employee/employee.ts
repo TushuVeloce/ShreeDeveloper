@@ -16,6 +16,10 @@ import { EmployeeFetchRequest } from "./employeefetchrequest";
 
 export class EmployeeProps {
   public readonly Db_Table_Name = "EmployeeMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public DesignationRef: number = 0;
   public readonly DesignationName: string = '';

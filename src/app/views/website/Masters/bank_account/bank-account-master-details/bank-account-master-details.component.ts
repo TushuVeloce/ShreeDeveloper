@@ -62,7 +62,7 @@ export class BankAccountMasterDetailsComponent implements OnInit {
     }
     this.InitialEntity = Object.assign(BankAccount.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)) as BankAccount;
-      this.focusInput();
+    this.focusInput();
   }
 
   focusInput = () => {
@@ -75,7 +75,10 @@ export class BankAccountMasterDetailsComponent implements OnInit {
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
 
     this.Entity.p.DateofOpening = this.dtu.ConvertStringDateToFullFormat(this.dateofopening);
-
+    if (this.Entity.p.CreatedBy == 0) {
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    }
     let entityToSave = this.Entity.GetEditableVersion();
     if (!this.Entity.p.OpeningBalance) {
       this.Entity.p.OpeningBalance = 0;

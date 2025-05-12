@@ -16,6 +16,10 @@ import { SubStageFetchRequest } from "./substagefetchrequest";
 
 export class SubStageProps {
   public readonly Db_Table_Name = "SubStageMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public StageRef: number = 0;
   public readonly StageName: number = 0;
@@ -24,8 +28,6 @@ export class SubStageProps {
   public Name: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public CreatedBy: number = 0;
-  public UpdatedBy: number = 0;
 
   public readonly IsNewlyCreated: boolean = false;
 
@@ -69,7 +71,7 @@ export class SubStage implements IPersistable<SubStage> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') {vra.add('Name', 'Name cannot be blank.');} 
+    if (this.p.Name == '') { vra.add('Name', 'Name cannot be blank.'); }
   }
 
   public MergeIntoTransportData(td: TransportData) {

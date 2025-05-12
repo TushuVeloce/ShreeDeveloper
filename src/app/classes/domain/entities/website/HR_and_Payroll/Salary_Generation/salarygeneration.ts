@@ -41,7 +41,9 @@ export class SalaryGenerationProps {
   public CompanyRef: number = 0;
   public CompanyName: string = '';
   public CreatedBy: number = 0;
+  public CreatedByName: string = '';
   public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public SalarySlipMonthIndicator: string = 'A';
 
   public readonly IsNewlyCreated: boolean = false;

@@ -18,6 +18,10 @@ import {
 } from 'src/app/classes/domain/domainenums/domainenums';
 
 export class CustomerFollowUpProps {
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public CustomerEnquiryRef: number = 0;
   public CustomerRequirement: string = '';
@@ -65,7 +69,7 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
   private constructor(
     public readonly p: CustomerFollowUpProps,
     public readonly AllowEdit: boolean
-  ) {}
+  ) { }
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {

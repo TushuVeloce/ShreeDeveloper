@@ -26,7 +26,9 @@ export class OfficeDutyandTimeProps {
   public CompanyRef: number = 0;
   public readonly CompanyName: string = '';
   public CreatedBy: number = 0;
+  public CreatedByName: string = '';
   public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';

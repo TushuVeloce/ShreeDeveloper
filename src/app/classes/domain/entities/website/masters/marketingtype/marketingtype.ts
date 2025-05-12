@@ -15,6 +15,10 @@ import { MarketingTypeFetchRequest } from "./marketingtypefetchrequest";
 
 export class MarketingTypeProps {
   public readonly Db_Table_Name = "MarketingTypeMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Description: string = '';
   public MarketingMode: number = 0;
@@ -44,8 +48,8 @@ export class MarketingType implements IPersistable<MarketingType> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -162,7 +166,7 @@ export class MarketingType implements IPersistable<MarketingType> {
     let tdResponse = await MarketingType.FetchTransportData(req, errorHandler) as TransportData;
     return MarketingType.ListFromTransportData(tdResponse);
   }
-  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MarketingTypeFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await MarketingType.FetchTransportData(req, errorHandler) as TransportData;

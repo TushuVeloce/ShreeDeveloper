@@ -18,28 +18,32 @@ import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/c
 
 export class SiteProps {
   public readonly Db_Table_Name = "SiteManagement";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
-  public AddressLine1 : string = '';
-  public AddressLine2 : string = '';
-  public PinCode : string = '';
+  public AddressLine1: string = '';
+  public AddressLine2: string = '';
+  public PinCode: string = '';
   public CountryRef: number = 9163;
   public readonly CountryName: boolean = false;
   public StateRef: number = 0;
   public readonly StateName: boolean = false;
   public CityRef: number = 0;
   public readonly CityName: boolean = false;
-  public SiteInchargeRef   : number = 0;
-  public SiteInchargeName  : string = '';
-  public EstimatedStartingDate : string = '';
-  public EstimatedEndDate : string = '';
-  public EstimatedCost  : number = 0;
-  public TotalLandAreaInSqm   : number = 0;
-  public TotalLandAreaInSqft    : number = 0;
-  public NumberOfPlots : number = 0;
+  public SiteInchargeRef: number = 0;
+  public SiteInchargeName: string = '';
+  public EstimatedStartingDate: string = '';
+  public EstimatedEndDate: string = '';
+  public EstimatedCost: number = 0;
+  public TotalLandAreaInSqm: number = 0;
+  public TotalLandAreaInSqft: number = 0;
+  public NumberOfPlots: number = 0;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public LoginEmployeeRef:  number = 26893;
+  public LoginEmployeeRef: number = 26893;
 
   // public PlotDetailsList: PlotDetailProps[] = [];
   public SiteManagementOwnerDetails: OwnerDetailProps[] = [];
@@ -66,8 +70,8 @@ export class Site implements IPersistable<Site> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -89,8 +93,8 @@ export class Site implements IPersistable<Site> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Site Name cannot be blank.'); else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.Name)) {
-          vra.add('Name', ValidationMessages.NameWithoutNosMsg);
-        }
+      vra.add('Name', ValidationMessages.NameWithoutNosMsg);
+    }
     if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'AddressLine cannot be blank.');
     if (this.p.AddressLine2 == '') vra.add('AddressLine2', 'Site Location cannot be blank.');
     // if (this.p.PinCode == '') vra.add('PinCode', 'PinCode cannot be blank.');else if (!new RegExp(ValidationPatterns.PinCode).test(this.p.Name)) {
@@ -196,7 +200,7 @@ export class Site implements IPersistable<Site> {
     let tdResponse = await Site.FetchTransportData(req, errorHandler) as TransportData;
     return Site.ListFromTransportData(tdResponse);
   }
-  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new SiteFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await Site.FetchTransportData(req, errorHandler) as TransportData;

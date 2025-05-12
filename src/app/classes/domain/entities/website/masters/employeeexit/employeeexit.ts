@@ -15,18 +15,22 @@ import { EmployeeExitFetchRequest } from "./employeeexitfetchrequest";
 
 export class EmployeeExitProps {
   public readonly Db_Table_Name = "EmployeeExitMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
   public EmployeeRef: number = 0;
   public EmployeeName: string = '';
-  public Description : string = '';
+  public Description: string = '';
   public DateOfJoin: string = '';
   public DateOfExit: string = '';
   public Reason: string = '';
-  
-  
+
+
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -49,8 +53,8 @@ export class EmployeeExit implements IPersistable<EmployeeExit> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -165,8 +169,8 @@ export class EmployeeExit implements IPersistable<EmployeeExit> {
     let tdResponse = await EmployeeExit.FetchTransportData(req, errorHandler) as TransportData;
     return EmployeeExit.ListFromTransportData(tdResponse);
   }
-  
-  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new EmployeeExitFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await EmployeeExit.FetchTransportData(req, errorHandler) as TransportData;
