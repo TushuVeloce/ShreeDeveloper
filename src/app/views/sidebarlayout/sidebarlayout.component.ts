@@ -570,9 +570,9 @@ export class SidebarlayoutComponent implements OnInit {
     let moduleListInternal = [
       {
         Name: 'Dashboards',
-        RouterLink: '',
+       RouterLink: '/homepage/Website/',
         WhiteLogo: '/assets/icons/dashboard.png',
-        SubModuleList: DashboardsSubModuleList,
+        // SubModuleList: DashboardsSubModuleList,
       },
       {
         Name: 'Master',
