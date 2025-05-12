@@ -179,7 +179,7 @@
     <!-- Amount -->
     <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeRef != LabourExpenseRef">
       <ion-input type="number" label="Amount" labelPlacement="floating" placeholder="Enter Amount"
-        [(ngModel)]="Entity.p.Amount" (ngModelChange)="CalculateAmountOnRateAndQuantity()" readonly></ion-input>
+        [(ngModel)]="Amount" (ngModelChange)="CalculateAmountOnRateAndQuantity()" readonly></ion-input>
     </ion-item>
 
     <!-- Diesel Calculation -->
@@ -231,7 +231,7 @@
 
     <!-- Select Months -->
     <ion-item class="input-item" button (click)="selectMonthsBottomsheet()"
-    *ngIf="StageType == StageTypeEnum.OfficialExpenditure">
+      *ngIf="StageType == StageTypeEnum.OfficialExpenditure">
       <ion-label slot="start">Select Months</ion-label>
 
       <!-- Text showing the selected status -->
@@ -248,8 +248,7 @@
     <ion-item class="input-item" *ngIf="
     IsStage &&
     StageType !== StageTypeEnum.SolarStreetLight &&
-    StageType !== StageTypeEnum.SidePattiChira" 
-    >
+    StageType !== StageTypeEnum.SidePattiChira">
       <ion-input type="number" label="Gutter Nale" labelPlacement="floating" placeholder="Enter Quantity"
         [(ngModel)]="Entity.p.ExtraQuantity" *ngIf="StageType == StageTypeEnum.HalfRoundGutterNale"></ion-input>
       <ion-input type="number" label="/m2" labelPlacement="floating" placeholder="Enter Quantity"
@@ -258,8 +257,7 @@
 
     <!-- Select Gutter Nale Unit -->
     <ion-item class="input-item" button (click)="selectGutterNaleUnitBottomsheet()"
-    *ngIf="IsStage && StageType == StageTypeEnum.HalfRoundGutterNale"
-    >
+      *ngIf="IsStage && StageType == StageTypeEnum.HalfRoundGutterNale">
       <ion-label>Gutter Nale Unit</ion-label>
 
       <!-- Text showing the selected status -->
@@ -277,39 +275,39 @@
         [(ngModel)]="Entity.p.Rate" (ngModelChange)="CalculateAmountOnRateAndQuantity()"></ion-input>
     </ion-item> -->
 
-    <ion-grid *ngIf="Entity.p.ExpenseTypeRef == 200">
+    <ion-grid *ngIf="Entity.p.ExpenseTypeRef == LabourExpenseRef">
       <ion-row>
         <ion-col size="4">
           <!-- Skill Quantity -->
           <ion-item class="input-item">
-            <ion-input type="number" label="Skill Quantity" labelPlacement="floating" placeholder="Enter Skill Quantity"
-              [(ngModel)]="Entity.p.SkillQuantity"
+            <ion-input type="number" label="Skill Labour Quantity" labelPlacement="floating"
+              placeholder="Enter Skill Quantity" [(ngModel)]="Entity.p.SkillQuantity"
               (ngModelChange)="CalculateAmountOnSkillRateAndQuantity()"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col size="4">
           <!-- Skill Rate -->
           <ion-item class="input-item">
-            <ion-input type="number" label="Skill Rate" labelPlacement="floating" placeholder="Enter Skill Rate"
+            <ion-input type="number" label="Skill Labour Rate" labelPlacement="floating" placeholder="Enter Skill Rate"
               [(ngModel)]="Entity.p.SkillRate" (ngModelChange)="CalculateAmountOnSkillRateAndQuantity()"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col size="4">
           <!-- Skill Amount -->
           <ion-item class="input-item">
-            <ion-input type="number" label="Skill Amount" labelPlacement="floating" placeholder="Enter Skill Amount"
-              [(ngModel)]="Entity.p.SkillAmount" readonly></ion-input>
+            <ion-input type="number" label="Skill Labour Amount" labelPlacement="floating"
+              placeholder="Enter Skill Amount" [(ngModel)]="Entity.p.SkillAmount" readonly></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
     </ion-grid>
 
-    <ion-grid *ngIf="Entity.p.ExpenseTypeRef == 200">
+    <ion-grid *ngIf="Entity.p.ExpenseTypeRef == LabourExpenseRef">
       <ion-row>
         <ion-col size="4">
           <!-- unSkill Quantity -->
           <ion-item class="input-item">
-            <ion-input type="number" label="UnSkill Quantity" labelPlacement="floating"
+            <ion-input type="number" label="UnSkill Labour Quantity" labelPlacement="floating"
               placeholder="Enter UnSkill Quantity" [(ngModel)]="Entity.p.UnskillQuantity"
               (ngModelChange)="CalculateAmountOnUnSkillRateAndQuantity()"></ion-input>
           </ion-item>
@@ -317,43 +315,43 @@
         <ion-col size="4">
           <!-- Skill Rate -->
           <ion-item class="input-item">
-            <ion-input type="number" label="UnSkill Rate" labelPlacement="floating" placeholder="Enter UnSkill Rate"
-              [(ngModel)]="Entity.p.UnskillRate"
+            <ion-input type="number" label="UnSkill Labour Rate" labelPlacement="floating"
+              placeholder="Enter UnSkill Rate" [(ngModel)]="Entity.p.UnskillRate"
               (ngModelChange)="CalculateAmountOnUnSkillRateAndQuantity()"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col size="4">
           <!-- Skill Amount -->
           <ion-item class="input-item">
-            <ion-input type="number" label="UnSkill Amount" labelPlacement="floating" placeholder="Enter UnSkill Amount"
-              [(ngModel)]="Entity.p.UnskillAmount" readonly></ion-input>
+            <ion-input type="number" label="UnSkill Labour Amount" labelPlacement="floating"
+              placeholder="Enter UnSkill Amount" [(ngModel)]="Entity.p.UnskillAmount" readonly></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
     </ion-grid>
 
-    <ion-grid *ngIf="Entity.p.ExpenseTypeRef == 200">
+    <ion-grid *ngIf="Entity.p.ExpenseTypeRef == LabourExpenseRef">
       <ion-row>
         <ion-col size="4">
           <!-- Ladies Quantity -->
           <ion-item class="input-item">
-            <ion-input type="number" label="Ladies Quantity" labelPlacement="floating"
-              placeholder="Enter Ladies Quantity" [(ngModel)]="Entity.p.LadiesQuantity"
+            <ion-input type="number" label="Women Labour Quantity" labelPlacement="floating"
+              placeholder="Enter Women Quantity" [(ngModel)]="Entity.p.LadiesQuantity"
               (ngModelChange)="CalculateAmountOnLadiesRateAndQuantity()"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col size="4">
           <!-- Skill Rate -->
           <ion-item class="input-item">
-            <ion-input type="number" label="Ladies Rate" labelPlacement="floating" placeholder="Enter Ladies Rate"
+            <ion-input type="number" label="Women Labour Rate" labelPlacement="floating" placeholder="Enter Ladies Rate"
               [(ngModel)]="Entity.p.LadiesRate" (ngModelChange)="CalculateAmountOnLadiesRateAndQuantity()"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col size="4">
           <!-- Skill Amount -->
           <ion-item class="input-item">
-            <ion-input type="number" label="Ladies Amount" labelPlacement="floating" placeholder="Enter Ladies Amount"
-              [(ngModel)]="Entity.p.LadiesAmount" readonly></ion-input>
+            <ion-input type="number" label="Women Labour Amount" labelPlacement="floating"
+              placeholder="Enter Ladies Amount" [(ngModel)]="Entity.p.LadiesAmount" readonly></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -365,16 +363,16 @@
         placeholder="Enter Grand Total Amount" [(ngModel)]="Entity.p.Amount" readonly></ion-input>
     </ion-item>
 
-    <!-- Sign -->
-    <ion-item class="input-item">
-      <ion-input type="number" label="Sign" labelPlacement="floating" placeholder="Enter Sign"
-        [(ngModel)]="Entity.p.CreatedByName" readonly></ion-input>
-    </ion-item>
-
     <!-- Description -->
     <ion-item class="input-item">
       <ion-textarea type="number" label="Description" labelPlacement="floating" placeholder="Enter Description"
         [(ngModel)]="Entity.p.Description"></ion-textarea>
+    </ion-item>
+
+    <!-- Sign -->
+    <ion-item class="input-item">
+      <ion-input type="number" label="Sign" labelPlacement="floating" placeholder="Enter Sign"
+        [(ngModel)]="Entity.p.CreatedByName" readonly></ion-input>
     </ion-item>
 
 
