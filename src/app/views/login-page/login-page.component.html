@@ -1,4 +1,4 @@
-<div style="background-color: #DBD8D8; height: 100vh; display: flex; justify-content: center; align-items: center;">
+<!-- <div style="background-color: #DBD8D8; height: 100vh; display: flex; justify-content: center; align-items: center;">
   <div class="card">
     <div class="card-content">
       <div class="card-image">
@@ -11,7 +11,6 @@
           <h4 style="text-align: center; margin-bottom: 4%; font-family: 'Times New Roman', Times, serif ;">Login</h4>
           <form autocomplete="off">
 
-            <!-- User input -->
             <div style="position: relative; margin-bottom: 1rem;">
               <label for="userId">User ID</label>
               <input type="text" id="userId" name="UserId" class="form-control" placeholder="Enter your Mail ID"
@@ -20,7 +19,6 @@
                 style="position: absolute; top: 70%; right: 10px; transform: translateY(-50%); color: brown;"></i>
             </div>
 
-            <!-- Password Input -->
             <div style="position: relative;margin-bottom: 2rem;">
               <label for="password">Password</label>
               <input [type]="showPassword ? 'text' : 'password'" id="password" name="Password" class="form-control"
@@ -40,5 +38,37 @@
         </div>
       </div>
     </div>
+  </div>
+</div> -->
+
+<div class="login-container d-flex justify-content-center align-items-center">
+  <div class="login-card shadow-lg">
+    <div class="text-center mb-1">
+      <img src="../../../assets/logos/ShreeIcon.png" width="250px" alt="Logo" class="logo-img">
+    </div>
+    <h4 style="text-align: center; margin-bottom: 4%; font-family: 'Times New Roman', Times, serif ;">Log In</h4>
+    <form autocomplete="off">
+
+      <div style="position: relative; margin-bottom: 1rem;">
+        <label for="userId">Email</label>
+        <input type="text" id="userId" name="UserId" class="form-control" placeholder="Enter your Mail ID" required
+          [(ngModel)]="UserId" style="padding-right: 2.5rem;" />
+        <i class="fas fa-user"
+          style="position: absolute; top: 70%; right: 10px; transform: translateY(-50%); color: black;"></i>
+      </div>
+
+      <div style="position: relative;margin-bottom: 2rem;">
+        <label for="password">Password</label>
+        <input [type]="showPassword ? 'text' : 'password'" id="password" name="Password" class="form-control"
+          placeholder="Enter your Password" required [(ngModel)]="Password" style="padding-right: 2.5rem;" />
+        <i class="{{ showPassword ? 'fas fa-eye' : 'fas fa-eye-slash' }}" (click)="togglePasswordVisibility()"
+          style="position: absolute; top: 70%; right: 10px; transform: translateY(-50%); cursor: pointer; color: black;"></i>
+      </div>
+      <h6 style="margin-bottom: 4%;" class="text-end mb-3">Forgot Password ?</h6>
+      <div>
+        <button type="submit" class="btn btn-gradient w-100" (click)="Login()" id="login_btn">LOG IN</button>
+      </div>
+      <p class="text-center mt-3">New User? <span>Contact Admin</span></p>
+    </form>
   </div>
 </div>

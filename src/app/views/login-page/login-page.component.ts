@@ -8,12 +8,14 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { SessionValues } from 'src/app/services/sessionvalues.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss'],
-  imports: [FormsModule, CommonModule]
+  imports: [FormsModule, CommonModule, ReactiveFormsModule]
   // standalone: true,
 })
 export class LoginPageComponent implements OnInit {
@@ -58,7 +60,7 @@ export class LoginPageComponent implements OnInit {
     const response = await this.servercommunicator.LoginUser(req);
     this.appStateManage.setEmployeeRef(response.LoginEmployeeRef)
     this.appStateManage.setLoginToken(response.LoginToken)
-    this.appStateManage.StorageKey.setItem("UserDisplayName",response.UserDisplayName)
+    this.appStateManage.StorageKey.setItem("UserDisplayName", response.UserDisplayName)
 
     if (!response.Successful) {
       await this.uiUtils.showErrorMessage('Error', response.Message);
