@@ -85,6 +85,60 @@
       </ion-button>
     </ion-item>
 
+    <!-- Select Sub Stage -->
+    <ion-item class="input-item" button (click)="selectSubStageBottomsheet()"
+      *ngIf="IsStage && StageType != StageTypeEnum.OfficialExpenditure">
+      <ion-label>Sub Stage</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ Entity.p.SubStageName || 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
+    <!-- Select Months -->
+    <ion-item class="input-item" button (click)="selectMonthsBottomsheet()"
+      *ngIf="StageType == StageTypeEnum.OfficialExpenditure">
+      <ion-label slot="start">Select Months</ion-label>
+
+      <!-- Text showing the selected status -->
+      <div slot="end" class="chip-container">
+        <ion-chip *ngFor="let item of Entity.p.SelectedMonthsName">
+          <ion-label>{{ item }}</ion-label>
+        </ion-chip>
+      </div>
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
+    <!-- ExtraQuantity -->
+    <ion-item class="input-item" *ngIf="
+       IsStage &&
+       StageType !== StageTypeEnum.SolarStreetLight &&
+       StageType !== StageTypeEnum.SidePattiChira">
+      <ion-input type="number" label="Gutter Nale" labelPlacement="floating" placeholder="Enter Quantity"
+        [(ngModel)]="Entity.p.ExtraQuantity" *ngIf="StageType == StageTypeEnum.HalfRoundGutterNale"></ion-input>
+      <ion-input type="number" label="/m2" labelPlacement="floating" placeholder="Enter Quantity"
+        [(ngModel)]="Entity.p.ExtraQuantity" *ngIf="StageType == StageTypeEnum.Road"></ion-input>
+    </ion-item>
+
+    <!-- Select Gutter Nale Unit -->
+    <ion-item class="input-item" button (click)="selectGutterNaleUnitBottomsheet()"
+      *ngIf="IsStage && StageType == StageTypeEnum.HalfRoundGutterNale">
+      <ion-label>Gutter Nale Unit</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ Entity.p.GutterNaleUnitName || 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
     <!-- Select Vendor -->
     <ion-item class="input-item" button (click)="selectVendorBottomsheet()">
       <ion-label>Vendor</ion-label>
@@ -178,8 +232,8 @@
 
     <!-- Amount -->
     <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeRef != LabourExpenseRef">
-      <ion-input type="number" label="Amount" labelPlacement="floating" placeholder="Enter Amount"
-        [(ngModel)]="Amount" (ngModelChange)="CalculateAmountOnRateAndQuantity()" readonly></ion-input>
+      <ion-input type="number" label="Amount" labelPlacement="floating" placeholder="Enter Amount" [(ngModel)]="Amount"
+        (ngModelChange)="CalculateAmountOnRateAndQuantity()" readonly></ion-input>
     </ion-item>
 
     <!-- Diesel Calculation -->
@@ -214,60 +268,6 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-
-    <!-- Select Sub Stage -->
-    <ion-item class="input-item" button (click)="selectSubStageBottomsheet()"
-      *ngIf="IsStage && StageType != StageTypeEnum.OfficialExpenditure">
-      <ion-label>Sub Stage</ion-label>
-
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ Entity.p.SubStageName || 'Select' }}
-      </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-    </ion-item>
-
-    <!-- Select Months -->
-    <ion-item class="input-item" button (click)="selectMonthsBottomsheet()"
-      *ngIf="StageType == StageTypeEnum.OfficialExpenditure">
-      <ion-label slot="start">Select Months</ion-label>
-
-      <!-- Text showing the selected status -->
-      <div slot="end" class="chip-container">
-        <ion-chip *ngFor="let item of Entity.p.SelectedMonthsName">
-          <ion-label>{{ item }}</ion-label>
-        </ion-chip>
-      </div>
-      <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-    </ion-item>
-
-    <!-- ExtraQuantity -->
-    <ion-item class="input-item" *ngIf="
-    IsStage &&
-    StageType !== StageTypeEnum.SolarStreetLight &&
-    StageType !== StageTypeEnum.SidePattiChira">
-      <ion-input type="number" label="Gutter Nale" labelPlacement="floating" placeholder="Enter Quantity"
-        [(ngModel)]="Entity.p.ExtraQuantity" *ngIf="StageType == StageTypeEnum.HalfRoundGutterNale"></ion-input>
-      <ion-input type="number" label="/m2" labelPlacement="floating" placeholder="Enter Quantity"
-        [(ngModel)]="Entity.p.ExtraQuantity" *ngIf="StageType == StageTypeEnum.Road"></ion-input>
-    </ion-item>
-
-    <!-- Select Gutter Nale Unit -->
-    <ion-item class="input-item" button (click)="selectGutterNaleUnitBottomsheet()"
-      *ngIf="IsStage && StageType == StageTypeEnum.HalfRoundGutterNale">
-      <ion-label>Gutter Nale Unit</ion-label>
-
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ Entity.p.GutterNaleUnitName || 'Select' }}
-      </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-    </ion-item>
 
     <!-- Rate -->
     <!-- <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeRef != 200">
