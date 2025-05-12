@@ -9,7 +9,7 @@ import { Site } from 'src/app/classes/domain/entities/website/masters/site/site'
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { SubStage } from 'src/app/classes/domain/entities/website/masters/substage/subStage';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
-import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
+import { ServiceSuppliedByVendorProps, Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { ActualStagesChalanFetchRequest } from 'src/app/classes/domain/entities/website/site_management/actualstagechalan/actualstagechalanfetchrequest';
 import { ActualStages, ActualStagesProps } from 'src/app/classes/domain/entities/website/site_management/actualstages/actualstages';
@@ -40,7 +40,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   InitialEntity: ActualStages = null as any;
   isSaveDisabled: boolean = false;
   VendorList: Vendor[] = [];
-  VendorServiceList: VendorService[] = [];
+  VendorServiceList: ServiceSuppliedByVendorProps[] = [];
   StageList: Stage[] = [];
   SiteList: Site[] = [];
   SubStageList: SubStage[] = [];
@@ -299,8 +299,9 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       this.Entity.p.VendorServiceRef = 0
     }
     this.VendorServiceList = []
-    let lst = await VendorService.FetchEntireListByVendorRef(VendorRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.VendorServiceList = lst;
+    let lst = await Vendor.FetchInstance(VendorRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.VendorServiceList = lst.p.ServiceListSuppliedByVendor;
+    console.log('VendorServiceList :', this.VendorServiceList);
   }
 
   FormulateUnitList = async () => {

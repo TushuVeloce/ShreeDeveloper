@@ -14,8 +14,8 @@ import { MarketingManagementFetchRequest } from "./marketingmanagementfetchreque
 import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 
 export class ServiceSuppliedByVendorProps {
-  public MaterialRef: number = 0;
-  public MaterialName: string = '';
+  public Ref: number = 0;
+  public Name: string = '';
 }
 
 export class MarketingManagementProps {
