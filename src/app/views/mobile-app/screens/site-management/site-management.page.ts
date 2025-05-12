@@ -38,7 +38,6 @@ export class SiteManagementPage implements OnInit {
   }
 
   ionViewWillEnter = async () => {
-    this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
     await this.loadSiteIfCompanyExists();
   };
 
@@ -60,11 +59,12 @@ export class SiteManagementPage implements OnInit {
 
 
   private async loadSiteIfCompanyExists(): Promise<void> {
+    this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
     if (this.companyRef <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.getSiteListByCompanyRef();
+    await this.getSiteListByCompanyRef();
   }
 
   formatDate = (date: string | Date): string =>
@@ -81,7 +81,7 @@ export class SiteManagementPage implements OnInit {
       }
       let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.MasterList = lst;
-      console.log('Site :', this.MasterList);
+      // console.log('Site :', this.MasterList);
       this.DisplayMasterList = this.MasterList;
     } catch (error) {
       // console.log('error :', error);

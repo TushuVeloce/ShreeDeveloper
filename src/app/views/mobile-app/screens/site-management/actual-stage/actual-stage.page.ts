@@ -49,21 +49,10 @@ export class ActualStagePage implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
-    this.companyName = this.appStateManagement.StorageKey.getItem('companyName') ? this.appStateManagement.StorageKey.getItem('companyName') : '';
-    this.siteRef = Number(this.appStateManagement.StorageKey.getItem('siteRf'));
-    this.siteName = this.appStateManagement.StorageKey.getItem('siteName') ? this.appStateManagement.StorageKey.getItem('siteName') : '';
     this.loadActualStageIfCompanyExists();
   }
 
   ionViewWillEnter = async () => {
-    this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
-    this.companyName = this.appStateManagement.StorageKey.getItem('companyName') ? this.appStateManagement.StorageKey.getItem('companyName') : '';
-    console.log('companyRef :', this.companyRef);
-    this.siteRef = Number(this.appStateManagement.StorageKey.getItem('siteRf'));
-    console.log('siteRef :', this.siteRef);
-    this.siteName = this.appStateManagement.StorageKey.getItem('siteName') ? this.appStateManagement.StorageKey.getItem('siteName') : '';
-
     await this.loadActualStageIfCompanyExists();
   };
 
@@ -73,14 +62,26 @@ export class ActualStagePage implements OnInit {
   }
 
   private async loadActualStageIfCompanyExists(): Promise<void> {
-    if (this.companyRef <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
+    try {
+      this.isLoading=true;
+      this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
+      this.companyName = this.appStateManagement.StorageKey.getItem('companyName') ? this.appStateManagement.StorageKey.getItem('companyName') : '';
+      this.siteRef = Number(this.appStateManagement.StorageKey.getItem('siteRf'));
+      this.siteName = this.appStateManagement.StorageKey.getItem('siteName') ? this.appStateManagement.StorageKey.getItem('siteName') : '';
+      this.Entity.p.SiteRef = this.siteRef;
+      if (this.companyRef <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
+      this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.StageList = await Stage.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+      await this.getActualStageListByAllFilters();
+    } catch (error) {
+    // console.log('error :', error);
+    }finally{
+      this.isLoading = false;
     }
-    this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.StageList = await Stage.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.getActualStageListByAllFilters();
   }
 
   onViewClicked(item: ActualStages) {
