@@ -36,8 +36,8 @@ export class SiteManagementDetailsComponent implements OnInit {
   CountryListforOwner: Country[] = [];
   StateListforOwner: State[] = [];
   CityListforOwner: City[] = [];
-  localEstimatedStartingDate: string  = '';
-  localEstimatedEndDate: string  = '';
+  localEstimatedStartingDate: string = '';
+  localEstimatedEndDate: string = '';
   BookingRemarkList = DomainEnums.BookingRemarkList(true, '---Select Booking Remark---');
   plotheaders: string[] = ['Sr.No.', 'Plot No', 'Area sq.m', 'Area sq.ft', 'Goverment Rate', 'Company Rate', 'Action'];
   ownerheaders: string[] = ['Sr.No.', 'Name ', 'Contact No ', 'Email Id ', 'Address', 'Pin Code ', 'Action'];
@@ -74,7 +74,7 @@ export class SiteManagementDetailsComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-     this.getEmployeeListByCompanyRef()
+    this.getEmployeeListByCompanyRef()
     this.appStateManage.setDropdownDisabled(true);
     this.CountryListforSite = await Country.FetchEntireList();
     this.CountryListforOwner = await Country.FetchEntireList();
@@ -84,22 +84,22 @@ export class SiteManagementDetailsComponent implements OnInit {
       this.Entity = Site.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       console.log('Entity :', this.Entity);
-      if(this.Entity.p.EstimatedStartingDate != ''){
-        this.localEstimatedStartingDate= this.dtu.ConvertStringDateToShortFormat(this.Entity.p.EstimatedStartingDate)
-       }
-      if(this.Entity.p.EstimatedEndDate != ''){
-        this.localEstimatedEndDate= this.dtu.ConvertStringDateToShortFormat(this.Entity.p.EstimatedEndDate)
-       }
+      if (this.Entity.p.EstimatedStartingDate != '') {
+        this.localEstimatedStartingDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.EstimatedStartingDate)
+      }
+      if (this.Entity.p.EstimatedEndDate != '') {
+        this.localEstimatedEndDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.EstimatedEndDate)
+      }
       if (this.Entity.p.CountryRef) {
         this.getStateListByCountryRefforSite(this.Entity.p.CountryRef);
       }
       if (this.Entity.p.StateRef) {
         this.getCityListByStateRefforSite(this.Entity.p.StateRef);
       }
-      if(this.Entity.p.SiteManagementOwnerDetails[0].CountryRef){
+      if (this.Entity.p.SiteManagementOwnerDetails[0].CountryRef) {
         this.getStateListByCountryRefforOwner(this.Entity.p.SiteManagementOwnerDetails[0].CountryRef);
       }
-      if(this.Entity.p.SiteManagementOwnerDetails[0].StateRef){
+      if (this.Entity.p.SiteManagementOwnerDetails[0].StateRef) {
         this.getCityListByStateRefforOwner(this.Entity.p.SiteManagementOwnerDetails[0].StateRef);
       }
     } else {
@@ -153,7 +153,7 @@ export class SiteManagementDetailsComponent implements OnInit {
   }
 
   getStateListByCountryRefforOwner = async (CountryRef: number) => {
-  console.log('CountryRef :', CountryRef);
+    console.log('CountryRef :', CountryRef);
     this.StateListforOwner = [];
     this.CityListforOwner = [];
     this.newOwner.StateRef = 0;
@@ -161,8 +161,8 @@ export class SiteManagementDetailsComponent implements OnInit {
     if (CountryRef) {
       let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.StateListforOwner = lst;
+    }
   }
-}
 
   getCityListByStateRefforOwner = async (StateRef: number) => {
     this.CityListforOwner = [];
@@ -205,7 +205,7 @@ export class SiteManagementDetailsComponent implements OnInit {
 
   async addOwner() {
     if (!this.newOwner.Name || !this.newOwner.ContactNo || !this.newOwner.CountryRef || !this.newOwner.StateRef || !this.newOwner.CityRef || !this.newOwner.Address) {
-      await this.uiUtils.showErrorMessage('Error','Name, Contact No, Country, State, City, Adderss are Required!');
+      await this.uiUtils.showErrorMessage('Error', 'Name, Contact No, Country, State, City, Adderss are Required!');
       return;
     }
 
@@ -234,7 +234,7 @@ export class SiteManagementDetailsComponent implements OnInit {
     console.log('index :', index);
     this.isOwnerModalOpen = true
     this.newOwner = { ...this.Entity.p.SiteManagementOwnerDetails[index] }
-    console.log('this.newOwner  :', this.newOwner );
+    console.log('this.newOwner  :', this.newOwner);
     this.editingIndex = index;
   }
 
@@ -249,9 +249,12 @@ export class SiteManagementDetailsComponent implements OnInit {
     this.Entity.p.TotalLandAreaInSqft = this.Entity.p.TotalLandAreaInSqm * 10.7639
     this.Entity.p.EstimatedStartingDate = this.dtu.ConvertStringDateToFullFormat(this.localEstimatedStartingDate)
     this.Entity.p.EstimatedEndDate = this.dtu.ConvertStringDateToFullFormat(this.localEstimatedEndDate)
+    if (this.Entity.p.CreatedBy == 0) {
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('sitemanagemnt :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;

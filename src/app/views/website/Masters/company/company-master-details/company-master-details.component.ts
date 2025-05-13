@@ -95,7 +95,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
       console.log(this.Entity);
       this.imageUrl = this.Entity.p.LogoPath;
       console.log(this.Entity.p.LogoPath);
-      
+
       // While Edit Converting date String into Date Format //
       this.dateOfInCorporation = this.datePipe.transform(
         this.dtu.FromString(this.Entity.p.DateOfInCorporation),
@@ -194,8 +194,11 @@ export class CompanyMasterDetailsComponent implements OnInit {
 
 
   SaveCompanyMaster = async () => {
+    if (this.Entity.p.CreatedBy == 0) {
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    }
     let entityToSave = this.Entity.GetEditableVersion();
-
     // ------ Code For Save Date Of InCorporation Year Format ---------------//
     if (this.dateOfInCorporation) {
       let dateValue = new Date(this.dateOfInCorporation);
@@ -220,8 +223,6 @@ export class CompanyMasterDetailsComponent implements OnInit {
     }
     let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("Company_Logo", this.Entity.p.CompanyLogo, this.Entity.p.CompanyLogo.name)];
     let entitiesToSave = [entityToSave];
-    console.log(entitiesToSave);
-    console.log(lstFTO);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
 
     if (!tr.Successful) {

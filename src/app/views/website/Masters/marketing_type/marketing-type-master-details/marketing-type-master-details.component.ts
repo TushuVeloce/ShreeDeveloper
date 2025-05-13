@@ -44,7 +44,7 @@ export class MarketingTypeMasterDetailsComponent implements OnInit {
       this.Entity.p.MarketingMode = this.MarketingModesList[1].Ref;
     }
     this.InitialEntity = Object.assign(MarketingType.CreateNewInstance(),
-    this.utils.DeepCopy(this.Entity)) as MarketingType;
+      this.utils.DeepCopy(this.Entity)) as MarketingType;
     this.focusInput();
   }
 
@@ -56,6 +56,10 @@ export class MarketingTypeMasterDetailsComponent implements OnInit {
   SaveMarketingTypeMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    if (this.Entity.p.CreatedBy == 0) {
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
 

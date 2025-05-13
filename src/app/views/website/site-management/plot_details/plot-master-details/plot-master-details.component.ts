@@ -37,20 +37,20 @@ export class PlotMasterDetailsComponent implements OnInit {
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
   CompanyName = this.companystatemanagement.SelectedCompanyName;
   CompanyRef = this.companystatemanagement.SelectedCompanyRef;
-  
+
   @ViewChild('PlotNoCtrl') PlotNoInputControl!: NgModel;
   @ViewChild('AreaInSqmCtrl') AreaInSqmInputControl!: NgModel;
   @ViewChild('AreaInSqftCtrl') AreaInSqftInputControl!: NgModel;
   @ViewChild('GovermentRatePerSqmCtrl') GovermentRatePerSqmInputControl!: NgModel;
   @ViewChild('BasicRatePerSqftCtrl') BasicRatePerSqftInputControl!: NgModel;
-  
+
   constructor(
     private router: Router,
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
     private utils: Utils, private companystatemanagement: CompanyStateManagement
   ) { }
-  
+
   async ngOnInit() {
     this.CompanyList = await Company.FetchEntireList();
     const siteref = this.appStateManage.StorageKey.getItem('siteRf')
@@ -123,6 +123,10 @@ export class PlotMasterDetailsComponent implements OnInit {
     this.Entity.p.SiteManagementRef = this.SiteRf
     this.Entity.p.AreaInSqft = this.Entity.p.AreaInSqm * 10.7639
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
+    if (this.Entity.p.CreatedBy == 0) {
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);

@@ -33,7 +33,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   CityList: City[] = [];
   DesignationList: Designation[] = [];
   DepartmentList: Department[] = [];
-  OfficeDutyTimeList: OfficeDutyandTime [] = []
+  OfficeDutyTimeList: OfficeDutyandTime[] = []
   GenderList = DomainEnums.GenderTypeList(true, '---Select Gender---');
   MaritalStatusList = DomainEnums.MaritalStatusesList(true, '---Select Marital Status ---');
   MarketingModesList = DomainEnums.MarketingModesList();
@@ -67,8 +67,8 @@ export class EmployeeMasterDetailsComponent implements OnInit {
         ? 'New Employee'
         : 'Edit Employee';
       this.Entity = Employee.GetCurrentInstance();
-      console.log("entity",this.Entity);
-      
+      console.log("entity", this.Entity);
+
 
       // While Edit Converting date String into Date Format //
       this.dateofjoining = this.datePipe.transform(
@@ -150,8 +150,11 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   SaveEmployeeMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    if (this.Entity.p.CreatedBy == 0) {
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    }
     let entityToSave = this.Entity.GetEditableVersion();
-
     // ------ Code For Save Date Of Joining Format ---------------//
     if (this.dateofjoining) {
       let dateValue = new Date(this.dateofjoining);
@@ -175,7 +178,6 @@ export class EmployeeMasterDetailsComponent implements OnInit {
       }
     }
     let entitiesToSave = [entityToSave];
-    console.log(entitiesToSave);
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {

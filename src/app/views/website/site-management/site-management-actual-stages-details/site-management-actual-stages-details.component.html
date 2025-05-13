@@ -156,8 +156,9 @@
           'col-lg-4 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef !== ExpenseTypeRef || !Entity.p.ExpenseTypeRef
         }">
           <label>Vendor Services</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorServiceRef"
-            name="VendorServiceRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorServiceRef">
+          <nz-select class="nzSelect-light" [disabled]="VendorServiceList.length == 0" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="VendorServiceRef" name="VendorServiceRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.VendorServiceRef">
             <nz-option *ngFor="let VendorServices of VendorServiceList" [nzValue]="VendorServices.Ref"
               [nzLabel]="VendorServices.Name"></nz-option>
           </nz-select>
