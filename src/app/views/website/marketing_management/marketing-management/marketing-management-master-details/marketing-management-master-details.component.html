@@ -10,12 +10,17 @@
         <span class="detail_title">{{DetailsFormTitle}}</span>
       </div>
     </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label for="SiteRef"><b>Site Name</b></label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteRef" name="SiteRef"
-            [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -28,15 +33,16 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Marketing Type</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="MarketingTypeRef"
-            name="MarketingTypeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.MarketingTypeRef">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="MarketingTypeRef" name="MarketingTypeRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.MarketingTypeRef">
             <nz-option *ngFor="let Mode of MarketingModesList" [nzValue]="Mode.Ref" [nzLabel]="Mode.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Vendor</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorRef"
-            name="VendorRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorRef"
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="VendorRef" name="VendorRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorRef"
             (ngModelChange)="getVendorServiceListByVendorRef(Entity.p.VendorRef)">
             <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
           </nz-select>
@@ -53,8 +59,9 @@
         </div> -->
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Vendor Services</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorServiceRef"
-            name="VendorServiceRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorServiceRef">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="VendorServiceRef" name="VendorServiceRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.VendorServiceRef">
             <nz-option *ngFor="let VendorServices of VendorServiceList" [nzValue]="VendorServices.Ref"
               [nzLabel]="VendorServices.Name"></nz-option>
           </nz-select>
@@ -87,8 +94,8 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Name</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="Name"
-              name=" Name" [nzSize]="'large'" [(ngModel)]="Entity.p.Name">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="Name" name=" Name" [nzSize]="'large'" [(ngModel)]="Entity.p.Name">
             <nz-option *ngFor="let employee of EmployeeList" [nzValue]="employee.p.Ref"
               [nzLabel]="employee.p.Name"></nz-option>
           </nz-select>

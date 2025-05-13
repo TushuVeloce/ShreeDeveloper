@@ -8,18 +8,23 @@
         [(ngModel)]="SearchString" />
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
-      <nz-button  nz-button class="btn1" (click)='AddExpenseType()'>
+      <nz-button nz-button class="btn1" (click)='AddExpenseType()'>
         Add Expense Type
       </nz-button>
     </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
     <div class="card-body" style="margin-left: 14px;">
       <form autocomplete="off">
         <div class="row">
           <div class="col-md-4">
             <label for="StageRef"><b>Stage</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-              [(ngModel)]="Entity.p.StageRef" name="StageRef" required id="StageRef"
-              (ngModelChange)="getExpenseListByStageRef()">
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef" name="StageRef" required
+              id="StageRef" (ngModelChange)="getExpenseListByStageRef()">
               <nz-option *ngFor="let Stage of StageList" [nzLabel]="Stage.p.Name" [nzValue]="Stage.p.Ref"></nz-option>
             </nz-select>
           </div>

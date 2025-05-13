@@ -66,8 +66,8 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   NameWithoutNosMsg: string = ValidationMessages.NameWithNosAndSpaceAnd_Msg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
-  PinCode : string = ValidationPatterns.PinCode;
-  PinCodeWithoutMsg : string = ValidationMessages.PinCodeMsg;
+  PinCode: string = ValidationPatterns.PinCode;
+  PinCodeWithoutMsg: string = ValidationMessages.PinCodeMsg;
 
   @ViewChild('NameCtrl') CustomerEnquiryNameInputControl!: NgModel;
   @ViewChild('PinCodeCtrl') PinCodeNoInputControl!: NgModel;
@@ -104,16 +104,21 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     private dtu: DTU,
     private datePipe: DatePipe,
     private companystatemanagement: CompanyStateManagement
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    console.log(this.CustomerStatusList);
 
-    this.CountryList = await Country.FetchEntireList();
-    this.StateList = await State.FetchEntireList();
+    await this.FormulateCountryList();
+    // Load State based on Default Country Ref
+    if (this.Entity.p.CountryRef) {
+      await this.getStateListByCountryRef(this.Entity.p.CountryRef);
+    }
 
-    this.CityList = await City.FetchEntireList();
+    // Load Cities based on Default State Ref
+    if (this.Entity.p.StateRef) {
+      await this.getCityListByStateRef(this.Entity.p.StateRef);
+    }
     await this.getSiteListByCompanyRef();
     await this.getEmployeeListByCompanyRef();
 
@@ -123,7 +128,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
         ? 'New Customer'
         : 'Edit Customer';
       this.Entity = CustomerEnquiry.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
       // Site Visit Date
       if (this.Entity.p.CustomerFollowUps[0].SiteVisitDate != '') {
         // While Edit Converting date String into Date Format //
@@ -134,7 +138,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       }
 
       // Office Visit Date
-
       if (this.Entity.p.CustomerFollowUps[0].OfficeVisitDate) {
         // While Edit Converting date String into Date Format //
         this.localOfficeVisitDate = this.dtu.ConvertStringDateToShortFormat(
@@ -203,45 +206,49 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     }
   }
 
-  // For country, state, city dropdowns
-  getStateListByCountryRef = async (CountryRef: number) => {
-    this.StateList = [];
-    this.Entity.p.StateRef = 0;
-    this.Entity.p.CityRef = 0;
-    if (CountryRef) {
-      let lst = await State.FetchEntireListByCountryRef(
-        CountryRef,
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-      );
+  FormulateCountryList = async () => {
+    this.CountryList = await Country.FetchEntireList(
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
 
-      this.StateList = lst;
-      // console.log('StateList :', this.StateList);
+    // Set default country if exists
+    if (this.CountryList.length) {
+      const defaultCountry = this.CountryList.find(c => c.p.Ref === this.Entity.p.CountryRef);
+      this.Entity.p.CountryRef = defaultCountry ? defaultCountry.p.Ref : this.CountryList[0].p.Ref;
 
-      // Update CountryRef AFTER fetching data
-      this.Entity.p.CountryRef = CountryRef;
+      // Fetch the corresponding states
+      await this.getStateListByCountryRef(this.Entity.p.CountryRef);
     }
-  };
+  }
+
+  getStateListByCountryRef = async (CountryRef: number) => {
+    this.StateList = await State.FetchEntireListByCountryRef(
+      CountryRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
+    // Set default state if exists
+    if (this.StateList.length) {
+      const defaultState = this.StateList.find(s => s.p.Ref === this.Entity.p.StateRef);
+      this.Entity.p.StateRef = defaultState ? defaultState.p.Ref : this.StateList[0].p.Ref;
+
+      // Fetch the corresponding cities
+      await this.getCityListByStateRef(this.Entity.p.StateRef);
+    }
+  }
 
   getCityListByStateRef = async (StateRef: number) => {
-    this.CityList = [];
-    this.Entity.p.CityRef = 0;
-    if (StateRef) {
-      // Reset CityRef immediately when StateRef changes
-      let lst = await City.FetchEntireListByStateRef(
-        StateRef,
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-      );
+    this.CityList = await City.FetchEntireListByStateRef(
+      StateRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
 
-      this.CityList = lst;
-      // console.log('CityList :', this.CityList);
-
-      // Update StateRef AFTER fetching data
-      this.Entity.p.StateRef = StateRef;
-    } else {
-      // Clear selection if state is cleared
-      this.Entity.p.CityRef = 0;
+    // Set default city if exists
+    if (this.CityList.length) {
+      const defaultCity = this.CityList.find(c => c.p.Ref === this.Entity.p.CityRef);
+      this.Entity.p.CityRef = defaultCity ? defaultCity.p.Ref : this.CityList[0].p.Ref;
     }
-  };
+  }
 
   // for site and plot
   private getSiteListByCompanyRef = async () => {

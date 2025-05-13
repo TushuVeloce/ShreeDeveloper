@@ -10,6 +10,11 @@
         <span class="detail_title">Customer Enquiry</span>
       </div>
     </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
     <form #myForm="ngForm" autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
         <!-- Todays Date  -->
@@ -46,9 +51,9 @@
         <div class="col-md-4 mt-2">
           <div>
             <label for="CountryRef"><b>Country</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-              name="CountryRef" required id="CountryRef" [(ngModel)]="Entity.p.CountryRef"
-              (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" [nzSize]="'large'" name="CountryRef" required id="CountryRef"
+              [(ngModel)]="Entity.p.CountryRef" (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
               <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
                 [nzValue]="country.p.Ref"></nz-option>
             </nz-select>
@@ -58,8 +63,8 @@
         <div class="col-md-4 mt-2">
           <div>
             <label for="StateRef"><b>State</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
-              name="StateRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StateRef"
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="StateRef" name="StateRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StateRef"
               (ngModelChange)="getCityListByStateRef(Entity.p.StateRef)">
               <nz-option *ngFor="let state of StateList" [nzValue]="state.p.Ref" [nzLabel]="state.p.Name"></nz-option>
             </nz-select>
@@ -69,8 +74,8 @@
         <div class="col-md-4 mt-2">
           <div>
             <label for="CityRef"><b>City</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
-              name="CityRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CityRef">
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="CityRef" name="CityRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CityRef">
               <nz-option *ngFor="let city of CityList" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
             </nz-select>
           </div>
@@ -89,8 +94,8 @@
         <div class="col-md-4 col-md-4 col-sm-12 mt-2">
           <label>Pin Code</label>
           <input type="text" name="PinCode" class="form-control" [(ngModel)]="Entity.p.PinCode" id="PinCode" required
-            placeholder="Enter Pin Code" (focus)="selectAll($event)" pattern="{{PinCode}}"
-            #PinCodeCtrl="ngModel" required (blur)="PinCodeCtrl.control.markAsTouched()" />
+            placeholder="Enter Pin Code" (focus)="selectAll($event)" pattern="{{PinCode}}" #PinCodeCtrl="ngModel"
+            required (blur)="PinCodeCtrl.control.markAsTouched()" />
           <div *ngIf="(PinCodeCtrl.invalid && (PinCodeCtrl.touched || PinCodeCtrl.dirty))">
             <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['pattern']">{{PinCodeWithoutMsg}}</span>
             <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -99,7 +104,7 @@
         <!-- Customer Requirement  -->
         <div class="col-md-4 col-md-4 col-sm-12 mt-2" *ngIf="IsNewEntity">
           <label>Customer Requirement</label>
-          <textarea type="text" name="CustomerRequirement" class="form-control"
+          <textarea type="text" rows="1" name="CustomerRequirement" class="form-control"
             [(ngModel)]="Entity.p.CustomerFollowUps[0].CustomerRequirement" id="CustomerRequirement" required
             placeholder="Enter Customer Requirement">
           </textarea>
@@ -110,9 +115,9 @@
         <div class="col-md-4">
           <div>
             <label for="SiteManagementRef"><b>Interested site</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-              name="SiteManagementRef" [(ngModel)]="SiteManagementRef" id="SiteManagementRef"
-              (ngModelChange)="getPlotBySiteRefList(SiteManagementRef)">
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" [nzSize]="'large'" name="SiteManagementRef" [(ngModel)]="SiteManagementRef"
+              id="SiteManagementRef" (ngModelChange)="getPlotBySiteRefList(SiteManagementRef)">
               <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
             </nz-select>
             <!--
@@ -126,8 +131,9 @@
         <div class="col-md-4">
           <div>
             <label for="InterestedPlotRef"><b>Interested Plots</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="InterestedPlotRef"
-              name="InterestedPlotRef" [(ngModel)]="InterestedPlotRef" [nzSize]="'large'">
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="InterestedPlotRef" name="InterestedPlotRef" [(ngModel)]="InterestedPlotRef"
+              [nzSize]="'large'">
               <nz-option *ngFor="let Plot of PlotList" [nzValue]="Plot.p.Ref" [nzLabel]="Plot.p.PlotNo"></nz-option>
             </nz-select>
             <!--   [required]="isSIteVisitSelected()"
@@ -167,8 +173,9 @@
               <td Class="tbldata">{{ plot.PlotAreaInSqm }}</td>
               <td Class="tbldata">{{ plot.PlotAreaInSqft }}</td>
               <td class="tbldata">
-                <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-                  name="{{plot.PlotName.trim() + '_' + i + 100}}" [(ngModel)]="plot.CustomerStatus" [nzSize]="'large'">
+                <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+                  nzPlaceHolder="Select" name="{{plot.PlotName.trim() + '_' + i + 100}}"
+                  [(ngModel)]="plot.CustomerStatus" [nzSize]="'large'">
                   <nz-option *ngFor="let customerstatus of CustomerStatusList" [nzValue]="customerstatus.Ref"
                     [nzLabel]="customerstatus.Name"></nz-option>
                 </nz-select>
@@ -192,8 +199,9 @@
         <div class="col-md-4">
           <div>
             <label for="LeadSourceRef"><b>Lead Source</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-              name="LeadSourceRef" required id="LeadSourceRef" [(ngModel)]="Entity.p.CustomerFollowUps[0].LeadSource"
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" [nzSize]="'large'" name="LeadSourceRef" required id="LeadSourceRef"
+              [(ngModel)]="Entity.p.CustomerFollowUps[0].LeadSource"
               (ngModelChange)="onLeadSourceChange(Entity.p.CustomerFollowUps[0].LeadSource)">
               <nz-option *ngFor="let Mode of MarketingModesList" [nzValue]="Mode.Ref" [nzLabel]="Mode.Name"></nz-option>
             </nz-select>
@@ -213,8 +221,9 @@
         <div class="col-md-4">
           <div>
             <label for="LeadHandledByRef"><b>Lead Handled By</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LeadHandledByRef"
-              name="LeadHandledByRef" [(ngModel)]="Entity.p.CustomerFollowUps[0].LeadHandleBy" [nzSize]="'large'">
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="LeadHandledByRef" name="LeadHandledByRef"
+              [(ngModel)]="Entity.p.CustomerFollowUps[0].LeadHandleBy" [nzSize]="'large'">
               <nz-option *ngFor="let Employee of EmployeeList" [nzValue]="Employee.p.Ref"
                 [nzLabel]="Employee.p.Name"></nz-option>
             </nz-select>
@@ -224,8 +233,9 @@
         <div class="col-md-4" *ngIf="!showAgentBrokerInput">
           <div>
             <label for="ContactModeRef"><b>Contact Mode</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="ContactModeRef"
-              name="ContactModeRef" [(ngModel)]="Entity.p.CustomerFollowUps[0].ContactMode" [nzSize]="'large'">
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="ContactModeRef" name="ContactModeRef"
+              [(ngModel)]="Entity.p.CustomerFollowUps[0].ContactMode" [nzSize]="'large'">
               <nz-option *ngFor="let contactmode of ContactModeList" [nzValue]="contactmode.Ref"
                 [nzLabel]="contactmode.Name"></nz-option>
             </nz-select>
@@ -236,8 +246,9 @@
         <div class="col-md-4" *ngIf="showAgentBrokerInput">
           <div>
             <label for="ContactModeRef"><b>Contact Mode</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="ContactModeRef"
-              name="ContactModeRef" [(ngModel)]="Entity.p.CustomerFollowUps[0].ContactMode" [nzSize]="'large'">
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="ContactModeRef" name="ContactModeRef"
+              [(ngModel)]="Entity.p.CustomerFollowUps[0].ContactMode" [nzSize]="'large'">
               <nz-option *ngFor="let contactmode of ContactModeList" [nzValue]="contactmode.Ref"
                 [nzLabel]="contactmode.Name"></nz-option>
             </nz-select>
@@ -256,9 +267,10 @@
         <div class="col-md-4">
           <div>
             <label for="CustomerStatusRef"><b>Customer Status</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CustomerStatusRef"
-              name="CustomerStatusRef" [(ngModel)]="Entity.p.CustomerFollowUps[0].CustomerStatus"
-              (ngModelChange)="onStatusChange($event)" [nzSize]="'large'">
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="CustomerStatusRef" name="CustomerStatusRef"
+              [(ngModel)]="Entity.p.CustomerFollowUps[0].CustomerStatus" (ngModelChange)="onStatusChange($event)"
+              [nzSize]="'large'">
               <ng-container *ngFor="let customerstatus of CustomerStatusList">
                 <nz-option *ngIf="customerstatus.Ref !== 30 && customerstatus.Ref !== 40" [nzValue]="customerstatus.Ref"
                   [nzLabel]="customerstatus.Name"></nz-option>

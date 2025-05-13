@@ -54,10 +54,9 @@ export class EmployeeMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    this.DesignationList = await Designation.FetchEntireList();
     this.CountryList = await Country.FetchEntireList();
-    this.DepartmentList = await Department.FetchEntireList();
-
+    this.getDepartmentListByCompanyRef()
+    this.getDesignationListByDepartmentRef();
     this.getOfficeDutyTime();
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
@@ -97,6 +96,24 @@ export class EmployeeMasterDetailsComponent implements OnInit {
       this.utils.DeepCopy(this.Entity)
     ) as Employee;
     // this.focusInput();
+  }
+
+  getDepartmentListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Department.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.DepartmentList = lst;
+  }
+
+  getDesignationListByDepartmentRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Designation.FetchEntireListByDepartmentRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.DesignationList = lst;
   }
 
   getStateListByCountryRef = async (CountryRef: number) => {

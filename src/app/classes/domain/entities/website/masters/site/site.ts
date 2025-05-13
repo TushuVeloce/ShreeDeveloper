@@ -12,7 +12,7 @@ import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { SiteFetchRequest } from "./sitefetchrequest";
 import { OwnerDetailProps } from "./owner/owner";
-import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
+import { CountryStateCityRefs, ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 
 
 
@@ -27,12 +27,12 @@ export class SiteProps {
   public AddressLine1: string = '';
   public AddressLine2: string = '';
   public PinCode: string = '';
-  public CountryRef: number = 9163;
-  public readonly CountryName: boolean = false;
-  public StateRef: number = 0;
-  public readonly StateName: boolean = false;
-  public CityRef: number = 0;
-  public readonly CityName: boolean = false;
+  public CountryRef: number = CountryStateCityRefs.IndiaRef;
+  public readonly CountryName: string = '';
+  public StateRef: number = CountryStateCityRefs.MaharashtraRef;
+  public readonly StateName: string = '';
+  public CityRef: number = CountryStateCityRefs.KolhapurRef;
+  public readonly CityName: string = '';
   public SiteInchargeRef: number = 0;
   public SiteInchargeName: string = '';
   public EstimatedStartingDate: string = '';

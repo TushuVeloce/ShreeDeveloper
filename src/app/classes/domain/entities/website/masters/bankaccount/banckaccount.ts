@@ -23,7 +23,7 @@ export class BankAccountProps {
   public Ref: number = 0;
   public Name: string = '';
   public BranchName: string = '';
-  public AccountNumber: string = '';
+  public AccountNumber: number = 0;
   public IFSCCode: string = '';
   public OpeningBalance: number = 0;
   public DateofOpening: string = '';
@@ -79,10 +79,10 @@ export class BankAccount implements IPersistable<BankAccount> {
       vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     }
     if (this.p.BranchName == '') vra.add('Branch', 'Branch cannot be blank.');
-    if (this.p.AccountNumber == '') {
+    if (this.p.AccountNumber == 0) {
       vra.add('AccountNumber', 'Account Number cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.LargeInputNumber).test(this.p.AccountNumber)) {
-      vra.add('AccountNumber', ValidationMessages.LargeInputNumberMsg);
+    } else if (this.p.AccountNumber < 0) {
+      vra.add('AccountNumber', 'Account Number cannot be less then 0.');
     }
     if (this.p.IFSCCode == '') {
       vra.add('IFSCCode', 'IFSC cannot be blank.');

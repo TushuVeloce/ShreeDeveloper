@@ -13,7 +13,7 @@ import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { CustomerEnquiryFetchRequest } from './customerenquiryfetchrequest';
 import { CustomerFollowUpProps } from '../customerfollowup/customerfollowup';
 import { CustomerFollowUpPlotDetailsProps } from '../customerfollowupplotdetails/CustomerFollowUpPlotDetails';
-import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
+import { CountryStateCityRefs, ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 
 export class CustomerEnquiryProps {
   public CreatedBy: number = 0;
@@ -26,11 +26,11 @@ export class CustomerEnquiryProps {
   public EmailId: string = '';
   public Address: string = '';
   public PinCode: string = '';
-  public CountryRef: number = 9163;
+  public CountryRef: number = CountryStateCityRefs.IndiaRef;
   public readonly CountryName: string = '';
-  public StateRef: number = 0;
+  public StateRef: number = CountryStateCityRefs.MaharashtraRef;
   public readonly StateName: string = '';
-  public CityRef: number = 0;
+  public CityRef: number = CountryStateCityRefs.KolhapurRef;
   public readonly CityName: string = '';
   // public Date: string = '';
   public CompanyRef: number = 0;

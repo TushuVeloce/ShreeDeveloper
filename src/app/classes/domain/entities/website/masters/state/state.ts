@@ -11,11 +11,12 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { StateFetchRequest } from "./statefetchrequest";
+import { CountryStateCityRefs } from "src/app/classes/domain/constants";
 
 export class StateProps {
   public Ref: number = 0;
   public Name: string = '';
-  public CountryRef: number = 0;
+  public CountryRef: number = CountryStateCityRefs.IndiaRef;
   public readonly CountryName: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
@@ -155,7 +156,7 @@ export class State implements IPersistable<State> {
     return State.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCountryRef(CountryRef :number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCountryRef(CountryRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new StateFetchRequest();
     req.CountryRefs.push(CountryRef)
     let tdResponse = await State.FetchTransportData(req, errorHandler) as TransportData;

@@ -11,6 +11,7 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { OwnerFetchRequest } from "./ownerfetchrequest";
+import { CountryStateCityRefs } from "src/app/classes/domain/constants";
 
 
 export class OwnerDetailProps {
@@ -25,11 +26,11 @@ export class OwnerDetailProps {
   public EmailId: string = '';
   public Address: string = '';
   public PinCode: string = '';
-  public CountryRef: number = 0;
+  public CountryRef: number = CountryStateCityRefs.IndiaRef;
   public readonly CountryName: string = '';
-  public StateRef: number = 0;
+  public StateRef: number = CountryStateCityRefs.MaharashtraRef;
   public readonly StateName: string = '';
-  public CityRef: number = 0;
+  public CityRef: number = CountryStateCityRefs.KolhapurRef;
   public readonly CityName: string = '';
   public SiteManagementRef: number = 0;
 

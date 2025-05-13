@@ -43,7 +43,6 @@ export class MaterialMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    this.UnitList = await Unit.FetchEntireList();
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
@@ -77,7 +76,6 @@ export class MaterialMasterDetailsComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     console.log('lst :', lst);
-    this.UnitList = lst;
   };
 
   SaveMaterialMaster = async () => {

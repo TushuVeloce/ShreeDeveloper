@@ -11,6 +11,7 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { EmployeeFetchRequest } from "./employeefetchrequest";
+import { CountryStateCityRefs } from "src/app/classes/domain/constants";
 
 
 
@@ -32,12 +33,12 @@ export class EmployeeProps {
   public OfficialEmailId: string = '';
   public AddressLine1: string = '';
   public AddressLine2: string = '';
-  public CountryRef: number = 0;
-  public readonly CountryName: boolean = false;
-  public StateRef: number = 0;
-  public readonly StateName: boolean = false;
-  public CityRef: number = 0;
-  public readonly CityName: boolean = false;
+  public CountryRef: number = CountryStateCityRefs.IndiaRef;
+  public readonly CountryName: string = '';
+  public StateRef: number = CountryStateCityRefs.MaharashtraRef;
+  public readonly StateName: string = '';
+  public CityRef: number = CountryStateCityRefs.KolhapurRef;
+  public readonly CityName: string = '';
   public EmergencyContactName: string = '';
   public EmergencyContactNo: string = '';
   public MaritalStatus: number = 0;

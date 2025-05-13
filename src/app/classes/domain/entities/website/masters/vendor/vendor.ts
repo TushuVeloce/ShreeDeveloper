@@ -44,6 +44,7 @@ export class VendorProps {
   public StateRef: number = CountryStateCityRefs.MaharashtraRef;
   public readonly StateName: string = '';
   public CityRef: number = CountryStateCityRefs.KolhapurRef;
+  public readonly CityName: string = '';
 
   public PinCode: string = '';
   public BankName: string = '';

@@ -3,222 +3,136 @@
     <div class="row">
       <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
         <button type="button" class="backbtn" (click)="BackPlot()">
-          <img
-            src="/assets/icons/arrow-button.png"
-            alt=""
-            width="34px"
-            height="34px"
-          />
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
         </button>
       </div>
       <div class="col-md-11">
         <span class="detail_title">{{ DetailsFormTitle }}</span>
       </div>
     </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Site Name</label>
-          <input class="form-control date-input"  value={{SiteName}} readonly />
+          <input class="form-control date-input" value={{SiteName}} readonly />
         </div>
         <div class="col-md-4">
           <label>Plot No.</label>
-          <input
-            type="text"
-            name="PlotNo"
-            class="form-control date-input"
-            id="PlotNo"
-            [(ngModel)]="Entity.p.PlotNo"
-            #PlotNoCtrl="ngModel" required
-            (blur)="PlotNoCtrl.control.markAsTouched()"
-            placeholder="Enter Plot No."
-            (click)="selectAllValue($event)"
-          />
+          <input type="text" name="PlotNo" class="form-control date-input" id="PlotNo" [(ngModel)]="Entity.p.PlotNo"
+            #PlotNoCtrl="ngModel" required (blur)="PlotNoCtrl.control.markAsTouched()" placeholder="Enter Plot No."
+            (click)="selectAllValue($event)" />
           <div *ngIf="(PlotNoCtrl.invalid && (PlotNoCtrl.touched || PlotNoCtrl.dirty))">
             <span class="validation-text" *ngIf="PlotNoCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
         <div class="col-md-4">
           <label for="AreaInSqm">Area in Sqm</label>
-          <input type="number" class="form-control" name="AreaInSqm" id="AreaInSqm"
-            [(ngModel)]="Entity.p.AreaInSqm" 
-            (ngModelChange)="convertSqmToSqft()" 
-            #AreaInSqmCtrl="ngModel" required
-            (blur)="AreaInSqmCtrl.control.markAsTouched()" placeholder="Enter Area in Sqm"  (click)="selectAllValue($event)"/>
-            <div *ngIf="(AreaInSqmCtrl.invalid && (AreaInSqmCtrl.touched || AreaInSqmCtrl.dirty))">
-              <span class="validation-text" *ngIf="AreaInSqmCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+          <input type="number" class="form-control" name="AreaInSqm" id="AreaInSqm" [(ngModel)]="Entity.p.AreaInSqm"
+            (ngModelChange)="convertSqmToSqft()" #AreaInSqmCtrl="ngModel" required
+            (blur)="AreaInSqmCtrl.control.markAsTouched()" placeholder="Enter Area in Sqm"
+            (click)="selectAllValue($event)" />
+          <div *ngIf="(AreaInSqmCtrl.invalid && (AreaInSqmCtrl.touched || AreaInSqmCtrl.dirty))">
+            <span class="validation-text" *ngIf="AreaInSqmCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label for="AreaInSqft">Area in Sq ft</label>
-          <input type="number" class="form-control" name="AreaInSqft" id="AreaInSqft"
-            [(ngModel)]="Entity.p.AreaInSqft" 
-            (ngModelChange)="convertSqftToSqm()" 
-            #AreaInSqftCtrl="ngModel" required
-            (blur)="AreaInSqftCtrl.control.markAsTouched()" placeholder="Enter Area in Sqft"  (click)="selectAllValue($event)"/>
-            <div *ngIf="(AreaInSqftCtrl.invalid && (AreaInSqftCtrl.touched || AreaInSqftCtrl.dirty))">
-              <span class="validation-text" *ngIf="AreaInSqftCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
-          </div>     
-        <div class="col-md-4">
-          <label>Goverment Rate Per Sqm </label>
-          <input
-            type="number"
-            name="GovermentRatePerSqm"
-            class="form-control date-input"
-            id="GovermentRatePerSqm"
-            [(ngModel)]="Entity.p.GovermentRatePerSqm"
-            #GovermentRatePerSqmCtrl="ngModel" required
-            (blur)="GovermentRatePerSqmCtrl.control.markAsTouched()"
-            placeholder="Enter Goverment Rate Per Sqm "
-            (click)="selectAllValue($event)"
-          />
-          <div *ngIf="(GovermentRatePerSqmCtrl.invalid && (GovermentRatePerSqmCtrl.touched || GovermentRatePerSqmCtrl.dirty))">
-            <span class="validation-text" *ngIf="GovermentRatePerSqmCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <input type="number" class="form-control" name="AreaInSqft" id="AreaInSqft" [(ngModel)]="Entity.p.AreaInSqft"
+            (ngModelChange)="convertSqftToSqm()" #AreaInSqftCtrl="ngModel" required
+            (blur)="AreaInSqftCtrl.control.markAsTouched()" placeholder="Enter Area in Sqft"
+            (click)="selectAllValue($event)" />
+          <div *ngIf="(AreaInSqftCtrl.invalid && (AreaInSqftCtrl.touched || AreaInSqftCtrl.dirty))">
+            <span class="validation-text" *ngIf="AreaInSqftCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <!-- <div class="col-md-4">
-          <label>Goverment Rate Per Sqft </label>
-          <input
-            type="number"
-            name="GovermentRatePerSqft"
-            class="form-control date-input"
-            id="GovermentRatePerSqft"
-            [(ngModel)]="Entity.p.GovermentRatePerSqft"
-            required
-            placeholder="Enter Goverment Rate Per Sqft "
-            (click)="selectAllValue($event)"
-          />
-        </div> -->
+        <div class="col-md-4">
+          <label>Goverment Rate Per Sqm </label>
+          <input type="number" name="GovermentRatePerSqm" class="form-control date-input" id="GovermentRatePerSqm"
+            [(ngModel)]="Entity.p.GovermentRatePerSqm" #GovermentRatePerSqmCtrl="ngModel" required
+            (blur)="GovermentRatePerSqmCtrl.control.markAsTouched()" placeholder="Enter Goverment Rate Per Sqm "
+            (click)="selectAllValue($event)" />
+          <div
+            *ngIf="(GovermentRatePerSqmCtrl.invalid && (GovermentRatePerSqmCtrl.touched || GovermentRatePerSqmCtrl.dirty))">
+            <span class="validation-text"
+              *ngIf="GovermentRatePerSqmCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
         <div class="col-md-4">
           <label>Basic Rate Per Sqft </label>
-          <input
-            type="number"
-            name="BasicRatePerSqft"
-            class="form-control date-input"
-            id="BasicRatePerSqft"
-            [(ngModel)]="Entity.p.BasicRatePerSqft"
-            #BasicRatePerSqftCtrl="ngModel" required
-            (blur)="BasicRatePerSqftCtrl.control.markAsTouched()"
-            placeholder="Enter Basic Rate Per Sqft"
-            (click)="selectAllValue($event)"
-          />
+          <input type="number" name="BasicRatePerSqft" class="form-control date-input" id="BasicRatePerSqft"
+            [(ngModel)]="Entity.p.BasicRatePerSqft" #BasicRatePerSqftCtrl="ngModel" required
+            (blur)="BasicRatePerSqftCtrl.control.markAsTouched()" placeholder="Enter Basic Rate Per Sqft"
+            (click)="selectAllValue($event)" />
           <div *ngIf="(BasicRatePerSqftCtrl.invalid && (BasicRatePerSqftCtrl.touched || BasicRatePerSqftCtrl.dirty))">
             <span class="validation-text" *ngIf="BasicRatePerSqftCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
-        <!-- <div class="col-md-4">
-          <label>Basic Rate Per Sqm </label>
-          <input
-            type="number"
-            name="BasicRatePerSqm"
-            class="form-control date-input"
-            id="BasicRatePerSqm"
-            [(ngModel)]="Entity.p.BasicRatePerSqm"
-            required
-            placeholder="Enter Basic Rate Per Sqm"
-            (click)="selectAllValue($event)"
-          />
-        </div> -->
-      
         <div class="col-md-4">
           <label>Booking Remark</label>
-          <nz-select
-            class="nzSelect-light"
-            nzShowSearch
-            nzAllowClear
-            nzPlaceHolder="Select"
-            id="CurrentBookingRemark"
-            name="CurrentBookingRemark"
-            [nzSize]="'large'"
-            [(ngModel)]="Entity.p.CurrentBookingRemark"
-            (ngModelChange)="getCompanySingleRecord()"
-          >
-            <nz-option
-              *ngFor="let bookingremark of BookingRemarkList"
-              [nzValue]="bookingremark.Ref"
-              [nzLabel]="bookingremark.Name"
-            ></nz-option>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="CurrentBookingRemark" name="CurrentBookingRemark" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.CurrentBookingRemark" (ngModelChange)="getCompanySingleRecord()">
+            <nz-option *ngFor="let bookingremark of BookingRemarkList" [nzValue]="bookingremark.Ref"
+              [nzLabel]="bookingremark.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked">
           <label>Company Name</label>
-          <input
-            type="text"
-            name="CompanyName"
-            class="form-control date-input"
-            id="CompanyName"
-           value={{CompanyName()}}
-           readonly
-          />
+          <input type="text" name="CompanyName" class="form-control date-input" id="CompanyName" value={{CompanyName()}}
+            readonly />
         </div>
         <div class="col-md-4" *ngIf="Entity.p.CurrentBookingRemark != BookingRemark.Shree_Booked">
           <label>Customer Name</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-          [(ngModel)]="Entity.p.CurrentOwnerRef" name="CurrentOwnerRef" required id="CurrentOwnerRef" (ngModelChange) = "getCustomerDataBycustomerRef(Entity.p.CurrentOwnerRef)">
-          <nz-option *ngFor="let customer of CustomerList" [nzLabel]="customer.p.Name"
-            [nzValue]="customer.p.Ref"></nz-option>
-        </nz-select>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="Entity.p.CurrentOwnerRef" name="CurrentOwnerRef"
+            required id="CurrentOwnerRef" (ngModelChange)="getCustomerDataBycustomerRef(Entity.p.CurrentOwnerRef)">
+            <nz-option *ngFor="let customer of CustomerList" [nzLabel]="customer.p.Name"
+              [nzValue]="customer.p.Ref"></nz-option>
+          </nz-select>
         </div>
         <div class="col-md-4">
           <label>Mobile No</label>
-          <input
-            class="form-control date-input"
+          <input class="form-control date-input"
             [value]="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked ? CompanyEntity.p.Contacts : CustomerEntity.p.ContactNo"
-            readonly
-          />
+            readonly />
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem">     
+      <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Country</label>
-          <input
-            class="form-control date-input"
+          <input class="form-control date-input"
             [value]="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked ? CompanyEntity.p.CountryName : CustomerEntity.p.CountryName"
-            readonly
-          />
+            readonly />
         </div>
         <div class="col-md-4">
           <label>State</label>
-          <input
-            class="form-control date-input"
+          <input class="form-control date-input"
             [value]="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked ? CompanyEntity.p.StateName : CustomerEntity.p.StateName"
-            readonly
-          />
+            readonly />
         </div>
         <div class="col-md-4">
           <label>City</label>
-          <input
-            class="form-control date-input"
+          <input class="form-control date-input"
             [value]="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked ? CompanyEntity.p.CityName : CustomerEntity.p.CityName"
-            readonly
-          />
+            readonly />
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem"  >
+      <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Address</label>
-          <input
-            class="form-control date-input"
+          <input class="form-control date-input"
             [value]="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked ? CompanyEntity.p.AddressLine1 : CustomerEntity.p.Address"
-            readonly/>
+            readonly />
         </div>
-        <!-- <div class="col-md-4">
-          <label>Reference</label>
-          <input
-            type="text"
-            name="Reference"
-            class="form-control date-input"
-            id="Reference"
-            [(ngModel)]="Entity.p.Reference"
-            required
-            placeholder="Enter Reference"
-          />
-        </div> -->
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>

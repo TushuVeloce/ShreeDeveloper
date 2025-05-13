@@ -66,7 +66,6 @@ export class SubStageMasterDetailsComponent implements OnInit {
       SubStage.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as SubStage;
-    this.focusInput();
   }
 
   onStageChange = async (StageRef: number) => {
@@ -88,11 +87,6 @@ export class SubStageMasterDetailsComponent implements OnInit {
     this.StageList = lst.filter(stage => stage.p.IsSubStageApplicable === true);
   }
 
-  focusInput = () => {
-    let txtName = document.getElementById('Code')!;
-    txtName.focus();
-  }
-
   SaveSubStageMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
@@ -102,7 +96,6 @@ export class SubStageMasterDetailsComponent implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entityToSave :', entityToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {

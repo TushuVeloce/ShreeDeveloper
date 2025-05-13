@@ -22,7 +22,7 @@ export class StageMasterDetailsComponent implements OnInit {
   Entity: Stage = Stage.CreateNewInstance();
   DetailsFormTitle: 'New Stage' | 'Edit Stage' = 'New Stage';
   InitialEntity: Stage = null as any;
-  StageTypeList = DomainEnums.StageTypeList(true, 'select stage');
+  StageTypeList = DomainEnums.StageTypeList(true,'select stage');
 
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
@@ -56,41 +56,40 @@ export class StageMasterDetailsComponent implements OnInit {
     txtName.focus();
   }
 
-  ClearStageType = () => {
-    if (this.Entity.p.IsStageTypeApplicable == false) {
-      this.Entity.p.StageType = 0;
+  ClearStageType =()=>{
+    if(this.Entity.p.IsStageTypeApplicable == false){
+      this.Entity.p.StageType =0;
     }
   }
 
   SaveStageMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-    if (!this.Entity.p.IsSubStageApplicable) {
+    if(!this.Entity.p.IsSubStageApplicable){
       this.Entity.p.StageType = 0;
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
-    console.log('entitiesToSave :', entitiesToSave);
 
-    // await this.Entity.EnsurePrimaryKeysWithValidValues()
-    // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-    // if (!tr.Successful) {
-    //   this.isSaveDisabled = false;
-    //   this.uiUtils.showErrorMessage('Error', tr.Message);
-    //   return
-    // }
-    // else {
-    //   this.isSaveDisabled = false;
-    //   if (this.IsNewEntity) {
-    //     await this.uiUtils.showSuccessToster('Stage saved successfully!');
-    //     this.Entity = Stage.CreateNewInstance();
-    //     this.resetAllControls();
-    //   } else {
-    //     await this.uiUtils.showSuccessToster('Stage Updated successfully!');
-    //     await this.router.navigate(['/homepage/Website/Stage_Master']);
+    await this.Entity.EnsurePrimaryKeysWithValidValues()
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return
+    }
+    else {
+      this.isSaveDisabled = false;
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('Stage saved successfully!');
+        this.Entity = Stage.CreateNewInstance();
+        this.resetAllControls();
+      } else {
+        await this.uiUtils.showSuccessToster('Stage Updated successfully!');
+        await this.router.navigate(['/homepage/Website/Stage_Master']);
 
-    //   }
-    // }
+      }
+    }
   }
 
   // for value 0 selected while click on Input //

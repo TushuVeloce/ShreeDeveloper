@@ -68,8 +68,6 @@ export class VendorMasterDetailsComponent implements OnInit {
   @ViewChild('PANCtrl') PANInputControl!: NgModel;
   @ViewChild('GSTINCtrl') GSTINInputControl!: NgModel;
 
-
-
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
   async ngOnInit() {
@@ -127,19 +125,6 @@ export class VendorMasterDetailsComponent implements OnInit {
     }
   }
 
-  getCityListByStateRef = async (StateRef: number) => {
-    this.CityList = await City.FetchEntireListByStateRef(
-      StateRef,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-
-    // Set default city if exists
-    if (this.CityList.length) {
-      const defaultCity = this.CityList.find(c => c.p.Ref === this.Entity.p.CityRef);
-      this.Entity.p.CityRef = defaultCity ? defaultCity.p.Ref : this.CityList[0].p.Ref;
-    }
-  }
-
   getStateListByCountryRef = async (CountryRef: number) => {
     this.StateList = await State.FetchEntireListByCountryRef(
       CountryRef,
@@ -153,6 +138,19 @@ export class VendorMasterDetailsComponent implements OnInit {
 
       // Fetch the corresponding cities
       await this.getCityListByStateRef(this.Entity.p.StateRef);
+    }
+  }
+
+  getCityListByStateRef = async (StateRef: number) => {
+    this.CityList = await City.FetchEntireListByStateRef(
+      StateRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
+    // Set default city if exists
+    if (this.CityList.length) {
+      const defaultCity = this.CityList.find(c => c.p.Ref === this.Entity.p.CityRef);
+      this.Entity.p.CityRef = defaultCity ? defaultCity.p.Ref : this.CityList[0].p.Ref;
     }
   }
 
