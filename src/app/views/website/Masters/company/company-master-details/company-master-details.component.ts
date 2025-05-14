@@ -163,19 +163,6 @@ export class CompanyMasterDetailsComponent implements OnInit {
     }
   }
 
-  getCityListByStateRef = async (StateRef: number) => {
-    this.CityList = await City.FetchEntireListByStateRef(
-      StateRef,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-
-    // Set default city if exists
-    if (this.CityList.length) {
-      const defaultCity = this.CityList.find(c => c.p.Ref === this.Entity.p.CityRef);
-      this.Entity.p.CityRef = defaultCity ? defaultCity.p.Ref : this.CityList[0].p.Ref;
-    }
-  }
-
   getStateListByCountryRef = async (CountryRef: number) => {
     this.StateList = await State.FetchEntireListByCountryRef(
       CountryRef,
@@ -192,6 +179,18 @@ export class CompanyMasterDetailsComponent implements OnInit {
     }
   }
 
+  getCityListByStateRef = async (StateRef: number) => {
+    this.CityList = await City.FetchEntireListByStateRef(
+      StateRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
+    // Set default city if exists
+    if (this.CityList.length) {
+      const defaultCity = this.CityList.find(c => c.p.Ref === this.Entity.p.CityRef);
+      this.Entity.p.CityRef = defaultCity ? defaultCity.p.Ref : this.CityList[0].p.Ref;
+    }
+  }
 
   SaveCompanyMaster = async () => {
     if (this.Entity.p.CreatedBy == 0) {

@@ -217,11 +217,11 @@
               <label class="TableHeading"> Time Details Table</label>
             </div>
           </div>
-          <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{ x: 'auto' }"
+          <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
             nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.TimeDetails">
             <thead>
               <tr>
-                <th *ngFor="let header of timeheaders" class="tblheadersecond">
+                <th *ngFor="let header of timeheaders" class="tblheader">
                   {{ header }}
                 </th>
               </tr>

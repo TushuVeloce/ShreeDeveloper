@@ -156,12 +156,12 @@
             <label class="TableHeading">Intrested Plots</label>
           </div>
         </div>
-        <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{ x: 'auto' }"
+        <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
           nzFrontPagination="false" [nzShowSizeChanger]="false"
           [nzData]="Entity.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails">
           <thead>
             <tr>
-              <th *ngFor="let header of Plotheaders" class="tblheadersecond">
+              <th *ngFor="let header of Plotheaders" class="tblheader">
                 {{header}}
               </th>
             </tr>

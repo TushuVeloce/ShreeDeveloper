@@ -169,11 +169,11 @@
             <label class="TableHeading">Follow Up Plots</label>
           </div>
         </div>
-        <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{ x: 'auto' }"
+        <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
           nzFrontPagination="false" [nzShowSizeChanger]="false">
           <thead>
             <tr>
-              <th *ngFor="let header of Plotheaders" class="tblheadersecond">
+              <th *ngFor="let header of Plotheaders" class="tblheader">
                 {{header}}
               </th>
             </tr>

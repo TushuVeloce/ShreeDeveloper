@@ -86,12 +86,12 @@
       <div class="no-data-text">Data Not Found</div>
     </ng-template>
 
-    <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
       [nzData]="paginatedMachinaryList()" nzFrontPagination="false" [nzShowSizeChanger]="false"
       [nzNoResult]="noDataTpl">
       <thead>
         <tr>
-          <th *ngFor="let Header of MachinaryHeaders" class="tblheadersecond">{{ Header }}</th>
+          <th *ngFor="let Header of MachinaryHeaders" class="tblsubheader">{{ Header }}</th>
         </tr>
       </thead>
       <tbody>
@@ -102,7 +102,6 @@
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.ChalanNo}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.SiteName}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.VehicleNo}}</td>
-          <!-- <td Class="tbldata">{{MachinaryExpense.p.Description}}</td> -->
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.VendorName}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.Quantity}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.Rate}}</td>
@@ -139,11 +138,11 @@
           Labour Expense</label>
       </div>
     </div>
-    <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
       [nzData]="paginatedLabourList()" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzNoResult]="noDataTpl">
       <thead>
         <tr>
-          <th *ngFor="let Header of LabourHeaders" class="tblheadersecond">{{ Header }}</th>
+          <th *ngFor="let Header of LabourHeaders" class="tblsubheader">{{ Header }}</th>
         </tr>
       </thead>
       <tbody>
@@ -188,11 +187,11 @@
           Other Expense</label>
       </div>
     </div>
-    <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{x:'auto' }"
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
       [nzData]="paginatedOtherList()" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzNoResult]="noDataTpl">
       <thead>
         <tr>
-          <th *ngFor="let Header of Headers" class="tblheadersecond">{{ Header }}</th>
+          <th *ngFor="let Header of Headers" class="tblsubheader">{{ Header }}</th>
         </tr>
       </thead>
       <tbody>

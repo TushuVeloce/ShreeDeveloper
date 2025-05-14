@@ -54,11 +54,9 @@ export class EmployeeMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    this.CountryList = await Country.FetchEntireList();
     this.getDepartmentListByCompanyRef()
-    this.getDesignationListByDepartmentRef();
     this.getOfficeDutyTime();
-
+    await this.FormulateCountryList();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
 
@@ -108,60 +106,65 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   }
 
   getDesignationListByDepartmentRef = async () => {
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
+    if (this.Entity.p.DepartmentRef <= 0) {
+      await this.uiUtils.showErrorToster('Department not Selected');
       return;
     }
-    let lst = await Designation.FetchEntireListByDepartmentRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Designation.FetchEntireListByDepartmentRef(this.Entity.p.DepartmentRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DesignationList = lst;
   }
 
-  getStateListByCountryRef = async (CountryRef: number) => {
-    this.StateList = [];
-    this.CityList = [];
 
-    if (CountryRef) {
-      if (CountryRef == 9163) {
-        this.Entity.p.StateRef = 10263
-        this.Entity.p.CityRef = 10374
-        this.getCityListByStateRef(10263)
-      }
-      let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.StateList = lst;
-      if (CountryRef !== this.Entity.p.CountryRef) {
-        // Reset StateRef and CityRef when country is changed
-        this.Entity.p.StateRef = 0;
-        this.Entity.p.CityRef = 0;
-      }
-    } else {
-      // Clear selections if country is cleared
-      this.Entity.p.StateRef = 0;
-      this.Entity.p.CityRef = 0;
+  FormulateCountryList = async () => {
+    this.CountryList = await Country.FetchEntireList(
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
+    // Set default country if exists
+    if (this.CountryList.length) {
+      const defaultCountry = this.CountryList.find(c => c.p.Ref === this.Entity.p.CountryRef);
+      this.Entity.p.CountryRef = defaultCountry ? defaultCountry.p.Ref : this.CountryList[0].p.Ref;
+
+      // Fetch the corresponding states
+      await this.getStateListByCountryRef(this.Entity.p.CountryRef);
     }
   }
+
+  getStateListByCountryRef = async (CountryRef: number) => {
+    this.StateList = await State.FetchEntireListByCountryRef(
+      CountryRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
+    // Set default state if exists
+    if (this.StateList.length) {
+      const defaultState = this.StateList.find(s => s.p.Ref === this.Entity.p.StateRef);
+      this.Entity.p.StateRef = defaultState ? defaultState.p.Ref : this.StateList[0].p.Ref;
+
+      // Fetch the corresponding cities
+      await this.getCityListByStateRef(this.Entity.p.StateRef);
+    }
+  }
+
+  getCityListByStateRef = async (StateRef: number) => {
+    this.CityList = await City.FetchEntireListByStateRef(
+      StateRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
+    // Set default city if exists
+    if (this.CityList.length) {
+      const defaultCity = this.CityList.find(c => c.p.Ref === this.Entity.p.CityRef);
+      this.Entity.p.CityRef = defaultCity ? defaultCity.p.Ref : this.CityList[0].p.Ref;
+    }
+  }
+
 
   getOfficeDutyTime = async () => {
     let lst = await OfficeDutyandTime.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.OfficeDutyTimeList = lst;
     console.log(this.OfficeDutyTimeList);
 
-  }
-
-  getCityListByStateRef = async (StateRef: number) => {
-    this.CityList = [];
-
-    if (StateRef) {
-      let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.CityList = lst;
-
-      if (StateRef !== this.Entity.p.StateRef) {
-        // Reset CityRef when state is changed
-        this.Entity.p.CityRef = 0;
-      }
-    } else {
-      // Clear selection if state is cleared
-      this.Entity.p.CityRef = 0;
-    }
   }
 
   SaveEmployeeMaster = async () => {
