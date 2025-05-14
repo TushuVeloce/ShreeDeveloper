@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import { ExpenseType } from 'src/app/classes/domain/entities/website/masters/expensetype/expensetype';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
@@ -84,6 +86,28 @@ export class ActualStagePage implements OnInit {
     }
   }
 
+
+  @ViewChild('formContainer1', { static: false }) formContainer1!: ElementRef;
+
+  public makePdf() {
+    const element = this.formContainer1?.nativeElement;
+    if (!element) {
+      console.error('formContainer1 is not available');
+      return;
+    }
+
+    html2canvas(element).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('actualStage.pdf');
+    });
+  }
+  
   onViewClicked(item: ActualStages) {
     this.SelectedActualStages = item;
     this.ModalOpen = true;

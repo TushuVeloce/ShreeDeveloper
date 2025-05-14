@@ -18,7 +18,7 @@ export class BottomsheetMobileAppService {
         private router: Router
     ) { }
 
-    async openSelectModal(options: any[], selectedOptions: any[] = [], multiSelect: boolean = false, bottomsheetTitle: string = '', MaxSelection:number = 1): Promise<any[] | null> {
+    async openSelectModal(options: any[], selectedOptions: any[] = [], multiSelect: boolean = false, bottomsheetTitle: string = '', MaxSelection: number = 1): Promise<any[] | null> {
         this.modalInstance = await this.modalCtrl.create({
             component: SelectModalComponent,
             componentProps: {
@@ -33,6 +33,10 @@ export class BottomsheetMobileAppService {
             handle: true,
             backdropDismiss: true
         });
+        console.log(`                
+            selectedOptions:`,
+            selectedOptions);
+
 
         await this.modalInstance.present();
 

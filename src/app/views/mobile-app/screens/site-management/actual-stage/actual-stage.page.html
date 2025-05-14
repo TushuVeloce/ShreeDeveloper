@@ -210,4 +210,161 @@
       </ion-footer>
     </ng-container>
   </ion-modal>
+  <!-- Modal -->
+  <ion-modal [isOpen]="false" (didDismiss)="''" class="modal-card">
+    <ion-list>
+      <div class="card-body container-fluid" #formContainer1>
+        <div class="card p-3" id="print-section">
+          <!-- Header Row: Back Button + Title -->
+          <div class="row mb-3 align-items-center">
+            <div class="col-md-1">
+              <!-- <button type="button" class="backbtn" (click)="BackActualStage()">
+                <img src="/assets/icons/arrow-button.png" alt="Back" width="34px" height="34px" />
+              </button> -->
+            </div>
+            <div class="col-md-10 text-center">
+              <span class="detail_title">Actual Stage</span>
+            </div>
+          </div>
+
+          <!-- Receipt Content -->
+          <div class="receipt-container px-3">
+            <!-- Company & Receipt Info Spread Full Width -->
+            <div class="row mb-3 d-flex align-items-start justify-content-between">
+              <div class="col-md-6 col-6">
+                <img src="/assets/logos/ShreeIcon.png" style="margin-left: 30px;" alt=" Company Logo" height="80"
+                  class="mb-2" />
+                <p class="mb-0"><strong>{{Entity.p.CompanyName}}</strong></p>
+                <p class="mb-0">{{Entity.p.AddressLine1}}</p>
+                <p class="mb-0">{{Entity.p.AddressLine1}}</p>
+                <p class="mb-0">{{Entity.p.CityName}} - {{Entity.p.PinCode}}</p>
+                <p>Phone: {{Entity.p.Contacts}}</p>
+              </div>
+              <!-- <div class="col-md-6 text-md-end text-start mt-3 mt-md-0"> -->
+              <div class="col-md-6 col-6 text-end">
+                <p><strong>DATE:</strong> {{ this.Entity.p.Date }}</p>
+                <p><strong>Challan No:</strong> {{ Entity.p.ChalanNo }}</p>
+              </div>
+            </div>
+
+            <!-- Bill To & Project Info -->
+            <div class="row border mb-3 d-flex justify-content-between">
+              <div class="col-md-6 col-6 border-end p-2">
+                <h6 class="text-white p-1 MaroonBGHeading">BILL TO</h6>
+                <p><strong>Vendor Name:</strong> {{ Entity.p.VendorName }}</p>
+                <p><strong>Site Name:</strong> {{ Entity.p.SiteName }}</p>
+                <!-- <p><strong>Phone:</strong> {{ receipt.phone }}</p>
+                <p><strong>Address:</strong> {{ receipt.address }}</p> -->
+              </div>
+              <div class="col-md-6 col-6 p-2">
+                <p><strong>Stage Name:</strong> {{ Entity.p.StageName }}</p>
+                <p><strong>Service Type:</strong> {{ Entity.p.ExpenseTypeName }}</p>
+                <p *ngIf="Entity.p.ExpenseTypeRef == 100"><strong>Vehicle No:</strong> {{ Entity.p.VehicleNo }}</p>
+              </div>
+            </div>
+
+            <!-- Items Table Full Width -->
+            <div class="table-responsive">
+              <table class="table table-bordered text-center">
+                <thead class="text-white">
+                  <tr>
+                    <th style="width: 5%;" class="MaroonBGHeading">Sr.No</th>
+                    <th style="width: 45%;" class="MaroonBGHeading">DESCRIPTION</th>
+                    <th style="width: 10%;" class="MaroonBGHeading">Qty.</th>
+                    <th *ngIf="Entity.p.ExpenseTypeRef == 100" style="width: 10%;" class="MaroonBGHeading">UNIT</th>
+                    <th style="width: 15%;" class="MaroonBGHeading">RATE</th>
+                    <th style="width: 15%;" class="MaroonBGHeading">AMOUNT</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- <tr *ngFor="let item of receipt.items; let i = index">
+                            <td>{{ i + 1 }}</td>
+                            <td class="text-start">{{ item.description }}</td>
+                            <td>{{ item.qty }}</td>
+                            <td>{{ item.unit }}</td>
+                            <td>{{ item.rate | currency:'INR' }}</td>
+                            <td>{{ item.amount | currency:'INR' }}</td>
+                          </tr> -->
+                  <tr *ngIf="Entity.p.ExpenseTypeRef == 100">
+                    <td>1.</td>
+                    <td>Disel</td>
+                    <td>{{ Entity.p.DieselQuantity }}</td>
+                    <td>{{ Entity.p.UnitName }}</td>
+                    <td>{{ Entity.p.DieselRate }}</td>
+                    <td>{{ Entity.p.DieselTotalAmount }}</td>
+                  </tr>
+
+                  <tr *ngIf="Entity.p.ExpenseTypeRef == 200">
+                    <td>1.</td>
+                    <td>Skilled</td>
+                    <td>{{ Entity.p.SkillQuantity }}</td>
+                    <td>{{ Entity.p.SkillRate }}</td>
+                    <td>{{ Entity.p.SkillAmount }}</td>
+                  </tr>
+
+                  <tr *ngIf="Entity.p.ExpenseTypeRef == 200">
+                    <td>2.</td>
+                    <td>Unskilled</td>
+                    <td>{{ Entity.p.UnskillQuantity }}</td>
+                    <td>{{ Entity.p.UnskillRate }}</td>
+                    <td>{{ Entity.p.UnskillAmount }}</td>
+                  </tr>
+                  <tr *ngIf="Entity.p.ExpenseTypeRef == 200">
+                    <td>3.</td>
+                    <td>Ladies</td>
+                    <td>{{ Entity.p.LadiesQuantity }}</td>
+                    <td>{{ Entity.p.LadiesRate }}</td>
+                    <td>{{ Entity.p.LadiesAmount }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Totals -->
+            <div class="row justify-content-end">
+              <div class="col-md-6">
+                <table class="table border">
+                  <!-- <tr *ngFor="let row of receipt.totalRows">
+                            <td class="text-end"><strong>{{ row.label }}</strong></td>
+                            <td class="text-end">{{ row.value | currency:'INR' }}</td>
+                          </tr> -->
+                  <tr style="background-color: #e6b8af;">
+                    <td class="text-start"><strong style="background-color: #e6b8af;">TOTAL</strong></td>
+                    <td class="text-end text-danger fw-bold">{{ Entity.p.Amount| currency:'INR' }}</td>
+                  </tr>
+                  <tr>
+                    <!-- <td colspan="2"><strong>Inwords:</strong> {{ receipt.inwords }}</td> -->
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div>
+              <h6 class="FaintMaroonBGHeading"> <strong>OTHER COMMENTS</strong></h6>
+              <ol>
+                <li>वरील तपशिला प्रमाणे माल ताब्यात मिळाला.</li>
+                <li>ही पावती सेवा पुरवठादाराच्या नोंदीसाठी प्रदान करण्यात आली आहे.</li>
+                <li>ही पावती भविष्यातील लेखाजोखासाठी जतन करावी.</li>
+              </ol>
+            </div>
+            <br><br>
+            <div class="d-flex justify-content-between m-3">
+              <p>Sign: {{ Entity.p.VendorName }}</p>
+              <p>{{Entity.p.CompanyName}}</p>
+            </div>
+
+            <p class="text-center">If you have any questions about this invoice, please contact</p>
+            <p class="text-center">{{Entity.p.CompanyName}},{{Entity.p.Contacts}} , E-mail</p>
+            <p class="text-center" style="font-style: italic;">
+              <strong>Thank You For Your Business!</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+      <ion-button expand="block" color="primary" shape="round" (click)="makePdf()">
+        print
+      </ion-button>
+    </ion-list>
+  </ion-modal>
 </ion-content>

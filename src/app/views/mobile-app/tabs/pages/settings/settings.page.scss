@@ -19,6 +19,7 @@
     border-radius: 50%;
     object-fit: cover;
     transition: transform 0.3s ease;
+    border: 2px solid var(--ion-color-primary);
 }
 
 .user-avatar:hover {

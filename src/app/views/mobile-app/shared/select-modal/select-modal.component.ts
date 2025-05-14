@@ -20,19 +20,16 @@ export class SelectModalComponent implements OnInit {
 
   constructor(private modalCtrl: ModalController) { }
 
-  // ngOnInit() {
-  //   this.loadedOptions = this.options.slice(0, this.itemsPerLoad);
-  //   const selectedRefs = this.selectedOptions.map(item => item.p.Ref);
-  //   this.selectedOptions = this.options.filter(opt => selectedRefs.includes(opt.p.Ref));
-  // }
   ngOnInit() {
+    const selectedRefs = this.selectedOptions.map(item =>
+      String(item?.p?.Ref ?? item?.Ref)
+    );
+    this.selectedOptions = this.options.filter(opt =>
+      selectedRefs.includes(String(opt?.p?.Ref))
+    );
     this.loadedOptions = this.options.slice(0, this.itemsPerLoad);
-
-    const selectedRefs = this.selectedOptions.map(item => item?.p?.Ref);
-    this.selectedOptions = this.options.filter(opt => selectedRefs.includes(opt?.p?.Ref));
   }
   
-
   filterOptions(event: any) {
     const searchTerm = event.target.value.toLowerCase();
     if (searchTerm) {
@@ -76,9 +73,6 @@ export class SelectModalComponent implements OnInit {
     }
   }
 
-  // isDisabled(option: any): boolean {
-  //   return this.selectedOptions.length >= this.MaxSelection && !this.isSelected(option);
-  // }
   isDisabled(option: any): boolean {
     return this.multiSelect &&
       this.selectedOptions.length >= this.MaxSelection &&
@@ -87,6 +81,7 @@ export class SelectModalComponent implements OnInit {
   
 
   isSelected(option: any): boolean {
+    // console.log('isSelected option :', option);
     return this.selectedOptions.some(item => item.p.Ref === option.p.Ref);
   }
 

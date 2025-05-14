@@ -1,12 +1,9 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
 import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
-import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
-import { SessionValues } from 'src/app/services/sessionvalues.service';
-import { ThemeService } from 'src/app/services/theme.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -17,65 +14,95 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 })
 export class HeaderComponent implements OnInit {
   CompanyList: Company[] = [];
-  selectedCompany: Company[] = [];
+  selectedCompany: any[] = [];
   CompanyRef: number = 0;
+  CompanyName: string = '';
   @Input() title: string = 'Default Title';
-
-  showHeader = (): boolean => {
-    const hiddenRoutes = [
-      '/app_homepage/task/add',
-      '/app_homepage/task/edit',
-      // '/app_homepage/home',
-    ];
-    return !hiddenRoutes.includes(this.router.url);
-  }
-  options = [
-    { Ref: 1, Name: 'Apple' },
-    { Ref: 2, Name: 'Banana' },
-    { Ref: 3, Name: 'Cherry' },
-    { Ref: 4, Name: 'Date' },
-    { Ref: 5, Name: 'Elderberry' },
-    { Ref: 6, Name: 'Fig' },
-    { Ref: 7, Name: 'Grapes' },
-    { Ref: 8, Name: 'Honeydew' },
-    { Ref: 9, Name: 'Indian Fig' },
-    { Ref: 10, Name: 'Jackfruit' },
-    { Ref: 11, Name: 'Kiwi' },
-    { Ref: 12, Name: 'Lemon' },
-    { Ref: 13, Name: 'Mango' },
-    { Ref: 14, Name: 'Nectarine' },
-    { Ref: 15, Name: 'Orange' },
-    { Ref: 16, Name: 'Papaya' },
-    { Ref: 17, Name: 'Quince' },
-    { Ref: 18, Name: 'Raspberry' },
-    { Ref: 19, Name: 'Strawberry' },
-    { Ref: 20, Name: 'Tomato' }
-  ];
-
   constructor(
     public router: Router,
     public appStateManagement: AppStateManageService,
     private uiUtils: UIUtils,
     private companystatemanagement: CompanyStateManagement,
-  ) {}
+    private bottomsheetMobileAppService: BottomsheetMobileAppService,
+
+  ) { }
 
   ngOnInit() {
-    this.onGetCompany();
-    this.FormulateCompanyList();
-    // console.log(this.CompanyList);
+    this.loadCompanyList();
   }
-  private FormulateCompanyList = async ()=> {
-    let lst = await Company.FetchEntireList(
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-    this.CompanyList = lst;
-    console.log('CompanyList :', this.CompanyList);
+  private async loadCompanyList(): Promise<void> {
+    try {
+      // Load from local storage or default
+      const storedRef = await this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
+      const storedName = await this.appStateManagement.StorageKey.getItem('companyName');
+      this.selectedCompany = [
+        {
+          "p": {
+            "Ref": storedRef,
+            "Name": storedName
+          }
+        }
+      ];
+      console.log('selectedCompany :', this.selectedCompany);
+      const list = await Company.FetchEntireList(
+        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+      this.CompanyList = list || [];
 
-    // Set default selection if there is no stored value
-    this.onGetCompany();
+      if (storedRef && storedName) {
+        this.CompanyRef = +storedRef;
+        this.CompanyName = storedName;
+        this.companystatemanagement.setCompanyRef(this.CompanyRef, this.CompanyName);
+      } else if (this.CompanyList.length > 0) {
+        this.changeCompany(this.CompanyList[0].p.Ref);
+      }
+    } catch (error) {
+      console.error('Company fetch failed:', error);
+    }
   }
 
-  onGetCompany =()=> {
+  changeCompany = (ref: number) => {
+    const selected = this.CompanyList.find(c => c.p.Ref === ref);
+    if (selected) {
+      this.CompanyRef = selected.p.Ref;
+      this.CompanyName = selected.p.Name;
+
+      this.appStateManagement.StorageKey.setItem('SelectedCompanyRef', `${selected.p.Ref}`);
+      this.appStateManagement.StorageKey.setItem('companyName', selected.p.Name);
+
+      this.companystatemanagement.setCompanyRef(this.CompanyRef, this.CompanyName);
+    }
+  }
+
+  onSelectionChange = (selected: Company[]) => {
+    if (selected.length > 0) {
+      this.changeCompany(selected[0].p.Ref);
+    }
+  }
+
+  public async selectCountryBottomsheet(): Promise<void> {
+    try {
+      const selected = await this.bottomsheetMobileAppService.openSelectModal(
+        this.CompanyList, this.selectedCompany, false, 'Select Company', 1
+      );
+      if (selected) {
+        this.selectedCompany = selected;
+        console.log('selected :', selected);
+        this.onSelectionChange(this.selectedCompany);
+      }
+    } catch (error) {
+      console.error('Company selection failed:', error);
+    }
+  }
+
+  goToNotificationPage() {
+    this.router.navigate(['/app_homepage/notifications']);
+  }
+  goToProfilePage() {
+    this.router.navigate(['/app_homepage/user-profile']);
+  }
+
+  onGetCompany = () => {
     const storedCompanyRef =
       this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
     const storedCompanyName =
@@ -91,36 +118,15 @@ export class HeaderComponent implements OnInit {
       this.changeCompany(firstCompany.p.Ref);
     }
   }
-
-  onSelectionChange = (selected: Company[]) => {
-    console.log('Selected option:', selected[0].p.Ref);
-    this.changeCompany(selected[0].p.Ref);
-  }
-
-  changeCompany=(ref: number)=> {
-    const selectedCompany = this.CompanyList.find(
-      (company) => company.p.Ref === ref
-    );
-    if (selectedCompany) {
-      this.appStateManagement.StorageKey.setItem(
-        'SelectedCompanyRef',
-        selectedCompany.p.Ref.toString()
-      );
-      this.appStateManagement.StorageKey.setItem(
-        'companyName',
-        selectedCompany.p.Name
-      );
-
-      this.companystatemanagement.setCompanyRef(ref, selectedCompany.p.Name);
-      this.CompanyRef = ref;
-    } else {
-      console.warn('Selected company not found');
-    }
-  }
-
-  goToNotificationPage() {
-    console.log('Selected option:', '/app_homepage/notifications');
-    this.router.navigate(['/app_homepage/notifications']);
-    // this.router.navigate(['/notifications']);
+  private async openSelectModal(
+    dataList: any[],
+    selectedItems: any[],
+    multiSelect: boolean,
+    title: string,
+    MaxSelection: number,
+    updateCallback: (selected: any[]) => void
+  ): Promise<void> {
+    const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, multiSelect, title, MaxSelection);
+    if (selected) updateCallback(selected);
   }
 }

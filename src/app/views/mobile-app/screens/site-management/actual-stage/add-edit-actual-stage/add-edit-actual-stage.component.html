@@ -5,16 +5,21 @@
 <ion-content class="form-container ">
   <ion-list lines="none" class="ion-padding">
     <!-- Select Site -->
-    <ion-item class="input-item" button (click)="selectSiteBottomsheet()">
+    <!-- <ion-item class="input-item" button (click)="selectSiteBottomsheet()">
       <ion-label>Site</ion-label>
 
-      <!-- Text showing the selected status -->
+      Text showing the selected status
       <ion-text slot="end" class="status-text">
         {{ Entity.p.SiteName || 'Select' }}
       </ion-text>
 
-      <!-- Dropdown icon (chevron) on the right -->
+      Dropdown icon (chevron) on the right
       <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item> -->
+
+    <ion-item class="input-item">
+      <ion-label>Site</ion-label>
+      <ion-text>{{ Entity.p.SiteName}}</ion-text>
     </ion-item>
 
     <!-- Date -->
@@ -190,38 +195,48 @@
         <ion-label class="ion-text-center" style="font-weight: bold; font-size: 1.2rem;">
           Machinary Details
         </ion-label>
-        <ion-button>add</ion-button>
+        <ion-button (click)="openModel()">add</ion-button>
       </ion-item>
       <ion-card *ngFor="let Time of Entity.p.TimeDetails; let i = index">
         <ion-card-header>
-          <ion-card-title>{{ i }}</ion-card-title>
+          <ion-card-title>Entry {{ i + 1 }}</ion-card-title>
         </ion-card-header>
-
         <ion-card-content>
-          <ion-item>
+          <ion-item lines="full">
             <ion-label>Start Time</ion-label>
             <ion-text>{{ Time.StartTime }}</ion-text>
           </ion-item>
-
-          <ion-item>
+          <ion-item lines="full">
             <ion-label>End Time</ion-label>
             <ion-text>{{ Time.EndTime }}</ion-text>
           </ion-item>
-
-          <ion-item>
-            <ion-label>Total Time</ion-label>
-            <ion-text>{{ Time.WorkedHours }}</ion-text>
+          <ion-item lines="full">
+            <ion-label>Worked Time</ion-label>
+            <ion-text color="success"><strong>{{ Time.WorkedHours }} Hours</strong></ion-text>
           </ion-item>
+
+          <ion-button fill="clear" size="small" color="warning" (click)="EditTime(i)">
+            <ion-icon name="create-outline" slot="start"></ion-icon>Edit
+          </ion-button>
+          <ion-button fill="clear" size="small" color="danger" (click)="RemoveTime(i)">
+            <ion-icon name="trash-outline" slot="start"></ion-icon>Delete
+          </ion-button>
         </ion-card-content>
       </ion-card>
+      <ion-item lines="full">
+        <ion-label class="ion-text-center" style="font-weight: bold; font-size: 1.2rem;">
+          Total Worked Hours
+        </ion-label>
+        <ion-text color="success"><strong>{{ getTotalWorkedHours() }} Hours</strong></ion-text>
+      </ion-item>
     </ion-list>
 
     <!-- Quantity -->
-    <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeRef != LabourExpenseRef">
+    <ion-item class="input-item"
+      *ngIf="!(Entity.p.ExpenseTypeRef == ExpenseTypeRef && Entity.p.UnitRef == TimeUnitRef) && Entity.p.ExpenseTypeRef != LabourExpenseRef">
       <!-- Entity.p.ExpenseTypeRef != LabourExpenseRef -->
       <ion-input type="number" label="Quantity" labelPlacement="floating" placeholder="Enter Quantity"
-        [(ngModel)]="Entity.p.Quantity" (ngModelChange)="CalculateAmountOnRateAndQuantity()"
-        *ngIf="!(Entity.p.ExpenseTypeRef == ExpenseTypeRef && Entity.p.UnitRef == TimeUnitRef)"></ion-input>
+        [(ngModel)]="Entity.p.Quantity" (ngModelChange)="CalculateAmountOnRateAndQuantity()"></ion-input>
     </ion-item>
 
     <!-- Rate -->
@@ -365,14 +380,16 @@
 
     <!-- Description -->
     <ion-item class="input-item">
-      <ion-textarea type="number" label="Description" labelPlacement="floating" placeholder="Enter Description"
-        [(ngModel)]="Entity.p.Description"></ion-textarea>
+      <ion-input type="number" label="Description" labelPlacement="floating" placeholder="Enter Description"
+        [(ngModel)]="Entity.p.Description"></ion-input>
     </ion-item>
 
     <!-- Sign -->
     <ion-item class="input-item">
-      <ion-input type="number" label="Sign" labelPlacement="floating" placeholder="Enter Sign"
-        [(ngModel)]="Entity.p.CreatedByName" readonly></ion-input>
+      <!-- <ion-input type="number" label="Sign" labelPlacement="floating" placeholder="Enter Sign"
+        [(ngModel)]="Entity.p.CreatedByName" readonly></ion-input> -->
+        <ion-label>Sign</ion-label>
+        <ion-text>{{ Entity.p.CreatedByName}}</ion-text>
     </ion-item>
 
 
@@ -392,4 +409,78 @@
       </ion-row>
     </ion-grid>
   </ion-list>
+  <!-- add time Details Modal -->
+  <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeModal()" class="modal-card">
+    <ng-template>
+      <div class="modal-container">
+        <ion-header>
+          <ion-toolbar color="primary" class="modal-toolbar">
+            <ion-title>Add Time Details</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" (click)="closeModal()">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <ion-content class="modal-scroll-content ion-padding">
+          <ion-list lines="none">
+            <ion-item class="input-item">
+              <ion-label>Start Time</ion-label>
+              <ion-datetime-button datetime="startTime"></ion-datetime-button>
+            </ion-item>
+            <!-- <ion-datetime id="startTime" presentation="time" [(ngModel)]="StartTime"
+              (ngModelChange)="StartTimeChange($event)" show-default-buttons="true">
+            </ion-datetime> -->
+            <ion-modal keepContentsMounted="true">
+              <ng-template>
+                <ion-datetime id="startTime" presentation="time" [(ngModel)]="StartTime"
+                  (ngModelChange)="StartTimeChange($event)" hour-cycle="h23" prefer-wheel="true"
+                  show-default-buttons="true">
+                </ion-datetime>
+              </ng-template>
+            </ion-modal>
+
+            <ion-item class="input-item">
+              <ion-label>End Time</ion-label>
+              <ion-datetime-button datetime="endTime"></ion-datetime-button>
+            </ion-item>
+            <!-- <ion-datetime id="endTime" presentation="time" [(ngModel)]="EndTime" (ngModelChange)="EndTimeChange($event)"
+              show-default-buttons="true">
+            </ion-datetime> -->
+            <ion-modal keepContentsMounted="true">
+              <ng-template>
+                <ion-datetime id="endTime" presentation="time" [(ngModel)]="EndTime"
+                  (ngModelChange)="EndTimeChange($event)" hour-cycle="h23" prefer-wheel="true"
+                  show-default-buttons="true">
+                </ion-datetime>
+              </ng-template>
+            </ion-modal>
+
+            <ion-item class="input-item">
+              <ion-label color="primary">Total Time</ion-label>
+              <ion-text color="dark"><strong>{{ TimeEntity.WorkedHours }} Hours</strong></ion-text>
+            </ion-item>
+          </ion-list>
+        </ion-content>
+
+        <ion-footer class="modal-footer ion-padding">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-button expand="block" color="medium" shape="round"
+                  (click)="closeTimeModal('time')">Close</ion-button>
+              </ion-col>
+              <ion-col>
+                <ion-button expand="block" color="primary" shape="round" (click)="SaveTime()">
+                  {{ 'Save' }}
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-footer>
+      </div>
+    </ng-template>
+  </ion-modal>
 </ion-content>
