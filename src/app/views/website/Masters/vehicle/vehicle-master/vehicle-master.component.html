@@ -3,48 +3,48 @@
     <h5 style="padding-top: 3px;" class="title title_light">Vehicle Master</h5>
   </div>
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
-    <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus [(ngModel)]="SearchString" />
+    <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus
+      [(ngModel)]="SearchString" />
   </div>
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
-    <nz-button nz-button class="btn1 " (click)= 'AddVehicle()'>
+    <nz-button nz-button class="btn1 " (click)='AddVehicle()'>
       Add Vehicle
     </nz-button>
   </div>
 </div>
 <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
-<div class="table-container">
-  <nz-table #basicTable nzSize="small" [nzData]="paginatedList()" class="no-hover-table"
-    Class="bgtable_light" [nzScroll]="{x:'auto' }"
-    nzFrontPagination="false" [nzShowSizeChanger]="false">
-    <thead>
-      <tr>
-        <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let vehicle of paginatedList(); index as i">
-        <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-        <td Class="tbldata">{{vehicle.p.Name}}</td>
-        <!-- <td Class="tbldata">{{vehicle.p.Number}}</td> -->
-        <td class="tbldata">
-          <span style="margin-left: 9px;" (click)="onEditClicked(vehicle);">
-            <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-          </span>
-          <span style="margin-left: 9px;" (click)="onDeleteClicked(vehicle);">
-            <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-        </td>
-      </tr>
-    </tbody>
-  </nz-table>
-</div>
-<div class="fixed-pagination">
-  <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
-    (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
-  </nz-pagination>
-</div>
+  <div class="table-container">
+    <nz-table #basicTable nzSize="small" [nzData]="paginatedList()" class="no-hover-table bgtable_light"
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let vehicle of paginatedList(); index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{vehicle.p.Name}}</td>
+          <!-- <td Class="tbldata">{{vehicle.p.Number}}</td> -->
+          <td class="tbldata">
+            <span style="margin-left: 9px;" (click)="onEditClicked(vehicle);">
+              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+            </span>
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(vehicle);">
+              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+  <div class="fixed-pagination">
+    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+      (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+    </nz-pagination>
+  </div>
 </div>
 <div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
-<div style="height: 200px" class="d-flex align-items-center justify-content-center">
-  <span class="title_light"> Data Not Found</span>
-</div>
+  <div style="height: 200px" class="d-flex align-items-center justify-content-center">
+    <span class="title_light"> Data Not Found</span>
+  </div>
 </div>

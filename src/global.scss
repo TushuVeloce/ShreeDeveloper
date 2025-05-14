@@ -50,15 +50,16 @@
 .tblheader {
   text-align: center !important;
   font-weight: bold !important;
-  background-color: #FBD1D1 !important;
-  color: #A52A2A !important;
+  background-color: brown !important;
+  color: white !important;
   font-size: 14px !important;
 }
 
-.tblheadersecond {
-  background-color: #FAFAFA;
+.tblsubheader {
   text-align: center !important;
   font-weight: bold !important;
+  background-color: #fff2cc !important;
+  color: black !important;
   font-size: 14px !important;
 }
 
@@ -178,8 +179,6 @@ form {
   font-weight: 600;
   justify-content: left;
   display: flex;
-  margin-left: 2vw;
-
 }
 
 .tblcardtitle {
@@ -229,7 +228,7 @@ form {
 }
 
 .btn1:hover {
-  background-color: darkred;
+  background-color: maroon;
 }
 
 /* ------------------------- Search Box Styles End ------------------------- */
@@ -240,8 +239,9 @@ form {
 
 // For Table Heading
 .TableHeading {
-  background-color: rgb(254, 169, 183);
+  background-color: brown;
   height: 36px;
+  color: white;
   text-align: center;
   width: 100%;
   font-size: larger;

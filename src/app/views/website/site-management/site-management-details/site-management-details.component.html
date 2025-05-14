@@ -186,11 +186,11 @@
               <label class="TableHeading"> Owner Details Table</label>
             </div>
           </div>
-          <nz-table #basicTable nzSize="small" class="no-hover-table" Class="bgtable_light" [nzScroll]="{ x: 'auto' }"
+          <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
             nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.SiteManagementOwnerDetails">
             <thead>
               <tr>
-                <th *ngFor="let header of ownerheaders" class="tblheadersecond">
+                <th *ngFor="let header of ownerheaders" class="tblheader">
                   {{ header }}
                 </th>
               </tr>

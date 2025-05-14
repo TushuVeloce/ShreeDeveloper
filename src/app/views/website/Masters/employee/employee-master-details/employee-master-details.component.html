@@ -141,61 +141,21 @@
           <div>
             <label>Department Name </label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" id="DepartmentName" name="DepartmentName" [nzSize]="'large'"
-              [(ngModel)]="Entity.p.DepartmentRef">
+              nzPlaceHolder="Select" id="DepartmentName" [(ngModel)]="Entity.p.DepartmentRef" (ngModelChange)="getDesignationListByDepartmentRef()"
+              name="DepartmentName" [nzSize]="'large'">
               <nz-option *ngFor="let department of DepartmentList" [nzValue]="department.p.Ref"
                 [nzLabel]="department.p.Name"></nz-option>
             </nz-select>
           </div>
         </div>
-        <!-- <div class="col-md-4">
-          <div>
-            <label>Material Status </label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LoginStatus"
-              name="LoginStatus" [nzSize]="'large'" [(ngModel)]="Entity.p.LoginStatus">
-              <nz-option nzValue="true" nzLabel="Enable"></nz-option>
-              <nz-option nzValue="false" nzLabel="Disable"></nz-option>
-            </nz-select>
-          </div>
-        </div> -->
       </div>
-      <!-- <div class="row" style="margin-top: 1rem; "> -->
-      <!-- <div>
-            <label>Role</label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UserRoleRef"
-              name="UserRoleRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UserRoleRef">
-              <nz-option *ngFor="let role of UserRoleList" [nzValue]="role.p.Ref" [nzLabel]="role.p.Name"></nz-option>
-            </nz-select>
-          </div> -->
-
-
-      <!-- <div class="col-md-4">
-            <div>
-              <label>Login Status</label>
-              <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LoginStatus"
-                name="LoginStatus" [nzSize]="'large'" [(ngModel)]="Entity.p.LoginStatus">
-                <nz-option nzValue="true" nzLabel="Enable"></nz-option>
-                <nz-option nzValue="false" nzLabel="Disable"></nz-option>
-              </nz-select>
-            </div>
-          </div> -->
-      <!-- <div class="col-md-4">
-            <div>
-              <label>Is User</label>
-              <select type="text" name="isuser" class="form-control" id="isuser" required>
-                <option value="true">Yes</option>
-                <option value="false" selected>No</option>
-              </select>
-            </div>
-          </div> -->
-      <!-- </div> -->
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
             <label for="DesignationRef">Designation</label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" id="DesignationRef " name="DesignationRef " [nzSize]="'large'"
-              [(ngModel)]="Entity.p.DesignationRef ">
+            <nz-select class="nzSelect-light" [disabled]="Entity.p.DepartmentRef == 0" [nzNotFoundContent]="noDataTpl"
+              nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DesignationRef " name="DesignationRef "
+              [nzSize]="'large'" [(ngModel)]="Entity.p.DesignationRef ">
               <nz-option *ngFor="let designation of DesignationList" [nzValue]="designation.p.Ref"
                 [nzLabel]="designation.p.Name"></nz-option>
             </nz-select>
