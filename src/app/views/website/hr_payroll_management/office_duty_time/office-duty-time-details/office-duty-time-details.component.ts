@@ -27,7 +27,6 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
-
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
@@ -36,7 +35,6 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
       this.Entity = OfficeDutyandTime.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      console.log('this.Entity  :', this.Entity);
     } else {
       this.Entity = OfficeDutyandTime.CreateNewInstance();
       OfficeDutyandTime.SetCurrentInstance(this.Entity);
@@ -49,7 +47,7 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
   }
 
   focusInput = () => {
-    let txtName = document.getElementById('EmployeeRef')!;
+    let txtName = document.getElementById('FromTime')!;
     txtName.focus();
   }
 
@@ -65,6 +63,7 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
