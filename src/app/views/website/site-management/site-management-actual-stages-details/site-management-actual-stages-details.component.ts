@@ -55,7 +55,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   UnitQuantityTotal: number = 0;
   isAddingExpense = false;
   isAdd = false;
-  isOfficialExpenditureGov = false
+  // isOfficialExpenditureGov = false
   isModalOpen: boolean = false;
   timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time','Worked Hours','Action'];
   TimeEntity: TimeDetailProps = TimeDetailProps.Blank();
@@ -221,11 +221,11 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     // }else{
     //   this.isAdd = false
     // }
-    if(stagedata.p.StageTypeName == "Official Expenditure Gov"){
-      this.isOfficialExpenditureGov = true
-    }else{
-      this.isOfficialExpenditureGov = false
-    }
+    // if(stagedata.p.StageTypeName == "Official Expenditure Gov"){
+    //   this.isOfficialExpenditureGov = true
+    // }else{
+    //   this.isOfficialExpenditureGov = false
+    // }
     
     await this.getSubStageListByStageRef(StageRef);
     await this.getExpenseListByStageRef(StageRef);

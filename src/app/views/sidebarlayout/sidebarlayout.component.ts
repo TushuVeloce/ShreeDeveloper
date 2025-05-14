@@ -402,7 +402,7 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'New Site',
         RouterLink: '/homepage/Website/Site_Management_Master',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/New Site.png',
       },
       {
         Name: 'Plot Details',

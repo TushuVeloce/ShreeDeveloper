@@ -187,6 +187,7 @@ nz-content {
   /* Allow text to wrap */
   word-wrap: break-word;
   line-height: 22px;
+   font-size: medium;
 }
 
 .sidebar-submenu-item {
@@ -196,6 +197,7 @@ nz-content {
   /* Allow text to wrap */
   word-wrap: break-word;
   line-height: 22px;
+  font-size: small;
 }
 
 .ant-menu-inline .ant-menu-item-selected::after,
@@ -386,5 +388,7 @@ nz-content {
 //   color: orangered;
 //   border-radius: 5px 5px 5px 5px;
 // }
+
+
 
 

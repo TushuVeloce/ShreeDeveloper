@@ -39,7 +39,9 @@
               <ul>
                 <div style="display: flex; align-items: center">
                   <!-- Collapse Sidebar View -->
-                  <a style="
+                  <a 
+                   title="{{ submodule.Name }}"
+                  style="
                       display: flex;
                       align-items: center;
                       justify-content: center;
@@ -47,17 +49,19 @@
                       height: 40px;
                       width: 40px;
                     " (click)="NavigationFromLogo(submodule.RouterLink)" *ngIf="isCollapsed">
-                    <img [src]="submodule.LogoPath" [title]="submodule.Name" style="width: 18px; height: 17px" />
+                    <img [src]="submodule.LogoPath" alt="logo" 
+                      style="width: 1.4rem; height: 1.4rem;" />
                   </a>
                   <!-- Full Sidebar View -->
                   <li nz-menu-item *ngIf="!isCollapsed" style="width: 100%;">
                     <div class="row g-1 align-items-center">
-                      <div class="col-1 d-flex justify-content-center align-items-center" style="height: 100%;">
+                      <div
+                        style="display: flex; align-items: center; justify-content: center; height: 2.5rem; width: 2.5rem;">
                         <span (click)="NavigationFromLogo(submodule.RouterLink)">
-                          <img [src]="submodule.LogoPath" style="width: 18px; height: 17px;" />
+                          <img [src]="submodule.LogoPath"  alt="logo" style="width: 1.5rem; height: 1.5rem;" />
                         </span>
                       </div>
-                      <div class="col-11 d-flex align-items-center">
+                      <div style="flex: 1; display: flex; align-items: center;">
                         <a *ngIf="submodule.RouterLink !== ''" [routerLink]="submodule.RouterLink"></a>
                         <span class="sidebar-submenu-item" (click)="onMenuItemClick(submodule.Name)">
                           {{ submodule.Name }}
@@ -89,7 +93,11 @@
           </div>
         </span>
       </div>
-
+      <ng-template #noDataTpl>
+        <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+          No Data
+        </div>
+      </ng-template>
       <!-- <a style="margin-top: 1rem">
           <label style="margin-right: 0.5rem; font-weight: bold" Class="togglebtn" > {{ Name }}</label >
         </a> -->
@@ -123,7 +131,7 @@
 
       <div style="display: flex; justify-content: end; align-items: center">
         <div style="padding-right: 1rem">
-          <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select" [nzSize]="'large'"
+          <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzPlaceHolder="Select" [nzSize]="'large'"
             [(ngModel)]="CompanyRef" name="CompanyRef" required id="CompanyRef"
             (ngModelChange)="changecompany(CompanyRef)" [nzDropdownMatchSelectWidth]="true" [style.width.px]="300"
             [disabled]="appStateManagement.isDropdownDisabled()">
