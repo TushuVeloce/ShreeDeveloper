@@ -18,7 +18,7 @@ export class SiteWorkGroupMasterDetailsComponent implements OnInit {
   Entity: SiteWorkGroup = SiteWorkGroup.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
-  DetailsFormTitle: 'New SiteWorkGroup' | 'Edit SiteWorkGroup' = 'New SiteWorkGroup';
+  DetailsFormTitle: 'New Site Work Group' | 'Edit Site Work Group' = 'New Site Work Group';
   IsDropdownDisabled: boolean = false
   InitialEntity: SiteWorkGroup = null as any;
   InputNumber: string = ValidationPatterns.InputNumber
@@ -36,7 +36,7 @@ export class SiteWorkGroupMasterDetailsComponent implements OnInit {
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
 
-      this.DetailsFormTitle = this.IsNewEntity ? 'New SiteWorkGroup' : 'Edit SiteWorkGroup';
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Site Work Group' : 'Edit Site Work Group';
       this.Entity = SiteWorkGroup.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable')
 

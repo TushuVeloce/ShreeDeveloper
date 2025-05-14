@@ -26,6 +26,10 @@ export class ServiceSuppliedByVendorProps {
 
 export class VendorProps {
   public readonly Db_Table_Name = "VendorMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Code: string = '';
   public CompanyType: number = 0;
@@ -40,6 +44,7 @@ export class VendorProps {
   public StateRef: number = CountryStateCityRefs.MaharashtraRef;
   public readonly StateName: string = '';
   public CityRef: number = CountryStateCityRefs.KolhapurRef;
+  public readonly CityName: string = '';
 
   public PinCode: string = '';
   public BankName: string = '';

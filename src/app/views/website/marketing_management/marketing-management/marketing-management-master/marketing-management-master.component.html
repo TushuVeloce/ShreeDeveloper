@@ -14,40 +14,46 @@
       </div>
     </div>
   </div>
+  <ng-template #noDataTpl>
+    <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+      No Data
+    </div>
+  </ng-template>
   <div class="row" style="margin-top: 1rem; ">
- <div class="col-md-4" style="margin-top: 1rem; ">
-    <label for="FromDate"><b>From Date</b></label>
-    <input type="date" name="FromDate" class="form-control" id="FromDate" [(ngModel)]="FromDate"/>
-  </div>
- <div class="col-md-4" style="margin-top: 1rem; ">
-    <label for="ToDate"><b>To Date</b></label>
-    <input type="date" name="ToDate" class="form-control" id="ToDate" [(ngModel)]="ToDate"/>
-  </div>
- <div class="col-md-4" style="margin-top: 1rem; ">
-    <div>
-      <label for="SiteRef"><b>site</b></label>
-      <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-        name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef">
-        <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+    <div class="col-md-4" style="margin-top: 1rem; ">
+      <label for="FromDate"><b>From Date</b></label>
+      <input type="date" name="FromDate" class="form-control" id="FromDate" [(ngModel)]="FromDate" />
+    </div>
+    <div class="col-md-4" style="margin-top: 1rem; ">
+      <label for="ToDate"><b>To Date</b></label>
+      <input type="date" name="ToDate" class="form-control" id="ToDate" [(ngModel)]="ToDate" />
+    </div>
+    <div class="col-md-4" style="margin-top: 1rem; ">
+      <div>
+        <label for="SiteRef"><b>site</b></label>
+        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+          nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef">
+          <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+    <div class="col-md-4" style="margin-top: 1rem; ">
+      <div>
+        <label for="VendorRef"><b>Vendor</b></label>
+        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+          nzPlaceHolder="Select" [nzSize]="'large'" name="VendorRef" [(ngModel)]="Entity.p.VendorRef" required
+          id="VendorRef">
+          <nz-option *ngFor="let vendor of VendorList" [nzValue]="vendor.p.Ref" [nzLabel]="vendor.p.Name"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+    <div class="col-md-4" style="margin-top: 1rem; ">
+      <label><b>Marketing Type</b></label>
+      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+        id="MarketingTypeRef" name="MarketingTypeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.MarketingTypeRef">
+        <nz-option *ngFor="let Mode of MarketingModesList" [nzValue]="Mode.Ref" [nzLabel]="Mode.Name"></nz-option>
       </nz-select>
     </div>
-  </div>
- <div class="col-md-4" style="margin-top: 1rem; ">
-    <div>
-      <label for="VendorRef"><b>Vendor</b></label>
-      <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-        name="VendorRef" [(ngModel)]="Entity.p.VendorRef" required id="VendorRef">
-        <nz-option *ngFor="let vendor of VendorList" [nzValue]="vendor.p.Ref" [nzLabel]="vendor.p.Name"></nz-option>
-      </nz-select>
-    </div>
-  </div>
-  <div class="col-md-4" style="margin-top: 1rem; ">
-    <label><b>Marketing Type</b></label>
-    <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="MarketingTypeRef"
-      name="MarketingTypeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.MarketingTypeRef">
-      <nz-option *ngFor="let Mode of MarketingModesList" [nzValue]="Mode.Ref" [nzLabel]="Mode.Name"></nz-option>
-    </nz-select>
-  </div>
   </div>
   <!-- Digital -->
   <div class="table-container" style="margin-top: 2rem;">
@@ -69,11 +75,11 @@
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{digital.p.SiteName}}</td>
           <td Class="tbldata">{{digital.p.Date}}</td>
-          <td Class="tbldata">{{digital.p.MarketingTypeName}}</td> 
-          <td Class="tbldata">{{digital.p.VendorName}}</td> 
-          <td Class="tbldata">{{digital.p.Rate}}</td> 
-          <td Class="tbldata">{{digital.p.Quantity}}</td> 
-          <td Class="tbldata">{{digital.p.Total}}</td> 
+          <td Class="tbldata">{{digital.p.MarketingTypeName}}</td>
+          <td Class="tbldata">{{digital.p.VendorName}}</td>
+          <td Class="tbldata">{{digital.p.Rate}}</td>
+          <td Class="tbldata">{{digital.p.Quantity}}</td>
+          <td Class="tbldata">{{digital.p.Total}}</td>
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(digital)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(digital)" />
@@ -99,15 +105,15 @@
         </tr>
       </thead>
       <tbody>
-       <tr *ngFor="let electronics of ElectronicsList; index as i">
+        <tr *ngFor="let electronics of ElectronicsList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{electronics.p.SiteName}}</td>
           <td Class="tbldata">{{electronics.p.Date}}</td>
-          <td Class="tbldata">{{electronics.p.MarketingTypeName}}</td> 
-          <td Class="tbldata">{{electronics.p.VendorName}}</td> 
-          <td Class="tbldata">{{electronics.p.Rate}}</td> 
-          <td Class="tbldata">{{electronics.p.Quantity}}</td> 
-          <td Class="tbldata">{{electronics.p.Total}}</td> 
+          <td Class="tbldata">{{electronics.p.MarketingTypeName}}</td>
+          <td Class="tbldata">{{electronics.p.VendorName}}</td>
+          <td Class="tbldata">{{electronics.p.Rate}}</td>
+          <td Class="tbldata">{{electronics.p.Quantity}}</td>
+          <td Class="tbldata">{{electronics.p.Total}}</td>
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(electronics)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(electronics)" />
@@ -133,15 +139,15 @@
         </tr>
       </thead>
       <tbody>
-       <tr *ngFor="let outdoor of OutdoorList; index as i">
+        <tr *ngFor="let outdoor of OutdoorList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{outdoor.p.SiteName}}</td>
           <td Class="tbldata">{{outdoor.p.Date}}</td>
-          <td Class="tbldata">{{outdoor.p.MarketingTypeName}}</td> 
-          <td Class="tbldata">{{outdoor.p.VendorName}}</td> 
-          <td Class="tbldata">{{outdoor.p.Rate}}</td> 
-          <td Class="tbldata">{{outdoor.p.Quantity}}</td> 
-          <td Class="tbldata">{{outdoor.p.Total}}</td> 
+          <td Class="tbldata">{{outdoor.p.MarketingTypeName}}</td>
+          <td Class="tbldata">{{outdoor.p.VendorName}}</td>
+          <td Class="tbldata">{{outdoor.p.Rate}}</td>
+          <td Class="tbldata">{{outdoor.p.Quantity}}</td>
+          <td Class="tbldata">{{outdoor.p.Total}}</td>
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(outdoor)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(outdoor)" />
@@ -167,15 +173,15 @@
         </tr>
       </thead>
       <tbody>
-       <tr *ngFor="let printingmedia of PrintingMediaList; index as i">
+        <tr *ngFor="let printingmedia of PrintingMediaList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{printingmedia.p.SiteName}}</td>
           <td Class="tbldata">{{printingmedia.p.Date}}</td>
-          <td Class="tbldata">{{printingmedia.p.MarketingTypeName}}</td> 
-          <td Class="tbldata">{{printingmedia.p.VendorName}}</td> 
-          <td Class="tbldata">{{printingmedia.p.Rate}}</td> 
-          <td Class="tbldata">{{printingmedia.p.Quantity}}</td> 
-          <td Class="tbldata">{{printingmedia.p.Total}}</td> 
+          <td Class="tbldata">{{printingmedia.p.MarketingTypeName}}</td>
+          <td Class="tbldata">{{printingmedia.p.VendorName}}</td>
+          <td Class="tbldata">{{printingmedia.p.Rate}}</td>
+          <td Class="tbldata">{{printingmedia.p.Quantity}}</td>
+          <td Class="tbldata">{{printingmedia.p.Total}}</td>
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(printingmedia)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(printingmedia)" />
@@ -202,15 +208,15 @@
         </tr>
       </thead>
       <tbody>
-       <tr *ngFor="let broker of BrokerList; index as i">
+        <tr *ngFor="let broker of BrokerList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{broker.p.SiteName}}</td>
           <td Class="tbldata">{{broker.p.Date}}</td>
-          <td Class="tbldata">{{broker.p.MarketingTypeName}}</td> 
-          <td Class="tbldata">{{broker.p.VendorName}}</td> 
-          <td Class="tbldata">{{broker.p.Rate}}</td> 
-          <td Class="tbldata">{{broker.p.Quantity}}</td> 
-          <td Class="tbldata">{{broker.p.Total}}</td> 
+          <td Class="tbldata">{{broker.p.MarketingTypeName}}</td>
+          <td Class="tbldata">{{broker.p.VendorName}}</td>
+          <td Class="tbldata">{{broker.p.Rate}}</td>
+          <td Class="tbldata">{{broker.p.Quantity}}</td>
+          <td Class="tbldata">{{broker.p.Total}}</td>
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(broker)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(broker)" />

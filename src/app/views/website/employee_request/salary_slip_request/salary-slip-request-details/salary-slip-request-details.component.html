@@ -10,6 +10,11 @@
         <span class="detail_title">{{DetailsFormTitle}}</span>
       </div>
     </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-lg-6 col-md-4 col-sm-12">
@@ -19,16 +24,16 @@
         </div>
         <div class="col-lg-6 col-md-4 col-sm-12">
           <label>Year</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="Year" name="Year"
-            [nzSize]="'large'" [(ngModel)]="Entity.p.Year">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="Year" name="Year" [nzSize]="'large'" [(ngModel)]="Entity.p.Year">
             <nz-option *ngFor="let Year of FinancialYearList" [nzValue]="Year" [nzLabel]="Year"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-6 col-md-4 col-sm-12">
           <label for="SelectedMonths"><b>Months</b></label>
-          <nz-select [(ngModel)]="Entity.p.SelectedMonths" nzMode="multiple" id="SelectedMonths" name="SelectedMonths"
-            nzShowSearch nzAllowClear (ngModalChange)="onSelectedMonthsChange(Entity.p.SelectedMonths)"
-            nzPlaceHolder="Select services">
+          <nz-select [(ngModel)]="Entity.p.SelectedMonths" [nzNotFoundContent]="noDataTpl" nzMode="multiple"
+            id="SelectedMonths" name="SelectedMonths" nzShowSearch nzAllowClear
+            (ngModalChange)="onSelectedMonthsChange(Entity.p.SelectedMonths)" nzPlaceHolder="Select services">
             <nz-option *ngFor="let SelectedMonths of MonthList" [nzValue]="SelectedMonths.Ref"
               [nzLabel]="SelectedMonths.Name"></nz-option>
           </nz-select>

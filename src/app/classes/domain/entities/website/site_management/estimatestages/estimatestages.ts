@@ -16,6 +16,10 @@ import { EstimateStagesFetchRequest } from "./estimatestagesfetchrequest";
 
 export class EstimateStagesProps {
   public readonly Db_Table_Name = "EstimateStage";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public SiteRef: number = 0;
   public readonly SiteName: string = '';
@@ -24,9 +28,7 @@ export class EstimateStagesProps {
   public Description: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public CreatedBy: number = 0;
   public CreatedDate: string = '';
-  public UpdatedBy: number = 0;
   public UpdatedDate: string = '';
 
   public readonly IsNewlyCreated: boolean = false;

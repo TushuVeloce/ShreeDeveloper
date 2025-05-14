@@ -1,0 +1,14 @@
+.nz-select-empty .ant-empty-description {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.nz-select-empty .ant-empty-description::after {
+  content: 'No Data';
+}
+
+.nz-select-empty .ant-empty-description::before {
+  content: '';
+  display: none;
+  /* hides the Chinese text */
+}

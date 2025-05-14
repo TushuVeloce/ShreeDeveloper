@@ -11,23 +11,28 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { OwnerFetchRequest } from "./ownerfetchrequest";
+import { CountryStateCityRefs } from "src/app/classes/domain/constants";
 
 
 export class OwnerDetailProps {
   public readonly Db_Table_Name = "SiteManagementOwnerDetails";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
-  public Name: string ='';
-  public ContactNo : string ='';
-  public EmailId : string ='';
-  public Address: string ='';
-  public PinCode : string ='';
-  public CountryRef: number = 0;
+  public Name: string = '';
+  public ContactNo: string = '';
+  public EmailId: string = '';
+  public Address: string = '';
+  public PinCode: string = '';
+  public CountryRef: number = CountryStateCityRefs.IndiaRef;
   public readonly CountryName: string = '';
-  public StateRef : number = 0;
-  public readonly StateName : string = '';
-  public CityRef : number = 0;
-  public readonly CityName : string = '';
-  public SiteManagementRef : number = 0;
+  public StateRef: number = CountryStateCityRefs.MaharashtraRef;
+  public readonly StateName: string = '';
+  public CityRef: number = CountryStateCityRefs.KolhapurRef;
+  public readonly CityName: string = '';
+  public SiteManagementRef: number = 0;
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -42,7 +47,7 @@ export class OwnerDetailProps {
   }
 }
 
-export class  Owner implements IPersistable<Owner> {
+export class Owner implements IPersistable<Owner> {
   public static readonly Db_Table_Name: string = 'SiteManagementOwnerDetails';
 
   public constructor(public readonly p: OwnerDetailProps, public readonly AllowEdit: boolean) {
@@ -51,8 +56,8 @@ export class  Owner implements IPersistable<Owner> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -167,21 +172,21 @@ export class  Owner implements IPersistable<Owner> {
     return Owner.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef:number,SiteRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-     let req = new OwnerFetchRequest();
-     req.CompanyRefs.push(CompanyRef)
-     req.SiteManagementRefs.push(SiteRef)
-     let tdResponse = await Owner.FetchTransportData(req, errorHandler) as TransportData;
-     return Owner.ListFromTransportData(tdResponse);
-   }
+  public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new OwnerFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    req.SiteManagementRefs.push(SiteRef)
+    let tdResponse = await Owner.FetchTransportData(req, errorHandler) as TransportData;
+    return Owner.ListFromTransportData(tdResponse);
+  }
 
-    public static async FetchEntireListBySiteRef(siteref:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-       let req = new OwnerFetchRequest();
-       req.SiteManagementRefs.push(siteref)
-       let tdResponse = await Owner.FetchTransportData(req, errorHandler) as TransportData;
-       return Owner.ListFromTransportData(tdResponse);
-     }
-   
+  public static async FetchEntireListBySiteRef(siteref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new OwnerFetchRequest();
+    req.SiteManagementRefs.push(siteref)
+    let tdResponse = await Owner.FetchTransportData(req, errorHandler) as TransportData;
+    return Owner.ListFromTransportData(tdResponse);
+  }
+
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

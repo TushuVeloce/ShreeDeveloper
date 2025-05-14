@@ -10,12 +10,17 @@
         <span class="detail_title">Actual Stage</span>
       </div>
     </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
     <form autocomplete="off">
       <div class="row">
         <div class="col-md-6" style="margin-top: 1rem">
           <label><b>Site Name</b></label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteRef" name="SiteRef"
-            [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
             <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -41,8 +46,8 @@
         </div>
         <div class="col-md-6" style="margin-top: 1rem">
           <label><b>Stage</b></label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StageRef"
-            name="StageRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef"
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="StageRef" name="StageRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef"
             (ngModelChange)="OnStageChange(Entity.p.StageRef)">
             <nz-option *ngFor="let Stage of StageList" [nzValue]="Stage.p.Ref" [nzLabel]="Stage.p.Name"></nz-option>
           </nz-select>
@@ -52,9 +57,9 @@
         <div class="col-md-6 mb-2">
           <label><b>Expense Type</b></label>
           <div class="d-flex align-items-center">
-            <nz-select *ngIf="!isAddingExpense" class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-              id="ExpenseTypeRef" name="ExpenseTypeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.ExpenseTypeRef"
-              (ngModelChange)="ClearInputsOnExpenseChange($event)">
+            <nz-select *ngIf="!isAddingExpense" class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch
+              nzAllowClear nzPlaceHolder="Select" id="ExpenseTypeRef" name="ExpenseTypeRef" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.ExpenseTypeRef" (ngModelChange)="ClearInputsOnExpenseChange($event)">
               <nz-option *ngFor="let Expense of ExpenseTypeList" [nzValue]="Expense.p.ExpenseType"
                 [nzLabel]="Expense.p.Name"></nz-option>
             </nz-select>
@@ -95,17 +100,18 @@
               StageType == StageTypeEnum.SolarStreetLight
           }">
           <label>Sub Stage</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SubStageRef"
-            name="SubStageRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SubStageRef">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="SubStageRef" name="SubStageRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.SubStageRef">
             <nz-option *ngFor="let SubStage of SubStageList" [nzValue]="SubStage.p.Ref"
               [nzLabel]="SubStage.p.Name"></nz-option>
           </nz-select>
         </div>
         <div *ngIf="StageType == StageTypeEnum.OfficialExpenditure" class="col-md-6 col-md-4 col-sm-12" clss>
           <label for="SelectedMonths"><b>Months</b></label>
-          <nz-select [(ngModel)]="Entity.p.SelectedMonths" nzMode="multiple" id="SelectedMonths" name="SelectedMonths"
-            nzShowSearch nzAllowClear (ngModalChange)="onSelectedMonthsChange(Entity.p.SelectedMonths)"
-            nzPlaceHolder="Select services">
+          <nz-select [(ngModel)]="Entity.p.SelectedMonths" [nzNotFoundContent]="noDataTpl" nzMode="multiple"
+            id="SelectedMonths" name="SelectedMonths" nzShowSearch nzAllowClear
+            (ngModalChange)="onSelectedMonthsChange(Entity.p.SelectedMonths)" nzPlaceHolder="Select services">
             <nz-option *ngFor="let SelectedMonths of MonthList" [nzValue]="SelectedMonths.Ref"
               [nzLabel]="SelectedMonths.Name"></nz-option>
           </nz-select>
@@ -133,8 +139,9 @@
         </div>
         <div *ngIf="IsStage && StageType == StageTypeEnum.HalfRoundGutterNale" class="col-lg-4 col-md-6 col-sm-12 mb-3">
           <label>Gutter Nale Unit</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="GutterNaleUnitRef"
-            name="GutterNaleUnitRef" [nzSize]="'large'" [(ngModel)]="Entity.p.GutterNaleUnitRef">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="GutterNaleUnitRef" name="GutterNaleUnitRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.GutterNaleUnitRef">
             <nz-option *ngFor="let unit of GutterNaleUnitList" [nzValue]="unit.Ref" [nzLabel]="unit.Name"></nz-option>
           </nz-select>
         </div>
@@ -145,8 +152,8 @@
        'col-lg-4 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef !== ExpenseTypeRef || !Entity.p.ExpenseTypeRef
      }">
           <label>Vendor</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorRef"
-            name="VendorRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorRef"
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="VendorRef" name="VendorRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorRef"
             (ngModelChange)="getVendorServiceListByVendorRef(Entity.p.VendorRef)">
             <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
           </nz-select>
@@ -156,8 +163,9 @@
           'col-lg-4 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef !== ExpenseTypeRef || !Entity.p.ExpenseTypeRef
         }">
           <label>Vendor Services</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorServiceRef"
-            name="VendorServiceRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorServiceRef">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" [disabled]="VendorServiceList.length == 0"
+            nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorServiceRef" name="VendorServiceRef"
+            [nzSize]="'large'" [(ngModel)]="Entity.p.VendorServiceRef">
             <nz-option *ngFor="let VendorServices of VendorServiceList" [nzValue]="VendorServices.Ref"
               [nzLabel]="VendorServices.Name"></nz-option>
           </nz-select>
@@ -179,8 +187,8 @@
           'col-lg-4 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef !== ExpenseTypeRef || !Entity.p.ExpenseTypeRef
         }">
           <label>Unit</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UnitRef" name="UnitRef"
-            [nzSize]="'large'" [(ngModel)]="Entity.p.UnitRef"
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="UnitRef" name="UnitRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UnitRef"
             (ngModelChange)="ClearValuesOnTimeSelection(Entity.p.UnitRef)">
             <nz-option *ngFor="let unit of UnitList" [nzValue]="unit.p.Ref" [nzLabel]="unit.p.Name"></nz-option>
           </nz-select>
@@ -508,7 +516,7 @@
               <input type="time" name="StartTime" class="form-control" id="StartTime" [(ngModel)]="TimeEntity.StartTime"
                 (ngModelChange)="calculateWorkedHours()" placeholder="Enter Start Time " #StartTimeCtrl="ngModel"
                 required (blur)="StartTimeCtrl.control.markAsTouched()" />
-              <i class="fa fa-clock"></i>
+              <!-- <i class="fa fa-clock"></i> -->
               <div *ngIf="(StartTimeCtrl.invalid && (StartTimeCtrl.touched || StartTimeCtrl.dirty))">
                 <span class="validation-text" *ngIf="StartTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
               </div>
@@ -520,7 +528,7 @@
               <input type="time" name="EndTime" class="form-control" id="EndTime" [(ngModel)]="TimeEntity.EndTime"
                 (ngModelChange)="calculateWorkedHours()" placeholder="Enter To Time" #EndTimeCtrl="ngModel" required
                 (blur)="EndTimeCtrl.control.markAsTouched()" />
-              <i class="fa fa-clock"></i>
+              <!-- <i class="fa fa-clock"></i> -->
 
               <div *ngIf="(EndTimeCtrl.invalid && (EndTimeCtrl.touched || EndTimeCtrl.dirty))">
                 <span class="validation-text" *ngIf="EndTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -531,7 +539,7 @@
             <div>
               <label for="WorkedHours">Total Working Hours</label>
               <input type="number" name="WorkedHours" class="form-control" id="WorkedHours"
-                [(ngModel)]="TimeEntity.WorkedHours" placeholder="Total Working Hours" required />
+                [(ngModel)]="TimeEntity.WorkedHours" placeholder="Total Working Hours" readonly />
             </div>
           </div>
         </div>

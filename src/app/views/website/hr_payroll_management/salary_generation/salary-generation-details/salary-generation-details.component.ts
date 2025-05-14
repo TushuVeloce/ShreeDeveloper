@@ -98,33 +98,34 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     this.Entity.p.TotalWorkingHrs = 0
     this.Entity.p.TotalLeavesHrs = 0
     this.Entity.p.OverAllWorkingHrs = 0
-  
+
     let req = new SalaryGenerationCustomRequest();
     req.EmployeeRef = employee;
     req.Month = month;
     let td = req.FormulateTransportData();
     let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
     let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-  
+
     if (!tr.Successful) {
       await this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     }
-  
+
     let tdResult = JSON.parse(tr.Tag) as TransportData;
     let res = SalaryGenerationCustomRequest.FromTransportData(tdResult);
     if (res.Data.length > 0) {
-        let checkInData: SalaryGenerationProps[] = res.Data as SalaryGenerationProps[];
-        Object.assign(this.Entity.p, checkInData[0]);
+      let checkInData: SalaryGenerationProps[] = res.Data as SalaryGenerationProps[];
+      Object.assign(this.Entity.p, checkInData[0]);
     }
   };
-  
+
 
   SaveSalaryGeneration = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     if (this.Entity.p.CreatedBy == 0) {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];

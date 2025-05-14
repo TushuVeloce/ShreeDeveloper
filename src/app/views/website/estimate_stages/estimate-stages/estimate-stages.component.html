@@ -15,15 +15,19 @@
         </nz-button>
       </div>
     </div>
-
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
     <div class="row">
       <div class="card-body" style="margin-left: 14px">
         <form autocomplete="off">
           <div class="row">
             <div class="col-md-4">
               <label for="SiteRef"><b>Site Name</b></label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteRef"
-                name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
+              <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+                nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
                 (ngModelChange)="onSiteChange(Entity.p.SiteRef)">
                 <nz-option [nzValue]="0" nzLabel="All"></nz-option>
                 <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
@@ -53,7 +57,8 @@
             <td class="tbldata">{{ estimatestage.p.SiteName }}</td>
             <!-- <td class="tbldata">{{ estimatestage.p.Description }}</td> -->
             <td Class="tbldata" style="cursor: pointer;" [nzTooltipTitle]="estimatestage.p.Description"
-            nzTooltipPlacement="top" nzTooltipColor="#A52A2A" nz-button nz-tooltip>{{estimatestage.p.Description}}</td>
+              nzTooltipPlacement="top" nzTooltipColor="#A52A2A" nz-button nz-tooltip>{{estimatestage.p.Description}}
+            </td>
             <td class="tbldata" style="text-align: right">
               {{ estimatestage.p.Amount | currency : "INR" }}
             </td>

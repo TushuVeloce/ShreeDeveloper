@@ -15,6 +15,10 @@ import { EmployeeAppraisalFetchRequest } from "./employeeappraisalfetchrequest";
 
 export class EmployeeAppraisalProps {
   public readonly Db_Table_Name = "EmployeeAppraisalMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public CompanyRef: number = 0;
@@ -28,10 +32,10 @@ export class EmployeeAppraisalProps {
   public PreviousSalaryPerYear: number = 0;
   public NewSalaryPerMonth: number = 0;
   public NewSalaryPerYear: number = 0;
-  public Description : string = '';
+  public Description: string = '';
   public AddDocument: string = '';
-  
-  
+
+
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -54,8 +58,8 @@ export class EmployeeAppraisal implements IPersistable<EmployeeAppraisal> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -170,8 +174,8 @@ export class EmployeeAppraisal implements IPersistable<EmployeeAppraisal> {
     let tdResponse = await EmployeeAppraisal.FetchTransportData(req, errorHandler) as TransportData;
     return EmployeeAppraisal.ListFromTransportData(tdResponse);
   }
-  
-  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new EmployeeAppraisalFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await EmployeeAppraisal.FetchTransportData(req, errorHandler) as TransportData;

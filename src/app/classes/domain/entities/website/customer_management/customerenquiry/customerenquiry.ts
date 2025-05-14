@@ -13,20 +13,24 @@ import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { CustomerEnquiryFetchRequest } from './customerenquiryfetchrequest';
 import { CustomerFollowUpProps } from '../customerfollowup/customerfollowup';
 import { CustomerFollowUpPlotDetailsProps } from '../customerfollowupplotdetails/CustomerFollowUpPlotDetails';
-import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
+import { CountryStateCityRefs, ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 
 export class CustomerEnquiryProps {
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public ContactNos: string = '';
   public EmailId: string = '';
   public Address: string = '';
   public PinCode: string = '';
-  public CountryRef: number = 9163;
+  public CountryRef: number = CountryStateCityRefs.IndiaRef;
   public readonly CountryName: string = '';
-  public StateRef: number = 0;
+  public StateRef: number = CountryStateCityRefs.MaharashtraRef;
   public readonly StateName: string = '';
-  public CityRef: number = 0;
+  public CityRef: number = CountryStateCityRefs.KolhapurRef;
   public readonly CityName: string = '';
   // public Date: string = '';
   public CompanyRef: number = 0;
@@ -59,7 +63,7 @@ export class CustomerEnquiry implements IPersistable<CustomerEnquiry> {
   private constructor(
     public readonly p: CustomerEnquiryProps,
     public readonly AllowEdit: boolean
-  ) {}
+  ) { }
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {

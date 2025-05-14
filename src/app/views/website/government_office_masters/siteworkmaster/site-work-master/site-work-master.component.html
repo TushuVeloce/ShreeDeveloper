@@ -15,13 +15,16 @@
     <div>
     </div>
   </div>
-
+  <ng-template #noDataTpl>
+    <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+      No Data
+    </div>
+  </ng-template>
   <div class="row">
-
     <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
       <label> Site Work Group</label>
-      <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteWorkGroupRef"
-        name="SiteWorkGroupRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteWorkGroupRef"
+      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+        id="SiteWorkGroupRef" name="SiteWorkGroupRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteWorkGroupRef"
         (ngModelChange)="onSiteGroupChange(Entity.p.SiteWorkGroupRef)">
         <nz-option *ngFor="let siteworkgroup of SiteWorkGroupList" [nzValue]="siteworkgroup.p.Ref"
           [nzLabel]="siteworkgroup.p.Name"></nz-option>

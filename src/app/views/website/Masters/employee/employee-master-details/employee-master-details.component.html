@@ -10,17 +10,13 @@
         <span class="detail_title">{{DetailsFormTitle}}</span>
       </div>
     </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-        <!-- <div class="col-md-4"> -->
-        <!-- <div>
-            <label>Role</label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UserRoleRef"
-              name="UserRoleRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UserRoleRef">
-              <nz-option *ngFor="let role of UserRoleList" [nzValue]="role.p.Ref" [nzLabel]="role.p.Name"></nz-option>
-            </nz-select>
-          </div> -->
-        <!-- </div> -->
         <div class="col-md-4">
           <div>
             <label>Name</label>
@@ -34,15 +30,15 @@
             <input type="date" name="DOB " [(ngModel)]="dob " class="form-control" id="DOB " required />
           </div>
         </div>
-          <div class="col-md-4">
-            <div>
-              <label>Gender</label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="gender" name="gender"
-                [nzSize]="'large'" [(ngModel)]="Entity.p.Gender">
-                <nz-option *ngFor="let gender of GenderList" [nzValue]="gender.Ref" [nzLabel]="gender.Name"></nz-option>
-              </nz-select>
-            </div>
+        <div class="col-md-4">
+          <div>
+            <label>Gender</label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="gender" name="gender" [nzSize]="'large'" [(ngModel)]="Entity.p.Gender">
+              <nz-option *ngFor="let gender of GenderList" [nzValue]="gender.Ref" [nzLabel]="gender.Name"></nz-option>
+            </nz-select>
           </div>
+        </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
@@ -85,9 +81,9 @@
         <div class="col-md-4">
           <div>
             <label for="CountryRef"><b>Country</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-              name="CountryRef" required id="CountryRef" [(ngModel)]="Entity.p.CountryRef"
-              (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" [nzSize]="'large'" name="CountryRef" required id="CountryRef"
+              [(ngModel)]="Entity.p.CountryRef" (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
               <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
                 [nzValue]="country.p.Ref"></nz-option>
             </nz-select>
@@ -98,8 +94,8 @@
         <div class="col-md-4">
           <div>
             <label for="StateRef"><b>State</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
-              name="StateRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StateRef"
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="StateRef" name="StateRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StateRef"
               (ngModelChange)="getCityListByStateRef(Entity.p.StateRef)">
               <nz-option *ngFor="let state of StateList" [nzValue]="state.p.Ref" [nzLabel]="state.p.Name"></nz-option>
             </nz-select>
@@ -108,8 +104,8 @@
         <div class="col-md-4">
           <div>
             <label for="CityRef"><b>City</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
-              name="CityRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CityRef">
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="CityRef" name="CityRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CityRef">
               <nz-option *ngFor="let city of CityList" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
             </nz-select>
           </div>
@@ -132,18 +128,21 @@
         </div>
         <div class="col-md-4">
           <div>
-            <label>Marital  Status</label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="MaritalStatus" name="MaritalStatus"
-              [nzSize]="'large'" [(ngModel)]="Entity.p.MaritalStatus">
-              <nz-option *ngFor="let status of MaritalStatusList" [nzValue]="status.Ref" [nzLabel]="status.Name"></nz-option>
+            <label>Marital Status</label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="MaritalStatus" name="MaritalStatus" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.MaritalStatus">
+              <nz-option *ngFor="let status of MaritalStatusList" [nzValue]="status.Ref"
+                [nzLabel]="status.Name"></nz-option>
             </nz-select>
           </div>
         </div>
         <div class="col-md-4">
           <div>
             <label>Department Name </label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DepartmentName"
-              name="DepartmentName" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef">
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="DepartmentName" name="DepartmentName" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.DepartmentRef">
               <nz-option *ngFor="let department of DepartmentList" [nzValue]="department.p.Ref"
                 [nzLabel]="department.p.Name"></nz-option>
             </nz-select>
@@ -152,7 +151,7 @@
         <!-- <div class="col-md-4">
           <div>
             <label>Material Status </label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LoginStatus"
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LoginStatus"
               name="LoginStatus" [nzSize]="'large'" [(ngModel)]="Entity.p.LoginStatus">
               <nz-option nzValue="true" nzLabel="Enable"></nz-option>
               <nz-option nzValue="false" nzLabel="Disable"></nz-option>
@@ -163,7 +162,7 @@
       <!-- <div class="row" style="margin-top: 1rem; "> -->
       <!-- <div>
             <label>Role</label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UserRoleRef"
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="UserRoleRef"
               name="UserRoleRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UserRoleRef">
               <nz-option *ngFor="let role of UserRoleList" [nzValue]="role.p.Ref" [nzLabel]="role.p.Name"></nz-option>
             </nz-select>
@@ -173,7 +172,7 @@
       <!-- <div class="col-md-4">
             <div>
               <label>Login Status</label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LoginStatus"
+              <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LoginStatus"
                 name="LoginStatus" [nzSize]="'large'" [(ngModel)]="Entity.p.LoginStatus">
                 <nz-option nzValue="true" nzLabel="Enable"></nz-option>
                 <nz-option nzValue="false" nzLabel="Disable"></nz-option>
@@ -194,8 +193,9 @@
         <div class="col-md-4">
           <div>
             <label for="DesignationRef">Designation</label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="DesignationRef "
-              name="DesignationRef " [nzSize]="'large'" [(ngModel)]="Entity.p.DesignationRef ">
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="DesignationRef " name="DesignationRef " [nzSize]="'large'"
+              [(ngModel)]="Entity.p.DesignationRef ">
               <nz-option *ngFor="let designation of DesignationList" [nzValue]="designation.p.Ref"
                 [nzLabel]="designation.p.Name"></nz-option>
             </nz-select>
@@ -204,9 +204,11 @@
         <div class="col-md-4">
           <div>
             <label for="OfficeDutyTimeRef">Office Duty Time</label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="OfficeDutyTimeRef" name="OfficeDutyTimeRef"
-              [nzSize]="'large'" [(ngModel)]="Entity.p.OfficeDutyTimeRef">
-              <nz-option *ngFor="let OfficeDutyTime of OfficeDutyTimeList" [nzValue]="OfficeDutyTime.p.Ref" [nzLabel]="OfficeDutyTime.p.ShortName"></nz-option>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="OfficeDutyTimeRef" name="OfficeDutyTimeRef" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.OfficeDutyTimeRef">
+              <nz-option *ngFor="let OfficeDutyTime of OfficeDutyTimeList" [nzValue]="OfficeDutyTime.p.Ref"
+                [nzLabel]="OfficeDutyTime.p.ShortName"></nz-option>
             </nz-select>
           </div>
         </div>
@@ -224,8 +226,8 @@
               id="SalaryPerMonth  " required />
           </div>
         </div>
-      <!-- </div> -->
-      <!-- <div class="row" style="margin-top: 1rem; "> -->
+        <!-- </div> -->
+        <!-- <div class="row" style="margin-top: 1rem; "> -->
         <div class="col-md-4">
           <div>
             <label>Salary Per Year</label>

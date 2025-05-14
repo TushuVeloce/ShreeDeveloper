@@ -15,12 +15,16 @@ import { VehicleFetchRequest } from "./vehiclefetchrequest";
 
 export class VehicleProps {
   public readonly Db_Table_Name = "VehicleMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public Number: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  
+
   public readonly IsNewlyCreated: boolean = false;
 
   private constructor(isNewlyCreated: boolean) {
@@ -41,8 +45,8 @@ export class Vehicle implements IPersistable<Vehicle> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -158,13 +162,13 @@ export class Vehicle implements IPersistable<Vehicle> {
     let tdResponse = await Vehicle.FetchTransportData(req, errorHandler) as TransportData;
     return Vehicle.ListFromTransportData(tdResponse);
   }
-  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new VehicleFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await Vehicle.FetchTransportData(req, errorHandler) as TransportData;
     return Vehicle.ListFromTransportData(tdResponse);
   }
-  
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

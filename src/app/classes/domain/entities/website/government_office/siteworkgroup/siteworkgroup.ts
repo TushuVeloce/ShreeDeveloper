@@ -15,6 +15,10 @@ import { SiteWorkGroupFetchRequest } from "./siteworkgroupfetchrequest";
 
 export class SiteWorkGroupProps {
   public readonly Db_Table_Name = "SiteWorkGroupMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public CompanyRef: number = 0

@@ -63,7 +63,6 @@ export class SubStageMasterComponent  implements OnInit {
     let lst = await SubStage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    console.log('DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
   }
 
@@ -77,7 +76,6 @@ export class SubStageMasterComponent  implements OnInit {
     }else{
       this.getSubStageListByCompanyRef()
     }
-    console.log('DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
   }
 

@@ -17,7 +17,7 @@ import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
   templateUrl: './sub-stage-master-details.component.html',
   styleUrls: ['./sub-stage-master-details.component.scss'],
 })
-export class SubStageMasterDetailsComponent  implements OnInit {
+export class SubStageMasterDetailsComponent implements OnInit {
   Entity: SubStage = SubStage.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
@@ -26,7 +26,7 @@ export class SubStageMasterDetailsComponent  implements OnInit {
   InitialEntity: SubStage = null as any;
   StageList: Stage[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  StageTypeList = DomainEnums.StageTypeList(true,'select stage');
+  StageTypeList = DomainEnums.StageTypeList(true, 'select stage');
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
@@ -55,7 +55,7 @@ export class SubStageMasterDetailsComponent  implements OnInit {
       console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      if(this.Entity.p.StageRef > 0){
+      if (this.Entity.p.StageRef > 0) {
         this.onStageChange(this.Entity.p.StageRef)
       }
     } else {
@@ -66,16 +66,15 @@ export class SubStageMasterDetailsComponent  implements OnInit {
       SubStage.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as SubStage;
-    this.focusInput();
   }
 
-    onStageChange = async (StageRef: number) => {
-      const services = await Stage.FetchInstance(StageRef, async errMsg =>
-        await this.uiUtils.showErrorMessage('Error', errMsg)
-      );
-      this.Entity.p.StageTypeName = services.p.StageTypeName
-      this.Entity.p.StageType = services.p.StageType
-    };
+  onStageChange = async (StageRef: number) => {
+    const services = await Stage.FetchInstance(StageRef, async errMsg =>
+      await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.Entity.p.StageTypeName = services.p.StageTypeName
+    this.Entity.p.StageType = services.p.StageType
+  };
 
 
   getStageListByCompanyRef = async () => {
@@ -88,20 +87,15 @@ export class SubStageMasterDetailsComponent  implements OnInit {
     this.StageList = lst.filter(stage => stage.p.IsSubStageApplicable === true);
   }
 
-  focusInput = () => {
-    let txtName = document.getElementById('Code')!;
-    txtName.focus();
-  }
-
   SaveSubStageMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     if (this.Entity.p.CreatedBy == 0) {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entityToSave :', entityToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {

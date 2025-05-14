@@ -15,6 +15,10 @@ import { DesignationFetchRequest } from "./designationfetchrequest";
 
 export class DesignationProps {
   public readonly Db_Table_Name = "DesignationMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public DepartmentRef: number = 0;

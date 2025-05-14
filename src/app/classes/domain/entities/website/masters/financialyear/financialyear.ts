@@ -13,12 +13,16 @@ import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { FinancialYearFetchRequest } from "./financialyearfetchrequest";
 
 export class FinancialYearProps {
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public Password: string = '';
-  FromDate: string = ''; 
+  FromDate: string = '';
   ToDate: string = '';
-  ShortName	: string = '';
+  ShortName: string = '';
   public CompanyRef: number = 0;
   public IsCurrentYear: number = 0;
 
@@ -163,7 +167,7 @@ export class FinancialYear implements IPersistable<FinancialYear> {
     return FinancialYear.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new FinancialYearFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await FinancialYear.FetchTransportData(req, errorHandler) as TransportData;

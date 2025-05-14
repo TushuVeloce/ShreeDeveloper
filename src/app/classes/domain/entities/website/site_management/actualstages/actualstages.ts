@@ -17,6 +17,10 @@ import { TimeDetailProps } from "../time/time";
 
 export class ActualStagesProps {
   public readonly Db_Table_Name = "ActualStage";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
 
   public Ref: number = 0;
   public TransDateTime: string = '';
@@ -29,11 +33,8 @@ export class ActualStagesProps {
 
   public IsDeleted: number = 0;
 
-  public CreatedBy: number = 0;
-  public CreatedByName: string = '';
   public CreatedDate: string = '';
 
-  public UpdatedBy: number = 0;
   public UpdatedDate: string = '';
 
   public SiteRef: number = 0;

@@ -4,196 +4,194 @@
       <h5 style="padding-top: 3px;" class="title title_light">Salary Generation</h5>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
-      <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus [(ngModel)]="SearchString" />
+      <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus
+        [(ngModel)]="SearchString" />
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
       <nz-button nz-button class="btn1" (click)='AddSalaryDetails()'>
         Add Salary Details
       </nz-button>
     </div>
-    <div>
-    </div>
   </div>
   <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
     <div class="table-container">
       <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
-      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
-      <thead>
-        <tr>
-          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let salary of paginatedList(); index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{salary.p.EmployeeName}}</td>
-          <td Class="tbldata">{{salary.p.MonthName}}</td>
-          <td Class="tbldata">{{salary.p.TotalWorkingDays}}</td>
-          <td Class="tbldata">{{salary.p.BasicSalary }}</td>
-          <td Class="tbldata">{{salary.p.GrossTotal}}</td>
-          <td Class="tbldata">{{salary.p.TotalDeduction}}</td>
-          <td Class="tbldata">{{salary.p.NetSalary}}</td>
-          <td class="tbldata">
-            <span style="margin-left: 9px;" (click)="onEditClicked(salary);">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span>
-            <span style="margin-left: 9px;" (click)="onDeleteClicked(salary);">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-            <span style="margin-left: 9px;"  (click)="openSalarySlipModal(salary)">
-              <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-          </td>
-        </tr>
-      </tbody>
-    </nz-table>
-  </div>
- <div class="fixed-pagination">
-    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
-      (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
-    </nz-pagination>
-  </div>
-</div>
-<div *ngIf="DisplayMasterList.length === 0">
-  <Data-Not-Found />
-</div>
-
-
-<div *ngIf="isModalVisible" (click)="isModalVisible = false" class="custom-modal-overlay d-flex justify-content-center align-items-center">
-  <div class="custom-modal bg-white rounded shadow p-4" #printSection>
-    
-    <!-- Modal Header -->
-    <div class="custom-modal-header mb-3">
-      <div class="d-flex justify-content-between align-items-center flex-wrap">
-        <div class="d-flex align-items-center mb-2 mb-md-0">
-          <img src="/assets/images/shreelogo.png" alt="Company Logo" style="width: 40px; height: 40px; margin-right: 10px;">
-          <h4 class="mb-0" style="color: #7F2525;">{{ Entity.p.CompanyName }}</h4>
-        </div>
-        <h6 class="text-muted mb-0">Date: 17/04/2025</h6>
-      </div>
-      <h6 class="mt-2">{{ CompanyAddress }}</h6>
-      <h6>{{ CompanyEmail }}</h6>
+        [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+        <thead>
+          <tr>
+            <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let salary of paginatedList(); index as i">
+            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td Class="tbldata">{{salary.p.EmployeeName}}</td>
+            <td Class="tbldata">{{salary.p.MonthName}}</td>
+            <td Class="tbldata">{{salary.p.TotalWorkingDays}}</td>
+            <td Class="tbldata">{{salary.p.BasicSalary }}</td>
+            <td Class="tbldata">{{salary.p.GrossTotal}}</td>
+            <td Class="tbldata">{{salary.p.TotalDeduction}}</td>
+            <td Class="tbldata">{{salary.p.NetSalary}}</td>
+            <td class="tbldata">
+              <span style="margin-left: 9px;" (click)="onEditClicked(salary);">
+                <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+              </span>
+              <span style="margin-left: 9px;" (click)="onDeleteClicked(salary);">
+                <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+              <span style="margin-left: 9px;" (click)="openSalarySlipModal(salary)">
+                <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
     </div>
+    <div class="fixed-pagination">
+      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+        (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+      </nz-pagination>
+    </div>
+  </div>
+  <div *ngIf="DisplayMasterList.length === 0">
+    <Data-Not-Found />
+  </div>
 
-    <!-- Modal Body -->
-    <div class="custom-modal-body">
-      <!-- Employee & Attendance Details -->
-      <div class="row mb-3" style="font-size: 15px;">
-        <div class="col-md-3 mb-2">
-          <strong>Employee Name :</strong> 
+
+  <div *ngIf="isModalVisible" (click)="isModalVisible = false"
+    class="custom-modal-overlay d-flex justify-content-center align-items-center">
+    <div class="custom-modal bg-white rounded shadow p-4" #printSection>
+
+      <!-- Modal Header -->
+      <div class="custom-modal-header mb-3">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+          <div class="d-flex align-items-center mb-2 mb-md-0">
+            <img src="/assets/images/shreelogo.png" alt="Company Logo"
+              style="width: 40px; height: 40px; margin-right: 10px;">
+            <h4 class="mb-0" style="color: #7F2525;">{{ Entity.p.CompanyName }}</h4>
+          </div>
+          <h6 class="text-muted mb-0">Date: 17/04/2025</h6>
         </div>
-        <div class="col-md-3 mb-2">
-          {{ Entity.p.EmployeeName }}
-        </div>
-        <div class="col-md-3 mb-2">
-          <strong>Designation :</strong> 
-        </div>
-        <div class="col-md-3 mb-2">
-          {{EmployeeDesignation}}
-        </div>
-        <div class="col-md-3 mb-2">
-          <strong>Salary per Month :</strong> 
-        </div>
-        <div class="col-md-3 mb-2">
-          {{ Entity.p.BasicSalary }}
-        </div>
-        <div class="col-md-3 mb-2">
-          <strong>Total Worked Days :</strong> 
-        </div>
-        <div class="col-md-3 mb-2">
-          {{ Entity.p.TotalWorkingDays }}
-        </div>
-        <div class="col-md-3 mb-2">
-          <strong>Banck Name :</strong> 
-        </div>
-        <div class="col-md-3 mb-2">
-          {{EmployeeBankName}}
-        </div>
-        <div class="col-md-3 mb-2">
-          <strong>Banck Branch :</strong> 
-        </div>
-        <div class="col-md-3 mb-2">
-          {{EmployeeBankBranch}}
-        </div>
-        <div class="col-md-3 mb-2">
-          <strong>Banck Account No :</strong> 
-        </div>
-        <div class="col-md-3 mb-2">
-          {{EmployeeBankAccountNo}}
-        </div>
-        <div class="col-md-3 mb-2">
-          <strong>TFSC Code :</strong> 
-        </div>
-        <div class="col-md-3 mb-2">
-          {{EmployeeBankIFSCCode}}
-        </div>
+        <h6 class="mt-2">{{ CompanyAddress }}</h6>
+        <h6>{{ CompanyEmail }}</h6>
       </div>
-      <div class="table-container">
-        <table class="table table-bordered text-center">
-          <thead class="bg-light">
-            <tr>
-              <th colspan="2">EARNINGS</th>
-              <th colspan="2">DEDUCTIONS</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Basic Salary</td>
-              <td>{{ Entity.p.BasicSalary | currency:'INR' }}</td>
-              <td>TDS</td>
-              <td>{{ Entity.p.TDS | currency:'INR' }}</td>
-            </tr>
-            <tr>
-              <td>Travel Allowance</td>
-              <td>{{ Entity.p.TotalAllowance | currency:'INR' }}</td>
-              <td>PF</td>
-              <td>{{ Entity.p.PF | currency:'INR' }}</td>
-            </tr>
-            <tr>
-              <td>Incentives</td>
-              <td>{{ Entity.p.TotalIncentive | currency:'INR' }}</td>
-              <td>Total Leaves Deduction</td>
-              <td>{{ Entity.p.TotalLeaveDeduction | currency:'INR'  }}</td>
-            </tr>
-            <tr>
-              <td>Other</td>
-              <td>{{ Entity.p.Other | currency:'INR' }}</td>
-              <td colspan="2"></td>
-            </tr>
-            <tr class="fw-bold">
-              <td>Gross Salary</td>
-              <td>{{ Entity.p.GrossTotal | currency:'INR' }}</td>
-              <td>Total Deduction</td>
-              <td>{{ Entity.p.TotalDeduction | currency:'INR' }}</td>
-            </tr>
-            <tr class="bg-secondary text-white fw-bold">
-              <td>Net Salary</td>
-              <td>{{ Entity.p.NetSalary | currency:'INR' }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    <!-- Footer Details -->
-    <div class="custom-modal-footer mt-4">
-      <!-- Signatures -->
-      <div class="row mt-8">
-        <div class="col-md-6 text-start d-flex flex-column align-items-left justify-content-center">
-          <!-- <hr class="my-2 w-100" style="max-width: 200px; border: 1px solid #0d6efd;"> -->
-          <h6 class="mb-0"> Signature :</h6>
+
+      <!-- Modal Body -->
+      <div class="custom-modal-body">
+        <!-- Employee & Attendance Details -->
+        <div class="row mb-3" style="font-size: 15px;">
+          <div class="col-md-3 mb-2">
+            <strong>Employee Name :</strong>
+          </div>
+          <div class="col-md-3 mb-2">
+            {{ Entity.p.EmployeeName }}
+          </div>
+          <div class="col-md-3 mb-2">
+            <strong>Designation :</strong>
+          </div>
+          <div class="col-md-3 mb-2">
+            {{EmployeeDesignation}}
+          </div>
+          <div class="col-md-3 mb-2">
+            <strong>Salary per Month :</strong>
+          </div>
+          <div class="col-md-3 mb-2">
+            {{ Entity.p.BasicSalary }}
+          </div>
+          <div class="col-md-3 mb-2">
+            <strong>Total Worked Days :</strong>
+          </div>
+          <div class="col-md-3 mb-2">
+            {{ Entity.p.TotalWorkingDays }}
+          </div>
+          <div class="col-md-3 mb-2">
+            <strong>Banck Name :</strong>
+          </div>
+          <div class="col-md-3 mb-2">
+            {{EmployeeBankName}}
+          </div>
+          <div class="col-md-3 mb-2">
+            <strong>Banck Branch :</strong>
+          </div>
+          <div class="col-md-3 mb-2">
+            {{EmployeeBankBranch}}
+          </div>
+          <div class="col-md-3 mb-2">
+            <strong>Banck Account No :</strong>
+          </div>
+          <div class="col-md-3 mb-2">
+            {{EmployeeBankAccountNo}}
+          </div>
+          <div class="col-md-3 mb-2">
+            <strong>TFSC Code :</strong>
+          </div>
+          <div class="col-md-3 mb-2">
+            {{EmployeeBankIFSCCode}}
+          </div>
         </div>
-        <!-- <div class="col-md-6 text-center d-flex flex-column align-items-center">
+        <div class="table-container">
+          <table class="table table-bordered text-center">
+            <thead class="bg-light">
+              <tr>
+                <th colspan="2">EARNINGS</th>
+                <th colspan="2">DEDUCTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Basic Salary</td>
+                <td>{{ Entity.p.BasicSalary | currency:'INR' }}</td>
+                <td>TDS</td>
+                <td>{{ Entity.p.TDS | currency:'INR' }}</td>
+              </tr>
+              <tr>
+                <td>Travel Allowance</td>
+                <td>{{ Entity.p.TotalAllowance | currency:'INR' }}</td>
+                <td>PF</td>
+                <td>{{ Entity.p.PF | currency:'INR' }}</td>
+              </tr>
+              <tr>
+                <td>Incentives</td>
+                <td>{{ Entity.p.TotalIncentive | currency:'INR' }}</td>
+                <td>Total Leaves Deduction</td>
+                <td>{{ Entity.p.TotalLeaveDeduction | currency:'INR' }}</td>
+              </tr>
+              <tr>
+                <td>Other</td>
+                <td>{{ Entity.p.Other | currency:'INR' }}</td>
+                <td colspan="2"></td>
+              </tr>
+              <tr class="fw-bold">
+                <td>Gross Salary</td>
+                <td>{{ Entity.p.GrossTotal | currency:'INR' }}</td>
+                <td>Total Deduction</td>
+                <td>{{ Entity.p.TotalDeduction | currency:'INR' }}</td>
+              </tr>
+              <tr class="bg-secondary text-white fw-bold">
+                <td>Net Salary</td>
+                <td>{{ Entity.p.NetSalary | currency:'INR' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Footer Details -->
+        <div class="custom-modal-footer mt-4">
+          <!-- Signatures -->
+          <div class="row mt-8">
+            <div class="col-md-6 text-start d-flex flex-column align-items-left justify-content-center">
+              <!-- <hr class="my-2 w-100" style="max-width: 200px; border: 1px solid #0d6efd;"> -->
+              <h6 class="mb-0"> Signature :</h6>
+            </div>
+            <!-- <div class="col-md-6 text-center d-flex flex-column align-items-center">
           <hr class="my-2 w-100" style="max-width: 200px; border: 1px solid #0d6efd;">
           <h6 class="mb-0">Employee Signature</h6>
         </div> -->
-        <div class=" col-md-6 text-end mt-1">
-          <button nz-button nzType="primary"  (click)="printPage()">Print</button>
-        </div>
-      </div>
-      <!-- Close Button -->
-      <!-- <div class="text-end mt-1">
+            <div class=" col-md-6 text-end mt-1">
+              <button nz-button nzType="primary" (click)="printPage()">Print</button>
+            </div>
+          </div>
+          <!-- Close Button -->
+          <!-- <div class="text-end mt-1">
         <button nz-button nzType="primary" (click)="isModalVisible = false">Close</button>
       </div> -->
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-
-
-

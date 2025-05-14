@@ -14,6 +14,10 @@ import { DocumentFetchRequest } from "./documentfetchrequest";
 
 
 export class DocumentProps {
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public OfficeName: string = '';
@@ -41,8 +45,8 @@ export class Document implements IPersistable<Document> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -164,19 +168,19 @@ export class Document implements IPersistable<Document> {
     let tdResponse = await Document.FetchTransportData(req, errorHandler) as TransportData;
     return Document.ListFromTransportData(tdResponse);
   }
-  public static async FetchEntireListByDocumentRef(DocumentRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByDocumentRef(DocumentRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new DocumentFetchRequest();
     req.DocumentRefs.push(DocumentRef)
     let tdResponse = await Document.FetchTransportData(req, errorHandler) as TransportData;
     return Document.ListFromTransportData(tdResponse);
   }
 
-    public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-      let req = new DocumentFetchRequest();
-      req.CompanyRefs.push(CompanyRef)
-      let tdResponse = await Document.FetchTransportData(req, errorHandler) as TransportData;
-      return Document.ListFromTransportData(tdResponse);
-    }
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new DocumentFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Document.FetchTransportData(req, errorHandler) as TransportData;
+    return Document.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

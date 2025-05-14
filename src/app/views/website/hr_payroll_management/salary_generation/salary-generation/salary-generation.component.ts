@@ -14,7 +14,7 @@ import { Employee } from 'src/app/classes/domain/entities/website/masters/employ
   templateUrl: './salary-generation.component.html',
   styleUrls: ['./salary-generation.component.scss'],
 })
-export class SalaryGenerationComponent  implements OnInit {
+export class SalaryGenerationComponent implements OnInit {
 
   @ViewChild('printSection') printSection!: ElementRef;
 
@@ -29,18 +29,18 @@ export class SalaryGenerationComponent  implements OnInit {
   total = 0;
   CompnyList: Company[] = [];
   EmployeeList: Employee[] = [];
-  CompanyAddress : string = ''
-  CompanyEmail : string = ''
-  EmployeeDesignation : string = ''
-  EmployeeBankName : string = ''
-  EmployeeBankBranch : string = ''
-  EmployeeBankAccountNo : string = ''
-  EmployeeBankIFSCCode : string = ''
+  CompanyAddress: string = ''
+  CompanyEmail: string = ''
+  EmployeeDesignation: string = ''
+  EmployeeBankName: string = ''
+  EmployeeBankBranch: string = ''
+  EmployeeBankAccountNo: string = ''
+  EmployeeBankIFSCCode: string = ''
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   isModalVisible = false;
 
 
-  headers: string[] = ['Sr.No.', 'Employee Name', 'Month', 'Total Working Days','Basic Salary','Gross Total','Total Deduction','Net Salary', 'Action'];
+  headers: string[] = ['Sr.No.', 'Employee Name', 'Month', 'Total Working Days', 'Basic Salary', 'Gross Total', 'Total Deduction', 'Net Salary', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
@@ -50,32 +50,43 @@ export class SalaryGenerationComponent  implements OnInit {
   }
 
   async ngOnInit() {
-    this.CompnyList = await  Company.FetchEntireList();
-    this.EmployeeList = await  Employee.FetchEntireList();
+    this.CompnyList = await Company.FetchEntireList();
+    console.log('companyRef :', this.companyRef);
     this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
-  openSalarySlipModal = (SalaryGeneration:SalaryGeneration) => {
-  this.isModalVisible = true;
-  this.Entity = SalaryGeneration
-  if(this.Entity.p.CompanyRef != 0){
-    const companydetails = this.CompnyList.find(item => item.p.Ref == this.Entity.p.CompanyRef);{
-      this.CompanyAddress = companydetails?.p?.AddressLine1 || '';
-      this.CompanyEmail = companydetails?.p?.EmailId || '';
+  openSalarySlipModal = (SalaryGeneration: SalaryGeneration) => {
+    this.isModalVisible = true;
+    this.Entity = SalaryGeneration
+    if (this.Entity.p.CompanyRef != 0) {
+      const companydetails = this.CompnyList.find(item => item.p.Ref == this.Entity.p.CompanyRef); {
+        this.CompanyAddress = companydetails?.p?.AddressLine1 || '';
+        this.CompanyEmail = companydetails?.p?.EmailId || '';
+      }
+    }
+    if (this.Entity.p.EmployeeRef != 0) {
+      const employeedetails = this.EmployeeList.find(item => item.p.Ref == this.Entity.p.EmployeeRef); {
+        this.EmployeeDesignation = employeedetails?.p.DesignationName || '';
+        this.EmployeeBankName = employeedetails?.p?.BankName || '';
+        this.EmployeeBankBranch = employeedetails?.p?.BranchName || '';
+        this.EmployeeBankAccountNo = employeedetails?.p?.BanckAccountNo || '';
+        this.EmployeeBankIFSCCode = employeedetails?.p?.IFSC || '';
+      }
     }
   }
-  if(this.Entity.p.EmployeeRef != 0){
-    const employeedetails = this.EmployeeList.find(item => item.p.Ref == this.Entity.p.EmployeeRef);{
-      this.EmployeeDesignation = employeedetails?.p.DesignationName || '';
-      this.EmployeeBankName = employeedetails?.p?.BankName || '';
-      this.EmployeeBankBranch = employeedetails?.p?.BranchName || '';
-      this.EmployeeBankAccountNo = employeedetails?.p?.BanckAccountNo || '';
-      this.EmployeeBankIFSCCode = employeedetails?.p?.IFSC || '';
+
+  getEmployeeListByCompanyRef = async () => {
+    this.EmployeeList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
+    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.EmployeeList = lst;
   }
-  }
+
 
   getSalaryListByCompanyRef = async () => {
     this.MasterList = [];
@@ -84,7 +95,7 @@ export class SalaryGenerationComponent  implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await SalaryGeneration.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SalaryGeneration.FetchEntireListByCompanyRef(30428, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();

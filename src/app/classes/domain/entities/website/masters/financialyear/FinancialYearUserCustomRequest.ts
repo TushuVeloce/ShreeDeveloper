@@ -4,25 +4,27 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class GenerateNewFinancialYearCustomRequest
-{
-    public static readonly FetchRequestType: string = "GenerateNewFinancialYearCustomRequest";
-    CompanyRef:number = 0;
-    Password:string = '';
-    EmployeeRef = 0;
-    LoginToken = ''
+export class GenerateNewFinancialYearCustomRequest {
+  public static readonly FetchRequestType: string = "GenerateNewFinancialYearCustomRequest";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
+  CompanyRef: number = 0;
+  Password: string = '';
+  EmployeeRef = 0;
+  LoginToken = ''
 
-    public MergeIntoTransportData = (td: TransportData) =>
-    {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, GenerateNewFinancialYearCustomRequest.FetchRequestType) as DataCollection;
-        coll.Entries.push(this);
-    }
+  public MergeIntoTransportData = (td: TransportData) => {
+    let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, GenerateNewFinancialYearCustomRequest.FetchRequestType) as DataCollection;
+    coll.Entries.push(this);
+  }
 
-    public FormulateTransportData = () => {
-        let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.CustomProcess);
-        this.MergeIntoTransportData(td);
+  public FormulateTransportData = () => {
+    let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.CustomProcess);
+    this.MergeIntoTransportData(td);
 
-        return td;
-    }
+    return td;
+  }
 }
 

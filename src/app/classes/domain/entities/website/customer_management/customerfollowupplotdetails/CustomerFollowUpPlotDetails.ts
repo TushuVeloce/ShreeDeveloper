@@ -13,7 +13,10 @@ import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { CustomerFollowUpPlotDetailsFetchRequest } from "./CustomerFollowUpPlotDetailsfetchrequest";
 
 export class CustomerFollowUpPlotDetailsProps {
-
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public CustomerFollowUpRef: number = 0;
   public SiteRef: number = 0;

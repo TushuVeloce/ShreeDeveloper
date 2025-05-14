@@ -15,9 +15,13 @@ import { RegistrarOfficeFetchRequest } from "./registrarofficefetchrequest";
 
 export class RegistrarOfficeProps {
   public readonly Db_Table_Name = "RegistrarOffice";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
-  public PlotRef	: number = 0;
-  public SiteRef	: number = 0;
+  public PlotRef: number = 0;
+  public SiteRef: number = 0;
   public CustomerName: string = '';
   public PlotName: string = '';
   public Name: string = '';
@@ -25,56 +29,54 @@ export class RegistrarOfficeProps {
 
   public IsChequeSubmit: Boolean = false;
 
-  public IsCustomerAadharSubmit : boolean = false;
-  public IsCustomerPanSubmit  : boolean = false;
+  public IsCustomerAadharSubmit: boolean = false;
+  public IsCustomerPanSubmit: boolean = false;
 
-  public Witness1Submit : boolean = false;
+  public Witness1Submit: boolean = false;
 
-  public Witness1Name : string = '';
-  public Witness1ContactNo : number = 0 ;
-  public CustomerAadharPath :string = '';
-  public CustomerPanPath   :string = '';
-  public Witness1IsAadharSubmit  : boolean = false;
-  public Witness1AadharPath : string = '';
-  public Witness1IsPanSubmit  : boolean = false;
-  public Witness1PanPath  : string = '' ;
+  public Witness1Name: string = '';
+  public Witness1ContactNo: number = 0;
+  public CustomerAadharPath: string = '';
+  public CustomerPanPath: string = '';
+  public Witness1IsAadharSubmit: boolean = false;
+  public Witness1AadharPath: string = '';
+  public Witness1IsPanSubmit: boolean = false;
+  public Witness1PanPath: string = '';
 
-  public Witness2Submit  : boolean = false;
-  public Witness2Name : string = '';
-  public Witness2ContactNo : number = 0 ;
-  public Witness2IsAadharSubmit  : boolean = false;
-  public Witness2AadharPath : string = '';
-  public Witness2IsPanSubmit   : boolean = false;
-  public Witness2PanPath  : string = '' ;
+  public Witness2Submit: boolean = false;
+  public Witness2Name: string = '';
+  public Witness2ContactNo: number = 0;
+  public Witness2IsAadharSubmit: boolean = false;
+  public Witness2AadharPath: string = '';
+  public Witness2IsPanSubmit: boolean = false;
+  public Witness2PanPath: string = '';
 
 
-//  public IsAgreementToSaleSubmit : boolean = false;
-  public AgreementDocumentNo  : string = '';
-  public AgreementDate : string = '';
-  public AgreementDocumentPath : string ='';
+  //  public IsAgreementToSaleSubmit : boolean = false;
+  public AgreementDocumentNo: string = '';
+  public AgreementDate: string = '';
+  public AgreementDocumentPath: string = '';
 
-//  public IsSaledeedSubmit : Boolean = false;
-  public SaleDeedDocumentNo : string = '';
-  public SaleDeedtDocumentPath :string = '';
-  public SaleDeedDate : string = '';
-  public IsIndexOriginalSubmit : boolean = false;
-  public IndexOriginalDocumentPath : string = '';
-  public IsDastZeroxSubmit : boolean = false;
-  public DastZeroxDocumentPath  : string = '';
+  //  public IsSaledeedSubmit : Boolean = false;
+  public SaleDeedDocumentNo: string = '';
+  public SaleDeedtDocumentPath: string = '';
+  public SaleDeedDate: string = '';
+  public IsIndexOriginalSubmit: boolean = false;
+  public IndexOriginalDocumentPath: string = '';
+  public IsDastZeroxSubmit: boolean = false;
+  public DastZeroxDocumentPath: string = '';
 
-//  public IsTalathiSubmit : Boolean = false;
-  public TalathiInwardNo : string = '';
-  public TalathiDate : string = '';
-  public IsFerfarNoticeSubmit : boolean = false;
-  public FerfarNoticeDocumentPath  : string = '';
-  public IsFinalCustomer712Submit :  boolean = false;
-  public FinalCustomer712DocumentPath  : string = '';
-  public IsSpiral712Submit :  boolean = false;
-  public IsClientSubmit :  boolean = false;
+  //  public IsTalathiSubmit : Boolean = false;
+  public TalathiInwardNo: string = '';
+  public TalathiDate: string = '';
+  public IsFerfarNoticeSubmit: boolean = false;
+  public FerfarNoticeDocumentPath: string = '';
+  public IsFinalCustomer712Submit: boolean = false;
+  public FinalCustomer712DocumentPath: string = '';
+  public IsSpiral712Submit: boolean = false;
+  public IsClientSubmit: boolean = false;
 
-  public UpdatedDate:  string = '';
-  public UpdatedBy:  number = 0;
-
+  public UpdatedDate: string = '';
 
   public CompanyRef: number = 0;
   public CustomerRef: number = 0;
@@ -82,7 +84,7 @@ export class RegistrarOfficeProps {
 
 
 
-  
+
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -107,8 +109,8 @@ export class RegistrarOffice implements IPersistable<RegistrarOffice> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -223,15 +225,15 @@ export class RegistrarOffice implements IPersistable<RegistrarOffice> {
     let tdResponse = await RegistrarOffice.FetchTransportData(req, errorHandler) as TransportData;
     return RegistrarOffice.ListFromTransportData(tdResponse);
   }
-  
-  public static async FetchEntireListBySiteRef(SiteRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+
+  public static async FetchEntireListBySiteRef(SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new RegistrarOfficeFetchRequest();
     req.SiteRefs.push(SiteRef)
     let tdResponse = await RegistrarOffice.FetchTransportData(req, errorHandler) as TransportData;
     return RegistrarOffice.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByPlotRef(PlotRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByPlotRef(PlotRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new RegistrarOfficeFetchRequest();
     req.PlotRefs.push(PlotRef)
     let tdResponse = await RegistrarOffice.FetchTransportData(req, errorHandler) as TransportData;

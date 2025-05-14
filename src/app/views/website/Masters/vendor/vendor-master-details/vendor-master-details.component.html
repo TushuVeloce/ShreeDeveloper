@@ -9,6 +9,11 @@
       <span class="detail_title">{{DetailsFormTitle}}</span>
     </div>
   </div>
+  <ng-template #noDataTpl>
+    <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+      No Data
+    </div>
+  </ng-template>
   <form #VendorForm="ngForm" autocomplete="off">
     <div class="row" style="margin-top: 1rem; ">
       <div class="row" style="margin-top: 1rem; ">
@@ -22,8 +27,9 @@
         </div>
         <div class="col-lg-6 col-md-4 col-sm-12">
           <label for="CompanyType">Company Type</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CompanyTypeRef"
-            name="CompanyTypeRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CompanyType">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="CompanyTypeRef" name="CompanyTypeRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.CompanyType">
             <nz-option *ngFor="let company of CompanyTypeList" [nzValue]="company.Ref"
               [nzLabel]="company.Name"></nz-option>
           </nz-select>
@@ -77,25 +83,25 @@
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4 col-md-4 col-sm-12">
           <label for="CountryRef"><b>Country</b></label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-            name="CountryRef" id="CountryRef" [(ngModel)]="Entity.p.CountryRef"
-            (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" [nzSize]="'large'" name="CountryRef" id="CountryRef"
+            [(ngModel)]="Entity.p.CountryRef" (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
             <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
               [nzValue]="country.p.Ref"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
           <label for="StateRef"><b>State</b></label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
-            name="StateRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StateRef"
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="StateRef" name="StateRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StateRef"
             (ngModelChange)="getCityListByStateRef(Entity.p.StateRef)">
             <nz-option *ngFor="let state of StateList" [nzValue]="state.p.Ref" [nzLabel]="state.p.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4 col-md-4 col-sm-12">
           <label for="CityRef"><b>City</b></label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef" name="CityRef"
-            [nzSize]="'large'" [(ngModel)]="Entity.p.CityRef">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="CityRef" name="CityRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CityRef">
             <nz-option *ngFor="let city of CityList" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -125,7 +131,7 @@
           <label>Branch Name</label>
           <input type="text" [(ngModel)]="Entity.p.BranchName" name="BranchName" class="form-control" id="BranchName"
             required placeholder="Enter Branch Name" pattern="{{NameWithNosAndSpace}}" #BranchNameCtrl="ngModel"
-             (blur)="BranchNameCtrl.control.markAsTouched()" />
+            (blur)="BranchNameCtrl.control.markAsTouched()" />
           <div *ngIf="(BranchNameCtrl.invalid && (BranchNameCtrl.touched || BranchNameCtrl.dirty))">
             <span class="validation-text" *ngIf="BankNameCtrl.errors?.['pattern']">{{NameWithNosAndSpaceMsg}}</span>
             <span class="validation-text" *ngIf="BranchNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -136,8 +142,8 @@
         <div class="col-md-4 col-md-4 col-sm-12">
           <label>Account No</label>
           <input type="number" [(ngModel)]="Entity.p.AccountNumber" name="AccountNo" class="form-control" id="AccountNo"
-            placeholder="Enter Bank Account Number" #AccountNumberCtrl="ngModel" required
-            pattern="{{LargeInputNumber}}" (blur)="AccountNumberCtrl.control.markAsTouched()" />
+            placeholder="Enter Bank Account Number" #AccountNumberCtrl="ngModel" required pattern="{{LargeInputNumber}}"
+            (blur)="AccountNumberCtrl.control.markAsTouched()" />
           <div *ngIf="(AccountNumberCtrl.invalid && (AccountNumberCtrl.touched || AccountNumberCtrl.dirty))">
             <span class="validation-text" *ngIf="AccountNumberCtrl.errors?.['pattern']">{{LargeInputNumberMsg}}</span>
             <span class="validation-text" *ngIf="AccountNumberCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -183,9 +189,9 @@
       <div class="row" style="margin-top: 1rem;">
         <div class="col-md-6 col-md-4 col-sm-12">
           <label for="MaterialListSuppliedByVendor"><b>Material Suplied by Vendor</b></label>
-          <nz-select [(ngModel)]="Entity.p.MaterialListSuppliedByVendor" nzMode="multiple"
-            id="MaterialListSuppliedByVendor" name="MaterialListSuppliedByVendor" nzShowSearch nzAllowClear
-            (ngModalChange)="onVendorServicesChange(Entity.p.MaterialListSuppliedByVendor)"
+          <nz-select [(ngModel)]="Entity.p.MaterialListSuppliedByVendor" [nzNotFoundContent]="noDataTpl"
+            nzMode="multiple" id="MaterialListSuppliedByVendor" name="MaterialListSuppliedByVendor" nzShowSearch
+            nzAllowClear (ngModalChange)="onVendorServicesChange(Entity.p.MaterialListSuppliedByVendor)"
             nzPlaceHolder="Select services">
             <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
               [nzLabel]="material.p.Name"></nz-option>
@@ -193,9 +199,9 @@
         </div>
         <div class="col-md-6 col-md-4 col-sm-12">
           <label for="ServiceListSuppliedByVendor"><b>Services Provided Services</b></label>
-          <nz-select [(ngModel)]="Entity.p.ServiceListSuppliedByVendor" nzMode="multiple"
-            id="ServiceListSuppliedByVendor" name="ServiceListSuppliedByVendor" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select services"
+          <nz-select [(ngModel)]="Entity.p.ServiceListSuppliedByVendor" [nzNotFoundContent]="noDataTpl"
+            nzMode="multiple" id="ServiceListSuppliedByVendor" name="ServiceListSuppliedByVendor" nzShowSearch
+            nzAllowClear nzPlaceHolder="Select services"
             (ngModalChange)="onServiceProviceChange(Entity.p.ServiceListSuppliedByVendor)">
             <nz-option *ngFor="let service of ServiceList" [nzValue]="service.p.Ref"
               [nzLabel]="service.p.Name"></nz-option>

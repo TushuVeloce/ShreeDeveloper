@@ -11,13 +11,14 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { CityFetchRequest } from "./cityfetchrequest";
+import { CountryStateCityRefs } from "src/app/classes/domain/constants";
 
 export class CityProps {
   public Ref: number = 0;
   public Name: string = '';
-  public CountryRef: number = 0;
+  public CountryRef: number = CountryStateCityRefs.IndiaRef;
   public readonly CountryName: string = '';
-  public StateRef: number = 0;
+  public StateRef: number = CountryStateCityRefs.MaharashtraRef;
   public readonly StateName: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
@@ -156,19 +157,19 @@ export class City implements IPersistable<City> {
     let tdResponse = await City.FetchTransportData(req, errorHandler) as TransportData;
     return City.ListFromTransportData(tdResponse);
   }
-  public static async FetchEntireListByStateRef(StateRef :number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByStateRef(StateRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new CityFetchRequest();
     req.StateRefs.push(StateRef)
     let tdResponse = await City.FetchTransportData(req, errorHandler) as TransportData;
     return City.ListFromTransportData(tdResponse);
   }
 
-    public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-      let req = new CityFetchRequest();
-      req.CompanyRefs.push(CompanyRef)
-      let tdResponse = await City.FetchTransportData(req, errorHandler) as TransportData;
-      return City.ListFromTransportData(tdResponse);
-    }
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new CityFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await City.FetchTransportData(req, errorHandler) as TransportData;
+    return City.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

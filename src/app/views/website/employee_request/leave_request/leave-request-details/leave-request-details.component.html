@@ -10,6 +10,11 @@
         <span class="detail_title">{{DetailsFormTitle}}</span>
       </div>
     </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-lg-4 col-md-4 col-sm-12">
@@ -23,8 +28,9 @@
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
           <label>Request Type</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="LeaveRequestType"
-            name="LeaveRequestType" [nzSize]="'large'" [(ngModel)]="Entity.p.LeaveRequestType" (ngModelChange)="onLeaveRequestTypeChanged()">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="LeaveRequestType" name="LeaveRequestType" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.LeaveRequestType" (ngModelChange)="onLeaveRequestTypeChanged()">
             <nz-option *ngFor="let LeaveRequestType of LeaveRequestTypeList" [nzValue]="LeaveRequestType.Ref"
               [nzLabel]="LeaveRequestType.Name"></nz-option>
           </nz-select>
@@ -32,8 +38,7 @@
         <div *ngIf="isHalfDay" class="col-lg-4 col-md-4 col-sm-12">
           <label>Date</label>
           <input type="date" [(ngModel)]="halfdaydate" name="halfdaydate" class="form-control" id="halfdaydate" required
-            placeholder="Enter To Date" #halfdaydateCtrl="ngModel"
-            (blur)="halfdaydateCtrl.control.markAsTouched()" />
+            placeholder="Enter To Date" #halfdaydateCtrl="ngModel" (blur)="halfdaydateCtrl.control.markAsTouched()" />
           <div style="height: 25px;"
             *ngIf="(halfdaydateCtrl.invalid && (halfdaydateCtrl.touched || halfdaydateCtrl.dirty))">
             <span class="validation-text" *ngIf="halfdaydateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>

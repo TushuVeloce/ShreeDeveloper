@@ -14,6 +14,10 @@ import { ProgressReportFetchRequest } from "./progressreportfetchrequest";
 
 
 export class ProgressReportProps {
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public SiteName: string = '';
   public TpOffice: string = '';
@@ -44,8 +48,8 @@ export class ProgressReport implements IPersistable<ProgressReport> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -167,19 +171,19 @@ export class ProgressReport implements IPersistable<ProgressReport> {
     let tdResponse = await ProgressReport.FetchTransportData(req, errorHandler) as TransportData;
     return ProgressReport.ListFromTransportData(tdResponse);
   }
-  public static async FetchEntireListByProgressReportRef(ProgressReportRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByProgressReportRef(ProgressReportRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new ProgressReportFetchRequest();
     req.ProgressReportRefs.push(ProgressReportRef)
     let tdResponse = await ProgressReport.FetchTransportData(req, errorHandler) as TransportData;
     return ProgressReport.ListFromTransportData(tdResponse);
   }
 
-    public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-      let req = new ProgressReportFetchRequest();
-      req.CompanyRefs.push(CompanyRef)
-      let tdResponse = await ProgressReport.FetchTransportData(req, errorHandler) as TransportData;
-      return ProgressReport.ListFromTransportData(tdResponse);
-    }
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new ProgressReportFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await ProgressReport.FetchTransportData(req, errorHandler) as TransportData;
+    return ProgressReport.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

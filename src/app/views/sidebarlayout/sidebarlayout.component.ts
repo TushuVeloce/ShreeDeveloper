@@ -294,16 +294,16 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Expense_Type_Master',
         LogoPath: '',
       },
-      {
-        Name: 'Account Main Ledger',
-        RouterLink: '/homepage/Website/Account_Main_Ledger',
-        LogoPath: '',
-      },
-      {
-        Name: 'Account Sub Ledger',
-        RouterLink: '/homepage/Website/Account_Sub_Ledger',
-        LogoPath: '',
-      },
+      // {
+      //   Name: 'Account Main Ledger',
+      //   RouterLink: '/homepage/Website/Account_Main_Ledger',
+      //   LogoPath: '',
+      // },
+      // {
+      //   Name: 'Account Sub Ledger',
+      //   RouterLink: '/homepage/Website/Account_Sub_Ledger',
+      //   LogoPath: '',
+      // },
       {
         Name: 'Marketing Type Master',
         RouterLink: '/homepage/Website/Marketing_Type_Master',
@@ -354,21 +354,21 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Designation_Master',
         LogoPath: '',
       },
-      {
-        Name: 'User Role Master',
-        RouterLink: '/homepage/Website/User_Role_Master',
-        LogoPath: '',
-      },
-      {
-        Name: 'User Role Right',
-        RouterLink: '/homepage/Website/User_Role_Rights',
-        LogoPath: '',
-      },
-      {
-        Name: 'External Users',
-        RouterLink: '/homepage/Website/External_Users',
-        LogoPath: '',
-      },
+      // {
+      //   Name: 'User Role Master',
+      //   RouterLink: '/homepage/Website/User_Role_Master',
+      //   LogoPath: '',
+      // },
+      // {
+      //   Name: 'User Role Right',
+      //   RouterLink: '/homepage/Website/User_Role_Rights',
+      //   LogoPath: '',
+      // },
+      // {
+      //   Name: 'External Users',
+      //   RouterLink: '/homepage/Website/External_Users',
+      //   LogoPath: '',
+      // },
       {
         Name: 'Company Master',
         RouterLink: '/homepage/Website/Company_Master',
@@ -384,16 +384,16 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Employee_Master',
         LogoPath: '',
       },
-      {
-        Name: 'Employee Appraisal Master',
-        RouterLink: '/homepage/Website/Employee_Appraisal_Master',
-        LogoPath: '',
-      },
-      {
-        Name: 'Employee Exit Master',
-        RouterLink: '/homepage/Website/Employee_Exit_Master',
-        LogoPath: '',
-      },
+      // {
+      //   Name: 'Employee Appraisal Master',
+      //   RouterLink: '/homepage/Website/Employee_Appraisal_Master',
+      //   LogoPath: '',
+      // },
+      // {
+      //   Name: 'Employee Exit Master',
+      //   RouterLink: '/homepage/Website/Employee_Exit_Master',
+      //   LogoPath: '',
+      // },
 
     ]
 

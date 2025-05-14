@@ -16,7 +16,7 @@ nz-select {
 
 .nzSelect-light ::ng-deep .ant-select-focused .ant-select-selector,
 .nzSelect-light ::ng-deep .ant-select-selector:focus-within {
-  border-color: orangered !important;
+  border-color: maroon !important;
   /* Change border color on focus for light theme */
 }
 
@@ -57,11 +57,11 @@ nz-select {
 }
 
 .nzSelect-dark:hover ::ng-deep.ant-select-selector {
-  border-color: orangered !important;
+  border-color: maroon !important;
 }
 
 .nzSelect-light:hover ::ng-deep.ant-select-selector {
-  border-color: orangered !important;
+  border-color: maroon !important;
 }
 
 // =========================== Nz Select Menu  Css End ==============================

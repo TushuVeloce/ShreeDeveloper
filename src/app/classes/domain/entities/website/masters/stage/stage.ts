@@ -16,6 +16,10 @@ import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/c
 
 export class StageProps {
   public readonly Db_Table_Name = "StageMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public StageType: number = 0;
@@ -76,10 +80,10 @@ export class Stage implements IPersistable<Stage> {
     } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
       vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     }
-    if(this.p.IsSubStageApplicable == true && this.p.StageType <= 0){
+    if (this.p.IsSubStageApplicable == true && this.p.StageType <= 0) {
       vra.add('StageType', 'StageType is required');
     }
-    if(this.p.DisplayOrder < 0){
+    if (this.p.DisplayOrder < 0) {
       vra.add('DisplayOrder', 'Display Order is required');
     }
   }

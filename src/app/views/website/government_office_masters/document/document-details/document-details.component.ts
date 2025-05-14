@@ -76,10 +76,12 @@ export class DocumentDetailsComponent implements OnInit {
 
   SaveDocument = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
-    this.Entity.p.CompanyName =
-      this.companystatemanagement.getCurrentCompanyName();
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+    if (this.Entity.p.CreatedBy == 0) {
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    }
     let entityToSave = this.Entity.GetEditableVersion();
-    console.log('entityToSave :', entityToSave);
 
     let entitiesToSave = [entityToSave];
     // await this.Entity.EnsurePrimaryKeysWithValidValues()

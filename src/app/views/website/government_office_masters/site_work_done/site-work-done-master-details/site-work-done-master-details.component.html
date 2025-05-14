@@ -10,36 +10,42 @@
         <span class="detail_title">{{DetailsFormTitle}}</span>
       </div>
     </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-
         <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
           <label> Site Group</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteGroupRef"
-            name="SiteGroupRef" [nzSize]="'large'" [(ngModel)]="SiteGroupRef" (ngModelChange)="onSiteGroupChange(SiteGroupRef)">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="SiteGroupRef" name="SiteGroupRef" [nzSize]="'large'" [(ngModel)]="SiteGroupRef"
+            (ngModelChange)="onSiteGroupChange(SiteGroupRef)">
             <nz-option *ngFor="let siteGroup of SiteWorkGroupList" [nzValue]="siteGroup.p.Ref"
               [nzLabel]="siteGroup.p.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
           <label> Site Work</label>
-          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteWorkRef"
-            name="SiteWorkRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteWorkRef">
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="SiteWorkRef" name="SiteWorkRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.SiteWorkRef">
             <nz-option *ngFor="let sitework of DisplaySiteWorkMasterList" [nzValue]="sitework.p.Ref"
               [nzLabel]="sitework.p.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
           <label for="ListOfApplicableTypes"><b>Applicable Types</b></label>
-          <nz-select [(ngModel)]="Entity.p.ListOfApplicableTypes" nzMode="multiple" id="ListOfApplicableTypes"
-            name="ListOfApplicableTypes" nzShowSearch nzAllowClear
+          <nz-select [(ngModel)]="Entity.p.ListOfApplicableTypes" [nzNotFoundContent]="noDataTpl" nzMode="multiple"
+            id="ListOfApplicableTypes" name="ListOfApplicableTypes" nzShowSearch nzAllowClear
             (ngModalChange)="onApplicableTypeChange(Entity.p.ListOfApplicableTypes)"
             nzPlaceHolder="Select Applicable Type">
             <nz-option *ngFor="let applicabletype of ApplicableTypesForSites" [nzValue]="applicabletype.Ref"
               [nzLabel]="applicabletype.Name"></nz-option>
           </nz-select>
         </div>
-       
+
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>

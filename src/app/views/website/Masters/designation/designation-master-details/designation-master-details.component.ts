@@ -45,7 +45,6 @@ export class DesignationMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    this.DepartmentList = await Department.FetchEntireList();
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
@@ -65,11 +64,21 @@ export class DesignationMasterDetailsComponent implements OnInit {
     ) as Designation;
     this.focusInput();
     await this.FormulateDepartmentList();
+    await this.getDepartmentListByCompanyRef();
   }
 
   focusInput = () => {
     let txtName = document.getElementById('Name')!;
     txtName.focus();
+  }
+
+  getDepartmentListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Department.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.DepartmentList = lst;
   }
 
   public FormulateDepartmentList = async () => {
@@ -89,9 +98,12 @@ export class DesignationMasterDetailsComponent implements OnInit {
   SaveDesignationMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
-    let entityToSave = this.Entity.GetEditableVersion();
     let DepartmentRef = this.Entity.p.DepartmentRef;
-
+    if (this.Entity.p.CreatedBy == 0) {
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    }
+    let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 

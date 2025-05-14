@@ -9,12 +9,16 @@
       </nz-button>
     </div> -->
   </div>
-
+  <ng-template #noDataTpl>
+    <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+      No Data
+    </div>
+  </ng-template>
   <div class="row">
     <div class="col-md-4">
       <label for="SiteManagementRef"><b>Site Name</b></label>
-      <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="SiteManagementRef"
-        name="SiteManagementRef" [nzSize]="'large'" [(ngModel)]="SiteManagementRef"
+      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+        id="SiteManagementRef" name="SiteManagementRef" [nzSize]="'large'" [(ngModel)]="SiteManagementRef"
         (ngModelChange)="onsitechange(SiteManagementRef)">
         <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
       </nz-select>

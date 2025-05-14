@@ -20,6 +20,10 @@ export class ApplicableTypeProps {
 
 export class SiteWorkMasterProps {
   public readonly Db_Table_Name = "SiteWorkMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public SiteWorkGroupRef: number = 0;

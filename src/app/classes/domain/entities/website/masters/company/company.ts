@@ -16,6 +16,10 @@ import { CountryStateCityRefs, ValidationMessages, ValidationPatterns } from "sr
 
 export class CompanyProps {
   public readonly Db_Table_Name = "CompanyMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public OwnerName: string = '';

@@ -26,8 +26,8 @@ export class CustomerFollowupComponent implements OnInit {
   Entity: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
   SiteList: Site[] = [];
   PlotList: Plot[] = [];
-  MasterList: CustomerEnquiry[] = [];
-  DisplayMasterList: CustomerEnquiry[] = [];
+  MasterList: CustomerFollowUp[] = [];
+  DisplayMasterList: CustomerFollowUp[] = [];
   SearchString: string = '';
   SelectedCustomerEnquiry: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
   SelectedFollowUp: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
@@ -113,13 +113,10 @@ export class CustomerFollowupComponent implements OnInit {
     let FollowUp = await CustomerFollowUp.FetchEntireListByDateandPlotRef(this.strCDT, this.InterestedPlotRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.followup = FollowUp
+    this.DisplayMasterList = FollowUp;
     this.loadPaginationData();
   };
 
-  paginatedList = () => {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.followup.slice(start, start + this.pageSize);
-  }
 
   formulateSiteListByCompanyRef = async () => {
     this.MasterList = [];
@@ -153,6 +150,11 @@ export class CustomerFollowupComponent implements OnInit {
     // this.InterestedPlotRef = lst[0].p.Ref;
 
   };
+
+  get paginatedList() {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
 
   onEditClicked = async (followup: CustomerFollowUp) => {
 

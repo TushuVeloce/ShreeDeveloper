@@ -16,10 +16,14 @@ import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/c
 
 export class BankAccountProps {
   public readonly Db_Table_Name = "BankAccountMaster";
+  public CreatedBy: number = 0;
+  public CreatedByName: string = '';
+  public UpdatedBy: number = 0;
+  public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
   public BranchName: string = '';
-  public AccountNumber: string = '';
+  public AccountNumber: number = 0;
   public IFSCCode: string = '';
   public OpeningBalance: number = 0;
   public DateofOpening: string = '';
@@ -75,10 +79,10 @@ export class BankAccount implements IPersistable<BankAccount> {
       vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     }
     if (this.p.BranchName == '') vra.add('Branch', 'Branch cannot be blank.');
-    if (this.p.AccountNumber == '') {
+    if (this.p.AccountNumber == 0) {
       vra.add('AccountNumber', 'Account Number cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.LargeInputNumber).test(this.p.AccountNumber)) {
-      vra.add('AccountNumber', ValidationMessages.LargeInputNumberMsg);
+    } else if (this.p.AccountNumber < 0) {
+      vra.add('AccountNumber', 'Account Number cannot be less then 0.');
     }
     if (this.p.IFSCCode == '') {
       vra.add('IFSCCode', 'IFSC cannot be blank.');
@@ -87,7 +91,7 @@ export class BankAccount implements IPersistable<BankAccount> {
     }
     if (this.p.OpeningBalance == 0) {
       vra.add('OpeningBalance', 'Opening Balance cannot be blank.');
-     } else if(this.p.OpeningBalance < 0) {
+    } else if (this.p.OpeningBalance < 0) {
       vra.add('OpeningBalance', 'Opening Balance cannot be less then 0.');
     }
     if (this.p.DateofOpening == '') vra.add('DateofOpening', 'Date of Opening cannot be blank.');

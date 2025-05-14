@@ -68,8 +68,6 @@ export class VendorMasterDetailsComponent implements OnInit {
   @ViewChild('PANCtrl') PANInputControl!: NgModel;
   @ViewChild('GSTINCtrl') GSTINInputControl!: NgModel;
 
-
-
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
   async ngOnInit() {
@@ -127,19 +125,6 @@ export class VendorMasterDetailsComponent implements OnInit {
     }
   }
 
-  getCityListByStateRef = async (StateRef: number) => {
-    this.CityList = await City.FetchEntireListByStateRef(
-      StateRef,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-
-    // Set default city if exists
-    if (this.CityList.length) {
-      const defaultCity = this.CityList.find(c => c.p.Ref === this.Entity.p.CityRef);
-      this.Entity.p.CityRef = defaultCity ? defaultCity.p.Ref : this.CityList[0].p.Ref;
-    }
-  }
-
   getStateListByCountryRef = async (CountryRef: number) => {
     this.StateList = await State.FetchEntireListByCountryRef(
       CountryRef,
@@ -156,6 +141,19 @@ export class VendorMasterDetailsComponent implements OnInit {
     }
   }
 
+  getCityListByStateRef = async (StateRef: number) => {
+    this.CityList = await City.FetchEntireListByStateRef(
+      StateRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
+    // Set default city if exists
+    if (this.CityList.length) {
+      const defaultCity = this.CityList.find(c => c.p.Ref === this.Entity.p.CityRef);
+      this.Entity.p.CityRef = defaultCity ? defaultCity.p.Ref : this.CityList[0].p.Ref;
+    }
+  }
+
   onVendorServicesChange = (selectedvalue: any) => {
     this.Entity.p.MaterialListSuppliedByVendor = selectedvalue;
   }
@@ -168,8 +166,11 @@ export class VendorMasterDetailsComponent implements OnInit {
     this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    if (this.Entity.p.CreatedBy == 0) {
+      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    }
     let entityToSave = this.Entity.GetEditableVersion();
-
     let entitiesToSave = [entityToSave]
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
@@ -197,7 +198,7 @@ export class VendorMasterDetailsComponent implements OnInit {
   }
 
   resetAllControls = () => {
-     // reset touched
+    // reset touched
     this.NameInputControl.control.markAsUntouched();
     this.CodeInputControl.control.markAsUntouched();
     this.AddressLine1InputControl.control.markAsUntouched();
