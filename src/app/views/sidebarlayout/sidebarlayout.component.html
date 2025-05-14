@@ -10,12 +10,7 @@
     </div>
     <!-- -------- Module list start ----------- -->
     <div class="scrollable-content">
-      <ul nz-menu nzMode="inline" [nzInlineCollapsed]="isCollapsed" style="
-          background-color: white;
-          color: black;
-          font-size: 1vw;
-          font-weight: 600;
-          padding-bottom: 60px;
+      <ul nz-menu nzMode="inline" [nzInlineCollapsed]="isCollapsed" style=" background-color: white; color: black; font-size: 1vw; font-weight: 600; padding-bottom: 60px;
         ">
         <div *ngFor="let module of ModuleList">
           <div style="display: flex" (click)="SideMenuHideShowForModule(module.Name, true)">
@@ -32,25 +27,15 @@
             </li>
           </div>
           <div *ngFor="let submodule of module.SubModuleList">
-            <li *ngIf="module.Name === newModulename && isShow" nz-menu-item #menuDiv [ngClass]="{
-                'ant-menu-item-selected':
-                  activeSubmodule === submodule.Name && !BrowserBack
-              }">
+            <li *ngIf="module.Name === newModulename && isShow" nz-menu-item #menuDiv [ngClass]="{'ant-menu-item-selected':activeSubmodule === submodule.Name && !BrowserBack}">
               <ul>
                 <div style="display: flex; align-items: center">
                   <!-- Collapse Sidebar View -->
                   <a 
                    title="{{ submodule.Name }}"
-                  style="
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                      margin-left: 17px;
-                      height: 40px;
-                      width: 40px;
+                  style="  display: flex;  align-items: center;  justify-content: center;  margin-left: 17px;  height: 40px;  width: 40px;
                     " (click)="NavigationFromLogo(submodule.RouterLink)" *ngIf="isCollapsed">
-                    <img [src]="submodule.LogoPath" alt="logo" 
-                      style="width: 1.4rem; height: 1.4rem;" />
+                    <img [src]="submodule.LogoPath" alt="logo"  style="width: 1.4rem; height: 1.4rem;" />
                   </a>
                   <!-- Full Sidebar View -->
                   <li nz-menu-item *ngIf="!isCollapsed" style="width: 100%;">

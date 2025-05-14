@@ -471,27 +471,27 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Site Work Group',
         RouterLink: '/homepage/Website/Site_Work_Group',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Site Work Group.png',
       },
       {
         Name: 'Site Work Master',
         RouterLink: '/homepage/Website/Site_Work_Master',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Site Work Master.png',
       },
       {
         Name: 'Site Work Done',
         RouterLink: '/homepage/Website/Site_Work_Done',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Site Work Done.png',
       },
       {
         Name: 'Progress Report',
         RouterLink: '/homepage/Website/Site_Progress_Report',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Progress Report.png',
       },
       {
         Name: 'Document List',
         RouterLink: '/homepage/Website/Document',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Document List.png',
       },
       // {
       //   Name: 'Government Transaction',
