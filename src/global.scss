@@ -121,8 +121,7 @@ input.form-control {
   border-color: brown;
 }
 
-input.form-control:focus,
-input.form-control:not(:placeholder-shown) {
+input.form-control:focus {
   outline: none;
   border: 1px solid brown;
   box-shadow: 0 0 5px rgba(165, 42, 42, 0.5);
@@ -159,6 +158,31 @@ textarea.form-control:not(:placeholder-shown) {
 
 // ========================== Input, textarea, nz-select Class CSS End =========================== //
 
+
+/* ------------------------- Search Box Styles Start ------------------------- */
+.search-container_light {
+  position: relative;
+}
+
+.search-box_light {
+  width: 100%;
+  padding: 5px 20px !important;
+  border-radius: 5px;
+  font-size: 14px;
+  outline: none;
+  border: 1.5px solid #8B0000 !important;
+  background-color: white;
+  transition: box-shadow 0.3s, border-color 0.3s;
+}
+
+/* Glow effect on focus and hover */
+.search-box_light:focus,
+.search-box_light:hover {
+  box-shadow: 0 0 10px rgba(139, 0, 0, 0.5);
+  /* same #8B0000 in rgba */
+}
+
+/* ------------------------- Search Box Styles End ------------------------- */
 
 .btn:hover {
   background-color: brown;
@@ -211,44 +235,6 @@ form {
   width: auto;
   vertical-align: text-top !important;
 }
-
-/* ------------------------- Search Box Styles Start ------------------------- */
-.search-container_light {
-  position: relative;
-}
-
-// .search-box_light {
-//   width: 100%;
-//   padding: 5px 20px !important;
-//   border-radius: 5px;
-//   font-size: 14px;
-//   outline: none;
-//   border: 1.5px solid #8B0000 !important;
-//   background-color: white;
-// }
-
-// .search-box_light:focus {
-//   border-color: #8B0000;
-// }
-
-.search-box_light {
-  width: 100%;
-  padding: 5px 20px !important;
-  border-radius: 5px;
-  font-size: 14px;
-  outline: none;
-  border: 1.5px solid #8B0000 !important;
-  background-color: white;
-  transition: box-shadow 0.3s, border-color 0.3s;
-}
-
-/* Glow effect on focus and hover */
-.search-box_light:focus,
-.search-box_light:hover {
-  box-shadow: 0 0 10px rgba(139, 0, 0, 0.5); /* same #8B0000 in rgba */
-}
-
-/* ------------------------- Search Box Styles End ------------------------- */
 
 /* Responsive styles */
 @media only screen and (max-width: 667px) {
