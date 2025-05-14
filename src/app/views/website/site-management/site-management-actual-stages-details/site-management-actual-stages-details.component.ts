@@ -213,6 +213,8 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   OnStageChange = async (StageRef: number) => {
     if(this.IsNewEntity){
       this.Entity.p.ExpenseTypeRef = 0
+      this.Entity.p.ExtraQuantity = 0
+      this.Entity.p.GutterNaleUnitRef = 0
       await this.AddExpenseTypeToOther( this.Entity.p.ExpenseTypeRef )
     }
     let stagedata = await Stage.FetchInstance(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));

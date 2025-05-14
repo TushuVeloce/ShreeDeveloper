@@ -57,6 +57,7 @@ export class SidebarlayoutComponent implements OnInit {
   CompnyList: Company[] = [];
   CompanyRef: number = 0;
   isDropdownDisabled: boolean = false;
+  isShow = true;
   // Name: string = 'Veloce Tech';
 
   previousActiveSubmodule: string | null = null; // Tracks the active module
@@ -107,6 +108,16 @@ export class SidebarlayoutComponent implements OnInit {
     this.isDarkMode = this.appStateManagement.getTheme() === 'dark'
     this.onThemeToggle();
     this.FormulateCompanyList();
+    const savedSubmodule = localStorage.getItem('activeSubmodule');
+    if (savedSubmodule) {
+      this.activeSubmodule = savedSubmodule;
+    }
+
+    const savedModule = localStorage.getItem('activeModule');
+    if (savedModule) {
+      this.newModulename = savedModule;
+      this.isShow = true;
+    }
 
     // Listen to browser back button events
     // this.location.subscribe(event => {
@@ -138,7 +149,6 @@ export class SidebarlayoutComponent implements OnInit {
 
   newModulename: string = '';
   oldModulename: string = '';
-  isShow: boolean = false;
   isShow1: boolean = false;
   count = true;
 
