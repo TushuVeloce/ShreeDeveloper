@@ -26,6 +26,7 @@ import { Company } from 'src/app/classes/domain/entities/website/masters/company
 interface SubModule {
   Name: string;
   RouterLink: string;
+  LogoPath: string;
 }
 
 interface module {
@@ -264,7 +265,7 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Dashboard',
         RouterLink: '/homepage/Website/',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
     ]
 
@@ -272,127 +273,127 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Unit Master',
         RouterLink: '/homepage/Website/Unit_Master',
-        LogoPath: '',
+        LogoPath: '/assets/icons/Unit Master.png',
       },
       {
         Name: 'Material Master',
         RouterLink: '/homepage/Website/Material_Master',
-        LogoPath: '',
+        LogoPath: '/assets/icons/Material Master.png',
       },
       {
         Name: 'Stage Master',
         RouterLink: '/homepage/Website/Stage_Master',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Stage Master.png',
       },
       {
         Name: 'Sub Stage Master',
         RouterLink: '/homepage/Website/Sub_Stage_Master',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Sub Stage Master.png',
       },
       {
         Name: 'Expense Type Master',
         RouterLink: '/homepage/Website/Expense_Type_Master',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Expense Type.png',
       },
       // {
       //   Name: 'Account Main Ledger',
       //   RouterLink: '/homepage/Website/Account_Main_Ledger',
-      //   LogoPath: '',
+      //  LogoPath:'/assets/icons/Material Master.png',
       // },
       // {
       //   Name: 'Account Sub Ledger',
       //   RouterLink: '/homepage/Website/Account_Sub_Ledger',
-      //   LogoPath: '',
+      //  LogoPath:'/assets/icons/Material Master.png',
       // },
       {
         Name: 'Marketing Type Master',
         RouterLink: '/homepage/Website/Marketing_Type_Master',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Marketing Type Master.png',
       },
       {
         Name: 'Vendor Services Master',
         RouterLink: '/homepage/Website/Vendor_Services_Master',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Vendor Service Master.png',
       },
       {
         Name: 'Vendor Master',
         RouterLink: '/homepage/Website/Vendor_Master',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Vendor Master.png',
       },
       // {
       //   Name: 'Vehicle Master',
       //   RouterLink: '/homepage/Website/Vehicle_Master',
-      //   LogoPath: '',
+      //  LogoPath:'/assets/icons/Material Master.png',
       // },
       {
         Name: 'Bank Account Master',
         RouterLink: '/homepage/Website/Bank_Account_Master',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Bank Account Master.png',
       },
       {
         Name: 'Country Master',
         RouterLink: '/homepage/Website/Country',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Country Master.png',
       },
       {
         Name: 'State Master',
         RouterLink: '/homepage/Website/State',
-        LogoPath: '',
+       LogoPath:'/assets/icons/State Master.png',
       },
       {
         Name: 'City Master',
         RouterLink: '/homepage/Website/City',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Department Master',
         RouterLink: '/homepage/Website/Department_Master',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Department Master.png',
       },
       {
         Name: 'Designation Master',
         RouterLink: '/homepage/Website/Designation_Master',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Designation Master.png',
       },
       // {
       //   Name: 'User Role Master',
       //   RouterLink: '/homepage/Website/User_Role_Master',
-      //   LogoPath: '',
+      //  LogoPath:'/assets/icons/Material Master.png',
       // },
       // {
       //   Name: 'User Role Right',
       //   RouterLink: '/homepage/Website/User_Role_Rights',
-      //   LogoPath: '',
+      //  LogoPath:'/assets/icons/Material Master.png',
       // },
       // {
       //   Name: 'External Users',
       //   RouterLink: '/homepage/Website/External_Users',
-      //   LogoPath: '',
+      //  LogoPath:'/assets/icons/Material Master.png',
       // },
       {
         Name: 'Company Master',
         RouterLink: '/homepage/Website/Company_Master',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Company Master.png',
       },
       {
         Name: 'Financial Year Master',
         RouterLink: '/homepage/Website/Financial_Year_Master',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Financial Year Master.png',
       },
       {
         Name: 'Employee Master',
         RouterLink: '/homepage/Website/Employee_Master',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Employee Master.png',
       },
       // {
       //   Name: 'Employee Appraisal Master',
       //   RouterLink: '/homepage/Website/Employee_Appraisal_Master',
-      //   LogoPath: '',
+      //  LogoPath:'/assets/icons/Employee Appraisal Master.png',
       // },
       // {
       //   Name: 'Employee Exit Master',
       //   RouterLink: '/homepage/Website/Employee_Exit_Master',
-      //   LogoPath: '',
+      //  LogoPath:'/assets/icons/Employee Exit Master.png',
       // },
 
     ]
@@ -401,22 +402,22 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'New Site',
         RouterLink: '/homepage/Website/Site_Management_Master',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Plot Details',
         RouterLink: '/homepage/Website/Plot_Master',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Actual Stages',
         RouterLink: '/homepage/Website/Site_Management_Actual_Stage',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Estimate Stages',
         RouterLink: '/homepage/Website/Estimate_Stages',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
     ]
 
@@ -424,27 +425,27 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Material Requisition',
         RouterLink: '/homepage/Website/Material_Requisition',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Stock Order',
         RouterLink: '/homepage/Website/Stock_Order',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Stock Inward',
         RouterLink: '/homepage/Website/Stock_Inward',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Stock Consume',
         RouterLink: '/homepage/Website/Stock_Consume',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Stock Transfer',
         RouterLink: '/homepage/Website/Stock_Transfer',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
     ]
 
@@ -452,17 +453,17 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Customer Enquiry',
         RouterLink: '/homepage/Website/Customer_Enquiry',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Customer Follow Up',
         RouterLink: '/homepage/Website/Customer_FollowUp',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Registered Customer',
         RouterLink: '/homepage/Website/Registered_Customer',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       }
     ]
 
@@ -470,46 +471,46 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Site Work Group',
         RouterLink: '/homepage/Website/Site_Work_Group',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Site Work Master',
         RouterLink: '/homepage/Website/Site_Work_Master',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Site Work Done',
         RouterLink: '/homepage/Website/Site_Work_Done',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Progress Report',
         RouterLink: '/homepage/Website/Site_Progress_Report',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Document List',
         RouterLink: '/homepage/Website/Document',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       // {
       //   Name: 'Government Transaction',
       //   RouterLink: '/homepage/Website/Government_Transaction',
-      //   LogoPath: '',
+      //  LogoPath:'/assets/icons/Material Master.png',
       // },
     ]
     // let RegistrarOfficeSubModuleList = [
     //   {
     //     Name: 'Registrar Office',
     //     RouterLink: '/homepage/Website/Registrar_Office',
-    //     LogoPath: '',
+    //    LogoPath:'/assets/icons/Material Master.png',
     //   },
     // ]
     // let MarketingManagementSubModuleList = [
     //   {
     //     Name: 'Marketing Management',
     //     RouterLink: '/homepage/Website/Marketing_Management',
-    //     LogoPath: '',
+    //    LogoPath:'/assets/icons/Material Master.png',
     //   },
     // ]
 
@@ -517,27 +518,27 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Office Duty & Time',
         RouterLink: '/homepage/Website/Office_Duty_Time',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Attendance',
         RouterLink: '/homepage/Website/Attendance_Logs',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Salary Generation',
         RouterLink: '/homepage/Website/Salary_Generation',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Leave Approval',
         RouterLink: '/homepage/Website/Leave_Approval',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Salary Slip Approval',
         RouterLink: '/homepage/Website/Salary_Slip_Approval',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       }
 
     ]
@@ -546,24 +547,24 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Employee Attendance Logs',
         RouterLink: '/homepage/Website/Employee_Attendance_Logs',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Leave Request',
         RouterLink: '/homepage/Website/Leave_Request',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       },
       {
         Name: 'Salary Slip Request',
         RouterLink: '/homepage/Website/Salary_Slip_Request',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       }
     ]
     let RazorpaySubModulelist = [
       {
         Name: 'Razorpay',
         RouterLink: '/homepage/Website/Razorpay',
-        LogoPath: '',
+       LogoPath:'/assets/icons/Material Master.png',
       }
     ]
 
@@ -577,13 +578,13 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Master',
         RouterLink: '',
-        WhiteLogo: '/assets/icons/master.png',
+        WhiteLogo: '/assets/icons/Master.png',
         SubModuleList: MasterSubModuleList,
       },
       {
         Name: 'Site Management',
         RouterLink: '',
-        WhiteLogo: '/assets/icons/site.png',
+        WhiteLogo: '/assets/icons/Site Management.png',
         SubModuleList: SiteManagementSubModuleList,
       },
       // {
@@ -595,43 +596,43 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Customer Management',
         RouterLink: '',
-        WhiteLogo: '/assets/icons/stock.png',
+        WhiteLogo: '/assets/icons/Customer Management.png',
         SubModuleList: CustomerManagementSubModuleList,
       },
       {
         Name: 'Government Office',
         RouterLink: '',
-        WhiteLogo: '/assets/icons/stock.png',
+        WhiteLogo: '/assets/icons/Government Office.png',
         SubModuleList: GovernmentOfficeSubModuleList,
       },
       {
         Name: 'Registrar Office',
         RouterLink: '/homepage/Website/Registrar_Office',
-        WhiteLogo: '/assets/icons/gov office.png',
+        WhiteLogo: '/assets/icons/Registrar Office.png',
         // SubModuleList: RegistrarOfficeSubModuleList,
       },
       {
         Name: 'Marketing Management',
         RouterLink: '/homepage/Website/Marketing_Management',
-        WhiteLogo: '/assets/icons/gov office.png',
+        WhiteLogo: '/assets/icons/Marketing Management.png',
         // SubModuleList: MarketingManagementSubModuleList,
       },
       {
         Name: 'Hr-Payroll Management',
         RouterLink: '',
-        WhiteLogo: '/assets/icons/gov office.png',
+        WhiteLogo: '/assets/icons/Hr-Payroll Management.png',
         SubModuleList: HrPayrollManagement,
       },
       {
         Name: 'Request',
         RouterLink: '',
-        WhiteLogo: '/assets/icons/gov office.png',
+        WhiteLogo: '/assets/icons/Request.png',
         SubModuleList: RequestSubModulelist,
       },
       {
         Name: 'RazorPay',
         RouterLink: '',
-        WhiteLogo: '/assets/icons/gov office.png',
+        WhiteLogo: '/assets/icons/Razorpay.png',
         SubModuleList: RazorpaySubModulelist,
       },
     ]

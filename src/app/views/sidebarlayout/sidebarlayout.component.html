@@ -11,12 +11,12 @@
     <!-- -------- Module list start ----------- -->
     <div class="scrollable-content">
       <ul nz-menu nzMode="inline" [nzInlineCollapsed]="isCollapsed" style="
-        background-color: white;
-        color: black;
-        font-size: 1vw;
-        font-weight: 600;
-        padding-bottom: 60px;
-      ">
+          background-color: white;
+          color: black;
+          font-size: 1vw;
+          font-weight: 600;
+          padding-bottom: 60px;
+        ">
         <div *ngFor="let module of ModuleList">
           <div style="display: flex" (click)="SideMenuHideShowForModule(module.Name, true)">
             <a style="margin-top: 12px; margin-left: 20px" (click)="NavigationFromLogo(module.RouterLink)"
@@ -32,29 +32,36 @@
             </li>
           </div>
           <div *ngFor="let submodule of module.SubModuleList">
-            <li *ngIf="module.Name === newModulename && isShow" nz-menu-item #menuDiv
-              [ngClass]="{'ant-menu-item-selected': activeSubmodule === submodule.Name && !BrowserBack }">
+            <li *ngIf="module.Name === newModulename && isShow" nz-menu-item #menuDiv [ngClass]="{
+                'ant-menu-item-selected':
+                  activeSubmodule === submodule.Name && !BrowserBack
+              }">
               <ul>
-                <div style="display: flex;">
+                <div style="display: flex; align-items: center">
                   <!-- Collapse Sidebar View -->
-                  <a style="margin-top: 16px; margin-left: 17px" (click)="NavigationFromLogo(submodule.RouterLink)"
-                    *ngIf="isCollapsed">
-                    <img src="/assets/icons/BlackRightArrow.png" alt="Arrow" style="width: 18px; height: 17px"
-                      title="{{ submodule.Name }}" />
+                  <a style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      margin-left: 17px;
+                      height: 40px;
+                      width: 40px;
+                    " (click)="NavigationFromLogo(submodule.RouterLink)" *ngIf="isCollapsed">
+                    <img [src]="submodule.LogoPath" [title]="submodule.Name" style="width: 18px; height: 17px" />
                   </a>
                   <!-- Full Sidebar View -->
-                  <li nz-menu-item *ngIf="!isCollapsed">
-                    <div class="row g-1">
-                      <div class="col-1">
-                        <span style="margin-top: 16px; margin-right: 5px"
-                          (click)="NavigationFromLogo(submodule.RouterLink)">
-                          <img src="/assets/icons/BlackRightArrow.png" alt="Arrow" style="width: 18px; height: 17px" />
+                  <li nz-menu-item *ngIf="!isCollapsed" style="width: 100%;">
+                    <div class="row g-1 align-items-center">
+                      <div class="col-1 d-flex justify-content-center align-items-center" style="height: 100%;">
+                        <span (click)="NavigationFromLogo(submodule.RouterLink)">
+                          <img [src]="submodule.LogoPath" style="width: 18px; height: 17px;" />
                         </span>
                       </div>
-                      <div class="col-11">
-                        <a *ngIf="submodule.RouterLink !== ''" routerLink="{{ submodule.RouterLink }}"></a>
-                        <span class="sidebar-submenu-item" (click)="onMenuItemClick(submodule.Name)">{{ submodule.Name
-                          }}</span>
+                      <div class="col-11 d-flex align-items-center">
+                        <a *ngIf="submodule.RouterLink !== ''" [routerLink]="submodule.RouterLink"></a>
+                        <span class="sidebar-submenu-item" (click)="onMenuItemClick(submodule.Name)">
+                          {{ submodule.Name }}
+                        </span>
                       </div>
                     </div>
                   </li>
@@ -65,31 +72,28 @@
         </div>
       </ul>
     </div>
-
   </nz-sider>
   <!-- ----------- Module list end--------- -->
 
   <nz-layout Class="layout_light">
     <nz-header class="d-flex justify-content-between align-items-center">
-
-      <div style="display: flex;align-items: center;margin: 0 1rem;">
+      <div style="display: flex; align-items: center; margin: 0 1rem">
         <span>
           <img src="/assets/icons/menu.png" alt="logo" (click)="toggleCollapsed()"
-            style="width: 25px; height: 25px; cursor: pointer;" />
+            style="width: 25px; height: 25px; cursor: pointer" />
         </span>
-        <span style="margin-left: 15px;">
+        <span style="margin-left: 15px">
           <div>
-            <span><b>{{ myDay }}</b></span> <span style="margin-left: 5px"><b>{{myDate}}</b></span>
+            <span><b>{{ myDay }}</b></span>
+            <span style="margin-left: 5px"><b>{{ myDate }}</b></span>
           </div>
         </span>
       </div>
 
-
-
-        <!-- <a style="margin-top: 1rem">
+      <!-- <a style="margin-top: 1rem">
           <label style="margin-right: 0.5rem; font-weight: bold" Class="togglebtn" > {{ Name }}</label >
         </a> -->
-        <!-- <div class="row" style="padding-right: 1rem;">
+      <!-- <div class="row" style="padding-right: 1rem;">
           <div class="col-md-9">
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
             [(ngModel)]="CompanyRef" name="CompanyRef" required id="CompanyRef">
@@ -113,37 +117,40 @@
             </nz-dropdown-menu>
           </div>
         </div> -->
-        <!-- <a style="margin-right: 15px">
+      <!-- <a style="margin-right: 15px">
           <i class="fa-solid fa-bell fa-xl" style="color: #6a788a"></i>
         </a> -->
 
-        <div style="display: flex; justify-content: end; align-items: center; ">
-          <div style="padding-right: 1rem;">
-            <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select" [nzSize]="'large'"
-            [(ngModel)]="CompanyRef" name="CompanyRef" required id="CompanyRef" (ngModelChange)="changecompany(CompanyRef)" [nzDropdownMatchSelectWidth]="true" [style.width.px]="300" [disabled]="appStateManagement.isDropdownDisabled()">
+      <div style="display: flex; justify-content: end; align-items: center">
+        <div style="padding-right: 1rem">
+          <nz-select class="nzSelect-light" nzShowSearch nzPlaceHolder="Select" [nzSize]="'large'"
+            [(ngModel)]="CompanyRef" name="CompanyRef" required id="CompanyRef"
+            (ngModelChange)="changecompany(CompanyRef)" [nzDropdownMatchSelectWidth]="true" [style.width.px]="300"
+            [disabled]="appStateManagement.isDropdownDisabled()">
             <nz-option *ngFor="let company of CompnyList" [nzLabel]="company.p.Name"
               [nzValue]="company.p.Ref"></nz-option>
-            </nz-select>
-          </div>
-          <div style="padding-right: 1rem;">
-            <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" >
-              <img width="40px" class="rounded-circle sidebar-text" height="40px" src="/assets/logos/ShreeIcon.png"
-                alt="logo" />
-            </a>
-            <nz-dropdown-menu #menu="nzDropdownMenu" Class="profile_dropdwon_light">
-              <ul class="dropdown-list" nz-menu Class="profile_dropdwon_light">
-                <li class="options" nz-menu-item routerLinkActive="active" routerLink="/homepage/hotel/user_profile"> Your
-                  Profile </li>
-                <li class="options" nz-menu-item routerLinkActive="active" routerLink="/homepage/hotel/change_password/">
-                  Change Password </li>
-                <li class="options" nz-menu-item routerLinkActive="active" (click)="logout()"> Log Out </li>
-              </ul>
-            </nz-dropdown-menu>
-          </div>
-
+          </nz-select>
         </div>
-
-
+        <div style="padding-right: 1rem">
+          <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
+            <img width="40px" class="rounded-circle sidebar-text" height="40px" src="/assets/logos/ShreeIcon.png"
+              alt="logo" />
+          </a>
+          <nz-dropdown-menu #menu="nzDropdownMenu" Class="profile_dropdwon_light">
+            <ul class="dropdown-list" nz-menu Class="profile_dropdwon_light">
+              <li class="options" nz-menu-item routerLinkActive="active" routerLink="/homepage/hotel/user_profile">
+                Your Profile
+              </li>
+              <li class="options" nz-menu-item routerLinkActive="active" routerLink="/homepage/hotel/change_password/">
+                Change Password
+              </li>
+              <li class="options" nz-menu-item routerLinkActive="active" (click)="logout()">
+                Log Out
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </div>
     </nz-header>
     <nz-content class="scrollable-content">
       <div class="inner-content inner-content_left">
@@ -177,14 +184,14 @@
                       <div class="col-1">
                         <span style="margin-top: 16px; margin-right: 5px"
                           (click)="NavigationFromLogo(submodule.RouterLink)">
-                          <img
-                            [src]=" themeService.IsDarkModeSignal() ? '/assets/icons/WhiteRightArrow.png' : '/assets/icons/BlackRightArrow.png' "
-                            alt="Arrow" style="width: 18px; height: 17px" />
+                          <img [src]="submodule.LogoPath" alt="Arrow" style="width: 18px; height: 17px" />
                         </span>
                       </div>
                       <div class="col-11">
                         <a *ngIf="submodule.RouterLink !== ''" routerLink="{{ submodule.RouterLink }}"></a>
-                        <span class="sidebar-submenu-item">{{ submodule.Name}}</span>
+                        <span class="sidebar-submenu-item">{{
+                          submodule.Name
+                          }}</span>
                       </div>
                     </div>
                   </li>
