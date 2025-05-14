@@ -37,10 +37,12 @@ export class AttendanceLogsComponent implements OnInit {
     true,
     '--Select Attendance Log Type--'
   );
+
   MonthList = DomainEnums.MonthList(
     true,
     '--Select Month List--'
   );
+
   EmployeeList: Employee[] = [];
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
@@ -55,10 +57,7 @@ export class AttendanceLogsComponent implements OnInit {
 
   constructor(
     private uiUtils: UIUtils,
-    private router: Router,
-    private appStateManage: AppStateManageService,
     private screenSizeService: ScreenSizeService, private companystatemanagement: CompanyStateManagement,
-    private utils: Utils, private dtu: DTU,
     private payloadPacketFacade: PayloadPacketFacade,
     private serverCommunicator: ServerCommunicatorService
   ) {
@@ -94,17 +93,13 @@ export class AttendanceLogsComponent implements OnInit {
 
     let TodaysAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = TodaysAttendanceLog
-    // this.groupByEmployee();
     this.getAttendanceCount(AttendenceLogType.TodaysAttendanceLog)
-    console.log('Todays', this.DisplayMasterList);
-    console.log('All Entity', this.Entity.p.TeamSize);
   }
 
   // On Week Selected
   selectWeek = async () => {
     this.Entity.p.EmployeeRef = 0;
     this.DisplayMasterList = [];
-    // this.groupedAttendanceLogs = {};
     this.ToDispayMonthlyRequirement = false;
     this.ToDisplayWeeklyRequirement = true;
     this.isTodayAttendanceView = false;
@@ -123,9 +118,7 @@ export class AttendanceLogsComponent implements OnInit {
 
     let WeeklyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(this.companyRef(), AttendenceLogType.WeeklyAttendanceLog, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = WeeklyAttendanceLog
-    // this.groupByEmployee();
     this.getAttendanceCount(AttendenceLogType.WeeklyAttendanceLog);
-    console.log('weekly', this.DisplayMasterList);
   }
   // On Month selected
   onEmployeeChange(): void {
@@ -136,7 +129,6 @@ export class AttendanceLogsComponent implements OnInit {
     this.Entity.p.EmployeeRef = 0;
     this.Entity.p.Months = 0;
     this.DisplayMasterList = [];
-    // this.groupedAttendanceLogs = {};
     this.ToDispayMonthlyRequirement = true;
     this.ToDisplayWeeklyRequirement = false;
     this.isTodayAttendanceView = false;
@@ -152,18 +144,13 @@ export class AttendanceLogsComponent implements OnInit {
     this.ToDisplayWeeklyRequirement = false;
     this.isTodayAttendanceView = false;
 
-    // let employeeref = this.appStateManage.getEmployeeRef()
-    // console.log(employeeref);
     const month = this.Entity.p.Months;
     const employeeref = this.Entity.p.EmployeeRef;
 
     let MonthlyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendenceLogType.MonthlyAttendanceLog,
       month, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = MonthlyAttendanceLog
-    // this.groupByEmployee();
     this.getAttendanceCount(AttendenceLogType.MonthlyAttendanceLog)
-    console.log('Monthly', this.DisplayMasterList);
-    console.log('All Entity', this.Entity);
   }
 
   // For Pagination  start ----
@@ -244,16 +231,4 @@ export class AttendanceLogsComponent implements OnInit {
     this.Entity.p.TotalDaysInWeek = 0;
     this.Entity.p.TotalDaysInMonth = 0;
   }
-
-  // groupedAttendanceLogs: { [employeeName: string]: any[] } = {};
-  // groupByEmployee = () => {
-  //   this.groupedAttendanceLogs = {};
-  //   for (let log of this.DisplayMasterList) {
-  //     const empName = log.p.EmployeeName;
-  //     if (!this.groupedAttendanceLogs[empName]) {
-  //       this.groupedAttendanceLogs[empName] = [];
-  //     }
-  //     this.groupedAttendanceLogs[empName].push(log);
-  //   }
-  // };
 }
