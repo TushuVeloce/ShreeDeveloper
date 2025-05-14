@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { ExpenseTypeRefs, UnitRefs } from 'src/app/classes/domain/constants';
 import { ExpenseType } from 'src/app/classes/domain/entities/website/masters/expensetype/expensetype';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
@@ -41,6 +42,12 @@ export class ActualStagePage implements OnInit {
   companyName: string | null = '';
   siteRef: number = 0;
   siteName: string | null = '';
+
+  ExpenseTypeRef: number = ExpenseTypeRefs.MachinaryExpense
+  LabourExpenseRef: number = ExpenseTypeRefs.LabourExpense
+  OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense
+  TimeUnitRef: number = UnitRefs.TimeUnitRef
+
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
@@ -65,7 +72,7 @@ export class ActualStagePage implements OnInit {
 
   private async loadActualStageIfCompanyExists(): Promise<void> {
     try {
-      this.isLoading=true;
+      this.isLoading = true;
       this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
       this.companyName = this.appStateManagement.StorageKey.getItem('companyName') ? this.appStateManagement.StorageKey.getItem('companyName') : '';
       this.siteRef = Number(this.appStateManagement.StorageKey.getItem('siteRf'));
@@ -80,8 +87,8 @@ export class ActualStagePage implements OnInit {
       this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
       await this.getActualStageListByAllFilters();
     } catch (error) {
-    // console.log('error :', error);
-    }finally{
+      // console.log('error :', error);
+    } finally {
       this.isLoading = false;
     }
   }
@@ -107,7 +114,7 @@ export class ActualStagePage implements OnInit {
       pdf.save('actualStage.pdf');
     });
   }
-  
+
   onViewClicked(item: ActualStages) {
     this.SelectedActualStages = item;
     this.ModalOpen = true;
@@ -212,6 +219,12 @@ export class ActualStagePage implements OnInit {
     );
   };
 
+  getTotalWorkedHours(TimeDetails:any): number {
+    return TimeDetails.reduce((total: number, item: any) => {
+      return total + Number(item.WorkedHours || 0);
+    }, 0);
+  }
+  
   AddActualStages = async () => {
     await this.router.navigate(['app_homepage/tabs/site-management/actual-stage/add']);
   }

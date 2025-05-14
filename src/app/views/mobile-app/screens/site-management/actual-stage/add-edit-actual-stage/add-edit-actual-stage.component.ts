@@ -286,16 +286,16 @@ export class AddEditActualStageComponent implements OnInit {
     try {
       this.isLoading = true;
       this.appStateManage.setDropdownDisabled(true);
-      this.siteRef = Number(this.appStateManagement.StorageKey.getItem('siteRf'));
-      this.siteName = this.appStateManagement.StorageKey.getItem('siteName') ? this.appStateManagement.StorageKey.getItem('siteName') : '';
-      this.selectedSite = [
-        {
-          "p": {
-            "Ref": this.siteRef,
-            "Name": this.siteName ?? ''
-          }
-        }
-      ];
+      this.siteRef = await Number(this.appStateManagement.StorageKey.getItem('siteRf'));
+      this.siteName = await this.appStateManagement.StorageKey.getItem('siteName') ? this.appStateManagement.StorageKey.getItem('siteName') : '';
+      // this.selectedSite = [
+      //   {
+      //     "p": {
+      //       "Ref": this.siteRef,
+      //       "Name": this.siteName ?? ''
+      //     }
+      //   }
+      // ];
       await this.getStageListByCompanyRef();
       await this.getVendorListByCompanyRef();
       await this.FormulateUnitList();
@@ -321,6 +321,8 @@ export class AddEditActualStageComponent implements OnInit {
       } else {
         this.Entity = ActualStages.CreateNewInstance();
         ActualStages.SetCurrentInstance(this.Entity);
+        this.Entity.p.SiteRef = this.siteRef;
+        this.Entity.p.SiteName = this.siteName ?? '';
         const CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
         if (CreatedBy != 0) {
           this.Entity.p.CreatedBy = CreatedBy
@@ -454,6 +456,7 @@ export class AddEditActualStageComponent implements OnInit {
       // console.log('error :', error);
     }
   }
+
   public async selectStageBottomsheet(): Promise<void> {
     try {
       const options = this.StageList;
@@ -493,7 +496,6 @@ export class AddEditActualStageComponent implements OnInit {
     if (selected) updateCallback(selected);
   }
 
-
   ChalanNo = async () => {
     try {
       let req = new ActualStagesChalanFetchRequest();
@@ -528,6 +530,7 @@ export class AddEditActualStageComponent implements OnInit {
       // console.log('error :', error);
     }
   };
+
   private async getSingleEmployeeDetails(): Promise<void> {
     try {
       if (this.companyRef <= 0) {
@@ -581,15 +584,22 @@ export class AddEditActualStageComponent implements OnInit {
   OnStageChange = async (StageRef: number) => {
     try {
       if (this.IsNewEntity) {
-        this.Entity.p.ExpenseTypeRef = 0
+        this.Entity.p.ExpenseTypeRef = 0;
+        this.Entity.p.ExpenseTypeName = '';
+        this.Entity.p.ExtraQuantity=0;
+        this.Entity.p.GutterNaleUnitName='';
+        this.Entity.p.GutterNaleUnitRef = 0;
+        this.Entity.p.SubStageName = '';
+        this.Entity.p.SubStageRef =0;  
+        this.Entity.p.SelectedMonthsName=[];
         await this.AddExpenseTypeToOther(this.Entity.p.ExpenseTypeRef)
       }
-      let stagedata = await Stage.FetchInstance(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      if (stagedata.p.StageTypeName == "Official Expenditure Gov") {
-        this.isOfficialExpenditureGov = true
-      } else {
-        this.isOfficialExpenditureGov = false
-      }
+      // let stagedata = await Stage.FetchInstance(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      // if (stagedata.p.StageTypeName == "Official Expenditure Gov") {
+      //   this.isOfficialExpenditureGov = true
+      // } else {
+      //   this.isOfficialExpenditureGov = false
+      // }
 
       await this.getSubStageListByStageRef(StageRef);
       await this.getExpenseListByStageRef(StageRef);
@@ -758,7 +768,6 @@ export class AddEditActualStageComponent implements OnInit {
     }
   };
 
-
   CalculateAmountOnSkillRateAndQuantity = () => {
     this.Entity.p.SkillAmount = (this.Entity.p.SkillRate * this.Entity.p.SkillQuantity);
     this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
@@ -836,8 +845,10 @@ export class AddEditActualStageComponent implements OnInit {
 
   SaveStageMaster = async () => {
     try {
-      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-      this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+      // this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+      this.Entity.p.CompanyRef = this.companyRef;
+      // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+      this.Entity.p.CompanyName = this.companyName;
       this.Entity.p.Total = this.getTotalWorkedHours()
       this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
       let entityToSave = this.Entity.GetEditableVersion();
@@ -855,6 +866,7 @@ export class AddEditActualStageComponent implements OnInit {
         if (this.IsNewEntity) {
           await this.uiUtils.showSuccessToster('Actual Stage saved successfully!');
           this.Entity = ActualStages.CreateNewInstance();
+          await this.router.navigate(['app_homepage/tabs/site-management/actual-stage'], { replaceUrl: true });
         } else {
           await this.uiUtils.showSuccessToster('Stage Updated successfully!');
           await this.router.navigate(['app_homepage/tabs/site-management/actual-stage'], { replaceUrl: true });

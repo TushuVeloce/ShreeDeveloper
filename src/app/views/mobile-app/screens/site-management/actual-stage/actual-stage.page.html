@@ -12,17 +12,21 @@
       <ng-container *ngIf="FilteredActualStagesList.length > 0 ; else noData">
         <ion-card *ngFor="let item of FilteredActualStagesList" class="data-card">
           <ion-card-header>
-            <ion-card-title class="info-row"><strong>Chalan No :</strong>{{ item.p.ChalanNo }}</ion-card-title>
-            <ion-card-subtitle class="info-row"><strong>Site Name :</strong>{{ item.p.SiteName }}</ion-card-subtitle>
+            <ion-card-title class="info-row"><strong>Chalan No :</strong>{{ item.p.ChalanNo ??'-' }}</ion-card-title>
+            <ion-card-subtitle class="info-row"><strong>Site Name :</strong>{{ item.p.SiteName ??'-'
+              }}</ion-card-subtitle>
             <ion-card-subtitle class="info-row"><strong>Date :</strong>{{ formatDate(item.p.Date)
+              ??'-'}}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"><strong>Vendor Name :</strong>{{ item.p.VendorName ??'-'
               }}</ion-card-subtitle>
-            <ion-card-subtitle class="info-row"><strong>Vendor Name :</strong>{{ item.p.VendorName
+            <ion-card-subtitle class="info-row"><strong>Vendor Service :</strong>{{ item.p.VendorServiceName??'-'
               }}</ion-card-subtitle>
-            <ion-card-subtitle class="info-row"><strong>Vendor Service :</strong>{{ item.p.VendorServiceName
+            <ion-card-subtitle class="info-row" *ngIf="TimeUnitRef != item.p.UnitRef"><strong>Quantity :</strong>{{ item.p.Quantity??'-'
               }}</ion-card-subtitle>
-            <ion-card-subtitle class="info-row"><strong>Quantity :</strong>{{ item.p.Quantity }}</ion-card-subtitle>
-            <ion-card-subtitle class="info-row"><strong>Rate :</strong>{{ item.p.Rate }}</ion-card-subtitle>
-            <ion-card-subtitle class="info-row"><strong>Amount :</strong>{{ item.p.Amount }}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row" *ngIf="TimeUnitRef == item.p.UnitRef"><strong>Worked Hours :</strong>{{ getTotalWorkedHours(item.p.TimeDetails)??'-'
+              }}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"><strong>Rate :</strong>{{ item.p.Rate??'-' }}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"><strong>Amount :</strong>{{ item.p.Amount ??'-'}}</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
             <div class="btn-row">
@@ -102,71 +106,70 @@
           <span class="value">{{ SelectedActualStages.p.ExpenseTypeName?SelectedActualStages.p.ExpenseTypeName:'-'
             }}</span>
         </div>
-        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==100">
+        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==ExpenseTypeRef">
           <strong class="label">Vehicle No:</strong>
           <span class="value">{{ SelectedActualStages.p.VehicleNo?SelectedActualStages.p.VehicleNo:'-'
             }}</span>
         </div>
-        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==100">
+        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==ExpenseTypeRef">
           <strong class="label">Diesel Quantity:</strong>
           <span class="value">{{ SelectedActualStages.p.DieselQuantity?SelectedActualStages.p.DieselQuantity:'-'
             }}</span>
         </div>
-        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==100">
+        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==ExpenseTypeRef">
           <strong class="label">Diesel Rate :</strong>
           <span class="value">{{ SelectedActualStages.p.DieselRate?SelectedActualStages.p.DieselRate:'-'
             }}</span>
         </div>
-        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==100">
+        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==ExpenseTypeRef">
           <strong class="label">Diesel Total :</strong>
           <span class="value">{{ SelectedActualStages.p.DieselTotalAmount?SelectedActualStages.p.DieselTotalAmount:'-'
             }}</span>
         </div>
 
-        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==200">
+        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==LabourExpenseRef">
           <strong class="label">Skill Quantity :</strong>
           <span class="value">{{ SelectedActualStages.p.SkillQuantity?SelectedActualStages.p.SkillQuantity:'-'
             }}</span>
         </div>
-        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==200">
+        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==LabourExpenseRef">
           <strong class="label">Skill Rate :</strong>
           <span class="value">{{ SelectedActualStages.p.SkillRate?SelectedActualStages.p.SkillRate:'-'
             }}</span>
         </div>
-        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==200">
+        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==LabourExpenseRef">
           <strong class="label">Skill Amount :</strong>
           <span class="value">{{ SelectedActualStages.p.SkillAmount?SelectedActualStages.p.SkillAmount:'-'
             }}</span>
         </div>
 
-        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==200">
+        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==LabourExpenseRef">
           <strong class="label">Unskill Quantity :</strong>
           <span class="value">{{ SelectedActualStages.p.UnskillQuantity?SelectedActualStages.p.UnskillQuantity:'-'
             }}</span>
         </div>
-        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==200">
+        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==LabourExpenseRef">
           <strong class="label">Unskill Rate :</strong>
           <span class="value">{{ SelectedActualStages.p.UnskillRate?SelectedActualStages.p.UnskillRate:'-'
             }}</span>
         </div>
-        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==200">
+        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==LabourExpenseRef">
           <strong class="label">Unskill Amount :</strong>
           <span class="value">{{ SelectedActualStages.p.UnskillAmount?SelectedActualStages.p.UnskillAmount:'-'
             }}</span>
         </div>
 
-
-        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==200">
+        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==LabourExpenseRef">
           <strong class="label">Ladies Quantity :</strong>
           <span class="value">{{ SelectedActualStages.p.LadiesQuantity?SelectedActualStages.p.LadiesQuantity:'-'
             }}</span>
         </div>
-        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==200">
+        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==LabourExpenseRef">
           <strong class="label">Ladies Rate :</strong>
           <span class="value">{{ SelectedActualStages.p.LadiesRate?SelectedActualStages.p.LadiesRate:'-'
             }}</span>
         </div>
-        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==200">
+        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==LabourExpenseRef">
           <strong class="label">Ladies Amount :</strong>
           <span class="value">{{ SelectedActualStages.p.LadiesAmount?SelectedActualStages.p.LadiesAmount:'-'
             }}</span>
@@ -186,9 +189,13 @@
           <strong class="label">Unit:</strong>
           <span class="value">{{ SelectedActualStages.p.UnitName?SelectedActualStages.p.UnitName:'-' }}</span>
         </div>
-        <div class="info-row-of-model">
+        <div class="info-row-of-model" *ngIf="TimeUnitRef != SelectedActualStages.p.UnitRef">
           <strong class="label">Quantity:</strong>
           <span class="value">{{ SelectedActualStages.p.Quantity?SelectedActualStages.p.Quantity:'-' }}</span>
+        </div>
+        <div class="info-row-of-model" *ngIf="TimeUnitRef == SelectedActualStages.p.UnitRef">
+          <strong class="label">Worked Hours:</strong>
+          <span class="value">{{ SelectedActualStages.p.TimeDetails?getTotalWorkedHours(SelectedActualStages.p.TimeDetails):'-'}}</span>
         </div>
         <div class="info-row-of-model">
           <strong class="label">Rate:</strong>
@@ -259,7 +266,8 @@
               <div class="col-md-6 col-6 p-2">
                 <p><strong>Stage Name:</strong> {{ Entity.p.StageName }}</p>
                 <p><strong>Service Type:</strong> {{ Entity.p.ExpenseTypeName }}</p>
-                <p *ngIf="Entity.p.ExpenseTypeRef == 100"><strong>Vehicle No:</strong> {{ Entity.p.VehicleNo }}</p>
+                <p *ngIf="Entity.p.ExpenseTypeRef == ExpenseTypeRef"><strong>Vehicle No:</strong> {{ Entity.p.VehicleNo
+                  }}</p>
               </div>
             </div>
 
@@ -271,7 +279,8 @@
                     <th style="width: 5%;" class="MaroonBGHeading">Sr.No</th>
                     <th style="width: 45%;" class="MaroonBGHeading">DESCRIPTION</th>
                     <th style="width: 10%;" class="MaroonBGHeading">Qty.</th>
-                    <th *ngIf="Entity.p.ExpenseTypeRef == 100" style="width: 10%;" class="MaroonBGHeading">UNIT</th>
+                    <th *ngIf="Entity.p.ExpenseTypeRef == ExpenseTypeRef" style="width: 10%;" class="MaroonBGHeading">
+                      UNIT</th>
                     <th style="width: 15%;" class="MaroonBGHeading">RATE</th>
                     <th style="width: 15%;" class="MaroonBGHeading">AMOUNT</th>
                   </tr>
@@ -285,7 +294,7 @@
                             <td>{{ item.rate | currency:'INR' }}</td>
                             <td>{{ item.amount | currency:'INR' }}</td>
                           </tr> -->
-                  <tr *ngIf="Entity.p.ExpenseTypeRef == 100">
+                  <tr *ngIf="Entity.p.ExpenseTypeRef == ExpenseTypeRef">
                     <td>1.</td>
                     <td>Disel</td>
                     <td>{{ Entity.p.DieselQuantity }}</td>
@@ -294,7 +303,7 @@
                     <td>{{ Entity.p.DieselTotalAmount }}</td>
                   </tr>
 
-                  <tr *ngIf="Entity.p.ExpenseTypeRef == 200">
+                  <tr *ngIf="Entity.p.ExpenseTypeRef == LabourExpenseRef">
                     <td>1.</td>
                     <td>Skilled</td>
                     <td>{{ Entity.p.SkillQuantity }}</td>
@@ -302,14 +311,14 @@
                     <td>{{ Entity.p.SkillAmount }}</td>
                   </tr>
 
-                  <tr *ngIf="Entity.p.ExpenseTypeRef == 200">
+                  <tr *ngIf="Entity.p.ExpenseTypeRef == LabourExpenseRef">
                     <td>2.</td>
                     <td>Unskilled</td>
                     <td>{{ Entity.p.UnskillQuantity }}</td>
                     <td>{{ Entity.p.UnskillRate }}</td>
                     <td>{{ Entity.p.UnskillAmount }}</td>
                   </tr>
-                  <tr *ngIf="Entity.p.ExpenseTypeRef == 200">
+                  <tr *ngIf="Entity.p.ExpenseTypeRef == LabourExpenseRef">
                     <td>3.</td>
                     <td>Ladies</td>
                     <td>{{ Entity.p.LadiesQuantity }}</td>
@@ -362,7 +371,7 @@
           </div>
         </div>
       </div>
-      <ion-button expand="block" color="primary" shape="round" (click)="makePdf()">
+      <ion-button expand="block" color="primary" (click)="makePdf()">
         print
       </ion-button>
     </ion-list>
