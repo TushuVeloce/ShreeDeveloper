@@ -135,8 +135,7 @@ textarea.form-control {
   border-color: brown;
 }
 
-textarea.form-control:focus,
-textarea.form-control:not(:placeholder-shown) {
+textarea.form-control:focus {
   outline: none;
   border: 1px solid brown;
   box-shadow: 0 0 5px rgba(165, 42, 42, 0.5);
