@@ -144,7 +144,8 @@ export class SidebarlayoutComponent implements OnInit {
   }
   onMenuItemClick(submoduleName: string): void {
     this.activeSubmodule = submoduleName;
-    this.BrowserBack = false;
+    // this.BrowserBack = false;
+     localStorage.setItem('activeSubmodule', submoduleName);
   }
 
   newModulename: string = '';
@@ -217,6 +218,8 @@ export class SidebarlayoutComponent implements OnInit {
         req.LoginToken = this.sessionValues.CurrentLoginToken;
         req.LastSelectedCompanyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
         req.EmployeeRef = this.appStateManagement.getEmployeeRef();
+        localStorage.removeItem('activeSubmodule');
+        localStorage.removeItem('activeModule');
         console.log('req :', req);
         let _ = await this.servercommunicator.LogoutUser(req)
         await this.router.navigate(['/']);
@@ -241,18 +244,24 @@ export class SidebarlayoutComponent implements OnInit {
     this.isCollapsed = !this.isCollapsed;
   }
 
-  SideMenuHideShowForModule = (ModuleName: string, value: boolean) => {
-    this.isShow = value;
-    this.isShow1 = false;
-    if (this.oldModulename == ModuleName && this.count) {
-      this.isShow = false;
-      this.count = false;
-    } else {
-      this.count = true;
-    }
-    this.newModulename = ModuleName;
-    this.oldModulename = this.newModulename;
-  };
+  // SideMenuHideShowForModule = (ModuleName: string, value: boolean) => {
+  //   this.isShow = value;
+  //   this.isShow1 = false;
+  //   if (this.oldModulename == ModuleName && this.count) {
+  //     this.isShow = false;
+  //     this.count = false;
+  //   } else {
+  //     this.count = true;
+  //   }
+  //   this.newModulename = ModuleName;
+  //   this.oldModulename = this.newModulename;
+  // };
+
+   SideMenuHideShowForModule(moduleName: string, show: boolean): void {
+    this.newModulename = moduleName;
+    this.isShow = show;
+    localStorage.setItem('activeModule', moduleName);
+  }
 
   NavigationFromLogo(RouterLink: any) {
     if (RouterLink != '') {
