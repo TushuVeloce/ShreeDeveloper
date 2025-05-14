@@ -20,7 +20,6 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
     let arr = JSON.parse(this.appStateManage.StorageKey.getItem('TransactionJson') ?? '[]');
 
     this.TpOfficeList = arr.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
-    console.log('TpOfficeList', this.TpOfficeList);
     this.BindApplicableTypeValueStatusToRadioButton();
   }
 
@@ -36,7 +35,6 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
 
       let ApplicableTypeValueList = ApplicableTypesList[0].ApplicableTypes.filter((item: { SiteWorkApplicableTypeName: string }) => item.SiteWorkApplicableTypeName == 'Yes No');
       this.getReportNOCAirportNOC(ApplicableTypeValueList[0].Value, ApplicableTypesList[0].SiteWorkName);
-      // console.log('arr3', ApplicableTypeValueList[0].Value, ApplicableTypesList[0].SiteWorkName);
     }
 
   }
@@ -59,8 +57,6 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
   // hide show content using radio button
   showReportNOCSection: boolean = false;
   getReportNOCAirportNOC = async (value: boolean, siteWorkName: string) => {
-    debugger
-    console.log('getReportNOCAirportNOC', value, siteWorkName);
     if (siteWorkName.trim() === 'Report NOC & Airport NOC') {
       this.showReportNOCSection = value;
     }
@@ -70,7 +66,6 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
     // this.appStateManage.StorageKey.setItem('TpOfficeList', JSON.stringify(this.TpOfficeList));
     this.onEntitySaved.emit(this.TpOfficeList);
     this.router.navigate(['/homepage/Website/Site_Progress_Report_Details']);
-    // console.log('onSave TpOfficeList', this.TpOfficeList);
   }
 
   onCancel = async () => {

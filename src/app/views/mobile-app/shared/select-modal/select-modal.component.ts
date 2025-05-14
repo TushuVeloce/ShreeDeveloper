@@ -29,7 +29,7 @@ export class SelectModalComponent implements OnInit {
     );
     this.loadedOptions = this.options.slice(0, this.itemsPerLoad);
   }
-  
+
   filterOptions(event: any) {
     const searchTerm = event.target.value.toLowerCase();
     if (searchTerm) {
@@ -78,10 +78,9 @@ export class SelectModalComponent implements OnInit {
       this.selectedOptions.length >= this.MaxSelection &&
       !this.isSelected(option);
   }
-  
+
 
   isSelected(option: any): boolean {
-    // console.log('isSelected option :', option);
     return this.selectedOptions.some(item => item.p.Ref === option.p.Ref);
   }
 
@@ -92,5 +91,5 @@ export class SelectModalComponent implements OnInit {
   close() {
     this.modalCtrl.dismiss(this.selectedOptions);
   }
-  
+
 }

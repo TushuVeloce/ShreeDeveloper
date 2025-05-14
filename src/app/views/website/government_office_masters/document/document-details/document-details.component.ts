@@ -71,7 +71,6 @@ export class DocumentDetailsComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.UnitList = lst;
-    console.log('UnitList :', this.UnitList);
   };
 
   SaveDocument = async () => {

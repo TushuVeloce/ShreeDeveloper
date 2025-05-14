@@ -41,11 +41,9 @@ export class GovernmentTransactionDetailsComponent implements OnInit {
 
     // this.Entity.IsComplete = !isAnyWorkIncomplete;
 
-    // console.log('Entity', arr);
   }
 
   getSiteWorkGroupName = async (SiteWorkGroupName: string) => {
-    console.log('SiteWorkGroupName', SiteWorkGroupName);
     await this.router.navigate(['/homepage/Website/Respected_child', { queryParams: SiteWorkGroupName }]);
   }
 

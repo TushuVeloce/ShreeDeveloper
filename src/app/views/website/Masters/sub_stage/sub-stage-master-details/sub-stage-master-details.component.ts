@@ -52,7 +52,6 @@ export class SubStageMasterDetailsComponent implements OnInit {
         ? 'New Sub Stage'
         : 'Edit Sub Stage';
       this.Entity = SubStage.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.Entity.p.StageRef > 0) {

@@ -95,7 +95,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(true);
     this.CountryList = await Country.FetchEntireList();
     this.EmployeeList = await Employee.FetchEntireList();
-    console.log(this.CustomerStatusList);
 
     this.getSiteListByCompanyRef();
     // Check if CountryRef is already set (e.g., India is preselected)
@@ -109,7 +108,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       this.Entity.p.CustomerStatus = 0;
       this.Entity.p.ContactMode = 0;
       this.Entity.p.CustomerRequirement = '';
-      console.log(this.Entity);
 
       //  this.CustomerEnquiryEntity = CustomerEnquiry.GetCurrentInstance();
 
@@ -143,7 +141,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
         //   'yyyy-MM-dd'
         // );
       }
-      // console.log(this.Entity.p.CustomerFollowUpPlotDetails);
       let plotDetailsArray: CustomerFollowUpPlotDetailsProps[] = [];
       plotDetailsArray = [...this.Entity.p.CustomerFollowUpPlotDetails];
       plotDetailsArray.forEach((e) => (e.Ref = 0));
@@ -247,8 +244,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     );
     this.PlotList = lst.filter((plot) => plot.p.CurrentBookingRemark !== BookingRemark.Booked);
 
-    console.log(this.PlotList);
-
     this.DisplayMasterList = this.PlotList;
     this.IsPlotDetails = true;
   };
@@ -284,7 +279,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
         obj.p.SiteName = selectedSite.p.Name;
       }
     }
-    // console.log(selectedPlot);
 
     // Check if the plot is already added
     const isAlreadyAdded = this.Entity.p.CustomerFollowUpPlotDetails.some(
@@ -312,7 +306,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       obj.Ref =
         await CustomerFollowUpPlotDetails.getPrimaryKeysWithValidValues();
     }
-    // console.log(this.Entity.p.CustomerFollowUpPlotDetails);
   };
 
   onLeadSourceChange = (selectedValue: number) => {
@@ -336,7 +329,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
     // -----------------------------------
     await this.GenerateCustomerFollowUpPlotDetailsRef();
-    // console.log(this.Entity.p.CustomerFollowUpPlotDetails);
 
     // return
     this.Entity.p.Ref = await CustomerFollowUp.getPrimaryKeysWithValidValues();
@@ -360,11 +352,9 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     // return
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log(entitiesToSave);
 
     // return
     // this.Entity.p.ContactMode = this.CustomerEnquiryEntity.p.CustomerFollowUps[0].ContactMode;
-    // console.log('entitiesToSave:', entitiesToSave);
     // // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {

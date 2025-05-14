@@ -46,12 +46,11 @@ export class UlcDetailsComponent implements OnInit {
     //   this.showReportNOCSection = value;
     // }
   }
-  
+
   onSave = () => {
     // this.appStateManage.StorageKey.setItem('TpOfficeList', JSON.stringify(this.TpOfficeList));
     this.onEntitySaved.emit(this.ULCList);
     this.router.navigate(['/homepage/Website/Site_Progress_Report_Details']);
-    // console.log('onSave TpOfficeList', this.TpOfficeList);
   }
 
   onCancel = async () => {

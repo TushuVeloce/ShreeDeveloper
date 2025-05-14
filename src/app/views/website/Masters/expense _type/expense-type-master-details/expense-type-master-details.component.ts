@@ -52,7 +52,6 @@ export class ExpenseTypeMasterDetailsComponent implements OnInit {
         ? 'New Expense Type'
         : 'Edit Expense Type';
       this.Entity = ExpenseType.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {

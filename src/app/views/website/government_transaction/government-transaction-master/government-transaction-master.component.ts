@@ -52,7 +52,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
     // let lst = await GovernmentTransaction.FetchEntireListByCompanyRef(
     //   this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
 
-    //  fetching entire government transaction list 
+    //  fetching entire government transaction list
 
     this.DisplayMasterList = [];
     let lst = await GovernmentTransaction.FetchEntireList(async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
@@ -67,7 +67,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
     let SiteListbycompanyname = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = SiteListbycompanyname;
 
-    // get Transaction Type List Status 
+    // get Transaction Type List Status
 
     for (let i = 0; i < this.MasterList.length; i++) {
       debugger
@@ -76,7 +76,6 @@ export class GovernmentTransactionMasterComponent implements OnInit {
       let transactionRef = obj.p.Ref;
 
       let groups: any[] = JSON.parse(transactionJson);
-      // console.log(`Transaction #${obj.p.Ref} => Parsed Groups:`, groups);
 
       for (let group of groups) {
         let isGroupComplete = true;
@@ -118,13 +117,11 @@ export class GovernmentTransactionMasterComponent implements OnInit {
         }
 
         this.groupCompletionStatus[obj.p.Ref][group.SiteWorkGroupName] = isGroupComplete;
-        console.log(this.groupCompletionStatus[obj.p.Ref][group.SiteWorkGroupName]);
 
         if (isGroupComplete) {
           this.getGroupStatus(transactionRef, group.SiteWorkGroupName);
         }
 
-        console.log(`Transaction #${transactionRef} → ${group.SiteWorkGroupName}: ${isGroupComplete}`);
       }
 
     }
@@ -141,8 +138,6 @@ export class GovernmentTransactionMasterComponent implements OnInit {
   }
 
   getGroupStatus(ref: number, groupName: string): boolean {
-    // console.log('Looking for status → Ref:', ref, 'Group:', groupName);
-    // console.log('Data:', this.groupCompletionStatus[ref]);
     return this.groupCompletionStatus[ref]?.[groupName] === true;
 
     // switch (groupName) {

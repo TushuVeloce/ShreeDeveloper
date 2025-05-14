@@ -207,7 +207,6 @@ export class AttendanceLogsComponent implements OnInit {
     }
     let tdResult = JSON.parse(tr.Tag) as TransportData;
     let res = AttendanceLogCountCustomRequest.FromTransportData(tdResult);
-    console.log(tdResult);
 
     const summaryCollection = tdResult.MainData?.Collections?.find((c: any) =>
       c?.Name === '' && c?.Entries?.length > 0
@@ -216,9 +215,6 @@ export class AttendanceLogsComponent implements OnInit {
     if (summaryCollection && summaryCollection.Entries.length > 0) {
       let DailyRecord: AttendanceLogsProps[] = res.Data as AttendanceLogsProps[];
       Object.assign(this.Entity.p, summaryCollection.Entries[0]);
-      console.log(this.Entity.p.TeamSize);
-      console.log(this.Entity.p.TotalDaysInMonth);
-      console.log(this.Entity.p.TotalDaysInWeek);
 
     }
   }

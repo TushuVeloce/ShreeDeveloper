@@ -21,7 +21,7 @@ export class SiteManagementMasterComponent implements OnInit {
   SelectedSite: Site = Site.CreateNewInstance();
   CustomerRef: number = 0;
   pageSize = 10;
-  currentPage = 1; 
+  currentPage = 1;
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   headers: string[] = ['Sr.No.', 'Site Name', 'No of Plots', 'Site Incharge','Site Location', 'Action'];
@@ -46,7 +46,6 @@ export class SiteManagementMasterComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
-    console.log('Site :', this.MasterList);
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }

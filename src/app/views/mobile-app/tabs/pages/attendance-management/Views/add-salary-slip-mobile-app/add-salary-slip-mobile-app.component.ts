@@ -50,7 +50,6 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
 
   // ionViewWillEnter = async () => {
   //   await this.loadSalarySlipRequestsIfEmployeeExists();
-  //   // console.log('Leave request refreshed on view enter');
   // };
 
   ngOnDestroy(): void {

@@ -202,7 +202,6 @@ export class TaskManagementPage implements OnInit {
 
   updateTaskStatus(task: any) {
     // Call your API or service to update the task's status
-    console.log('Updating task status...', task);
     // Example:
     // this.taskService.updateStatus(task.id, task.status).subscribe(...)
   }

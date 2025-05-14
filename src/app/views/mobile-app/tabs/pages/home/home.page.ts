@@ -71,10 +71,8 @@ export class HomePage implements OnInit {
   }
 
   showOptions(item: any) {
-    console.log('Options for', item.title);
   }
 
   viewAllActivity() {
-    console.log('Viewing all activity');
   }
 }

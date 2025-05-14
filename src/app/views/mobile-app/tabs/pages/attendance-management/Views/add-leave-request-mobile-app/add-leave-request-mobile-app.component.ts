@@ -63,7 +63,6 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
 
   // ionViewWillEnter = async () => {
   //   await this.loadLeaveRequestsIfEmployeeExists();
-  //   // console.log('Leave request refreshed on view enter');
   // };
 
   ngOnDestroy(): void {
@@ -151,7 +150,6 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
 
   public onDateChangeSetDaysandLeaveHours(): void {
     if (this.fromDate && this.toDate) {
-    console.log('this.fromDate && this.toDate :', this.fromDate ,this.toDate);
       const from = new Date(this.fromDate);
       const to = new Date(this.toDate);
       const diffInMs = Math.abs(to.getTime() - from.getTime()) + 1;

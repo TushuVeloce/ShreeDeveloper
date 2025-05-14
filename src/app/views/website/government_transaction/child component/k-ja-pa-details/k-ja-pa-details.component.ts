@@ -18,7 +18,6 @@ export class KJaPaDetailsComponent implements OnInit {
     let arr = JSON.parse(this.appStateManage.StorageKey.getItem('TransactionJson') ?? '[]');
 
     this.KJAPAList = arr.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
-    // console.log('KJAPAList', this.KJAPAList);
   }
 
   ngOnInit() { }
@@ -38,7 +37,7 @@ export class KJaPaDetailsComponent implements OnInit {
         return ''; // Default return value
     }
   }
-  
+
  // hide show content using radio button
  showReportNOCSection: boolean = false;
  IsYesNoStatus(value: boolean, siteWorkName: string) {
@@ -50,7 +49,6 @@ export class KJaPaDetailsComponent implements OnInit {
     // this.appStateManage.StorageKey.setItem('TpOfficeList', JSON.stringify(this.TpOfficeList));
     this.onEntitySaved.emit(this.KJAPAList);
     this.router.navigate(['/homepage/Website/Site_Progress_Report_Details']);
-    // console.log('onSave TpOfficeList', this.TpOfficeList);
   }
 
   onCancel = async () => {

@@ -48,7 +48,6 @@ export class VendorMasterComponent implements OnInit {
   }
 
   onEditClicked = async (item: Vendor) => {
-  console.log('item :', item);
     this.SelectedVendor = item.GetEditableVersion();
     Vendor.SetCurrentInstance(this.SelectedVendor);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');

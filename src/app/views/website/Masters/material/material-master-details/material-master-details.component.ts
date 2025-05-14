@@ -51,7 +51,6 @@ export class MaterialMasterDetailsComponent implements OnInit {
         ? 'New Material'
         : 'Edit Material';
       this.Entity = Material.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
@@ -75,7 +74,6 @@ export class MaterialMasterDetailsComponent implements OnInit {
     let lst = await Unit.FetchEntireList(
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    console.log('lst :', lst);
   };
 
   SaveMaterialMaster = async () => {

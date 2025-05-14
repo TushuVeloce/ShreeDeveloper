@@ -55,7 +55,7 @@ export class FinancialYearMasterComponent implements OnInit {
     });
   }
 
-  async ngOnInit() {    
+  async ngOnInit() {
     // await this.FormulateMasterList();
   }
 
@@ -69,9 +69,8 @@ export class FinancialYearMasterComponent implements OnInit {
     let lst = await FinancialYear.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    console.log('DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
-    this.convertdate();    
+    this.convertdate();
   }
 
   convertdate = () => {
@@ -123,7 +122,7 @@ export class FinancialYearMasterComponent implements OnInit {
 
       let req = new GenerateNewFinancialYearCustomRequest();
       req.CompanyRef = this.companyRef();
-      req.Password = this.localpassword;     
+      req.Password = this.localpassword;
       req.EmployeeRef = this.appStateManage.getEmployeeRef();
       req.LoginToken = this.appStateManage.getLoginToken();
 
@@ -156,7 +155,7 @@ export class FinancialYearMasterComponent implements OnInit {
 
       let req = new SetCurrentFinancialYearCustomRequest();
       this.Entity = FinancialYear.GetCurrentInstance()
-    
+
       req.FinancialYearRef = this.Entity.p.Ref
       req.CompanyRef = this.companyRef();
       req.Password = this.localpassword;
@@ -187,16 +186,16 @@ export class FinancialYearMasterComponent implements OnInit {
     loadPaginationData = () => {
       this.total = this.DisplayMasterList.length; // Update total based on loaded data
     }
-  
+
     paginatedList = () => {
       const start = (this.currentPage - 1) * this.pageSize;
       return this.DisplayMasterList.slice(start, start + this.pageSize);
     }
-  
+
     onPageChange = (pageIndex: number): void => {
       this.currentPage = pageIndex; // Update the current page
     }
-  
+
     filterTable = () => {
       if (this.SearchString != '') {
         this.DisplayMasterList = this.MasterList.filter((data: any) => {
@@ -207,6 +206,6 @@ export class FinancialYearMasterComponent implements OnInit {
         this.DisplayMasterList = this.MasterList
       }
     }
-  
+
 
 }

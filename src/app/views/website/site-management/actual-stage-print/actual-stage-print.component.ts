@@ -60,7 +60,6 @@ export class ActualStagePrintComponent implements OnInit {
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     // history.state.myData;
-    console.log('history.state.myData :', history.state.printData);
 
     this.Entity = history.state.printData;
     this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.CreatedDate);

@@ -72,7 +72,7 @@ export class SiteWorkDoneMasterDetailsComponent implements OnInit {
       this.Entity = SiteWorkDone.GetCurrentInstance();
       this.SiteGroupRef =this.Entity.p.SiteWorkGroupRef
       this.DisplaySiteWorkMasterList = this.SiteWorkMasterList.filter(e=> e.p.SiteWorkGroupRef == this.Entity.p.SiteWorkGroupRef)
-       
+
       this.appStateManage.StorageKey.removeItem('Editable');
     } else {
       this.Entity = SiteWorkDone.CreateNewInstance();
@@ -87,7 +87,6 @@ export class SiteWorkDoneMasterDetailsComponent implements OnInit {
 
   onApplicableTypeChange(selectedvalue: any) {
     this.Entity.p.ListOfApplicableTypes = selectedvalue;
-    // console.log(this.Entity.p.MaterialSuppliedByVendors);
   }
 
   onSiteGroupChange(siteGroupRef: number) {

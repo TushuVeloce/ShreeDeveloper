@@ -29,7 +29,7 @@ export class RegisteredCustomerComponent  implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  RegisterCustomerList: RegisteredCustomer[] = []; 
+  RegisterCustomerList: RegisteredCustomer[] = [];
 
   headers: string[] = [
     'Sr.No.',
@@ -42,7 +42,7 @@ export class RegisteredCustomerComponent  implements OnInit {
   ];  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private payloadPacketFacade: PayloadPacketFacade,
         private serverCommunicator: ServerCommunicatorService
-  ) { 
+  ) {
     effect(async() => {
      await this.getRegisterCustomerListByCompanyRef()
     });
@@ -62,15 +62,14 @@ export class RegisteredCustomerComponent  implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await RegisteredCustomer.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));    
-    console.log('lst :', lst);
+    let lst = await RegisteredCustomer.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.RegisterCustomerList = lst
-    this.loadPaginationData();    
+    this.loadPaginationData();
   };
 
-  
+
 
   onEditClicked = async (item: RegisteredCustomer) => {
 
@@ -84,29 +83,28 @@ export class RegisteredCustomerComponent  implements OnInit {
   CancelDeal = async (registercustomer:RegisteredCustomer) => {
     let confirm = await this.uiUtils.showConfirmationMessage('Confirmation','Are you sure you want to cancel this process?',
       async () => {
-        let req = new CancelDealCustomRequest();  
+        let req = new CancelDealCustomRequest();
         req.RegisterCustomerRef = registercustomer.p.Ref;
         req.PlotRef = registercustomer.p.PlotRef;
         let td = req.FormulateTransportData();
         let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
         let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-    
+
         if (!tr.Successful) {
           await this.uiUtils.showErrorMessage('Error', tr.Message);
           return;
         }
-        await this.uiUtils.showSuccessToster('Deal canceled Successfully');      
+        await this.uiUtils.showSuccessToster('Deal canceled Successfully');
        let tdResult = JSON.parse(tr.Tag) as TransportData;
-        console.log('tdResult :', tdResult);
       }
     );
     this.getRegisterCustomerListByCompanyRef()
     this.loadPaginationData()
 };
 
-    
+
   // For Pagination  start ----
-  
+
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   };

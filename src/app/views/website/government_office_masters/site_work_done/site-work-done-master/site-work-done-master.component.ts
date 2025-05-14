@@ -70,10 +70,8 @@ export class SiteWorkDoneMasterComponent implements OnInit {
   //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
   //   );
   //   this.MasterList = lst;
-  //   console.log('MasterList :', this.MasterList);
   //   this.DisplayMasterList = this.MasterList;
   //   this.loadPaginationData();
-  //   // console.log(this.DisplayMasterList);
   // };
 
   getSiteWorkDoneListByCompanyRef = async () => {

@@ -30,7 +30,7 @@ export class RegistrarOfficeComponent  implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   headers: string[] = ['Sr.No.','Customer', 'Cheque', 'Witness 1','Agreement to Sale','Sale Deed','Talathi','7/12	','Spiral','Client Submit	', 'Action'];
-  
+
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement) {
     effect(() => {
       this.getSiteListByCompanyRef();
@@ -40,8 +40,8 @@ export class RegistrarOfficeComponent  implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
-  } 
-    
+  }
+
   // get SiteList With Company Ref //
   getSiteListByCompanyRef = async () => {
     this.PlotNoList = [];
@@ -72,7 +72,7 @@ getPlotListBySiteRef = async (SiteRef: number) => {
   let lst = await Plot.FetchEntireListBySiteRef(SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
   this.PlotNoList = lst.filter(plot => plot.p.CurrentBookingRemark === 50);
   this.getRegistrarOfficeListBySiteRef(SiteRef)
-  this.loadPaginationData(); 
+  this.loadPaginationData();
 }
 
   // get CustomerList With Plot Ref //
@@ -81,7 +81,6 @@ getPlotListBySiteRef = async (SiteRef: number) => {
     let lst = await RegistrarOffice.FetchEntireListBySiteRef(SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
         this.MasterList = lst;
         this.DisplayMasterList = this.MasterList;
-        console.log('DisplayMasterList :', this.DisplayMasterList);
       this.loadPaginationData();
   }
 
@@ -95,7 +94,6 @@ getPlotListBySiteRef = async (SiteRef: number) => {
     let lst = await RegistrarOffice.FetchEntireListByPlotRef(PlotRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
         this.MasterList = lst;
         this.DisplayMasterList = this.MasterList;
-        console.log('DisplayMasterList :', this.DisplayMasterList);
       this.loadPaginationData();
   }
 
@@ -104,16 +102,16 @@ getPlotListBySiteRef = async (SiteRef: number) => {
     const p = office.p;
     return p.Witness1Name && p.Witness1ContactNo && p.Witness1IsAadharSubmit && p.Witness1IsPanSubmit;
   }
-  
+
   isAgreementCompleted(office: any): boolean {
     const p = office.p;
     return p.AgreementDocumentNo && p.AgreementDate;
   }
-  
+
   isSaleDeedCompleted(office: any): boolean {
     return office.p.SaleDeedDocumentNo && office.p.SaleDeedDate;
   }
-  
+
   isFerfarCompleted(office: any): boolean {
     const p = office.p;
     return p.IsIndexOriginalSubmit &&
@@ -122,7 +120,7 @@ getPlotListBySiteRef = async (SiteRef: number) => {
            p.TalathiDate &&
            p.IsFerfarNoticeSubmit;
   }
-  
+
   onEditClicked = async (item: RegistrarOffice) => {
     this.SelectedRegistrarOffice = item.GetEditableVersion();
     RegistrarOffice.SetCurrentInstance(this.SelectedRegistrarOffice);

@@ -97,7 +97,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
         this.Entity.p.Date= this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
        }
       this.isChalanDisabled = true
-      console.log('Entity :', this.Entity);
       if(this.Entity.p.TimeDetails.length>0){
         this.Amount = this.getTotalWorkedHours()
       }else{
@@ -242,7 +241,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     this.ExpenseTypeList = []
     let lst = await ExpenseType.FetchEntireListByStageRef(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.ExpenseTypeList = lst;
-    console.log('ExpenseTypeList :', this.ExpenseTypeList);
   }
 
   toggleExpenseInput() {
@@ -305,7 +303,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     this.VendorServiceList = []
     let lst = await Vendor.FetchInstance(VendorRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.VendorServiceList = lst.p.ServiceListSuppliedByVendor;
-    console.log('VendorServiceList :', this.VendorServiceList);
   }
 
   FormulateUnitList = async () => {
@@ -313,7 +310,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.UnitList = lst;
-    console.log('UnitList :', this.UnitList);
   };
 
   ClearInputsOnExpenseChange = (ExpenseTypeRef:number) => {
@@ -361,7 +357,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   }
 
   AddExpenseTypeToOther = async(ExpenseTypeRef:number) =>{
-  console.log('ExpenseTypeRef :', ExpenseTypeRef);
     if (ExpenseTypeRef == this.OtherExpenseRef){
       this.isAdd = true
     }else{
@@ -466,7 +461,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     this.ExpenseTypeEntity.p.StageRef = this.Entity.p.StageRef
     let entityToSave = this.ExpenseTypeEntity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
-    console.log('entitiesToSave :', entitiesToSave);
     await this.ExpenseTypeEntity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
@@ -574,7 +568,6 @@ async SaveTime() {
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
-    console.log('entitiesToSave :', entitiesToSave);
     await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {

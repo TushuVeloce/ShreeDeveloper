@@ -50,23 +50,19 @@ export class ProgressReportComponent implements OnInit {
   //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
   //   );
   //   this.MasterList = lst;
-  //   console.log('MasterList :', this.MasterList);
   //   this.DisplayMasterList = this.MasterList;
   //   this.loadPaginationData();
-  //   // console.log(this.DisplayMasterList);
   // };
 
   getProgressReportListByCompanyRef = async () => {
     // this.MasterList = [];
     // this.DisplayMasterList = [];
-    // console.log('companyRef :', this.companyRef());
     // if (this.companyRef() <= 0) {
     //   await this.uiUtils.showErrorToster('Company not Selected');
     //   return;
     // }
     // let lst = await ProgressReport.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     // this.MasterList = lst;
-    // console.log('ProgressReportList :', this.MasterList);
 
     // this.DisplayMasterList = this.MasterList;
     // this.loadPaginationData();

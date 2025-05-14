@@ -47,7 +47,6 @@ export class SearchableSelectComponent implements OnInit, OnDestroy {
 
     // Listen for back button
     this.backButtonSubscription = this.platform.backButton.subscribeWithPriority(10, () => {
-      console.log('Back button pressed - Closing modal');
       this.modalInstance.dismiss();
       this.backButtonSubscription.unsubscribe();
     });
@@ -55,7 +54,6 @@ export class SearchableSelectComponent implements OnInit, OnDestroy {
     // Listen for route changes
     this.routeSubscription = this.router.events.subscribe(event => {
       if (event instanceof NavigationStart && this.modalInstance) {
-        console.log('Route changed - Closing modal');
         this.modalInstance.dismiss();
       }
     });

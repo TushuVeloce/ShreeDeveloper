@@ -60,7 +60,6 @@ export class ViewAllPresentEmployeeComponent implements OnInit {
       let TodaysAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.TodayAttendanceLogList = TodaysAttendanceLog
     } catch (error) {
-      // console.log(error);
     } finally {
       this.isLoading = false;
     }

@@ -107,9 +107,7 @@ debugger
       return;
     }
     let tdResult = JSON.parse(tr.Tag) as TransportData;
-    console.log('verifyPayment tdResult :', tdResult);
     let res = VerifyPaymentResponse.FromTransportData(tdResult);
-    console.log('verifyPayment res :', res);
 
     return tr.Successful;
   }

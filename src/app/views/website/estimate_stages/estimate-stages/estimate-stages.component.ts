@@ -95,13 +95,12 @@ export class EstimateStagesComponent implements OnInit {
       this.DisplayMasterList = this.MasterList;
       this.loadPaginationData();
     }
-  
+
   getEstimateListBySiteRef = async (siteref: number) => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     this.SiteRef = siteref
     let lst = await EstimateStages.FetchEntireListBySiteRef(siteref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -154,19 +153,19 @@ export class EstimateStagesComponent implements OnInit {
       'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
     ];
     const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-  
+
     if ((amount = amount || 0) === 0) return 'Zero Rupees Only';
     if (amount.toString().length > 9) return 'Overflow';
-  
+
     let n = ('000000000' + amount).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{3})$/);
     if (!n) return '';
-  
+
     let str = '';
     str += (Number(n[1]) !== 0) ? (a[Number(n[1])] || (b[Number(n[1][0])] + ' ' + a[Number(n[1][1])])) + ' Crore ' : '';
     str += (Number(n[2]) !== 0) ? (a[Number(n[2])] || (b[Number(n[2][0])] + ' ' + a[Number(n[2][1])])) + ' Lakh ' : '';
     str += (Number(n[3]) !== 0) ? (a[Number(n[3])] || (b[Number(n[3][0])] + ' ' + a[Number(n[3][1])])) + ' Thousand ' : '';
     str += (Number(n[4]) !== 0) ? (a[Number(n[4])] || (b[Number(n[4][0])] + ' ' + a[Number(n[4][1])])) + ' ' : '';
-  
+
     return str.trim() + ' Rupees Only';
   }
 

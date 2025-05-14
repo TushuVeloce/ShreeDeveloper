@@ -162,7 +162,6 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   getOfficeDutyTime = async () => {
     let lst = await OfficeDutyandTime.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.OfficeDutyTimeList = lst;
-    console.log(this.OfficeDutyTimeList);
 
   }
 

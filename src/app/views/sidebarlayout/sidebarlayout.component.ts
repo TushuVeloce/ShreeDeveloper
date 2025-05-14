@@ -220,7 +220,6 @@ export class SidebarlayoutComponent implements OnInit {
         req.EmployeeRef = this.appStateManagement.getEmployeeRef();
         localStorage.removeItem('activeSubmodule');
         localStorage.removeItem('activeModule');
-        console.log('req :', req);
         let _ = await this.servercommunicator.LogoutUser(req)
         await this.router.navigate(['/']);
       });

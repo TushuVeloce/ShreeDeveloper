@@ -47,7 +47,6 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
 
   ionViewWillEnter = async () => {
     await this.loadLeaveRequestsIfEmployeeExists();
-    // console.log('Leave request refreshed on view enter');
   };
 
   ngOnDestroy(): void {
@@ -146,7 +145,6 @@ export class LeaveRequestMobileAppComponent implements OnInit, OnDestroy {
     try {
       if (this.companyRef <= 0) {
         await this.uiUtils.showErrorToster('Company not Selected');
-        // console.log('Company not Selected :', this.companyRef);
         return;
       }
       this.router.navigate([

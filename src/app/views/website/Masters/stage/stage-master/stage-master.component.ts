@@ -49,12 +49,10 @@ export class StageMasterComponent implements OnInit {
   );
     this.MasterList = lst.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
     this.DisplayMasterList = this.MasterList;
-    console.log('DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
 };
 
   onEditClicked = async (item: Stage) => {
-  console.log('item :', item);
     this.SelectedStage = item.GetEditableVersion();
     Stage.SetCurrentInstance(this.SelectedStage);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');

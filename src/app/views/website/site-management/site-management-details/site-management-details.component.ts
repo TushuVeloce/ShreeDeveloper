@@ -83,7 +83,6 @@ export class SiteManagementDetailsComponent implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity ? 'New Site' : 'Edit Site';
       this.Entity = Site.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
-      console.log('Entity :', this.Entity);
       if (this.Entity.p.EstimatedStartingDate != '') {
         this.localEstimatedStartingDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.EstimatedStartingDate)
       }
@@ -153,7 +152,6 @@ export class SiteManagementDetailsComponent implements OnInit {
   }
 
   getStateListByCountryRefforOwner = async (CountryRef: number) => {
-    console.log('CountryRef :', CountryRef);
     this.StateListforOwner = [];
     this.CityListforOwner = [];
     this.newOwner.StateRef = 0;
@@ -231,10 +229,8 @@ export class SiteManagementDetailsComponent implements OnInit {
   }
 
   editowner(index: number) {
-    console.log('index :', index);
     this.isOwnerModalOpen = true
     this.newOwner = { ...this.Entity.p.SiteManagementOwnerDetails[index] }
-    console.log('this.newOwner  :', this.newOwner);
     this.editingIndex = index;
   }
 

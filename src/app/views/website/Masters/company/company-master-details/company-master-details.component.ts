@@ -92,9 +92,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
 
       this.DetailsFormTitle = this.IsNewEntity ? 'New Company' : 'Edit Company';
       this.Entity = Company.GetCurrentInstance();
-      console.log(this.Entity);
       this.imageUrl = this.Entity.p.LogoPath;
-      console.log(this.Entity.p.LogoPath);
 
       // While Edit Converting date String into Date Format //
       this.dateOfInCorporation = this.datePipe.transform(

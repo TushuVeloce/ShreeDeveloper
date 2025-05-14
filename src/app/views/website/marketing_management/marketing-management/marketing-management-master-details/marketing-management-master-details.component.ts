@@ -60,7 +60,6 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity? 'New Marketing': 'Edit Marketing';
       this.Entity = MarketingManagement.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
        this.getVendorServiceListByVendorRef(this.Entity.p.VendorRef);
@@ -101,7 +100,6 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
     this.VendorServiceList = []
     let lst = await Vendor.FetchInstance(VendorRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.VendorServiceList = lst.p.ServiceListSuppliedByVendor;
-    console.log('VendorServiceList :', this.VendorServiceList);
   }
 
   selectAllValue(event: MouseEvent): void {
@@ -119,7 +117,6 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
     const services = await VendorService.FetchInstance(vendorref, async errMsg =>
       await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    console.log('services:', services);
     const name = services?.p?.Name || '';
     this.serviceNamesString = name;
   };

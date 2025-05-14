@@ -88,7 +88,6 @@ export class SiteWorkMasterDetailComponent implements OnInit {
 
   // onApplicableTypeChange(selectedvalue: any) {
   //   this.Entity.p.ListOfApplicableTypes = selectedvalue;
-  //   // console.log(this.Entity.p.MaterialSuppliedByVendors);
   // }
 
   SaveSiteWorkMaster = async () => {

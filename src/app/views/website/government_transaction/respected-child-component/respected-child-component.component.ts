@@ -23,18 +23,15 @@ export class RespectedChildComponentComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute, private appStateManage: AppStateManageService,
     private utils: Utils, private uiUtils: UIUtils, private companystatemanagement: CompanyStateManagement) {
     let str = this.route.snapshot.params['queryParams'];
-    // console.log('str :', str);
     this.SectionName = str;
     this.SelectedTransactionType = this.SectionName;
 
     this.TransactionTypeArrayObj = JSON.parse(this.appStateManage.StorageKey.getItem('TransactionJson') ?? '[]');
     this.SelectedArrayObj = this.TransactionTypeArrayObj.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
-    console.log(this.SelectedTransactionType);
   }
 
   ngOnInit() {
     this.Entity = GovernmentTransaction.GetCurrentInstance();
-    // console.log('Entity', this.Entity);
 
   }
 

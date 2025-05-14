@@ -18,7 +18,6 @@ export class MojaniDetailsComponent implements OnInit {
     let arr = JSON.parse(this.appStateManage.StorageKey.getItem('TransactionJson') ?? '[]');
 
     this.MojaniList = arr.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
-    // console.log('MojaniList', this.MojaniList);
   }
 
   ngOnInit() { }
@@ -49,7 +48,6 @@ export class MojaniDetailsComponent implements OnInit {
     // this.appStateManage.StorageKey.setItem('TpOfficeList', JSON.stringify(this.TpOfficeList));
     this.onEntitySaved.emit(this.MojaniList);
     this.router.navigate(['/homepage/Website/Site_Progress_Report_Details']);
-    // console.log('onSave TpOfficeList', this.TpOfficeList);
   }
 
   onCancel = async () => {

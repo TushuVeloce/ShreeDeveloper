@@ -290,11 +290,9 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       (plot) => plot.p.CurrentBookingRemark !== BookingRemark.Booked
     );
 
-    console.log(this.PlotList);
 
     // this.DisplayMasterList = this.PlotList
     // this.IsPlotDetails = true;
-    // console.log('PlotList :', this.PlotList);
   };
 
   addDataToTable() {
@@ -340,7 +338,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
         obj.p
       );
       this.IsPlotDetails = true;
-      // console.log('Updated DisplayMasterList :', this.DisplayMasterList);
       this.SiteManagementRef = 0;
       this.InterestedPlotRef = 0;
     }
@@ -360,7 +357,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
 
   // onPlotSelected(selectedvalue: any) {
   //   this.Entity.p.CustomerFollowUpPlotDetails = selectedvalue;
-  //   // console.log(this.Entity.p.MaterialSuppliedByVendors);
   // }
   selectedCustomerStatus: number = 0;
   isReminderRequired: boolean = false;
@@ -431,7 +427,6 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
 
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
 
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);

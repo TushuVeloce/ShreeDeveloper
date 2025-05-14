@@ -62,7 +62,6 @@ export class PlotMasterDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Plot' : 'Edit Plot';
       this.Entity = Plot.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
       this.SiteName = this.Entity.p.SiteName
       this.SiteRf = this.Entity.p.SiteManagementRef
       this.appStateManage.StorageKey.removeItem('Editable');
@@ -110,7 +109,6 @@ export class PlotMasterDetailsComponent implements OnInit {
     this.CompanyEntity = Company.CreateNewInstance();
     if (this.Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked) {
       let CompanyData = await Company.FetchInstance(this.CompanyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      console.log('CompanyData :', CompanyData);
       this.CompanyEntity = CompanyData;
     }
   }
@@ -129,7 +127,6 @@ export class PlotMasterDetailsComponent implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;

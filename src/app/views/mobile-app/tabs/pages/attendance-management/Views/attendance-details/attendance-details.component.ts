@@ -92,15 +92,6 @@ export class AttendanceDetailsComponent implements OnInit {
         employeeRef,
         async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
-      console.log(`      this.companyRef,
-        AttendenceLogType.MonthlyAttendanceLog,
-        month,
-        employeeRef :`, this.companyRef,
-        AttendenceLogType.MonthlyAttendanceLog,
-        month,
-        employeeRef);
-      console.log('logs :', logs);
-
       this.monthlyAttendanceLogsList = logs;
       this.filteredMonthlyAttendanceLogsList = logs;
     } catch (error) {

@@ -94,7 +94,6 @@ export class VendorMasterDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Vendor' : 'Edit Vendor';
       this.Entity = Vendor.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable')
 
     } else {

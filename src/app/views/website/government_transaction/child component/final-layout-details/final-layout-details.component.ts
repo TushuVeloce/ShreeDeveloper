@@ -19,7 +19,6 @@ export class FinalLayoutDetailsComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     let arr = JSON.parse(this.appStateManage.StorageKey.getItem('TransactionJson') ?? '[]');
     this.FinalLayoutList = arr.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
-    // console.log('FinalLayoutList', this.FinalLayoutList);
     this.BindApplicableTypeValueStatusToRadioButton();
   }
 
@@ -48,7 +47,7 @@ export class FinalLayoutDetailsComponent implements OnInit {
       this.showReportNOCSection = value;
     }
   }
-  
+
   BindApplicableTypeValueStatusToRadioButton = () => {
     // debugger
     for (let i = 0; i < this.FinalLayoutList.length; i++) {
@@ -57,7 +56,6 @@ export class FinalLayoutDetailsComponent implements OnInit {
 
       let ApplicableTypeValueList = ApplicableTypesList[0].ApplicableTypes.filter((item: { SiteWorkApplicableTypeName: string }) => item.SiteWorkApplicableTypeName == 'Yes No');
       this.IsRoadNOCStatus(ApplicableTypeValueList[0].Value, ApplicableTypesList[0].SiteWorkName);
-      // console.log('arr3', ApplicableTypeValueList[0].Value, ApplicableTypesList[0].SiteWorkName);
     }
 
   }
@@ -65,7 +63,6 @@ export class FinalLayoutDetailsComponent implements OnInit {
     // this.appStateManage.StorageKey.setItem('TpOfficeList', JSON.stringify(this.TpOfficeList));
     this.onEntitySaved.emit(this.FinalLayoutList);
     this.router.navigate(['/homepage/Website/Site_Progress_Report_Details']);
-    // console.log('onSave TpOfficeList', this.TpOfficeList);
   }
 
   onCancel = async () => {

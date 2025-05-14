@@ -115,7 +115,6 @@ export class AttendanceManagementPage implements OnInit {
   // ionViewWillEnter = async () => {
   //   await this.getCheckInData(),
   //   await this.getWeekWiseAttendanceLogByAttendanceListType(), // ← Called every time user comes back
-  //   console.log('api calling of getSalarySlipRequestListByEmployeeRef',);
   // }
   ngOnDestroy(): void {
     // cleanup logic if needed later
@@ -154,7 +153,6 @@ export class AttendanceManagementPage implements OnInit {
 
       const tdResult = JSON.parse(response.Tag) as TransportData;
       const res = AttendanceLogCheckInCustomRequest.FromTransportData(tdResult);
-      console.log('Check-in response:', res);
 
       if (res.Data.length > 0) {
         const checkInData: AttendanceLogProps[] = res.Data as AttendanceLogProps[];
@@ -286,7 +284,6 @@ export class AttendanceManagementPage implements OnInit {
       this.attendanceLog.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
       const entityToSave = this.attendanceLog.GetEditableVersion();
       const entitiesToSave = [entityToSave];
-      console.log('entitiesToSave:', entitiesToSave);
 
       const tr = await this.utils.SavePersistableEntities(entitiesToSave);
       if (!tr.Successful) {
@@ -319,7 +316,6 @@ export class AttendanceManagementPage implements OnInit {
       this.attendanceLog.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
       const entityToSave = this.attendanceLog.GetEditableVersion();
       const entitiesToSave = [entityToSave];
-      console.log('entitiesToSave:', entitiesToSave);
 
       const tr = await this.utils.SavePersistableEntities(entitiesToSave);
       if (!tr.Successful) {
@@ -365,8 +361,6 @@ export class AttendanceManagementPage implements OnInit {
       this.weeklyAttendanceLogs = logs;
       // Optionally, apply further filtering before assigning to filteredWeeklyAttendanceLogs
       this.filteredWeeklyAttendanceLogs = logs;
-
-      // console.log('Weekly Attendance Logs:', logs);
     } catch (error) {
       // console.error('Error fetching weekly attendance logs:', error);
     } finally {

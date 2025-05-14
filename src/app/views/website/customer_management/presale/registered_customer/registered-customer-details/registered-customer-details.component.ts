@@ -36,15 +36,14 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
     GoodandServicesTaxList = DomainEnums.GoodsAndServicesTaxList(true, '--Select GST --');
     companyRef = this.companystatemanagement.SelectedCompanyRef;
     FinancialYearList: FinancialYear[]=[]
-  
+
     constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement,private servicecommunicator: ServerCommunicatorService,private dtu: DTU,) { }
-  
+
     async ngOnInit() {
       this.appStateManage.setDropdownDisabled(true);
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
          this.IsNewEntity = false;
          this.Entity = RegisteredCustomer.GetCurrentInstance();
-         console.log('Entity :', this.Entity);
          this.Entity.p.SiteVisitDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.SiteVisitDate)
          if(this.Entity.p.RegisterDate != ''){
           this.localRegisterDate= this.dtu.ConvertStringDateToShortFormat(this.Entity.p.RegisterDate)
@@ -70,7 +69,7 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
       const DiscountedRateOnArea = Number(this.Entity.p.DiscountedRateOnArea);
       const BasicRatePerSqft = Number(this.Entity.p.BasicRatePerSqft);
       const DiscountOnTotalPlotAmount = Number(this.Entity.p.DiscountOnTotalPlotAmount)
-  
+
       if (DiscountedRateOnArea === 0) {
         this.Entity.p.TotalPlotAmount = Math.ceil(BasicRatePerSqft * AreaInSqft) - DiscountOnTotalPlotAmount;
       } else {
@@ -128,7 +127,6 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
       this.Entity.p.RegisterDate = this.dtu.ConvertStringDateToFullFormat(this.localRegisterDate)
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
-      console.log('entitiesToSave :', entitiesToSave);
       let tr = await this.utils.SavePersistableEntities(entitiesToSave);
       if (!tr.Successful) {
         this.isSaveDisabled = false;
@@ -145,8 +143,8 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
         }
       }
     };
-  
-   
+
+
     BackRegisteredCustomer= () => {
       this.router.navigate(['/homepage/Website/Registered_Customer']);
     }

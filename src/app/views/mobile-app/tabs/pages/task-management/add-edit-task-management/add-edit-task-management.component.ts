@@ -61,14 +61,11 @@ export class AddEditTaskManagementComponent implements OnInit {
       this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    console.log('siteList :', this.siteList, this.companyRef());
   };
 
   save() {
     if (this.isEditMode) {
-      console.log('Updating task:', this.taskId);
     } else {
-      console.log('Creating new task');
     }
     this.router.navigate(['/app_homepage/tabs/task-management']); // ✅ Fix router access
   }
