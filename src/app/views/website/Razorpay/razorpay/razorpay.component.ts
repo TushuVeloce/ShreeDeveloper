@@ -25,14 +25,14 @@ export class RazorpayComponent  implements OnInit {
   startPayment = async ()=>{
 
     try {
-      
+
 
     let amount = 1000;
     let orderId = await this.getOrderIdByAmount(amount);
     if(orderId == '' || orderId == null || orderId == undefined){
       await this.uiUtils.showErrorMessage('Error', 'order Id not generated');
       return
-    } 
+    }
 
     // open razorpay UI
 
@@ -58,7 +58,7 @@ export class RazorpayComponent  implements OnInit {
         color: '#3399cc'
       }
     };
-  
+
     const rzp = new Razorpay(options);
     rzp.open();
   } catch (error) {
@@ -83,9 +83,7 @@ export class RazorpayComponent  implements OnInit {
       return;
     }
     let tdResult = JSON.parse(tr.Tag) as TransportData;
-    console.log('tdResult :', tdResult);
     let res = CreateOrderResponse.FromTransportData(tdResult);
-    console.log('res :', res);
     if(res.Rows.length > 0){
       let orderId = res.Rows[0].OrderId;
       return orderId;

@@ -43,7 +43,6 @@ export class HeaderComponent implements OnInit {
           }
         }
       ];
-      console.log('selectedCompany :', this.selectedCompany);
       const list = await Company.FetchEntireList(
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
@@ -87,7 +86,7 @@ export class HeaderComponent implements OnInit {
       );
       if (selected) {
         this.selectedCompany = selected;
-        console.log('selected :', selected);
+
         this.onSelectionChange(this.selectedCompany);
       }
     } catch (error) {

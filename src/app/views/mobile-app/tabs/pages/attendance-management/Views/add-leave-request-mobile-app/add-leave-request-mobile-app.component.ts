@@ -104,7 +104,7 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
         await this.uiUtils.showErrorToster('Employee not selected');
       }
     } catch (error) {
-      // console.log('error :', error);
+
 
     } finally {
       this.isLoading = false;
@@ -130,7 +130,7 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
       this.Entity.p.EmployeeName = employee.p.Name;
       this.TotalWorkingHrs = employee.p.TotalWorkingHrs;
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -178,7 +178,6 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
     }
   }
   // onDateChange(event: any) {
-  //   console.log('Selected date:', event.detail.value);
   // }
   public async onFromDateChange(date: any): Promise<void> {
     this.fromDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
@@ -218,14 +217,14 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
 
       this.openSelectModal(options, selectData, false, 'Select Leave Type', 1, (selected) => {
         selectData = selected;
-        // console.log('selected :', selected);
+
         this.SelectedLeaveType = selected;
         this.Entity.p.LeaveRequestType = selected[0]?.p?.Ref;
         this.Entity.p.LeaveRequestName = selected[0]?.p?.Name;
         this.onLeaveRequestTypeChanged();
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -274,7 +273,7 @@ export class AddLeaveRequestMobileAppComponent implements OnInit {
       this.resetForm();
       await this.router.navigate(['app_homepage/tabs/attendance-management/leave-request'], { replaceUrl: true });
     } catch (error) {
-      // console.log('error :', error);
+
     } finally {
       this.isLoading = false;
     }

@@ -59,7 +59,7 @@ export class SiteWorkMasterDetailComponent implements OnInit {
   async ngOnInit() {
     // debugger
     this.SiteWorkGroupList = await SiteWorkGroup.FetchEntireList();
-    
+
     this.appStateManage.setDropdownDisabled(true);
     const SiteGroupRef = this.appStateManage.StorageKey.getItem('sitegroup');
     this.Entity.p.SiteWorkGroupRef = SiteGroupRef ? Number(SiteGroupRef) : 0;
@@ -97,7 +97,7 @@ export class SiteWorkMasterDetailComponent implements OnInit {
     this.Entity.p.CompanyName =
       this.companystatemanagement.getCurrentCompanyName();
     let entityToSave = this.Entity.GetEditableVersion();
-    console.log('entityToSave :', entityToSave);
+
 
     let entitiesToSave = [entityToSave];
     // await this.Entity.EnsurePrimaryKeysWithValidValues()

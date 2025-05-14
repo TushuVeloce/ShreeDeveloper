@@ -87,7 +87,7 @@ export class ActualStagePage implements OnInit {
       this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
       await this.getActualStageListByAllFilters();
     } catch (error) {
-      // console.log('error :', error);
+
     } finally {
       this.isLoading = false;
     }
@@ -180,7 +180,6 @@ export class ActualStagePage implements OnInit {
     let lst = await ActualStages.FetchEntireListByAllFilters(this.companyRef, this.FromDate ?? '', this.ToDate ?? '', this.Entity.p.SiteRef, this.Entity.p.VendorRef, this.Entity.p.StageRef, this.Entity.p.ExpenseTypeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.ActualStagesList = lst;
     this.FilteredActualStagesList = lst;
-    console.log('FilteredActualStagesList :', this.FilteredActualStagesList);
     for (const item of lst) {
       switch (item.p.ExpenseTypeRef) {
         case 100:
@@ -224,7 +223,7 @@ export class ActualStagePage implements OnInit {
       return total + Number(item.WorkedHours || 0);
     }, 0);
   }
-  
+
   AddActualStages = async () => {
     await this.router.navigate(['app_homepage/tabs/site-management/actual-stage/add']);
   }

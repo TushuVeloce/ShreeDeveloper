@@ -16,7 +16,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   templateUrl: './create-password.component.html',
   styleUrls: ['./create-password.component.scss'],
     imports: [CommonModule, NzLayoutModule,
-      NzMenuModule, FormsModule] 
+      NzMenuModule, FormsModule]
     })
 export class CreatePasswordComponent  implements OnInit {
 OldPassword: string = '';
@@ -44,28 +44,26 @@ constructor(private router: Router,private uiUtils: UIUtils,private payloadPacke
     }else if(oldpassword == ''){
       await this.uiUtils.showErrorMessage('Error', 'Old Password cannot be empty');
     }
-  
-    let req = new CraetePasswordCustomRequest();  
+
+    let req = new CraetePasswordCustomRequest();
     req.CompanyRef = this.CompanyRef
     req.EmployeeRef = this.EmployeeRef
     req.OldPassword = oldpassword;
     req.NewPassword = newpassword;
     req.ConfirmPassword = confirmpassword;
-    console.log('req :', req);
     let td = req.FormulateTransportData();
     let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
     let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-  
+
     if (!tr.Successful) {
       await this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     }
-  
+
     await this.uiUtils.showSuccessToster('Password Created Successfully');
     let tdResult = JSON.parse(tr.Tag) as TransportData;
-    console.log('tdResult:', tdResult);
     await this.router.navigate(['/login']);
   };
-  
+
 
 }

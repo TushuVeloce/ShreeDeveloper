@@ -63,9 +63,6 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
   public CountryName: string | null = null;
 
   Date: string | null = null;
-  // onDateChange(event: any) {
-  //   console.log('Selected date:', event.detail.value, this.Date);
-  // }
   DateWithTime: string | null = null;
 
   MarketingModesList = DomainEnums.MarketingModesList();
@@ -90,7 +87,6 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
   // ionViewWillEnter = async () => {
   //   await this.loadSalarySlipRequestsIfEmployeeExists();
-  //   // console.log('Leave request refreshed on view enter');
   // };
 
   ngOnDestroy(): void {
@@ -102,7 +98,6 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
       this.isLoading = true;
       this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
       this.appStateManagement.setDropdownDisabled(true);
-      console.log(this.CustomerStatusList);
       this.CountryList = await Country.FetchEntireList();
       // this.StateList = await State.FetchEntireList();
 
@@ -116,7 +111,6 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
           ? 'New Customer Enquiry'
           : 'Edit Customer Enquiry';
         this.Entity = CustomerEnquiry.GetCurrentInstance();
-        console.log('Entity :', this.Entity);
         // Site Visit Date
         if (this.Entity.p.CustomerFollowUps[0].SiteVisitDate != '') {
           // While Edit Converting date String into Date Format //
@@ -195,7 +189,7 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
         this.DateWithTime = this.Entity.p.CustomerFollowUps[0].TransDateTime;
       }
     } catch (error) {
-      // console.log('error :', error);
+
 
     } finally {
       this.isLoading = false;
@@ -215,13 +209,13 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
       this.openSelectModal(options, selectData, false, 'Select Country', 1, (selected) => {
         selectData = selected;
-        // console.log('selected :', selected);
+
         this.Entity.p.CountryRef = selected[0].p.Ref;
         this.CountryName = selected[0].p.Name;
         this.getStateListByCountryRef(selected[0].p.Ref)
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -239,13 +233,13 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
       this.openSelectModal(options, selectData, false, 'Select State', 1, (selected) => {
         selectData = selected;
-        // console.log('selected :', selected);
+
         this.Entity.p.StateRef = selected[0].p.Ref;
         this.StateName = selected[0].p.Name;
         this.getCityListByStateRef(selected[0].p.Ref)
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
   public async selectCityBottomsheet(): Promise<void> {
@@ -262,12 +256,12 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
       this.openSelectModal(options, selectData, false, 'Select City', 1, (selected) => {
         selectData = selected;
-        // console.log('selected :', selected);
+
         this.Entity.p.CityRef = selected[0].p.Ref;
         this.CityName = selected[0].p.Name;
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
   public async selectInterestedSiteBottomsheet(): Promise<void> {
@@ -284,13 +278,13 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
       this.openSelectModal(options, selectData, false, 'Select Interested Site', 1, (selected) => {
         selectData = selected;
-        // console.log('selected :', selected);
+
         this.SiteManagementRef = selected[0].p.Ref;
         this.SiteManagementName = selected[0].p.Name;
         this.getPlotBySiteRefList(selected[0].p.Ref)
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
   public async selectInterestedPlotsBottomsheet(): Promise<void> {
@@ -307,12 +301,12 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
       this.openSelectModal(options, selectData, false, 'Select Interested Plots', 1, (selected) => {
         selectData = selected;
-        // console.log('selected :', selected);
+
         this.InterestedPlotRef = selected[0].p.Ref;
         this.InterestedPlotNo = selected[0].p.PlotNo;
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -329,13 +323,13 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
       this.openSelectModal(options, selectData, false, 'Select Lead Source', 1, (selected) => {
         selectData = selected;
-        // console.log('selected :', selected);
+
         this.Entity.p.CustomerFollowUps[0].LeadSource = selected[0].p.Ref;
         this.LeadSourceName = selected[0].p.Name;
         this.onLeadSourceChange(selected[0].p.Ref)
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
   public async selectLeadHandleByBottomsheet(): Promise<void> {
@@ -352,12 +346,12 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
       this.openSelectModal(options, selectData, false, 'Select Lead Handle By', 1, (selected) => {
         selectData = selected;
-        // console.log('selected :', selected);
+
         this.Entity.p.CustomerFollowUps[0].LeadHandleBy = selected[0].p.Ref;
         this.LeadHandleByName = selected[0].p.Name;
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -374,12 +368,12 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
       this.openSelectModal(options, selectData, false, 'Select Contact Mode', 1, (selected) => {
         selectData = selected;
-        // console.log('selected :', selected);
+
         this.Entity.p.CustomerFollowUps[0].ContactMode = selected[0].p.Ref;
         this.contactModeName = selected[0].p.Name;
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -396,12 +390,12 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
       this.openSelectModal(options, selectData, false, 'Select Contact Mode', 1, (selected) => {
         selectData = selected;
-        console.log('selected :', selected);
+
         this.Entity.p.CustomerFollowUps[0].ContactMode = selected[0].p.Ref;
         this.contactModeNameInAgentBroker = selected[0].p.Name;
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -418,13 +412,13 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
       this.openSelectModal(options, selectData, false, 'Select Customer Status', 1, (selected) => {
         selectData = selected;
-        console.log('selected :', selected);
+
         this.Entity.p.CustomerFollowUps[0].CustomerStatusName = selected[0].p.Name;
         this.Entity.p.CustomerFollowUps[0].CustomerStatus = selected[0].p.Ref;
         this.onStatusChange(selected[0]?.p?.Ref);
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -453,7 +447,6 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
       );
 
       this.StateList = lst;
-      // console.log('StateList :', this.StateList);
 
       // Update CountryRef AFTER fetching data
       this.Entity.p.CountryRef = CountryRef;
@@ -471,7 +464,6 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
       );
 
       this.CityList = lst;
-      // console.log('CityList :', this.CityList);
 
       // Update StateRef AFTER fetching data
       this.Entity.p.StateRef = StateRef;
@@ -521,11 +513,9 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
       (plot) => plot.p.CurrentBookingRemark !== BookingRemark.Booked
     );
 
-    console.log(this.PlotList);
 
     // this.DisplayMasterList = this.PlotList
     // this.IsPlotDetails = true;
-    // console.log('PlotList :', this.PlotList);
   };
 
   addDataToTable() {
@@ -571,7 +561,6 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
         obj.p
       );
       this.IsPlotDetails = true;
-      // console.log('Updated DisplayMasterList :', this.DisplayMasterList);
       this.SiteManagementRef = 0;
       this.InterestedPlotRef = 0;
       this.SiteManagementName='';
@@ -593,7 +582,6 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
   // onPlotSelected(selectedvalue: any) {
   //   this.Entity.p.CustomerFollowUpPlotDetails = selectedvalue;
-  //   // console.log(this.Entity.p.MaterialSuppliedByVendors);
   // }
   selectedCustomerStatus: number = 0;
   isReminderRequired: boolean = false;
@@ -645,7 +633,6 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
 
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);

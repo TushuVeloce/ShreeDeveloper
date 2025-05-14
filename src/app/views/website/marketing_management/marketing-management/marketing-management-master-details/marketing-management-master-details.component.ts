@@ -103,7 +103,7 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
     this.VendorServiceList = lst.p.ServiceListSuppliedByVendor;
     console.log('VendorServiceList :', this.VendorServiceList);
   }
-  
+
   selectAllValue(event: MouseEvent): void {
     const input = event.target as HTMLInputElement;
     input.select();
@@ -123,8 +123,8 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
     const name = services?.p?.Name || '';
     this.serviceNamesString = name;
   };
-  
- 
+
+
   calculateTotal= () => {
     const Rate = Number(this.Entity.p.Rate);
     const Quantity = Number(this.Entity.p.Quantity);
@@ -139,7 +139,7 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entityToSave :', entityToSave);
+
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {

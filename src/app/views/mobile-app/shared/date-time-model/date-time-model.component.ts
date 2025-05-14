@@ -26,8 +26,6 @@ export class DateTimeModelComponent  implements OnInit {
     //   const now = new Date();
     //   this.selectedValue = now.toISOString(); // sets current date-time in ISO format
     // }
-    console.log('selectedValue :', this.selectedValue);
-
   }
 
 

@@ -40,13 +40,12 @@ export class CustomerFollowUpPage implements OnInit {
     private companystatemanagement: CompanyStateManagement,
     private dateconversionService: DateconversionService
   ) {}
-  
+
   async ngOnInit() {
     this.LoadAllData()
   }
   ionViewWillEnter = async () => {
     await this.LoadAllData();
-    // console.log('Leave request refreshed on view enter');
   };
   async handleRefresh(event: CustomEvent): Promise<void> {
     await this.LoadAllData();
@@ -55,7 +54,7 @@ export class CustomerFollowUpPage implements OnInit {
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    
+
   }
 
   private async LoadAllData() {
@@ -143,7 +142,6 @@ export class CustomerFollowUpPage implements OnInit {
 
       this.followupList = followUps;
       this.FilterFollowupList = followUps;
-      console.log('Follow-up list:', this.followupList);
     } catch (error) {
       await this.uiUtils.showErrorMessage('Error', 'Failed to fetch follow-ups');
     } finally {
@@ -175,7 +173,7 @@ export class CustomerFollowUpPage implements OnInit {
       this.isLoading = false;
     }
   }
- 
+
   async loadPlotsBySiteRef(siteRef: number) {
     this.isLoading = true;
     try {

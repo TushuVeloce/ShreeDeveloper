@@ -28,9 +28,7 @@ title: string = '';  // ✅ Add missing property
 
   save() {
     if (this.isEditMode) {
-      console.log('Updating task:', this.taskId);
     } else {
-      console.log('Creating new task');
     }
     this.router.navigate(['/app_homepage/tabs/task-management']); // ✅ Fix router access
   }

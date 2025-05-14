@@ -65,7 +65,6 @@ export class SearchableSelectComponent implements OnInit, OnDestroy {
     this.cleanupSubscriptions();
 
     if (data) {
-      console.log('Selected options:', data);
       this.selectedOptions = data;
       this.selectionChange.emit(this.selectedOptions);
     }

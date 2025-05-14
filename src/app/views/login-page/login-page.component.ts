@@ -51,7 +51,6 @@ export class LoginPageComponent implements OnInit {
     }
 
     let req = new UserLoginRequest();
-    console.log('req :', req);
     req.UserId = this.UserId;
     req.Password = this.Password;
     req.LoginDeviceId = this.sessionValues.LoginDeviceId;

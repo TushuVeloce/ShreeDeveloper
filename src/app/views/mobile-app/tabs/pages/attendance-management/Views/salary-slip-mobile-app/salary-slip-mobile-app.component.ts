@@ -81,7 +81,7 @@ export class SalarySlipMobileAppComponent implements OnInit {
       );
       await this.filterSalarySlipsByStatus();
     } catch (error) {
-      // console.log('error :', error);
+
     } finally {
       this.isLoading = false;
     }
@@ -102,7 +102,7 @@ export class SalarySlipMobileAppComponent implements OnInit {
         }
       );
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
   filterSalarySlipsByStatus(): void {

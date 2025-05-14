@@ -71,7 +71,6 @@ export class AttendanceDetailsComponent implements OnInit {
   async fetchAttendanceByMonth(value: SegmentValue | undefined): Promise<void> {
     try {
       const SelectedMonth = Number(value);
-      console.log('SelectedMonth :', SelectedMonth);
       if (isNaN(SelectedMonth)) return;
       this.selectedMonth = SelectedMonth;
       this.attendanceLogFilter.p.Months = SelectedMonth;

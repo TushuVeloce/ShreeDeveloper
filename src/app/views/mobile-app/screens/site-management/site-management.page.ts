@@ -34,7 +34,6 @@ export class SiteManagementPage implements OnInit {
   ) {}
   async ngOnInit(): Promise<void> {
     await this.loadSiteIfCompanyExists();
-    // console.log('companyRef :', await this.companyRef);
   }
 
   ionViewWillEnter = async () => {
@@ -81,10 +80,9 @@ export class SiteManagementPage implements OnInit {
       }
       let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.MasterList = lst;
-      // console.log('Site :', this.MasterList);
       this.DisplayMasterList = this.MasterList;
     } catch (error) {
-      // console.log('error :', error);
+
     } finally {
       this.isLoading = false;
     }

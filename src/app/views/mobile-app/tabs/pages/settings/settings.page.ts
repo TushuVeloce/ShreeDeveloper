@@ -19,7 +19,7 @@ export class SettingsPage implements OnInit {
   employeeRef: number = 0;
   employeeName: any = '';
   employeeData: Employee[] = [];
-  
+
   async ngOnInit(): Promise<void> {
     this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
     this.companyName = this.appStateManagement.StorageKey.getItem('companyName') ? this.appStateManagement.StorageKey.getItem('companyName') : '';
@@ -41,10 +41,10 @@ export class SettingsPage implements OnInit {
       try {
         this.isLoading = true;
         // await this.getSingleEmployeeDetails();
-        
+
       } catch (error) {
-        // console.log('error :', error);
-  
+
+
       } finally {
         this.isLoading = false;
       }
@@ -62,7 +62,7 @@ export class SettingsPage implements OnInit {
         );
         console.log('employee :', employee);
       } catch (error) {
-        // console.log('error :', error);
+
       }
     }
 

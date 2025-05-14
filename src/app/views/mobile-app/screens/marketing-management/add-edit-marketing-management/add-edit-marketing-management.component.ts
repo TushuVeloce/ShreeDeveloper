@@ -55,7 +55,6 @@ export class AddEditMarketingManagementComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Marketing' : 'Edit Marketing';
       this.Entity = MarketingManagement.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
@@ -78,7 +77,6 @@ export class AddEditMarketingManagementComponent implements OnInit {
     const services = await VendorService.FetchInstance(vendorref, async errMsg =>
       await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    console.log('services:', services);
     const name = services?.p?.Name || '';
     this.serviceNamesString = name;
   };
@@ -99,7 +97,7 @@ export class AddEditMarketingManagementComponent implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entityToSave :', entityToSave);
+
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
@@ -135,14 +133,14 @@ export class AddEditMarketingManagementComponent implements OnInit {
 
       this.openSelectModal(options, selectData, false, 'Select Services', 1, (selected) => {
         selectData = selected;
-        // console.log('selected :', selected);
+
         // this.Entity.p.VendorRef = selected[0].p.Ref;
         this.serviceNamesString = selected[0].p.Name;
         this.VendorServiceName = selected[0].p.Name;
         // this.getStateListByCountryRef(selected[0].p.Ref)
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
   public async selectVendorBottomsheet(): Promise<void> {
@@ -159,13 +157,13 @@ export class AddEditMarketingManagementComponent implements OnInit {
 
       this.openSelectModal(options, selectData, false, 'Select Vendor', 1, (selected) => {
         selectData = selected;
-        // console.log('selected :', selected);
+
         this.Entity.p.VendorRef = selected[0].p.Ref;
         this.VendorName = selected[0].p.Name;
         // this.getStateListByCountryRef(selected[0].p.Ref)
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
   public async selectMarketingTypeBottomsheet(): Promise<void> {
@@ -182,13 +180,13 @@ export class AddEditMarketingManagementComponent implements OnInit {
 
       this.openSelectModal(options, selectData, false, 'Select Marketing Type', 1, (selected) => {
         selectData = selected;
-        // console.log('selected :', selected);
+
         this.Entity.p.MarketingTypeRef = selected[0].p.Ref;
         this.MarketingTypeName = selected[0].p.Name;
         // this.getStateListByCountryRef(selected[0].p.Ref)
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
   public async selectSiteBottomsheet(): Promise<void> {
@@ -205,13 +203,13 @@ export class AddEditMarketingManagementComponent implements OnInit {
 
       this.openSelectModal(options, selectData, false, 'Select Site', 1, (selected) => {
         selectData = selected;
-        // console.log('selected :', selected);
+
         this.Entity.p.SiteRef = selected[0].p.Ref;
         this.SiteName = selected[0].p.Name;
         // this.getStateListByCountryRef(selected[0].p.Ref)
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
   private async openSelectModal(

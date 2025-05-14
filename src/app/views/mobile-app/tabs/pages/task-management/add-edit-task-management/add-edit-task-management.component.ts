@@ -84,7 +84,6 @@ export class AddEditTaskManagementComponent implements OnInit {
   //   );
   //   if (selected) {
   //     this.selectedOptions = selected;
-  //     console.log('selectedOptions :', this.selectedOptions);
   //     this.siteName=selected[0].p.Name;
   //   }
   // }
@@ -97,7 +96,6 @@ export class AddEditTaskManagementComponent implements OnInit {
 
     if (pickedDate) {
       this.startDate = this.datePipe.transform(pickedDate, 'yyyy-MM-dd');
-      console.log('Selected:', pickedDate);
     }
   }
   async selectEndDate() {
@@ -110,7 +108,6 @@ export class AddEditTaskManagementComponent implements OnInit {
     if (pickedDate) {
       this.endDate = this.datePipe.transform(pickedDate, 'yyyy-MM-dd');
       // this.endDate = pickedDate;
-      console.log('Selected:', this.endDate);
     }
   }
 
@@ -122,7 +119,6 @@ export class AddEditTaskManagementComponent implements OnInit {
       (selected) => {
         this.selectedOptions = selected;
         this.siteName = selected[0]?.p?.Name || '';
-        console.log('Selected Site:', this.selectedOptions);
       }
     );
   }

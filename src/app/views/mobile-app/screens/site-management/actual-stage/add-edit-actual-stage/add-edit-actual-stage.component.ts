@@ -110,7 +110,6 @@ export class AddEditActualStageComponent implements OnInit {
 
   // ionViewWillEnter = async () => {
   //   await this.loadSalarySlipRequestsIfEmployeeExists();
-  //   // console.log('Leave request refreshed on view enter');
   // };
 
   ngOnDestroy(): void {
@@ -130,7 +129,6 @@ export class AddEditActualStageComponent implements OnInit {
   DateChange(value: string) {
     this.Date = value;
     this.Entity.p.Date = value || '';
-    console.log('Date:', this.Date);
   }
 
   // ---------- UTILITY METHODS ----------
@@ -164,7 +162,6 @@ export class AddEditActualStageComponent implements OnInit {
   StartTimeChange(value: string) {
     this.StartTime = value;
     this.TimeEntity.StartTime = this.formatTimeToHHMM(value);
-    console.log('StartTime:', this.TimeEntity.StartTime);
     this.calculateWorkedHours();
   }
 
@@ -175,7 +172,6 @@ export class AddEditActualStageComponent implements OnInit {
     }
     this.EndTime = value;
     this.TimeEntity.EndTime = this.formatTimeToHHMM(value);
-    console.log('EndTime:', this.TimeEntity.EndTime);
     this.calculateWorkedHours();
   }
 
@@ -224,7 +220,6 @@ export class AddEditActualStageComponent implements OnInit {
     } else {
       this.TimeEntity.SiteManagementRef = this.Entity.p.Ref;
       this.Entity.p.TimeDetails.push({ ...this.TimeEntity });
-      console.log('TimeDetails:', this.Entity.p.TimeDetails);
       this.CalculateAmountOnRateAndQuantity();
       await this.uiUtils.showSuccessToster('Time added successfully!');
     }
@@ -308,7 +303,6 @@ export class AddEditActualStageComponent implements OnInit {
           this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
         }
         this.isChalanDisabled = true
-        console.log('Entity :', this.Entity);
         if (this.Entity.p.TimeDetails.length > 0) {
           this.Amount = this.getTotalWorkedHours()
         } else {
@@ -341,7 +335,7 @@ export class AddEditActualStageComponent implements OnInit {
       this.InitialEntity = Object.assign(ActualStages.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as ActualStages;
       // this.focusInput();
     } catch (error) {
-      // console.log('error :', error);
+
 
     } finally {
       this.isLoading = false;
@@ -358,7 +352,7 @@ export class AddEditActualStageComponent implements OnInit {
         this.ClearValuesOnTimeSelection(selected[0].p.Ref);
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -371,7 +365,7 @@ export class AddEditActualStageComponent implements OnInit {
         this.Entity.p.GutterNaleUnitName = this.selectedGutterNaleUnit[0].p.Name;
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -385,7 +379,7 @@ export class AddEditActualStageComponent implements OnInit {
         this.onSelectedMonthsChange(this.Entity.p.SelectedMonths)
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -402,7 +396,7 @@ export class AddEditActualStageComponent implements OnInit {
         this.Entity.p.SubStageName = this.selectedSubStage[0].p.Name;
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -416,7 +410,7 @@ export class AddEditActualStageComponent implements OnInit {
         this.getVendorServiceListByVendorRef(selected[0].p.Ref)
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -434,7 +428,7 @@ export class AddEditActualStageComponent implements OnInit {
         // this.ClearInputsOnExpenseChange();
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -447,13 +441,12 @@ export class AddEditActualStageComponent implements OnInit {
       const options = this.ExpenseTypeList;
       this.openSelectModal(options, this.selectedExpenseType, false, 'Select Expense Type', 1, (selected) => {
         this.selectedExpenseType = selected;
-        console.log('Expense Type selected :', selected);
         this.Entity.p.ExpenseTypeRef = this.selectedExpenseType[0].p.ExpenseType;
         this.Entity.p.ExpenseTypeName = this.selectedExpenseType[0].p.ExpenseTypeName ? selected[0].p.ExpenseTypeName : selected[0].p.Name;
         this.ClearInputsOnExpenseChange(this.Entity.p.ExpenseTypeRef);
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -467,7 +460,7 @@ export class AddEditActualStageComponent implements OnInit {
         this.OnStageChange(selected[0].p.Ref)
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -480,7 +473,7 @@ export class AddEditActualStageComponent implements OnInit {
         this.Entity.p.SiteName = this.selectedSite[0].p.Name;
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -527,7 +520,7 @@ export class AddEditActualStageComponent implements OnInit {
       }
       await this.uiUtils.showErrorMessage('Error', 'Chalan number could not be retrieved.');
     } catch (error) {
-      // console.log('error :', error);
+
     }
   };
 
@@ -542,14 +535,12 @@ export class AddEditActualStageComponent implements OnInit {
         this.Entity.p.CreatedBy, this.companyRef,
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
-      console.log('employee :', employee);
-      console.log('CreatedBy :', this.Entity);
       if (!employee) {
         this.Entity.p.CreatedByName = this.appStateManage.StorageKey.getItem('UserDisplayName') ?? '';
       }
       this.Entity.p.CreatedByName = employee.p.Name;
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -562,7 +553,7 @@ export class AddEditActualStageComponent implements OnInit {
       let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.SiteList = lst;
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -577,7 +568,7 @@ export class AddEditActualStageComponent implements OnInit {
       this.getSubStageListByStageRef(this.Entity.p.StageRef);
       this.getExpenseListByStageRef(this.Entity.p.StageRef);
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -590,7 +581,7 @@ export class AddEditActualStageComponent implements OnInit {
         this.Entity.p.GutterNaleUnitName='';
         this.Entity.p.GutterNaleUnitRef = 0;
         this.Entity.p.SubStageName = '';
-        this.Entity.p.SubStageRef =0;  
+        this.Entity.p.SubStageRef =0;
         this.Entity.p.SelectedMonthsName=[];
         await this.AddExpenseTypeToOther(this.Entity.p.ExpenseTypeRef)
       }
@@ -605,7 +596,7 @@ export class AddEditActualStageComponent implements OnInit {
       await this.getExpenseListByStageRef(StageRef);
       await this.getStageTypeOnStageRef(StageRef);
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -614,9 +605,8 @@ export class AddEditActualStageComponent implements OnInit {
       this.ExpenseTypeList = []
       let lst = await ExpenseType.FetchEntireListByStageRef(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.ExpenseTypeList = lst;
-      // console.log('ExpenseTypeList :', this.ExpenseTypeList);
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -637,7 +627,7 @@ export class AddEditActualStageComponent implements OnInit {
       let lst = await SubStage.FetchEntireListByStageRef(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.SubStageList = lst;
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -649,7 +639,7 @@ export class AddEditActualStageComponent implements OnInit {
         this.IsStage = SingleRecord.p.IsSubStageApplicable;
       }
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -663,7 +653,7 @@ export class AddEditActualStageComponent implements OnInit {
       let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.VendorList = lst;
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -676,7 +666,7 @@ export class AddEditActualStageComponent implements OnInit {
       let lst = await VendorService.FetchEntireListByVendorRef(VendorRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.VendorServiceList = lst;
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -686,9 +676,8 @@ export class AddEditActualStageComponent implements OnInit {
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
       this.UnitList = lst;
-      // console.log('UnitList :', this.UnitList); 
     } catch (error) {
-      // console.log('error :', error);
+
     }
   };
 
@@ -737,7 +726,6 @@ export class AddEditActualStageComponent implements OnInit {
   }
 
   AddExpenseTypeToOther = async (ExpenseTypeRef: number) => {
-    console.log('ExpenseTypeRef :', ExpenseTypeRef);
     if (ExpenseTypeRef == this.OtherExpenseRef) {
       this.isAdd = true
     } else {
@@ -817,7 +805,6 @@ export class AddEditActualStageComponent implements OnInit {
       this.ExpenseTypeEntity.p.StageRef = this.Entity.p.StageRef
       let entityToSave = this.ExpenseTypeEntity.GetEditableVersion();
       let entitiesToSave = [entityToSave]
-      console.log('entitiesToSave :', entitiesToSave);
       await this.ExpenseTypeEntity.EnsurePrimaryKeysWithValidValues()
       let tr = await this.utils.SavePersistableEntities(entitiesToSave);
       if (!tr.Successful) {
@@ -833,7 +820,7 @@ export class AddEditActualStageComponent implements OnInit {
         this.getExpenseListByStageRef(this.Entity.p.StageRef)
       }
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -853,7 +840,6 @@ export class AddEditActualStageComponent implements OnInit {
       this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave]
-      console.log('entitiesToSave :', entitiesToSave);
       await this.Entity.EnsurePrimaryKeysWithValidValues()
       let tr = await this.utils.SavePersistableEntities(entitiesToSave);
       if (!tr.Successful) {
@@ -873,7 +859,7 @@ export class AddEditActualStageComponent implements OnInit {
         }
       }
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
   public goBack(): void {

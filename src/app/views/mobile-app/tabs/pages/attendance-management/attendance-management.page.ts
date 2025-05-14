@@ -175,22 +175,18 @@ export class AttendanceManagementPage implements OnInit {
       if (!this.attendanceLog.p.FirstCheckInTime && !this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime) {
         this.isCheckInEnabled = true;
         this.bothButtonsEnabled = true;
-        console.log("call condition 1");
 
       } else if (this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime) {
         this.isCheckInEnabled = false;
         this.bothButtonsEnabled = true;
-        console.log("call condition 2");
 
       } else if (this.attendanceLog.p.CheckInTime && this.attendanceLog.p.CheckOutTime) {
         this.isCheckInEnabled = true;
         this.bothButtonsEnabled = true;
-        console.log("call condition 3");
 
       } else {
         this.isCheckInEnabled = false;
         this.bothButtonsEnabled = false;
-        console.log("call condition 4");
 
       }
     } catch (error) {
@@ -226,12 +222,11 @@ export class AttendanceManagementPage implements OnInit {
 
       this.openSelectModal(options, this.selectedAttendanceLocationType, false, 'Select Location Type', 1, (selected) => {
         this.selectedAttendanceLocationType = selected;
-        console.log('selectedAttendanceLocationType :', this.selectedAttendanceLocationType);
         this.attendanceLog.p.AttendenceLocationType = selected[0].p.Ref;
         this.AttendenceLocationTypeName = selected[0].p.Name;
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -242,12 +237,12 @@ export class AttendanceManagementPage implements OnInit {
 
       this.openSelectModal(options, this.selectedSite, false, 'Select Site', 1, (selected) => {
         this.selectedSite = selected;
-        // console.log('selected :', selected);
+
         this.selectedSite = selected;
         this.SiteName = selected[0].p.Name;
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 

@@ -18,7 +18,6 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
   constructor(private appStateManage: AppStateManageService, private router: Router,) { }
   ngOnChanges(changes: SimpleChanges): void {
     let arr = JSON.parse(this.appStateManage.StorageKey.getItem('TransactionJson') ?? '[]');
-    // console.log('SelectedTransactionType', this.SelectedTransactionType);
 
     this.TpOfficeList = arr.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
     console.log('TpOfficeList', this.TpOfficeList);

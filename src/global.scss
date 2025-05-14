@@ -50,7 +50,7 @@
 .tblheader {
   text-align: center !important;
   font-weight: bold !important;
-  background-color: brown !important;
+  background-color: var(--ion-color-primary-tint) !important;
   color: white !important;
   font-size: 14px !important;
 }
@@ -91,7 +91,7 @@
 }
 
 .btn {
-  background-color: brown !important;
+  background-color: var(--ion-color-primary-tint) !important;
   color: white !important;
   padding: 0.4rem 2.1rem !important;
   border: none !important;
@@ -118,13 +118,13 @@ input.form-control {
   outline: 0;
   box-shadow: none;
   border: solid 1px;
-  border-color: brown;
+  border-color: var(--ion-color-primary-tint);
 }
 
 input.form-control:focus {
   outline: none;
-  border: 1px solid brown;
-  box-shadow: 0 0 5px rgba(165, 42, 42, 0.5);
+  border: 1px solid var(--ion-color-primary-tint);
+  box-shadow: 0 0 5px var(--ion-color-primary-shade);
   /* optional */
 }
 
@@ -132,19 +132,19 @@ textarea.form-control {
   outline: 0;
   box-shadow: none;
   border: solid 1px;
-  border-color: brown;
+  border-color: var(--ion-color-primary-tint);
 }
 
 textarea.form-control:focus {
   outline: none;
-  border: 1px solid brown;
-  box-shadow: 0 0 5px rgba(165, 42, 42, 0.5);
+  border: 1px solid var(--ion-color-primary-tint);
+  box-shadow: 0 0 5px var(--ion-color-primary-shade);
   /* optional */
 }
 
-/* Apply brown border by default */
+/* Apply var(--ion-color-primary-tint) border by default */
 .nzSelect-light .ant-select-selector {
-  border: 1px solid brown !important;
+  border: 1px solid var(--ion-color-primary-tint) !important;
   transition: box-shadow 0.3s, border-color 0.3s;
 }
 
@@ -152,7 +152,7 @@ textarea.form-control:focus {
 .nzSelect-light.ant-select-focused .ant-select-selector,
 .nzSelect-light.ant-select-open .ant-select-selector,
 .nzSelect-light:hover .ant-select-selector {
-  box-shadow: 0 0 5px rgba(165, 42, 42, 0.5);
+  box-shadow: 0 0 5px var(--ion-color-primary-shade);
 }
 
 // ========================== Input, textarea, nz-select Class CSS End =========================== //
@@ -169,7 +169,7 @@ textarea.form-control:focus {
   border-radius: 5px;
   font-size: 14px;
   outline: none;
-  border: 1.5px solid #8B0000 !important;
+  border: 1.5px solid var(--ion-color-primary-tint) !important;
   background-color: white;
   transition: box-shadow 0.3s, border-color 0.3s;
 }
@@ -184,13 +184,13 @@ textarea.form-control:focus {
 /* ------------------------- Search Box Styles End ------------------------- */
 
 .btn:hover {
-  background-color: brown;
+  background-color: var(--ion-color-primary-tint);
   color: white;
 }
 
 .backbtn {
   background-color: rgb(252, 252, 252);
-  border: 2px solid brown;
+  border: 2px solid var(--ion-color-primary-tint);
   color: white;
   padding: 1px 12px;
   border-radius: 6px;
@@ -201,7 +201,7 @@ textarea.form-control:focus {
 }
 
 .detail_title {
-  color: brown;
+  color: var(--ion-color-primary-tint);
   font-size: large;
   font-weight: 600;
   font-size: 22px;
@@ -222,7 +222,7 @@ form {
 }
 
 .title_light {
-  color: brown;
+  color: var(--ion-color-primary-tint);
   font-weight: bold;
   font-size: 22px;
   font-weight: 600;
@@ -244,7 +244,7 @@ form {
 
 /* Button styles */
 .btn1 {
-  background-color: brown;
+  background-color: var(--ion-color-primary-tint);
   color: white;
   padding: 8px 16px;
   font-size: medium;
@@ -267,7 +267,7 @@ form {
 
 // For Table Heading
 .TableHeading {
-  background-color: brown;
+  background-color: var(--ion-color-primary-tint);
   height: 36px;
   color: white;
   text-align: center;
@@ -310,12 +310,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
 
   &:hover .ant-select-selector {
-    border-color: brown !important;
+    border-color: var(--ion-color-primary-tint) !important;
   }
 
   .ant-select-focused .ant-select-selector,
   .ant-select-selector:focus-within {
-    border-color: brown !important;
+    border-color: var(--ion-color-primary-tint) !important;
   }
 
   .ant-select-clear {
@@ -469,40 +469,40 @@ nz-select {
 
 /* Active page */
 .try .ant-pagination-item-active {
-  border-color: brown !important;
+  border-color: var(--ion-color-primary-tint) !important;
 }
 
 .try .ant-pagination-item-active a {
-  color: brown !important;
+  color: var(--ion-color-primary-tint) !important;
 }
 
 /* Hover on page items */
 .try .ant-pagination-item:hover {
-  border-color: brown !important;
+  border-color: var(--ion-color-primary-tint) !important;
 }
 
 .try .ant-pagination-item:hover a {
-  color: brown !important;
+  color: var(--ion-color-primary-tint) !important;
 }
 
 /* Previous and Next buttons */
 .try .ant-pagination-prev,
 .try .ant-pagination-next {
-  color: brown !important;
-  border-color: brown !important;
+  color: var(--ion-color-primary-tint) !important;
+  border-color: var(--ion-color-primary-tint) !important;
 }
 
 /* Hover on Previous and Next */
 .try .ant-pagination-prev:hover,
 .try .ant-pagination-next:hover {
-  color: brown !important;
-  border-color: brown !important;
+  color: var(--ion-color-primary-tint) !important;
+  border-color: var(--ion-color-primary-tint) !important;
 }
 
-/* Disable button (optional - if you want a muted brown) */
+/* Disable button (optional - if you want a muted var(--ion-color-primary-tint)) */
 .try .ant-pagination-disabled {
   color: #a0522d !important;
-  /* muted brown */
+  /* muted var(--ion-color-primary-tint) */
   border-color: #a0522d !important;
 }
 

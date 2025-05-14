@@ -121,7 +121,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
           // Construct the new date format
           this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
           this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
-        }    
+        }
       this.isChalanDisabled = false
       // if(CreatedBy != 0){
       //   this.Entity.p.CreatedBy = CreatedBy
@@ -138,21 +138,21 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     // txtName.focus();
   }
 
-  
-  ChalanNo = async () => {  
-    let req = new ActualStagesChalanFetchRequest();  
+
+  ChalanNo = async () => {
+    let req = new ActualStagesChalanFetchRequest();
     let td = req.FormulateTransportData();
     let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
     let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-  
+
     if (!tr.Successful) {
       await this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     }
-  
+
     let tdResult = JSON.parse(tr.Tag) as TransportData;
     let collections = tdResult?.MainData?.Collections;
-  
+
     if (Array.isArray(collections)) {
       for (const item of collections) {
         if (
@@ -169,15 +169,14 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     }
     await this.uiUtils.showErrorMessage('Error', 'Chalan number could not be retrieved.');
   };
-  
-  
+
+
   getSingleEmployeeDetails = async (CreatedBy:number) => {
     if (this.Entity.p.CreatedBy == 1001) {
       this.Entity.p.CreatedByName = 'Admin';
       return;
     }
     let data = await Employee.FetchInstance(CreatedBy, this.companyRef(),async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('data :', data);
   };
 
 
@@ -228,7 +227,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     // }else{
     //   this.isOfficialExpenditureGov = false
     // }
-    
+
     await this.getSubStageListByStageRef(StageRef);
     await this.getExpenseListByStageRef(StageRef);
     await this.getStageTypeOnStageRef(StageRef);
@@ -249,7 +248,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   toggleExpenseInput() {
     this.isAddingExpense = !this.isAddingExpense;
     if (!this.isAddingExpense) {
-      this.ExpenseTypeEntity.p.Name = ''; 
+      this.ExpenseTypeEntity.p.Name = '';
     }
   }
 
@@ -358,7 +357,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     }
     this.isDiselPaid = false
     this.DiselPaid(0)
-   
+
   }
 
   AddExpenseTypeToOther = async(ExpenseTypeRef:number) =>{
@@ -382,14 +381,14 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     const quantity = Number(this.Entity.p.Quantity) || 0;
     const dieselAmount = Number(this.Entity.p.DieselTotalAmount) || 0;
     const isDieselPaid = !!this.Entity.p.IsDieselPaid;
-    
+
     if(TotalWorkedHours > 0){
       this.Entity.p.Amount= rate * TotalWorkedHours - dieselAmount
       this.Amount = rate * TotalWorkedHours
     }else{
       this.Amount = rate * quantity
       this.Entity.p.Amount= rate * quantity - dieselAmount
-     
+
     }
   };
 
@@ -412,25 +411,25 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   calculateWorkedHours() {
     const start = this.TimeEntity.StartTime;
     const end = this.TimeEntity.EndTime;
-  
+
     if (start && end) {
       const [startHour, startMin] = start.split(':').map(Number);
       const [endHour, endMin] = end.split(':').map(Number);
-  
+
       const startDate = new Date();
       startDate.setHours(startHour, startMin, 0);
-  
+
       const endDate = new Date();
       endDate.setHours(endHour, endMin, 0);
-  
+
       let diffMs = endDate.getTime() - startDate.getTime();
-  
+
       // If end time is before start time, assume it's the next day
       if (diffMs < 0) {
         endDate.setDate(endDate.getDate() + 1);
         diffMs = endDate.getTime() - startDate.getTime();
       }
-  
+
       const diffHrs = diffMs / (1000 * 60 * 60); // convert ms to hours
       this.TimeEntity.WorkedHours = +diffHrs.toFixed(2); // round to 2 decimal places
     } else {
@@ -529,11 +528,11 @@ async SaveTime() {
    closeModal = async (type: string) => {
       if (type === 'time') {
         const keysToCheck = ['Start Time', 'End Time'] as const;
-  
+
         const hasData = keysToCheck.some(
           key => (this.TimeEntity as any)[key]?.toString().trim()
         );
-  
+
         if (hasData) {
           await this.uiUtils.showConfirmationMessage(
             'Close',

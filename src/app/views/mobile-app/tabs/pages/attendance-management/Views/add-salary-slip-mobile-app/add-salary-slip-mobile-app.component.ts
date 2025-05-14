@@ -89,7 +89,7 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
         await this.uiUtils.showErrorToster('Employee not selected');
       }
     } catch (error) {
-      // console.log('error :', error);
+
 
     } finally {
       this.isLoading = false;
@@ -110,7 +110,7 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
       this.Entity.p.EmployeeRef = employee.p.Ref;
       this.Entity.p.EmployeeName = employee.p.Name;
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -127,12 +127,11 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
 
       this.openSelectModal(options, this.SelectedMonth, true, 'Select Leave Type', 3, (selected) => {
         this.SelectedMonth = selected;
-        // console.log('selected :', selected.map(item => item.p.Ref));
         this.Entity.p.SelectedMonths = selected.map(item => item.p.Ref);
         this.Entity.p.SelectedMonthsName = selected.map(item => item.p.Name);
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -154,7 +153,7 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
         this.Entity.p.Year = selected[0]?.p?.Ref;
       });
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -197,7 +196,7 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
 
       this.FinancialYearList = uniqueYears;
     } catch (error) {
-      // console.log('error :', error);
+
     }
   }
 
@@ -228,7 +227,7 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
         }
       }
     } catch (error) {
-      // console.log('error :', error);
+
     } finally {
       this.isLoading = false;
     }

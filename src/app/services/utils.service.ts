@@ -103,7 +103,6 @@ export class Utils {
       result[prop] = obj[prop];
     }
 
-    console.log("State Transfer Object:", result);
 
     return result;
   }

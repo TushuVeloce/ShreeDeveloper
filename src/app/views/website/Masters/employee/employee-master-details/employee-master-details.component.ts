@@ -64,7 +64,6 @@ export class EmployeeMasterDetailsComponent implements OnInit {
         ? 'New Employee'
         : 'Edit Employee';
       this.Entity = Employee.GetCurrentInstance();
-      console.log("entity", this.Entity);
 
 
       // While Edit Converting date String into Date Format //
