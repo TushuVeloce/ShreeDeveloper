@@ -578,7 +578,7 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Master',
         RouterLink: '',
-        WhiteLogo: '/assets/icons/Master.png',
+        WhiteLogo: '/assets/icons/Masters.png',
         SubModuleList: MasterSubModuleList,
       },
       {
@@ -596,7 +596,7 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Customer Management',
         RouterLink: '',
-        WhiteLogo: '/assets/icons/Customer Management.png',
+        WhiteLogo: '/assets/icons/Customer-Management.png',
         SubModuleList: CustomerManagementSubModuleList,
       },
       {
