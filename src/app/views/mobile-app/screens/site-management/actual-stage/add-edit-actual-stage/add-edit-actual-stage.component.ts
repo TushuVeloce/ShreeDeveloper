@@ -32,7 +32,7 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class AddEditActualStageComponent implements OnInit {
   isLoading: boolean = false;
-
+  isModalOpen: boolean = false;
   Entity: ActualStages = ActualStages.CreateNewInstance();
   ExpenseTypeEntity: ExpenseType = ExpenseType.CreateNewInstance();
   VendorServicesEntity: Vendor = Vendor.CreateNewInstance();
@@ -57,7 +57,7 @@ export class AddEditActualStageComponent implements OnInit {
   isAddingExpense = false;
   isAdd = false;
   isOfficialExpenditureGov = false
-  isModalOpen: boolean = false;
+  // isModalOpen: boolean = false;
   timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time', 'Worked Hours', 'Action'];
   TimeEntity: TimeDetailProps = TimeDetailProps.Blank();
   editingIndex: null | undefined | number
@@ -83,9 +83,11 @@ export class AddEditActualStageComponent implements OnInit {
   selectedSubStage: any[] = [];
   selectedUnit: any[] = [];
   // selectedMonths: any[] = [];
-  selectedGutterNaleUnit : any[] = [];
+  selectedGutterNaleUnit: any[] = [];
 
   Date: string | null = null;
+  StartTime: string | null = null;
+  EndTime: string | null = null;
   SelectedMonth: any[] = [];
   selectedItems: any[] = [];
 
@@ -115,10 +117,168 @@ export class AddEditActualStageComponent implements OnInit {
     // cleanup logic if needed later
   }
 
+  closeModal() {
+    this.isModalOpen = false;
+  }
+  openModel() {
+    this.TimeEntity = TimeDetailProps.Blank();
+    this.StartTime = null;
+    this.EndTime = null;
+    this.editingIndex = null;
+    this.isModalOpen = true;
+  }
   DateChange(value: string) {
     this.Date = value;
     this.Entity.p.Date = value || '';
     console.log('Date:', this.Date);
+  }
+
+  // ---------- UTILITY METHODS ----------
+
+  formatTimeToHHMM(isoString: string): string {
+    const date = new Date(isoString);
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
+
+  formatToTrimmedISOString(dateString: string): string {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}:00`;
+  }
+
+  convertHHMMToISOString(time: string): string {
+    const [hours, minutes] = time.split(':').map(Number);
+    const now = new Date();
+    now.setHours(hours, minutes, 0, 0);
+    return this.formatToTrimmedISOString(now.toISOString());
+  }
+
+  // ---------- TIME CHANGE EVENTS ----------
+
+  StartTimeChange(value: string) {
+    this.StartTime = value;
+    this.TimeEntity.StartTime = this.formatTimeToHHMM(value);
+    console.log('StartTime:', this.TimeEntity.StartTime);
+    this.calculateWorkedHours();
+  }
+
+  EndTimeChange(value: string) {
+    if (!this.StartTime) {
+      const now = new Date();
+      this.StartTimeChange(this.formatToTrimmedISOString(now.toISOString()));
+    }
+    this.EndTime = value;
+    this.TimeEntity.EndTime = this.formatTimeToHHMM(value);
+    console.log('EndTime:', this.TimeEntity.EndTime);
+    this.calculateWorkedHours();
+  }
+
+  // ---------- WORKED HOURS CALCULATION ----------
+
+  calculateWorkedHours() {
+    const { StartTime, EndTime } = this.TimeEntity;
+
+    if (StartTime && EndTime) {
+      const [startHour, startMin] = StartTime.split(':').map(Number);
+      const [endHour, endMin] = EndTime.split(':').map(Number);
+
+      const now = new Date();
+      const startDate = new Date(now);
+      const endDate = new Date(now);
+
+      startDate.setHours(startHour, startMin, 0, 0);
+      endDate.setHours(endHour, endMin, 0, 0);
+
+      // Handle next-day time difference
+      if (endDate < startDate) {
+        endDate.setDate(endDate.getDate() + 1);
+      }
+
+      const diffMs = endDate.getTime() - startDate.getTime();
+      const diffHrs = diffMs / (1000 * 60 * 60);
+
+      this.TimeEntity.WorkedHours = +diffHrs.toFixed(2);
+      // this.TotalHHMM = diffHrs.toFixed(2)+':'+diffMs.toFixed(2)
+    } else {
+      this.TimeEntity.WorkedHours = 0;
+    }
+  }
+
+  // ---------- CRUD HANDLERS ----------
+
+  async SaveTime() {
+    if (!this.TimeEntity.StartTime || !this.TimeEntity.EndTime) {
+      await this.uiUtils.showErrorMessage('Error', 'Start Time and End Time are required!');
+      return;
+    }
+
+    if (this.editingIndex != null && this.editingIndex >= 0) {
+      this.Entity.p.TimeDetails[this.editingIndex] = { ...this.TimeEntity };
+      await this.uiUtils.showSuccessToster('Time updated successfully!');
+    } else {
+      this.TimeEntity.SiteManagementRef = this.Entity.p.Ref;
+      this.Entity.p.TimeDetails.push({ ...this.TimeEntity });
+      console.log('TimeDetails:', this.Entity.p.TimeDetails);
+      this.CalculateAmountOnRateAndQuantity();
+      await this.uiUtils.showSuccessToster('Time added successfully!');
+    }
+
+    this.resetTimeEntry();
+  }
+
+  EditTime(index: number) {
+    this.TimeEntity = { ...this.Entity.p.TimeDetails[index] };
+    this.StartTime = this.convertHHMMToISOString(this.TimeEntity.StartTime);
+    this.EndTime = this.convertHHMMToISOString(this.TimeEntity.EndTime);
+    this.editingIndex = index;
+    this.isModalOpen = true;
+  }
+
+  RemoveTime(index: number) {
+    this.Entity.p.TimeDetails.splice(index, 1);
+    this.CalculateAmountOnRateAndQuantity();
+  }
+
+  resetTimeEntry() {
+    this.TimeEntity = TimeDetailProps.Blank();
+    this.StartTime = null;
+    this.EndTime = null;
+    this.editingIndex = null;
+    this.isModalOpen = false;
+  }
+
+  async closeTimeModal(type: string) {
+    if (type === 'time') {
+      const keysToCheck = ['Start Time', 'End Time'] as const;
+      const hasData = keysToCheck.some(
+        key => (this.TimeEntity as any)[key]?.toString().trim()
+      );
+
+      if (hasData) {
+        await this.uiUtils.showConfirmationMessage(
+          'Close',
+          `This process is <strong>IRREVERSIBLE!</strong><br/>
+        Are you sure you want to close this modal?`,
+          async () => {
+            this.TimeEntity = TimeDetailProps.Blank();
+            this.StartTime = null;
+            this.EndTime = null;
+            this.isModalOpen = false;
+          }
+        );
+      } else {
+        this.TimeEntity = TimeDetailProps.Blank();
+        this.StartTime = null;
+        this.EndTime = null;
+        this.isModalOpen = false;
+      }
+    }
   }
 
 
@@ -132,10 +292,10 @@ export class AddEditActualStageComponent implements OnInit {
         {
           "p": {
             "Ref": this.siteRef,
-            "Name": this.siteName??''
+            "Name": this.siteName ?? ''
           }
         }
-    ];
+      ];
       await this.getStageListByCompanyRef();
       await this.getVendorListByCompanyRef();
       await this.FormulateUnitList();
@@ -162,9 +322,9 @@ export class AddEditActualStageComponent implements OnInit {
         this.Entity = ActualStages.CreateNewInstance();
         ActualStages.SetCurrentInstance(this.Entity);
         const CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
-        if (this.appStateManage.StorageKey.getItem('UserDisplayName')) {
-          const name = this.appStateManage.StorageKey.getItem('UserDisplayName') || ''
-          this.Entity.p.CreatedByName = name
+        if (CreatedBy != 0) {
+          this.Entity.p.CreatedBy = CreatedBy
+          await this.getSingleEmployeeDetails();
         }
         if (this.Entity.p.Date == '') {
           this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
@@ -174,10 +334,6 @@ export class AddEditActualStageComponent implements OnInit {
           this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
         }
         this.isChalanDisabled = false
-        // if(CreatedBy != 0){
-        //   this.Entity.p.CreatedBy = CreatedBy
-        //   await this.getSingleEmployeeDetails(CreatedBy);
-        // }
         await this.ChalanNo()
       }
       this.InitialEntity = Object.assign(ActualStages.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as ActualStages;
@@ -233,6 +389,10 @@ export class AddEditActualStageComponent implements OnInit {
 
   public async selectSubStageBottomsheet(): Promise<void> {
     try {
+      if (this.Entity.p.StageRef <= 0) {
+        await this.uiUtils.showErrorToster('Please Select Stage');
+        return;
+      }
       const options = this.SubStageList;
       this.openSelectModal(options, this.selectedSubStage, false, 'Select Vendor', 1, (selected) => {
         this.selectedSubStage = selected;
@@ -261,8 +421,8 @@ export class AddEditActualStageComponent implements OnInit {
   public async selectVendorServicesBottomsheet(): Promise<void> {
     try {
       if (this.Entity.p.VendorRef <= 0) {
-        await this.uiUtils.showErrorToster('Vendor is not Selected');
-        return ;
+        await this.uiUtils.showErrorToster('Please Select Vendor');
+        return;
       }
       const options = this.VendorServiceList;
       this.openSelectModal(options, this.selectedVendorService, false, 'Select Vendor Service', 1, (selected) => {
@@ -278,6 +438,10 @@ export class AddEditActualStageComponent implements OnInit {
 
   public async selectExpenseTypeBottomsheet(): Promise<void> {
     try {
+      if (this.Entity.p.StageRef <= 0) {
+        await this.uiUtils.showErrorToster('Please Select Stage');
+        return;
+      }
       const options = this.ExpenseTypeList;
       this.openSelectModal(options, this.selectedExpenseType, false, 'Select Expense Type', 1, (selected) => {
         this.selectedExpenseType = selected;
@@ -330,115 +494,126 @@ export class AddEditActualStageComponent implements OnInit {
   }
 
 
-  ChalanNo = async () => {  
-    let req = new ActualStagesChalanFetchRequest();  
-    let td = req.FormulateTransportData();
-    let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-  
-    if (!tr.Successful) {
-      await this.uiUtils.showErrorMessage('Error', tr.Message);
-      return;
-    }
-  
-    let tdResult = JSON.parse(tr.Tag) as TransportData;
-    let collections = tdResult?.MainData?.Collections;
-  
-    if (Array.isArray(collections)) {
-      for (const item of collections) {
-        if (
-          item.Name === 'ActualStage' &&
-          Array.isArray(item.Entries) &&
-          item.Entries.length > 0
-        ) {
-          const entry = item.Entries[0] as { NextChalanNo: number };
-          const nextChalanNo = entry.NextChalanNo;
-          this.Entity.p.ChalanNo = nextChalanNo
-          return;
+  ChalanNo = async () => {
+    try {
+      let req = new ActualStagesChalanFetchRequest();
+      let td = req.FormulateTransportData();
+      let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+      let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+
+      if (!tr.Successful) {
+        await this.uiUtils.showErrorMessage('Error', tr.Message);
+        return;
+      }
+
+      let tdResult = JSON.parse(tr.Tag) as TransportData;
+      let collections = tdResult?.MainData?.Collections;
+
+      if (Array.isArray(collections)) {
+        for (const item of collections) {
+          if (
+            item.Name === 'ActualStage' &&
+            Array.isArray(item.Entries) &&
+            item.Entries.length > 0
+          ) {
+            const entry = item.Entries[0] as { NextChalanNo: number };
+            const nextChalanNo = entry.NextChalanNo;
+            this.Entity.p.ChalanNo = nextChalanNo
+            return;
+          }
         }
       }
+      await this.uiUtils.showErrorMessage('Error', 'Chalan number could not be retrieved.');
+    } catch (error) {
+      // console.log('error :', error);
     }
-    await this.uiUtils.showErrorMessage('Error', 'Chalan number could not be retrieved.');
   };
-  
-  
-  getSingleEmployeeDetails = async (CreatedBy:number) => {
-    if (this.Entity.p.CreatedBy == 1001) {
-      this.Entity.p.CreatedByName = 'Admin';
-      return;
-    }
-    let data = await Employee.FetchInstance(CreatedBy, this.companyRef,async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('data :', data);
-  };
+  private async getSingleEmployeeDetails(): Promise<void> {
+    try {
+      if (this.companyRef <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
 
+      const employee = await Employee.FetchInstance(
+        this.Entity.p.CreatedBy, this.companyRef,
+        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+      console.log('employee :', employee);
+      console.log('CreatedBy :', this.Entity);
+      if (!employee) {
+        this.Entity.p.CreatedByName = this.appStateManage.StorageKey.getItem('UserDisplayName') ?? '';
+      }
+      this.Entity.p.CreatedByName = employee.p.Name;
+    } catch (error) {
+      // console.log('error :', error);
+    }
+  }
 
   getSiteListByCompanyRef = async () => {
-    if (this.companyRef <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
+    try {
+      if (this.companyRef <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
+      let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.SiteList = lst;
+    } catch (error) {
+      // console.log('error :', error);
     }
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.SiteList = lst;
-    // if (this.SiteList.length > 0) {
-    //   this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
-    // }
   }
 
   getStageListByCompanyRef = async () => {
-    if (this.companyRef<= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
+    try {
+      if (this.companyRef <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
+      let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.StageList = lst;
+      this.getSubStageListByStageRef(this.Entity.p.StageRef);
+      this.getExpenseListByStageRef(this.Entity.p.StageRef);
+    } catch (error) {
+      // console.log('error :', error);
     }
-    let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.StageList = lst;
-    // if (this.StageList.length > 0) {
-    //   this.Entity.p.StageRef = this.StageList[0].p.Ref;
-    //   this.OnStageChange( this.Entity.p.StageRef)
-    //   this.StageType = this.StageList[0].p.StageType;
-    //   this.IsStage = this.StageList[0].p.IsSubStageApplicable;
-    // }
-    this.getSubStageListByStageRef(this.Entity.p.StageRef);
-    this.getExpenseListByStageRef(this.Entity.p.StageRef);
   }
 
   OnStageChange = async (StageRef: number) => {
-    if(this.IsNewEntity){
-      this.Entity.p.ExpenseTypeRef = 0
-      await this.AddExpenseTypeToOther( this.Entity.p.ExpenseTypeRef )
+    try {
+      if (this.IsNewEntity) {
+        this.Entity.p.ExpenseTypeRef = 0
+        await this.AddExpenseTypeToOther(this.Entity.p.ExpenseTypeRef)
+      }
+      let stagedata = await Stage.FetchInstance(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      if (stagedata.p.StageTypeName == "Official Expenditure Gov") {
+        this.isOfficialExpenditureGov = true
+      } else {
+        this.isOfficialExpenditureGov = false
+      }
+
+      await this.getSubStageListByStageRef(StageRef);
+      await this.getExpenseListByStageRef(StageRef);
+      await this.getStageTypeOnStageRef(StageRef);
+    } catch (error) {
+      // console.log('error :', error);
     }
-    let stagedata = await Stage.FetchInstance(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    // if(stagedata.p.IsOtherExpenseApplicable == true){
-    //   this.isAdd = true
-    // }else{
-    //   this.isAdd = false
-    // }
-    if(stagedata.p.StageTypeName == "Official Expenditure Gov"){
-      this.isOfficialExpenditureGov = true
-    }else{
-      this.isOfficialExpenditureGov = false
-    }
-    
-    await this.getSubStageListByStageRef(StageRef);
-    await this.getExpenseListByStageRef(StageRef);
-    await this.getStageTypeOnStageRef(StageRef);
   }
 
-
   getExpenseListByStageRef = async (StageRef: number) => {
-    // if (StageRef <= 0) {
-    //   await this.uiUtils.showErrorToster('Stage not Selected');
-    //   return;
-    // }
-    this.ExpenseTypeList = []
-    let lst = await ExpenseType.FetchEntireListByStageRef(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.ExpenseTypeList = lst;
-    console.log('ExpenseTypeList :', this.ExpenseTypeList);
+    try {
+      this.ExpenseTypeList = []
+      let lst = await ExpenseType.FetchEntireListByStageRef(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.ExpenseTypeList = lst;
+      // console.log('ExpenseTypeList :', this.ExpenseTypeList);
+    } catch (error) {
+      // console.log('error :', error);
+    }
   }
 
   toggleExpenseInput() {
     this.isAddingExpense = !this.isAddingExpense;
     if (!this.isAddingExpense) {
-      this.ExpenseTypeEntity.p.Name = ''; 
+      this.ExpenseTypeEntity.p.Name = '';
     }
   }
 
@@ -448,61 +623,66 @@ export class AddEditActualStageComponent implements OnInit {
   }
 
   getSubStageListByStageRef = async (StageRef: number) => {
-    // if (StageRef <= 0) {
-    //   await this.uiUtils.showErrorToster('Stage not Selected');
-    //   return;
-    // }
-    let lst = await SubStage.FetchEntireListByStageRef(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.SubStageList = lst;
+    try {
+      let lst = await SubStage.FetchEntireListByStageRef(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.SubStageList = lst;
+    } catch (error) {
+      // console.log('error :', error);
+    }
   }
 
-
   getStageTypeOnStageRef = async (StageRef: number) => {
-    // if (this.Entity.p.StageRef <= 0) {
-    //   await this.uiUtils.showErrorToster('Stage not Selected');
-    //   return;
-    // }
-    let SingleRecord = this.StageList.find((data) => data.p.Ref == StageRef);;
-    if (SingleRecord?.p) {
-      this.StageType = SingleRecord.p.StageType;
-      this.IsStage = SingleRecord.p.IsSubStageApplicable;
+    try {
+      let SingleRecord = this.StageList.find((data) => data.p.Ref == StageRef);;
+      if (SingleRecord?.p) {
+        this.StageType = SingleRecord.p.StageType;
+        this.IsStage = SingleRecord.p.IsSubStageApplicable;
+      }
+    } catch (error) {
+      // console.log('error :', error);
     }
-    // let SingleRecord = await Stage.FetchInstance(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    // this.StageType = SingleRecord.p.StageType;
   }
 
   getVendorListByCompanyRef = async () => {
-    if (this.companyRef <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
+    try {
+      if (this.companyRef <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
+      this.VendorList = []
+      let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.VendorList = lst;
+    } catch (error) {
+      // console.log('error :', error);
     }
-    this.VendorList = []
-    let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.VendorList = lst;
-    // if (this.VendorList.length > 0) {
-    //   this.Entity.p.VendorRef = this.VendorList[0].p.Ref;
-    // }
-    // this.getVendorServiceListByVendorRef();
   }
 
-  getVendorServiceListByVendorRef = async (VendorRef:number) => {
-    if(this.IsNewEntity){
-      this.Entity.p.VendorServiceRef = 0
+  getVendorServiceListByVendorRef = async (VendorRef: number) => {
+    try {
+      if (this.IsNewEntity) {
+        this.Entity.p.VendorServiceRef = 0
+      }
+      this.VendorServiceList = []
+      let lst = await VendorService.FetchEntireListByVendorRef(VendorRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.VendorServiceList = lst;
+    } catch (error) {
+      // console.log('error :', error);
     }
-    this.VendorServiceList = []
-    let lst = await VendorService.FetchEntireListByVendorRef(VendorRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.VendorServiceList = lst;
   }
 
   FormulateUnitList = async () => {
-    let lst = await Unit.FetchEntireList(
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-    this.UnitList = lst;
-    console.log('UnitList :', this.UnitList);
+    try {
+      let lst = await Unit.FetchEntireList(
+        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+      this.UnitList = lst;
+      // console.log('UnitList :', this.UnitList); 
+    } catch (error) {
+      // console.log('error :', error);
+    }
   };
 
-  ClearInputsOnExpenseChange = (ExpenseTypeRef:number) => {
+  ClearInputsOnExpenseChange = (ExpenseTypeRef: number) => {
     this.AddExpenseTypeToOther(ExpenseTypeRef)
     this.Entity.p.Amount = 0;
     this.Entity.p.UnitRef = 0;
@@ -523,7 +703,7 @@ export class AddEditActualStageComponent implements OnInit {
       this.Entity.p.LadiesAmount = 0;
     }
 
-    if (this.Entity.p.ExpenseTypeRef  == this.LabourExpenseRef) {
+    if (this.Entity.p.ExpenseTypeRef == this.LabourExpenseRef) {
       this.Entity.p.DieselRate = 0;
       this.Entity.p.DieselQuantity = 0;
       this.Entity.p.DieselTotalAmount = 0;
@@ -533,24 +713,24 @@ export class AddEditActualStageComponent implements OnInit {
     this.Entity.p.TimeDetails = []
   }
 
-  ClearValuesOnTimeSelection = (UnitRef:number) => {
+  ClearValuesOnTimeSelection = (UnitRef: number) => {
     this.Entity.p.TimeDetails = []
-    if( UnitRef == this.TimeUnitRef){
+    if (UnitRef == this.TimeUnitRef) {
       this.Entity.p.Rate = 0
       this.Entity.p.Quantity = 0
       this.Entity.p.Amount = 0,
-      this.Amount = 0
+        this.Amount = 0
     }
     this.isDiselPaid = false
     this.DiselPaid(0)
-   
+
   }
 
-  AddExpenseTypeToOther = async(ExpenseTypeRef:number) =>{
-  console.log('ExpenseTypeRef :', ExpenseTypeRef);
-    if (ExpenseTypeRef == this.OtherExpenseRef){
+  AddExpenseTypeToOther = async (ExpenseTypeRef: number) => {
+    console.log('ExpenseTypeRef :', ExpenseTypeRef);
+    if (ExpenseTypeRef == this.OtherExpenseRef) {
       this.isAdd = true
-    }else{
+    } else {
       this.isAdd = false
     }
   }
@@ -567,14 +747,14 @@ export class AddEditActualStageComponent implements OnInit {
     const quantity = Number(this.Entity.p.Quantity) || 0;
     const dieselAmount = Number(this.Entity.p.DieselTotalAmount) || 0;
     const isDieselPaid = !!this.Entity.p.IsDieselPaid;
-    
-    if(TotalWorkedHours > 0){
-      this.Entity.p.Amount= rate * TotalWorkedHours - dieselAmount
+
+    if (TotalWorkedHours > 0) {
+      this.Entity.p.Amount = rate * TotalWorkedHours - dieselAmount
       this.Amount = rate * TotalWorkedHours
-    }else{
+    } else {
       this.Amount = rate * quantity
-      this.Entity.p.Amount= rate * quantity - dieselAmount
-     
+      this.Entity.p.Amount = rate * quantity - dieselAmount
+
     }
   };
 
@@ -594,47 +774,18 @@ export class AddEditActualStageComponent implements OnInit {
     this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
   }
 
-  calculateWorkedHours() {
-    const start = this.TimeEntity.StartTime;
-    const end = this.TimeEntity.EndTime;
-  
-    if (start && end) {
-      const [startHour, startMin] = start.split(':').map(Number);
-      const [endHour, endMin] = end.split(':').map(Number);
-  
-      const startDate = new Date();
-      startDate.setHours(startHour, startMin, 0);
-  
-      const endDate = new Date();
-      endDate.setHours(endHour, endMin, 0);
-  
-      let diffMs = endDate.getTime() - startDate.getTime();
-  
-      // If end time is before start time, assume it's the next day
-      if (diffMs < 0) {
-        endDate.setDate(endDate.getDate() + 1);
-        diffMs = endDate.getTime() - startDate.getTime();
-      }
-  
-      const diffHrs = diffMs / (1000 * 60 * 60); // convert ms to hours
-      this.TimeEntity.WorkedHours = +diffHrs.toFixed(2); // round to 2 decimal places
+  DiselPaid = (DiselPaid: number) => {
+    if (DiselPaid == 1) {
+      this.isDiselPaid = true
+      this.Entity.p.IsDieselPaid = 1;
     } else {
-      this.TimeEntity.WorkedHours = 0;
+      this.Entity.p.DieselQuantity = 0;
+      this.Entity.p.DieselRate = 0;
+      this.Entity.p.DieselTotalAmount = 0;
+      this.Entity.p.IsDieselPaid = 0;
+      this.isDiselPaid = false
     }
-  }
-
-  DiselPaid = (DiselPaid:number) => {
-  if(DiselPaid == 1){
-    this.isDiselPaid = true
-    this.Entity.p.IsDieselPaid = 1;
-  }else{
-    this.Entity.p.DieselQuantity = 0;
-    this.Entity.p.DieselRate = 0;
-    this.Entity.p.DieselTotalAmount = 0;
-    this.Entity.p.IsDieselPaid = 0;
-    this.isDiselPaid = false
-  }
-  this.CalculateAmountOnRateAndQuantity()
+    this.CalculateAmountOnRateAndQuantity()
   }
 
   getTotalWorkedHours(): number {
@@ -647,30 +798,33 @@ export class AddEditActualStageComponent implements OnInit {
     this.Entity.p.SelectedMonths = Selectedservice;
   }
 
-
   saveNewExpenseType = async () => {
-    if (!this.ExpenseTypeEntity.p.Name) {
-      await this.uiUtils.showErrorMessage('Error', 'Expense Type name is required!');
-      this.isAddingExpense = false;
-      return;
-    }
-    this.ExpenseTypeEntity.p.StageRef = this.Entity.p.StageRef
-    let entityToSave = this.ExpenseTypeEntity.GetEditableVersion();
-    let entitiesToSave = [entityToSave]
-    console.log('entitiesToSave :', entitiesToSave);
-    await this.ExpenseTypeEntity.EnsurePrimaryKeysWithValidValues()
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-    if (!tr.Successful) {
-      this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error', tr.Message);
-      return
-    }
-    else {
+    try {
+      if (!this.ExpenseTypeEntity.p.Name) {
+        await this.uiUtils.showErrorMessage('Error', 'Expense Type name is required!');
+        this.isAddingExpense = false;
+        return;
+      }
+      this.ExpenseTypeEntity.p.StageRef = this.Entity.p.StageRef
+      let entityToSave = this.ExpenseTypeEntity.GetEditableVersion();
+      let entitiesToSave = [entityToSave]
+      console.log('entitiesToSave :', entitiesToSave);
+      await this.ExpenseTypeEntity.EnsurePrimaryKeysWithValidValues()
+      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+      if (!tr.Successful) {
+        this.isSaveDisabled = false;
+        this.uiUtils.showErrorMessage('Error', tr.Message);
+        return
+      }
+      else {
         await this.uiUtils.showSuccessToster('Expense Type saved successfully!');
-        this.ExpenseTypeEntity= ExpenseType.CreateNewInstance();
+        this.ExpenseTypeEntity = ExpenseType.CreateNewInstance();
         this.ExpenseTypeEntity.p.Name = ''
         this.isAddingExpense = false
         this.getExpenseListByStageRef(this.Entity.p.StageRef)
+      }
+    } catch (error) {
+      // console.log('error :', error);
     }
   }
 
@@ -680,90 +834,34 @@ export class AddEditActualStageComponent implements OnInit {
     input.select();
   }
 
-async SaveTime() {
-  if (!this.TimeEntity.StartTime || !this.TimeEntity.EndTime) {
-    await this.uiUtils.showErrorMessage('Error', 'Start Time and End Time are required!');
-    return;
-  }
-
-  if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
-    this.Entity.p.TimeDetails[this.editingIndex] = { ...this.TimeEntity };
-    await this.uiUtils.showSuccessToster('Time updated successfully!');
-    this.isModalOpen = false;
-  } else {
-    this.TimeEntity.SiteManagementRef = this.Entity.p.Ref;
-    this.Entity.p.TimeDetails.push({ ...this.TimeEntity });
-    this.CalculateAmountOnRateAndQuantity()
-    await this.uiUtils.showSuccessToster('Time added successfully!');
-  }
-
-  this.TimeEntity = TimeDetailProps.Blank();
-  this.editingIndex = null;
-}
-
-
-   EditTime(index: number) {
-    this.isModalOpen = true
-    this.TimeEntity = { ...this.Entity.p.TimeDetails[index] }
-    this.editingIndex = index;
-  }
-
-
-  RemoveTime(index: number) {
-    this.Entity.p.TimeDetails.splice(index, 1); // Remove Time
-    this.CalculateAmountOnRateAndQuantity()
-  }
-
-   closeModal = async (type: string) => {
-      if (type === 'time') {
-        const keysToCheck = ['Start Time', 'End Time'] as const;
-  
-        const hasData = keysToCheck.some(
-          key => (this.TimeEntity as any)[key]?.toString().trim()
-        );
-  
-        if (hasData) {
-          await this.uiUtils.showConfirmationMessage(
-            'Close',
-            `This process is <strong>IRREVERSIBLE!</strong><br/>
-             Are you sure you want to close this modal?`,
-            async () => {
-              this.isModalOpen = false;
-              this.TimeEntity = TimeDetailProps.Blank();
-            }
-          );
+  SaveStageMaster = async () => {
+    try {
+      this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+      this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+      this.Entity.p.Total = this.getTotalWorkedHours()
+      this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
+      let entityToSave = this.Entity.GetEditableVersion();
+      let entitiesToSave = [entityToSave]
+      console.log('entitiesToSave :', entitiesToSave);
+      await this.Entity.EnsurePrimaryKeysWithValidValues()
+      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+      if (!tr.Successful) {
+        this.isSaveDisabled = false;
+        this.uiUtils.showErrorMessage('Error', tr.Message);
+        return
+      }
+      else {
+        this.isSaveDisabled = false;
+        if (this.IsNewEntity) {
+          await this.uiUtils.showSuccessToster('Actual Stage saved successfully!');
+          this.Entity = ActualStages.CreateNewInstance();
         } else {
-          this.isModalOpen = false;
-          this.TimeEntity = TimeDetailProps.Blank();
+          await this.uiUtils.showSuccessToster('Stage Updated successfully!');
+          await this.router.navigate(['app_homepage/tabs/site-management/actual-stage'], { replaceUrl: true });
         }
       }
-    };
-
-
-  SaveStageMaster = async () => {
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-    this.Entity.p.Total = this.getTotalWorkedHours()
-    this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
-    let entityToSave = this.Entity.GetEditableVersion();
-    let entitiesToSave = [entityToSave]
-    console.log('entitiesToSave :', entitiesToSave);
-    await this.Entity.EnsurePrimaryKeysWithValidValues()
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-    if (!tr.Successful) {
-      this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error', tr.Message);
-      return
-    }
-    else {
-      this.isSaveDisabled = false;
-      if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Actual Stage saved successfully!');
-        this.Entity = ActualStages.CreateNewInstance();
-      } else {
-        await this.uiUtils.showSuccessToster('Stage Updated successfully!');
-        await this.router.navigate(['app_homepage/tabs/site-management/actual-stage'], { replaceUrl: true });
-      }
+    } catch (error) {
+      // console.log('error :', error);
     }
   }
   public goBack(): void {

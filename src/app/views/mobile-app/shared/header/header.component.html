@@ -1,4 +1,4 @@
-<ion-header class="ion-no-border modern-header" *ngIf="showHeader()">
+<ion-header class="ion-no-border modern-header">
   <ion-toolbar>
     <!-- Left-aligned logo -->
     <ion-buttons slot="start">
@@ -7,20 +7,26 @@
       </ion-button>
     </ion-buttons>
 
-    <!-- App title -->
-    <!-- <ion-title class="mobile-app-title">{{ title }}</ion-title> -->
-    <!-- <app-dropdown label="Select Company" [dataList]="departments" [(selectedValue)]="selectedDepartment"></app-dropdown> -->
-    <app-searchable-select [options]="CompanyList" [selectedOptions]="selectedCompany" [multiSelect]="false" [placeholder]="'Select Company'"
-      (selectionChange)="onSelectionChange($event)">
-    </app-searchable-select>
+    <!-- Company Selector -->
+    <!-- <ion-item class="input-item" button detail (click)="selectCountryBottomsheet()"> -->
+      <!-- <ion-label>Company</ion-label> -->
+      <!-- <ion-text class="status-text">{{ CompanyName || 'Select Company' }}</ion-text>
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item> -->
 
-
-    <!-- Action buttons -->
+    <ion-item class="input-item" button (click)="selectCountryBottomsheet()">
+      <ion-text class="status-text">
+        {{ CompanyName || 'Select Company' }}
+      </ion-text>
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+    
+    <!-- Right-side actions -->
     <ion-buttons slot="end">
-      <ion-button class="icon-button" (click)="goToNotificationPage()">
-        <ion-icon name="notifications-outline"></ion-icon>
+      <ion-button class="icon-button" (click)="goToNotificationPage()" fill="clear">
+        <ion-icon name="notifications-outline" slot="icon-only"></ion-icon>
       </ion-button>
-      <ion-avatar class="user-avatar">
+      <ion-avatar class="user-avatar" (click)="goToProfilePage()">
         <img alt="User Avatar" src="https://avatar.iran.liara.run/public" />
       </ion-avatar>
     </ion-buttons>

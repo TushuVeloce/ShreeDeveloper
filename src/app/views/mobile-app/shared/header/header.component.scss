@@ -1,40 +1,54 @@
-/* Modern Header */
+/* Gradient background with modern look */
 .modern-header {
-    --background: linear-gradient(to right, var(--ion-color-primary), var(--ion-color-secondary));
-    display: flex;
-    align-items: center;
+    --background: linear-gradient(135deg, #4c6ef5 0%, #15aabf 100%);
+    color: #333;
+    padding: 0 10px;
 }
 
-/* Logo Styling */
+/* Logo Button */
 .logo-button {
-    display: flex;
-    align-items: center;
     padding: 0;
+    height: 100%;
 }
 
 .logo-img {
-    height: 40px;
+    height: 36px;
     width: auto;
 }
 
-/* Title Styling */
-.mobile-app-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.2rem;
+/* Company Dropdown Styling */
+.input-item {
+    --background: transparent;
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    color: var(--ion-text-color);
+    margin: 10 auto;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.status-text {
     font-weight: 600;
+    font-size: 1rem;
+    margin-right: 4px;
+    padding-left: 10px;
 }
 
-/* User Avatar */
-.user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+.dropdown-icon {
+    font-size: 1.2rem;
+    margin-left: 4px;
+    color: var(--ion-color-primary);
 }
 
-/* Action Buttons */
+/* Notification & Avatar */
 .icon-button {
-    color: var(--ion-color-dark);
-    font-size: 1.4rem;
+    color: var(--ion-color-primary);
+    font-size: 1.5rem;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border: 2px solid var(--ion-color-primary);
 }
