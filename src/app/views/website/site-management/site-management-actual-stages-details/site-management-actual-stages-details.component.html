@@ -516,7 +516,7 @@
               <input type="time" name="StartTime" class="form-control" id="StartTime" [(ngModel)]="TimeEntity.StartTime"
                 (ngModelChange)="calculateWorkedHours()" placeholder="Enter Start Time " #StartTimeCtrl="ngModel"
                 required (blur)="StartTimeCtrl.control.markAsTouched()" />
-              <i class="fa fa-clock"></i>
+              <!-- <i class="fa fa-clock"></i> -->
               <div *ngIf="(StartTimeCtrl.invalid && (StartTimeCtrl.touched || StartTimeCtrl.dirty))">
                 <span class="validation-text" *ngIf="StartTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
               </div>
@@ -528,7 +528,7 @@
               <input type="time" name="EndTime" class="form-control" id="EndTime" [(ngModel)]="TimeEntity.EndTime"
                 (ngModelChange)="calculateWorkedHours()" placeholder="Enter To Time" #EndTimeCtrl="ngModel" required
                 (blur)="EndTimeCtrl.control.markAsTouched()" />
-              <i class="fa fa-clock"></i>
+              <!-- <i class="fa fa-clock"></i> -->
 
               <div *ngIf="(EndTimeCtrl.invalid && (EndTimeCtrl.touched || EndTimeCtrl.dirty))">
                 <span class="validation-text" *ngIf="EndTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -539,7 +539,7 @@
             <div>
               <label for="WorkedHours">Total Working Hours</label>
               <input type="number" name="WorkedHours" class="form-control" id="WorkedHours"
-                [(ngModel)]="TimeEntity.WorkedHours" placeholder="Total Working Hours" required />
+                [(ngModel)]="TimeEntity.WorkedHours" placeholder="Total Working Hours" readonly />
             </div>
           </div>
         </div>
