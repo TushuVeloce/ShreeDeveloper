@@ -407,17 +407,17 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Plot Details',
         RouterLink: '/homepage/Website/Plot_Master',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Plot Details.png',
       },
       {
         Name: 'Actual Stages',
         RouterLink: '/homepage/Website/Site_Management_Actual_Stage',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Actual Stages.png',
       },
       {
         Name: 'Estimate Stages',
         RouterLink: '/homepage/Website/Estimate_Stages',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Estimated Stages.png',
       },
     ]
 
@@ -453,17 +453,17 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Customer Enquiry',
         RouterLink: '/homepage/Website/Customer_Enquiry',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Customer Enquiry.png',
       },
       {
         Name: 'Customer Follow Up',
         RouterLink: '/homepage/Website/Customer_FollowUp',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Customer Followup.png',
       },
       {
         Name: 'Registered Customer',
         RouterLink: '/homepage/Website/Registered_Customer',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Registered Customer.png',
       }
     ]
 
@@ -518,27 +518,27 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Office Duty & Time',
         RouterLink: '/homepage/Website/Office_Duty_Time',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Office Duty_Time.png',
       },
       {
         Name: 'Attendance',
         RouterLink: '/homepage/Website/Attendance_Logs',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Attendance.png',
       },
       {
         Name: 'Salary Generation',
         RouterLink: '/homepage/Website/Salary_Generation',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Salary Genration.png',
       },
       {
         Name: 'Leave Approval',
         RouterLink: '/homepage/Website/Leave_Approval',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Leave Approval.png',
       },
       {
         Name: 'Salary Slip Approval',
         RouterLink: '/homepage/Website/Salary_Slip_Approval',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Salary Slip Approval.png',
       }
 
     ]
@@ -547,17 +547,17 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Employee Attendance Logs',
         RouterLink: '/homepage/Website/Employee_Attendance_Logs',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Employee Attendance Logs.png',
       },
       {
         Name: 'Leave Request',
         RouterLink: '/homepage/Website/Leave_Request',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Leave Requests.png',
       },
       {
         Name: 'Salary Slip Request',
         RouterLink: '/homepage/Website/Salary_Slip_Request',
-       LogoPath:'/assets/icons/Material Master.png',
+       LogoPath:'/assets/icons/Salary Slip Request.png',
       }
     ]
     let RazorpaySubModulelist = [
@@ -631,9 +631,9 @@ export class SidebarlayoutComponent implements OnInit {
       },
       {
         Name: 'RazorPay',
-        RouterLink: '',
+        RouterLink: '/homepage/Website/Razorpay',
         WhiteLogo: '/assets/icons/Razorpay.png',
-        SubModuleList: RazorpaySubModulelist,
+        // SubModuleList: RazorpaySubModulelist,
       },
     ]
 
@@ -699,8 +699,6 @@ export class SidebarlayoutComponent implements OnInit {
       console.warn('Selected company not found');
     }
   }
-
-
 
   //  private FormulateCompanyList = async () => {
   //     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
