@@ -27,7 +27,9 @@
             </li>
           </div>
           <div *ngFor="let submodule of module.SubModuleList">
-            <li *ngIf="module.Name === newModulename && isShow" nz-menu-item #menuDiv [ngClass]="{'ant-menu-item-selected':activeSubmodule === submodule.Name && !BrowserBack}">
+            <li *ngIf="module.Name === newModulename && isShow" nz-menu-item #menuDiv [ngClass]="{
+  'ant-menu-item-selected': activeSubmodule === submodule.Name
+}">
               <ul>
                 <div style="display: flex; align-items: center">
                   <!-- Collapse Sidebar View -->

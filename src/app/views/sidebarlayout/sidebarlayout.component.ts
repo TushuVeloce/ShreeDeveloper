@@ -256,11 +256,23 @@ export class SidebarlayoutComponent implements OnInit {
   //   this.oldModulename = this.newModulename;
   // };
 
-   SideMenuHideShowForModule(moduleName: string, show: boolean): void {
+SideMenuHideShowForModule(moduleName: string, show: boolean): void {
+  if (this.newModulename === moduleName) {
+    // Toggle collapse if the same module is clicked again
+    this.isShow = !this.isShow;
+
+    // If collapsing, clear activeModule from localStorage
+    if (!this.isShow) {
+      localStorage.removeItem('activeModule');
+    }
+  } else {
+    // New module clicked → set it as active and expand it
     this.newModulename = moduleName;
-    this.isShow = show;
+    this.isShow = true;
     localStorage.setItem('activeModule', moduleName);
   }
+}
+
 
   NavigationFromLogo(RouterLink: any) {
     if (RouterLink != '') {
