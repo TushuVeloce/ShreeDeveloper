@@ -195,15 +195,15 @@ export class SiteManagementActualStagesComponent implements OnInit {
   }
 
   get totalMachinaryAmount(): number {
-    return this.MachinaryExpenseList.reduce((sum, item) => sum + (item.p.Amount || 0), 0);
+    return this.MachinaryExpenseList.reduce((sum, item) => sum + (item.p.GrandTotal || 0), 0);
   }
 
   get totalLabourAmount(): number {
-    return this.LabourExpenseList.reduce((sum, item) => sum + (item.p.Amount || 0), 0);
+    return this.LabourExpenseList.reduce((sum, item) => sum + (item.p.GrandTotal || 0), 0);
   }
 
   get totalOtherAmount(): number {
-    return this.OtherExpenseList.reduce((sum, item) => sum + (item.p.Amount || 0), 0);
+    return this.OtherExpenseList.reduce((sum, item) => sum + (item.p.GrandTotal || 0), 0);
   }
 
   onEditClicked = async (item: ActualStages) => {

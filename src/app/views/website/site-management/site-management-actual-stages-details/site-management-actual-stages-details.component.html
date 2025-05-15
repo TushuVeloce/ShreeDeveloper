@@ -221,7 +221,7 @@
             nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.TimeDetails">
             <thead>
               <tr>
-                <th *ngFor="let header of timeheaders" class="tblheader">
+                <th *ngFor="let header of timeheaders" class="tblsubheader">
                   {{ header }}
                 </th>
               </tr>
@@ -285,11 +285,12 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label><b>Amount</b></label>
-          <input type="number" class="form-control" placeholder="Amount" [value]='Amount' readonly />
-          <div *ngIf="
+          <input type="number" name="Amount" id="Amount" class="form-control" placeholder="Amount" [(ngModel)]="Entity.p.Amount" readonly />
+          <!-- <div *ngIf="
               AmountCtrl.invalid && (AmountCtrl.touched || AmountCtrl.dirty)
             ">
             <span class="validation-text" *ngIf="AmountCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+          </div> -->
           </div>
         </div>
       </div>
@@ -463,14 +464,10 @@
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-6 mb-2">
           <label><b>Grand Total</b></label>
-          <input type="number" [(ngModel)]="Entity.p.Amount" name="Amount" class="form-control" id="Amount"
-            placeholder="Enter Amount" #AmountCtrl="ngModel" (blur)="AmountCtrl.control.markAsTouched()"
-            (click)="selectAllValue($event)" />
-          <div *ngIf="
-              AmountCtrl.invalid && (AmountCtrl.touched || AmountCtrl.dirty)
-            ">
-            <span class="validation-text" *ngIf="AmountCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
-          </div>
+          <input type="number" [(ngModel)]="Entity.p.GrandTotal" name="GrandTotal" class="form-control" id="GrandTotal"
+            placeholder="GrandTotal"/>
+          <input type="number" [(ngModel)]="Entity.p.GrandTotal" name="GrandTotal" class="form-control" id="GrandTotal"
+            placeholder="GrandTotal"/>
         </div>
         <div class="col-md-6 mb-2">
           <label><b>Description</b></label>
