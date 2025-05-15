@@ -29,7 +29,6 @@ export class VendorMasterDetailsComponent implements OnInit {
   Entity: Vendor = Vendor.CreateNewInstance();
   DetailsFormTitle: 'New Vendor' | 'Edit Vendor' = 'New Vendor';
   InitialEntity: Vendor = null as any;
-  CompanyList: Company[] = [];
   companyName = this.companystatemanagement.SelectedCompanyName;
   CompanyTypeList = DomainEnums.CompanyTypeList(true, '--Select Company Type--');
   MaterialList: Material[] = [];
@@ -38,6 +37,8 @@ export class VendorMasterDetailsComponent implements OnInit {
   CountryList: Country[] = [];
   StateList: State[] = [];
   CityList: City[] = [];
+
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
   PinCodePattern: string = ValidationPatterns.PinCode;
@@ -72,10 +73,8 @@ export class VendorMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    this.MaterialList = await Material.FetchEntireList();
-    this.ServiceList = await VendorService.FetchEntireList();
-
-    Vendor.SetCurrentInstance(this.Entity);
+    this.getVendorServiceListByCompanyRef();
+    this.getMaterialListByCompanyRef();
     await this.FormulateCountryList();
 
     // Load State based on Default Country Ref
@@ -87,8 +86,6 @@ export class VendorMasterDetailsComponent implements OnInit {
     if (this.Entity.p.StateRef) {
       await this.getCityListByStateRef(this.Entity.p.StateRef);
     }
-
-    this.CompanyList = await Company.FetchEntireList();
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
@@ -107,6 +104,20 @@ export class VendorMasterDetailsComponent implements OnInit {
   focusInput = () => {
     let txtName = document.getElementById('Code')!;
     txtName.focus();
+  }
+
+  getVendorServiceListByCompanyRef = async () => {
+    if (this.companyRef) {
+      let lst = await VendorService.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.ServiceList = lst;
+    }
+  }
+
+  getMaterialListByCompanyRef = async () => {
+    if (this.companyRef) {
+      let lst = await Material.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.MaterialList = lst;
+    }
   }
 
   FormulateCountryList = async () => {
