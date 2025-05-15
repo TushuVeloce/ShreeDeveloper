@@ -1,0 +1,44 @@
+<ion-content class="ion-padding login-content">
+    <div class="login-container">
+
+      <!-- Logo -->
+      <div class="logo-wrapper">
+        <img src="assets/logos/ShreeIcon.png" class="logo-img" alt="Logo" />
+      </div>
+
+      <!-- Heading -->
+      <h2 class="login-title">Log In</h2>
+
+      <!-- Form -->
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+
+        <!-- Email -->
+         <ion-label><strong>Email</strong></ion-label>
+        <ion-item lines="none" class="input-item">
+          <ion-input placeholder="Enter Email" type="email" formControlName="email" required>
+          </ion-input>
+          <ion-icon slot="end" name="scan-outline"></ion-icon>
+        </ion-item>
+
+        <!-- Password -->
+        <ion-label><strong>Password</strong></ion-label>
+        <ion-item lines="none" class="input-item">
+          <ion-input [type]="showPassword ? 'text' : 'password'" placeholder="Enter Password" formControlName="password"
+            required>
+          </ion-input>
+          <ion-icon slot="end" [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+            (click)="togglePasswordVisibility()">
+          </ion-icon>
+        </ion-item>
+
+        <div class="forgot-text"><strong>Forgot Password?</strong></div>
+
+        <!-- Login Button -->
+        <ion-button expand="block" class="login-button" type="submit">
+          LOG IN
+        </ion-button>
+      </form>
+
+      <div class="new-user-text"><strong>New User? Contact Admin</strong></div>
+    </div>
+</ion-content>

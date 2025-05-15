@@ -1,0 +1,108 @@
+.login-content {
+    // --background: repeating-linear-gradient(#fbeaea 0%,
+    //             #e3c4c4 30%,
+    //             #c9a5a5 70%,
+    //             #8a6b6b 100%);
+    // --background:
+    //         linear-gradient(to right top, #853535, #fadddd 50%),
+    //         /* top-left to top-right */
+    //         linear-gradient(to left bottom, #853535 50%, #fadddd 100%),
+    //         /* mid-right to mid-left */
+    //         linear-gradient(to right, #853535 50%, #fadddd 100%);
+    //     /* end-left to end-right */
+    // --background: linear-gradient(135deg, #fbeaea 0%, #e3c4c4 30%, #c9a5a5 70%, #8a6b6b 100%);
+    --background: linear-gradient(135deg, #fbeaea 0%, #e3c4c4 30%, #c9a5a5 70%, #8a6b6b 100%);
+    
+    background: var(--background);
+    background-blend-mode: overlay;
+
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    // Ensure scrolling for smaller screens
+    overflow-y: auto;
+
+
+    .login-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+        width: 100%;
+        padding: 24px;
+        border-radius: 20px;
+        align-items: center;
+        gap: 16px;
+        box-sizing: border-box;
+    }
+
+    .logo-wrapper {
+        margin-top: 24px;
+        margin-bottom: 16px;
+
+        .logo-img {
+            width: 180px;
+            height: auto;
+        }
+    }
+
+    .login-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 8px;
+    }
+
+    form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        ion-input {
+            font-size: 16px;
+            align-content: center;
+        }
+
+        .forgot-text {
+            font-size: 14px;
+            color: #444;
+            text-align: right;
+            margin-bottom: 16px;
+        }
+
+        .login-button {
+            --background: linear-gradient(90deg, #702623, #d67b73);
+            --border-radius: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 8px;
+            height: 10%;
+        }
+    }
+
+    .new-user-text {
+        font-size: 14px;
+        color: #444;
+        margin-top: 16px;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+
+    // Responsive adjustments
+    @media screen and (max-width: 768px) {
+        .logo-img {
+            width: 100px;
+        }
+
+        .login-title {
+            font-size: 20px;
+        }
+
+        .forgot-text {
+            text-align: left;
+        }
+    }
+}

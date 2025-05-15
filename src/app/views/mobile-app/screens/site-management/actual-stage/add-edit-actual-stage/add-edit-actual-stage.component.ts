@@ -128,6 +128,7 @@ export class AddEditActualStageComponent implements OnInit {
   }
   DateChange(value: string) {
     this.Date = value;
+    console.log('value :', value);
     this.Entity.p.Date = value || '';
   }
 
@@ -300,8 +301,17 @@ export class AddEditActualStageComponent implements OnInit {
         this.DetailsFormTitle = this.IsNewEntity ? 'New Actual Stage' : 'Edit Actual Stage';
         this.Entity = ActualStages.GetCurrentInstance();
         if (this.Entity.p.Date != '') {
-          this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
+          const datePart = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date); // e.g., "2025-05-14"
+          const now = new Date();
+          // Get current time parts
+          const hours = String(now.getHours()).padStart(2, '0');
+          const minutes = String(now.getMinutes()).padStart(2, '0');
+          const seconds = String(now.getSeconds()).padStart(2, '0');
+          // Combine date and current time
+          this.DateChange(`${datePart}T${hours}:${minutes}:${seconds}`)
         }
+        
+        
         this.isChalanDisabled = true
         if (this.Entity.p.TimeDetails.length > 0) {
           this.Amount = this.getTotalWorkedHours()
@@ -591,7 +601,8 @@ export class AddEditActualStageComponent implements OnInit {
         this.Entity.p.GutterNaleUnitRef = 0;
         this.Entity.p.SubStageName = '';
         this.Entity.p.SubStageRef =0;
-        this.Entity.p.SelectedMonthsName=[];
+        this.Entity.p.SelectedMonthsName = [];
+        this.Entity.p.SelectedMonths = [];
         await this.AddExpenseTypeToOther(this.Entity.p.ExpenseTypeRef)
       }
       // let stagedata = await Stage.FetchInstance(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
@@ -692,6 +703,7 @@ export class AddEditActualStageComponent implements OnInit {
 
   ClearInputsOnExpenseChange = (ExpenseTypeRef: number) => {
     this.AddExpenseTypeToOther(ExpenseTypeRef)
+    this.Entity.p.GrandTotal = 0;
     this.Entity.p.Amount = 0;
     this.Entity.p.UnitRef = 0;
     this.Entity.p.Quantity = 0;
@@ -724,6 +736,7 @@ export class AddEditActualStageComponent implements OnInit {
   ClearValuesOnTimeSelection = (UnitRef: number) => {
     this.Entity.p.TimeDetails = []
     if (UnitRef == this.TimeUnitRef) {
+      this.Entity.p.GrandTotal = 0,
       this.Entity.p.Rate = 0
       this.Entity.p.Quantity = 0
       this.Entity.p.Amount = 0,
@@ -744,7 +757,7 @@ export class AddEditActualStageComponent implements OnInit {
 
   CalculateTotalOnDiselRateAndLtr = () => {
     this.Entity.p.DieselTotalAmount = (this.Entity.p.DieselQuantity * this.Entity.p.DieselRate);
-    this.Entity.p.Amount = this.Entity.p.DieselTotalAmount + this.UnitQuantityTotal
+    this.Entity.p.GrandTotal = this.Entity.p.DieselTotalAmount + this.UnitQuantityTotal
     this.CalculateAmountOnRateAndQuantity()
   }
 
@@ -756,28 +769,27 @@ export class AddEditActualStageComponent implements OnInit {
     const isDieselPaid = !!this.Entity.p.IsDieselPaid;
 
     if (TotalWorkedHours > 0) {
-      this.Entity.p.Amount = rate * TotalWorkedHours - dieselAmount
+      this.Entity.p.GrandTotal = rate * TotalWorkedHours - dieselAmount
       this.Amount = rate * TotalWorkedHours
     } else {
       this.Amount = rate * quantity
-      this.Entity.p.Amount = rate * quantity - dieselAmount
-
+      this.Entity.p.GrandTotal = rate * quantity - dieselAmount
     }
   };
 
   CalculateAmountOnSkillRateAndQuantity = () => {
     this.Entity.p.SkillAmount = (this.Entity.p.SkillRate * this.Entity.p.SkillQuantity);
-    this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
+    this.Entity.p.GrandTotal = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
   }
 
   CalculateAmountOnUnSkillRateAndQuantity = () => {
     this.Entity.p.UnskillAmount = (this.Entity.p.UnskillRate * this.Entity.p.UnskillQuantity);
-    this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
+    this.Entity.p.GrandTotal = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
   }
 
   CalculateAmountOnLadiesRateAndQuantity = () => {
     this.Entity.p.LadiesAmount = (this.Entity.p.LadiesRate * this.Entity.p.LadiesQuantity);
-    this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
+    this.Entity.p.GrandTotal = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
   }
 
   DiselPaid = (DiselPaid: number) => {

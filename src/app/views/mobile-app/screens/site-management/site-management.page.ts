@@ -63,6 +63,7 @@ export class SiteManagementPage implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
+    this.appStateManagement.setSiteRef(0,"")
     await this.getSiteListByCompanyRef();
   }
 
