@@ -12,21 +12,31 @@
       <ng-container *ngIf="FilteredActualStagesList.length > 0 ; else noData">
         <ion-card *ngFor="let item of FilteredActualStagesList" class="data-card">
           <ion-card-header>
-            <ion-card-title class="info-row"><strong>Chalan No :</strong>{{ item.p.ChalanNo ??'-' }}</ion-card-title>
-            <ion-card-subtitle class="info-row"><strong>Site Name :</strong>{{ item.p.SiteName ??'-'
+            <ion-card-title class="info-row"><strong>Chalan No :</strong>{{ item.p.ChalanNo ?item.p.ChalanNo:'-'
+              }}</ion-card-title>
+            <ion-card-subtitle class="info-row"><strong>Site Name :</strong>{{ item.p.SiteName ? item.p.SiteName:'-'
               }}</ion-card-subtitle>
-            <ion-card-subtitle class="info-row"><strong>Date :</strong>{{ formatDate(item.p.Date)
-              ??'-'}}</ion-card-subtitle>
-            <ion-card-subtitle class="info-row"><strong>Vendor Name :</strong>{{ item.p.VendorName ??'-'
+            <ion-card-subtitle class="info-row"><strong>Date :</strong>{{item.p.Date
+              ?formatDate(item.p.Date):'-'}}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"><strong>Vendor Name :</strong>{{ item.p.VendorName ?item.p.VendorName:'-'
               }}</ion-card-subtitle>
-            <ion-card-subtitle class="info-row"><strong>Vendor Service :</strong>{{ item.p.VendorServiceName??'-'
+            <ion-card-subtitle class="info-row"><strong>Vendor Service :</strong>{{ item.p.VendorServiceName?item.p.VendorServiceName:'-'
               }}</ion-card-subtitle>
-            <ion-card-subtitle class="info-row" *ngIf="TimeUnitRef != item.p.UnitRef"><strong>Quantity :</strong>{{ item.p.Quantity??'-'
+            <ion-card-subtitle class="info-row"><strong>Expense Type :</strong>{{ item.p.ExpenseTypeName?item.p.ExpenseTypeName:'-'
               }}</ion-card-subtitle>
-            <ion-card-subtitle class="info-row" *ngIf="TimeUnitRef == item.p.UnitRef"><strong>Worked Hours :</strong>{{ getTotalWorkedHours(item.p.TimeDetails)??'-'
+            <ion-card-subtitle class="info-row"
+              *ngIf="TimeUnitRef != item.p.UnitRef && LabourExpenseRef != item.p.ExpenseTypeRef"><strong>Quantity
+                :</strong>{{
+              item.p.Quantity?item.p.Quantity:'-'
               }}</ion-card-subtitle>
-            <ion-card-subtitle class="info-row"><strong>Rate :</strong>{{ item.p.Rate??'-' }}</ion-card-subtitle>
-            <ion-card-subtitle class="info-row"><strong>Amount :</strong>{{ item.p.Amount ??'-'}}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"
+              *ngIf="TimeUnitRef == item.p.UnitRef && LabourExpenseRef != item.p.ExpenseTypeRef"><strong>Worked Hours
+                :</strong>{{
+            item.p.TimeDetails ?getTotalWorkedHours(item.p.TimeDetails):'-'
+              }}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row" *ngIf="ExpenseTypeRef == item.p.ExpenseTypeRef"><strong>Rate
+                :</strong>{{ item.p.Rate?item.p.Rate:'-' }}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"><strong>Amount :</strong>{{ item.p.Amount ?item.p.Amount:'-'}}</ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
             <div class="btn-row">
@@ -101,6 +111,11 @@
           <strong class="label">Sub Stage:</strong>
           <span class="value">{{ SelectedActualStages.p.SubStageName?SelectedActualStages.p.SubStageName:'-' }}</span>
         </div>
+        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.GutterNaleUnitName">
+          <strong class="label">Gutter Nale Unit:</strong>
+          <span class="value">{{ SelectedActualStages.p.GutterNaleUnitName?SelectedActualStages.p.GutterNaleUnitName:'-'
+            }}</span>
+        </div>
         <div class="info-row-of-model">
           <strong class="label">Expense Type:</strong>
           <span class="value">{{ SelectedActualStages.p.ExpenseTypeName?SelectedActualStages.p.ExpenseTypeName:'-'
@@ -160,17 +175,17 @@
         </div>
 
         <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==LabourExpenseRef">
-          <strong class="label">Ladies Quantity :</strong>
+          <strong class="label">women Quantity :</strong>
           <span class="value">{{ SelectedActualStages.p.LadiesQuantity?SelectedActualStages.p.LadiesQuantity:'-'
             }}</span>
         </div>
         <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==LabourExpenseRef">
-          <strong class="label">Ladies Rate :</strong>
+          <strong class="label">women Rate :</strong>
           <span class="value">{{ SelectedActualStages.p.LadiesRate?SelectedActualStages.p.LadiesRate:'-'
             }}</span>
         </div>
         <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==LabourExpenseRef">
-          <strong class="label">Ladies Amount :</strong>
+          <strong class="label">women Amount :</strong>
           <span class="value">{{ SelectedActualStages.p.LadiesAmount?SelectedActualStages.p.LadiesAmount:'-'
             }}</span>
         </div>
@@ -195,7 +210,8 @@
         </div>
         <div class="info-row-of-model" *ngIf="TimeUnitRef == SelectedActualStages.p.UnitRef">
           <strong class="label">Worked Hours:</strong>
-          <span class="value">{{ SelectedActualStages.p.TimeDetails?getTotalWorkedHours(SelectedActualStages.p.TimeDetails):'-'}}</span>
+          <span class="value">{{
+            SelectedActualStages.p.TimeDetails?getTotalWorkedHours(SelectedActualStages.p.TimeDetails):'-'}}</span>
         </div>
         <div class="info-row-of-model">
           <strong class="label">Rate:</strong>

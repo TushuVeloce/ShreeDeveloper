@@ -36,7 +36,7 @@ export class AddEditActualStageComponent implements OnInit {
   Entity: ActualStages = ActualStages.CreateNewInstance();
   ExpenseTypeEntity: ExpenseType = ExpenseType.CreateNewInstance();
   VendorServicesEntity: Vendor = Vendor.CreateNewInstance();
-  private IsNewEntity: boolean = true;
+  IsNewEntity: boolean = true;
   DetailsFormTitle: 'New Actual Stage' | 'Edit Actual Stage' = 'New Actual Stage';
   InitialEntity: ActualStages = null as any;
   isSaveDisabled: boolean = false;
@@ -311,6 +311,14 @@ export class AddEditActualStageComponent implements OnInit {
         await this.DiselPaid(this.Entity.p.IsDieselPaid)
         await this.OnStageChange(this.Entity.p.StageRef)
         this.getVendorServiceListByVendorRef(this.Entity.p.VendorRef);
+        this.selectedStage = [{ p: { Ref: this.Entity.p.StageRef, Name: this.Entity.p.StageName } }];
+        this.selectedExpenseType = [{ p: { Ref: this.Entity.p.ExpenseTypeRef, Name: this.Entity.p.ExpenseTypeName } }];
+        this.selectedSubStage = [{ p: { Ref: this.Entity.p.SubStageRef, Name: this.Entity.p.SubStageName } }];
+        this.selectedUnit = [{ p: { Ref: this.Entity.p.UnitRef, Name: this.Entity.p.UnitName } }];
+        this.selectedGutterNaleUnit = [{ p: { Ref: this.Entity.p.GutterNaleUnitRef, Name: this.Entity.p.GutterNaleUnitName } }];
+        this.selectedVendor = [{ p: { Ref: this.Entity.p.VendorRef, Name: this.Entity.p.VendorName } }];
+        this.selectedVendorService = [{ p: { Ref: this.Entity.p.VendorServiceRef, Name: this.Entity.p.VendorServiceName } }];
+        
         this.appStateManage.StorageKey.removeItem('Editable')
       } else {
         this.Entity = ActualStages.CreateNewInstance();
@@ -386,11 +394,11 @@ export class AddEditActualStageComponent implements OnInit {
   public async selectSubStageBottomsheet(): Promise<void> {
     try {
       if (this.Entity.p.StageRef <= 0) {
-        await this.uiUtils.showErrorToster('Please Select Stage');
+        await this.uiUtils.showErrorToster('Please Select sub Stage');
         return;
       }
       const options = this.SubStageList;
-      this.openSelectModal(options, this.selectedSubStage, false, 'Select Vendor', 1, (selected) => {
+      this.openSelectModal(options, this.selectedSubStage, false, 'Select sub Stage', 1, (selected) => {
         this.selectedSubStage = selected;
         this.Entity.p.SubStageRef = this.selectedSubStage[0].p.Ref;
         this.Entity.p.SubStageName = this.selectedSubStage[0].p.Name;
@@ -439,6 +447,7 @@ export class AddEditActualStageComponent implements OnInit {
         return;
       }
       const options = this.ExpenseTypeList;
+      console.log('options :', options);
       this.openSelectModal(options, this.selectedExpenseType, false, 'Select Expense Type', 1, (selected) => {
         this.selectedExpenseType = selected;
         this.Entity.p.ExpenseTypeRef = this.selectedExpenseType[0].p.ExpenseType;
