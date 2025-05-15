@@ -96,6 +96,7 @@ export class ActualStagesProps {
 
   public VehicleNo: string = '';
 
+  public GrandTotal: number = 0;
   public Amount: number = 0;
 
   public Total: number = 0;
@@ -144,18 +145,22 @@ export class ActualStages implements IPersistable<ActualStages> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
-    if (this.p.Description == '') {
-      vra.add('Description', 'Description cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Description)) {
-      vra.add('Description', ValidationMessages.NameWithNosAndSpaceMsg + ' for Description');
-    }
-    if (this.p.Amount == 0) {
-      vra.add('Amount', 'Amount cannot be blank.');
-    } else if (this.p.Amount < 0) {
-      vra.add('Amount', 'Amount cannot be less then 0.');
-    } else if (this.p.Amount.toString().includes('.')) {
-      vra.add('Amount', 'Rational Number not allowed for Amount');
-    }
+    if (this.p.SiteRef == 0) vra.add('SiteRef', 'Site Name cannot be blank.');
+    if (this.p.ChalanNo == 0) vra.add('ChalanNo', 'Chalan No cannot be blank.');
+    if (this.p.StageRef == 0) vra.add('StageRef', 'Stage Name cannot be blank.');
+    if (this.p.ExpenseTypeRef == 0) vra.add('ExpenseTypeRef', 'Expense Type cannot be blank.');
+    if (this.p.VendorRef == 0) vra.add('VendorRef', 'Vendor Name cannot be blank.');
+    if (this.p.UnitRef == 0) vra.add('UnitRef', 'Unit cannot be blank.');
+    // if (this.p.Description == '') {
+    //   vra.add('Description', 'Description cannot be blank.');
+    // } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Description)) {
+    //   vra.add('Description', ValidationMessages.NameWithNosAndSpaceMsg + ' for Description');
+    // }
+    // if (this.p.GrandTotal == 0) {vra.add('Amount', 'Amount cannot be blank.');} else if (this.p.GrandTotal < 0) {
+    //   vra.add('Amount', 'Amount cannot be less then 0.');
+    // } else if (this.p.GrandTotal.toString().includes('.')) {
+    //   vra.add('Amount', 'Rational Number not allowed for Amount');
+    // }
   }
 
   public MergeIntoTransportData(td: TransportData) {

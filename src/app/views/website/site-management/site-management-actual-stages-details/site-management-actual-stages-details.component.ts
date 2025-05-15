@@ -62,7 +62,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   isChalanDisabled=false
-  Amount:number = 0
   originalAmount: number = 0;
   strCDT: string = ''
   ExpenseTypeRef:number = ExpenseTypeRefs.MachinaryExpense
@@ -98,9 +97,9 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
        }
       this.isChalanDisabled = true
       if(this.Entity.p.TimeDetails.length>0){
-        this.Amount = this.getTotalWorkedHours()
+        this.Entity.p.Amount = this.getTotalWorkedHours()
       }else{
-        this.Amount = this.Entity.p.Rate * this.Entity.p.Quantity
+        this.Entity.p.Amount = this.Entity.p.Rate * this.Entity.p.Quantity
       }
       await this.DiselPaid(this.Entity.p.IsDieselPaid)
       await this.OnStageChange(this.Entity.p.StageRef)
@@ -314,11 +313,11 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
 
   ClearInputsOnExpenseChange = (ExpenseTypeRef:number) => {
     this.AddExpenseTypeToOther(ExpenseTypeRef)
-    this.Entity.p.Amount = 0;
+    this.Entity.p.GrandTotal = 0;
     this.Entity.p.UnitRef = 0;
     this.Entity.p.Quantity = 0;
     this.Entity.p.Rate = 0;
-    this.Amount = 0;
+    this.Entity.p.Amount = 0;
     if (this.Entity.p.ExpenseTypeRef == this.ExpenseTypeRef) {
       this.Entity.p.SkillRate = 0;
       this.Entity.p.SkillQuantity = 0;
@@ -348,8 +347,8 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     if( UnitRef == this.TimeUnitRef){
       this.Entity.p.Rate = 0
       this.Entity.p.Quantity = 0
-      this.Entity.p.Amount = 0,
-      this.Amount = 0
+      this.Entity.p.GrandTotal = 0,
+      this.Entity.p.Amount = 0
     }
     this.isDiselPaid = false
     this.DiselPaid(0)
@@ -366,7 +365,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
 
   CalculateTotalOnDiselRateAndLtr = () => {
     this.Entity.p.DieselTotalAmount = (this.Entity.p.DieselQuantity * this.Entity.p.DieselRate);
-    this.Entity.p.Amount = this.Entity.p.DieselTotalAmount + this.UnitQuantityTotal
+    this.Entity.p.GrandTotal = this.Entity.p.DieselTotalAmount + this.UnitQuantityTotal
     this.CalculateAmountOnRateAndQuantity()
   }
 
@@ -378,11 +377,11 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     const isDieselPaid = !!this.Entity.p.IsDieselPaid;
 
     if(TotalWorkedHours > 0){
-      this.Entity.p.Amount= rate * TotalWorkedHours - dieselAmount
-      this.Amount = rate * TotalWorkedHours
+      this.Entity.p.GrandTotal= rate * TotalWorkedHours - dieselAmount
+      this.Entity.p.Amount = rate * TotalWorkedHours
     }else{
-      this.Amount = rate * quantity
-      this.Entity.p.Amount= rate * quantity - dieselAmount
+      this.Entity.p.Amount = rate * quantity
+      this.Entity.p.GrandTotal= rate * quantity - dieselAmount
 
     }
   };
@@ -390,17 +389,17 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
 
   CalculateAmountOnSkillRateAndQuantity = () => {
     this.Entity.p.SkillAmount = (this.Entity.p.SkillRate * this.Entity.p.SkillQuantity);
-    this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
+    this.Entity.p.GrandTotal = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
   }
 
   CalculateAmountOnUnSkillRateAndQuantity = () => {
     this.Entity.p.UnskillAmount = (this.Entity.p.UnskillRate * this.Entity.p.UnskillQuantity);
-    this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
+    this.Entity.p.GrandTotal = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
   }
 
   CalculateAmountOnLadiesRateAndQuantity = () => {
     this.Entity.p.LadiesAmount = (this.Entity.p.LadiesRate * this.Entity.p.LadiesQuantity);
-    this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
+    this.Entity.p.GrandTotal = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
   }
 
   calculateWorkedHours() {
@@ -461,6 +460,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     this.ExpenseTypeEntity.p.StageRef = this.Entity.p.StageRef
     let entityToSave = this.ExpenseTypeEntity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
+    console.log('entitiesToSave :', entitiesToSave);
     await this.ExpenseTypeEntity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {

@@ -106,7 +106,7 @@
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.Quantity}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.Rate}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.UnitName}}</td>
-          <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.Amount}}</td>
+          <td Class="tbldata" style="white-space: nowrap;">{{MachinaryExpense.p.GrandTotal}}</td>
           <td class="tbldata" style="white-space: nowrap;">
             <Edit-Icon (editClick)="onEditClicked(MachinaryExpense)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(MachinaryExpense)" />
@@ -155,7 +155,7 @@
           <td Class="tbldata" style="white-space: nowrap;">{{LabourExpense.p.VendorName}}</td>
           <!-- <td Class="tbldata">{{LabourExpense.p.Rate}}</td>
           <td Class="tbldata">{{LabourExpense.p.Quantity}}</td> -->
-          <td Class="tbldata" style="white-space: nowrap;">{{LabourExpense.p.Amount}}</td>
+          <td Class="tbldata" style="white-space: nowrap;">{{LabourExpense.p.GrandTotal}}</td>
           <td class="tbldata" style="white-space: nowrap;">
             <Edit-Icon (editClick)="onEditClicked(LabourExpense)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(LabourExpense)" />
@@ -205,7 +205,7 @@
           <!-- <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.VendorName}}</td> -->
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.Quantity}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.Rate}}</td>
-          <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.Amount}}</td>
+          <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.GrandTotal}}</td>
           <td class="tbldata" style="white-space: nowrap;">
             <span>
               <Edit-Icon (editClick)="onEditClicked(OtherExpense)" />
