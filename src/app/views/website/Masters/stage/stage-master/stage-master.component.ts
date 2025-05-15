@@ -44,7 +44,7 @@ export class StageMasterComponent implements OnInit {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
     }
-    let lst = await Stage.FetchEntireList(
+    let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(),
     async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
   );
     this.MasterList = lst.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);

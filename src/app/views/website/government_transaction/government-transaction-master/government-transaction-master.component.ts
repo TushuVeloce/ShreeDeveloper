@@ -39,7 +39,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    await this.FormulateGovernmentTransactionList();
+    await this.FormulateGovernmentTransactionListByCompanyRef();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
@@ -47,15 +47,18 @@ export class GovernmentTransactionMasterComponent implements OnInit {
   groupCompletionStatus: { [ref: string]: { [groupName: string]: boolean } } = {};
   SiteList: Site[] = [];
 
-  FormulateGovernmentTransactionList = async () => {
+  FormulateGovernmentTransactionListByCompanyRef = async () => {
     // fetching government transaction list by company ref
     // let lst = await GovernmentTransaction.FetchEntireListByCompanyRef(
     //   this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
 
     //  fetching entire government transaction list
-
+ if (this.companyRef() <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+    }
     this.DisplayMasterList = [];
-    let lst = await GovernmentTransaction.FetchEntireList(async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await GovernmentTransaction.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
 
@@ -173,7 +176,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
           await this.uiUtils.showSuccessToster(
             `GovernmentTransaction ${GovernmentTransaction.p.SiteName} has been deleted!`
           );
-          await this.FormulateGovernmentTransactionList();
+          await this.FormulateGovernmentTransactionListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
 

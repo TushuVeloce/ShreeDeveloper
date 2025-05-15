@@ -45,14 +45,8 @@ export class EmployeeMasterComponent implements OnInit {
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    // this.FormulateMasterList();
   }
 
-  // private FormulateMasterList = async () => {
-  //   let lst = await Employee.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.MasterList = lst;
-  //   this.DisplayMasterList = this.MasterList
-  // }
 
   getEmployeeListByCompanyRef = async () => {
     this.MasterList = [];

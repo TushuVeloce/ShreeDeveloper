@@ -40,12 +40,6 @@ export class UserRoleMasterComponent implements OnInit {
     // this.FormulateMaterialList();
   }
 
-  // private FormulateMaterialList = async () => {
-  //   let lst = await UserRole.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.MasterList = lst;
-  //   this.DisplayMasterList = this.MasterList
-  // }
-
   getUserRoleListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];

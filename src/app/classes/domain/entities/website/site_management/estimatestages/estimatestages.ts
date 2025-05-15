@@ -186,6 +186,13 @@ export class EstimateStages implements IPersistable<EstimateStages> {
     return EstimateStages.ListFromTransportData(tdResponse);
   }
 
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new EstimateStagesFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await EstimateStages.FetchTransportData(req, errorHandler) as TransportData;
+    return EstimateStages.ListFromTransportData(tdResponse);
+  }
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

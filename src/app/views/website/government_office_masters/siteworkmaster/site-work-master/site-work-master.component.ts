@@ -54,19 +54,9 @@ export class SiteWorkMasterComponent implements OnInit {
   async ngOnInit() {
     this.SiteWorkGroupList = await SiteWorkGroup.FetchEntireList();
     this.appStateManage.setDropdownDisabled(false);
-    // await this.FormulateSiteWorkMasterList();
-    // this.DisplayMasterList = [];
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
-  // private FormulateSiteWorkMasterList = async () => {
-  //   let lst = await SiteWorkMaster.FetchEntireList(
-  //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-  //   );
-  //   this.MasterList = lst;
-  //   this.DisplayMasterList = this.MasterList;
-  //   this.loadPaginationData();
-  // };
 
   getSiteWorkMasterListByCompanyRef = async () => {
     this.MasterList = [];

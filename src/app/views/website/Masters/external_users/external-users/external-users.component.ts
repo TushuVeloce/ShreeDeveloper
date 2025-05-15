@@ -36,12 +36,6 @@ export class ExternalUsersComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(false);
   }
 
-  // private FormulateMasterList = async () => {
-  //   let lst = await User.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.MasterList = lst;
-  //   this.DisplayMasterList = this.MasterList
-  // }
-
   getExternalUsersListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];

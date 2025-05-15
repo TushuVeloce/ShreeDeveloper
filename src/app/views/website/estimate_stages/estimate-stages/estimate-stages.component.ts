@@ -47,7 +47,7 @@ export class EstimateStagesComponent implements OnInit {
       });
     }
     if(this.SiteRef == 0){
-      this.getEstimatedStagesList()
+      this.getEstimatedStagesListByCompanyRef()
     }
   }
 
@@ -72,7 +72,7 @@ export class EstimateStagesComponent implements OnInit {
     if(this.SiteRef == 0){
       this.appStateManage.StorageKey.removeItem('EstSiteRef');
       this.appStateManage.StorageKey.removeItem('EstSiteName');
-      this.getEstimatedStagesList()
+      this.getEstimatedStagesListByCompanyRef()
     }
     if (siteref > 0 && this.SiteList.length > 0) {
       this.Entity.p.SiteRef = siteref;
@@ -87,10 +87,14 @@ export class EstimateStagesComponent implements OnInit {
   }
 
 
-    getEstimatedStagesList = async () => {
+    getEstimatedStagesListByCompanyRef = async () => {
       this.MasterList = [];
       this.DisplayMasterList = [];
-      let lst = await EstimateStages.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+       if (this.companyRef() <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+    }
+      let lst = await EstimateStages.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
       this.loadPaginationData();

@@ -33,17 +33,10 @@ export class EmployeeAppraisalMasterComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // await this.FormulateMasterList();
     this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
   }
 
-  // private FormulateMasterList = async () => {
-  //   let lst = await EmployeeAppraisal.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.MasterList = lst;
-  //   this.DisplayMasterList = this.MasterList
-  //   this.loadPaginationData();
-  // }
 
   getEmployeeAppraisalListByCompanyRef = async () => {
     this.MasterList = [];

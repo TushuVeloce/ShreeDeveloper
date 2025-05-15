@@ -40,19 +40,9 @@ export class DocumentListComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    // await this.FormulateDocumentList();
-    // this.DisplayMasterList = [];
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
-  // private FormulateDocumentList = async () => {
-  //   let lst = await Document.FetchEntireList(
-  //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-  //   );
-  //   this.MasterList = lst;
-  //   this.DisplayMasterList = this.MasterList;
-  //   this.loadPaginationData();
-  // };
 
   getDocumentListByCompanyRef = async () => {
     this.MasterList = [];

@@ -57,16 +57,11 @@ export class SiteWorkMasterDetailComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    // debugger
-    this.SiteWorkGroupList = await SiteWorkGroup.FetchEntireList();
+    this.FormulateSiteWorkGroupListByCompanyRef()
 
     this.appStateManage.setDropdownDisabled(true);
     const SiteGroupRef = this.appStateManage.StorageKey.getItem('sitegroup');
     this.Entity.p.SiteWorkGroupRef = SiteGroupRef ? Number(SiteGroupRef) : 0;
-
-    // const sitegroupName = this.appStateManage.StorageKey.getItem('siteName');
-    // this.SiteGroupName = sitegroupName ? sitegroupName : '';
-
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
 
@@ -83,12 +78,19 @@ export class SiteWorkMasterDetailComponent implements OnInit {
       SiteWorkMaster.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as SiteWorkMaster;
-    // this.focusInput();
   }
 
-  // onApplicableTypeChange(selectedvalue: any) {
-  //   this.Entity.p.ListOfApplicableTypes = selectedvalue;
-  // }
+  private FormulateSiteWorkGroupListByCompanyRef = async () => {
+      if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await SiteWorkGroup.FetchEntireListByCompanyRef(this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.SiteWorkGroupList = lst.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
+
+  };
 
   SaveSiteWorkMaster = async () => {
     this.Entity.p.CompanyRef =
@@ -96,19 +98,14 @@ export class SiteWorkMasterDetailComponent implements OnInit {
     this.Entity.p.CompanyName =
       this.companystatemanagement.getCurrentCompanyName();
     let entityToSave = this.Entity.GetEditableVersion();
-
-
     let entitiesToSave = [entityToSave];
-    // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     } else {
       this.isSaveDisabled = false;
-      // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster(
           'Site Work Master  saved successfully!'

@@ -36,8 +36,6 @@ export class ExternalUsersMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true)
-    // this.UserRoleList = await UserRole.FetchEntireList();
-    // this.DepartmentList = await Department.FetchEntireList();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New External User' : 'Edit External User';

@@ -163,12 +163,13 @@ export class SiteWorkGroup implements IPersistable<SiteWorkGroup> {
     let tdResponse = await SiteWorkGroup.FetchTransportData(req, errorHandler) as TransportData;
     return SiteWorkGroup.ListFromTransportData(tdResponse);
   }
-  // public static async FetchEntireListByProjectRef(ProjectRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-  //   let req = new SiteWorkGroupFetchRequest();
-  //   req.GAAProjectRefs.push(ProjectRef)
-  //   let tdResponse = await SiteWorkGroup.FetchTransportData(req, errorHandler) as TransportData;
-  //   return SiteWorkGroup.ListFromTransportData(tdResponse);
-  // }
+
+  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new SiteWorkGroupFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await SiteWorkGroup.FetchTransportData(req, errorHandler) as TransportData;
+    return SiteWorkGroup.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

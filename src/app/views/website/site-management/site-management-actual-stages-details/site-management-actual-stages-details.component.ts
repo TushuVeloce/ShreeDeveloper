@@ -460,7 +460,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     this.ExpenseTypeEntity.p.StageRef = this.Entity.p.StageRef
     let entityToSave = this.ExpenseTypeEntity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
-    console.log('entitiesToSave :', entitiesToSave);
     await this.ExpenseTypeEntity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {

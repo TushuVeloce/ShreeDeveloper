@@ -42,37 +42,18 @@ export class SiteWorkDoneMasterComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
-      // this.getSiteWorkDoneListByCompanyRef()
       await this.getSiteWorkDoneListByCompanyRef();
     });
   }
 
-  // effect(() => {
-  //   // this.getSiteWorkDoneListByCompanyRef()
-  //   setTimeout(() => {
-  //     if (this.companyRef() > 0) {
-  //       this.getSiteWorkDoneListByCompanyRef();
-  //     }
-  //   }, 300);
-  // });
 
   async ngOnInit() {
     this.SiteWorkGroupList = await SiteWorkGroup.FetchEntireList();
     this.SiteWorkMasterList = await SiteWorkMaster.FetchEntireList();
     this.appStateManage.setDropdownDisabled(false);
-    // await this.FormulateSiteWorkDoneList();
-    // this.DisplayMasterList = [];
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
-  // private FormulateSiteWorkDoneList = async () => {
-  //   let lst = await SiteWorkDone.FetchEntireList(
-  //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-  //   );
-  //   this.MasterList = lst;
-  //   this.DisplayMasterList = this.MasterList;
-  //   this.loadPaginationData();
-  // };
 
   getSiteWorkDoneListByCompanyRef = async () => {
     this.MasterList = [];
@@ -95,20 +76,11 @@ export class SiteWorkDoneMasterComponent implements OnInit {
     this.DisplaySiteWorkMasterList = [];
     this.Entity.p.SiteWorkRef = 0;
     if (siteGroupRef > 0) {
-      // this.Entity.p.SiteWorkGroupRef = sitework;
-      // const selectedSiteWorkref = this.SiteWorkMasterList.find(
-      //   (site) => site.p.Ref === sitework
-      // );
-      // if (!selectedSiteWorkref) {
-      //   return;
-      // }
       this.DisplaySiteWorkMasterList = this.SiteWorkMasterList.filter(e => e.p.SiteWorkGroupRef == siteGroupRef);
     }
   }
 
   onEditClicked = async (item: SiteWorkDone) => {
-    // let props = Object.assign(SiteWorkDoneProps.Blank(),item.p);
-    // this.SelectedSiteWorkDone = SiteWorkDone.CreateInstance(props,true);
 
     this.SelectedSiteWorkDone = item.GetEditableVersion();
 
@@ -132,7 +104,6 @@ export class SiteWorkDoneMasterComponent implements OnInit {
           await this.getSiteWorkDoneListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
-          // await this.FormulateSiteWorkDoneList();
         });
       }
     );
@@ -181,13 +152,6 @@ export class SiteWorkDoneMasterComponent implements OnInit {
     this.DisplayMasterList = [];
     this.SiteGroup = sitework;
     if (sitework > 0) {
-      // this.Entity.p.SiteWorkGroupRef = sitework;
-      // const selectedSiteWorkref = this.SiteWorkMasterList.find(
-      //   (site) => site.p.Ref === sitework
-      // );
-      // if (!selectedSiteWorkref) {
-      //   return;
-      // }
       let List = this.MasterList.filter(e => e.p.SiteWorkRef == sitework)
       this.DisplayMasterList = List.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
 

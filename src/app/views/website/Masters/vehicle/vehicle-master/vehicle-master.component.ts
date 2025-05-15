@@ -33,16 +33,9 @@ export class VehicleMasterComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    //   await this.FormulateMasterList();
     this.loadPaginationData();
   }
 
-  //  private FormulateMasterList = async () => {
-  //     let lst = await Vehicle.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //     this.MasterList = lst;
-  //     this.DisplayMasterList = this.MasterList
-  //     this.loadPaginationData();
-  //   }
 
   getVehicleListByCompanyRef = async () => {
     this.MasterList = [];
