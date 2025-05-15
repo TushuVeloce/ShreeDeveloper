@@ -74,6 +74,7 @@ export class MaterialMasterDetailsComponent implements OnInit {
     let lst = await Unit.FetchEntireList(
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
+    this.UnitList = lst
   };
 
   SaveMaterialMaster = async () => {
