@@ -10,6 +10,7 @@ import { Country } from 'src/app/classes/domain/entities/website/masters/country
 import { State } from 'src/app/classes/domain/entities/website/masters/state/state';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
@@ -65,12 +66,15 @@ export class CompanyMasterDetailsComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private dtu: DTU,
     private datePipe: DatePipe,
-    private http: HttpClient
+    private http: HttpClient,
+    private baseUrl: BaseUrlService
   ) { }
 
 
   async ngOnInit() {
-    this.ImageBaseUrl = this.appStateManage.BaseImageUrl;
+    // this.ImageBaseUrl = this.appStateManage.BaseImageUrl;
+    this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
+
     this.LoginToken = this.appStateManage.getLoginToken();
 
     this.appStateManage.setDropdownDisabled(true);

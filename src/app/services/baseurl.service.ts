@@ -34,4 +34,29 @@ export class BaseUrlService {
 
     return baseURLstring;
   }
+
+     public GenerateImageBaseUrl() {
+    // let ImageBaseUrl: string = "http://192.168.29.68:5000/uploadeddocumentpath/";  //For Backend Developers
+    let ImageBaseUrl: string = "http://localhost:5100/uploadeddocumentpath/";  //For Frontend Developers
+
+    //let baseURLstring = ``;
+
+    // if (window.location.hostname.includes('enscloud.in')) {
+    //   baseURLstring = `https://enscloud.in/gladiancedev-gladiance-web-api`;
+    // } else if (window.location.hostname.includes('gladiance.one')) {
+    //   if (window.location.toString().includes("://dev."))
+    //   {
+    //     baseURLstring = `https://dev.api.gladiance.one/gladiancecloud-web-api`;
+    //   }
+    //   else
+    //   {
+    //     baseURLstring = `https://api.gladiance.one/gladiancecloud-web-api`;
+    //   }
+    // } else {
+    //   // baseURLstring = `https://localhost:5001`;
+    //   baseURLstring = `https://api.gladiance.one/gladiancecloud-web-api`;
+    // }
+
+    return ImageBaseUrl;
+  }
 }
