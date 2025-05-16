@@ -14,6 +14,7 @@ import { UserLoginRequest } from '../classes/infrastructure/request_response/use
 import { AppStateManageService } from './app-state-manage.service';
 import { RequestTypes } from '../classes/infrastructure/enums';
 import { CompanyStateManagement } from './companystatemanagement';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -703,6 +704,28 @@ export class ServerCommunicatorService {
     }
     catch (error) {
       return error as string;
+    }
+  }
+
+  public async DownloadDocument(documentPath: string, loginToken: string): Promise<Blob | null> {
+    try {
+      const apiRoot = this.sessionValues.requestController;
+      const encodedPath = encodeURIComponent(documentPath);
+      const url = `${apiRoot}/uploadeddocumentpath/${encodedPath}/${loginToken}`;
+
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json'
+      });
+
+      const response = await firstValueFrom(this.http.get(url, {
+        headers: headers,
+        responseType: 'blob'
+      }));
+
+      return response;
+    } catch (error) {
+      console.error('Download failed:', error);
+      return null;
     }
   }
 }

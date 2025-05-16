@@ -316,4 +316,99 @@ public async handleImageSelection(
   });
 }
 
+public getMimeTypeFromFileName = (mimeType: string): string => {
+
+  const mimeToExtensionMap: { [key: string]: string[] } = {
+    // Documents
+    'application/pdf': ['.pdf'],
+    'text/plain': ['.txt'],
+    'text/markdown': ['.md'],
+    'application/msword': ['.doc'],
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+    'application/vnd.ms-excel': ['.xls'],
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+    'application/vnd.ms-powerpoint': ['.ppt'],
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
+    'application/epub+zip': ['.epub'],
+    'application/x-mobipocket-ebook': ['.mobi'],
+    'application/rtf': ['.rtf'],
+    'application/vnd.oasis.opendocument.text': ['.odt'],
+    'application/vnd.oasis.opendocument.spreadsheet': ['.ods'],
+    'application/vnd.oasis.opendocument.presentation': ['.odp'],
+    
+    // Images
+    'image/jpeg': ['.jpg', '.jpeg'],
+    'image/png': ['.png'],
+    'image/gif': ['.gif'],
+    'image/bmp': ['.bmp'],
+    'image/tiff': ['.tiff'],
+    'image/svg+xml': ['.svg'],
+    'image/x-icon': ['.ico'],
+    
+    // Audio
+    'audio/mpeg': ['.mp3'],
+    'audio/wav': ['.wav'],
+    'audio/ogg': ['.ogg'],
+    'audio/flac': ['.flac'],
+    'audio/aac': ['.aac'],
+    'audio/midi': ['.midi', '.mid'],
+    
+    // Video
+    'video/mp4': ['.mp4'],
+    'video/x-msvideo': ['.avi'],
+    'video/quicktime': ['.mov'],
+    'video/x-ms-wmv': ['.wmv'],
+    'video/webm': ['.webm'],
+    'video/ogg': ['.ogv'],
+    
+    // Archives
+    'application/zip': ['.zip'],
+    'application/x-tar': ['.tar'],
+    'application/gzip': ['.gz'],
+    'application/x-bzip2': ['.bz2'],
+    'application/x-7z-compressed': ['.7z'],
+    'application/x-rar-compressed': ['.rar'],
+    'application/x-iso9660-image': ['.iso'],
+    'application/x-debian-package': ['.deb'],
+    'application/x-rpm': ['.rpm'],
+    
+    // Web
+    'text/html': ['.html', '.htm'],
+    'text/css': ['.css'],
+    'application/javascript': ['.js'],
+    'application/json': ['.json'],
+    'application/xml': ['.xml'],
+    'text/csv': ['.csv'],
+    'application/ld+json': ['.jsonld'],
+    'application/xhtml+xml': ['.xhtml'],
+    
+    // Fonts
+    'font/woff': ['.woff'],
+    'font/woff2': ['.woff2'],
+    'font/ttf': ['.ttf'],
+    'font/otf': ['.otf'],
+    
+    // Miscellaneous
+    'application/postscript': ['.ps'],
+    'application/vnd.android.package-archive': ['.apk'],
+    'application/vnd.apple.installer+xml': ['.ipa'],
+    'application/x-xpinstall': ['.xpi'],
+    'application/x-shockwave-flash': ['.swf'],
+    'application/x-bittorrent': ['.torrent'],
+    'application/x-apple-diskimage': ['.dmg'],
+    'application/octet-stream': ['.bin'],
+    'application/vnd.ms-fontobject': ['.eot'],
+    
+    // Other
+    'text/yaml': ['.yaml', '.yml'],
+    'text/calendar': ['.ics'],
+    'text/vcard': ['.vcf'],
+    'application/xml-dtd': ['.dtd'],
+  };
+  
+  return mimeToExtensionMap[mimeType]?.[0] || '';
+}
+
+
+
 }

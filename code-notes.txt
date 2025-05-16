@@ -1,0 +1,4 @@
+Module required for Download Documents
+1. npm install @capacitor/filesystem@6.0.0 --force
+2. npm install @capacitor/device@6.0.0 --force
+3. npm i @types/mime-types --force 

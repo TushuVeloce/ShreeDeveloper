@@ -3,6 +3,13 @@ import { Router } from '@angular/router';
 import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+
+import { Device } from '@capacitor/device';
+import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
+import { Utils } from 'src/app/services/utils.service';
+
+
 
 @Component({
   selector: 'app-company-master',
@@ -23,7 +30,8 @@ export class CompanyMasterComponent implements OnInit {
 
   headers: string[] = ['Sr.No.', 'Name', 'Owner Names', 'Contacts','Country ','State ','City ',' GST No',' Pan No', 'Action'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService) { }
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,
+    private serverCommunicatorService: ServerCommunicatorService) { }
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -57,6 +65,78 @@ export class CompanyMasterComponent implements OnInit {
           this.FormulateMasterList();
         });
       });
+  }
+
+  OnDownloadDocument = async (company: Company) => {
+    await this.uiUtils.showConfirmationMessage('Download',
+      `Are you sure that you want to Download?`,
+      async () => {
+       await this.downloadDocument(company)
+      });
+  }
+
+  downloadDocument = async (SelectItem: Company) => {
+    // code for download image
+    try {
+      
+      let blobResponse = await this.serverCommunicatorService.DownloadDocument(SelectItem.p.LogoPath, this.appStateManage.getLoginToken())
+      console.log(blobResponse);
+      if (blobResponse == null || undefined) {
+        alert("Error to get file")
+        return
+      }
+      
+      const platformInfo = await Device.getInfo();
+     // const ext = extension(blobResponse.type); // e.g., "pdf"
+      // let ext2 = mime.extension('text/plain');
+      let ext2 = Utils.GetInstance().getMimeTypeFromFileName(blobResponse.type);
+      let fileName = SelectItem.p.LogoPath || 'downloaded-file' + '.'+ ext2;
+      if (platformInfo.platform === 'web') {
+        this.downloadInBrowser(blobResponse, fileName);
+      } else {
+        const base64Data = await this.convertBlobToBase64(blobResponse);
+        const customPath = `Credai/${fileName}`;
+
+        // await Filesystem.writeFile({
+        //   path: fileName,
+        //   data: base64Data,
+        //   directory: Directory.Documents
+        // });
+
+        await Filesystem.writeFile({
+          path: customPath,
+          data: base64Data,
+          directory: Directory.Documents,
+          recursive: true
+        });
+        alert(`File saved to Documents folder: ${fileName}`);
+      }
+
+    } catch (error) {
+      console.error('Download error:', error);
+
+    }
+  }
+
+  private downloadInBrowser = (blob: Blob, filename: string)=> {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  private convertBlobToBase64 = (blob: Blob): Promise<string> => {
+    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+      reader.onerror = () => reject('File reading failed');
+      reader.onload = () => {
+        const base64 = (reader.result as string).split(',')[1];
+        resolve(base64);
+      };
+      reader.readAsDataURL(blob);
+    });
   }
 
   // For Pagination  start ----
