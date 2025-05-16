@@ -17,7 +17,7 @@
     </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
+        <div class="col-md-6">
           <label for="StageRef"><b>Stage</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" [disabled]="IsDropdownDisabled" nzShowSearch
             nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef" name="StageRef"
@@ -25,7 +25,7 @@
             <nz-option *ngFor="let Stage of StageList" [nzLabel]="Stage.p.Name" [nzValue]="Stage.p.Ref"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <label>Name</label>
           <input type="text" [readOnly]="isAdd" onclick="" [(ngModel)]="Entity.p.Name" name="Name" class="form-control"
             id="Name" placeholder="Enter Name" pattern="{{NameWithNosAndSpace}}" #NameCtrl="ngModel" required
@@ -36,6 +36,8 @@
           </div>
         </div>
       </div>
+      <br>
+      <p style="color: red;"><b>Note : </b>Please Do Not add <b>"Macinary Expense", "Labour Expense"</b>  and <b>"Other Expense"</b> here</p>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
           <button type="button" class="btn" (click)="SaveExpenseTypeMaster()" [disabled]="isSaveDisabled">Save</button>

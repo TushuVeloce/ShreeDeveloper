@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UnitRefs } from 'src/app/classes/domain/constants';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
@@ -21,6 +22,7 @@ export class UnitMasterComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
+  TimeUnitRef:number = UnitRefs.TimeUnitRef
 
   headers: string[] = ['Sr.No.', 'Unit', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService) { }

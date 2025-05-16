@@ -55,21 +55,18 @@ export class StageMasterDetailsComponent implements OnInit {
     txtName.focus();
   }
 
-  ClearStageType =()=>{
-    if(this.Entity.p.IsStageTypeApplicable == false){
-      this.Entity.p.StageType =0;
-    }
+ onStageTypeApplicableChange(value: boolean): void {
+  if (!value) {
+    this.Entity.p.StageType = 0;
   }
+}
+
 
   SaveStageMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-    if(!this.Entity.p.IsSubStageApplicable){
-      this.Entity.p.StageType = 0;
-    }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
-
     await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
