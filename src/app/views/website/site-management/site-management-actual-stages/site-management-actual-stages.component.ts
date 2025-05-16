@@ -64,11 +64,11 @@ export class SiteManagementActualStagesComponent implements OnInit {
   }
 
   async ngOnInit() {
+  this.appStateManage.setDropdownDisabled(false);
     this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.StageList = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.appStateManage.setDropdownDisabled(false);
   }
 
   // Extracted from services date conversion //

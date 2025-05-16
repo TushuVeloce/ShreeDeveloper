@@ -216,9 +216,10 @@ export class Vendor implements IPersistable<Vendor> {
     return tdResponse;
   }
 
-  public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchInstance(ref: number,CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new VendorFetchRequest();
     req.VendorRefs.push(ref);
+     req.CompanyRefs.push(CompanyRef);
 
     let tdResponse = await Vendor.FetchTransportData(req, errorHandler) as TransportData;
     return Vendor.SingleInstanceFromTransportData(tdResponse);

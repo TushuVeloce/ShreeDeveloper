@@ -26,8 +26,8 @@
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{Unit.p.Name}}</td>
           <td class="tbldata">
-            <Edit-Icon (editClick)="onEditClicked(Unit)" />
-            <Delete-Icon (deleteClicked)="onDeleteClicked(Unit)" />
+            <Edit-Icon (editClick)="onEditClicked(Unit)"  [class.disabled-icon]="Unit.p.Ref === TimeUnitRef" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(Unit)"  [class.disabled-icon]="Unit.p.Ref === TimeUnitRef"/>
           </td>
         </tr>
       </tbody>
