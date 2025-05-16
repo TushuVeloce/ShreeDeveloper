@@ -63,7 +63,7 @@ export class DesignationMasterDetailsComponent implements OnInit {
       this.utils.DeepCopy(this.Entity)
     ) as Designation;
     this.focusInput();
-    await this.FormulateDepartmentList();
+    // await this.FormulateDepartmentList();
     await this.getDepartmentListByCompanyRef();
   }
 
@@ -81,13 +81,13 @@ export class DesignationMasterDetailsComponent implements OnInit {
     this.DepartmentList = lst;
   }
 
-  public FormulateDepartmentList = async () => {
-    let lst = await Department.FetchEntireListByCompanyRef(this.companyRef(),
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-    this.DepartmentList = lst;
-    this.Entity.p.DepartmentRef = this.DepartmentList[0].p.Ref;
-  };
+  // public FormulateDepartmentList = async () => {
+  //   let lst = await Department.FetchEntireListByCompanyRef(this.companyRef(),
+  //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+  //   );
+  //   this.DepartmentList = lst;
+    // this.Entity.p.DepartmentRef = this.DepartmentList[0].p.Ref;
+  // };
 
   // for value 0 selected while click on Input //
   selectAllValue(event: MouseEvent): void {

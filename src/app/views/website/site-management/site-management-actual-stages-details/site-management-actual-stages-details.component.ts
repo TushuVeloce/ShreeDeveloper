@@ -300,7 +300,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       this.Entity.p.VendorServiceRef = 0
     }
     this.VendorServiceList = []
-    let lst = await Vendor.FetchInstance(VendorRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Vendor.FetchInstance(VendorRef,this.companyRef(),async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.VendorServiceList = lst.p.ServiceListSuppliedByVendor;
   }
 
