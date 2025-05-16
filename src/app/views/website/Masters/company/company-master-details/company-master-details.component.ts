@@ -1,6 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
@@ -34,19 +33,20 @@ export class CompanyMasterDetailsComponent implements OnInit {
   IsDropdownDisabled: boolean = false;
   InitialEntity: Company = null as any;
   CompanyTypeList = DomainEnums.CompanyTypeList(true, '--Select Company Type--');
-  errors = { company_image: '' };
-  allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
   dateOfInCorporation: string | null = null;
   lastDateOfFirstFinancialYear: string | null = null;
-  ImageBaseUrl: string = "";
 
+  ImageBaseUrl: string = "";
+  errors = { company_image: '' };
+
+  imagePreviewUrl: string | null = null;
+  selectedFileName: string | null = null;
 
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
   Email: string = ValidationPatterns.Email
   PinCode: string = ValidationPatterns.PinCode;
   GSTIN: string = ValidationPatterns.GSTIN;
   PAN: string = ValidationPatterns.PAN;
-
 
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   PinCodeMsg: string = ValidationMessages.PinCodeMsg;
@@ -58,21 +58,19 @@ export class CompanyMasterDetailsComponent implements OnInit {
   TimeStamp = Date.now()
   LoginToken = '';
 
+  @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
+
   constructor(
     private router: Router,
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
     private utils: Utils,
-    private cdr: ChangeDetectorRef,
     private dtu: DTU,
     private datePipe: DatePipe,
-    private http: HttpClient,
     private baseUrl: BaseUrlService
   ) { }
 
-
   async ngOnInit() {
-    // this.ImageBaseUrl = this.appStateManage.BaseImageUrl;
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
 
     this.LoginToken = this.appStateManage.getLoginToken();
@@ -98,6 +96,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
       this.Entity = Company.GetCurrentInstance();
       this.imageUrl = this.Entity.p.LogoPath;
 
+      this.loadImageFromBackend(this.Entity.p.LogoPath)
       // While Edit Converting date String into Date Format //
       this.dateOfInCorporation = this.datePipe.transform(
         this.dtu.FromString(this.Entity.p.DateOfInCorporation),
@@ -111,6 +110,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
       );
 
       this.appStateManage.StorageKey.removeItem('Editable');
+
       if (this.Entity.p.CountryRef) {
         await this.getStateListByCountryRef(this.Entity.p.CountryRef);
       }
@@ -122,32 +122,38 @@ export class CompanyMasterDetailsComponent implements OnInit {
       this.dateOfInCorporation = ''; // Clear Date
       this.lastDateOfFirstFinancialYear = ''; // Clear Date
     }
+
     this.InitialEntity = Object.assign(Company.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Company;
-
-    // this.focusInput();
-    const fullUrl = this.ImageBaseUrl + this.imageUrl;
-    // this.http.get(fullUrl, { responseType: 'blob' }).subscribe(blob => {
-    //   this.imageBlobUrl = URL.createObjectURL(blob);
-    // });
   }
-  onImageUpload = async (event: any) => {
-    const result = await this.utils.handleImageSelection(
-      event,
-      this.allowedImageTypes
-    );
 
-    if (result.error) {
-      // If there is an error, show it and reset values
-      this.file = null;
-      this.imageUrl = null;
-      this.errors.company_image = result.error;
+  // Call this when editing existing data
+  loadImageFromBackend(imageUrl: string): void {
+    if (imageUrl) {
+      this.imagePreviewUrl = `${this.ImageBaseUrl}${imageUrl}/${this.LoginToken}?${this.TimeStamp}`;
+      this.selectedFileName = imageUrl;
     } else {
-      // If valid, assign values
-      this.file = result.file;
-      // this.imageUrl = result.imageUrl;
-      this.errors.company_image = '';
-      this.Entity.p.CompanyLogo = this.file!;
+      this.imagePreviewUrl = null;
     }
+  }
+
+  // On file selected
+  onImageUpload(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      this.Entity.p.CompanyLogo = input.files[0];
+      this.selectedFileName = this.Entity.p.CompanyLogo.name;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreviewUrl = reader.result as string;
+      };
+      reader.readAsDataURL(this.Entity.p.CompanyLogo);
+    }
+  }
+
+  // Trigger file input when clicking the image
+  triggerFileInput(): void {
+    this.fileInputRef.nativeElement.click();
   }
 
   FormulateCountryList = async () => {
@@ -222,9 +228,13 @@ export class CompanyMasterDetailsComponent implements OnInit {
         entityToSave.p.LastDateOfFirstFinancialYear = '';
       }
     }
-    let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("Company_Logo", this.Entity.p.CompanyLogo, this.Entity.p.CompanyLogo.name)];
     let entitiesToSave = [entityToSave];
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+    if (this.Entity.p.CompanyLogo != null) {
+      let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("Company_Logo", this.Entity.p.CompanyLogo, this.Entity.p.CompanyLogo.name)];
+      let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+    }
+
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
       this.isSaveDisabled = false;
@@ -232,7 +242,6 @@ export class CompanyMasterDetailsComponent implements OnInit {
       return;
     } else {
       this.isSaveDisabled = false;
-      // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Company saved successfully!');
         this.dateOfInCorporation = '';
@@ -246,10 +255,6 @@ export class CompanyMasterDetailsComponent implements OnInit {
       }
     }
   };
-
-  createObjectURL = (file: File): string => {
-    return URL.createObjectURL(file);
-  }
 
   BackCompany = () => {
     this.router.navigate(['/homepage/Website/Company_Master']);

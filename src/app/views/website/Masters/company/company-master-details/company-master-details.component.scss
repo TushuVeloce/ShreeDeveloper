@@ -1,11 +1,11 @@
 /* Company image styling */
 .Company-Logo-container {
-    display: flex;
+    // display: flex;
     flex-direction: column;
     align-items: end;
-  
+
   }
-  
+
   .Company-Logo {
     width: 250px;
     height: 200px;
@@ -13,8 +13,13 @@
     border-radius: 8PX;
     // margin-top: 1rem;
   }
-  
+
   .file-upload {
     width: 220px;
   }
-  
+
+  .Upload-Icon{
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+  }

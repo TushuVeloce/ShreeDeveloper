@@ -172,11 +172,10 @@
             <div class="text-align-center">
               <label><b>Company Logo </b></label>
             </div>
-            <div class="Company-Logo-container">
+            <!-- <div class="Company-Logo-container">
               <ng-container *ngIf="imageUrl; else defaultImage">
                 <img [src]="ImageBaseUrl + imageUrl +'/' + LoginToken +'?' + TimeStamp" alt="Company Logo"
                   class="Company-Logo" />
-                <!-- <img [src]="imageBlobUrl" alt="Company Logo" class="Company-Logo" /> -->
               </ng-container>
               <ng-template #defaultImage>
                 <img src="/assets/images/noimage.png" alt="No Image" class="Company-Logo" />
@@ -186,7 +185,55 @@
               <p *ngIf="errors.company_image" class="validation-error">
                 {{ errors.company_image }}
               </p>
+            </div> -->
+            <!-- <div class="Company-Logo-container">
+              <ng-container *ngIf="imagePreviewUrl; else defaultImage">
+                <img [src]="imagePreviewUrl" alt="Company Logo" class="Company-Logo" />
+              </ng-container>
+              <ng-template #defaultImage>
+                <img src="/assets/images/noimage.png" alt="No Image" class="Company-Logo" />
+              </ng-template>
+
+              <input type="file" (change)="onImageUpload($event)" id="CompanyLogo" class="file-upload" name="image"
+                accept=".jpg, .jpeg, .png, .gif" />
+
+              <p *ngIf="errors.company_image" class="validation-error">
+                {{ errors.company_image }}
+              </p>
+            </div> -->
+
+            <div class="Company-Logo-container">
+              <!-- Image Preview -->
+              <ng-container *ngIf="imagePreviewUrl; else defaultImage">
+                <img [src]="imagePreviewUrl" alt="Company Logo" class="Company-Logo" />
+              </ng-container>
+              <ng-template #defaultImage>
+                <img src="/assets/images/noimage.png" alt="No Image" class="Company-Logo" />
+              </ng-template>
+
+              <div class="row">
+                <div class="col-4 d-flex align-items-center">
+                  <!-- Upload icon triggers file input -->
+                  <img src="/assets/icons/upload.png" alt="Upload" class="Upload-Icon" (click)="triggerFileInput()" />
+                </div>
+                <div class="col-8 d-flex align-items-center">
+                  <div>
+                   {{selectedFileName}}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hidden File Input -->
+              <input type="file" #fileInput (change)="onImageUpload($event)" class="file-upload" name="image"
+                accept=".jpg, .jpeg, .png, .gif" style="display: none" />
+
+              <!-- Error Message -->
+              <p *ngIf="errors.company_image" class="validation-error">
+                {{ errors.company_image }}
+              </p>
             </div>
+
+
           </div>
         </div>
       </div>
