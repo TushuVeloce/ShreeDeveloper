@@ -75,7 +75,10 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
 
+  VendorServiceList1: VendorService[] = [];
+
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('VehicleNoCtrl') VehicleNoInputControl!: NgModel;
   @ViewChild('StartTimeCtrl') StartTimeInputControl!: NgModel;
   @ViewChild('EndTimeCtrl') EndTimeInputControl!: NgModel;
 
@@ -295,13 +298,55 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     // this.getVendorServiceListByVendorRef();
   }
 
+   private FormulateVendorServiceList = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await VendorService.FetchEntireListByCompanyRef(this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
+    this.VendorServiceList1 = lst;
+    console.log(this.VendorServiceList1);
+    
+  };
+
   getVendorServiceListByVendorRef = async (VendorRef:number) => {
+  console.log('VendorRef :', VendorRef);
     if(this.IsNewEntity){
       this.Entity.p.VendorServiceRef = 0
     }
     this.VendorServiceList = []
+     if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
     let lst = await Vendor.FetchInstance(VendorRef,this.companyRef(),async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log(lst);
     this.VendorServiceList = lst.p.ServiceListSuppliedByVendor;
+    if(this.VendorServiceList.length > 0){
+      await this.FormulateVendorServiceList()
+      let refArray :number[] = []; // Example: [51675, 51674]
+      this.VendorServiceList.forEach(e=>refArray.push(e.Ref))
+const matchedNames = this.VendorServiceList1
+  .filter(item => refArray.includes(item.p.Ref))
+  
+
+console.log(matchedNames);
+       console.log(this.VendorServiceList);
+       console.log(this.VendorServiceList1);
+      
+    }
+
+    // const selectedRefs = this.VendorServiceList; // [51675, 51674]
+
+// const matchedNames = this.VendorServiceList1
+//   .filter(item => selectedRefs.includes(item.p.Ref))
+//   .map(item => item.p.Name);
+
+// console.log(matchedNames);
+    
   }
 
   FormulateUnitList = async () => {
@@ -547,9 +592,11 @@ async SaveTime() {
   resetAllControls = () => {
     // reset touched
     this.NameInputControl.control.markAsUntouched();
+    this.VehicleNoInputControl.control.markAsUntouched();
 
     // reset dirty
     this.NameInputControl.control.markAsPristine();
+    this.VehicleNoInputControl.control.markAsPristine();
   }
 
   resetTimeControls = () => {

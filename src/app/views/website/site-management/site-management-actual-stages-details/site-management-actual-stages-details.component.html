@@ -175,12 +175,12 @@
           <input type="text" [(ngModel)]="Entity.p.VehicleNo" name="VehicleNo" class="form-control" id="VehicleNo"
             placeholder="Enter Vehicle No" #VehicleNoCtrl="ngModel" (blur)="VehicleNoCtrl.control.markAsTouched()"
             maxlength="10" />
-          <div *ngIf="
+          <!-- <div *ngIf="
               VehicleNoCtrl.invalid &&
               (VehicleNoCtrl.touched || VehicleNoCtrl.dirty)
             ">
             <span class="validation-text" *ngIf="VehicleNoCtrl.errors?.['pattern']">{{ NameWithNosAndSpaceMsg }}</span>
-          </div>
+          </div> -->
         </div>
         <div [ngClass]="{
           'col-lg-3 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef === ExpenseTypeRef,
