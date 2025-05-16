@@ -35,6 +35,7 @@ export class CustomerEnquiryComponent implements OnInit {
     'Customer Status',
     'Action',
   ];
+
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
@@ -71,8 +72,6 @@ export class CustomerEnquiryComponent implements OnInit {
   };
 
   onEditClicked = async (item: CustomerEnquiry) => {
-    // let props = Object.assign(CustomerEnquiryProps.Blank(),item.p);
-    // this.SelectedCustomerEnquiry = CustomerEnquiry.CreateInstance(props,true);
     item.p.CustomerFollowUps = [];
     item.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank())
 
@@ -82,7 +81,7 @@ export class CustomerEnquiryComponent implements OnInit {
 
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
 
-    this.router.navigate(['/homepage/Website/Customer_Enquiry_Details']);
+    this.AddCustomerEnquiryForm();
   };
 
   onDeleteClicked = async (customerenquiry: CustomerEnquiry) => {
@@ -116,7 +115,7 @@ export class CustomerEnquiryComponent implements OnInit {
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
   }
-  
+
   async AddCustomerEnquiryForm() {
     if (this.companyRef() <= 0) {
       this.uiUtils.showErrorToster('Company not Selected');
@@ -124,6 +123,7 @@ export class CustomerEnquiryComponent implements OnInit {
     }
     this.router.navigate(['/homepage/Website/Customer_Enquiry_Details']);
   }
+
   filterTable = () => {
     if (this.SearchString != '') {
       this.DisplayMasterList = this.MasterList.filter((data: any) => {

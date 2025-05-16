@@ -127,24 +127,25 @@ export class PlotMasterDetailsComponent implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-    if (!tr.Successful) {
-      this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error', tr.Message)
-      return;
-    } else {
-      this.isSaveDisabled = false;
-      // this.onEntitySaved.emit(entityToSave);
-      if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Plot saved successfully!');
-        this.Entity = Plot.CreateNewInstance();
-        this.CustomerEntity = Owner.CreateNewInstance();
-        this.CompanyEntity = Company.CreateNewInstance();
-        this.resetAllControls()
-      } else {
-        await this.uiUtils.showSuccessToster('Plot Updated successfully!');
-      }
-    }
+    console.log('entitiesToSave :', entitiesToSave);
+    // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    // if (!tr.Successful) {
+    //   this.isSaveDisabled = false;
+    //   this.uiUtils.showErrorMessage('Error', tr.Message)
+    //   return;
+    // } else {
+    //   this.isSaveDisabled = false;
+    //   // this.onEntitySaved.emit(entityToSave);
+    //   if (this.IsNewEntity) {
+    //     await this.uiUtils.showSuccessToster('Plot saved successfully!');
+    //     this.Entity = Plot.CreateNewInstance();
+    //     this.CustomerEntity = Owner.CreateNewInstance();
+    //     this.CompanyEntity = Company.CreateNewInstance();
+    //     this.resetAllControls()
+    //   } else {
+    //     await this.uiUtils.showSuccessToster('Plot Updated successfully!');
+    //   }
+    // }
   };
 
   convertSqmToSqft = () => {

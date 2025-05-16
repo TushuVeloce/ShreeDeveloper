@@ -73,8 +73,6 @@ export class VendorMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    this.getVendorServiceListByCompanyRef();
-    this.getMaterialListByCompanyRef();
     await this.FormulateCountryList();
 
     // Load State based on Default Country Ref
@@ -91,9 +89,14 @@ export class VendorMasterDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Vendor' : 'Edit Vendor';
       this.Entity = Vendor.GetCurrentInstance();
+      console.log('this.Entity :', this.Entity.p.MaterialListSuppliedByVendor);
+      console.log('this.Entity :', Object.entries(this.Entity.p.MaterialListSuppliedByVendor).map(([key, value]) => ({ key, value })));
+      // this.ServiceList = Object.values(this.Entity.p.MaterialListSuppliedByVendor);
       this.appStateManage.StorageKey.removeItem('Editable')
 
     } else {
+      this.getMaterialListByCompanyRef();
+      this.getVendorServiceListByCompanyRef();
       this.Entity = Vendor.CreateNewInstance();
       Vendor.SetCurrentInstance(this.Entity);
     }
@@ -181,26 +184,27 @@ export class VendorMasterDetailsComponent implements OnInit {
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
     let entityToSave = this.Entity.GetEditableVersion();
-    let entitiesToSave = [entityToSave]
+    console.log('entityToSave :', entityToSave);
+    // let entitiesToSave = [entityToSave]
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-    if (!tr.Successful) {
-      this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error', tr.Message);
-      return
-    }
-    else {
-      this.isSaveDisabled = false;
-      // this.onEntitySaved.emit(entityToSave);
-      if (this.IsNewEntity) {
-        this.resetAllControls()
-        await this.uiUtils.showSuccessToster('Vendor saved successfully!');
-        this.Entity = Vendor.CreateNewInstance();
-      } else {
-        await this.uiUtils.showSuccessToster('Vendor Updated successfully!');
-        this.BackVendor();
-      }
-    }
+    // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    // if (!tr.Successful) {
+    //   this.isSaveDisabled = false;
+    //   this.uiUtils.showErrorMessage('Error', tr.Message);
+    //   return
+    // }
+    // else {
+    //   this.isSaveDisabled = false;
+    //   // this.onEntitySaved.emit(entityToSave);
+    //   if (this.IsNewEntity) {
+    //     this.resetAllControls()
+    //     await this.uiUtils.showSuccessToster('Vendor saved successfully!');
+    //     this.Entity = Vendor.CreateNewInstance();
+    //   } else {
+    //     await this.uiUtils.showSuccessToster('Vendor Updated successfully!');
+    //     this.BackVendor();
+    //   }
+    // }
   }
 
   BackVendor = () => {
