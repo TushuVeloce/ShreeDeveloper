@@ -75,6 +75,7 @@ export class Unit implements IPersistable<Unit> {
     } else if (!new RegExp(ValidationPatterns.SIUnit).test(this.p.Name)) {
       vra.add('Name', ValidationMessages.SIUnitMsg + ' for Name');
     }
+    console.log('add or edit - ', this.p.IsNewlyCreated);
   }
 
   public MergeIntoTransportData(td: TransportData) {

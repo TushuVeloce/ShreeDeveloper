@@ -89,42 +89,49 @@ export class Company implements IPersistable<Company> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     // if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    // if (this.p.Name == '') {
-    //   vra.add('Name', 'Name cannot be blank.');
-    // } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
-    //   vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
-    // }
-    // if (this.p.OwnerName == '') {
-    //   vra.add('OwnerName', 'Owner Name cannot be blank.');
-    // } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.OwnerName)) {
-    //   vra.add('OwnerName', ValidationMessages.NameWithNosAndSpaceMsg + ' for Owner Name');
-    // }
-    // if (this.p.EmailId == '') {
-    //   vra.add('EmailId', 'Email Id cannot be blank.');
-    // } else if (!new RegExp(ValidationPatterns.Email).test(this.p.EmailId)) {
-    //   vra.add('EmailId', ValidationMessages.EmailMsg);
-    // }
-    // if (this.p.CompanyType == 0) vra.add('CompanyType', 'Company Type cannot be blank.');
-    // if (this.p.PinCode == '') {
-    //   vra.add('PinCode', 'Pin cannot be blank.');
-    // // } else if (!new RegExp(ValidationPatterns.PinCode).test(this.p.PinCode)) {
-    // //   vra.add('PinCode', ValidationMessages.PinCodeMsg);
-    // }
-    // if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'AddressLine1 cannot be blank.');
-    // if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country Name cannot be blank.');
-    // if (this.p.StateRef == 0) vra.add('StateRef', 'State Name cannot be blank.');
-    // if (this.p.CityRef == 0) vra.add('CityRef', 'City Name cannot be blank.');
-    // if (this.p.GSTIN == '') {
-    //   vra.add('GSTIN', 'GST IN cannot be blank.');
-    // // } else if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN)) {
-    // //   vra.add('GSTIN', ValidationMessages.GSTINMsg);
-    // }
-    // if (this.p.Pan == '') {
-    //   vra.add('Pan', 'Pan cannot be blank.');
-    // } else if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan)) {
-    //   vra.add('Pan', ValidationMessages.PANMsg);
-    // }
-    // if (this.p.Notes == '') vra.add('Notes', 'Notes cannot be blank.');
+    if (this.p.Name == '') {
+      vra.add('Name', 'Name cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
+      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
+    }
+    if (this.p.OwnerName == '') {
+      vra.add('OwnerName', 'Owner Name cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.OwnerName)) {
+      vra.add('OwnerName', ValidationMessages.NameWithNosAndSpaceMsg + ' for Owner Name');
+    }
+    if (this.p.EmailId == '') {
+      vra.add('EmailId', 'Email Id cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.Email).test(this.p.EmailId)) {
+      vra.add('EmailId', ValidationMessages.EmailMsg);
+    }
+    if (this.p.CompanyType == 0) vra.add('CompanyType', 'Company Type cannot be blank.');
+    if (this.p.PinCode == '') {
+      vra.add('PinCode', 'Pin cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.PinCode).test(this.p.PinCode)) {
+      vra.add('PinCode', ValidationMessages.PinCodeMsg);
+    }
+    if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'AddressLine1 cannot be blank.');
+    if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country Name cannot be blank.');
+    if (this.p.StateRef == 0) vra.add('StateRef', 'State Name cannot be blank.');
+    if (this.p.CityRef == 0) vra.add('CityRef', 'City Name cannot be blank.');
+    if (this.p.GSTIN == '') {
+      vra.add('GSTIN', 'GST IN cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN)) {
+      vra.add('GSTIN', ValidationMessages.GSTINMsg);
+    }
+    if (this.p.Pan == '') {
+      vra.add('Pan', 'Pan cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan)) {
+      vra.add('Pan', ValidationMessages.PANMsg);
+    }
+
+    console.log('add or edit - ', this.p.IsNewlyCreated);
+
+
+    if(this.p.LogoPath == '' && this.p.CompanyLogo){
+
+    }
+    if (this.p.Notes == '') vra.add('Notes', 'Notes cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
