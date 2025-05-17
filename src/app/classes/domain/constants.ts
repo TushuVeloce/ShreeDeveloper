@@ -3,7 +3,7 @@ export class ValidationPatterns {
   public static readonly NameWithoutNos: string = "^[a-zA-Z\\s]+$";
   public static readonly NameWithNos: string = "^[a-zA-Z0-9]+$";
   public static readonly NameWithoutNoswith_: string = "^[a-zA-Z\\s_]+$";
-  public static readonly Email: string = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+  public static readonly Email: string = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|in|org|net|edu|gov|co\.in|info)$";
   public static readonly INDPhoneNo: string = "^[6789][0-9]{9}$";
   public static readonly Address: string = "^[a-zA-Z0-9 ,./#-]{5,100}$";
 
@@ -106,12 +106,12 @@ export class AddressStateRefs {
   public static readonly OtherCountry: number = 800089;
 }
 
-export class ExpenseTypeRefs{
+export class ExpenseTypeRefs {
   public static readonly MachinaryExpense: number = 100;
   public static readonly LabourExpense: number = 200;
   public static readonly OtherExpense: number = 300;
 }
 
-export class UnitRefs{
+export class UnitRefs {
   public static readonly TimeUnitRef: number = 100;
 }
