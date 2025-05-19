@@ -166,7 +166,7 @@
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" [disabled]="VendorServiceList.length == 0"
             nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorServiceRef" name="VendorServiceRef"
             [nzSize]="'large'" [(ngModel)]="Entity.p.VendorServiceRef">
-            <nz-option *ngFor="let VendorServices of VendorServiceList" [nzValue]="VendorServices.Ref"
+            <nz-option *ngFor="let VendorServices of VendorServiceList1" [nzValue]="VendorServices.Ref"
               [nzLabel]="VendorServices.Name"></nz-option>
           </nz-select>
         </div>

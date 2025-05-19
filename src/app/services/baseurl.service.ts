@@ -12,9 +12,9 @@ export class BaseUrlService {
   public GenerateBaseUrl() {
     // let baseURLstring = `http://localhost:5111/api/RequestController2`;
     // let baseURLstring = `http://localhost:5111/api`;   //For Backend Developers
-    // let baseURLstring = `http://192.168.29.68:5100/api`;  //For Frontend Developers pc
+    let baseURLstring = `http://192.168.29.68:5100/api`;  //For Frontend Developers pc
     // let baseURLstring = `http://192.168.29.80:5100/api`;  //For Frontend Developers laptop 1
-    let baseURLstring = `http://192.168.29.245:5100/api`;  //For Frontend Developers laptop 2
+    // let baseURLstring = `http://192.168.29.245:5100/api`;  //For Frontend Developers laptop 2
 
     //let baseURLstring = ``;
 
@@ -38,9 +38,9 @@ export class BaseUrlService {
   }
 
      public GenerateImageBaseUrl() {
-    // let ImageBaseUrl: string = "http://192.168.29.68:5100/api/Request/uploadeddocumentpath/";  //For Frontend Developers Pc
+    let ImageBaseUrl: string = "http://192.168.29.68:5100/api/Request/uploadeddocumentpath/";  //For Frontend Developers Pc
     // let ImageBaseUrl: string = "http://192.168.29.80:5100/api/Request/uploadeddocumentpath/";  //For Frontend Developers Laptop 1
-    let ImageBaseUrl: string = "http://192.168.29.245:5100/api/Request/uploadeddocumentpath/";  //For Frontend Developers Laptop 2
+    // let ImageBaseUrl: string = "http://192.168.29.245:5100/api/Request/uploadeddocumentpath/";  //For Frontend Developers Laptop 2
     // let ImageBaseUrl: string = "http://localhost:5111/api/Request/uploadeddocumentpath/";  //For Backend Developers
 
     //let baseURLstring = ``;
