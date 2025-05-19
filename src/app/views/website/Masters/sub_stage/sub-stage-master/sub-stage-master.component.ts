@@ -7,6 +7,10 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
+import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
+import { TransportData } from 'src/app/classes/infrastructure/transportdata';
+import { DeleteSubStageCustomRequest } from 'src/app/classes/domain/entities/website/masters/substage/DeleteCustomRequest';
 
 @Component({
   selector: 'app-sub-stage-master',
@@ -14,7 +18,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   templateUrl: './sub-stage-master.component.html',
   styleUrls: ['./sub-stage-master.component.scss'],
 })
-export class SubStageMasterComponent  implements OnInit {
+export class SubStageMasterComponent implements OnInit {
   Entity: SubStage = SubStage.CreateNewInstance();
   MasterList: SubStage[] = [];
   DisplayMasterList: SubStage[] = [];
@@ -27,9 +31,10 @@ export class SubStageMasterComponent  implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.','Stage Name','Stage Type', 'Sub Stage Name', 'Action'];
+  headers: string[] = ['Sr.No.', 'Stage Name', 'Stage Type', 'Sub Stage Name', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement, private payloadPacketFacade: PayloadPacketFacade,
+    private serverCommunicator: ServerCommunicatorService
   ) {
     effect(async () => {
       await this.getSubStageListByCompanyRef();
@@ -38,12 +43,12 @@ export class SubStageMasterComponent  implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-     this.getStageListByCompanyRef()
+    this.getStageListByCompanyRef()
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
-   getStageListByCompanyRef = async () => {
+  getStageListByCompanyRef = async () => {
     this.StageList = []
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
@@ -66,14 +71,14 @@ export class SubStageMasterComponent  implements OnInit {
     this.loadPaginationData();
   }
 
-  getSubStageListByStageRef = async (stageref:number) => {
+  getSubStageListByStageRef = async (stageref: number) => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    if(stageref > 0){
-    let lst = await SubStage.FetchEntireListByStageRef(stageref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList;
-    }else{
+    if (stageref > 0) {
+      let lst = await SubStage.FetchEntireListByStageRef(stageref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.MasterList = lst;
+      this.DisplayMasterList = this.MasterList;
+    } else {
       this.getSubStageListByCompanyRef()
     }
     this.loadPaginationData();
@@ -86,22 +91,44 @@ export class SubStageMasterComponent  implements OnInit {
     await this.router.navigate(['/homepage/Website/Sub_Stage_Master_Details']);
   };
 
-  onDeleteClicked = async (SubStage: SubStage) => {
+  // onDeleteClicked = async (SubStage: SubStage) => {
+  //   await this.uiUtils.showConfirmationMessage(
+  //     'Delete',
+  //     `This process is <strong>IRREVERSIBLE!</strong> <br/>
+  //   Are you sure that you want to DELETE this SubStage?`,
+  //     async () => {
+  //       await SubStage.DeleteInstance(async () => {
+  //         await this.uiUtils.showSuccessToster(
+  //           `SubStage ${SubStage.p.Name} has been deleted!`
+  //         );
+  //         await this.getSubStageListByCompanyRef();
+  //         this.SearchString = '';
+  //         this.loadPaginationData();
+  //       });
+  //     }
+  //   );
+  // };
+
+  DeleteSubStage = async (SubStage: SubStage) => {
     await this.uiUtils.showConfirmationMessage(
-      'Delete',
-      `This process is <strong>IRREVERSIBLE!</strong> <br/>
-    Are you sure that you want to DELETE this SubStage?`,
+      'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this SubStage?`,
       async () => {
-        await SubStage.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(
-            `SubStage ${SubStage.p.Name} has been deleted!`
-          );
-          await this.getSubStageListByCompanyRef();
-          this.SearchString = '';
-          this.loadPaginationData();
-        });
+        let req = new DeleteSubStageCustomRequest();
+        req.Ref = SubStage.p.Ref;
+        let td = req.FormulateTransportData();
+        console.log('td :', td);
+        let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+        let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+        if (!tr.Successful) {
+          await this.uiUtils.showErrorMessage('Error', tr.Message);
+          return;
+        }
+        await this.uiUtils.showSuccessToster(`Stage ${SubStage.p.Name} has been deleted!`);
+        let tdResult = JSON.parse(tr.Tag) as TransportData;
       }
     );
+    this.getSubStageListByCompanyRef()
+    this.loadPaginationData()
   };
 
   // For Pagination  start ----

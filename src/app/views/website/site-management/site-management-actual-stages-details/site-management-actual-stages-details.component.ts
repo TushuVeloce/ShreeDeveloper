@@ -595,6 +595,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     this.Entity.p.Total = this.getTotalWorkedHours()
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
     let entityToSave = this.Entity.GetEditableVersion();
+    console.log('entityToSave :', entityToSave);
     let entitiesToSave = [entityToSave]
     await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
