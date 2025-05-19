@@ -46,8 +46,16 @@
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{ExpenseType.p.Name}}</td>
             <td class="tbldata">
-              <Edit-Icon (editClick)="onEditClicked(ExpenseType)" />
-              <Delete-Icon (deleteClicked)="onDeleteClicked(ExpenseType)" />
+              <Edit-Icon (editClick)="onEditClicked(ExpenseType)"  [class.disabled-icon]="
+    ExpenseType.p.ExpenseType === ExpenseTypeRef ||
+    ExpenseType.p.ExpenseType === LabourExpenseRef ||
+    ExpenseType.p.ExpenseType === OtherExpenseRef
+  "/>
+              <Delete-Icon (deleteClicked)="onDeleteClicked(ExpenseType)"  [class.disabled-icon]="
+    ExpenseType.p.ExpenseType === ExpenseTypeRef ||
+    ExpenseType.p.ExpenseType === LabourExpenseRef ||
+    ExpenseType.p.ExpenseType === OtherExpenseRef
+  "/>
             </td>
           </tr>
         </tbody>
