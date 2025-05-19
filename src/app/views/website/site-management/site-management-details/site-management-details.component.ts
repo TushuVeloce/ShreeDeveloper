@@ -55,7 +55,10 @@ export class SiteManagementDetailsComponent implements OnInit {
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
   @ViewChild('AddressLine1Ctrl') AddressLine1InputControl!: NgModel;
   @ViewChild('AddressLine2Ctrl') AddressLine2InputControl!: NgModel;
+  @ViewChild('EstimatedStartingDateCtrl') EstimatedStartingDateInputControl!: NgModel;
+  @ViewChild('EstimatedEndDateCtrl') EstimatedEndDateInputControl!: NgModel;
   @ViewChild('PinCodeCtrl') PinCodeInputControl!: NgModel;
+  @ViewChild('EstimatedCostCtrl') EstimatedCostInputControl!: NgModel;
   @ViewChild('TotalLandAreaInSqmCtrl') TotalLandAreaInSqmInputControl!: NgModel;
   @ViewChild('TotalLandAreaInSqftCtrl') TotalLandAreaInSqftInputControl!: NgModel;
   @ViewChild('NumberOfPlotsCtrl') NumberOfPlotsInputControl!: NgModel;
@@ -334,17 +337,21 @@ export class SiteManagementDetailsComponent implements OnInit {
     this.NameInputControl.control.markAsUntouched();
     this.AddressLine1InputControl.control.markAsUntouched();
     this.AddressLine2InputControl.control.markAsUntouched();
+    this.EstimatedStartingDateInputControl.control.markAsUntouched();
+    this.EstimatedEndDateInputControl.control.markAsUntouched();
     this.PinCodeInputControl.control.markAsUntouched();
+    this.EstimatedCostInputControl.control.markAsUntouched();
     this.TotalLandAreaInSqmInputControl.control.markAsUntouched();
     this.TotalLandAreaInSqftInputControl.control.markAsUntouched();
     this.NumberOfPlotsInputControl.control.markAsUntouched();
 
-
-
     this.NameInputControl.control.markAsPristine();
     this.AddressLine1InputControl.control.markAsPristine();
     this.AddressLine2InputControl.control.markAsPristine();
+    this.EstimatedStartingDateInputControl.control.markAsPristine();
+    this.EstimatedEndDateInputControl.control.markAsPristine();
     this.PinCodeInputControl.control.markAsPristine();
+    this.EstimatedCostInputControl.control.markAsPristine();
     this.TotalLandAreaInSqmInputControl.control.markAsPristine();
     this.TotalLandAreaInSqftInputControl.control.markAsPristine();
     this.NumberOfPlotsInputControl.control.markAsPristine();

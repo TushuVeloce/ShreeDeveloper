@@ -113,21 +113,36 @@
         <div class="col-md-4">
           <label>Starting Date</label>
           <input type="date" name="localEstimatedStartingDate" class="form-control date-input"
-            id="localEstimatedStartingDate" [(ngModel)]="localEstimatedStartingDate" placeholder="Select Date" />
-        </div>
+            id="localEstimatedStartingDate" [(ngModel)]="localEstimatedStartingDate" placeholder="Select Date"   #EstimatedStartingDateCtrl="ngModel" required (blur)="EstimatedStartingDateCtrl.control.markAsTouched()"/>
+          <div
+            *ngIf="(EstimatedStartingDateCtrl.invalid && (EstimatedStartingDateCtrl.touched || EstimatedStartingDateCtrl.dirty))">
+            <span class="validation-text"
+              *ngIf="EstimatedStartingDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+          </div>
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Estimated End Date</label>
           <input type="date" name="localEstimatedEndDate" class="form-control date-input" id="localEstimatedEndDate"
-            [(ngModel)]="localEstimatedEndDate" required placeholder="Select Date" />
-        </div>
+            [(ngModel)]="localEstimatedEndDate"  placeholder="Select Date" #EstimatedEndDateCtrl="ngModel" required (blur)="EstimatedEndDateCtrl.control.markAsTouched()"/>
+          <div
+            *ngIf="(EstimatedEndDateCtrl.invalid && (EstimatedEndDateCtrl.touched || EstimatedEndDateCtrl.dirty))">
+            <span class="validation-text"
+              *ngIf="EstimatedEndDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+          </div>
         <div class="col-md-4">
           <label>Estimated Cost</label>
           <input type="number" name="EstimatedCost" class="form-control" id="EstimatedCost"
-            [(ngModel)]="Entity.p.EstimatedCost" required placeholder="Enter Estimated Cost"
-            (click)="selectAllValue($event)" />
-        </div>
+            [(ngModel)]="Entity.p.EstimatedCost" placeholder="Enter Estimated Cost"
+            (click)="selectAllValue($event)"   #EstimatedCostCtrl="ngModel" required (blur)="EstimatedCostCtrl.control.markAsTouched()"/>
+          <div
+            *ngIf="(EstimatedCostCtrl.invalid && (EstimatedCostCtrl.touched || EstimatedCostCtrl.dirty))">
+            <span class="validation-text"
+              *ngIf="EstimatedCostCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+          </div>
         <div class="col-md-4">
           <label for="TotalLandAreaInSqm">Total Land Area in Sqm</label>
           <input type="number" class="form-control" name="TotalLandAreaInSqm" id="TotalLandAreaInSqm"
