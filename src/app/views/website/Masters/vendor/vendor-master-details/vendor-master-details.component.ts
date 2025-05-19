@@ -75,6 +75,23 @@ export class VendorMasterDetailsComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(true);
     await this.FormulateCountryList();
 
+    this.getMaterialListByCompanyRef();
+    this.getVendorServiceListByCompanyRef();
+
+    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+      this.IsNewEntity = false;
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Vendor' : 'Edit Vendor';
+      this.Entity = Vendor.GetCurrentInstance();
+      console.log(' this.Entity :', this.Entity);
+      console.log('this.Entity :', this.Entity.p.MaterialListSuppliedByVendor);
+      console.log('this.Entity :', Object.entries(this.Entity.p.MaterialListSuppliedByVendor).map(([key, value]) => ({ key, value })));
+      // this.ServiceList = Object.values(this.Entity.p.MaterialListSuppliedByVendor);
+      this.appStateManage.StorageKey.removeItem('Editable')
+
+    } else {
+      this.Entity = Vendor.CreateNewInstance();
+      Vendor.SetCurrentInstance(this.Entity);
+    }
     // Load State based on Default Country Ref
     if (this.Entity.p.CountryRef) {
       await this.getStateListByCountryRef(this.Entity.p.CountryRef);
@@ -83,22 +100,6 @@ export class VendorMasterDetailsComponent implements OnInit {
     // Load Cities based on Default State Ref
     if (this.Entity.p.StateRef) {
       await this.getCityListByStateRef(this.Entity.p.StateRef);
-    }
-
-    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-      this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Vendor' : 'Edit Vendor';
-      this.Entity = Vendor.GetCurrentInstance();
-      console.log('this.Entity :', this.Entity.p.MaterialListSuppliedByVendor);
-      console.log('this.Entity :', Object.entries(this.Entity.p.MaterialListSuppliedByVendor).map(([key, value]) => ({ key, value })));
-      // this.ServiceList = Object.values(this.Entity.p.MaterialListSuppliedByVendor);
-      this.appStateManage.StorageKey.removeItem('Editable')
-
-    } else {
-      this.getMaterialListByCompanyRef();
-      this.getVendorServiceListByCompanyRef();
-      this.Entity = Vendor.CreateNewInstance();
-      Vendor.SetCurrentInstance(this.Entity);
     }
     this.InitialEntity = Object.assign(Vendor.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Vendor;
     this.focusInput();
