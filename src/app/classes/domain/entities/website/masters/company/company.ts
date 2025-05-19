@@ -125,12 +125,12 @@ export class Company implements IPersistable<Company> {
       vra.add('Pan', ValidationMessages.PANMsg);
     }
 
-    console.log('add or edit - ', this.p.IsNewlyCreated);
-
-
-    if(this.p.LogoPath == '' && this.p.CompanyLogo){
-
+    if (this.p.IsNewlyCreated == true && this.p.CompanyLogo == null) {
+      vra.add('CompanyLogo', 'Company Logo cannot be blank.');
+    } else if (this.p.IsNewlyCreated != true && this.p.LogoPath == '' && this.p.CompanyLogo == null) {
+      vra.add('CompanyLogo', 'Company Logo cannot be blank.');
     }
+
     if (this.p.Notes == '') vra.add('Notes', 'Notes cannot be blank.');
   }
 
