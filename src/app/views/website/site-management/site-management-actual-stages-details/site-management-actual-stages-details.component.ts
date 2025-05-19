@@ -50,25 +50,25 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   IsStage: Boolean = false;
   StageTypeList = DomainEnums.StageTypeList(true, 'select stage');
   MonthList = DomainEnums.MonthList(true, '--Select Month Type--');
-  GutterNaleUnitList = DomainEnums.UnitList(true,'--Select Unit--');
+  GutterNaleUnitList = DomainEnums.UnitList(true, '--Select Unit--');
   StageTypeEnum = StageType;
   UnitQuantityTotal: number = 0;
   isAddingExpense = false;
   isAdd = false;
   // isOfficialExpenditureGov = false
   isModalOpen: boolean = false;
-  timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time','Worked Hours','Action'];
+  timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time', 'Worked Hours', 'Action'];
   TimeEntity: TimeDetailProps = TimeDetailProps.Blank();
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  isChalanDisabled=false
+  isChalanDisabled = false
   originalAmount: number = 0;
   strCDT: string = ''
-  ExpenseTypeRef:number = ExpenseTypeRefs.MachinaryExpense
-  LabourExpenseRef:number = ExpenseTypeRefs.LabourExpense
-  OtherExpenseRef:number = ExpenseTypeRefs.OtherExpense
-  TimeUnitRef:number = UnitRefs.TimeUnitRef
-  isDiselPaid:boolean = false
+  ExpenseTypeRef: number = ExpenseTypeRefs.MachinaryExpense
+  LabourExpenseRef: number = ExpenseTypeRefs.LabourExpense
+  OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense
+  TimeUnitRef: number = UnitRefs.TimeUnitRef
+  isDiselPaid: boolean = false
 
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
@@ -82,26 +82,26 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   @ViewChild('StartTimeCtrl') StartTimeInputControl!: NgModel;
   @ViewChild('EndTimeCtrl') EndTimeInputControl!: NgModel;
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement,private payloadPacketFacade: PayloadPacketFacade,
-      private serverCommunicator: ServerCommunicatorService,private dtu: DTU,) { }
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private payloadPacketFacade: PayloadPacketFacade,
+    private serverCommunicator: ServerCommunicatorService, private dtu: DTU,) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    await  this.getStageListByCompanyRef();
-    await  this.getVendorListByCompanyRef();
+    await this.getStageListByCompanyRef();
+    await this.getVendorListByCompanyRef();
     await this.FormulateUnitList();
     await this.getSiteListByCompanyRef();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stage' : 'Edit Stage';
       this.Entity = ActualStages.GetCurrentInstance();
-      if(this.Entity.p.Date != ''){
-        this.Entity.p.Date= this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
-       }
+      if (this.Entity.p.Date != '') {
+        this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
+      }
       this.isChalanDisabled = true
-      if(this.Entity.p.TimeDetails.length>0){
+      if (this.Entity.p.TimeDetails.length > 0) {
         this.Entity.p.Amount = this.getTotalWorkedHours()
-      }else{
+      } else {
         this.Entity.p.Amount = this.Entity.p.Rate * this.Entity.p.Quantity
       }
       await this.DiselPaid(this.Entity.p.IsDieselPaid)
@@ -111,18 +111,18 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     } else {
       this.Entity = ActualStages.CreateNewInstance();
       ActualStages.SetCurrentInstance(this.Entity);
-      const CreatedBy =  Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
-      if(this.appStateManage.StorageKey.getItem('UserDisplayName')){
+      const CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+      if (this.appStateManage.StorageKey.getItem('UserDisplayName')) {
         const name = this.appStateManage.StorageKey.getItem('UserDisplayName') || ''
         this.Entity.p.CreatedByName = name
       }
-     if (this.Entity.p.Date == '') {
-          this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-          let parts = this.strCDT.substring(0, 16).split('-');
-          // Construct the new date format
-          this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
-          this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
-        }
+      if (this.Entity.p.Date == '') {
+        this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+        let parts = this.strCDT.substring(0, 16).split('-');
+        // Construct the new date format
+        this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
+        this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+      }
       this.isChalanDisabled = false
       // if(CreatedBy != 0){
       //   this.Entity.p.CreatedBy = CreatedBy
@@ -172,12 +172,12 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   };
 
 
-  getSingleEmployeeDetails = async (CreatedBy:number) => {
+  getSingleEmployeeDetails = async (CreatedBy: number) => {
     if (this.Entity.p.CreatedBy == 1001) {
       this.Entity.p.CreatedByName = 'Admin';
       return;
     }
-    let data = await Employee.FetchInstance(CreatedBy, this.companyRef(),async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let data = await Employee.FetchInstance(CreatedBy, this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
   };
 
 
@@ -211,11 +211,11 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   }
 
   OnStageChange = async (StageRef: number) => {
-    if(this.IsNewEntity){
+    if (this.IsNewEntity) {
       this.Entity.p.ExpenseTypeRef = 0
       this.Entity.p.ExtraQuantity = 0
       this.Entity.p.GutterNaleUnitRef = 0
-      await this.AddExpenseTypeToOther( this.Entity.p.ExpenseTypeRef )
+      await this.AddExpenseTypeToOther(this.Entity.p.ExpenseTypeRef)
     }
     let stagedata = await Stage.FetchInstance(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     // if(stagedata.p.IsOtherExpenseApplicable == true){
@@ -262,7 +262,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     //   await this.uiUtils.showErrorToster('Stage not Selected');
     //   return;
     // }
-     if(this.IsNewEntity){
+    if (this.IsNewEntity) {
       this.Entity.p.SubStageRef = 0
     }
     let lst = await SubStage.FetchEntireListByStageRef(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
@@ -298,54 +298,37 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     // this.getVendorServiceListByVendorRef();
   }
 
-   private FormulateVendorServiceList = async () => {
+  private FormulateVendorServiceList = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
+    this.VendorServiceList1 = []
     let lst = await VendorService.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-
     this.VendorServiceList1 = lst;
-    console.log(this.VendorServiceList1);
-    
   };
 
-  getVendorServiceListByVendorRef = async (VendorRef:number) => {
-  console.log('VendorRef :', VendorRef);
-    if(this.IsNewEntity){
+  getVendorServiceListByVendorRef = async (VendorRef: number) => {
+    if (this.IsNewEntity) {
       this.Entity.p.VendorServiceRef = 0
     }
     this.VendorServiceList = []
-     if (this.companyRef() <= 0) {
+    if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Vendor.FetchInstance(VendorRef,this.companyRef(),async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log(lst);
+    let lst = await Vendor.FetchInstance(VendorRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.VendorServiceList = lst.p.ServiceListSuppliedByVendor;
-    if(this.VendorServiceList.length > 0){
-      await this.FormulateVendorServiceList()
-      let refArray :number[] = []; // Example: [51675, 51674]
-      this.VendorServiceList.forEach(e=>refArray.push(e.Ref))
-      const matchedNames = this.VendorServiceList1.filter(item => refArray.includes(item.p.Ref))
-  
-
-console.log(matchedNames);
-       console.log(this.VendorServiceList);
-       console.log(this.VendorServiceList1);
-      
+    this.VendorServiceList1 = []; // Clear existing list first
+    if (this.VendorServiceList.length > 0) {
+      await this.FormulateVendorServiceList();
+      const refArray = this.VendorServiceList.map(s => Number(s));
+      const matched = this.VendorServiceList1.filter(service => refArray.includes(service.p.Ref));
+      console.log('matched :', matched);
+      this.VendorServiceList1 = matched; // Either matched list or stays empty
     }
-
-    // const selectedRefs = this.VendorServiceList; // [51675, 51674]
-
-// const matchedNames = this.VendorServiceList1
-//   .filter(item => selectedRefs.includes(item.p.Ref))
-//   .map(item => item.p.Name);
-
-// console.log(matchedNames);
-    
   }
 
   FormulateUnitList = async () => {
@@ -355,7 +338,7 @@ console.log(matchedNames);
     this.UnitList = lst;
   };
 
-  ClearInputsOnExpenseChange = (ExpenseTypeRef:number) => {
+  ClearInputsOnExpenseChange = (ExpenseTypeRef: number) => {
     this.AddExpenseTypeToOther(ExpenseTypeRef)
     this.Entity.p.GrandTotal = 0;
     this.Entity.p.UnitRef = 0;
@@ -376,7 +359,7 @@ console.log(matchedNames);
       this.Entity.p.LadiesAmount = 0;
     }
 
-    if (this.Entity.p.ExpenseTypeRef  == this.LabourExpenseRef) {
+    if (this.Entity.p.ExpenseTypeRef == this.LabourExpenseRef) {
       this.Entity.p.DieselRate = 0;
       this.Entity.p.DieselQuantity = 0;
       this.Entity.p.DieselTotalAmount = 0;
@@ -386,23 +369,23 @@ console.log(matchedNames);
     this.Entity.p.TimeDetails = []
   }
 
-  ClearValuesOnTimeSelection = (UnitRef:number) => {
+  ClearValuesOnTimeSelection = (UnitRef: number) => {
     this.Entity.p.TimeDetails = []
-    if( UnitRef == this.TimeUnitRef){
+    if (UnitRef == this.TimeUnitRef) {
       this.Entity.p.Rate = 0
       this.Entity.p.Quantity = 0
       this.Entity.p.GrandTotal = 0,
-      this.Entity.p.Amount = 0
+        this.Entity.p.Amount = 0
     }
     this.isDiselPaid = false
     this.DiselPaid(0)
 
   }
 
-  AddExpenseTypeToOther = async(ExpenseTypeRef:number) =>{
-    if (ExpenseTypeRef == this.OtherExpenseRef){
+  AddExpenseTypeToOther = async (ExpenseTypeRef: number) => {
+    if (ExpenseTypeRef == this.OtherExpenseRef) {
       this.isAdd = true
-    }else{
+    } else {
       this.isAdd = false
     }
   }
@@ -420,12 +403,12 @@ console.log(matchedNames);
     const dieselAmount = Number(this.Entity.p.DieselTotalAmount) || 0;
     const isDieselPaid = !!this.Entity.p.IsDieselPaid;
 
-    if(TotalWorkedHours > 0){
-      this.Entity.p.GrandTotal= rate * TotalWorkedHours - dieselAmount
+    if (TotalWorkedHours > 0) {
+      this.Entity.p.GrandTotal = rate * TotalWorkedHours - dieselAmount
       this.Entity.p.Amount = rate * TotalWorkedHours
-    }else{
+    } else {
       this.Entity.p.Amount = rate * quantity
-      this.Entity.p.GrandTotal= rate * quantity - dieselAmount
+      this.Entity.p.GrandTotal = rate * quantity - dieselAmount
 
     }
   };
@@ -475,18 +458,18 @@ console.log(matchedNames);
     }
   }
 
-  DiselPaid = (DiselPaid:number) => {
-  if(DiselPaid == 1){
-    this.isDiselPaid = true
-    this.Entity.p.IsDieselPaid = 1;
-  }else{
-    this.Entity.p.DieselQuantity = 0;
-    this.Entity.p.DieselRate = 0;
-    this.Entity.p.DieselTotalAmount = 0;
-    this.Entity.p.IsDieselPaid = 0;
-    this.isDiselPaid = false
-  }
-  this.CalculateAmountOnRateAndQuantity()
+  DiselPaid = (DiselPaid: number) => {
+    if (DiselPaid == 1) {
+      this.isDiselPaid = true
+      this.Entity.p.IsDieselPaid = 1;
+    } else {
+      this.Entity.p.DieselQuantity = 0;
+      this.Entity.p.DieselRate = 0;
+      this.Entity.p.DieselTotalAmount = 0;
+      this.Entity.p.IsDieselPaid = 0;
+      this.isDiselPaid = false
+    }
+    this.CalculateAmountOnRateAndQuantity()
   }
 
   getTotalWorkedHours(): number {
@@ -512,11 +495,11 @@ console.log(matchedNames);
       return
     }
     else {
-        await this.uiUtils.showSuccessToster('Expense Type saved successfully!');
-        this.ExpenseTypeEntity= ExpenseType.CreateNewInstance();
-        this.ExpenseTypeEntity.p.Name = ''
-        this.isAddingExpense = false
-        this.getExpenseListByStageRef(this.Entity.p.StageRef)
+      await this.uiUtils.showSuccessToster('Expense Type saved successfully!');
+      this.ExpenseTypeEntity = ExpenseType.CreateNewInstance();
+      this.ExpenseTypeEntity.p.Name = ''
+      this.isAddingExpense = false
+      this.getExpenseListByStageRef(this.Entity.p.StageRef)
 
     }
   }
@@ -527,30 +510,30 @@ console.log(matchedNames);
     input.select();
   }
 
-async SaveTime() {
-  if (!this.TimeEntity.StartTime || !this.TimeEntity.EndTime) {
-    await this.uiUtils.showErrorMessage('Error', 'Start Time and End Time are required!');
-    return;
+  async SaveTime() {
+    if (!this.TimeEntity.StartTime || !this.TimeEntity.EndTime) {
+      await this.uiUtils.showErrorMessage('Error', 'Start Time and End Time are required!');
+      return;
+    }
+
+    if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
+      this.Entity.p.TimeDetails[this.editingIndex] = { ...this.TimeEntity };
+      await this.uiUtils.showSuccessToster('Machinary Time updated successfully!');
+      this.isModalOpen = false;
+    } else {
+      this.TimeEntity.SiteManagementRef = this.Entity.p.Ref;
+      this.Entity.p.TimeDetails.push({ ...this.TimeEntity });
+      this.CalculateAmountOnRateAndQuantity()
+      await this.uiUtils.showSuccessToster('Machinary Time added successfully!');
+      this.resetTimeControls();
+    }
+
+    this.TimeEntity = TimeDetailProps.Blank();
+    this.editingIndex = null;
   }
 
-  if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
-    this.Entity.p.TimeDetails[this.editingIndex] = { ...this.TimeEntity };
-    await this.uiUtils.showSuccessToster('Machinary Time updated successfully!');
-    this.isModalOpen = false;
-  } else {
-    this.TimeEntity.SiteManagementRef = this.Entity.p.Ref;
-    this.Entity.p.TimeDetails.push({ ...this.TimeEntity });
-    this.CalculateAmountOnRateAndQuantity()
-    await this.uiUtils.showSuccessToster('Machinary Time added successfully!');
-    this.resetTimeControls();
-  }
 
-  this.TimeEntity = TimeDetailProps.Blank();
-  this.editingIndex = null;
-}
-
-
-   EditTime(index: number) {
+  EditTime(index: number) {
     this.isModalOpen = true
     this.TimeEntity = { ...this.Entity.p.TimeDetails[index] }
     this.editingIndex = index;
@@ -562,30 +545,30 @@ async SaveTime() {
     this.CalculateAmountOnRateAndQuantity()
   }
 
-   closeModal = async (type: string) => {
-      if (type === 'time') {
-        const keysToCheck = ['Start Time', 'End Time'] as const;
+  closeModal = async (type: string) => {
+    if (type === 'time') {
+      const keysToCheck = ['Start Time', 'End Time'] as const;
 
-        const hasData = keysToCheck.some(
-          key => (this.TimeEntity as any)[key]?.toString().trim()
-        );
+      const hasData = keysToCheck.some(
+        key => (this.TimeEntity as any)[key]?.toString().trim()
+      );
 
-        if (hasData) {
-          await this.uiUtils.showConfirmationMessage(
-            'Close',
-            `This process is <strong>IRREVERSIBLE!</strong><br/>
+      if (hasData) {
+        await this.uiUtils.showConfirmationMessage(
+          'Close',
+          `This process is <strong>IRREVERSIBLE!</strong><br/>
              Are you sure you want to close this modal?`,
-            async () => {
-              this.isModalOpen = false;
-              this.TimeEntity = TimeDetailProps.Blank();
-            }
-          );
-        } else {
-          this.isModalOpen = false;
-          this.TimeEntity = TimeDetailProps.Blank();
-        }
+          async () => {
+            this.isModalOpen = false;
+            this.TimeEntity = TimeDetailProps.Blank();
+          }
+        );
+      } else {
+        this.isModalOpen = false;
+        this.TimeEntity = TimeDetailProps.Blank();
       }
-    };
+    }
+  };
 
 
   resetAllControls = () => {
