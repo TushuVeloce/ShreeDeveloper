@@ -1,7 +1,6 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Modal } from 'bootstrap';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { City } from 'src/app/classes/domain/entities/website/masters/city/city';
@@ -78,6 +77,8 @@ export class SiteManagementDetailsComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(true);
     this.CountryListforSite = await Country.FetchEntireList();
     this.CountryListforOwner = await Country.FetchEntireList();
+    await this.FormulateCountryListforSite();
+    await this.FormulateCountryListforOwner();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Site' : 'Edit Site';
@@ -119,55 +120,91 @@ export class SiteManagementDetailsComponent implements OnInit {
     this.EmployeeList = lst;
   }
 
-  getStateListByCountryRefforSite = async (CountryRef: number) => {
-    this.StateListforSite = [];
-    this.CityListforSite = [];
-    if (CountryRef) {
-      let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.StateListforSite = lst;
+  FormulateCountryListforSite = async () => {
+    this.CountryListforSite = await Country.FetchEntireList(
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
 
-      if (CountryRef !== this.Entity.p.CountryRef) {
-        this.Entity.p.StateRef = 0;
-        this.Entity.p.CityRef = 0;
-      }
-    } else {
-      this.Entity.p.StateRef = 0;
-      this.Entity.p.CityRef = 0;
+    // Set default country if exists
+    if (this.CountryListforSite.length) {
+      const defaultCountry = this.CountryListforSite.find(c => c.p.Ref === this.Entity.p.CountryRef);
+      this.Entity.p.CountryRef = defaultCountry ? defaultCountry.p.Ref : this.CountryListforSite[0].p.Ref;
+
+      // Fetch the corresponding states
+      await this.getStateListByCountryRefforSite(this.Entity.p.CountryRef);
+    }
+  }
+
+  getStateListByCountryRefforSite = async (CountryRef: number) => {
+    this.StateListforSite = await State.FetchEntireListByCountryRef(
+      CountryRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
+    // Set default state if exists
+    if (this.StateListforSite.length) {
+      const defaultState = this.StateListforSite.find(s => s.p.Ref === this.Entity.p.StateRef);
+      this.Entity.p.StateRef = defaultState ? defaultState.p.Ref : this.StateListforSite[0].p.Ref;
+
+      // Fetch the corresponding cities
+      await this.getCityListByStateRefforSite(this.Entity.p.StateRef);
     }
   }
 
   getCityListByStateRefforSite = async (StateRef: number) => {
-    this.CityListforSite = [];
+    this.CityListforSite = await City.FetchEntireListByStateRef(
+      StateRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
 
-    if (StateRef) {
-      let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.CityListforSite = lst;
+    // Set default city if exists
+    if (this.CityListforSite.length) {
+      const defaultCity = this.CityListforSite.find(c => c.p.Ref === this.Entity.p.CityRef);
+      this.Entity.p.CityRef = defaultCity ? defaultCity.p.Ref : this.CityListforSite[0].p.Ref;
+    }
+  }
 
-      if (StateRef !== this.Entity.p.StateRef) {
-        this.Entity.p.CityRef = 0;
-      }
-    } else {
-      this.Entity.p.CityRef = 0;
+  FormulateCountryListforOwner = async () => {
+    this.CountryListforOwner = await Country.FetchEntireList(
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
+    // Set default country if exists
+    if (this.CountryListforOwner.length) {
+      const defaultCountry = this.CountryListforOwner.find(c => c.p.Ref === this.newOwner.CountryRef);
+      this.newOwner.CountryRef = defaultCountry ? defaultCountry.p.Ref : this.CountryListforOwner[0].p.Ref;
+
+      // Fetch the corresponding states
+      await this.getStateListByCountryRefforOwner(this.newOwner.CountryRef);
     }
   }
 
   getStateListByCountryRefforOwner = async (CountryRef: number) => {
-    this.StateListforOwner = [];
-    this.CityListforOwner = [];
-    this.newOwner.StateRef = 0;
-    this.newOwner.CityRef = 0;
-    if (CountryRef) {
-      let lst = await State.FetchEntireListByCountryRef(CountryRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.StateListforOwner = lst;
+    this.StateListforOwner = await State.FetchEntireListByCountryRef(
+      CountryRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
+    // Set default state if exists
+    if (this.StateListforOwner.length) {
+      const defaultState = this.StateListforOwner.find(s => s.p.Ref === this.newOwner.StateRef);
+      this.newOwner.StateRef = defaultState ? defaultState.p.Ref : this.StateListforOwner[0].p.Ref;
+
+      // Fetch the corresponding cities
+      await this.getCityListByStateRefforOwner(this.newOwner.StateRef);
     }
   }
 
   getCityListByStateRefforOwner = async (StateRef: number) => {
-    this.CityListforOwner = [];
-    this.newOwner.CityRef = 0;
-    if (StateRef) {
-      let lst = await City.FetchEntireListByStateRef(StateRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.CityListforOwner = lst;
+    this.CityListforOwner = await City.FetchEntireListByStateRef(
+      StateRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
+    // Set default city if exists
+    if (this.CityListforOwner.length) {
+      const defaultCity = this.CityListforOwner.find(c => c.p.Ref === this.newOwner.CityRef);
+      this.newOwner.CityRef = defaultCity ? defaultCity.p.Ref : this.CityListforOwner[0].p.Ref;
     }
   }
 

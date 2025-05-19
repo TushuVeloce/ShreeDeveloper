@@ -156,7 +156,7 @@ export class CRMPage implements OnInit {
 
       this.InterestedPlotRef = 0;
 
-      this.PlotList = await Plot.FetchEntireListBySiteandbookingremarkRef(
+      this.PlotList = await Plot.FetchEntireListBySiteandBookingRemarkRef(
         siteRef,
         BookingRemark.Booked,
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)

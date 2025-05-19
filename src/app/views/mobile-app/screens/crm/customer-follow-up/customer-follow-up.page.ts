@@ -32,14 +32,14 @@ export class CustomerFollowUpPage implements OnInit {
   strCDT: string = '';
   ModalOpen: boolean = false;
   isLoading: boolean = false;
-  companyRef : number = 0
+  companyRef: number = 0
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
     private appStateManagement: AppStateManageService,
     private companystatemanagement: CompanyStateManagement,
     private dateconversionService: DateconversionService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.LoadAllData()
@@ -63,7 +63,7 @@ export class CustomerFollowUpPage implements OnInit {
       await this.initializeDate();
       await this.loadSitesByCompanyRef();
     }
-   this.FilterFollowupList = [
+    this.FilterFollowupList = [
       {
         p: {
           CustomerName: 'Rahul Sharma',
@@ -184,15 +184,14 @@ export class CustomerFollowUpPage implements OnInit {
 
       this.InterestedPlotRef = 0;
 
-      const plots = await Plot.FetchEntireListBySiteandbookingremarkRef(
+      const plots = await Plot.FetchEntireListBySiteandBookingRemarkRef(
         siteRef,
-        BookingRemark.Booked,
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+        BookingRemark.Booked, async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
 
       this.PlotList = plots;
     } catch (error) {
-      await this.uiUtils.showErrorMessage('Error','Failed to load plots');
+      await this.uiUtils.showErrorMessage('Error', 'Failed to load plots');
     } finally {
       this.isLoading = false;
     }

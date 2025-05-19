@@ -142,7 +142,7 @@ export class CustomerFollowupComponent implements OnInit {
     }
     this.InterestedPlotRef = 0;
 
-    let lst = await Plot.FetchEntireListBySiteandbookingremarkRef(
+    let lst = await Plot.FetchEntireListBySiteandBookingRemarkRef(
       siteRef, BookingRemarkRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );

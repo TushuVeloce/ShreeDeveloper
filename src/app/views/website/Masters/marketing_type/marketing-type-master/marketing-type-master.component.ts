@@ -27,8 +27,8 @@ export class MarketingTypeMasterComponent implements OnInit {
 
   MarketingTypeModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
 
-
   headers: string[] = ['Sr.No.', 'Marketing Type', 'Description', 'Action'];
+
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement) {
     effect(() => {
       this.getMarketingTypeListByCompanyRef()
@@ -66,7 +66,7 @@ export class MarketingTypeMasterComponent implements OnInit {
     Are you sure that you want to DELETE this MarketingType Mode?`,
       async () => {
         await MarketingType.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(`MarketingType ${MarketingType.p.MarketingModeName} has been deleted!`);
+          await this.uiUtils.showSuccessToster(`Marketing Type ${MarketingType.p.MarketingModeName} has been deleted!`);
           await this.getMarketingTypeListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();

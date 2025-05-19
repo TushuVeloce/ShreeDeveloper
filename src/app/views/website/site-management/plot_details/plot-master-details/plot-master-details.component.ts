@@ -53,7 +53,7 @@ export class PlotMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.CompanyList = await Company.FetchEntireList();
-    const siteref = this.appStateManage.StorageKey.getItem('siteRf')
+    const siteref = this.appStateManage.StorageKey.getItem('siteRef')
     const siteName = this.appStateManage.StorageKey.getItem('siteName')
     this.SiteRf = siteref ? Number(siteref) : 0;
     this.SiteName = siteName ? siteName : '';
@@ -128,24 +128,23 @@ export class PlotMasterDetailsComponent implements OnInit {
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
-    // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-    // if (!tr.Successful) {
-    //   this.isSaveDisabled = false;
-    //   this.uiUtils.showErrorMessage('Error', tr.Message)
-    //   return;
-    // } else {
-    //   this.isSaveDisabled = false;
-    //   // this.onEntitySaved.emit(entityToSave);
-    //   if (this.IsNewEntity) {
-    //     await this.uiUtils.showSuccessToster('Plot saved successfully!');
-    //     this.Entity = Plot.CreateNewInstance();
-    //     this.CustomerEntity = Owner.CreateNewInstance();
-    //     this.CompanyEntity = Company.CreateNewInstance();
-    //     this.resetAllControls()
-    //   } else {
-    //     await this.uiUtils.showSuccessToster('Plot Updated successfully!');
-    //   }
-    // }
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message)
+      return;
+    } else {
+      this.isSaveDisabled = false;
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('Plot saved successfully!');
+        this.Entity = Plot.CreateNewInstance();
+        this.CustomerEntity = Owner.CreateNewInstance();
+        this.CompanyEntity = Company.CreateNewInstance();
+        this.resetAllControls()
+      } else {
+        await this.uiUtils.showSuccessToster('Plot Updated successfully!');
+      }
+    }
   };
 
   convertSqmToSqft = () => {

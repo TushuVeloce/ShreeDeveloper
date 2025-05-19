@@ -27,7 +27,7 @@ export class PlotMasterComponent implements OnInit {
   headers: string[] = ['Sr.No.', 'Plot No', 'Area /sqm', 'Area /sqft', 'Gov Rate/Sqm', 'Basic Rate/Sqft', 'Booking Remark', 'Action',];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   siteref: number = 0
-  bookigremark: number = 0
+  bookingremark: number = 0
   BookingRemarkList = DomainEnums.BookingRemarkList(true,);
   BookingRemarkEnum = BookingRemark;
   shouldDestroy: boolean = true;
@@ -42,11 +42,14 @@ export class PlotMasterComponent implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
+
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
-    const storedSiteRef = Number(this.appStateManage.StorageKey.getItem('siteRf'));
+
+    const storedSiteRef = Number(this.appStateManage.StorageKey.getItem('siteRef'));
     const bookingRemarkeRef = Number(this.appStateManage.StorageKey.getItem('bookingremarkRef'));
+
     this.siteref = storedSiteRef
-    this.bookigremark = bookingRemarkeRef
+    this.bookingremark = bookingRemarkeRef
     if (storedSiteRef > 0) {
       setTimeout(async () => {
         this.Entity.p.SiteManagementRef = storedSiteRef;
@@ -72,10 +75,10 @@ export class PlotMasterComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
-    if(this.siteref == 0){
+    if (this.siteref == 0) {
       // this.getPlotList()
       this.onsitechange(this.siteref)
-    }else{
+    } else {
       this.BookingRemarkList = DomainEnums.BookingRemarkList(true, '--select--');
     }
     this.loadPaginationData();
@@ -84,13 +87,13 @@ export class PlotMasterComponent implements OnInit {
   onsitechange = (siteref: number) => {
     this.siteref = siteref
     this.Entity.p.CurrentBookingRemark = 0
-    this.bookigremark = 0
+    this.bookingremark = 0
     this.MasterList = [];
     this.DisplayMasterList = [];
-    if (this.siteref == 0) {
+    if (this.siteref <= 0) {
       this.clearStorage();
       this.getPlotList()
-      this.BookingRemarkList = DomainEnums.BookingRemarkList(true,);
+      this.BookingRemarkList = DomainEnums.BookingRemarkList(true);
     } else {
       this.BookingRemarkList = DomainEnums.BookingRemarkList(true, '--select--');
     }
@@ -100,12 +103,11 @@ export class PlotMasterComponent implements OnInit {
       if (!selectedSite) {
         return;
       }
-      this.appStateManage.StorageKey.setItem('siteRf', String(siteref));
+      this.appStateManage.StorageKey.setItem('siteRef', String(siteref));
       this.appStateManage.StorageKey.setItem('siteName', selectedSite.p.Name);
-      this.appStateManage.StorageKey.setItem('bookingremarkRef', String(this.bookigremark));
-      if (this.bookigremark > 0) {
-        this.getPlotListBySiteandBookingRemarkRef(siteref, this.bookigremark)
-      }
+      this.appStateManage.StorageKey.setItem('bookingremarkRef', String(this.bookingremark));
+
+      this.getPlotListBySiteandBookingRemarkRef(siteref, this.bookingremark)
     }
   }
 
@@ -113,12 +115,12 @@ export class PlotMasterComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     this.siteref = siteref
-    this.bookigremark = bookingremarkref
-    if (bookingremarkref <= 0 || siteref <= 0) {
+    this.bookingremark = bookingremarkref
+    if (siteref <= 0) {
       return
     }
     this.appStateManage.StorageKey.setItem('bookingremarkRef', String(bookingremarkref));
-    let lst = await Plot.FetchEntireListBySiteandbookingremarkRef(siteref, bookingremarkref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Plot.FetchEntireListBySiteandBookingRemarkRef(siteref, bookingremarkref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -138,8 +140,8 @@ export class PlotMasterComponent implements OnInit {
     this.SelectedPlot = item.GetEditableVersion();
     Plot.SetCurrentInstance(this.SelectedPlot);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-      this.shouldDestroy = false;
-      await this.router.navigate(['/homepage/Website/Plot_Master_Details']);
+    this.shouldDestroy = false;
+    await this.router.navigate(['/homepage/Website/Plot_Master_Details']);
   };
 
 
@@ -198,8 +200,8 @@ export class PlotMasterComponent implements OnInit {
     }
   }
 
-   clearStorage() {
-    this.appStateManage.StorageKey.removeItem('siteRf');
+  clearStorage() {
+    this.appStateManage.StorageKey.removeItem('siteRef');
     this.appStateManage.StorageKey.removeItem('siteName');
     this.appStateManage.StorageKey.removeItem('bookingremarkRef');
   }
