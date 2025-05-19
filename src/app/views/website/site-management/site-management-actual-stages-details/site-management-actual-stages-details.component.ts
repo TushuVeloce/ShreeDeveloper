@@ -329,13 +329,13 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       await this.FormulateVendorServiceList()
       let refArray :number[] = []; // Example: [51675, 51674]
       this.VendorServiceList.forEach(e=>refArray.push(e.Ref))
-const matchedNames = this.VendorServiceList1
-  .filter(item => refArray.includes(item.p.Ref))
-
+      const matchedNames = this.VendorServiceList1.filter(item => refArray.includes(item.p.Ref))
+  
 
 console.log(matchedNames);
        console.log(this.VendorServiceList);
-       console.log(this.VendorServiceList1);      
+       console.log(this.VendorServiceList1);
+      
     }
 
     // const selectedRefs = this.VendorServiceList; // [51675, 51674]

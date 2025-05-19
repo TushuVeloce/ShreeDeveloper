@@ -27,7 +27,7 @@ export class VendorMasterDetailsComponent implements OnInit {
   isSaveDisabled: boolean = false;
   private IsNewEntity: boolean = true;
   Entity: Vendor = Vendor.CreateNewInstance();
-  DetailsFormTitle: 'New Vendor' | 'Edit Vendor' = 'New Vendor';
+  DetailsFormTitle: 'New Vendorr' | 'Edit Vendorr' = 'New Vendorr';
   InitialEntity: Vendor = null as any;
   companyName = this.companystatemanagement.SelectedCompanyName;
   CompanyTypeList = DomainEnums.CompanyTypeList(true, '--Select Company Type--');
@@ -87,7 +87,7 @@ export class VendorMasterDetailsComponent implements OnInit {
 
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Vendor' : 'Edit Vendor';
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Vendorr' : 'Edit Vendorr';
       this.Entity = Vendor.GetCurrentInstance();
       console.log('this.Entity :', this.Entity.p.MaterialListSuppliedByVendor);
       console.log('this.Entity :', Object.entries(this.Entity.p.MaterialListSuppliedByVendor).map(([key, value]) => ({ key, value })));
