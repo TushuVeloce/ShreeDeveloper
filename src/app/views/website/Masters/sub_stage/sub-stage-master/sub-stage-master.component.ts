@@ -91,30 +91,12 @@ export class SubStageMasterComponent implements OnInit {
     await this.router.navigate(['/homepage/Website/Sub_Stage_Master_Details']);
   };
 
-  // onDeleteClicked = async (SubStage: SubStage) => {
-  //   await this.uiUtils.showConfirmationMessage(
-  //     'Delete',
-  //     `This process is <strong>IRREVERSIBLE!</strong> <br/>
-  //   Are you sure that you want to DELETE this SubStage?`,
-  //     async () => {
-  //       await SubStage.DeleteInstance(async () => {
-  //         await this.uiUtils.showSuccessToster(
-  //           `SubStage ${SubStage.p.Name} has been deleted!`
-  //         );
-  //         await this.getSubStageListByCompanyRef();
-  //         this.SearchString = '';
-  //         this.loadPaginationData();
-  //       });
-  //     }
-  //   );
-  // };
-
   DeleteSubStage = async (SubStage: SubStage) => {
     await this.uiUtils.showConfirmationMessage(
       'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this SubStage?`,
       async () => {
         let req = new DeleteSubStageCustomRequest();
-        req.Ref = SubStage.p.Ref;
+        req.SubStageRef = SubStage.p.Ref;
         let td = req.FormulateTransportData();
         console.log('td :', td);
         let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
