@@ -57,7 +57,7 @@
           <label>Pin Code</label>
           <input type="text" name="PinCode" class="form-control" id="PinCode" [(ngModel)]="Entity.p.PinCode"
             pattern="{{ PinCodePattern }}" #PinCodeCtrl="ngModel" required (blur)="PinCodeCtrl.control.markAsTouched()"
-            placeholder="Enter PinCode" />
+            placeholder="Enter Pin Code" />
           <div *ngIf="
               PinCodeCtrl.invalid && (PinCodeCtrl.touched || PinCodeCtrl.dirty)
             ">

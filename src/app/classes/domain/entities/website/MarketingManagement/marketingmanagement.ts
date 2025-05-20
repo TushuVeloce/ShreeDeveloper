@@ -25,9 +25,11 @@ export class MarketingManagementProps {
   public readonly SiteName: string = '';
   public Date: string = '';
   public MarketingTypeRef: number = 0;
-  public MarketingTypeName: string = '';
+  public readonly MarketingTypeName: string = '';
   public VendorRef: number = 0;
-  public VendorName: string = '';
+  public readonly VendorName: string = '';
+  public VendorServiceRef: number = 0;
+  public readonly VendorServiceName: string = '';
   public Page: number = 0;
   public Place: string = '';
   public Rate: number = 0;
@@ -41,8 +43,6 @@ export class MarketingManagementProps {
   public UpdatedByName: number = 0;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public VendorServiceRef: number = 0;
-  public VendorServiceName: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
