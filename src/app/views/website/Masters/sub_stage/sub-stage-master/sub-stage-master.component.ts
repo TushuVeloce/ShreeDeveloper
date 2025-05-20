@@ -10,7 +10,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
-import { DeleteSubStageCustomRequest } from 'src/app/classes/domain/entities/website/masters/substage/DeleteCustomRequest';
+import { DeleteSubStageCustomRequest } from 'src/app/classes/domain/entities/website/masters/substage/DeleteSubStageCustomRequest';
 
 @Component({
   selector: 'app-sub-stage-master',

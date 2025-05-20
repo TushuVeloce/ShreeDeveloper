@@ -54,7 +54,7 @@
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
-          <label>PinCode</label>
+          <label>Pin Code</label>
           <input type="text" name="PinCode" class="form-control" id="PinCode" [(ngModel)]="Entity.p.PinCode"
             pattern="{{ PinCodePattern }}" #PinCodeCtrl="ngModel" required (blur)="PinCodeCtrl.control.markAsTouched()"
             placeholder="Enter PinCode" />
