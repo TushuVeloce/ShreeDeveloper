@@ -88,7 +88,7 @@ export class VendorServicesMasterComponent implements OnInit {
 
     DeleteVendorService = async (VendorService: VendorService) => {
       await this.uiUtils.showConfirmationMessage(
-        'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this SubStage?`,
+        'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Service?`,
         async () => {
           let req = new DeleteVendorServiceCustomRequest();
           req.VendorServiceRef = VendorService.p.Ref;

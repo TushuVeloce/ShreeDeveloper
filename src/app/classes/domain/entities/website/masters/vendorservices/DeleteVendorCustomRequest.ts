@@ -6,7 +6,7 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class DeleteVendorServiceCustomRequest
 {
-    public static readonly CustomProcessRequestType: string = "DeleteVendorServiceRequest";
+    public static readonly CustomProcessRequestType: string = "DeleteVendorServiceCustomRequest";
 
     VendorServiceRef: number = 0;
 
