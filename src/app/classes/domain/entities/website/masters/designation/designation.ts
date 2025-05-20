@@ -112,7 +112,7 @@ export class Designation implements IPersistable<Designation> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Designation[] {
+   sortPropertyName: string = ""): Designation[] {
     let result: Designation[] = [];
 
     let dcs = DataContainerService.GetInstance();

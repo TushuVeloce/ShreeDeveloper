@@ -101,7 +101,7 @@ export class ExpenseType implements IPersistable<ExpenseType> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): ExpenseType[] {
+   sortPropertyName: string = ""): ExpenseType[] {
     let result: ExpenseType[] = [];
 
     let dcs = DataContainerService.GetInstance();

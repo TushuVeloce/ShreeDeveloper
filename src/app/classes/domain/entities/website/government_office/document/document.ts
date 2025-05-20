@@ -109,7 +109,7 @@ export class Document implements IPersistable<Document> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Document[] {
+   sortPropertyName: string = ""): Document[] {
     let result: Document[] = [];
 
     let dcs = DataContainerService.GetInstance();

@@ -106,7 +106,7 @@ export class OfficeDutyandTime implements IPersistable<OfficeDutyandTime> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): OfficeDutyandTime[] {
+   sortPropertyName: string = ""): OfficeDutyandTime[] {
     let result: OfficeDutyandTime[] = [];
 
     let dcs = DataContainerService.GetInstance();

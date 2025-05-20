@@ -91,7 +91,7 @@ export class Country implements IPersistable<Country> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Country[] {
+   sortPropertyName: string = ""): Country[] {
     let result: Country[] = [];
 
     let dcs = DataContainerService.GetInstance();

@@ -117,7 +117,7 @@ export class SalarySlipRequest implements IPersistable<SalarySlipRequest> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): SalarySlipRequest[] {
+   sortPropertyName: string = ""): SalarySlipRequest[] {
     let result: SalarySlipRequest[] = [];
 
     let dcs = DataContainerService.GetInstance();

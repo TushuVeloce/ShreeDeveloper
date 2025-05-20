@@ -107,7 +107,7 @@ export class MarketingType implements IPersistable<MarketingType> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): MarketingType[] {
+   sortPropertyName: string = ""): MarketingType[] {
     let result: MarketingType[] = [];
 
     let dcs = DataContainerService.GetInstance();

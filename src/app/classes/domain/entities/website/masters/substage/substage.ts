@@ -105,7 +105,7 @@ export class SubStage implements IPersistable<SubStage> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): SubStage[] {
+   sortPropertyName: string = ""): SubStage[] {
     let result: SubStage[] = [];
 
     let dcs = DataContainerService.GetInstance();

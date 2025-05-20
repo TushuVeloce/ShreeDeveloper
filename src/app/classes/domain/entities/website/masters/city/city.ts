@@ -98,7 +98,7 @@ export class City implements IPersistable<City> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): City[] {
+   sortPropertyName: string = ""): City[] {
     let result: City[] = [];
 
     let dcs = DataContainerService.GetInstance();

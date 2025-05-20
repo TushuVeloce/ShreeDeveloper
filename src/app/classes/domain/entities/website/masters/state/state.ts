@@ -96,7 +96,7 @@ export class State implements IPersistable<State> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): State[] {
+   sortPropertyName: string = ""): State[] {
     let result: State[] = [];
 
     let dcs = DataContainerService.GetInstance();

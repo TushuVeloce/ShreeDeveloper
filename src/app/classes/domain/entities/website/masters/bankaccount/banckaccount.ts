@@ -130,7 +130,7 @@ export class BankAccount implements IPersistable<BankAccount> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): BankAccount[] {
+   sortPropertyName: string = ""): BankAccount[] {
     let result: BankAccount[] = [];
 
     let dcs = DataContainerService.GetInstance();

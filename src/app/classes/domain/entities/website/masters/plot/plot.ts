@@ -124,7 +124,7 @@ export class Plot implements IPersistable<Plot> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Plot[] {
+   sortPropertyName: string = ""): Plot[] {
     let result: Plot[] = [];
 
     let dcs = DataContainerService.GetInstance();

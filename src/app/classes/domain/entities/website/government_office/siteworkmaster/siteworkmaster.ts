@@ -114,7 +114,7 @@ export class SiteWorkMaster implements IPersistable<SiteWorkMaster> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): SiteWorkMaster[] {
+   sortPropertyName: string = ""): SiteWorkMaster[] {
     let result: SiteWorkMaster[] = [];
 
     let dcs = DataContainerService.GetInstance();

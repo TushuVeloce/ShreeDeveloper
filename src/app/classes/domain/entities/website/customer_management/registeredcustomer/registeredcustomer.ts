@@ -147,7 +147,7 @@ export class RegisteredCustomer implements IPersistable<RegisteredCustomer> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): RegisteredCustomer[] {
+   sortPropertyName: string = ""): RegisteredCustomer[] {
     let result: RegisteredCustomer[] = [];
 
     let dcs = DataContainerService.GetInstance();

@@ -107,7 +107,7 @@ export class Employee implements IPersistable<Employee> {
     if (this.p.Name == '') vra.add('Name', ' Name cannot be blank.');
     if (this.p.DOB == '') vra.add('DOB', ' DOB cannot be blank.');
     if (this.p.Gender == 0) vra.add('Gender', ' Gender cannot be blank.');
-    if (this.p.ContactNos == '') vra.add('ContactNos', ' Contact Nos cannot be blank.');
+    if (this.p.ContactNos == '') vra.add('ContactNos', ' Contact No cannot be blank.');
     if (this.p.PersonalEmailId == '') vra.add('PersonalEmailId', ' Personal Email Id cannot be blank.');
     if (this.p.OfficialEmailId == '') vra.add('OfficialEmailId', ' Official Email Id cannot be blank.');
     if (this.p.AddressLine1 == '') vra.add('AddressLine1', ' AddressLine1 cannot be blank.');
@@ -159,7 +159,7 @@ export class Employee implements IPersistable<Employee> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Employee[] {
+   sortPropertyName: string = ""): Employee[] {
     let result: Employee[] = [];
 
     let dcs = DataContainerService.GetInstance();

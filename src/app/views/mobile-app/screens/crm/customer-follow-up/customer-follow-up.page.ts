@@ -67,7 +67,7 @@ export class CustomerFollowUpPage implements OnInit {
       {
         p: {
           CustomerName: 'Rahul Sharma',
-          ContactNos: '9876543210',
+          ContactNo: '9876543210',
           ReminderDate: '2025-05-10T10:00:00Z',
           CustomerStatusName: 'Interested',
           CustomerRequirement: '3 BHK Apartment in Pune',
@@ -76,7 +76,7 @@ export class CustomerFollowUpPage implements OnInit {
       {
         p: {
           CustomerName: 'Priya Desai',
-          ContactNos: '9988776655',
+          ContactNo: '9988776655',
           ReminderDate: '2025-05-11T14:30:00Z',
           CustomerStatusName: 'Follow-up Later',
           CustomerRequirement: 'Commercial Office Space',

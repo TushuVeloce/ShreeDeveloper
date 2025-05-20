@@ -111,7 +111,7 @@ export class VendorService implements IPersistable<VendorService> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): VendorService[] {
+   sortPropertyName: string = ""): VendorService[] {
     let result: VendorService[] = [];
 
     let dcs = DataContainerService.GetInstance();

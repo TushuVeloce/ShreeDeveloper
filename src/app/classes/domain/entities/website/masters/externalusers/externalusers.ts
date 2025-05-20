@@ -107,7 +107,7 @@ export class ExternalUsers implements IPersistable<ExternalUsers> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): ExternalUsers[] {
+   sortPropertyName: string = ""): ExternalUsers[] {
     let result: ExternalUsers[] = [];
 
     let dcs = DataContainerService.GetInstance();

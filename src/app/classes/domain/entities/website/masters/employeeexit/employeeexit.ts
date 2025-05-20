@@ -110,7 +110,7 @@ export class EmployeeExit implements IPersistable<EmployeeExit> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): EmployeeExit[] {
+   sortPropertyName: string = ""): EmployeeExit[] {
     let result: EmployeeExit[] = [];
 
     let dcs = DataContainerService.GetInstance();

@@ -108,7 +108,7 @@ export class Unit implements IPersistable<Unit> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    // sortPropertyName: string = "Name"): Unit[] {
+    //sortPropertyName: string = "Name"): Unit[] {
     sortPropertyName: string = ""): Unit[] {
     let result: Unit[] = [];
 

@@ -112,7 +112,7 @@ export class Material implements IPersistable<Material> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Material[] {
+   sortPropertyName: string = ""): Material[] {
     let result: Material[] = [];
 
     let dcs = DataContainerService.GetInstance();

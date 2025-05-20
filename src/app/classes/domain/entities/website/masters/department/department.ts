@@ -108,7 +108,7 @@ export class Department implements IPersistable<Department> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Department[] {
+   sortPropertyName: string = ""): Department[] {
     let result: Department[] = [];
 
     let dcs = DataContainerService.GetInstance();

@@ -117,7 +117,7 @@ export class UserRoleRight implements IPersistable<UserRoleRight> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): UserRoleRight[] {
+   sortPropertyName: string = ""): UserRoleRight[] {
     let result: UserRoleRight[] = [];
 
     let dcs = DataContainerService.GetInstance();

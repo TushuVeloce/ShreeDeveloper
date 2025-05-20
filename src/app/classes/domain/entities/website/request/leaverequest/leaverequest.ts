@@ -144,7 +144,7 @@ export class LeaveRequest implements IPersistable<LeaveRequest> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): LeaveRequest[] {
+   sortPropertyName: string = ""): LeaveRequest[] {
     let result: LeaveRequest[] = [];
 
     let dcs = DataContainerService.GetInstance();

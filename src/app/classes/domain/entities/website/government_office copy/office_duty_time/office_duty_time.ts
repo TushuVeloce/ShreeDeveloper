@@ -109,7 +109,7 @@ export class office_duty_time implements IPersistable<office_duty_time> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): office_duty_time[] {
+   sortPropertyName: string = ""): office_duty_time[] {
     let result: office_duty_time[] = [];
 
     let dcs = DataContainerService.GetInstance();

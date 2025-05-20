@@ -104,7 +104,7 @@ export class SiteWorkGroup implements IPersistable<SiteWorkGroup> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): SiteWorkGroup[] {
+   sortPropertyName: string = ""): SiteWorkGroup[] {
     let result: SiteWorkGroup[] = [];
 
     let dcs = DataContainerService.GetInstance();

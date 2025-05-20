@@ -115,7 +115,7 @@ export class EmployeeAppraisal implements IPersistable<EmployeeAppraisal> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): EmployeeAppraisal[] {
+   sortPropertyName: string = ""): EmployeeAppraisal[] {
     let result: EmployeeAppraisal[] = [];
 
     let dcs = DataContainerService.GetInstance();

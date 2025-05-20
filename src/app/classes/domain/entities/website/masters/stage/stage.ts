@@ -119,7 +119,7 @@ export class Stage implements IPersistable<Stage> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Stage[] {
+   sortPropertyName: string = ""): Stage[] {
     let result: Stage[] = [];
 
     let dcs = DataContainerService.GetInstance();

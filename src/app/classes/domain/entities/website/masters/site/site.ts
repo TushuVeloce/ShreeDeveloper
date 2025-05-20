@@ -141,7 +141,7 @@ export class Site implements IPersistable<Site> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Site[] {
+   sortPropertyName: string = ""): Site[] {
     let result: Site[] = [];
 
     let dcs = DataContainerService.GetInstance();

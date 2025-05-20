@@ -194,7 +194,7 @@ export class ActualStages implements IPersistable<ActualStages> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): ActualStages[] {
+   sortPropertyName: string = ""): ActualStages[] {
     let result: ActualStages[] = [];
 
     let dcs = DataContainerService.GetInstance();

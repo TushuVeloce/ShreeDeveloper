@@ -166,7 +166,7 @@ export class RegistrarOffice implements IPersistable<RegistrarOffice> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): RegistrarOffice[] {
+   sortPropertyName: string = ""): RegistrarOffice[] {
     let result: RegistrarOffice[] = [];
 
     let dcs = DataContainerService.GetInstance();

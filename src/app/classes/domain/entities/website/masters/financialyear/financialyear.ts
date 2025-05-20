@@ -107,7 +107,7 @@ export class FinancialYear implements IPersistable<FinancialYear> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): FinancialYear[] {
+   sortPropertyName: string = ""): FinancialYear[] {
     let result: FinancialYear[] = [];
 
     let dcs = DataContainerService.GetInstance();

@@ -165,7 +165,7 @@ export class Company implements IPersistable<Company> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Company[] {
+   sortPropertyName: string = ""): Company[] {
     let result: Company[] = [];
 
     let dcs = DataContainerService.GetInstance();

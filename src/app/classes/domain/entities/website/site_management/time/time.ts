@@ -102,7 +102,7 @@ export class Time implements IPersistable<Time> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Time[] {
+   sortPropertyName: string = ""): Time[] {
     let result: Time[] = [];
 
     let dcs = DataContainerService.GetInstance();

@@ -117,7 +117,7 @@ export class CustomerFollowUpPlotDetails implements IPersistable<CustomerFollowU
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): CustomerFollowUpPlotDetails[] {
+   sortPropertyName: string = ""): CustomerFollowUpPlotDetails[] {
     let result: CustomerFollowUpPlotDetails[] = [];
 
     let dcs = DataContainerService.GetInstance();

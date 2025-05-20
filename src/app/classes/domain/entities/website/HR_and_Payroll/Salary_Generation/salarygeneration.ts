@@ -122,7 +122,7 @@ export class SalaryGeneration implements IPersistable<SalaryGeneration> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): SalaryGeneration[] {
+   sortPropertyName: string = ""): SalaryGeneration[] {
     let result: SalaryGeneration[] = [];
 
     let dcs = DataContainerService.GetInstance();

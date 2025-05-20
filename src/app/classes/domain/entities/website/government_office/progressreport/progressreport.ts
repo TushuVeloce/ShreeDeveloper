@@ -112,7 +112,7 @@ export class ProgressReport implements IPersistable<ProgressReport> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): ProgressReport[] {
+   sortPropertyName: string = ""): ProgressReport[] {
     let result: ProgressReport[] = [];
 
     let dcs = DataContainerService.GetInstance();

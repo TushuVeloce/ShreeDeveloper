@@ -103,7 +103,7 @@ export class Vehicle implements IPersistable<Vehicle> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Vehicle[] {
+   sortPropertyName: string = ""): Vehicle[] {
     let result: Vehicle[] = [];
 
     let dcs = DataContainerService.GetInstance();

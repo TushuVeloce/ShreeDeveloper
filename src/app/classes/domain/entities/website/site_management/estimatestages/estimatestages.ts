@@ -119,7 +119,7 @@ export class EstimateStages implements IPersistable<EstimateStages> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): EstimateStages[] {
+   sortPropertyName: string = ""): EstimateStages[] {
     let result: EstimateStages[] = [];
 
     let dcs = DataContainerService.GetInstance();

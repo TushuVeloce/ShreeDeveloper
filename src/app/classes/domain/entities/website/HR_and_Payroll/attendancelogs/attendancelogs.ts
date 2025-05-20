@@ -117,7 +117,7 @@ export class AttendanceLogs implements IPersistable<AttendanceLogs> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): AttendanceLogs[] {
+   sortPropertyName: string = ""): AttendanceLogs[] {
     let result: AttendanceLogs[] = [];
 
     let dcs = DataContainerService.GetInstance();

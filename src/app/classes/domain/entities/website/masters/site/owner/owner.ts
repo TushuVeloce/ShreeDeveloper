@@ -112,7 +112,7 @@ export class Owner implements IPersistable<Owner> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Owner[] {
+   sortPropertyName: string = ""): Owner[] {
     let result: Owner[] = [];
 
     let dcs = DataContainerService.GetInstance();

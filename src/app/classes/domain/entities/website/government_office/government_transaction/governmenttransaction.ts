@@ -118,7 +118,7 @@ export class GovernmentTransaction implements IPersistable<GovernmentTransaction
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): GovernmentTransaction[] {
+   sortPropertyName: string = ""): GovernmentTransaction[] {
     let result: GovernmentTransaction[] = [];
 
     let dcs = DataContainerService.GetInstance();
