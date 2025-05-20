@@ -30,7 +30,7 @@ export class PlotMasterDetailsComponent implements OnInit {
   InitialEntity: Plot = null as any;
   BookingRemarkList = DomainEnums.BookingRemarkList(true, '---Select Booking Remark---');
   BookingRemark = BookingRemark
-  SiteRf: number = 0
+  SiteRef: number = 0
   SiteName: string = ''
   CustomerList: Owner[] = [];
   CompanyList: Company[] = [];
@@ -55,7 +55,7 @@ export class PlotMasterDetailsComponent implements OnInit {
     this.CompanyList = await Company.FetchEntireList();
     const siteref = this.appStateManage.StorageKey.getItem('siteRef')
     const siteName = this.appStateManage.StorageKey.getItem('siteName')
-    this.SiteRf = siteref ? Number(siteref) : 0;
+    this.SiteRef = siteref ? Number(siteref) : 0;
     this.SiteName = siteName ? siteName : '';
     this.appStateManage.setDropdownDisabled(true);
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
@@ -63,7 +63,7 @@ export class PlotMasterDetailsComponent implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity ? 'New Plot' : 'Edit Plot';
       this.Entity = Plot.GetCurrentInstance();
       this.SiteName = this.Entity.p.SiteName
-      this.SiteRf = this.Entity.p.SiteManagementRef
+      this.SiteRef = this.Entity.p.SiteManagementRef
       this.appStateManage.StorageKey.removeItem('Editable');
       if (this.Entity.p.CurrentBookingRemark == BookingRemark.Booked) {
         this.isSaveDisabled = true
@@ -79,7 +79,7 @@ export class PlotMasterDetailsComponent implements OnInit {
       Plot.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as Plot;
-    this.getCustomerListBySiteandBookingRef(this.SiteRf)
+    this.getCustomerListBySiteandBookingRef(this.SiteRef)
   }
 
   getCustomerListBySiteandBookingRef = async (SiteRf: number) => {
@@ -113,12 +113,11 @@ export class PlotMasterDetailsComponent implements OnInit {
     }
   }
 
-
   SavePlot = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    this.Entity.p.SiteManagementRef = this.SiteRf
+    this.Entity.p.SiteManagementRef = this.SiteRef
     this.Entity.p.AreaInSqft = this.Entity.p.AreaInSqm * 10.7639
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
     if (this.Entity.p.CreatedBy == 0) {
@@ -127,7 +126,6 @@ export class PlotMasterDetailsComponent implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
