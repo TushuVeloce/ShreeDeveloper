@@ -36,12 +36,12 @@
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{followup.p.CustomerName}}</td>
             <td Class="tbldata">{{followup.p.ContactNos}}</td>
-            <!-- <td class="tbldata">{{ formatDate(followup.p.ReminderDate) }}</td> -->
+            <td class="tbldata">{{formatDate(followup.p.ReminderDate)}}</td>
 
             <td Class="tbldata">{{followup.p.CustomerStatusName}}</td>
-            <td class="tbldata">
+            <td class="tbldata d-flex justify-content-center">
               <nz-button nz-button class="btn2" (click)="onEditClicked(followup)">
-                Follow Up?
+                Follow Up
               </nz-button>
             </td>
           </tr>

@@ -93,8 +93,8 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    this.CountryList = await Country.FetchEntireList();
-    this.EmployeeList = await Employee.FetchEntireList();
+    // this.CountryList = await Country.FetchEntireList();
+    // this.EmployeeList = await Employee.FetchEntireList();
 
     this.getSiteListByCompanyRef();
     // Check if CountryRef is already set (e.g., India is preselected)
@@ -102,6 +102,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       // debugger
       this.IsNewEntity = false;
       this.Entity = CustomerFollowUp.GetCurrentInstance();
+      console.log('this.Entity :', this.Entity);
       // Reset Required Entities
       this.Entity.p.ReminderDate = '';
       this.Entity.p.Reason = '';

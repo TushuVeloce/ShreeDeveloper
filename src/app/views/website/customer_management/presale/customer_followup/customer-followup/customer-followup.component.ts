@@ -75,50 +75,19 @@ export class CustomerFollowupComponent implements OnInit {
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
-  // DateToStandardDateTime = async (date: string) => {
-  //   if (date != '') {
-  //     let parts = date.substring(0, 16).split('-');
-  //     // Construct the new date format
-  //     this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
-  //   } else {
-  //     this.ReminderDate = ''; // Clears the date variable when input is cleared
-  //     this.strCDT = '';
-  //   }
-  //   this.getCustomerFollowUpListByDateandPlotRef();
-  // }
-
   // Extracted from services date conversion //
-  // formatDate(date: string | Date): string {
-  //   return this.ReminderDateconversionService.formatDate(date);
-  // }
-
-  // getCustomerFollowUpListByDate = async () => {
-  //   let FollowUp = await CustomerFollowUp.FetchEntireListByDate(this.strCDT,
-  //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.followup = FollowUp
-  //   this.loadPaginationData();
-  // };
-
-  // getCustomerFollowUpListByPlotRef = async () => {
-  //   if (this.InterestedPlotRef != 0) {
-  //     let FollowUp = await CustomerFollowUp.FetchEntireListByDateandPlotRef(this.strCDT, this.InterestedPlotRef,
-  //       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //     this.followup = FollowUp
-  //     this.loadPaginationData();
-  //   }
-  // };
-
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
+  }
 
   getCustomerFollowUpListByDateandPlotRef = async () => {
     this.strCDT = this.dtu.ConvertStringDateToFullFormat(this.ReminderDate);
-    console.log('this.strCDT :', typeof (this.strCDT));
     let FollowUp = await CustomerFollowUp.FetchEntireListByDateandPlotRef(this.strCDT, this.InterestedPlotRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.followup = FollowUp
     this.DisplayMasterList = FollowUp;
     this.loadPaginationData();
   };
-
 
   formulateSiteListByCompanyRef = async () => {
     this.MasterList = [];
@@ -159,16 +128,10 @@ export class CustomerFollowupComponent implements OnInit {
   }
 
   onEditClicked = async (followup: CustomerFollowUp) => {
-
-    // // this.SelectedCustomerEnquiry = item.GetEditableVersion();
-    // this.SelectedFollowUp = (followup ? followup.GetEditableVersion() : {}) as CustomerFollowUp
-    // CustomerEnquiry.SetCurrentInstance(this.SelectedCustomerEnquiry);
-    // CustomerFollowUp.SetCurrentInstance(this.SelectedFollowUp);
     this.SelectedFollowUp = followup.GetEditableVersion();
     CustomerFollowUp.SetCurrentInstance(this.SelectedFollowUp);
-
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Customer_FollowUp_Details']);
+    this.AddFollowUp();
   };
 
 
@@ -193,7 +156,7 @@ export class CustomerFollowupComponent implements OnInit {
     }
   }
 
-  async add() {
-    await this.router.navigate(['/homepage/Website/Customer_FollowUp_Details']);
+  AddFollowUp = () => {
+    this.router.navigate(['/homepage/Website/Customer_FollowUp_Details']);
   }
 }

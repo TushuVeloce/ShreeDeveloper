@@ -20,120 +20,76 @@
       <div class="row" style="margin-top: 1rem; ">
         <!-- Todays Date  -->
         <div class="col-md-4 mt-2">
-          <div>
-            <label>Date</label>
-            <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Date" required readonly />
-          </div>
-        </div>
-        <!-- Contact Mode Field  -->
-        <div class="col-md-4">
-          <div>
-            <label>Contact Mode</label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" id="ContactMode" name="ContactMode" [nzSize]="'large'"
-              [(ngModel)]="Entity.p.ContactMode">
-              <nz-option *ngFor="let Mode of ContactModesList" [nzValue]="Mode.Ref" [nzLabel]="Mode.Name"></nz-option>
-            </nz-select>
-          </div>
-        </div>
-        <!-- Reason -->
-        <div class="col-md-4">
-          <div>
-            <label>Reason</label>
-            <input type="text" name="reason" class="form-control" id="reason" [(ngModel)]="Entity.p.Reason" required />
-          </div>
+          <label>Date</label>
+          <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Date" required readonly />
         </div>
         <!-- Customer Name  -->
-        <div class="col-md-4">
-          <div>
-            <label>Customer Name</label>
-            <input type="text" name="CustomerName" class="form-control" id="CustomerName"
-              [(ngModel)]="Entity.p.CustomerName" required placeholder="Enter Customer Name" readonly />
-          </div>
+        <div class="col-md-4 mt-2">
+          <label>Customer Name</label>
+          <input type="text" name="CustomerName" class="form-control" id="CustomerName"
+            [(ngModel)]="Entity.p.CustomerName" required placeholder="Enter Customer Name" readonly />
         </div>
-        <!-- </div>
-      <div class="row" style="margin-top: 1rem; "> -->
         <!-- Contact No  -->
         <div class="col-md-4 mt-2">
-          <div>
-            <label>Contact No</label>
-            <input type="text" name="ContactNos" class="form-control" id="ContactNos" required
-              [(ngModel)]="Entity.p.ContactNos" placeholder="Enter Contact No" readonly />
-          </div>
+          <label>Contact No</label>
+          <input type="text" name="ContactNos" class="form-control" id="ContactNos" required
+            [(ngModel)]="Entity.p.ContactNos" placeholder="Enter Contact No" readonly />
         </div>
-        <!-- <div class="col-md-4">
-          <div>
-            <label>Email Id</label>
-            <input type="text" name="PersonalEmailId" class="form-control" id="PersonalEmailId" required
-              [(ngModel)]="Entity.p.EmailId" placeholder="Enter Personal Email Id" />
-          </div>
-        </div> -->
+
         <!-- Country  -->
         <div class="col-md-4 mt-2">
-          <div>
-            <label for="CountryRef"><b>Country</b></label>
-            <input type="text" name="CountryRef" class="form-control" id="CountryRef" [(ngModel)]="Entity.p.CountryName"
-              readonly />
-            <!-- <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-              name="CountryRef" required id="CountryRef" [(ngModel)]="CustomerEnquiryEntity.p.CountryRef">
-              <nz-option></nz-option>
-            </nz-select> -->
-          </div>
+          <label for="CountryRef"><b>Country</b></label>
+          <input type="text" name="CountryRef" class="form-control" id="CountryRef" [(ngModel)]="Entity.p.CountryName"
+            readonly />
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
         <!-- State  -->
-        <div class="col-md-4">
-          <div>
-            <label for="StateRef"><b>State</b></label>
-            <input type="text" name="StateRef" class="form-control" id="StateRef" [(ngModel)]="Entity.p.StateName"
-              readonly />
-            <!-- <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="StateRef"
-              name="StateRef" [nzSize]="'large'"  [(ngModel)]="CustomerEnquiryEntity.p.StateRef">
-              <nz-option></nz-option>
-            </nz-select> -->
-          </div>
+        <div class="col-md-4 mt-2">
+          <label for="StateRef"><b>State</b></label>
+          <input type="text" name="StateRef" class="form-control" id="StateRef" [(ngModel)]="Entity.p.StateName"
+            readonly />
         </div>
         <!-- City  -->
-        <div class="col-md-4">
-          <div>
-            <label for="CityRef"><b>City</b></label>
-            <input type="text" name="CityRef" class="form-control" id="CityRef" [(ngModel)]="Entity.p.CityName"
-              readonly />
-            <!-- <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="CityRef"
-              name="CityRef" [nzSize]="'large'"  [(ngModel)]="CustomerEnquiryEntity.p.CityRef">
-              <nz-option></nz-option>
-            </nz-select> -->
-          </div>
+        <div class="col-md-4 mt-2">
+          <label for="CityRef"><b>City</b></label>
+          <input type="text" name="CityRef" class="form-control" id="CityRef" [(ngModel)]="Entity.p.CityName"
+            readonly />
         </div>
         <!-- Address  -->
-        <div class="col-md-4">
-          <div>
-            <label>Address</label>
-            <input type="text" name="address" class="form-control" id="address" required placeholder="Enter Address"
-              [(ngModel)]="Entity.p.Address" readonly>
-          </div>
+        <div class="col-md-4 mt-2">
+          <label>Address</label>
+          <input type="text" name="address" class="form-control" id="address" required placeholder="Enter Address"
+            [(ngModel)]="Entity.p.Address" readonly>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem;">
         <!-- Pin Code  -->
-        <div class="col-md-4">
+        <div class="col-md-4 mt-2">
           <label>Pin Code</label>
           <input type="text" name="PinCode" class="form-control" id="PinCode" required [(ngModel)]="Entity.p.PinCode"
             placeholder="Enter Pin Code" readonly />
         </div>
+        <!-- Contact Mode Field  -->
+        <div class="col-md-4 mt-2">
+          <label>Contact Mode</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="ContactMode" name="ContactMode" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.ContactMode">
+            <nz-option *ngFor="let Mode of ContactModesList" [nzValue]="Mode.Ref" [nzLabel]="Mode.Name"></nz-option>
+          </nz-select>
+        </div>
+        <!-- Reason -->
+        <div class="col-md-4 mt-2">
+          <label>Reason</label>
+          <input type="text" name="reason" class="form-control" id="reason" [(ngModel)]="Entity.p.Reason" required />
+        </div>
         <!-- Customer Requirement  -->
-        <div class="col-md-4">
+        <div class="col-md-4 mt-2">
           <div>
             <label>Customer Requirement</label>
             <input type="text" name="CustomerRequirement" class="form-control" id="CustomerRequirement"
               [(ngModel)]="Entity.p.CustomerRequirement" required placeholder="Enter Customer Requirement" />
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem;">
         <!-- Intrested Site  -->
-        <div class="col-md-4">
+        <div class="col-md-4 mt-2">
           <div>
             <label for="SiteManagementRef"><b>Interested site</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -144,7 +100,7 @@
           </div>
         </div>
         <!-- Intrested Plots  -->
-        <div class="col-md-4">
+        <div class="col-md-4 mt-2">
           <div>
             <label for="InterestedPlotRef"><b>Interested Plots</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -153,15 +109,21 @@
               <nz-option *ngFor="let Plot of PlotList" [nzValue]="Plot.p.Ref" [nzLabel]="Plot.p.PlotNo"></nz-option>
             </nz-select>
           </div>
+        </div>
+        <div class="col-md-4 mt-2">
 
         </div>
+
         <!-- Add button  -->
-        <div class="col-md-4" style="margin-top: 33px;">
+        <div class="col-md-4 mt-2 d-flex justify-content-end align-items-end" style="margin-top: 33px;">
           <div>
             <button type="button" class="btn" (click)="addDataToCustomerFollowUpPlotDetail()">Add</button>
           </div>
         </div>
       </div>
+      <ng-template #noDataTpl>
+        <div class="no-data-text">Data Not Found</div>
+      </ng-template>
       <!-- Plot Details table  -->
       <div class="table-container" style="margin-top: 2rem">
         <div class="row">
@@ -169,11 +131,11 @@
             <label class="TableHeading">Follow Up Plots</label>
           </div>
         </div>
-        <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
-          nzFrontPagination="false" [nzShowSizeChanger]="false">
+        <nz-table #basicTable [nzNoResult]="noDataTpl" nzSize="small" class="no-hover-table bgtable_light"
+          [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
           <thead>
             <tr>
-              <th *ngFor="let header of Plotheaders" class="tblheader">
+              <th *ngFor="let header of Plotheaders" class="tblsubheader">
                 {{header}}
               </th>
             </tr>
