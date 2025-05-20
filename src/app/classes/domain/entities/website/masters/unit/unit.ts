@@ -108,7 +108,8 @@ export class Unit implements IPersistable<Unit> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = "Name"): Unit[] {
+    // sortPropertyName: string = "Name"): Unit[] {
+    sortPropertyName: string = ""): Unit[] {
     let result: Unit[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -141,9 +142,9 @@ export class Unit implements IPersistable<Unit> {
 
     let tr = await ServerCommunicatorService.GetInstance().sendHttpRequest(pktRequest);
     if (!tr.Successful) {
+    }
       if (!isNullOrUndefined(errorHandler)) await errorHandler(tr.Message);
       return null;
-    }
 
     let tdResponse = JSON.parse(tr.Tag) as TransportData;
     return tdResponse;
