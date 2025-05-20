@@ -15,7 +15,7 @@
           <div class="col-md-4">
             <label for="date"><b>Date</b></label>
             <input type="date" name="date" class="form-control" id="date" [(ngModel)]="ReminderDate"
-              (ngModelChange)="DateToStandardDateTime(ReminderDate)" />
+              (ngModelChange)="getCustomerFollowUpListByDateandPlotRef()" />
           </div>
         </div>
       </form>

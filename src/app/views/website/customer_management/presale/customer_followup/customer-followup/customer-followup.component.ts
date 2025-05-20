@@ -75,17 +75,17 @@ export class CustomerFollowupComponent implements OnInit {
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
-  DateToStandardDateTime = async (date: string) => {
-    if (date != '') {
-      let parts = date.substring(0, 16).split('-');
-      // Construct the new date format
-      this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
-    } else {
-      this.ReminderDate = ''; // Clears the date variable when input is cleared
-      this.strCDT = '';
-    }
-    this.getCustomerFollowUpListByDateandPlotRef();
-  }
+  // DateToStandardDateTime = async (date: string) => {
+  //   if (date != '') {
+  //     let parts = date.substring(0, 16).split('-');
+  //     // Construct the new date format
+  //     this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+  //   } else {
+  //     this.ReminderDate = ''; // Clears the date variable when input is cleared
+  //     this.strCDT = '';
+  //   }
+  //   this.getCustomerFollowUpListByDateandPlotRef();
+  // }
 
   // Extracted from services date conversion //
   // formatDate(date: string | Date): string {
@@ -110,6 +110,8 @@ export class CustomerFollowupComponent implements OnInit {
 
 
   getCustomerFollowUpListByDateandPlotRef = async () => {
+    this.strCDT = this.dtu.ConvertStringDateToFullFormat(this.ReminderDate);
+    console.log('this.strCDT :', typeof (this.strCDT));
     let FollowUp = await CustomerFollowUp.FetchEntireListByDateandPlotRef(this.strCDT, this.InterestedPlotRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.followup = FollowUp

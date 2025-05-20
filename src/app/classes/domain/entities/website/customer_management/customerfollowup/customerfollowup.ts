@@ -350,7 +350,7 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
   ) {
     let req = new CustomerFollowUpFetchRequest();
     req.ReminderDate.push(ReminderDate);
-    if(plotref){
+    if (plotref) {
       req.PlotRefs.push(plotref);
     }
     let tdResponse = (await CustomerFollowUp.FetchTransportData(
