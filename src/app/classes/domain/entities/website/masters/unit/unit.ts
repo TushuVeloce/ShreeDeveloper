@@ -142,9 +142,9 @@ export class Unit implements IPersistable<Unit> {
 
     let tr = await ServerCommunicatorService.GetInstance().sendHttpRequest(pktRequest);
     if (!tr.Successful) {
-    }
       if (!isNullOrUndefined(errorHandler)) await errorHandler(tr.Message);
       return null;
+    }
 
     let tdResponse = JSON.parse(tr.Tag) as TransportData;
     return tdResponse;
