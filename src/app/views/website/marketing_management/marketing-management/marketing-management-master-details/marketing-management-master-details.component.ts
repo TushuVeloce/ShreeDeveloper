@@ -153,7 +153,7 @@ export class MarketingManagementMasterDetailsComponent  implements OnInit {
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('MarketingManagement Master Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Marketing_Management']);
+       this.BackMarketingManagement()
       }
     }
   };

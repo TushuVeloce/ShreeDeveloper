@@ -75,6 +75,7 @@ export class VendorServicesMasterDetailsComponent implements OnInit {
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Vendor Service Updated successfully!');
+        await this.router.navigate(['/homepage/Website/Vendor_Services_Master']);
         this.BackVendorService();
       }
     }

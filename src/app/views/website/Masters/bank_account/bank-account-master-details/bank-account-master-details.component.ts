@@ -110,8 +110,7 @@ export class BankAccountMasterDetailsComponent implements OnInit {
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Bank Account Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Bank_Account_Master']);
-
+        this.BackBankAccount()
       }
     }
   }

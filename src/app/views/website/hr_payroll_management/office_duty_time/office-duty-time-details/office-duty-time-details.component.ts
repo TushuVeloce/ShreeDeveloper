@@ -76,7 +76,7 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
         this.Entity = OfficeDutyandTime.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster('Office Duty and Time  Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Office_Duty_Time']);
+        this.BackOfficeTime()
       }
     }
   };

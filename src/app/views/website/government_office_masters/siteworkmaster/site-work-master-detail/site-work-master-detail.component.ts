@@ -115,7 +115,7 @@ export class SiteWorkMasterDetailComponent implements OnInit {
         await this.uiUtils.showSuccessToster(
           'Site Work Master  Updated successfully!'
         );
-        await this.router.navigate(['/homepage/Website/Site_Work_Master']);
+        this.BackSiteWorkMaster()
       }
     }
   };

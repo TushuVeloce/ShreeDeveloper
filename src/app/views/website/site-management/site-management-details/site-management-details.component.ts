@@ -304,6 +304,7 @@ export class SiteManagementDetailsComponent implements OnInit {
         this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster('Site Updated successfully!');
+        this.BackSiteManagement()
       }
     }
   };

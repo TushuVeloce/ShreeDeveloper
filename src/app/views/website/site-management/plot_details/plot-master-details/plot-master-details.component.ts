@@ -143,6 +143,7 @@ export class PlotMasterDetailsComponent implements OnInit {
         this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster('Plot Updated successfully!');
+        this.BackPlot()
       }
     }
   };

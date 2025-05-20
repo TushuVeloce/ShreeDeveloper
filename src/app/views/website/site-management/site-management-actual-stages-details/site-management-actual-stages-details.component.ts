@@ -75,7 +75,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
 
-  VendorServiceList1: VendorService[] = [];
+  VendorServiceListByVendor: VendorService[] = [];
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
   @ViewChild('VehicleNoCtrl') VehicleNoInputControl!: NgModel;
@@ -95,6 +95,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stage' : 'Edit Stage';
       this.Entity = ActualStages.GetCurrentInstance();
+      console.log('Entity :', this.Entity);
       if (this.Entity.p.Date != '') {
         this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
       }
@@ -111,7 +112,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     } else {
       this.Entity = ActualStages.CreateNewInstance();
       ActualStages.SetCurrentInstance(this.Entity);
-      const CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
       if (this.appStateManage.StorageKey.getItem('UserDisplayName')) {
         const name = this.appStateManage.StorageKey.getItem('UserDisplayName') || ''
         this.Entity.p.CreatedByName = name
@@ -303,11 +303,11 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.VendorServiceList1 = []
+    this.VendorServiceListByVendor = []
     let lst = await VendorService.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.VendorServiceList1 = lst;
+    this.VendorServiceListByVendor = lst;
   };
 
   getVendorServiceListByVendorRef = async (VendorRef: number) => {
@@ -321,13 +321,13 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     }
     let lst = await Vendor.FetchInstance(VendorRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.VendorServiceList = lst.p.ServiceListSuppliedByVendor;
-    this.VendorServiceList1 = []; // Clear existing list first
+    this.VendorServiceListByVendor = []; // Clear existing list first
     if (this.VendorServiceList.length > 0) {
       await this.FormulateVendorServiceList();
       const refArray = this.VendorServiceList.map(s => Number(s));
-      const matched = this.VendorServiceList1.filter(service => refArray.includes(service.p.Ref));
+      const matched = this.VendorServiceListByVendor.filter(service => refArray.includes(service.p.Ref));
       console.log('matched :', matched);
-      this.VendorServiceList1 = matched; // Either matched list or stays empty
+      this.VendorServiceListByVendor = matched; // Either matched list or stays empty
     }
   }
 
@@ -592,6 +592,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   SaveStageMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
     this.Entity.p.Total = this.getTotalWorkedHours()
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
     let entityToSave = this.Entity.GetEditableVersion();
@@ -612,8 +613,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Actual Stage Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage']);
-
+        this.BackActualStages()
       }
     }
   }

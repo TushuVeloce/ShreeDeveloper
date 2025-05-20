@@ -102,7 +102,7 @@ export class DocumentDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster(
           'Document Master Updated successfully!'
         );
-        await this.router.navigate(['/homepage/Website/Document']);
+       this.BackDocument()
       }
     }
   };

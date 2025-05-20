@@ -104,13 +104,13 @@ export class SubStageMasterDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Sub Stage Master saved successfully!');
+        await this.uiUtils.showSuccessToster('Sub Stage saved successfully!');
         // this.Entity = SubStage.CreateNewInstance();
         this.Entity.p.Name = ''
         this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster('Sub Stage Master Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Sub_Stage_Master']);
+        await this.uiUtils.showSuccessToster('Sub Stage Updated successfully!');
+        this.BackSubStage()
       }
     }
   };

@@ -104,8 +104,7 @@ export class EstimateStagesDetailsComponent implements OnInit {
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Estimate Stage Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Estimate_Stages']);
-
+       this.BackEstimateStage()
       }
     }
   }

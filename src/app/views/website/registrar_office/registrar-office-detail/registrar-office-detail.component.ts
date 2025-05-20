@@ -152,7 +152,7 @@ export class RegistrarOfficeDetailComponent  implements OnInit {
           this.Entity = RegistrarOffice.CreateNewInstance();
         } else {
           await this.router.navigate(['/homepage/Website/Registrar_Office'])
-          await this.uiUtils.showSuccessToster('Registrar Office Updated successfully!');
+          this.BackRegistrarOffice()
         }
       }
     }

@@ -142,7 +142,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
         this.Entity = SalaryGeneration.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster('Salary Details  Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Salary_Generation']);
+        this.BackSalaryGenaration()
       }
     }
   };

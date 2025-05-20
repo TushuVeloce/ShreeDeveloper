@@ -131,7 +131,7 @@ export class SiteWorkDoneMasterDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster(
           'Site Work Done  Updated successfully!'
         );
-        await this.router.navigate(['/homepage/Website/Site_Work_Done']);
+        this.BackSiteWorkDone()
       }
     }
   };

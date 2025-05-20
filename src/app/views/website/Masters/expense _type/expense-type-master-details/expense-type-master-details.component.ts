@@ -106,12 +106,12 @@ export class ExpenseTypeMasterDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Expense Type Master saved successfully!');
+        await this.uiUtils.showSuccessToster('Expense Typesaved successfully!');
         this.Entity = ExpenseType.CreateNewInstance();
         this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster('Expense Type Master Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Expense_Type_Master']);
+        await this.uiUtils.showSuccessToster('Expense Type Updated successfully!');
+        this.BackExpenseType()
       }
     }
   };

@@ -71,7 +71,7 @@ export class SiteWorkGroupMasterDetailsComponent implements OnInit {
         this.Entity = SiteWorkGroup.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster('SiteWorkGroup Master Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Site_Work_Group']);
+        this.BackSiteWorkGroup()
       }
     }
   }

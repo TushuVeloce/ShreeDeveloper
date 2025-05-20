@@ -43,11 +43,14 @@ export class SiteManagementActualStagesComponent implements OnInit {
   currentMachinaryPage = 1; // Initialize current page
   currentLabourPage = 1; // Initialize current page
   currentOtherPage = 1; // Initialize current page
+  ExpenseTypeRef: number = ExpenseTypeRefs.MachinaryExpense
+  LabourExpenseRef: number = ExpenseTypeRefs.LabourExpense
+  OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  MachinaryHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.','Site Name', 'Vehicle No',  'Vendor Name', 'Quantity', 'Rate', 'Unit', 'Amount', 'Action'];
-  LabourHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.','Site Name',  'Vendor Name', 'Amount', 'Action'];
-  Headers: string[] = ['Sr.No.', 'Date', 'Chalan No.','Expense Type', 'Site Name', 'Quantity','Rate', 'Amount', 'Action'];
+  MachinaryHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.','Site Name', 'Vehicle No',  'Vendor Name', 'Quantity', 'Rate', 'Unit', 'Grand Total', 'Action'];
+  LabourHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.','Site Name',  'Vendor Name', 'Grand Total', 'Action'];
+  Headers: string[] = ['Sr.No.', 'Date', 'Chalan No.','Expense Type', 'Site Name', 'Quantity','Rate', 'Grand Total', 'Action'];
 
   constructor(private uiUtils: UIUtils,
     private router: Router,
@@ -103,12 +106,13 @@ export class SiteManagementActualStagesComponent implements OnInit {
     let lst = await ActualStages.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
+    console.log('DisplayMasterList :', this.DisplayMasterList);
     for (const item of lst) {
       switch (item.p.ExpenseTypeRef) {
-        case 100:
+        case this.ExpenseTypeRef:
           this.MachinaryExpenseList.push(item);
           break;
-        case 200:
+        case this.LabourExpenseRef:
           this.LabourExpenseList.push(item);
           break;
         default:
