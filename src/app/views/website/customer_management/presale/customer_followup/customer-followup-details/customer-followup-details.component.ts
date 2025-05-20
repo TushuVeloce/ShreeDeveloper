@@ -95,7 +95,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(true);
     // this.CountryList = await Country.FetchEntireList();
     // this.EmployeeList = await Employee.FetchEntireList();
-
+    this.getEmployeeListByCompanyRef()
     this.getSiteListByCompanyRef();
     // Check if CountryRef is already set (e.g., India is preselected)
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
@@ -176,6 +176,16 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       this.DateWithTime = this.Entity.p.TransDateTime;
     }
   }
+
+  getEmployeeListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.EmployeeList = lst;
+  }
+
   // For country, state, city dropdowns
   getStateListByCountryRef = async (CountryRef: number) => {
     this.StateList = [];
