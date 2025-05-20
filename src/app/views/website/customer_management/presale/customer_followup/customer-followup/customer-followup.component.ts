@@ -39,7 +39,7 @@ export class CustomerFollowupComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   InterestedPlotRef: number = 0
   SiteManagementRef: number = 0;
-  date: string = ''
+  ReminderDate: string = ''
   strCDT: string = ''
 
   headers: string[] = [
@@ -60,11 +60,11 @@ export class CustomerFollowupComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    if (this.date == '') {
+    if (this.ReminderDate == '') {
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       let parts = this.strCDT.substring(0, 16).split('-');
       // Construct the new date format
-      this.date = `${parts[0]}-${parts[1]}-${parts[2]}`;
+      this.ReminderDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
       this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
       if (this.strCDT != '') {
         this.getCustomerFollowUpListByDateandPlotRef();
@@ -81,16 +81,16 @@ export class CustomerFollowupComponent implements OnInit {
       // Construct the new date format
       this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
     } else {
-      this.date = ''; // Clears the date variable when input is cleared
+      this.ReminderDate = ''; // Clears the date variable when input is cleared
       this.strCDT = '';
     }
     this.getCustomerFollowUpListByDateandPlotRef();
   }
 
   // Extracted from services date conversion //
-  formatDate(date: string | Date): string {
-    return this.DateconversionService.formatDate(date);
-  }
+  // formatDate(date: string | Date): string {
+  //   return this.ReminderDateconversionService.formatDate(date);
+  // }
 
   // getCustomerFollowUpListByDate = async () => {
   //   let FollowUp = await CustomerFollowUp.FetchEntireListByDate(this.strCDT,

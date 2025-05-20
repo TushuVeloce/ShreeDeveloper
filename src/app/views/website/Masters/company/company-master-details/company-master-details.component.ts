@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
@@ -58,6 +59,13 @@ export class CompanyMasterDetailsComponent implements OnInit {
   TimeStamp = Date.now()
   LoginToken = '';
 
+  @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('ContactsCtrl') ContactsControl!: NgModel;
+  @ViewChild('EmailIdCtrl') EmailIdControl!: NgModel;
+  @ViewChild('OwnerNameCtrl') OwnerNameControl!: NgModel;
+  @ViewChild('PinCodeCtrl') PinCodeControl!: NgModel;
+  @ViewChild('AddressLine1Ctrl') AddressLine1Control!: NgModel;
+  @ViewChild('GSTINCtrl') GSTINInputControl!: NgModel;
   @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
 
   constructor(
@@ -248,6 +256,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
         this.dateOfInCorporation = '';
         this.lastDateOfFirstFinancialYear = '';
         this.Entity = Company.CreateNewInstance();
+        this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Company Updated successfully!');
         this.dateOfInCorporation = '';
@@ -259,5 +268,25 @@ export class CompanyMasterDetailsComponent implements OnInit {
 
   BackCompany = () => {
     this.router.navigate(['/homepage/Website/Company_Master']);
+  }
+
+    resetAllControls = () => {
+    // reset touched
+    this.NameInputControl.control.markAsUntouched();
+    this.ContactsControl.control.markAsUntouched();
+    this.EmailIdControl.control.markAsUntouched();
+    this.OwnerNameControl.control.markAsUntouched();
+    this.PinCodeControl.control.markAsUntouched();
+    this.AddressLine1Control.control.markAsUntouched();
+    this.GSTINInputControl.control.markAsUntouched();
+
+    // reset dirty
+    this.NameInputControl.control.markAsPristine();
+    this.ContactsControl.control.markAsPristine();
+    this.EmailIdControl.control.markAsPristine();
+    this.OwnerNameControl.control.markAsPristine();
+    this.PinCodeControl.control.markAsPristine();
+    this.AddressLine1Control.control.markAsPristine();
+    this.GSTINInputControl.control.markAsPristine();
   }
 }

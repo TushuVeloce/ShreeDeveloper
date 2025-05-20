@@ -14,8 +14,8 @@
         <div class="row">
           <div class="col-md-4">
             <label for="date"><b>Date</b></label>
-            <input type="date" name="date" class="form-control" id="date" [(ngModel)]="date"
-              (ngModelChange)="DateToStandardDateTime(date)" />
+            <input type="date" name="date" class="form-control" id="date" [(ngModel)]="ReminderDate"
+              (ngModelChange)="DateToStandardDateTime(ReminderDate)" />
           </div>
         </div>
       </form>
@@ -36,7 +36,7 @@
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{followup.p.CustomerName}}</td>
             <td Class="tbldata">{{followup.p.ContactNos}}</td>
-            <td class="tbldata">{{ formatDate(followup.p.ReminderDate) }}</td>
+            <!-- <td class="tbldata">{{ formatDate(followup.p.ReminderDate) }}</td> -->
 
             <td Class="tbldata">{{followup.p.CustomerStatusName}}</td>
             <td class="tbldata">

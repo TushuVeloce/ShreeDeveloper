@@ -1,5 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ExpenseTypeRefs } from 'src/app/classes/domain/constants';
 import { ExpenseType } from 'src/app/classes/domain/entities/website/masters/expensetype/expensetype';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -26,6 +27,9 @@ export class ExpenseTypeMasterComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
+  ExpenseTypeRef: number = ExpenseTypeRefs.MachinaryExpense
+  LabourExpenseRef: number = ExpenseTypeRefs.LabourExpense
+  OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -71,6 +75,7 @@ export class ExpenseTypeMasterComponent implements OnInit {
     this.MasterList = lst;
 
     this.DisplayMasterList = this.MasterList;
+    console.log('DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
   }
 
