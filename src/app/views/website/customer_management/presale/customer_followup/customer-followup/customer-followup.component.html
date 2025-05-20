@@ -8,6 +8,11 @@
         [(ngModel)]="SearchString" />
     </div>
   </div>
+  <ng-template #noDataTpl>
+    <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+      No Data
+    </div>
+  </ng-template>
   <div class="row">
     <div class="card-body" style="margin-left: 14px;">
       <form autocomplete="off">
@@ -16,6 +21,15 @@
             <label for="date"><b>Date</b></label>
             <input type="date" name="date" class="form-control" id="date" [(ngModel)]="ReminderDate"
               (ngModelChange)="getCustomerFollowUpListByDateandPlotRef()" />
+          </div>
+          <div class="col-md-4">
+              <label for="ContactModeRef"><b>Contact Mode</b></label>
+              <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+                nzPlaceHolder="Select" id="ContactModeRef" name="ContactModeRef"
+                [(ngModel)]="Entity.p.CustomerFollowUps[0].ContactMode" [nzSize]="'large'">
+                <nz-option *ngFor="let contactmode of ContactModeList" [nzValue]="contactmode.Ref"
+                  [nzLabel]="contactmode.Name"></nz-option>
+              </nz-select>
           </div>
         </div>
       </form>

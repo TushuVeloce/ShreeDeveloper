@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { BookingRemark } from 'src/app/classes/domain/domainenums/domainenums';
+import { BookingRemark, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { Plot } from 'src/app/classes/domain/entities/website/masters/plot/plot';
@@ -41,6 +41,11 @@ export class CustomerFollowupComponent implements OnInit {
   SiteManagementRef: number = 0;
   ReminderDate: string = ''
   strCDT: string = ''
+
+  ContactModeList = DomainEnums.ContactModeList(
+    true,
+    '--Select Contact Type--'
+  );
 
   headers: string[] = [
     'Sr.No.',

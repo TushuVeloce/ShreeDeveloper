@@ -113,34 +113,21 @@
       <div class="row" style="margin-top: 1rem;" *ngIf="IsNewEntity">
         <!-- Intrested Site  -->
         <div class="col-md-4">
-          <div>
-            <label for="SiteManagementRef"><b>Interested site</b></label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" [nzSize]="'large'" name="SiteManagementRef" [(ngModel)]="SiteManagementRef"
-              id="SiteManagementRef" (ngModelChange)="getPlotBySiteRefList(SiteManagementRef)">
-              <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
-            </nz-select>
-            <!--
-            [required]="isSIteVisitSelected()"
-            <div *ngIf="isSIteVisitSelected() && !SiteManagementRef" class="text-danger mt-1">
-              Interested site is required
-            </div> -->
-          </div>
+          <label for="SiteManagementRef"><b>Interested site</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" [nzSize]="'large'" name="SiteManagementRef" [(ngModel)]="SiteManagementRef"
+            id="SiteManagementRef" (ngModelChange)="getPlotBySiteRefList(SiteManagementRef)">
+            <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+          </nz-select>
         </div>
         <!-- Intrested Plot  -->
         <div class="col-md-4">
-          <div>
-            <label for="InterestedPlotRef"><b>Interested Plots</b></label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" id="InterestedPlotRef" name="InterestedPlotRef" [(ngModel)]="InterestedPlotRef"
-              [nzSize]="'large'">
-              <nz-option *ngFor="let Plot of PlotList" [nzValue]="Plot.p.Ref" [nzLabel]="Plot.p.PlotNo"></nz-option>
-            </nz-select>
-            <!--   [required]="isSIteVisitSelected()"
-            <div *ngIf="isSIteVisitSelected() && !InterestedPlotRef" class="text-danger mt-1">
-              Interested plot is required
-            </div> -->
-          </div>
+          <label for="InterestedPlotRef"><b>Interested Plots</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="InterestedPlotRef" name="InterestedPlotRef" [(ngModel)]="InterestedPlotRef"
+            [nzSize]="'large'">
+            <nz-option *ngFor="let Plot of PlotList" [nzValue]="Plot.p.Ref" [nzLabel]="Plot.p.PlotNo"></nz-option>
+          </nz-select>
         </div>
         <!-- Add button  -->
         <div class="col-md-4" style="margin-top: 33px;">
@@ -197,126 +184,103 @@
       <div class="row" style="margin-top: 1rem;" *ngIf="IsNewEntity">
         <!-- Lead Source  -->
         <div class="col-md-4">
-          <div>
-            <label for="LeadSourceRef"><b>Lead Source</b></label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" [nzSize]="'large'" name="LeadSourceRef" required id="LeadSourceRef"
-              [(ngModel)]="Entity.p.CustomerFollowUps[0].LeadSource"
-              (ngModelChange)="onLeadSourceChange(Entity.p.CustomerFollowUps[0].LeadSource)">
-              <nz-option *ngFor="let Mode of MarketingModesList" [nzValue]="Mode.Ref" [nzLabel]="Mode.Name"></nz-option>
-            </nz-select>
-          </div>
+          <label for="LeadSourceRef"><b>Lead Source</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" [nzSize]="'large'" name="LeadSourceRef" required id="LeadSourceRef"
+            [(ngModel)]="Entity.p.CustomerFollowUps[0].LeadSource"
+            (ngModelChange)="onLeadSourceChange(Entity.p.CustomerFollowUps[0].LeadSource)">
+            <nz-option *ngFor="let Mode of MarketingModesList" [nzValue]="Mode.Ref" [nzLabel]="Mode.Name"></nz-option>
+          </nz-select>
         </div>
         <!-- Additional input field for Agent Broker -->
         <div class="col-md-4" *ngIf="showAgentBrokerInput">
-          <div>
-            <label for="AgentName"><b>Agent Name</b></label>
-            <input type="text" name="AgentName" class="form-control" id="AgentName"
-              [(ngModel)]="Entity.p.CustomerFollowUps[0].BrokerName" required placeholder="Enter Agent Name">
-          </div>
+          <label for="AgentName"><b>Agent Name</b></label>
+          <input type="text" name="AgentName" class="form-control" id="AgentName"
+            [(ngModel)]="Entity.p.CustomerFollowUps[0].BrokerName" required placeholder="Enter Agent Name">
         </div>
         <!-- End -->
 
         <!-- Lead Handle By  -->
         <div class="col-md-4">
-          <div>
-            <label for="LeadHandledByRef"><b>Lead Handled By</b></label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" id="LeadHandledByRef" name="LeadHandledByRef"
-              [(ngModel)]="Entity.p.CustomerFollowUps[0].LeadHandleBy" [nzSize]="'large'">
-              <nz-option *ngFor="let Employee of EmployeeList" [nzValue]="Employee.p.Ref"
-                [nzLabel]="Employee.p.Name"></nz-option>
-            </nz-select>
-          </div>
+          <label for="LeadHandledByRef"><b>Lead Handled By</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="LeadHandledByRef" name="LeadHandledByRef"
+            [(ngModel)]="Entity.p.CustomerFollowUps[0].LeadHandleBy" [nzSize]="'large'">
+            <nz-option *ngFor="let Employee of EmployeeList" [nzValue]="Employee.p.Ref"
+              [nzLabel]="Employee.p.Name"></nz-option>
+          </nz-select>
         </div>
         <!-- Contact Mode  -->
         <div class="col-md-4" *ngIf="!showAgentBrokerInput">
-          <div>
-            <label for="ContactModeRef"><b>Contact Mode</b></label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" id="ContactModeRef" name="ContactModeRef"
-              [(ngModel)]="Entity.p.CustomerFollowUps[0].ContactMode" [nzSize]="'large'">
-              <nz-option *ngFor="let contactmode of ContactModeList" [nzValue]="contactmode.Ref"
-                [nzLabel]="contactmode.Name"></nz-option>
-            </nz-select>
-          </div>
+          <label for="ContactModeRef"><b>Contact Mode</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="ContactModeRef" name="ContactModeRef"
+            [(ngModel)]="Entity.p.CustomerFollowUps[0].ContactMode" [nzSize]="'large'">
+            <nz-option *ngFor="let contactmode of ContactModeList" [nzValue]="contactmode.Ref"
+              [nzLabel]="contactmode.Name"></nz-option>
+          </nz-select>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem;" *ngIf="IsNewEntity">
         <div class="col-md-4" *ngIf="showAgentBrokerInput">
-          <div>
-            <label for="ContactModeRef"><b>Contact Mode</b></label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" id="ContactModeRef" name="ContactModeRef"
-              [(ngModel)]="Entity.p.CustomerFollowUps[0].ContactMode" [nzSize]="'large'">
-              <nz-option *ngFor="let contactmode of ContactModeList" [nzValue]="contactmode.Ref"
-                [nzLabel]="contactmode.Name"></nz-option>
-            </nz-select>
-          </div>
+          <label for="ContactModeRef"><b>Contact Mode</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="ContactModeRef" name="ContactModeRef"
+            [(ngModel)]="Entity.p.CustomerFollowUps[0].ContactMode" [nzSize]="'large'">
+            <nz-option *ngFor="let contactmode of ContactModeList" [nzValue]="contactmode.Ref"
+              [nzLabel]="contactmode.Name"></nz-option>
+          </nz-select>
         </div>
         <!-- Reason  -->
         <div class="col-md-4" *ngIf="IsNewEntity">
-          <div>
-            <label>Reason</label>
-            <textarea type="text" name="Reason" [(ngModel)]="Entity.p.CustomerFollowUps[0].Reason" class="form-control"
-              id="Reason " required placeholder="Enter Reason">
+          <label>Reason</label>
+          <textarea type="text" name="Reason" rows="1" [(ngModel)]="Entity.p.CustomerFollowUps[0].Reason"
+            class="form-control" id="Reason " required placeholder="Enter Reason">
             </textarea>
-          </div>
         </div>
         <!-- Customer Status  -->
         <div class="col-md-4">
-          <div>
-            <label for="CustomerStatusRef"><b>Customer Status</b></label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" id="CustomerStatusRef" name="CustomerStatusRef"
-              [(ngModel)]="Entity.p.CustomerFollowUps[0].CustomerStatus" (ngModelChange)="onStatusChange($event)"
-              [nzSize]="'large'">
-              <ng-container *ngFor="let customerstatus of CustomerStatusList">
-                <nz-option *ngIf="customerstatus.Ref !== 30 && customerstatus.Ref !== 40" [nzValue]="customerstatus.Ref"
-                  [nzLabel]="customerstatus.Name"></nz-option>
-              </ng-container>
-            </nz-select>
-          </div>
+          <label for="CustomerStatusRef"><b>Customer Status</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="CustomerStatusRef" name="CustomerStatusRef"
+            [(ngModel)]="Entity.p.CustomerFollowUps[0].CustomerStatus" (ngModelChange)="onStatusChange($event)"
+            [nzSize]="'large'">
+            <ng-container *ngFor="let customerstatus of CustomerStatusList">
+              <nz-option *ngIf="customerstatus.Ref !== 30 && customerstatus.Ref !== 40" [nzValue]="customerstatus.Ref"
+                [nzLabel]="customerstatus.Name"></nz-option>
+            </ng-container>
+          </nz-select>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem;" *ngIf="IsNewEntity">
+
         <!-- Remark  -->
         <div class="col-md-4">
-          <div>
-            <label>Remark</label>
-            <input type="text" name="Remark" [(ngModel)]="Entity.p.CustomerFollowUps[0].Remark" class="form-control"
-              id="Remark " required placeholder="Enter Remark" />
-          </div>
+          <label>Remark</label>
+          <input type="text" name="Remark" [(ngModel)]="Entity.p.CustomerFollowUps[0].Remark" class="form-control"
+            id="Remark " required placeholder="Enter Remark" />
         </div>
+
         <!-- Next Site Visit Date  -->
-        <div class="col-md-4">
-          <div>
-            <label for="localSiteVisitDate">Next Site Visit Date</label>
-            <input type="Date" name="localSiteVisitDate" [(ngModel)]="localSiteVisitDate" [min]="today"
-              class="form-control" id="localSiteVisitDate" required />
-          </div>
+        <div class="col-md-4 mt-3">
+          <label for="localSiteVisitDate">Next Site Visit Date</label>
+          <input type="Date" name="localSiteVisitDate" [(ngModel)]="localSiteVisitDate" [min]="today"
+            class="form-control" id="localSiteVisitDate" required />
         </div>
 
         <!-- Next Office Visit Date -->
-        <div class="col-md-4">
-          <div>
-            <label for="localOfficeVisitDate">Next Office Visit Date</label>
-            <input type="Date" name="localOfficeVisitDate" [(ngModel)]="localOfficeVisitDate" [min]="today"
-              class="form-control" id="localOfficeVisitDate" required />
-          </div>
+        <div class="col-md-4 mt-3">
+          <label for="localOfficeVisitDate">Next Office Visit Date</label>
+          <input type="Date" name="localOfficeVisitDate" [(ngModel)]="localOfficeVisitDate" [min]="today"
+            class="form-control" id="localOfficeVisitDate" required />
         </div>
-        <!-- Reminder Date  -->
-        <div class="col-md-4">
-          <div>
-            <label>Reminder Date</label>
-            <input type="Date" name="localReminderDate" [(ngModel)]="localReminderDate" class="form-control"
-              id="localReminderDate" [required]="isReminderRequired" #reminderDateField="ngModel"
-              (ngModelChange)="markTouched(reminderDateField)" [min]="today" />
-            <div *ngIf="isReminderRequired && reminderDateField.invalid && reminderDateField.touched"
-              class="text-danger">
-              {{ reminderMessage }}
-            </div>
 
+        <!-- Reminder Date  -->
+        <div class="col-md-4 mt-3">
+          <label>Reminder Date</label>
+          <input type="Date" name="localReminderDate" [(ngModel)]="localReminderDate" class="form-control"
+            id="localReminderDate" [required]="isReminderRequired" #reminderDateField="ngModel"
+            (ngModelChange)="markTouched(reminderDateField)" [min]="today" />
+          <div *ngIf="isReminderRequired && reminderDateField.invalid && reminderDateField.touched" class="text-danger">
+            {{ reminderMessage }}
           </div>
         </div>
       </div>
