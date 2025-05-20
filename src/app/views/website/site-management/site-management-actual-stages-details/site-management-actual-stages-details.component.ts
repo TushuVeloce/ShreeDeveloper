@@ -105,6 +105,10 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       } else {
         this.Entity.p.Amount = this.Entity.p.Rate * this.Entity.p.Quantity
       }
+      if(this.Entity.p.ExpenseTypeRef == this.OtherExpenseRef){
+          this.isAddingExpense = false
+          this.isAdd = true
+      }
       await this.DiselPaid(this.Entity.p.IsDieselPaid)
       await this.OnStageChange(this.Entity.p.StageRef)
       this.getVendorServiceListByVendorRef(this.Entity.p.VendorRef);
