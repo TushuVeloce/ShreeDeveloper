@@ -360,6 +360,45 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
     return CustomerFollowUp.ListFromTransportData(tdResponse);
   }
 
+  public static async FetchEntirePendingListByContactModeRef(
+    CompanyRef: number,
+    ContactModeRef: number,
+    errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance()
+      .GlobalUIErrorHandler
+  ) {
+    let req = new CustomerFollowUpFetchRequest();
+    if (ContactModeRef) {
+      req.ContactModeRefs.push(ContactModeRef);
+    }
+    req.CompanyRefs.push(CompanyRef)
+    req.PendingCallList.push(100);
+    let tdResponse = (await CustomerFollowUp.FetchTransportData(
+      req,
+      errorHandler
+    )) as TransportData;
+    return CustomerFollowUp.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByDateComapanyAndContactModeRef(
+    CompanyRef: number,
+    ReminderDate: string,
+    ContactModeRef: number,
+    errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance()
+      .GlobalUIErrorHandler
+  ) {
+    let req = new CustomerFollowUpFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    req.ReminderDate.push(ReminderDate);
+    if (ContactModeRef) {
+      req.ContactModeRefs.push(ContactModeRef);
+    }
+    let tdResponse = (await CustomerFollowUp.FetchTransportData(
+      req,
+      errorHandler
+    )) as TransportData;
+    return CustomerFollowUp.ListFromTransportData(tdResponse);
+  }
+
   public async DeleteInstance(
     successHandler: () => Promise<void> = null!,
     errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance()
