@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExpenseTypeRefs, UnitRefs } from 'src/app/classes/domain/constants';
 import { DomainEnums, StageType } from 'src/app/classes/domain/domainenums/domainenums';
+import { ServiceSuppliedByVendorProps } from 'src/app/classes/domain/entities/website/MarketingManagement/marketingmanagement';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { ExpenseType } from 'src/app/classes/domain/entities/website/masters/expensetype/expensetype';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -41,7 +42,8 @@ export class AddEditActualStageComponent implements OnInit {
   InitialEntity: ActualStages = null as any;
   isSaveDisabled: boolean = false;
   VendorList: Vendor[] = [];
-  VendorServiceList: VendorService[] = [];
+  VendorServiceList: ServiceSuppliedByVendorProps[] = [];
+  VendorServiceListByVendor: VendorService[] = [];
   StageList: Stage[] = [];
   SiteList: Site[] = [];
   SubStageList: SubStage[] = [];
@@ -438,7 +440,8 @@ export class AddEditActualStageComponent implements OnInit {
         await this.uiUtils.showErrorToster('Please Select Vendor');
         return;
       }
-      const options = this.VendorServiceList;
+      // const options = this.VendorServiceList;
+      const options = this.VendorServiceListByVendor;
       this.openSelectModal(options, this.selectedVendorService, false, 'Select Vendor Service', 1, (selected) => {
         this.selectedVendorService = selected;
         this.Entity.p.VendorServiceRef = this.selectedVendorService[0].p.Ref;
@@ -677,18 +680,49 @@ export class AddEditActualStageComponent implements OnInit {
     }
   }
 
-  getVendorServiceListByVendorRef = async (VendorRef: number) => {
-    try {
-      if (this.IsNewEntity) {
-        this.Entity.p.VendorServiceRef = 0
-      }
-      this.VendorServiceList = []
-      let lst = await VendorService.FetchEntireListByVendorRef(VendorRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.VendorServiceList = lst;
-    } catch (error) {
+  // getVendorServiceListByVendorRef = async (VendorRef: number) => {
+  //   try {
+  //     if (this.IsNewEntity) {
+  //       this.Entity.p.VendorServiceRef = 0
+  //     }
+  //     this.VendorServiceList = []
+  //     let lst = await VendorService.FetchEntireListByVendorRef(VendorRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //     this.VendorServiceList = lst;
+  //   } catch (error) {
 
+  //   }
+  // }
+  getVendorServiceListByVendorRef = async (VendorRef: number) => {
+    if (this.IsNewEntity) {
+      this.Entity.p.VendorServiceRef = 0
+    }
+    this.VendorServiceList = []
+    if (this.companyRef <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Vendor.FetchInstance(VendorRef, this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.VendorServiceList = lst.p.ServiceListSuppliedByVendor;
+    this.VendorServiceListByVendor = []; // Clear existing list first
+    if (this.VendorServiceList.length > 0) {
+      await this.FormulateVendorServiceList();
+      const refArray = this.VendorServiceList.map(s => Number(s));
+      const matched = this.VendorServiceListByVendor.filter(service => refArray.includes(service.p.Ref));
+      console.log('matched :', matched);
+      this.VendorServiceListByVendor = matched; // Either matched list or stays empty
     }
   }
+  private FormulateVendorServiceList = async () => {
+    if (this.companyRef <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    this.VendorServiceListByVendor = []
+    let lst = await VendorService.FetchEntireListByCompanyRef(this.companyRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.VendorServiceListByVendor = lst;
+  };
 
   FormulateUnitList = async () => {
     try {
@@ -761,6 +795,21 @@ export class AddEditActualStageComponent implements OnInit {
     this.CalculateAmountOnRateAndQuantity()
   }
 
+  // CalculateAmountOnRateAndQuantity = () => {
+  //   const TotalWorkedHours = this.getTotalWorkedHours()
+  //   const rate = Number(this.Entity.p.Rate) || 0;
+  //   const quantity = Number(this.Entity.p.Quantity) || 0;
+  //   const dieselAmount = Number(this.Entity.p.DieselTotalAmount) || 0;
+  //   const isDieselPaid = !!this.Entity.p.IsDieselPaid;
+
+  //   if (TotalWorkedHours > 0) {
+  //     this.Entity.p.GrandTotal = rate * TotalWorkedHours - dieselAmount
+  //     this.Amount = rate * TotalWorkedHours
+  //   } else {
+  //     this.Amount = rate * quantity
+  //     this.Entity.p.GrandTotal = rate * quantity - dieselAmount
+  //   }
+  // };
   CalculateAmountOnRateAndQuantity = () => {
     const TotalWorkedHours = this.getTotalWorkedHours()
     const rate = Number(this.Entity.p.Rate) || 0;
@@ -770,10 +819,11 @@ export class AddEditActualStageComponent implements OnInit {
 
     if (TotalWorkedHours > 0) {
       this.Entity.p.GrandTotal = rate * TotalWorkedHours - dieselAmount
-      this.Amount = rate * TotalWorkedHours
+      this.Entity.p.Amount = rate * TotalWorkedHours
     } else {
-      this.Amount = rate * quantity
+      this.Entity.p.Amount = rate * quantity
       this.Entity.p.GrandTotal = rate * quantity - dieselAmount
+
     }
   };
 

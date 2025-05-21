@@ -123,9 +123,7 @@
     <ion-item class="input-item" *ngIf="
        IsStage &&
        StageType !== StageTypeEnum.SolarStreetLight &&
-       StageType !== StageTypeEnum.SidePattiChira && 
-              StageType == StageTypeEnum.HalfRoundGutterNale ||
-              StageType == StageTypeEnum.Road">
+       StageType !== StageTypeEnum.SidePattiChira">
       <ion-input type="number" label="Gutter Nale" labelPlacement="floating" placeholder="Enter Quantity"
         [(ngModel)]="Entity.p.ExtraQuantity" *ngIf="StageType == StageTypeEnum.HalfRoundGutterNale"></ion-input>
       <ion-input type="number" label="/m2" labelPlacement="floating" placeholder="Enter Quantity"
@@ -250,7 +248,7 @@
     <!-- Amount -->
     <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeRef != LabourExpenseRef">
       <ion-input type="number" label="Amount" labelPlacement="floating" placeholder="Enter Amount"
-        [(ngModel)]="Entity.p.Amount" (ngModelChange)="CalculateAmountOnRateAndQuantity()" readonly></ion-input>
+        [(ngModel)]="Entity.p.Amount" readonly></ion-input>
     </ion-item>
 
     <!-- Diesel Calculation -->

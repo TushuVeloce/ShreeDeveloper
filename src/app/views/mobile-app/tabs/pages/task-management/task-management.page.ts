@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { FilterBottomsheetComponent } from '../../../shared/filter-bottomsheet/filter-bottomsheet.component';
+import { FilterService } from 'src/app/services/filter.service';
 
 
 type Task = {
@@ -34,7 +35,7 @@ export class TaskManagementPage implements OnInit {
       start_date: '2025-04-03',
       end_date: '2025-04-03',
       employeeID: 10,
-      siteName:'site1',
+      siteName: 'site1',
       status: 100,
       priority: 200,
       siteRef: 12345,
@@ -207,7 +208,7 @@ export class TaskManagementPage implements OnInit {
   }
 
 
-  constructor(private router: Router, private modalCtrl: ModalController) { }
+  constructor(private router: Router, private modalCtrl: ModalController, private filterService: FilterService) { }
 
   ngOnInit() {
     this.highPriorityTasks = this.tasks.filter(task => task.priority === 200);
@@ -222,6 +223,54 @@ export class TaskManagementPage implements OnInit {
     this.router.navigate(['/app_homepage/tabs/task-management/edit', taskId]);
   }
 
+  // selectedFilters:any = {};
+
+  openFilterSheet() {
+    const filterData = {
+      categories: [
+        {
+          name: 'Brand',
+          multi: true,
+          options: ['Apple', 'Samsung', 'OnePlus', 'Vivo', 'Apple', 'Samsung', 'OnePlus', 'Vivo',]
+        },
+        {
+          name: 'RAM',
+          multi: false,
+          options: ['4GB', '6GB', '8GB']
+        },
+        {
+          name: 'Storage',
+          multi: true,
+          options: ['4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB',]
+        },
+        {
+          name: 'Storage',
+          multi: true,
+          options: ['4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB',]
+        },
+        {
+          name: 'Storage',
+          multi: true,
+          options: ['4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB',]
+        },
+        {
+          name: 'Storage',
+          multi: true,
+          options: ['4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB',]
+        }
+      ]
+    };
+    
+
+    this.filterService.openFilter(filterData, this.selectedFilters).then(res => {
+      if (res?.selected) {
+        this.selectedFilters = res.selected;
+        console.log('Filters applied:', this.selectedFilters);
+        // Apply filter logic here...
+      }
+    });
+  }
+
   async openFilterModal() {
     const modal = await this.modalCtrl.create({
       component: FilterBottomsheetComponent,
@@ -229,7 +278,7 @@ export class TaskManagementPage implements OnInit {
         filters: this.filters,
         currentFilters: this.selectedFilters
       },
-      breakpoints: [0, 0.5, 1],
+      breakpoints: [0, 0.5,1],
       initialBreakpoint: 0.5
     });
 

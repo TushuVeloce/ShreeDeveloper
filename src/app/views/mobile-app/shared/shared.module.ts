@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 
@@ -11,14 +11,16 @@ import { FilterBottomsheetComponent } from './filter-bottomsheet/filter-bottomsh
 import { DynamicFilterBottomsheetComponent } from './dynamic-filter-bottomsheet/dynamic-filter-bottomsheet.component';
 import { CardListComponent } from './card-list/card-list.component';
 import { DateTimeModelComponent } from './date-time-model/date-time-model.component';
+import { FilterSheetComponent } from './filter-sheet/filter-sheet.component';
 
 @NgModule({
-  declarations: [HeaderComponent, HeaderWithBackHandlerComponent, SearchableSelectComponent, SelectModalComponent, FilterBottomsheetComponent, DynamicFilterBottomsheetComponent, CardListComponent, DateTimeModelComponent],
+  declarations: [HeaderComponent, HeaderWithBackHandlerComponent, SearchableSelectComponent, SelectModalComponent, FilterBottomsheetComponent, DynamicFilterBottomsheetComponent, CardListComponent, DateTimeModelComponent, FilterSheetComponent],
   imports: [
     CommonModule,
     IonicModule,
     FormsModule,
   ],
-  exports: [HeaderComponent, HeaderWithBackHandlerComponent,SearchableSelectComponent,SelectModalComponent,FilterBottomsheetComponent,DynamicFilterBottomsheetComponent,CardListComponent,DateTimeModelComponent]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA] ,
+  exports: [HeaderComponent, HeaderWithBackHandlerComponent, SearchableSelectComponent, SelectModalComponent, FilterBottomsheetComponent, DynamicFilterBottomsheetComponent, CardListComponent, DateTimeModelComponent, FilterSheetComponent]
 })
 export class SharedModule { }

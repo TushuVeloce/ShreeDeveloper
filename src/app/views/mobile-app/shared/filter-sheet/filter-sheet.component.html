@@ -1,0 +1,59 @@
+<ion-content class="filter-sheet-container" fullscreen>
+  <ion-grid class="scrollable-content">
+    <ion-row>
+      <!-- Categories -->
+      <ion-col size="4" class="category-column">
+        <ion-list>
+          <ion-item *ngFor="let cat of data?.categories" button (click)="selectCategory(cat)"
+            [class.active]="selectedCategory?.name === cat.name" [class.has-selection]="hasAnySelection(cat.name)">
+            {{ cat.name }}
+            <ion-icon *ngIf="hasAnySelection(cat.name)" name="checkmark-circle-outline" slot="end"
+              color="primary"></ion-icon>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+
+      <!-- Options -->
+      <ion-col size="8" class="option-column">
+        <ng-container *ngIf="selectedCategory">
+          <ion-list>
+            <div *ngIf="selectedCategory">
+              <ng-container *ngIf="selectedCategory.multi; else singleSelectTemplate">
+            
+                <!-- Multi-select -->
+                <!-- <ion-list-header>
+                  <ion-label>{{ selectedCategory.name }}</ion-label>
+                </ion-list-header> -->
+            
+                <ion-item *ngFor="let option of selectedCategory.options">
+                  <ion-label>{{ option }}</ion-label>
+                  <ion-checkbox slot="start" [checked]="isSelected(selectedCategory.name, option)"
+                    (ionChange)="toggleOption(selectedCategory.name, option)">
+                  </ion-checkbox>
+                </ion-item>
+            
+              </ng-container>
+            
+              <ng-template #singleSelectTemplate>
+                <!-- Single select -->
+                <ion-radio-group [value]="selectedOptions[selectedCategory.name]?.[0]"
+                  (ionChange)="toggleOption(selectedCategory.name, $event.detail.value)">
+                  <ion-item *ngFor="let option of selectedCategory.options">
+                    <ion-label>{{ option }}</ion-label>
+                    <ion-radio slot="start" [value]="option"></ion-radio>
+                  </ion-item>
+                </ion-radio-group>
+              </ng-template>
+            </div>
+          </ion-list>
+        </ng-container>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Footer -->
+  <div class="footer">
+    <ion-button fill="clear" (click)="clearFilters()">Clear</ion-button>
+    <ion-button expand="block" (click)="applyFilters()">Apply Filter</ion-button>
+  </div>
+  </ion-content>

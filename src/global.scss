@@ -606,6 +606,9 @@ input[type=number] {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   // transition: border-color 0.3s ease, box-shadow 0.3s ease, --background 0.3s ease;
   border-radius: var(--border-radius);
+  ion-input{
+    margin-top: -10px;
+  }
 }
 
 .input-item:focus-within {
