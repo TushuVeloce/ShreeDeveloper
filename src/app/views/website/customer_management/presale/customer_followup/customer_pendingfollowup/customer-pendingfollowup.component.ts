@@ -17,11 +17,11 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
   selector: 'app-customer-followup',
-  templateUrl: './customer-followup.component.html',
-  styleUrls: ['./customer-followup.component.scss'],
+  templateUrl: './customer-pendingfollowup.component.html',
+  styleUrls: ['./customer-pendingfollowup.component.scss'],
   standalone: false
 })
-export class CustomerFollowupComponent implements OnInit {
+export class CustomerPendingFollowupComponent implements OnInit {
 
   Entity: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
   SiteList: Site[] = [];
@@ -58,7 +58,7 @@ export class CustomerFollowupComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement, private dtu: DTU, private datePipe: DatePipe, private DateconversionService: DateconversionService
   ) {
     effect(() => {
-      this.getCustomerFollowUpListByDateComapanyAndContactModeRef();
+      this.getCustomerFollowUpPendingListByContactModeRef();
     });
   }
 
@@ -72,7 +72,7 @@ export class CustomerFollowupComponent implements OnInit {
       this.ReminderDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
       this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
       if (this.strCDT != '') {
-        this.getCustomerFollowUpListByDateComapanyAndContactModeRef();
+        this.getCustomerFollowUpPendingListByContactModeRef();
       }
     }
 
@@ -85,11 +85,10 @@ export class CustomerFollowupComponent implements OnInit {
     return this.DateconversionService.formatDate(date);
   }
 
-  getCustomerFollowUpListByDateComapanyAndContactModeRef = async () => {
+  getCustomerFollowUpPendingListByContactModeRef = async () => {
     this.strCDT = this.dtu.ConvertStringDateToFullFormat(this.ReminderDate);
-    let FollowUp = await CustomerFollowUp.FetchEntireListByDateComapanyAndContactModeRef(this.companyRef(), this.strCDT, this.Entity.p.ContactMode,
-    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('FollowUp :', FollowUp);
+    let FollowUp = await CustomerFollowUp.FetchEntirePendingListByContactModeRef(this.companyRef(), this.Entity.p.ContactMode,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.followup = FollowUp
     this.DisplayMasterList = FollowUp;
     this.loadPaginationData();

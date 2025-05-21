@@ -145,7 +145,7 @@ export class SidebarlayoutComponent implements OnInit {
   onMenuItemClick(submoduleName: string): void {
     this.activeSubmodule = submoduleName;
     // this.BrowserBack = false;
-     localStorage.setItem('activeSubmodule', submoduleName);
+    localStorage.setItem('activeSubmodule', submoduleName);
   }
 
   newModulename: string = '';
@@ -256,22 +256,22 @@ export class SidebarlayoutComponent implements OnInit {
   //   this.oldModulename = this.newModulename;
   // };
 
-SideMenuHideShowForModule(moduleName: string, show: boolean): void {
-  if (this.newModulename === moduleName) {
-    // Toggle collapse if the same module is clicked again
-    this.isShow = !this.isShow;
+  SideMenuHideShowForModule(moduleName: string, show: boolean): void {
+    if (this.newModulename === moduleName) {
+      // Toggle collapse if the same module is clicked again
+      this.isShow = !this.isShow;
 
-    // If collapsing, clear activeModule from localStorage
-    if (!this.isShow) {
-      localStorage.removeItem('activeModule');
+      // If collapsing, clear activeModule from localStorage
+      if (!this.isShow) {
+        localStorage.removeItem('activeModule');
+      }
+    } else {
+      // New module clicked → set it as active and expand it
+      this.newModulename = moduleName;
+      this.isShow = true;
+      localStorage.setItem('activeModule', moduleName);
     }
-  } else {
-    // New module clicked → set it as active and expand it
-    this.newModulename = moduleName;
-    this.isShow = true;
-    localStorage.setItem('activeModule', moduleName);
   }
-}
 
 
   NavigationFromLogo(RouterLink: any) {
@@ -295,7 +295,7 @@ SideMenuHideShowForModule(moduleName: string, show: boolean): void {
       {
         Name: 'Dashboard',
         RouterLink: '/homepage/Website/',
-       LogoPath:'/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/Material Master.png',
       },
     ]
 
@@ -313,17 +313,17 @@ SideMenuHideShowForModule(moduleName: string, show: boolean): void {
       {
         Name: 'Stage Master',
         RouterLink: '/homepage/Website/Stage_Master',
-       LogoPath:'/assets/icons/Stage Master.png',
+        LogoPath: '/assets/icons/Stage Master.png',
       },
       {
         Name: 'Sub Stage Master',
         RouterLink: '/homepage/Website/Sub_Stage_Master',
-       LogoPath:'/assets/icons/Sub Stage Master.png',
+        LogoPath: '/assets/icons/Sub Stage Master.png',
       },
       {
         Name: 'Expense Type Master',
         RouterLink: '/homepage/Website/Expense_Type_Master',
-       LogoPath:'/assets/icons/Expense Type.png',
+        LogoPath: '/assets/icons/Expense Type.png',
       },
       // {
       //   Name: 'Account Main Ledger',
@@ -338,17 +338,17 @@ SideMenuHideShowForModule(moduleName: string, show: boolean): void {
       {
         Name: 'Marketing Type Master',
         RouterLink: '/homepage/Website/Marketing_Type_Master',
-       LogoPath:'/assets/icons/Marketing Type Master.png',
+        LogoPath: '/assets/icons/Marketing Type Master.png',
       },
       {
         Name: 'Vendor Services Master',
         RouterLink: '/homepage/Website/Vendor_Services_Master',
-       LogoPath:'/assets/icons/Vendor Service Master.png',
+        LogoPath: '/assets/icons/Vendor Service Master.png',
       },
       {
         Name: 'Vendor Master',
         RouterLink: '/homepage/Website/Vendor_Master',
-       LogoPath:'/assets/icons/Vendor Master.png',
+        LogoPath: '/assets/icons/Vendor Master.png',
       },
       // {
       //   Name: 'Vehicle Master',
@@ -358,32 +358,32 @@ SideMenuHideShowForModule(moduleName: string, show: boolean): void {
       {
         Name: 'Bank Account Master',
         RouterLink: '/homepage/Website/Bank_Account_Master',
-       LogoPath:'/assets/icons/Bank Account Master.png',
+        LogoPath: '/assets/icons/Bank Account Master.png',
       },
       {
         Name: 'Country Master',
         RouterLink: '/homepage/Website/Country',
-       LogoPath:'/assets/icons/Country Master.png',
+        LogoPath: '/assets/icons/Country Master.png',
       },
       {
         Name: 'State Master',
         RouterLink: '/homepage/Website/State',
-       LogoPath:'/assets/icons/State Master.png',
+        LogoPath: '/assets/icons/State Master.png',
       },
       {
         Name: 'City Master',
         RouterLink: '/homepage/Website/City',
-       LogoPath:'/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/Material Master.png',
       },
       {
         Name: 'Department Master',
         RouterLink: '/homepage/Website/Department_Master',
-       LogoPath:'/assets/icons/Department Master.png',
+        LogoPath: '/assets/icons/Department Master.png',
       },
       {
         Name: 'Designation Master',
         RouterLink: '/homepage/Website/Designation_Master',
-       LogoPath:'/assets/icons/Designation Master.png',
+        LogoPath: '/assets/icons/Designation Master.png',
       },
       // {
       //   Name: 'User Role Master',
@@ -403,17 +403,17 @@ SideMenuHideShowForModule(moduleName: string, show: boolean): void {
       {
         Name: 'Company Master',
         RouterLink: '/homepage/Website/Company_Master',
-       LogoPath:'/assets/icons/Company Master.png',
+        LogoPath: '/assets/icons/Company Master.png',
       },
       {
         Name: 'Financial Year Master',
         RouterLink: '/homepage/Website/Financial_Year_Master',
-       LogoPath:'/assets/icons/Financial Year Master.png',
+        LogoPath: '/assets/icons/Financial Year Master.png',
       },
       {
         Name: 'Employee Master',
         RouterLink: '/homepage/Website/Employee_Master',
-       LogoPath:'/assets/icons/Employee Master.png',
+        LogoPath: '/assets/icons/Employee Master.png',
       },
       // {
       //   Name: 'Employee Appraisal Master',
@@ -432,22 +432,22 @@ SideMenuHideShowForModule(moduleName: string, show: boolean): void {
       {
         Name: 'New Site',
         RouterLink: '/homepage/Website/Site_Management_Master',
-       LogoPath:'/assets/icons/New Site.png',
+        LogoPath: '/assets/icons/New Site.png',
       },
       {
         Name: 'Plot Details',
         RouterLink: '/homepage/Website/Plot_Master',
-       LogoPath:'/assets/icons/Plot Details.png',
+        LogoPath: '/assets/icons/Plot Details.png',
       },
       {
         Name: 'Actual Stages',
         RouterLink: '/homepage/Website/Site_Management_Actual_Stage',
-       LogoPath:'/assets/icons/Actual Stages.png',
+        LogoPath: '/assets/icons/Actual Stages.png',
       },
       {
         Name: 'Estimate Stages',
         RouterLink: '/homepage/Website/Estimate_Stages',
-       LogoPath:'/assets/icons/Estimated Stages.png',
+        LogoPath: '/assets/icons/Estimated Stages.png',
       },
     ]
 
@@ -455,27 +455,27 @@ SideMenuHideShowForModule(moduleName: string, show: boolean): void {
       {
         Name: 'Material Requisition',
         RouterLink: '/homepage/Website/Material_Requisition',
-       LogoPath:'/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/Material Master.png',
       },
       {
         Name: 'Stock Order',
         RouterLink: '/homepage/Website/Stock_Order',
-       LogoPath:'/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/Material Master.png',
       },
       {
         Name: 'Stock Inward',
         RouterLink: '/homepage/Website/Stock_Inward',
-       LogoPath:'/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/Material Master.png',
       },
       {
         Name: 'Stock Consume',
         RouterLink: '/homepage/Website/Stock_Consume',
-       LogoPath:'/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/Material Master.png',
       },
       {
         Name: 'Stock Transfer',
         RouterLink: '/homepage/Website/Stock_Transfer',
-       LogoPath:'/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/Material Master.png',
       },
     ]
 
@@ -483,17 +483,22 @@ SideMenuHideShowForModule(moduleName: string, show: boolean): void {
       {
         Name: 'Customer Enquiry',
         RouterLink: '/homepage/Website/Customer_Enquiry',
-       LogoPath:'/assets/icons/Customer Enquiry.png',
+        LogoPath: '/assets/icons/Customer Enquiry.png',
       },
       {
         Name: 'Customer Follow Up',
         RouterLink: '/homepage/Website/Customer_FollowUp',
-       LogoPath:'/assets/icons/Customer Followup.png',
+        LogoPath: '/assets/icons/Customer Followup.png',
+      },
+      {
+        Name: 'Pending Follow Up',
+        RouterLink: '/homepage/Website/Pending_FollowUp',
+        LogoPath: '/assets/icons/Customer Followup.png',
       },
       {
         Name: 'Registered Customer',
         RouterLink: '/homepage/Website/Registered_Customer',
-       LogoPath:'/assets/icons/Registered Customer.png',
+        LogoPath: '/assets/icons/Registered Customer.png',
       }
     ]
 
@@ -501,27 +506,27 @@ SideMenuHideShowForModule(moduleName: string, show: boolean): void {
       {
         Name: 'Site Work Group',
         RouterLink: '/homepage/Website/Site_Work_Group',
-       LogoPath:'/assets/icons/Site Work Group.png',
+        LogoPath: '/assets/icons/Site Work Group.png',
       },
       {
         Name: 'Site Work Master',
         RouterLink: '/homepage/Website/Site_Work_Master',
-       LogoPath:'/assets/icons/Site Work Master.png',
+        LogoPath: '/assets/icons/Site Work Master.png',
       },
       {
         Name: 'Site Work Done',
         RouterLink: '/homepage/Website/Site_Work_Done',
-       LogoPath:'/assets/icons/Site Work Done.png',
+        LogoPath: '/assets/icons/Site Work Done.png',
       },
       {
         Name: 'Progress Report',
         RouterLink: '/homepage/Website/Site_Progress_Report',
-       LogoPath:'/assets/icons/Progress Report.png',
+        LogoPath: '/assets/icons/Progress Report.png',
       },
       {
         Name: 'Document List',
         RouterLink: '/homepage/Website/Document',
-       LogoPath:'/assets/icons/Document List.png',
+        LogoPath: '/assets/icons/Document List.png',
       },
       // {
       //   Name: 'Government Transaction',
@@ -548,27 +553,27 @@ SideMenuHideShowForModule(moduleName: string, show: boolean): void {
       {
         Name: 'Office Duty & Time',
         RouterLink: '/homepage/Website/Office_Duty_Time',
-       LogoPath:'/assets/icons/Office Duty_Time.png',
+        LogoPath: '/assets/icons/Office Duty_Time.png',
       },
       {
         Name: 'Attendance',
         RouterLink: '/homepage/Website/Attendance_Logs',
-       LogoPath:'/assets/icons/Attendance.png',
+        LogoPath: '/assets/icons/Attendance.png',
       },
       {
         Name: 'Salary Generation',
         RouterLink: '/homepage/Website/Salary_Generation',
-       LogoPath:'/assets/icons/Salary Genration.png',
+        LogoPath: '/assets/icons/Salary Genration.png',
       },
       {
         Name: 'Leave Approval',
         RouterLink: '/homepage/Website/Leave_Approval',
-       LogoPath:'/assets/icons/Leave Approval.png',
+        LogoPath: '/assets/icons/Leave Approval.png',
       },
       {
         Name: 'Salary Slip Approval',
         RouterLink: '/homepage/Website/Salary_Slip_Approval',
-       LogoPath:'/assets/icons/Salary Slip Approval.png',
+        LogoPath: '/assets/icons/Salary Slip Approval.png',
       }
 
     ]
@@ -577,31 +582,31 @@ SideMenuHideShowForModule(moduleName: string, show: boolean): void {
       {
         Name: 'Employee Attendance Logs',
         RouterLink: '/homepage/Website/Employee_Attendance_Logs',
-       LogoPath:'/assets/icons/Employee Attendance Logs.png',
+        LogoPath: '/assets/icons/Employee Attendance Logs.png',
       },
       {
         Name: 'Leave Request',
         RouterLink: '/homepage/Website/Leave_Request',
-       LogoPath:'/assets/icons/Leave Requests.png',
+        LogoPath: '/assets/icons/Leave Requests.png',
       },
       {
         Name: 'Salary Slip Request',
         RouterLink: '/homepage/Website/Salary_Slip_Request',
-       LogoPath:'/assets/icons/Salary Slip Request.png',
+        LogoPath: '/assets/icons/Salary Slip Request.png',
       }
     ]
     let RazorpaySubModulelist = [
       {
         Name: 'Razorpay',
         RouterLink: '/homepage/Website/Razorpay',
-       LogoPath:'/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/Material Master.png',
       }
     ]
 
     let moduleListInternal = [
       {
         Name: 'Dashboards',
-       RouterLink: '/homepage/Website/',
+        RouterLink: '/homepage/Website/',
         WhiteLogo: '/assets/icons/dashboard.png',
         // SubModuleList: DashboardsSubModuleList,
       },

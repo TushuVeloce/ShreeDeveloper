@@ -112,6 +112,7 @@ import { ExpenseTypeMasterDetailsComponent } from './Masters/expense _type/expen
 import { MarketingManagementMasterComponent } from './marketing_management/marketing-management/marketing-management-master/marketing-management-master.component';
 import { MarketingManagementMasterDetailsComponent } from './marketing_management/marketing-management/marketing-management-master-details/marketing-management-master-details.component';
 import { ActualStagePrintComponent } from './site-management/actual-stage-print/actual-stage-print.component';
+import { CustomerPendingFollowupComponent } from './customer_management/presale/customer_followup/customer_pendingfollowup/customer-pendingfollowup.component';
 
 
 const routes: Routes = [
@@ -217,6 +218,7 @@ const routes: Routes = [
       { path: 'Customer_Enquiry_Details', component: CustomerEnquiryDetailsComponent },
 
       { path: 'Customer_FollowUp', component: CustomerFollowupComponent },
+      { path: 'Pending_FollowUp', component: CustomerPendingFollowupComponent },
       { path: 'Customer_FollowUp_Details', component: CustomerFollowupDetailsComponent },
 
       { path: 'Registered_Customer', component: RegisteredCustomerComponent },

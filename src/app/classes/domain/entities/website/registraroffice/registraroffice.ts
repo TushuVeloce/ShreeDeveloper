@@ -36,35 +36,60 @@ export class RegistrarOfficeProps {
 
   public Witness1Name: string = '';
   public Witness1ContactNo: number = 0;
+
   public CustomerAadharPath: string = '';
+  public CustomerAadharFile: File = null as any
+
   public CustomerPanPath: string = '';
+  public CustomerPanFile: File = null as any
+
   public Witness1IsAadharSubmit: boolean = false;
+
   public Witness1AadharPath: string = '';
+  public Witness1AadharFile: File = null as any
+
   public Witness1IsPanSubmit: boolean = false;
+
   public Witness1PanPath: string = '';
+  public Witness1PanFile: File = null as any
 
   public Witness2Submit: boolean = false;
   public Witness2Name: string = '';
   public Witness2ContactNo: number = 0;
   public Witness2IsAadharSubmit: boolean = false;
+
   public Witness2AadharPath: string = '';
+  public Witness2AadharFile: File = null as any
+
   public Witness2IsPanSubmit: boolean = false;
+
   public Witness2PanPath: string = '';
+  public Witness2PanFile: File = null as any
 
 
   //  public IsAgreementToSaleSubmit : boolean = false;
   public AgreementDocumentNo: string = '';
   public AgreementDate: string = '';
+
   public AgreementDocumentPath: string = '';
+  public AgreementDocumentFile: File = null as any
 
   //  public IsSaledeedSubmit : Boolean = false;
   public SaleDeedDocumentNo: string = '';
+
   public SaleDeedtDocumentPath: string = '';
+  public SaleDeedtDocumentFile: File = null as any
+
   public SaleDeedDate: string = '';
   public IsIndexOriginalSubmit: boolean = false;
+
   public IndexOriginalDocumentPath: string = '';
+  public IndexOriginalDocumentFile: File = null as any
+
   public IsDastZeroxSubmit: boolean = false;
+
   public DastZeroxDocumentPath: string = '';
+  public DastZeroxDocumentFile: File = null as any
 
   //  public IsTalathiSubmit : Boolean = false;
   public TalathiInwardNo: string = '';
@@ -166,7 +191,7 @@ export class RegistrarOffice implements IPersistable<RegistrarOffice> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): RegistrarOffice[] {
+    sortPropertyName: string = ""): RegistrarOffice[] {
     let result: RegistrarOffice[] = [];
 
     let dcs = DataContainerService.GetInstance();

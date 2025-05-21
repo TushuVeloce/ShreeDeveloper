@@ -55,45 +55,46 @@
               class="custom-checkbox" />
           </div>
           <!-- Aadhar -->
-          <div class="col-md-8 d-flex mb-4">
-            <div class="col-md-8 d-flex">
-              <div class="col-md-4 d-flex justify-content-center">
-                <label>Aadhar</label>
-              </div>
-              <div class="col-md-8 d-flex">
-                <input type="file" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
-                  placeholder="Enter Name" />
-              </div>
-              <div>
-                <img [src]="Entity.p.CustomerAadharPath" />
-              </div>
+          <div class="col-md-4 d-flex align-items-center justify-content-evenly mb-4">
+            <!-- Upload icon triggers file input -->
+            <img src="/assets/icons/upload.png" alt="Upload" class="Upload-Icon"
+              (click)="CustomerAadharTriggerFileInput()" />
+            <div>
+              {{CustomerAadharSelectedFileName}}
             </div>
-            <!-- Submit -->
+            <!-- Hidden File Input -->
+            <input type="file" #CustomerAadharFileInput (change)="onCustomerAadharFileUpload($event)"
+              class="file-upload" name="image" accept=".jpg, .jpeg, .png, .gif" style="display: none" />
+
+            <!-- Error Message -->
+            <p *ngIf="errors.CustomerAadharFile" class="validation-error">
+              {{ errors.CustomerAadharFile }}
+            </p>
+          </div>
+          <!-- Submit -->
+          <div class="col-md-4 d-flex justify-content-center">
+            <label for="IsCustomerAadharSubmit">Submit</label>
+            <input type="checkbox" id="IsCustomerAadharSubmit" [(ngModel)]="Entity.p.IsCustomerAadharSubmit"
+              name="IsCustomerAadharSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+
+        <!--  Pan   -->
+        <div class="col-md-8 d-flex mb-4">
+          <div class="col-md-8 d-flex">
             <div class="col-md-4 d-flex justify-content-center">
-              <label for="IsCustomerAadharSubmit">Submit</label>
-              <input type="checkbox" id="IsCustomerAadharSubmit" [(ngModel)]="Entity.p.IsCustomerAadharSubmit"
-                name="IsCustomerAadharSubmit" class="custom-checkbox" />
+              <label>Pan</label>
+            </div>
+            <div class="col-md-8 d-flex">
+              <input type="file" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
+                placeholder="Enter Name" />
             </div>
           </div>
-
-          <div class="col-md-4"></div>
-          <!--  Pan   -->
-          <div class="col-md-8 d-flex mb-4">
-            <div class="col-md-8 d-flex">
-              <div class="col-md-4 d-flex justify-content-center">
-                <label>Pan</label>
-              </div>
-              <div class="col-md-8 d-flex">
-                <input type="file" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
-                  placeholder="Enter Name" />
-              </div>
-            </div>
-            <!-- Submit -->
-            <div class="col-md-4 d-flex justify-content-center">
-              <label for="IsCustomerPanSubmit">Submit</label>
-              <input type="checkbox" id="IsCustomerPanSubmit" [(ngModel)]="Entity.p.IsCustomerPanSubmit"
-                name="IsCustomerPanSubmit" class="custom-checkbox" />
-            </div>
+          <!-- Submit -->
+          <div class="col-md-4 d-flex justify-content-center">
+            <label for="IsCustomerPanSubmit">Submit</label>
+            <input type="checkbox" id="IsCustomerPanSubmit" [(ngModel)]="Entity.p.IsCustomerPanSubmit"
+              name="IsCustomerPanSubmit" class="custom-checkbox" />
           </div>
         </div>
       </div>
