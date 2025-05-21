@@ -41,6 +41,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   isSaveDisabled: boolean = false;
   VendorList: Vendor[] = [];
   VendorServiceList: ServiceSuppliedByVendorProps[] = [];
+  VendorServiceListByVendor: VendorService[] = [];
   StageList: Stage[] = [];
   SiteList: Site[] = [];
   SubStageList: SubStage[] = [];
@@ -75,7 +76,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
 
-  VendorServiceListByVendor: VendorService[] = [];
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
   @ViewChild('ChalanNoCtrl') ChalanNoInputControl!: NgModel;

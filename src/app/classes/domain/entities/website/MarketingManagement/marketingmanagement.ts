@@ -19,7 +19,7 @@ export class ServiceSuppliedByVendorProps {
 }
 
 export class MarketingManagementProps {
-  public readonly Db_Table_Name = "MarketingManagementMaster";
+  public readonly Db_Table_Name = "MarketingManagement";
   public Ref: number = 0;
   public SiteRef: number = 0;
   public readonly SiteName: string = '';
@@ -35,7 +35,7 @@ export class MarketingManagementProps {
   public Rate: number = 0;
   public Quantity: number = 0;
   public Total: number = 0;
-  public Name: string = '';
+  public Name: number = 0;
   public Narration: string = '';
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
@@ -57,7 +57,7 @@ export class MarketingManagementProps {
 }
 
 export class MarketingManagement implements IPersistable<MarketingManagement> {
-  public static readonly Db_Table_Name: string = 'MarketingManagementMaster';
+  public static readonly Db_Table_Name: string = 'MarketingManagement';
 
   private constructor(public readonly p: MarketingManagementProps, public readonly AllowEdit: boolean) {
 
@@ -87,11 +87,7 @@ export class MarketingManagement implements IPersistable<MarketingManagement> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') {
-      vra.add('Name', 'Name cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
-    }
+    if (this.p.Name > 0) {vra.add('Name', 'Name cannot be blank.');}
   }
 
   public MergeIntoTransportData(td: TransportData) {

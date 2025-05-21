@@ -28,7 +28,10 @@
           <div>
             <label>Date</label>
             <input type="date" [(ngModel)]="Entity.p.Date" name="Date" class="form-control" id="Date" required
-              placeholder="Enter Date" />
+              placeholder="Enter Date"  #DateCtrl="ngModel" (blur)="DateCtrl.control.markAsTouched()" />
+          <div *ngIf="(DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty))">
+            <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
@@ -59,37 +62,49 @@
         </div> -->
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Vendor Services</label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="VendorServiceRef" name="VendorServiceRef" [nzSize]="'large'"
-            [(ngModel)]="Entity.p.VendorServiceRef">
-            <nz-option *ngFor="let VendorServices of VendorServiceList" [nzValue]="VendorServices.Ref"
-              [nzLabel]="VendorServices.Name"></nz-option>
+         <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" [disabled]="VendorServiceListByVendor.length == 0"
+            nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorServiceRef" name="VendorServiceRef"
+            [nzSize]="'large'" [(ngModel)]="Entity.p.VendorServiceRef">
+            <nz-option *ngFor="let VendorServices of VendorServiceListByVendor" [nzValue]="VendorServices.p.Ref"
+              [nzLabel]="VendorServices.p.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem;"
           *ngIf="Entity.p.MarketingTypeRef == MarketingType.PrintingMedia">
           <label>Page</label>
-          <input type="text" [(ngModel)]="Entity.p.Page" name="Page" class="form-control" id="Page" required
-            placeholder="Enter Page" />
+          <input type="number" [(ngModel)]="Entity.p.Page" name="Page" class="form-control" id="Page" required
+            placeholder="Enter Page" (click)="selectAllValue($event)"/>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Place</label>
           <input type="text" [(ngModel)]="Entity.p.Place" name="Place" class="form-control" id="Place" required
-            placeholder="Enter Place" />
+            placeholder="Enter Place"  #PlaceCtrl="ngModel" required
+            (blur)="PlaceCtrl.control.markAsTouched()" />
+          <div *ngIf="(PlaceCtrl.invalid && (PlaceCtrl.touched || PlaceCtrl.dirty))">
+            <span class="validation-text" *ngIf="PlaceCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Rate</label>
-          <input type="text" [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate" required
-            (ngModelChange)="calculateTotal()" (click)="selectAllValue($event)" placeholder="Enter Rate" />
+          <input type="number" [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate" required
+            (ngModelChange)="calculateTotal()" (click)="selectAllValue($event)" placeholder="Enter Rate"  #RateCtrl="ngModel"
+            (blur)="RateCtrl.control.markAsTouched()" />
+          <div *ngIf="(RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty))">
+            <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Quantity</label>
-          <input type="text" [(ngModel)]="Entity.p.Quantity" name="Quantity" class="form-control" id="Quantity" required
-            (ngModelChange)="calculateTotal()" (click)="selectAllValue($event)" placeholder="Enter Quantity" />
+          <input type="number" [(ngModel)]="Entity.p.Quantity" name="Quantity" class="form-control" id="Quantity" required
+            (ngModelChange)="calculateTotal()" (click)="selectAllValue($event)" placeholder="Enter Quantity"  #QuantityCtrl="ngModel"
+            (blur)="QuantityCtrl.control.markAsTouched()" />
+          <div *ngIf="(QuantityCtrl.invalid && (QuantityCtrl.touched || QuantityCtrl.dirty))">
+            <span class="validation-text" *ngIf="QuantityCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Total</label>
-          <input type="text" [(ngModel)]="Entity.p.Total" name="Total" class="form-control" id="Total" required
+          <input type="number" [(ngModel)]="Entity.p.Total" name="Total" class="form-control" id="Total" required
             placeholder="Total" readonly />
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">

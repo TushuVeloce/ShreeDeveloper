@@ -269,14 +269,20 @@
         <div class="col-md-4 mt-3">
           <label for="localSiteVisitDate">Next Site Visit Date</label>
           <input type="Date" name="localSiteVisitDate" [(ngModel)]="localSiteVisitDate" [min]="today"
-            class="form-control" id="localSiteVisitDate" required />
+            class="form-control" id="localSiteVisitDate" required  #localSiteVisitDateCtrl="ngModel" (blur)="localSiteVisitDateCtrl.control.markAsTouched()" />
+            <div *ngIf="(localSiteVisitDateCtrl.invalid && (localSiteVisitDateCtrl.touched || localSiteVisitDateCtrl.dirty))">
+              <span class="validation-text" *ngIf="localSiteVisitDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
         </div>
 
         <!-- Next Office Visit Date -->
         <div class="col-md-4 mt-3">
           <label for="localOfficeVisitDate">Next Office Visit Date</label>
           <input type="Date" name="localOfficeVisitDate" [(ngModel)]="localOfficeVisitDate" [min]="today"
-            class="form-control" id="localOfficeVisitDate" required />
+            class="form-control" id="localOfficeVisitDate" required #localOfficeVisitDateDateCtrl="ngModel"  (blur)="localOfficeVisitDateDateCtrl.control.markAsTouched()" />
+          <div *ngIf="(localOfficeVisitDateDateCtrl.invalid && (localOfficeVisitDateDateCtrl.touched || localOfficeVisitDateDateCtrl.dirty))">
+            <span class="validation-text" *ngIf="localOfficeVisitDateDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
         </div>
 
         <!-- Reminder Date  -->

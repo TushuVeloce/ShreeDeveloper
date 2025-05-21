@@ -92,6 +92,13 @@ export class SiteWorkMasterDetailComponent implements OnInit {
 
   };
 
+   // for value 0 selected while click on Input //
+  selectAllValue(event: MouseEvent): void {
+    const input = event.target as HTMLInputElement;
+    input.select();
+  }
+
+
   SaveSiteWorkMaster = async () => {
     this.Entity.p.CompanyRef =
       this.companystatemanagement.getCurrentCompanyRef();
@@ -111,6 +118,7 @@ export class SiteWorkMasterDetailComponent implements OnInit {
           'Site Work Master  saved successfully!'
         );
         this.Entity = SiteWorkMaster.CreateNewInstance();
+        this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster(
           'Site Work Master  Updated successfully!'
@@ -126,7 +134,7 @@ export class SiteWorkMasterDetailComponent implements OnInit {
 
   resetAllControls = () => {
     // reset touched
-    this.NameInputControl.control.markAsUntouched();
+   this.NameInputControl.control.markAsUntouched();
     this.CodeInputControl.control.markAsUntouched();
 
     // reset dirty

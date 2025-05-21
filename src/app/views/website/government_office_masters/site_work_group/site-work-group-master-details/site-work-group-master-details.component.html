@@ -27,7 +27,7 @@
             <label> Display Order</label>
             <input type="number" [(ngModel)]="Entity.p.DisplayOrder" name="DisplayOrder" class="form-control"
               id="DisplayOrder" required placeholder="Enter Display Order" pattern="{{InputNumber}}"
-              #DisplayOrderCtrl="ngModel" required (blur)="DisplayOrderCtrl.control.markAsTouched()" />
+              #DisplayOrderCtrl="ngModel" required (blur)="DisplayOrderCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
             <div *ngIf="(DisplayOrderCtrl.invalid && (DisplayOrderCtrl.touched || DisplayOrderCtrl.dirty))">
               <span class="validation-text" *ngIf="DisplayOrderCtrl.errors?.['pattern']">{{InputNumberMsg}}</span>
               <span class="validation-text" *ngIf="DisplayOrderCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>

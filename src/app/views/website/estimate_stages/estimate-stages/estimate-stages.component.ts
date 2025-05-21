@@ -151,27 +151,39 @@ export class EstimateStagesComponent implements OnInit {
     return this.convertNumberToWords(this.totalAmount);
   }
 
-  convertNumberToWords(amount: number): string {
-    const a = [
-      '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
-      'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
-    ];
-    const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+ convertNumberToWords(amount: number): string {
+  const a = [
+    '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+    'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen',
+    'Seventeen', 'Eighteen', 'Nineteen'
+  ];
+  const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
 
-    if ((amount = amount || 0) === 0) return 'Zero Rupees Only';
-    if (amount.toString().length > 9) return 'Overflow';
+  if (isNaN(amount)) return 'Invalid amount';
 
-    let n = ('000000000' + amount).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{3})$/);
-    if (!n) return '';
+  let [rupees, paise] = amount.toFixed(2).split('.').map(Number);
 
-    let str = '';
-    str += (Number(n[1]) !== 0) ? (a[Number(n[1])] || (b[Number(n[1][0])] + ' ' + a[Number(n[1][1])])) + ' Crore ' : '';
-    str += (Number(n[2]) !== 0) ? (a[Number(n[2])] || (b[Number(n[2][0])] + ' ' + a[Number(n[2][1])])) + ' Lakh ' : '';
-    str += (Number(n[3]) !== 0) ? (a[Number(n[3])] || (b[Number(n[3][0])] + ' ' + a[Number(n[3][1])])) + ' Thousand ' : '';
-    str += (Number(n[4]) !== 0) ? (a[Number(n[4])] || (b[Number(n[4][0])] + ' ' + a[Number(n[4][1])])) + ' ' : '';
+  if (rupees === 0) return 'Zero Rupees Only';
 
-    return str.trim() + ' Rupees Only';
+  const numToWords = (num: number): string => {
+    if (num < 20) return a[num];
+    if (num < 100) return b[Math.floor(num / 10)] + (num % 10 ? ' ' + a[num % 10] : '');
+    if (num < 1000) return a[Math.floor(num / 100)] + ' Hundred' + (num % 100 ? ' and ' + numToWords(num % 100) : '');
+
+    if (num < 100000) return numToWords(Math.floor(num / 1000)) + ' Thousand' + (num % 1000 ? ' ' + numToWords(num % 1000) : '');
+    if (num < 10000000) return numToWords(Math.floor(num / 100000)) + ' Lakh' + (num % 100000 ? ' ' + numToWords(num % 100000) : '');
+    return numToWords(Math.floor(num / 10000000)) + ' Crore' + (num % 10000000 ? ' ' + numToWords(num % 10000000) : '');
+  };
+
+  let result = numToWords(rupees) + ' Rupees';
+
+  if (paise) {
+    result += ' and ' + numToWords(paise) + ' Paise';
   }
+
+  return result + ' Only';
+}
+
 
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page

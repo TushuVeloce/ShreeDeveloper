@@ -75,6 +75,7 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
       } else {
         this.Entity.p.TotalPlotAmount = Math.ceil(DiscountedRateOnArea * AreaInSqft)- DiscountOnTotalPlotAmount;
       }
+      this.calculateGrandTotal()
     }
 
     calculateGovernmentValue= () => {

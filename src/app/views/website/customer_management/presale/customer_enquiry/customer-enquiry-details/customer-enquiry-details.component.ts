@@ -73,6 +73,9 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   @ViewChild('ContactNoCtrl') ContactNoInputControl!: NgModel;
   @ViewChild('AddressCtrl') AddressInputControl!: NgModel;
   @ViewChild('PinCodeCtrl') PinCodeNoInputControl!: NgModel;
+  @ViewChild('localSiteVisitDateCtrl') localSiteVisitDateInputControl!: NgModel;
+  @ViewChild('localOfficeVisitDateDateCtrl') localOfficeVisitDateDateInputControl!: NgModel;
+  // @ViewChild('localSiteVisitDateCtrl') localSiteVisitDateInputControl!: NgModel;
 
   MarketingModesList = DomainEnums.MarketingModesList(
     true,
@@ -392,12 +395,16 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     this.ContactNoInputControl.control.markAsUntouched();
     this.AddressInputControl.control.markAsUntouched();
     this.PinCodeNoInputControl.control.markAsUntouched();
+    this.localSiteVisitDateInputControl.control.markAsUntouched();
+    this.localOfficeVisitDateDateInputControl.control.markAsUntouched();
 
     // reset dirty
     this.NameInputControl.control.markAsPristine();
     this.ContactNoInputControl.control.markAsPristine();
     this.AddressInputControl.control.markAsPristine();
     this.PinCodeNoInputControl.control.markAsPristine();
+    this.localSiteVisitDateInputControl.control.markAsPristine();
+    this.localOfficeVisitDateDateInputControl.control.markAsPristine();
   };
 
   SaveCustomerEnquiry = async () => {
@@ -451,7 +458,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster(
           'Customer Enquiry Updated successfully!'
         );
-        this.router.navigate(['/homepage/Website/Customer_Enquiry']);
+        this.BackCustomerEnquiry()
       }
     }
   };

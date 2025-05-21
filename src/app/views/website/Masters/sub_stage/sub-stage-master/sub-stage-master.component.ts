@@ -56,6 +56,9 @@ export class SubStageMasterComponent implements OnInit {
     }
     let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.StageList = lst.filter(stage => stage.p.IsSubStageApplicable === true);
+    if(this.StageList.length > 0){
+      this.Entity.p.StageRef = this.StageList[0].p.Ref
+    }
   }
 
   getSubStageListByCompanyRef = async () => {

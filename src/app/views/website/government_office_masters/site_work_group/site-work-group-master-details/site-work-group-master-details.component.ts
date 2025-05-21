@@ -50,6 +50,13 @@ export class SiteWorkGroupMasterDetailsComponent implements OnInit {
     // this.focusInput();
   }
 
+   // for value 0 selected while click on Input //
+  selectAllValue(event: MouseEvent): void {
+    const input = event.target as HTMLInputElement;
+    input.select();
+  }
+
+
   SaveSiteWorkGroupMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
@@ -69,6 +76,7 @@ export class SiteWorkGroupMasterDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('SiteWorkGroup Master saved successfully!');
         this.Entity = SiteWorkGroup.CreateNewInstance();
+        this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster('SiteWorkGroup Master Updated successfully!');
         this.BackSiteWorkGroup()
