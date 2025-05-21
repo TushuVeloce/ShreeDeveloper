@@ -59,28 +59,42 @@ export class UnitMasterComponent implements OnInit {
   };
 
   
-   DeleteUnit = async (Unit: Unit) => {
-      await this.uiUtils.showConfirmationMessage(
-        'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Unit?`,
-        async () => {
-          let req = new DeleteUnitCustomRequest();
-          req.UnitRef = Unit.p.Ref;
-          let td = req.FormulateTransportData();
-          console.log('td :', td);
-          let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-          let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-          if (!tr.Successful) {
-            await this.uiUtils.showErrorMessage('Error', tr.Message);
-            return;
-          }
+  //  DeleteUnit = async (Unit: Unit) => {
+  //     await this.uiUtils.showConfirmationMessage(
+  //       'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Unit?`,
+  //       async () => {
+  //         let req = new DeleteUnitCustomRequest();
+  //         req.UnitRef = Unit.p.Ref;
+  //         let td = req.FormulateTransportData();
+  //         console.log('td :', td);
+  //         let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+  //         let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+  //         if (!tr.Successful) {
+  //           await this.uiUtils.showErrorMessage('Error', tr.Message);
+  //           return;
+  //         }
+  //         await this.uiUtils.showSuccessToster(`Unit ${Unit.p.Name} has been deleted!`);
+  //         let tdResult = JSON.parse(tr.Tag) as TransportData;
+  //       }
+  //     );
+  //     this.FormulateUnitList()
+  //     this.loadPaginationData()
+  //     this.SearchString = '';
+  //   };
+  onDeleteClicked = async (Unit: Unit) => {
+    await this.uiUtils.showConfirmationMessage('Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+      Are you sure that you want to DELETE this Unit?`,
+      async () => {
+        await Unit.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(`Unit ${Unit.p.Name} has been deleted!`);
-          let tdResult = JSON.parse(tr.Tag) as TransportData;
-        }
-      );
-      this.FormulateUnitList()
-      this.loadPaginationData()
-      this.SearchString = '';
-    };
+          this.SearchString = '';
+          this.loadPaginationData();
+          this.FormulateUnitList();
+        });
+      });
+  }
+
 
   // For Pagination  start ----
   loadPaginationData = () => {

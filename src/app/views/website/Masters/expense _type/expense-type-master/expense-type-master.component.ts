@@ -95,46 +95,46 @@ export class ExpenseTypeMasterComponent implements OnInit {
     await this.router.navigate(['/homepage/Website/Expense_Type_Master_Details']);
   };
 
-  // onDeleteClicked = async (ExpenseType: ExpenseType) => {
-  //   await this.uiUtils.showConfirmationMessage(
-  //     'Delete',
-  //     `This process is <strong>IRREVERSIBLE!</strong> <br/>
-  //    Are you sure that you want to DELETE this ExpenseType?`,
-  //     async () => {
-  //       await ExpenseType.DeleteInstance(async () => {
-  //         await this.uiUtils.showSuccessToster(
-  //           `ExpenseType ${ExpenseType.p.Name} has been deleted!`
-  //         );
-  //         await this.getExpenseListByStageRef();
-  //         this.SearchString = '';
-  //         this.loadPaginationData();
-  //       });
-  //     }
-  //   );
-  // };
+  onDeleteClicked = async (ExpenseType: ExpenseType) => {
+    await this.uiUtils.showConfirmationMessage(
+      'Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+     Are you sure that you want to DELETE this ExpenseType?`,
+      async () => {
+        await ExpenseType.DeleteInstance(async () => {
+          await this.uiUtils.showSuccessToster(
+            `ExpenseType ${ExpenseType.p.Name} has been deleted!`
+          );
+          await this.getExpenseListByStageRef();
+          this.SearchString = '';
+          this.loadPaginationData();
+        });
+      }
+    );
+  };
 
-   DeleteExpenseType = async (ExpenseType: ExpenseType) => {
-      await this.uiUtils.showConfirmationMessage(
-        'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Expense Type?`,
-        async () => {
-          let req = new DeleteExpenseTypeCustomRequest();
-          req.ExpenseTypeRef = ExpenseType.p.Ref;
-          let td = req.FormulateTransportData();
-          console.log('td :', td);
-          let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-          let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-          if (!tr.Successful) {
-            await this.uiUtils.showErrorMessage('Error', tr.Message);
-            return;
-          }
-          await this.uiUtils.showSuccessToster(`Expense Type ${ExpenseType.p.Name} has been deleted!`);
-          let tdResult = JSON.parse(tr.Tag) as TransportData;
-        }
-      );
-      this.getExpenseListByStageRef()
-      this.loadPaginationData()
-       this.SearchString = '';
-    };
+  //  DeleteExpenseType = async (ExpenseType: ExpenseType) => {
+  //     await this.uiUtils.showConfirmationMessage(
+  //       'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Expense Type?`,
+  //       async () => {
+  //         let req = new DeleteExpenseTypeCustomRequest();
+  //         req.ExpenseTypeRef = ExpenseType.p.Ref;
+  //         let td = req.FormulateTransportData();
+  //         console.log('td :', td);
+  //         let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+  //         let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+  //         if (!tr.Successful) {
+  //           await this.uiUtils.showErrorMessage('Error', tr.Message);
+  //           return;
+  //         }
+  //         await this.uiUtils.showSuccessToster(`Expense Type ${ExpenseType.p.Name} has been deleted!`);
+  //         let tdResult = JSON.parse(tr.Tag) as TransportData;
+  //       }
+  //     );
+  //     this.getExpenseListByStageRef()
+  //     this.loadPaginationData()
+  //      this.SearchString = '';
+  //   };
 
   // For Pagination  start ----
   loadPaginationData = () => {

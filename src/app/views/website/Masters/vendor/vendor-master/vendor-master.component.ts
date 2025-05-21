@@ -59,43 +59,43 @@ export class VendorMasterComponent implements OnInit {
     await this.router.navigate(['/homepage/Website/Vendor_Master_Details']);
   }
 
-  // onDeleteClicked = async (Vendor: Vendor) => {
-  //   await this.uiUtils.showConfirmationMessage('Delete',
-  //     `This process is <strong>IRREVERSIBLE!</strong> <br/>
-  //   Are you sure that you want to DELETE this Vendor?`,
-  //     async () => {
-  //       await Vendor.DeleteInstance(async () => {
-  //         await this.uiUtils.showSuccessToster(`Vendor ${Vendor.p.Name} has been deleted!`);
-  //         await this.getVendorListByCompanyRef();
-  //         this.SearchString = '';
-  //         this.loadPaginationData();
-  //         // await this.FormulateMasterList();
-  //       });
-  //     });
-  // }
+  onDeleteClicked = async (Vendor: Vendor) => {
+    await this.uiUtils.showConfirmationMessage('Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+    Are you sure that you want to DELETE this Vendor?`,
+      async () => {
+        await Vendor.DeleteInstance(async () => {
+          await this.uiUtils.showSuccessToster(`Vendor ${Vendor.p.Name} has been deleted!`);
+          await this.getVendorListByCompanyRef();
+          this.SearchString = '';
+          this.loadPaginationData();
+          // await this.FormulateMasterList();
+        });
+      });
+  }
 
-  DeleteVendor = async (Vendor: Vendor) => {
-        await this.uiUtils.showConfirmationMessage(
-          'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Vendor?`,
-          async () => {
-            let req = new DeleteVendorCustomRequest();
-            req.VendorRef = Vendor.p.Ref;
-            let td = req.FormulateTransportData();
-            console.log('td :', td);
-            let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-            let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-            if (!tr.Successful) {
-              await this.uiUtils.showErrorMessage('Error', tr.Message);
-              return;
-            }
-            await this.uiUtils.showSuccessToster(`Vendor ${Vendor.p.Name} has been deleted!`);
-            let tdResult = JSON.parse(tr.Tag) as TransportData;
-          }
-        );
-         this.SearchString = '';
-        this.getVendorListByCompanyRef()
-        this.loadPaginationData()
-      };
+  // DeleteVendor = async (Vendor: Vendor) => {
+  //       await this.uiUtils.showConfirmationMessage(
+  //         'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Vendor?`,
+  //         async () => {
+  //           let req = new DeleteVendorCustomRequest();
+  //           req.VendorRef = Vendor.p.Ref;
+  //           let td = req.FormulateTransportData();
+  //           console.log('td :', td);
+  //           let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+  //           let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+  //           if (!tr.Successful) {
+  //             await this.uiUtils.showErrorMessage('Error', tr.Message);
+  //             return;
+  //           }
+  //           await this.uiUtils.showSuccessToster(`Vendor ${Vendor.p.Name} has been deleted!`);
+  //           let tdResult = JSON.parse(tr.Tag) as TransportData;
+  //         }
+  //       );
+  //        this.SearchString = '';
+  //       this.getVendorListByCompanyRef()
+  //       this.loadPaginationData()
+  //     };
 
   // For Pagination  start ----
   loadPaginationData = () => {

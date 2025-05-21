@@ -94,28 +94,46 @@ export class SubStageMasterComponent implements OnInit {
     await this.router.navigate(['/homepage/Website/Sub_Stage_Master_Details']);
   };
 
-  DeleteSubStage = async (SubStage: SubStage) => {
+    onDeleteClicked = async (SubStage: SubStage) => {
     await this.uiUtils.showConfirmationMessage(
-      'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this SubStage?`,
+      'Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+     Are you sure that you want to DELETE this Sub Stage?`,
       async () => {
-        let req = new DeleteSubStageCustomRequest();
-        req.SubStageRef = SubStage.p.Ref;
-        let td = req.FormulateTransportData();
-        console.log('td :', td);
-        let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-        let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-        if (!tr.Successful) {
-          await this.uiUtils.showErrorMessage('Error', tr.Message);
-          return;
-        }
-        await this.uiUtils.showSuccessToster(`Stage ${SubStage.p.Name} has been deleted!`);
-        let tdResult = JSON.parse(tr.Tag) as TransportData;
+        await SubStage.DeleteInstance(async () => {
+          await this.uiUtils.showSuccessToster(
+            `Sub Stage ${SubStage.p.Name} has been deleted!`
+          );
+          await this.getSubStageListByCompanyRef();
+          this.SearchString = '';
+          this.loadPaginationData();
+        });
       }
     );
-    this.getSubStageListByCompanyRef()
-    this.loadPaginationData()
-     this.SearchString = '';
   };
+
+  // DeleteSubStage = async (SubStage: SubStage) => {
+  //   await this.uiUtils.showConfirmationMessage(
+  //     'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this SubStage?`,
+  //     async () => {
+  //       let req = new DeleteSubStageCustomRequest();
+  //       req.SubStageRef = SubStage.p.Ref;
+  //       let td = req.FormulateTransportData();
+  //       console.log('td :', td);
+  //       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+  //       let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+  //       if (!tr.Successful) {
+  //         await this.uiUtils.showErrorMessage('Error', tr.Message);
+  //         return;
+  //       }
+  //       await this.uiUtils.showSuccessToster(`Stage ${SubStage.p.Name} has been deleted!`);
+  //       let tdResult = JSON.parse(tr.Tag) as TransportData;
+  //     }
+  //   );
+  //   this.getSubStageListByCompanyRef()
+  //   this.loadPaginationData()
+  //    this.SearchString = '';
+  // };
 
   // For Pagination  start ----
   loadPaginationData = () => {

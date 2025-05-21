@@ -67,47 +67,47 @@ export class VendorServicesMasterComponent implements OnInit {
     await this.router.navigate(['/homepage/Website/Vendor_Services_Master_Details']);
   };
 
-  // onDeleteClicked = async (Item: VendorService) => {
-  //   await this.uiUtils.showConfirmationMessage(
-  //     'Delete',
-  //     `This process is <strong>IRREVERSIBLE!</strong> <br/>
-  //   Are you sure that you want to DELETE this Vendor Service?`,
-  //     async () => {
-  //       await Item.DeleteInstance(async () => {
-  //         await this.uiUtils.showSuccessToster(
-  //           `Vendor Service ${Item.p.Name} has been deleted!`
-  //         );
-  //         await this.FormulateVendorServiceList();
-  //         this.SearchString = '';
-  //         this.loadPaginationData();
-  //         await this.FormulateVendorServiceList();
-  //       });
-  //     }
-  //   );
-  // };
+  onDeleteClicked = async (Item: VendorService) => {
+    await this.uiUtils.showConfirmationMessage(
+      'Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+    Are you sure that you want to DELETE this Vendor Service?`,
+      async () => {
+        await Item.DeleteInstance(async () => {
+          await this.uiUtils.showSuccessToster(
+            `Vendor Service ${Item.p.Name} has been deleted!`
+          );
+          await this.FormulateVendorServiceList();
+          this.SearchString = '';
+          this.loadPaginationData();
+          await this.FormulateVendorServiceList();
+        });
+      }
+    );
+  };
 
-    DeleteVendorService = async (VendorService: VendorService) => {
-      await this.uiUtils.showConfirmationMessage(
-        'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Service?`,
-        async () => {
-          let req = new DeleteVendorServiceCustomRequest();
-          req.VendorServiceRef = VendorService.p.Ref;
-          let td = req.FormulateTransportData();
-          console.log('td :', td);
-          let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-          let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-          if (!tr.Successful) {
-            await this.uiUtils.showErrorMessage('Error', tr.Message);
-            return;
-          }
-          await this.uiUtils.showSuccessToster(`Vendor Service ${VendorService.p.Name} has been deleted!`);
-          let tdResult = JSON.parse(tr.Tag) as TransportData;
-        }
-      );
-      this.FormulateVendorServiceList()
-      this.loadPaginationData()
-       this.SearchString = '';
-    };
+    // DeleteVendorService = async (VendorService: VendorService) => {
+    //   await this.uiUtils.showConfirmationMessage(
+    //     'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Service?`,
+    //     async () => {
+    //       let req = new DeleteVendorServiceCustomRequest();
+    //       req.VendorServiceRef = VendorService.p.Ref;
+    //       let td = req.FormulateTransportData();
+    //       console.log('td :', td);
+    //       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+    //       let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+    //       if (!tr.Successful) {
+    //         await this.uiUtils.showErrorMessage('Error', tr.Message);
+    //         return;
+    //       }
+    //       await this.uiUtils.showSuccessToster(`Vendor Service ${VendorService.p.Name} has been deleted!`);
+    //       let tdResult = JSON.parse(tr.Tag) as TransportData;
+    //     }
+    //   );
+    //   this.FormulateVendorServiceList()
+    //   this.loadPaginationData()
+    //    this.SearchString = '';
+    // };
 
   // For Pagination  start ----
   loadPaginationData = () => {

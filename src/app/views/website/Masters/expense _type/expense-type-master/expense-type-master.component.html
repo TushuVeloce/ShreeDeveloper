@@ -94,7 +94,7 @@
                 "
               />
               <Delete-Icon
-                (deleteClicked)="DeleteExpenseType(ExpenseType)"
+                (deleteClicked)="onDeleteClicked(ExpenseType)"
                 [class.disabled-icon]="
                   ExpenseType.p.ExpenseType === ExpenseTypeRef ||
                   ExpenseType.p.ExpenseType === LabourExpenseRef ||
