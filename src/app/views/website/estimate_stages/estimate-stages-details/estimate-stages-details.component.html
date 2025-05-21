@@ -17,7 +17,7 @@
     </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-6 col-sm-12 mb-3">
+        <div class="col-md-4 col-sm-12 mb-3">
           <label for="SiteRef"><b>Site Name</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
@@ -32,7 +32,7 @@
             <span class="validation-text" *ngIf="TransDateTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div> -->
-        <div class="col-md-6 col-sm-12 mb-3">
+        <div class="col-md-4 col-sm-12 mb-3">
           <label for="Amount">Amount</label>
           <input type="number" [(ngModel)]="Entity.p.Amount" name="Amount" class="form-control" id="Amount" required
             placeholder="Enter Display Order" #AmountCtrl="ngModel" required (blur)="AmountCtrl.control.markAsTouched()"
@@ -41,10 +41,10 @@
             <span class="validation-text" *ngIf="AmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-md-12 col-sm-12 mb-3">
+        <div class="col-md-4 col-sm-12 mb-3">
           <label><b>Description</b></label>
           <textarea type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
-            id="Description" rows="3" required placeholder="Enter Description" #DescriptionCtrl="ngModel"
+            id="Description" rows="1" required placeholder="Enter Description" #DescriptionCtrl="ngModel"
             (blur)="DescriptionCtrl.control.markAsTouched()"></textarea>
           <div style="height: 25px;"
             *ngIf="(DescriptionCtrl.invalid && (DescriptionCtrl.touched || DescriptionCtrl.dirty))">

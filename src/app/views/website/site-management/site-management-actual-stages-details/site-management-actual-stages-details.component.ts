@@ -78,6 +78,8 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   VendorServiceListByVendor: VendorService[] = [];
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('ChalanNoCtrl') ChalanNoInputControl!: NgModel;
+  @ViewChild('RateCtrl') RateInputControl!: NgModel;
   @ViewChild('VehicleNoCtrl') VehicleNoInputControl!: NgModel;
   @ViewChild('StartTimeCtrl') StartTimeInputControl!: NgModel;
   @ViewChild('EndTimeCtrl') EndTimeInputControl!: NgModel;
@@ -579,10 +581,13 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     // reset touched
     this.NameInputControl.control.markAsUntouched();
     this.VehicleNoInputControl.control.markAsUntouched();
+    this.ChalanNoInputControl.control.markAsUntouched();
+    this.RateInputControl.control.markAsUntouched();
 
     // reset dirty
     this.NameInputControl.control.markAsPristine();
-    this.VehicleNoInputControl.control.markAsPristine();
+    this.ChalanNoInputControl.control.markAsPristine();
+    this.RateInputControl.control.markAsPristine();
   }
 
   resetTimeControls = () => {
@@ -593,7 +598,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     this.EndTimeInputControl.control.markAsPristine();
   }
 
-  SaveStageMaster = async () => {
+  SaveActualStage = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));

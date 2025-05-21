@@ -106,6 +106,7 @@ export class VendorServicesMasterComponent implements OnInit {
       );
       this.FormulateVendorServiceList()
       this.loadPaginationData()
+       this.SearchString = '';
     };
 
   // For Pagination  start ----

@@ -1,11 +1,15 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ExpenseTypeRefs } from 'src/app/classes/domain/constants';
+import { DeleteExpenseTypeCustomRequest } from 'src/app/classes/domain/entities/website/masters/expensetype/DeleteExpenseTypeCustomRequest';
 import { ExpenseType } from 'src/app/classes/domain/entities/website/masters/expensetype/expensetype';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
+import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
+import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
+import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -35,7 +39,8 @@ export class ExpenseTypeMasterComponent implements OnInit {
 
   headers: string[] = ['Sr.No.', 'Name', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement,private payloadPacketFacade: PayloadPacketFacade,
+        private serverCommunicator: ServerCommunicatorService
   ) {
     effect(async () => {
       await this.getStageListByCompanyRef();
@@ -90,23 +95,46 @@ export class ExpenseTypeMasterComponent implements OnInit {
     await this.router.navigate(['/homepage/Website/Expense_Type_Master_Details']);
   };
 
-  onDeleteClicked = async (ExpenseType: ExpenseType) => {
-    await this.uiUtils.showConfirmationMessage(
-      'Delete',
-      `This process is <strong>IRREVERSIBLE!</strong> <br/>
-     Are you sure that you want to DELETE this ExpenseType?`,
-      async () => {
-        await ExpenseType.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(
-            `ExpenseType ${ExpenseType.p.Name} has been deleted!`
-          );
-          await this.getExpenseListByStageRef();
-          this.SearchString = '';
-          this.loadPaginationData();
-        });
-      }
-    );
-  };
+  // onDeleteClicked = async (ExpenseType: ExpenseType) => {
+  //   await this.uiUtils.showConfirmationMessage(
+  //     'Delete',
+  //     `This process is <strong>IRREVERSIBLE!</strong> <br/>
+  //    Are you sure that you want to DELETE this ExpenseType?`,
+  //     async () => {
+  //       await ExpenseType.DeleteInstance(async () => {
+  //         await this.uiUtils.showSuccessToster(
+  //           `ExpenseType ${ExpenseType.p.Name} has been deleted!`
+  //         );
+  //         await this.getExpenseListByStageRef();
+  //         this.SearchString = '';
+  //         this.loadPaginationData();
+  //       });
+  //     }
+  //   );
+  // };
+
+   DeleteExpenseType = async (ExpenseType: ExpenseType) => {
+      await this.uiUtils.showConfirmationMessage(
+        'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Expense Type?`,
+        async () => {
+          let req = new DeleteExpenseTypeCustomRequest();
+          req.ExpenseTypeRef = ExpenseType.p.Ref;
+          let td = req.FormulateTransportData();
+          console.log('td :', td);
+          let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+          let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+          if (!tr.Successful) {
+            await this.uiUtils.showErrorMessage('Error', tr.Message);
+            return;
+          }
+          await this.uiUtils.showSuccessToster(`Expense Type ${ExpenseType.p.Name} has been deleted!`);
+          let tdResult = JSON.parse(tr.Tag) as TransportData;
+        }
+      );
+      this.getExpenseListByStageRef()
+      this.loadPaginationData()
+       this.SearchString = '';
+    };
 
   // For Pagination  start ----
   loadPaginationData = () => {

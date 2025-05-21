@@ -111,6 +111,7 @@ export class SubStageMasterComponent implements OnInit {
     );
     this.getSubStageListByCompanyRef()
     this.loadPaginationData()
+     this.SearchString = '';
   };
 
   // For Pagination  start ----

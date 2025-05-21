@@ -35,13 +35,10 @@
         <div class="col-md-6" style="margin-top: 1rem">
           <label><b>Chalan No.</b></label>
           <input type="number" [(ngModel)]="Entity.p.ChalanNo" name="ChalanNo" class="form-control" id="ChalanNo"
-            placeholder="Enter Chalan No" #ChalanNoCtrl="ngModel" (blur)="ChalanNoCtrl.control.markAsTouched()"
-            (click)="selectAllValue($event)" [disabled]="isChalanDisabled" />
-          <div *ngIf="
-              ChalanNoCtrl.invalid &&
-              (ChalanNoCtrl.touched || ChalanNoCtrl.dirty)
-            ">
-            <span class="validation-text" *ngIf="ChalanNoCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+            placeholder="Enter Chalan No" (click)="selectAllValue($event)" [disabled]="isChalanDisabled" #ChalanNoCtrl="ngModel" required
+            (blur)="ChalanNoCtrl.control.markAsTouched()" />
+          <div *ngIf="(ChalanNoCtrl.invalid && (ChalanNoCtrl.touched || ChalanNoCtrl.dirty))">
+            <span class="validation-text" *ngIf="ChalanNoCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
         <div class="col-md-6" style="margin-top: 1rem">
@@ -277,10 +274,10 @@
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem">
           <label><b>Rate</b></label>
           <input type="number" [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate"
-            placeholder="Enter Rate" (ngModelChange)="CalculateAmountOnRateAndQuantity()" #RateCtrl="ngModel"
-            (blur)="RateCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
-          <div *ngIf="RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty)">
-            <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+            placeholder="Enter Rate" (ngModelChange)="CalculateAmountOnRateAndQuantity()" (click)="selectAllValue($event)" #RateCtrl="ngModel" required
+            (blur)="RateCtrl.control.markAsTouched()" />
+          <div *ngIf="(RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty))">
+            <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
@@ -485,7 +482,7 @@
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
         <div>
-          <button type="button" class="btn" (click)="SaveStageMaster()">Save</button>
+          <button type="button" class="btn" (click)="SaveActualStage()">Save</button>
         </div>
         <div>
           <button type="button" class="btn" (click)="BackActualStages()">Cancel</button>

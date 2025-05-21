@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UnitRefs } from 'src/app/classes/domain/constants';
+import { DeleteUnitCustomRequest } from 'src/app/classes/domain/entities/website/masters/unit/DeleteUnitCustomRequest';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
+import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
+import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
+import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -25,7 +29,8 @@ export class UnitMasterComponent implements OnInit {
   TimeUnitRef:number = UnitRefs.TimeUnitRef
 
   headers: string[] = ['Sr.No.', 'Unit', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService) { }
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,private payloadPacketFacade: PayloadPacketFacade,
+      private serverCommunicator: ServerCommunicatorService) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -53,25 +58,29 @@ export class UnitMasterComponent implements OnInit {
     await this.router.navigate(['/homepage/Website/Unit_Master_Details']);
   };
 
-  onDeleteClicked = async (Item: Unit) => {
-    await this.uiUtils.showConfirmationMessage(
-      'Delete',
-      `This process is <strong>IRREVERSIBLE!</strong> <br/>
-    Are you sure that you want to DELETE this Unit?`,
-      async () => {
-        await Item.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(
-            `Unit ${Item.p.Name} has been deleted!`
-          );
-          await this.FormulateUnitList();
-          this.SearchString = '';
-          this.loadPaginationData();
-          await this.FormulateUnitList();
-
-        });
-      }
-    );
-  };
+  
+   DeleteUnit = async (Unit: Unit) => {
+      await this.uiUtils.showConfirmationMessage(
+        'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Unit?`,
+        async () => {
+          let req = new DeleteUnitCustomRequest();
+          req.UnitRef = Unit.p.Ref;
+          let td = req.FormulateTransportData();
+          console.log('td :', td);
+          let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+          let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+          if (!tr.Successful) {
+            await this.uiUtils.showErrorMessage('Error', tr.Message);
+            return;
+          }
+          await this.uiUtils.showSuccessToster(`Unit ${Unit.p.Name} has been deleted!`);
+          let tdResult = JSON.parse(tr.Tag) as TransportData;
+        }
+      );
+      this.FormulateUnitList()
+      this.loadPaginationData()
+      this.SearchString = '';
+    };
 
   // For Pagination  start ----
   loadPaginationData = () => {

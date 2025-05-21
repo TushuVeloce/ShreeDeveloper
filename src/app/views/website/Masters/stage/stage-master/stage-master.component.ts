@@ -1,9 +1,13 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DeleteStageCustomRequest } from 'src/app/classes/domain/entities/website/masters/stage/DeleteStageCustomRequest';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
+import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
+import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
+import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -24,8 +28,8 @@ export class StageMasterComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr No','Display Order','Stage Name','Has Sub Stage', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private screenSizeService: ScreenSizeService, private companystatemanagement: CompanyStateManagement) {
+  headers: string[] = ['Sr No', 'Display Order', 'Stage Name', 'Has Sub Stage', 'Action'];
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService, private companystatemanagement: CompanyStateManagement, private payloadPacketFacade: PayloadPacketFacade, private serverCommunicator: ServerCommunicatorService) {
     effect(() => {
       this.getStageListByCompanyRef()
     });
@@ -41,16 +45,16 @@ export class StageMasterComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef() <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
-        return;
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
     let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(),
-    async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
-  );
+      async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
-};
+  };
 
   onEditClicked = async (item: Stage) => {
     this.SelectedStage = item.GetEditableVersion();
@@ -59,20 +63,43 @@ export class StageMasterComponent implements OnInit {
     await this.router.navigate(['/homepage/Website/Stage_Master_Details']);
   }
 
-  onDeleteClicked = async (Stage: Stage) => {
-    await this.uiUtils.showConfirmationMessage('Delete',
-      `This process is <strong>IRREVERSIBLE!</strong> <br/>
-      Are you sure that you want to DELETE this Stage?`,
-      async () => {
-        await Stage.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(`Stage ${Stage.p.Name} has been deleted!`);
-          await this.getStageListByCompanyRef();
-          this.SearchString = '';
-          this.loadPaginationData();
+  // onDeleteClicked = async (Stage: Stage) => {
+  //   await this.uiUtils.showConfirmationMessage('Delete',
+  //     `This process is <strong>IRREVERSIBLE!</strong> <br/>
+  //     Are you sure that you want to DELETE this Stage?`,
+  //     async () => {
+  //       await Stage.DeleteInstance(async () => {
+  //         await this.uiUtils.showSuccessToster(`Stage ${Stage.p.Name} has been deleted!`);
+  //         await this.getStageListByCompanyRef();
+  //         this.SearchString = '';
+  //         this.loadPaginationData();
 
-        });
-      });
-  }
+  //       });
+  //     });
+  // }
+
+  DeleteStage = async (Stage: Stage) => {
+    await this.uiUtils.showConfirmationMessage(
+      'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Stage?`,
+      async () => {
+        let req = new DeleteStageCustomRequest();
+        req.StageRef = Stage.p.Ref;
+        let td = req.FormulateTransportData();
+        console.log('td :', td);
+        let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+        let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+        if (!tr.Successful) {
+          await this.uiUtils.showErrorMessage('Error', tr.Message);
+          return;
+        }
+        await this.uiUtils.showSuccessToster(`Stage ${Stage.p.Name} has been deleted!`);
+        let tdResult = JSON.parse(tr.Tag) as TransportData;
+      }
+    );
+    this.getStageListByCompanyRef()
+    this.loadPaginationData()
+     this.SearchString = '';
+  };
 
   // For Pagination  start ----
   loadPaginationData = () => {

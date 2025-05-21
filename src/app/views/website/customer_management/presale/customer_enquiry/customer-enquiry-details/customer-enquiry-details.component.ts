@@ -69,9 +69,10 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   PinCode: string = ValidationPatterns.PinCode;
   PinCodeWithoutMsg: string = ValidationMessages.PinCodeMsg;
 
-  @ViewChild('NameCtrl') CustomerEnquiryNameInputControl!: NgModel;
+  @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('ContactNoCtrl') ContactNoInputControl!: NgModel;
+  @ViewChild('AddressCtrl') AddressInputControl!: NgModel;
   @ViewChild('PinCodeCtrl') PinCodeNoInputControl!: NgModel;
-  // @ViewChild('ContactNos') phoneNosInput!: NgModel;
 
   MarketingModesList = DomainEnums.MarketingModesList(
     true,
@@ -387,11 +388,15 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
 
   resetAllControls = () => {
     // reset touched
-    this.CustomerEnquiryNameInputControl.control.markAsUntouched();
+    this.NameInputControl.control.markAsUntouched();
+    this.ContactNoInputControl.control.markAsUntouched();
+    this.AddressInputControl.control.markAsUntouched();
     this.PinCodeNoInputControl.control.markAsUntouched();
 
     // reset dirty
-    this.CustomerEnquiryNameInputControl.control.markAsPristine();
+    this.NameInputControl.control.markAsPristine();
+    this.ContactNoInputControl.control.markAsPristine();
+    this.AddressInputControl.control.markAsPristine();
     this.PinCodeNoInputControl.control.markAsPristine();
   };
 
