@@ -97,7 +97,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stage' : 'Edit Stage';
       this.Entity = ActualStages.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
       if (this.Entity.p.Date != '') {
         this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
       }
