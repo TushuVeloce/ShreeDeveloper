@@ -124,6 +124,9 @@ export class Company implements IPersistable<Company> {
     } else if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan)) {
       vra.add('Pan', ValidationMessages.PANMsg);
     }
+    if (this.p.CINNO && !new RegExp(ValidationPatterns.CIN).test(this.p.CINNO)) {
+      vra.add('CIN', ValidationMessages.CINMsg);
+    }
 
     if (this.p.IsNewlyCreated == true && this.p.CompanyLogo == null) {
       vra.add('CompanyLogo', 'Company Logo cannot be blank.');
@@ -165,7 +168,7 @@ export class Company implements IPersistable<Company> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): Company[] {
+    sortPropertyName: string = ""): Company[] {
     let result: Company[] = [];
 
     let dcs = DataContainerService.GetInstance();
