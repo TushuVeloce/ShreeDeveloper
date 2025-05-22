@@ -106,25 +106,25 @@ export class Employee implements IPersistable<Employee> {
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
     if (this.p.Name == '') {
       vra.add('Name', 'Name cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.NameWithoutNosMsg + ' for Name');
+    } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
+      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     }
     if (this.p.DOB == '') vra.add('DOB', ' DOB cannot be blank.');
     if (this.p.Gender == 0) vra.add('Gender', ' Gender cannot be blank.');
     if (this.p.ContactNos == '') {
       vra.add('Contact No', 'Contact No cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.ContactNos)) {
-      vra.add('Contact No', ValidationMessages.INDPhoneNoMsg);
+      vra.add('Contact No', ValidationMessages.INDPhoneNoMsg + ' for Contact No');
     }
     if (this.p.PersonalEmailId == '') {
       vra.add('Personal Email Id', 'Personal Email Id cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.Email).test(this.p.PersonalEmailId)) {
-      vra.add('Personal Email Id', ValidationMessages.EmailMsg);
+      vra.add('Personal Email Id', ValidationMessages.EmailMsg + ' for Personal Email Id.');
     }
     if (this.p.OfficialEmailId == '') {
       vra.add('Office Email Id', 'Office Email Id cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.Email).test(this.p.OfficialEmailId)) {
-      vra.add('Office Email Id', ValidationMessages.EmailMsg);
+      vra.add('Office Email Id', ValidationMessages.EmailMsg + ' for Office Email Id.');
     }
     if (this.p.AddressLine1 == '') vra.add('AddressLine1', ' AddressLine1 cannot be blank.');
     if (this.p.AddressLine2 == '') vra.add('AddressLine2', ' AddressLine2 cannot be blank.');
@@ -132,11 +132,13 @@ export class Employee implements IPersistable<Employee> {
     if (this.p.EmergencyContactName == '') {
       vra.add('Emergency Contact Name', 'Emergency Contact Name cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.EmergencyContactName)) {
-      vra.add('Emergency Contact Name', ValidationMessages.NameWithoutNosMsg + ' for Name');
-    } if (this.p.EmergencyContactNo == '') {
+      vra.add('Emergency Contact Name', ValidationMessages.NameWithoutNosMsg + ' for Emergency Contact Name.');
+    }
+    if (this.p.EmergencyContactNo == '') {
       vra.add('Emergency Contact No', 'Emergency Contact No cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.EmergencyContactNo)) {
-      vra.add('Emergency Contact No', ValidationMessages.INDPhoneNoMsg);
+      vra.add('Emergency Contact No', ValidationMessages.INDPhoneNoMsg + ' for Emergency Contact No.');
+
     } if (this.p.MaritalStatus == 0) vra.add('MaritalStatus', 'Marital Status cannot be blank.');
     if (this.p.DepartmentRef == 0) vra.add('DepartmentRef', 'Department cannot be blank.');
     if (this.p.DesignationRef == 0) vra.add('DesignationRef', 'Designation cannot be blank.');
@@ -146,12 +148,12 @@ export class Employee implements IPersistable<Employee> {
     if (this.p.BankName == '') {
       vra.add('Bank Name', 'Bank Name cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.BankName)) {
-      vra.add('Bank Name', ValidationMessages.NameWithoutNosMsg + ' for Name');
+      vra.add('Bank Name', ValidationMessages.NameWithoutNosMsg + ' for Bank Name.');
     }
     if (this.p.BranchName == '') {
       vra.add('Branch Name', 'Branch Name cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.BranchName)) {
-      vra.add('Branch Name', ValidationMessages.NameWithoutNosMsg + ' for Name');
+      vra.add('Branch Name', ValidationMessages.NameWithoutNosMsg + ' for Branch Name.');
     }
     if (this.p.IFSC == '') {
       vra.add('IFSC', 'IFSC cannot be blank.');

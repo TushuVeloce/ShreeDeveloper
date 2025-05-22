@@ -14,7 +14,7 @@ export class ValidationPatterns {
   public static readonly CurrencySymbolRegex: string = "^[\\$€£¥₹₩₽₦₪฿₫₴₲₵₣₱؋]+|^[A-Za-z]{1,10}$";
   public static readonly CurrencyNameRegex: string = "^[A-Za-z\\s-]{1,30}$";
   public static readonly InputNumber: string = "^[0-9]{1,3}$"
-  public static readonly LargeInputNumber: string = "^[0-9]{1,15}$"
+  public static readonly LargeInputNumber: string = "^[0-9]{1,18}$"
   public static readonly PinCode: string = "^[0-9]{6}$";
   public static readonly Website: string = "https?://.+";
   public static readonly IFSC: string = "[A-Z]{4}0[A-Z0-9]{6}";
