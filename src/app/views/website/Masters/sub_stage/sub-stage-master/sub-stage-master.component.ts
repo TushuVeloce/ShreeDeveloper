@@ -37,13 +37,13 @@ export class SubStageMasterComponent implements OnInit {
     private serverCommunicator: ServerCommunicatorService
   ) {
     effect(async () => {
-      await this.getSubStageListByCompanyRef();
+      await this.getStageListByCompanyRef();
     });
   }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    this.getStageListByCompanyRef()
+    // this.getStageListByCompanyRef()
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
@@ -58,21 +58,22 @@ export class SubStageMasterComponent implements OnInit {
     this.StageList = lst.filter(stage => stage.p.IsSubStageApplicable === true);
     if(this.StageList.length > 0){
       this.Entity.p.StageRef = this.StageList[0].p.Ref
+      this.getSubStageListByStageRef(this.Entity.p.StageRef)
     }
   }
 
-  getSubStageListByCompanyRef = async () => {
-    this.MasterList = [];
-    this.DisplayMasterList = [];
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await SubStage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList;
-    this.loadPaginationData();
-  }
+  // getSubStageListByCompanyRef = async () => {
+  //   this.MasterList = [];
+  //   this.DisplayMasterList = [];
+  //   if (this.companyRef() <= 0) {
+  //     await this.uiUtils.showErrorToster('Company not Selected');
+  //     return;
+  //   }
+  //   let lst = await SubStage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.MasterList = lst;
+  //   this.DisplayMasterList = this.MasterList;
+  //   this.loadPaginationData();
+  // }
 
   getSubStageListByStageRef = async (stageref: number) => {
     this.MasterList = [];
@@ -81,9 +82,7 @@ export class SubStageMasterComponent implements OnInit {
       let lst = await SubStage.FetchEntireListByStageRef(stageref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
-    } else {
-      this.getSubStageListByCompanyRef()
-    }
+    } 
     this.loadPaginationData();
   }
 
@@ -103,9 +102,7 @@ export class SubStageMasterComponent implements OnInit {
         await SubStage.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
             `Sub Stage ${SubStage.p.Name} has been deleted!`
-          );
-          await this.getSubStageListByCompanyRef();
-          this.SearchString = '';
+          );          this.SearchString = '';
           this.loadPaginationData();
         });
       }

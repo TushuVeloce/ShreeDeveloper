@@ -63,7 +63,7 @@ export class MarketingTypeMasterComponent implements OnInit {
   onDeleteClicked = async (MarketingType: MarketingType) => {
     await this.uiUtils.showConfirmationMessage('Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-    Are you sure that you want to DELETE this MarketingType Mode?`,
+    Are you sure that you want to DELETE this Marketing Type?`,
       async () => {
         await MarketingType.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(`Marketing Type ${MarketingType.p.MarketingModeName} has been deleted!`);

@@ -10,14 +10,14 @@
         <span class="detail_title">{{ DetailsFormTitle }}</span>
       </div>
     </div>
-    <form autocomplete="off">
+    <form autocomplete="off" #bankForm="ngForm">
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-6">
           <label>Bank Name</label>
           <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
-            placeholder="Enter Bank Name" pattern="{{NameWithNosAndSpace}}" #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()" />
+            placeholder="Enter Bank Name" pattern="{{NameWithoutNos}}" #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()" />
           <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
-            <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithNosAndSpaceMsg}}</span>
+            <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithoutNosMsg}}</span>
             <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
@@ -68,7 +68,7 @@
         <div class="col-md-6">
           <label>Date of Opening</label>
           <input type="date" [(ngModel)]="dateofopening" name="DateofOpening" class="form-control" id="DateofOpening"
-            #DateofOpeningCtrl="ngModel" required (blur)="DateofOpeningCtrl.control.markAsTouched()" />
+            #DateofOpeningCtrl="ngModel" required (blur)="DateofOpeningCtrl.control.markAsTouched()" [max]="today"/>
           <div *ngIf="(DateofOpeningCtrl.invalid && (DateofOpeningCtrl.touched || DateofOpeningCtrl.dirty))">
             <span class="validation-text" *ngIf="DateofOpeningCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>

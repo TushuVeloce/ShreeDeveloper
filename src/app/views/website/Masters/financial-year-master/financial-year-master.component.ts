@@ -20,8 +20,6 @@ import { Utils } from 'src/app/services/utils.service';
   standalone: false,
 })
 export class FinancialYearMasterComponent implements OnInit {
-
-
   Entity: FinancialYear = FinancialYear.CreateNewInstance();
   MasterList: FinancialYear[] = [];
   DisplayMasterList: FinancialYear[] = [];
@@ -56,6 +54,7 @@ export class FinancialYearMasterComponent implements OnInit {
   }
 
   async ngOnInit() {
+     this.appStateManage.setDropdownDisabled(false);
     // await this.FormulateMasterList();
   }
 

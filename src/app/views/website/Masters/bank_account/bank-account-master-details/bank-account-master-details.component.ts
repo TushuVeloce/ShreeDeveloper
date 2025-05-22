@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgModel } from '@angular/forms';
+import { NgForm, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
@@ -24,16 +24,17 @@ export class BankAccountMasterDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Bank Account' | 'Edit Bank Account' = 'New Bank Account';
   InitialEntity: BankAccount = null as any;
   dateofopening: string = '';
-
+  today: string = new Date().toISOString().split('T')[0];
   IFSCPattern: string = ValidationPatterns.IFSC;
   LargeInputNumber: string = ValidationPatterns.LargeInputNumber;
-  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace;
+  NameWithoutNos: string = ValidationPatterns.NameWithoutNos;
 
   IFSCMsg: string = ValidationMessages.IFSCMsg;
   LargeInputNumberMsg: string = ValidationMessages.LargeInputNumberMsg;
-  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg;
+  NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
+  @ViewChild('bankForm') bankForm!: NgForm;
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
   @ViewChild('BranchNameCtrl') BranchNameInputControl!: NgModel;
   @ViewChild('AccountNumberCtrl') AccountNumberInputControl!: NgModel;
@@ -105,6 +106,7 @@ export class BankAccountMasterDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Bank Account saved successfully!');
+        debugger
         this.dateofopening = '';
         this.Entity = BankAccount.CreateNewInstance();
         this.resetAllControls();
@@ -121,25 +123,29 @@ export class BankAccountMasterDetailsComponent implements OnInit {
     input.select();
   }
 
-  resetAllControls = () => {
-    // reset touched
-    this.NameInputControl.control.markAsUntouched();
-    this.IFSCInputControl.control.markAsUntouched();
-    this.BranchNameInputControl.control.markAsUntouched();
-    this.AccountNumberInputControl.control.markAsUntouched();
-    this.IFSCInputControl.control.markAsUntouched();
-    this.OpeningBalanceInputControl.control.markAsUntouched();
-    this.DateOfOpeningInputControl.control.markAsUntouched();
+  // resetAllControls = () => {
+  //   // reset touched
+  //   this.NameInputControl.control.markAsUntouched();
+  //   this.IFSCInputControl.control.markAsUntouched();
+  //   this.BranchNameInputControl.control.markAsUntouched();
+  //   this.AccountNumberInputControl.control.markAsUntouched();
+  //   this.IFSCInputControl.control.markAsUntouched();
+  //   this.OpeningBalanceInputControl.control.markAsUntouched();
+  //   this.DateOfOpeningInputControl.control.markAsUntouched();
 
-    // reset dirty
-    this.NameInputControl.control.markAsPristine();
-    this.IFSCInputControl.control.markAsPristine();
-    this.BranchNameInputControl.control.markAsPristine();
-    this.AccountNumberInputControl.control.markAsPristine();
-    this.IFSCInputControl.control.markAsPristine();
-    this.OpeningBalanceInputControl.control.markAsPristine();
-    this.DateOfOpeningInputControl.control.markAsPristine();
-  }
+  //   // reset dirty
+  //   this.NameInputControl.control.markAsPristine();
+  //   this.IFSCInputControl.control.markAsPristine();
+  //   this.BranchNameInputControl.control.markAsPristine();
+  //   this.AccountNumberInputControl.control.markAsPristine();
+  //   this.IFSCInputControl.control.markAsPristine();
+  //   this.OpeningBalanceInputControl.control.markAsPristine();
+  //   this.DateOfOpeningInputControl.control.markAsPristine();
+  // }
+
+  resetAllControls() {
+  this.bankForm.resetForm(); // this will reset all form controls to their initial state
+}
 
   BackBankAccount = () => {
     this.router.navigate(['/homepage/Website/Bank_Account_Master']);

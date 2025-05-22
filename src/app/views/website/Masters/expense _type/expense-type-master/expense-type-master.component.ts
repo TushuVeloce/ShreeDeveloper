@@ -99,7 +99,7 @@ export class ExpenseTypeMasterComponent implements OnInit {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-     Are you sure that you want to DELETE this ExpenseType?`,
+     Are you sure that you want to DELETE this Expense Type?`,
       async () => {
         await ExpenseType.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
