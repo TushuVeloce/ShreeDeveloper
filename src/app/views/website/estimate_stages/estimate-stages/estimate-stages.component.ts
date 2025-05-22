@@ -117,15 +117,15 @@ export class EstimateStagesComponent implements OnInit {
     await this.router.navigate(['/homepage/Website/Estimate_Stages_details']);
   };
 
-  onDeleteClicked = async (plot: EstimateStages) => {
+  onDeleteClicked = async (EstimateStage: EstimateStages) => {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-      Are you sure that you want to DELETE this Estimate?`,
+      Are you sure that you want to DELETE this Estimate Stage?`,
       async () => {
-        await plot.DeleteInstance(async () => {
+        await EstimateStage.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `Material ${plot.p.SiteRef} has been deleted!`
+            `Estimate Stage of ${EstimateStage.p.SiteName} has been deleted!`
           );
           await this.getEstimateListBySiteRef(this.SiteRef);
           this.SearchString = '';

@@ -113,7 +113,7 @@ export class PlotMasterComponent implements OnInit {
       async () => {
         await plot.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `Material ${plot.p.PlotNo} has been deleted!`
+            `Plot ${plot.p.PlotNo} has been deleted!`
           );
           this.SearchString = '';
           this.loadPaginationData();

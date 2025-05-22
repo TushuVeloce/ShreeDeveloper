@@ -81,6 +81,7 @@ export class UnitMasterComponent implements OnInit {
   //     this.loadPaginationData()
   //     this.SearchString = '';
   //   };
+  
   onDeleteClicked = async (Unit: Unit) => {
     await this.uiUtils.showConfirmationMessage('Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>

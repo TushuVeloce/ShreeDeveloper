@@ -102,7 +102,8 @@ export class SubStageMasterComponent implements OnInit {
         await SubStage.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
             `Sub Stage ${SubStage.p.Name} has been deleted!`
-          );          this.SearchString = '';
+          );         
+           this.SearchString = '';
           this.loadPaginationData();
         });
       }

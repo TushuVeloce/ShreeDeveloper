@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgModel } from '@angular/forms';
+import { NgForm, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
@@ -50,17 +50,19 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   GSTINPattern: string = ValidationPatterns.GSTIN;
   LargeInputNumber: string = ValidationPatterns.LargeInputNumber;
   INDPhoneNo: string = ValidationPatterns.INDPhoneNo;  
-
+  Email: string = ValidationPatterns.Email
+  
   NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
   LargeInputNumberMsg: string = ValidationMessages.LargeInputNumberMsg;
   PinCodeMsg: string = ValidationMessages.PinCodeMsg;
   IFSCMsg: string = ValidationMessages.IFSCMsg;
   GSTINMsg: string = ValidationMessages.GSTINMsg;
   PANMsg: string = ValidationMessages.PANMsg;
+  EmailMsg: string = ValidationMessages.EmailMsg
   INDPhoneNoMsg: string = ValidationMessages.INDPhoneNoMsg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
-
+  @ViewChild('employeeForm') employeeForm!: NgForm;
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
   @ViewChild('DOBCtrl') DOBInputControl!: NgModel;
   @ViewChild('ContactNoCtrl') ContactNoInputControl!: NgModel;
@@ -263,39 +265,43 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     this.router.navigate(['/homepage/Website/Employee_Master']);
   }
 
-  resetAllControls = () => {
-    // reset touched
-    this.NameInputControl.control.markAsUntouched();
-    this.DOBInputControl.control.markAsUntouched();
-    this.AddressLine1InputControl.control.markAsUntouched();
-    this.ContactNoInputControl.control.markAsUntouched();
-    this.PersonalEmailIdInputControl.control.markAsUntouched();
-    this.OfficialEmailIdInputControl.control.markAsUntouched();
-    this.EmergencyContactNameInputControl.control.markAsUntouched();
-    this.EmergencyContactNoInputControl.control.markAsUntouched();
-    this.DateOfJoiningInputControl.control.markAsUntouched();
-    this.SalaryPerMonthInputControl.control.markAsUntouched();
-    this.SalaryPerYearInputControl.control.markAsUntouched();
-    this.BankNameInputControl.control.markAsUntouched();
-    this.BranchNameInputControl.control.markAsUntouched();
-    this.AccountNumberInputControl.control.markAsUntouched();
-    this.IFSCInputControl.control.markAsUntouched();
+  // resetAllControls = () => {
+  //   // reset touched
+  //   this.NameInputControl.control.markAsUntouched();
+  //   this.DOBInputControl.control.markAsUntouched();
+  //   this.AddressLine1InputControl.control.markAsUntouched();
+  //   this.ContactNoInputControl.control.markAsUntouched();
+  //   this.PersonalEmailIdInputControl.control.markAsUntouched();
+  //   this.OfficialEmailIdInputControl.control.markAsUntouched();
+  //   this.EmergencyContactNameInputControl.control.markAsUntouched();
+  //   this.EmergencyContactNoInputControl.control.markAsUntouched();
+  //   this.DateOfJoiningInputControl.control.markAsUntouched();
+  //   this.SalaryPerMonthInputControl.control.markAsUntouched();
+  //   this.SalaryPerYearInputControl.control.markAsUntouched();
+  //   this.BankNameInputControl.control.markAsUntouched();
+  //   this.BranchNameInputControl.control.markAsUntouched();
+  //   this.AccountNumberInputControl.control.markAsUntouched();
+  //   this.IFSCInputControl.control.markAsUntouched();
 
-    // reset dirty
-    this.NameInputControl.control.markAsPristine();
-    this.DOBInputControl.control.markAsPristine();
-    this.AddressLine1InputControl.control.markAsPristine();
-    this.ContactNoInputControl.control.markAsPristine();
-    this.PersonalEmailIdInputControl.control.markAsPristine();
-    this.OfficialEmailIdInputControl.control.markAsPristine();
-    this.EmergencyContactNameInputControl.control.markAsPristine();
-    this.EmergencyContactNoInputControl.control.markAsPristine();
-    this.DateOfJoiningInputControl.control.markAsPristine();
-    this.SalaryPerMonthInputControl.control.markAsPristine();
-    this.SalaryPerYearInputControl.control.markAsPristine();
-    this.BankNameInputControl.control.markAsPristine();
-    this.BranchNameInputControl.control.markAsPristine();
-    this.AccountNumberInputControl.control.markAsPristine();
-    this.IFSCInputControl.control.markAsPristine();
-  }
+  //   // reset dirty
+  //   this.NameInputControl.control.markAsPristine();
+  //   this.DOBInputControl.control.markAsPristine();
+  //   this.AddressLine1InputControl.control.markAsPristine();
+  //   this.ContactNoInputControl.control.markAsPristine();
+  //   this.PersonalEmailIdInputControl.control.markAsPristine();
+  //   this.OfficialEmailIdInputControl.control.markAsPristine();
+  //   this.EmergencyContactNameInputControl.control.markAsPristine();
+  //   this.EmergencyContactNoInputControl.control.markAsPristine();
+  //   this.DateOfJoiningInputControl.control.markAsPristine();
+  //   this.SalaryPerMonthInputControl.control.markAsPristine();
+  //   this.SalaryPerYearInputControl.control.markAsPristine();
+  //   this.BankNameInputControl.control.markAsPristine();
+  //   this.BranchNameInputControl.control.markAsPristine();
+  //   this.AccountNumberInputControl.control.markAsPristine();
+  //   this.IFSCInputControl.control.markAsPristine();
+  // }
+
+   resetAllControls() {
+  this.employeeForm.resetForm(); // this will reset all form controls to their initial state
+}
 }

@@ -15,7 +15,7 @@
         No Data
       </div>
     </ng-template>
-    <form autocomplete="off">
+    <form autocomplete="off" #employeeForm="ngForm">
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4 mb-3">
           <div>
@@ -62,9 +62,10 @@
           <div>
             <label>Personal Email Id</label>
             <input type="email" name="PersonalEmailId" [(ngModel)]="Entity.p.PersonalEmailId" class="form-control"
-              id="PersonalEmailId" required placeholder="Enter Personal Email Id" #PersonalEmailIdCtrl="ngModel"
+              id="PersonalEmailId" required placeholder="Enter Personal Email Id" [pattern]="Email" #PersonalEmailIdCtrl="ngModel"
               (blur)="PersonalEmailIdCtrl.control.markAsTouched()" />
             <div *ngIf="(PersonalEmailIdCtrl.invalid && (PersonalEmailIdCtrl.touched || PersonalEmailIdCtrl.dirty))">
+              <span class="validation-text" *ngIf="PersonalEmailIdCtrl.errors?.['pattern']">{{EmailMsg}}</span>
               <span class="validation-text" *ngIf="PersonalEmailIdCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
@@ -73,9 +74,10 @@
           <div>
             <label>Official Email Id</label>
             <input type="email" name="OfficialEmailId" [(ngModel)]="Entity.p.OfficialEmailId" class="form-control"
-              id="OfficialEmailId" required placeholder="Enter Official Email Id" #OfficialEmailIdCtrl="ngModel"
+              id="OfficialEmailId" required placeholder="Enter Official Email Id" [pattern]="Email" #OfficialEmailIdCtrl="ngModel"
               (blur)="OfficialEmailIdCtrl.control.markAsTouched()" />
             <div *ngIf="(OfficialEmailIdCtrl.invalid && (OfficialEmailIdCtrl.touched || OfficialEmailIdCtrl.dirty))">
+              <span class="validation-text" *ngIf="OfficialEmailIdCtrl.errors?.['pattern']">{{EmailMsg}}</span>
               <span class="validation-text" *ngIf="OfficialEmailIdCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>

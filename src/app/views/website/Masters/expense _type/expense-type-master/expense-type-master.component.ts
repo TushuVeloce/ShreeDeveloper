@@ -103,7 +103,7 @@ export class ExpenseTypeMasterComponent implements OnInit {
       async () => {
         await ExpenseType.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `ExpenseType ${ExpenseType.p.Name} has been deleted!`
+            `Expense Type ${ExpenseType.p.Name} has been deleted!`
           );
           await this.getExpenseListByStageRef();
           this.SearchString = '';
