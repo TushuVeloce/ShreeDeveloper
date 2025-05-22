@@ -138,10 +138,10 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Salary Details saved successfully!');
+        await this.uiUtils.showSuccessToster('Salary Generation Details saved successfully!');
         this.Entity = SalaryGeneration.CreateNewInstance();
       } else {
-        await this.uiUtils.showSuccessToster('Salary Details  Updated successfully!');
+        await this.uiUtils.showSuccessToster('Salary Generation Details Updated successfully!');
         this.BackSalaryGenaration()
       }
     }

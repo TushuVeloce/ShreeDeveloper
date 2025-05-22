@@ -74,11 +74,11 @@ export class SiteWorkGroupMasterDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('SiteWorkGroup Master saved successfully!');
+        await this.uiUtils.showSuccessToster('Site Work Group saved successfully!');
         this.Entity = SiteWorkGroup.CreateNewInstance();
         this.resetAllControls()
       } else {
-        await this.uiUtils.showSuccessToster('SiteWorkGroup Master Updated successfully!');
+        await this.uiUtils.showSuccessToster('Site Wor Group Updated successfully!');
         this.BackSiteWorkGroup()
       }
     }
