@@ -54,23 +54,44 @@
             <input type="checkbox" id="IsChequeSubmit" [(ngModel)]="Entity.p.IsChequeSubmit" name="IsChequeSubmit"
               class="custom-checkbox" />
           </div>
-          <!-- Aadhar -->
           <div class="col-md-4 d-flex align-items-center justify-content-evenly mb-4">
             <!-- Upload icon triggers file input -->
-            <img src="/assets/icons/upload.png" alt="Upload" class="Upload-Icon"
-              (click)="CustomerAadharTriggerFileInput()" />
-            <div>
-              {{CustomerAadharSelectedFileName}}
-            </div>
-            <!-- Hidden File Input -->
-            <input type="file" #CustomerAadharFileInput (change)="onCustomerAadharFileUpload($event)"
-              class="file-upload" name="image" accept=".jpg, .jpeg, .png, .gif" style="display: none" />
+            <img src="/assets/icons/upload.png" alt="Upload Aadhar" class="Upload-Icon"
+              (click)="CustomerAadharFileInputRef.nativeElement.click()" />
 
-            <!-- Error Message -->
-            <p *ngIf="errors.CustomerAadharFile" class="validation-error">
-              {{ errors.CustomerAadharFile }}
+            <div>
+              {{ selectedFileNames['aadhar'] || 'No file selected' }}
+            </div>
+
+            <!-- Hidden File Input -->
+            <input type="file" #CustomerAadharFileInput accept=".jpg,.jpeg,.png,.gif" style="display: none"
+              (change)="onFileUpload($event, 'aadhar')" />
+
+            <p *ngIf="errors['aadhar']" class="validation-error">
+              {{ errors['aadhar'] }}
             </p>
+
+            <img *ngIf="filePreviews['aadhar']" [src]="filePreviews['aadhar']" class="img-preview" />
           </div>
+
+          <div class="col-md-4 d-flex align-items-center justify-content-evenly mb-4">
+            <img src="/assets/icons/upload.png" alt="Upload PAN" class="Upload-Icon"
+              (click)="CustomerPanFileInputRef.nativeElement.click()" />
+
+            <div>
+              {{ selectedFileNames['pan'] || 'No file selected' }}
+            </div>
+
+            <input type="file" #CustomerPanFileInput accept=".jpg,.jpeg,.png,.gif" style="display: none"
+              (change)="onFileUpload($event, 'pan')" />
+
+            <p *ngIf="errors['pan']" class="validation-error">
+              {{ errors['pan'] }}
+            </p>
+
+            <img *ngIf="filePreviews['pan']" [src]="filePreviews['pan']" class="img-preview" />
+          </div>
+
           <!-- Submit -->
           <div class="col-md-4 d-flex justify-content-center">
             <label for="IsCustomerAadharSubmit">Submit</label>
@@ -489,7 +510,7 @@
           margin-top: 2rem;
         ">
         <div>
-          <button type="button" class="btn" (click)="SaveRegistrarOfficeMaster()" [disabled]="isSaveDisabled">
+          <button type="submit" class="btn" (click)="SaveRegistrarOfficeMaster()" [disabled]="isSaveDisabled">
             Save
           </button>
         </div>

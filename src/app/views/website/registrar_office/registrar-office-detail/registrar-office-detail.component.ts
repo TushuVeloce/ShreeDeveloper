@@ -32,10 +32,12 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   localtalathidate: string = '';
 
   ImageBaseUrl: string = "";
-  errors = { CustomerAadharFile: '' };
 
-  CustomerAadharFilePreviewUrl: string | null = null;
-  CustomerAadharSelectedFileName: string | null = null;
+  selectedFileNames: { [key: string]: string } = {};
+
+  uploadedFiles: { label: string; file: File; filename: string }[] = [];
+  filePreviews: { [key: string]: string } = {};
+  errors: { [key: string]: string } = {};
 
   NameWithNos: string = ValidationPatterns.NameWithNos
 
@@ -46,8 +48,8 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   @ViewChild('SaleDeedDocumentNoCtrl') SaleDeedDocumentNoInputControl!: NgModel;
   @ViewChild('TalathiInwardNoCtrl') TalathiInwardNoInputControl!: NgModel;
 
-  @ViewChild('CustomerAadharFileInput') CustomerAadharFileInputRef!: ElementRef<HTMLInputElement>;
-
+  @ViewChild('CustomerAadharFileInput', { static: false }) CustomerAadharFileInputRef!: ElementRef;
+  @ViewChild('CustomerPanFileInput', { static: false }) CustomerPanFileInputRef!: ElementRef;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private dtu: DTU,
     private datePipe: DatePipe) { }
@@ -86,25 +88,66 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     input.select();
   }
 
-  onCustomerAadharFileUpload(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      this.Entity.p.CustomerAadharFile = input.files[0];
-      console.log('this.Entity.p.CustomerAadharFile :', this.Entity.p.CustomerAadharFile);
-      this.CustomerAadharSelectedFileName = this.Entity.p.CustomerAadharFile.name;
-      console.log('this.CustomerAadharSelectedFileName :', this.CustomerAadharSelectedFileName);
+  // onCustomerAadharFileUpload(event: Event): void {
+  //   const input = event.target as HTMLInputElement;
+  //   if (input.files && input.files[0]) {
+  //     this.Entity.p.CustomerAadharFile = input.files[0];
+  //     console.log('this.Entity.p.CustomerAadharFile :', this.Entity.p.CustomerAadharFile);
+  //     this.CustomerAadharSelectedFileName = this.Entity.p.CustomerAadharFile.name;
+  //     console.log('this.CustomerAadharSelectedFileName :', this.CustomerAadharSelectedFileName);
 
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.CustomerAadharFilePreviewUrl = reader.result as string;
-      };
-      reader.readAsDataURL(this.Entity.p.CustomerAadharFile);
-    }
-  }
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       this.CustomerAadharFilePreviewUrl = reader.result as string;
+  //     };
+  //     reader.readAsDataURL(this.Entity.p.CustomerAadharFile);
+  //   }
+  // }
 
   // Trigger file input when clicking the image
   CustomerAadharTriggerFileInput(): void {
     this.CustomerAadharFileInputRef.nativeElement.click();
+  }
+
+  onFileUpload(event: Event, type: string): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+      const maxSizeMB = 2;
+
+      if (!allowedTypes.includes(file.type)) {
+        this.errors[type] = 'Only JPG, PNG, and GIF files are allowed.';
+        return;
+      }
+
+      if (file.size / 1024 / 1024 > maxSizeMB) {
+        this.errors[type] = 'File size should not exceed 2 MB.';
+        return;
+      }
+
+      this.errors[type] = '';
+      const existingIndex = this.uploadedFiles.findIndex(f => f.label === type);
+
+      const fileEntry = {
+        label: type,
+        file,
+        filename: file.name
+      };
+
+      if (existingIndex > -1) {
+        this.uploadedFiles[existingIndex] = fileEntry;
+      } else {
+        this.uploadedFiles.push(fileEntry);
+      }
+      console.log('this.uploadedFiles :', this.uploadedFiles);
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.filePreviews[type] = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   isWitness1Complete(): boolean {
@@ -155,42 +198,46 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   }
 
   SaveRegistrarOfficeMaster = async () => {
-    this.isSaveDisabled = true;
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-    this.Entity.p.UpdatedDate = await CurrentDateTimeRequest.GetCurrentDateTime();
-    this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    // this.isSaveDisabled = true;
+    // this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    // this.Entity.p.UpdatedDate = await CurrentDateTimeRequest.GetCurrentDateTime();
+    // this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
 
-    // convert date 2025-02-23 to 2025-02-23-00-00-00-000
-    this.Entity.p.AgreementDate = this.dtu.ConvertStringDateToFullFormat(this.localagreementdate)
-    this.Entity.p.SaleDeedDate = this.dtu.ConvertStringDateToFullFormat(this.localsaledeeddate)
-    this.Entity.p.TalathiDate = this.dtu.ConvertStringDateToFullFormat(this.localtalathidate)
+    // // convert date 2025-02-23 to 2025-02-23-00-00-00-000
+    // this.Entity.p.AgreementDate = this.dtu.ConvertStringDateToFullFormat(this.localagreementdate)
+    // this.Entity.p.SaleDeedDate = this.dtu.ConvertStringDateToFullFormat(this.localsaledeeddate)
+    // this.Entity.p.TalathiDate = this.dtu.ConvertStringDateToFullFormat(this.localtalathidate)
 
-    let entityToSave = this.Entity.GetEditableVersion();
-    let entitiesToSave = [entityToSave]
+    // let entityToSave = this.Entity.GetEditableVersion();
+    // let entitiesToSave = [entityToSave]
 
+    const lstFTO: FileTransferObject[] = this.uploadedFiles.map(f =>
+      FileTransferObject.FromFile(f.label, f.file, f.filename)
+    );
+
+    console.log('lstFTO:', lstFTO);
     if (this.Entity.p.CustomerAadharFile != null) {
-      let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("Company_Logo", this.Entity.p.CustomerAadharFile, this.Entity.p.CustomerAadharFile.name)];
-      let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+      // let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
     }
 
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-    if (!tr.Successful) {
-      this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error', tr.Message);
-      return
-    }
-    else {
-      this.isSaveDisabled = false;
-      // this.onEntitySaved.emit(entityToSave);
-      if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Registrar Office saved successfully!');
-        this.Entity = RegistrarOffice.CreateNewInstance();
-      } else {
-        await this.router.navigate(['/homepage/Website/Registrar_Office'])
-        this.BackRegistrarOffice()
-      }
-    }
+    // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    // if (!tr.Successful) {
+    //   this.isSaveDisabled = false;
+    //   this.uiUtils.showErrorMessage('Error', tr.Message);
+    //   return
+    // }
+    // else {
+    //   this.isSaveDisabled = false;
+    //   // this.onEntitySaved.emit(entityToSave);
+    //   if (this.IsNewEntity) {
+    //     await this.uiUtils.showSuccessToster('Registrar Office saved successfully!');
+    //     this.Entity = RegistrarOffice.CreateNewInstance();
+    //   } else {
+    //     await this.router.navigate(['/homepage/Website/Registrar_Office'])
+    //     this.BackRegistrarOffice()
+    //   }
+    // }
   }
 
   BackRegistrarOffice() {
