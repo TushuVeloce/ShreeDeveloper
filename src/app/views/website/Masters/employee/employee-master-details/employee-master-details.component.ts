@@ -49,7 +49,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   PANPattern: string = ValidationPatterns.PAN;
   GSTINPattern: string = ValidationPatterns.GSTIN;
   LargeInputNumber: string = ValidationPatterns.LargeInputNumber;
-  
+
   NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
   LargeInputNumberMsg: string = ValidationMessages.LargeInputNumberMsg;
   PinCodeMsg: string = ValidationMessages.PinCodeMsg;
@@ -57,23 +57,23 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   GSTINMsg: string = ValidationMessages.GSTINMsg;
   PANMsg: string = ValidationMessages.PANMsg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
-  
 
-    @ViewChild('NameCtrl') NameInputControl!: NgModel;
-    @ViewChild('DOBCtrl') DOBInputControl!: NgModel;
-    @ViewChild('ContactNoCtrl') ContactNoInputControl!: NgModel;
-    @ViewChild('PersonalEmailIdCtrl') PersonalEmailIdInputControl!: NgModel;
-    @ViewChild('OfficialEmailIdCtrl') OfficialEmailIdInputControl!: NgModel;
-    @ViewChild('AddressLine1Ctrl') AddressLine1InputControl!: NgModel;
-    @ViewChild('EmergencyContactNameCtrl') EmergencyContactNameInputControl!: NgModel;
-    @ViewChild('EmergencyContactNoCtrl') EmergencyContactNoInputControl!: NgModel;
-    @ViewChild('DateOfJoiningCtrl') DateOfJoiningInputControl!: NgModel;
-    @ViewChild('SalaryPerMonthCtrl') SalaryPerMonthInputControl!: NgModel;
-    @ViewChild('SalaryPerYearCtrl') SalaryPerYearInputControl!: NgModel;
-    @ViewChild('BankNameCtrl') BankNameInputControl!: NgModel;
-    @ViewChild('BranchNameCtrl') BranchNameInputControl!: NgModel;
-    @ViewChild('AccountNumberCtrl') AccountNumberInputControl!: NgModel;
-    @ViewChild('IFSCCtrl') IFSCInputControl!: NgModel;
+
+  @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('DOBCtrl') DOBInputControl!: NgModel;
+  @ViewChild('ContactNoCtrl') ContactNoInputControl!: NgModel;
+  @ViewChild('PersonalEmailIdCtrl') PersonalEmailIdInputControl!: NgModel;
+  @ViewChild('OfficialEmailIdCtrl') OfficialEmailIdInputControl!: NgModel;
+  @ViewChild('AddressLine1Ctrl') AddressLine1InputControl!: NgModel;
+  @ViewChild('EmergencyContactNameCtrl') EmergencyContactNameInputControl!: NgModel;
+  @ViewChild('EmergencyContactNoCtrl') EmergencyContactNoInputControl!: NgModel;
+  @ViewChild('DateOfJoiningCtrl') DateOfJoiningInputControl!: NgModel;
+  @ViewChild('SalaryPerMonthCtrl') SalaryPerMonthInputControl!: NgModel;
+  @ViewChild('SalaryPerYearCtrl') SalaryPerYearInputControl!: NgModel;
+  @ViewChild('BankNameCtrl') BankNameInputControl!: NgModel;
+  @ViewChild('BranchNameCtrl') BranchNameInputControl!: NgModel;
+  @ViewChild('AccountNumberCtrl') AccountNumberInputControl!: NgModel;
+  @ViewChild('IFSCCtrl') IFSCInputControl!: NgModel;
 
   constructor(
     private router: Router,
@@ -108,6 +108,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
         this.dtu.FromString(this.Entity.p.DOB),
         'yyyy-MM-dd'
       );
+      this.getDesignationListByDepartmentRef();
       this.appStateManage.StorageKey.removeItem('Editable');
       if (this.Entity.p.CountryRef) {
         this.getStateListByCountryRef(this.Entity.p.CountryRef);
@@ -142,6 +143,9 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     }
     let lst = await Designation.FetchEntireListByDepartmentRef(this.Entity.p.DepartmentRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DesignationList = lst;
+    // if (lst.length > 0 && this.Entity.p.DesignationRef != lst[0].p.Ref) {
+    //   this.Entity.p.DesignationRef = lst[0].p.Ref;
+    // }
   }
 
 
