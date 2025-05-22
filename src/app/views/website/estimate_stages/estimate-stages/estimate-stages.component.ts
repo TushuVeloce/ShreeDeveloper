@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
@@ -25,13 +25,17 @@ export class EstimateStagesComponent implements OnInit {
   pageSize = 8; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  headers: string[] = ['Sr.No.', 'Site Name', 'Description', 'Amount','Action'];
+  headers: string[] = ['Sr.No.', 'Site Name', 'Description', 'Amount', 'Action'];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   SiteRef: number = 0
   shouldDestroy: boolean = true;
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement,) { }
+    private companystatemanagement: CompanyStateManagement,) {
+    effect(() => {
+      this.getEstimatedStagesListByCompanyRef(); this.getSiteListByCompanyRef();
+    });
+  }
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
@@ -40,13 +44,13 @@ export class EstimateStagesComponent implements OnInit {
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
     const storedSiteRef = Number(this.appStateManage.StorageKey.getItem('EstSiteRef'));
     this.SiteRef = storedSiteRef
-    if (storedSiteRef > 0)  {
+    if (storedSiteRef > 0) {
       setTimeout(async () => {
         this.Entity.p.SiteRef = storedSiteRef;
         await this.getEstimateListBySiteRef(storedSiteRef);
       });
     }
-    if(this.SiteRef == 0){
+    if (this.SiteRef == 0) {
       this.getEstimatedStagesListByCompanyRef()
     }
   }
@@ -62,6 +66,11 @@ export class EstimateStagesComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
+    if (this.SiteList.length > 0) {
+      this.getEstimatedStagesListByCompanyRef();
+    } else {
+      this.DisplayMasterList = [];
+    }
     this.loadPaginationData();
   }
 
@@ -69,7 +78,7 @@ export class EstimateStagesComponent implements OnInit {
     this.SiteRef = siteref
     this.MasterList = [];
     this.DisplayMasterList = [];
-    if(this.SiteRef == 0){
+    if (this.SiteRef == 0) {
       this.appStateManage.StorageKey.removeItem('EstSiteRef');
       this.appStateManage.StorageKey.removeItem('EstSiteName');
       this.getEstimatedStagesListByCompanyRef()
@@ -87,18 +96,18 @@ export class EstimateStagesComponent implements OnInit {
   }
 
 
-    getEstimatedStagesListByCompanyRef = async () => {
-      this.MasterList = [];
-      this.DisplayMasterList = [];
-       if (this.companyRef() <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
-        return;
+  getEstimatedStagesListByCompanyRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
-      let lst = await EstimateStages.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.MasterList = lst;
-      this.DisplayMasterList = this.MasterList;
-      this.loadPaginationData();
-    }
+    let lst = await EstimateStages.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  }
 
   getEstimateListBySiteRef = async (siteref: number) => {
     this.MasterList = [];
@@ -151,38 +160,38 @@ export class EstimateStagesComponent implements OnInit {
     return this.convertNumberToWords(this.totalAmount);
   }
 
- convertNumberToWords(amount: number): string {
-  const a = [
-    '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
-    'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen',
-    'Seventeen', 'Eighteen', 'Nineteen'
-  ];
-  const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+  convertNumberToWords(amount: number): string {
+    const a = [
+      '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+      'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen',
+      'Seventeen', 'Eighteen', 'Nineteen'
+    ];
+    const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
 
-  if (isNaN(amount)) return 'Invalid amount';
+    if (isNaN(amount)) return 'Invalid amount';
 
-  let [rupees, paise] = amount.toFixed(2).split('.').map(Number);
+    let [rupees, paise] = amount.toFixed(2).split('.').map(Number);
 
-  if (rupees === 0) return 'Zero Rupees Only';
+    if (rupees === 0) return 'Zero Rupees Only';
 
-  const numToWords = (num: number): string => {
-    if (num < 20) return a[num];
-    if (num < 100) return b[Math.floor(num / 10)] + (num % 10 ? ' ' + a[num % 10] : '');
-    if (num < 1000) return a[Math.floor(num / 100)] + ' Hundred' + (num % 100 ? ' and ' + numToWords(num % 100) : '');
+    const numToWords = (num: number): string => {
+      if (num < 20) return a[num];
+      if (num < 100) return b[Math.floor(num / 10)] + (num % 10 ? ' ' + a[num % 10] : '');
+      if (num < 1000) return a[Math.floor(num / 100)] + ' Hundred' + (num % 100 ? ' and ' + numToWords(num % 100) : '');
 
-    if (num < 100000) return numToWords(Math.floor(num / 1000)) + ' Thousand' + (num % 1000 ? ' ' + numToWords(num % 1000) : '');
-    if (num < 10000000) return numToWords(Math.floor(num / 100000)) + ' Lakh' + (num % 100000 ? ' ' + numToWords(num % 100000) : '');
-    return numToWords(Math.floor(num / 10000000)) + ' Crore' + (num % 10000000 ? ' ' + numToWords(num % 10000000) : '');
-  };
+      if (num < 100000) return numToWords(Math.floor(num / 1000)) + ' Thousand' + (num % 1000 ? ' ' + numToWords(num % 1000) : '');
+      if (num < 10000000) return numToWords(Math.floor(num / 100000)) + ' Lakh' + (num % 100000 ? ' ' + numToWords(num % 100000) : '');
+      return numToWords(Math.floor(num / 10000000)) + ' Crore' + (num % 10000000 ? ' ' + numToWords(num % 10000000) : '');
+    };
 
-  let result = numToWords(rupees) + ' Rupees';
+    let result = numToWords(rupees) + ' Rupees';
 
-  if (paise) {
-    result += ' and ' + numToWords(paise) + ' Paise';
+    if (paise) {
+      result += ' and ' + numToWords(paise) + ' Paise';
+    }
+
+    return result + ' Only';
   }
-
-  return result + ' Only';
-}
 
 
   onPageChange = (pageIndex: number): void => {
@@ -204,8 +213,8 @@ export class EstimateStagesComponent implements OnInit {
   };
 
   AddEstimateStages = async () => {
-      this.shouldDestroy = false;
-      await this.router.navigate(['/homepage/Website/Estimate_Stages_details']);
+    this.shouldDestroy = false;
+    await this.router.navigate(['/homepage/Website/Estimate_Stages_details']);
   }
 
   ngOnDestroy(): void {

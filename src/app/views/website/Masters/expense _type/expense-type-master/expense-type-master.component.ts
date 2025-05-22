@@ -39,8 +39,8 @@ export class ExpenseTypeMasterComponent implements OnInit {
 
   headers: string[] = ['Sr.No.', 'Name', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement,private payloadPacketFacade: PayloadPacketFacade,
-        private serverCommunicator: ServerCommunicatorService
+    private companystatemanagement: CompanyStateManagement, private payloadPacketFacade: PayloadPacketFacade,
+    private serverCommunicator: ServerCommunicatorService
   ) {
     effect(async () => {
       await this.getStageListByCompanyRef();
@@ -55,6 +55,7 @@ export class ExpenseTypeMasterComponent implements OnInit {
 
 
   getStageListByCompanyRef = async () => {
+    this.Entity.p.StageRef = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -63,8 +64,10 @@ export class ExpenseTypeMasterComponent implements OnInit {
     this.StageList = lst;
     if (this.StageList.length > 0) {
       this.Entity.p.StageRef = this.StageList[0].p.Ref;
+      this.getExpenseListByStageRef();
+    } else {
+      this.DisplayMasterList = [];
     }
-    this.getExpenseListByStageRef();
   }
 
   getExpenseListByStageRef = async () => {

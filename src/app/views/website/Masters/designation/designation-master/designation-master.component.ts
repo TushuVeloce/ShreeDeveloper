@@ -27,7 +27,6 @@ export class DesignationMasterComponent implements OnInit {
   total = 0;
   DepartmentList: Department[] = [];
 
-
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   headers: string[] = ['Sr.No.', 'Designation', 'Seniority Level', 'Action'];
@@ -39,8 +38,6 @@ export class DesignationMasterComponent implements OnInit {
     });
   }
 
-
-
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
@@ -48,6 +45,7 @@ export class DesignationMasterComponent implements OnInit {
   }
 
   public getDepartmentListByCompanyRef = async () => {
+    this.Entity.p.DepartmentRef = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -56,8 +54,12 @@ export class DesignationMasterComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.DepartmentList = lst;
-    this.Entity.p.DepartmentRef = this.DepartmentList[0].p.Ref;
-    this.getDesignationListByDepartmentRef();
+    if (this.DepartmentList.length > 0) {
+      this.Entity.p.DepartmentRef = this.DepartmentList[0].p.Ref;
+      this.getDesignationListByDepartmentRef();
+    } else {
+      this.DisplayMasterList = [];
+    }
   };
 
   getDesignationListByDepartmentRef = async () => {
