@@ -30,9 +30,10 @@
         <div class="col-md-4">
           <label for="Contacts">Contact No</label>
           <input type="text" [(ngModel)]="Entity.p.Contacts" name="Contacts" class="form-control" id="Contacts"
-            placeholder="Enter Contacts" #ContactsCtrl="ngModel" required
+            placeholder="Enter Contacts"  pattern="{{INDPhoneNo}}" #ContactsCtrl="ngModel" required
             (blur)="ContactsCtrl.control.markAsTouched()" />
           <div *ngIf="(ContactsCtrl.invalid && (ContactsCtrl.touched || ContactsCtrl.dirty))">
+            <span class="validation-text" *ngIf="ContactsCtrl.errors?.['pattern']">{{INDPhoneNoMsg}}</span>
             <span class="validation-text" *ngIf="ContactsCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>

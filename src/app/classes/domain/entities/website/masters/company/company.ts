@@ -94,6 +94,11 @@ export class Company implements IPersistable<Company> {
     } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
       vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     }
+     if (this.p.Contacts == '') {
+      vra.add('Contact No', 'Contact No cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.Contacts)) {
+      vra.add('Contact No', ValidationMessages.INDPhoneNoMsg);
+    }
     if (this.p.OwnerName == '') {
       vra.add('OwnerName', 'Owner Name cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.OwnerName)) {

@@ -49,6 +49,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
   GSTIN: string = ValidationPatterns.GSTIN;
   PAN: string = ValidationPatterns.PAN;
   CIN: string = ValidationPatterns.CIN;
+  INDPhoneNo: string = ValidationPatterns.INDPhoneNo;
 
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   PinCodeMsg: string = ValidationMessages.PinCodeMsg;
@@ -56,6 +57,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
   EmailMsg: string = ValidationMessages.EmailMsg
   GSTINMsg: string = ValidationMessages.GSTINMsg
   CINMsg: string = ValidationMessages.CINMsg
+  INDPhoneNoMsg: string = ValidationMessages.INDPhoneNoMsg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
   imageBlobUrl: string | null = null;
   TimeStamp = Date.now()

@@ -36,7 +36,7 @@ export class ValidationMessages {
   public static readonly EmailMsg: string = "Please Enter a Valid Email Address.";
   public static readonly INDPhoneNoMsg: string = "Please Enter a Valid 10-digit Mobile Number starting with 6, 7, 8, or 9.";
   public static readonly InputNumberMsg: string = "Please enter a number between 0 and 999."
-  public static readonly LargeInputNumberMsg: string = "Please enter a number between 0 to 15 Digit."
+  public static readonly LargeInputNumberMsg: string = "Please enter a number between 9 to 18 Digit."
   public static readonly IPAddressMsg: string = "Please enter a valid IPv4 address (e.g., 192.168.1.1)."
   public static readonly ONVIFPortMsg: string = "Please enter a valid port number between 0 and 65535."
 

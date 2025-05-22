@@ -46,6 +46,7 @@ export class VendorMasterDetailsComponent implements OnInit {
   PANPattern: string = ValidationPatterns.PAN;
   GSTINPattern: string = ValidationPatterns.GSTIN;
   LargeInputNumber: string = ValidationPatterns.LargeInputNumber;
+  INDPhoneNo: string = ValidationPatterns.INDPhoneNo;
 
 
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
@@ -54,6 +55,7 @@ export class VendorMasterDetailsComponent implements OnInit {
   IFSCMsg: string = ValidationMessages.IFSCMsg;
   GSTINMsg: string = ValidationMessages.GSTINMsg;
   PANMsg: string = ValidationMessages.PANMsg;
+  INDPhoneNoMsg: string = ValidationMessages.INDPhoneNoMsg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;

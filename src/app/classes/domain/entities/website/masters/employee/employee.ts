@@ -11,7 +11,7 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { EmployeeFetchRequest } from "./employeefetchrequest";
-import { CountryStateCityRefs } from "src/app/classes/domain/constants";
+import { CountryStateCityRefs, ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 
 
 
@@ -104,12 +104,28 @@ export class Employee implements IPersistable<Employee> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
-    if (this.p.Name == '') vra.add('Name', ' Name cannot be blank.');
+   if (this.p.Name == '') {
+      vra.add('Name', 'Name cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.Name)) {
+      vra.add('Name', ValidationMessages.NameWithoutNosMsg + ' for Name');
+    }
     if (this.p.DOB == '') vra.add('DOB', ' DOB cannot be blank.');
     if (this.p.Gender == 0) vra.add('Gender', ' Gender cannot be blank.');
-    if (this.p.ContactNos == '') vra.add('ContactNos', ' Contact No cannot be blank.');
-    if (this.p.PersonalEmailId == '') vra.add('PersonalEmailId', ' Personal Email Id cannot be blank.');
-    if (this.p.OfficialEmailId == '') vra.add('OfficialEmailId', ' Official Email Id cannot be blank.');
+     if (this.p.ContactNos == '') {
+          vra.add('Contact No', 'Contact No cannot be blank.');
+        } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.ContactNos)) {
+          vra.add('Contact No', ValidationMessages.INDPhoneNoMsg);
+        }
+     if (this.p.PersonalEmailId == '') {
+      vra.add('Personal Email Id', 'Personal Email Id cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.Email).test(this.p.PersonalEmailId)) {
+      vra.add('Personal Email Id', ValidationMessages.EmailMsg);
+    }
+ if (this.p.OfficialEmailId == '') {
+      vra.add('Office Email Id', 'Office Email Id cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.Email).test(this.p.OfficialEmailId)) {
+      vra.add('Office Email Id', ValidationMessages.EmailMsg);
+    }   
     if (this.p.AddressLine1 == '') vra.add('AddressLine1', ' AddressLine1 cannot be blank.');
     if (this.p.AddressLine2 == '') vra.add('AddressLine2', ' AddressLine2 cannot be blank.');
     if (this.p.CityRef == 0) vra.add('CityRef', ' City cannot be blank.');
