@@ -38,7 +38,7 @@
         </div>
         <div class="col-md-4">
           <label>Company Email Id </label>
-          <input type="text" [(ngModel)]="Entity.p.EmailId" name="EmailId" class="form-control" id="EmailId"
+          <input type="email" [(ngModel)]="Entity.p.EmailId" name="EmailId" class="form-control" id="EmailId"
             placeholder="Enter Email Id" [pattern]="Email" #EmailIdCtrl="ngModel" required
             (blur)="EmailIdCtrl.control.markAsTouched()" />
           <div *ngIf="(EmailIdCtrl.invalid && (EmailIdCtrl.touched || EmailIdCtrl.dirty))">
@@ -142,8 +142,12 @@
           </div>
           <div class="col-md-4">
             <label>CIN</label>
-            <input type="text" [(ngModel)]="Entity.p.CINNO" name="CINNO" class="form-control" id="CINNO" required
-              placeholder="Enter CIN" />
+            <input type="text" [(ngModel)]="Entity.p.CINNO" name="CINNO" class="form-control" id="CINNO" 
+              placeholder="Enter CIN" pattern="{{CIN}}" #CINCtrl="ngModel"
+              (blur)="CINCtrl.control.markAsTouched()" />
+            <div *ngIf="(CINCtrl.invalid && (CINCtrl.touched || CINCtrl.dirty))">
+              <span class="validation-text" *ngIf="CINCtrl.errors?.['pattern']">{{CINMsg}}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -158,12 +162,20 @@
           <div class="col-md-12 mb-3">
             <label><b>Date Of Incorporation</b></label>
             <input type="date" name="DateOfInCorporation" [(ngModel)]="dateOfInCorporation"
-              class="form-control date-input" id="DateOfInCorporation" required placeholder="Select Date" />
+              class="form-control date-input" id="DateOfInCorporation" required placeholder="Select Date" #DateOfInCorporationCtrl="ngModel"
+              (blur)="DateOfInCorporationCtrl.control.markAsTouched()" />
+            <div *ngIf="(DateOfInCorporationCtrl.invalid && (DateOfInCorporationCtrl.touched || DateOfInCorporationCtrl.dirty))">
+              <span class="validation-text" *ngIf="DateOfInCorporationCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
           </div>
           <div class="col-md-12">
             <label><b>Last Date Of First Financial Year </b></label>
             <input type="date" name="LastDateOfFirstFinancialYear " [(ngModel)]="lastDateOfFirstFinancialYear"
-              class="form-control date-input" id="LastDateOfFirstFinancialYear " required placeholder="Select Date" />
+              class="form-control date-input" id="LastDateOfFirstFinancialYear " required placeholder="Select Date" #LastDateOfFirstFinancialYearCtrl="ngModel"
+              (blur)="LastDateOfFirstFinancialYearCtrl.control.markAsTouched()" />
+            <div *ngIf="(LastDateOfFirstFinancialYearCtrl.invalid && (LastDateOfFirstFinancialYearCtrl.touched || LastDateOfFirstFinancialYearCtrl.dirty))">
+              <span class="validation-text" *ngIf="LastDateOfFirstFinancialYearCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
           </div>
         </div>
 
