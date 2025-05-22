@@ -104,43 +104,65 @@ export class Employee implements IPersistable<Employee> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
-   if (this.p.Name == '') {
+    if (this.p.Name == '') {
       vra.add('Name', 'Name cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.Name)) {
       vra.add('Name', ValidationMessages.NameWithoutNosMsg + ' for Name');
     }
     if (this.p.DOB == '') vra.add('DOB', ' DOB cannot be blank.');
     if (this.p.Gender == 0) vra.add('Gender', ' Gender cannot be blank.');
-     if (this.p.ContactNos == '') {
-          vra.add('Contact No', 'Contact No cannot be blank.');
-        } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.ContactNos)) {
-          vra.add('Contact No', ValidationMessages.INDPhoneNoMsg);
-        }
-     if (this.p.PersonalEmailId == '') {
+    if (this.p.ContactNos == '') {
+      vra.add('Contact No', 'Contact No cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.ContactNos)) {
+      vra.add('Contact No', ValidationMessages.INDPhoneNoMsg);
+    }
+    if (this.p.PersonalEmailId == '') {
       vra.add('Personal Email Id', 'Personal Email Id cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.Email).test(this.p.PersonalEmailId)) {
       vra.add('Personal Email Id', ValidationMessages.EmailMsg);
     }
- if (this.p.OfficialEmailId == '') {
+    if (this.p.OfficialEmailId == '') {
       vra.add('Office Email Id', 'Office Email Id cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.Email).test(this.p.OfficialEmailId)) {
       vra.add('Office Email Id', ValidationMessages.EmailMsg);
-    }   
+    }
     if (this.p.AddressLine1 == '') vra.add('AddressLine1', ' AddressLine1 cannot be blank.');
     if (this.p.AddressLine2 == '') vra.add('AddressLine2', ' AddressLine2 cannot be blank.');
     if (this.p.CityRef == 0) vra.add('CityRef', ' City cannot be blank.');
-    if (this.p.EmergencyContactName == '') vra.add('EmergencyContactName', 'Emergency Contact Name cannot be blank.');
-    if (this.p.EmergencyContactNo == '') vra.add('EmergencyContactNo', 'Emergency Contact No cannot be blank.');
-    if (this.p.MaritalStatus == 0) vra.add('MaritalStatus', 'Marital Status cannot be blank.');
+    if (this.p.EmergencyContactName == '') {
+      vra.add('Emergency Contact Name', 'Emergency Contact Name cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.EmergencyContactName)) {
+      vra.add('Emergency Contact Name', ValidationMessages.NameWithoutNosMsg + ' for Name');
+    } if (this.p.EmergencyContactNo == '') {
+      vra.add('Emergency Contact No', 'Emergency Contact No cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.EmergencyContactNo)) {
+      vra.add('Emergency Contact No', ValidationMessages.INDPhoneNoMsg);
+    } if (this.p.MaritalStatus == 0) vra.add('MaritalStatus', 'Marital Status cannot be blank.');
     if (this.p.DepartmentRef == 0) vra.add('DepartmentRef', 'Department cannot be blank.');
     if (this.p.DesignationRef == 0) vra.add('DesignationRef', 'Designation cannot be blank.');
     if (this.p.DateOfJoining == '') vra.add('DateOfJoining', ' Date Of Joining cannot be blank.');
     if (this.p.SalaryPerMonth == 0) vra.add('SalaryPerMonth', ' Salary Per Month cannot be blank.');
     if (this.p.SalaryPerYear == 0) vra.add('SalaryPerYear', ' Salary Per Year cannot be blank.');
-    if (this.p.BankName == '') vra.add('BankName', ' Bank Name cannot be blank.');
-    if (this.p.BranchName == '') vra.add('BranchName ', ' Branch Name cannot be blank.');
-    if (this.p.IFSC == '') vra.add('IFSC', ' IFSC cannot be blank.');
-    if (this.p.BanckAccountNo == '') vra.add('BanckAccountNo', ' Banck Account No cannot be blank.');
+    if (this.p.BankName == '') {
+      vra.add('Bank Name', 'Bank Name cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.BankName)) {
+      vra.add('Bank Name', ValidationMessages.NameWithoutNosMsg + ' for Name');
+    }
+    if (this.p.BranchName == '') {
+      vra.add('Branch Name', 'Branch Name cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.BranchName)) {
+      vra.add('Branch Name', ValidationMessages.NameWithoutNosMsg + ' for Name');
+    }
+    if (this.p.IFSC == '') {
+      vra.add('IFSC', 'IFSC cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.IFSC).test(this.p.IFSC)) {
+      vra.add('IFSC', ValidationMessages.IFSCMsg);
+    }
+    if (this.p.BanckAccountNo == '') {
+      vra.add('Banck Account No', 'Banck Account No cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.LargeInputNumber).test(this.p.BanckAccountNo)) {
+      vra.add('Banck Account No', ValidationMessages.LargeInputNumberMsg);
+    }
 
   }
 
@@ -175,7 +197,7 @@ export class Employee implements IPersistable<Employee> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): Employee[] {
+    sortPropertyName: string = ""): Employee[] {
     let result: Employee[] = [];
 
     let dcs = DataContainerService.GetInstance();

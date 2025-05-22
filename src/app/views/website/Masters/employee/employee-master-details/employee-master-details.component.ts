@@ -49,8 +49,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   PANPattern: string = ValidationPatterns.PAN;
   GSTINPattern: string = ValidationPatterns.GSTIN;
   LargeInputNumber: string = ValidationPatterns.LargeInputNumber;
-    INDPhoneNo: string = ValidationPatterns.INDPhoneNo;
-  
+  INDPhoneNo: string = ValidationPatterns.INDPhoneNo;  
 
   NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
   LargeInputNumberMsg: string = ValidationMessages.LargeInputNumberMsg;
@@ -254,6 +253,11 @@ export class EmployeeMasterDetailsComponent implements OnInit {
       }
     }
   };
+  
+  selectAllValue(event: MouseEvent): void {
+    const input = event.target as HTMLInputElement;
+    input.select();
+  }
 
   BackEmployee = () => {
     this.router.navigate(['/homepage/Website/Employee_Master']);
