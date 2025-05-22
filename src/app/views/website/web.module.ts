@@ -127,6 +127,7 @@ import { MarketingManagementMasterComponent } from './marketing_management/marke
 import { MarketingManagementMasterDetailsComponent } from './marketing_management/marketing-management/marketing-management-master-details/marketing-management-master-details.component';
 import { ActualStagePrintComponent } from './site-management/actual-stage-print/actual-stage-print.component';
 import { CustomerPendingFollowupComponent } from './customer_management/presale/customer_followup/customer_pendingfollowup/customer-pendingfollowup.component';
+import { SharedFilterComponent } from './Helpers/shared-filter/shared-filter.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent, StageMasterComponent, StageMasterDetailsComponent, AccountMainLedgerComponent, AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent, MarketingTypeMasterDetailsComponent,
@@ -137,9 +138,10 @@ import { CustomerPendingFollowupComponent } from './customer_management/presale/
   imports: [
     CommonModule, WebRoutingModule, FormsModule, NzDropDownModule, NzTableModule, IonicModule.forRoot(),
     NzPaginationModule, NzUploadModule, NzModalModule, NzCheckboxModule, NzCardModule, NzEmptyModule,
-    CommonModule, NzTableModule, NzIconModule, NzLayoutModule, NzMenuModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzStepsModule, NzButtonModule, NzToolTipModule
+    CommonModule, NzTableModule, NzIconModule, NzLayoutModule, NzMenuModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzStepsModule, NzButtonModule, NzToolTipModule, SharedFilterComponent
   ],
-  providers: [DatePipe]
+  providers: [DatePipe],
+  exports: [SharedFilterComponent],
 })
 export class WebModule {
   constructor(private injector: Injector) {
