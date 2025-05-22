@@ -115,13 +115,13 @@ export class SiteWorkMasterDetailComponent implements OnInit {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster(
-          'Site Work Master  saved successfully!'
+          'Site Work Master saved successfully!'
         );
         this.Entity = SiteWorkMaster.CreateNewInstance();
         this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster(
-          'Site Work Master  Updated successfully!'
+          'Site Work Master Updated successfully!'
         );
         this.BackSiteWorkMaster()
       }

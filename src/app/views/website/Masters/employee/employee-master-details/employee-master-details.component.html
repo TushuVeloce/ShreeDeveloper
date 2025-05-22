@@ -52,10 +52,13 @@
           <div>
             <label>Contact No</label>
             <input type="text" name="ContactNos" class="form-control" [(ngModel)]="Entity.p.ContactNos" id="ContactNos"
-              required placeholder="Enter Contact No"  #ContactNoCtrl="ngModel" (blur)="ContactNoCtrl.control.markAsTouched()" />
+              required placeholder="Enter Contact No"  pattern="{{INDPhoneNo}}" #ContactNoCtrl="ngModel"
+              required
+            (blur)="ContactNoCtrl.control.markAsTouched()" />
            <div *ngIf="(ContactNoCtrl.invalid && (ContactNoCtrl.touched || ContactNoCtrl.dirty))">
+              <span class="validation-text" *ngIf="ContactNoCtrl.errors?.['pattern']">{{INDPhoneNoMsg}}</span>
             <span class="validation-text" *ngIf="ContactNoCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+            </div>
           </div>
         </div>
         <div class="col-md-4 mb-3">

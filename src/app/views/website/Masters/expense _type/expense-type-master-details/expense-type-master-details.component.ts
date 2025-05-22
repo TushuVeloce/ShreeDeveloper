@@ -106,7 +106,7 @@ export class ExpenseTypeMasterDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Expense Typesaved successfully!');
+        await this.uiUtils.showSuccessToster('Expense Type saved successfully!');
         this.Entity = ExpenseType.CreateNewInstance();
         this.resetAllControls();
       } else {

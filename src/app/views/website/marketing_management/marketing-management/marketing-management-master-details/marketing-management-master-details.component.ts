@@ -191,11 +191,11 @@ export class MarketingManagementMasterDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('MarketingManagement Master saved successfully!');
+        await this.uiUtils.showSuccessToster('Marketing Management saved successfully!');
         this.Entity = MarketingManagement.CreateNewInstance();
         this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster('MarketingManagement Master Updated successfully!');
+        await this.uiUtils.showSuccessToster('Marketin Management Updated successfully!');
         this.BackMarketingManagement()
       }
     }
