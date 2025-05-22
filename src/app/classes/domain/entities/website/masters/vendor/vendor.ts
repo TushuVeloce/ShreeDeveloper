@@ -111,7 +111,7 @@ export class Vendor implements IPersistable<Vendor> {
       vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     }
     if (this.p.TradeName == '') vra.add('TradeName', 'Trade Name cannot be blank.');
-   if (this.p.MobileNo == '') {
+    if (this.p.MobileNo == '') {
       vra.add('Mobile No', 'Mobile No cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.MobileNo)) {
       vra.add('IFSC', ValidationMessages.INDPhoneNoMsg);
@@ -129,7 +129,7 @@ export class Vendor implements IPersistable<Vendor> {
     if (this.p.BranchName == '') vra.add('BranchName', 'Branch cannot be blank.');
     if (this.p.AccountNumber == '') vra.add('AccountNumber', 'Account Number cannot be blank.');
     if (this.p.AccountNumber.length > 15) vra.add('AccountNumber', 'Account Number Should be less then 15.');
-    
+
     if (this.p.IFSC == '') {
       vra.add('IFSC', 'IFSC cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.IFSC).test(this.p.IFSC)) {
@@ -145,9 +145,12 @@ export class Vendor implements IPersistable<Vendor> {
     } else if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan)) {
       vra.add('Pan', ValidationMessages.PANMsg);
     }
-    if (this.p.CINNO == '') vra.add('CINNO', 'CIN cannot be blank.');
-    if (this.p.MaterialListSuppliedByVendor.length < 0) vra.add('MaterialListSuppliedByVendor', ' Vendor Material Supply list cannot be blank.');
-    if (this.p.ServiceListSuppliedByVendor.length < 0) vra.add('ServiceListSuppliedByVendor', 'Vendor Service Supply list cannot be blank.');
+    if (this.p.CINNO && !new RegExp(ValidationPatterns.CIN).test(this.p.CINNO)) {
+      vra.add('CIN', ValidationMessages.CINMsg);
+    }
+
+    if (this.p.MaterialListSuppliedByVendor.length <= 0) vra.add('MaterialListSuppliedByVendor', ' Vendor Material Supply list cannot be blank.');
+    if (this.p.ServiceListSuppliedByVendor.length <= 0) vra.add('ServiceListSuppliedByVendor', 'Vendor Service Supply list cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -180,7 +183,7 @@ export class Vendor implements IPersistable<Vendor> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): Vendor[] {
+    sortPropertyName: string = ""): Vendor[] {
     let result: Vendor[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -221,10 +224,10 @@ export class Vendor implements IPersistable<Vendor> {
     return tdResponse;
   }
 
-  public static async FetchInstance(ref: number,CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchInstance(ref: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new VendorFetchRequest();
     req.VendorRefs.push(ref);
-     req.CompanyRefs.push(CompanyRef);
+    req.CompanyRefs.push(CompanyRef);
 
     let tdResponse = await Vendor.FetchTransportData(req, errorHandler) as TransportData;
     return Vendor.SingleInstanceFromTransportData(tdResponse);
