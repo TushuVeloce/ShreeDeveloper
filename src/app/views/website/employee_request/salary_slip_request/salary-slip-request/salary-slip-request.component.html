@@ -4,8 +4,8 @@
       <h5 style="padding-top: 3px;" class="title title_light">Salary Slip Request</h5>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
-      <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus
-        [(ngModel)]="SearchString" />
+      <app-shared-filter [masterList]="MasterList" [filterFields]="['Year']"
+        (filteredList)="DisplayMasterList = $event"></app-shared-filter>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
       <nz-button *ngIf="Entity.p.EmployeeRef != 1001" nz-button class="btn1" (click)='AddSalarySlipRequest()'>
@@ -39,7 +39,8 @@
             <td class="tbldata">
               <span style="margin-left: 9px;" (click)="onDeleteClicked(salarysliprequest);"
                 *ngIf="!salarysliprequest.p.IsApproved">
-                <img src="\assets\icons\delete.png" alt="logo" style="cursor: pointer;" title="Delete" width="20px" height="20px" /></span>
+                <img src="\assets\icons\delete.png" alt="logo" style="cursor: pointer;" title="Delete" width="20px"
+                  height="20px" /></span>
 
               <span style="margin-left: 9px;" *ngIf="salarysliprequest.p.IsApproved">
                 <img src="\assets\icons\GreyDustbin.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
