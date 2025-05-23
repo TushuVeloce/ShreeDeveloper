@@ -47,9 +47,11 @@ export class SiteManagementDetailsComponent implements OnInit {
 
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos
   PinCodePattern: string = ValidationPatterns.PinCode;
+  INDPhoneNo: string = ValidationPatterns.INDPhoneNo;
 
   NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
   PinCodeMsg: string = ValidationMessages.PinCodeMsg;
+  INDPhoneNoMsg: string = ValidationMessages.INDPhoneNoMsg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;

@@ -92,7 +92,7 @@ export class SiteWorkMasterComponent implements OnInit {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-    Are you sure that you want to DELETE this SiteWorkMaster?`,
+    Are you sure that you want to DELETE this Site Work Master?`,
       async () => {
         await SiteWorkMaster.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(

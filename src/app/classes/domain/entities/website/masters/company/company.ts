@@ -94,6 +94,11 @@ export class Company implements IPersistable<Company> {
     } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
       vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     }
+     if (this.p.Contacts == '') {
+      vra.add('Contact No', 'Contact No cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.Contacts)) {
+      vra.add('Contact No', ValidationMessages.INDPhoneNoMsg);
+    }
     if (this.p.OwnerName == '') {
       vra.add('OwnerName', 'Owner Name cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.OwnerName)) {
@@ -123,6 +128,9 @@ export class Company implements IPersistable<Company> {
       vra.add('Pan', 'Pan cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan)) {
       vra.add('Pan', ValidationMessages.PANMsg);
+    }
+    if (this.p.CINNO && !new RegExp(ValidationPatterns.CIN).test(this.p.CINNO)) {
+      vra.add('CIN', ValidationMessages.CINMsg);
     }
 
     if (this.p.IsNewlyCreated == true && this.p.CompanyLogo == null) {
@@ -165,7 +173,7 @@ export class Company implements IPersistable<Company> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): Company[] {
+    sortPropertyName: string = ""): Company[] {
     let result: Company[] = [];
 
     let dcs = DataContainerService.GetInstance();

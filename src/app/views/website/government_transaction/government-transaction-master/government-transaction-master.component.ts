@@ -53,9 +53,9 @@ export class GovernmentTransactionMasterComponent implements OnInit {
     //   this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
 
     //  fetching entire government transaction list
- if (this.companyRef() <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
-        return;
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
     this.DisplayMasterList = [];
     let lst = await GovernmentTransaction.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
@@ -73,7 +73,6 @@ export class GovernmentTransactionMasterComponent implements OnInit {
     // get Transaction Type List Status
 
     for (let i = 0; i < this.MasterList.length; i++) {
-      debugger
       let obj = this.MasterList[i];
       let transactionJson = obj.p.TransactionJson;
       let transactionRef = obj.p.Ref;

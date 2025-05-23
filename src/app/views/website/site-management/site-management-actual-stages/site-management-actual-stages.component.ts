@@ -225,7 +225,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
       async () => {
         await actualstage.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `actualstage ${actualstage.p.SiteName} has been deleted!`
+            `Actual Stage ${actualstage.p.StageName} has been deleted!`
           );
           await this.getActualStageListByCompanyRef();
           this.SearchString = '';

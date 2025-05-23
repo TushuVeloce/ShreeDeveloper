@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GovernmentTransaction } from 'src/app/classes/domain/entities/website/government_office/government_transaction/governmenttransaction';
+import { SiteWorkGroup } from 'src/app/classes/domain/entities/website/government_office/siteworkgroup/siteworkgroup';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -20,6 +21,8 @@ export class RespectedChildComponentComponent implements OnInit {
   Entity: GovernmentTransaction = GovernmentTransaction.CreateNewInstance();
   SelectedArrayObj: any[] = [];
   TransactionTypeArrayObj: any[] = [];
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+
   constructor(private router: Router, private route: ActivatedRoute, private appStateManage: AppStateManageService,
     private utils: Utils, private uiUtils: UIUtils, private companystatemanagement: CompanyStateManagement) {
     let str = this.route.snapshot.params['queryParams'];
@@ -28,11 +31,18 @@ export class RespectedChildComponentComponent implements OnInit {
 
     this.TransactionTypeArrayObj = JSON.parse(this.appStateManage.StorageKey.getItem('TransactionJson') ?? '[]');
     this.SelectedArrayObj = this.TransactionTypeArrayObj.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
+    console.log(this.SelectedTransactionType, ' this.SelectedTransactionType');
+    console.log(this.SelectedArrayObj, ' this.SelectedArrayObj');
+    console.log(this.TransactionTypeArrayObj, ' this.TransactionTypeArrayObj');
+
   }
-
-  ngOnInit() {
+  SiteWorkGroupList: SiteWorkGroup[] = [];
+  async ngOnInit() {
     this.Entity = GovernmentTransaction.GetCurrentInstance();
-
+    let lst = await SiteWorkGroup.FetchEntireListByCompanyRef(this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.SiteWorkGroupList = lst;
   }
 
   onAddTransactionSubmit = async (value: any) => {

@@ -64,11 +64,11 @@ export class SiteWorkGroupMasterComponent implements OnInit {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-    Are you sure that you want to DELETE this SiteWorkGroup?`,
+    Are you sure that you want to DELETE this Site Work Group?`,
       async () => {
         await Item.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `SiteWorkGroup ${Item.p.Name} has been deleted!`
+            `Site Work Group ${Item.p.Name} has been deleted!`
           );
           await this.FormulateSiteWorkGroupList();
           this.SearchString = '';

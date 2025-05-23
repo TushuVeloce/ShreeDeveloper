@@ -3,19 +3,20 @@
     <h5 style="padding-top: 3px;" class="title title_light">Financial Year</h5>
   </div>
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
-    <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus
-      [(ngModel)]="SearchString" />
+    <app-shared-filter [masterList]="MasterList"
+      [filterFields]="['FromDate', 'ToDate', 'Contacts', 'DepartmentName', 'UserRoleName']"
+      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
   <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
-    <nz-button nz-button class="btn1"  (click)="isPasswordModalOpen = true">
+    <nz-button nz-button class="btn1" (click)="isPasswordModalOpen = true">
       Create New Financial Year
     </nz-button>
   </div>
 </div>
 <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="MasterList.length > 0">
   <div class="table-container">
-    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()" [nzScroll]="{x:'auto' }"
-      nzFrontPagination="false" [nzShowSizeChanger]="false">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
@@ -27,8 +28,10 @@
           <td Class="tbldata">{{financialyear.p.FromDate}}</td>
           <td Class="tbldata">{{financialyear.p.ToDate}}</td>
           <td class="tbldata">
-            <button style="color: black;" class="yearstatus" [disabled]="financialyear.p.IsCurrentYear === 1" [ngClass]="financialyear.p.IsCurrentYear === 1 ? 'current' : 'set'" (click)="isSetFinancialYearModalOpen = true; onSelectedFinanacialYear(financialyear);">
-             {{financialyear.p.IsCurrentYear === 1 ? 'Current Financial Year' : 'Set Financial Year'}}
+            <button style="color: black;" class="yearstatus" [disabled]="financialyear.p.IsCurrentYear === 1"
+              [ngClass]="financialyear.p.IsCurrentYear === 1 ? 'current' : 'set'"
+              (click)="isSetFinancialYearModalOpen = true; onSelectedFinanacialYear(financialyear);">
+              {{financialyear.p.IsCurrentYear === 1 ? 'Current Financial Year' : 'Set Financial Year'}}
             </button>
           </td>
         </tr>
@@ -58,23 +61,24 @@
     </div>
     <div class="custom-modal-body">
       <form autocomplete="off">
-         <!-- Password Field -->
-      <div style="margin-top: 12px;">
-        <label for="password">Password</label>
-        <div style="display: flex">
-          <input [type]="showPassword ? 'text' : 'password'" id="password" class="form-control" name="Password" required
-            [(ngModel)]="localpassword" />
-          <span (click)="togglePasswordVisibility()" class="input-icon"
-            style="margin-top: 0.4rem; margin-left: 0.4rem; color: rgb(24, 23, 23); cursor: pointer;">
-            <i class="fas fa-eye" *ngIf="showPassword"></i>
-            <i class="fas fa-eye-slash" *ngIf="!showPassword"></i>
-          </span>
-        </div>
+        <!-- Password Field -->
+        <div style="margin-top: 12px;">
+          <label for="password">Password</label>
+          <div style="display: flex">
+            <input [type]="showPassword ? 'text' : 'password'" id="password" class="form-control" name="Password"
+              required [(ngModel)]="localpassword" />
+            <span (click)="togglePasswordVisibility()" class="input-icon"
+              style="margin-top: 0.4rem; margin-left: 0.4rem; color: rgb(24, 23, 23); cursor: pointer;">
+              <i class="fas fa-eye" *ngIf="showPassword"></i>
+              <i class="fas fa-eye-slash" *ngIf="!showPassword"></i>
+            </span>
+          </div>
 
-      </div>
-      <div style="margin-top: 8px;">
-        <strong>Note :</strong> To {{isSetFinancialYearModalOpen ? 'set new ' : 'create a new '}}financial year, you must enter your login password.
-      </div>
+        </div>
+        <div style="margin-top: 8px;">
+          <strong>Note :</strong> To {{isSetFinancialYearModalOpen ? 'set new ' : 'create a new '}}financial year, you
+          must enter your login password.
+        </div>
         <!-- <div class="row" style="margin-top: 1rem">
           <div class="col-md-12 mb-3">
             <label for="localpassword">Password</label>
@@ -85,13 +89,14 @@
             <strong>Note :</strong> To create a new financial year, you must enter your login password.
           </span>
         </div> -->
-        </form>
+      </form>
     </div>
     <div class="custom-modal-footer">
       <!-- <button type="button" class="btn btn-secondary" (click)="isModalOpen = false">Close</button> -->
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
         <div>
-          <nz-button nz-button class="btn1" (click)="handleFinancialYearFunctionCall()"> {{isSetFinancialYearModalOpen ? 'Set ' : 'Save '}}</nz-button>
+          <nz-button nz-button class="btn1" (click)="handleFinancialYearFunctionCall()"> {{isSetFinancialYearModalOpen ?
+            'Set ' : 'Save '}}</nz-button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="closeModal('owner')">
@@ -102,4 +107,3 @@
     </div>
   </div>
 </div>
-

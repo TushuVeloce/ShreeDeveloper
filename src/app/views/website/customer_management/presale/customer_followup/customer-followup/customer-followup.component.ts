@@ -58,7 +58,7 @@ export class CustomerFollowupComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement, private dtu: DTU, private datePipe: DatePipe, private DateconversionService: DateconversionService
   ) {
     effect(() => {
-      this.getCustomerFollowUpListByDateComapanyAndContactModeRef();
+      this.getCustomerFollowUpListByDateCompanyAndContactModeRef();
     });
   }
 
@@ -72,7 +72,7 @@ export class CustomerFollowupComponent implements OnInit {
       this.ReminderDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
       this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
       if (this.strCDT != '') {
-        this.getCustomerFollowUpListByDateComapanyAndContactModeRef();
+        this.getCustomerFollowUpListByDateCompanyAndContactModeRef();
       }
     }
 
@@ -85,7 +85,7 @@ export class CustomerFollowupComponent implements OnInit {
     return this.DateconversionService.formatDate(date);
   }
 
-  getCustomerFollowUpListByDateComapanyAndContactModeRef = async () => {
+  getCustomerFollowUpListByDateCompanyAndContactModeRef = async () => {
     this.strCDT = this.dtu.ConvertStringDateToFullFormat(this.ReminderDate);
     let FollowUp = await CustomerFollowUp.FetchEntireListByDateComapanyAndContactModeRef(this.companyRef(), this.strCDT, this.Entity.p.ContactMode,
     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));

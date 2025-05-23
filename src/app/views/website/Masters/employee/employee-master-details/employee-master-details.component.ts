@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgModel } from '@angular/forms';
+import { NgForm, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
@@ -49,6 +49,8 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   PANPattern: string = ValidationPatterns.PAN;
   GSTINPattern: string = ValidationPatterns.GSTIN;
   LargeInputNumber: string = ValidationPatterns.LargeInputNumber;
+  INDPhoneNo: string = ValidationPatterns.INDPhoneNo;  
+  Email: string = ValidationPatterns.Email
   
   NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
   LargeInputNumberMsg: string = ValidationMessages.LargeInputNumberMsg;
@@ -56,24 +58,26 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   IFSCMsg: string = ValidationMessages.IFSCMsg;
   GSTINMsg: string = ValidationMessages.GSTINMsg;
   PANMsg: string = ValidationMessages.PANMsg;
+  EmailMsg: string = ValidationMessages.EmailMsg
+  INDPhoneNoMsg: string = ValidationMessages.INDPhoneNoMsg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
-  
 
-    @ViewChild('NameCtrl') NameInputControl!: NgModel;
-    @ViewChild('DOBCtrl') DOBInputControl!: NgModel;
-    @ViewChild('ContactNoCtrl') ContactNoInputControl!: NgModel;
-    @ViewChild('PersonalEmailIdCtrl') PersonalEmailIdInputControl!: NgModel;
-    @ViewChild('OfficialEmailIdCtrl') OfficialEmailIdInputControl!: NgModel;
-    @ViewChild('AddressLine1Ctrl') AddressLine1InputControl!: NgModel;
-    @ViewChild('EmergencyContactNameCtrl') EmergencyContactNameInputControl!: NgModel;
-    @ViewChild('EmergencyContactNoCtrl') EmergencyContactNoInputControl!: NgModel;
-    @ViewChild('DateOfJoiningCtrl') DateOfJoiningInputControl!: NgModel;
-    @ViewChild('SalaryPerMonthCtrl') SalaryPerMonthInputControl!: NgModel;
-    @ViewChild('SalaryPerYearCtrl') SalaryPerYearInputControl!: NgModel;
-    @ViewChild('BankNameCtrl') BankNameInputControl!: NgModel;
-    @ViewChild('BranchNameCtrl') BranchNameInputControl!: NgModel;
-    @ViewChild('AccountNumberCtrl') AccountNumberInputControl!: NgModel;
-    @ViewChild('IFSCCtrl') IFSCInputControl!: NgModel;
+  @ViewChild('employeeForm') employeeForm!: NgForm;
+  @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('DOBCtrl') DOBInputControl!: NgModel;
+  @ViewChild('ContactNoCtrl') ContactNoInputControl!: NgModel;
+  @ViewChild('PersonalEmailIdCtrl') PersonalEmailIdInputControl!: NgModel;
+  @ViewChild('OfficialEmailIdCtrl') OfficialEmailIdInputControl!: NgModel;
+  @ViewChild('AddressLine1Ctrl') AddressLine1InputControl!: NgModel;
+  @ViewChild('EmergencyContactNameCtrl') EmergencyContactNameInputControl!: NgModel;
+  @ViewChild('EmergencyContactNoCtrl') EmergencyContactNoInputControl!: NgModel;
+  @ViewChild('DateOfJoiningCtrl') DateOfJoiningInputControl!: NgModel;
+  @ViewChild('SalaryPerMonthCtrl') SalaryPerMonthInputControl!: NgModel;
+  @ViewChild('SalaryPerYearCtrl') SalaryPerYearInputControl!: NgModel;
+  @ViewChild('BankNameCtrl') BankNameInputControl!: NgModel;
+  @ViewChild('BranchNameCtrl') BranchNameInputControl!: NgModel;
+  @ViewChild('AccountNumberCtrl') AccountNumberInputControl!: NgModel;
+  @ViewChild('IFSCCtrl') IFSCInputControl!: NgModel;
 
   constructor(
     private router: Router,
@@ -108,6 +112,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
         this.dtu.FromString(this.Entity.p.DOB),
         'yyyy-MM-dd'
       );
+      this.getDesignationListByDepartmentRef();
       this.appStateManage.StorageKey.removeItem('Editable');
       if (this.Entity.p.CountryRef) {
         this.getStateListByCountryRef(this.Entity.p.CountryRef);
@@ -142,6 +147,9 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     }
     let lst = await Designation.FetchEntireListByDepartmentRef(this.Entity.p.DepartmentRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DesignationList = lst;
+    // if (lst.length > 0 && this.Entity.p.DesignationRef != lst[0].p.Ref) {
+    //   this.Entity.p.DesignationRef = lst[0].p.Ref;
+    // }
   }
 
 
@@ -247,44 +255,53 @@ export class EmployeeMasterDetailsComponent implements OnInit {
       }
     }
   };
+  
+  selectAllValue(event: MouseEvent): void {
+    const input = event.target as HTMLInputElement;
+    input.select();
+  }
 
   BackEmployee = () => {
     this.router.navigate(['/homepage/Website/Employee_Master']);
   }
 
-  resetAllControls = () => {
-    // reset touched
-    this.NameInputControl.control.markAsUntouched();
-    this.DOBInputControl.control.markAsUntouched();
-    this.AddressLine1InputControl.control.markAsUntouched();
-    this.ContactNoInputControl.control.markAsUntouched();
-    this.PersonalEmailIdInputControl.control.markAsUntouched();
-    this.OfficialEmailIdInputControl.control.markAsUntouched();
-    this.EmergencyContactNameInputControl.control.markAsUntouched();
-    this.EmergencyContactNoInputControl.control.markAsUntouched();
-    this.DateOfJoiningInputControl.control.markAsUntouched();
-    this.SalaryPerMonthInputControl.control.markAsUntouched();
-    this.SalaryPerYearInputControl.control.markAsUntouched();
-    this.BankNameInputControl.control.markAsUntouched();
-    this.BranchNameInputControl.control.markAsUntouched();
-    this.AccountNumberInputControl.control.markAsUntouched();
-    this.IFSCInputControl.control.markAsUntouched();
+  // resetAllControls = () => {
+  //   // reset touched
+  //   this.NameInputControl.control.markAsUntouched();
+  //   this.DOBInputControl.control.markAsUntouched();
+  //   this.AddressLine1InputControl.control.markAsUntouched();
+  //   this.ContactNoInputControl.control.markAsUntouched();
+  //   this.PersonalEmailIdInputControl.control.markAsUntouched();
+  //   this.OfficialEmailIdInputControl.control.markAsUntouched();
+  //   this.EmergencyContactNameInputControl.control.markAsUntouched();
+  //   this.EmergencyContactNoInputControl.control.markAsUntouched();
+  //   this.DateOfJoiningInputControl.control.markAsUntouched();
+  //   this.SalaryPerMonthInputControl.control.markAsUntouched();
+  //   this.SalaryPerYearInputControl.control.markAsUntouched();
+  //   this.BankNameInputControl.control.markAsUntouched();
+  //   this.BranchNameInputControl.control.markAsUntouched();
+  //   this.AccountNumberInputControl.control.markAsUntouched();
+  //   this.IFSCInputControl.control.markAsUntouched();
 
-    // reset dirty
-    this.NameInputControl.control.markAsPristine();
-    this.DOBInputControl.control.markAsPristine();
-    this.AddressLine1InputControl.control.markAsPristine();
-    this.ContactNoInputControl.control.markAsPristine();
-    this.PersonalEmailIdInputControl.control.markAsPristine();
-    this.OfficialEmailIdInputControl.control.markAsPristine();
-    this.EmergencyContactNameInputControl.control.markAsPristine();
-    this.EmergencyContactNoInputControl.control.markAsPristine();
-    this.DateOfJoiningInputControl.control.markAsPristine();
-    this.SalaryPerMonthInputControl.control.markAsPristine();
-    this.SalaryPerYearInputControl.control.markAsPristine();
-    this.BankNameInputControl.control.markAsPristine();
-    this.BranchNameInputControl.control.markAsPristine();
-    this.AccountNumberInputControl.control.markAsPristine();
-    this.IFSCInputControl.control.markAsPristine();
-  }
+  //   // reset dirty
+  //   this.NameInputControl.control.markAsPristine();
+  //   this.DOBInputControl.control.markAsPristine();
+  //   this.AddressLine1InputControl.control.markAsPristine();
+  //   this.ContactNoInputControl.control.markAsPristine();
+  //   this.PersonalEmailIdInputControl.control.markAsPristine();
+  //   this.OfficialEmailIdInputControl.control.markAsPristine();
+  //   this.EmergencyContactNameInputControl.control.markAsPristine();
+  //   this.EmergencyContactNoInputControl.control.markAsPristine();
+  //   this.DateOfJoiningInputControl.control.markAsPristine();
+  //   this.SalaryPerMonthInputControl.control.markAsPristine();
+  //   this.SalaryPerYearInputControl.control.markAsPristine();
+  //   this.BankNameInputControl.control.markAsPristine();
+  //   this.BranchNameInputControl.control.markAsPristine();
+  //   this.AccountNumberInputControl.control.markAsPristine();
+  //   this.IFSCInputControl.control.markAsPristine();
+  // }
+
+   resetAllControls() {
+  this.employeeForm.resetForm(); // this will reset all form controls to their initial state
+}
 }

@@ -60,18 +60,18 @@
               (click)="CustomerAadharFileInputRef.nativeElement.click()" />
 
             <div>
-              {{ selectedFileNames['aadhar'] || 'No file selected' }}
+              {{ selectedFileNames['CustomerAadharFile'] || 'No file selected' }}
             </div>
 
             <!-- Hidden File Input -->
             <input type="file" #CustomerAadharFileInput accept=".jpg,.jpeg,.png,.gif" style="display: none"
-              (change)="onFileUpload($event, 'aadhar')" />
+              (change)="onFileUpload($event, 'CustomerAadharFile')" />
 
-            <p *ngIf="errors['aadhar']" class="validation-error">
-              {{ errors['aadhar'] }}
+            <p *ngIf="errors['CustomerAadharFile']" class="validation-error">
+              {{ errors['CustomerAadharFile'] }}
             </p>
 
-            <img *ngIf="filePreviews['aadhar']" [src]="filePreviews['aadhar']" class="img-preview" />
+            <img *ngIf="filePreviews['CustomerAadharFile']" [src]="filePreviews['CustomerAadharFile']" class="img-preview" />
           </div>
 
           <div class="col-md-4 d-flex align-items-center justify-content-evenly mb-4">
@@ -79,17 +79,17 @@
               (click)="CustomerPanFileInputRef.nativeElement.click()" />
 
             <div>
-              {{ selectedFileNames['pan'] || 'No file selected' }}
+              {{ selectedFileNames['CustomerPanFile'] || 'No file selected' }}
             </div>
 
             <input type="file" #CustomerPanFileInput accept=".jpg,.jpeg,.png,.gif" style="display: none"
-              (change)="onFileUpload($event, 'pan')" />
+              (change)="onFileUpload($event, 'CustomerPanFile')" />
 
-            <p *ngIf="errors['pan']" class="validation-error">
-              {{ errors['pan'] }}
+            <p *ngIf="errors['CustomerPanFile']" class="validation-error">
+              {{ errors['CustomerPanFile'] }}
             </p>
 
-            <img *ngIf="filePreviews['pan']" [src]="filePreviews['pan']" class="img-preview" />
+            <img *ngIf="filePreviews['CustomerPanFile']" [src]="filePreviews['CustomerPanFile']" class="img-preview" />
           </div>
 
           <!-- Submit -->

@@ -5,22 +5,11 @@
         Expense Type Master
       </h5>
     </div>
-    <div
-      class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light"
-    >
-      <input
-        type="text"
-        Class="search-box_light"
-        placeholder="Search..."
-        (input)="filterTable()"
-        autofocus
-        [(ngModel)]="SearchString"
-      />
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
+      <app-shared-filter [masterList]="MasterList" [filterFields]="['Name']"
+        (filteredList)="DisplayMasterList = $event"></app-shared-filter>
     </div>
-    <div
-      class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container"
-      routerLinkActive="active"
-    >
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
       <nz-button nz-button class="btn1" (click)="AddExpenseType()">
         Add Expense Type
       </nz-button>
@@ -33,46 +22,20 @@
         <div class="row">
           <div class="col-md-4">
             <label for="StageRef"><b>Stage</b></label>
-            <nz-select
-              class="nzSelect-light"
-              [nzNotFoundContent]="noDataTpl"
-              nzShowSearch
-              nzAllowClear
-              nzPlaceHolder="Select"
-              [nzSize]="'large'"
-              [(ngModel)]="Entity.p.StageRef"
-              name="StageRef"
-              required
-              id="StageRef"
-              (ngModelChange)="getExpenseListByStageRef()"
-            >
-              <nz-option
-                *ngFor="let Stage of StageList"
-                [nzLabel]="Stage.p.Name"
-                [nzValue]="Stage.p.Ref"
-              ></nz-option>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef" name="StageRef" required
+              id="StageRef" (ngModelChange)="getExpenseListByStageRef()">
+              <nz-option *ngFor="let Stage of StageList" [nzLabel]="Stage.p.Name" [nzValue]="Stage.p.Ref"></nz-option>
             </nz-select>
           </div>
         </div>
       </form>
     </div>
   </div>
-  <div
-    class="table-wrapper"
-    class="tblcard_light"
-    style="margin-top: 2rem"
-    *ngIf="DisplayMasterList.length > 0"
-  >
+  <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
     <div class="table-container">
-      <nz-table
-        #basicTable
-        nzSize="small"
-        class="no-hover-table bgtable_light"
-        [nzData]="paginatedList()"
-        [nzScroll]="{ x: 'auto' }"
-        nzFrontPagination="false"
-        [nzShowSizeChanger]="false"
-      >
+      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
+        [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
         <thead>
           <tr>
             <th *ngFor="let header of headers" class="tblheader">
@@ -85,22 +48,16 @@
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{ ExpenseType.p.Name }}</td>
             <td class="tbldata">
-              <Edit-Icon
-                (editClick)="onEditClicked(ExpenseType)"
-                [class.disabled-icon]="
+              <Edit-Icon (editClick)="onEditClicked(ExpenseType)" [class.disabled-icon]="
                   ExpenseType.p.ExpenseType === ExpenseTypeRef ||
                   ExpenseType.p.ExpenseType === LabourExpenseRef ||
                   ExpenseType.p.ExpenseType === OtherExpenseRef
-                "
-              />
-              <Delete-Icon
-                (deleteClicked)="onDeleteClicked(ExpenseType)"
-                [class.disabled-icon]="
+                " />
+              <Delete-Icon (deleteClicked)="onDeleteClicked(ExpenseType)" [class.disabled-icon]="
                   ExpenseType.p.ExpenseType === ExpenseTypeRef ||
                   ExpenseType.p.ExpenseType === LabourExpenseRef ||
                   ExpenseType.p.ExpenseType === OtherExpenseRef
-                "
-              />
+                " />
             </td>
           </tr>
         </tbody>
@@ -111,12 +68,8 @@
         (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
       </nz-pagination>
     </div> -->
-    <Pagination
-      [pageSize]="pageSize"
-      [total]="total"
-      [(currentPage)]="currentPage"
-      (pageChange)="onPageChange($event)"
-    />
+    <Pagination [pageSize]="pageSize" [total]="total" [(currentPage)]="currentPage"
+      (pageChange)="onPageChange($event)" />
   </div>
   <!-- <div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
     <div style="height: 200px" class="d-flex align-items-center justify-content-center">

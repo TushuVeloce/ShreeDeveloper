@@ -74,7 +74,7 @@ export class BankAccountMasterComponent implements OnInit {
       Are you sure that you want to DELETE this Bank Account?`,
       async () => {
         await BankAccount.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(`BankAccount ${BankAccount.p.Name} has been deleted!`);
+          await this.uiUtils.showSuccessToster(`Bank Account ${BankAccount.p.Name} has been deleted!`);
           await this.getBankListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();

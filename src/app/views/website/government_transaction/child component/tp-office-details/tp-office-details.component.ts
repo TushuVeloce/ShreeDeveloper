@@ -21,6 +21,8 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
 
     this.TpOfficeList = arr.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
     this.BindApplicableTypeValueStatusToRadioButton();
+    console.log(this.TpOfficeList);
+    
   }
 
   ngOnInit() {

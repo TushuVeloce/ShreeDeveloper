@@ -77,7 +77,7 @@ export class SiteManagementMasterComponent implements OnInit {
       async () => {
         await site.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `Material ${site.p.Name} has been deleted!`
+            `Site ${site.p.Name} has been deleted!`
           );
           await this.getSiteListByCompanyRef();
           this.SearchString = '';

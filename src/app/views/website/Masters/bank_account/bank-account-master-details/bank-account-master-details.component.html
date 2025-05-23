@@ -36,7 +36,7 @@
           <label>Account No</label>
           <input type="text" [(ngModel)]="Entity.p.AccountNumber" name="AccountNo" class="form-control" id="AccountNo"
             pattern="{{LargeInputNumber}}" placeholder="Enter Account Number" #AccountNumberCtrl="ngModel" required
-            (blur)="AccountNumberCtrl.control.markAsTouched()" />
+            (blur)="AccountNumberCtrl.control.markAsTouched()"  (click)="selectAllValue($event)"/>
           <div *ngIf="(AccountNumberCtrl.invalid && (AccountNumberCtrl.touched || AccountNumberCtrl.dirty))">
             <span class="validation-text" *ngIf="AccountNumberCtrl.errors?.['pattern']">{{LargeInputNumberMsg}}</span>
             <span class="validation-text" *ngIf="AccountNumberCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>

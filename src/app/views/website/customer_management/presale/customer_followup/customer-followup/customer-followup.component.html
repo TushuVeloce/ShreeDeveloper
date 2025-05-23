@@ -4,8 +4,8 @@
       <h5 style="padding-top: 3px;" class="title title_light">Customer Follow Up</h5>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
-      <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus
-        [(ngModel)]="SearchString" />
+      <app-shared-filter [masterList]="MasterList" [filterFields]="['CustomerName', 'ContactNos', 'ReminderDate']"
+        (filteredList)="DisplayMasterList = $event"></app-shared-filter>
     </div>
   </div>
   <ng-template #noDataTpl>
@@ -20,13 +20,13 @@
           <div class="col-md-4">
             <label for="date"><b>Reminder Date</b></label>
             <input type="date" name="date" class="form-control" id="date" [(ngModel)]="ReminderDate"
-              (ngModelChange)="getCustomerFollowUpListByDateComapanyAndContactModeRef()" />
+              (ngModelChange)="getCustomerFollowUpListByDateCompanyAndContactModeRef()" />
           </div>
           <div class="col-md-4">
             <label for="ContactModeRef"><b>Contact Mode</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
               nzPlaceHolder="Select" id="ContactModeRef" name="ContactModeRef" [(ngModel)]="Entity.p.ContactMode"
-              (ngModelChange)="getCustomerFollowUpListByDateComapanyAndContactModeRef()" [nzSize]="'large'">
+              (ngModelChange)="getCustomerFollowUpListByDateCompanyAndContactModeRef()" [nzSize]="'large'">
               <nz-option *ngFor="let contactmode of ContactModeList" [nzValue]="contactmode.Ref"
                 [nzLabel]="contactmode.Name"></nz-option>
             </nz-select>

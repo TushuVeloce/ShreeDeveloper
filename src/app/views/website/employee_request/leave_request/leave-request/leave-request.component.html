@@ -4,8 +4,9 @@
       <h5 style="padding-top: 3px;" class="title title_light">Leave Request</h5>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
-      <input type="text" Class="search-box_light" placeholder="Search..." (input)="filterTable()" autofocus
-        [(ngModel)]="SearchString" />
+      <app-shared-filter [masterList]="MasterList"
+        [filterFields]="['LeaveRequestName', 'Description', 'ToDate', 'HalfDayDate', 'Days']"
+        (filteredList)="DisplayMasterList = $event"></app-shared-filter>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
       <nz-button nz-button *ngIf="Entity.p.EmployeeRef != 1001" class="btn1" (click)='AddLeaveRequest()'>
@@ -36,27 +37,25 @@
             <td Class="tbldata">{{leaverequest.p.Days}}</td>
             <td class="tbldata">
               <!-- PENDING -->
-              <span class="status" *ngIf="!leaverequest.p.IsApproved && !leaverequest.p.IsCancelled"
-                ngClass="pending">
+              <span class="status" *ngIf="!leaverequest.p.IsApproved && !leaverequest.p.IsCancelled" ngClass="pending">
                 Pending
               </span>
 
               <!-- APPROVED -->
-              <span class="status" *ngIf="leaverequest.p.IsApproved && !leaverequest.p.IsCancelled"
-                ngClass="approved">
+              <span class="status" *ngIf="leaverequest.p.IsApproved && !leaverequest.p.IsCancelled" ngClass="approved">
                 Approved
               </span>
 
               <!-- REJECTED -->
-              <span class="status" *ngIf="!leaverequest.p.IsApproved && leaverequest.p.IsCancelled"
-                ngClass="rejected">
+              <span class="status" *ngIf="!leaverequest.p.IsApproved && leaverequest.p.IsCancelled" ngClass="rejected">
                 Rejected
               </span>
             </td>
             <td class="tbldata">
               <span style="margin-left: 9px;" *ngIf="!leaverequest.p.IsApproved && !leaverequest.p.IsCancelled"
                 (click)="onDeleteClicked(leaverequest);">
-                <img src="\assets\icons\delete.png" alt="logo" style="cursor: pointer;" title="Delete" width="20px" height="20px" /></span>
+                <img src="\assets\icons\delete.png" alt="logo" style="cursor: pointer;" title="Delete" width="20px"
+                  height="20px" /></span>
 
               <span style="margin-left: 9px;" *ngIf="leaverequest.p.IsApproved || leaverequest.p.IsCancelled">
                 <img src="\assets\icons\GreyDustbin.png" alt="logo" title="Delete" width="20px" height="20px" /></span>

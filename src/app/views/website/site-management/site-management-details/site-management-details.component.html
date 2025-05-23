@@ -277,17 +277,18 @@
           <div class="col-md-6">
             <label>Contact Numbers</label>
             <input type="text" name="ContactNo" class="form-control" [(ngModel)]="newOwner.ContactNo"
-              #OwnerContactNosCtrl="ngModel" required (blur)="OwnerContactNosCtrl.control.markAsTouched()"
-              placeholder="Enter Contact Numbers" />
-            <div *ngIf="(OwnerContactNosCtrl.invalid && (OwnerContactNosCtrl.touched || OwnerContactNosCtrl.dirty))">
-              <span class="validation-text" *ngIf="OwnerContactNosCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+             pattern="{{INDPhoneNo}}" #OwnerContactNosCtrl="ngModel" required
+            (blur)="OwnerContactNosCtrl.control.markAsTouched()" />
+          <div *ngIf="(OwnerContactNosCtrl.invalid && (OwnerContactNosCtrl.touched || OwnerContactNosCtrl.dirty))">
+            <span class="validation-text" *ngIf="OwnerContactNosCtrl.errors?.['pattern']">{{INDPhoneNoMsg}}</span>
+            <span class="validation-text" *ngIf="OwnerContactNosCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
           </div>
         </div>
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Email Id</label>
-            <input type="text" name="EmailId" class="form-control" [(ngModel)]="newOwner.EmailId" required
+            <input type="email" name="EmailId" class="form-control" [(ngModel)]="newOwner.EmailId" required
               placeholder="Enter Email Id" />
           </div>
           <div class="col-md-6">

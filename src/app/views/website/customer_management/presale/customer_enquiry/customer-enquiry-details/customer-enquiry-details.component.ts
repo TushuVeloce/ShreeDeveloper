@@ -63,10 +63,12 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   DateWithTime: string | null = null;
 
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace;
+  PinCode: string = ValidationPatterns.PinCode;
+  INDPhoneNo: string = ValidationPatterns.INDPhoneNo;
+
   NameWithoutNosMsg: string = ValidationMessages.NameWithNosAndSpaceAnd_Msg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
-
-  PinCode: string = ValidationPatterns.PinCode;
+  INDPhoneNoMsg: string = ValidationMessages.INDPhoneNoMsg;
   PinCodeWithoutMsg: string = ValidationMessages.PinCodeMsg;
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;

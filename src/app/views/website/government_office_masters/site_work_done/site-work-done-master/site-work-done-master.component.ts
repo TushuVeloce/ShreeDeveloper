@@ -95,11 +95,11 @@ export class SiteWorkDoneMasterComponent implements OnInit {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-     Are you sure that you want to DELETE this SiteWorkDone?`,
+     Are you sure that you want to DELETE this Site Work Done?`,
       async () => {
         await SiteWorkDone.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `Site Work Master ${SiteWorkDone.p.SiteWorkName} has been deleted!`
+            `Site Work Done ${SiteWorkDone.p.SiteWorkName} has been deleted!`
           );
           await this.getSiteWorkDoneListByCompanyRef();
           this.SearchString = '';

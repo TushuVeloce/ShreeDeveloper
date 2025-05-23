@@ -209,8 +209,8 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     // this.Entity.p.SaleDeedDate = this.dtu.ConvertStringDateToFullFormat(this.localsaledeeddate)
     // this.Entity.p.TalathiDate = this.dtu.ConvertStringDateToFullFormat(this.localtalathidate)
 
-    // let entityToSave = this.Entity.GetEditableVersion();
-    // let entitiesToSave = [entityToSave]
+    let entityToSave = this.Entity.GetEditableVersion();
+    let entitiesToSave = [entityToSave]
 
     const lstFTO: FileTransferObject[] = this.uploadedFiles.map(f =>
       FileTransferObject.FromFile(f.label, f.file, f.filename)
@@ -218,26 +218,26 @@ export class RegistrarOfficeDetailComponent implements OnInit {
 
     console.log('lstFTO:', lstFTO);
     if (this.Entity.p.CustomerAadharFile != null) {
-      // let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+      let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
     }
 
-    // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-    // if (!tr.Successful) {
-    //   this.isSaveDisabled = false;
-    //   this.uiUtils.showErrorMessage('Error', tr.Message);
-    //   return
-    // }
-    // else {
-    //   this.isSaveDisabled = false;
-    //   // this.onEntitySaved.emit(entityToSave);
-    //   if (this.IsNewEntity) {
-    //     await this.uiUtils.showSuccessToster('Registrar Office saved successfully!');
-    //     this.Entity = RegistrarOffice.CreateNewInstance();
-    //   } else {
-    //     await this.router.navigate(['/homepage/Website/Registrar_Office'])
-    //     this.BackRegistrarOffice()
-    //   }
-    // }
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return
+    }
+    else {
+      this.isSaveDisabled = false;
+      // this.onEntitySaved.emit(entityToSave);
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('Registrar Office saved successfully!');
+        this.Entity = RegistrarOffice.CreateNewInstance();
+      } else {
+        await this.router.navigate(['/homepage/Website/Registrar_Office'])
+        this.BackRegistrarOffice()
+      }
+    }
   }
 
   BackRegistrarOffice() {

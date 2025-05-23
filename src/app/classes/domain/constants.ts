@@ -7,7 +7,6 @@ export class ValidationPatterns {
   public static readonly INDPhoneNo: string = "^[6789][0-9]{9}$";
   public static readonly Address: string = "^[a-zA-Z0-9 ,./#-]{5,100}$";
 
-
   public static readonly NameWithNosAndSpace: string = "^[a-zA-Z0-9\\s]+$";
   public static readonly NameWithNosAndSpaceAnd_: string = "^[a-zA-Z0-9\\s_]+$";
 
@@ -15,15 +14,14 @@ export class ValidationPatterns {
   public static readonly CurrencySymbolRegex: string = "^[\\$€£¥₹₩₽₦₪฿₫₴₲₵₣₱؋]+|^[A-Za-z]{1,10}$";
   public static readonly CurrencyNameRegex: string = "^[A-Za-z\\s-]{1,30}$";
   public static readonly InputNumber: string = "^[0-9]{1,3}$"
-  public static readonly LargeInputNumber: string = "^[0-9]{1,15}$"
+  public static readonly LargeInputNumber: string = "^[0-9]{1,18}$"
   public static readonly PinCode: string = "^[0-9]{6}$";
   public static readonly Website: string = "https?://.+";
   public static readonly IFSC: string = "[A-Z]{4}0[A-Z0-9]{6}";
   public static readonly PAN: string = "[A-Z]{5}[0-9]{4}[A-Z]";
   public static readonly GSTIN: string = "[0-3][0-9][A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]";
+  public static readonly CIN: string = "^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$";
   public static readonly demo: string = "demo";
-
-
 }
 
 export class ValidationMessages {
@@ -38,7 +36,7 @@ export class ValidationMessages {
   public static readonly EmailMsg: string = "Please Enter a Valid Email Address.";
   public static readonly INDPhoneNoMsg: string = "Please Enter a Valid 10-digit Mobile Number starting with 6, 7, 8, or 9.";
   public static readonly InputNumberMsg: string = "Please enter a number between 0 and 999."
-  public static readonly LargeInputNumberMsg: string = "Please enter a number between 0 to 15 Digit."
+  public static readonly LargeInputNumberMsg: string = "Please enter a number between 9 to 18 Digit."
   public static readonly IPAddressMsg: string = "Please enter a valid IPv4 address (e.g., 192.168.1.1)."
   public static readonly ONVIFPortMsg: string = "Please enter a valid port number between 0 and 65535."
 
@@ -57,6 +55,7 @@ export class ValidationMessages {
   public static readonly IFSCMsg: string = "Invalid IFSC Code!";
   public static readonly PANMsg: string = "Invalid PAN!";
   public static readonly GSTINMsg: string = "Invalid GSTIN!";
+  public static readonly CINMsg: string = "Invalid CIN!";
 }
 
 export class CountryStateCityRefs {

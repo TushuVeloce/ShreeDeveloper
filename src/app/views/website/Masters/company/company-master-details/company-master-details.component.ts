@@ -48,12 +48,16 @@ export class CompanyMasterDetailsComponent implements OnInit {
   PinCode: string = ValidationPatterns.PinCode;
   GSTIN: string = ValidationPatterns.GSTIN;
   PAN: string = ValidationPatterns.PAN;
+  CIN: string = ValidationPatterns.CIN;
+  INDPhoneNo: string = ValidationPatterns.INDPhoneNo;
 
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   PinCodeMsg: string = ValidationMessages.PinCodeMsg;
   PANMsg: string = ValidationMessages.PANMsg;
   EmailMsg: string = ValidationMessages.EmailMsg
   GSTINMsg: string = ValidationMessages.GSTINMsg
+  CINMsg: string = ValidationMessages.CINMsg
+  INDPhoneNoMsg: string = ValidationMessages.INDPhoneNoMsg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
   imageBlobUrl: string | null = null;
   TimeStamp = Date.now()
@@ -66,6 +70,9 @@ export class CompanyMasterDetailsComponent implements OnInit {
   @ViewChild('PinCodeCtrl') PinCodeControl!: NgModel;
   @ViewChild('AddressLine1Ctrl') AddressLine1Control!: NgModel;
   @ViewChild('GSTINCtrl') GSTINInputControl!: NgModel;
+  @ViewChild('CINCtrl') CINInputControl!: NgModel;
+  @ViewChild('DateOfInCorporationCtrl') DateOfInCorporationInputControl!: NgModel;
+  @ViewChild('LastDateOfFirstFinancialYearCtrl') LastDateOfFirstFinancialYearInputControl!: NgModel;
   @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
 
   constructor(
@@ -279,6 +286,9 @@ export class CompanyMasterDetailsComponent implements OnInit {
     this.PinCodeControl.control.markAsUntouched();
     this.AddressLine1Control.control.markAsUntouched();
     this.GSTINInputControl.control.markAsUntouched();
+    this.CINInputControl.control.markAsUntouched();
+    this.DateOfInCorporationInputControl.control.markAsUntouched();
+    this.LastDateOfFirstFinancialYearInputControl.control.markAsUntouched();
 
     // reset dirty
     this.NameInputControl.control.markAsPristine();
@@ -288,5 +298,8 @@ export class CompanyMasterDetailsComponent implements OnInit {
     this.PinCodeControl.control.markAsPristine();
     this.AddressLine1Control.control.markAsPristine();
     this.GSTINInputControl.control.markAsPristine();
+    this.CINInputControl.control.markAsPristine();
+    this.DateOfInCorporationInputControl.control.markAsPristine();
+    this.LastDateOfFirstFinancialYearInputControl.control.markAsPristine();
   }
 }

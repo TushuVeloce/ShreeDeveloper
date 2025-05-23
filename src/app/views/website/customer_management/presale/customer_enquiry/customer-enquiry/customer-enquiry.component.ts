@@ -88,7 +88,7 @@ export class CustomerEnquiryComponent implements OnInit {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-    Are you sure that you want to DELETE this CustomerEnquiry?`,
+    Are you sure that you want to DELETE this Customer Enquiry?`,
       async () => {
         await customerenquiry.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(

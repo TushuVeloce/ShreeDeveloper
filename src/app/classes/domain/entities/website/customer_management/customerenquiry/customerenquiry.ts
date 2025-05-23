@@ -98,8 +98,11 @@ export class CustomerEnquiry implements IPersistable<CustomerEnquiry> {
     else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
       vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg);
     }
-    if (this.p.ContactNos == '')
-      vra.add('ContactNos', 'Contact Number cannot be blank.');
+     if (this.p.ContactNos == '') {
+      vra.add('Contact No', 'Contact No cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.ContactNos)) {
+      vra.add('Contact No', ValidationMessages.INDPhoneNoMsg);
+    }
     if (this.p.CountryRef == 0)
       vra.add('CountryRef', 'Country Name cannot be blank.');
     if (this.p.StateRef == 0)
