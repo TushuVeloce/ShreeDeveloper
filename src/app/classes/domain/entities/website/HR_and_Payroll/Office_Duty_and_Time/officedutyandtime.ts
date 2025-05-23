@@ -73,6 +73,10 @@ export class OfficeDutyandTime implements IPersistable<OfficeDutyandTime> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
+     if (this.p.FromTime == '') vra.add('FromTime', 'From Time cannot be blank.');
+     if (this.p.ToTime == '') vra.add('ToTime', 'To Time cannot be blank.');
+     if (this.p.LateMarkGraceTimeInMins == '') vra.add('LateMarkGraceTimeInMins', 'Late Mark Grace Time cannot be blank.');
+     if (this.p.OvertimeGraceTimeInMins == '') vra.add('OvertimeGraceTimeInMins', 'Over Time Grace Time cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {

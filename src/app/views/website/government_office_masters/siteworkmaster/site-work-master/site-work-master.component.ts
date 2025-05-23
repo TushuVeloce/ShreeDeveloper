@@ -24,6 +24,7 @@ export class SiteWorkMasterComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   SiteWorkGroupList: SiteWorkGroup[] = [];
+  SiteWorkGroupRef:number = 0
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -39,6 +40,7 @@ export class SiteWorkMasterComponent implements OnInit {
     effect(() => {
       // this.getSiteWorkMasterListByCompanyRef()
       this.getSiteWorkMasterListByCompanyRef();
+      this.FormulateSiteWorkGroupListByCompanyRef()
     });
   }
 
@@ -52,11 +54,31 @@ export class SiteWorkMasterComponent implements OnInit {
   // });
 
   async ngOnInit() {
-    this.SiteWorkGroupList = await SiteWorkGroup.FetchEntireList();
+    this.Entity.p.SiteWorkGroupRef = Number( this.appStateManage.StorageKey.getItem('sitegroup'))
+    this.SiteWorkGroupList = await SiteWorkGroup.FetchEntireListByCompanyRef(this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
+
+  private FormulateSiteWorkGroupListByCompanyRef = async () => {
+      if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    this.Entity.p.SiteWorkGroupRef = Number( this.appStateManage.StorageKey.getItem('sitegroup'))
+    this.SiteWorkGroupRef= 0
+    let lst = await SiteWorkGroup.FetchEntireListByCompanyRef(this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.SiteWorkGroupList = lst.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
+    if(this.SiteWorkGroupRef == 0 && this.Entity.p.SiteWorkGroupRef !=0){
+      this.Entity.p.SiteWorkGroupRef = 0
+     this.appStateManage.StorageKey.setItem('sitegroup', String( this.Entity.p.SiteWorkGroupRef ));
+    }
+  };
 
   getSiteWorkMasterListByCompanyRef = async () => {
     this.MasterList = [];
@@ -158,7 +180,7 @@ export class SiteWorkMasterComponent implements OnInit {
       // if (!selectedSitegroupref) {
       //   return;
       // }
-      // this.appStateManage.StorageKey.setItem('sitegroup', String(sitegroup));
+      this.appStateManage.StorageKey.setItem('sitegroup', String(siteGroupRef));
       let List = this.MasterList.filter(e => e.p.SiteWorkGroupRef == siteGroupRef)
       this.DisplayMasterList = List.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
       this.loadPaginationData()

@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ValidationMessages } from 'src/app/classes/domain/constants';
 import { OfficeDutyandTime } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Office_Duty_and_Time/officedutyandtime';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -17,24 +19,44 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
   Entity: OfficeDutyandTime = OfficeDutyandTime.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
-  DetailsFormTitle: 'New Office Duty and Time' | 'Edit Office Duty and Time' = 'New Office Duty and Time';
+  DetailsFormTitle: 'New Office Duty and Time' | 'Edit Office Duty and Time' =
+    'New Office Duty and Time';
   IsDropdownDisabled: boolean = false;
   InitialEntity: OfficeDutyandTime = null as any;
   companyName = this.companystatemanagement.SelectedCompanyName;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  localFromTime: string = ""
-  localToTime: string = ""
+  localFromTime: string = '';
+  localToTime: string = '';
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
+  @ViewChild('officedutyandtimeForm') officedutyandtimeForm!: NgForm;
+  @ViewChild('FromTimeCtrl') FromTimeInputControl!: NgModel;
+  @ViewChild('ToTimeCtrl') ToTimeInputControl!: NgModel;
+  @ViewChild('LateMarkGraceTimeInMinsCtrl')
+  LateMarkGraceTimeInMinsInputControl!: NgModel;
+  @ViewChild('OvertimeGraceTimeInMinsCtrl')
+  OvertimeGraceTimeInMinsInputControl!: NgModel;
+
+  constructor(
+    private router: Router,
+    private uiUtils: UIUtils,
+    private appStateManage: AppStateManageService,
+    private utils: Utils,
+    private companystatemanagement: CompanyStateManagement
+  ) {}
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Office Duty and Time' : 'New Office Duty and Time';
+      this.DetailsFormTitle = this.IsNewEntity
+        ? 'New Office Duty and Time'
+        : 'New Office Duty and Time';
       this.Entity = OfficeDutyandTime.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
     } else {
       this.Entity = OfficeDutyandTime.CreateNewInstance();
       OfficeDutyandTime.SetCurrentInstance(this.Entity);
@@ -49,20 +71,26 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
   focusInput = () => {
     let txtName = document.getElementById('FromTime')!;
     txtName.focus();
-  }
+  };
 
   BackOfficeTime = async () => {
     this.router.navigate(['/homepage/Website/Office_Duty_Time']);
-  }
+  };
 
   SaveOfficeDutyTimeMaster = async () => {
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CompanyRef =
+      this.companystatemanagement.getCurrentCompanyRef();
     if (this.Entity.p.CreatedBy == 0) {
-      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.CreatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
+      this.Entity.p.UpdatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
@@ -72,12 +100,21 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Office Duty and Time saved successfully!');
+        await this.uiUtils.showSuccessToster(
+          'Office Duty and Time saved successfully!'
+        );
         this.Entity = OfficeDutyandTime.CreateNewInstance();
+        this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster('Office Duty and Time  Updated successfully!');
-        this.BackOfficeTime()
+        await this.uiUtils.showSuccessToster(
+          'Office Duty and Time  Updated successfully!'
+        );
+        this.BackOfficeTime();
       }
     }
   };
+
+  resetAllControls() {
+    this.officedutyandtimeForm.resetForm(); // this will reset all form controls to their initial state
+  }
 }

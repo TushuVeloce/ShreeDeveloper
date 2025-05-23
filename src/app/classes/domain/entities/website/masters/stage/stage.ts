@@ -80,7 +80,7 @@ export class Stage implements IPersistable<Stage> {
     } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
       vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     }
-    if (this.p.IsSubStageApplicable == true && this.p.IsStageTypeApplicable == true && this.p.StageType <= 0) {
+    if ((this.p.IsSubStageApplicable == true || this.p.IsStageTypeApplicable == true) && this.p.StageType <= 0) {
       vra.add('StageType', 'Stage Type is required');
     }
     if (this.p.DisplayOrder < 0) {

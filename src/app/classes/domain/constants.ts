@@ -106,11 +106,11 @@ export class AddressStateRefs {
 }
 
 export class ExpenseTypeRefs {
-  public static readonly MachinaryExpense: number = 100;
-  public static readonly LabourExpense: number = 200;
-  public static readonly OtherExpense: number = 300;
+  public static readonly MachinaryExpense: number = 105;
+  public static readonly LabourExpense: number = 110;
+  public static readonly OtherExpense: number = 115;
 }
 
 export class UnitRefs {
-  public static readonly TimeUnitRef: number = 100;
+  public static readonly TimeUnitRef: number = 205;
 }

@@ -33,7 +33,7 @@
           <div>
             <label>Date of Birth</label>
             <input type="date" name="DOB " [(ngModel)]="dob " class="form-control" id="DOB " required #DOBCtrl="ngModel"
-              (blur)="DOBCtrl.control.markAsTouched()" />
+              (blur)="DOBCtrl.control.markAsTouched()" [max]="maxDOB"/>
             <div *ngIf="(DOBCtrl.invalid && (DOBCtrl.touched || DOBCtrl.dirty))">
               <span class="validation-text" *ngIf="DOBCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
@@ -207,7 +207,7 @@
             <label>Date Of Joining</label>
             <input type="date" name="DateOfJoining " [(ngModel)]="dateofjoining " class="form-control"
               id="DateOfJoining " required #DateOfJoiningCtrl="ngModel"
-              (blur)="DateOfJoiningCtrl.control.markAsTouched()" />
+              (blur)="DateOfJoiningCtrl.control.markAsTouched()" [max]="today"/>
             <div *ngIf="(DateOfJoiningCtrl.invalid && (DateOfJoiningCtrl.touched || DateOfJoiningCtrl.dirty))">
               <span class="validation-text" *ngIf="DateOfJoiningCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>

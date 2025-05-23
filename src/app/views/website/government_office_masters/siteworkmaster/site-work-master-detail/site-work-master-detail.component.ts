@@ -58,10 +58,9 @@ export class SiteWorkMasterDetailComponent implements OnInit {
 
   async ngOnInit() {
     this.FormulateSiteWorkGroupListByCompanyRef()
-
     this.appStateManage.setDropdownDisabled(true);
-    const SiteGroupRef = this.appStateManage.StorageKey.getItem('sitegroup');
-    this.Entity.p.SiteWorkGroupRef = SiteGroupRef ? Number(SiteGroupRef) : 0;
+    // const SiteGroupRef = this.appStateManage.StorageKey.getItem('sitegroup');
+    // this.Entity.p.SiteWorkGroupRef = SiteGroupRef ? Number(SiteGroupRef) : 0;
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
 
@@ -73,6 +72,10 @@ export class SiteWorkMasterDetailComponent implements OnInit {
     } else {
       this.Entity = SiteWorkMaster.CreateNewInstance();
       SiteWorkMaster.SetCurrentInstance(this.Entity);
+      const SiteWorkGroupRef = Number( this.appStateManage.StorageKey.getItem('sitegroup'))
+      if(SiteWorkGroupRef){
+        this.Entity.p.SiteWorkGroupRef = SiteWorkGroupRef
+      }
     }
     this.InitialEntity = Object.assign(
       SiteWorkMaster.CreateNewInstance(),
@@ -117,7 +120,9 @@ export class SiteWorkMasterDetailComponent implements OnInit {
         await this.uiUtils.showSuccessToster(
           'Site Work Master saved successfully!'
         );
-        this.Entity = SiteWorkMaster.CreateNewInstance();
+        // this.Entity = SiteWorkMaster.CreateNewInstance();
+        this.Entity.p.Name =''
+        this.Entity.p.DisplayOrder = 0
         this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster(

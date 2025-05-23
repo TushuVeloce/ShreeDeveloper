@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgModel } from '@angular/forms';
+import { NgForm, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -32,6 +32,7 @@ export class EstimateStagesDetailsComponent implements OnInit {
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
 
+  @ViewChild('estimateForm') estimateForm!: NgForm;
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
   @ViewChild('AmountCtrl') AmountInputControl!: NgModel;
   @ViewChild('DescriptionCtrl') DescriptionInputControl!: NgModel;
@@ -119,18 +120,23 @@ export class EstimateStagesDetailsComponent implements OnInit {
     this.router.navigate(['/homepage/Website/Estimate_Stages']);
   }
 
-  resetAllControls = () => {
-    // reset touched
-    this.NameInputControl.control.markAsUntouched();
-    this.AmountInputControl.control.markAsUntouched();
-    this.DescriptionInputControl.control.markAsUntouched();
+  // resetAllControls = () => {
+  //   // reset touched
+  //   this.NameInputControl.control.markAsUntouched();
+  //   this.AmountInputControl.control.markAsUntouched();
+  //   this.DescriptionInputControl.control.markAsUntouched();
 
-    // reset dirty
-    this.NameInputControl.control.markAsPristine();
-    this.AmountInputControl.control.markAsPristine();
-    this.DescriptionInputControl.control.markAsPristine();
+  //   // reset dirty
+  //   this.NameInputControl.control.markAsPristine();
+  //   this.AmountInputControl.control.markAsPristine();
+  //   this.DescriptionInputControl.control.markAsPristine();
+  // }
+
+    resetAllControls() {
+  this.estimateForm.resetForm(); // this will reset all form controls to their initial state
+    }
   }
-}
+
 
 
 

@@ -42,6 +42,8 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   companyName = this.companystatemanagement.SelectedCompanyName;
   dateofjoining: string | null = null;
   dob: string | null = null;
+  today: string = new Date().toISOString().split('T')[0];
+  maxDOB: string = ''
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos
   PinCodePattern: string = ValidationPatterns.PinCode;
@@ -49,9 +51,9 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   PANPattern: string = ValidationPatterns.PAN;
   GSTINPattern: string = ValidationPatterns.GSTIN;
   LargeInputNumber: string = ValidationPatterns.LargeInputNumber;
-  INDPhoneNo: string = ValidationPatterns.INDPhoneNo;  
+  INDPhoneNo: string = ValidationPatterns.INDPhoneNo;
   Email: string = ValidationPatterns.Email
-  
+
   NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
   LargeInputNumberMsg: string = ValidationMessages.LargeInputNumberMsg;
   PinCodeMsg: string = ValidationMessages.PinCodeMsg;
@@ -92,6 +94,9 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     this.getDepartmentListByCompanyRef()
     this.getOfficeDutyTime();
     await this.FormulateCountryList();
+    const date = new Date();
+    date.setFullYear(date.getFullYear() - 14); // Subtract 14 years
+    this.maxDOB = date.toISOString().split('T')[0];
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
 
@@ -255,7 +260,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
       }
     }
   };
-  
+
   selectAllValue(event: MouseEvent): void {
     const input = event.target as HTMLInputElement;
     input.select();
@@ -301,7 +306,7 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   //   this.IFSCInputControl.control.markAsPristine();
   // }
 
-   resetAllControls() {
-  this.employeeForm.resetForm(); // this will reset all form controls to their initial state
-}
+  resetAllControls() {
+    this.employeeForm.resetForm(); // this will reset all form controls to their initial state
+  }
 }
