@@ -61,6 +61,9 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
   public CityName: string | null = null;
   public StateName: string | null = null;
   public CountryName: string | null = null;
+  selectedCountry: any[] = [];
+  selectedState: any[] = [];
+  selectedCity: any[] = [];
 
   Date: string | null = null;
   DateWithTime: string | null = null;
@@ -93,24 +96,135 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
     // cleanup logic if needed later
   }
 
+  // private async loadCustomerEnquiryIfEmployeeExists(): Promise<void> {
+  //   try {
+  //     this.isLoading = true;
+  //     this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
+  //     this.appStateManagement.setDropdownDisabled(true);
+  //     this.CountryList = await Country.FetchEntireList();
+  //     // this.StateList = await State.FetchEntireList();
+
+  //     // this.CityList = await City.FetchEntireList();
+  //     await this.getSiteListByCompanyRef();
+  //     await this.getEmployeeListByCompanyRef();
+
+  //     if (this.appStateManagement.StorageKey.getItem('Editable') == 'Edit') {
+  //       this.IsNewEntity = false;
+  //       this.DetailsFormTitle = this.IsNewEntity
+  //         ? 'New Customer Enquiry'
+  //         : 'Edit Customer Enquiry';
+  //       this.Entity = CustomerEnquiry.GetCurrentInstance();
+  //       // Site Visit Date
+  //       if (this.Entity.p.CustomerFollowUps[0].SiteVisitDate != '') {
+  //         // While Edit Converting date String into Date Format //
+  //         // convert  2025-02-23-00-00-00-000 to 2025-02-23
+  //         this.localSiteVisitDate = this.dtu.ConvertStringDateToShortFormat(
+  //           this.Entity.p.CustomerFollowUps[0].SiteVisitDate
+  //         );
+  //       }
+  //       // Office Visit Date
+
+  //       if (this.Entity.p.CustomerFollowUps[0].OfficeVisitDate) {
+  //         // While Edit Converting date String into Date Format //
+  //         this.localOfficeVisitDate = this.dtu.ConvertStringDateToShortFormat(
+  //           this.Entity.p.CustomerFollowUps[0].OfficeVisitDate
+  //         );
+  //         // this.localOfficeVisitDate = this.datePipe.transform(
+  //         //   this.dtu.FromString(this.Entity.p.OfficeVisitDate),
+  //         //   'yyyy-MM-dd'
+  //         // );
+  //       }
+
+  //       // Reminde Date
+  //       if (this.Entity.p.CustomerFollowUps[0].ReminderDate) {
+  //         this.localReminderDate = this.dtu.ConvertStringDateToShortFormat(
+  //           this.Entity.p.CustomerFollowUps[0].ReminderDate
+  //         );
+  //         // this.localReminderDate = this.datePipe.transform(
+  //         //   this.dtu.FromString(this.Entity.p.ReminderDate),
+  //         //   'yyyy-MM-dd'
+  //         // );
+  //       }
+
+  //       this.appStateManagement.StorageKey.removeItem('Editable');
+  //       this.IsPlotDetails = true;
+  //       if (this.Entity.p.CountryRef) {
+  //         this.StateList = this.StateList.filter(
+  //           (e) => e.p.CountryRef == this.Entity.p.CountryRef
+  //         );
+  //         if (this.Entity.p.StateRef) {
+  //           this.CityList = this.CityList.filter(
+  //             (e) => e.p.StateRef == this.Entity.p.StateRef
+  //           );
+  //         }
+  //       }
+  //       this.selectedCountry = [{ p: { Ref: this.Entity.p.CountryName, Name: this.Entity.p.CompanyRef } }];
+  //       this.selectedState = [{ p: { Ref: this.Entity.p.StateName, Name: this.Entity.p.StateRef } }];
+  //       this.selectedCity = [{ p: { Ref: this.Entity.p.CityName, Name: this.Entity.p.CityRef } }];
+  //     } else {
+  //       this.Entity = CustomerEnquiry.CreateNewInstance();
+  //       CustomerEnquiry.SetCurrentInstance(this.Entity);
+  //       // Check if CountryRef is already set (e.g., India is preselected)
+  //       if (this.Entity.p.CountryRef) {
+  //         // Load states for the preselected country
+  //         await this.getStateListByCountryRef(this.Entity.p.CountryRef);
+  //       }
+  //     }
+  //     this.InitialEntity = Object.assign(
+  //       CustomerEnquiry.CreateNewInstance(),
+  //       this.utils.DeepCopy(this.Entity)
+  //     ) as CustomerEnquiry;
+  //     // this.focusInput();
+
+  //     if (this.Entity.p.CustomerFollowUps[0].TransDateTime.trim().length <= 0) {
+  //       let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+
+  //       // this.BillDate = this.datePipe.transform(this.dtu.FromString(strCDT), 'yyyy-MM-dd');
+  //       this.Date = strCDT.substring(0, 10);
+  //       this.DateWithTime = strCDT;
+  //     } else {
+  //       this.Date = this.datePipe.transform(
+  //         this.dtu.FromString(this.Entity.p.CustomerFollowUps[0].TransDateTime),
+  //         'yyyy-MM-dd'
+  //       );
+  //       this.Date = this.Entity.p.CustomerFollowUps[0].TransDateTime.substring(
+  //         0,
+  //         10
+  //       );
+  //       this.DateWithTime = this.Entity.p.CustomerFollowUps[0].TransDateTime;
+  //     }
+  //   } catch (error) {
+
+
+  //   } finally {
+  //     this.isLoading = false;
+  //   }
+  // }
+
   private async loadCustomerEnquiryIfEmployeeExists(): Promise<void> {
     try {
       this.isLoading = true;
       this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
       this.appStateManagement.setDropdownDisabled(true);
-      this.CountryList = await Country.FetchEntireList();
-      // this.StateList = await State.FetchEntireList();
 
-      // this.CityList = await City.FetchEntireList();
+      await this.FormulateCountryList();
+      // Load State based on Default Country Ref
+      if (this.Entity.p.CountryRef) {
+        await this.getStateListByCountryRef(this.Entity.p.CountryRef);
+      }
+
+      // Load Cities based on Default State Ref
+      if (this.Entity.p.StateRef) {
+        await this.getCityListByStateRef(this.Entity.p.StateRef);
+      }
       await this.getSiteListByCompanyRef();
       await this.getEmployeeListByCompanyRef();
 
       if (this.appStateManagement.StorageKey.getItem('Editable') == 'Edit') {
         this.IsNewEntity = false;
-        this.DetailsFormTitle = this.IsNewEntity
-          ? 'New Customer Enquiry'
-          : 'Edit Customer Enquiry';
+        this.DetailsFormTitle = this.IsNewEntity ? 'New Customer Enquiry' : 'Edit Customer Enquiry';
         this.Entity = CustomerEnquiry.GetCurrentInstance();
+        console.log('this.Entity :', this.Entity);
         // Site Visit Date
         if (this.Entity.p.CustomerFollowUps[0].SiteVisitDate != '') {
           // While Edit Converting date String into Date Format //
@@ -121,7 +235,6 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
         }
 
         // Office Visit Date
-
         if (this.Entity.p.CustomerFollowUps[0].OfficeVisitDate) {
           // While Edit Converting date String into Date Format //
           this.localOfficeVisitDate = this.dtu.ConvertStringDateToShortFormat(
@@ -156,6 +269,14 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
             );
           }
         }
+        this.selectedCountry = [{ p: { Ref: this.Entity.p.CountryRef, Name: this.Entity.p.CountryName } }];
+        this.CountryName = this.selectedCountry[0].p.Name;
+        this.getStateListByCountryRef(this.Entity.p.CountryRef);
+        this.selectedState = [{ p: { Ref: this.Entity.p.StateRef, Name: this.Entity.p.StateName } }];
+        this.StateName = this.selectedState[0].p.Name;
+        this.getCityListByStateRef(this.Entity.p.StateRef);
+        this.selectedCity = [{ p: { Ref: this.Entity.p.CityRef, Name: this.Entity.p.CityName } }];
+        this.CityName = this.selectedCity[0].p.Name;
       } else {
         this.Entity = CustomerEnquiry.CreateNewInstance();
         CustomerEnquiry.SetCurrentInstance(this.Entity);
@@ -197,18 +318,9 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
   }
   public async selectCountryBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.MarketingModesList.map((item) => ({ p: item }));
       const options = this.CountryList;
-
-      let selectData: any[] = [];
-
-      this.openSelectModal(options, selectData, false, 'Select Country', 1, (selected) => {
-        selectData = selected;
+      this.openSelectModal(options, this.selectedCountry, false, 'Select Country', 1, (selected) => {
+        this.selectedCountry = selected;
 
         this.Entity.p.CountryRef = selected[0].p.Ref;
         this.CountryName = selected[0].p.Name;
@@ -229,10 +341,10 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
       // const options = this.MarketingModesList.map((item) => ({ p: item }));
       const options = this.StateList;
 
-      let selectData: any[] = [];
+      // let selectData: any[] = [];
 
-      this.openSelectModal(options, selectData, false, 'Select State', 1, (selected) => {
-        selectData = selected;
+      this.openSelectModal(options, this.selectedState, false, 'Select State', 1, (selected) => {
+        this.selectedState = selected;
 
         this.Entity.p.StateRef = selected[0].p.Ref;
         this.StateName = selected[0].p.Name;
@@ -242,6 +354,7 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
     }
   }
+
   public async selectCityBottomsheet(): Promise<void> {
     try {
       // Filter the list before mapping
@@ -252,10 +365,10 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
       // const options = this.MarketingModesList.map((item) => ({ p: item }));
       const options = this.CityList;
 
-      let selectData: any[] = [];
+      // let selectData: any[] = [];
 
-      this.openSelectModal(options, selectData, false, 'Select City', 1, (selected) => {
-        selectData = selected;
+      this.openSelectModal(options, this.selectedCity, false, 'Select City', 1, (selected) => {
+        this.selectedCity = selected;
 
         this.Entity.p.CityRef = selected[0].p.Ref;
         this.CityName = selected[0].p.Name;
@@ -264,6 +377,7 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
     }
   }
+
   public async selectInterestedSiteBottomsheet(): Promise<void> {
     try {
       // Filter the list before mapping
@@ -287,14 +401,13 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
     }
   }
+
   public async selectInterestedPlotsBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.MarketingModesList.map((item) => ({ p: item }));
+      if (this.SiteManagementRef <= 0) {
+        this.uiUtils.showWarningToster(`Please Select a Site`);
+       return; 
+      }
       const options = this.PlotList;
 
       let selectData: any[] = [];
@@ -436,42 +549,49 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
 
 
   // For country, state, city dropdowns
-  getStateListByCountryRef = async (CountryRef: number) => {
-    this.StateList = [];
-    this.Entity.p.StateRef = 0;
-    this.Entity.p.CityRef = 0;
-    if (CountryRef) {
-      let lst = await State.FetchEntireListByCountryRef(
-        CountryRef,
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-      );
+  FormulateCountryList = async () => {
+    this.CountryList = await Country.FetchEntireList(
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
 
-      this.StateList = lst;
+    // Set default country if exists
+    if (this.CountryList.length) {
+      const defaultCountry = this.CountryList.find(c => c.p.Ref === this.Entity.p.CountryRef);
+      this.Entity.p.CountryRef = defaultCountry ? defaultCountry.p.Ref : this.CountryList[0].p.Ref;
 
-      // Update CountryRef AFTER fetching data
-      this.Entity.p.CountryRef = CountryRef;
+      // Fetch the corresponding states
+      await this.getStateListByCountryRef(this.Entity.p.CountryRef);
     }
-  };
+  }
+
+  getStateListByCountryRef = async (CountryRef: number) => {
+    this.StateList = await State.FetchEntireListByCountryRef(
+      CountryRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
+    // Set default state if exists
+    if (this.StateList.length) {
+      const defaultState = this.StateList.find(s => s.p.Ref === this.Entity.p.StateRef);
+      this.Entity.p.StateRef = defaultState ? defaultState.p.Ref : this.StateList[0].p.Ref;
+
+      // Fetch the corresponding cities
+      await this.getCityListByStateRef(this.Entity.p.StateRef);
+    }
+  }
 
   getCityListByStateRef = async (StateRef: number) => {
-    this.CityList = [];
-    this.Entity.p.CityRef = 0;
-    if (StateRef) {
-      // Reset CityRef immediately when StateRef changes
-      let lst = await City.FetchEntireListByStateRef(
-        StateRef,
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-      );
+    this.CityList = await City.FetchEntireListByStateRef(
+      StateRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
 
-      this.CityList = lst;
-
-      // Update StateRef AFTER fetching data
-      this.Entity.p.StateRef = StateRef;
-    } else {
-      // Clear selection if state is cleared
-      this.Entity.p.CityRef = 0;
+    // Set default city if exists
+    if (this.CityList.length) {
+      const defaultCity = this.CityList.find(c => c.p.Ref === this.Entity.p.CityRef);
+      this.Entity.p.CityRef = defaultCity ? defaultCity.p.Ref : this.CityList[0].p.Ref;
     }
-  };
+  }
 
   // for site and plot
   private getSiteListByCompanyRef = async () => {
@@ -535,6 +655,7 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
     if (selectedPlot) {
       obj.EnsurePrimaryKeysWithValidValues();
       obj.p.SiteRef = this.SiteManagementRef;
+      obj.p.SiteName = this.SiteManagementName ?? '';
       obj.p.PlotRef = this.InterestedPlotRef;
       obj.p.PlotAreaInSqft = selectedPlot.p.AreaInSqft;
       obj.p.PlotAreaInSqm = selectedPlot.p.AreaInSqm;
@@ -651,7 +772,7 @@ export class AddEditCustomerEnquiryComponent implements OnInit {
         await this.uiUtils.showSuccessToster(
           'Customer Enquiry Updated successfully!'
         );
-        this.router.navigate(['pp_homepage/tabs/crm/customer-enquiry']);
+        this.router.navigate(['app_homepage/tabs/crm/customer-enquiry']);
       }
     }
   };

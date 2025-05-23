@@ -73,8 +73,11 @@ export class AddEditCustomerFollowUpComponent implements OnInit {
   LeadSourceList = DomainEnums.MarketingModesList();
   ContactModesList = DomainEnums.ContactModeList();
   CustomerStatusList = DomainEnums.CustomerStatusList();
-
-  companyRef = this.companystatemanagement.SelectedCompanyRef;
+  companyRef: number = 0
+  selectedContactMode: any[] = [];
+  selectedLeadSource: any[] = [];
+  selectedLeadHandleBy: any[] = [];
+  selectedCustomerStatus: any[] = [];
 
 
   constructor(
@@ -99,112 +102,196 @@ export class AddEditCustomerFollowUpComponent implements OnInit {
     // cleanup logic if needed later
   }
 
+  // private async loadCustomerFollowUpIfEmployeeExists(): Promise<void> {
+  //   try {
+  //     this.isLoading = true;
+  //     this.appStateManage.setDropdownDisabled(true);
+  //        this.CountryList = await Country.FetchEntireList();
+  //        this.EmployeeList = await Employee.FetchEntireList();
+
+  //          await this.getSiteListByCompanyRef();
+  //        // Check if CountryRef is already set (e.g., India is preselected)
+  //        if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+  //          // debugger
+  //          this.IsNewEntity = false;
+  //          this.Entity = CustomerFollowUp.GetCurrentInstance();
+  //          // Reset Required Entities
+  //          this.Entity.p.ReminderDate = '';
+  //          this.Entity.p.Reason = '';
+  //          this.Entity.p.CustomerStatus = 0;
+  //          this.Entity.p.ContactMode = 0;
+  //          this.Entity.p.CustomerRequirement = '';
+
+  //          //  this.CustomerEnquiryEntity = CustomerEnquiry.GetCurrentInstance();
+
+  //          // While Edit Converting date String into Date Format //
+  //          if (this.Entity.p.ReminderDate) {
+  //            this.localReminderDate = this.dtu.ConvertStringDateToShortFormat(
+  //              this.Entity.p.ReminderDate
+  //            );
+  //            // this.localReminderDate = this.datePipe.transform(
+  //            //   this.dtu.FromString(this.Entity.p.ReminderDate),
+  //            //   'yyyy-MM-dd'
+  //            // );
+  //          }
+
+  //          if (this.Entity.p.SiteVisitDate != '') {
+  //            // While Edit Converting date String into Date Format //
+  //            // convert  2025-02-23-00-00-00-000 to 2025-02-23
+  //            this.localSiteVisitDate = this.dtu.ConvertStringDateToShortFormat(
+  //              this.Entity.p.SiteVisitDate
+  //            );
+  //          }
+  //          //else this.localSiteVisitDate = this.dtu.ConvertStringDateToShortFormat(this.localSiteVisitDate)
+
+  //          if (this.Entity.p.OfficeVisitDate) {
+  //            // While Edit Converting date String into Date Format //
+  //            this.localOfficeVisitDate = this.dtu.ConvertStringDateToShortFormat(
+  //              this.Entity.p.OfficeVisitDate
+  //            );
+  //            // this.localOfficeVisitDate = this.datePipe.transform(
+  //            //   this.dtu.FromString(this.Entity.p.OfficeVisitDate),
+  //            //   'yyyy-MM-dd'
+  //            // );
+  //          }
+  //          let plotDetailsArray: CustomerFollowUpPlotDetailsProps[] = [];
+  //          plotDetailsArray = [...this.Entity.p.CustomerFollowUpPlotDetails];
+  //          plotDetailsArray.forEach((e) => (e.Ref = 0));
+  //          this.Entity.p.CustomerFollowUpPlotDetails = [];
+  //          this.Entity.p.CustomerFollowUpPlotDetails = plotDetailsArray;
+  //          this.appStateManage.StorageKey.removeItem('Editable');
+  //        } else {
+  //          this.Entity = CustomerFollowUp.CreateNewInstance();
+  //          CustomerFollowUp.SetCurrentInstance(this.Entity);
+  //        }
+  //        this.InitialEntity = Object.assign(
+  //          CustomerFollowUp.CreateNewInstance(),
+  //          this.utils.DeepCopy(this.Entity)
+  //        ) as CustomerFollowUp;
+  //        // this.focusInput();
+
+  //        if (this.Entity.p.TransDateTime.trim().length <= 0) {
+  //          let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+
+  //          // this.BillDate = this.datePipe.transform(this.dtu.FromString(strCDT), 'yyyy-MM-dd');
+  //          this.Date = strCDT.substring(0, 10);
+  //          this.DateWithTime = strCDT;
+  //        } else {
+  //          this.Date = this.datePipe.transform(
+  //            this.dtu.FromString(this.Entity.p.TransDateTime),
+  //            'yyyy-MM-dd'
+  //          );
+  //          this.Date = this.Entity.p.TransDateTime.substring(
+  //            0,
+  //            10
+  //          );
+  //          this.DateWithTime = this.Entity.p.TransDateTime;
+  //     }
+  //   } catch (error) {
+
+
+  //   } finally {
+  //     this.isLoading = false;
+  //   }
+  // }
+
   private async loadCustomerFollowUpIfEmployeeExists(): Promise<void> {
     try {
       this.isLoading = true;
       this.appStateManage.setDropdownDisabled(true);
-         this.CountryList = await Country.FetchEntireList();
-         this.EmployeeList = await Employee.FetchEntireList();
+      this.companyRef = Number(this.appStateManage.StorageKey.getItem('SelectedCompanyRef'));
+      this.getEmployeeListByCompanyRef()
+      this.getSiteListByCompanyRef();
+      // Check if CountryRef is already set (e.g., India is preselected)
+      if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+        this.IsNewEntity = false;
+        this.Entity = CustomerFollowUp.GetCurrentInstance();
+        console.log('this.Entity :', this.Entity);
+        // Reset Required Entities
+        this.Entity.p.ReminderDate = '';
+        this.Entity.p.Reason = '';
+        this.Entity.p.CustomerStatus = 0;
+        this.Entity.p.ContactMode = 0;
+        this.Entity.p.CustomerRequirement = '';
 
-           await this.getSiteListByCompanyRef();
-         // Check if CountryRef is already set (e.g., India is preselected)
-         if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-           // debugger
-           this.IsNewEntity = false;
-           this.Entity = CustomerFollowUp.GetCurrentInstance();
-           // Reset Required Entities
-           this.Entity.p.ReminderDate = '';
-           this.Entity.p.Reason = '';
-           this.Entity.p.CustomerStatus = 0;
-           this.Entity.p.ContactMode = 0;
-           this.Entity.p.CustomerRequirement = '';
+        // While Edit Converting date String into Date Format //
+        if (this.Entity.p.ReminderDate) {
+          this.localReminderDate = this.dtu.ConvertStringDateToShortFormat(
+            this.Entity.p.ReminderDate
+          );
+        }
 
-           //  this.CustomerEnquiryEntity = CustomerEnquiry.GetCurrentInstance();
+        if (this.Entity.p.SiteVisitDate != '') {
+          // While Edit Converting date String into Date Format //
+          // convert  2025-02-23-00-00-00-000 to 2025-02-23
+          this.localSiteVisitDate = this.dtu.ConvertStringDateToShortFormat(
+            this.Entity.p.SiteVisitDate
+          );
+        }
+        if (this.Entity.p.OfficeVisitDate) {
+          // While Edit Converting date String into Date Format //
+          this.localOfficeVisitDate = this.dtu.ConvertStringDateToShortFormat(
+            this.Entity.p.OfficeVisitDate
+          );
+        }
+        this.selectedContactMode = [{ p: { Ref: this.Entity.p.ContactMode, Name: this.Entity.p.ContactMode } }];
+        this.selectedLeadSource = [{ p: { Ref: this.Entity.p.LeadSource, Name: this.Entity.p.LeadSource } }];
+        this.selectedCustomerStatus = [{ p: { Ref: this.Entity.p.CustomerStatus, Name: this.Entity.p.CustomerStatusName } }];
+        this.selectedLeadHandleBy = [{ p: { Ref: this.Entity.p.LeadHandleBy, Name: this.Entity.p.LeadHandleBy } }];
 
-           // While Edit Converting date String into Date Format //
-           if (this.Entity.p.ReminderDate) {
-             this.localReminderDate = this.dtu.ConvertStringDateToShortFormat(
-               this.Entity.p.ReminderDate
-             );
-             // this.localReminderDate = this.datePipe.transform(
-             //   this.dtu.FromString(this.Entity.p.ReminderDate),
-             //   'yyyy-MM-dd'
-             // );
-           }
+        let plotDetailsArray: CustomerFollowUpPlotDetailsProps[] = [];
+        plotDetailsArray = [...this.Entity.p.CustomerFollowUpPlotDetails];
+        plotDetailsArray.forEach((e) => (e.Ref = 0));
+        this.Entity.p.CustomerFollowUpPlotDetails = [];
+        this.Entity.p.CustomerFollowUpPlotDetails = plotDetailsArray;
+        this.appStateManage.StorageKey.removeItem('Editable');
+      } else {
+        this.Entity = CustomerFollowUp.CreateNewInstance();
+        CustomerFollowUp.SetCurrentInstance(this.Entity);
+      }
+      this.InitialEntity = Object.assign(
+        CustomerFollowUp.CreateNewInstance(),
+        this.utils.DeepCopy(this.Entity)
+      ) as CustomerFollowUp;
 
-           if (this.Entity.p.SiteVisitDate != '') {
-             // While Edit Converting date String into Date Format //
-             // convert  2025-02-23-00-00-00-000 to 2025-02-23
-             this.localSiteVisitDate = this.dtu.ConvertStringDateToShortFormat(
-               this.Entity.p.SiteVisitDate
-             );
-           }
-           //else this.localSiteVisitDate = this.dtu.ConvertStringDateToShortFormat(this.localSiteVisitDate)
-
-           if (this.Entity.p.OfficeVisitDate) {
-             // While Edit Converting date String into Date Format //
-             this.localOfficeVisitDate = this.dtu.ConvertStringDateToShortFormat(
-               this.Entity.p.OfficeVisitDate
-             );
-             // this.localOfficeVisitDate = this.datePipe.transform(
-             //   this.dtu.FromString(this.Entity.p.OfficeVisitDate),
-             //   'yyyy-MM-dd'
-             // );
-           }
-           let plotDetailsArray: CustomerFollowUpPlotDetailsProps[] = [];
-           plotDetailsArray = [...this.Entity.p.CustomerFollowUpPlotDetails];
-           plotDetailsArray.forEach((e) => (e.Ref = 0));
-           this.Entity.p.CustomerFollowUpPlotDetails = [];
-           this.Entity.p.CustomerFollowUpPlotDetails = plotDetailsArray;
-           this.appStateManage.StorageKey.removeItem('Editable');
-         } else {
-           this.Entity = CustomerFollowUp.CreateNewInstance();
-           CustomerFollowUp.SetCurrentInstance(this.Entity);
-         }
-         this.InitialEntity = Object.assign(
-           CustomerFollowUp.CreateNewInstance(),
-           this.utils.DeepCopy(this.Entity)
-         ) as CustomerFollowUp;
-         // this.focusInput();
-
-         if (this.Entity.p.TransDateTime.trim().length <= 0) {
-           let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-
-           // this.BillDate = this.datePipe.transform(this.dtu.FromString(strCDT), 'yyyy-MM-dd');
-           this.Date = strCDT.substring(0, 10);
-           this.DateWithTime = strCDT;
-         } else {
-           this.Date = this.datePipe.transform(
-             this.dtu.FromString(this.Entity.p.TransDateTime),
-             'yyyy-MM-dd'
-           );
-           this.Date = this.Entity.p.TransDateTime.substring(
-             0,
-             10
-           );
-           this.DateWithTime = this.Entity.p.TransDateTime;
+      if (this.Entity.p.TransDateTime.trim().length <= 0) {
+        let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+        this.Date = strCDT.substring(0, 10);
+        this.DateWithTime = strCDT;
+      } else {
+        this.Date = this.datePipe.transform(
+          this.dtu.FromString(this.Entity.p.TransDateTime),
+          'yyyy-MM-dd'
+        );
+        this.Date = this.Entity.p.TransDateTime.substring(
+          0,
+          10
+        );
+        this.DateWithTime = this.Entity.p.TransDateTime;
       }
     } catch (error) {
-
 
     } finally {
       this.isLoading = false;
     }
   }
+  getEmployeeListByCompanyRef = async () => {
+    if (this.companyRef <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.EmployeeList = lst;
+  }
 
-  public async selectContactModeBottomsheet(): Promise<void> {
+  public   async selectContactModeBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
       const options = this.ContactModesList.map((item) => ({ p: item }));
 
-      let selectData: any[] = [];
+      // let selectData: any[] = [];
 
-      this.openSelectModal(options, selectData, false, 'Select Contact Mode', 1, (selected) => {
-        selectData = selected;
+      this.openSelectModal(options, this.selectedContactMode, false, 'Select Contact Mode', 1, (selected) => {
+        this.selectedContactMode = selected;
 
         this.Entity.p.ContactMode = selected[0].p.Ref;
         this.contactModeName = selected[0].p.Name;
@@ -216,12 +303,6 @@ export class AddEditCustomerFollowUpComponent implements OnInit {
 
   public async selectInterestedSiteBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.MarketingModesList.map((item) => ({ p: item }));
       const options = this.SiteList;
 
       let selectData: any[] = [];
@@ -239,12 +320,6 @@ export class AddEditCustomerFollowUpComponent implements OnInit {
   }
   public async selectInterestedPlotsBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.MarketingModesList.map((item) => ({ p: item }));
       const options = this.PlotList;
 
       let selectData: any[] = [];
@@ -261,17 +336,10 @@ export class AddEditCustomerFollowUpComponent implements OnInit {
   }
   public async selectLeadSourceBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
       const options = this.LeadSourceList.map((item) => ({ p: item }));
-
-      let selectData: any[] = [];
-
-      this.openSelectModal(options, selectData, false, 'Select Lead Source', 1, (selected) => {
-        selectData = selected;
+      // let selectData: any[] = [];
+      this.openSelectModal(options, this.selectedLeadSource, false, 'Select Lead Source', 1, (selected) => {
+        this.selectedLeadSource = selected;
 
         this.Entity.p.LeadSource = selected[0].p.Ref;
         this.LeadSourceName = selected[0].p.Name;
@@ -283,19 +351,10 @@ export class AddEditCustomerFollowUpComponent implements OnInit {
   }
   public async selectLeadHandleByBottomsheet(): Promise<void> {
     try {
-      // Filter the list before mapping
-      // const filteredList = this.CustomerStatusList.filter(
-      //   (item) => item.Ref !== CustomerStatus.ConvertToDeal && item.Ref !== CustomerStatus.LeadClosed
-      // );
-
-      // const options = this.ContactModeList.map((item) => ({ p: item }));
       const options = this.EmployeeList;
-
-      let selectData: any[] = [];
-
-      this.openSelectModal(options, selectData, false, 'Select Contact Mode', 1, (selected) => {
-        selectData = selected;
-
+      // let selectData: any[] = [];
+      this.openSelectModal(options, this.selectedLeadHandleBy, false, 'Select Contact Mode', 1, (selected) => {
+        this.selectedLeadHandleBy = selected;
         this.Entity.p.LeadHandleBy = selected[0].p.Ref;
         this.LeadHandleByName = selected[0].p.Name;
       });
@@ -307,10 +366,10 @@ export class AddEditCustomerFollowUpComponent implements OnInit {
     try {
       const options = this.CustomerStatusList.map((item) => ({ p: item }));
 
-      let selectData: any[] = [];
+      // let selectData: any[] = [];
 
-      this.openSelectModal(options, selectData, false, 'Select Customer Status', 1, (selected) => {
-        selectData = selected;
+      this.openSelectModal(options, this.selectedCustomerStatus, false, 'Select Customer Status', 1, (selected) => {
+        this.selectedCustomerStatus = selected;
 
         this.Entity.p.CustomerStatusName = selected[0].p.Name;
         this.Entity.p.CustomerStatus = selected[0].p.Ref;
@@ -381,12 +440,11 @@ export class AddEditCustomerFollowUpComponent implements OnInit {
   // for site and plot
   private getSiteListByCompanyRef = async () => {
     let lst = await Site.FetchEntireListByCompanyRef(
-      this.companyRef(),
+      this.companyRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.SiteList = lst;
   };
-
 
   getPlotBySiteRefList = async (siteRef: number) => {
     if (siteRef <= 0) {
@@ -403,11 +461,6 @@ export class AddEditCustomerFollowUpComponent implements OnInit {
     this.DisplayMasterList = this.PlotList;
     this.IsPlotDetails = true;
   };
-
-
-  // onPlotSelected(selectedvalue: any) {
-  //   this.Entity.p.CustomerFollowUpPlotDetails = selectedvalue;
-  // }
 
   addDataToCustomerFollowUpPlotDetail = () => {
     if (this.SiteManagementRef <= 0) {
@@ -426,7 +479,6 @@ export class AddEditCustomerFollowUpComponent implements OnInit {
     );
     let obj = CustomerFollowUpPlotDetails.CreateNewInstance();
     if (selectedPlot) {
-      // obj.EnsurePrimaryKeysWithValidValues();
       obj.p.SiteRef = this.SiteManagementRef;
       obj.p.PlotRef = this.InterestedPlotRef;
       obj.p.PlotAreaInSqft = selectedPlot.p.AreaInSqft;
@@ -436,14 +488,10 @@ export class AddEditCustomerFollowUpComponent implements OnInit {
         obj.p.SiteName = selectedSite.p.Name;
       }
     }
-
     // Check if the plot is already added
     const isAlreadyAdded = this.Entity.p.CustomerFollowUpPlotDetails.some(
       (plot) => plot.PlotRef === this.InterestedPlotRef
     );
-    // const isAlreadyAdded = this.plotDetailsArray.some(
-    //   (plot) => plot.PlotRef === this.InterestedPlotRef);
-
     if (isAlreadyAdded) {
       this.uiUtils.showWarningToster(
         'This plot is already added to the table.'
@@ -483,42 +531,31 @@ export class AddEditCustomerFollowUpComponent implements OnInit {
     });
     let CurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
     this.Entity.p.TransDateTime = CurrentDateTime;
-
-    // -----------------------------------
     await this.GenerateCustomerFollowUpPlotDetailsRef();
-
-    // return
     this.Entity.p.Ref = await CustomerFollowUp.getPrimaryKeysWithValidValues();
 
     // Update CustomerEnquiryFollowUpDetailsRef for each PlotDetail
-
     this.Entity.p.CustomerFollowUpPlotDetails.forEach((plotDetail) => {
       plotDetail.CustomerFollowUpRef = this.Entity.p.Ref;
     });
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
     // convert date 2025-02-23 to 2025-02-23-00-00-00-000
     this.Entity.p.SiteVisitDate = this.dtu.ConvertStringDateToFullFormat(
-      this.localSiteVisitDate ? this.localSiteVisitDate:''
+      this.localSiteVisitDate ? this.localSiteVisitDate : ''
     );
     this.Entity.p.OfficeVisitDate = this.dtu.ConvertStringDateToFullFormat(
-      this.localOfficeVisitDate ? this.localOfficeVisitDate:''
+      this.localOfficeVisitDate ? this.localOfficeVisitDate : ''
     );
     this.Entity.p.ReminderDate = this.dtu.ConvertStringDateToFullFormat(
-      this.localReminderDate ? this.localReminderDate:''
+      this.localReminderDate ? this.localReminderDate : ''
     );
-    // return
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-
-    // return
-    // this.Entity.p.ContactMode = this.CustomerEnquiryEntity.p.CustomerFollowUps[0].ContactMode;
-    // // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     } else {
-      // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster(
           'Customer Enquiry saved successfully!'
@@ -535,7 +572,7 @@ export class AddEditCustomerFollowUpComponent implements OnInit {
   };
 
   public goBack(): void {
-    this.router.navigate(['/app_h omepage/tabs/crm/customer-follow-up'], { replaceUrl: true });
+    this.router.navigate(['/app_homepage/tabs/crm/customer-follow-up'], { replaceUrl: true });
   }
 
 }

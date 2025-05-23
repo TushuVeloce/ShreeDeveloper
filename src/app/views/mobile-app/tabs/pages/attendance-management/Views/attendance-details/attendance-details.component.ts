@@ -30,7 +30,8 @@ export class AttendanceDetailsComponent implements OnInit {
   constructor(
     private uiUtils: UIUtils,
     private appState: AppStateManageService,
-    private dateConversionService: DateconversionService
+    private dateConversionService: DateconversionService,
+    private dateService: DateconversionService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -94,37 +95,40 @@ export class AttendanceDetailsComponent implements OnInit {
       );
       this.monthlyAttendanceLogsList = logs;
       this.filteredMonthlyAttendanceLogsList = logs;
+      console.log('filteredMonthlyAttendanceLogsList :', this.filteredMonthlyAttendanceLogsList);
     } catch (error) {
       this.handleError(error, 'Fetching monthly logs');
     }
   }
 
-  // Custom date parsing for "DD-MM-YYYY"
-  private parseCustomDate(dateString: string): Date | null {
-    if (!dateString) return null;
-    const [day, month, year] = dateString.split('-').map(Number);
-    return new Date(year, month - 1, day);
-  }
-
   getDayName(dateString: string): string {
-    const date = this.parseCustomDate(dateString);
-    return date
-      ? date.toLocaleDateString(this.DEFAULT_LOCALE, { weekday: 'long' })
-      : '--';
+    const formatted = this.formatDate(dateString); // returns "23-05-2025"
+    const date = this.parseFormattedDate(formatted);
+    if (isNaN(date.getTime())) return '--';
+
+    return date.toLocaleDateString(this.DEFAULT_LOCALE, { weekday: 'long' });
   }
 
   formatDay(dateString: string): string {
-    const date = this.parseCustomDate(dateString);
-    return date
-      ? date.toLocaleDateString(this.DEFAULT_LOCALE, {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-      })
-      : '--';
+    const formatted = this.formatDate(dateString); // returns "23-05-2025"
+    const date = this.parseFormattedDate(formatted);
+    if (isNaN(date.getTime())) return '--';
+
+    return date.toLocaleDateString(this.DEFAULT_LOCALE, {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
   }
 
+  private parseFormattedDate(dateString: string): Date {
+    const [day, month, year] = dateString.split('-');
+    return new Date(`${year}-${month}-${day}`);
+  }  
+  
+  // Custom date parsing for "DD-MM-YYYY"
   formatDate(date: string | Date): string {
+    // console.log('this.dateConversionService.formatDate(date) :', this.dateConversionService.formatDate(date));
     return this.dateConversionService.formatDate(date);
   }
 
