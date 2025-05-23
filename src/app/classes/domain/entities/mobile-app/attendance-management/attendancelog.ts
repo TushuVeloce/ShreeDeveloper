@@ -179,7 +179,7 @@ export class AttendanceLog implements IPersistable<AttendanceLog> {
   public static async FetchEntireListByCompanyRef(employeeRef: number, CompanyRef: number, TransDateTime: string, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new AttendanceLogFetchRequest();
     req.CompanyRefs.push(CompanyRef);
-    req.CompanyRefs.push(employeeRef);
+    req.EmployeeRefs.push(employeeRef);
     req.TransDateTime = TransDateTime;
     let tdResponse = await AttendanceLog.FetchTransportData(req, errorHandler) as TransportData;
     return AttendanceLog.ListFromTransportData(tdResponse);
