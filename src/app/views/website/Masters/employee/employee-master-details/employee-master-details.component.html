@@ -263,10 +263,10 @@
           <div>
             <label>IFSC</label>
             <input type="text" name="IFSC" [(ngModel)]="Entity.p.IFSC" class="form-control" id="IFSC" required
-              #IFSCCodeCtrl="ngModel" [pattern]="IFSCPattern" (blur)="IFSCCodeCtrl.control.markAsTouched()" />
-            <div *ngIf="(IFSCCodeCtrl.invalid && (IFSCCodeCtrl.touched || IFSCCodeCtrl.dirty))">
-              <span class="validation-text" *ngIf="IFSCCodeCtrl.errors?.['pattern']">{{IFSCMsg}}</span>
-              <span class="validation-text" *ngIf="IFSCCodeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              #IFSCCtrl="ngModel" [pattern]="IFSCPattern" (blur)="IFSCCtrl.control.markAsTouched()" />
+            <div *ngIf="(IFSCCtrl.invalid && (IFSCCtrl.touched || IFSCCtrl.dirty))">
+              <span class="validation-text" *ngIf="IFSCCtrl.errors?.['pattern']">{{IFSCMsg}}</span>
+              <span class="validation-text" *ngIf="IFSCCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
         </div>
