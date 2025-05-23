@@ -72,8 +72,8 @@ export class SiteWorkMasterDetailComponent implements OnInit {
     } else {
       this.Entity = SiteWorkMaster.CreateNewInstance();
       SiteWorkMaster.SetCurrentInstance(this.Entity);
-      const SiteWorkGroupRef = Number( this.appStateManage.StorageKey.getItem('sitegroup'))
-      if(SiteWorkGroupRef){
+      const SiteWorkGroupRef = Number(this.appStateManage.StorageKey.getItem('sitegroup'))
+      if (SiteWorkGroupRef) {
         this.Entity.p.SiteWorkGroupRef = SiteWorkGroupRef
       }
     }
@@ -83,8 +83,12 @@ export class SiteWorkMasterDetailComponent implements OnInit {
     ) as SiteWorkMaster;
   }
 
+  onSiteWorkDone = () => {
+    this.appStateManage.StorageKey.setItem('sitegroup', String(this.Entity.p.SiteWorkGroupRef));
+  }
+
   private FormulateSiteWorkGroupListByCompanyRef = async () => {
-      if (this.companyRef() <= 0) {
+    if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
@@ -95,7 +99,7 @@ export class SiteWorkMasterDetailComponent implements OnInit {
 
   };
 
-   // for value 0 selected while click on Input //
+  // for value 0 selected while click on Input //
   selectAllValue(event: MouseEvent): void {
     const input = event.target as HTMLInputElement;
     input.select();
@@ -121,7 +125,7 @@ export class SiteWorkMasterDetailComponent implements OnInit {
           'Site Work Master saved successfully!'
         );
         // this.Entity = SiteWorkMaster.CreateNewInstance();
-        this.Entity.p.Name =''
+        this.Entity.p.Name = ''
         this.Entity.p.DisplayOrder = 0
         this.resetAllControls()
       } else {
@@ -139,7 +143,7 @@ export class SiteWorkMasterDetailComponent implements OnInit {
 
   resetAllControls = () => {
     // reset touched
-   this.NameInputControl.control.markAsUntouched();
+    this.NameInputControl.control.markAsUntouched();
     this.CodeInputControl.control.markAsUntouched();
 
     // reset dirty
