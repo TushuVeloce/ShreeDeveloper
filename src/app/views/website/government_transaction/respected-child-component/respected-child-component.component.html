@@ -1,42 +1,45 @@
 <div class="row" [ngSwitch]="SectionName">
   <div class="col-md-1"></div>
   <div class="col-md-10">
-    <app-tp-office-details *ngSwitchCase="'TP Office'" [SelectedTransactionType]="SelectedTransactionType"
+    <app-tp-office-details *ngSwitchCase="SiteWorkGroupList[0].p.Name"
+      [SelectedTransactionType]="SelectedTransactionType"
       (onEntitySaved)="onAddTransactionSubmit($event)"></app-tp-office-details>
   </div>
   <div class="col-md-1"></div>
 
   <div class="col-md-1"></div>
   <div class="col-md-10">
-    <app-na-letter-details *ngSwitchCase="'परिशिष्ठ A(NA)'" [SelectedTransactionType]="SelectedTransactionType"
+    <app-na-letter-details *ngSwitchCase="SiteWorkGroupList[1].p.Name"
+      [SelectedTransactionType]="SelectedTransactionType"
       (onEntitySaved)="onAddTransactionSubmit($event)"></app-na-letter-details>
   </div>
   <div class="col-md-1"></div>
 
   <div class="col-md-1"></div>
   <div class="col-md-10">
-    <app-mojani-details *ngSwitchCase="'मोजणी'" [SelectedTransactionType]="SelectedTransactionType"
+    <app-mojani-details *ngSwitchCase="SiteWorkGroupList[2].p.Name" [SelectedTransactionType]="SelectedTransactionType"
       (onEntitySaved)="onAddTransactionSubmit($event)"></app-mojani-details>
   </div>
   <div class="col-md-1"></div>
 
   <div class="col-md-1"></div>
   <div class="col-md-10">
-    <app-ulc-details *ngSwitchCase="'ULC'" [SelectedTransactionType]="SelectedTransactionType"
+    <app-ulc-details *ngSwitchCase="SiteWorkGroupList[3].p.Name" [SelectedTransactionType]="SelectedTransactionType"
       (onEntitySaved)="onAddTransactionSubmit($event)"></app-ulc-details>
   </div>
   <div class="col-md-1"></div>
 
   <div class="col-md-1"></div>
   <div class="col-md-10">
-    <app-final-layout-details *ngSwitchCase="'Final Layout'" [SelectedTransactionType]="SelectedTransactionType"
+    <app-final-layout-details *ngSwitchCase="SiteWorkGroupList[4].p.Name"
+      [SelectedTransactionType]="SelectedTransactionType"
       (onEntitySaved)="onAddTransactionSubmit($event)"></app-final-layout-details>
   </div>
   <div class="col-md-1"></div>
 
   <div class="col-md-1"></div>
   <div class="col-md-10">
-    <app-k-ja-pa-details *ngSwitchCase="'क जा पा'" [SelectedTransactionType]="SelectedTransactionType"
+    <app-k-ja-pa-details *ngSwitchCase="SiteWorkGroupList[5].p.Name" [SelectedTransactionType]="SelectedTransactionType"
       (onEntitySaved)="onAddTransactionSubmit($event)"></app-k-ja-pa-details>
   </div>
   <div class="col-md-1"></div>
