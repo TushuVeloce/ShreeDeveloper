@@ -32,6 +32,7 @@ export class GovernmentTransactionDetailsComponent implements OnInit {
     }
     this.Entity = GovernmentTransaction.GetCurrentInstance();
     let arr = JSON.parse(this.Entity.p.TransactionJson);
+    console.log(arr);
     this.appStateManage.StorageKey.setItem('TransactionJson', JSON.stringify(arr));
     this.TransactionJsonArray = arr;
 

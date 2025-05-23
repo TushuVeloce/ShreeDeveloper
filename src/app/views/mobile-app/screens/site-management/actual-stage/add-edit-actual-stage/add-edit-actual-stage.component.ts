@@ -302,6 +302,7 @@ export class AddEditActualStageComponent implements OnInit {
         this.IsNewEntity = false;
         this.DetailsFormTitle = this.IsNewEntity ? 'New Actual Stage' : 'Edit Actual Stage';
         this.Entity = ActualStages.GetCurrentInstance();
+        console.log(' this.Entity  :',  this.Entity );
         if (this.Entity.p.Date != '') {
           const datePart = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date); // e.g., "2025-05-14"
           const now = new Date();

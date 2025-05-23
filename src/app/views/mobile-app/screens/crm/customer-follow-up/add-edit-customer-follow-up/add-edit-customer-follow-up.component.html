@@ -15,25 +15,6 @@
       </ng-template>
     </ion-modal>
 
-    <!-- Select Contact Mode -->
-    <ion-item class="input-item" button (click)="selectContactModeBottomsheet()">
-      <ion-label>Contact Mode</ion-label>
-
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ contactModeName|| 'Select' }}
-      </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-    </ion-item>
-
-    <!-- Reason -->
-    <ion-item class="input-item">
-      <ion-input label="Reason" labelPlacement="floating" placeholder="Enter Reason" [(ngModel)]="Entity.p.Reason">
-      </ion-input>
-    </ion-item>
-
     <!-- Customer Name -->
     <ion-item class="input-item">
       <ion-input label="Customer Name" labelPlacement="floating" placeholder="Enter Customer Name"
@@ -90,12 +71,30 @@
         {{ Entity.p.PinCode }}
       </ion-text>
     </ion-item>
+    <!-- Select Contact Mode -->
+    <ion-item class="input-item" button (click)="selectContactModeBottomsheet()">
+      <ion-label>Contact Mode</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ contactModeName|| 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
+    <!-- Reason -->
+    <ion-item class="input-item">
+      <ion-input label="Reason" labelPlacement="floating" placeholder="Enter Reason" [(ngModel)]="Entity.p.Reason">
+      </ion-input>
+    </ion-item>
 
     <!-- Customer Requirement -->
     <ion-item class="input-item">
-      <ion-textarea label="Customer Requirement" labelPlacement="floating" placeholder="Enter Customer Requirement"
+      <ion-input label="Customer Requirement" labelPlacement="floating" placeholder="Enter Customer Requirement"
         [(ngModel)]="Entity.p.CustomerRequirement">
-      </ion-textarea>
+      </ion-input>
     </ion-item>
 
     <!-- from of add Plot Table -->
@@ -239,13 +238,14 @@
         <ion-text slot="end" class="status-text">
           {{ Entity.p.CustomerStatusName || 'Select' }}
         </ion-text>
-  
+
         <!-- Dropdown icon (chevron) on the right -->
         <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
       </ion-item>
 
       <!-- Next Site Visit Date -->
-      <ion-item class="input-item" *ngIf="Entity.p.CustomerStatus !== CustomerStatuscode.LeadClosed && Entity.p.CustomerStatus !== CustomerStatuscode.ConvertToDeal">
+      <ion-item class="input-item"
+        *ngIf="Entity.p.CustomerStatus !== CustomerStatuscode.LeadClosed && Entity.p.CustomerStatus !== CustomerStatuscode.ConvertToDeal">
         <ion-label>Next Site Visit Date</ion-label>
         <ion-datetime-button datetime="NextSiteVisitDate" trigger="site-visit-modal"></ion-datetime-button>
       </ion-item>
@@ -257,7 +257,8 @@
       </ion-modal>
 
       <!-- Next Office Visit Date -->
-      <ion-item class="input-item" *ngIf="Entity.p.CustomerStatus !== CustomerStatuscode.LeadClosed && Entity.p.CustomerStatus !== CustomerStatuscode.ConvertToDeal">
+      <ion-item class="input-item"
+        *ngIf="Entity.p.CustomerStatus !== CustomerStatuscode.LeadClosed && Entity.p.CustomerStatus !== CustomerStatuscode.ConvertToDeal">
         <ion-label>Next Site Visit Date</ion-label>
         <ion-datetime-button datetime="NextSiteOfficeDate" trigger="office-visit-modal"></ion-datetime-button>
       </ion-item>
@@ -269,7 +270,8 @@
       </ion-modal>
 
       <!-- Reminder Date -->
-      <ion-item class="input-item" *ngIf="Entity.p.CustomerStatus !== CustomerStatuscode.LeadClosed && Entity.p.CustomerStatus !== CustomerStatuscode.ConvertToDeal">
+      <ion-item class="input-item"
+        *ngIf="Entity.p.CustomerStatus !== CustomerStatuscode.LeadClosed && Entity.p.CustomerStatus !== CustomerStatuscode.ConvertToDeal">
         <ion-label>Reminder Date</ion-label>
         <ion-datetime-button datetime="ReminderDate"></ion-datetime-button>
       </ion-item>

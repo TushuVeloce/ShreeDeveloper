@@ -4,7 +4,8 @@
       <h5 style="padding-top: 3px;" class="title title_light">Pending Follow Up</h5>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
-      <app-shared-filter [masterList]="MasterList" [filterFields]="['CustomerName', 'ContactNos', 'ReminderDate']"
+      <app-shared-filter [masterList]="followup"
+        [filterFields]="['CustomerName', 'ContactNos', 'ReminderDate', 'CustomerStatusName']"
         (filteredList)="DisplayMasterList = $event"></app-shared-filter>
     </div>
   </div>

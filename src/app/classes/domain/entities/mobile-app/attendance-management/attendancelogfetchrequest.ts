@@ -6,10 +6,11 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class AttendanceLogFetchRequest
 {
-    public static readonly FetchRequestType: string = "MaterialFetchRequest";
+    public static readonly FetchRequestType: string = "AttendanceLogCheckInFetchRequest";
 
     CompanyRefs: number[] = [];
     EmployeeRefs: number[] = [];
+    TransDateTime: string = '';
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

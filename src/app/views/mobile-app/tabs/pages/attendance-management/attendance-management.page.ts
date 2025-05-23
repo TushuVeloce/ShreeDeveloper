@@ -68,6 +68,7 @@ export class AttendanceManagementPage implements OnInit {
 
   // Company and employee references
   employeeRef: number = 0;
+  companyRef: number = 0;
 
   constructor(
     private router: Router,
@@ -87,7 +88,8 @@ export class AttendanceManagementPage implements OnInit {
   }
 
   private async loadAttendenceIfEmployeeExists(): Promise<void> {
-    this.employeeRef = this.employeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+    this.companyRef = Number(this.appStateManage.StorageKey.getItem('SelectedCompanyRef'));
+    this.employeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
     if (this.employeeRef > 0) {
       // Retrieve employee reference from storage (ensure proper type conversion)
       this.employeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
@@ -126,6 +128,75 @@ export class AttendanceManagementPage implements OnInit {
       (event.target as HTMLIonRefresherElement).complete();
   }
 
+  // async getCheckInData(): Promise<void> {
+  //   try {
+  //     this.isLoading = true;
+  //     this.isOnLeave = false;
+  //     this.checkInTime = '';
+  //     this.checkOutTime = '';
+  //     this.attendanceLog = AttendanceLog.CreateNewInstance();
+
+  //     const tranDate = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
+  //     const req = new AttendanceLogCheckInCustomRequest();
+  //     req.TransDateTime = tranDate;
+  //     // Instead of calling companyRef as a function, use the proper method from the service
+  //     req.CompanyRef = this.companyState.getCurrentCompanyRef();
+  //     req.EmployeeRef = this.employeeRef;
+
+  //     const transportData = req.FormulateTransportData();
+  //     const payload = this.payloadPacketFacade.CreateNewPayloadPacket2(transportData);
+  //     const response = await this.serverCommunicator.sendHttpRequest(payload);
+
+  //     if (!response.Successful) {
+  //       this.bothButtonsEnabled = false;
+  //       await this.uiUtils.showErrorMessage('Error', response.Message);
+  //       return;
+  //     }
+
+  //     const tdResult = JSON.parse(response.Tag) as TransportData;
+  //     const res = AttendanceLogCheckInCustomRequest.FromTransportData(tdResult);
+  //     console.log('res :', res);
+
+  //     if (res.Data.length > 0) {
+  //       const checkInData: AttendanceLogProps[] = res.Data as AttendanceLogProps[];
+  //       console.log('checkInData :', checkInData);
+  //       const pendingCheckIn = checkInData.filter(e => e.CheckOutTime === '');
+  //       if (pendingCheckIn.length > 0) {
+  //         Object.assign(this.attendanceLog.p, pendingCheckIn[0]);
+  //       } else {
+  //         const completedCheckIns = checkInData.filter(e => e.CheckOutTime !== '');
+  //         if (completedCheckIns.length > 0) {
+  //           Object.assign(this.attendanceLog.p, completedCheckIns[0]);
+  //         }
+  //       }
+  //       this.isOnLeave = Boolean(this.attendanceLog.p.IsLeave);
+  //       this.checkInTime = this.attendanceLog.p.CheckInTime;
+  //       this.checkOutTime = this.attendanceLog.p.CheckOutTime;
+  //     }
+  //     // Set button statuses based on attendanceLog properties
+  //     if (!this.attendanceLog.p.FirstCheckInTime && !this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime) {
+  //       this.isCheckInEnabled = true;
+  //       this.bothButtonsEnabled = true;
+
+  //     } else if (this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime) {
+  //       this.isCheckInEnabled = false;
+  //       this.bothButtonsEnabled = true;
+
+  //     } else if (this.attendanceLog.p.CheckInTime && this.attendanceLog.p.CheckOutTime) {
+  //       this.isCheckInEnabled = true;
+  //       this.bothButtonsEnabled = true;
+
+  //     } else {
+  //       this.isCheckInEnabled = false;
+  //       this.bothButtonsEnabled = false;
+
+  //     }
+  //   } catch (error) {
+  //     // console.error('Error in getCheckInData:', error);
+  //   } finally {
+  //     this.isLoading = false;
+  //   }
+  // }
   async getCheckInData(): Promise<void> {
     try {
       this.isLoading = true;
@@ -135,27 +206,13 @@ export class AttendanceManagementPage implements OnInit {
       this.attendanceLog = AttendanceLog.CreateNewInstance();
 
       const tranDate = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
-      const req = new AttendanceLogCheckInCustomRequest();
-      req.TransDateTime = tranDate;
-      // Instead of calling companyRef as a function, use the proper method from the service
-      req.CompanyRef = this.companyState.getCurrentCompanyRef();
-      req.EmployeeRef = this.employeeRef;
-
-      const transportData = req.FormulateTransportData();
-      const payload = this.payloadPacketFacade.CreateNewPayloadPacket2(transportData);
-      const response = await this.serverCommunicator.sendHttpRequest(payload);
-
-      if (!response.Successful) {
-        this.bothButtonsEnabled = false;
-        await this.uiUtils.showErrorMessage('Error', response.Message);
-        return;
-      }
-
-      const tdResult = JSON.parse(response.Tag) as TransportData;
-      const res = AttendanceLogCheckInCustomRequest.FromTransportData(tdResult);
-
-      if (res.Data.length > 0) {
-        const checkInData: AttendanceLogProps[] = res.Data as AttendanceLogProps[];
+      console.log('this.employeeRef, this.companyRef,tranDate :', this.employeeRef, this.companyRef, tranDate);
+      // return;
+      let lst = await AttendanceLog.FetchEntireListByCompanyRef(this.employeeRef, this.companyRef, tranDate, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      if (lst.length > 0) {
+        // const checkInData: AttendanceLogProps[] = lst as AttendanceLogProps[];
+        const checkInData: any[] = lst;
+        console.log('checkInData :', checkInData);
         const pendingCheckIn = checkInData.filter(e => e.CheckOutTime === '');
         if (pendingCheckIn.length > 0) {
           Object.assign(this.attendanceLog.p, pendingCheckIn[0]);
@@ -168,7 +225,12 @@ export class AttendanceManagementPage implements OnInit {
         this.isOnLeave = Boolean(this.attendanceLog.p.IsLeave);
         this.checkInTime = this.attendanceLog.p.CheckInTime;
         this.checkOutTime = this.attendanceLog.p.CheckOutTime;
+      } else {
+        this.bothButtonsEnabled = false;
+        await this.uiUtils.showErrorMessage('Error', "unable to get data");
+        return;
       }
+
       // Set button statuses based on attendanceLog properties
       if (!this.attendanceLog.p.FirstCheckInTime && !this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime) {
         this.isCheckInEnabled = true;

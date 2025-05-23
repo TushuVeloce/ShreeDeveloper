@@ -18,22 +18,22 @@ export class AttendanceLogProps {
   public EmployeeRef: number = 0;
   public CompanyRef: number = 0;
   public TransDateTime: string = '';
-  public SiteRef :number = 0;
-  public TotalWorkingHrs :number = 0;
-  public IsLateMark :number = 0;
-  public TotalLateMarkHrs :number = 0;
-  public IsOverTime :number = 0;
-  public TotalOvertimeHrs :number = 0;
+  public SiteRef: number = 0;
+  public TotalWorkingHrs: number = 0;
+  public IsLateMark: number = 0;
+  public TotalLateMarkHrs: number = 0;
+  public IsOverTime: number = 0;
+  public TotalOvertimeHrs: number = 0;
   public FirstCheckInTime: string = '';
   public CheckOutTime: string = '';
   public CheckInTime: string = '';
   public LastCheckOutTime: string = '';
   public AttendanceLogPath1: string = '';
   public AttendanceLogPath2: string = '';
-  public IsLeave :number = 0;
-  public IsHalfDay :number = 0;
-  public AttendenceLocationType :number = 0;
-  public WorkingHrs :number = 0;
+  public IsLeave: number = 0;
+  public IsHalfDay: number = 0;
+  public AttendenceLocationType: number = 0;
+  public WorkingHrs: number = 0;
   public readonly EmployeeName: string = '';
   public readonly SiteName: string = '';
   public readonly CompanyName: string = '';
@@ -60,8 +60,8 @@ export class AttendanceLog implements IPersistable<AttendanceLog> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -116,7 +116,7 @@ export class AttendanceLog implements IPersistable<AttendanceLog> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): AttendanceLog[] {
+    sortPropertyName: string = ""): AttendanceLog[] {
     let result: AttendanceLog[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -176,9 +176,11 @@ export class AttendanceLog implements IPersistable<AttendanceLog> {
     return AttendanceLog.ListFromTransportData(tdResponse);
   }
 
- public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(employeeRef: number, CompanyRef: number, TransDateTime: string, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new AttendanceLogFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
+    req.CompanyRefs.push(CompanyRef);
+    req.EmployeeRefs.push(employeeRef);
+    req.TransDateTime = TransDateTime;
     let tdResponse = await AttendanceLog.FetchTransportData(req, errorHandler) as TransportData;
     return AttendanceLog.ListFromTransportData(tdResponse);
   }

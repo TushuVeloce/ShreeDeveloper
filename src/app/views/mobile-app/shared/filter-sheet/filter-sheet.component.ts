@@ -19,9 +19,10 @@ export class FilterSheetComponent implements OnInit {
   @Input() selected: { [category: string]: string[] } = {};
 
   selectedOptions: { [category: string]: string[] } = {};
+  // selectedOptions: {[categoryName: string]: string[] | undefined;} = {};
   selectedCategory: Category | null = null;
 
-  constructor(private modalCtrl: ModalController) { }
+  constructor(private modalCtrl: ModalController) { } 
 
   ngOnInit() {
     // Pre-fill selected filters if available

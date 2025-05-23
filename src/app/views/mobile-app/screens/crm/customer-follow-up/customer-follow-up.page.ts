@@ -22,8 +22,9 @@ export class CustomerFollowUpPage implements OnInit {
   SiteList: Site[] = [];
   PlotList: Plot[] = [];
   followupList: CustomerFollowUp[] = [];
-  FilterFollowupList: any[] = [];
+  FilterFollowupList: CustomerFollowUp[] = [];
   SelectedFollowUp: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
+  SelectedCustomerEnquiry: CustomerEnquiry = CustomerEnquiry.CreateNewInstance();
 
   CustomerRef: number = 0;
   InterestedPlotRef: number = 0;
@@ -61,38 +62,7 @@ export class CustomerFollowUpPage implements OnInit {
     this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
     if (!this.date) {
       await this.initializeDate();
-      await this.loadSitesByCompanyRef();
     }
-    this.FilterFollowupList = [
-      {
-        p: {
-          CustomerName: 'Rahul Sharma',
-          ContactNo: '9876543210',
-          ReminderDate: '2025-05-10T10:00:00Z',
-          CustomerStatusName: 'Interested',
-          CustomerRequirement: '3 BHK Apartment in Pune',
-        }
-      },
-      {
-        p: {
-          CustomerName: 'Priya Desai',
-          ContactNo: '9988776655',
-          ReminderDate: '2025-05-11T14:30:00Z',
-          CustomerStatusName: 'Follow-up Later',
-          CustomerRequirement: 'Commercial Office Space',
-        }
-      },
-      {
-        p: {
-          CustomerName: 'Amit Joshi',
-          ContactNos: '9123456789',
-          ReminderDate: '2025-05-12T09:00:00Z',
-          CustomerStatusName: 'Converted',
-          CustomerRequirement: '1 BHK Flat near Station',
-        }
-      }
-    ];
-
   }
   private async initializeDate() {
     this.isLoading = true;
@@ -134,14 +104,20 @@ export class CustomerFollowUpPage implements OnInit {
   private async fetchFollowUps() {
     this.isLoading = true;
     try {
-      const followUps = await CustomerFollowUp.FetchEntireListByDateandPlotRef(
-        this.strCDT,
-        this.InterestedPlotRef,
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-      );
+      // const followUps = await CustomerFollowUp.FetchEntireListByDateandPlotRef(
+      //   this.strCDT,
+      //   this.InterestedPlotRef,
+      //   async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      // );
 
-      this.followupList = followUps;
-      this.FilterFollowupList = followUps;
+      // this.followupList = followUps;
+      // this.FilterFollowupList = followUps;
+      // this.strCDT = this.dtu.ConvertStringDateToFullFormat(this.ReminderDate);
+      let FollowUp = await CustomerFollowUp.FetchEntireListByDateComapanyAndContactModeRef(this.companyRef, this.strCDT, this.Entity.p.ContactMode,
+        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+      console.log('FollowUp :', FollowUp, this.companyRef, this.strCDT, this.Entity.p.ContactMode);
+      this.followupList = FollowUp
+      this.FilterFollowupList = FollowUp;
     } catch (error) {
       await this.uiUtils.showErrorMessage('Error', 'Failed to fetch follow-ups');
     } finally {
@@ -149,69 +125,15 @@ export class CustomerFollowUpPage implements OnInit {
     }
   }
 
-  private async loadSitesByCompanyRef() {
-    this.isLoading = true;
-    try {
-      this.followupList = [];
-      this.FilterFollowupList = [];
-      this.SiteList = [];
-
-      if (this.companyRef <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
-        return;
-      }
-
-      const sites = await Site.FetchEntireListByCompanyRef(
-        this.companyRef,
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-      );
-
-      this.SiteList = sites;
-    } catch (error) {
-      await this.uiUtils.showErrorMessage('Error', 'Failed to load sites');
-    } finally {
-      this.isLoading = false;
-    }
-  }
-
-  async loadPlotsBySiteRef(siteRef: number) {
-    this.isLoading = true;
-    try {
-      if (siteRef <= 0) {
-        await this.uiUtils.showWarningToster(`Please select a site`);
-        return;
-      }
-
-      this.InterestedPlotRef = 0;
-
-      const plots = await Plot.FetchEntireListBySiteandBookingRemarkRef(
-        siteRef,
-        BookingRemark.Booked, async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-      );
-
-      this.PlotList = plots;
-    } catch (error) {
-      await this.uiUtils.showErrorMessage('Error', 'Failed to load plots');
-    } finally {
-      this.isLoading = false;
-    }
-  }
-
-
   async onFollowUpClick(followup: CustomerFollowUp) {
     this.SelectedFollowUp = followup.GetEditableVersion();
     CustomerFollowUp.SetCurrentInstance(this.SelectedFollowUp);
     this.appStateManagement.StorageKey.setItem('Editable', 'Edit');
-
-    await this.router.navigate(['/app_homepage/tabs/crm/customer-follow-up/add']);
+    this.onAddCustomerEnquiry()
+    // await this.router.navigate(['/app_homepage/tabs/crm/customer-follow-up/add']);
   }
 
   async onAddCustomerEnquiry() {
-    if (this.companyRef <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-
     await this.router.navigate(['/app_homepage/tabs/crm/customer-follow-up/add']);
   }
 }

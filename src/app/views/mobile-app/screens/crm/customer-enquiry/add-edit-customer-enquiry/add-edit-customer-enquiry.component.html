@@ -135,11 +135,15 @@
       </ion-item>
       <ion-card *ngFor="let plot of Entity.p.CustomerFollowUps[0].CustomerFollowUpPlotDetails; let i = index">
         <ion-card-header>
-          <ion-card-title>{{ plot.SiteName }}</ion-card-title>
+          <!-- <ion-card-title>{{ plot.SiteName }}</ion-card-title> -->
           <ion-card-subtitle>Plot #{{ (currentPage - 1) * pageSize + i + 1 }}</ion-card-subtitle>
         </ion-card-header>
 
         <ion-card-content>
+          <ion-item>
+            <ion-label>Site Name</ion-label>
+            <ion-text>{{ plot.SiteName }}</ion-text>
+          </ion-item>
           <ion-item>
             <ion-label>Area (sqm)</ion-label>
             <ion-text>{{ plot.PlotAreaInSqm }}</ion-text>

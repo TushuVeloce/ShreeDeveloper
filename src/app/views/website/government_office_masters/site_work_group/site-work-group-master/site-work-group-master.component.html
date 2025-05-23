@@ -23,7 +23,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let SiteWorkGroup of MasterList; index as i">
+          <tr *ngFor="let SiteWorkGroup of paginatedList; index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{SiteWorkGroup.p.Name}}</td>
             <td Class="tbldata">{{SiteWorkGroup.p.DisplayOrder}}</td>
