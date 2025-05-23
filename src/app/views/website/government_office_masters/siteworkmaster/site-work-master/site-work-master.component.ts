@@ -24,7 +24,6 @@ export class SiteWorkMasterComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   SiteWorkGroupList: SiteWorkGroup[] = [];
-  SiteWorkGroupRef:number = 0
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -38,7 +37,6 @@ export class SiteWorkMasterComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {
     effect(() => {
-      // this.getSiteWorkMasterListByCompanyRef()
       this.getSiteWorkMasterListByCompanyRef();
       this.FormulateSiteWorkGroupListByCompanyRef()
     });
@@ -54,7 +52,7 @@ export class SiteWorkMasterComponent implements OnInit {
   // });
 
   async ngOnInit() {
-    this.Entity.p.SiteWorkGroupRef = Number( this.appStateManage.StorageKey.getItem('sitegroup'))
+    this.Entity.p.SiteWorkGroupRef = Number(this.appStateManage.StorageKey.getItem('sitegroup'))
     this.SiteWorkGroupList = await SiteWorkGroup.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
@@ -64,19 +62,21 @@ export class SiteWorkMasterComponent implements OnInit {
   }
 
   private FormulateSiteWorkGroupListByCompanyRef = async () => {
-      if (this.companyRef() <= 0) {
+    if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.Entity.p.SiteWorkGroupRef = Number( this.appStateManage.StorageKey.getItem('sitegroup'))
-    this.SiteWorkGroupRef= 0
+    this.Entity.p.SiteWorkGroupRef = Number(this.appStateManage.StorageKey.getItem('sitegroup'))
     let lst = await SiteWorkGroup.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.SiteWorkGroupList = lst.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
-    if(this.SiteWorkGroupRef == 0 && this.Entity.p.SiteWorkGroupRef !=0){
-      this.Entity.p.SiteWorkGroupRef = 0
-     this.appStateManage.StorageKey.setItem('sitegroup', String( this.Entity.p.SiteWorkGroupRef ));
+    // debugger
+    if (lst.length <= 0) {
+      this.Entity.p.SiteWorkGroupRef = 0;
+    }
+    if (!this.SiteWorkGroupList.some((v) => v.p.Ref == this.Entity.p.SiteWorkGroupRef)) {
+      this.Entity.p.SiteWorkGroupRef = 0;
     }
   };
 
@@ -181,8 +181,8 @@ export class SiteWorkMasterComponent implements OnInit {
       //   return;
       // }
       this.appStateManage.StorageKey.setItem('sitegroup', String(siteGroupRef));
-      let List = this.MasterList.filter(e => e.p.SiteWorkGroupRef == siteGroupRef)
-      this.DisplayMasterList = List.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
+      // let List = this.MasterList.filter(e => e.p.SiteWorkGroupRef == siteGroupRef)
+      // this.DisplayMasterList = List.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
       this.loadPaginationData()
     }
   }
