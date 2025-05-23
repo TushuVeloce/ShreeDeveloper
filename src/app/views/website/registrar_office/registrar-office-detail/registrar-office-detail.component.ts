@@ -217,11 +217,11 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     );
 
     console.log('lstFTO:', lstFTO);
-    if (this.Entity.p.CustomerAadharFile != null) {
+    // if (this.Entity.p.CustomerAadharFile != null) {
       let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
-    }
+    // }
 
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message);
