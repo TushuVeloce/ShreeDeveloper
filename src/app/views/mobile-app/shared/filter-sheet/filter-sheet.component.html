@@ -5,9 +5,9 @@
       <ion-col size="4" class="category-column">
         <ion-list>
           <ion-item *ngFor="let cat of data?.categories" button (click)="selectCategory(cat)"
-            [class.active]="selectedCategory?.name === cat.name" [class.has-selection]="hasAnySelection(cat.name)">
-            {{ cat.name }}
-            <ion-icon *ngIf="hasAnySelection(cat.name)" name="checkmark-circle-outline" slot="end"
+            [class.active]="selectedCategory?.Ref === cat.Ref" [class.has-selection]="hasAnySelection(cat.Ref)">
+            {{ cat.Name }}
+            <ion-icon *ngIf="hasAnySelection(cat.Ref)" name="checkmark-circle-outline" slot="end"
               color="primary"></ion-icon>
           </ion-item>
         </ion-list>
@@ -19,28 +19,30 @@
           <ion-list>
             <div *ngIf="selectedCategory">
               <ng-container *ngIf="selectedCategory.multi; else singleSelectTemplate">
-            
+
                 <!-- Multi-select -->
                 <!-- <ion-list-header>
-                  <ion-label>{{ selectedCategory.name }}</ion-label>
+                  <ion-label>{{ selectedCategory.Name }}</ion-label>
                 </ion-list-header> -->
-            
+
+                <!-- Multi-select -->
                 <ion-item *ngFor="let option of selectedCategory.options">
-                  <ion-label>{{ option }}</ion-label>
-                  <ion-checkbox slot="start" [checked]="isSelected(selectedCategory.name, option)"
-                    (ionChange)="toggleOption(selectedCategory.name, option)">
+                  <ion-label>{{ option.Name }}</ion-label>
+                  <ion-checkbox slot="start" [checked]="isSelected(selectedCategory.Ref, option.Ref)"
+                    (ionChange)="toggleOption(selectedCategory.Ref, option.Ref)">
                   </ion-checkbox>
                 </ion-item>
-            
+
+
               </ng-container>
-            
+
               <ng-template #singleSelectTemplate>
-                <!-- Single select -->
-                <ion-radio-group [value]="selectedOptions[selectedCategory.name]?.[0]"
-                  (ionChange)="toggleOption(selectedCategory.name, $event.detail.value)">
+                <!-- Single-select -->
+                <ion-radio-group [value]="selectedOptions[selectedCategory.Ref] ? selectedOptions[selectedCategory.Ref][0] : null"
+                  (ionChange)="toggleOption(selectedCategory.Ref, $event.detail.value)">
                   <ion-item *ngFor="let option of selectedCategory.options">
-                    <ion-label>{{ option }}</ion-label>
-                    <ion-radio slot="start" [value]="option"></ion-radio>
+                    <ion-label>{{ option.Name }}</ion-label>
+                    <ion-radio slot="start" [value]="option.Ref"></ion-radio>
                   </ion-item>
                 </ion-radio-group>
               </ng-template>
@@ -56,4 +58,4 @@
     <ion-button fill="clear" (click)="clearFilters()">Clear</ion-button>
     <ion-button expand="block" (click)="applyFilters()">Apply Filter</ion-button>
   </div>
-  </ion-content>
+</ion-content>

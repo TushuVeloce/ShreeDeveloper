@@ -85,8 +85,6 @@
     </ion-card-content>
   </ion-card>
 
-
-
   <!-- Punch Modal -->
   <ion-modal [isOpen]="punchModalOpen" (didDismiss)="punchModalOpen = false" class="punch-modal">
     <ng-template>
@@ -106,8 +104,6 @@
         <!-- Modal Content -->
         <ion-content class="ion-padding modal-content">
           <ion-list lines="none">
-            <!-- Select Location Type -->
-
             <!-- Select Location Type -->
             <ion-item class="input-item" button (click)="selectAttendanceLocationBottomsheet()">
               <ion-label>Location Type</ion-label>
@@ -145,8 +141,8 @@
                     <ion-icon name="camera-outline" slot="start"></ion-icon>
                     Capture
                   </ion-button>
-                  <img *ngIf="capturedBeforePhoto" [src]="capturedBeforePhoto" class="preview-img" />
-                  <ion-icon name="image-outline" *ngIf="!capturedBeforePhoto" class="preview-img"></ion-icon>
+                  <img *ngIf="capturedSelfPhoto" [src]="capturedSelfPhoto" class="preview-img" />
+                  <ion-icon name="image-outline" *ngIf="!capturedSelfPhoto" class="preview-img"></ion-icon>
                 </div>
                 <div>
                   <ion-label>Work Location</ion-label>
@@ -154,8 +150,8 @@
                     <ion-icon name="camera-outline" slot="start"></ion-icon>
                     Capture
                   </ion-button>
-                  <img *ngIf="capturedAfterPhoto" [src]="capturedAfterPhoto" class="preview-img" />
-                  <ion-icon name="image-outline" *ngIf="!capturedAfterPhoto" class="preview-img"></ion-icon>
+                  <img *ngIf="capturedWorkLocationPhoto" [src]="capturedWorkLocationPhoto" class="preview-img" />
+                  <ion-icon name="image-outline" *ngIf="!capturedWorkLocationPhoto" class="preview-img"></ion-icon>
                 </div>
               </div>
             </div>

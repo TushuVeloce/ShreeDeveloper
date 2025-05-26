@@ -11,6 +11,7 @@ import { ActualStages } from 'src/app/classes/domain/entities/website/site_manag
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { FilterService } from 'src/app/services/filter.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -48,13 +49,16 @@ export class ActualStagePage implements OnInit {
   OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense
   TimeUnitRef: number = UnitRefs.TimeUnitRef
 
+  selectedFilters: any[] = [];
+
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
     private appStateManage: AppStateManageService,
     private companystatemanagement: CompanyStateManagement,
     private dateService: DateconversionService,
-    private appStateManagement: AppStateManageService
+    private appStateManagement: AppStateManageService,
+    private filterService: FilterService
   ) { }
 
   ngOnInit(): void {
@@ -218,7 +222,7 @@ export class ActualStagePage implements OnInit {
     );
   };
 
-  getTotalWorkedHours(TimeDetails:any): number {
+  getTotalWorkedHours(TimeDetails: any): number {
     return TimeDetails.reduce((total: number, item: any) => {
       return total + Number(item.WorkedHours || 0);
     }, 0);
@@ -226,5 +230,43 @@ export class ActualStagePage implements OnInit {
 
   AddActualStages = async () => {
     await this.router.navigate(['app_homepage/tabs/site-management/actual-stage/add']);
+  }
+
+  openFilterSheet = async () => {
+    const filterData = {
+      categories: [
+        {
+          Name: 'Vendor',
+          Ref: 100,
+          multi: false,
+          options:this.VendorList
+        },
+        {
+          Name: 'Stage',
+          Ref: 200,
+          multi: false,
+          options:this.StageList
+        },
+        {
+          Name: 'From Date',
+          Ref: 300,
+          multi: false,
+          options: [
+            { Ref: 301, Name: '40GB' },
+            { Ref: 302, Name: '60GB' },
+            { Ref: 303, Name: '80GB' }
+          ]
+        }
+      ]
+    };
+
+    console.log(' this.vendor :', this.VendorList);
+    console.log(' this.stage :', this.StageList);
+    this.filterService.openFilter(filterData, this.selectedFilters).then(res => {
+      if (res?.selected) {
+        this.selectedFilters = res.selected;
+        console.log(' this.selectedFilters :', this.selectedFilters);
+      }
+    });
   }
 }

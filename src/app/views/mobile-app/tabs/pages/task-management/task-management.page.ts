@@ -130,7 +130,8 @@ export class TaskManagementPage implements OnInit {
 
   highPriorityTasks: Task[] = [];
   filteredTasks: Task[] = [];
-  selectedFilters: any = {};
+  selectedFilters: any[] = [];
+  // selectedFilters: any[] = [];
   selectedTab: string = 'in_progress';
 
   filters: any[] = [
@@ -212,8 +213,10 @@ export class TaskManagementPage implements OnInit {
 
   ngOnInit() {
     this.highPriorityTasks = this.tasks.filter(task => task.priority === 200);
+    this.filteredTasks = [...this.tasks];
     this.filterTasks();
   }
+  
 
   addTask() {
     this.router.navigate(['/app_homepage/tabs/task-management/add'], { replaceUrl: true });
@@ -229,44 +232,56 @@ export class TaskManagementPage implements OnInit {
     const filterData = {
       categories: [
         {
-          name: 'Brand',
+          Name: 'Brand',
+          Ref: 100,
           multi: true,
-          options: ['Apple', 'Samsung', 'OnePlus', 'Vivo', 'Apple', 'Samsung', 'OnePlus', 'Vivo',]
+          options: [
+            { Ref: 101, Name: 'Apple' },
+            { Ref: 102, Name: 'Samsung' },
+            { Ref: 103, Name: 'OnePlus' },
+            { Ref: 104, Name: 'Vivo' },
+            { Ref: 105, Name: 'Apple' },
+            { Ref: 106, Name: 'Samsung' },
+            { Ref: 107, Name: 'OnePlus' },
+            { Ref: 108, Name: 'Vivo' }
+          ]
         },
         {
-          name: 'RAM',
+          Name: 'RAM',
+          Ref: 200,
           multi: false,
-          options: ['4GB', '6GB', '8GB']
+          options: [
+            { Ref: 201, Name: '4GB' },
+            { Ref: 202, Name: '6GB' },
+            { Ref: 203, Name: '8GB' }
+          ]
         },
         {
-          name: 'Storage',
+          Name: 'Storage',
+          Ref: 300,
           multi: true,
-          options: ['4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB',]
-        },
-        {
-          name: 'Storage',
-          multi: true,
-          options: ['4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB',]
-        },
-        {
-          name: 'Storage',
-          multi: true,
-          options: ['4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB',]
-        },
-        {
-          name: 'Storage',
-          multi: true,
-          options: ['4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB', '4GB', '6GB', '8GB',]
+          options: [
+            { Ref: 301, Name: '40GB' },
+            { Ref: 302, Name: '60GB' },
+            { Ref: 303, Name: '80GB' }
+          ]
         }
       ]
     };
     
 
+    // this.filterService.openFilter(filterData, this.selectedFilters).then(res => {
+    //   if (res?.selected) {
+    //     this.selectedFilters = res.selected;
+    //     console.log('Filters applied:', this.selectedFilters);
+    //     // Apply filter logic here...
+    //   }
+    // });
+    console.log(' this.selectedFilters :', this.selectedFilters);
     this.filterService.openFilter(filterData, this.selectedFilters).then(res => {
       if (res?.selected) {
         this.selectedFilters = res.selected;
-        console.log('Filters applied:', this.selectedFilters);
-        // Apply filter logic here...
+        console.log(' this.selectedFilters :',  this.selectedFilters);
       }
     });
   }
@@ -293,12 +308,10 @@ export class TaskManagementPage implements OnInit {
 
   applyFilters() {
     this.filteredTasks = this.tasks.filter(task => {
-      return Object.keys(this.selectedFilters).every((key) => {
-        const selectedValue = this.selectedFilters[key];
-        const taskValue = task[key as keyof Task];
+      return Object.entries(this.selectedFilters).every(([key, selectedValue]) => {
+        if (!selectedValue || selectedValue) return true;
 
-        if (!selectedValue || selectedValue.length === 0) return true;
-
+        const taskValue = (task as any)[key]; // Use if unsure of key type
         const selectedArray = Array.isArray(selectedValue) ? selectedValue : [selectedValue];
 
         if (key === 'date') {
@@ -309,8 +322,9 @@ export class TaskManagementPage implements OnInit {
       });
     });
 
-    this.filterTasks(); // Re-apply tab filtering after applying filters
+    this.filterTasks();
   }
+  
 
   isDateMatch(taskDate: string, selectedValues: string[]): boolean {
     const today = new Date();
@@ -340,38 +354,16 @@ export class TaskManagementPage implements OnInit {
   }
 
   filterTasks() {
-    const baseFiltered = this.tasks.filter((task) => {
-      switch (this.selectedTab) {
-        case 'completed':
-          return task.status === 102;
-        case 'in_progress':
-          return task.status === 101;
-        case 'not_started':
-          return task.status === 100;
-        case 'cancelled':
-          return task.status === 103;
-        default:
-          return true;
-      }
-    });
-
-    // Apply active filters too if any
-    if (Object.keys(this.selectedFilters).length > 0) {
-      this.filteredTasks = baseFiltered.filter(task =>
-        Object.keys(this.selectedFilters).every((key) => {
-          const selectedValue = this.selectedFilters[key];
-          const taskValue = task[key as keyof Task];
-          if (!selectedValue || selectedValue.length === 0) return true;
-
-          const selectedArray = Array.isArray(selectedValue) ? selectedValue : [selectedValue];
-          if (key === 'date') return this.isDateMatch(task.end_date, selectedArray);
-
-          return selectedArray.includes(taskValue);
-        })
-      );
+    if (this.selectedTab === 'in_progress') {
+      this.filteredTasks = this.tasks.filter(t => t.status === 101);
+    } else if (this.selectedTab === 'completed') {
+      this.filteredTasks = this.tasks.filter(t => t.status === 102);
+    } else if (this.selectedTab === 'cancelled') {
+      this.filteredTasks = this.tasks.filter(t => t.status === 103);
     } else {
-      this.filteredTasks = baseFiltered;
+      this.filteredTasks = [...this.tasks]; // All tasks
     }
   }
+
 
 }

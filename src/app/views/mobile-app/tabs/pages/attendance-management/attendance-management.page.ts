@@ -21,6 +21,8 @@ import { DTU } from 'src/app/services/dtu.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
 
 @Component({
   selector: 'app-attendance-management',
@@ -39,8 +41,12 @@ export class AttendanceManagementPage implements OnInit {
   checkInTime: string = "";
   checkOutTime: string = "";
   DateValue: string = "";
-  capturedBeforePhoto: string | null = null;
-  capturedAfterPhoto: string | null = null;
+  // capturedBeforePhoto: string | null = null;
+  // capturedAfterPhoto: string | null = null;
+  capturedSelfPhoto: string | null | undefined = null;
+  rawCapturedSelfPhoto: string | null | undefined = null;
+  capturedWorkLocationPhoto: string | null | undefined = null;
+  rawCapturedWorkLocationPhoto: string | null | undefined = null;
   isOnLeave: boolean = false;
   isCheckInEnabled: boolean = false;
   bothButtonsEnabled: boolean = true;
@@ -197,6 +203,64 @@ export class AttendanceManagementPage implements OnInit {
   //     this.isLoading = false;
   //   }
   // }
+  // async getCheckInData(): Promise<void> {
+  //   try {
+  //     this.isLoading = true;
+  //     this.isOnLeave = false;
+  //     this.checkInTime = '';
+  //     this.checkOutTime = '';
+  //     this.attendanceLog = AttendanceLog.CreateNewInstance();
+
+  //     const tranDate = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
+  //     console.log('this.employeeRef, this.companyRef,tranDate :', this.employeeRef, this.companyRef, tranDate);
+  //     // return;
+  //     let lst = await AttendanceLog.FetchEntireListByCompanyRef(this.employeeRef, this.companyRef, tranDate, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //     if (lst.length > 0) {
+  //       // const checkInData: AttendanceLogProps[] = lst as AttendanceLogProps[];
+  //       const checkInData: any[] = lst;
+  //       console.log('checkInData :', checkInData);
+  //       const pendingCheckIn = checkInData.filter(e => e.CheckOutTime === '');
+  //       if (pendingCheckIn.length > 0) {
+  //         Object.assign(this.attendanceLog.p, pendingCheckIn[0]);
+  //       } else {
+  //         const completedCheckIns = checkInData.filter(e => e.CheckOutTime !== '');
+  //         if (completedCheckIns.length > 0) {
+  //           Object.assign(this.attendanceLog.p, completedCheckIns[0]);
+  //         }
+  //       }
+  //       this.isOnLeave = Boolean(this.attendanceLog.p.IsLeave);
+  //       this.checkInTime = this.attendanceLog.p.CheckInTime;
+  //       this.checkOutTime = this.attendanceLog.p.CheckOutTime;
+  //     } else {
+  //       this.bothButtonsEnabled = false;
+  //       await this.uiUtils.showErrorMessage('Error', "unable to get data");
+  //       return;
+  //     }
+
+  //     // Set button statuses based on attendanceLog properties
+  //     if (!this.attendanceLog.p.FirstCheckInTime && !this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime) {
+  //       this.isCheckInEnabled = true;
+  //       this.bothButtonsEnabled = true;
+
+  //     } else if (this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime) {
+  //       this.isCheckInEnabled = false;
+  //       this.bothButtonsEnabled = true;
+
+  //     } else if (this.attendanceLog.p.CheckInTime && this.attendanceLog.p.CheckOutTime) {
+  //       this.isCheckInEnabled = true;
+  //       this.bothButtonsEnabled = true;
+
+  //     } else {
+  //       this.isCheckInEnabled = false;
+  //       this.bothButtonsEnabled = false;
+
+  //     }
+  //   } catch (error) {
+  //     // console.error('Error in getCheckInData:', error);
+  //   } finally {
+  //     this.isLoading = false;
+  //   }
+  // }
   async getCheckInData(): Promise<void> {
     try {
       this.isLoading = true;
@@ -206,55 +270,63 @@ export class AttendanceManagementPage implements OnInit {
       this.attendanceLog = AttendanceLog.CreateNewInstance();
 
       const tranDate = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
-      console.log('this.employeeRef, this.companyRef,tranDate :', this.employeeRef, this.companyRef, tranDate);
-      // return;
-      let lst = await AttendanceLog.FetchEntireListByCompanyRef(this.employeeRef, this.companyRef, tranDate, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      if (lst.length > 0) {
-        // const checkInData: AttendanceLogProps[] = lst as AttendanceLogProps[];
-        const checkInData: any[] = lst;
-        console.log('checkInData :', checkInData);
-        const pendingCheckIn = checkInData.filter(e => e.CheckOutTime === '');
-        if (pendingCheckIn.length > 0) {
-          Object.assign(this.attendanceLog.p, pendingCheckIn[0]);
-        } else {
-          const completedCheckIns = checkInData.filter(e => e.CheckOutTime !== '');
-          if (completedCheckIns.length > 0) {
-            Object.assign(this.attendanceLog.p, completedCheckIns[0]);
-          }
-        }
-        this.isOnLeave = Boolean(this.attendanceLog.p.IsLeave);
-        this.checkInTime = this.attendanceLog.p.CheckInTime;
-        this.checkOutTime = this.attendanceLog.p.CheckOutTime;
-      } else {
+      const companyRef = this.companyState.getCurrentCompanyRef(); // fixed here
+      console.log('employeeRef, companyRef, tranDate :', this.employeeRef, companyRef, tranDate);
+
+      const lst = await AttendanceLog.FetchEntireListByCompanyRef(
+        this.employeeRef,
+        companyRef,
+        tranDate,
+        async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+      console.log('lst :', lst);
+
+      if (!lst || lst.length === 0) {
         this.bothButtonsEnabled = false;
-        await this.uiUtils.showErrorMessage('Error', "unable to get data");
+        await this.uiUtils.showErrorMessage('Error', "Unable to get attendance data.");
         return;
       }
 
+      // const checkInData = lst as AttendanceLogProps[];
+      const checkInData: AttendanceLogProps[] = lst.map(log => log.p);
+      console.log('lst :', lst);
+      console.log('checkInData :', checkInData);
+      const pendingCheckIn = checkInData.find(e => !e.CheckOutTime);
+      const completedCheckIn = checkInData.find(e => e.CheckOutTime);
+
+      if (pendingCheckIn) {
+        Object.assign(this.attendanceLog.p, pendingCheckIn);
+      } else if (completedCheckIn) {
+        Object.assign(this.attendanceLog.p, completedCheckIn);
+      }
+
+      this.isOnLeave = Boolean(this.attendanceLog.p.IsLeave);
+      this.checkInTime = this.attendanceLog.p.CheckInTime || '';
+      this.checkOutTime = this.attendanceLog.p.CheckOutTime || '';
+
       // Set button statuses based on attendanceLog properties
-      if (!this.attendanceLog.p.FirstCheckInTime && !this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime) {
+      const { FirstCheckInTime, CheckInTime, CheckOutTime } = this.attendanceLog.p;
+
+      if (!FirstCheckInTime && !CheckInTime && !CheckOutTime) {
         this.isCheckInEnabled = true;
         this.bothButtonsEnabled = true;
-
-      } else if (this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime) {
+      } else if (CheckInTime && !CheckOutTime) {
         this.isCheckInEnabled = false;
         this.bothButtonsEnabled = true;
-
-      } else if (this.attendanceLog.p.CheckInTime && this.attendanceLog.p.CheckOutTime) {
+      } else if (CheckInTime && CheckOutTime) {
         this.isCheckInEnabled = true;
         this.bothButtonsEnabled = true;
-
       } else {
         this.isCheckInEnabled = false;
         this.bothButtonsEnabled = false;
-
       }
     } catch (error) {
-      // console.error('Error in getCheckInData:', error);
+      await this.uiUtils.showErrorMessage('Error', 'Unexpected error while fetching attendance.');
     } finally {
       this.isLoading = false;
     }
   }
+
 
   formatDate(date: string | Date): string {
     return this.dateConversionService.formatDate(date);
@@ -332,35 +404,86 @@ export class AttendanceManagementPage implements OnInit {
     }
   }
 
+  async takePhoto(type: 'before' | 'after'): Promise<void> {
+    try {
+      const image = await Camera.getPhoto({
+        quality: 80,
+        allowEditing: false,
+        resultType: CameraResultType.Uri,
+        source: CameraSource.Camera
+      });
+
+      const fileUri = image.path ?? image.webPath;
+
+      if (type === 'before') {
+        this.rawCapturedSelfPhoto = fileUri ?? null;
+        this.capturedSelfPhoto = image.webPath ?? null;
+      } else {
+        this.rawCapturedWorkLocationPhoto = fileUri ?? null;
+        this.capturedWorkLocationPhoto = image.webPath ?? null;
+      }
+    } catch (error) {
+      console.error(`Error capturing ${type} photo:`, error);
+    }
+  }
+
+
+  async uriToFile(uri: string, fileName: string, mimeType = 'image/jpeg'): Promise<File> {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    return new File([blob], fileName, { type: mimeType });
+  }
+
+
   async submitPunchIn(): Promise<void> {
     try {
       this.isLoading = true;
       this.isSubmitting = true;
+
       this.attendanceLog.p.IsCheckIn = true;
       this.attendanceLog.p.CompanyRef = this.companyState.getCurrentCompanyRef();
       this.attendanceLog.p.EmployeeRef = this.employeeRef;
+
       if (this.selectedSite.length > 0) {
         this.attendanceLog.p.SiteRef = this.selectedSite[0].p.Ref;
       }
-      // Convert date to full format
+
       this.attendanceLog.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
       const entityToSave = this.attendanceLog.GetEditableVersion();
       const entitiesToSave = [entityToSave];
 
-      const tr = await this.utils.SavePersistableEntities(entitiesToSave);
+      const filesToUpload: FileTransferObject[] = [];
+
+      if (this.rawCapturedSelfPhoto) {
+        const file = await this.uriToFile(this.rawCapturedSelfPhoto, "PunchIn_Self_Photo.jpg");
+        filesToUpload.push(FileTransferObject.FromFile("AttendanceLogFile1", file, "PunchIn_Self_Photo"));
+      }
+      
+      if (this.rawCapturedWorkLocationPhoto) {
+        const file = await this.uriToFile(this.rawCapturedWorkLocationPhoto, "PunchIn_Work_location.jpg");
+        filesToUpload.push(FileTransferObject.FromFile("AttendanceLogFile2", file, "PunchIn_Work_location"));
+      }
+
+      const tr = await this.utils.SavePersistableEntities(entitiesToSave, filesToUpload);
+
       if (!tr.Successful) {
         await this.uiUtils.showErrorMessage('Error', tr.Message);
         return;
       }
+
       await this.uiUtils.showSuccessToster('Punch in successfully!');
-      // Reset state and refresh data
+
+      // Reset state
       this.attendanceLog = AttendanceLog.CreateNewInstance();
+      this.capturedSelfPhoto = null;
+      this.capturedWorkLocationPhoto = null;
+
       await Promise.all([
         this.getCheckInData(),
         this.getWeekWiseAttendanceLogByAttendanceListType()
       ]);
     } catch (error) {
-      // console.error('Error in submitPunchIn:', error);
+      console.error('Error in submitPunchIn:', error);
     } finally {
       this.isSubmitting = false;
       this.punchModalOpen = false;
@@ -396,19 +519,6 @@ export class AttendanceManagementPage implements OnInit {
     } finally {
       this.isSubmitting = false;
       this.isLoading = false;
-    }
-  }
-
-  // Note: Actual photo capture code should be implemented per your requirements.
-  async takePhoto(type: 'before' | 'after'): Promise<void> {
-    try {
-      // Implement camera functionality here.
-      // For example, using Capacitor Camera plugin.
-      // const image = await Camera.getPhoto({ ... });
-      // this.capturedBeforePhoto = type === 'before' ? image.dataUrl : this.capturedBeforePhoto;
-      // this.capturedAfterPhoto = type === 'after' ? image.dataUrl : this.capturedAfterPhoto;
-    } catch (error) {
-      console.error(`Error capturing ${type} photo:`, error);
     }
   }
 

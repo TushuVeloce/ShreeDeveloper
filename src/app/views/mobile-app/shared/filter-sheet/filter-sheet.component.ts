@@ -1,10 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
+export interface Option {
+  Ref: number;
+  Name: string;
+}
+
 export interface Category {
-  name: string;
+  Ref: number;
+  Name: string;
   multi: boolean;
-  options: string[];
+  options: Option[];
 }
 
 @Component({
@@ -14,58 +20,84 @@ export interface Category {
   standalone: false
 })
 export class FilterSheetComponent implements OnInit {
-
   @Input() data!: { categories: Category[] };
-  @Input() selected: { [category: string]: string[] } = {};
+  @Input() selected: {
+    category: { Ref: number; Name: string };
+    selectedOptions: { Ref: number; Name: string }[];
+  }[] = [];
+  
 
-  selectedOptions: { [category: string]: string[] } = {};
-  // selectedOptions: {[categoryName: string]: string[] | undefined;} = {};
+  selectedOptions: { [categoryRef: number]: number[] } = {};
   selectedCategory: Category | null = null;
-
-  constructor(private modalCtrl: ModalController) { } 
-
+  
+  constructor(private modalCtrl: ModalController) { }
   ngOnInit() {
-    // Pre-fill selected filters if available
-    this.selectedOptions = { ...this.selected };
+    this.selectedOptions = {};
 
-    // Initialize selectedCategory to first category if exists
+    for (const filter of this.selected) {
+      const catRef = filter.category.Ref;
+      const optionRefs = filter.selectedOptions.map(opt => opt.Ref);
+      this.selectedOptions[catRef] = optionRefs;
+    }
+
     if (this.data?.categories?.length) {
       this.selectedCategory = this.data.categories[0];
     }
   }
+  
+  
 
   selectCategory(category: Category) {
     this.selectedCategory = category;
   }
 
-  toggleOption(category: string, option: string) {
-    const isMulti = this.data.categories.find((c: Category) => c.name === category)?.multi;
+  toggleOption(categoryRef: number, optionRef: number) {
+    const category = this.data.categories.find(c => c.Ref === categoryRef);
+    if (!category) return;
 
-    if (isMulti) {
-      // Multiselect
-      const options = this.selectedOptions[category] || [];
-      if (options.includes(option)) {
-        this.selectedOptions[category] = options.filter(o => o !== option);
+    if (category.multi) {
+      const options = this.selectedOptions[categoryRef] || [];
+      if (options.includes(optionRef)) {
+        this.selectedOptions[categoryRef] = options.filter(ref => ref !== optionRef);
       } else {
-        this.selectedOptions[category] = [...options, option];
+        this.selectedOptions[categoryRef] = [...options, optionRef];
       }
     } else {
-      // Singleselect - replace with the selected option
-      this.selectedOptions[category] = [option];
+      this.selectedOptions[categoryRef] = [optionRef];
     }
   }
 
-  isSelected(category: string, option: string): boolean {
-    return this.selectedOptions[category]?.includes(option) ?? false;
+  isSelected(categoryRef: number, optionRef: number): boolean {
+    return this.selectedOptions[categoryRef]?.includes(optionRef) ?? false;
   }
 
-  hasAnySelection(category: string): boolean {
-    return (this.selectedOptions[category]?.length ?? 0) > 0;
+  hasAnySelection(categoryRef: number): boolean {
+    return (this.selectedOptions[categoryRef]?.length ?? 0) > 0;
   }
-
+  
   applyFilters() {
-    this.modalCtrl.dismiss({ selected: this.selectedOptions });
+    const selected = Object.entries(this.selectedOptions).map(([catRefStr, optionRefs]) => {
+      const catRef = Number(catRefStr);
+      const category = this.data.categories.find(c => c.Ref === catRef);
+
+      const selectedOptions = category?.options.filter(opt =>
+        (optionRefs as number[]).includes(opt.Ref)
+      ) ?? [];
+
+      return {
+        category: category
+          ? { Ref: category.Ref, Name: category.Name }
+          : { Ref: catRef, Name: 'Unknown' },
+        selectedOptions: selectedOptions.map(opt => ({
+          Ref: opt.Ref,
+          Name: opt.Name
+        }))
+      };
+    });
+
+    this.modalCtrl.dismiss({ selected });
   }
+  
 
   clearFilters() {
     this.selectedOptions = {};
