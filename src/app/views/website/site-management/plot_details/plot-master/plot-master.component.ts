@@ -75,12 +75,15 @@ export class PlotMasterComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
-    if (this.siteref == 0) {
+    if (this.siteref == 0 && lst.length > 0) {
       // this.getPlotList()
+     this.siteref = lst[0].p.Ref
+     this.Entity.p.SiteManagementRef = lst[0].p.Ref
       this.onsitechange(this.siteref)
-    } else {
-      this.BookingRemarkList = DomainEnums.BookingRemarkList(true, '--select--');
-    }
+    } 
+    // else {
+    //   this.BookingRemarkList = DomainEnums.BookingRemarkList(true, '--select--');
+    // }
     this.loadPaginationData();
   }
 
@@ -94,9 +97,10 @@ export class PlotMasterComponent implements OnInit {
       this.clearStorage();
       this.getPlotList()
       this.BookingRemarkList = DomainEnums.BookingRemarkList(true);
-    } else {
-      this.BookingRemarkList = DomainEnums.BookingRemarkList(true, '--select--');
     }
+    //  else {
+    //   this.BookingRemarkList = DomainEnums.BookingRemarkList(true, '--select--');
+    // }
     if (siteref > 0 && this.SiteList.length > 0) {
       this.Entity.p.SiteManagementRef = siteref;
       const selectedSite = this.SiteList.find(site => site.p.Ref === siteref);

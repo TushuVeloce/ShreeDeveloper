@@ -29,7 +29,7 @@
               <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
                 nzPlaceHolder="Select" id="SiteManagementRef" name="SiteManagementRef" [nzSize]="'large'"
                 [(ngModel)]="Entity.p.SiteManagementRef" (ngModelChange)="onsitechange(Entity.p.SiteManagementRef)">
-                <nz-option [nzValue]="0" nzLabel="All"></nz-option>
+                <!-- <nz-option [nzValue]="0" nzLabel="All"></nz-option> -->
                 <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
               </nz-select>
             </div>
