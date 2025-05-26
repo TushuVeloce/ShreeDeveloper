@@ -25,18 +25,20 @@
         <form autocomplete="off">
           <div class="row">
             <div class="col-md-4">
-              <label for="siteref"><b>Site Name</b></label>
+              <label for="SiteManagementRef"><b>Site Name</b></label>
               <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-                nzPlaceHolder="Select" id="siteref" name="siteref" [nzSize]="'large'" [(ngModel)]="siteref"
-                (ngModelChange)="getPlotListBySiteandBookingRemarkRef()">
+                nzPlaceHolder="Select" id="SiteManagementRef" name="SiteManagementRef" [nzSize]="'large'"
+                [(ngModel)]="Entity.p.SiteManagementRef" (ngModelChange)="onsitechange(Entity.p.SiteManagementRef)">
+                <nz-option [nzValue]="0" nzLabel="All"></nz-option>
                 <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
               </nz-select>
             </div>
             <div class="col-md-4">
               <label>Booking Remark</label>
               <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-                nzPlaceHolder="Select" id="bookingremark" name="bookingremark" [nzSize]="'large'"
-                [(ngModel)]="bookingremark" (ngModelChange)="getPlotListBySiteandBookingRemarkRef()">
+                nzPlaceHolder="Select" id="CurrentBookingRemark" name="CurrentBookingRemark" [nzSize]="'large'"
+                [(ngModel)]="Entity.p.CurrentBookingRemark"
+                (ngModelChange)="getPlotListBySiteandBookingRemarkRef(Entity.p.SiteManagementRef,Entity.p.CurrentBookingRemark)">
                 <nz-option *ngFor="let bookingremark of BookingRemarkList" [nzValue]="bookingremark.Ref"
                   [nzLabel]="bookingremark.Name"></nz-option>
               </nz-select>
