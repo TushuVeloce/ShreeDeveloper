@@ -213,12 +213,12 @@ export class RegistrarOfficeDetailComponent implements OnInit {
       FileTransferObject.FromFile(f.label, f.file, f.filename)
     );
 
-    console.log('lstFTO:', lstFTO);
-    if (this.Entity.p.CustomerAadharFile != null) {
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+
+    if (this.uploadedFiles.length <= 0) {
+      let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
     }
 
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message);
