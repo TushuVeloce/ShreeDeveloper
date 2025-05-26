@@ -200,6 +200,7 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     this.Entity.p.UpdatedDate = await CurrentDateTimeRequest.GetCurrentDateTime();
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    this.Entity.p.SiteRef = Number(this.appStateManage.StorageKey.getItem('siteRef'))
 
     // convert date 2025-02-23 to 2025-02-23-00-00-00-000
     this.Entity.p.AgreementDate = this.dtu.ConvertStringDateToFullFormat(this.localagreementdate)
@@ -212,12 +213,14 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     const lstFTO: FileTransferObject[] = this.uploadedFiles.map(f =>
       FileTransferObject.FromFile(f.label, f.file, f.filename)
     );
+    console.log('lstFTO :', lstFTO);
 
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    console.log('entitiesToSave :', entitiesToSave);
 
     if (this.uploadedFiles.length <= 0) {
-      let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
     }
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
 
     if (!tr.Successful) {
       this.isSaveDisabled = false;
@@ -226,7 +229,6 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     }
     else {
       this.isSaveDisabled = false;
-      // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Registrar Office saved successfully!');
         this.Entity = RegistrarOffice.CreateNewInstance();

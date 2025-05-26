@@ -1,4 +1,4 @@
-import { Component, OnInit,effect  } from '@angular/core';
+import { Component, OnInit, effect } from '@angular/core';
 import { Router } from '@angular/router';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
@@ -15,7 +15,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   templateUrl: './registrar-office.component.html',
   styleUrls: ['./registrar-office.component.scss'],
 })
-export class RegistrarOfficeComponent  implements OnInit {
+export class RegistrarOfficeComponent implements OnInit {
 
   Entity: RegistrarOffice = RegistrarOffice.CreateNewInstance();
   MasterList: RegistrarOffice[] = [];
@@ -29,13 +29,13 @@ export class RegistrarOfficeComponent  implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.','Customer', 'Cheque', 'Witness 1','Agreement to Sale','Sale Deed','Talathi','7/12	','Spiral','Client Submit	', 'Action'];
+  headers: string[] = ['Sr.No.', 'Customer', 'Cheque', 'Witness 1', 'Agreement to Sale', 'Sale Deed', 'Talathi', '7/12	', 'Spiral', 'Client Submit	', 'Action'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement) {
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement) {
     effect(() => {
       this.getSiteListByCompanyRef();
     });
-   }
+  }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
@@ -60,28 +60,29 @@ export class RegistrarOfficeComponent  implements OnInit {
 
   // get PlotList With Site Ref //
 
-getPlotListBySiteRef = async (SiteRef: number) => {
-  this.MasterList = [];
-  this.DisplayMasterList = [];
-  this.PlotNoList = [];
-  this.Entity.p.PlotRef= 0 ;
-  if (SiteRef <= 0) {
-    await this.uiUtils.showWarningToster(`Please Select Site`);
-    return
+  getPlotListBySiteRef = async (SiteRef: number) => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    this.PlotNoList = [];
+    this.Entity.p.PlotRef = 0;
+    this.appStateManage.StorageKey.setItem('siteRef', String(SiteRef));
+    if (SiteRef <= 0) {
+      await this.uiUtils.showWarningToster(`Please Select Site`);
+      return
+    }
+    let lst = await Plot.FetchEntireListBySiteRef(SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.PlotNoList = lst.filter(plot => plot.p.CurrentBookingRemark === 50);
+    this.getRegistrarOfficeListBySiteRef(SiteRef)
+    this.loadPaginationData();
   }
-  let lst = await Plot.FetchEntireListBySiteRef(SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  this.PlotNoList = lst.filter(plot => plot.p.CurrentBookingRemark === 50);
-  this.getRegistrarOfficeListBySiteRef(SiteRef)
-  this.loadPaginationData();
-}
 
   // get CustomerList With Plot Ref //
   getRegistrarOfficeListBySiteRef = async (SiteRef: number) => {
     this.DisplayMasterList = [];
     let lst = await RegistrarOffice.FetchEntireListBySiteRef(SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-        this.MasterList = lst;
-        this.DisplayMasterList = this.MasterList;
-      this.loadPaginationData();
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
   }
 
   // get CustomerList With Plot Ref //
@@ -92,9 +93,9 @@ getPlotListBySiteRef = async (SiteRef: number) => {
       return
     }
     let lst = await RegistrarOffice.FetchEntireListByPlotRef(PlotRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-        this.MasterList = lst;
-        this.DisplayMasterList = this.MasterList;
-      this.loadPaginationData();
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
   }
 
 
@@ -115,10 +116,10 @@ getPlotListBySiteRef = async (SiteRef: number) => {
   isFerfarCompleted(office: any): boolean {
     const p = office.p;
     return p.IsIndexOriginalSubmit &&
-           p.IsDastZeroxSubmit &&
-           p.TalathiInwardNo &&
-           p.TalathiDate &&
-           p.IsFerfarNoticeSubmit;
+      p.IsDastZeroxSubmit &&
+      p.TalathiInwardNo &&
+      p.TalathiDate &&
+      p.IsFerfarNoticeSubmit;
   }
 
   onEditClicked = async (item: RegistrarOffice) => {
@@ -146,12 +147,12 @@ getPlotListBySiteRef = async (SiteRef: number) => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   }
 
-  get paginatedList () {
+  get paginatedList() {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
 
-  onPageChange  = (pageIndex: number): void => {
+  onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
   }
 
