@@ -173,6 +173,8 @@ export class MarketingType implements IPersistable<MarketingType> {
     return MarketingType.ListFromTransportData(tdResponse);
   }
 
+  
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

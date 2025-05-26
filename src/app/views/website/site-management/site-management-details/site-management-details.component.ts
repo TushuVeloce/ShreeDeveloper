@@ -276,8 +276,16 @@ export class SiteManagementDetailsComponent implements OnInit {
     this.editingIndex = index;
   }
 
-  removeowner(index: number) {
-    this.Entity.p.SiteManagementOwnerDetails.splice(index, 1); // Remove owner
+  async removeowner(index: number) {
+    // this.Entity.p.SiteManagementOwnerDetails.splice(index, 1); // Remove owner
+ await this.uiUtils.showConfirmationMessage(
+    'Delete',
+    `This process is <strong>IRREVERSIBLE!</strong> <br/>
+     Are you sure that you want to DELETE this Owner?`,
+    async () => {
+      this.Entity.p.SiteManagementOwnerDetails.splice(index, 1);
+    }
+  );
   }
 
   SaveSite = async () => {

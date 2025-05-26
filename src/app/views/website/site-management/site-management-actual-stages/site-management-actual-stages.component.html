@@ -111,7 +111,7 @@
             <Edit-Icon (editClick)="onEditClicked(MachinaryExpense)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(MachinaryExpense)" />
             <span style="margin-left: 9px; cursor: pointer;" (click)="navigateToPrint(MachinaryExpense)">
-              <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+              <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
           </td>
         </tr>
         <tr *ngIf="paginatedMachinaryList().length > 0">
@@ -160,7 +160,7 @@
             <Edit-Icon (editClick)="onEditClicked(LabourExpense)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(LabourExpense)" />
             <span style="margin-left: 9px; cursor: pointer;" (click)="navigateToPrint(LabourExpense)">
-              <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+                <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
           </td>
         </tr>
         <tr *ngIf="paginatedLabourList().length > 0">
@@ -206,15 +206,15 @@
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.Quantity}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.Rate}}</td>
           <td Class="tbldata" style="white-space: nowrap;">{{OtherExpense.p.GrandTotal}}</td>
-          <td class="tbldata" style="white-space: nowrap;">
+          <td class="tbldata" style="white-space: nowrap; justify-content: center;">
             <span>
               <Edit-Icon (editClick)="onEditClicked(OtherExpense)" />
             </span>
             <span>
               <Delete-Icon (deleteClicked)="onDeleteClicked(OtherExpense)" />
             </span>
-            <span style="margin-left: 9px; cursor: pointer;" (click)="navigateToPrint(OtherExpense)">
-              <img src="\assets\icons\printer.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+            <span style="margin-left: 9px; margin-right: 9px; cursor: pointer;" (click)="navigateToPrint(OtherExpense)">
+               <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
           </td>
         </tr>
         <tr *ngIf="paginatedOtherList().length > 0">

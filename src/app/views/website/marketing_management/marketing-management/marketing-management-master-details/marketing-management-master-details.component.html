@@ -37,8 +37,8 @@
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Marketing Type</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="MarketingTypeRef" name="MarketingTypeRef" [nzSize]="'large'"
-            [(ngModel)]="Entity.p.MarketingTypeRef">
+            nzPlaceHolder="Select" id="MarketingType" name="MarketingType" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.MarketingType" (ngModelChange)="ClearPage()">
             <nz-option *ngFor="let Mode of MarketingModesList" [nzValue]="Mode.Ref" [nzLabel]="Mode.Name"></nz-option>
           </nz-select>
         </div>
@@ -70,7 +70,7 @@
           </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem;"
-          *ngIf="Entity.p.MarketingTypeRef == MarketingType.PrintingMedia">
+          *ngIf="Entity.p.MarketingType == MarketingType.PrintingMedia">
           <label>Page</label>
           <input type="number" [(ngModel)]="Entity.p.Page" name="Page" class="form-control" id="Page" required
             placeholder="Enter Page" (click)="selectAllValue($event)"/>

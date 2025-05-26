@@ -6,6 +6,8 @@ import { Site } from 'src/app/classes/domain/entities/website/masters/site/site'
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { DTU } from 'src/app/services/dtu.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -27,6 +29,13 @@ export class MarketingManagementMasterComponent implements OnInit {
   SiteList: Site[] = [];
   VendorList: Vendor[] = [];
   SearchString: string = '';
+
+  DigitalPaginationTotal = 0;
+  ElectronicsPaginationTotal = 0;
+  OutdoorPaginationTotal = 0;
+  PrintingMediaPaginationTotal = 0;
+  BrokerPaginationTotal = 0;
+
   SelectedMarketingManagement: MarketingManagement = MarketingManagement.CreateNewInstance();
   MarketingModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
   pageSize = 8; // Items per page
@@ -37,7 +46,7 @@ export class MarketingManagementMasterComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   Headers: string[] = ['Sr.No.', 'Site Name', 'Date', 'Marketing Type', 'Vendor Name', 'Rate', 'Quantity', 'Total', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement, private dtu: DTU, private DateconversionService: DateconversionService
   ) {
     effect(async () => {
       await this.getMarketingListByCompanyRef();
@@ -47,7 +56,7 @@ export class MarketingManagementMasterComponent implements OnInit {
   async ngOnInit() {
     this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef(),
-    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
@@ -69,7 +78,7 @@ export class MarketingManagementMasterComponent implements OnInit {
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     for (const item of lst) {
-      switch (item.p.MarketingTypeRef) {
+      switch (item.p.MarketingType) {
         case MarketingModes.Digital:
           this.DigitalList.push(item);
           break;
@@ -90,11 +99,61 @@ export class MarketingManagementMasterComponent implements OnInit {
     this.loadPaginationData();
   }
 
+  getActualStageListByAllFilters = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    this.DigitalList = [];
+    this.ElectronicsList = [];
+    this.OutdoorList = [];
+    this.PrintingMediaList = [];
+    this.BrokerList = [];
+    let FromDate = this.dtu.ConvertStringDateToFullFormat(this.FromDate);
+    let ToDate = this.dtu.ConvertStringDateToFullFormat(this.ToDate);
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await MarketingManagement.FetchEntireListByAllFilters(this.companyRef(), FromDate, ToDate, this.Entity.p.SiteRef, this.Entity.p.VendorRef, this.Entity.p.MarketingType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    for (const item of lst) {
+      switch (item.p.MarketingType) {
+        case MarketingModes.Digital:
+          this.DigitalList.push(item);
+          break;
+        case MarketingModes.Electronics:
+          this.ElectronicsList.push(item);
+          break;
+        case MarketingModes.Outdoor:
+          this.OutdoorList.push(item);
+          break;
+        case MarketingModes.PrintingMedia:
+          this.PrintingMediaList.push(item);
+          break;
+        case MarketingModes.AgentBoker:
+          this.BrokerList.push(item);
+          break;
+      }
+    }
+    this.loadPaginationData();
+  }
+
+formatShortDate(dateString: string): string {
+  if (!dateString) return '';
+  
+  const parts = dateString.split('-');
+  if (parts.length >= 3) {
+    return `${parts[0]}-${parts[1]}-${parts[2]}`; // YYYY-MM-DD
+  }
+  return dateString; // fallback
+}
+
+
   onEditClicked = async (item: MarketingManagement) => {
     this.SelectedMarketingManagement = item.GetEditableVersion();
     MarketingManagement.SetCurrentInstance(this.SelectedMarketingManagement);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Marketing_Management_Master']);
+    await this.router.navigate(['/homepage/Website/Marketing_Management_Details']);
   };
 
   onDeleteClicked = async (material: MarketingManagement) => {
