@@ -50,6 +50,16 @@ export class RegistrarOfficeDetailComponent implements OnInit {
 
   @ViewChild('CustomerAadharFileInput', { static: false }) CustomerAadharFileInputRef!: ElementRef;
   @ViewChild('CustomerPanFileInput', { static: false }) CustomerPanFileInputRef!: ElementRef;
+  @ViewChild('Witness1IsAadharSubmit', { static: false }) Witness1IsAadharSubmitRef!: ElementRef;
+  @ViewChild('Witness1IsPanSubmit', { static: false }) Witness1IsPanSubmitRef!: ElementRef;
+  @ViewChild('Witness2IsAadharSubmit', { static: false }) Witness2IsAadharSubmitRef!: ElementRef;
+  @ViewChild('Witness2IsPanSubmit', { static: false }) Witness2IsPanSubmitRef!: ElementRef;
+  @ViewChild('AgreementDocument', { static: false }) AgreementDocumentRef!: ElementRef;
+  @ViewChild('SaleDeedDocument', { static: false }) SaleDeedDocumentRef!: ElementRef;
+  @ViewChild('IndexOriginalDocument', { static: false }) IndexOriginalDocumentRef!: ElementRef;
+  @ViewChild('DastZeroxDocument', { static: false }) DastZeroxDocumentRef!: ElementRef;
+  @ViewChild('FerfarNoticeDocument', { static: false }) FerfarNoticeDocumentRef!: ElementRef;
+  @ViewChild('FinalCustomer712Document', { static: false }) FinalCustomer712DocumentRef!: ElementRef;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private dtu: DTU,
     private datePipe: DatePipe) { }
@@ -88,21 +98,6 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     input.select();
   }
 
-  // onCustomerAadharFileUpload(event: Event): void {
-  //   const input = event.target as HTMLInputElement;
-  //   if (input.files && input.files[0]) {
-  //     this.Entity.p.CustomerAadharFile = input.files[0];
-  //     console.log('this.Entity.p.CustomerAadharFile :', this.Entity.p.CustomerAadharFile);
-  //     this.CustomerAadharSelectedFileName = this.Entity.p.CustomerAadharFile.name;
-  //     console.log('this.CustomerAadharSelectedFileName :', this.CustomerAadharSelectedFileName);
-
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       this.CustomerAadharFilePreviewUrl = reader.result as string;
-  //     };
-  //     reader.readAsDataURL(this.Entity.p.CustomerAadharFile);
-  //   }
-  // }
 
   // Trigger file input when clicking the image
   CustomerAadharTriggerFileInput(): void {
@@ -145,6 +140,8 @@ export class RegistrarOfficeDetailComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = () => {
         this.filePreviews[type] = reader.result as string;
+        this.selectedFileNames[type] = fileEntry.filename;
+
       };
       reader.readAsDataURL(file);
     }
@@ -198,16 +195,16 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   }
 
   SaveRegistrarOfficeMaster = async () => {
-    // this.isSaveDisabled = true;
-    // this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    // this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-    // this.Entity.p.UpdatedDate = await CurrentDateTimeRequest.GetCurrentDateTime();
-    // this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    this.isSaveDisabled = true;
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
+    this.Entity.p.UpdatedDate = await CurrentDateTimeRequest.GetCurrentDateTime();
+    this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
 
-    // // convert date 2025-02-23 to 2025-02-23-00-00-00-000
-    // this.Entity.p.AgreementDate = this.dtu.ConvertStringDateToFullFormat(this.localagreementdate)
-    // this.Entity.p.SaleDeedDate = this.dtu.ConvertStringDateToFullFormat(this.localsaledeeddate)
-    // this.Entity.p.TalathiDate = this.dtu.ConvertStringDateToFullFormat(this.localtalathidate)
+    // convert date 2025-02-23 to 2025-02-23-00-00-00-000
+    this.Entity.p.AgreementDate = this.dtu.ConvertStringDateToFullFormat(this.localagreementdate)
+    this.Entity.p.SaleDeedDate = this.dtu.ConvertStringDateToFullFormat(this.localsaledeeddate)
+    this.Entity.p.TalathiDate = this.dtu.ConvertStringDateToFullFormat(this.localtalathidate)
 
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
@@ -217,11 +214,11 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     );
 
     console.log('lstFTO:', lstFTO);
-    // if (this.Entity.p.CustomerAadharFile != null) {
-      let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
-    // }
+    if (this.Entity.p.CustomerAadharFile != null) {
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+    }
 
-    // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message);
