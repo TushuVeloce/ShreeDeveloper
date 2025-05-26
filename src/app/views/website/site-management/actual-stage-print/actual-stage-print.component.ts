@@ -25,29 +25,6 @@ export class ActualStagePrintComponent implements OnInit {
   IsDropdownDisabled: boolean = false
   InitialEntity: ActualStages = null as any;
 
-  receipt = {
-    date: '5/6/2025',
-    challanNo: 123,
-    vendor: 'Vendor Name',
-    siteName: 'SITE NAME',
-    address: 'Some location address',
-    phone: '1234567890',
-    stageName: 'Excavation Stage',
-    serviceType: 'Earth Work',
-    vehicleNo: 'MH12 AB1234',
-    items: [
-      { description: 'JCB Usage', qty: 12, unit: 'hr', rate: 850, amount: 10500 },
-      { description: 'Diesel', qty: 50, unit: 'ltr', rate: 93, amount: -4650 }
-    ],
-    totalRows: [
-      { label: '', value: 0 },
-      { label: '', value: 0 },
-      { label: '', value: 0 }
-    ],
-    total: 5850,
-    inwords: 'Five Thousand Eight Hundred Fifty Only'
-  };
-
   constructor(
     private router: Router,
     private uiUtils: UIUtils,
@@ -81,7 +58,7 @@ export class ActualStagePrintComponent implements OnInit {
 
   printSection(sectionId: string): void {
     const printContents = document.getElementById(sectionId)?.innerHTML;
-    const popupWin = window.open('', '_blank', 'width=1000,height=800');
+    const popupWin = window.open('', '_blank', 'width=1300,height=800');
 
     if (popupWin && printContents) {
       popupWin.document.open();

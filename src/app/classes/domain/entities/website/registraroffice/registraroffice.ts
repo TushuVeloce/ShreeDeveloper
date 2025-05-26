@@ -77,7 +77,7 @@ export class RegistrarOfficeProps {
   //  public IsSaledeedSubmit : Boolean = false;
   public SaleDeedDocumentNo: string = '';
 
-  public SaleDeedtDocumentPath: string = '';
+  public SaleDeedDocumentPath: string = '';
   public SaleDeedDocumentFile: File = null as any
 
   public SaleDeedDate: string = '';
