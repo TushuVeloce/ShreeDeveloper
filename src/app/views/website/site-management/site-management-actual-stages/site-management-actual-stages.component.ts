@@ -213,6 +213,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
   onEditClicked = async (item: ActualStages) => {
     this.SelectedActualStages = item.GetEditableVersion();
     ActualStages.SetCurrentInstance(this.SelectedActualStages);
+    console.log('this.SelectedActualStages :', this.SelectedActualStages);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage_Details']);
   };
