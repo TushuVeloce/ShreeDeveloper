@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { CRMPage } from './crm.page';
+import { CustomerPendingFollowUpMobileAppComponent } from './customer-pending-follow-up-mobile-app/customer-pending-follow-up-mobile-app.component';
 
 const routes: Routes = [
   {
@@ -15,6 +16,10 @@ const routes: Routes = [
   {
     path: 'customer-follow-up',
     loadChildren: () => import('./customer-follow-up/customer-follow-up.module').then( m => m.CustomerFollowUpPageModule)
+  },
+  {
+    path: 'pending-customer-follow-up',
+    component:CustomerPendingFollowUpMobileAppComponent
   }
 
 ];

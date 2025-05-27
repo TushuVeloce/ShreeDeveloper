@@ -106,7 +106,6 @@ export class SiteManagementActualStagesComponent implements OnInit {
     let lst = await ActualStages.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    console.log('DisplayMasterList :', this.DisplayMasterList);
     for (const item of lst) {
       switch (item.p.ExpenseTypeRef) {
         case this.ExpenseTypeRef:
@@ -212,7 +211,6 @@ export class SiteManagementActualStagesComponent implements OnInit {
   onEditClicked = async (item: ActualStages) => {
     this.SelectedActualStages = item.GetEditableVersion();
     ActualStages.SetCurrentInstance(this.SelectedActualStages);
-    console.log('this.SelectedActualStages :', this.SelectedActualStages);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage_Details']);
   };

@@ -98,7 +98,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stage' : 'Edit Stage';
       debugger
       this.Entity = ActualStages.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
       if (this.Entity.p.Date != '') {
         this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
       }
@@ -333,7 +332,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       await this.FormulateVendorServiceList();
       const refArray = this.VendorServiceList.map(s => Number(s));
       const matched = this.VendorServiceListByVendor.filter(service => refArray.includes(service.p.Ref));
-      console.log('matched :', matched);
       this.VendorServiceListByVendor = matched; // Either matched list or stays empty
     }
   }
@@ -608,7 +606,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     this.Entity.p.Total = this.getTotalWorkedHours()
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
     let entityToSave = this.Entity.GetEditableVersion();
-    console.log('entityToSave :', entityToSave);
     let entitiesToSave = [entityToSave]
     await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);

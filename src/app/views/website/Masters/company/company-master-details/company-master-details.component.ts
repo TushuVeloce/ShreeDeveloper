@@ -109,7 +109,6 @@ export class CompanyMasterDetailsComponent implements OnInit {
 
       this.DetailsFormTitle = this.IsNewEntity ? 'New Company' : 'Edit Company';
       this.Entity = Company.GetCurrentInstance();
-      console.log('this.Entity :', this.Entity);
       this.imageUrl = this.Entity.p.LogoFile;
 
       this.loadImageFromBackend(this.Entity.p.LogoFile)

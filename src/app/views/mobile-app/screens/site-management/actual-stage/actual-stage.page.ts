@@ -198,6 +198,7 @@ export class ActualStagePage implements OnInit {
       }
     }
   }
+
   onEditClicked = async (item: ActualStages) => {
     this.SelectedActualStages = item.GetEditableVersion();
     ActualStages.SetCurrentInstance(this.SelectedActualStages);
@@ -231,6 +232,12 @@ export class ActualStagePage implements OnInit {
   AddActualStages = async () => {
     await this.router.navigate(['app_homepage/tabs/site-management/actual-stage/add']);
   }
+  formatData = (list: any[]) => {
+    return list.map(item => ({
+      Ref: item.p.Ref,
+      Name: item.p.Name
+    }));
+  };
 
   openFilterSheet = async () => {
     const filterData = {
@@ -239,34 +246,86 @@ export class ActualStagePage implements OnInit {
           Name: 'Vendor',
           Ref: 100,
           multi: false,
-          options:this.VendorList
+          date: false,
+          dependUponRef: 0,
+          options: this.formatData(this.VendorList)
         },
         {
           Name: 'Stage',
           Ref: 200,
           multi: false,
-          options:this.StageList
+          date: false,
+          dependUponRef: 0,
+          options: this.formatData(this.StageList)
         },
         {
-          Name: 'From Date',
+          Name: 'Expense Type',
           Ref: 300,
           multi: false,
-          options: [
-            { Ref: 301, Name: '40GB' },
-            { Ref: 302, Name: '60GB' },
-            { Ref: 303, Name: '80GB' }
-          ]
-        }
+          date: false,
+          dependUponRef: 200,
+          options: []
+         }
+        // ,
+        // {
+        //   Name: 'From Date',
+        //   Ref: 400,
+        //   multi: false,
+        //   date: true,
+        //   dependUponRef: 0,
+        //   options: []
+        // },
+        // {
+        //   Name: 'To Date',
+        //   Ref: 500,
+        //   multi: false,
+        //   date: true,
+        //   dependUponRef: 0,
+        //   options: []
+        // }
       ]
     };
 
-    console.log(' this.vendor :', this.VendorList);
-    console.log(' this.stage :', this.StageList);
-    this.filterService.openFilter(filterData, this.selectedFilters).then(res => {
-      if (res?.selected) {
+    // console.log('Vendor List:', this.VendorList);
+    // console.log('Stage List:', this.StageList);
+
+    try {
+      const res = await this.filterService.openFilter(filterData, this.selectedFilters);
+      console.log('res :', res);
+
+      if (res.selected && res.selected.length > 0) {
         this.selectedFilters = res.selected;
-        console.log(' this.selectedFilters :', this.selectedFilters);
+        // console.log('Selected Filters:', this.selectedFilters);
+
+        for (const filter of this.selectedFilters) {
+          // console.log('Filter:', filter);
+
+          switch (filter.category.Ref) {
+            case 100:
+              this.Entity.p.VendorRef = filter.selectedOptions[0].Ref;
+              break;
+            case 200:
+              this.Entity.p.StageRef = filter.selectedOptions[0].Ref;
+              break;
+            case 300:
+              // this.Entity.p.SomeDateRef = filter.SelectedValue;
+              break;
+          }
+        }
+
+        this.getActualStageListByAllFilters();
+      } else {
+        this.Entity.p.VendorRef = 0;
+        // console.log('this.Entity.p.VendorRef :', this.Entity.p.VendorRef);
+        this.Entity.p.StageRef = 0;
+        // console.log('this.Entity.p.StageRef :', this.Entity.p.StageRef);
+        this.selectedFilters = [];
+        // this.Entity.p.SiteRef = 0;
+        this.getActualStageListByAllFilters();
       }
-    });
-  }
+    } catch (error) {
+      console.error('Error in filter selection:', error);
+    }
+  };
+
 }

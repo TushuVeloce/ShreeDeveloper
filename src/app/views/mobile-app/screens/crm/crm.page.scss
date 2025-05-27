@@ -1,154 +1,79 @@
-/* CRM Container */
-.crm-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-    padding: 16px;
-}
-
-/* CRM Stats Section */
-.crm-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 12px;
-}
-
-.stat-card {
-    background: var(--ion-color-primary);
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.2s ease-in-out;
-}
-
-.stat-card:hover {
-    transform: translateY(-3px);
-}
-
-.stat-icon {
-    font-size: 24px;
-    color: var(--ion-text-color-dark);
-    margin-bottom: 6px;
-}
-
-.stat-value {
-    font-size: 18px;
-    font-weight: 500;
-    color: var(--ion-text-color-dark);
-}
-
-.stat-title {
-    font-size: 12px;
-    color: var(--ion-text-color-dark);
-}
-
-/* 📱 Responsive Adjustments */
-@media (max-width: 768px) {
-    .crm-stats {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .stat-card {
-        padding: 8px;
-    }
-
-    .stat-icon {
-        font-size: 22px;
-    }
-
-    .stat-value {
-        font-size: 16px;
-    }
-
-    .stat-title {
-        font-size: 10px;
-    }
-}
-
-/* 📌 Action Buttons */
-.action-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: center;
-}
-
-ion-button {
-    flex: 1;
-    min-width: 150px;
-    font-size: 14px;
-    padding: 10px;
-    text-transform: uppercase;
-}
-
-/* 📌 Reminders Section */
-.reminders-section {
-    background: var(--ion-background-color);
-    padding: 16px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* === General Reset === */
+ion-content {
+    --background: #f2f4f7;
 }
 
 .section-title {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
     color: #333;
-    margin-bottom: 12px;
+    margin: 16px 0 8px;
 }
 
-.reminder-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 10px;
+/* === Buttons === */
+.action-button-group ion-button {
+    font-weight: 500;
+    font-size: 15px;
+    border-radius: 12px;
+    height: 48px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    --box-shadow: none;
 }
 
-.reminder-item {
+/* === Reminder Cards === */
+.reminder-card-modern {
+    border-radius: 12px;
+    transition: transform 0.2s ease-in-out;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    background: #ffffff;
+}
+
+.reminder-card-modern:hover {
+    transform: translateY(-3px);
+}
+
+.reminder-content {
     display: flex;
+    gap: 14px;
     align-items: center;
-    gap: 12px;
-    background: #f8f9fa;
-    padding: 12px;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-    margin-bottom: 10px;
 }
 
-.reminder-item:hover {
-    background-color: #e9ecef;
-}
-
-.reminder-item ion-icon {
-    font-size: 20px;
+.reminder-content ion-icon {
+    font-size: 28px;
     color: var(--ion-color-primary);
 }
 
-.reminder-details {
-    flex: 1;
-}
-
-.reminder-title {
-    font-size: 14px;
+.reminder-content h3 {
+    font-size: 16px;
+    margin: 0;
     font-weight: 600;
-    color: #333;
+    color: #111;
 }
 
-.reminder-date {
-    font-size: 12px;
-    color: #777;
+.reminder-content p {
+    font-size: 14px;
+    margin: 2px 0 0;
+    color: #666;
 }
 
-/* Responsive Reminders */
+/* === No Data Message === */
+.no-data-msg {
+    font-size: 15px;
+    color: #888;
+    margin-top: 20px;
+}
+
+/* === Responsive Design === */
 @media (max-width: 768px) {
-    .reminder-grid {
-        grid-template-columns: 1fr;
+    .reminder-content h3 {
+        font-size: 15px;
     }
 
-    .reminder-item {
-        padding: 10px;
-    }
-
-    .reminder-title {
+    .reminder-content p {
         font-size: 13px;
+    }
+
+    .section-title {
+        font-size: 18px;
     }
 }

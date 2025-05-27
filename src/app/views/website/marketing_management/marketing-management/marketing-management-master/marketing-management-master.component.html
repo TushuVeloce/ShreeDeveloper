@@ -64,19 +64,18 @@
           Digital</label>
       </div>
     </div>
-    <nz-table #basicTable nzSize="small" [nzNoResult]="noDataTpl" class="no-hover-table bgtable_light"
-      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="DigitalList">
+    <nz-table #basicTable nzSize="small"  class="no-hover-table bgtable_light"
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedDigitalList()" [nzNoResult]="noDataTpl">
       <thead>
         <tr>
           <th *ngFor="let Header of Headers" class="tblsubheader">{{ Header }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let digital of DigitalList; index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <tr *ngFor="let digital of paginatedDigitalList(); index as i">
+          <td Class="tbldata">{{ (currentDigitalPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{digital.p.SiteName}}</td>
-          <td class="tbldata">{{formatShortDate(digital.p.Date)}}</td>
-          <td Class="tbldata">{{digital.p.MarketingTypeName}}</td>
+          <td class="tbldata" style="white-space: nowrap;">{{formatShortDate(digital.p.Date)}}</td>
           <td Class="tbldata">{{digital.p.VendorName}}</td>
           <td Class="tbldata">{{digital.p.Rate}}</td>
           <td Class="tbldata">{{digital.p.Quantity}}</td>
@@ -86,8 +85,20 @@
             <Delete-Icon (deleteClicked)="onDeleteClicked(digital)" />
           </td>
         </tr>
+        <tr *ngIf="paginatedDigitalList().length > 0">
+          <td class="tbldata" colspan="5"></td>
+          <td class="tbldata"><b>Total</b></td>
+          <td class="tbldata"><b>{{ totalDigitalAmount | currency: 'INR' }}</b></td>
+          <td class="tbldata"></td>
+        </tr>
       </tbody>
     </nz-table>
+     <div class="pagination">
+      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="DigitalPaginationTotal"
+        [(nzPageIndex)]="currentDigitalPage" (nzPageIndexChange)="onDigitalPageChange($event)"
+        [nzShowSizeChanger]="false" [nzResponsive]="true">
+      </nz-pagination>
+    </div>
   </div>
 
   <!-- Electronics -->
@@ -99,18 +110,17 @@
       </div>
     </div>
     <nz-table #basicTable [nzNoResult]="noDataTpl" nzSize="small" class="no-hover-table bgtable_light"
-      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="ElectronicsList">
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedElectronicsList()">
       <thead>
         <tr>
           <th *ngFor="let Header of Headers" class="tblsubheader">{{ Header }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let electronics of ElectronicsList; index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <tr *ngFor="let electronics of paginatedElectronicsList(); index as i">
+          <td Class="tbldata">{{ (currentElectronicsPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{electronics.p.SiteName}}</td>
-          <td Class="tbldata">{{electronics.p.Date}}</td>
-          <td Class="tbldata">{{electronics.p.MarketingTypeName}}</td>
+          <td class="tbldata"style="white-space: nowrap;">{{formatShortDate(electronics.p.Date)}}</td>
           <td Class="tbldata">{{electronics.p.VendorName}}</td>
           <td Class="tbldata">{{electronics.p.Rate}}</td>
           <td Class="tbldata">{{electronics.p.Quantity}}</td>
@@ -120,8 +130,20 @@
             <Delete-Icon (deleteClicked)="onDeleteClicked(electronics)" />
           </td>
         </tr>
+         <tr *ngIf="paginatedElectronicsList().length > 0">
+          <td class="tbldata" colspan="5"></td>
+          <td class="tbldata"><b>Total</b></td>
+          <td class="tbldata"><b>{{ totalElectonicsAmount | currency: 'INR' }}</b></td>
+          <td class="tbldata"></td>
+        </tr>
       </tbody>
     </nz-table>
+     <div class="pagination">
+      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="ElectronicsPaginationTotal"
+        [(nzPageIndex)]="currentElectronicsPage" (nzPageIndexChange)="onElectronicsPageChange($event)"
+        [nzShowSizeChanger]="false" [nzResponsive]="true">
+      </nz-pagination>
+    </div>
   </div>
 
   <!-- Outdoor -->
@@ -133,18 +155,17 @@
       </div>
     </div>
     <nz-table #basicTable [nzNoResult]="noDataTpl" nzSize="small" class="no-hover-table bgtable_light"
-      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="OutdoorList">
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedOutdoorList()">
       <thead>
         <tr>
           <th *ngFor="let Header of Headers" class="tblsubheader">{{ Header }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let outdoor of OutdoorList; index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <tr *ngFor="let outdoor of paginatedOutdoorList(); index as i">
+          <td Class="tbldata">{{ (currentOutdoorPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{outdoor.p.SiteName}}</td>
-          <td Class="tbldata">{{outdoor.p.Date}}</td>
-          <td Class="tbldata">{{outdoor.p.MarketingTypeName}}</td>
+         <td class="tbldata"style="white-space: nowrap;">{{formatShortDate(outdoor.p.Date)}}</td>
           <td Class="tbldata">{{outdoor.p.VendorName}}</td>
           <td Class="tbldata">{{outdoor.p.Rate}}</td>
           <td Class="tbldata">{{outdoor.p.Quantity}}</td>
@@ -154,8 +175,20 @@
             <Delete-Icon (deleteClicked)="onDeleteClicked(outdoor)" />
           </td>
         </tr>
+         <tr *ngIf="paginatedOutdoorList().length > 0">
+          <td class="tbldata" colspan="5"></td>
+          <td class="tbldata"><b>Total</b></td>
+          <td class="tbldata"><b>{{ totalOutdoorAmount | currency: 'INR' }}</b></td>
+          <td class="tbldata"></td>
+        </tr>
       </tbody>
     </nz-table>
+     <div class="pagination">
+      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="OutdoorPaginationTotal"
+        [(nzPageIndex)]="currentOutdoorPage" (nzPageIndexChange)="onOutdoorPageChange($event)"
+        [nzShowSizeChanger]="false" [nzResponsive]="true">
+      </nz-pagination>
+    </div>
   </div>
 
   <!-- Printing Media  -->
@@ -167,18 +200,17 @@
       </div>
     </div>
     <nz-table #basicTable [nzNoResult]="noDataTpl" nzSize="small" class="no-hover-table bgtable_light"
-      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="PrintingMediaList">
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedPrintingMediaList()">
       <thead>
         <tr>
           <th *ngFor="let Header of Headers" class="tblsubheader">{{ Header }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let printingmedia of PrintingMediaList; index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <tr *ngFor="let printingmedia of paginatedPrintingMediaList(); index as i">
+          <td Class="tbldata">{{ (currentPrintingMediaPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{printingmedia.p.SiteName}}</td>
-          <td Class="tbldata">{{printingmedia.p.Date}}</td>
-          <td Class="tbldata">{{printingmedia.p.MarketingTypeName}}</td>
+          <td class="tbldata"style="white-space: nowrap;">{{formatShortDate(printingmedia.p.Date)}}</td>
           <td Class="tbldata">{{printingmedia.p.VendorName}}</td>
           <td Class="tbldata">{{printingmedia.p.Rate}}</td>
           <td Class="tbldata">{{printingmedia.p.Quantity}}</td>
@@ -188,8 +220,20 @@
             <Delete-Icon (deleteClicked)="onDeleteClicked(printingmedia)" />
           </td>
         </tr>
+        <tr *ngIf="paginatedPrintingMediaList().length > 0">
+          <td class="tbldata" colspan="5"></td>
+          <td class="tbldata"><b>Total</b></td>
+          <td class="tbldata"><b>{{ totalPrintingMediaAmount | currency: 'INR' }}</b></td>
+          <td class="tbldata"></td>
+        </tr>
       </tbody>
     </nz-table>
+     <div class="pagination">
+      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="PrintingMediaPaginationTotal"
+        [(nzPageIndex)]="currentPrintingMediaPage" (nzPageIndexChange)="onPrintingMediaPageChange($event)"
+        [nzShowSizeChanger]="false" [nzResponsive]="true">
+      </nz-pagination>
+    </div>
   </div>
 
   <!-- Agent/Broker -->
@@ -201,7 +245,7 @@
       </div>
     </div>
     <nz-table #basicTable [nzNoResult]="noDataTpl" nzSize="small" class="no-hover-table bgtable_light"
-      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="BrokerList">
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedBrokerList()">
       <thead>
         <tr>
           <th *ngFor="let Header of Headers" class="tblsubheader">{{ Header }}
@@ -209,11 +253,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let broker of BrokerList; index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <tr *ngFor="let broker of paginatedBrokerList(); index as i">
+          <td Class="tbldata">{{ (currentBrokerPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{broker.p.SiteName}}</td>
-          <td Class="tbldata">{{broker.p.Date}}</td>
-          <td Class="tbldata">{{broker.p.MarketingTypeName}}</td>
+          <td class="tbldata"style="white-space: nowrap;">{{formatShortDate(broker.p.Date)}}</td>
           <td Class="tbldata">{{broker.p.VendorName}}</td>
           <td Class="tbldata">{{broker.p.Rate}}</td>
           <td Class="tbldata">{{broker.p.Quantity}}</td>
@@ -223,7 +266,19 @@
             <Delete-Icon (deleteClicked)="onDeleteClicked(broker)" />
           </td>
         </tr>
+         <tr *ngIf="paginatedBrokerList().length > 0">
+          <td class="tbldata" colspan="5"></td>
+          <td class="tbldata"><b>Total</b></td>
+          <td class="tbldata"><b>{{ totalBrokerAmount | currency: 'INR' }}</b></td>
+          <td class="tbldata"></td>
+        </tr>
       </tbody>
     </nz-table>
+     <div class="pagination">
+      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="BrokerPaginationTotal"
+        [(nzPageIndex)]="currentBrokerPage" (nzPageIndexChange)="onBrokerPageChange($event)"
+        [nzShowSizeChanger]="false" [nzResponsive]="true">
+      </nz-pagination>
+    </div>
   </div>
 </div>

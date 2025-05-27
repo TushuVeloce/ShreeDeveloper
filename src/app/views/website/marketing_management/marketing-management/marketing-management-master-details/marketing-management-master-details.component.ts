@@ -67,7 +67,6 @@ export class MarketingManagementMasterDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Marketing' : 'Edit Marketing';
       this.Entity = MarketingManagement.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.Entity.p.Date != '') {
@@ -143,7 +142,6 @@ export class MarketingManagementMasterDetailsComponent implements OnInit {
       await this.FormulateVendorServiceList();
       const refArray = this.VendorServiceList.map(s => Number(s));
       const matched = this.VendorServiceListByVendor.filter(service => refArray.includes(service.p.Ref));
-      console.log('matched :', matched);
       this.VendorServiceListByVendor = matched; // Either matched list or stays empty
     }
   }
@@ -185,7 +183,6 @@ export class MarketingManagementMasterDetailsComponent implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
 
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
@@ -196,11 +193,11 @@ export class MarketingManagementMasterDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Marketing Management saved successfully!');
+        await this.uiUtils.showSuccessToster('Marketing saved successfully!');
         this.Entity = MarketingManagement.CreateNewInstance();
         this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster('Marketin Management Updated successfully!');
+        await this.uiUtils.showSuccessToster('Marketin Updated successfully!');
         this.BackMarketingManagement()
       }
     }

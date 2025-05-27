@@ -38,13 +38,17 @@ export class MarketingManagementMasterComponent implements OnInit {
 
   SelectedMarketingManagement: MarketingManagement = MarketingManagement.CreateNewInstance();
   MarketingModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
-  pageSize = 8; // Items per page
-  currentPage = 1; // Initialize current page
+  pageSize = 5; // Items per page
+  currentDigitalPage = 1; // Initialize current page
+  currentElectronicsPage = 1; // Initialize current page
+  currentOutdoorPage = 1; // Initialize current page
+  currentPrintingMediaPage = 1; // Initialize current page
+  currentBrokerPage = 1; // Initialize current page
   total = 0;
   FromDate = '';
   ToDate = '';
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  Headers: string[] = ['Sr.No.', 'Site Name', 'Date', 'Marketing Type', 'Vendor Name', 'Rate', 'Quantity', 'Total', 'Action'];
+  Headers: string[] = ['Sr.No.', 'Site Name', 'Date', 'Vendor Name', 'Rate', 'Quantity', 'Total', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private dtu: DTU, private DateconversionService: DateconversionService
   ) {
@@ -59,7 +63,7 @@ export class MarketingManagementMasterComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.appStateManage.setDropdownDisabled(false);
     this.loadPaginationData();
-    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    // this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
   getMarketingListByCompanyRef = async () => {
@@ -138,17 +142,12 @@ export class MarketingManagementMasterComponent implements OnInit {
     this.loadPaginationData();
   }
 
-formatShortDate(dateString: string): string {
-  if (!dateString) return '';
-  
-  const parts = dateString.split('-');
-  if (parts.length >= 3) {
-    return `${parts[0]}-${parts[1]}-${parts[2]}`; // YYYY-MM-DD
+
+  formatShortDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
   }
-  return dateString; // fallback
-}
 
-
+ 
   onEditClicked = async (item: MarketingManagement) => {
     this.SelectedMarketingManagement = item.GetEditableVersion();
     MarketingManagement.SetCurrentInstance(this.SelectedMarketingManagement);
@@ -156,15 +155,15 @@ formatShortDate(dateString: string): string {
     await this.router.navigate(['/homepage/Website/Marketing_Management_Details']);
   };
 
-  onDeleteClicked = async (material: MarketingManagement) => {
+  onDeleteClicked = async (marketing: MarketingManagement) => {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-     Are you sure that you want to DELETE this Material?`,
+     Are you sure that you want to DELETE this Marketing?`,
       async () => {
-        await material.DeleteInstance(async () => {
+        await marketing.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `Material ${material.p.Name} has been deleted!`
+            `Marketing ${marketing.p.Name} has been deleted!`
           );
           await this.getMarketingListByCompanyRef();
           this.SearchString = '';
@@ -174,19 +173,87 @@ formatShortDate(dateString: string): string {
     );
   };
 
-  // For Pagination  start ----
-  loadPaginationData = () => {
-    this.total = this.DisplayMasterList.length; // Update total based on loaded data
-  };
 
-  paginatedList = () => {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.DisplayMasterList.slice(start, start + this.pageSize);
+ get totalDigitalAmount(): number {
+    return this.DigitalList.reduce((sum, item) => sum + (item.p.Total || 0), 0);
+  }
+  
+  get totalElectonicsAmount(): number {
+    return this.ElectronicsList.reduce((sum, item) => sum + (item.p.Total || 0), 0);
   }
 
-  onPageChange = (pageIndex: number): void => {
-    this.currentPage = pageIndex; // Update the current page
+  get totalOutdoorAmount(): number {
+    return this.OutdoorList.reduce((sum, item) => sum + (item.p.Total || 0), 0);
+  }
+
+  get totalPrintingMediaAmount(): number {
+    return this.PrintingMediaList.reduce((sum, item) => sum + (item.p.Total || 0), 0);
+  }
+
+  get totalBrokerAmount(): number {
+    return this.BrokerList.reduce((sum, item) => sum + (item.p.Total || 0), 0);
+  }
+ 
+
+   // Digital Pagination
+  paginatedDigitalList = () => {
+    const start = (this.currentDigitalPage - 1) * this.pageSize;
+    return this.DigitalList.slice(start, start + this.pageSize);
+  }
+
+  onDigitalPageChange = (pageIndex: number): void => {
+    this.currentDigitalPage = pageIndex; // Update the current page
+  }
+
+   // Electronics Pagination
+  paginatedElectronicsList = () => {
+    const start = (this.currentElectronicsPage - 1) * this.pageSize;
+    return this.ElectronicsList.slice(start, start + this.pageSize);
+  }
+
+  onElectronicsPageChange = (pageIndex: number): void => {
+    this.currentElectronicsPage = pageIndex; // Update the current page
+  }
+
+   // Outdoor Pagination
+  paginatedOutdoorList = () => {
+    const start = (this.currentOutdoorPage - 1) * this.pageSize;
+    return this.OutdoorList.slice(start, start + this.pageSize);
+  }
+
+  onOutdoorPageChange = (pageIndex: number): void => {
+    this.currentOutdoorPage = pageIndex; // Update the current page
+  }
+
+   // Printing Media Pagination
+  paginatedPrintingMediaList = () => {
+    const start = (this.currentPrintingMediaPage - 1) * this.pageSize;
+    return this.PrintingMediaList.slice(start, start + this.pageSize);
+  }
+
+  onPrintingMediaPageChange = (pageIndex: number): void => {
+    this.currentPrintingMediaPage = pageIndex; // Update the current page
+  }
+
+   // Broker Pagination
+  paginatedBrokerList = () => {
+    const start = (this.currentBrokerPage - 1) * this.pageSize;
+    return this.BrokerList.slice(start, start + this.pageSize);
+  }
+
+  onBrokerPageChange = (pageIndex: number): void => {
+    this.currentBrokerPage = pageIndex; // Update the current page
+  }
+
+  // For Pagination  start ----
+  loadPaginationData = () => {
+    this.DigitalPaginationTotal = this.DigitalList.length; // Update total based on loaded data
+    this.ElectronicsPaginationTotal = this.ElectronicsList.length; // Update total based on loaded data
+    this.OutdoorPaginationTotal = this.OutdoorList.length; // Update total based on loaded data
+    this.PrintingMediaPaginationTotal = this.PrintingMediaList.length; // Update total based on loaded data
+    this.BrokerPaginationTotal = this.BrokerList.length; // Update total based on loaded data
   };
+
 
   AddMarketing = () => {
     if (this.companyRef() <= 0) {

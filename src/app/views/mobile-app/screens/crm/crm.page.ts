@@ -186,4 +186,7 @@ export class CRMPage implements OnInit {
   goToCustomerFollowUp() {
     this.router.navigate(['/app_homepage/tabs/crm/customer-follow-up']);
   }
+  goToPendingCustomerFollowUp() {
+    this.router.navigate(['/app_homepage/tabs/crm/pending-customer-follow-up']);
+  }
 }

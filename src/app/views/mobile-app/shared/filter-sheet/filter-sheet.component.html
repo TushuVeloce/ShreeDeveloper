@@ -1,11 +1,12 @@
 <ion-content class="filter-sheet-container" fullscreen>
   <ion-grid class="scrollable-content">
     <ion-row>
-      <!-- Categories -->
       <ion-col size="4" class="category-column">
-        <ion-list>
+        <ion-list *ngIf="selectedCategory as category">
           <ion-item *ngFor="let cat of data?.categories" button (click)="selectCategory(cat)"
-            [class.active]="selectedCategory?.Ref === cat.Ref" [class.has-selection]="hasAnySelection(cat.Ref)">
+            [class.active]="category.Ref === cat.Ref" [class.has-selection]="hasAnySelection(cat.Ref)"
+            [disabled]="cat.dependUponRef > 0 && !(selectedOptions[cat.dependUponRef]?.length ?? 0)"
+            >
             {{ cat.Name }}
             <ion-icon *ngIf="hasAnySelection(cat.Ref)" name="checkmark-circle-outline" slot="end"
               color="primary"></ion-icon>
@@ -13,32 +14,25 @@
         </ion-list>
       </ion-col>
 
-      <!-- Options -->
+
+      <!-- Options Column -->
       <ion-col size="8" class="option-column">
         <ng-container *ngIf="selectedCategory">
-          <ion-list>
-            <div *ngIf="selectedCategory">
+          <ng-container *ngIf="selectedCategory.options.length>0; else noOptions">
+            <ion-list>
               <ng-container *ngIf="selectedCategory.multi; else singleSelectTemplate">
-
-                <!-- Multi-select -->
-                <!-- <ion-list-header>
-                  <ion-label>{{ selectedCategory.Name }}</ion-label>
-                </ion-list-header> -->
-
                 <!-- Multi-select -->
                 <ion-item *ngFor="let option of selectedCategory.options">
                   <ion-label>{{ option.Name }}</ion-label>
                   <ion-checkbox slot="start" [checked]="isSelected(selectedCategory.Ref, option.Ref)"
-                    (ionChange)="toggleOption(selectedCategory.Ref, option.Ref)">
-                  </ion-checkbox>
+                    (ionChange)="toggleOption(selectedCategory.Ref, option.Ref)"></ion-checkbox>
                 </ion-item>
-
-
               </ng-container>
 
+              <!-- Single-select -->
               <ng-template #singleSelectTemplate>
-                <!-- Single-select -->
-                <ion-radio-group [value]="selectedOptions[selectedCategory.Ref] ? selectedOptions[selectedCategory.Ref][0] : null"
+                <ion-radio-group
+                  [value]="selectedOptions[selectedCategory.Ref] ? selectedOptions[selectedCategory.Ref][0] : null"
                   (ionChange)="toggleOption(selectedCategory.Ref, $event.detail.value)">
                   <ion-item *ngFor="let option of selectedCategory.options">
                     <ion-label>{{ option.Name }}</ion-label>
@@ -46,8 +40,54 @@
                   </ion-item>
                 </ion-radio-group>
               </ng-template>
+            </ion-list>
+          </ng-container>
+
+          <!-- No Options Template -->
+          <!-- <ng-template #noOptions>
+            <div class="centered-message">
+              <ion-text color="medium">
+                <p>No options available</p>
+              </ion-text>
             </div>
-          </ion-list>
+          </ng-template> -->
+
+          <!-- Fallback for categories with no options -->
+          <ng-template #noOptions>
+            <ng-container *ngIf="selectedCategory.date; else noData">
+              <!-- Replace below with your actual date picker component -->
+              <!-- <ion-item> -->
+              <!-- Date -->
+              <ion-item>
+                <!-- <ion-label>Select Date</ion-label> -->
+                <ion-datetime-button datetime="EntryDate"></ion-datetime-button>
+              </ion-item>
+              
+              <ion-modal keepContentsMounted="true">
+                <ng-template>
+                  <ion-datetime id="EntryDate" presentation="date" [(ngModel)]="selectedDate" (ngModelChange)="DateChange(selectedCategory.Ref,$event)"
+                    show-default-buttons="true">
+                  </ion-datetime>
+                </ng-template>
+              </ion-modal>
+            </ng-container>
+          </ng-template>
+          
+          <!-- If not a date field and no options -->
+          <ng-template #noData>
+            <ion-item>
+              <ion-label>No options available</ion-label>
+            </ion-item>
+          </ng-template>
+          
+          <!-- date Template -->
+          <ng-template #dateTemplate>
+            <div class="centered-message">
+              <ion-text color="medium">
+                <p>No options available</p>
+              </ion-text>
+            </div>
+          </ng-template>
         </ng-container>
       </ion-col>
     </ion-row>
