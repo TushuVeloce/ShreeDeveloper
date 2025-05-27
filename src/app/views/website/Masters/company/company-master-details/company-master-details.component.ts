@@ -110,6 +110,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity ? 'New Company' : 'Edit Company';
       this.Entity = Company.GetCurrentInstance();
       this.imageUrl = this.Entity.p.LogoFile;
+      console.log('this.Entity.p.LogoFile :', this.Entity.p.LogoFile);
 
       this.loadImageFromBackend(this.Entity.p.LogoFile)
       // While Edit Converting date String into Date Format //
