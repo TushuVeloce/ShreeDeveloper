@@ -66,7 +66,6 @@ export class UnitMasterComponent implements OnInit {
   //         let req = new DeleteUnitCustomRequest();
   //         req.UnitRef = Unit.p.Ref;
   //         let td = req.FormulateTransportData();
-  //         console.log('td :', td);
   //         let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
   //         let tr = await this.serverCommunicator.sendHttpRequest(pkt);
   //         if (!tr.Successful) {

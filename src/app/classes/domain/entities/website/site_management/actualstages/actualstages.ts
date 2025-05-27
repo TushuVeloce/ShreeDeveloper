@@ -27,6 +27,7 @@ export class ActualStagesProps {
   public DefaultExpenseTypeName: string = '';
 
   public AddressLine1: string = '';
+  public AddressLine2: string = '';
   public Contacts: string = '';
   public CityName: string = '';
   public PinCode: string = '';
@@ -45,9 +46,15 @@ export class ActualStagesProps {
 
   public CompanyRef: number = 0;
   public CompanyName: string = '';
+  public CompanyOwnerName: string = '';
 
   public VendorRef: number = 0;
   public VendorName: string = '';
+
+  public VendorCompanyName: string = '';
+  public VendorAddressLine1: string = '';
+  public VendorAddressLine2: string = '';
+  public VendorPhone: string = '';
 
   public VendorServiceRef: number = 0;
   public VendorServiceName: string = '';

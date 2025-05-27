@@ -85,7 +85,6 @@ export class StageMasterComponent implements OnInit {
         let req = new DeleteStageCustomRequest();
         req.StageRef = Stage.p.Ref;
         let td = req.FormulateTransportData();
-        console.log('td :', td);
         let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
         let tr = await this.serverCommunicator.sendHttpRequest(pkt);
         if (!tr.Successful) {

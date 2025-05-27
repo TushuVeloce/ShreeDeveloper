@@ -57,8 +57,10 @@ export class LoginPageComponent implements OnInit {
     // req.SenderURL;
 
     const response = await this.servercommunicator.LoginUser(req);
+    console.log('response :', response);
     this.appStateManage.setEmployeeRef(response.LoginEmployeeRef)
     this.appStateManage.setLoginToken(response.LoginToken)
+    this.appStateManage.StorageKey.setItem("IsDefaultUser", response.IsDefault.toString())
     this.appStateManage.StorageKey.setItem("UserDisplayName", response.UserDisplayName)
 
     if (!response.Successful) {
