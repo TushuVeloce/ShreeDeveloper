@@ -44,7 +44,7 @@ export class MarketingManagementMasterComponent implements OnInit {
   FromDate = '';
   ToDate = '';
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  Headers: string[] = ['Sr.No.', 'Site Name', 'Date', 'Marketing Type', 'Vendor Name', 'Rate', 'Quantity', 'Total', 'Action'];
+  Headers: string[] = ['Sr.No.', 'Site Name', 'Date', 'Vendor Name', 'Rate', 'Quantity', 'Total', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private dtu: DTU, private DateconversionService: DateconversionService
   ) {
