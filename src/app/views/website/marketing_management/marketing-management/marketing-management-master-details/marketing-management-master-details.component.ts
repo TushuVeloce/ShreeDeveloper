@@ -67,6 +67,7 @@ export class MarketingManagementMasterDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Marketing' : 'Edit Marketing';
       this.Entity = MarketingManagement.GetCurrentInstance();
+      console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.Entity.p.Date != '') {
@@ -108,6 +109,10 @@ export class MarketingManagementMasterDetailsComponent implements OnInit {
     //   this.Entity.p.VendorRef = this.VendorList[0].p.Ref;
     // }
     // this.getVendorServiceListByVendorRef();
+  }
+
+  ClearPage =() =>{
+    this.Entity.p.Page = 0
   }
 
    private FormulateVendorServiceList = async () => {

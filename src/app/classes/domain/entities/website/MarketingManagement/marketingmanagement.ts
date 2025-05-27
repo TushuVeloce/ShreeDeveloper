@@ -24,7 +24,7 @@ export class MarketingManagementProps {
   public SiteRef: number = 0;
   public readonly SiteName: string = '';
   public Date: string = '';
-  public MarketingTypeRef: number = 0;
+  public MarketingType: number = 0;
   public readonly MarketingTypeName: string = '';
   public VendorRef: number = 0;
   public readonly VendorName: string = '';
@@ -187,6 +187,29 @@ export class MarketingManagement implements IPersistable<MarketingManagement> {
     let tdResponse = await MarketingManagement.FetchTransportData(req, errorHandler) as TransportData;
     return MarketingManagement.ListFromTransportData(tdResponse);
   }
+
+
+   public static async FetchEntireListByAllFilters(CompanyRef: number, FromDate: string, ToDate: string, SiteRef: number, VendorRef: number, MarketingTypeRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+      let req = new MarketingManagementFetchRequest();
+      req.CompanyRefs.push(CompanyRef)
+      if (FromDate) {
+        req.FromDate.push(FromDate)
+      }
+      if (ToDate) {
+        req.ToDate.push(ToDate)
+      }
+      if (SiteRef) {
+        req.SiteRefs.push(SiteRef)
+      }
+      if (VendorRef) {
+        req.VendorRefs.push(VendorRef)
+      }
+      if (MarketingTypeRef) {
+        req.MarketingTypeRefs.push(MarketingTypeRef)
+      }
+      let tdResponse = await MarketingManagement.FetchTransportData(req, errorHandler) as TransportData;
+      return MarketingManagement.ListFromTransportData(tdResponse);
+    }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

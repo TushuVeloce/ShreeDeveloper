@@ -8,7 +8,13 @@ export class MarketingManagementFetchRequest
 {
     public static readonly FetchRequestType: string = "MarketingManagementFetchRequest";
 
-    CompanyRefs: number[] = [];
+     CompanyRefs: number[] = [];
+    FromDate: string[] = [];
+    ToDate: string[] = [];
+    SiteRefs: number[] = [];
+    VendorRefs: number[] = [];
+    StageRefs: number[] = [];
+    MarketingTypeRefs: number[] = [];
     MarketingManagementRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>

@@ -157,7 +157,6 @@ export class SiteManagementActualStagesComponent implements OnInit {
   }
 
 
-
   navigateToPrint = async (item: ActualStages) => {
     // this.SelectedActualStages = item.GetEditableVersion();
     // ActualStages.SetCurrentInstance(this.SelectedActualStages);
@@ -188,7 +187,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
     this.currentLabourPage = pageIndex; // Update the current page
   }
 
-  // Machinary Pagination
+  // Other Pagination
   paginatedOtherList = () => {
     const start = (this.currentOtherPage - 1) * this.pageSize;
     return this.OtherExpenseList.slice(start, start + this.pageSize);

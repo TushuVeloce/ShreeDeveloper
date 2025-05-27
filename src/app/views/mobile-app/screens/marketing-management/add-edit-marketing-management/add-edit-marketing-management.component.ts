@@ -181,7 +181,7 @@ export class AddEditMarketingManagementComponent implements OnInit {
       this.openSelectModal(options, selectData, false, 'Select Marketing Type', 1, (selected) => {
         selectData = selected;
 
-        this.Entity.p.MarketingTypeRef = selected[0].p.Ref;
+        this.Entity.p.MarketingType = selected[0].p.Ref;
         this.MarketingTypeName = selected[0].p.Name;
         // this.getStateListByCountryRef(selected[0].p.Ref)
       });

@@ -43,7 +43,7 @@ export class CompanyProps {
   public readonly CityName: string = '';
   public CompanyLogo: File = null as any
 
-  public readonly LogoPath: string = "";
+  public readonly LogoFile: string = "";
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -135,7 +135,7 @@ export class Company implements IPersistable<Company> {
 
     if (this.p.IsNewlyCreated == true && this.p.CompanyLogo == null) {
       vra.add('CompanyLogo', 'Company Logo cannot be blank.');
-    } else if (this.p.IsNewlyCreated != true && this.p.LogoPath == '' && this.p.CompanyLogo == null) {
+    } else if (this.p.IsNewlyCreated != true && this.p.LogoFile == '' && this.p.CompanyLogo == null) {
       vra.add('CompanyLogo', 'Company Logo cannot be blank.');
     }
 
