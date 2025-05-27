@@ -71,9 +71,9 @@ export class CustomerFollowupComponent implements OnInit {
       // Construct the new date format
       this.ReminderDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
       this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
-      if (this.strCDT != '') {
-        this.getCustomerFollowUpListByDateCompanyAndContactModeRef();
-      }
+      // if (this.strCDT != '') {
+      //   this.getCustomerFollowUpListByDateCompanyAndContactModeRef();
+      // }
     }
 
     this.loadPaginationData();
@@ -87,6 +87,7 @@ export class CustomerFollowupComponent implements OnInit {
 
   getCustomerFollowUpListByDateCompanyAndContactModeRef = async () => {
     this.strCDT = this.dtu.ConvertStringDateToFullFormat(this.ReminderDate);
+    console.log('this.companyRef() :', this.companyRef());
     let FollowUp = await CustomerFollowUp.FetchEntireListByDateComapanyAndContactModeRef(this.companyRef(), this.strCDT, this.Entity.p.ContactMode,
     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('FollowUp :', FollowUp);
