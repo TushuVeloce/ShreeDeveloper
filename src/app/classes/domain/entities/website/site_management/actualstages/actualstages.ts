@@ -46,6 +46,7 @@ export class ActualStagesProps {
 
   public CompanyRef: number = 0;
   public CompanyName: string = '';
+  public CompanyOwnerName: string = '';
 
   public VendorRef: number = 0;
   public VendorName: string = '';

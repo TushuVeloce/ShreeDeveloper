@@ -113,11 +113,13 @@ export class ActualStagePrintComponent implements OnInit {
          * {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
+            font-family: sans-serif;
            }
             table {
               border-collapse: collapse;
               width: 100%;
             }
+
             th, td {
               border: 1px solid  rgb(169, 167, 167);
               text-align: center;
