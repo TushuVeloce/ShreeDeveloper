@@ -12,4 +12,5 @@ export class UserLoginResponse
     public LoginEmployeeRef: number = 0;
     public LoginEmployeeName: string = '';
     public LoginForFirstTime: number = 0;
+    public IsDefault: number = 0;
 }
