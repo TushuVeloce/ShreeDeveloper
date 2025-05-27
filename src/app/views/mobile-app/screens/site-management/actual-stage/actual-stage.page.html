@@ -119,6 +119,16 @@
           <span class="value">{{ SelectedActualStages.p.VehicleNo?SelectedActualStages.p.VehicleNo:'-'
             }}</span>
         </div>
+        <div class="info-row-of-model">
+          <strong class="label">Vendor Name:</strong>
+          <span class="value">{{ SelectedActualStages.p.VendorName?SelectedActualStages.p.VendorName:'-' }}</span>
+        </div>
+        <div class="info-row-of-model">
+          <strong class="label">Vendor Service:</strong>
+          <span class="value">{{ SelectedActualStages.p.VendorServiceName?SelectedActualStages.p.VendorServiceName:'-'
+            }}</span>
+        </div>
+
         <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==ExpenseTypeRef">
           <strong class="label">Diesel Quantity:</strong>
           <span class="value">{{ SelectedActualStages.p.DieselQuantity?SelectedActualStages.p.DieselQuantity:'-'
@@ -134,7 +144,7 @@
           <span class="value">{{ SelectedActualStages.p.DieselTotalAmount?SelectedActualStages.p.DieselTotalAmount:'-'
             }}</span>
         </div>
-
+        
         <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==LabourExpenseRef">
           <strong class="label">Skill Quantity :</strong>
           <span class="value">{{ SelectedActualStages.p.SkillQuantity?SelectedActualStages.p.SkillQuantity:'-'
@@ -150,7 +160,7 @@
           <span class="value">{{ SelectedActualStages.p.SkillAmount?SelectedActualStages.p.SkillAmount:'-'
             }}</span>
         </div>
-
+        
         <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==LabourExpenseRef">
           <strong class="label">Unskill Quantity :</strong>
           <span class="value">{{ SelectedActualStages.p.UnskillQuantity?SelectedActualStages.p.UnskillQuantity:'-'
@@ -166,7 +176,7 @@
           <span class="value">{{ SelectedActualStages.p.UnskillAmount?SelectedActualStages.p.UnskillAmount:'-'
             }}</span>
         </div>
-
+        
         <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef==LabourExpenseRef">
           <strong class="label">women Quantity :</strong>
           <span class="value">{{ SelectedActualStages.p.LadiesQuantity?SelectedActualStages.p.LadiesQuantity:'-'
@@ -182,22 +192,11 @@
           <span class="value">{{ SelectedActualStages.p.LadiesAmount?SelectedActualStages.p.LadiesAmount:'-'
             }}</span>
         </div>
-
-        <div class="info-row-of-model">
-          <strong class="label">Vendor Name:</strong>
-          <span class="value">{{ SelectedActualStages.p.VendorName?SelectedActualStages.p.VendorName:'-' }}</span>
-        </div>
-        <div class="info-row-of-model">
-          <strong class="label">Vendor Service:</strong>
-          <span class="value">{{ SelectedActualStages.p.VendorServiceName?SelectedActualStages.p.VendorServiceName:'-'
-            }}</span>
-        </div>
-
-        <div class="info-row-of-model">
+        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef!=LabourExpenseRef">
           <strong class="label">Unit:</strong>
           <span class="value">{{ SelectedActualStages.p.UnitName?SelectedActualStages.p.UnitName:'-' }}</span>
         </div>
-        <div class="info-row-of-model" *ngIf="TimeUnitRef != SelectedActualStages.p.UnitRef">
+        <div class="info-row-of-model" *ngIf="TimeUnitRef != SelectedActualStages.p.UnitRef && SelectedActualStages.p.ExpenseTypeRef!=LabourExpenseRef">
           <strong class="label">Quantity:</strong>
           <span class="value">{{ SelectedActualStages.p.Quantity?SelectedActualStages.p.Quantity:'-' }}</span>
         </div>
@@ -206,13 +205,17 @@
           <span class="value">{{
             SelectedActualStages.p.TimeDetails?getTotalWorkedHours(SelectedActualStages.p.TimeDetails):'-'}}</span>
         </div>
-        <div class="info-row-of-model">
+        <div class="info-row-of-model" *ngIf="SelectedActualStages.p.ExpenseTypeRef!=LabourExpenseRef">
           <strong class="label">Rate:</strong>
           <span class="value">{{ SelectedActualStages.p.Rate?SelectedActualStages.p.Rate:'-' }}</span>
         </div>
         <div class="info-row-of-model">
           <strong class="label">Amount:</strong>
           <span class="value">{{ SelectedActualStages.p.Amount?SelectedActualStages.p.Amount:'-' }}</span>
+        </div>
+        <div class="info-row-of-model">
+          <strong class="label">GrandTotal:</strong>
+          <span class="value">{{ SelectedActualStages.p.GrandTotal?SelectedActualStages.p.GrandTotal:'-' }}</span>
         </div>
         <div class="info-row-of-model">
           <strong class="label">Description:</strong>

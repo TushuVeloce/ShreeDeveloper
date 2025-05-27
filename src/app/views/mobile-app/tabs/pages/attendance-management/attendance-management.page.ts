@@ -282,8 +282,10 @@ export class AttendanceManagementPage implements OnInit {
       console.log('lst :', lst);
 
       if (!lst || lst.length === 0) {
-        this.bothButtonsEnabled = false;
-        await this.uiUtils.showErrorMessage('Error', "Unable to get attendance data.");
+        // this.bothButtonsEnabled = false;
+        this.isCheckInEnabled = true;
+        this.bothButtonsEnabled = true;
+        // await this.uiUtils.showErrorMessage('Error', "Unable to get attendance data.");
         return;
       }
 

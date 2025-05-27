@@ -10,13 +10,13 @@
   </ion-refresher>
 
   <!-- Status Filter -->
-  <div class="segment-wrapper">
-    <ion-segment [(ngModel)]="selectedStatus" (ngModelChange)="filterSalarySlipsByStatus()" class="modern-segment">
+  <!-- <div class="segment-wrapper"> -->
+    <ion-segment [(ngModel)]="selectedStatus" (ngModelChange)="filterSalarySlipsByStatus()">
       <ion-segment-button *ngFor="let status of statusOptions" [value]="status.value">
         <ion-label>{{ status.label }}</ion-label>
       </ion-segment-button>
     </ion-segment>
-  </div>
+  <!-- </div> -->
 
   <!-- Salary Slip Cards -->
   <ion-list class="salary-slip-list">

@@ -182,6 +182,7 @@ export class ActualStagePage implements OnInit {
       return;
     }
     let lst = await ActualStages.FetchEntireListByAllFilters(this.companyRef, this.FromDate ?? '', this.ToDate ?? '', this.Entity.p.SiteRef, this.Entity.p.VendorRef, this.Entity.p.StageRef, this.Entity.p.ExpenseTypeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.ActualStagesList = lst;
     this.FilteredActualStagesList = lst;
     for (const item of lst) {
@@ -206,17 +207,17 @@ export class ActualStagePage implements OnInit {
     await this.router.navigate(['app_homepage/tabs/site-management/actual-stage/edit']);
   };
 
-  onDeleteClicked = async (material: ActualStages) => {
+  onDeleteClicked = async (ActualStages: ActualStages) => {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-       Are you sure that you want to DELETE this Material?`,
+       Are you sure that you want to DELETE this actual stage?`,
       async () => {
-        await material.DeleteInstance(async () => {
+        await ActualStages.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `Material ${material.p.SiteName} has been deleted!`
+            `Actual Stages ${ActualStages.p.ChalanNo} has been deleted!`
           );
-          await this.getActualStageListByCompanyRef();
+          await this.getActualStageListByAllFilters();
           this.SearchString = '';
         });
       }

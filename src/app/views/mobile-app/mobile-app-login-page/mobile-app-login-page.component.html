@@ -11,69 +11,39 @@
       <h2 class="login-title">Log In</h2>
 
       <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-        <!-- Email -->
-        <!-- <ion-label position="stacked"><strong>Email</strong></ion-label>
-        <ion-item lines="none" class="input-item">
-          <ion-input type="email" formControlName="email" placeholder="Enter your email" aria-label="Email"
-            required></ion-input> -->
-          <!-- <ion-icon slot="end">
-            <img src="assets/icons/email_icon.png" alt="Email Icon" class="icon-img" />
-          </ion-icon> -->
-          <!-- <ion-button fill="clear" slot="end" (click)="togglePasswordVisibility()" class="password-toggle"> -->
-            <!-- <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon> -->
-            <!-- <img src="assets/icons/email_icon.png" alt="Email Icon" class="icon-img" />
-          </ion-button>
-        </ion-item>
-        <ion-text color="danger" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
-          <p class="error-text">Please enter a valid email</p>
-        </ion-text> -->
 
+        <!-- Email Field -->
         <ion-label position="stacked"><strong>Email</strong></ion-label>
-        <ion-item lines="none" class="input-field">
-          <ion-input type="email" formControlName="email" placeholder="Enter your email"
-            required></ion-input>
-            <img src="assets/icons/email_icon.png" alt="Email Icon"slot="end" />
+        <ion-item class="input-field" lines="none">
+          <ion-input type="email" formControlName="email" placeholder="Enter your email" required></ion-input>
+          <ion-icon name="mail-outline" slot="end" class="input-icon"></ion-icon>
         </ion-item>
         <ion-text color="danger" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
           <p class="error-text">Please enter a valid email</p>
         </ion-text>
 
-
-        <!-- Password -->
-        <!-- <ion-label position="stacked"><strong>Password</strong></ion-label>
-        <ion-item lines="none" class="input-item">
-          <ion-input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Enter your password"
-            aria-label="Password" required></ion-input>
-          <ion-button fill="clear" (click)="togglePasswordVisibility()" class="password-toggle">
-            <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
-          </ion-button>
-        </ion-item>
-        <ion-text color="danger" slot="end" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
-          <p class="error-text">Password is required</p>
-        </ion-text> -->
+        <!-- Password Field -->
         <ion-label position="stacked"><strong>Password</strong></ion-label>
-        <ion-item lines="none" class="input-field">
-          <ion-input placeholder="Enter your password" [type]="showPassword ? 'text' : 'password'"
-            formControlName="password" required></ion-input>
-          <ion-icon slot="end" [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+        <ion-item class="input-field" lines="none">
+          <ion-input [type]="showPassword ? 'text' : 'password'" formControlName="password"
+            placeholder="Enter your password" required></ion-input>
+          <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" slot="end" class="input-icon"
             (click)="showPassword = !showPassword"></ion-icon>
         </ion-item>
-        <ion-text color="danger" slot="end"
-          *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+        <ion-text color="danger" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
           <p class="error-text">Password is required</p>
         </ion-text>
 
         <!-- Forgot Password -->
-        <div class="forgot-text"><strong>Forgot Password?</strong></div>
+        <div class="forgot-text">Forgot Password?</div>
 
         <!-- Login Button -->
         <ion-button expand="block" class="login-button" type="submit" [disabled]="loginForm.invalid">
-          LOG IN
+          Log In
         </ion-button>
       </form>
 
-
-      <div class="new-user-text"><strong>New User? Contact Admin</strong></div>
+      <div class="new-user-text">New User? Contact Admin</div>
     </div>
   </div>
 </ion-content>

@@ -316,10 +316,13 @@ export class AddEditActualStageComponent implements OnInit {
         
         
         this.isChalanDisabled = true
+        // if (this.Entity.p.GrandTotal){
+        //   this.Entity.p.GrandTotal = this.Entity.p.LadiesAmount + this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount
+        // }
         if (this.Entity.p.TimeDetails.length > 0) {
-          this.Amount = this.getTotalWorkedHours()
+           this.Entity.p.Amount = this.getTotalWorkedHours()
         } else {
-          this.Amount = this.Entity.p.Rate * this.Entity.p.Quantity
+           this.Entity.p.Amount = this.Entity.p.Rate * this.Entity.p.Quantity
         }
         await this.DiselPaid(this.Entity.p.IsDieselPaid)
         await this.OnStageChange(this.Entity.p.StageRef)
@@ -740,11 +743,12 @@ export class AddEditActualStageComponent implements OnInit {
   ClearInputsOnExpenseChange = (ExpenseTypeRef: number) => {
     this.AddExpenseTypeToOther(ExpenseTypeRef)
     this.Entity.p.GrandTotal = 0;
+    console.log('this.Entity.p.GrandTotal :ClearInputsOnExpenseChange', this.Entity.p.GrandTotal);
     this.Entity.p.Amount = 0;
     this.Entity.p.UnitRef = 0;
     this.Entity.p.Quantity = 0;
     this.Entity.p.Rate = 0;
-    this.Amount = 0;
+     this.Entity.p.Amount = 0;
     if (this.Entity.p.ExpenseTypeRef == this.MachinaryExpenseTypeRef) {
       this.Entity.p.SkillRate = 0;
       this.Entity.p.SkillQuantity = 0;
@@ -773,10 +777,11 @@ export class AddEditActualStageComponent implements OnInit {
     this.Entity.p.TimeDetails = []
     if (UnitRef == this.TimeUnitRef) {
       this.Entity.p.GrandTotal = 0,
+        console.log(' this.Entity.p.GrandTotal : ClearValuesOnTimeSelection data clear', this.Entity.p.GrandTotal);
       this.Entity.p.Rate = 0
       this.Entity.p.Quantity = 0
       this.Entity.p.Amount = 0,
-        this.Amount = 0
+         this.Entity.p.Amount = 0
     }
     this.isDiselPaid = false
     this.DiselPaid(0)
@@ -794,6 +799,7 @@ export class AddEditActualStageComponent implements OnInit {
   CalculateTotalOnDiselRateAndLtr = () => {
     this.Entity.p.DieselTotalAmount = (this.Entity.p.DieselQuantity * this.Entity.p.DieselRate);
     this.Entity.p.GrandTotal = this.Entity.p.DieselTotalAmount + this.UnitQuantityTotal
+    console.log('this.Entity.p.GrandTotal : CalculateTotalOnDiselRateAndLtr update value', this.Entity.p.GrandTotal);
     this.CalculateAmountOnRateAndQuantity()
   }
 
@@ -806,14 +812,15 @@ export class AddEditActualStageComponent implements OnInit {
 
   //   if (TotalWorkedHours > 0) {
   //     this.Entity.p.GrandTotal = rate * TotalWorkedHours - dieselAmount
-  //     this.Amount = rate * TotalWorkedHours
+  //      this.Entity.p.Amount = rate * TotalWorkedHours
   //   } else {
-  //     this.Amount = rate * quantity
+  //      this.Entity.p.Amount = rate * quantity
   //     this.Entity.p.GrandTotal = rate * quantity - dieselAmount
   //   }
   // };
   CalculateAmountOnRateAndQuantity = () => {
     const TotalWorkedHours = this.getTotalWorkedHours()
+    console.log('rate * quantity :0', this.Entity.p.Rate, this.Entity.p.Quantity);
     const rate = Number(this.Entity.p.Rate) || 0;
     const quantity = Number(this.Entity.p.Quantity) || 0;
     const dieselAmount = Number(this.Entity.p.DieselTotalAmount) || 0;
@@ -821,27 +828,36 @@ export class AddEditActualStageComponent implements OnInit {
 
     if (TotalWorkedHours > 0) {
       this.Entity.p.GrandTotal = rate * TotalWorkedHours - dieselAmount
+      console.log(' this.Entity.p.GrandTotal :CalculateAmountOnRateAndQuantity if',  this.Entity.p.GrandTotal);
       this.Entity.p.Amount = rate * TotalWorkedHours
     } else {
+      console.log('rate * quantity :1', rate, quantity);
       this.Entity.p.Amount = rate * quantity
+      console.log('rate * quantity :2', rate , quantity);
       this.Entity.p.GrandTotal = rate * quantity - dieselAmount
-
+      console.log(' this.Entity.p.GrandTotal :CalculateAmountOnRateAndQuantity else', this.Entity.p.GrandTotal);
     }
   };
 
   CalculateAmountOnSkillRateAndQuantity = () => {
     this.Entity.p.SkillAmount = (this.Entity.p.SkillRate * this.Entity.p.SkillQuantity);
+    this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
     this.Entity.p.GrandTotal = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
+    console.log(' this.Entity.p.GrandTotal  : CalculateAmountOnSkillRateAndQuantity',  this.Entity.p.GrandTotal );
   }
 
   CalculateAmountOnUnSkillRateAndQuantity = () => {
     this.Entity.p.UnskillAmount = (this.Entity.p.UnskillRate * this.Entity.p.UnskillQuantity);
+    this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
     this.Entity.p.GrandTotal = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
+    console.log(' this.Entity.p.GrandTotal :CalculateAmountOnUnSkillRateAndQuantity',  this.Entity.p.GrandTotal);
   }
 
   CalculateAmountOnLadiesRateAndQuantity = () => {
     this.Entity.p.LadiesAmount = (this.Entity.p.LadiesRate * this.Entity.p.LadiesQuantity);
+    this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
     this.Entity.p.GrandTotal = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
+    console.log('this.Entity.p.GrandTotal :CalculateAmountOnLadiesRateAndQuantity', this.Entity.p.GrandTotal);
   }
 
   DiselPaid = (DiselPaid: number) => {
