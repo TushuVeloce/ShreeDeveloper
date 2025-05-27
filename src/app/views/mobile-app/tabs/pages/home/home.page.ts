@@ -16,10 +16,10 @@ export class HomePage implements OnInit {
   }
   gridItems = [
     { label: 'Site Management', icon: 'layers-outline', routerPath: '/app_homepage/tabs/site-management' },
-    { label: 'Stock Management', icon: 'grid-outline', routerPath: '/app_homepage/tabs/stock-management' },
+    // { label: 'Stock Management', icon: 'grid-outline', routerPath: '/app_homepage/tabs/stock-management' },
     { label: 'Marketing Management', icon: 'bar-chart-outline', routerPath: '/app_homepage/tabs/marketing-management' },
     { label: 'CRM', icon: 'people-outline', routerPath: '/app_homepage/tabs/crm' },
-    { label: 'Report', icon: 'reader-outline', routerPath: '/app_homepage/tabs/report' },
+    // { label: 'Report', icon: 'reader-outline', routerPath: '/app_homepage/tabs/report' },
   ];
   // Navigate to the Task page
   async goToRouterPath(path: string) {

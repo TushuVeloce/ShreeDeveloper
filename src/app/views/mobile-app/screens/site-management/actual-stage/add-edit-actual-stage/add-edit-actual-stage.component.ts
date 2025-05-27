@@ -67,7 +67,7 @@ export class AddEditActualStageComponent implements OnInit {
   Amount: number = 0
   originalAmount: number = 0;
   strCDT: string = ''
-  ExpenseTypeRef: number = ExpenseTypeRefs.MachinaryExpense
+  MachinaryExpenseTypeRef: number = ExpenseTypeRefs.MachinaryExpense
   LabourExpenseRef: number = ExpenseTypeRefs.LabourExpense
   OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense
   TimeUnitRef: number = UnitRefs.TimeUnitRef
@@ -159,7 +159,7 @@ export class AddEditActualStageComponent implements OnInit {
     now.setHours(hours, minutes, 0, 0);
     return this.formatToTrimmedISOString(now.toISOString());
   }
-
+ 
   // ---------- TIME CHANGE EVENTS ----------
 
   StartTimeChange(value: string) {
@@ -724,6 +724,7 @@ export class AddEditActualStageComponent implements OnInit {
     );
     this.VendorServiceListByVendor = lst;
   };
+  
 
   FormulateUnitList = async () => {
     try {
@@ -744,7 +745,7 @@ export class AddEditActualStageComponent implements OnInit {
     this.Entity.p.Quantity = 0;
     this.Entity.p.Rate = 0;
     this.Amount = 0;
-    if (this.Entity.p.ExpenseTypeRef == this.ExpenseTypeRef) {
+    if (this.Entity.p.ExpenseTypeRef == this.MachinaryExpenseTypeRef) {
       this.Entity.p.SkillRate = 0;
       this.Entity.p.SkillQuantity = 0;
       this.Entity.p.SkillAmount = 0;

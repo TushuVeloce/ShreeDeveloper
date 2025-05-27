@@ -9,10 +9,10 @@ export class CustomerFollowUpFetchRequest {
 
   SiteManagemetRefs: number[] = [];
   PlotRefs: number[] = [];
-  ContactModeRefs: number[] = [];
+  ContactModes: number[] = [];
   CompanyRefs: number[] = [];
   ReminderDate: string[] = [];
-  PendingCallList: number[] = [];
+  PendingCallList: number = 0;
 
   public MergeIntoTransportData = (td: TransportData) => {
     let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CustomerFollowUpFetchRequest.FetchRequestType) as DataCollection;

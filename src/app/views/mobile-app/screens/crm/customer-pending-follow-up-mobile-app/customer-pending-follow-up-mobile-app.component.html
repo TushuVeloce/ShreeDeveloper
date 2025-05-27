@@ -1,6 +1,6 @@
 <app-loader *ngIf="isLoading"></app-loader>
 
-<app-header-with-back-handler title="Customer Follow-Up" backRoute="app_homepage/tabs/crm">
+<app-header-with-back-handler title="Pending Customer Follow-Up" backRoute="app_homepage/tabs/crm">
 </app-header-with-back-handler>
 
 <ion-content [fullscreen]="true" class="followup-content">
@@ -60,7 +60,8 @@
     <ng-template #noData>
       <ion-card class="data-card">
         <ion-card-content class="text-center">
-          <ion-icon name="information-circle-outline" size="large" color="medium" style="align-self: center;"></ion-icon>
+          <ion-icon name="information-circle-outline" size="large" color="medium"
+            style="align-self: center;"></ion-icon>
           <div>No Customer Follow up data found.</div>
         </ion-card-content>
       </ion-card>

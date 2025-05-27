@@ -171,7 +171,7 @@
     </ion-item>
 
     <!-- Vehical No -->
-    <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeRef == ExpenseTypeRef">
+    <ion-item class="input-item" *ngIf="Entity.p.ExpenseTypeRef == MachinaryExpenseTypeRef">
       <ion-input label="Vehical No" labelPlacement="floating" placeholder="Enter Vehical No"
         [(ngModel)]="Entity.p.VehicleNo" maxlength="10"></ion-input>
     </ion-item>
@@ -190,7 +190,7 @@
     </ion-item>
 
     <!--Table For site and Plot details -->
-    <ion-list *ngIf="Entity.p.ExpenseTypeRef == ExpenseTypeRef && Entity.p.UnitRef == TimeUnitRef">
+    <ion-list *ngIf="Entity.p.ExpenseTypeRef == MachinaryExpenseTypeRef && Entity.p.UnitRef == TimeUnitRef">
       <ion-item lines="none">
         <ion-label class="ion-text-center" style="font-weight: bold; font-size: 1.2rem;">
           Machinary Details
@@ -233,7 +233,7 @@
 
     <!-- Quantity -->
     <ion-item class="input-item"
-      *ngIf="!(Entity.p.ExpenseTypeRef == ExpenseTypeRef && Entity.p.UnitRef == TimeUnitRef) && Entity.p.ExpenseTypeRef != LabourExpenseRef">
+      *ngIf="!(Entity.p.ExpenseTypeRef == MachinaryExpenseTypeRef && Entity.p.UnitRef == TimeUnitRef) && Entity.p.ExpenseTypeRef != LabourExpenseRef">
       <!-- Entity.p.ExpenseTypeRef != LabourExpenseRef -->
       <ion-input type="number" label="Quantity" labelPlacement="floating" placeholder="Enter Quantity"
         [(ngModel)]="Entity.p.Quantity" (ngModelChange)="CalculateAmountOnRateAndQuantity()"></ion-input>
@@ -252,7 +252,7 @@
     </ion-item>
 
     <!-- Diesel Calculation -->
-    <ion-grid *ngIf="Entity.p.ExpenseTypeRef == ExpenseTypeRef">
+    <ion-grid *ngIf="Entity.p.ExpenseTypeRef == MachinaryExpenseTypeRef">
       <ion-row>
         <ion-col size="12">
           <ion-checkbox [(ngModel)]="Entity.p.IsDieselPaid" (ionChange)="DiselPaid(Entity.p.IsDieselPaid)">Diesel

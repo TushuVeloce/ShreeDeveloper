@@ -362,16 +362,16 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
 
   public static async FetchEntirePendingListByContactModeRef(
     CompanyRef: number,
-    ContactModeRef: number,
+    ContactModes: number,
     errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance()
       .GlobalUIErrorHandler
   ) {
     let req = new CustomerFollowUpFetchRequest();
-    if (ContactModeRef) {
-      req.ContactModeRefs.push(ContactModeRef);
+    if (ContactModes) {
+      req.ContactModes.push(ContactModes);
     }
     req.CompanyRefs.push(CompanyRef)
-    req.PendingCallList.push(100);
+    req.PendingCallList=100;
     let tdResponse = (await CustomerFollowUp.FetchTransportData(
       req,
       errorHandler
@@ -382,15 +382,15 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
   public static async FetchEntireListByDateComapanyAndContactModeRef(
     CompanyRef: number,
     ReminderDate: string,
-    ContactModeRef: number,
+    ContactModes: number,
     errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance()
       .GlobalUIErrorHandler
   ) {
     let req = new CustomerFollowUpFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     req.ReminderDate.push(ReminderDate);
-    if (ContactModeRef) {
-      req.ContactModeRefs.push(ContactModeRef);
+    if (ContactModes) {
+      req.ContactModes.push(ContactModes);
     }
     let tdResponse = (await CustomerFollowUp.FetchTransportData(
       req,
