@@ -86,7 +86,6 @@ export class VendorMasterDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Vendor' : 'Edit Vendor';
       this.Entity = Vendor.GetCurrentInstance();
-      console.log(' this.Entity :', this.Entity);
       console.log('this.Entity :', this.Entity.p.MaterialListSuppliedByVendor);
       console.log('this.Entity :', Object.entries(this.Entity.p.MaterialListSuppliedByVendor).map(([key, value]) => ({ key, value })));
       // this.ServiceList = Object.values(this.Entity.p.MaterialListSuppliedByVendor);

@@ -93,7 +93,6 @@ export class VendorServicesMasterComponent implements OnInit {
     //       let req = new DeleteVendorServiceCustomRequest();
     //       req.VendorServiceRef = VendorService.p.Ref;
     //       let td = req.FormulateTransportData();
-    //       console.log('td :', td);
     //       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
     //       let tr = await this.serverCommunicator.sendHttpRequest(pkt);
     //       if (!tr.Successful) {
