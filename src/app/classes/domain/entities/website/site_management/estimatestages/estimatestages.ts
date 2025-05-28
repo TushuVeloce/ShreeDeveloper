@@ -23,6 +23,10 @@ export class EstimateStagesProps {
   public Ref: number = 0;
   public SiteRef: number = 0;
   public readonly SiteName: string = '';
+  public StageRef: number = 0;
+  public readonly StageName: string = '';
+  public SubStageRef: number = 0;
+  public readonly SubStageName: string = '';
   public TransDateTime: string = '';
   public Amount: number = 0;
   public Description: string = '';
@@ -74,6 +78,8 @@ export class EstimateStages implements IPersistable<EstimateStages> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
+    if (this.p.SiteRef == 0) vra.add('SiteRef', 'Site Name cannot be blank.');
+    if (this.p.StageRef == 0) vra.add('StageRef', 'Stage Name cannot be blank.');
     if (this.p.Description == '') {
       vra.add('Description', 'Description cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Description)) {

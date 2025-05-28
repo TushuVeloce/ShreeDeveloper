@@ -7,57 +7,77 @@
         </button>
       </div>
       <div class="col-md-11">
-        <span class="detail_title">{{this.DetailsFormTitle}}</span>
+        <span class="detail_title">{{ this.DetailsFormTitle }}</span>
       </div>
     </div>
     <ng-template #noDataTpl>
-      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
-        No Data
-      </div>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
     </ng-template>
-    <form autocomplete="off"  #estimateForm="ngForm">
-      <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4 col-sm-12 mb-3">
+    <form autocomplete="off" #estimateForm="ngForm">
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-6 col-sm-12 mb-3">
           <label for="SiteRef"><b>Site Name</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
-        <!-- <div class="col-md-6 col-sm-12 mb-3">
-          <label for="TransDateTime">Transaction Date</label>
-          <input type="date" [(ngModel)]="Entity.p.TransDateTime" name="TransDateTime" class="form-control" id="TransDateTime" required
-            placeholder="Enter Date" #TransDateTimeCtrl="ngModel" required (blur)="TransDateTimeCtrl.control.markAsTouched()"/>
-          <div *ngIf="(TransDateTimeCtrl.invalid && (TransDateTimeCtrl.touched || TransDateTimeCtrl.dirty))">
-            <span class="validation-text" *ngIf="TransDateTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
-        </div> -->
-        <div class="col-md-4 col-sm-12 mb-3">
+        <div class="col-md-6">
+          <label><b>Stage</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="StageRef" name="StageRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef"
+            (ngModelChange)="getSubStageListByStageRef(Entity.p.StageRef)">
+            <!-- <nz-option [nzValue]="0" nzLabel="All"></nz-option> -->
+            <nz-option *ngFor="let stage of StageList" [nzValue]="stage.p.Ref" [nzLabel]="stage.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-6">
+          <label><b>Sub Stage</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="SubStageRef" name="SubStageRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SubStageRef">
+            <!-- <nz-option [nzValue]="0" nzLabel="All"></nz-option> -->
+            <nz-option *ngFor="let substage of SubStageList" [nzValue]="substage.p.Ref" [nzLabel]="substage.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-6 col-sm-12 mb-3">
           <label for="Amount">Amount</label>
           <input type="number" [(ngModel)]="Entity.p.Amount" name="Amount" class="form-control" id="Amount" required
             placeholder="Enter Display Order" #AmountCtrl="ngModel" required (blur)="AmountCtrl.control.markAsTouched()"
             (click)="selectAllValue($event)" />
-          <div *ngIf="(AmountCtrl.invalid && (AmountCtrl.touched || AmountCtrl.dirty))">
-            <span class="validation-text" *ngIf="AmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div *ngIf="
+              AmountCtrl.invalid && (AmountCtrl.touched || AmountCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="AmountCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-        <div class="col-md-4 col-sm-12 mb-3">
+        <div class="col-md-6 col-sm-12 mb-3">
           <label><b>Description</b></label>
           <textarea type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
             id="Description" rows="1" required placeholder="Enter Description" #DescriptionCtrl="ngModel"
             (blur)="DescriptionCtrl.control.markAsTouched()"></textarea>
-          <div style="height: 25px;"
-            *ngIf="(DescriptionCtrl.invalid && (DescriptionCtrl.touched || DescriptionCtrl.dirty))">
-            <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <div style="height: 25px" *ngIf="
+              DescriptionCtrl.invalid &&
+              (DescriptionCtrl.touched || DescriptionCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
       </div>
-      <div style="justify-content: center; display: flex; gap: 2rem; margin-top: 2rem;">
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
         <div>
-          <button type="button" class="btn" (click)="SaveStageMaster()">Save</button>
+          <button type="button" class="btn" (click)="SaveStageMaster()">
+            Save
+          </button>
         </div>
         <div>
-          <button type="button" class="btn" (click)="BackEstimateStage()">Cancel</button>
+          <button type="button" class="btn" (click)="BackEstimateStage()">
+            Cancel
+          </button>
         </div>
       </div>
     </form>

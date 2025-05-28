@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, effect, OnInit, ViewChild } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
+import { SubStage } from 'src/app/classes/domain/entities/website/masters/substage/subStage';
 import { EstimateStages } from 'src/app/classes/domain/entities/website/site_management/estimatestages/estimatestages';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -26,6 +27,7 @@ export class EstimateStagesDetailsComponent implements OnInit {
   InitialEntity: EstimateStages = null as any;
   SiteList: Site[] = [];
   StageList: Stage[] = [];
+  SubStageList: SubStage[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
@@ -38,7 +40,11 @@ export class EstimateStagesDetailsComponent implements OnInit {
   @ViewChild('AmountCtrl') AmountInputControl!: NgModel;
   @ViewChild('DescriptionCtrl') DescriptionInputControl!: NgModel;
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement,private dtu: DTU,) { }
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement,private dtu: DTU,) {
+      effect(async () => {
+        await this.getStageListByCompanyRef();
+      });
+    }
 
 
   async ngOnInit() {
@@ -78,6 +84,26 @@ export class EstimateStagesDetailsComponent implements OnInit {
     // this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
   }
 
+  getStageListByCompanyRef = async () => {
+    this.Entity.p.StageRef = 0;
+    this.StageList = []
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.StageList = lst.filter(stage => stage.p.IsSubStageApplicable === true);
+  }
+
+    getSubStageListByStageRef = async (stageref: number) => {
+      this.Entity.p.SubStageRef = 0
+    this.SubStageList = [];
+    if (stageref > 0) {
+      let lst = await SubStage.FetchEntireListByStageRef(stageref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.SubStageList = lst;
+    }
+  }
+
 
   SaveStageMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
@@ -91,6 +117,7 @@ export class EstimateStagesDetailsComponent implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
+    console.log('entitiesToSave :', entitiesToSave);
     await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {

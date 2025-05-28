@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { BookingRemark, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { BookingRemark, DomainEnums, MarketingModes } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import {
@@ -74,6 +74,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     true,
     '--Select Lead Source --'
   );
+   LeadSourceEnum = MarketingModes;
   CustomerStatusList = DomainEnums.CustomerStatusList(
     true,
     '--Select Customer Status --'
@@ -151,6 +152,10 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     } else {
       this.Entity = CustomerFollowUp.CreateNewInstance();
       CustomerFollowUp.SetCurrentInstance(this.Entity);
+      if( this.Entity.p.LeadSource = this.LeadSourceEnum.AgentBoker){
+        this.onLeadSourceChange(this.Entity.p.LeadSource)
+      }
+     
     }
     this.InitialEntity = Object.assign(
       CustomerFollowUp.CreateNewInstance(),
@@ -321,7 +326,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
   onLeadSourceChange = (selectedValue: number) => {
     // Check if the selected value is AgentBroker (50)
-    if (selectedValue === 50) {
+    if (selectedValue ===  this.LeadSourceEnum.AgentBoker) {
       this.showAgentBrokerInput = true;
     } else {
       this.showAgentBrokerInput = false;

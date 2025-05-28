@@ -107,39 +107,40 @@
           <input type="number" name="GrossTotal" class="form-control" id="GrossTotal" [(ngModel)]="Entity.p.GrossTotal"
             placeholder="Enter Gross Total" readonly />
         </div>
-        <div class="col-md-4">
+      </div>
+      <div style="width: 100%; margin-top: 1rem; " class="d-flex justify-content-center">
+        <hr style="border: 2px solid brown" width="20%" />
+      </div>
+      <div class="row">
+          <div class="col-md-4" style="margin-top: 1rem; ">
           <label>TDS</label>
           <input type="number" name="TDS" class="form-control" id="TDS" [(ngModel)]="Entity.p.TDS"
             placeholder="Enter TDS" required (click)="selectAllValue($event)"
             (ngModelChange)="calculatetotaldeduction()" />
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
+        <div class="col-md-4" style="margin-top: 1rem; ">
           <label>PF</label>
           <input type="number" name="PF" class="form-control" id="PF" [(ngModel)]="Entity.p.PF" placeholder="Enter PF"
             required (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()" />
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Total Leave Deduction</label>
           <input type="number" name="TotalLeaveDeduction" class="form-control" id="TotalLeaveDeduction"
             [(ngModel)]="Entity.p.TotalLeaveDeduction" placeholder="Enter Total Leave Deduction" required
             (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()" />
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Advance Payment</label>
           <input type="number" name="AdvancePayment" class="form-control" id="AdvancePayment"
             [(ngModel)]="Entity.p.AdvancePayment" placeholder="Enter Advance Payment" required
             (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()" />
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
+        <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Total Deduction</label>
           <input type="number" name="TotalDeduction" class="form-control" id="TotalDeduction"
             [(ngModel)]="Entity.p.TotalDeduction" placeholder="Enter Total Deduction" readonly />
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Net Salary</label>
           <input type="number" name="NetSalary" class="form-control" id="NetSalary" [(ngModel)]="Entity.p.NetSalary"
             placeholder="Enter Net Salary" readonly />

@@ -88,6 +88,14 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   }
 
   EmployeeData = async (employee: number, month: number) => {
+    if(month != 0){
+      const selectedMonthData = this.MonthList.find(m => m.Ref === month);
+      if (selectedMonthData) {
+        this.Entity.p.TotalDays = selectedMonthData.Days;
+      }
+    }else {
+         this.Entity.p.TotalDays =0;
+      }
     if (employee === 0 || month === 0) {
       return;
     }
@@ -97,7 +105,6 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     this.Entity.p.TotalWorkingHrs = 0
     this.Entity.p.TotalLeavesHrs = 0
     this.Entity.p.OverAllWorkingHrs = 0
-
     let req = new SalaryGenerationCustomRequest();
     req.EmployeeRef = employee;
     req.Month = month;
