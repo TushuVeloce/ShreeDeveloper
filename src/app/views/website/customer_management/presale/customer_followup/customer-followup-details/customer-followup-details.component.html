@@ -125,7 +125,7 @@
         <div class="no-data-text">Data Not Found</div>
       </ng-template>
       <!-- Plot Details table  -->
-      <div class="table-container" style="margin-top: 2rem">
+      <div class="table-container" style="margin-top: 2rem" *ngIf="Entity.p.CustomerFollowUpPlotDetails.length > 0">
         <div class="row">
           <div class="col-12">
             <label class="TableHeading">Follow Up Plots</label>
@@ -217,14 +217,14 @@
             <label for="CustomerStatus"><b>Customer Status</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
               nzPlaceHolder="Select" id="CustomerStatus" name="CustomerStatus" [(ngModel)]="Entity.p.CustomerStatus"
-              [nzSize]="'large'">
+              [nzSize]="'large'" (mgModelChange)="ConverttoDeal(Entity.p.CustomerStatus)">
               <nz-option *ngFor="let status of CustomerStatusList" [nzValue]="status.Ref"
                 [nzLabel]="status.Name"></nz-option>
             </nz-select>
           </div>
         </div>
         <!-- Next site visit date  -->
-        <div class="col-md-4" *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== 40">
+        <div class="col-md-4" *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== CustomerStatusEnum.ConvertToDeal">
           <div>
             <label>Next Site Visit Date</label>
             <input type="date" name="localSiteVisitDate" class="form-control" id="localSiteVisitDate" [min]="today"
@@ -232,7 +232,7 @@
           </div>
         </div>
         <!-- Next Office visit date  -->
-        <div class="col-md-4" *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== 40">
+        <div class="col-md-4" *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== CustomerStatusEnum.ConvertToDeal">
           <div>
             <label>Next Office Visit Date</label>
             <input type="date" name="localOfficeVisitDate" class="form-control" id="localOfficeVisitDate" [min]="today"

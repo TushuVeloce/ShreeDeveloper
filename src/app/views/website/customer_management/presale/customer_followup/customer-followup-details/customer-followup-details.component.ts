@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { BookingRemark, DomainEnums, MarketingModes } from 'src/app/classes/domain/domainenums/domainenums';
+import { BookingRemark, CustomerStatus, DomainEnums, MarketingModes } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUp } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import {
@@ -79,6 +79,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     true,
     '--Select Customer Status --'
   );
+  CustomerStatusEnum = CustomerStatus
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   showAgentBrokerInput: boolean = false;
 
@@ -333,6 +334,23 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     }
   };
 
+ ConverttoDeal = (CustomerStatus: number) => {
+ console.log('CustomerStatus :', CustomerStatus);
+  if (this.Entity.p.CustomerFollowUpPlotDetails.length > 0 && CustomerStatus === this.CustomerStatusEnum.ConvertToDeal) {
+    const hasDealRecord = this.Entity.p.CustomerFollowUpPlotDetails?.some(
+      (item: any) => item.CustomerStatus === this.CustomerStatusEnum.ConvertToDeal
+    );
+    console.log('hasDealRecord :', hasDealRecord);
+
+    if (!hasDealRecord) {
+      this.uiUtils.showWarningToster('No record found in the Plots Table as "Convert to Deal"');
+      return false;
+    }
+  }
+   return true; 
+};
+
+
   SaveCustomerFollowUp = async () => {
     this.Entity.p.LoginEmployeeRef = Number(
       this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
@@ -365,6 +383,9 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     this.Entity.p.ReminderDate = this.dtu.ConvertStringDateToFullFormat(
       this.localReminderDate
     );
+    if(!this.ConverttoDeal(this.Entity.p.CustomerStatus)){
+      return
+    }
     // return
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];

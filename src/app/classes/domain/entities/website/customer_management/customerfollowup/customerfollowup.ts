@@ -106,7 +106,6 @@ export class CustomerFollowUp implements IPersistable<CustomerFollowUp> {
     _td: TransportData,
     vra: ValidationResultAccumulator
   ): void {
-    debugger;
     if (!this.AllowEdit)
       vra.add('', 'This object is not editable and hence cannot be saved.');
     // if (this.p.CustomerEnquiryRef == 0)
