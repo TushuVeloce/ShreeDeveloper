@@ -25,6 +25,7 @@ export class EstimateStagesDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Estimate Stage' | 'Edit Estimate Stage' = 'New Estimate Stage';
   InitialEntity: EstimateStages = null as any;
   SiteList: Site[] = [];
+  StageList: Stage[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
