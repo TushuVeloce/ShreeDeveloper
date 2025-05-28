@@ -109,10 +109,10 @@ export class CompanyMasterDetailsComponent implements OnInit {
 
       this.DetailsFormTitle = this.IsNewEntity ? 'New Company' : 'Edit Company';
       this.Entity = Company.GetCurrentInstance();
-      this.imageUrl = this.Entity.p.LogoFile;
-      console.log('this.Entity.p.LogoFile :', this.Entity.p.LogoFile);
+      this.imageUrl = this.Entity.p.LogoPath;
+      console.log('this.Entity.p.LogoFile :', this.Entity.p.LogoPath);
 
-      this.loadImageFromBackend(this.Entity.p.LogoFile)
+      this.loadImageFromBackend(this.Entity.p.LogoPath)
       // While Edit Converting date String into Date Format //
       this.dateOfInCorporation = this.datePipe.transform(
         this.dtu.FromString(this.Entity.p.DateOfInCorporation),
@@ -246,7 +246,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
     }
     let entitiesToSave = [entityToSave];
     if (this.Entity.p.CompanyLogo != null) {
-      let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("Company_Logo", this.Entity.p.CompanyLogo, this.Entity.p.CompanyLogo.name)];
+      let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("LogoFile", this.Entity.p.CompanyLogo, this.Entity.p.CompanyLogo.name)];
       let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
     }
 

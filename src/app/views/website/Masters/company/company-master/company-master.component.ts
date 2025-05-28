@@ -79,7 +79,7 @@ export class CompanyMasterComponent implements OnInit {
     // code for download image
     try {
 
-      let blobResponse = await this.serverCommunicatorService.DownloadDocument(SelectItem.p.LogoFile, this.appStateManage.getLoginToken())
+      let blobResponse = await this.serverCommunicatorService.DownloadDocument(SelectItem.p.LogoPath, this.appStateManage.getLoginToken())
       console.log(blobResponse);
       if (blobResponse == null || undefined) {
         alert("Error to get file")
@@ -90,7 +90,7 @@ export class CompanyMasterComponent implements OnInit {
      // const ext = extension(blobResponse.type); // e.g., "pdf"
       // let ext2 = mime.extension('text/plain');
       let ext2 = Utils.GetInstance().getMimeTypeFromFileName(blobResponse.type);
-      let fileName = SelectItem.p.LogoFile || 'downloaded-file' + '.'+ ext2;
+      let fileName = SelectItem.p.LogoPath || 'downloaded-file' + '.'+ ext2;
       if (platformInfo.platform === 'web') {
         this.downloadInBrowser(blobResponse, fileName);
       } else {
