@@ -57,9 +57,9 @@ export class PlotMasterComponent implements OnInit {
         await this.getPlotListBySiteandBookingRemarkRef(storedSiteRef, bookingRemarkeRef);
       });
     }
-    if (this.siteref == 0) {
-      this.getPlotList()
-    }
+    // if (this.siteref == 0) {
+    //   this.getPlotList()
+    // }
   }
 
   FormulateSiteListByCompanyRef = async () => {
@@ -95,7 +95,7 @@ export class PlotMasterComponent implements OnInit {
     this.DisplayMasterList = [];
     if (this.siteref <= 0) {
       this.clearStorage();
-      this.getPlotList()
+      // this.getPlotList()
       this.BookingRemarkList = DomainEnums.BookingRemarkList(true);
     }
     //  else {
@@ -130,15 +130,15 @@ export class PlotMasterComponent implements OnInit {
     this.loadPaginationData();
   }
 
-  getPlotList = async () => {
-    this.MasterList = [];
-    this.DisplayMasterList = [];
-    this.siteref = 0
-    let lst = await Plot.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList;
-    this.loadPaginationData();
-  }
+  // getPlotList = async () => {
+  //   this.MasterList = [];
+  //   this.DisplayMasterList = [];
+  //   this.siteref = 0
+  //   let lst = await Plot.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.MasterList = lst;
+  //   this.DisplayMasterList = this.MasterList;
+  //   this.loadPaginationData();
+  // }
 
   onEditClicked = async (item: Plot) => {
     this.SelectedPlot = item.GetEditableVersion();
