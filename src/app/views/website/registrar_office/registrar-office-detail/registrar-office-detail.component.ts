@@ -25,7 +25,7 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   IsNewEntity: boolean = true;
   isChecked = false; // Default value
   Entity: RegistrarOffice = RegistrarOffice.CreateNewInstance();
-  DetailsFormTitle: 'New Registrar Office' | 'Edit Registrar Office' = 'New Registrar Office';
+  DetailsFormTitle: string = 'Registrar Office';
   InitialEntity: RegistrarOffice = null as any;
   companyName = this.companystatemanagement.SelectedCompanyName;
   localagreementdate: string = '';
@@ -39,7 +39,9 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   selectedFileNames: { [key: string]: string } = {};
 
   uploadedFiles: { label: string; file: File; filename: string }[] = [];
-  filePreviews: { [key: string]: string } = {};
+  filePrevViews: { [key: string]: string } = {};
+  filePostViews: { [key: string]: string } = {};
+  filePostViewsURL: { [key: string]: string } = {};
   errors: { [key: string]: string } = {};
 
   NameWithNos: string = ValidationPatterns.NameWithNos
@@ -78,54 +80,66 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
-    console.log(' this.ImageBaseUrl :',  this.ImageBaseUrl);
     this.LoginToken = this.appStateManage.getLoginToken();
-    console.log('this.LoginToken :', this.LoginToken);
-    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-      this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Registrar Office' : 'Edit Registrar Office';
-      this.Entity = RegistrarOffice.GetCurrentInstance();
-      console.log('this.Entity :', this.Entity);
-      this.filePreviews['CustomerAadharFile'] = `${this.ImageBaseUrl}${this.Entity.p.CustomerAadharPath}/${this.LoginToken}?${this.TimeStamp}`;
-      console.log('this.filePreviews[\'CustomerAadharFile\'] :', this.filePreviews['CustomerAadharFile']);
-      this.filePreviews['CustomerPanFile'] = `${this.ImageBaseUrl}${this.Entity.p.CustomerPanPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.Entity = history.state.registrarData;;
+    console.log('this.Entity :', this.Entity);
 
-      this.filePreviews['Witness1AadharFile'] = `${this.ImageBaseUrl}${this.Entity.p.Witness1AadharPath}/${this.LoginToken}?${this.TimeStamp}`;
-      this.filePreviews['Witness1PanFile'] = `${this.ImageBaseUrl}${this.Entity.p.Witness1PanPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.filePostViews['CustomerAadharFile'] = `${this.ImageBaseUrl}${this.Entity.p.CustomerAadharPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.selectedFileNames['CustomerAadharFile'] = this.Entity.p.CustomerAadharPath;
 
-      this.filePreviews['Witness2AadharFile'] = `${this.ImageBaseUrl}${this.Entity.p.Witness2AadharPath}/${this.LoginToken}?${this.TimeStamp}`;
-      this.filePreviews['Witness2PanFile'] = `${this.ImageBaseUrl}${this.Entity.p.Witness2PanPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.filePostViews['CustomerPanFile'] = `${this.ImageBaseUrl}${this.Entity.p.CustomerPanPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.selectedFileNames['CustomerPanFile'] = this.Entity.p.CustomerPanPath;
 
-      this.filePreviews['AgreementDocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.AgreementDocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.filePostViews['Witness1AadharFile'] = `${this.ImageBaseUrl}${this.Entity.p.Witness1AadharPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.selectedFileNames['Witness1AadharFile'] = this.Entity.p.Witness1AadharPath;
 
-      this.filePreviews['SaleDeedDocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.SaleDeedDocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.filePostViews['Witness1PanFile'] = `${this.ImageBaseUrl}${this.Entity.p.Witness1PanPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.selectedFileNames['Witness1PanFile'] = this.Entity.p.Witness1PanPath;
 
-      this.filePreviews['IndexOriginalDocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.IndexOriginalDocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
-      this.filePreviews['DastZeroxDocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.DastZeroxDocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.filePostViews['Witness2AadharFile'] = `${this.ImageBaseUrl}${this.Entity.p.Witness2AadharPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.selectedFileNames['Witness2AadharFile'] = this.Entity.p.Witness2AadharPath;
 
-      this.filePreviews['FerfarNoticeDocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.FerfarNoticeDocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
-      this.filePreviews['FinalCustomer712DocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.FinalCustomer712DocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.filePostViews['Witness2PanFile'] = `${this.ImageBaseUrl}${this.Entity.p.Witness2PanPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.selectedFileNames['Witness2PanFile'] = this.Entity.p.Witness2PanPath;
+
+    this.filePostViews['AgreementDocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.AgreementDocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.selectedFileNames['AgreementDocumentFile'] = this.Entity.p.AgreementDocumentPath;
+
+    this.filePostViews['SaleDeedDocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.SaleDeedDocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.selectedFileNames['SaleDeedDocumentFile'] = this.Entity.p.SaleDeedDocumentPath;
+
+    this.filePostViews['IndexOriginalDocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.IndexOriginalDocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.selectedFileNames['IndexOriginalDocumentFile'] = this.Entity.p.IndexOriginalDocumentPath;
+
+    this.filePostViews['DastZeroxDocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.DastZeroxDocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.selectedFileNames['DastZeroxDocumentFile'] = this.Entity.p.DastZeroxDocumentPath;
+
+    this.filePostViews['FerfarNoticeDocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.FerfarNoticeDocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.selectedFileNames['FerfarNoticeDocumentFile'] = this.Entity.p.FerfarNoticeDocumentPath;
+
+    this.filePostViews['FinalCustomer712DocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.FinalCustomer712DocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
+    this.selectedFileNames['FinalCustomer712DocumentFile'] = this.Entity.p.FinalCustomer712DocumentPath;
 
 
-      // While Edit Converting date String into Date Format //
-      if (this.Entity.p.AgreementDate) {
-        this.localagreementdate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.AgreementDate)
-      }
-      if (this.Entity.p.SaleDeedDate) {
-        this.localsaledeeddate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.SaleDeedDate)
-      }
-      if (this.Entity.p.TalathiDate) {
-        this.localtalathidate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.TalathiDate)
-      }
-      this.appStateManage.StorageKey.removeItem('Editable')
-
-    } else {
-      this.Entity = RegistrarOffice.CreateNewInstance();
-      RegistrarOffice.SetCurrentInstance(this.Entity);
-
+    // While Edit Converting date String into Date Format //
+    if (this.Entity.p.AgreementDate) {
+      this.localagreementdate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.AgreementDate)
+    }
+    if (this.Entity.p.SaleDeedDate) {
+      this.localsaledeeddate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.SaleDeedDate)
+    }
+    if (this.Entity.p.TalathiDate) {
+      this.localtalathidate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.TalathiDate)
     }
     this.InitialEntity = Object.assign(RegistrarOffice.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)) as RegistrarOffice;
+  }
+
+  isImageFile(filePath: string): boolean {
+    if (!filePath) return false;
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+    const ext = filePath.substring(filePath.lastIndexOf('.')).toLowerCase();
+    return imageExtensions.includes(ext);
   }
 
   // for value 0 selected while click on Input //
@@ -144,11 +158,22 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
       const maxSizeMB = 2;
 
+      if (file) {
+        const isPdf = file.type === 'application/pdf';
+        const isImage = file.type.startsWith('image/');
+
+        if (isPdf || isImage) {
+          this.filePostViewsURL[type] = URL.createObjectURL(file);
+        } else {
+          alert('Only PDF or image files are supported.');
+        }
+      }
+
       if (!allowedTypes.includes(file.type)) {
-        this.errors[type] = 'Only JPG, PNG, and GIF files are allowed.';
+        this.errors[type] = 'Only JPG, PNG, GIF, and PDF files are allowed.';
         return;
       }
 
@@ -171,11 +196,10 @@ export class RegistrarOfficeDetailComponent implements OnInit {
       } else {
         this.uploadedFiles.push(fileEntry);
       }
-      console.log('this.uploadedFiles :', this.uploadedFiles);
 
       const reader = new FileReader();
       reader.onload = () => {
-        this.filePreviews[type] = reader.result as string;
+        this.filePrevViews[type] = reader.result as string;
         this.selectedFileNames[type] = fileEntry.filename;
 
       };
@@ -254,8 +278,6 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     console.log('entitiesToSave :', entitiesToSave);
 
-    if (this.uploadedFiles.length <= 0) {
-    }
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
 
     if (!tr.Successful) {
@@ -265,17 +287,19 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     }
     else {
       this.isSaveDisabled = false;
-      if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Registrar Office saved successfully!');
-        this.Entity = RegistrarOffice.CreateNewInstance();
-      } else {
-        await this.router.navigate(['/homepage/Website/Registrar_Office'])
-        this.BackRegistrarOffice()
-      }
+      this.BackRegistrarOffice()
     }
   }
 
-  BackRegistrarOffice() {
+  fileNavigation = (File: string, Type: string) => {
+    if (File) {
+      window.open(this.filePostViews[Type], '_blank');
+    } else {
+      window.open(this.filePostViewsURL[Type], '_blank');
+    }
+  }
+
+  BackRegistrarOffice = () => {
     this.router.navigate(['/homepage/Website/Registrar_Office']);
   }
 

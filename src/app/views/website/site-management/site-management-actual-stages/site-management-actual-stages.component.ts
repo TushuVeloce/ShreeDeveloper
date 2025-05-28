@@ -157,10 +157,6 @@ export class SiteManagementActualStagesComponent implements OnInit {
 
 
   navigateToPrint = async (item: ActualStages) => {
-    // this.SelectedActualStages = item.GetEditableVersion();
-    // ActualStages.SetCurrentInstance(this.SelectedActualStages);
-    // this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    // await this.router.navigate(['/homepage/Website/Actual_Stage_Print']);
     this.router.navigate(['/homepage/Website/Actual_Stage_Print'], {
       state: { printData: item.GetEditableVersion() }
     });
