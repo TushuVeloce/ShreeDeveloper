@@ -75,9 +75,6 @@
               {{ errors['CustomerAadharFile'] }}
             </p>
 
-            <!-- <img *ngIf="filePreviews['CustomerAadharFile']" [src]="filePreviews['CustomerAadharFile']"
-              class="img-preview" /> -->
-
             <ng-container *ngIf="filePreviews['CustomerAadharFile']; else defaultImage">
               <img [src]="filePreviews['CustomerAadharFile']" alt="Customer Aadhar" class="img-preview" />
             </ng-container>
@@ -114,8 +111,6 @@
             <p *ngIf="errors['CustomerPanFile']" class="validation-error">
               {{ errors['CustomerPanFile'] }}
             </p>
-
-            <!-- <img *ngIf="filePreviews['CustomerPanFile']" [src]="filePreviews['CustomerPanFile']" class="img-preview" /> -->
 
             <ng-container *ngIf="filePreviews['CustomerPanFile']; else defaultImage">
               <img [src]="filePreviews['CustomerPanFile']" alt="Customer Pan" class="img-preview" />
@@ -279,42 +274,6 @@
         </div>
 
         <!-- Aadhar -->
-        <!-- <div class="row mb-2">
-          <div class="col-md-8 d-flex">
-            <div class="col-md-4 d-flex justify-content-center">
-              <label>Aadhar</label>
-            </div>
-            <div class="col-md-8 d-flex">
-              <input type="file" [(ngModel)]="Entity.p.Witness2AadharPath" name="Aadhar" class="form-control"
-                id="Aadhar" required placeholder="Enter Aadhar" />
-            </div>
-          </div>
-
-          <div class="col-md-4 d-flex justify-content-center">
-            <label for="Witness2IsAadharSubmit">Submit</label>
-            <input type="checkbox" id="Witness2IsAadharSubmit" [(ngModel)]="Entity.p.Witness2IsAadharSubmit"
-              name="Witness2IsAadharSubmit" class="custom-checkbox" />
-          </div>
-        </div> -->
-
-        <!-- Pan -->
-        <!-- <div class="row mb-2">
-          <div class="col-md-8 d-flex">
-            <div class="col-md-4 d-flex justify-content-center">
-              <label> Pan</label>
-            </div>
-            <div class="col-md-8 d-flex">
-              <input type="file" [(ngModel)]="Entity.p.Witness2PanPath" name="Pan" class="form-control" id="Pan"
-                required placeholder="Enter Pan" />
-            </div>
-          </div>
-=          <div class="col-md-4 d-flex justify-content-center">
-            <label for="Witness2IsPanSubmit">Submit</label>
-            <input type="checkbox" id="Witness2IsPanSubmit" [(ngModel)]="Entity.p.Witness2IsPanSubmit"
-              name="Witness2IsPanSubmit" class="custom-checkbox" />
-          </div>
-        </div> -->
-        <!-- Aadhar -->
         <div class="row">
           <div class="col-md-3 d-flex justify-content-center">
           </div>
@@ -408,10 +367,6 @@
             </div>
           </div>
 
-          <!-- <div class="col-md-4 d-flex">
-            <input type="file" [(ngModel)]="Entity.p.AgreementDocumentPath" name="Name" class="form-control" id="Name"
-              required placeholder="Enter Name" />
-          </div> -->
           <div class="col-md-5 d-flex align-items-center justify-content-evenly mb-2">
             <img src="/assets/icons/upload.png" alt="Agreement Document" class="Upload-Icon"
               (click)="AgreementDocumentRef.nativeElement.click()" />
@@ -425,13 +380,6 @@
             <p *ngIf="errors['AgreementDocumentFile']" class="validation-error">
               {{ errors['AgreementDocumentFile'] }}
             </p>
-
-            <!-- <ng-container *ngIf="filePreviews['AgreementDocumentFile']; else defaultImage">
-              <img [src]="filePreviews['AgreementDocumentFile']" alt="Agreement Document" class="img-preview" />
-            </ng-container>
-            <ng-template #defaultImage>
-              <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
-            </ng-template> -->
           </div>
         </div>
 
@@ -491,13 +439,6 @@
             <p *ngIf="errors['SaleDeedDocumentFile']" class="validation-error">
               {{ errors['SaleDeedDocumentFile'] }}
             </p>
-
-            <!-- <ng-container *ngIf="filePreviews['SaleDeedDocumentFile']; else defaultImage">
-              <img [src]="filePreviews['SaleDeedDocumentFile']" alt="Sale Deed Document" class="img-preview" />
-            </ng-container>
-            <ng-template #defaultImage>
-              <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
-            </ng-template> -->
           </div>
 
         </div>
@@ -544,43 +485,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Index Original -->
-        <!-- <div class="row mb-2">
-          <div class="col-md-8 d-flex">
-            <div class="col-md-4 d-flex justify-content-center">
-              <label>Index Original</label>
-            </div>
-            <div class="col-md-8 d-flex">
-              <input type="file" [(ngModel)]="Entity.p.IndexOriginalDocumentPath" name="Index Original"
-                class="form-control" id="Index Original" required placeholder="Enter Index Original" />
-            </div>
-          </div>
-
-          <div class="col-md-4 d-flex justify-content-center">
-            <label for="IsIndexOriginalSubmit">Submit</label>
-            <input type="checkbox" id="IsIndexOriginalSubmit" [(ngModel)]="Entity.p.IsIndexOriginalSubmit"
-              name="IsIndexOriginalSubmit" class="custom-checkbox" />
-          </div>
-        </div> -->
-        <!-- दस्त Zerox -->
-        <!-- <div class="row mb-2">
-          <div class="col-md-8 d-flex">
-            <div class="col-md-4 d-flex justify-content-center">
-              <label> दस्त Zerox</label>
-            </div>
-            <div class="col-md-8 d-flex">
-              <input type="file" [(ngModel)]="Entity.p.DastZeroxDocumentPath" name="दस्त Zerox" class="form-control"
-                id="दस्त Zerox" required placeholder="Enter दस्त Zerox" />
-            </div>
-          </div>
-
-          <div class="col-md-4 d-flex justify-content-center">
-            <label for="IsDastZeroxSubmit">Submit</label>
-            <input type="checkbox" id="IsDastZeroxSubmit" [(ngModel)]="Entity.p.IsDastZeroxSubmit"
-              name="IsDastZeroxSubmit" class="custom-checkbox" />
-          </div>
-        </div> -->
 
         <!-- Index Original -->
         <div class="row mb-2">
@@ -681,43 +585,6 @@
         </div>
 
         <!-- फेरफार Notice घेणे -->
-        <!-- <div class="row mb-2">
-          <div class="col-md-8 d-flex">
-            <div class="col-md-4 d-flex justify-content-center">
-              <label> फेरफार Notice घेणे</label>
-            </div>
-            <div class="col-md-8 d-flex">
-              <input type="file" [(ngModel)]="Entity.p.Name" name="फेरफार Notice घेणे" class="form-control"
-                id="फेरफार Notice घेणे" required placeholder="Enter फेरफार Notice घेणे" />
-            </div>
-          </div>
-
-          <div class="col-md-4 d-flex justify-content-center">
-            <label for="IsFerfarNoticeSubmit">Submit</label>
-            <input type="checkbox" id="IsFerfarNoticeSubmit" [(ngModel)]="Entity.p.IsFerfarNoticeSubmit"
-              name="IsFerfarNoticeSubmit" class="custom-checkbox" />
-          </div>
-        </div> -->
-        <!-- Final-Customer 7/12 -->
-        <!-- <div class="row mb-2">
-          <div class="col-md-8 d-flex">
-            <div class="col-md-4 d-flex justify-content-center">
-              <label> Final-Customer 7/12</label>
-            </div>
-            <div class="col-md-8 d-flex">
-              <input type="file" [(ngModel)]="Entity.p.Name" name="Final-Customer 7/12" class="form-control"
-                id="Final-Customer 7/12" required placeholder="Enter Final-Customer 7/12" />
-            </div>
-          </div>
-
-          <div class="col-md-4 d-flex justify-content-center">
-            <label for="IsFinalCustomer712Submit">Submit</label>
-            <input type="checkbox" id="IsFinalCustomer712Submit" [(ngModel)]="Entity.p.IsFinalCustomer712Submit"
-              name="IsFinalCustomer712Submit" class="custom-checkbox" />
-          </div>
-        </div>-->
-
-        <!-- फेरफार Notice घेणे -->
         <div class="row mb-2">
           <div class="col-md-3 d-flex justify-content-center">
           </div>
@@ -776,8 +643,6 @@
             <p *ngIf="errors['FinalCustomer712DocumentFile']" class="validation-error">
               {{ errors['FinalCustomer712DocumentFile'] }}
             </p>
-            <!-- <img *ngIf="filePreviews['FinalCustomer712DocumentFile']"
-              [src]="filePreviews['FinalCustomer712DocumentFile']" class="img-preview" /> -->
 
             <ng-container *ngIf="filePreviews['FinalCustomer712DocumentFile']; else defaultImage">
               <img [src]="filePreviews['FinalCustomer712DocumentFile']" alt="Final Customer 7/12" class="img-preview" />

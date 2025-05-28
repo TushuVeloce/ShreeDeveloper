@@ -22,7 +22,7 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class RegistrarOfficeDetailComponent implements OnInit {
   isSaveDisabled: boolean = false;
-  private IsNewEntity: boolean = true;
+  IsNewEntity: boolean = true;
   isChecked = false; // Default value
   Entity: RegistrarOffice = RegistrarOffice.CreateNewInstance();
   DetailsFormTitle: 'New Registrar Office' | 'Edit Registrar Office' = 'New Registrar Office';
@@ -78,14 +78,33 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
+    console.log(' this.ImageBaseUrl :',  this.ImageBaseUrl);
     this.LoginToken = this.appStateManage.getLoginToken();
+    console.log('this.LoginToken :', this.LoginToken);
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Registrar Office' : 'Edit Registrar Office';
       this.Entity = RegistrarOffice.GetCurrentInstance();
-      console.log(' this.Entity :', this.Entity);
+      console.log('this.Entity :', this.Entity);
       this.filePreviews['CustomerAadharFile'] = `${this.ImageBaseUrl}${this.Entity.p.CustomerAadharPath}/${this.LoginToken}?${this.TimeStamp}`;
+      console.log('this.filePreviews[\'CustomerAadharFile\'] :', this.filePreviews['CustomerAadharFile']);
       this.filePreviews['CustomerPanFile'] = `${this.ImageBaseUrl}${this.Entity.p.CustomerPanPath}/${this.LoginToken}?${this.TimeStamp}`;
+
+      this.filePreviews['Witness1AadharFile'] = `${this.ImageBaseUrl}${this.Entity.p.Witness1AadharPath}/${this.LoginToken}?${this.TimeStamp}`;
+      this.filePreviews['Witness1PanFile'] = `${this.ImageBaseUrl}${this.Entity.p.Witness1PanPath}/${this.LoginToken}?${this.TimeStamp}`;
+
+      this.filePreviews['Witness2AadharFile'] = `${this.ImageBaseUrl}${this.Entity.p.Witness2AadharPath}/${this.LoginToken}?${this.TimeStamp}`;
+      this.filePreviews['Witness2PanFile'] = `${this.ImageBaseUrl}${this.Entity.p.Witness2PanPath}/${this.LoginToken}?${this.TimeStamp}`;
+
+      this.filePreviews['AgreementDocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.AgreementDocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
+
+      this.filePreviews['SaleDeedDocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.SaleDeedDocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
+
+      this.filePreviews['IndexOriginalDocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.IndexOriginalDocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
+      this.filePreviews['DastZeroxDocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.DastZeroxDocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
+
+      this.filePreviews['FerfarNoticeDocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.FerfarNoticeDocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
+      this.filePreviews['FinalCustomer712DocumentFile'] = `${this.ImageBaseUrl}${this.Entity.p.FinalCustomer712DocumentPath}/${this.LoginToken}?${this.TimeStamp}`;
 
 
       // While Edit Converting date String into Date Format //

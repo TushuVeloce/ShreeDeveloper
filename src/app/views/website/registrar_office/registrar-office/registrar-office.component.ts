@@ -54,6 +54,11 @@ export class RegistrarOfficeComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
+
+    if (this.SiteList.length >= 0) {
+      this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
+      this.getRegistrarOfficeListBySiteRef(this.Entity.p.SiteRef);
+    }
     this.loadPaginationData();
   }
 
