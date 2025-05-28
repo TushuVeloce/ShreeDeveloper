@@ -245,12 +245,8 @@ export class CompanyMasterDetailsComponent implements OnInit {
       }
     }
     let entitiesToSave = [entityToSave];
-    if (this.Entity.p.CompanyLogo != null) {
-      let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("LogoFile", this.Entity.p.CompanyLogo, this.Entity.p.CompanyLogo.name)];
-      let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
-    }
-
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("LogoFile", this.Entity.p.CompanyLogo, this.Entity.p.CompanyLogo.name)];
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
 
     if (!tr.Successful) {
       this.isSaveDisabled = false;
@@ -277,7 +273,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
     this.router.navigate(['/homepage/Website/Company_Master']);
   }
 
-    resetAllControls = () => {
+  resetAllControls = () => {
     // reset touched
     this.NameInputControl.control.markAsUntouched();
     this.ContactsControl.control.markAsUntouched();
