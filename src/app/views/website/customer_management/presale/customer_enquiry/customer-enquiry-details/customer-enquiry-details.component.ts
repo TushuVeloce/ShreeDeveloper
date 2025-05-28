@@ -272,11 +272,13 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     );
     this.EmployeeList = lst;
   };
+
   getPlotBySiteRefList = async (siteRef: number) => {
     if (siteRef <= 0) {
       await this.uiUtils.showWarningToster(`Please Select Site`);
       return;
     }
+    this.PlotList = []
     this.InterestedPlotRef = 0;
     // old code start
     // let bookingref = BookingRemark.Booked;
@@ -290,13 +292,8 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
 
     let lst = await Plot.FetchEntireListBySiteRef(
       siteRef,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-    this.PlotList = lst.filter(
-      (plot) => plot.p.CurrentBookingRemark !== BookingRemark.Booked
-    );
-
-
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.PlotList = lst.filter((plot) => plot.p.CurrentBookingRemark !== BookingRemark.Booked);
     // this.DisplayMasterList = this.PlotList
     // this.IsPlotDetails = true;
   };
