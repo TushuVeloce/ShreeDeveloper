@@ -107,9 +107,9 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       } else {
         this.Entity.p.Amount = this.Entity.p.Rate * this.Entity.p.Quantity
       }
-      if(this.Entity.p.ExpenseTypeRef == this.OtherExpenseRef){
-          this.isAddingExpense = false
-          this.isAdd = true
+      if (this.Entity.p.ExpenseTypeRef == this.OtherExpenseRef) {
+        this.isAddingExpense = false
+        this.isAdd = true
       }
       await this.DiselPaid(this.Entity.p.IsDieselPaid)
       await this.OnStageChange(this.Entity.p.StageRef)
@@ -414,9 +414,18 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       this.Entity.p.GrandTotal = rate * TotalWorkedHours - dieselAmount
       this.Entity.p.Amount = rate * TotalWorkedHours
     } else {
-      this.Entity.p.Amount = rate * quantity
-      this.Entity.p.GrandTotal = rate * quantity - dieselAmount
-
+      // this.Entity.p.Amount = rate * quantity
+      // this.Entity.p.GrandTotal = rate * quantity - dieselAmount
+      if (rate > 0 && quantity > 0) {
+        console.log('rate * quantity :1', rate, quantity);
+        this.Entity.p.Amount = rate * quantity
+        console.log('rate * quantity :2', rate, quantity);
+        this.Entity.p.GrandTotal = rate * quantity - dieselAmount
+        console.log(' this.Entity.p.GrandTotal :CalculateAmountOnRateAndQuantity else', this.Entity.p.GrandTotal);
+      } else {
+        this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
+        this.Entity.p.GrandTotal = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
+      }
     }
   };
 
