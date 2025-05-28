@@ -32,24 +32,19 @@ export class RegistrarOfficeProps {
   public IsCustomerAadharSubmit: boolean = false;
   public IsCustomerPanSubmit: boolean = false;
 
-  public Witness1Submit: boolean = false;
-
-  public Witness1Name: string = '';
-  public Witness1ContactNo: number = 0;
-
   public CustomerAadharPath: string = '';
   public CustomerAadharFile: File = null as any
-
   public CustomerPanPath: string = '';
   public CustomerPanFile: File = null as any
 
-  public Witness1IsAadharSubmit: boolean = false;
+  public Witness1Submit: boolean = false;
+  public Witness1Name: string = '';
+  public Witness1ContactNo: number = 0;
 
+  public Witness1IsAadharSubmit: boolean = false;
   public Witness1AadharPath: string = '';
   public Witness1AadharFile: File = null as any
-
   public Witness1IsPanSubmit: boolean = false;
-
   public Witness1PanPath: string = '';
   public Witness1PanFile: File = null as any
 
@@ -57,41 +52,31 @@ export class RegistrarOfficeProps {
   public Witness2Name: string = '';
   public Witness2ContactNo: number = 0;
   public Witness2IsAadharSubmit: boolean = false;
-
   public Witness2AadharPath: string = '';
   public Witness2AadharFile: File = null as any
 
   public Witness2IsPanSubmit: boolean = false;
-
   public Witness2PanPath: string = '';
   public Witness2PanFile: File = null as any
 
-
-  //  public IsAgreementToSaleSubmit : boolean = false;
   public AgreementDocumentNo: string = '';
   public AgreementDate: string = '';
-
   public AgreementDocumentPath: string = '';
   public AgreementDocumentFile: File = null as any
 
-  //  public IsSaledeedSubmit : Boolean = false;
   public SaleDeedDocumentNo: string = '';
-
   public SaleDeedDocumentPath: string = '';
   public SaleDeedDocumentFile: File = null as any
-
   public SaleDeedDate: string = '';
-  public IsIndexOriginalSubmit: boolean = false;
 
   public IndexOriginalDocumentPath: string = '';
   public IndexOriginalDocumentFile: File = null as any
-
-  public IsDastZeroxSubmit: boolean = false;
+  public IsIndexOriginalSubmit: boolean = false;
 
   public DastZeroxDocumentPath: string = '';
   public DastZeroxDocumentFile: File = null as any
+  public IsDastZeroxSubmit: boolean = false;
 
-  //  public IsTalathiSubmit : Boolean = false;
   public TalathiInwardNo: string = '';
   public TalathiDate: string = '';
   public IsFerfarNoticeSubmit: boolean = false;
@@ -106,10 +91,6 @@ export class RegistrarOfficeProps {
   public CompanyRef: number = 0;
   public CustomerRef: number = 0;
   public CompanyName: string = '';
-
-
-
-
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
