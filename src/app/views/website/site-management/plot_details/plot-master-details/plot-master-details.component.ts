@@ -90,10 +90,10 @@ export class PlotMasterDetailsComponent implements OnInit {
     }
     let lst = await Owner.FetchEntireListBySiteRef(SiteRf, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.CustomerList = lst;
-    if (this.CustomerList.length == 1) {
-      this.Entity.p.CurrentOwnerRef = this.CustomerList[0].p.Ref
-      this.getCustomerDataBycustomerRef(this.Entity.p.CurrentOwnerRef)
-    }
+    // if (this.CustomerList.length == 1) {
+    //   this.Entity.p.CurrentOwnerRef = this.CustomerList[0].p.Ref
+    //   this.getCustomerDataBycustomerRef(this.Entity.p.CurrentOwnerRef)
+    // }
     if (this.Entity.p.CurrentOwnerRef > 0 && this.CustomerList.length > 0) {
       this.getCustomerDataBycustomerRef(this.Entity.p.CurrentOwnerRef)
     }
@@ -107,6 +107,8 @@ export class PlotMasterDetailsComponent implements OnInit {
 
   getCompanySingleRecord = async () => {
     this.CompanyEntity = Company.CreateNewInstance();
+    this.Entity.p.CurrentOwnerRef = 0 
+    this.CustomerEntity = Owner.CreateNewInstance();
     if (this.Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked) {
       let CompanyData = await Company.FetchInstance(this.CompanyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.CompanyEntity = CompanyData;
@@ -120,6 +122,9 @@ export class PlotMasterDetailsComponent implements OnInit {
     this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.SiteManagementRef = this.SiteRf
     this.Entity.p.AreaInSqft = this.Entity.p.AreaInSqm * 10.7639
+    if (this.Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked) {
+      this.Entity.p.CurrentOwnerRef = 0
+    }
     this.Entity.p.IsNewlyCreated = this.IsNewEntity;
     if (this.Entity.p.CreatedBy == 0) {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
@@ -127,6 +132,7 @@ export class PlotMasterDetailsComponent implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
