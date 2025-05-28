@@ -149,7 +149,7 @@ export class LeaveApprovalComponent implements OnInit {
             await this.uiUtils.showSuccessToster(`Leave has been approved successfully`);
           }
           else if (selectedStatus === 'Rejected') {
-            await this.uiUtils.showErrorToster(`Leave has been rejected  successfully`);
+            await this.uiUtils.showSuccessToster(`Leave has been rejected  successfully`);
           }
           this.getLeaveApprovalListByEmployeeRef();
         }

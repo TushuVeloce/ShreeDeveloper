@@ -438,9 +438,11 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       this.dtu.ConvertStringDateToFullFormat(this.localOfficeVisitDate);
     this.Entity.p.CustomerFollowUps[0].ReminderDate =
       this.dtu.ConvertStringDateToFullFormat(this.localReminderDate);
-
+      this.Entity.p.CustomerFollowUps[0].CompanyRef =
+        this.companystatemanagement.getCurrentCompanyRef();
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
 
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
