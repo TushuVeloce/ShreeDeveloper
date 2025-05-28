@@ -7,6 +7,7 @@ import { RegistrarOffice } from 'src/app/classes/domain/entities/website/registr
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
@@ -30,6 +31,8 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   localagreementdate: string = '';
   localsaledeeddate: string = '';
   localtalathidate: string = '';
+  TimeStamp = Date.now()
+  LoginToken = '';
 
   ImageBaseUrl: string = "";
 
@@ -61,15 +64,29 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   @ViewChild('FerfarNoticeDocument', { static: false }) FerfarNoticeDocumentRef!: ElementRef;
   @ViewChild('FinalCustomer712Document', { static: false }) FinalCustomer712DocumentRef!: ElementRef;
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private dtu: DTU,
-    private datePipe: DatePipe) { }
+  constructor(
+    private router: Router,
+    private baseUrl: BaseUrlService,
+    private uiUtils: UIUtils,
+    private appStateManage: AppStateManageService,
+    private utils: Utils,
+    private companystatemanagement: CompanyStateManagement,
+    private dtu: DTU,
+    private datePipe: DatePipe
+  ) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
+    this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
+    this.LoginToken = this.appStateManage.getLoginToken();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Registrar Office' : 'Edit Registrar Office';
       this.Entity = RegistrarOffice.GetCurrentInstance();
+      console.log(' this.Entity :', this.Entity);
+      this.filePreviews['CustomerAadharFile'] = `${this.ImageBaseUrl}${this.Entity.p.CustomerAadharPath}/${this.LoginToken}?${this.TimeStamp}`;
+      this.filePreviews['CustomerPanFile'] = `${this.ImageBaseUrl}${this.Entity.p.CustomerPanPath}/${this.LoginToken}?${this.TimeStamp}`;
+
 
       // While Edit Converting date String into Date Format //
       if (this.Entity.p.AgreementDate) {

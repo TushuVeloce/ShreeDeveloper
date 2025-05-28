@@ -158,6 +158,7 @@ export class ActualStages implements IPersistable<ActualStages> {
     if (this.p.ExpenseTypeRef == 0) vra.add('ExpenseTypeRef', 'Expense Type cannot be blank.');
     if (this.p.VendorRef == 0) vra.add('VendorRef', 'Vendor Name cannot be blank.');
     if (this.p.UnitRef == 0) vra.add('UnitRef', 'Unit cannot be blank.');
+    if (this.p.Description == '') vra.add('Description', 'Description cannot be blank.');
     // if (this.p.Description == '') {
     //   vra.add('Description', 'Description cannot be blank.');
     // } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Description)) {
