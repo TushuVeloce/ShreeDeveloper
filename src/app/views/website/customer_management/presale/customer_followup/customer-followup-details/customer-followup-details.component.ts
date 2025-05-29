@@ -255,6 +255,8 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       await this.uiUtils.showWarningToster(`Please Select Site`);
       return;
     }
+    this.PlotList = []
+    this.InterestedPlotRef = 0;
     let lst = await Plot.FetchEntireListBySiteRef(
       siteRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)

@@ -47,9 +47,18 @@ export class AppStateManageService {
 
   constructor() { }
 
-  setDropdownDisabled(value: boolean) {
+  // setDropdownDisabled(value: boolean) {
+  //   this.isDropdownDisabled.set(value);
+  // }
+
+  setDropdownDisabled(value?: boolean): void {
+  if (value === undefined) {
+    const isDefault = Number(this.StorageKey.getItem("IsDefaultUser")) === 1;
+    this.isDropdownDisabled.set(!isDefault); // Disable if not default
+  } else {
     this.isDropdownDisabled.set(value);
   }
+}
 
   // EmployeeRef  start
   getEmployeeRef(): number {

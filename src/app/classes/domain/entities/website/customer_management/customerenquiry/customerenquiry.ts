@@ -108,7 +108,11 @@ export class CustomerEnquiry implements IPersistable<CustomerEnquiry> {
     if (this.p.StateRef == 0)
       vra.add('StateRef', 'State Name cannot be blank.');
     if (this.p.CityRef == 0) vra.add('CityRef', 'City Name cannot be blank.');
-    if (this.p.PinCode == '') vra.add('PinCode', 'Pin code cannot be blank.');
+     if (this.p.PinCode == '') {
+      vra.add('PinCode', 'Pin cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.PinCode).test(this.p.PinCode)) {
+      vra.add('PinCode', ValidationMessages.PinCodeMsg);
+    }
     if (this.p.Address == '')
       vra.add('AddressLine1', 'Address cannot be blank.');
 

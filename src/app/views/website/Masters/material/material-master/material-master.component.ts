@@ -37,13 +37,7 @@ export class MaterialMasterComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const IsDefault = Number(this.appStateManage.StorageKey.getItem("IsDefaultUser"))
-    console.log('IsDefault :', IsDefault);
-    if(IsDefault == 1){  
-      this.appStateManage.setDropdownDisabled(false);
-    }else{
-        this.appStateManage.setDropdownDisabled(true);
-    }
+    this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
