@@ -224,7 +224,6 @@ export class SidebarlayoutComponent implements OnInit {
         localStorage.removeItem('activeSubmodule');
         localStorage.removeItem('activeModule');
         let _ = await this.servercommunicator.LogoutUser(req)
-        console.log('req :', req);
         await this.router.navigate(['/']);
       });
   }
