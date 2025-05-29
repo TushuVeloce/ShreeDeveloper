@@ -126,8 +126,12 @@ export class RegisteredCustomerDetailsComponent  implements OnInit {
       this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
           // convert date 2025-02-23 to 2025-02-23-00-00-00-000
       this.Entity.p.RegisterDate = this.dtu.ConvertStringDateToFullFormat(this.localRegisterDate)
+      if(this.Entity.p.DiscountOnTotalPlotAmount == undefined){
+        this.Entity.p.DiscountOnTotalPlotAmount = 0
+      }
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
+      console.log('entitiesToSave :', entitiesToSave);
       let tr = await this.utils.SavePersistableEntities(entitiesToSave);
       if (!tr.Successful) {
         this.isSaveDisabled = false;
