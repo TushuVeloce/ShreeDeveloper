@@ -38,6 +38,7 @@ export class MarketingManagementMasterComponent implements OnInit {
 
   SelectedMarketingManagement: MarketingManagement = MarketingManagement.CreateNewInstance();
   MarketingModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
+  MarketingType = MarketingModes
   pageSize = 5; // Items per page
   currentDigitalPage = 1; // Initialize current page
   currentElectronicsPage = 1; // Initialize current page
@@ -48,6 +49,11 @@ export class MarketingManagementMasterComponent implements OnInit {
   FromDate = '';
   ToDate = '';
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  HideDigitalTable: boolean = false
+  HideElectronicsTable: boolean = false
+  HideOutdoorTable: boolean = false
+  HidePrintingMediaTable: boolean = false
+  HideBrokerTable: boolean = false
   Headers: string[] = ['Sr.No.', 'Site Name', 'Date', 'Vendor Name', 'Rate', 'Quantity', 'Total', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private dtu: DTU, private DateconversionService: DateconversionService
@@ -78,6 +84,7 @@ export class MarketingManagementMasterComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
+    
     let lst = await MarketingManagement.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
@@ -138,6 +145,43 @@ export class MarketingManagementMasterComponent implements OnInit {
           this.BrokerList.push(item);
           break;
       }
+    }
+    if(this.Entity.p.MarketingType == this.MarketingType.Digital){
+        this.HideDigitalTable = false
+        this.HideElectronicsTable = true
+        this.HideOutdoorTable = true
+        this.HidePrintingMediaTable = true
+        this.HideBrokerTable = true
+    }else if(this.Entity.p.MarketingType == this.MarketingType.Electronics){
+         this.HideDigitalTable = true
+        this.HideElectronicsTable = false
+        this.HideOutdoorTable = true
+        this.HidePrintingMediaTable = true
+        this.HideBrokerTable = true
+    }else if(this.Entity.p.MarketingType == this.MarketingType.Outdoor){
+       this.HideDigitalTable = true
+        this.HideElectronicsTable = true
+        this.HideOutdoorTable = false
+        this.HidePrintingMediaTable = true
+        this.HideBrokerTable = true
+    }else if(this.Entity.p.MarketingType == this.MarketingType.PrintingMedia){
+           this.HideDigitalTable = true
+        this.HideElectronicsTable = true
+        this.HideOutdoorTable = true
+        this.HidePrintingMediaTable = false
+        this.HideBrokerTable = true
+    }else if(this.Entity.p.MarketingType == this.MarketingType.AgentBoker){
+           this.HideDigitalTable = true
+        this.HideElectronicsTable = true
+        this.HideOutdoorTable = true
+        this.HidePrintingMediaTable = true
+        this.HideBrokerTable = false
+    }else{
+       this.HideDigitalTable = false
+        this.HideElectronicsTable = false
+        this.HideOutdoorTable = false
+        this.HidePrintingMediaTable = false
+        this.HideBrokerTable = false
     }
     this.loadPaginationData();
   }
