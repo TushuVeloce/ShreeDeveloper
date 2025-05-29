@@ -61,7 +61,7 @@ export class MarketingManagementMasterComponent implements OnInit {
     this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.appStateManage.setDropdownDisabled(false);
+    this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     // this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }

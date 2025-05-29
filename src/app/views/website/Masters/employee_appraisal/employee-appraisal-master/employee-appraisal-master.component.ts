@@ -33,7 +33,7 @@ export class EmployeeAppraisalMasterComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.appStateManage.setDropdownDisabled(false);
+    this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
   }
 

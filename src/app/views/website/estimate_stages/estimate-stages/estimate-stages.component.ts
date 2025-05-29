@@ -38,7 +38,7 @@ export class EstimateStagesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.appStateManage.setDropdownDisabled(false);
+    this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.getSiteListByCompanyRef();
     this.pageSize = this.screenSizeService.getPageSize('withDropdown');

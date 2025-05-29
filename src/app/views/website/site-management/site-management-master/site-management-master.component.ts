@@ -34,7 +34,7 @@ export class SiteManagementMasterComponent implements OnInit {
     });
   }
   ngOnInit() {
-      this.appStateManage.setDropdownDisabled(false);
+      this.appStateManage.setDropdownDisabled();
    }
 
   getSiteListByCompanyRef = async () => {

@@ -37,7 +37,7 @@ export class BankAccountMasterComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.appStateManage.setDropdownDisabled(false);
+    this.appStateManage.setDropdownDisabled();
     await this.getBankListByCompanyRef();
     this.loadPaginationData();
 

@@ -48,7 +48,7 @@ export class LeaveRequestComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.appStateManage.setDropdownDisabled(false);
+    this.appStateManage.setDropdownDisabled();
     this.Entity.p.EmployeeRef = this.appStateManage.getEmployeeRef();
     this.getLeaveRequestListByEmployeeRef()
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');

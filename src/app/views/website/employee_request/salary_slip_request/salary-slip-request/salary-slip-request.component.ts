@@ -41,7 +41,7 @@ export class SalarySlipRequestComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.appStateManage.setDropdownDisabled(false);
+    this.appStateManage.setDropdownDisabled();
     this.Entity.p.EmployeeRef = this.appStateManage.getEmployeeRef();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');

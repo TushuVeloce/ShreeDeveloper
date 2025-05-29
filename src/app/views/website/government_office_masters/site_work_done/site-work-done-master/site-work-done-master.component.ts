@@ -50,7 +50,7 @@ export class SiteWorkDoneMasterComponent implements OnInit {
   async ngOnInit() {
     this.SiteWorkGroupList = await SiteWorkGroup.FetchEntireList();
     this.SiteWorkMasterList = await SiteWorkMaster.FetchEntireList();
-    this.appStateManage.setDropdownDisabled(false);
+    this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }

@@ -64,7 +64,7 @@ export class CustomerFollowupComponent implements OnInit {
 
 
   async ngOnInit() {
-    this.appStateManage.setDropdownDisabled(false);
+    this.appStateManage.setDropdownDisabled();
     if (this.ReminderDate == '') {
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       let parts = this.strCDT.substring(0, 16).split('-');

@@ -44,7 +44,7 @@ export class EmployeeMasterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.appStateManage.setDropdownDisabled(false);
+    this.appStateManage.setDropdownDisabled();
   }
 
 

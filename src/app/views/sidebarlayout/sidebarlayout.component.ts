@@ -598,13 +598,13 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '/assets/icons/Salary Slip Request.png',
       }
     ]
-    let RazorpaySubModulelist = [
-      {
-        Name: 'Razorpay',
-        RouterLink: '/homepage/Website/Razorpay',
-        LogoPath: '/assets/icons/Material Master.png',
-      }
-    ]
+    // let RazorpaySubModulelist = [
+    //   {
+    //     Name: 'Razorpay',
+    //     RouterLink: '/homepage/Website/Razorpay',
+    //     LogoPath: '/assets/icons/Material Master.png',
+    //   }
+    // ]
 
     let moduleListInternal = [
       {
@@ -667,12 +667,12 @@ export class SidebarlayoutComponent implements OnInit {
         WhiteLogo: '/assets/icons/Request.png',
         SubModuleList: RequestSubModulelist,
       },
-      {
-        Name: 'RazorPay',
-        RouterLink: '/homepage/Website/Razorpay',
-        WhiteLogo: '/assets/icons/Razorpay.png',
-        // SubModuleList: RazorpaySubModulelist,
-      },
+      // {
+      //   Name: 'RazorPay',
+      //   RouterLink: '/homepage/Website/Razorpay',
+      //   WhiteLogo: '/assets/icons/Razorpay.png',
+      //   // SubModuleList: RazorpaySubModulelist,
+      // },
     ]
 
     this.ModuleList = moduleListInternal;

@@ -51,7 +51,7 @@ export class SalaryGenerationComponent implements OnInit {
 
   async ngOnInit() {
     this.CompnyList = await Company.FetchEntireList();
-    this.appStateManage.setDropdownDisabled(false);
+    this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
