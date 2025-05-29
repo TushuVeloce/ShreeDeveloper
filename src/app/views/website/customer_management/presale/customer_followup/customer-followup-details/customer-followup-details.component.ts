@@ -336,7 +336,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
  ConverttoDeal = (CustomerStatus: number) => {
  console.log('CustomerStatus :', CustomerStatus);
-  if (this.Entity.p.CustomerFollowUpPlotDetails.length > 0 && CustomerStatus === this.CustomerStatusEnum.ConvertToDeal) {
+  if (CustomerStatus === this.CustomerStatusEnum.ConvertToDeal) {
     const hasDealRecord = this.Entity.p.CustomerFollowUpPlotDetails?.some(
       (item: any) => item.CustomerStatus === this.CustomerStatusEnum.ConvertToDeal
     );
