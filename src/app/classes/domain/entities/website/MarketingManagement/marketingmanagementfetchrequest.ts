@@ -14,7 +14,7 @@ export class MarketingManagementFetchRequest
     SiteRefs: number[] = [];
     VendorRefs: number[] = [];
     StageRefs: number[] = [];
-    MarketingTypeRefs: number[] = [];
+    MarketingType: number[] = [];
     MarketingManagementRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>

@@ -189,7 +189,7 @@ export class MarketingManagement implements IPersistable<MarketingManagement> {
   }
 
 
-   public static async FetchEntireListByAllFilters(CompanyRef: number, FromDate: string, ToDate: string, SiteRef: number, VendorRef: number, MarketingTypeRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+   public static async FetchEntireListByAllFilters(CompanyRef: number, FromDate: string, ToDate: string, SiteRef: number, VendorRef: number, MarketingType: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
       let req = new MarketingManagementFetchRequest();
       req.CompanyRefs.push(CompanyRef)
       if (FromDate) {
@@ -204,8 +204,8 @@ export class MarketingManagement implements IPersistable<MarketingManagement> {
       if (VendorRef) {
         req.VendorRefs.push(VendorRef)
       }
-      if (MarketingTypeRef) {
-        req.MarketingTypeRefs.push(MarketingTypeRef)
+      if (MarketingType) {
+        req.MarketingType.push(MarketingType)
       }
       let tdResponse = await MarketingManagement.FetchTransportData(req, errorHandler) as TransportData;
       return MarketingManagement.ListFromTransportData(tdResponse);
