@@ -9,7 +9,7 @@ export class SiteWorkMasterFetchRequest
     public static readonly FetchRequestType: string = "SiteWorkFetchRequest";
 
     CompanyRefs: number[] = [];
-    SiteWorkGroupRef : number[] = [];
+    SiteWorkGroupRefs : number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
