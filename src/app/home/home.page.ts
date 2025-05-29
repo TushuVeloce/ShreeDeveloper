@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AppStateManageService } from '../services/app-state-manage.service';
 
 @Component({
   selector: 'app-home',
@@ -8,6 +9,10 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+  constructor(private appStateManage: AppStateManageService) {}
+
+   async ngOnInit() {
+    this.appStateManage.setDropdownDisabled();
+  }
 
 }

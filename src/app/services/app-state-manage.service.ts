@@ -37,7 +37,7 @@ export class AppStateManageService {
   public devUserId: string = 'deployment@gladiance.com'
   public devPassword: string = 'maths@4321'
   private IsForgetPasswordClickedValue = false
-  public isDropdownDisabled = signal<boolean>(false);
+  public isDropdownDisabled = signal<boolean>(true);
 
   private _BaseImageUrl: string = "http://localhost:5100/api/Request/uploadeddocumentpath/";
 
