@@ -101,9 +101,9 @@ export class SidebarlayoutComponent implements OnInit {
   }
   async ngOnInit() {
     await this.ongetcompany()
-     this.appStateManagement.companyInit$.subscribe(() => {
-    this.ongetcompany(); // Called after login
-  });
+    this.appStateManagement.companyInit$.subscribe(() => {
+      this.ongetcompany(); // Called after login
+    });
     this.isDarkMode = this.appStateManagement.getTheme() === 'dark';
     this.onThemeToggle();
 
@@ -393,11 +393,11 @@ export class SidebarlayoutComponent implements OnInit {
       //   RouterLink: '/homepage/Website/User_Role_Master',
       //  LogoPath:'/assets/icons/Material Master.png',
       // },
-      // {
-      //   Name: 'User Role Right',
-      //   RouterLink: '/homepage/Website/User_Role_Rights',
-      //  LogoPath:'/assets/icons/Material Master.png',
-      // },
+      {
+        Name: 'User Role Right',
+        RouterLink: '/homepage/Website/User_Role_Rights',
+        LogoPath: '/assets/icons/Material Master.png',
+      },
       // {
       //   Name: 'External Users',
       //   RouterLink: '/homepage/Website/External_Users',
@@ -711,7 +711,7 @@ export class SidebarlayoutComponent implements OnInit {
   }
 
   async ongetcompany() {
-    const storedCompanyRef =  this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
+    const storedCompanyRef = this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
     const storedCompanyName = this.appStateManagement.StorageKey.getItem('companyName');
 
     if (storedCompanyRef && storedCompanyName) {
