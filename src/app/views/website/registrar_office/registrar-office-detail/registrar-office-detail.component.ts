@@ -76,11 +76,11 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   }
 
   // 🔸 Confirm before unload (reload/close/tab exit)
-  @HostListener('window:beforeunload', ['$event'])
-  unloadNotification(event: BeforeUnloadEvent) {
-    event.preventDefault();
-    event.returnValue = ''; // Required for Chrome
-  }
+  // @HostListener('window:beforeunload', ['$event'])
+  // unloadNotification(event: BeforeUnloadEvent) {
+  //   event.preventDefault();
+  //   event.returnValue = ''; // Required for Chrome
+  // }
 
   @HostListener('window:contextmenu', ['$event'])
   disableRightClick(event: MouseEvent) {
@@ -104,15 +104,8 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
     this.LoginToken = this.appStateManage.getLoginToken();
     this.Entity = RegistrarOffice.GetCurrentInstance();
-    // this.Entity = history.state.registrarData;
-
-    const navEntries = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
-    const navType = navEntries?.[0]?.type;
-
-    if (navType === 'reload') {
-      // ✅ Only when user did a hard reload or clicked reload icon
-      this.router.navigate(['/your-target-route']); // e.g., /dashboard
-    }
+    // this.Entity = RegistrarOffice.CreateNewInstance();
+    //  this.Entity = history.state.registrarData;
 
     console.log('this.Entity :', this.Entity);
 
