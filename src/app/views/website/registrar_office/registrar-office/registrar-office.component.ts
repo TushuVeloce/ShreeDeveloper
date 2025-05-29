@@ -128,13 +128,13 @@ export class RegistrarOfficeComponent implements OnInit {
   }
 
   onEditClicked = async (item: RegistrarOffice) => {
-    // this.SelectedRegistrarOffice = item.GetEditableVersion();
-    // RegistrarOffice.SetCurrentInstance(this.SelectedRegistrarOffice);
-    // this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    // await this.router.navigate(['/homepage/Website/Registrar_Office_Details']);
-    this.router.navigate(['/homepage/Website/Registrar_Office_Details'], {
-      state: { registrarData: item.GetEditableVersion() }
-    });
+    this.SelectedRegistrarOffice = item.GetEditableVersion();
+    RegistrarOffice.SetCurrentInstance(this.SelectedRegistrarOffice);
+    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+    await this.router.navigate(['/homepage/Website/Registrar_Office_Details']);
+    // this.router.navigate(['/homepage/Website/Registrar_Office_Details'], {
+    //   state: { registrarData: item.GetEditableVersion() }
+    // });
   }
 
   onDeleteClicked = async (RegistrarOffice: RegistrarOffice) => {

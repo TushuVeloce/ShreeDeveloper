@@ -1,9 +1,9 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
-import { RegistrarOffice } from 'src/app/classes/domain/entities/website/registraroffice/registraroffice';
+import { RegistrarOffice, RegistrarOfficeProps } from 'src/app/classes/domain/entities/website/registraroffice/registraroffice';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -66,6 +66,27 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   @ViewChild('FerfarNoticeDocument', { static: false }) FerfarNoticeDocumentRef!: ElementRef;
   @ViewChild('FinalCustomer712Document', { static: false }) FinalCustomer712DocumentRef!: ElementRef;
 
+  // 🔸 Prevent F5 and Ctrl+R
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.key === 'F5' || (event.ctrlKey && event.key.toLowerCase() === 'r')) {
+      event.preventDefault();
+      console.log('Reload prevented');
+    }
+  }
+
+  // 🔸 Confirm before unload (reload/close/tab exit)
+  // @HostListener('window:beforeunload', ['$event'])
+  // unloadNotification(event: BeforeUnloadEvent) {
+  //   event.preventDefault();
+  //   event.returnValue = ''; // Required for Chrome
+  // }
+
+  @HostListener('window:contextmenu', ['$event'])
+  disableRightClick(event: MouseEvent) {
+    event.preventDefault();
+  }
+
   constructor(
     private router: Router,
     private baseUrl: BaseUrlService,
@@ -78,10 +99,14 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+
     this.appStateManage.setDropdownDisabled(true);
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
     this.LoginToken = this.appStateManage.getLoginToken();
-    this.Entity = history.state.registrarData;;
+    this.Entity = RegistrarOffice.GetCurrentInstance();
+    // this.Entity = RegistrarOffice.CreateNewInstance();
+    //  this.Entity = history.state.registrarData;
+
     console.log('this.Entity :', this.Entity);
 
     this.filePostViews['CustomerAadharFile'] = `${this.ImageBaseUrl}${this.Entity.p.CustomerAadharPath}/${this.LoginToken}?${this.TimeStamp}`;
@@ -154,7 +179,7 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     this.CustomerAadharFileInputRef.nativeElement.click();
   }
 
-  onFileUpload(event: Event, type: string): void {
+  onFileUpload(event: Event, type: string, pathKey: 'CustomerPanPath' | 'CustomerAadharPath' | 'Witness1AadharPath' | 'Witness1PanPath' | 'Witness2AadharPath' | 'Witness2PanPath' | 'AgreementDocumentPath' | 'SaleDeedDocumentPath' | 'IndexOriginalDocumentPath' | 'DastZeroxDocumentPath' | 'FerfarNoticeDocumentPath' | 'FinalCustomer712DocumentPath'): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
@@ -167,8 +192,9 @@ export class RegistrarOfficeDetailComponent implements OnInit {
 
         if (isPdf || isImage) {
           this.filePostViewsURL[type] = URL.createObjectURL(file);
+          this.Entity.p[pathKey] = '';
         } else {
-          alert('Only PDF or image files are supported.');
+          this.uiUtils.showWarningToster('Only PDF or image files are supported.')
         }
       }
 
@@ -258,7 +284,7 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-    this.Entity.p.UpdatedDate = await CurrentDateTimeRequest.GetCurrentDateTime();
+    // this.Entity.p.UpdatedDate = await CurrentDateTimeRequest.GetCurrentDateTime();
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.SiteRef = Number(this.appStateManage.StorageKey.getItem('siteRef'))
 

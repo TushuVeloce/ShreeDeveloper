@@ -76,7 +76,7 @@
           </div>
           <div class="col-md-5 d-flex align-items-center justify-content-between">
             <!-- Upload icon triggers file input -->
-            <img src="/assets/icons/upload.png" alt="Upload Aadhar" class="Upload-Icon"
+            <img src="/assets/icons/upload.png" alt="Customer Aadhar" title="Upload Customer Aadhar" class="Upload-Icon"
               (click)="CustomerAadharFileInputRef.nativeElement.click()" />
 
             <ng-container *ngIf="selectedFileNames['CustomerAadharFile']; else NoFile">
@@ -88,22 +88,24 @@
 
             <!-- Hidden File Input -->
             <input type="file" #CustomerAadharFileInput accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
-              (change)="onFileUpload($event, 'CustomerAadharFile'); this.Entity.p.CustomerAadharPath = ''" />
-
-            <p *ngIf="errors['CustomerAadharFile']" class="validation-error">
-              {{ errors['CustomerAadharFile'] }}
-            </p>
+              (change)="onFileUpload($event, 'CustomerAadharFile', 'CustomerAadharPath');" />
 
             <!-- Customer Aadhar Image Display -->
             <ng-container *ngIf="this.Entity.p.CustomerAadharPath; else AddDocImage">
-              <img *ngIf="isImageFile(this.Entity.p.CustomerAadharPath); else defaultDocImage"
-                [src]="filePostViews['CustomerAadharFile']" alt="Customer Aadhar" class="img-preview" />
+              <img
+                [src]="isImageFile(this.Entity.p.CustomerAadharPath) ? filePostViews['CustomerAadharFile'] : '/assets/icons/doc-placeholder.png'"
+                alt="Customer Aadhar" title="Customer Aadhar"
+                (click)="fileNavigation(this.Entity.p.CustomerAadharPath, 'CustomerAadharFile')"
+                [class]="isImageFile(this.Entity.p.CustomerAadharPath) ?  'img-preview' : 'file-preview'" />
             </ng-container>
 
             <ng-template #AddDocImage>
               <ng-container *ngIf="filePrevViews['CustomerAadharFile']; else defaultImage">
-                <img *ngIf="isImageFile(selectedFileNames['CustomerAadharFile']); else defaultDocImage"
-                  [src]="filePrevViews['CustomerAadharFile']" alt="Customer Aadhar" class="img-preview" />
+                <img
+                  [src]="isImageFile(selectedFileNames['CustomerAadharFile']) ? filePrevViews['CustomerAadharFile'] : '/assets/icons/doc-placeholder.png'"
+                  alt="Customer Aadhar" title="Customer Aadhar"
+                  (click)="fileNavigation(this.Entity.p.CustomerAadharPath, 'CustomerAadharFile')"
+                  [class]="isImageFile(selectedFileNames['CustomerAadharFile']) ? 'img-preview' : 'file-preview'" />
               </ng-container>
             </ng-template>
 
@@ -124,7 +126,7 @@
           </div>
 
           <div class="col-md-5 d-flex align-items-center justify-content-between">
-            <img src="/assets/icons/upload.png" alt="Upload PAN" class="Upload-Icon"
+            <img src="/assets/icons/upload.png" alt="Upload PAN" title="Upload Customer PAN" class="Upload-Icon"
               (click)="CustomerPanFileInputRef.nativeElement.click()" />
 
             <ng-container *ngIf="selectedFileNames['CustomerPanFile']; else NoFile">
@@ -134,21 +136,23 @@
             </ng-container>
 
             <input type="file" #CustomerPanFileInput accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
-              (change)="onFileUpload($event, 'CustomerPanFile'); this.Entity.p.CustomerPanPath = ''" />
-
-            <p *ngIf="errors['CustomerPanFile']" class="validation-error">
-              {{ errors['CustomerPanFile'] }}
-            </p>
+              (change)="onFileUpload($event, 'CustomerPanFile', 'CustomerPanPath');" />
 
             <ng-container *ngIf="this.Entity.p.CustomerPanPath; else CustomerPanAddDocImage">
-              <img *ngIf="isImageFile(this.Entity.p.CustomerPanPath); else defaultDocImage"
-                [src]="filePostViews['CustomerPanFile']" alt="Customer Pan" class="img-preview" />
+              <img
+                [src]="isImageFile(this.Entity.p.CustomerPanPath) ? filePostViews['CustomerPanFile'] : '/assets/icons/doc-placeholder.png'"
+                alt="Customer Pan" title="Customer Pan"
+                (click)="fileNavigation(this.Entity.p.CustomerPanPath, 'CustomerPanFile')"
+                [class]="isImageFile(this.Entity.p.CustomerPanPath) ? 'img-preview' : 'file-preview'" />
             </ng-container>
 
             <ng-template #CustomerPanAddDocImage>
               <ng-container *ngIf="filePrevViews['CustomerPanFile']; else defaultImage">
-                <img *ngIf="isImageFile(selectedFileNames['CustomerPanFile']); else defaultDocImage"
-                  [src]="filePrevViews['CustomerPanFile']" alt="Customer Pan" class="img-preview" />
+                <img
+                  [src]="isImageFile(selectedFileNames['CustomerPanFile']) ? filePrevViews['CustomerPanFile'] : '/assets/icons/doc-placeholder.png'"
+                  alt="Customer Pan" title="Customer Pan"
+                  (click)="fileNavigation(this.Entity.p.CustomerPanPath, 'CustomerPanFile')"
+                  [class]="isImageFile(selectedFileNames['CustomerPanFile']) ? 'img-preview' : 'file-preview'" />
               </ng-container>
             </ng-template>
 
@@ -206,7 +210,7 @@
             <label>Aadhar</label>
           </div>
           <div class="col-md-5 d-flex align-items-center justify-content-between">
-            <img src="/assets/icons/upload.png" alt="Upload Aadhar" class="Upload-Icon"
+            <img src="/assets/icons/upload.png" alt="Upload Aadhar" title="Upload Witness 1 Aadhar" class="Upload-Icon"
               (click)="Witness1IsAadharSubmitRef.nativeElement.click()" />
 
             <ng-container *ngIf="selectedFileNames['Witness1AadharFile']; else NoFile">
@@ -217,28 +221,23 @@
             </ng-container>
 
             <input type="file" #Witness1IsAadharSubmit accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
-              (change)="onFileUpload($event, 'Witness1AadharFile'); this.Entity.p.Witness1AadharPath = ''" />
-
-            <p *ngIf="errors['Witness1AadharFile']" class="validation-error">
-              {{ errors['Witness1AadharFile'] }}
-            </p>
-
-            <!-- <ng-container *ngIf="filePrevViews['Witness1AadharFile']; else defaultImage">
-              <img [src]="filePrevViews['Witness1AadharFile']" alt="Witness 1 Aadhar" class="img-preview" />
-            </ng-container>
-            <ng-template #defaultImage>
-              <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
-            </ng-template> -->
+              (change)="onFileUpload($event, 'Witness1AadharFile', 'Witness1AadharPath');" />
 
             <ng-container *ngIf="this.Entity.p.Witness1AadharPath; else Witness1AadharAddDocImage">
-              <img *ngIf="isImageFile(this.Entity.p.Witness1AadharPath); else defaultDocImage"
-                [src]="filePostViews['Witness1AadharFile']" alt="Customer Pan" class="img-preview" />
+              <img
+                [src]="isImageFile(this.Entity.p.Witness1AadharPath) ? filePostViews['Witness1AadharFile'] : '/assets/icons/doc-placeholder.png'"
+                alt="Witness 1 Aadhar" title="Witness 1 Aadhar"
+                (click)="fileNavigation(this.Entity.p.Witness1AadharPath, 'Witness1AadharFile')"
+                [class]="isImageFile(this.Entity.p.Witness1AadharPath) ?  'img-preview' : 'file-preview'" />
             </ng-container>
 
             <ng-template #Witness1AadharAddDocImage>
               <ng-container *ngIf="filePrevViews['Witness1AadharFile']; else defaultImage">
-                <img *ngIf="isImageFile(selectedFileNames['Witness1AadharFile']); else defaultDocImage"
-                  [src]="filePrevViews['Witness1AadharFile']" alt="Witness 1 Pan" class="img-preview" />
+                <img
+                  [src]="isImageFile(selectedFileNames['Witness1AadharFile']) ? filePrevViews['Witness1AadharFile'] : '/assets/icons/doc-placeholder.png'"
+                  alt="Witness 1 Aadhar" title="Witness 1 Aadhar"
+                  (click)="fileNavigation(this.Entity.p.Witness1AadharPath, 'Witness1AadharFile')"
+                  [class]="isImageFile(selectedFileNames['Witness1AadharFile']) ? 'img-preview' : 'file-preview'" />
               </ng-container>
             </ng-template>
           </div>
@@ -258,25 +257,34 @@
             <label>Pan</label>
           </div>
           <div class="col-md-5 d-flex align-items-center justify-content-between">
-            <img src="/assets/icons/upload.png" alt="Upload PAN" class="Upload-Icon"
+            <img src="/assets/icons/upload.png" alt="Upload PAN" title="Upload Witness 1 Pan" class="Upload-Icon"
               (click)="Witness1IsPanSubmitRef.nativeElement.click()" />
 
-            <div>
-              {{ selectedFileNames['Witness1PanFile'] || 'No file selected' }}
-            </div>
-
-            <input type="file" #Witness1IsPanSubmit accept=".jpg,.jpeg,.png,.gif" style="display: none"
-              (change)="onFileUpload($event, 'Witness1PanFile')" />
-
-            <p *ngIf="errors['Witness1PanFile']" class="validation-error">
-              {{ errors['Witness1PanFile'] }}
-            </p>
-
-            <ng-container *ngIf="filePrevViews['Witness1PanFile']; else defaultImage">
-              <img [src]="filePrevViews['Witness1PanFile']" alt="Witness 1 Pan" class="img-preview" />
+            <ng-container *ngIf="selectedFileNames['Witness1PanFile']; else NoFile">
+              <span style="cursor: pointer;" (click)="fileNavigation(this.Entity.p.Witness1PanPath, 'Witness1PanFile')">
+                {{ selectedFileNames['Witness1PanFile']}}
+              </span>
             </ng-container>
-            <ng-template #defaultImage>
-              <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
+
+            <input type="file" #Witness1IsPanSubmit accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
+              (change)="onFileUpload($event, 'Witness1PanFile', 'Witness1PanPath')" />
+
+            <ng-container *ngIf="this.Entity.p.Witness1PanPath; else Witness1PanAddDocImage">
+              <img
+                [src]="isImageFile(this.Entity.p.Witness1PanPath) ? filePostViews['Witness1PanFile'] : '/assets/icons/doc-placeholder.png'"
+                alt="Witness 1 Pan" title="Witness 1 Pan"
+                (click)="fileNavigation(this.Entity.p.Witness1PanPath, 'Witness1PanFile')"
+                [class]="isImageFile(this.Entity.p.Witness1PanPath) ? 'img-preview' : 'file-preview'" />
+            </ng-container>
+
+            <ng-template #Witness1PanAddDocImage>
+              <ng-container *ngIf="filePrevViews['Witness1PanFile']; else defaultImage">
+                <img
+                  [src]="isImageFile(selectedFileNames['Witness1PanFile']) ? filePrevViews['Witness1PanFile'] : '/assets/icons/doc-placeholder.png'"
+                  alt="Witness 1 Pan" title="Witness 1 Pan"
+                  (click)="fileNavigation(this.Entity.p.Witness1PanPath, 'Witness1PanFile')"
+                  [class]="isImageFile(selectedFileNames['Witness1PanFile']) ? 'img-preview' : 'file-preview'" />
+              </ng-container>
             </ng-template>
           </div>
 
@@ -330,25 +338,35 @@
             <label>Aadhar</label>
           </div>
           <div class="col-md-5 d-flex align-items-center justify-content-between">
-            <img src="/assets/icons/upload.png" alt="Upload Aadhar" class="Upload-Icon"
+            <img src="/assets/icons/upload.png" alt="Upload Aadhar" class="Upload-Icon" title="Upload Witness 2 Aadhar"
               (click)="Witness2IsAadharSubmitRef.nativeElement.click()" />
 
-            <div>
-              {{ selectedFileNames['Witness2AadharFile'] || 'No file selected' }}
-            </div>
-
-            <input type="file" #Witness2IsAadharSubmit accept=".jpg,.jpeg,.png,.gif" style="display: none"
-              (change)="onFileUpload($event, 'Witness2AadharFile')" />
-
-            <p *ngIf="errors['Witness2AadharFile']" class="validation-error">
-              {{ errors['Witness2AadharFile'] }}
-            </p>
-
-            <ng-container *ngIf="filePrevViews['Witness2AadharFile']; else defaultImage">
-              <img [src]="filePrevViews['Witness2AadharFile']" alt="Witness 2 Aadhar" class="img-preview" />
+            <ng-container *ngIf="selectedFileNames['Witness2AadharFile']; else NoFile">
+              <span style="cursor: pointer;"
+                (click)="fileNavigation(this.Entity.p.Witness2AadharPath, 'Witness2AadharFile')">
+                {{ selectedFileNames['Witness2AadharFile']}}
+              </span>
             </ng-container>
-            <ng-template #defaultImage>
-              <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
+
+            <input type="file" #Witness2IsAadharSubmit accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
+              (change)="onFileUpload($event, 'Witness2AadharFile', 'Witness2AadharPath')" />
+
+            <ng-container *ngIf="this.Entity.p.Witness2AadharPath; else Witness2AadharAddDocImage">
+              <img
+                [src]="isImageFile(this.Entity.p.Witness2AadharPath) ? filePostViews['Witness2AadharFile'] : '/assets/icons/doc-placeholder.png'"
+                alt="Witness 2 Aadhar" title="Witness 2 Aadhar"
+                (click)="fileNavigation(this.Entity.p.Witness2AadharPath, 'Witness2AadharFile')"
+                [class]="isImageFile(this.Entity.p.Witness2AadharPath) ?  'img-preview' : 'file-preview'" />
+            </ng-container>
+
+            <ng-template #Witness2AadharAddDocImage>
+              <ng-container *ngIf="filePrevViews['Witness2AadharFile']; else defaultImage">
+                <img
+                  [src]="isImageFile(selectedFileNames['Witness2AadharFile']) ? filePrevViews['Witness2AadharFile'] : '/assets/icons/doc-placeholder.png'"
+                  alt="Witness 2 Aadhar" title="Witness 2 Aadhar"
+                  (click)="fileNavigation(this.Entity.p.Witness2AadharPath, 'Witness2AadharFile')"
+                  [class]="isImageFile(selectedFileNames['Witness2AadharFile']) ? 'img-preview' : 'file-preview'" />
+              </ng-container>
             </ng-template>
           </div>
 
@@ -367,25 +385,34 @@
             <label>Pan</label>
           </div>
           <div class="col-md-5 d-flex align-items-center justify-content-between">
-            <img src="/assets/icons/upload.png" alt="Upload PAN" class="Upload-Icon"
+            <img src="/assets/icons/upload.png" alt="Upload PAN" class="Upload-Icon" title="Upload Witness 2 Pan"
               (click)="Witness2IsPanSubmitRef.nativeElement.click()" />
 
-            <div>
-              {{ selectedFileNames['Witness2PanFile'] || 'No file selected' }}
-            </div>
-
-            <input type="file" #Witness2IsPanSubmit accept=".jpg,.jpeg,.png,.gif" style="display: none"
-              (change)="onFileUpload($event, 'Witness2PanFile')" />
-
-            <p *ngIf="errors['Witness2PanFile']" class="validation-error">
-              {{ errors['Witness2PanFile'] }}
-            </p>
-
-            <ng-container *ngIf="filePrevViews['Witness2PanFile']; else defaultImage">
-              <img [src]="filePrevViews['Witness2PanFile']" alt="Witness 2 Pan" class="img-preview" />
+            <ng-container *ngIf="selectedFileNames['Witness2PanFile']; else NoFile">
+              <span style="cursor: pointer;" (click)="fileNavigation(this.Entity.p.Witness2PanPath, 'Witness2PanFile')">
+                {{ selectedFileNames['Witness2PanFile']}}
+              </span>
             </ng-container>
-            <ng-template #defaultImage>
-              <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
+
+            <input type="file" #Witness2IsPanSubmit accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
+              (change)="onFileUpload($event, 'Witness2PanFile', 'Witness2PanPath')" />
+
+            <ng-container *ngIf="this.Entity.p.Witness2PanPath; else Witness2PanAddDocImage">
+              <img
+                [src]="isImageFile(this.Entity.p.Witness2PanPath) ? filePostViews['Witness2PanFile'] : '/assets/icons/doc-placeholder.png'"
+                alt="Witness 2 Pan" title="Witness 2 Pan"
+                (click)="fileNavigation(this.Entity.p.Witness2PanPath, 'Witness2PanFile')"
+                [class]="isImageFile(this.Entity.p.Witness2PanPath) ?  'img-preview' : 'file-preview'" />
+            </ng-container>
+
+            <ng-template #Witness2PanAddDocImage>
+              <ng-container *ngIf="filePrevViews['Witness2PanFile']; else defaultImage">
+                <img
+                  [src]="isImageFile(selectedFileNames['Witness2PanFile']) ? filePrevViews['Witness2PanFile'] : '/assets/icons/doc-placeholder.png'"
+                  alt="Witness 2 Pan" title="Witness 2 Pan"
+                  (click)="fileNavigation(this.Entity.p.Witness2PanPath, 'Witness2PanFile')"
+                  [class]="isImageFile(selectedFileNames['Witness2PanFile']) ? 'img-preview' : 'file-preview'" />
+              </ng-container>
             </ng-template>
           </div>
 
@@ -418,17 +445,17 @@
 
           <div class="col-md-5 d-flex align-items-center justify-content-between mb-2">
             <img src="/assets/icons/upload.png" alt="Agreement Document" class="Upload-Icon"
-              (click)="AgreementDocumentRef.nativeElement.click()" />
-            <div>
-              {{ selectedFileNames['AgreementDocumentFile'] || 'No file selected' }}
-            </div>
+              title="Upload Agreement Document" (click)="AgreementDocumentRef.nativeElement.click()" />
 
-            <input type="file" #AgreementDocument accept=".jpg,.jpeg,.png,.gif" style="display: none"
-              (change)="onFileUpload($event, 'AgreementDocumentFile')" />
+            <ng-container *ngIf="selectedFileNames['AgreementDocumentFile']; else NoFile">
+              <span style="cursor: pointer;"
+                (click)="fileNavigation(this.Entity.p.AgreementDocumentPath, 'AgreementDocumentFile')">
+                {{ selectedFileNames['AgreementDocumentFile']}}
+              </span>
+            </ng-container>
 
-            <p *ngIf="errors['AgreementDocumentFile']" class="validation-error">
-              {{ errors['AgreementDocumentFile'] }}
-            </p>
+            <input type="file" #AgreementDocument accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
+              (change)="onFileUpload($event, 'AgreementDocumentFile', 'AgreementDocumentPath')" />
           </div>
         </div>
 
@@ -477,17 +504,17 @@
 
           <div class="col-md-5 d-flex align-items-center justify-content-between mb-2">
             <img src="/assets/icons/upload.png" alt="Sale Deed Document" class="Upload-Icon"
-              (click)="SaleDeedDocumentRef.nativeElement.click()" />
-            <div>
-              {{ selectedFileNames['SaleDeedDocumentFile'] || 'No file selected' }}
-            </div>
+              title="Upload Sale Deed Document" (click)="SaleDeedDocumentRef.nativeElement.click()" />
 
-            <input type="file" #SaleDeedDocument accept=".jpg,.jpeg,.png,.gif" style="display: none"
-              (change)="onFileUpload($event, 'SaleDeedDocumentFile')" />
+            <ng-container *ngIf="selectedFileNames['SaleDeedDocumentFile']; else NoFile">
+              <span style="cursor: pointer;"
+                (click)="fileNavigation(this.Entity.p.SaleDeedDocumentPath, 'SaleDeedDocumentFile')">
+                {{ selectedFileNames['SaleDeedDocumentFile']}}
+              </span>
+            </ng-container>
 
-            <p *ngIf="errors['SaleDeedDocumentFile']" class="validation-error">
-              {{ errors['SaleDeedDocumentFile'] }}
-            </p>
+            <input type="file" #SaleDeedDocument accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
+              (change)="onFileUpload($event, 'SaleDeedDocumentFile', 'SaleDeedDocumentPath')" />
           </div>
 
         </div>
@@ -543,47 +570,36 @@
             <label>Index Original</label>
           </div>
           <div class="col-md-5 d-flex align-items-center justify-content-between">
-            <img src="/assets/icons/upload.png" alt="Index Original" class="Upload-Icon"
+            <img src="/assets/icons/upload.png" alt="Index Original" class="Upload-Icon" title="Upload Index Original"
               (click)="IndexOriginalDocumentRef.nativeElement.click()" />
 
-            <div>
-              {{ selectedFileNames['IndexOriginalDocumentFile'] || 'No file selected' }}
-            </div>
-
-            <input type="file" #IndexOriginalDocument accept=".jpg,.jpeg,.png,.gif" style="display: none"
-              (change)="onFileUpload($event, 'IndexOriginalDocumentFile')" />
-
-            <p *ngIf="errors['IndexOriginalDocumentFile']" class="validation-error">
-              {{ errors['IndexOriginalDocumentFile'] }}
-            </p>
-
-            <!-- <ng-container *ngIf="filePrevViews['IndexOriginalDocumentFile']; else defaultImage">
-              <img [src]="filePrevViews['IndexOriginalDocumentFile']" alt="Index Original Document"
-                class="img-preview" />
-            </ng-container>
-            <ng-template #defaultImage>
-              <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
-            </ng-template> -->
-
-            <ng-container *ngIf="IsNewEntity; else IndexOriginalDocumentEditMode">
-              <!-- Add Mode -->
-              <ng-container *ngIf="filePrevViews['IndexOriginalDocumentFile']; else IndexOriginalDocumentDefaultImage">
-                <img [src]="filePrevViews['IndexOriginalDocumentFile']" alt="Index Original Document"
-                  class="img-preview" />
-              </ng-container>
+            <ng-container *ngIf="selectedFileNames['IndexOriginalDocumentFile']; else NoFile">
+              <span style="cursor: pointer;"
+                (click)="fileNavigation(this.Entity.p.IndexOriginalDocumentPath, 'IndexOriginalDocumentFile')">
+                {{ selectedFileNames['IndexOriginalDocumentFile']}}
+              </span>
             </ng-container>
 
-            <ng-template #IndexOriginalDocumentEditMode>
-              <!-- Edit Mode -->
-              <ng-container *ngIf="Entity?.p?.IndexOriginalDocumentPath; else IndexOriginalDocumentDefaultImage">
-                <img [src]="Entity.p.IndexOriginalDocumentPath" alt="Index Original Document" class="img-preview" />
+            <input type="file" #IndexOriginalDocument accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
+              (change)="onFileUpload($event, 'IndexOriginalDocumentFile', 'IndexOriginalDocumentPath')" />
+
+            <ng-container *ngIf="this.Entity.p.IndexOriginalDocumentPath; else IndexOriginalDocumentAddDocImage">
+              <img
+                [src]="isImageFile(this.Entity.p.IndexOriginalDocumentPath) ? filePostViews['IndexOriginalDocumentFile'] : '/assets/icons/doc-placeholder.png'"
+                alt="Index Original Document" title="Index Original Document"
+                (click)="fileNavigation(this.Entity.p.IndexOriginalDocumentPath, 'IndexOriginalDocumentFile')"
+                [class]="isImageFile(this.Entity.p.IndexOriginalDocumentPath) ?  'img-preview' : 'file-preview'" />
+            </ng-container>
+
+            <ng-template #IndexOriginalDocumentAddDocImage>
+              <ng-container *ngIf="filePrevViews['IndexOriginalDocumentFile']; else defaultImage">
+                <img
+                  [src]="isImageFile(selectedFileNames['IndexOriginalDocumentFile']) ? filePrevViews['IndexOriginalDocumentFile'] : '/assets/icons/doc-placeholder.png'"
+                  alt="Index Original Document" title="Index Original Document"
+                  (click)="fileNavigation(this.Entity.p.IndexOriginalDocumentPath, 'IndexOriginalDocumentFile')"
+                  [class]="isImageFile(selectedFileNames['IndexOriginalDocumentFile']) ? 'img-preview' : 'file-preview'" />
               </ng-container>
             </ng-template>
-
-            <ng-template #IndexOriginalDocumentDefaultImage>
-              <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
-            </ng-template>
-
           </div>
 
           <!-- Submit -->
@@ -601,36 +617,35 @@
             <label>दस्त Zerox</label>
           </div>
           <div class="col-md-5 d-flex align-items-center justify-content-between">
-            <img src="/assets/icons/upload.png" alt="दस्त Zerox" class="Upload-Icon"
+            <img src="/assets/icons/upload.png" alt="दस्त Zerox" class="Upload-Icon" title="Upload दस्त Zerox"
               (click)="DastZeroxDocumentRef.nativeElement.click()" />
 
-            <div>
-              {{ selectedFileNames['DastZeroxDocumentFile'] || 'No file selected' }}
-            </div>
-
-            <input type="file" #DastZeroxDocument accept=".jpg,.jpeg,.png,.gif" style="display: none"
-              (change)="onFileUpload($event, 'DastZeroxDocumentFile')" />
-
-            <p *ngIf="errors['DastZeroxDocumentFile']" class="validation-error">
-              {{ errors['DastZeroxDocumentFile'] }}
-            </p>
-
-            <ng-container *ngIf="IsNewEntity; else DastZeroxDocumentEditMode">
-              <!-- Add Mode -->
-              <ng-container *ngIf="filePrevViews['DastZeroxDocumentFile']; else DastZeroxDocumentDefaultImage">
-                <img [src]="filePrevViews['DastZeroxDocumentFile']" alt="Index Original Document" class="img-preview" />
-              </ng-container>
+            <ng-container *ngIf="selectedFileNames['DastZeroxDocumentFile']; else NoFile">
+              <span style="cursor: pointer;"
+                (click)="fileNavigation(this.Entity.p.DastZeroxDocumentPath, 'DastZeroxDocumentFile')">
+                {{ selectedFileNames['DastZeroxDocumentFile']}}
+              </span>
             </ng-container>
 
-            <ng-template #DastZeroxDocumentEditMode>
-              <!-- Edit Mode -->
-              <ng-container *ngIf="Entity?.p?.DastZeroxDocumentPath; else DastZeroxDocumentDefaultImage">
-                <img [src]="Entity.p.DastZeroxDocumentPath" alt="Index Original Document" class="img-preview" />
-              </ng-container>
-            </ng-template>
+            <input type="file" #DastZeroxDocument accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
+              (change)="onFileUpload($event, 'DastZeroxDocumentFile', 'DastZeroxDocumentPath')" />
 
-            <ng-template #DastZeroxDocumentDefaultImage>
-              <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
+            <ng-container *ngIf="this.Entity.p.DastZeroxDocumentPath; else DastZeroxDocumentAddDocImage">
+              <img
+                [src]="isImageFile(this.Entity.p.DastZeroxDocumentPath) ? filePostViews['DastZeroxDocumentFile'] : '/assets/icons/doc-placeholder.png'"
+                alt="Dast Zerox Document" title="Dast Zerox Document"
+                (click)="fileNavigation(this.Entity.p.DastZeroxDocumentPath, 'DastZeroxDocumentFile')"
+                [class]="isImageFile(this.Entity.p.DastZeroxDocumentPath) ?  'img-preview' : 'file-preview'" />
+            </ng-container>
+
+            <ng-template #DastZeroxDocumentAddDocImage>
+              <ng-container *ngIf="filePrevViews['DastZeroxDocumentFile']; else defaultImage">
+                <img
+                  [src]="isImageFile(selectedFileNames['DastZeroxDocumentFile']) ? filePrevViews['DastZeroxDocumentFile'] : '/assets/icons/doc-placeholder.png'"
+                  alt="Dast Zerox Document" title="Dast Zerox Document"
+                  (click)="fileNavigation(this.Entity.p.DastZeroxDocumentPath, 'DastZeroxDocumentFile')"
+                  [class]="isImageFile(selectedFileNames['DastZeroxDocumentFile']) ? 'img-preview' : 'file-preview'" />
+              </ng-container>
             </ng-template>
           </div>
 
@@ -673,24 +688,34 @@
           </div>
           <div class="col-md-5 d-flex align-items-center justify-content-between">
             <img src="/assets/icons/upload.png" alt="फेरफार Notice घेणे" class="Upload-Icon"
-              (click)="FerfarNoticeDocumentRef.nativeElement.click()" />
+              title="Upload फेरफार Notice" (click)="FerfarNoticeDocumentRef.nativeElement.click()" />
 
-            <div>
-              {{ selectedFileNames['FerfarNoticeDocumentFile'] || 'No file selected' }}
-            </div>
-
-            <input type="file" #FerfarNoticeDocument accept=".jpg,.jpeg,.png,.gif" style="display: none"
-              (change)="onFileUpload($event, 'FerfarNoticeDocumentFile')" />
-
-            <p *ngIf="errors['FerfarNoticeDocumentFile']" class="validation-error">
-              {{ errors['FerfarNoticeDocumentFile'] }}
-            </p>
-
-            <ng-container *ngIf="filePrevViews['FerfarNoticeDocumentFile']; else defaultImage">
-              <img [src]="filePrevViews['FerfarNoticeDocumentFile']" alt="Ferfar Notice Document" class="img-preview" />
+            <ng-container *ngIf="selectedFileNames['FerfarNoticeDocumentFile']; else NoFile">
+              <span style="cursor: pointer;"
+                (click)="fileNavigation(this.Entity.p.FerfarNoticeDocumentPath, 'FerfarNoticeDocumentFile')">
+                {{ selectedFileNames['FerfarNoticeDocumentFile']}}
+              </span>
             </ng-container>
-            <ng-template #defaultImage>
-              <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
+
+            <input type="file" #FerfarNoticeDocument accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
+              (change)="onFileUpload($event, 'FerfarNoticeDocumentFile', 'FerfarNoticeDocumentPath')" />
+
+            <ng-container *ngIf="this.Entity.p.FerfarNoticeDocumentPath; else FerfarNoticeDocumentAddDocImage">
+              <img
+                [src]="isImageFile(this.Entity.p.FerfarNoticeDocumentPath) ? filePostViews['FerfarNoticeDocumentFile'] : '/assets/icons/doc-placeholder.png'"
+                alt="Ferfar Notice" title="Ferfar Notice"
+                (click)="fileNavigation(this.Entity.p.FerfarNoticeDocumentPath, 'FerfarNoticeDocumentFile')"
+                [class]="isImageFile(this.Entity.p.FerfarNoticeDocumentPath) ?  'img-preview' : 'file-preview'" />
+            </ng-container>
+
+            <ng-template #FerfarNoticeDocumentAddDocImage>
+              <ng-container *ngIf="filePrevViews['FerfarNoticeDocumentFile']; else defaultImage">
+                <img
+                  [src]="isImageFile(selectedFileNames['FerfarNoticeDocumentFile']) ? filePrevViews['FerfarNoticeDocumentFile'] : '/assets/icons/doc-placeholder.png'"
+                  alt="Ferfar Notice" title="Ferfar Notice"
+                  (click)="fileNavigation(this.Entity.p.FerfarNoticeDocumentPath, 'FerfarNoticeDocumentFile')"
+                  [class]="isImageFile(selectedFileNames['FerfarNoticeDocumentFile']) ? 'img-preview' : 'file-preview'" />
+              </ng-container>
             </ng-template>
           </div>
 
@@ -711,25 +736,34 @@
           </div>
           <div class="col-md-5 d-flex align-items-center justify-content-between">
             <img src="/assets/icons/upload.png" alt="Final-Customer 7/12" class="Upload-Icon"
-              (click)="FinalCustomer712DocumentRef.nativeElement.click()" />
+              title="Upload Final-Customer 7/12" (click)="FinalCustomer712DocumentRef.nativeElement.click()" />
 
-            <div>
-              {{ selectedFileNames['FinalCustomer712DocumentFile'] || 'No file selected' }}
-            </div>
-
-            <input type="file" #FinalCustomer712Document accept=".jpg,.jpeg,.png,.gif" style="display: none"
-              (change)="onFileUpload($event, 'FinalCustomer712DocumentFile')" />
-
-            <p *ngIf="errors['FinalCustomer712DocumentFile']" class="validation-error">
-              {{ errors['FinalCustomer712DocumentFile'] }}
-            </p>
-
-            <ng-container *ngIf="filePrevViews['FinalCustomer712DocumentFile']; else defaultImage">
-              <img [src]="filePrevViews['FinalCustomer712DocumentFile']" alt="Final Customer 7/12"
-                class="img-preview" />
+            <ng-container *ngIf="selectedFileNames['FinalCustomer712DocumentFile']; else NoFile">
+              <span style="cursor: pointer;"
+                (click)="fileNavigation(this.Entity.p.FinalCustomer712DocumentPath, 'FinalCustomer712DocumentFile')">
+                {{ selectedFileNames['FinalCustomer712DocumentFile']}}
+              </span>
             </ng-container>
-            <ng-template #defaultImage>
-              <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
+
+            <input type="file" #FinalCustomer712Document accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
+              (change)="onFileUpload($event, 'FinalCustomer712DocumentFile', 'FinalCustomer712DocumentPath')" />
+
+            <ng-container *ngIf="this.Entity.p.FinalCustomer712DocumentPath; else FinalCustomer712DocumentAddDocImage">
+              <img
+                [src]="isImageFile(this.Entity.p.FinalCustomer712DocumentPath) ? filePostViews['FinalCustomer712DocumentFile'] : '/assets/icons/doc-placeholder.png'"
+                alt="Final Customer 7/12" title="Final Customer 7/12"
+                (click)="fileNavigation(this.Entity.p.FinalCustomer712DocumentPath, 'FinalCustomer712DocumentFile')"
+                [class]="isImageFile(this.Entity.p.FinalCustomer712DocumentPath) ?  'img-preview' : 'file-preview'" />
+            </ng-container>
+
+            <ng-template #FinalCustomer712DocumentAddDocImage>
+              <ng-container *ngIf="filePrevViews['FinalCustomer712DocumentFile']; else defaultImage">
+                <img
+                  [src]="isImageFile(selectedFileNames['FinalCustomer712DocumentFile']) ? filePrevViews['FinalCustomer712DocumentFile'] : '/assets/icons/doc-placeholder.png'"
+                  alt="Final Customer 7/12" title="Final Customer 7/12"
+                  (click)="fileNavigation(this.Entity.p.FinalCustomer712DocumentPath, 'FinalCustomer712DocumentFile')"
+                  [class]="isImageFile(selectedFileNames['FinalCustomer712DocumentFile']) ? 'img-preview' : 'file-preview'" />
+              </ng-container>
             </ng-template>
           </div>
 
