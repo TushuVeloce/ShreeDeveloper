@@ -74,7 +74,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     true,
     '--Select Lead Source --'
   );
-   LeadSourceEnum = MarketingModes;
+  LeadSourceEnum = MarketingModes;
   CustomerStatusList = DomainEnums.CustomerStatusList(
     true,
     '--Select Customer Status --'
@@ -91,7 +91,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement,
     private dtu: DTU,
     private datePipe: DatePipe
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -153,10 +153,10 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     } else {
       this.Entity = CustomerFollowUp.CreateNewInstance();
       CustomerFollowUp.SetCurrentInstance(this.Entity);
-      if( this.Entity.p.LeadSource = this.LeadSourceEnum.AgentBoker){
+      if (this.Entity.p.LeadSource = this.LeadSourceEnum.AgentBoker) {
         this.onLeadSourceChange(this.Entity.p.LeadSource)
       }
-     
+
     }
     this.InitialEntity = Object.assign(
       CustomerFollowUp.CreateNewInstance(),
@@ -327,28 +327,42 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
   onLeadSourceChange = (selectedValue: number) => {
     // Check if the selected value is AgentBroker (50)
-    if (selectedValue ===  this.LeadSourceEnum.AgentBoker) {
+    if (selectedValue === this.LeadSourceEnum.AgentBoker) {
       this.showAgentBrokerInput = true;
     } else {
       this.showAgentBrokerInput = false;
     }
   };
 
- ConverttoDeal = (CustomerStatus: number) => {
- console.log('CustomerStatus :', CustomerStatus);
-  if (CustomerStatus === this.CustomerStatusEnum.ConvertToDeal) {
+  //  ConverttoDeal = (CustomerStatus: number) => {
+  //   if (CustomerStatus === this.CustomerStatusEnum.ConvertToDeal) {
+  //     const hasDealRecord = this.Entity.p.CustomerFollowUpPlotDetails?.some(
+  //       (item: any) => item.CustomerStatus === this.CustomerStatusEnum.ConvertToDeal
+  //     );
+
+  //     if (!hasDealRecord) {
+  //       this.uiUtils.showWarningToster('No record found in the Plots Table as "Convert to Deal"');
+  //       return false;
+  //     }
+  //   }
+  //    return true; 
+  // };
+
+
+  ConverttoDeal = (CustomerStatus: number): boolean => {
     const hasDealRecord = this.Entity.p.CustomerFollowUpPlotDetails?.some(
       (item: any) => item.CustomerStatus === this.CustomerStatusEnum.ConvertToDeal
     );
-    console.log('hasDealRecord :', hasDealRecord);
-
-    if (!hasDealRecord) {
+    if (CustomerStatus === this.CustomerStatusEnum.ConvertToDeal && !hasDealRecord) {
       this.uiUtils.showWarningToster('No record found in the Plots Table as "Convert to Deal"');
       return false;
     }
-  }
-   return true; 
-};
+    if (hasDealRecord && CustomerStatus !== this.CustomerStatusEnum.ConvertToDeal) {
+      this.uiUtils.showWarningToster('One or more plots are marked as "Convert to Deal", so the Customer Status must also be "Convert to Deal"');
+      return false;
+    }
+    return true;
+  };
 
 
   SaveCustomerFollowUp = async () => {
@@ -383,7 +397,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     this.Entity.p.ReminderDate = this.dtu.ConvertStringDateToFullFormat(
       this.localReminderDate
     );
-    if(!this.ConverttoDeal(this.Entity.p.CustomerStatus)){
+    if (!this.ConverttoDeal(this.Entity.p.CustomerStatus)) {
       return
     }
     // return
@@ -418,8 +432,8 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     this.router.navigate(['/homepage/Website/Customer_FollowUp']);
   };
 
-    // function for preselected values in field
-    selectAll(event: any) {
-      event.target.select();
-    }
+  // function for preselected values in field
+  selectAll(event: any) {
+    event.target.select();
+  }
 }
