@@ -9,6 +9,7 @@ import { ServerCommunicatorService } from 'src/app/services/server-communicator.
 import { SessionValues } from 'src/app/services/sessionvalues.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class LoginPageComponent implements OnInit {
 
   constructor(private router: Router, private platform: Platform, private servercommunicator: ServerCommunicatorService,
     private uiUtils: UIUtils, private activatedRoute: ActivatedRoute, private sessionValues: SessionValues,
-    private appStateManage: AppStateManageService) {
+    private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement,) {
 
     platform.ready().then(async () => {
       this.isIosPlatform = platform.is('ios');
@@ -62,6 +63,10 @@ export class LoginPageComponent implements OnInit {
     this.appStateManage.setLoginToken(response.LoginToken)
     this.appStateManage.StorageKey.setItem("IsDefaultUser", response.IsDefault.toString())
     this.appStateManage.StorageKey.setItem("UserDisplayName", response.UserDisplayName)
+    this.appStateManage.StorageKey.setItem('SelectedCompanyRef', response.LastSelectedCompanyRef.toString());
+    this.appStateManage.StorageKey.setItem('companyName', response.CompanyName);
+    this.appStateManage.StorageKey.setItem('LoginEmployeeRef', response.LoginEmployeeRef.toString());
+    this.companystatemanagement.setCompanyRef(response.LastSelectedCompanyRef,response.CompanyName)
 
     if (!response.Successful) {
       await this.uiUtils.showErrorMessage('Error', response.Message);
@@ -75,6 +80,7 @@ export class LoginPageComponent implements OnInit {
         await this.router.navigate(['/create_password']);
       } else {
         await this.router.navigate(['/homepage']);  // Navigate to web
+        this.appStateManage.triggerCompanyInit(); 
       }
     }
   }

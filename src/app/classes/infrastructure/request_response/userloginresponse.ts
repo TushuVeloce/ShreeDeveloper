@@ -8,7 +8,7 @@ export class UserLoginResponse
     public UserDisplayName: string = '';
     public ValidMenuItemIds: string[] = [];
     public LastSelectedCompanyRef: number = 0;
-    public LastSelectedCompanyName: string = '';
+    public CompanyName: string = '';
     public LoginEmployeeRef: number = 0;
     public LoginEmployeeName: string = '';
     public LoginForFirstTime: number = 0;

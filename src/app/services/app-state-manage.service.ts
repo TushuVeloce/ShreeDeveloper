@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -182,24 +183,31 @@ export class AppStateManageService {
     this.localStorage.setItem('DesignationRef', '0');
   }
 
-    // ==================================== Login Token Start =========================================================
+  // ==================================== Login Token Start =========================================================
 
-    getLoginToken(): string {
-      const logtoken = this.StorageKey.getItem('LoginToken');
-      return logtoken ? logtoken : ''; // Return the project reference or 0 if not found
-    }
+  getLoginToken(): string {
+    const logtoken = this.StorageKey.getItem('LoginToken');
+    return logtoken ? logtoken : ''; // Return the project reference or 0 if not found
+  }
 
-    setLoginToken(val: string): void {
-      this.LoginToken = val;
-      this.StorageKey.setItem('LoginToken', val); // Store project reference in local storage
-    }
+  setLoginToken(val: string): void {
+    this.LoginToken = val;
+    this.StorageKey.setItem('LoginToken', val); // Store project reference in local storage
+  }
 
-    resetLoginToken(): void {
-      this.StorageKey.setItem('LoginToken', '');
-    }
+  resetLoginToken(): void {
+    this.StorageKey.setItem('LoginToken', '');
+  }
 
-    // ==================================== Login Token End =========================================================
+  // ==================================== Login Token End =========================================================
 
+
+  private companyInitTrigger = new Subject<void>();
+  companyInit$ = this.companyInitTrigger.asObservable();
+
+  triggerCompanyInit() {
+    this.companyInitTrigger.next();
+  }
 
 
 }

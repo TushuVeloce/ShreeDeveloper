@@ -99,8 +99,11 @@ export class SidebarlayoutComponent implements OnInit {
   toggleMenu(): void {
     this.isMenuFolded = !this.isMenuFolded; // Toggles the menu state
   }
-  ngOnInit() {
-    this.ongetcompany()
+  async ngOnInit() {
+    await this.ongetcompany()
+     this.appStateManagement.companyInit$.subscribe(() => {
+    this.ongetcompany(); // Called after login
+  });
     this.isDarkMode = this.appStateManagement.getTheme() === 'dark';
     this.onThemeToggle();
 
@@ -221,6 +224,7 @@ export class SidebarlayoutComponent implements OnInit {
         localStorage.removeItem('activeSubmodule');
         localStorage.removeItem('activeModule');
         let _ = await this.servercommunicator.LogoutUser(req)
+        console.log('req :', req);
         await this.router.navigate(['/']);
       });
   }
@@ -707,8 +711,8 @@ export class SidebarlayoutComponent implements OnInit {
     this.ongetcompany();
   }
 
-  ongetcompany() {
-    const storedCompanyRef = this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
+  async ongetcompany() {
+    const storedCompanyRef =  this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
     const storedCompanyName = this.appStateManagement.StorageKey.getItem('companyName');
 
     if (storedCompanyRef && storedCompanyName) {
@@ -718,7 +722,7 @@ export class SidebarlayoutComponent implements OnInit {
     } else if (this.CompnyList && this.CompnyList.length > 0) {
       // Select first company if no stored value is found
       const firstCompany = this.CompnyList[0];
-      this.changecompany(firstCompany.p.Ref);
+      await this.changecompany(firstCompany.p.Ref); // Assuming changecompany is also async
     }
   }
 
