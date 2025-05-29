@@ -159,6 +159,7 @@ export class PlotMasterComponent implements OnInit {
           await this.uiUtils.showSuccessToster(
             `Plot ${plot.p.PlotNo} has been deleted!`
           );
+          await this.getPlotListBySiteandBookingRemarkRef(this.siteref,this.bookingremark);
           this.SearchString = '';
           this.loadPaginationData();
         });

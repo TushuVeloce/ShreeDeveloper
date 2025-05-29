@@ -57,7 +57,7 @@
   </ng-template>
 
   <!-- Digital -->
-  <div class="table-container" style="margin-top: 2rem;">
+  <div class="table-container" style="margin-top: 2rem;" *ngIf="!HideDigitalTable">
     <div class="row">
       <div class="col-12">
         <label class="TableHeading">
@@ -102,7 +102,7 @@
   </div>
 
   <!-- Electronics -->
-  <div class="table-container" style="margin-top: 2rem;">
+  <div class="table-container" style="margin-top: 2rem;" *ngIf="!HideElectronicsTable">
     <div class="row">
       <div class="col-12">
         <label class="TableHeading">
@@ -147,7 +147,7 @@
   </div>
 
   <!-- Outdoor -->
-  <div class="table-container" style="margin-top: 2rem;">
+  <div class="table-container" style="margin-top: 2rem;" *ngIf="!HideOutdoorTable">
     <div class="row">
       <div class="col-12">
         <label class="TableHeading">
@@ -192,7 +192,7 @@
   </div>
 
   <!-- Printing Media  -->
-  <div class="table-container" style="margin-top: 2rem;">
+  <div class="table-container" style="margin-top: 2rem;" *ngIf="!HidePrintingMediaTable">
     <div class="row">
       <div class="col-12">
         <label class="TableHeading">
@@ -237,7 +237,7 @@
   </div>
 
   <!-- Agent/Broker -->
-  <div class="table-container" style="margin-top: 2rem;">
+  <div class="table-container" style="margin-top: 2rem;" *ngIf="!HideBrokerTable">
     <div class="row">
       <div class="col-12">
         <label class="TableHeading">
