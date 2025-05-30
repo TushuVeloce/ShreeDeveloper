@@ -30,9 +30,9 @@
           <div>
             <label>Name</label>
             <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
-              placeholder="Enter Name" pattern="{{NameWithNosAndSpace}}" #NameCtrl="ngModel"
+              placeholder="Enter Name" #NameCtrl="ngModel"
               (blur)="NameCtrl.control.markAsTouched()" />
-            <Validation [control]="NameCtrl" [patternMessage]="NameWithNosAndSpaceMsg" />
+            <!-- <Validation [control]="NameCtrl" [patternMessage]="NameWithNosAndSpaceMsg" /> -->
           </div>
         </div>
 
