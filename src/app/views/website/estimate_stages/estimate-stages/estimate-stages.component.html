@@ -57,6 +57,7 @@
           <tr *ngFor="let estimatestage of paginatedList; index as i">
             <td class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td class="tbldata">{{ estimatestage.p.SiteName }}</td>
+            <td class="tbldata">{{ estimatestage.p.StageName }}</td>
             <!-- <td class="tbldata">{{ estimatestage.p.Description }}</td> -->
             <td Class="tbldata" style="cursor: pointer;" [nzTooltipTitle]="estimatestage.p.Description"
               nzTooltipPlacement="top" nzTooltipColor="#A52A2A" nz-button nz-tooltip>{{estimatestage.p.Description}}

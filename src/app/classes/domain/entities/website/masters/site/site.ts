@@ -95,14 +95,14 @@ export class Site implements IPersistable<Site> {
     if (this.p.Name == '') vra.add('Name', 'Site Name cannot be blank.'); else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.Name)) {
       vra.add('Name', ValidationMessages.NameWithoutNosMsg);
     }
-    if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'AddressLine cannot be blank.');
+    if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'Address Line  cannot be blank.');
     if (this.p.AddressLine2 == '') vra.add('AddressLine2', 'Site Location cannot be blank.');
     // if (this.p.PinCode == '') vra.add('PinCode', 'PinCode cannot be blank.');else if (!new RegExp(ValidationPatterns.PinCode).test(this.p.Name)) {
     //   vra.add('Name', ValidationMessages.PinCodeMsg);
     // }
-    if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country Name cannot be blank.');
-    if (this.p.StateRef == 0) vra.add('StateRef', 'State Name cannot be blank.');
-    if (this.p.CityRef == 0) vra.add('CityRef', 'City Name cannot be blank.');
+    if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country cannot be blank.');
+    if (this.p.StateRef == 0) vra.add('StateRef', 'State cannot be blank.');
+    if (this.p.CityRef == 0) vra.add('CityRef', 'City cannot be blank.');
     if (this.p.SiteInchargeRef == 0) vra.add('SiteInchargeRef', 'Site Incharge cannot be blank.');
     if (this.p.EstimatedStartingDate == '') vra.add('EstimatedStartingDate', 'Estimated Starting Date cannot be blank.');
     if (this.p.EstimatedEndDate == '') vra.add('EstimatedEndDate', 'Estimated End Date cannot be blank.');

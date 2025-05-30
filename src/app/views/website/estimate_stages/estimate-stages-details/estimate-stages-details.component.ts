@@ -92,7 +92,7 @@ export class EstimateStagesDetailsComponent implements OnInit {
       return;
     }
     let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.StageList = lst.filter(stage => stage.p.IsSubStageApplicable === true);
+    this.StageList = lst;
   }
 
     getSubStageListByStageRef = async (stageref: number) => {

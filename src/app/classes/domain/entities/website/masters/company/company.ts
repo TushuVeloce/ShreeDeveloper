@@ -111,21 +111,21 @@ export class Company implements IPersistable<Company> {
     }
     if (this.p.CompanyType == 0) vra.add('CompanyType', 'Company Type cannot be blank.');
     if (this.p.PinCode == '') {
-      vra.add('PinCode', 'Pin cannot be blank.');
+      vra.add('PinCode', 'Pin Code cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.PinCode).test(this.p.PinCode)) {
       vra.add('PinCode', ValidationMessages.PinCodeMsg);
     }
-    if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'AddressLine1 cannot be blank.');
-    if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country Name cannot be blank.');
-    if (this.p.StateRef == 0) vra.add('StateRef', 'State Name cannot be blank.');
-    if (this.p.CityRef == 0) vra.add('CityRef', 'City Name cannot be blank.');
+    if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'Address Line 1 cannot be blank.');
+    if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country cannot be blank.');
+    if (this.p.StateRef == 0) vra.add('StateRef', 'State cannot be blank.');
+    if (this.p.CityRef == 0) vra.add('CityRef', 'City cannot be blank.');
     if (this.p.GSTIN == '') {
       vra.add('GSTIN', 'GST IN cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN)) {
       vra.add('GSTIN', ValidationMessages.GSTINMsg);
     }
     if (this.p.Pan == '') {
-      vra.add('Pan', 'Pan cannot be blank.');
+      vra.add('Pan', 'PAN cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan)) {
       vra.add('Pan', ValidationMessages.PANMsg);
     }
@@ -139,6 +139,8 @@ export class Company implements IPersistable<Company> {
       vra.add('CompanyLogo', 'Company Logo cannot be blank.');
     }
 
+    if (this.p.DateOfInCorporation == '') vra.add('DateOfInCorporation', 'Date Of InCorporation cannot be blank.');
+    if (this.p.LastDateOfFirstFinancialYear == '') vra.add('LastDateOfFirstFinancialYear', 'Last Date Of First Financial Year cannot be blank.');
     if (this.p.Notes == '') vra.add('Notes', 'Notes cannot be blank.');
   }
 

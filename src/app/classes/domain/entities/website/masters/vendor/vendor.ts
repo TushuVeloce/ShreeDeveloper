@@ -106,7 +106,7 @@ export class Vendor implements IPersistable<Vendor> {
     if (this.p.Code == '') vra.add('Code', 'Vendor Code cannot be blank.');
     if (this.p.CompanyType == 0) vra.add('CompanyType', 'Company Type cannot be blank.');
     if (this.p.Name == '') {
-      vra.add('Name', 'Name cannot be blank.');
+      vra.add('Name', 'Vendor Name cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
       vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     }
@@ -116,17 +116,17 @@ export class Vendor implements IPersistable<Vendor> {
     } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.MobileNo)) {
       vra.add('IFSC', ValidationMessages.INDPhoneNoMsg);
     }
-    if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'AddressLine1 cannot be blank.');
+    if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'Address Line 1 cannot be blank.');
     if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country cannot be blank.');
     if (this.p.StateRef == 0) vra.add('StateRef', 'State cannot be blank.');
     if (this.p.CityRef == 0) vra.add('CityRef', 'City cannot be blank.');
     if (this.p.PinCode == '') {
-      vra.add('PinCode', 'Pin cannot be blank.');
+      vra.add('PinCode', 'Pin Code cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.PinCode).test(this.p.PinCode)) {
       vra.add('PinCode', ValidationMessages.PinCodeMsg);
     }
-    if (this.p.BankName == '') vra.add('BankName', 'Bank cannot be blank.');
-    if (this.p.BranchName == '') vra.add('BranchName', 'Branch cannot be blank.');
+    if (this.p.BankName == '') vra.add('BankName', 'Bank Name cannot be blank.');
+    if (this.p.BranchName == '') vra.add('BranchName', 'Branch Name cannot be blank.');
     if (this.p.AccountNumber == '') vra.add('AccountNumber', 'Account Number cannot be blank.');
     if (this.p.AccountNumber.length > 15) vra.add('AccountNumber', 'Account Number Should be less then 15.');
 
@@ -141,7 +141,7 @@ export class Vendor implements IPersistable<Vendor> {
       vra.add('GSTIN', ValidationMessages.GSTINMsg);
     }
     if (this.p.Pan == '') {
-      vra.add('Pan', 'Pan cannot be blank.');
+      vra.add('Pan', 'PAN cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan)) {
       vra.add('Pan', ValidationMessages.PANMsg);
     }
@@ -149,8 +149,8 @@ export class Vendor implements IPersistable<Vendor> {
       vra.add('CIN', ValidationMessages.CINMsg);
     }
 
-    if (this.p.MaterialListSuppliedByVendor.length <= 0) vra.add('MaterialListSuppliedByVendor', ' Vendor Material Supply list cannot be blank.');
-    if (this.p.ServiceListSuppliedByVendor.length <= 0) vra.add('ServiceListSuppliedByVendor', 'Vendor Service Supply list cannot be blank.');
+    if (this.p.MaterialListSuppliedByVendor.length <= 0) vra.add('MaterialListSuppliedByVendor', 'Material list cannot be blank.');
+    if (this.p.ServiceListSuppliedByVendor.length <= 0) vra.add('ServiceListSuppliedByVendor', 'Service list cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {

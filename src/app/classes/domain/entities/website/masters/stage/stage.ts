@@ -84,7 +84,7 @@ export class Stage implements IPersistable<Stage> {
       vra.add('StageType', 'Stage Type is required');
     }
     if (this.p.DisplayOrder < 0) {
-      vra.add('DisplayOrder', 'Display Order is required');
+      vra.add('DisplayOrder', 'Display Order cannot be blank');
     }
   }
 
