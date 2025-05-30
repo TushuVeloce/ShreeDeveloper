@@ -441,7 +441,7 @@ export class AddEditActualStageComponent implements OnInit {
   public async selectVendorServicesBottomsheet(): Promise<void> {
     try {
       if (this.Entity.p.VendorRef <= 0) {
-        await this.uiUtils.showErrorToster('Please Select Vendor');
+        await this.uiUtils.showWarningToster('Please Select Vendor');
         return;
       }
       // const options = this.VendorServiceList;
@@ -831,11 +831,16 @@ export class AddEditActualStageComponent implements OnInit {
       console.log(' this.Entity.p.GrandTotal :CalculateAmountOnRateAndQuantity if',  this.Entity.p.GrandTotal);
       this.Entity.p.Amount = rate * TotalWorkedHours
     } else {
-      console.log('rate * quantity :1', rate, quantity);
-      this.Entity.p.Amount = rate * quantity
-      console.log('rate * quantity :2', rate , quantity);
-      this.Entity.p.GrandTotal = rate * quantity - dieselAmount
-      console.log(' this.Entity.p.GrandTotal :CalculateAmountOnRateAndQuantity else', this.Entity.p.GrandTotal);
+      if (rate>0 && quantity>0) {
+        console.log('rate * quantity :1', rate, quantity);
+        this.Entity.p.Amount = rate * quantity
+        console.log('rate * quantity :2', rate, quantity);
+        this.Entity.p.GrandTotal = rate * quantity - dieselAmount
+        console.log(' this.Entity.p.GrandTotal :CalculateAmountOnRateAndQuantity else', this.Entity.p.GrandTotal);
+      }else{
+        this.Entity.p.Amount = this.Entity.p.SkillAmount+this.Entity.p.UnskillAmount+this.Entity.p.LadiesAmount;
+        this.Entity.p.GrandTotal = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
+      }
     }
   };
 

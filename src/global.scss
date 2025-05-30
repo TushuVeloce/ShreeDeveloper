@@ -621,6 +621,12 @@ input[type=number] {
   color: #333;
 }
 
+ion-item.invalid {
+  --border-color: red;
+  border: 1.5px solid red;
+  border-radius: 12px;
+}
+
 // .submit-button {
 //   --background: var(--ion-color-primary);
 //   --color: var(--ion-text-color:);

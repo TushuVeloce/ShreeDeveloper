@@ -14,30 +14,31 @@
     padding: 10px 16px;
 }
 
-.category-column {
-    background-color: #f6f6f6;
-    max-height: 100%;
-    overflow-y: auto;
-    max-height: calc(50vh - 80px);
-
-    ion-item.active {
-        background-color: #e0e0e0;
-        font-weight: bold;
-    }
-
-    ion-item.has-selection {
-        font-weight: bold;
-        color: var(--ion-color-primary);
-    }
-}
-
+/* Fixed height for category and option columns inside 50vh - 80px */
+.category-column,
 .option-column {
-    padding: 0 10px;
-    max-height: 100%;
+    // background-color: #f6f6f6;
+    height: calc(50vh - 120px);
     overflow-y: auto;
-    max-height: calc(50vh - 80px);
 }
 
+/* Optional padding only for option-column */
+.option-column {
+    padding: 0 5px;
+}
+
+/* Styling for active and selected items */
+.category-column ion-item.active {
+    background-color: #e0e0e0;
+    font-weight: bold;
+}
+
+.category-column ion-item.has-selection {
+    font-weight: bold;
+    color: var(--ion-color-primary);
+}
+
+/* Footer remains unchanged */
 .footer {
     flex: 0 0 auto;
     padding: 16px;
@@ -47,6 +48,7 @@
     background: #fff;
     z-index: 10;
 }
+
 .centered-message {
     height: 200px;
     display: flex;

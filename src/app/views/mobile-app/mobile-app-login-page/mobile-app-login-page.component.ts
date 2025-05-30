@@ -16,62 +16,10 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   standalone: false
 })
 export class MobileAppLoginPageComponent implements OnInit {
-  // loginForm: FormGroup;
-  // showPassword = false;
-
-  // constructor(private fb: FormBuilder, private platform: Platform) {
-  //   this.loginForm = this.fb.group({
-  //     email: ['', [Validators.required, Validators.email]],
-  //     password: ['', Validators.required],
-  //   });
-  // }
-
-  ngOnInit() {
-    //   // When keyboard is closed (by tapping outside or hardware back), fix layout
-    //   Keyboard.addListener('keyboardWillHide', () => {
-    //     this.fixLayoutAfterKeyboard();
-    //   });
-
-    //   // Handle Android hardware back button to blur input
-    //   this.platform.backButton.subscribeWithPriority(10, () => {
-    //     const active = document.activeElement as HTMLElement | null;
-    //     if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) {
-    //       active.blur(); // dismiss keyboard
-    //     }
-    //   });
-  }
-
-  // fixLayoutAfterKeyboard() {
-  //   setTimeout(() => {
-  //     window.dispatchEvent(new Event('resize'));
-  //     // Optional scroll reset (if layout is scrolled weirdly)
-  //     document.querySelector('ion-content')?.scrollToTop(300);
-  //   }, 100);
-  // }
-
-  // get email() {
-  //   return this.loginForm.get('email')!;
-  // }
-
-  // get password() {
-  //   return this.loginForm.get('password')!;
-  // }
-
-  // togglePasswordVisibility() {
-  //   this.showPassword = !this.showPassword;
-  // }
-
-  // onLogin() {
-  //   if (this.loginForm.valid) {
-  //     console.log('Logging in with:', this.loginForm.value);
-  //     // Proceed with login API call
-  //   } else {
-  //     this.loginForm.markAllAsTouched();
-  //   }
-  // }
+  ngOnInit() {}
   showPassword: boolean = false;
-  UserId: string = 'admin@gmail.com';
-  Password: string = 'admin123';
+  UserId: string = '';
+  Password: string = '';
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],

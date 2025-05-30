@@ -10,6 +10,7 @@ import { ActualStagePage } from './actual-stage.page';
 import { SharedModule } from "../../../shared/shared.module";
 import { AddEditActualStageComponent } from './add-edit-actual-stage/add-edit-actual-stage.component';
 import { LoaderComponent } from "../../../shared/loader/loader.component";
+import { PreviewPrintComponent } from './preview-print/preview-print.component';
 
 @NgModule({
   imports: [
@@ -20,6 +21,6 @@ import { LoaderComponent } from "../../../shared/loader/loader.component";
     SharedModule,
     LoaderComponent
 ],
-  declarations: [ActualStagePage,AddEditActualStageComponent]
+  declarations: [ActualStagePage,AddEditActualStageComponent,PreviewPrintComponent]
 })
 export class ActualStagePageModule {}

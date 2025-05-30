@@ -2,6 +2,9 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { Share } from '@capacitor/share';
+import { DomSanitizer } from '@angular/platform-browser';  // For safe HTML if needed
+
 import { ExpenseTypeRefs, UnitRefs } from 'src/app/classes/domain/constants';
 import { ExpenseType } from 'src/app/classes/domain/entities/website/masters/expensetype/expensetype';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -58,7 +61,8 @@ export class ActualStagePage implements OnInit {
     private companystatemanagement: CompanyStateManagement,
     private dateService: DateconversionService,
     private appStateManagement: AppStateManageService,
-    private filterService: FilterService
+    private filterService: FilterService,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit(): void {
@@ -98,26 +102,17 @@ export class ActualStagePage implements OnInit {
   }
 
 
-  @ViewChild('formContainer1', { static: false }) formContainer1!: ElementRef;
-
-  public makePdf() {
-    const element = this.formContainer1?.nativeElement;
-    if (!element) {
-      console.error('formContainer1 is not available');
-      return;
-    }
-
-    html2canvas(element).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save('actualStage.pdf');
+  async onPrintClicked(item: any) {
+    this.router.navigate(['app_homepage/tabs/site-management/actual-stage/print'], {
+      state: { printData: item.GetEditableVersion() }
     });
   }
+
+  // formatDate(dateStr: string): string {
+  //   // Your existing date formatting logic
+  //   const date = new Date(dateStr);
+  //   return date.toLocaleDateString();
+  // }
 
   onViewClicked(item: ActualStages) {
     this.SelectedActualStages = item;

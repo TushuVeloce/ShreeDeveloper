@@ -1,51 +1,91 @@
 <app-loader *ngIf="isLoading"></app-loader>
-<app-header-with-back-handler title="Marketing Management " backRoute="app_homepage/tabs/home"></app-header-with-back-handler>
+<app-header-with-back-handler title="Marketing Management "
+  backRoute="app_homepage/tabs/home"></app-header-with-back-handler>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="actual-stage-content">
+  <!-- Refresher -->
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <!-- Marketing Data List -->
-  <ion-list class="Data-list">
-    <ng-container *ngIf="DisplayMasterList.length > 0; else noData">
-      <ion-card *ngFor="let item of DisplayMasterList" class="Data-card">
-        <ion-card-content>
-          <div class="info-row"><strong>Site :</strong> {{ item.p.SiteName }}</div>
-          <div class="info-row">
-            <strong>Date :</strong> {{ item.p.Date}}
-          </div>
-          <div class="info-row"><strong>Marketing Type:</strong> {{ item.p.MarketingTypeName }}</div>
-          <div class="info-row"><strong>Vendor Name:</strong> {{ item.p.MarketingTypeName }}</div>
-          <div class="info-row"><strong>Rate:</strong> {{ item.p.Rate }}</div>
-          <div class="info-row"><strong>Quantity:</strong> {{ item.p.Quantity }}</div>
-          <div class="info-row"><strong>Total:</strong> {{ item.p.Total }}</div>
-          <div class="btn-row">
-            <ion-button size="small" fill="outline" color="primary" (click)="onViewClicked(item)">
-              <ion-icon name="eye-outline" slot="start"></ion-icon> View
-            </ion-button>
-            <ion-button size="small" fill="outline" color="secondary" (click)="onEditClicked(item)">
-              <ion-icon name="create-outline" slot="start"></ion-icon> Edit
-            </ion-button>
-            <ion-button size="small" fill="outline" color="danger" (click)="onDeleteClicked(item)">
-              <ion-icon name="trash-outline" slot="start"></ion-icon> Delete
-            </ion-button>
-          </div>
-        </ion-card-content>
-      </ion-card>
+  <ion-list class="data-list">
+    <ng-container *ngIf="!isLoading">
+      <ng-container *ngIf="DisplayMasterList.length > 0 ; else noData">
+        <ion-card *ngFor="let item of DisplayMasterList" class="data-card">
+          <ion-card-header>
+            <ion-card-title class="info-row"><strong>Marketing Type :</strong>{{ item.p.MarketingTypeName ?item.p.MarketingTypeName:'-'
+              }}</ion-card-title>
+            <ion-card-subtitle class="info-row"><strong>Site Name :</strong>{{ item.p.SiteName ? item.p.SiteName:'-'
+              }}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"><strong>Date :</strong>{{item.p.Date
+              ?formatShortDate(item.p.Date):'-'}}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"><strong>Vendor Name :</strong>{{ item.p.VendorName
+              ?item.p.VendorName:'-'
+              }}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"><strong>Vendor Service :</strong>{{
+              item.p.VendorServiceName?item.p.VendorServiceName:'-'
+              }}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"><strong>Rate :</strong>{{
+              item.p.Rate?item.p.Rate:'-'
+              }}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"><strong>Quantity :</strong>{{
+              item.p.Quantity?item.p.Quantity:'-'
+              }}</ion-card-subtitle>
+            <ion-card-subtitle class="info-row"><strong>Total :</strong>{{
+              item.p.Total?item.p.Total:'-'
+              }}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="btn-row">
+              <ion-button fill="clear" size="small" color="primary" (click)="onViewClicked(item)">
+                <ion-icon slot="start" name="eye-outline"></ion-icon> View
+              </ion-button>
+              <ion-button fill="clear" size="small" color="secondary" (click)="onEditClicked(item)">
+                <ion-icon slot="start" name="create-outline"></ion-icon> Edit
+              </ion-button>
+              <ion-button fill="clear" size="small" color="danger" (click)="onDeleteClicked(item)">
+                <ion-icon slot="start" name="trash-outline"></ion-icon> Delete
+              </ion-button>
+              <!-- <ion-button fill="clear" size="small" color="warning" (click)="onViewClicked(item)">
+                <ion-icon slot="start" name="print-outline"></ion-icon> Print
+              </ion-button> -->
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
     </ng-container>
+
     <!-- No Data Template -->
     <ng-template #noData>
-      <ion-card class="Data-card">
+      <ion-card class="data-card">
         <ion-card-content class="text-center">
           <ion-icon name="information-circle-outline" size="large" color="medium"></ion-icon>
-          <div class="info-row">No Marketing Data found.</div>
+          <div>No Marketing Management data found.</div>
         </ion-card-content>
       </ion-card>
     </ng-template>
   </ion-list>
 
   <!-- FAB -->
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="primary" (click)="AddMarketing()">
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
+  </ion-fab> -->
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="ellipsis-vertical"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button color="primary" (click)="AddMarketing()">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button color="tertiary" (click)="openFilterSheet()">
+        <ion-icon name="filter-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
   </ion-fab>
 
   <!-- Modal -->
@@ -68,7 +108,7 @@
         </div>
         <div class="info-row-of-model">
           <strong class="label">Date:</strong>
-          <span class="value">{{ SelectedMarketingManagement.p.Date }}</span>
+          <span class="value">{{ formatShortDate(SelectedMarketingManagement.p.Date)}}</span>
         </div>
         <div class="info-row-of-model">
           <strong class="label">Marketing Type:</strong>
@@ -80,7 +120,7 @@
         </div>
         <div class="info-row-of-model">
           <strong class="label">Service:</strong>
-          <span class="value">{{ SelectedMarketingManagement.p.VendorName }}</span>
+          <span class="value">{{ SelectedMarketingManagement.p.VendorServiceName }}</span>
         </div>
         <div class="info-row-of-model">
           <strong class="label">Place:</strong>
@@ -103,10 +143,10 @@
           <strong class="label">Total:</strong>
           <span class="value">{{ SelectedMarketingManagement.p.Total }}</span>
         </div>
-        <div class="info-row-of-model">
+        <!-- <div class="info-row-of-model">
           <strong class="label">Name:</strong>
           <span class="value">{{ SelectedMarketingManagement.p.Name }}</span>
-        </div>
+        </div> -->
         <div class="info-row-of-model">
           <strong class="label">Narration:</strong>
           <span class="value">{{ SelectedMarketingManagement.p.Narration }}</span>

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -23,7 +23,8 @@ import { LoaderComponent } from "../../../shared/loader/loader.component";
     IonicModule,
     AttendanceManagementPageRoutingModule,
     SharedModule,
-    LoaderComponent
+    LoaderComponent,
+    ReactiveFormsModule,
 ],
   declarations: [AttendanceManagementPage, AttendanceDetailsComponent, AddSalarySlipMobileAppComponent, SalarySlipMobileAppComponent, LeaveRequestMobileAppComponent, AddLeaveRequestMobileAppComponent,ViewAllPresentEmployeeComponent]
 

@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { ActualStagePage } from './actual-stage.page';
 import { AddEditActualStageComponent } from './add-edit-actual-stage/add-edit-actual-stage.component';
+import { PreviewPrintComponent } from './preview-print/preview-print.component';
 
 const routes: Routes = [
   {
@@ -11,6 +12,7 @@ const routes: Routes = [
   },
   { path: 'add', component: AddEditActualStageComponent }, // Add Page
   { path: 'edit', component: AddEditActualStageComponent }, // Edit Page with ID
+  { path: 'print', component: PreviewPrintComponent }, // Edit Page with ID
 ];
 
 @NgModule({

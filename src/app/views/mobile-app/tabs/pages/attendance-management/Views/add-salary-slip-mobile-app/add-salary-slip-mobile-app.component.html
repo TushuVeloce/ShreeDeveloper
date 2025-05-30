@@ -11,7 +11,7 @@
     </ion-item>
 
     <!-- Select Month -->
-    <ion-item class="input-item" button (click)="selectMonthBottomsheet()">
+    <ion-item class="input-item" button (click)="selectMonthBottomsheet()" [class.invalid]="isMonthInvalid">
       <ion-label slot="start">Select Months</ion-label>
 
       <!-- Text showing the selected status -->
@@ -29,7 +29,7 @@
     </ion-item>
 
     <!-- Select Year Type -->
-    <ion-item class="input-item" button (click)="selectYearBottomsheet()">
+    <ion-item class="input-item" button (click)="selectYearBottomsheet()" [class.invalid]="isYearInvalid">
       <ion-label>Select Year</ion-label>
 
       <!-- Text showing the selected status -->
