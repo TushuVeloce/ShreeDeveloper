@@ -26,12 +26,18 @@
       <tbody>
         <tr *ngFor="let company of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">
+            <ng-container *ngIf="company.p.LogoPath; else defaultImage">
+              <img [src]="loadImageFromBackend(company.p.LogoPath)" alt="Company Logo" class="Company-Logo" />
+            </ng-container>
+
+            <ng-template #defaultImage>
+              <img src="/assets/images/noimage.png" alt="No Image" class="Company-Logo" />
+            </ng-template>
+          </td>
           <td Class="tbldata">{{company.p.Name }}</td>
           <td Class="tbldata">{{company.p.OwnerName }}</td>
           <td Class="tbldata">{{company.p.Contacts }}</td>
-          <td Class="tbldata">{{company.p.CountryName }}</td>
-          <td Class="tbldata">{{company.p.StateName}}</td>
-          <td Class="tbldata">{{company.p.CityName}}</td>
           <td Class="tbldata">{{company.p.GSTIN }}</td>
           <td Class="tbldata">{{company.p.Pan }}</td>
           <td class="tbldata">
@@ -41,7 +47,7 @@
             <span style="margin-left: 9px;" (click)="onDeleteClicked(company);">
               <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
             <!-- <span style="margin-left: 9px;" (click)="OnDownloadDocument(company);">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span> -->
+              <img src="\assets\icons\download.png" alt="logo" title="Delete" width="25px" height="25px" /></span> -->
           </td>
         </tr>
       </tbody>

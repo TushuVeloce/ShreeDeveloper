@@ -8,6 +8,7 @@ import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Device } from '@capacitor/device';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { Utils } from 'src/app/services/utils.service';
+import { BaseUrlService } from 'src/app/services/baseurl.service';
 
 
 
@@ -27,19 +28,26 @@ export class CompanyMasterComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-
-  headers: string[] = ['Sr.No.', 'Name', 'Owner Names', 'Contacts','Country ','State ','City ',' GST No',' Pan No', 'Action'];
+  imagePreviewUrl: string | null = null;
+  ImageBaseUrl: string = "";
+  TimeStamp = Date.now()
+  LoginToken = '';
+  headers: string[] = ['Sr.No.', 'Logo', 'Name', 'Owner Names', 'Contacts', ' GST No', ' Pan No', 'Action'];
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,
-    private serverCommunicatorService: ServerCommunicatorService) { }
+    private serverCommunicatorService: ServerCommunicatorService, private baseUrl: BaseUrlService
+  ) { }
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    this.FormulateMasterList();
+    this.FormulateCompanyMasterList();
     this.loadPaginationData();
+    this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
+
+    this.LoginToken = this.appStateManage.getLoginToken();
   }
 
-  private FormulateMasterList = async () => {
+  private FormulateCompanyMasterList = async () => {
     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList
@@ -62,7 +70,7 @@ export class CompanyMasterComponent implements OnInit {
           await this.uiUtils.showSuccessToster(`Company ${Company.p.Name} has been deleted!`);
           this.SearchString = '';
           this.loadPaginationData();
-          this.FormulateMasterList();
+          this.FormulateCompanyMasterList();
         });
       });
   }
@@ -71,8 +79,16 @@ export class CompanyMasterComponent implements OnInit {
     await this.uiUtils.showConfirmationMessage('Download',
       `Are you sure that you want to Download?`,
       async () => {
-       await this.downloadDocument(company)
+        await this.downloadDocument(company)
       });
+  }
+
+  loadImageFromBackend = (imageUrl: string) => {
+    if (imageUrl) {
+      return `${this.ImageBaseUrl}${imageUrl}/${this.LoginToken}?${this.TimeStamp}`;
+    } else {
+      return null;
+    }
   }
 
   downloadDocument = async (SelectItem: Company) => {
@@ -87,10 +103,10 @@ export class CompanyMasterComponent implements OnInit {
       }
 
       const platformInfo = await Device.getInfo();
-     // const ext = extension(blobResponse.type); // e.g., "pdf"
+      // const ext = extension(blobResponse.type); // e.g., "pdf"
       // let ext2 = mime.extension('text/plain');
       let ext2 = Utils.GetInstance().getMimeTypeFromFileName(blobResponse.type);
-      let fileName = SelectItem.p.LogoPath || 'downloaded-file' + '.'+ ext2;
+      let fileName = SelectItem.p.LogoPath || 'downloaded-file' + '.' + ext2;
       if (platformInfo.platform === 'web') {
         this.downloadInBrowser(blobResponse, fileName);
       } else {
@@ -118,7 +134,7 @@ export class CompanyMasterComponent implements OnInit {
     }
   }
 
-  private downloadInBrowser = (blob: Blob, filename: string)=> {
+  private downloadInBrowser = (blob: Blob, filename: string) => {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -149,7 +165,7 @@ export class CompanyMasterComponent implements OnInit {
     return this.DisplayMasterList.slice(start, start + this.pageSize);
   }
 
-  onPageChange  = (pageIndex: number): void => {
+  onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
   }
 
