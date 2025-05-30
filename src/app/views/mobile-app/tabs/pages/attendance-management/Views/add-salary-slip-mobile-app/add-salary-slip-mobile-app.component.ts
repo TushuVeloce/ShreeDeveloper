@@ -35,6 +35,8 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
   private CompanyName: string = '';
 
   private IsNewEntity = true;
+  public isMonthInvalid = false;
+  public isYearInvalid = false;
 
   constructor(
     private router: Router,
@@ -122,12 +124,14 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
 
       const options = this.monthList.map((item) => ({ p: item }));
 
-      let selectData: any[] = [];
+      // let selectData: any[] = [];
 
       this.openSelectModal(options, this.SelectedMonth, true, 'Select Leave Type', 3, (selected) => {
         this.SelectedMonth = selected;
         this.Entity.p.SelectedMonths = selected.map(item => item.p.Ref);
         this.Entity.p.SelectedMonthsName = selected.map(item => item.p.Name);
+        // After the user selects months, update the invalid flag
+        this.isMonthInvalid = this.Entity.p.SelectedMonthsName.length === 0;
       });
     } catch (error) {
 
@@ -150,6 +154,8 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
       this.openSelectModal(options, selectData, false, 'Select Year', 1, (selected) => {
         this.SelectedYear = selected;
         this.Entity.p.Year = selected[0]?.p?.Ref;
+        // After the user selects year, update the invalid flag
+        this.isYearInvalid = !this.Entity.p.Year;
       });
     } catch (error) {
 
@@ -201,6 +207,13 @@ export class AddSalarySlipMobileAppComponent implements OnInit {
 
   public async SaveSalarySlipRequest(): Promise<void> {
     try {
+      this.isMonthInvalid = this.Entity.p.SelectedMonthsName.length === 0;
+      this.isYearInvalid = !this.Entity.p.Year;
+
+      if (this.isMonthInvalid || this.isYearInvalid) {
+        // stop submission if invalid
+        return;
+      }
       this.isLoading = false;
       this.Entity.p.CompanyRef = this.CompanyRef;
       this.Entity.p.CompanyName = this.CompanyName;

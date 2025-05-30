@@ -22,13 +22,13 @@
 
     <div class="btn-group">
       <ion-button fill="outline" color="light" (click)="openPunchModal()"
-        [disabled]="!isCheckInEnabled || isOnLeave || !bothButtonsEnabled">
+        [disabled]="isOnLeave ? isOnLeave:!isCheckInEnabled|| !bothButtonsEnabled">
         <ion-ripple-effect></ion-ripple-effect>
         CHECKIN
       </ion-button>
 
       <ion-button color="warning" (click)="submitPunchOut()"
-        [disabled]="isCheckInEnabled || isOnLeave || !bothButtonsEnabled">
+        [disabled]="isOnLeave ? isOnLeave:isCheckInEnabled || !bothButtonsEnabled">
         <ion-ripple-effect></ion-ripple-effect>
         CHECKOUT
       </ion-button>

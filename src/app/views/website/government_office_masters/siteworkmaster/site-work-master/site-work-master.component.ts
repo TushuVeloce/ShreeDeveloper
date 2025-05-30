@@ -37,19 +37,9 @@ export class SiteWorkMasterComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {
     effect(() => {
-      this.getSiteWorkMasterListByCompanyRef();
       this.FormulateSiteWorkGroupListByCompanyRef()
     });
   }
-
-  // effect(() => {
-  //   // this.getSiteWorkMasterListByCompanyRef()
-  //   setTimeout(() => {
-  //     if (this.companyRef() > 0) {
-  //       this.getSiteWorkMasterListByCompanyRef();
-  //     }
-  //   }, 300);
-  // });
 
   async ngOnInit() {
     this.Entity.p.SiteWorkGroupRef = Number(this.appStateManage.StorageKey.getItem('sitegroup'))
@@ -70,8 +60,10 @@ export class SiteWorkMasterComponent implements OnInit {
     let lst = await SiteWorkGroup.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.SiteWorkGroupList = lst.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
-    // debugger
+    if (lst.length >= 0) {
+      this.SiteWorkGroupList = lst.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
+      this.getSiteWorkMasterListBySiteWorkGroupRef();
+    }
     if (lst.length <= 0) {
       this.Entity.p.SiteWorkGroupRef = 0;
     }
@@ -80,15 +72,15 @@ export class SiteWorkMasterComponent implements OnInit {
     }
   };
 
-  getSiteWorkMasterListByCompanyRef = async () => {
+  getSiteWorkMasterListBySiteWorkGroupRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await SiteWorkMaster.FetchEntireListByCompanyRef(
-      this.companyRef(),
+    let lst = await SiteWorkMaster.FetchEntireListBySiteWorkGroupRef(
+      this.Entity.p.SiteWorkGroupRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
@@ -120,7 +112,7 @@ export class SiteWorkMasterComponent implements OnInit {
           await this.uiUtils.showSuccessToster(
             `Site Work Master ${SiteWorkMaster.p.Name} has been deleted!`
           );
-          await this.getSiteWorkMasterListByCompanyRef();
+          await this.getSiteWorkMasterListBySiteWorkGroupRef();
           this.SearchString = '';
           this.loadPaginationData();
           // await this.FormulateSiteWorkMasterList();
@@ -168,22 +160,12 @@ export class SiteWorkMasterComponent implements OnInit {
 
   SiteGroup: number = 0;
 
-  onSiteGroupChange(siteGroupRef: number) {
-    // this.SiteGroup = sitegroup;
-    // this.MasterList = [];
-    this.DisplayMasterList = [];
-    if (siteGroupRef > 0) {
-      // this.Entity.p.SiteWorkGroupRef = sitegroup;
-      // const selectedSitegroupref = this.SiteWorkGroupList.find(
-      //   (site) => site.p.Ref === sitegroup
-      // );
-      // if (!selectedSitegroupref) {
-      //   return;
-      // }
-      this.appStateManage.StorageKey.setItem('sitegroup', String(siteGroupRef));
-      // let List = this.MasterList.filter(e => e.p.SiteWorkGroupRef == siteGroupRef)
-      // this.DisplayMasterList = List.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
-      this.loadPaginationData()
-    }
-  }
+  // onSiteGroupChange(siteGroupRef: number) {
+  //   if (siteGroupRef > 0) {
+  //     this.appStateManage.StorageKey.setItem('sitegroup', String(siteGroupRef));
+  //     let List = this.MasterList.filter(e => e.p.SiteWorkGroupRef == siteGroupRef)
+  //     this.DisplayMasterList = List.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
+  //     this.loadPaginationData()
+  //   }
+  // }
 }

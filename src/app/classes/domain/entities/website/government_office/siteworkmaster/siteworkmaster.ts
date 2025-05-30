@@ -114,7 +114,7 @@ export class SiteWorkMaster implements IPersistable<SiteWorkMaster> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): SiteWorkMaster[] {
+    sortPropertyName: string = ""): SiteWorkMaster[] {
     let result: SiteWorkMaster[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -157,7 +157,7 @@ export class SiteWorkMaster implements IPersistable<SiteWorkMaster> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new SiteWorkMasterFetchRequest();
-    req.SiteWorkGroupRef.push(ref);
+    req.SiteWorkGroupRefs.push(ref);
 
     let tdResponse = await SiteWorkMaster.FetchTransportData(req, errorHandler) as TransportData;
     return SiteWorkMaster.SingleInstanceFromTransportData(tdResponse);
@@ -177,6 +177,13 @@ export class SiteWorkMaster implements IPersistable<SiteWorkMaster> {
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new SiteWorkMasterFetchRequest();
     req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await SiteWorkMaster.FetchTransportData(req, errorHandler) as TransportData;
+    return SiteWorkMaster.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListBySiteWorkGroupRef(SiteWorkGroupRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new SiteWorkMasterFetchRequest();
+    req.SiteWorkGroupRefs.push(SiteWorkGroupRef)
     let tdResponse = await SiteWorkMaster.FetchTransportData(req, errorHandler) as TransportData;
     return SiteWorkMaster.ListFromTransportData(tdResponse);
   }

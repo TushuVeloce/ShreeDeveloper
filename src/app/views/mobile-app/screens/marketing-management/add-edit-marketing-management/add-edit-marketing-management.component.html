@@ -34,7 +34,7 @@
       <ion-text slot="end" class="status-text">
         {{ MarketingTypeName|| 'Select' }}
       </ion-text>
-
+ 
       <!-- Dropdown icon (chevron) on the right -->
       <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
     </ion-item>
@@ -68,7 +68,7 @@
     <!-- Page -->
     <ion-item class="input-item" *ngIf="Entity.p.MarketingType == MarketingType.PrintingMedia">
       <ion-input label="Page" labelPlacement="floating" placeholder="Enter Page"
-        [(ngModel)]="Entity.p.Page"></ion-input>
+        [(ngModel)]="Entity.p.Page" type="number" ></ion-input>
     </ion-item>
 
 
@@ -80,26 +80,34 @@
 
     <!-- Rate -->
     <ion-item class="input-item">
-      <ion-input label="Rate" labelPlacement="floating" placeholder="Enter Rate" [(ngModel)]="Entity.p.Rate"
+      <ion-input label="Rate" labelPlacement="floating" placeholder="Enter Rate" type="number" [(ngModel)]="Entity.p.Rate"
         (ngModelChange)="calculateTotal()"></ion-input>
     </ion-item>
 
     <!-- Quantity -->
     <ion-item class="input-item">
-      <ion-input label="Quantity" labelPlacement="floating" placeholder="Enter Quantity" [(ngModel)]="Entity.p.Quantity"
+      <ion-input label="Quantity" labelPlacement="floating" placeholder="Enter Quantity" type="number" [(ngModel)]="Entity.p.Quantity"
         (ngModelChange)="calculateTotal()"></ion-input>
     </ion-item>
 
     <!-- Total -->
     <ion-item class="input-item">
-      <ion-input label="Total" labelPlacement="floating" placeholder="Enter Total" [(ngModel)]="Entity.p.Total"
+      <ion-input label="Total" labelPlacement="floating" placeholder="Enter Total" type="number" [(ngModel)]="Entity.p.Total"
         readonly></ion-input>
     </ion-item>
 
     <!-- Name -->
-    <ion-item class="input-item">
-      <ion-input label="Name" labelPlacement="floating" placeholder="Enter Name"
-        [(ngModel)]="Entity.p.Name"></ion-input>
+    <!-- Select Vendor Service -->
+    <ion-item class="input-item" button (click)="selectEmployeeBottomsheet()">
+      <ion-label>Name</ion-label>
+    
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ selectedEmployeeName|| 'Select' }}
+      </ion-text>
+    
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
     </ion-item>
 
     <!-- Narration -->
@@ -118,7 +126,7 @@
         </ion-col>
         <ion-col size="6">
           <ion-button expand="block" (click)="SaveMarketingManagementMaster()" class="submit-button primary-button">
-            {{IsNewEntity?"Save":"Update"}}
+            {{IsNewEntity ? "Save" : "Update"}}
           </ion-button>
         </ion-col>
       </ion-row>

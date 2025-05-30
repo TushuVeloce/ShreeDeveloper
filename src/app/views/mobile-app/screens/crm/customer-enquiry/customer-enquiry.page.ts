@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CustomerStatus } from 'src/app/classes/domain/domainenums/domainenums';
+import { CustomerStatus, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { CustomerEnquiry } from 'src/app/classes/domain/entities/website/customer_management/customerenquiry/customerenquiry';
 import { CustomerFollowUpProps } from 'src/app/classes/domain/entities/website/customer_management/customerfollowup/customerfollowup';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { FilterService } from 'src/app/services/filter.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -21,9 +22,11 @@ export class CustomerEnquiryPage implements OnInit {
 
   SearchString: string = '';
   ModalOpen: boolean = false;
-  selectedStatus: number = CustomerStatus.Interested;
+  selectedStatus: number = 0;
   isLoading: boolean = false;
   companyRef: number = 0;
+  selectedFilters: any[] = [];
+  CustomerStatusList = DomainEnums.CustomerStatusList();
 
   CustomerStatusEnum = CustomerStatus;
   statusOptions = [
@@ -37,6 +40,7 @@ export class CustomerEnquiryPage implements OnInit {
     private uiUtils: UIUtils,
     private router: Router,
     private appStateManagement: AppStateManageService,
+    private filterService: FilterService
   ) { }
 
   ngOnInit(): void {
@@ -49,6 +53,7 @@ export class CustomerEnquiryPage implements OnInit {
 
   async handleRefresh(event: CustomEvent): Promise<void> {
     await this.loadCRMIfCompanyExists();
+    await this.filterCustomerList();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
@@ -77,6 +82,7 @@ export class CustomerEnquiryPage implements OnInit {
       this.CustomerEnquiryList = lst;
       this.CustomerEnquiryList.forEach(e => e.p.CustomerFollowUps.push(CustomerFollowUpProps.Blank()))
       this.FilteredCustomerEnquiryList = this.CustomerEnquiryList;
+      console.log('FilteredCustomerEnquiryList :', this.FilteredCustomerEnquiryList);
       this.filterCustomerList();
     } catch (error: any) {
       await this.uiUtils.showErrorMessage('Unexpected Error', error?.message || 'Something went wrong');
@@ -86,9 +92,13 @@ export class CustomerEnquiryPage implements OnInit {
   }
 
   filterCustomerList() {
-    this.FilteredCustomerEnquiryList = this.CustomerEnquiryList.filter(
-      (customer) => customer.p.CustomerStatus === this.selectedStatus
-    );
+    if (this.selectedStatus === 0) {
+      this.FilteredCustomerEnquiryList = this.CustomerEnquiryList;
+    } else {
+      this.FilteredCustomerEnquiryList = this.CustomerEnquiryList.filter(
+        (customer) => customer.p.CustomerStatus === this.selectedStatus
+      );
+    }
   }
 
   onEditClicked = async (item: CustomerEnquiry) => {
@@ -144,4 +154,49 @@ export class CustomerEnquiryPage implements OnInit {
       await this.uiUtils.showErrorMessage('Error', error?.message || 'Failed to open the add form.');
     }
   }
+
+  formatData = (list: any[]) => {
+    return list.map(item => ({
+      Ref: item.p.Ref,
+      Name: item.p.Name
+    }));
+  };
+
+  openFilterSheet = async () => {
+    const filterData = {
+      categories: [
+        {
+          Name: 'Customer Status',
+          Ref: 100,
+          multi: false,
+          date: false,
+          dependUponRef: 0,
+          options: this.CustomerStatusList
+        }
+      ]
+    };
+    try {
+      const res = await this.filterService.openFilter(filterData, this.selectedFilters);
+      console.log('res :', res);
+
+      if (res.selected && res.selected.length > 0) {
+        this.selectedFilters = res.selected;
+
+        for (const filter of this.selectedFilters) {
+
+          switch (filter.category.Ref) {
+            case 100:
+              this.selectedStatus = filter.selectedOptions[0].Ref;
+              break;
+          }
+        }
+        this.filterCustomerList();
+      } else {
+        this.selectedStatus = 0;
+        this.filterCustomerList();
+      }
+    } catch (error) {
+      console.error('Error in filter selection:', error);
+    }
+  };
 }
