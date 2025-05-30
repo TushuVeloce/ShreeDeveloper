@@ -25,7 +25,7 @@
       <label> Site Work Group</label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
         id="SiteWorkGroupRef" name="SiteWorkGroupRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteWorkGroupRef"
-        (ngModelChange)="onSiteGroupChange(Entity.p.SiteWorkGroupRef)">
+        (ngModelChange)="getSiteWorkMasterListBySiteWorkGroupRef()">
         <nz-option *ngFor="let siteworkgroup of SiteWorkGroupList" [nzValue]="siteworkgroup.p.Ref"
           [nzLabel]="siteworkgroup.p.Name"></nz-option>
       </nz-select>
