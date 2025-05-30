@@ -32,7 +32,7 @@ export class CustomerEnquiryComponent implements OnInit {
     'Name',
     'Contact No',
     // 'Date',
-    'Customer Status',
+    'City',
     'Action',
   ];
 
