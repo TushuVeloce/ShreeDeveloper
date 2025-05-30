@@ -27,7 +27,7 @@ export class SiteWorkMasterComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Name', 'Site Work Master Name', 'Display Order', 'Action'];
+  headers: string[] = ['Sr.No.', 'Site Work Master Name', 'Display Order', 'Action'];
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
@@ -43,9 +43,6 @@ export class SiteWorkMasterComponent implements OnInit {
 
   async ngOnInit() {
     this.Entity.p.SiteWorkGroupRef = Number(this.appStateManage.StorageKey.getItem('sitegroup'))
-    this.SiteWorkGroupList = await SiteWorkGroup.FetchEntireListByCompanyRef(this.companyRef(),
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
@@ -75,10 +72,11 @@ export class SiteWorkMasterComponent implements OnInit {
   getSiteWorkMasterListBySiteWorkGroupRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
+    if (this.Entity.p.SiteWorkGroupRef <= 0) {
+      await this.uiUtils.showErrorToster('Site Work Group not Selected');
       return;
     }
+    this.appStateManage.StorageKey.setItem('sitegroup', String(this.Entity.p.SiteWorkGroupRef));
     let lst = await SiteWorkMaster.FetchEntireListBySiteWorkGroupRef(
       this.Entity.p.SiteWorkGroupRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
@@ -157,15 +155,4 @@ export class SiteWorkMasterComponent implements OnInit {
       this.DisplayMasterList = this.MasterList;
     }
   };
-
-  SiteGroup: number = 0;
-
-  // onSiteGroupChange(siteGroupRef: number) {
-  //   if (siteGroupRef > 0) {
-  //     this.appStateManage.StorageKey.setItem('sitegroup', String(siteGroupRef));
-  //     let List = this.MasterList.filter(e => e.p.SiteWorkGroupRef == siteGroupRef)
-  //     this.DisplayMasterList = List.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
-  //     this.loadPaginationData()
-  //   }
-  // }
 }

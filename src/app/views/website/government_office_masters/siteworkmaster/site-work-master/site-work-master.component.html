@@ -9,7 +9,7 @@
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
       <nz-button nz-button class="btn1" (click)='AddSiteWorkMaster()'>
-        Add Site Work Master
+        Add Site Work
       </nz-button>
     </div>
     <div>
@@ -44,7 +44,6 @@
         <tbody>
           <tr *ngFor="let siteworkmaster of paginatedList; index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td Class="tbldata">{{siteworkmaster.p.SiteWorkGroupName}}</td>
             <td Class="tbldata">{{siteworkmaster.p.Name}}</td>
             <td Class="tbldata">{{siteworkmaster.p.DisplayOrder}}</td>
             <td class="tbldata">

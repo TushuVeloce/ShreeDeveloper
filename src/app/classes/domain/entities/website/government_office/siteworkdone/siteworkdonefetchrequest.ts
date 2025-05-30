@@ -5,21 +5,22 @@ import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class SiteWorkDoneFetchRequest {
-    public static readonly FetchRequestType: string = "SiteWorkDoneFetchRequest";
+  public static readonly FetchRequestType: string = "SiteWorkDoneFetchRequest";
 
-    CompanyRefs: number[] = [];
-    SiteWorkGroupRef: number[] = [];
+  CompanyRefs: number[] = [];
+  SiteWorkDoneRef: number[] = [];
+  SiteWorkRefs: number[] = [];
 
-    public MergeIntoTransportData = (td: TransportData) => {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, SiteWorkDoneFetchRequest.FetchRequestType) as DataCollection;
-        coll.Entries.push(this);
-    }
+  public MergeIntoTransportData = (td: TransportData) => {
+    let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, SiteWorkDoneFetchRequest.FetchRequestType) as DataCollection;
+    coll.Entries.push(this);
+  }
 
-    public FormulateTransportData = () => {
-        let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.Fetch);
-        this.MergeIntoTransportData(td);
+  public FormulateTransportData = () => {
+    let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.Fetch);
+    this.MergeIntoTransportData(td);
 
-        return td;
-    }
+    return td;
+  }
 }
 

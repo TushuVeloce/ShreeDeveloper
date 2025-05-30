@@ -22,18 +22,18 @@
     <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
       <label> Site Group</label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-        id="SiteGroupRef" name="SiteGroupRef" [nzSize]="'large'" [(ngModel)]="SiteGroupRef"
-        (ngModelChange)="onSiteGroupChange(SiteGroupRef)">
-        <nz-option *ngFor="let siteGroup of SiteWorkGroupList" [nzValue]="siteGroup.p.Ref"
-          [nzLabel]="siteGroup.p.Name"></nz-option>
+        id="SiteWorkGroupRef" name="SiteWorkGroupRef" [nzSize]="'large'" [(ngModel)]="SiteWorkGroupRef"
+        (ngModelChange)="getSiteWorkListBySiteWorkGroupRef()">
+        <nz-option *ngFor="let siteWorkGroup of SiteWorkGroupList" [nzValue]="siteWorkGroup.p.Ref"
+          [nzLabel]="siteWorkGroup.p.Name"></nz-option>
       </nz-select>
     </div>
     <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
       <label> Site Work </label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-        id="SiteWorkRef" name="SiteWorkRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteWorkRef"
-        (ngModelChange)="onSiteWorkChange(Entity.p.SiteWorkRef)">
-        <nz-option *ngFor="let sitework of DisplaySiteWorkMasterList" [nzValue]="sitework.p.Ref"
+        id="SiteWorkRef" name="SiteWorkRef" [nzSize]="'large'" [(ngModel)]="SiteWorkRef"
+        (ngModelChange)="getSiteWorkDoneListBySiteWorkRef()">
+        <nz-option *ngFor="let sitework of SiteWorkMasterList" [nzValue]="sitework.p.Ref"
           [nzLabel]="sitework.p.Name"></nz-option>
       </nz-select>
     </div>

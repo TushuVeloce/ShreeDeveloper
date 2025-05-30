@@ -15,10 +15,9 @@
         <div class="col-md-6">
           <label>Site Work Group</label>
           <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
-            placeholder="Enter Site Work Group" pattern="{{NameWithoutNos}}" #NameCtrl="ngModel" required
+            placeholder="Enter Site Work Group" #NameCtrl="ngModel" required
             (blur)="NameCtrl.control.markAsTouched()" />
           <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
-            <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithoutNosMsg}}</span>
             <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>

@@ -108,7 +108,7 @@ export class SiteWorkDone implements IPersistable<SiteWorkDone> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): SiteWorkDone[] {
+    sortPropertyName: string = ""): SiteWorkDone[] {
     let result: SiteWorkDone[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -151,7 +151,7 @@ export class SiteWorkDone implements IPersistable<SiteWorkDone> {
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new SiteWorkDoneFetchRequest();
-    req.SiteWorkGroupRef.push(ref);
+    req.SiteWorkDoneRef.push(ref);
 
     let tdResponse = await SiteWorkDone.FetchTransportData(req, errorHandler) as TransportData;
     return SiteWorkDone.SingleInstanceFromTransportData(tdResponse);
@@ -171,6 +171,13 @@ export class SiteWorkDone implements IPersistable<SiteWorkDone> {
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new SiteWorkDoneFetchRequest();
     req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await SiteWorkDone.FetchTransportData(req, errorHandler) as TransportData;
+    return SiteWorkDone.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListBySiteWorkRef(SiteWorkRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new SiteWorkDoneFetchRequest();
+    req.SiteWorkRefs.push(SiteWorkRef)
     let tdResponse = await SiteWorkDone.FetchTransportData(req, errorHandler) as TransportData;
     return SiteWorkDone.ListFromTransportData(tdResponse);
   }

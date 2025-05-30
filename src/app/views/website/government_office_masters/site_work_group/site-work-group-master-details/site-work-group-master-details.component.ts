@@ -23,8 +23,6 @@ export class SiteWorkGroupMasterDetailsComponent implements OnInit {
   InitialEntity: SiteWorkGroup = null as any;
   InputNumber: string = ValidationPatterns.InputNumber
   InputNumberMsg: string = ValidationMessages.InputNumberMsg
-  NameWithoutNos: string = ValidationPatterns.NameWithoutNos
-  NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;

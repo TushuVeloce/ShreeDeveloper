@@ -30,9 +30,7 @@ export class SiteWorkMasterDetailComponent implements OnInit {
   InitialEntity: SiteWorkMaster = null as any;
   SiteWorkGroupList: SiteWorkGroup[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  NameWithNos: string = ValidationPatterns.NameWithNos;
 
-  NameWithNosMsg: string = ValidationMessages.NameWithNosMsg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
   InputNumber: string = ValidationPatterns.InputNumber;
   InputNumberMsg: string = ValidationMessages.InputNumberMsg;
