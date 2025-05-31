@@ -7,7 +7,7 @@
         </button>
       </div>
       <div class="col-md-11">
-        <span class="detail_title">Add Salary Details</span>
+        <span class="detail_title">{{DetailsFormTitle}}</span>
       </div>
     </div>
     <ng-template #noDataTpl>
@@ -38,7 +38,7 @@
         <div class="col-md-4">
           <label>Total Days</label>
           <input type="number" name="TotalDays" class="form-control" id="TotalDays" [(ngModel)]="Entity.p.TotalDays"
-            placeholder="Enter TotalDays" required (click)="selectAllValue($event)" />
+            placeholder="Enter TotalDays" readonly/>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
@@ -79,8 +79,7 @@
         <div class="col-md-4">
           <label>Basic Salary</label>
           <input type="number" name="BasicSalary" class="form-control" id="BasicSalary"
-            [(ngModel)]="Entity.p.BasicSalary" placeholder="Enter Basic Salary" required
-            (click)="selectAllValue($event)" (ngModelChange)="calculategrosstotal()" />
+            [(ngModel)]="Entity.p.BasicSalary" placeholder="Enter Basic Salary" required readonly (ngModelChange)="calculategrosstotal()" />
         </div>
         <div class="col-md-4">
           <label>Total Allowance</label>
@@ -108,7 +107,7 @@
             placeholder="Enter Gross Total" readonly />
         </div>
       </div>
-      <div style="width: 100%; margin-top: 1rem; " class="d-flex justify-content-center">
+      <div style="width: 100%" class="d-flex justify-content-center" style="margin-top: 1rem;">
         <hr style="border: 2px solid brown" width="20%" />
       </div>
       <div class="row">

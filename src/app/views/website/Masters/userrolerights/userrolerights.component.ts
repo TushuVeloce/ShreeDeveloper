@@ -33,7 +33,7 @@ export class UserrolerightsComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   ModuleList = DomainEnums.ModuleList(true, '--Select Module Type--');
-  FeatureGroupList = DomainEnums.ApplicationFeatureGroupList(true, '--Select Feature Group--');
+  FeatureGroupList = DomainEnums.ApplicationFeatureGroupList(true, '-- Select Feature Group --');
   FeatureToGroupMapList = DomainEnums.FeatureToFeatureGroupMapList();
 
   FeatureGroupRef: number = 0;

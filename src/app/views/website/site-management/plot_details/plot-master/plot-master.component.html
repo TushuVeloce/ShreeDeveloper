@@ -1,53 +1,57 @@
-<div class="container-fluid">
-  <div class="headers">
+<div>
     <div class="row">
-      <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
-        <h5 style="padding-top: 3px;" class="title title_light">All Plots</h5>
+       <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2">
+        <h5 style="padding-top: 3px;" class="title title_light">Plot List</h5>
       </div>
-      <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light">
+       <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
         <app-shared-filter [masterList]="MasterList"
           [filterFields]="['PlotNo', 'AreaInSqm', 'AreaInSqft', 'GovermentRatePerSqm', 'BasicRatePerSqft', 'BookingRemarkName']"
           (filteredList)="DisplayMasterList = $event"></app-shared-filter>
       </div>
-      <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
+      <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
         <nz-button nz-button class="btn1" (click)="AddPlot()">
           Add Plot
         </nz-button>
       </div>
-    </div>
-    <ng-template #noDataTpl>
-      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
-        No Data
-      </div>
-    </ng-template>
-    <div class="row">
-      <div class="card-body" style="margin-left: 14px;">
+      <ng-template #noDataTpl>
+        <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+          No Data
+        </div>
+      </ng-template>
+      <div class="card-body" style="margin-left: 14px">
         <form autocomplete="off">
           <div class="row">
-            <div class="col-md-4">
-              <label for="SiteManagementRef"><b>Site Name</b></label>
-              <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-                nzPlaceHolder="Select" id="SiteManagementRef" name="SiteManagementRef" [nzSize]="'large'"
-                [(ngModel)]="Entity.p.SiteManagementRef" (ngModelChange)="onsitechange(Entity.p.SiteManagementRef)">
-                <!-- <nz-option [nzValue]="0" nzLabel="All"></nz-option> -->
-                <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
-              </nz-select>
-            </div>
-            <div class="col-md-4">
-              <label>Booking Remark</label>
-              <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-                nzPlaceHolder="Select" id="CurrentBookingRemark" name="CurrentBookingRemark" [nzSize]="'large'"
-                [(ngModel)]="Entity.p.CurrentBookingRemark"
-                (ngModelChange)="getPlotListBySiteandBookingRemarkRef(Entity.p.SiteManagementRef,Entity.p.CurrentBookingRemark)">
-                <nz-option *ngFor="let bookingremark of BookingRemarkList" [nzValue]="bookingremark.Ref"
-                  [nzLabel]="bookingremark.Name"></nz-option>
-              </nz-select>
+            <div class="card-body" style="margin-left: 14px;">
+              <form autocomplete="off">
+                <div class="row">
+                  <div class="col-md-4">
+                    <label for="SiteManagementRef"><b>Site</b></label>
+                    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+                      nzPlaceHolder="Select" id="SiteManagementRef" name="SiteManagementRef" [nzSize]="'large'"
+                      [(ngModel)]="Entity.p.SiteManagementRef"
+                      (ngModelChange)="onsitechange(Entity.p.SiteManagementRef)">
+                      <!-- <nz-option [nzValue]="0" nzLabel="All"></nz-option> -->
+                      <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref"
+                        [nzLabel]="site.p.Name"></nz-option>
+                    </nz-select>
+                  </div>
+                  <div class="col-md-4">
+                    <label>Booking Remark</label>
+                    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+                      nzPlaceHolder="Select" id="CurrentBookingRemark" name="CurrentBookingRemark" [nzSize]="'large'"
+                      [(ngModel)]="Entity.p.CurrentBookingRemark"
+                      (ngModelChange)="getPlotListBySiteandBookingRemarkRef(Entity.p.SiteManagementRef,Entity.p.CurrentBookingRemark)">
+                      <nz-option *ngFor="let bookingremark of BookingRemarkList" [nzValue]="bookingremark.Ref"
+                        [nzLabel]="bookingremark.Name"></nz-option>
+                    </nz-select>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </form>
       </div>
     </div>
-  </div>
   <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
     <div class="table-container" style="margin-top: 2rem;">
       <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"

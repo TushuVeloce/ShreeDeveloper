@@ -23,7 +23,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   Entity: SalaryGeneration = SalaryGeneration.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
-  DetailsFormTitle: 'New Salary' | 'Edit Salary' = 'New Salary';
+  DetailsFormTitle: 'New Salary Details' | 'Edit Salary Details' = 'New Salary Details';
   IsDropdownDisabled: boolean = false;
   InitialEntity: SalaryGeneration = null as any;
   EmployeeList: Employee[] = [];
@@ -40,10 +40,11 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.isEmployeeDisabled = true
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Salary' : 'Edit Salary';
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Salary Details' : 'Edit Salary Details';
       this.Entity = SalaryGeneration.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.calculategrosstotal()
     } else {
       this.Entity = SalaryGeneration.CreateNewInstance();
       SalaryGeneration.SetCurrentInstance(this.Entity);

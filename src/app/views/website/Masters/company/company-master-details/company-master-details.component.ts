@@ -33,7 +33,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Company' | 'Edit Company' = 'New Company';
   IsDropdownDisabled: boolean = false;
   InitialEntity: Company = null as any;
-  CompanyTypeList = DomainEnums.CompanyTypeList(true, '--Select Company Type--');
+  CompanyTypeList = DomainEnums.CompanyTypeList(true, '-- Select Company Type --');
   dateOfInCorporation: string | null = null;
   lastDateOfFirstFinancialYear: string | null = null;
 
@@ -70,6 +70,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
   @ViewChild('PinCodeCtrl') PinCodeControl!: NgModel;
   @ViewChild('AddressLine1Ctrl') AddressLine1Control!: NgModel;
   @ViewChild('GSTINCtrl') GSTINInputControl!: NgModel;
+  @ViewChild('PanCtrl') PanInputControl!: NgModel;
   @ViewChild('CINCtrl') CINInputControl!: NgModel;
   @ViewChild('DateOfInCorporationCtrl') DateOfInCorporationInputControl!: NgModel;
   @ViewChild('LastDateOfFirstFinancialYearCtrl') LastDateOfFirstFinancialYearInputControl!: NgModel;
@@ -282,6 +283,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
     this.PinCodeControl.control.markAsUntouched();
     this.AddressLine1Control.control.markAsUntouched();
     this.GSTINInputControl.control.markAsUntouched();
+    this.PanInputControl.control.markAsUntouched();
     this.CINInputControl.control.markAsUntouched();
     this.DateOfInCorporationInputControl.control.markAsUntouched();
     this.LastDateOfFirstFinancialYearInputControl.control.markAsUntouched();
@@ -294,6 +296,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
     this.PinCodeControl.control.markAsPristine();
     this.AddressLine1Control.control.markAsPristine();
     this.GSTINInputControl.control.markAsPristine();
+    this.PanInputControl.control.markAsPristine();
     this.CINInputControl.control.markAsPristine();
     this.DateOfInCorporationInputControl.control.markAsPristine();
     this.LastDateOfFirstFinancialYearInputControl.control.markAsPristine();

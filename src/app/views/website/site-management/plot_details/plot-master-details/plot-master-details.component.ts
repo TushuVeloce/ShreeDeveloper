@@ -28,7 +28,7 @@ export class PlotMasterDetailsComponent implements OnInit {
   isSaveDisabled: boolean = false;
   IsDropdownDisabled: boolean = false;
   InitialEntity: Plot = null as any;
-  BookingRemarkList = DomainEnums.BookingRemarkList(true, '---Select Booking Remark---');
+  BookingRemarkList = DomainEnums.BookingRemarkList(true, '--- Select Booking Remark ---');
   BookingRemark = BookingRemark
   SiteRf: number = 0
   SiteName: string = ''

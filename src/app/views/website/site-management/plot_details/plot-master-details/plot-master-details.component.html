@@ -43,7 +43,7 @@
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
-          <label for="AreaInSqft">Area in Sq ft</label>
+          <label for="AreaInSqft">Area in Sqft</label>
           <input type="number" class="form-control" name="AreaInSqft" id="AreaInSqft" [(ngModel)]="Entity.p.AreaInSqft"
             (ngModelChange)="convertSqftToSqm()" #AreaInSqftCtrl="ngModel" required
             (blur)="AreaInSqftCtrl.control.markAsTouched()" placeholder="Enter Area in Sqft"
@@ -91,7 +91,7 @@
             readonly />
         </div>
         <div class="col-md-4" *ngIf="Entity.p.CurrentBookingRemark != BookingRemark.Shree_Booked">
-          <label>Customer Name</label>
+          <label>Owner Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="Entity.p.CurrentOwnerRef" name="CurrentOwnerRef"
             required id="CurrentOwnerRef" (ngModelChange)="getCustomerDataBycustomerRef(Entity.p.CurrentOwnerRef)">

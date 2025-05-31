@@ -19,9 +19,9 @@
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4 mb-3">
           <div>
-            <label>Name</label>
+            <label>Employee Name</label>
             <input type="text" name="Name " [(ngModel)]="Entity.p.Name " class="form-control" id="Name " required
-              placeholder="Enter First Name" [pattern]="NameWithoutNos" #NameCtrl="ngModel"
+              placeholder="Enter Employee Name" [pattern]="NameWithoutNos" #NameCtrl="ngModel"
               (blur)="NameCtrl.control.markAsTouched()" />
             <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
               <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithoutNosMsg}}</span>
@@ -89,7 +89,7 @@
           <div>
             <label>Address Line 1</label>
             <input type="text" name="address" [(ngModel)]="Entity.p.AddressLine1" class="form-control" id="address"
-              required placeholder="Enter Address" #AddressLine1Ctrl="ngModel"
+              required placeholder="Enter Address Line 1" #AddressLine1Ctrl="ngModel"
               (blur)="AddressLine1Ctrl.control.markAsTouched()" />
             <div *ngIf="(AddressLine1Ctrl.invalid && (AddressLine1Ctrl.touched || AddressLine1Ctrl.dirty))">
               <span class="validation-text" *ngIf="AddressLine1Ctrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -100,7 +100,7 @@
           <div>
             <label>Address Line 2</label>
             <input type="text" name="address" [(ngModel)]="Entity.p.AddressLine2" class="form-control" id="address"
-              required placeholder="Enter Address" />
+              required placeholder="Enter Address Line 2" />
           </div>
         </div>
         <div class="col-md-4 mb-3">
@@ -136,7 +136,7 @@
         <div class="col-md-4 mb-3">
           <div>
             <label>Emergency Contact Name</label>
-            <input type="text" name="EmergencyContactName " [(ngModel)]="Entity.p.EmergencyContactName "
+            <input type="text" name="EmergencyContactName " [(ngModel)]="Entity.p.EmergencyContactName " placeholder="Enter Emergency Contact Name"
               class="form-control" id="EmergencyContactName" required [pattern]="NameWithoutNos" #EmergencyContactNameCtrl="ngModel"
               (blur)="EmergencyContactNameCtrl.control.markAsTouched()" />
             <div *ngIf="(EmergencyContactNameCtrl.invalid && (EmergencyContactNameCtrl.touched || EmergencyContactNameCtrl.dirty))">
@@ -148,7 +148,7 @@
         <div class="col-md-4 mb-3">
           <div>
             <label>Emergency Contact No</label>
-            <input type="text" name="EmergencyContactNo " [(ngModel)]="Entity.p.EmergencyContactNo "
+            <input type="text" name="EmergencyContactNo " [(ngModel)]="Entity.p.EmergencyContactNo" placeholder="Enter Emengency Contact No"
               class="form-control" id="EmergencyContactNo "  pattern="{{INDPhoneNo}}" #EmergencyContactNoCtrl="ngModel"
               required
             (blur)="EmergencyContactNoCtrl.control.markAsTouched()" />
@@ -217,7 +217,7 @@
           <div>
             <label>Salary Per Month</label>
             <input type="number" name="SalaryPerMonth" [(ngModel)]="Entity.p.SalaryPerMonth  " class="form-control"
-              id="SalaryPerMonth  " required #SalaryPerMonthCtrl="ngModel"
+              id="SalaryPerMonth" placeholder="Enter Salary Per Month" required #SalaryPerMonthCtrl="ngModel"
               (blur)="SalaryPerMonthCtrl.control.markAsTouched()"  (click)="selectAllValue($event)"/>
             <div *ngIf="(SalaryPerMonthCtrl.invalid && (SalaryPerMonthCtrl.touched || SalaryPerMonthCtrl.dirty))">
               <span class="validation-text" *ngIf="SalaryPerMonthCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -228,7 +228,7 @@
           <div>
             <label>Salary Per Year</label>
             <input type="number" name="SalaryPerYear" [(ngModel)]="Entity.p.SalaryPerYear  " class="form-control"
-              id="SalaryPerYear  " required #SalaryPerYearCtrl="ngModel"
+              id="SalaryPerYear" placeholder="Enter Salary Per Year" required #SalaryPerYearCtrl="ngModel"
               (blur)="SalaryPerYearCtrl.control.markAsTouched()"  (click)="selectAllValue($event)"/>
             <div *ngIf="(SalaryPerYearCtrl.invalid && (SalaryPerYearCtrl.touched || SalaryPerYearCtrl.dirty))">
               <span class="validation-text" *ngIf="SalaryPerYearCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -239,7 +239,7 @@
           <div>
             <label>Bank Name</label>
             <input type="text" name="BankName  " [(ngModel)]="Entity.p.BankName  " class="form-control" id="BankName"
-              [pattern]="NameWithoutNos" required #BankNameCtrl="ngModel"
+              [pattern]="NameWithoutNos" placeholder="Enter Bank Name" required #BankNameCtrl="ngModel"
               (blur)="BankNameCtrl.control.markAsTouched()" />
             <div *ngIf="(BankNameCtrl.invalid && (BankNameCtrl.touched || BankNameCtrl.dirty))">
               <span class="validation-text" *ngIf="BankNameCtrl.errors?.['pattern']">{{NameWithoutNosMsg}}</span>
@@ -251,7 +251,7 @@
           <div>
             <label>Branch Name</label>
             <input type="text" name="BranchName" [(ngModel)]="Entity.p.BranchName" class="form-control" id="BranchName"
-              required [pattern]="NameWithoutNos" #BranchNameCtrl="ngModel"
+              required [pattern]="NameWithoutNos" placeholder="Enter Branch Name" #BranchNameCtrl="ngModel"
               (blur)="BranchNameCtrl.control.markAsTouched()" />
             <div *ngIf="(BranchNameCtrl.invalid && (BranchNameCtrl.touched || BranchNameCtrl.dirty))">
               <span class="validation-text" *ngIf="BranchNameCtrl.errors?.['pattern']">{{NameWithoutNosMsg}}</span>
@@ -263,7 +263,7 @@
           <div>
             <label>IFSC</label>
             <input type="text" name="IFSC" [(ngModel)]="Entity.p.IFSC" class="form-control" id="IFSC" required
-              #IFSCCtrl="ngModel" [pattern]="IFSCPattern" (blur)="IFSCCtrl.control.markAsTouched()" />
+              #IFSCCtrl="ngModel" placeholder="Enter IFSC" [pattern]="IFSCPattern" (blur)="IFSCCtrl.control.markAsTouched()" />
             <div *ngIf="(IFSCCtrl.invalid && (IFSCCtrl.touched || IFSCCtrl.dirty))">
               <span class="validation-text" *ngIf="IFSCCtrl.errors?.['pattern']">{{IFSCMsg}}</span>
               <span class="validation-text" *ngIf="IFSCCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -272,9 +272,9 @@
         </div>
         <div class="col-md-4 mb-3">
           <div>
-            <label>Banck Account No</label>
+            <label>Account No</label>
             <input type="text" name="BanckAccountNo" [(ngModel)]="Entity.p.BanckAccountNo" class="form-control"
-              id="BanckAccountNo" #AccountNumberCtrl="ngModel" required pattern="{{LargeInputNumber}}"
+              id="BanckAccountNo" placeholder="Enter Account No" #AccountNumberCtrl="ngModel" required pattern="{{LargeInputNumber}}"
               (blur)="AccountNumberCtrl.control.markAsTouched()" />
             <div *ngIf="(AccountNumberCtrl.invalid && (AccountNumberCtrl.touched || AccountNumberCtrl.dirty))">
               <span class="validation-text" *ngIf="AccountNumberCtrl.errors?.['pattern']">{{LargeInputNumberMsg}}</span>

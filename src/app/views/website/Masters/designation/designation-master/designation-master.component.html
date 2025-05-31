@@ -14,26 +14,26 @@
     </div>
     <div>
     </div>
-  </div>
-  <ng-template #noDataTpl>
-    <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
-      No Data
-    </div>
-  </ng-template>
-  <div class="card-body" style="margin-left: 14px;">
-    <form autocomplete="off">
-      <div class="row">
-        <div class="col-md-4">
-          <label for="DepartmentRef"><b>Department</b></label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef" name="DepartmentRef" required
-            id="DepartmentRef" (ngModelChange)="getDesignationListByDepartmentRef()">
-            <nz-option *ngFor="let Department of DepartmentList" [nzLabel]="Department.p.Name"
-              [nzValue]="Department.p.Ref"></nz-option>
-          </nz-select>
-        </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
       </div>
-    </form>
+    </ng-template>
+    <div class="card-body" style="margin-left: 14px;">
+      <form autocomplete="off">
+        <div class="row">
+          <div class="col-md-4">
+            <label for="DepartmentRef"><b>Department</b></label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef" name="DepartmentRef" required
+              id="DepartmentRef" (ngModelChange)="getDesignationListByDepartmentRef()">
+              <nz-option *ngFor="let Department of DepartmentList" [nzLabel]="Department.p.Name"
+                [nzValue]="Department.p.Ref"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
   <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
     <div class="table-container">

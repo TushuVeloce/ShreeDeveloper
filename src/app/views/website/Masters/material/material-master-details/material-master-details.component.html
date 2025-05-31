@@ -20,24 +20,24 @@
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
-            <label>Code</label>
+            <label>Material Code</label>
             <input type="text" [(ngModel)]="Entity.p.Code" name="Code" class="form-control" id="Code" required
-              placeholder="Enter Code" #CodeCtrl="ngModel" (blur)="CodeCtrl.control.markAsTouched()" />
+              placeholder="Enter Material Code" #CodeCtrl="ngModel" (blur)="CodeCtrl.control.markAsTouched()" />
             <Validation [control]="CodeCtrl" />
           </div>
         </div>
         <div class="col-md-4">
           <div>
-            <label>Name</label>
+            <label>Material Name</label>
             <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
-              placeholder="Enter Name" #NameCtrl="ngModel"
+              placeholder="Enter Material Name" #NameCtrl="ngModel"
               (blur)="NameCtrl.control.markAsTouched()" />
             <!-- <Validation [control]="NameCtrl" [patternMessage]="NameWithNosAndSpaceMsg" /> -->
           </div>
         </div>
 
         <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
-          <label>Unit</label>
+          <label>Material Unit</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="UnitRef" name="UnitRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UnitRef">
             <nz-option *ngFor="let unit of UnitList" [nzValue]="unit.p.Ref" [nzLabel]="unit.p.Name"></nz-option>

@@ -1,52 +1,55 @@
 <div>
   <div class="row">
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2">
-      <h5 style="padding-top: 3px;" class="title title_light">Sub Stage Master</h5>
+      <h5 style="padding-top: 3px" class="title title_light">
+        Sub Stage Master
+      </h5>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
-      <app-shared-filter [masterList]="MasterList"
-        [filterFields]="['Name', 'StageName', 'StageTypeName']"
+      <app-shared-filter [masterList]="MasterList" [filterFields]="['Name', 'StageName', 'StageTypeName']"
         (filteredList)="DisplayMasterList = $event"></app-shared-filter>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
-      <nz-button nz-button class="btn1" (click)='AddSubStage()'>
+      <nz-button nz-button class="btn1" (click)="AddSubStage()">
         Add Sub Stage
       </nz-button>
     </div>
-    <div>
-    </div>
-  </div>
-  <ng-template #noDataTpl>
-    <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
-      No Data
-    </div>
-  </ng-template>
-  <div class="row">
-    <div class="col-md-4">
-      <label><b>Stage</b></label>
-      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-        id="StageRef" name="StageRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef"
-        (ngModelChange)="getSubStageListByStageRef(Entity.p.StageRef)">
-        <!-- <nz-option [nzValue]="0" nzLabel="All"></nz-option> -->
-        <nz-option *ngFor="let stage of StageList" [nzValue]="stage.p.Ref" [nzLabel]="stage.p.Name"></nz-option>
-      </nz-select>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
+    </ng-template>
+    <div class="card-body" style="margin-left: 14px">
+      <form autocomplete="off">
+        <div class="row">
+          <div class="col-md-4">
+            <label><b>Stage</b></label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="StageRef" name="StageRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef"
+              (ngModelChange)="getSubStageListByStageRef(Entity.p.StageRef)">
+              <!-- <nz-option [nzValue]="0" nzLabel="All"></nz-option> -->
+              <nz-option *ngFor="let stage of StageList" [nzValue]="stage.p.Ref" [nzLabel]="stage.p.Name"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
   <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
     <div class="table-container">
       <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
-        [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+        [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
         <thead>
           <tr>
-            <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+            <th *ngFor="let header of headers" class="tblheader">
+              {{ header }}
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let SubStage of paginatedList(); index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td Class="tbldata">{{SubStage.p.StageName}}</td>
-            <td Class="tbldata">{{SubStage.p.StageTypeName}}</td>
-            <td Class="tbldata">{{SubStage.p.Name}}</td>
+            <td Class="tbldata">{{ SubStage.p.StageName }}</td>
+            <td Class="tbldata">{{ SubStage.p.StageTypeName }}</td>
+            <td Class="tbldata">{{ SubStage.p.Name }}</td>
             <td class="tbldata">
               <Edit-Icon (editClick)="onEditClicked(SubStage)" />
               <Delete-Icon (deleteClicked)="onDeleteClicked(SubStage)" />
@@ -71,3 +74,4 @@
   <div *ngIf="DisplayMasterList.length === 0">
     <Data-Not-Found />
   </div>
+</div>

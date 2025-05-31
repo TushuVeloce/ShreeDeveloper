@@ -22,7 +22,7 @@ export class StageMasterDetailsComponent implements OnInit {
   Entity: Stage = Stage.CreateNewInstance();
   DetailsFormTitle: 'New Stage' | 'Edit Stage' = 'New Stage';
   InitialEntity: Stage = null as any;
-  StageTypeList = DomainEnums.StageTypeList(true,'select stage');
+  StageTypeList = DomainEnums.StageTypeList(true,'-- Select Stage Type --');
 
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 

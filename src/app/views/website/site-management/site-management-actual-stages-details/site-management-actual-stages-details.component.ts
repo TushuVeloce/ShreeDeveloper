@@ -36,7 +36,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   ExpenseTypeEntity: ExpenseType = ExpenseType.CreateNewInstance();
   VendorServicesEntity: Vendor = Vendor.CreateNewInstance();
   private IsNewEntity: boolean = true;
-  DetailsFormTitle: 'New Stage' | 'Edit Stage' = 'New Stage';
+  DetailsFormTitle: 'New Actual Stage' | 'Edit Actual Stage' = 'New Actual Stage';
   InitialEntity: ActualStages = null as any;
   isSaveDisabled: boolean = false;
   VendorList: Vendor[] = [];
@@ -95,7 +95,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     await this.getSiteListByCompanyRef();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Stage' : 'Edit Stage';
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Actual Stage' : 'Edit Actual Stage';
       debugger
       this.Entity = ActualStages.GetCurrentInstance();
       if (this.Entity.p.Date != '') {

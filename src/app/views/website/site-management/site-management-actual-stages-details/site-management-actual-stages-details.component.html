@@ -7,7 +7,7 @@
         </button>
       </div>
       <div class="col-md-11">
-        <span class="detail_title">Actual Stage</span>
+        <span class="detail_title">{{DetailsFormTitle}}</span>
       </div>
     </div>
     <ng-template #noDataTpl>
@@ -108,7 +108,7 @@
           <label for="SelectedMonths"><b>Months</b></label>
           <nz-select [(ngModel)]="Entity.p.SelectedMonths" [nzNotFoundContent]="noDataTpl" nzMode="multiple"
             id="SelectedMonths" name="SelectedMonths" nzShowSearch nzAllowClear
-            (ngModalChange)="onSelectedMonthsChange(Entity.p.SelectedMonths)" nzPlaceHolder="Select services">
+            (ngModalChange)="onSelectedMonthsChange(Entity.p.SelectedMonths)" nzPlaceHolder="Select Months">
             <nz-option *ngFor="let SelectedMonths of MonthList" [nzValue]="SelectedMonths.Ref"
               [nzLabel]="SelectedMonths.Name"></nz-option>
           </nz-select>
@@ -159,7 +159,7 @@
           'col-lg-3 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef === ExpenseTypeRef,
           'col-lg-4 col-md-6 col-sm-12 mb-3': Entity.p.ExpenseTypeRef !== ExpenseTypeRef || !Entity.p.ExpenseTypeRef
         }">
-          <label>Vendor Services</label>
+          <label>Vendor Service</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" [disabled]="VendorServiceListByVendor.length == 0"
             nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorServiceRef" name="VendorServiceRef"
             [nzSize]="'large'" [(ngModel)]="Entity.p.VendorServiceRef">
@@ -458,12 +458,12 @@
         <hr style="border: 2px solid brown" width="20%" />
       </div>
       <div class="row" style="margin-top: 1rem">
-        <div class="col-md-6 mb-2">
+         <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem">
           <label><b>Grand Total</b></label>
           <input type="number" [(ngModel)]="Entity.p.GrandTotal" name="GrandTotal" class="form-control" id="GrandTotal"
             placeholder="GrandTotal" readonly/>
         </div>
-        <div class="col-md-6 mb-2">
+         <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem">
           <label><b>Description</b></label>
           <textarea type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
             id="Description" rows="1" placeholder="Enter Description" #DescriptionCtrl="ngModel"
@@ -473,7 +473,7 @@
             <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-        <div class="col-md-6 mb-2">
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3" style="margin-top: 1rem">
           <label><b>Sign</b></label>
           <input type="text" [(ngModel)]="Entity.p.CreatedByName" name="CreatedByName" class="form-control"
             id="CreatedByName" placeholder="Enter Sign" readonly [pattern]="NameWithNosAndSpace"

@@ -68,16 +68,16 @@ export class CustomerFollowupDetailsComponent implements OnInit {
 
   ContactModesList = DomainEnums.ContactModeList(
     true,
-    '--Select Contact Mode --'
+    '-- Select Contact Mode --'
   );
   LeadSourceList = DomainEnums.MarketingModesList(
     true,
-    '--Select Lead Source --'
+    '-- Select Lead Source --'
   );
   LeadSourceEnum = MarketingModes;
   CustomerStatusList = DomainEnums.CustomerStatusList(
     true,
-    '--Select Customer Status --'
+    '-- Select Customer Status --'
   );
   CustomerStatusEnum = CustomerStatus
   companyRef = this.companystatemanagement.SelectedCompanyRef;

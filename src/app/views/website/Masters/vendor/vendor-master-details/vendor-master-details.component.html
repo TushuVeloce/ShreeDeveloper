@@ -39,7 +39,7 @@
         <div class="col-md-6 col-md-4 col-sm-12">
           <label for="Name">Vendor Name</label>
           <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name"
-            placeholder="Enter Name" [pattern]="NameWithNosAndSpace" #NameCtrl="ngModel" required
+            placeholder="Enter Vendor Name" [pattern]="NameWithNosAndSpace" #NameCtrl="ngModel" required
             (blur)="NameCtrl.control.markAsTouched()" />
           <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
             <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithNosAndSpaceMsg}}</span>
@@ -60,7 +60,7 @@
         <div class="col-md-4 col-sm-12">
           <label for="MobileNo">Mobile Number</label>
           <input type="text" [(ngModel)]="Entity.p.MobileNo" name="MobileNo" class="form-control" id="MobileNo" required
-            placeholder="Enter Phone No." pattern="{{INDPhoneNo}}" #MobileNoCtrl="ngModel" required
+            placeholder="Enter Mobile No." pattern="{{INDPhoneNo}}" #MobileNoCtrl="ngModel" required
             (blur)="MobileNoCtrl.control.markAsTouched()" />
           <div *ngIf="(MobileNoCtrl.invalid && (MobileNoCtrl.touched || MobileNoCtrl.dirty))">
             <span class="validation-text" *ngIf="MobileNoCtrl.errors?.['pattern']">{{INDPhoneNoMsg}}</span>
@@ -144,7 +144,7 @@
         <div class="col-md-4 col-sm-12">
           <label>Account No</label>
           <input type="string" [(ngModel)]="Entity.p.AccountNumber" name="AccountNo" class="form-control" id="AccountNo"
-            placeholder="Enter Bank Account Number" #AccountNumberCtrl="ngModel" required pattern="{{LargeInputNumber}}"
+            placeholder="Enter Bank Account No" #AccountNumberCtrl="ngModel" required pattern="{{LargeInputNumber}}"
             (blur)="AccountNumberCtrl.control.markAsTouched()" />
           <div *ngIf="(AccountNumberCtrl.invalid && (AccountNumberCtrl.touched || AccountNumberCtrl.dirty))">
             <span class="validation-text" *ngIf="AccountNumberCtrl.errors?.['pattern']">{{LargeInputNumberMsg}}</span>
@@ -164,7 +164,7 @@
         <div class="col-md-4 col-sm-12">
           <label>GSTIN</label>
           <input type="text" [(ngModel)]="Entity.p.GSTIN" name="GSTIN" class="form-control" id="GSTIN"
-            pattern="{{GSTINPattern}}" placeholder="Enter GST" #GSTINCtrl="ngModel"
+            pattern="{{GSTINPattern}}" placeholder="Enter GSTIN" #GSTINCtrl="ngModel"
             (blur)="GSTINCtrl.control.markAsTouched()" />
           <div *ngIf="(GSTINCtrl.invalid && (GSTINCtrl.touched || GSTINCtrl.dirty))">
             <span class="validation-text" *ngIf="GSTINCtrl.errors?.['pattern']">{{GSTINMsg}}</span>
@@ -175,7 +175,7 @@
         <div class="col-md-4 col-sm-12">
           <label>PAN </label>
           <input type="text" [(ngModel)]="Entity.p.Pan" name="Pan" class="form-control" id="Pan"
-            pattern="{{PANPattern}}" placeholder="Enter Pan" #PANCtrl="ngModel" required
+            pattern="{{PANPattern}}" placeholder="Enter PAN" #PANCtrl="ngModel" required
             (blur)="PANCtrl.control.markAsTouched()" />
           <div *ngIf="(PANCtrl.invalid && (PANCtrl.touched || PANCtrl.dirty))">
             <span class="validation-text" *ngIf="PANCtrl.errors?.['pattern']">{{PANMsg}}</span>
@@ -197,7 +197,7 @@
           <nz-select [(ngModel)]="Entity.p.MaterialListSuppliedByVendor" [nzNotFoundContent]="noDataTpl"
             nzMode="multiple" id="MaterialListSuppliedByVendor" name="MaterialListSuppliedByVendor" nzShowSearch
             nzAllowClear (ngModalChange)="onVendorServicesChange(Entity.p.MaterialListSuppliedByVendor)"
-            nzPlaceHolder="Select services">
+            nzPlaceHolder="Select Materials">
             <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
               [nzLabel]="material.p.Name"></nz-option>
           </nz-select>
@@ -206,7 +206,7 @@
           <label for="ServiceListSuppliedByVendor"><b>Services Provided by Vendor</b></label>
           <nz-select [(ngModel)]="Entity.p.ServiceListSuppliedByVendor" [nzNotFoundContent]="noDataTpl"
             nzMode="multiple" id="ServiceListSuppliedByVendor" name="ServiceListSuppliedByVendor" nzShowSearch
-            nzAllowClear nzPlaceHolder="Select services"
+            nzAllowClear nzPlaceHolder="Select Services"
             (ngModalChange)="onServiceProviceChange(Entity.p.ServiceListSuppliedByVendor)">
             <nz-option *ngFor="let service of ServiceList" [nzValue]="service.p.Ref"
               [nzLabel]="service.p.Name"></nz-option>

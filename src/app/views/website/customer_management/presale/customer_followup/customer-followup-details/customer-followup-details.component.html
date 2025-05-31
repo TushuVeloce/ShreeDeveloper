@@ -17,57 +17,57 @@
       </div>
     </ng-template>
     <form autocomplete="off">
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row">
         <!-- Todays Date  -->
-        <div class="col-md-4 mt-2">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Date</label>
           <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Date" required readonly />
         </div>
         <!-- Customer Name  -->
-        <div class="col-md-4 mt-2">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Customer Name</label>
           <input type="text" name="CustomerName" class="form-control" id="CustomerName"
             [(ngModel)]="Entity.p.CustomerName" required placeholder="Enter Customer Name" readonly />
         </div>
         <!-- Contact No  -->
-        <div class="col-md-4 mt-2">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Contact No</label>
           <input type="text" name="ContactNos" class="form-control" id="ContactNos" required
             [(ngModel)]="Entity.p.ContactNos" placeholder="Enter Contact No" readonly />
         </div>
 
         <!-- Country  -->
-        <div class="col-md-4 mt-2">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label for="CountryRef"><b>Country</b></label>
           <input type="text" name="CountryRef" class="form-control" id="CountryRef" [(ngModel)]="Entity.p.CountryName"
             readonly />
         </div>
         <!-- State  -->
-        <div class="col-md-4 mt-2">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label for="StateRef"><b>State</b></label>
           <input type="text" name="StateRef" class="form-control" id="StateRef" [(ngModel)]="Entity.p.StateName"
             readonly />
         </div>
         <!-- City  -->
-        <div class="col-md-4 mt-2">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label for="CityRef"><b>City</b></label>
           <input type="text" name="CityRef" class="form-control" id="CityRef" [(ngModel)]="Entity.p.CityName"
             readonly />
         </div>
         <!-- Address  -->
-        <div class="col-md-4 mt-2">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Address</label>
           <input type="text" name="address" class="form-control" id="address" required placeholder="Enter Address"
             [(ngModel)]="Entity.p.Address" readonly>
         </div>
         <!-- Pin Code  -->
-        <div class="col-md-4 mt-2">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Pin Code</label>
           <input type="text" name="PinCode" class="form-control" id="PinCode" required [(ngModel)]="Entity.p.PinCode"
             placeholder="Enter Pin Code" readonly />
         </div>
         <!-- Contact Mode Field  -->
-        <div class="col-md-4 mt-2">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Contact Mode</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="ContactMode" name="ContactMode" [nzSize]="'large'"
@@ -76,20 +76,18 @@
           </nz-select>
         </div>
         <!-- Reason -->
-        <div class="col-md-4 mt-2">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <label>Reason</label>
           <input type="text" name="reason" class="form-control" id="reason" [(ngModel)]="Entity.p.Reason" required />
         </div>
         <!-- Customer Requirement  -->
-        <div class="col-md-4 mt-2">
-          <div>
+        <div class="col-md-4" style="margin-top: 1rem;">
             <label>Customer Requirement</label>
             <input type="text" name="CustomerRequirement" class="form-control" id="CustomerRequirement"
               [(ngModel)]="Entity.p.CustomerRequirement" required placeholder="Enter Customer Requirement" />
-          </div>
         </div>
         <!-- Intrested Site  -->
-        <div class="col-md-4 mt-2">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <div>
             <label for="SiteManagementRef"><b>Interested site</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -100,7 +98,7 @@
           </div>
         </div>
         <!-- Intrested Plots  -->
-        <div class="col-md-4 mt-2">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <div>
             <label for="InterestedPlotRef"><b>Interested Plots</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -110,12 +108,9 @@
             </nz-select>
           </div>
         </div>
-        <div class="col-md-4 mt-2">
-
-        </div>
 
         <!-- Add button  -->
-        <div class="col-md-4 mt-2 d-flex justify-content-end align-items-end" style="margin-top: 33px;">
+        <div class="col-md-4 mt-2 d-flex justify-content-start align-items-end" style="margin-top: 33px;">
           <div>
             <button type="button" class="btn" (click)="addDataToCustomerFollowUpPlotDetail()">Add</button>
           </div>
@@ -164,11 +159,13 @@
         </nz-table>
       </div>
 
-      <hr style="color: black;">
+       <div style="width: 100%" class="d-flex justify-content-center" style="margin-top: 1rem;">
+        <hr style="border: 2px solid brown" width="20%" />
+      </div>
 
-      <div class="row" style="margin-top: 1rem;">
+      <div class="row">
         <!-- Lead Source -->
-        <div class="col-md-4">
+        <div class="col-md-4" style="margin-top: 1rem;">
           <div>
             <label for="LeadSource"><b>Lead Source</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -179,15 +176,15 @@
           </div>
         </div>
         <!-- Agent Name  -->
-        <div class="col-md-4" *ngIf="showAgentBrokerInput">
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="showAgentBrokerInput">
           <div>
-            <label for="AgentName"><b>Agent Name</b></label>
+            <label for="AgentName"><b>Agent/Name</b></label>
             <input type="text" name="AgentName" class="form-control" id="AgentName" [(ngModel)]="Entity.p.BrokerName"
-              required placeholder="Enter Agent Name">
+              required placeholder="Enter Agent/Broker Name">
           </div>
         </div>
         <!-- Lead Handle By  -->
-        <div class="col-md-4">
+        <div class="col-md-4" style="margin-top: 1rem;" style="margin-top: 1rem;">
           <div>
             <label for="LeadHandleBy"><b>Lead Handled By</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -199,20 +196,19 @@
           </div>
         </div>
         <!-- Remark  -->
-        <div class="col-md-4" *ngIf="!showAgentBrokerInput">
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="!showAgentBrokerInput">
           <label>Remark</label>
           <input type="text" name="Remark" class="form-control" id="Remark " required placeholder="Enter Remark"
             [(ngModel)]="Entity.p.Remark" (focus)="selectAll($event)" />
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem;">
-        <div class="col-md-4" *ngIf="showAgentBrokerInput">
+      
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="showAgentBrokerInput">
           <label>Remark</label>
           <input type="text" name="Remark" class="form-control" id="Remark " required placeholder="Enter Remark"
             [(ngModel)]="Entity.p.Remark" />
         </div>
         <!-- Customer Status  -->
-        <div class="col-md-4">
+        <div class="col-md-4" style="margin-top: 1rem;" style="margin-top: 1rem;">
           <div>
             <label for="CustomerStatus"><b>Customer Status</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -224,7 +220,7 @@
           </div>
         </div>
         <!-- Next site visit date  -->
-        <div class="col-md-4" *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== CustomerStatusEnum.ConvertToDeal">
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== CustomerStatusEnum.ConvertToDeal">
           <div>
             <label>Next Site Visit Date</label>
             <input type="date" name="localSiteVisitDate" class="form-control" id="localSiteVisitDate" [min]="today"
@@ -232,7 +228,7 @@
           </div>
         </div>
         <!-- Next Office visit date  -->
-        <div class="col-md-4" *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== CustomerStatusEnum.ConvertToDeal">
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== CustomerStatusEnum.ConvertToDeal">
           <div>
             <label>Next Office Visit Date</label>
             <input type="date" name="localOfficeVisitDate" class="form-control" id="localOfficeVisitDate" [min]="today"
@@ -240,7 +236,7 @@
           </div>
         </div>
         <!--Reminder Date  -->
-        <div class="col-md-4" *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== 40">
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== 40">
           <div>
             <label>Reminder Date</label>
             <input type="Date" name="localReminderDate" class="form-control" id="localReminderDate" [min]="today"
@@ -248,7 +244,6 @@
           </div>
         </div>
       </div>
-
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
           <button type="button" class="btn" (click)="SaveCustomerFollowUp()">Save</button>

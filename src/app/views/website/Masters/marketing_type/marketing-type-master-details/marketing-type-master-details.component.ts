@@ -24,7 +24,7 @@ export class MarketingTypeMasterDetailsComponent implements OnInit {
   InitialEntity: MarketingType = null as any;
 
   MarketingModesTypes = MarketingModes;
-  MarketingModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
+  MarketingModesList = DomainEnums.MarketingModesList(true, '-- Select Markeing Mode --');
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
   @ViewChild('DescriptionCtrl') DescriptionInputControl!: NgModel;
 

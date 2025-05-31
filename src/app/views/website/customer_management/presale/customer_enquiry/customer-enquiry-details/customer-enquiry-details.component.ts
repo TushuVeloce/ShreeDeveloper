@@ -57,7 +57,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   InterestedPlotRef: number = 0;
   SiteManagementRef: number = 0;
   today: string = new Date().toISOString().split('T')[0];
-  DetailsFormTitle: 'New Customer' | 'Edit Customer' = 'New Customer';
+  DetailsFormTitle: 'New Customer Enquiry' | 'Edit Customer Enquiry' = 'New Customer Enquiry';
 
   Date: string | null = null;
   DateWithTime: string | null = null;
@@ -85,11 +85,11 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
   );
   ContactModeList = DomainEnums.ContactModeList(
     true,
-    '--Select Contact Type--'
+    '-- Select Contact Type --'
   );
   CustomerStatusList = DomainEnums.CustomerStatusList(
     true,
-    '--Select Customer Status--'
+    '-- Select Customer Status --'
   );
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
@@ -131,8 +131,8 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity
-        ? 'New Customer'
-        : 'Edit Customer';
+        ? 'New Customer Enquiry'
+        : 'Edit Customer Enquiry';
       this.Entity = CustomerEnquiry.GetCurrentInstance();
       // Site Visit Date
       if (this.Entity.p.CustomerFollowUps[0].SiteVisitDate != '') {

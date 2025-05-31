@@ -61,7 +61,7 @@
           />
         </div> -->
         <div class="col-md-4" style="margin-top: 1rem; ">
-          <label>Vendor Services</label>
+          <label>Vendor Service</label>
          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" [disabled]="VendorServiceListByVendor.length == 0"
             nzShowSearch nzAllowClear nzPlaceHolder="Select" id="VendorServiceRef" name="VendorServiceRef"
             [nzSize]="'large'" [(ngModel)]="Entity.p.VendorServiceRef">
@@ -118,7 +118,7 @@
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Description</label>
           <input type="text" [(ngModel)]="Entity.p.Narration" name="Narration" class="form-control" id="Narration"
-            required placeholder="Enter Narration" />
+            required placeholder="Enter Description" />
         </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">

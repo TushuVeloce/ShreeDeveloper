@@ -18,9 +18,9 @@
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
-          <label for="Name">Name</label>
+          <label for="Name">Company Name</label>
           <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name"
-            placeholder="Enter Name" [pattern]="NameWithNosAndSpace" #NameCtrl="ngModel" required
+            placeholder="Enter Company Name" [pattern]="NameWithNosAndSpace" #NameCtrl="ngModel" required
             (blur)="NameCtrl.control.markAsTouched()" />
           <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
             <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithNosAndSpaceMsg}}</span>
@@ -30,7 +30,7 @@
         <div class="col-md-4">
           <label for="Contacts">Contact No</label>
           <input type="text" [(ngModel)]="Entity.p.Contacts" name="Contacts" class="form-control" id="Contacts"
-            placeholder="Enter Contacts"  pattern="{{INDPhoneNo}}" #ContactsCtrl="ngModel" required
+            placeholder="Enter Contact No"  pattern="{{INDPhoneNo}}" #ContactsCtrl="ngModel" required
             (blur)="ContactsCtrl.control.markAsTouched()" />
           <div *ngIf="(ContactsCtrl.invalid && (ContactsCtrl.touched || ContactsCtrl.dirty))">
             <span class="validation-text" *ngIf="ContactsCtrl.errors?.['pattern']">{{INDPhoneNoMsg}}</span>
@@ -40,7 +40,7 @@
         <div class="col-md-4">
           <label>Company Email Id </label>
           <input type="email" [(ngModel)]="Entity.p.EmailId" name="EmailId" class="form-control" id="EmailId"
-            placeholder="Enter Email Id" [pattern]="Email" #EmailIdCtrl="ngModel" required
+            placeholder="Enter Company Email Id" [pattern]="Email" #EmailIdCtrl="ngModel" required
             (blur)="EmailIdCtrl.control.markAsTouched()" />
           <div *ngIf="(EmailIdCtrl.invalid && (EmailIdCtrl.touched || EmailIdCtrl.dirty))">
             <span class="validation-text" *ngIf="EmailIdCtrl.errors?.['pattern']">{{EmailMsg}}</span>
@@ -122,9 +122,9 @@
         </div>
         <div class="row mb-3" style="margin-top: 1rem">
           <div class="col-md-4 col-sm-12">
-            <label for="GSTIN">GST IN</label>
+            <label for="GSTIN">GSTIN</label>
             <input type="text" [(ngModel)]="Entity.p.GSTIN" name="GSTIN" class="form-control" id="GSTIN"
-              placeholder="Enter GST IN" pattern="{{GSTIN}}" #GSTINCtrl="ngModel" required
+              placeholder="Enter GSTIN" pattern="{{GSTIN}}" #GSTINCtrl="ngModel" required
               (blur)="GSTINCtrl.control.markAsTouched()" />
             <div *ngIf="(GSTINCtrl.invalid && (GSTINCtrl.touched || GSTINCtrl.dirty))">
               <span class="validation-text" *ngIf="GSTINCtrl.errors?.['pattern']">{{GSTINMsg}}</span>
@@ -134,7 +134,7 @@
           <div class="col-md-4">
             <label for="Pan">PAN</label>
             <input type="text" [(ngModel)]="Entity.p.Pan" name="Pan" class="form-control" id="Pan"
-              placeholder="Enter Pan" pattern="{{PAN}}" #PanCtrl="ngModel" required
+              placeholder="Enter PAN" pattern="{{PAN}}" #PanCtrl="ngModel" required
               (blur)="PanCtrl.control.markAsTouched()" />
             <div *ngIf="(PanCtrl.invalid && (PanCtrl.touched || PanCtrl.dirty))">
               <span class="validation-text" *ngIf="PanCtrl.errors?.['pattern']">{{PANMsg}}</span>
@@ -217,9 +217,16 @@
 
             <div class="Company-Logo-container">
               <!-- Image Preview -->
-              <ng-container *ngIf="imagePreviewUrl; else defaultImage">
+              <ng-container *ngIf="this.Entity.p.LogoPath ; else AddPreviewImage">
                 <img [src]="imagePreviewUrl" alt="Company Logo" class="Company-Logo" />
               </ng-container>
+
+              <ng-template #AddPreviewImage>
+                <ng-container *ngIf="imagePreviewUrl ; else defaultImage">
+                  <img [src]="imagePreviewUrl" alt="Company Logo" class="Company-Logo" />
+                </ng-container>
+              </ng-template>
+
               <ng-template #defaultImage>
                 <img src="/assets/images/noimage.png" alt="No Image" class="Company-Logo" />
               </ng-template>
@@ -231,7 +238,7 @@
                 </div>
                 <div class="col-8 d-flex align-items-center">
                   <div>
-                   {{selectedFileName}}
+                    {{selectedFileName}}
                   </div>
                 </div>
               </div>
@@ -245,8 +252,6 @@
                 {{ errors.company_image }}
               </p>
             </div>
-
-
           </div>
         </div>
       </div>

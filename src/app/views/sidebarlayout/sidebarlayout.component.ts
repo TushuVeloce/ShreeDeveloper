@@ -344,7 +344,7 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '/assets/icons/Marketing Type Master.png',
       },
       {
-        Name: 'Vendor Services Master',
+        Name: 'Vendor Service Master',
         RouterLink: '/homepage/Website/Vendor_Services_Master',
         LogoPath: '/assets/icons/Vendor Service Master.png',
       },
@@ -443,12 +443,12 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '/assets/icons/Plot Details.png',
       },
       {
-        Name: 'Actual Stages',
+        Name: 'Actual Stage',
         RouterLink: '/homepage/Website/Site_Management_Actual_Stage',
         LogoPath: '/assets/icons/Actual Stages.png',
       },
       {
-        Name: 'Estimate Stages',
+        Name: 'Estimate Stage',
         RouterLink: '/homepage/Website/Estimate_Stages',
         LogoPath: '/assets/icons/Estimated Stages.png',
       },

@@ -105,7 +105,7 @@
         <div class="col-md-4">
           <div>
             <label>Discount On Total Plot Amount </label>
-            <input type="number" name="DiscountOnTotalPlotAmount " class="form-control" id="DiscountOnTotalPlotAmount " [(ngModel)]="Entity.p.DiscountOnTotalPlotAmount" (ngModelChange)="calculateTotalPlotAmount()" required placeholder="Enter Discount" (click)="selectAllValue($event)"/>
+            <input type="number" name="DiscountOnTotalPlotAmount " class="form-control" id="DiscountOnTotalPlotAmount " [(ngModel)]="Entity.p.DiscountOnTotalPlotAmount" (ngModelChange)="calculateTotalPlotAmount()" required placeholder="Enter Discount On Total Plot Amount" (click)="selectAllValue($event)"/>
           </div>
         </div>
       </div>
@@ -151,8 +151,8 @@
         </div>
         <div class="col-md-4">
           <div>
-            <label>Value Of Agreement</label>
-            <input type="number" name="ValueOfAgreement" class="form-control" id="ValueOfAgreement" [(ngModel)]="Entity.p.ValueOfAgreement"  (ngModelChange)="calculateStampDuties()"  required placeholder="Enter Value Of Agreement" (click)="selectAllValue($event)"/>
+            <label>Value of Agreement</label>
+            <input type="number" name="ValueOfAgreement" class="form-control" id="ValueOfAgreement" [(ngModel)]="Entity.p.ValueOfAgreement"  (ngModelChange)="calculateStampDuties()"  required placeholder="Enter Value of Agreement" (click)="selectAllValue($event)"/>
           </div>
         </div>
         <div class="col-md-4">
@@ -196,30 +196,30 @@
           </nz-select>
         </div>
         </div>
+          <div class="col-md-4">
+          <div>
+            <label>Gst Total Amount </label>
+            <input type="number" name="GstToatalAmount " class="form-control" id="GstToatalAmount " [(ngModel)]="Entity.p.GstToatalAmount"  required placeholder="Enter Gst Total Amount" readonly/>
+          </div>
+        </div>
         <div class="col-md-4">
           <div>
             <label>Legal Charges</label>
             <input type="number" name="LegalCharges" class="form-control" id="LegalCharges" [(ngModel)]="Entity.p.LegalCharges"  (ngModelChange)="calculateExtraCharges()"  required placeholder="Enter Legal Charges"  (click)="selectAllValue($event)"/>
           </div>
         </div>
-        <div class="col-md-4">
+      </div>
+      <div class="row" style="margin-top: 1rem; ">
+         <div class="col-md-4">
           <div>
             <label>Total Extra Charges</label>
             <input type="number" name="TotalExtraCharges" class="form-control" id="TotalExtraCharges" [(ngModel)]="Entity.p.TotalExtraCharges"  required placeholder="Enter Total Extra Charges" readonly/>
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <div>
             <label>Grand Total</label>
             <input type="number" name="GrandTotal" class="form-control" id="GrandTotal" [(ngModel)]="Entity.p.GrandTotal"  readonly placeholder="Enter Grand Total" />
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div>
-            <label>Gst Total Amount </label>
-            <input type="number" name="GstToatalAmount " class="form-control" id="GstToatalAmount " [(ngModel)]="Entity.p.GstToatalAmount"  required placeholder="Enter Gst Total Amount" />
           </div>
         </div>
         <!-- <div class="col-md-4">

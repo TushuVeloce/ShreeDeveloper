@@ -35,7 +35,7 @@ export class MarketingManagementMasterDetailsComponent implements OnInit {
   VendorServiceList: ServiceSuppliedByVendorProps[] = [];
   VendorServiceListByVendor: VendorService[] = [];
   EmployeeList: Employee[] = [];
-  MarketingModesList = DomainEnums.MarketingModesList(true, '--Select Modes Type--');
+  MarketingModesList = DomainEnums.MarketingModesList(true, '-- Select Modes Type --');
   MarketingType = MarketingModes
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace

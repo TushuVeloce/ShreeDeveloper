@@ -7,7 +7,7 @@
         </button>
       </div>
       <div class="col-md-11">
-        <span class="detail_title">Customer Enquiry</span>
+        <span class="detail_title">{{DetailsFormTitle}}</span>
       </div>
     </div>
     <ng-template #noDataTpl>
@@ -16,20 +16,20 @@
       </div>
     </ng-template>
     <form #myForm="ngForm" autocomplete="off">
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row">
         <!-- Todays Date  -->
-        <div class="col-md-4 mt-2" *ngIf="IsNewEntity">
+        <div class="col-md-4 " style="margin-top: 1rem" *ngIf="IsNewEntity">
           <div>
             <label>Date</label>
             <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Date" required readonly />
           </div>
         </div>
         <!-- Name  -->
-        <div class="col-md-4 mt-2">
+        <div class="col-md-4" style="margin-top: 1rem">
           <div>
-            <label>Name</label>
+            <label>Customer Name</label>
             <input type="text" name="Name" class="form-control" id="Name " [(ngModel)]="Entity.p.Name" required
-              placeholder="Enter First Name" (focus)="selectAll($event)" pattern="{{NameWithNosAndSpace}}"
+              placeholder="Enter Customer Name" (focus)="selectAll($event)" pattern="{{NameWithNosAndSpace}}"
               #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()" />
             <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
               <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithoutNosMsg}}</span>
@@ -38,7 +38,7 @@
           </div>
         </div>
         <!-- Contact No -->
-        <div class="col-md-4 mt-2">
+       <div class="col-md-4" style="margin-top: 1rem">
           <div>
             <label for="ContactNos">Contact No</label>
             <input type="text" name="ContactNos" class="form-control" [(ngModel)]="Entity.p.ContactNos" id="ContactNos"
@@ -53,7 +53,7 @@
         <!-- </div> -->
         <!-- <div class="row" style="margin-top: 1rem; "> -->
         <!-- Country -->
-        <div class="col-md-4 mt-2">
+       <div class="col-md-4" style="margin-top: 1rem">
           <div>
             <label for="CountryRef"><b>Country</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -65,7 +65,7 @@
           </div>
         </div>
         <!-- State -->
-        <div class="col-md-4 mt-2">
+       <div class="col-md-4" style="margin-top: 1rem">
           <div>
             <label for="StateRef"><b>State</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -76,7 +76,7 @@
           </div>
         </div>
         <!-- City  -->
-        <div class="col-md-4 mt-2">
+       <div class="col-md-4" style="margin-top: 1rem">
           <div>
             <label for="CityRef"><b>City</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -88,7 +88,7 @@
         <!-- </div>
       <div class="row" style="margin-top: 1rem; "> -->
         <!-- Address  -->
-        <div class="col-md-4 mt-2">
+       <div class="col-md-4" style="margin-top: 1rem">
           <div>
             <label>Address</label>
             <input type="text" name="Address" class="form-control" [(ngModel)]="Entity.p.Address" id="address" required
@@ -99,7 +99,7 @@
           </div>
         </div>
         <!-- Pin Code  -->
-        <div class="col-md-4 col-md-4 col-sm-12 mt-2">
+      <div class="col-md-4" style="margin-top: 1rem">
           <label>Pin Code</label>
           <input type="text" name="PinCode" class="form-control" [(ngModel)]="Entity.p.PinCode" id="PinCode" required
             placeholder="Enter Pin Code" (focus)="selectAll($event)" pattern="{{PinCode}}" #PinCodeCtrl="ngModel"
@@ -110,7 +110,7 @@
           </div>
         </div>
         <!-- Customer Requirement  -->
-        <div class="col-md-4 col-md-4 col-sm-12 mt-2" *ngIf="IsNewEntity">
+       <div class="col-md-4" style="margin-top: 1rem" *ngIf="IsNewEntity">
           <label>Customer Requirement</label>
           <textarea type="text" rows="1" name="CustomerRequirement" class="form-control"
             [(ngModel)]="Entity.p.CustomerFollowUps[0].CustomerRequirement" id="CustomerRequirement" required
@@ -118,9 +118,9 @@
           </textarea>
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem;" *ngIf="IsNewEntity">
+      <div class="row" *ngIf="IsNewEntity">
         <!-- Intrested Site  -->
-        <div class="col-md-4">
+       <div class="col-md-4" style="margin-top: 1rem">
           <label for="SiteManagementRef"><b>Interested site</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" [nzSize]="'large'" name="SiteManagementRef" [(ngModel)]="SiteManagementRef"
@@ -129,7 +129,7 @@
           </nz-select>
         </div>
         <!-- Intrested Plot  -->
-        <div class="col-md-4">
+       <div class="col-md-4" style="margin-top: 1rem">
           <label for="InterestedPlotRef"><b>Interested Plots</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="InterestedPlotRef" name="InterestedPlotRef" [(ngModel)]="InterestedPlotRef"
@@ -138,7 +138,7 @@
           </nz-select>
         </div>
         <!-- Add button  -->
-        <div class="col-md-4" style="margin-top: 33px;">
+        <div class="col-md-4" style="margin-top: 48px;">
           <div>
             <button type="button" class="btn" (click)="addDataToTable()">Add</button>
           </div>
@@ -189,11 +189,13 @@
         </nz-table>
       </div>
 
-      <hr style="color: black;">
+       <div style="width: 100%" class="d-flex justify-content-center" style="margin-top: 1rem">
+        <hr style="border: 2px solid brown" width="20%" />
+      </div>
 
-      <div class="row" style="margin-top: 1rem;" *ngIf="IsNewEntity">
+      <div class="row" *ngIf="IsNewEntity">
         <!-- Lead Source  -->
-        <div class="col-md-4">
+       <div class="col-md-4" style="margin-top: 1rem">
           <label for="LeadSourceRef"><b>Lead Source</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" [nzSize]="'large'" name="LeadSourceRef" required id="LeadSourceRef"
@@ -203,7 +205,7 @@
           </nz-select>
         </div>
         <!-- Additional input field for Agent Broker -->
-        <div class="col-md-4" *ngIf="showAgentBrokerInput">
+       <div class="col-md-4 mt-2" style="margin-top: 1rem" *ngIf="showAgentBrokerInput">
           <label for="AgentName"><b>Agent Name</b></label>
           <input type="text" name="AgentName" class="form-control" id="AgentName"
             [(ngModel)]="Entity.p.CustomerFollowUps[0].BrokerName" required placeholder="Enter Agent Name">
@@ -211,7 +213,7 @@
         <!-- End -->
 
         <!-- Lead Handle By  -->
-        <div class="col-md-4">
+       <div class="col-md-4" style="margin-top: 1rem">
           <label for="LeadHandledByRef"><b>Lead Handled By</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="LeadHandledByRef" name="LeadHandledByRef"
@@ -221,7 +223,7 @@
           </nz-select>
         </div>
         <!-- Contact Mode  -->
-        <div class="col-md-4" *ngIf="!showAgentBrokerInput">
+       <div class="col-md-4" style="margin-top: 1rem" *ngIf="!showAgentBrokerInput">
           <label for="ContactModeRef"><b>Contact Mode</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="ContactModeRef" name="ContactModeRef"
@@ -231,7 +233,7 @@
           </nz-select>
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem;" *ngIf="IsNewEntity">
+      <div class="row" *ngIf="IsNewEntity">
         <div class="col-md-4" *ngIf="showAgentBrokerInput">
           <label for="ContactModeRef"><b>Contact Mode</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -242,14 +244,14 @@
           </nz-select>
         </div>
         <!-- Reason  -->
-        <div class="col-md-4" *ngIf="IsNewEntity">
+       <div class="col-md-4" style="margin-top: 1rem" *ngIf="IsNewEntity">
           <label>Reason</label>
           <textarea type="text" name="Reason" rows="1" [(ngModel)]="Entity.p.CustomerFollowUps[0].Reason"
             class="form-control" id="Reason " required placeholder="Enter Reason">
             </textarea>
         </div>
         <!-- Customer Status  -->
-        <div class="col-md-4">
+       <div class="col-md-4" style="margin-top: 1rem">
           <label for="CustomerStatusRef"><b>Customer Status</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="CustomerStatusRef" name="CustomerStatusRef"
@@ -263,7 +265,7 @@
         </div>
 
         <!-- Remark  -->
-        <div class="col-md-4">
+       <div class="col-md-4" style="margin-top: 1rem">
           <label>Remark</label>
           <input type="text" name="Remark" [(ngModel)]="Entity.p.CustomerFollowUps[0].Remark" class="form-control"
             id="Remark " required placeholder="Enter Remark" />

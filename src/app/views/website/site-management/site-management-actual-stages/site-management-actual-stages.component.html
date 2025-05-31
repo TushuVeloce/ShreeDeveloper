@@ -1,77 +1,80 @@
-<div class="container-fluid">
-  <div class="headers">
-    <div class="row">
-      <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
-        <h5 style="padding-top: 3px;" class="title title_light">All Actual Stages</h5>
-      </div>
-      <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 ">
-        <!-- <input type="text" Class="search-box_light" placeholder="Search..." autofocus /> -->
-      </div>
-      <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" routerLinkActive="active">
-        <nz-button nz-button class="btn1" (click)="AddActualStages()">
-          Add Actual Stage
-        </nz-button>
-      </div>
+<div>
+  <div class="row">
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2">
+      <h5 style="padding-top: 3px;" class="title title_light">Actual Stage List</h5>
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
+      <!-- <input type="text" Class="search-box_light" placeholder="Search..." autofocus /> -->
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
+      <nz-button nz-button class="btn1" (click)="AddActualStages()">
+        Add Actual Stage
+      </nz-button>
     </div>
     <ng-template #noDataTpl>
       <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
         No Data
       </div>
     </ng-template>
-    <div class="row" style="margin-top: 1rem; ">
-      <div class="col-md-4" style="margin-top: 1rem; ">
-        <label for="FromDate"><b>From Date</b></label>
-        <input type="date" name="FromDate" class="form-control" id="FromDate" [(ngModel)]="FromDate"
-          (ngModelChange)="getActualStageListByAllFilters()" />
-      </div>
-      <div class="col-md-4" style="margin-top: 1rem; ">
-        <label for="ToDate"><b>To Date</b></label>
-        <input type="date" name="ToDate" [min]="FromDate" class="form-control" id="ToDate" [(ngModel)]="ToDate"
-          (ngModelChange)="getActualStageListByAllFilters()" />
-      </div>
-      <div class="col-md-4" style="margin-top: 1rem; ">
-        <div>
-          <label for="SiteRef"><b>Site</b></label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" id="SiteRef" [(ngModel)]="Entity.p.SiteRef"
-            (ngModelChange)="getActualStageListByAllFilters()">
-            <nz-option [nzValue]="0" nzLabel="All"></nz-option>
-            <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
-          </nz-select>
+    <div class="card-body" style="margin-left: 14px; margin-right: 14px;">
+      <form autocomplete="off">
+        <div class="row" style="margin-top: 1rem; ">
+          <div class="col-md-4" style="margin-top: 1rem; ">
+            <label for="FromDate"><b>From Date</b></label>
+            <input type="date" name="FromDate" class="form-control" id="FromDate" [(ngModel)]="FromDate"
+              (ngModelChange)="getActualStageListByAllFilters()" />
+          </div>
+          <div class="col-md-4" style="margin-top: 1rem; ">
+            <label for="ToDate"><b>To Date</b></label>
+            <input type="date" name="ToDate" [min]="FromDate" class="form-control" id="ToDate" [(ngModel)]="ToDate"
+              (ngModelChange)="getActualStageListByAllFilters()" />
+          </div>
+          <div class="col-md-4" style="margin-top: 1rem; ">
+            <div>
+              <label for="SiteRef"><b>Site</b></label>
+              <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+                nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" id="SiteRef" [(ngModel)]="Entity.p.SiteRef"
+                (ngModelChange)="getActualStageListByAllFilters()">
+                <nz-option [nzValue]="0" nzLabel="All"></nz-option>
+                <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+              </nz-select>
+            </div>
+          </div>
+          <div class="col-md-4" style="margin-top: 1rem; ">
+            <div>
+              <label for="VendorRef"><b>Vendor</b></label>
+              <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+                nzPlaceHolder="Select" [nzSize]="'large'" name="VendorRef" id="VendorRef"
+                [(ngModel)]="Entity.p.VendorRef" (ngModelChange)="getActualStageListByAllFilters()">
+                <nz-option [nzValue]="0" nzLabel="All"></nz-option>
+                <nz-option *ngFor="let vendor of VendorList" [nzValue]="vendor.p.Ref"
+                  [nzLabel]="vendor.p.Name"></nz-option>
+              </nz-select>
+            </div>
+          </div>
+          <div class="col-md-4" style="margin-top: 1rem; ">
+            <div>
+              <label for="StageRef"><b>Stage</b></label>
+              <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+                nzPlaceHolder="Select" [nzSize]="'large'" name="StageRef" id="StageRef" [(ngModel)]="Entity.p.StageRef"
+                (ngModelChange)="OnStageChange()">
+                <nz-option [nzValue]="0" nzLabel="All"></nz-option>
+                <nz-option *ngFor="let stage of StageList" [nzValue]="stage.p.Ref" [nzLabel]="stage.p.Name"></nz-option>
+              </nz-select>
+            </div>
+          </div>
+          <div class="col-md-4" style="margin-top: 1rem; ">
+            <label><b>Expense Type</b></label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="ExpenseTypeRef" name="ExpenseTypeRef" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.ExpenseTypeRef" (ngModelChange)="getActualStageListByAllFilters()">
+              <nz-option [nzValue]="0" nzLabel="All"></nz-option>
+              <nz-option *ngFor="let Expense of ExpenseTypeList" [nzValue]="Expense.p.ExpenseType"
+                [nzLabel]="Expense.p.Name"></nz-option>
+            </nz-select>
+          </div>
         </div>
-      </div>
-      <div class="col-md-4" style="margin-top: 1rem; ">
-        <div>
-          <label for="VendorRef"><b>Vendor</b></label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" [nzSize]="'large'" name="VendorRef" id="VendorRef" [(ngModel)]="Entity.p.VendorRef"
-            (ngModelChange)="getActualStageListByAllFilters()">
-            <nz-option [nzValue]="0" nzLabel="All"></nz-option>
-            <nz-option *ngFor="let vendor of VendorList" [nzValue]="vendor.p.Ref" [nzLabel]="vendor.p.Name"></nz-option>
-          </nz-select>
-        </div>
-      </div>
-      <div class="col-md-4" style="margin-top: 1rem; ">
-        <div>
-          <label for="StageRef"><b>Stage</b></label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" [nzSize]="'large'" name="StageRef" id="StageRef" [(ngModel)]="Entity.p.StageRef"
-            (ngModelChange)="OnStageChange()">
-            <nz-option [nzValue]="0" nzLabel="All"></nz-option>
-            <nz-option *ngFor="let stage of StageList" [nzValue]="stage.p.Ref" [nzLabel]="stage.p.Name"></nz-option>
-          </nz-select>
-        </div>
-      </div>
-      <div class="col-md-4" style="margin-top: 1rem; ">
-        <label><b>Expense Type</b></label>
-        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-          nzPlaceHolder="Select" id="ExpenseTypeRef" name="ExpenseTypeRef" [nzSize]="'large'"
-          [(ngModel)]="Entity.p.ExpenseTypeRef" (ngModelChange)="getActualStageListByAllFilters()">
-          <nz-option [nzValue]="0" nzLabel="All"></nz-option>
-          <nz-option *ngFor="let Expense of ExpenseTypeList" [nzValue]="Expense.p.ExpenseType"
-            [nzLabel]="Expense.p.Name"></nz-option>
-        </nz-select>
-      </div>
+      </form>
     </div>
   </div>
   <div class="table-container" style="margin-top: 2rem;">
@@ -160,7 +163,7 @@
             <Edit-Icon (editClick)="onEditClicked(LabourExpense)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(LabourExpense)" />
             <span style="margin-left: 9px; cursor: pointer;" (click)="navigateToPrint(LabourExpense)">
-                <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
+              <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
           </td>
         </tr>
         <tr *ngIf="paginatedLabourList().length > 0">
@@ -214,7 +217,7 @@
               <Delete-Icon (deleteClicked)="onDeleteClicked(OtherExpense)" />
             </span>
             <span style="margin-left: 9px; margin-right: 9px; cursor: pointer;" (click)="navigateToPrint(OtherExpense)">
-               <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
+              <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
           </td>
         </tr>
         <tr *ngIf="paginatedOtherList().length > 0">
