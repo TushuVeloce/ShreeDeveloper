@@ -198,11 +198,11 @@ const routes: Routes = [
       { path: 'Plot_Master_Details', component: PlotMasterDetailsComponent },
 
 
-      { path: 'Site_Management_Master', component: SiteManagementMasterComponent },
+      { path: 'Site_Management', component: SiteManagementMasterComponent },
       { path: 'Site_Management_Details', component: SiteManagementDetailsComponent },
 
-      { path: 'Site_Management_Actual_Stage', component: SiteManagementActualStagesComponent },
-      { path: 'Site_Management_Actual_Stage_Details', component: SiteManagementActualStagesDetailsComponent },
+      { path: 'Actual_Stage', component: SiteManagementActualStagesComponent },
+      { path: 'Actual_Stage_Details', component: SiteManagementActualStagesDetailsComponent },
 
       { path: 'Actual_Stage_Print', component: ActualStagePrintComponent },
 

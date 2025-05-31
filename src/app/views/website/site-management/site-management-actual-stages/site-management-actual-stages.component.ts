@@ -208,7 +208,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
     this.SelectedActualStages = item.GetEditableVersion();
     ActualStages.SetCurrentInstance(this.SelectedActualStages);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage_Details']);
+    await this.router.navigate(['/homepage/Website/Actual_Stage_Details']);
   };
 
   onDeleteClicked = async (actualstage: ActualStages) => {
@@ -237,7 +237,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
   };
 
   AddActualStages = async () => {
-    await this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage_Details']);
+    await this.router.navigate(['/homepage/Website/Actual_Stage_Details']);
   }
 
   filterTable = () => {

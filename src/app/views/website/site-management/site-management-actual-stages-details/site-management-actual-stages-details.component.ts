@@ -637,7 +637,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
   }
 
   BackActualStages = () => {
-    this.router.navigate(['/homepage/Website/Site_Management_Actual_Stage']);
+    this.router.navigate(['/homepage/Website/Actual_Stage']);
   }
 }
 

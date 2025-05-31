@@ -156,58 +156,109 @@ export class SidebarlayoutComponent implements OnInit {
   isShow1: boolean = false;
   count = true;
 
+  // updateActiveModuleAndSubmodule(): void {
+  //   // Clear previous selections
+  //   this.activeModule = null;
+  //   this.activeSubmodule = null;
+
+  //   this.previousActiveModule = null; // Add these to track previous
+  //   this.previousActiveSubmodule = null;
+
+  //   // Find the current module
+  //   const currentModule = this.ModuleList.filter(module =>
+  //     module.SubModuleList?.find(submodule => submodule.RouterLink === this.currentRoute)
+  //   );
+
+  //   const previousModule = this.ModuleList.filter(module =>
+  //     module.SubModuleList?.find(submodule => submodule.RouterLink === this.previousRoute)
+  //   );
+
+  //   if (currentModule.length > 0) {
+  //     // Update the active module
+  //     this.activeModule = currentModule[0].Name;
+
+  //     // Find the current submodule
+  //     const currentSubmodule = currentModule[0]?.SubModuleList?.find(
+  //       (submodule: SubModule) => this.currentRoute === submodule.RouterLink
+  //     );
+
+  //     if (currentSubmodule) {
+  //       this.activeSubmodule = currentSubmodule.Name;
+  //     }
+  //   }
+
+  //   if (previousModule.length > 0) {
+  //     // Update the previous module
+  //     this.previousActiveModule = previousModule[0].Name;
+  //     // Find the previous submodule
+  //     const previousSubmodule = previousModule[0]?.SubModuleList?.find(
+  //       (submodule: SubModule) => this.previousRoute === submodule.RouterLink
+  //     );
+
+  //     if (this.previousActiveModule == this.activeModule) {
+  //       return
+  //     } else if (this.previousActiveModule != this.activeModule && this.BrowserBack) {
+  //       if (this.activeModule) {
+  //         this.SideMenuHideShowForModule(this.activeModule, true)
+  //       }
+  //     }
+  //   }
+  // }
+
+  // isRouteActive(route: string, ModuleName: string) {
+  //   return this.currentRoute === route;
+  // }
+
   updateActiveModuleAndSubmodule(): void {
-    // Clear previous selections
-    this.activeModule = null;
-    this.activeSubmodule = null;
+  this.activeModule = null;
+  this.activeSubmodule = null;
 
-    this.previousActiveModule = null; // Add these to track previous
-    this.previousActiveSubmodule = null;
+  this.previousActiveModule = null;
+  this.previousActiveSubmodule = null;
 
-    // Find the current module
-    const currentModule = this.ModuleList.filter(module =>
-      module.SubModuleList?.find(submodule => submodule.RouterLink === this.currentRoute)
+  // Find the current module and submodule by matching if currentRoute starts with submodule's RouterLink
+  const currentModule = this.ModuleList.filter(module =>
+    module.SubModuleList?.some(submodule => this.currentRoute.startsWith(submodule.RouterLink))
+  );
+
+  const previousModule = this.ModuleList.filter(module =>
+    module.SubModuleList?.some(submodule => this.previousRoute.startsWith(submodule.RouterLink))
+  );
+
+  if (currentModule.length > 0) {
+    this.activeModule = currentModule[0].Name;
+
+    const currentSubmodule = currentModule[0]?.SubModuleList?.find(
+      (submodule: SubModule) => this.currentRoute.startsWith(submodule.RouterLink)
     );
 
-    const previousModule = this.ModuleList.filter(module =>
-      module.SubModuleList?.find(submodule => submodule.RouterLink === this.previousRoute)
-    );
-
-    if (currentModule.length > 0) {
-      // Update the active module
-      this.activeModule = currentModule[0].Name;
-
-      // Find the current submodule
-      const currentSubmodule = currentModule[0]?.SubModuleList?.find(
-        (submodule: SubModule) => this.currentRoute === submodule.RouterLink
-      );
-
-      if (currentSubmodule) {
-        this.activeSubmodule = currentSubmodule.Name;
-      }
-    }
-
-    if (previousModule.length > 0) {
-      // Update the previous module
-      this.previousActiveModule = previousModule[0].Name;
-      // Find the previous submodule
-      const previousSubmodule = previousModule[0]?.SubModuleList?.find(
-        (submodule: SubModule) => this.previousRoute === submodule.RouterLink
-      );
-
-      if (this.previousActiveModule == this.activeModule) {
-        return
-      } else if (this.previousActiveModule != this.activeModule && this.BrowserBack) {
-        if (this.activeModule) {
-          this.SideMenuHideShowForModule(this.activeModule, true)
-        }
-      }
+    if (currentSubmodule) {
+      this.activeSubmodule = currentSubmodule.Name;
     }
   }
 
-  isRouteActive(route: string, ModuleName: string) {
-    return this.currentRoute === route;
+  if (previousModule.length > 0) {
+    this.previousActiveModule = previousModule[0].Name;
+
+    const previousSubmodule = previousModule[0]?.SubModuleList?.find(
+      (submodule: SubModule) => this.previousRoute.startsWith(submodule.RouterLink)
+    );
+
+    if (this.previousActiveModule === this.activeModule) {
+      return;
+    } else if (this.previousActiveModule !== this.activeModule && this.BrowserBack) {
+      if (this.activeModule) {
+        this.SideMenuHideShowForModule(this.activeModule, true);
+      }
+    }
   }
+}
+
+// Also update your isRouteActive() to use startsWith:
+isRouteActive(route: string, ModuleName: string) {
+  return this.currentRoute.startsWith(route);
+}
+
   ngOnDestroy(): void {
     if (this.routerChangedSubscription) {
       this.routerChangedSubscription.unsubscribe();
@@ -223,6 +274,8 @@ export class SidebarlayoutComponent implements OnInit {
         req.EmployeeRef = this.appStateManagement.getEmployeeRef();
         localStorage.removeItem('activeSubmodule');
         localStorage.removeItem('activeModule');
+        this.isCollapsed = false
+        this.activeModule = null
         let _ = await this.servercommunicator.LogoutUser(req)
         await this.router.navigate(['/']);
       });
@@ -434,7 +487,7 @@ export class SidebarlayoutComponent implements OnInit {
     let SiteManagementSubModuleList = [
       {
         Name: 'New Site',
-        RouterLink: '/homepage/Website/Site_Management_Master',
+        RouterLink: '/homepage/Website/Site_Management',
         LogoPath: '/assets/icons/New Site.png',
       },
       {
@@ -444,7 +497,7 @@ export class SidebarlayoutComponent implements OnInit {
       },
       {
         Name: 'Actual Stage',
-        RouterLink: '/homepage/Website/Site_Management_Actual_Stage',
+        RouterLink: '/homepage/Website/Actual_Stage',
         LogoPath: '/assets/icons/Actual Stages.png',
       },
       {

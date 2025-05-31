@@ -341,7 +341,7 @@ export class SiteManagementDetailsComponent implements OnInit {
   }
 
   BackSiteManagement() {
-    this.router.navigate(['/homepage/Website/Site_Management_Master']);
+    this.router.navigate(['/homepage/Website/Site_Management']);
   }
 
   resetAllControls = () => {
