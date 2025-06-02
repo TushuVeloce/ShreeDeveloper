@@ -1,25 +1,19 @@
-/* Enhanced User Card Styling */
 .settings-card {
     border-radius: 20px;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
-    padding: 25px;
+    padding: 30px;
     margin-bottom: 25px;
     background-color: var(--ion-background-color);
-    transition: box-shadow 0.3s ease;
 }
 
-.settings-card:hover {
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-/* Avatar Styling */
 .user-avatar {
-    width: 70px;
-    height: 70px;
+    width: 75px;
+    height: 75px;
     border-radius: 50%;
-    object-fit: cover;
+    overflow: hidden;
+    // border: 3px solid var(--ion-color-primary);
     transition: transform 0.3s ease;
-    border: 2px solid var(--ion-color-primary);
+    cursor: pointer;
 }
 
 .user-avatar:hover {
@@ -27,87 +21,28 @@
 }
 
 ion-label h2 {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: bold;
-    color: var(--ion-text-color);
-    transition: color 0.3s ease;
 }
 
 ion-label p {
-    font-size: 15px;
-    color: #777;
+    font-size: 14px;
+    color: #888;
 }
-/* Hover Effect for List Items */
+
 .settings-list ion-item {
     border-radius: 15px;
-    padding: 12px 20px;
-    background-color: var(--ion-item-background);
+    margin-bottom: 20px;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease; 
 }
 
 .settings-list ion-item:hover {
-    background-color: var(--ion-item-hover-background);
-    transform: translateY(-5px);
-    border: #777 solid 1px;
+    background-color: var(--ion-color-light-tint);
+    transform: translateY(-3px);
 }
 
-.settings-list ion-item ion-icon {
-    transition: transform 0.3s ease;
-}
-
-.settings-list ion-item:hover ion-icon {
-    transform: scale(1.1);
-}
-
-/* Making the label bold and bigger */
-ion-label {
-    font-size: 16px;
-    font-weight: 500;
-}
-/* Toggle Enhancement */
-ion-toggle {
-    --padding-top: 0;
-    --padding-bottom: 0;
-    --width: 50px;
-    --height: 30px;
-    --border-radius: 15px;
-    --track-background: var(--ion-color-secondary);
-    --track-background-checked: var(--ion-color-primary);
-    transition: background-color 0.3s ease;
-}
-/* Spacing and Layout Adjustments */
-.settings-list {
-    margin-top: 30px;
-    gap: 20px;
-    background-color: var(--ion-color-background);
-}
-
-.settings-list ion-item {
-    margin-bottom: 10px;
-}
-/* Styling for Danger (Logout) Item */
 .logout-item {
     --color: var(--ion-color-danger);
-    background-color: var(--ion-item-background);
     font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    // border-radius: 15px;
-    // border: #777 solid 1px;
 }
-
-.logout-item:hover {
-    background-color: var(--ion-color-danger-tint);
-    transform: scale(1.05);
-    // border-radius: 15px;
-}
-/* Background Gradient */
-ion-content {
-    // --background: linear-gradient(135deg, #f9f9f9, #e2e2e2);
-    --background: var(--ion-background-color);
-}
-
-// /* Smooth transition for dark/light mode */
-// body {
-//     transition: var(--ion-background-color) 0.3s ease, color 0.3s ease;
-// }

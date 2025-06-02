@@ -1,11 +1,84 @@
+<app-header-with-back-handler title="Privacy & Security"></app-header-with-back-handler>
 
-<app-header-with-back-handler title="Privacy And Security"></app-header-with-back-handler>
+<ion-content class="ion-padding">
+  <!-- Privacy Settings -->
+  <!-- <ion-card class="privacy-card">
+    <ion-card-header>
+      <ion-card-title>Privacy Settings</ion-card-title>
+    </ion-card-header>
+
+    <ion-list class="privacy-list">
+      <ion-item lines="full">
+        <ion-label>Show Online Status</ion-label>
+        <ion-toggle slot="end" [(ngModel)]="showOnlineStatus"></ion-toggle>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-label>Allow Push Notifications</ion-label>
+        <ion-toggle slot="end" [(ngModel)]="allowNotifications"></ion-toggle>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-label>Use Biometric Authentication</ion-label>
+        <ion-toggle slot="end" [(ngModel)]="useBiometrics"></ion-toggle>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-label>Location Access</ion-label>
+        <ion-toggle slot="end" [(ngModel)]="locationAccess"></ion-toggle>
+      </ion-item>
+    </ion-list>
+  </ion-card> -->
+
+<!-- Privacy Policy -->
+<ion-card class="policy-card">
+  <ion-card-header (click)="togglePrivacyPolicy()" class="accordion-header">
+    <ion-card-title>
+      <ion-icon [name]="showPrivacyPolicy ? 'chevron-down' : 'chevron-forward'" slot="start"></ion-icon>
+      Privacy Policy
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content [@expandCollapse]="showPrivacyPolicy ? 'expanded' : 'collapsed'">
+    <p>
+      We value your privacy. Your personal information is securely stored and never shared without your consent.
+      We collect minimal data to enhance your experience and comply with data protection laws.
+    </p>
+    <ul>
+      <li>Your data is never sold.</li>
+      <li>You can request deletion at any time.</li>
+      <li>We use encryption to protect your info.</li>
+    </ul>
+  </ion-card-content>
+</ion-card>
+
+<!-- Security Policy -->
+<ion-card class="policy-card">
+  <ion-card-header (click)="toggleSecurityPolicy()" class="accordion-header">
+    <ion-card-title>
+      <ion-icon [name]="showSecurityPolicy ? 'chevron-down' : 'chevron-forward'" slot="start"></ion-icon>
+      Security Policy
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content [@expandCollapse]="showSecurityPolicy ? 'expanded' : 'collapsed'">
+    <p>
+      Your security is our top priority. We implement industry-standard measures like:
+    </p>
+    <ul>
+      <li>SSL encryption for all data transfers.</li>
+      <li>Regular security audits and patching.</li>
+      <li>2FA and biometric support for extra protection.</li>
+    </ul>
+  </ion-card-content>
+</ion-card>
 
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">PrivacyAndSecurity</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!-- Danger Zone -->
+  <ion-card class="danger-zone">
+    <!-- <ion-card-header>
+      <ion-card-title>Danger Zone</ion-card-title>
+    </ion-card-header> -->
+    <ion-list>
+      <ion-item button (click)="deleteAccount()" class="danger-item">
+        <ion-icon name="trash-outline" slot="start" color="danger"></ion-icon>
+        <ion-label color="danger">Delete Account</ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-card>
 </ion-content>

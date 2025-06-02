@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController, ToastController } from '@ionic/angular';
-import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
-import { AppStateManageService } from 'src/app/services/app-state-manage.service';
-import { UIUtils } from 'src/app/services/uiutils.service';
-import { Utils } from 'src/app/services/utils.service';
+import { ActionSheetController, AlertController, ToastController } from '@ionic/angular';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 @Component({
   selector: 'app-settings',
@@ -13,59 +10,21 @@ import { Utils } from 'src/app/services/utils.service';
   standalone:false
 })
 export class SettingsPage implements OnInit {
-  isLoading: boolean = false;
-  companyRef: number = 0;
-  companyName: any = '';
-  employeeRef: number = 0;
-  employeeName: any = '';
-  employeeData: Employee[] = [];
-
-  async ngOnInit(): Promise<void> {
-    this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
-    this.companyName = this.appStateManagement.StorageKey.getItem('companyName') ? this.appStateManagement.StorageKey.getItem('companyName') : '';
-    this.employeeRef = Number(this.appStateManagement.StorageKey.getItem('LoginEmployeeRef'));
-    this.employeeName = this.appStateManagement.StorageKey.getItem('UserDisplayName') ? this.appStateManagement.StorageKey.getItem('UserDisplayName') : '';
-    await this.loadCustomerEnquiryIfEmployeeExists();
-  }
+  employeeName: string = '';
+  userImage: string = '';
+  // defaultAvatar: string = 'https://avatar.iran.liara.run/public/6';
+  defaultAvatar: string = 'assets/logos/dp.png';
 
   constructor(
     private router: Router,
     private alertController: AlertController,
     private toastController: ToastController,
-    private uiUtils: UIUtils,
-    private utils: Utils,
-    private appStateManagement: AppStateManageService,
-  ) {}
+    private actionSheetCtrl: ActionSheetController
+  ) { }
 
-    private async loadCustomerEnquiryIfEmployeeExists(): Promise<void> {
-      try {
-        this.isLoading = true;
-        // await this.getSingleEmployeeDetails();
-
-      } catch (error) {
-
-
-      } finally {
-        this.isLoading = false;
-      }
-    }
-
-    private async getSingleEmployeeDetails(): Promise<void> {
-      try {
-        if (this.companyRef <= 0) {
-          await this.uiUtils.showErrorToster('Company not Selected');
-          return;
-        }
-        const employee = await Employee.FetchInstance(
-          this.employeeRef, this.companyRef,
-          async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-        );
-        console.log('employee :', employee);
-      } catch (error) {
-
-      }
-    }
-
+  async ngOnInit(): Promise<void> {
+    this.employeeName = localStorage.getItem('UserDisplayName') || 'User';
+  }
 
   openProfile() {
     this.router.navigate(['/app_homepage/user-profile']);
@@ -84,17 +43,10 @@ export class SettingsPage implements OnInit {
       header: 'Logout',
       message: 'Are you sure you want to logout?',
       buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-        },
-        {
-          text: 'Logout',
-          handler: () => this.logout(),
-        },
+        { text: 'Cancel', role: 'cancel' },
+        { text: 'Logout', handler: () => this.logout() },
       ],
     });
-
     await alert.present();
   }
 
@@ -105,6 +57,45 @@ export class SettingsPage implements OnInit {
       color: 'danger',
     });
     toast.present();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login_mobile_app']);
+  }
+
+  async selectImage() {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: 'Select Image Source',
+      buttons: [
+        {
+          text: 'Camera',
+          icon: 'camera',
+          handler: () => this.pickImage(CameraSource.Camera)
+        },
+        {
+          text: 'Gallery',
+          icon: 'image',
+          handler: () => this.pickImage(CameraSource.Photos)
+        },
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel'
+        }
+      ]
+    });
+
+    await actionSheet.present();
+  }
+
+  async pickImage(source: CameraSource) {
+    try {
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: true,
+        resultType: CameraResultType.DataUrl,
+        source
+      });
+      this.userImage = image.dataUrl!;
+    } catch (error) {
+      console.error('Image pick error:', error);
+    }
   }
 }
