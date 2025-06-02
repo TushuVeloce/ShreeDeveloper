@@ -29,12 +29,12 @@ export class SiteWorkGroupMasterComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled();
-    await this.FormulateSiteWorkGroupList();
+    await this.FormulateSiteWorkGroupListByCompanyRef();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
-  private FormulateSiteWorkGroupList = async () => {
+  private FormulateSiteWorkGroupListByCompanyRef = async () => {
       if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -70,11 +70,9 @@ export class SiteWorkGroupMasterComponent implements OnInit {
           await this.uiUtils.showSuccessToster(
             `Site Work Group ${Item.p.Name} has been deleted!`
           );
-          await this.FormulateSiteWorkGroupList();
+          await this.FormulateSiteWorkGroupListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
-          await this.FormulateSiteWorkGroupList();
-
         });
       }
     );
@@ -84,7 +82,7 @@ export class SiteWorkGroupMasterComponent implements OnInit {
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data
   };
-  
+
   get paginatedList() {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
