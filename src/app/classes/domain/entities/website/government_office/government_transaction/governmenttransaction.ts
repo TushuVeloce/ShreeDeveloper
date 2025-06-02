@@ -184,6 +184,7 @@ export class GovernmentTransaction implements IPersistable<GovernmentTransaction
     let tdResponse = await GovernmentTransaction.FetchTransportData(req, errorHandler) as TransportData;
     return GovernmentTransaction.ListFromTransportData(tdResponse);
   }
+  
   public static async FetchEntireListBySiteRef(SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new GovernmentTransactionFetchRequest();
     req.SiteRefs.push(SiteRef)

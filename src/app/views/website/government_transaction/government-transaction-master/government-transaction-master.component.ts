@@ -22,6 +22,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
   SearchString: string = '';
   SelectedGovernmentTransaction: GovernmentTransaction = GovernmentTransaction.CreateNewInstance();
   CustomerRef: number = 0;
+  SiteManagementRef: number = 0;
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
@@ -32,44 +33,52 @@ export class GovernmentTransactionMasterComponent implements OnInit {
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
-    // effect(() => {
-    //   this.getGovernmentTransactionListByCompanyRef();
-    // });
+    effect(() => {
+      this.getSiteWorkGroupListByCompanyRef();
+    });
   }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(false);
-    await this.FormulateGovernmentTransactionListByCompanyRef();
+    await this.getSiteWorkGroupListByCompanyRef();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
+
+  getSiteWorkGroupListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SiteList = lst;
+    if (this.SiteList.length >= 0) {
+      this.SiteManagementRef = this.SiteList[0].p.Ref;
+    } else {
+      this.SiteManagementRef = 0;
+    }
+    this.FormulateGovernmentTransactionListBySiteRef();
+  }
+
   SiteGroupList: any[] = [];
 
   groupCompletionStatus: { [ref: string]: { [groupName: string]: boolean } } = {};
   SiteList: Site[] = [];
 
-  FormulateGovernmentTransactionListByCompanyRef = async () => {
+  FormulateGovernmentTransactionListBySiteRef = async () => {
     // fetching government transaction list by company ref
     // let lst = await GovernmentTransaction.FetchEntireListByCompanyRef(
     //   this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
 
     //  fetching entire government transaction list
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
+    if (this.SiteManagementRef <= 0) {
+      await this.uiUtils.showErrorToster('Site not Selected');
       return;
     }
     this.DisplayMasterList = [];
-    let lst = await GovernmentTransaction.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await GovernmentTransaction.FetchEntireListBySiteRef(this.SiteManagementRef, async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-
-    // fetching site list by company ref
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let SiteListbycompanyname = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.SiteList = SiteListbycompanyname;
 
     // get Transaction Type List Status
 
@@ -134,16 +143,6 @@ export class GovernmentTransactionMasterComponent implements OnInit {
     }
   }
 
-  SiteManagementRef: number = 0;
-  onsitechange = (siteref: number) => {
-    if (siteref > 0 && this.MasterList.length > 0) {
-      this.DisplayMasterList = this.MasterList.filter(e => (e.p.SiteRef == siteref));
-    }
-    else {
-      this.DisplayMasterList = this.MasterList;
-    }
-  }
-
   getGroupStatus(ref: number, groupName: string): boolean {
     return this.groupCompletionStatus[ref]?.[groupName] || false;
 
@@ -180,7 +179,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
           await this.uiUtils.showSuccessToster(
             `GovernmentTransaction ${GovernmentTransaction.p.SiteName} has been deleted!`
           );
-          await this.FormulateGovernmentTransactionListByCompanyRef();
+          await this.FormulateGovernmentTransactionListBySiteRef();
           this.SearchString = '';
           this.loadPaginationData();
 
