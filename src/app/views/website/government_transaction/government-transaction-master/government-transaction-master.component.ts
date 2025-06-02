@@ -43,6 +43,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
+  SiteGroupList: any[] = [];
 
   groupCompletionStatus: { [ref: string]: { [groupName: string]: boolean } } = {};
   SiteList: Site[] = [];
@@ -73,6 +74,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
     // get Transaction Type List Status
 
     for (let i = 0; i < this.MasterList.length; i++) {
+      // debugger
       let obj = this.MasterList[i];
       let transactionJson = obj.p.TransactionJson;
       let transactionRef = obj.p.Ref;
@@ -119,6 +121,9 @@ export class GovernmentTransactionMasterComponent implements OnInit {
         }
 
         this.groupCompletionStatus[obj.p.Ref][group.SiteWorkGroupName] = isGroupComplete;
+        this.SiteGroupList.push(group.SiteWorkGroupName)
+        // console.log( this.SiteGroupList);
+
 
         if (isGroupComplete) {
           this.getGroupStatus(transactionRef, group.SiteWorkGroupName);
@@ -140,7 +145,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
   }
 
   getGroupStatus(ref: number, groupName: string): boolean {
-    return this.groupCompletionStatus[ref]?.[groupName] === true;
+    return this.groupCompletionStatus[ref]?.[groupName] || false;
 
     // switch (groupName) {
     //   case 'TP Office': return this.Entity.p.TpOfficeStatus = groupStatus;
