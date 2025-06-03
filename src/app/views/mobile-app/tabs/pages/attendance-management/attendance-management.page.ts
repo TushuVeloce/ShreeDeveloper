@@ -445,6 +445,7 @@ export class AttendanceManagementPage implements OnInit {
       this.attendanceLog.p.IsCheckIn = true;
       this.attendanceLog.p.CompanyRef = this.companyState.getCurrentCompanyRef();
       this.attendanceLog.p.EmployeeRef = this.employeeRef;
+      this.attendanceLog.p.HandleBy = 100;
 
       if (this.selectedSite.length > 0) {
         this.attendanceLog.p.SiteRef = this.selectedSite[0].p.Ref;
@@ -454,16 +455,28 @@ export class AttendanceManagementPage implements OnInit {
       const entityToSave = this.attendanceLog.GetEditableVersion();
       const entitiesToSave = [entityToSave];
 
-      const filesToUpload: FileTransferObject[] = [];
+      // const filesToUpload: FileTransferObject[] = [];
 
-      if (this.rawCapturedSelfPhoto) {
-        const file = await this.uriToFile(this.rawCapturedSelfPhoto, "PunchIn_Self_Photo.jpg");
-        filesToUpload.push(FileTransferObject.FromFile("AttendanceLogFile1", file, "PunchIn_Self_Photo"));
-      }
+      // if (this.rawCapturedSelfPhoto) {
+      //   const file = await this.uriToFile(this.rawCapturedSelfPhoto, "PunchIn_Self_Photo.jpg");
+      //   filesToUpload.push(FileTransferObject.FromFile("AttendanceLogFile1", file, "PunchIn_Self_Photo"));
+      // }
       
+      // if (this.rawCapturedWorkLocationPhoto) {
+      //   const file = await this.uriToFile(this.rawCapturedWorkLocationPhoto, "PunchIn_Work_location.jpg");
+      //   filesToUpload.push(FileTransferObject.FromFile("AttendanceLogFile2", file, "PunchIn_Work_location"));
+      // }
+      const filesToUpload: FileTransferObject[] = [];
+      if (this.rawCapturedSelfPhoto) {
+        // Convert URI to File with .jpg extension
+        const file = await this.uriToFile(this.rawCapturedSelfPhoto, "PunchIn_Self_Photo.jpg");
+        // Send file with extension explicitly included
+        filesToUpload.push(FileTransferObject.FromFile("AttendanceLogFile1", file, "PunchIn_Self_Photo.jpg"));
+      }
+
       if (this.rawCapturedWorkLocationPhoto) {
         const file = await this.uriToFile(this.rawCapturedWorkLocationPhoto, "PunchIn_Work_location.jpg");
-        filesToUpload.push(FileTransferObject.FromFile("AttendanceLogFile2", file, "PunchIn_Work_location"));
+        filesToUpload.push(FileTransferObject.FromFile("AttendanceLogFile2", file, "PunchIn_Work_location.jpg"));
       }
 
       const tr = await this.utils.SavePersistableEntities(entitiesToSave, filesToUpload);
@@ -499,6 +512,7 @@ export class AttendanceManagementPage implements OnInit {
       this.attendanceLog.p.IsCheckIn = false;
       this.attendanceLog.p.CompanyRef = this.companyState.getCurrentCompanyRef();
       this.attendanceLog.p.EmployeeRef = this.employeeRef;
+      this.attendanceLog.p.HandleBy = 100;
       // Convert date to full format
       this.attendanceLog.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
       const entityToSave = this.attendanceLog.GetEditableVersion();

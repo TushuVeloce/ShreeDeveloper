@@ -34,6 +34,7 @@ export class AttendanceLogProps {
   public IsHalfDay: number = 0;
   public AttendenceLocationType: number = 0;
   public WorkingHrs: number = 0;
+  public HandleBy: number = 0;
   public readonly EmployeeName: string = '';
   public readonly SiteName: string = '';
   public readonly CompanyName: string = '';
