@@ -86,8 +86,22 @@ export class UnitMasterDetailsComponent implements OnInit {
     }
   }
 
-  BackUnit = () => {
-    this.router.navigate(['/homepage/Website/Unit_Master']);
+  // BackUnit = () => {
+  //   this.router.navigate(['/homepage/Website/Unit_Master']);
+  // }
+
+  BackUnit = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this User Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Unit_Master']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Unit_Master']);
+    }
   }
 
   resetAllControls = () => {
