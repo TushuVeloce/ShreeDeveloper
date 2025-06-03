@@ -95,7 +95,7 @@ export class UnitMasterDetailsComponent implements OnInit {
       await this.uiUtils.showConfirmationMessage('Cancel',
         `This process is IRREVERSIBLE!
       <br/>
-      Are you sure that you want to Cancel this User Form?`,
+      Are you sure that you want to Cancel this Unit Form?`,
         async () => {
           await this.router.navigate(['/homepage/Website/Unit_Master']);
         });
