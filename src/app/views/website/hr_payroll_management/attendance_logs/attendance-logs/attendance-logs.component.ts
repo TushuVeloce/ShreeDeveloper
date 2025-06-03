@@ -8,6 +8,7 @@ import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacke
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
@@ -60,6 +61,7 @@ export class AttendanceLogsComponent implements OnInit {
     private screenSizeService: ScreenSizeService, private companystatemanagement: CompanyStateManagement,
     private payloadPacketFacade: PayloadPacketFacade,
     private serverCommunicator: ServerCommunicatorService,
+    private DateconversionService: DateconversionService,
     private router: Router,
   ) {
     effect(async () => {
@@ -186,6 +188,11 @@ export class AttendanceLogsComponent implements OnInit {
       return [...this.baseHeaders, 'On Leave', 'Leave Type'];
     }
     return this.baseHeaders;
+  }
+
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
   }
 
   // CustomFetchRequest

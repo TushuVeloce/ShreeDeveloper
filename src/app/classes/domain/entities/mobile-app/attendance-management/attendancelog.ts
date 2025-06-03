@@ -11,6 +11,7 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { AttendanceLogFetchRequest } from "./attendancelogfetchrequest";
+import { AttendanceLocationType } from "../../../domainenums/domainenums";
 
 
 export class AttendanceLogProps {
@@ -30,6 +31,7 @@ export class AttendanceLogProps {
   public LastCheckOutTime: string = '';
   public AttendanceLogPath1: string = '';
   public AttendanceLogPath2: string = '';
+  public FromTime: string = '';
   public IsLeave: number = 0;
   public IsHalfDay: number = 0;
   public AttendanceLocationType: number = 0;
@@ -86,6 +88,10 @@ export class AttendanceLog implements IPersistable<AttendanceLog> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company cannot be blank.');
+    if (this.p.EmployeeRef == 0) vra.add('EmployeeRef', 'Employee cannot be blank.');
+    if (this.p.FromTime == '') vra.add('FromTime', 'From Date cannot be blank.');
+    if (this.p.AttendanceLocationType == 0) vra.add('AttendanceLocationType', 'Attendance Location Type cannot be blank.');
+    if (this.p.AttendanceLocationType == AttendanceLocationType.Site && this.p.SiteRef == 0) vra.add('SiteRef', 'Site cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {

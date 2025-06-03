@@ -10,18 +10,48 @@
         <span class="detail_title">{{DetailsFormTitle}}</span>
       </div>
     </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-        <!-- <div class="col-md-6">
-          <label>Attendence Name</label>
-          <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name"
-            placeholder="Enter Attendence Name" pattern="{{Attendence}}" #NameCtrl="ngModel" required
-            (blur)="NameCtrl.control.markAsTouched()" />
-          <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
-            <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{AttendenceMsg}}</span>
-            <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+        <div class="col-6">
+          <label>Employee</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" [nzSize]="'large'" name="SiteInchargeRef" required id="SiteInchargeRef"
+            [(ngModel)]="Entity.p.EmployeeRef">
+            <nz-option *ngFor="let employee of EmployeeList" [nzLabel]="employee.p.Name"
+              [nzValue]="employee.p.Ref"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-6">
+          <div>
+            <label>From Time</label>
+            <input type="time" [(ngModel)]="Entity.p.FromTime" name="FromDate" class="form-control" id="FromDate"
+              required #FromDateCtrl="ngModel" (blur)="FromDateCtrl.control.markAsTouched()" />
+            <div *ngIf="(FromDateCtrl.invalid && (FromDateCtrl.touched || FromDateCtrl.dirty))">
+              <span class="validation-text" *ngIf="FromDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
           </div>
-        </div> -->
+        </div>
+        <div class="col-6">
+          <label>Attendance Location Type</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" [nzSize]="'large'" name="AttendanceLocationType" required id="AttendanceLocationType"
+            [(ngModel)]="Entity.p.AttendanceLocationType">
+            <nz-option *ngFor="let Location of AttendanceLocationTypeList" [nzLabel]="Location.Name"
+              [nzValue]="Location.Ref"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-6" *ngIf="Entity.p.AttendanceLocationType == AttendanceLocationType.Site">
+          <label for="SiteRef"><b>Site</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" id="SiteRef">
+            <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+          </nz-select>
+        </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>

@@ -121,6 +121,10 @@ export class SiteManagementDetailsComponent implements OnInit {
   }
 
   getEmployeeListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
     let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.EmployeeList = lst;
   }
@@ -278,14 +282,14 @@ export class SiteManagementDetailsComponent implements OnInit {
 
   async removeowner(index: number) {
     // this.Entity.p.SiteManagementOwnerDetails.splice(index, 1); // Remove owner
- await this.uiUtils.showConfirmationMessage(
-    'Delete',
-    `This process is <strong>IRREVERSIBLE!</strong> <br/>
+    await this.uiUtils.showConfirmationMessage(
+      'Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
      Are you sure that you want to DELETE this Owner?`,
-    async () => {
-      this.Entity.p.SiteManagementOwnerDetails.splice(index, 1);
-    }
-  );
+      async () => {
+        this.Entity.p.SiteManagementOwnerDetails.splice(index, 1);
+      }
+    );
   }
 
   SaveSite = async () => {

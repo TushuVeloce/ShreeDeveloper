@@ -1,10 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
+import { ValidationMessages, ValidationPatterns, AttendanceHandleByRefs } from 'src/app/classes/domain/constants';
+import { AttendanceLocationType, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { AttendanceLog } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelog';
+import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -12,6 +17,7 @@ import { Utils } from 'src/app/services/utils.service';
   selector: 'app-attendance-details',
   templateUrl: './attendance-details.component.html',
   styleUrls: ['./attendance-details.component.scss'],
+  standalone: false,
 })
 export class AttendanceDetailsComponent implements OnInit {
   Entity: AttendanceLog = AttendanceLog.CreateNewInstance();
@@ -20,18 +26,26 @@ export class AttendanceDetailsComponent implements OnInit {
   DetailsFormTitle: 'New Attendance' | 'Edit Attendance' = 'New Attendance';
   IsDropdownDisabled: boolean = false
   InitialEntity: AttendanceLog = null as any;
+  EmployeeList: Employee[] = [];
+  FromTime: string = '';
+  SiteList: Site[] = [];
+  AttendanceLocationTypeList = DomainEnums.AttendanceLocationTypeList();
+  AttendanceLocationType = AttendanceLocationType;
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos
 
   NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
-  @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('FromDateCtrl') FromDateInputControl!: NgModel;
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
+  constructor(private router: Router, private uiUtils: UIUtils, private dtu: DTU, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
+    this.getEmployeeListByCompanyRef();
+    this.getSiteListByCompanyRef();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
 
@@ -45,13 +59,24 @@ export class AttendanceDetailsComponent implements OnInit {
 
     }
     this.InitialEntity = Object.assign(AttendanceLog.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as AttendanceLog;
-    this.focusInput();
   }
 
-  focusInput = () => {
-    let txtName = document.getElementById('Name')!;
-    txtName.focus();
+  getEmployeeListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.EmployeeList = lst;
   }
+
+  private getSiteListByCompanyRef = async () => {
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.SiteList = lst;
+  };
 
   SaveAttendenceMaster = async () => {
     this.isSaveDisabled = true;
@@ -60,8 +85,15 @@ export class AttendanceDetailsComponent implements OnInit {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
+
+    this.Entity.p.HandleBy = AttendanceHandleByRefs.WebRef;
+    // Get current date time and set state
+    const strCurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
+    const DateValue = strCurrentDateTime.substring(0, 10);
+    this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(DateValue);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
+    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
@@ -97,10 +129,10 @@ export class AttendanceDetailsComponent implements OnInit {
 
   resetAllControls = () => {
     // reset touched
-    this.NameInputControl.control.markAsUntouched();
+    this.FromDateInputControl.control.markAsUntouched();
 
     // reset dirty
-    this.NameInputControl.control.markAsPristine();
+    this.FromDateInputControl.control.markAsPristine();
   }
 }
 
