@@ -10,16 +10,14 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { EmployeeOvertimeFetchRequest } from "./employeeovertimefetchrequest";
+import { CompanyHolidaysFetchRequest } from "./companyholidaysfetchrequest";
 
 
-export class EmployeeOvertimeProps {
-  public readonly Db_Table_Name = "EmployeeOvertime";
+export class CompanyHolidaysProps {
+  public readonly Db_Table_Name = "HolidayCalender";
   public Ref: number = 0;
   public Date: string = '';
-  public EmployeeRef: number = 0;
-  public OverTimeInMin: number = 0;
-  public OverTimeInHrs: number = 0;
+  public Reason: string = '';
   public CompanyRef: number = 0;
   public readonly CompanyName: string = '';
   public CreatedBy: number = 0;
@@ -37,14 +35,14 @@ export class EmployeeOvertimeProps {
   }
 
   public static Blank() {
-    return new EmployeeOvertimeProps(true);
+    return new CompanyHolidaysProps(true);
   }
 }
 
-export class EmployeeOvertime implements IPersistable<EmployeeOvertime> {
-  public static readonly Db_Table_Name: string = 'EmployeeOvertime';
+export class CompanyHolidays implements IPersistable<CompanyHolidays> {
+  public static readonly Db_Table_Name: string = 'HolidayCalender';
 
-  private constructor(public readonly p: EmployeeOvertimeProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: CompanyHolidaysProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -57,17 +55,17 @@ export class EmployeeOvertime implements IPersistable<EmployeeOvertime> {
     }
   }
 
-  public GetEditableVersion(): EmployeeOvertime {
-    let newState: EmployeeOvertimeProps = Utils.GetInstance().DeepCopy(this.p);
-    return EmployeeOvertime.CreateInstance(newState, true);
+  public GetEditableVersion(): CompanyHolidays {
+    let newState: CompanyHolidaysProps = Utils.GetInstance().DeepCopy(this.p);
+    return CompanyHolidays.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new EmployeeOvertime(EmployeeOvertimeProps.Blank(), true);
+    return new CompanyHolidays(CompanyHolidaysProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new EmployeeOvertime(data as EmployeeOvertimeProps, allowEdit);
+    return new CompanyHolidays(data as CompanyHolidaysProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
@@ -75,28 +73,28 @@ export class EmployeeOvertime implements IPersistable<EmployeeOvertime> {
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, EmployeeOvertime.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, CompanyHolidays.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: EmployeeOvertime = EmployeeOvertime.CreateNewInstance();
+  private static m_currentInstance: CompanyHolidays = CompanyHolidays.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return EmployeeOvertime.m_currentInstance;
+    return CompanyHolidays.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: EmployeeOvertime) {
-    EmployeeOvertime.m_currentInstance = value;
+  public static SetCurrentInstance(value: CompanyHolidays) {
+    CompanyHolidays.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): EmployeeOvertime {
+  public static SingleInstanceFromTransportData(td: TransportData): CompanyHolidays {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, EmployeeOvertime.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, EmployeeOvertime.Db_Table_Name)!.Entries) {
-        return EmployeeOvertime.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, CompanyHolidays.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, CompanyHolidays.Db_Table_Name)!.Entries) {
+        return CompanyHolidays.CreateInstance(data, false);
       }
     }
 
@@ -105,13 +103,13 @@ export class EmployeeOvertime implements IPersistable<EmployeeOvertime> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): EmployeeOvertime[] {
-    let result: EmployeeOvertime[] = [];
+   sortPropertyName: string = ""): CompanyHolidays[] {
+    let result: CompanyHolidays[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, EmployeeOvertime.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, EmployeeOvertime.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, CompanyHolidays.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, CompanyHolidays.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -121,18 +119,18 @@ export class EmployeeOvertime implements IPersistable<EmployeeOvertime> {
       }
 
       for (let data of entries) {
-        result.push(EmployeeOvertime.CreateInstance(data, false));
+        result.push(CompanyHolidays.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): EmployeeOvertime[] {
-    return EmployeeOvertime.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): CompanyHolidays[] {
+    return CompanyHolidays.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: EmployeeOvertimeFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: CompanyHolidaysFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -147,29 +145,29 @@ export class EmployeeOvertime implements IPersistable<EmployeeOvertime> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new EmployeeOvertimeFetchRequest();
-    req.EmployeeOvertimeRefs.push(ref);
+    let req = new CompanyHolidaysFetchRequest();
+    req.CompanyHolidaysRefs.push(ref);
 
-    let tdResponse = await EmployeeOvertime.FetchTransportData(req, errorHandler) as TransportData;
-    return EmployeeOvertime.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await CompanyHolidays.FetchTransportData(req, errorHandler) as TransportData;
+    return CompanyHolidays.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: EmployeeOvertimeFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await EmployeeOvertime.FetchTransportData(req, errorHandler) as TransportData;
-    return EmployeeOvertime.ListFromTransportData(tdResponse);
+  public static async FetchList(req: CompanyHolidaysFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await CompanyHolidays.FetchTransportData(req, errorHandler) as TransportData;
+    return CompanyHolidays.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new EmployeeOvertimeFetchRequest();
-    let tdResponse = await EmployeeOvertime.FetchTransportData(req, errorHandler) as TransportData;
-    return EmployeeOvertime.ListFromTransportData(tdResponse);
+    let req = new CompanyHolidaysFetchRequest();
+    let tdResponse = await CompanyHolidays.FetchTransportData(req, errorHandler) as TransportData;
+    return CompanyHolidays.ListFromTransportData(tdResponse);
   }
 
  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new EmployeeOvertimeFetchRequest();
+    let req = new CompanyHolidaysFetchRequest();
     req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await EmployeeOvertime.FetchTransportData(req, errorHandler) as TransportData;
-    return EmployeeOvertime.ListFromTransportData(tdResponse);
+    let tdResponse = await CompanyHolidays.FetchTransportData(req, errorHandler) as TransportData;
+    return CompanyHolidays.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {

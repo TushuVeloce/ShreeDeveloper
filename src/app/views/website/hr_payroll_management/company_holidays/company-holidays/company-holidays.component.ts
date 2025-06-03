@@ -1,6 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { EmployeeOvertime } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Employee_Overtime/employeeovertime';
+import { CompanyHolidays } from 'src/app/classes/domain/entities/website/HR_and_Payroll/company_holidays/companyholidays';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
@@ -8,29 +8,29 @@ import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
-  selector: 'app-employee-overtime',
+  selector: 'app-company-holidays',
   standalone: false,
-  templateUrl: './employee-overtime.component.html',
-  styleUrls: ['./employee-overtime.component.scss'],
+  templateUrl: './company-holidays.component.html',
+  styleUrls: ['./company-holidays.component.scss'],
 })
-export class EmployeeOvertimeComponent  implements OnInit {
- Entity: EmployeeOvertime = EmployeeOvertime.CreateNewInstance();
-  MasterList: EmployeeOvertime[] = [];
-  DisplayMasterList: EmployeeOvertime[] = [];
+export class CompanyHolidaysComponent  implements OnInit {
+ Entity: CompanyHolidays = CompanyHolidays.CreateNewInstance();
+  MasterList: CompanyHolidays[] = [];
+  DisplayMasterList: CompanyHolidays[] = [];
   SearchString: string = '';
-  SelectedTime: EmployeeOvertime = EmployeeOvertime.CreateNewInstance();
+  SelectedTime: CompanyHolidays = CompanyHolidays.CreateNewInstance();
   CustomerRef: number = 0;
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Date','Employee Name','Overtime in Min','Overtime in Hrs','Action'];
+  headers: string[] = ['Sr.No.', 'Date','Reason','Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement,private DateconversionService: DateconversionService,
   ) {
     effect(async () => {
-      await this.getEmployeeOvertimeListByCompanyRef();
+      await this.getCompanyHolidaysListByCompanyRef();
     });
   }
   async ngOnInit() {
@@ -39,35 +39,35 @@ export class EmployeeOvertimeComponent  implements OnInit {
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
  
-   getEmployeeOvertimeListByCompanyRef = async () => {
+   getCompanyHolidaysListByCompanyRef = async () => {
       this.MasterList = [];
       this.DisplayMasterList = [];
       if (this.companyRef() <= 0) {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
       }
-      let lst = await EmployeeOvertime.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      let lst = await CompanyHolidays.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
       this.loadPaginationData();
     }
 
-    onEditClicked = async (item: EmployeeOvertime) => {
+    onEditClicked = async (item: CompanyHolidays) => {
       this.SelectedTime = item.GetEditableVersion();
-      EmployeeOvertime.SetCurrentInstance(this.SelectedTime);
+      CompanyHolidays.SetCurrentInstance(this.SelectedTime);
       this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-      await this.router.navigate(['/homepage/Website/Employee_Overtime_Details']);
+      await this.router.navigate(['/homepage/Website/Company_Holidays_Details']);
     };
 
-    onDeleteClicked = async (EmployeeOvertime: EmployeeOvertime) => {
+    onDeleteClicked = async (CompanyHolidays: CompanyHolidays) => {
       await this.uiUtils.showConfirmationMessage(
         'Delete',
         `This process is <strong>IRREVERSIBLE!</strong> <br/>
       Are you sure that you want to DELETE this Overtime?`,
         async () => {
-          await EmployeeOvertime.DeleteInstance(async () => {
-            await this.uiUtils.showSuccessToster(`${EmployeeOvertime.p.EmployeeRef} has been deleted!`);
-            await this.getEmployeeOvertimeListByCompanyRef();
+          await CompanyHolidays.DeleteInstance(async () => {
+            await this.uiUtils.showSuccessToster(`${CompanyHolidays.p.Date} has been deleted!`);
+            await this.getCompanyHolidaysListByCompanyRef();
             this.SearchString = '';
             this.loadPaginationData();
           });
@@ -94,8 +94,8 @@ export class EmployeeOvertimeComponent  implements OnInit {
       this.currentPage = pageIndex; // Update the current page
     };
 
-   AddEmployeeOvertime = async() => {
-    this.router.navigate(['/homepage/Website/Employee_Overtime_Details']);
+   AddCompanyHoliday = async() => {
+    this.router.navigate(['/homepage/Website/Company_Holidays_Details']);
   }
 
   filterTable = () => {
@@ -109,3 +109,4 @@ export class EmployeeOvertimeComponent  implements OnInit {
     }
   }
 }
+

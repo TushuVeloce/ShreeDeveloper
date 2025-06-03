@@ -117,6 +117,9 @@ import { EmployeeOvertime } from 'src/app/classes/domain/entities/website/HR_and
 import { EmployeeOvertimeComponent } from './hr_payroll_management/employee_overtime/employee-overtime/employee-overtime.component';
 import { EmployeeOvertimeDetailsComponent } from './hr_payroll_management/employee_overtime/employee-overtime-details/employee-overtime-details.component';
 import { YourProfileComponent } from './profile/your_profile/your-profile/your-profile.component';
+import { CompanyHolidays } from 'src/app/classes/domain/entities/website/HR_and_Payroll/company_holidays/companyholidays';
+import { CompanyHolidaysComponent } from './hr_payroll_management/company_holidays/company-holidays/company-holidays.component';
+import { CompanyHolidaysDetailsComponent } from './hr_payroll_management/company_holidays/company-holidays-details/company-holidays-details.component';
 import { AttendanceDetailsComponent } from './hr_payroll_management/attendance_logs/attendance-details/attendance-details.component';
 
 
@@ -270,6 +273,8 @@ const routes: Routes = [
       { path: 'Salary_Slip_Approval', component: SalarySlipApprovalComponent },
       { path: 'Employee_Overtime', component: EmployeeOvertimeComponent},
       { path: 'Employee_Overtime_Details', component: EmployeeOvertimeDetailsComponent},
+      { path: 'Company_Holidays', component: CompanyHolidaysComponent},
+      { path: 'Company_Holidays_Details', component: CompanyHolidaysDetailsComponent},
 
       // Request
       { path: 'Leave_Request', component: LeaveRequestComponent },

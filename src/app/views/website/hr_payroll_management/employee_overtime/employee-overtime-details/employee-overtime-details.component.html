@@ -15,7 +15,7 @@
         No Data
       </div>
     </ng-template>
-    <form autocomplete="off" #officedutyandtimeForm="ngForm">
+    <form autocomplete="off" #OvertimeForm="ngForm">
       <div class="row">
         <div class="col-md-6" style="margin-top: 1rem; ">
           <div>
@@ -41,20 +41,20 @@
         <div class="col-md-6" style="margin-top: 1rem; ">
           <div>
             <label>Overtime in Hrs</label>
-            <input type="number" name="OverTimeinhrs" class="form-control" id="OverTimeinhrs" [(ngModel)]="Entity.p.OverTimeinhrs" (ngModelChange)="converthrtomin()"
-              placeholder="Enter late Mark Grace" required #OvertimeinHrsCtrl="ngModel" (blur)="OvertimeinHrsCtrl.control.markAsTouched()" />
-          <div *ngIf="(OvertimeinHrsCtrl.invalid && (OvertimeinHrsCtrl.touched || OvertimeinHrsCtrl.dirty))">
-            <span class="validation-text" *ngIf="OvertimeinHrsCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <input type="number" name="OverTimeInHrs" class="form-control" id="OverTimeInHrs" [(ngModel)]="Entity.p.OverTimeInHrs" (ngModelChange)="converthrtomin()"
+              placeholder="Enter late Mark Grace" required #OverTimeInHrsCtrl="ngModel" (blur)="OverTimeInHrsCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>
+          <div *ngIf="(OverTimeInHrsCtrl.invalid && (OverTimeInHrsCtrl.touched || OverTimeInHrsCtrl.dirty))">
+            <span class="validation-text" *ngIf="OverTimeInHrsCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
           </div>
         </div>
           <div class="col-md-6" style="margin-top: 1rem; ">
           <div>
             <label>Overtime in Min</label>
-            <input type="number" name="OverTimeinmin " class="form-control" id="OverTimeinmin " [(ngModel)]="Entity.p.OverTimeinmin" (ngModelChange)="convertmintohr()"
-              placeholder="Enter over time Grace" #OvertimeinminCtrl="ngModel" required (blur)="OvertimeinminCtrl.control.markAsTouched()" />
-          <div *ngIf="(OvertimeinminCtrl.invalid && (OvertimeinminCtrl.touched || OvertimeinminCtrl.dirty))">
-            <span class="validation-text" *ngIf="OvertimeinminCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <input type="number" name="OverTimeInMin " class="form-control" id="OverTimeInMin " [(ngModel)]="Entity.p.OverTimeInMin" (ngModelChange)="convertmintohr()"
+              placeholder="Enter over time Grace" #OverTimeInMinCtrl="ngModel" required (blur)="OverTimeInMinCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>
+          <div *ngIf="(OverTimeInMinCtrl.invalid && (OverTimeInMinCtrl.touched || OverTimeInMinCtrl.dirty))">
+            <span class="validation-text" *ngIf="OverTimeInMinCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
           </div>
         </div>

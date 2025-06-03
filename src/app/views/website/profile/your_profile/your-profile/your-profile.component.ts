@@ -4,6 +4,7 @@ import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/c
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { UserProfile } from 'src/app/classes/domain/entities/website/profile/userprofile';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 
 @Component({
   selector: 'app-your-profile',
@@ -26,7 +27,7 @@ export class YourProfileComponent  implements OnInit {
   @ViewChild('PhoneNosCtrl') phoneNosInputControl!: NgModel;
 
 
-  constructor(private cdr: ChangeDetectorRef) { }
+  constructor(private cdr: ChangeDetectorRef,private DateconversionService: DateconversionService,) { }
 
   // CountryCodeList = DomainEnums.CountryCodeList(true, '--Select Status--');
 
@@ -60,6 +61,11 @@ export class YourProfileComponent  implements OnInit {
   // Utility function to create object URL
   createObjectURL(file: File): string {
     return URL.createObjectURL(file);
+  }
+
+   // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
   }
 
   selectAllValue(event: MouseEvent): void {

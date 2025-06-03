@@ -4,16 +4,16 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class EmployeeOvertimeFetchRequest
+export class CompanyHolidaysFetchRequest
 {
-    public static readonly FetchRequestType: string = "EmployeeOvertimeFetchRequest";
+    public static readonly FetchRequestType: string = "HolidayCalenderFetchRequest";
 
     CompanyRefs: number[] = [];
-    EmployeeOvertimeRefs: number[] = [];
+    CompanyHolidaysRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, EmployeeOvertimeFetchRequest.FetchRequestType) as DataCollection;
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CompanyHolidaysFetchRequest.FetchRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 

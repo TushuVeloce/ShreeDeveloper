@@ -1,0 +1,53 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackCompanyHoliday()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">{{DetailsFormTitle}}</span>
+      </div>
+    </div>
+     <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
+    <form autocomplete="off" #companyForm="ngForm">
+      <div class="row">
+        <div class="col-md-6" style="margin-top: 1rem; ">
+          <div>
+            <label for="Date">Date</label>
+            <input type="date" name="Date" required class="form-control" id="Date" [(ngModel)]="Entity.p.Date"
+              placeholder="Enter From Time " #DateCtrl="ngModel" required (blur)="DateCtrl.control.markAsTouched()" />
+          <div *ngIf="(DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty))">
+            <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+          </div>
+        </div>
+        <div class="col-md-6" style="margin-top: 1rem; ">
+          <div>
+            <label for="Reason">Reason</label>
+            <input type="text" name="Reason" required class="form-control" id="Reason" [(ngModel)]="Entity.p.Reason"
+              placeholder="Enter Reason " #ReasonCtrl="ngModel" required (blur)="ReasonCtrl.control.markAsTouched()" />
+          <div *ngIf="(ReasonCtrl.invalid && (ReasonCtrl.touched || ReasonCtrl.dirty))">
+            <span class="validation-text" *ngIf="ReasonCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+          </div>
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn" (click)="SaveCompanyHoliday()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackCompanyHoliday()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
