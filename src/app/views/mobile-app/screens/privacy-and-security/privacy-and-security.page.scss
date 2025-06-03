@@ -1,0 +1,47 @@
+.privacy-card,
+.policy-card {
+    border-radius: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    background-color: var(--ion-background-color);
+}
+
+.privacy-list ion-item {
+    padding: 10px 16px;
+}
+
+.accordion-header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 14px;
+}
+
+.policy-card ion-card-title {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.policy-card ion-card-content p,
+.policy-card ion-card-content ul {
+    font-size: 15px;
+    color: var(--ion-color-medium);
+}
+
+.policy-card ul {
+    padding-left: 18px;
+    margin-top: 8px;
+}
+
+.danger-zone {
+    border: 1px solid var(--ion-color-danger);
+    border-radius: 16px;
+}
+
+.danger-item {
+    font-weight: bold;
+    color: var(--ion-color-danger);
+    --color: var(--ion-color-danger);
+}

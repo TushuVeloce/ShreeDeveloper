@@ -16,7 +16,7 @@
 //   box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
 // }
 
-.menu-sidebar{
+.menu-sidebar {
   position: relative;
   z-index: 10;
   min-height: 100vh;
@@ -42,26 +42,8 @@
   margin-bottom: 8px;
   display: flex;
   justify-content: center;
-  height: 85px;
   background: white !important;
   transition: all .3s;
-}
-
-.sidebar-logo img {
-  text-align: left;
-  display: inline-block;
-  height: 30px;
-  // width: 30px;
-  vertical-align: middle;
-}
-
-.sidebar-logo h1 {
-  display: inline-block;
-  // margin: 0 0 0 20px;
-  color: #fff;
-  font-weight: 600;
-  font-size: 14px;
-  vertical-align: middle;
 }
 
 nz-header {
@@ -71,37 +53,29 @@ nz-header {
 }
 
 
-.ant-layout-header{
-background-color: white;
-box-shadow: 0 2px 2px rgba(18, 18, 18, 0.08);
+.ant-layout-header {
+  background-color: white;
+  box-shadow: 0 2px 2px rgba(18, 18, 18, 0.08);
 }
 
-.inner-content{
+.inner-content {
   padding: 16px;
   background-color: #e5e7eb;
   height: 100%;
   overflow-y: auto;
 }
 
-.inner-content_left {
-  padding: 24px;
-  background-color: #e5e7eb;
-  height: 100%;
-  overflow-y: auto;
-}
-
-
 .scrollable-content {
   overflow-y: auto;
   max-height: calc(100vh - 64px);
   background-color: #fff5f5;
-  scrollbar-width:none;
+  scrollbar-width: none;
   /* Adjust the height as needed, subtracting any fixed header height */
 }
 
 .theme_logo {
   width: 40%;
-  height: 100%!important;
+  height: 100% !important;
 }
 
 .layout_light {
@@ -182,8 +156,8 @@ box-shadow: 0 2px 2px rgba(18, 18, 18, 0.08);
   white-space: normal;
   /* Allow text to wrap */
   word-wrap: break-word;
-  line-height: 22px;
-   font-size: medium;
+  line-height: 1vw;
+  font-size: 90%;
 }
 
 .sidebar-submenu-item {
@@ -192,8 +166,8 @@ box-shadow: 0 2px 2px rgba(18, 18, 18, 0.08);
   white-space: normal;
   /* Allow text to wrap */
   word-wrap: break-word;
-  line-height: 22px;
-  font-size: small;
+  line-height: 1vw;
+  font-size: 80%;
 }
 
 .ant-menu-inline .ant-menu-item-selected::after,
@@ -225,7 +199,7 @@ box-shadow: 0 2px 2px rgba(18, 18, 18, 0.08);
 .ant-menu-vertical-left .ant-menu-submenu-title,
 .ant-menu-vertical-right .ant-menu-item,
 .ant-menu-vertical-right .ant-menu-submenu-title {
-  height: 40px;
+  height: 2.5vw;
   margin-top: 4px;
   margin-bottom: 4px;
   padding: 0 16px;
@@ -303,6 +277,7 @@ box-shadow: 0 2px 2px rgba(18, 18, 18, 0.08);
   height: 30px;
   padding-right: 1rem;
 }
+
 /* Override Styles When Browser Back Event Occurs */
 .browserBack {
 
@@ -384,8 +359,3 @@ box-shadow: 0 2px 2px rgba(18, 18, 18, 0.08);
 //   color: orangered;
 //   border-radius: 5px 5px 5px 5px;
 // }
-
-
-
-
-

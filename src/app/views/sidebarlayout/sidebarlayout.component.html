@@ -16,32 +16,37 @@
           <div style="display: flex" (click)="SideMenuHideShowForModule(module.Name, true)">
             <a style="margin-top: 12px; margin-left: 20px" (click)="NavigationFromLogo(module.RouterLink)"
               *ngIf="isCollapsed">
-              <img [src]="module.WhiteLogo" alt="logo" title="{{ module.Name }}" style="width: 25px; height: 25px" />
+              <img [src]="module.WhiteLogo" [alt]="module.Name" [title]="module.Name"
+                style="width: 25px; height: 25px" />
             </a>
             <li nz-menu-item *ngIf="!isCollapsed" nz-menu-item>
-              <a style="margin-top: 12px; margin-right: 12px" (click)="NavigationFromLogo(module.RouterLink)">
-                <img [src]="module.WhiteLogo" alt="logo" style="width: 25px; height: 25px" />
+              <a style="margin-top: 12px; margin-right: 3%" (click)="NavigationFromLogo(module.RouterLink)">
+                <img [src]="module.WhiteLogo" [alt]="module.Name" [title]="module.Name"
+                  style="width: 12%; height: 12%" />
               </a>
               <a *ngIf="module.RouterLink !== ''" routerLink="{{ module.RouterLink }}"></a>
               <span class="sidebar-menu-item">{{ module.Name }}</span>
             </li>
           </div>
           <div *ngFor="let submodule of module.SubModuleList">
-            <li *ngIf="module.Name === newModulename && isShow" nz-menu-item #menuDiv [ngClass]="{'ant-menu-item-selected': activeSubmodule === submodule.Name}">
+            <li *ngIf="module.Name === newModulename && isShow" nz-menu-item #menuDiv
+              [ngClass]="{'ant-menu-item-selected': activeSubmodule === submodule.Name}">
               <ul>
                 <div style="display: flex; align-items: center">
                   <!-- Collapse Sidebar View -->
-                  <a title="{{ submodule.Name }}" style="  display: flex;  align-items: center;  justify-content: center;  margin-left: 17px;  height: 40px;  width: 40px;
+                  <a title="{{ submodule.Name }}" style="  display: flex;  align-items: center;  justify-content: center;  margin-left: 10px;  height: 40px;  width: 40px;
                     " (click)="NavigationFromLogo(submodule.RouterLink)" *ngIf="isCollapsed">
-                    <img [src]="submodule.LogoPath" alt="logo" style="width: 1.4rem; height: 1.4rem;" />
+                    <img [src]="submodule.LogoPath" [alt]="submodule.Name" [title]="submodule.Name"
+                      style="width: 1.4vw; height: 1.4vw;" />
                   </a>
                   <!-- Full Sidebar View -->
                   <li nz-menu-item *ngIf="!isCollapsed" style="width: 100%;">
                     <div class="row g-1 align-items-center">
                       <div
-                        style="display: flex; align-items: center; justify-content: center; height: 2.5rem; width: 2.5rem;">
+                        style="display: flex; align-items: center; justify-content: center; height: 2vw; width: 2vw;">
                         <span (click)="NavigationFromLogo(submodule.RouterLink)">
-                          <img [src]="submodule.LogoPath" alt="logo" style="width: 1.5rem; height: 1.5rem;" />
+                          <img [src]="submodule.LogoPath" [alt]="submodule.Name" [title]="submodule.Name"
+                            style="width: 1.5vw; height: 1.5vw;" />
                         </span>
                       </div>
                       <div style="flex: 1; display: flex; align-items: center;">
@@ -71,8 +76,8 @@
         </span>
         <span style="margin-left: 15px">
           <div>
-            <span><b>{{ myDay }}</b></span>
-            <span style="margin-left: 5px"><b>{{ myDate }}</b></span>
+            <span style="font-size: 90%;"><b>{{ myDay }}</b></span>
+            <span style="margin-left: 5px; font-size: 90%;"><b>{{ myDate }}</b></span>
           </div>
         </span>
       </div>
@@ -144,7 +149,7 @@
       </div>
     </nz-header>
     <nz-content class="scrollable-content">
-      <div class="inner-content inner-content_left">
+      <div class="inner-content">
         <router-outlet></router-outlet>
       </div>
     </nz-content>

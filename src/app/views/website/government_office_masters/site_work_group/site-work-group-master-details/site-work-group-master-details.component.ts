@@ -18,12 +18,17 @@ export class SiteWorkGroupMasterDetailsComponent implements OnInit {
   Entity: SiteWorkGroup = SiteWorkGroup.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
+  WorkGroupList: SiteWorkGroup[] = [];
   DetailsFormTitle: 'New Site Work Group' | 'Edit Site Work Group' = 'New Site Work Group';
   IsDropdownDisabled: boolean = false
   InitialEntity: SiteWorkGroup = null as any;
   InputNumber: string = ValidationPatterns.InputNumber
   InputNumberMsg: string = ValidationMessages.InputNumberMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
+
+
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
 
@@ -43,22 +48,42 @@ export class SiteWorkGroupMasterDetailsComponent implements OnInit {
       SiteWorkGroup.SetCurrentInstance(this.Entity);
 
     }
+    this.FormulateSiteWorkGroupListByCompanyRef();
     this.InitialEntity = Object.assign(SiteWorkGroup.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)) as SiteWorkGroup;
     // this.focusInput();
   }
 
-   // for value 0 selected while click on Input //
+  // for value 0 selected while click on Input //
   selectAllValue(event: MouseEvent): void {
     const input = event.target as HTMLInputElement;
     input.select();
   }
 
+  private FormulateSiteWorkGroupListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await SiteWorkGroup.FetchEntireListByCompanyRef(this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
+    this.WorkGroupList = lst;
+  };
+
 
   SaveSiteWorkGroupMaster = async () => {
+    this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     let entityToSave = this.Entity.GetEditableVersion();
+
+    if (this.WorkGroupList.length >= 6) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showWarningToster('Only 6 Work Group are allowed to Create');
+      return
+    }
 
     let entitiesToSave = [entityToSave]
     // await this.Entity.EnsurePrimaryKeysWithValidValues()

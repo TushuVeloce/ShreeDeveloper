@@ -33,7 +33,7 @@ export class SiteWorkDoneMasterComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Site Work', 'Applicable Type', 'Action'];
+  headers: string[] = ['Sr.No.', 'Applicable Type', 'Action'];
 
   constructor(
     private uiUtils: UIUtils,

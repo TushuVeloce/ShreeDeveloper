@@ -19,7 +19,7 @@
       <label for="SiteManagementRef"><b>Site Name</b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
         id="SiteManagementRef" name="SiteManagementRef" [nzSize]="'large'" [(ngModel)]="SiteManagementRef"
-        (ngModelChange)="onsitechange(SiteManagementRef)">
+        (ngModelChange)="FormulateGovernmentTransactionListBySiteRef()">
         <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
       </nz-select>
     </div>
@@ -40,33 +40,33 @@
               <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
               <td Class="tbldata">{{gov.p.SiteName}}</td>
               <td Class="tbldata"><span
-                  [ngClass]="getGroupStatus(gov.p.Ref, 'TP Office') ? 'status-completed' : 'status-pending'">
-                  {{ getGroupStatus(gov.p.Ref, 'TP Office') ? 'Completed' : 'Pending' }}
+                  [ngClass]="getGroupStatus(gov.p.Ref, SiteGroupList[0]) ? 'status-completed' : 'status-pending'">
+                  {{ getGroupStatus(gov.p.Ref, SiteGroupList[0]) ? 'Completed' : 'Pending' }}
                 </span>
               </td>
               <td Class="tbldata"><span
-                  [ngClass]="getGroupStatus(gov.p.Ref, 'परिशिष्ठ A(NA)') ? 'status-completed' : 'status-pending'">
-                  {{ getGroupStatus(gov.p.Ref, 'परिशिष्ठ A(NA)') ? 'Completed' : 'Pending' }}
+                  [ngClass]="getGroupStatus(gov.p.Ref, SiteGroupList[1]) ? 'status-completed' : 'status-pending'">
+                  {{ getGroupStatus(gov.p.Ref, SiteGroupList[1]) ? 'Completed' : 'Pending' }}
                 </span>
               </td>
               <td Class="tbldata"><span
-                  [ngClass]="getGroupStatus(gov.p.Ref, 'मोजणी') ? 'status-completed' : 'status-pending'">
-                  {{ getGroupStatus(gov.p.Ref, 'मोजणी') ? 'Completed' : 'Pending' }}
+                  [ngClass]="getGroupStatus(gov.p.Ref, SiteGroupList[2]) ? 'status-completed' : 'status-pending'">
+                  {{ getGroupStatus(gov.p.Ref, SiteGroupList[2]) ? 'Completed' : 'Pending' }}
                 </span>
               </td>
               <td Class="tbldata"><span
-                  [ngClass]="getGroupStatus(gov.p.Ref, 'ULC') ? 'status-completed' : 'status-pending'">
-                  {{ getGroupStatus(gov.p.Ref, 'ULC') ? 'Completed' : 'Pending' }}
+                  [ngClass]="getGroupStatus(gov.p.Ref,SiteGroupList[3]) ? 'status-completed' : 'status-pending'">
+                  {{ getGroupStatus(gov.p.Ref, SiteGroupList[3]) ? 'Completed' : 'Pending' }}
                 </span>
               </td>
               <td Class="tbldata"><span
-                  [ngClass]="getGroupStatus(gov.p.Ref, 'Final Layout') ? 'status-completed' : 'status-pending'">
-                  {{ getGroupStatus(gov.p.Ref, 'Final Layout') ? 'Completed' : 'Pending' }}
+                  [ngClass]="getGroupStatus(gov.p.Ref,SiteGroupList[4]) ? 'status-completed' : 'status-pending'">
+                  {{ getGroupStatus(gov.p.Ref, SiteGroupList[4]) ? 'Completed' : 'Pending' }}
                 </span>
               </td>
               <td Class="tbldata"><span
-                  [ngClass]="getGroupStatus(gov.p.Ref, 'KaJaPa') ? 'status-completed' : 'status-pending'">
-                  {{ getGroupStatus(gov.p.Ref, 'KaJaPa') ? 'Completed' : 'Pending' }}
+                  [ngClass]="getGroupStatus(gov.p.Ref,SiteGroupList[5]) ? 'status-completed' : 'status-pending'">
+                  {{ getGroupStatus(gov.p.Ref, SiteGroupList[5]) ? 'Completed' : 'Pending' }}
                 </span>
               </td>
               <td class="tbldata">

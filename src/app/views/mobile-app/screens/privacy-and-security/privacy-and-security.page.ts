@@ -1,16 +1,78 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  trigger,
+  state,
+  style,
+  transition,
+  animate
+} from '@angular/animations';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-privacy-and-security',
   templateUrl: './privacy-and-security.page.html',
   styleUrls: ['./privacy-and-security.page.scss'],
-  standalone:false
+  standalone:false,
+  animations: [
+    trigger('expandCollapse', [
+      state('collapsed', style({
+        height: '0px',
+        opacity: 0,
+        padding: '0px',
+        overflow: 'hidden',
+      })),
+      state('expanded', style({
+        height: '*',
+        opacity: 1,
+        padding: '*',
+        overflow: 'hidden',
+      })),
+      transition('collapsed <=> expanded', [
+        animate('300ms ease')
+      ]),
+    ])
+  ]
 })
 export class PrivacyAndSecurityPage implements OnInit {
+  showOnlineStatus = true;
+  allowNotifications = true;
+  useBiometrics = false;
+  locationAccess = false;
 
-  constructor() { }
+  showPrivacyPolicy = false;
+  showSecurityPolicy = false;
 
-  ngOnInit() {
+  constructor(private alertController: AlertController) { }
+
+  ngOnInit() { }
+
+  togglePrivacyPolicy() {
+    this.showPrivacyPolicy = !this.showPrivacyPolicy;
   }
 
+  toggleSecurityPolicy() {
+    this.showSecurityPolicy = !this.showSecurityPolicy;
+  }
+
+  async deleteAccount() {
+    const alert = await this.alertController.create({
+      header: 'Confirm Deletion',
+      message: 'Are you sure you want to permanently delete your account?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Delete',
+          role: 'destructive',
+          handler: () => {
+            console.log('Account deleted');
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
 }

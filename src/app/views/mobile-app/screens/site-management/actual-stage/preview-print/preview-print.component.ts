@@ -173,7 +173,6 @@ export class PreviewPrintComponent implements OnInit {
       console.error('Error while sharing receipt PDF:', error);
     }
   }
-
   // Helper function to convert blob to base64 string
   private convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -185,5 +184,67 @@ export class PreviewPrintComponent implements OnInit {
     };
     reader.readAsDataURL(blob);
   });
-  
+  // async onShare() {
+  //   try {
+  //     const element = this.printContainer.nativeElement;
+
+  //     // 1. Generate canvas from HTML element
+  //     const canvas = await html2canvas(element, { scale: 2 });
+  //     const imgData = canvas.toDataURL('image/png');
+
+  //     // 2. Create PDF using jsPDF
+  //     const pdf = new jsPDF({
+  //       orientation: 'portrait',
+  //       unit: 'px',
+  //       format: [canvas.width, canvas.height],
+  //     });
+  //     pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+
+  //     // 3. Get PDF as blob
+  //     const pdfBlob = pdf.output('blob');
+
+  //     // 4. Save PDF as actual file on device using Capacitor Filesystem
+  //     const base64 = await this.convertBlobToBase64(pdfBlob) as string;
+
+  //     const fileName = `Receipt_${Date.now()}.pdf`;
+
+  //     // Save to Documents
+  //     const saved = await Filesystem.writeFile({
+  //       path: fileName,
+  //       data: base64,
+  //       directory: Directory.Documents,
+  //       recursive: true,
+  //     });
+
+  //     // 5. Get the native file URI
+  //     const fileUri = await Filesystem.getUri({
+  //       directory: Directory.Documents,
+  //       path: fileName,
+  //     });
+
+  //     // 6. Convert URI to real path (only for Android using FileOpener or Share plugin)
+  //     const finalUri = fileUri.uri;
+
+  //     // 7. Share the actual file
+  //     await Share.share({
+  //       title: 'Share Receipt',
+  //       text: 'Here is the actual receipt PDF file.',
+  //       url: finalUri, // 👈 This must be a valid file URI like file:///.../Receipt_123.pdf
+  //       dialogTitle: 'Share your receipt'
+  //     });
+
+  //   } catch (error) {
+  //     console.error('Sharing failed:', error);
+  //   }
+  // }
+  // private convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
+  //   const reader = new FileReader();
+  //   reader.onerror = reject;
+  //   reader.onload = () => {
+  //     const base64 = (reader.result as string).split(',')[1]; // remove "data:*/*;base64,"
+  //     resolve(base64);
+  //   };
+  //   reader.readAsDataURL(blob);
+  // });
+
 }

@@ -17,6 +17,7 @@ export class HeaderComponent implements OnInit {
   selectedCompany: any[] = [];
   CompanyRef: number = 0;
   CompanyName: string = '';
+  IsDefaultUser: boolean = false;
   @Input() title: string = 'Default Title';
   constructor(
     public router: Router,
@@ -24,7 +25,6 @@ export class HeaderComponent implements OnInit {
     private uiUtils: UIUtils,
     private companystatemanagement: CompanyStateManagement,
     private bottomsheetMobileAppService: BottomsheetMobileAppService,
-
   ) { }
 
   ngOnInit() {
@@ -43,6 +43,8 @@ export class HeaderComponent implements OnInit {
           }
         }
       ];
+      this.IsDefaultUser = await this.appStateManagement.StorageKey.getItem('IsDefaultUser') == "1" ? false : true;
+      console.log('this.IsDefaultUser :', this.IsDefaultUser);
       const list = await Company.FetchEntireList(
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
