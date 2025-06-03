@@ -497,7 +497,7 @@ isRouteActive(route: string, ModuleName: string) {
       },
       {
         Name: 'Actual Stage',
-        RouterLink: '/homepage/Website/Actual_Stage',
+        RouterLink: '/homepage/Website/Site_Management_Actual_Stage',
         LogoPath: '/assets/icons/Actual Stages.png',
       },
       {
@@ -629,6 +629,11 @@ isRouteActive(route: string, ModuleName: string) {
       {
         Name: 'Salary Slip Approval',
         RouterLink: '/homepage/Website/Salary_Slip_Approval',
+        LogoPath: '/assets/icons/Salary Slip Approval.png',
+      },
+      {
+        Name: 'Employee Overtime',
+        RouterLink: '/homepage/Website/Employee_Overtime',
         LogoPath: '/assets/icons/Salary Slip Approval.png',
       }
 

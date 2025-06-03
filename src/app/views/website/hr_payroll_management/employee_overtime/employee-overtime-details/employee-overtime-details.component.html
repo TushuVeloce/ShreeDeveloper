@@ -1,0 +1,74 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackEmployeeOverTime()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">{{DetailsFormTitle}}</span>
+      </div>
+    </div>
+     <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
+    <form autocomplete="off" #officedutyandtimeForm="ngForm">
+      <div class="row">
+        <div class="col-md-6" style="margin-top: 1rem; ">
+          <div>
+            <label for="Date">Date</label>
+            <input type="date" name="Date" required class="form-control" id="Date" [(ngModel)]="Entity.p.Date"
+              placeholder="Enter From Time " #DateCtrl="ngModel" required (blur)="DateCtrl.control.markAsTouched()" />
+          <div *ngIf="(DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty))">
+            <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+          </div>
+        </div>
+        <div class="col-md-6" style="margin-top: 1rem; ">
+          <div>
+            <label for="EmployeeRef">Employee Name</label>
+             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" [nzSize]="'large'" name="EmployeeRef" required id="EmployeeRef"
+            [(ngModel)]="Entity.p.EmployeeRef">
+            <nz-option *ngFor="let employee of EmployeeList" [nzLabel]="employee.p.Name"
+              [nzValue]="employee.p.Ref"></nz-option>
+          </nz-select>
+          </div>
+        </div>
+        <div class="col-md-6" style="margin-top: 1rem; ">
+          <div>
+            <label>Overtime in Hrs</label>
+            <input type="number" name="OverTimeinhrs" class="form-control" id="OverTimeinhrs" [(ngModel)]="Entity.p.OverTimeinhrs" (ngModelChange)="converthrtomin()"
+              placeholder="Enter late Mark Grace" required #OvertimeinHrsCtrl="ngModel" (blur)="OvertimeinHrsCtrl.control.markAsTouched()" />
+          <div *ngIf="(OvertimeinHrsCtrl.invalid && (OvertimeinHrsCtrl.touched || OvertimeinHrsCtrl.dirty))">
+            <span class="validation-text" *ngIf="OvertimeinHrsCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+          </div>
+        </div>
+          <div class="col-md-6" style="margin-top: 1rem; ">
+          <div>
+            <label>Overtime in Min</label>
+            <input type="number" name="OverTimeinmin " class="form-control" id="OverTimeinmin " [(ngModel)]="Entity.p.OverTimeinmin" (ngModelChange)="convertmintohr()"
+              placeholder="Enter over time Grace" #OvertimeinminCtrl="ngModel" required (blur)="OvertimeinminCtrl.control.markAsTouched()" />
+          <div *ngIf="(OvertimeinminCtrl.invalid && (OvertimeinminCtrl.touched || OvertimeinminCtrl.dirty))">
+            <span class="validation-text" *ngIf="OvertimeinminCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+          </div>
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn" (click)="SaveEmployeeOvertime()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackEmployeeOverTime()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

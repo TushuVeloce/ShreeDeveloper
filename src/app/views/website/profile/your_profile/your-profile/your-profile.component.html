@@ -1,0 +1,87 @@
+<div class="col-md-10 col-lg-10 col-sm-6 col-xs-6">
+  <h5 class="title" class="title_light">
+    Your Profile
+  </h5>
+</div>
+<form #AddForm="ngForm" style="margin-top: 1rem; margin-bottom: 4rem;">
+  <div class="row align-items-center" style="justify-content: center;">
+    <!-- <div class="col-lg-1 col-md-1 col-sm-1"></div> -->
+    <!-- Profile Image Upload -->
+    <div class="col-lg-5 col-md-5 col-sm-12">
+      <div class="text-align-center">
+        <p style="text-align: center" for="profileImage" class="form-label_light">
+          Profile Image
+        </p>
+      </div>
+      <div class="profile-image-container">
+        <!-- <img height="300px"
+          [src]="file ? (file.name ? createObjectURL(file) : '/assets/images/UserImages/' + file) : '/assets/images/noimage.png'"
+          class="profile-image" alt="Profile Image" />
+        <input type="file" nz-button nzType="default" id="profileImage" class="file-upload"
+          (change)="handleFileChange($event)" />
+        <div *ngIf="errors.profile_image" class="validation-error">
+          {{ errors.profile_image }}
+        </div> -->
+        <ng-container *ngIf="imageUrl; else defaultImage">
+          <img [src]="imageUrl" alt="Profile Image" class="profile-image" />
+        </ng-container>
+        <ng-template #defaultImage>
+          <img src="/assets/images/noimage.png" alt="No Image" class="profile-image" />
+        </ng-template>
+        <input type="file" (change)="handleFileChange($event)" id="profileImage" class="file-upload" />
+        <p *ngIf="errors.profile_image" class="validation-error">{{ errors.profile_image }}</p>
+      </div>
+
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12">
+      <div class="row">
+         <div class="col-md-5">
+          <div>
+            <label>Name</label>
+            <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
+              placeholder="Enter Name" />
+          </div>
+        </div>
+         <div class="col-md-5">
+          <div>
+            <label>Gender</label>
+            <input type="number" [(ngModel)]="Entity.p.Gender" name="Gender" class="form-control" id="Gender" required
+              placeholder="Enter Gender" />
+          </div>
+        </div>
+         <div class="col-md-5" style="margin-top: 1rem;">
+          <div>
+            <label>Date of Birth</label>
+            <input type="text" [(ngModel)]="Entity.p.DOB" name="DOB" class="form-control" id="DOB" required
+              placeholder="Enter DOB" />
+          </div>
+        </div>
+         <div class="col-md-5" style="margin-top: 1rem;">
+          <div>
+            <label>Email-ID</label>
+            <input type="email" [(ngModel)]="Entity.p.EmailId" name="EmailId" class="form-control" id="EmailId" required
+              placeholder="Enter Email Id" />
+          </div>
+        </div>
+         <div class="col-md-5" style="margin-top: 1rem;">
+          <div>
+            <label>Mob No</label>
+            <input type="text" [(ngModel)]="Entity.p.MobileNo" name="MobileNo" class="form-control" id="MobileNo" required
+              placeholder="Enter Mob Number" />
+          </div>
+        </div>
+         <div class="col-md-5" style="margin-top: 1rem;">
+          <div>
+            <label>Address</label>
+            <input type="text" [(ngModel)]="Entity.p.Address" name="Address" class="form-control" id="Address" required
+              placeholder="Enter Address" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4 mb-3 "></div>
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 mb-3 " style=" text-align: center; margin-top: 1rem; width: 100%;">
+      <button type="submit" class="btn btn-save" (click)="SaveProfile()">Save</button>
+    </div>
+  </div>
+</form>

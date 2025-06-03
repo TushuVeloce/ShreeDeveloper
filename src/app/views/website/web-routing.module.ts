@@ -113,6 +113,10 @@ import { MarketingManagementMasterComponent } from './marketing_management/marke
 import { MarketingManagementMasterDetailsComponent } from './marketing_management/marketing-management/marketing-management-master-details/marketing-management-master-details.component';
 import { ActualStagePrintComponent } from './site-management/actual-stage-print/actual-stage-print.component';
 import { CustomerPendingFollowupComponent } from './customer_management/presale/customer_followup/customer_pendingfollowup/customer-pendingfollowup.component';
+import { EmployeeOvertime } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Employee_Overtime/employeeovertime';
+import { EmployeeOvertimeComponent } from './hr_payroll_management/employee_overtime/employee-overtime/employee-overtime.component';
+import { EmployeeOvertimeDetailsComponent } from './hr_payroll_management/employee_overtime/employee-overtime-details/employee-overtime-details.component';
+import { YourProfileComponent } from './profile/your_profile/your-profile/your-profile.component';
 
 
 const routes: Routes = [
@@ -262,6 +266,8 @@ const routes: Routes = [
       { path: 'Leave_Approval', component: LeaveApprovalComponent },
 
       { path: 'Salary_Slip_Approval', component: SalarySlipApprovalComponent },
+      { path: 'Employee_Overtime', component: EmployeeOvertimeComponent},
+      { path: 'Employee_Overtime_Details', component: EmployeeOvertimeDetailsComponent},
 
       // Request
       { path: 'Leave_Request', component: LeaveRequestComponent },
@@ -292,6 +298,8 @@ const routes: Routes = [
 
       // Razorpay
       { path: 'Razorpay', component: RazorpayComponent },
+      { path: 'your_profile', component: YourProfileComponent },
+      // { path: 'change_password', component: ChangePasswordComponent},
 
       // { path: 'Progress_Report', component: ProgressReportComponent },
     ]

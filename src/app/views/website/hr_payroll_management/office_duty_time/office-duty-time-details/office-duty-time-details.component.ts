@@ -19,8 +19,7 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
   Entity: OfficeDutyandTime = OfficeDutyandTime.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
-  DetailsFormTitle: 'New Office Duty and Time' | 'Edit Office Duty and Time' =
-    'New Office Duty and Time';
+  DetailsFormTitle: 'New Office Duty and Time' | 'Edit Office Duty and Time' = 'New Office Duty and Time';
   IsDropdownDisabled: boolean = false;
   InitialEntity: OfficeDutyandTime = null as any;
   companyName = this.companystatemanagement.SelectedCompanyName;
