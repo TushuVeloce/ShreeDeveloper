@@ -112,7 +112,7 @@ export class MaterialMasterDetailsComponent implements OnInit {
       await this.uiUtils.showConfirmationMessage('Cancel',
         `This process is IRREVERSIBLE!
       <br/>
-      Are you sure that you want to Cancel this Unit Form?`,
+      Are you sure that you want to Cancel this Material Form?`,
         async () => {
           await this.router.navigate(['/homepage/Website/Material_Master']);
         });

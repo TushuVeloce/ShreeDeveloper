@@ -116,8 +116,18 @@ export class ExpenseTypeMasterDetailsComponent implements OnInit {
     }
   };
 
-  BackExpenseType = () => {
-    this.router.navigate(['/homepage/Website/Expense_Type_Master']);
+  BackExpenseType = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Expense Type Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Expense_Type_Master']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Expense_Type_Master']);
+    }
   }
 
   resetAllControls = () => {

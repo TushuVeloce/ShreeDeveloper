@@ -22,7 +22,7 @@ export class StageMasterDetailsComponent implements OnInit {
   Entity: Stage = Stage.CreateNewInstance();
   DetailsFormTitle: 'New Stage' | 'Edit Stage' = 'New Stage';
   InitialEntity: Stage = null as any;
-  StageTypeList = DomainEnums.StageTypeList(true,'-- Select Stage Type --');
+  StageTypeList = DomainEnums.StageTypeList(true, '-- Select Stage Type --');
 
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
@@ -55,11 +55,11 @@ export class StageMasterDetailsComponent implements OnInit {
     txtName.focus();
   }
 
- onStageTypeApplicableChange(value: boolean): void {
-  if (!value) {
-    this.Entity.p.StageType = 0;
+  onStageTypeApplicableChange(value: boolean): void {
+    if (!value) {
+      this.Entity.p.StageType = 0;
+    }
   }
-}
 
 
   SaveStageMaster = async () => {
@@ -94,8 +94,19 @@ export class StageMasterDetailsComponent implements OnInit {
     input.select();
   }
 
-  BackStage = () => {
-    this.router.navigate(['/homepage/Website/Stage_Master']);
+
+  BackStage = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Stage Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Stage_Master']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Stage_Master']);
+    }
   }
 
   resetAllControls = () => {

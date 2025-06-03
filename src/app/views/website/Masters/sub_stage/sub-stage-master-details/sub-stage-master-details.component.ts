@@ -115,8 +115,18 @@ export class SubStageMasterDetailsComponent implements OnInit {
     }
   };
 
-  BackSubStage = () => {
-    this.router.navigate(['/homepage/Website/Sub_Stage_Master']);
+  BackSubStage = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Sub Stage Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Sub_Stage_Master']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Sub_Stage_Master']);
+    }
   }
 
   resetAllControls = () => {
