@@ -1,6 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AttendenceLogType, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { AttendanceLogType, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { AttendanceLogCountCustomRequest } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogcountcustomrequest';
 import { AttendanceLogs, AttendanceLogsProps } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogs';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
@@ -33,7 +33,7 @@ export class AttendanceLogsComponent implements OnInit {
 
   employeeDataList: [] = []
 
-  AttendanceLogTypeList = DomainEnums.AttendenceLogTypeList(
+  AttendanceLogTypeList = DomainEnums.AttendanceLogTypeList(
     true,
     '--Select Attendance Log Type--'
   );
@@ -59,7 +59,8 @@ export class AttendanceLogsComponent implements OnInit {
     private uiUtils: UIUtils,
     private screenSizeService: ScreenSizeService, private companystatemanagement: CompanyStateManagement,
     private payloadPacketFacade: PayloadPacketFacade,
-    private serverCommunicator: ServerCommunicatorService
+    private serverCommunicator: ServerCommunicatorService,
+    private router: Router,
   ) {
     effect(async () => {
       await this.getTodayAttendanceLogByAttendanceListType();
@@ -91,9 +92,9 @@ export class AttendanceLogsComponent implements OnInit {
     this.isTodayAttendanceView = true;
     this.isShowMonthlyData = false;
 
-    let TodaysAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let TodaysAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendanceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = TodaysAttendanceLog
-    this.getAttendanceCount(AttendenceLogType.TodaysAttendanceLog)
+    this.getAttendanceCount(AttendanceLogType.TodaysAttendanceLog)
   }
 
   // On Week Selected
@@ -116,9 +117,9 @@ export class AttendanceLogsComponent implements OnInit {
 
     let employeeref = this.Entity.p.EmployeeRef
 
-    let WeeklyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(this.companyRef(), AttendenceLogType.WeeklyAttendanceLog, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let WeeklyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(this.companyRef(), AttendanceLogType.WeeklyAttendanceLog, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = WeeklyAttendanceLog
-    this.getAttendanceCount(AttendenceLogType.WeeklyAttendanceLog);
+    this.getAttendanceCount(AttendanceLogType.WeeklyAttendanceLog);
   }
   // On Month selected
   onEmployeeChange(): void {
@@ -147,10 +148,10 @@ export class AttendanceLogsComponent implements OnInit {
     const month = this.Entity.p.Months;
     const employeeref = this.Entity.p.EmployeeRef;
 
-    let MonthlyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendenceLogType.MonthlyAttendanceLog,
+    let MonthlyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendanceLogType.MonthlyAttendanceLog,
       month, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = MonthlyAttendanceLog
-    this.getAttendanceCount(AttendenceLogType.MonthlyAttendanceLog)
+    this.getAttendanceCount(AttendanceLogType.MonthlyAttendanceLog)
   }
 
   // For Pagination  start ----
@@ -188,14 +189,14 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   // CustomFetchRequest
-  getAttendanceCount = async (AttendenceLogType: number) => {
+  getAttendanceCount = async (AttendanceLogType: number) => {
     // let tranDate = this.dtu.ConvertStringDateToFullFormat(this.Date!)
     let req = new AttendanceLogCountCustomRequest();
     // req.TransDateTime = tranDate;
     req.CompanyRef = this.companyRef();
     req.EmployeeRef = this.Entity.p.EmployeeRef;
     req.Months = this.Entity.p.Months
-    req.AttendanceLogTypes = AttendenceLogType
+    req.AttendanceLogTypes = AttendanceLogType
 
     let td = req.FormulateTransportData();
     let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
@@ -217,6 +218,10 @@ export class AttendanceLogsComponent implements OnInit {
       Object.assign(this.Entity.p, summaryCollection.Entries[0]);
 
     }
+  }
+
+  AddAttendance = () => {
+    this.router.navigate(['/homepage/Website/Attendance_Details']);
   }
 
   resetSummaryStats() {

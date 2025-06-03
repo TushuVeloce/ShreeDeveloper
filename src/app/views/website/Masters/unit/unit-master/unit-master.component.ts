@@ -58,7 +58,7 @@ export class UnitMasterComponent implements OnInit {
     await this.router.navigate(['/homepage/Website/Unit_Master_Details']);
   };
 
-  
+
   //  DeleteUnit = async (Unit: Unit) => {
   //     await this.uiUtils.showConfirmationMessage(
   //       'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Unit?`,
@@ -80,7 +80,7 @@ export class UnitMasterComponent implements OnInit {
   //     this.loadPaginationData()
   //     this.SearchString = '';
   //   };
-  
+
   onDeleteClicked = async (Unit: Unit) => {
     await this.uiUtils.showConfirmationMessage('Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AttendenceLogType } from 'src/app/classes/domain/domainenums/domainenums';
+import { AttendanceLogType } from 'src/app/classes/domain/domainenums/domainenums';
 import { AttendanceLogs } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogs';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -57,7 +57,7 @@ export class ViewAllPresentEmployeeComponent implements OnInit {
   getTodayAttendanceLogByAttendanceListType = async () => {
     try {
       this.isLoading = true;
-      let TodaysAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendenceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      let TodaysAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendanceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.TodayAttendanceLogList = TodaysAttendanceLog
     } catch (error) {
     } finally {

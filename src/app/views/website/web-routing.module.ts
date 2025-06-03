@@ -117,6 +117,7 @@ import { EmployeeOvertime } from 'src/app/classes/domain/entities/website/HR_and
 import { EmployeeOvertimeComponent } from './hr_payroll_management/employee_overtime/employee-overtime/employee-overtime.component';
 import { EmployeeOvertimeDetailsComponent } from './hr_payroll_management/employee_overtime/employee-overtime-details/employee-overtime-details.component';
 import { YourProfileComponent } from './profile/your_profile/your-profile/your-profile.component';
+import { AttendanceDetailsComponent } from './hr_payroll_management/attendance_logs/attendance-details/attendance-details.component';
 
 
 const routes: Routes = [
@@ -259,6 +260,7 @@ const routes: Routes = [
       { path: 'Office_Duty_Time_Details', component: OfficeDutyTimeDetailsComponent },
 
       { path: 'Attendance_Logs', component: AttendanceLogsComponent },
+      { path: 'Attendance_Details', component: AttendanceDetailsComponent },
 
       { path: 'Salary_Generation', component: SalaryGenerationComponent },
       { path: 'Salary_Generation_Details', component: SalaryGenerationDetailsComponent },

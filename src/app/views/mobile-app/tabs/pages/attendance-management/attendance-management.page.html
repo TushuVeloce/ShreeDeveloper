@@ -110,7 +110,7 @@
 
               <!-- Text showing the selected status -->
               <ion-text slot="end" class="status-text">
-                {{AttendenceLocationTypeName}}
+                {{AttendanceLocationTypeName}}
               </ion-text>
 
               <!-- Dropdown icon (chevron) on the right -->
@@ -119,7 +119,7 @@
 
             <!-- Site Selection -->
             <ion-item class="input-item" button (click)="selectSiteBottomsheet()"
-              *ngIf="attendanceLog.p.AttendenceLocationType === AttendanceLocationTypes.Site">
+              *ngIf="attendanceLog.p.AttendanceLocationType === AttendanceLocationTypes.Site">
               <ion-label>Select Site</ion-label>
 
               <!-- Text showing the selected status -->

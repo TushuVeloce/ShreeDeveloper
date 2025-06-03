@@ -64,6 +64,11 @@ export class CountryStateCityRefs {
   public static readonly KolhapurRef = 35081;
 }
 
+export class AttendanceHandleByRefs {
+  public static readonly MobileRef = 100;
+  public static readonly WebRef = 200;
+}
+
 export class AddressStateRefs {
   public static readonly HimachalPradesh: number = 800053;
   public static readonly JammuKashmir: number = 800052;

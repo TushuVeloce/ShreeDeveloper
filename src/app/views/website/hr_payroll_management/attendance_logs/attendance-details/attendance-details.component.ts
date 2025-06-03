@@ -2,31 +2,27 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
-import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
+import { AttendanceLog } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelog';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
 @Component({
-  selector: 'app-unit-master-details',
-  standalone: false,
-  templateUrl: './unit-master-details.component.html',
-  styleUrls: ['./unit-master-details.component.scss'],
+  selector: 'app-attendance-details',
+  templateUrl: './attendance-details.component.html',
+  styleUrls: ['./attendance-details.component.scss'],
 })
-
-export class UnitMasterDetailsComponent implements OnInit {
-  Entity: Unit = Unit.CreateNewInstance();
+export class AttendanceDetailsComponent implements OnInit {
+  Entity: AttendanceLog = AttendanceLog.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
-  DetailsFormTitle: 'New Unit' | 'Edit Unit' = 'New Unit';
+  DetailsFormTitle: 'New Attendance' | 'Edit Attendance' = 'New Attendance';
   IsDropdownDisabled: boolean = false
-  InitialEntity: Unit = null as any;
+  InitialEntity: AttendanceLog = null as any;
 
-  Unit: string = ValidationPatterns.SIUnit
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos
 
-  UnitMsg: string = ValidationMessages.SIUnitMsg
   NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
@@ -39,16 +35,16 @@ export class UnitMasterDetailsComponent implements OnInit {
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
 
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Unit' : 'Edit Unit';
-      this.Entity = Unit.GetCurrentInstance();
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Attendance' : 'Edit Attendance';
+      this.Entity = AttendanceLog.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable')
 
     } else {
-      this.Entity = Unit.CreateNewInstance();
-      Unit.SetCurrentInstance(this.Entity);
+      this.Entity = AttendanceLog.CreateNewInstance();
+      AttendanceLog.SetCurrentInstance(this.Entity);
 
     }
-    this.InitialEntity = Object.assign(Unit.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Unit;
+    this.InitialEntity = Object.assign(AttendanceLog.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as AttendanceLog;
     this.focusInput();
   }
 
@@ -57,10 +53,9 @@ export class UnitMasterDetailsComponent implements OnInit {
     txtName.focus();
   }
 
-  SaveUnitMaster = async () => {
+  SaveAttendenceMaster = async () => {
     this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     if (this.Entity.p.CreatedBy == 0) {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
@@ -76,27 +71,27 @@ export class UnitMasterDetailsComponent implements OnInit {
     else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Unit saved successfully!');
-        this.Entity = Unit.CreateNewInstance();
+        await this.uiUtils.showSuccessToster('Attendance saved successfully!');
+        this.Entity = AttendanceLog.CreateNewInstance();
         this.resetAllControls()
       } else {
-        await this.uiUtils.showSuccessToster('Unit Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Unit_Master']);
+        await this.uiUtils.showSuccessToster('Attendance Updated successfully!');
+        await this.router.navigate(['/homepage/Website/Attendance_Logs']);
       }
     }
   }
 
-  BackUnit = async () => {
+  BackAttendence = async () => {
     if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
       await this.uiUtils.showConfirmationMessage('Cancel',
         `This process is IRREVERSIBLE!
       <br/>
-      Are you sure that you want to Cancel this Unit Form?`,
+      Are you sure that you want to Cancel this Attendance Form?`,
         async () => {
-          await this.router.navigate(['/homepage/Website/Unit_Master']);
+          await this.router.navigate(['/homepage/Website/Attendance_Logs']);
         });
     } else {
-      await this.router.navigate(['/homepage/Website/Unit_Master']);
+      await this.router.navigate(['/homepage/Website/Attendance_Logs']);
     }
   }
 
@@ -108,3 +103,4 @@ export class UnitMasterDetailsComponent implements OnInit {
     this.NameInputControl.control.markAsPristine();
   }
 }
+

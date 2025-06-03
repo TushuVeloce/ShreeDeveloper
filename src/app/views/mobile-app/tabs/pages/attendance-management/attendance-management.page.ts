@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
-  AttendenceLocationType,
-  AttendenceLogType,
+  AttendanceLocationType,
+  AttendanceLogType,
   DomainEnums,
   LeaveRequestType
 } from 'src/app/classes/domain/domainenums/domainenums';
@@ -62,9 +62,9 @@ export class AttendanceManagementPage implements OnInit {
 
 
   // Enums and Lists
-  AttendanceLocationTypes = AttendenceLocationType;
-  attendanceLocationTypeList = DomainEnums.AttendenceLocationTypeList();
-  AttendenceLocationTypeName: string = '';
+  AttendanceLocationTypes = AttendanceLocationType;
+  attendanceLocationTypeList = DomainEnums.AttendanceLocationTypeList();
+  AttendanceLocationTypeName: string = '';
   readonly LeaveRequestTypeEnum = LeaveRequestType;
   gridItems = [
     { label: 'Salary Slip', icon: 'layers-outline', gridFunction: 100 },
@@ -90,10 +90,10 @@ export class AttendanceManagementPage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    await this.loadAttendenceIfEmployeeExists();
+    await this.loadAttendanceIfEmployeeExists();
   }
 
-  private async loadAttendenceIfEmployeeExists(): Promise<void> {
+  private async loadAttendanceIfEmployeeExists(): Promise<void> {
     this.companyRef = Number(this.appStateManage.StorageKey.getItem('SelectedCompanyRef'));
     this.employeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
     if (this.employeeRef > 0) {
@@ -356,8 +356,8 @@ export class AttendanceManagementPage implements OnInit {
 
       this.openSelectModal(options, this.selectedAttendanceLocationType, false, 'Select Location Type', 1, (selected) => {
         this.selectedAttendanceLocationType = selected;
-        this.attendanceLog.p.AttendenceLocationType = selected[0].p.Ref;
-        this.AttendenceLocationTypeName = selected[0].p.Name;
+        this.attendanceLog.p.AttendanceLocationType = selected[0].p.Ref;
+        this.AttendanceLocationTypeName = selected[0].p.Name;
       });
     } catch (error) {
 
@@ -461,7 +461,7 @@ export class AttendanceManagementPage implements OnInit {
       //   const file = await this.uriToFile(this.rawCapturedSelfPhoto, "PunchIn_Self_Photo.jpg");
       //   filesToUpload.push(FileTransferObject.FromFile("AttendanceLogFile1", file, "PunchIn_Self_Photo"));
       // }
-      
+
       // if (this.rawCapturedWorkLocationPhoto) {
       //   const file = await this.uriToFile(this.rawCapturedWorkLocationPhoto, "PunchIn_Work_location.jpg");
       //   filesToUpload.push(FileTransferObject.FromFile("AttendanceLogFile2", file, "PunchIn_Work_location"));
@@ -543,7 +543,7 @@ export class AttendanceManagementPage implements OnInit {
       this.isLoading = true;
       const logs = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(
         this.companyState.getCurrentCompanyRef(),
-        AttendenceLogType.WeeklyAttendanceLog,
+        AttendanceLogType.WeeklyAttendanceLog,
         async (errMsg: string) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
       this.weeklyAttendanceLogs = logs;

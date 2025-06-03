@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AttendenceLogType, DomainEnums, LeaveRequestType } from 'src/app/classes/domain/domainenums/domainenums';
+import { AttendanceLogType, DomainEnums, LeaveRequestType } from 'src/app/classes/domain/domainenums/domainenums';
 import { AttendanceLogs } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogs';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
@@ -88,7 +88,7 @@ export class AttendanceDetailsComponent implements OnInit {
 
       const logs = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(
         this.companyRef,
-        AttendenceLogType.MonthlyAttendanceLog,
+        AttendanceLogType.MonthlyAttendanceLog,
         month,
         employeeRef,
         async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
@@ -124,8 +124,8 @@ export class AttendanceDetailsComponent implements OnInit {
   private parseFormattedDate(dateString: string): Date {
     const [day, month, year] = dateString.split('-');
     return new Date(`${year}-${month}-${day}`);
-  }  
-  
+  }
+
   // Custom date parsing for "DD-MM-YYYY"
   formatDate(date: string | Date): string {
     // console.log('this.dateConversionService.formatDate(date) :', this.dateConversionService.formatDate(date));

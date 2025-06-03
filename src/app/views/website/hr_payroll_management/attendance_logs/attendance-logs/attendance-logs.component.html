@@ -1,19 +1,24 @@
 <div>
   <h5 style="padding-top: 3px;" class="title title_light">Attendance Logs</h5>
   <!-- Button Group -->
-  <div class="row d-flex flex-wrap justify-content-start gap-2">
-    <div class="col-12 col-sm-auto">
-      <nz-button nz-button type="button" class="btn btn-dark w-100"
-        (click)="getTodayAttendanceLogByAttendanceListType()">MY TEAM
-        TODAY</nz-button>
-    </div>
-    <div class="col-12 col-sm-auto">
-      <nz-button nz-button type="button" class="btn btn-dark w-100" (click)="selectWeek()">MY TEAM
-        WEEKLY</nz-button>
-    </div>
-    <div class="col-12 col-sm-auto">
-      <nz-button nz-button type="button" class="btn btn-dark w-100" (click)="selectMonth()">MY TEAM
-        MONTHLY</nz-button>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 col-md-2">
+        <button type="button" class="btn" (click)="getTodayAttendanceLogByAttendanceListType()">MY TEAM
+          TODAY</button>
+      </div>
+      <div class="col-12 col-md-2">
+        <button type="button" class="btn" (click)="selectWeek()">MY TEAM
+          WEEKLY</button>
+      </div>
+      <div class="col-12 col-md-3">
+        <button type="button" class="btn" (click)="selectMonth()">MY TEAM
+          MONTHLY</button>
+      </div>
+      <div class="col-12 col-md-3"> </div>
+      <div class="col-12 col-md-2">
+        <button type="button" class="btn" (click)="AddAttendance()">Add Attendance</button>
+      </div>
     </div>
   </div>
   <ng-template #noDataTpl>

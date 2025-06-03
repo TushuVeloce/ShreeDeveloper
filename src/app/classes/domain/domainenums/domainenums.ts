@@ -155,13 +155,13 @@ export enum LeaveRequestType {
   HalfDay = 300,
 }
 
-export enum AttendenceLocationType {
+export enum AttendanceLocationType {
   None = 0,
   Office = 100,
   Site = 200,
 }
 
-export enum AttendenceLogType {
+export enum AttendanceLogType {
   None = 0,
   TodaysAttendanceLog = 100,
   WeeklyAttendanceLog = 200,
@@ -1326,38 +1326,38 @@ export class DomainEnums {
     return result;
   }
 
-  public static AttendenceLocationTypeName(itemType: AttendenceLocationType) {
+  public static AttendanceLocationTypeName(itemType: AttendanceLocationType) {
     switch (itemType) {
-      case AttendenceLocationType.Office:
+      case AttendanceLocationType.Office:
         return 'Office';
-      case AttendenceLocationType.Site:
+      case AttendanceLocationType.Site:
         return 'Site';
       default:
         return '';
     }
   }
 
-  public static AttendenceLocationTypeList(
+  public static AttendanceLocationTypeList(
     withAllOption: boolean = false,
     allOptionName: string = '<All>'
   ) {
     let result = [
       {
-        Ref: AttendenceLocationType.Office,
-        Name: DomainEnums.AttendenceLocationTypeName(
-          AttendenceLocationType.Office
+        Ref: AttendanceLocationType.Office,
+        Name: DomainEnums.AttendanceLocationTypeName(
+          AttendanceLocationType.Office
         ),
       },
       {
-        Ref: AttendenceLocationType.Site,
-        Name: DomainEnums.AttendenceLocationTypeName(
-          AttendenceLocationType.Site
+        Ref: AttendanceLocationType.Site,
+        Name: DomainEnums.AttendanceLocationTypeName(
+          AttendanceLocationType.Site
         ),
       },
     ];
     if (withAllOption) {
       let allEntry = {
-        Ref: AttendenceLocationType.None,
+        Ref: AttendanceLocationType.None,
         Name: allOptionName,
       };
       result.unshift(allEntry);
@@ -1366,46 +1366,46 @@ export class DomainEnums {
   }
 
   // Attendance log type
-  public static AttendenceLogName(itemType: AttendenceLogType) {
+  public static AttendanceLogName(itemType: AttendanceLogType) {
     switch (itemType) {
-      case AttendenceLogType.TodaysAttendanceLog:
+      case AttendanceLogType.TodaysAttendanceLog:
         return 'Todays Attendance Log';
-      case AttendenceLogType.WeeklyAttendanceLog:
+      case AttendanceLogType.WeeklyAttendanceLog:
         return 'Weekly Attendance Log';
-      case AttendenceLogType.MonthlyAttendanceLog:
+      case AttendanceLogType.MonthlyAttendanceLog:
         return 'Monthly Attendance Log';
       default:
         return '';
     }
   }
 
-  public static AttendenceLogTypeList(
+  public static AttendanceLogTypeList(
     withAllOption: boolean = false,
     allOptionName: string = '<All>'
   ) {
     let result = [
       {
-        Ref: AttendenceLogType.TodaysAttendanceLog,
-        Name: DomainEnums.AttendenceLogName(
-          AttendenceLogType.TodaysAttendanceLog
+        Ref: AttendanceLogType.TodaysAttendanceLog,
+        Name: DomainEnums.AttendanceLogName(
+          AttendanceLogType.TodaysAttendanceLog
         ),
       },
       {
-        Ref: AttendenceLogType.WeeklyAttendanceLog,
-        Name: DomainEnums.AttendenceLogName(
-          AttendenceLogType.WeeklyAttendanceLog
+        Ref: AttendanceLogType.WeeklyAttendanceLog,
+        Name: DomainEnums.AttendanceLogName(
+          AttendanceLogType.WeeklyAttendanceLog
         ),
       },
       {
-        Ref: AttendenceLogType.MonthlyAttendanceLog,
-        Name: DomainEnums.AttendenceLogName(
-          AttendenceLogType.MonthlyAttendanceLog
+        Ref: AttendanceLogType.MonthlyAttendanceLog,
+        Name: DomainEnums.AttendanceLogName(
+          AttendanceLogType.MonthlyAttendanceLog
         ),
       },
     ];
     if (withAllOption) {
       let allEntry = {
-        Ref: AttendenceLogType.None,
+        Ref: AttendanceLogType.None,
         Name: allOptionName,
       };
       result.unshift(allEntry);

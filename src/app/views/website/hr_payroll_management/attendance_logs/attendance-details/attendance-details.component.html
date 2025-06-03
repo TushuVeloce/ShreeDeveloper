@@ -1,0 +1,36 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackAttendence()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">{{DetailsFormTitle}}</span>
+      </div>
+    </div>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem; ">
+        <!-- <div class="col-md-6">
+          <label>Attendence Name</label>
+          <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name"
+            placeholder="Enter Attendence Name" pattern="{{Attendence}}" #NameCtrl="ngModel" required
+            (blur)="NameCtrl.control.markAsTouched()" />
+          <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
+            <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{AttendenceMsg}}</span>
+            <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div> -->
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn" (click)="SaveAttendenceMaster()" [disabled]="isSaveDisabled">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackAttendence()">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
