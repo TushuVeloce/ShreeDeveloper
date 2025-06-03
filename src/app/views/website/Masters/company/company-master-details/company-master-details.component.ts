@@ -248,6 +248,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
     let entitiesToSave = [entityToSave];
     let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("LogoFile", this.Entity.p.CompanyLogo, this.Entity.p.CompanyLogo.name)];
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+    console.log('tr :', tr);
 
     if (!tr.Successful) {
       this.isSaveDisabled = false;

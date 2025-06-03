@@ -12,8 +12,13 @@
   // margin-top: 1rem;
 }
 
+
 .file-upload {
   width: 294px;
+}
+
+body, html {
+  overflow-x: hidden; /* prevents horizontal scroll */
 }
 
 // =========================== Nz Select Menu  Css start ==============================

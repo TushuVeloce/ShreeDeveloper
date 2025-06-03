@@ -60,6 +60,8 @@ export class EmployeeProps {
   // public IsUser: boolean = false;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
+  public ProfilePicFile: File = null as any
+  public ProfilePicPath: string = "";
 
   public readonly IsNewlyCreated: boolean = false;
 
