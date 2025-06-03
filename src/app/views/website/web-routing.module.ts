@@ -120,7 +120,10 @@ import { YourProfileComponent } from './profile/your_profile/your-profile/your-p
 import { CompanyHolidays } from 'src/app/classes/domain/entities/website/HR_and_Payroll/company_holidays/companyholidays';
 import { CompanyHolidaysComponent } from './hr_payroll_management/company_holidays/company-holidays/company-holidays.component';
 import { CompanyHolidaysDetailsComponent } from './hr_payroll_management/company_holidays/company-holidays-details/company-holidays-details.component';
+<<<<<<< Updated upstream
 import { AttendanceDetailsComponent } from './hr_payroll_management/attendance_logs/attendance-details/attendance-details.component';
+=======
+>>>>>>> Stashed changes
 
 
 const routes: Routes = [
