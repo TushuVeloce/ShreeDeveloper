@@ -25,9 +25,9 @@ export class MaterialMasterDetailsComponent implements OnInit {
   InitialEntity: Material = null as any;
   UnitList: Unit[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  // NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
+  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
-  // NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
+  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
