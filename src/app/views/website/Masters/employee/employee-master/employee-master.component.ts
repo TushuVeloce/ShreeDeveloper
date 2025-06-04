@@ -107,7 +107,7 @@ export class EmployeeMasterComponent implements OnInit {
 
   AddEmployee = () => {
     if (this.companyRef() <= 0) {
-      this.uiUtils.showErrorToster('Company not Selected');
+      this.uiUtils.showWarningToster('Please select company');
       return;
     }
     this.router.navigate(['/homepage/Website/Employee_Master_Details']);

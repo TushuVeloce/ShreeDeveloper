@@ -50,10 +50,15 @@ export class SalaryGenerationComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.CompnyList = await Company.FetchEntireList();
+    this.getCompanyList();
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+  }
+
+  getCompanyList = async () => {
+    let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.CompnyList = lst;
   }
 
   openSalarySlipModal = (SalaryGeneration: SalaryGeneration) => {
@@ -141,7 +146,7 @@ export class SalaryGenerationComponent implements OnInit {
 
   AddSalaryDetails = () => {
     if (this.companyRef() <= 0) {
-      this.uiUtils.showErrorToster('Company not Selected');
+      this.uiUtils.showWarningToster('Please select company');
       return;
     }
     this.router.navigate(['/homepage/Website/Salary_Generation_Details']);

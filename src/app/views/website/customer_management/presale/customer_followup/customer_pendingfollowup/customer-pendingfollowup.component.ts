@@ -86,6 +86,10 @@ export class CustomerPendingFollowupComponent implements OnInit {
   }
 
   getCustomerFollowUpPendingListByContactModeRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
     this.strCDT = this.dtu.ConvertStringDateToFullFormat(this.ReminderDate);
     let FollowUp = await CustomerFollowUp.FetchEntirePendingListByContactModeRef(this.companyRef(), this.Entity.p.ContactMode,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));

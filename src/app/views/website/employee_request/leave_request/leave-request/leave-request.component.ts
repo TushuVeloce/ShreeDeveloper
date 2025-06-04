@@ -117,7 +117,7 @@ export class LeaveRequestComponent implements OnInit {
 
   AddLeaveRequest = () => {
     if (this.companyRef() <= 0) {
-      this.uiUtils.showErrorToster('Company not Selected');
+      this.uiUtils.showWarningToster('Please select company');
       return;
     }
     this.router.navigate(['/homepage/Website/Leave_Request_Details']);

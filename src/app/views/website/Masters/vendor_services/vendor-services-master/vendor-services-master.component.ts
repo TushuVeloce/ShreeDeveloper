@@ -31,8 +31,8 @@ export class VendorServicesMasterComponent implements OnInit {
 
   headers: string[] = ['Sr.No.', 'Vendor Service', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement,private payloadPacketFacade: PayloadPacketFacade,
-        private serverCommunicator: ServerCommunicatorService
+    private companystatemanagement: CompanyStateManagement, private payloadPacketFacade: PayloadPacketFacade,
+    private serverCommunicator: ServerCommunicatorService
   ) {
     effect(() => {
       this.FormulateVendorServiceList()
@@ -86,27 +86,27 @@ export class VendorServicesMasterComponent implements OnInit {
     );
   };
 
-    // DeleteVendorService = async (VendorService: VendorService) => {
-    //   await this.uiUtils.showConfirmationMessage(
-    //     'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Service?`,
-    //     async () => {
-    //       let req = new DeleteVendorServiceCustomRequest();
-    //       req.VendorServiceRef = VendorService.p.Ref;
-    //       let td = req.FormulateTransportData();
-    //       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-    //       let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-    //       if (!tr.Successful) {
-    //         await this.uiUtils.showErrorMessage('Error', tr.Message);
-    //         return;
-    //       }
-    //       await this.uiUtils.showSuccessToster(`Vendor Service ${VendorService.p.Name} has been deleted!`);
-    //       let tdResult = JSON.parse(tr.Tag) as TransportData;
-    //     }
-    //   );
-    //   this.FormulateVendorServiceList()
-    //   this.loadPaginationData()
-    //    this.SearchString = '';
-    // };
+  // DeleteVendorService = async (VendorService: VendorService) => {
+  //   await this.uiUtils.showConfirmationMessage(
+  //     'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Service?`,
+  //     async () => {
+  //       let req = new DeleteVendorServiceCustomRequest();
+  //       req.VendorServiceRef = VendorService.p.Ref;
+  //       let td = req.FormulateTransportData();
+  //       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+  //       let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+  //       if (!tr.Successful) {
+  //         await this.uiUtils.showErrorMessage('Error', tr.Message);
+  //         return;
+  //       }
+  //       await this.uiUtils.showSuccessToster(`Vendor Service ${VendorService.p.Name} has been deleted!`);
+  //       let tdResult = JSON.parse(tr.Tag) as TransportData;
+  //     }
+  //   );
+  //   this.FormulateVendorServiceList()
+  //   this.loadPaginationData()
+  //    this.SearchString = '';
+  // };
 
   // For Pagination  start ----
   loadPaginationData = () => {
@@ -123,6 +123,10 @@ export class VendorServicesMasterComponent implements OnInit {
   };
 
   AddVendorService = () => {
+    if (this.companyRef() <= 0) {
+      this.uiUtils.showWarningToster('Please select company');
+      return;
+    }
     this.router.navigate(['/homepage/Website/Vendor_Services_Master_Details']);
   }
 

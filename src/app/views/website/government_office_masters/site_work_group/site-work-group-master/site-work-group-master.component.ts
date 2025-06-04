@@ -35,7 +35,7 @@ export class SiteWorkGroupMasterComponent implements OnInit {
   }
 
   private FormulateSiteWorkGroupListByCompanyRef = async () => {
-      if (this.companyRef() <= 0) {
+    if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
@@ -93,6 +93,10 @@ export class SiteWorkGroupMasterComponent implements OnInit {
   };
 
   AddSiteWorkGroup() {
+    if (this.companyRef() <= 0) {
+      this.uiUtils.showWarningToster('Please select company');
+      return;
+    }
     this.router.navigate(['/homepage/Website/Site_Work_Group_Details']);
   }
 

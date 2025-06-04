@@ -86,11 +86,13 @@ export class CustomerFollowupComponent implements OnInit {
   }
 
   getCustomerFollowUpListByDateCompanyAndContactModeRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
     this.strCDT = this.dtu.ConvertStringDateToFullFormat(this.ReminderDate);
-    console.log('this.companyRef() :', this.companyRef());
     let FollowUp = await CustomerFollowUp.FetchEntireListByDateComapanyAndContactModeRef(this.companyRef(), this.strCDT, this.Entity.p.ContactMode,
-    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('FollowUp :', FollowUp);
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.followup = FollowUp
     this.DisplayMasterList = FollowUp;
     this.loadPaginationData();

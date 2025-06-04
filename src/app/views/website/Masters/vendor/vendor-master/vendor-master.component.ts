@@ -29,8 +29,12 @@ export class VendorMasterComponent implements OnInit {
 
   headers: string[] = ['SR.No', 'Vendor Name', 'Mobile No', 'Address', 'Company Name', 'Action'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement,private payloadPacketFacade: PayloadPacketFacade,
-      private serverCommunicator: ServerCommunicatorService) {
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private companystatemanagement: CompanyStateManagement,
+  ) {
     effect(() => {
       this.getVendorListByCompanyRef()
     });
@@ -44,11 +48,13 @@ export class VendorMasterComponent implements OnInit {
   getVendorListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    if (this.companyRef) {
-      let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.MasterList = lst;
-      this.DisplayMasterList = this.MasterList;
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
+    let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
 
@@ -112,12 +118,11 @@ export class VendorMasterComponent implements OnInit {
   }
 
   AddVendor = () => {
-    if(this.companyRef()){
-    this.router.navigate(['/homepage/Website/Vendor_Master_Details']);
-    }
-    else{
+    if (this.companyRef() <= 0) {
       this.uiUtils.showWarningToster('Please select company');
+      return;
     }
+    this.router.navigate(['/homepage/Website/Vendor_Master_Details']);
   }
 
   filterTable = () => {

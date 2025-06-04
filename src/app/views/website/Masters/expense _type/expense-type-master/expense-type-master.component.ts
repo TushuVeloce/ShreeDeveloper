@@ -83,7 +83,6 @@ export class ExpenseTypeMasterComponent implements OnInit {
     this.MasterList = lst;
 
     this.DisplayMasterList = this.MasterList;
-    console.log('DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
   }
 
@@ -155,7 +154,7 @@ export class ExpenseTypeMasterComponent implements OnInit {
 
   AddExpenseType = () => {
     if (this.Entity.p.StageRef <= 0) {
-      this.uiUtils.showErrorToster('Stage not Selected');
+      this.uiUtils.showWarningToster('Stage not Selected');
       return;
     }
     if (!this.IsOtherExpenseApplicable) {

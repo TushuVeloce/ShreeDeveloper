@@ -13,8 +13,8 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   templateUrl: './company-holidays.component.html',
   styleUrls: ['./company-holidays.component.scss'],
 })
-export class CompanyHolidaysComponent  implements OnInit {
- Entity: CompanyHolidays = CompanyHolidays.CreateNewInstance();
+export class CompanyHolidaysComponent implements OnInit {
+  Entity: CompanyHolidays = CompanyHolidays.CreateNewInstance();
   MasterList: CompanyHolidays[] = [];
   DisplayMasterList: CompanyHolidays[] = [];
   SearchString: string = '';
@@ -25,9 +25,9 @@ export class CompanyHolidaysComponent  implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Date','Reason','Action'];
+  headers: string[] = ['Sr.No.', 'Date', 'Reason', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement,private DateconversionService: DateconversionService,
+    private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
   ) {
     effect(async () => {
       await this.getCompanyHolidaysListByCompanyRef();
@@ -38,63 +38,67 @@ export class CompanyHolidaysComponent  implements OnInit {
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
- 
-   getCompanyHolidaysListByCompanyRef = async () => {
-      this.MasterList = [];
-      this.DisplayMasterList = [];
-      if (this.companyRef() <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
-        return;
-      }
-      let lst = await CompanyHolidays.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.MasterList = lst;
-      this.DisplayMasterList = this.MasterList;
-      this.loadPaginationData();
+
+  getCompanyHolidaysListByCompanyRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
+    let lst = await CompanyHolidays.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  }
 
-    onEditClicked = async (item: CompanyHolidays) => {
-      this.SelectedTime = item.GetEditableVersion();
-      CompanyHolidays.SetCurrentInstance(this.SelectedTime);
-      this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-      await this.router.navigate(['/homepage/Website/Company_Holidays_Details']);
-    };
+  onEditClicked = async (item: CompanyHolidays) => {
+    this.SelectedTime = item.GetEditableVersion();
+    CompanyHolidays.SetCurrentInstance(this.SelectedTime);
+    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+    await this.router.navigate(['/homepage/Website/Company_Holidays_Details']);
+  };
 
-    onDeleteClicked = async (CompanyHolidays: CompanyHolidays) => {
-      await this.uiUtils.showConfirmationMessage(
-        'Delete',
-        `This process is <strong>IRREVERSIBLE!</strong> <br/>
+  onDeleteClicked = async (CompanyHolidays: CompanyHolidays) => {
+    await this.uiUtils.showConfirmationMessage(
+      'Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
       Are you sure that you want to DELETE this Overtime?`,
-        async () => {
-          await CompanyHolidays.DeleteInstance(async () => {
-            await this.uiUtils.showSuccessToster(`${CompanyHolidays.p.Date} has been deleted!`);
-            await this.getCompanyHolidaysListByCompanyRef();
-            this.SearchString = '';
-            this.loadPaginationData();
-          });
-        }
-      );
-    };
+      async () => {
+        await CompanyHolidays.DeleteInstance(async () => {
+          await this.uiUtils.showSuccessToster(`${CompanyHolidays.p.Date} has been deleted!`);
+          await this.getCompanyHolidaysListByCompanyRef();
+          this.SearchString = '';
+          this.loadPaginationData();
+        });
+      }
+    );
+  };
 
-    // For Pagination  start ----
-    loadPaginationData = () => {
-      this.total = this.DisplayMasterList.length; // Update total based on loaded data
-    };
+  // For Pagination  start ----
+  loadPaginationData = () => {
+    this.total = this.DisplayMasterList.length; // Update total based on loaded data
+  };
 
-     // Extracted from services date conversion //
+  // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   }
 
-    paginatedList = () => {
-      const start = (this.currentPage - 1) * this.pageSize;
-      return this.DisplayMasterList.slice(start, start + this.pageSize);
+  paginatedList = () => {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  onPageChange = (pageIndex: number): void => {
+    this.currentPage = pageIndex; // Update the current page
+  };
+
+  AddCompanyHoliday = async () => {
+    if (this.companyRef() <= 0) {
+      this.uiUtils.showWarningToster('Please select company');
+      return;
     }
-
-    onPageChange = (pageIndex: number): void => {
-      this.currentPage = pageIndex; // Update the current page
-    };
-
-   AddCompanyHoliday = async() => {
     this.router.navigate(['/homepage/Website/Company_Holidays_Details']);
   }
 

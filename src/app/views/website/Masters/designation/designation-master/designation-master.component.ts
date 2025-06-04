@@ -124,7 +124,7 @@ export class DesignationMasterComponent implements OnInit {
 
   AddDesignation = async () => {
     if (this.companyRef() <= 0) {
-      this.uiUtils.showErrorToster('Company not Selected');
+      this.uiUtils.showWarningToster('Please select company');
       return;
     }
     this.router.navigate(['/homepage/Website/Designation_Master_Details']);

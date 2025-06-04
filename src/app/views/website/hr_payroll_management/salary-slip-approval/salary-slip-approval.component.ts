@@ -63,6 +63,10 @@ export class SalarySlipApprovalComponent implements OnInit {
   getSalarySlipApprovalListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
     let lst = await SalarySlipRequest.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
 

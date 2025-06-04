@@ -1,7 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ExpenseTypeRefs } from 'src/app/classes/domain/constants';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { ExpenseType } from 'src/app/classes/domain/entities/website/masters/expensetype/expensetype';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
@@ -13,7 +12,6 @@ import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
-import { Utils } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-site-management-actual-stages',
@@ -48,14 +46,13 @@ export class SiteManagementActualStagesComponent implements OnInit {
   OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  MachinaryHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.','Site Name', 'Vehicle No',  'Vendor Name', 'Quantity', 'Rate', 'Unit', 'Grand Total', 'Action'];
-  LabourHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.','Site Name',  'Vendor Name', 'Grand Total', 'Action'];
-  Headers: string[] = ['Sr.No.', 'Date', 'Chalan No.','Expense Type', 'Site Name', 'Quantity','Rate', 'Grand Total', 'Action'];
+  MachinaryHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Site Name', 'Vehicle No', 'Vendor Name', 'Quantity', 'Rate', 'Unit', 'Grand Total', 'Action'];
+  LabourHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Site Name', 'Vendor Name', 'Grand Total', 'Action'];
+  Headers: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Expense Type', 'Site Name', 'Quantity', 'Rate', 'Grand Total', 'Action'];
 
   constructor(private uiUtils: UIUtils,
     private router: Router,
     private appStateManage: AppStateManageService,
-    private screenSizeService: ScreenSizeService,
     private DateconversionService: DateconversionService,
     private companystatemanagement: CompanyStateManagement,
     private dtu: DTU,
@@ -67,11 +64,37 @@ export class SiteManagementActualStagesComponent implements OnInit {
   }
 
   async ngOnInit() {
-  this.appStateManage.setDropdownDisabled();
-    this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.StageList = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef(),
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.appStateManage.setDropdownDisabled();
+    this.getSiteListByCompanyRef()
+    this.getStageListByCompanyRef()
+    this.getVendorListByCompanyRef()
+  }
+
+  getSiteListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SiteList = lst;
+  }
+
+  getStageListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.StageList = lst;
+  }
+
+  getVendorListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.VendorList = lst;
   }
 
   // Extracted from services date conversion //
@@ -237,6 +260,10 @@ export class SiteManagementActualStagesComponent implements OnInit {
   };
 
   AddActualStages = async () => {
+    if (this.companyRef() <= 0) {
+      this.uiUtils.showWarningToster('Please select company');
+      return;
+    }
     await this.router.navigate(['/homepage/Website/Actual_Stage_Details']);
   }
 
