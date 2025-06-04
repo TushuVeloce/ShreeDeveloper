@@ -56,7 +56,7 @@ export class YourProfileComponent implements OnInit {
     this.currentemployee = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.LoginToken = this.appStateManage.getLoginToken();
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
-    if (this.currentemployee) {
+    if (this.currentemployee !=0 && this.currentemployee != 1001) {
       this.getEmployeeDetails()
     }
   }
