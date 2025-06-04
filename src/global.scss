@@ -230,20 +230,32 @@ form {
 }
 
 .title_light {
-
-  // background: linear-gradient(to bottom, #7c2424, #c0392b);
-  // -webkit-background-clip: text;
-  // -webkit-text-fill-color: transparent;
-  // color: transparent;
-
   color: var(--ion-color-primary-tint);
-  font-weight: bold;
-  background-clip: text;
-  font-size: 22px;
   font-weight: 600;
-  justify-content: left;
+  background-clip: text;
   display: flex;
+  justify-content: flex-start;
+  padding-top: 3px;
+
+  /* Responsive font sizes */
+  font-size: 1rem;
+  /* base size for small screens */
 }
+
+@media (min-width: 480px) {
+  .title_light {
+    font-size: 1.25rem;
+    /* tablets */
+  }
+}
+
+@media (min-width: 768px) {
+  .title_light {
+    font-size: 1.5rem;
+    /* medium devices */
+  }
+}
+
 
 .form-label_light {
   color: black;
@@ -264,20 +276,37 @@ form {
 /* Button styles */
 .btn1 {
   background-color: var(--ion-color-primary-tint);
-  // background: linear-gradient(to top right, #7c2424, #fc4935) !important;
   color: white;
-  padding: 8px 16px;
-  font-size: medium;
+  padding: 0.3rem 0.75rem; // Smaller padding: 4.8px 12px
+  font-size: 1rem; // base font size (~16px)
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
   float: right;
-  justify-self: right
+  justify-self: right;
+
+
+  // Slightly scale up on larger screens
+  @media (min-width: 480px) {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.9rem;
+  }
+
+  @media (min-width: 768px) {
+    font-size: 0.95rem;
+    padding: 0.45rem 1rem;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 1rem;
+    padding: 0.5rem 1.1rem;
+  }
+
+  &:hover {
+    background-color: maroon;
+  }
 }
 
-.btn1:hover {
-  background-color: maroon;
-}
 
 /* ------------------------- Search Box Styles End ------------------------- */
 .mobile-btn {
