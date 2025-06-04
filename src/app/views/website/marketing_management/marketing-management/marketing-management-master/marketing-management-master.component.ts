@@ -55,8 +55,13 @@ export class MarketingManagementMasterComponent implements OnInit {
   HidePrintingMediaTable: boolean = false
   HideBrokerTable: boolean = false
   Headers: string[] = ['Sr.No.', 'Site Name', 'Date', 'Vendor Name', 'Rate', 'Quantity', 'Total', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement, private dtu: DTU, private DateconversionService: DateconversionService
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private companystatemanagement: CompanyStateManagement,
+    private dtu: DTU,
+    private DateconversionService: DateconversionService
   ) {
     effect(async () => {
       await this.getMarketingListByCompanyRef();
@@ -64,12 +69,29 @@ export class MarketingManagementMasterComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef(),
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.getSiteListByCompanyRef();
+    this.getVendorListByCompanyRef();
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     // this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+  }
+
+  getSiteListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SiteList = lst;
+  }
+
+  getVendorListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.VendorList = lst;
   }
 
   getMarketingListByCompanyRef = async () => {
@@ -84,7 +106,7 @@ export class MarketingManagementMasterComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    
+
     let lst = await MarketingManagement.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
@@ -146,42 +168,42 @@ export class MarketingManagementMasterComponent implements OnInit {
           break;
       }
     }
-    if(this.Entity.p.MarketingType == this.MarketingType.Digital){
-        this.HideDigitalTable = false
-        this.HideElectronicsTable = true
-        this.HideOutdoorTable = true
-        this.HidePrintingMediaTable = true
-        this.HideBrokerTable = true
-    }else if(this.Entity.p.MarketingType == this.MarketingType.Electronics){
-         this.HideDigitalTable = true
-        this.HideElectronicsTable = false
-        this.HideOutdoorTable = true
-        this.HidePrintingMediaTable = true
-        this.HideBrokerTable = true
-    }else if(this.Entity.p.MarketingType == this.MarketingType.Outdoor){
-       this.HideDigitalTable = true
-        this.HideElectronicsTable = true
-        this.HideOutdoorTable = false
-        this.HidePrintingMediaTable = true
-        this.HideBrokerTable = true
-    }else if(this.Entity.p.MarketingType == this.MarketingType.PrintingMedia){
-           this.HideDigitalTable = true
-        this.HideElectronicsTable = true
-        this.HideOutdoorTable = true
-        this.HidePrintingMediaTable = false
-        this.HideBrokerTable = true
-    }else if(this.Entity.p.MarketingType == this.MarketingType.AgentBoker){
-           this.HideDigitalTable = true
-        this.HideElectronicsTable = true
-        this.HideOutdoorTable = true
-        this.HidePrintingMediaTable = true
-        this.HideBrokerTable = false
-    }else{
-       this.HideDigitalTable = false
-        this.HideElectronicsTable = false
-        this.HideOutdoorTable = false
-        this.HidePrintingMediaTable = false
-        this.HideBrokerTable = false
+    if (this.Entity.p.MarketingType == this.MarketingType.Digital) {
+      this.HideDigitalTable = false
+      this.HideElectronicsTable = true
+      this.HideOutdoorTable = true
+      this.HidePrintingMediaTable = true
+      this.HideBrokerTable = true
+    } else if (this.Entity.p.MarketingType == this.MarketingType.Electronics) {
+      this.HideDigitalTable = true
+      this.HideElectronicsTable = false
+      this.HideOutdoorTable = true
+      this.HidePrintingMediaTable = true
+      this.HideBrokerTable = true
+    } else if (this.Entity.p.MarketingType == this.MarketingType.Outdoor) {
+      this.HideDigitalTable = true
+      this.HideElectronicsTable = true
+      this.HideOutdoorTable = false
+      this.HidePrintingMediaTable = true
+      this.HideBrokerTable = true
+    } else if (this.Entity.p.MarketingType == this.MarketingType.PrintingMedia) {
+      this.HideDigitalTable = true
+      this.HideElectronicsTable = true
+      this.HideOutdoorTable = true
+      this.HidePrintingMediaTable = false
+      this.HideBrokerTable = true
+    } else if (this.Entity.p.MarketingType == this.MarketingType.AgentBoker) {
+      this.HideDigitalTable = true
+      this.HideElectronicsTable = true
+      this.HideOutdoorTable = true
+      this.HidePrintingMediaTable = true
+      this.HideBrokerTable = false
+    } else {
+      this.HideDigitalTable = false
+      this.HideElectronicsTable = false
+      this.HideOutdoorTable = false
+      this.HidePrintingMediaTable = false
+      this.HideBrokerTable = false
     }
     this.loadPaginationData();
   }
@@ -191,7 +213,7 @@ export class MarketingManagementMasterComponent implements OnInit {
     return this.DateconversionService.formatDate(date);
   }
 
- 
+
   onEditClicked = async (item: MarketingManagement) => {
     this.SelectedMarketingManagement = item.GetEditableVersion();
     MarketingManagement.SetCurrentInstance(this.SelectedMarketingManagement);
@@ -218,10 +240,10 @@ export class MarketingManagementMasterComponent implements OnInit {
   };
 
 
- get totalDigitalAmount(): number {
+  get totalDigitalAmount(): number {
     return this.DigitalList.reduce((sum, item) => sum + (item.p.Total || 0), 0);
   }
-  
+
   get totalElectonicsAmount(): number {
     return this.ElectronicsList.reduce((sum, item) => sum + (item.p.Total || 0), 0);
   }
@@ -237,9 +259,9 @@ export class MarketingManagementMasterComponent implements OnInit {
   get totalBrokerAmount(): number {
     return this.BrokerList.reduce((sum, item) => sum + (item.p.Total || 0), 0);
   }
- 
 
-   // Digital Pagination
+
+  // Digital Pagination
   paginatedDigitalList = () => {
     const start = (this.currentDigitalPage - 1) * this.pageSize;
     return this.DigitalList.slice(start, start + this.pageSize);
@@ -249,7 +271,7 @@ export class MarketingManagementMasterComponent implements OnInit {
     this.currentDigitalPage = pageIndex; // Update the current page
   }
 
-   // Electronics Pagination
+  // Electronics Pagination
   paginatedElectronicsList = () => {
     const start = (this.currentElectronicsPage - 1) * this.pageSize;
     return this.ElectronicsList.slice(start, start + this.pageSize);
@@ -259,7 +281,7 @@ export class MarketingManagementMasterComponent implements OnInit {
     this.currentElectronicsPage = pageIndex; // Update the current page
   }
 
-   // Outdoor Pagination
+  // Outdoor Pagination
   paginatedOutdoorList = () => {
     const start = (this.currentOutdoorPage - 1) * this.pageSize;
     return this.OutdoorList.slice(start, start + this.pageSize);
@@ -269,7 +291,7 @@ export class MarketingManagementMasterComponent implements OnInit {
     this.currentOutdoorPage = pageIndex; // Update the current page
   }
 
-   // Printing Media Pagination
+  // Printing Media Pagination
   paginatedPrintingMediaList = () => {
     const start = (this.currentPrintingMediaPage - 1) * this.pageSize;
     return this.PrintingMediaList.slice(start, start + this.pageSize);
@@ -279,7 +301,7 @@ export class MarketingManagementMasterComponent implements OnInit {
     this.currentPrintingMediaPage = pageIndex; // Update the current page
   }
 
-   // Broker Pagination
+  // Broker Pagination
   paginatedBrokerList = () => {
     const start = (this.currentBrokerPage - 1) * this.pageSize;
     return this.BrokerList.slice(start, start + this.pageSize);

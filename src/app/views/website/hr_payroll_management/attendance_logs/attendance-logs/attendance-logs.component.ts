@@ -93,7 +93,10 @@ export class AttendanceLogsComponent implements OnInit {
     this.ToDisplayWeeklyRequirement = false;
     this.isTodayAttendanceView = true;
     this.isShowMonthlyData = false;
-
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
     let TodaysAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendanceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = TodaysAttendanceLog
     this.getAttendanceCount(AttendanceLogType.TodaysAttendanceLog)
