@@ -1,97 +1,91 @@
-<div>
-    <div class="row">
-       <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2">
-        <h5 style="padding-top: 3px;" class="title title_light">Plot List</h5>
-      </div>
-       <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
-        <app-shared-filter [masterList]="MasterList"
-          [filterFields]="['PlotNo', 'AreaInSqm', 'AreaInSqft', 'GovermentRatePerSqm', 'BasicRatePerSqft', 'BookingRemarkName']"
-          (filteredList)="DisplayMasterList = $event"></app-shared-filter>
-      </div>
-      <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
-        <nz-button nz-button class="btn1" (click)="AddPlot()">
-          Add Plot
-        </nz-button>
-      </div>
-      <ng-template #noDataTpl>
-        <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
-          No Data
-        </div>
-      </ng-template>
-      <div class="card-body" style="margin-left: 14px">
-        <form autocomplete="off">
-          <div class="row">
-            <div class="card-body" style="margin-left: 14px;">
-              <form autocomplete="off">
-                <div class="row">
-                  <div class="col-md-4">
-                    <label for="SiteManagementRef"><b>Site</b></label>
-                    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-                      nzPlaceHolder="Select" id="SiteManagementRef" name="SiteManagementRef" [nzSize]="'large'"
-                      [(ngModel)]="Entity.p.SiteManagementRef"
-                      (ngModelChange)="onsitechange(Entity.p.SiteManagementRef)">
-                      <!-- <nz-option [nzValue]="0" nzLabel="All"></nz-option> -->
-                      <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref"
-                        [nzLabel]="site.p.Name"></nz-option>
-                    </nz-select>
-                  </div>
-                  <div class="col-md-4">
-                    <label>Booking Remark</label>
-                    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-                      nzPlaceHolder="Select" id="CurrentBookingRemark" name="CurrentBookingRemark" [nzSize]="'large'"
-                      [(ngModel)]="Entity.p.CurrentBookingRemark"
-                      (ngModelChange)="getPlotListBySiteandBookingRemarkRef(Entity.p.SiteManagementRef,Entity.p.CurrentBookingRemark)">
-                      <nz-option *ngFor="let bookingremark of BookingRemarkList" [nzValue]="bookingremark.Ref"
-                        [nzLabel]="bookingremark.Name"></nz-option>
-                    </nz-select>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
-    <div class="table-container" style="margin-top: 2rem;">
-      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
-        [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedList">
-        <thead>
-          <tr>
-            <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let plot of paginatedList; index as i">
-            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td Class="tbldata">{{plot.p.PlotNo}}</td>
-            <td Class="tbldata">{{plot.p.AreaInSqm}}</td>
-            <td Class="tbldata">{{plot.p.AreaInSqft}}</td>
-            <td Class="tbldata">{{plot.p.GovermentRatePerSqm}}</td>
-            <!-- <td Class="tbldata">{{plot.p.GovermentRatePerSqft}}</td> -->
-            <!-- <td Class="tbldata">{{plot.p.BasicRatePerSqm}}</td> -->
-            <td Class="tbldata">{{plot.p.BasicRatePerSqft}}</td>
-            <td Class="tbldata">{{plot.p.BookingRemarkName}}</td>
-            <td class="tbldata">
-              <span style="margin-left: 9px;" (click)="onEditClicked(plot);">
-                <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-              </span>
-              <span style="margin-left: 9px;" (click)="onDeleteClicked(plot);">
-                <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-            </td>
-          </tr>
-        </tbody>
-      </nz-table>
-    </div>
-    <div class="fixed-pagination">
-      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
-        (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
-      </nz-pagination>
-    </div>
+<div class="row">
+  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2">
+    <h5 style="padding-top: 3px;" class="title title_light">Plot List</h5>
   </div>
-  <div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
-    <div style="height: 200px" class="d-flex align-items-center justify-content-center">
-      <span class="title_light"> Data Not Found</span>
+  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
+    <app-shared-filter [masterList]="MasterList"
+      [filterFields]="['PlotNo', 'AreaInSqm', 'AreaInSqft', 'GovermentRatePerSqm', 'BasicRatePerSqft', 'BookingRemarkName']"
+      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
+  </div>
+  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
+    <nz-button nz-button class="btn1" (click)="AddPlot()">
+      Add Plot
+    </nz-button>
+  </div>
+</div>
+<ng-template #noDataTpl>
+  <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+    No Data
+  </div>
+</ng-template>
+<div class="card-body" style="margin-left: 14px">
+  <form autocomplete="off">
+    <div class="card-body" style="margin-left: 14px;">
+      <form autocomplete="off">
+        <div class="row">
+          <div class="col-md-4">
+            <label for="SiteManagementRef"><b>Site</b></label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="SiteManagementRef" name="SiteManagementRef" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.SiteManagementRef" (ngModelChange)="onsitechange(Entity.p.SiteManagementRef)">
+              <!-- <nz-option [nzValue]="0" nzLabel="All"></nz-option> -->
+              <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+            </nz-select>
+          </div>
+          <div class="col-md-4">
+            <label>Booking Remark</label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="CurrentBookingRemark" name="CurrentBookingRemark" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.CurrentBookingRemark"
+              (ngModelChange)="getPlotListBySiteandBookingRemarkRef(Entity.p.SiteManagementRef,Entity.p.CurrentBookingRemark)">
+              <nz-option *ngFor="let bookingremark of BookingRemarkList" [nzValue]="bookingremark.Ref"
+                [nzLabel]="bookingremark.Name"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </form>
     </div>
+  </form>
+</div>
+<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+  <div class="table-container" style="margin-top: 2rem;">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedList">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let plot of paginatedList; index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{plot.p.PlotNo}}</td>
+          <td Class="tbldata">{{plot.p.AreaInSqm}}</td>
+          <td Class="tbldata">{{plot.p.AreaInSqft}}</td>
+          <td Class="tbldata">{{plot.p.GovermentRatePerSqm}}</td>
+          <!-- <td Class="tbldata">{{plot.p.GovermentRatePerSqft}}</td> -->
+          <!-- <td Class="tbldata">{{plot.p.BasicRatePerSqm}}</td> -->
+          <td Class="tbldata">{{plot.p.BasicRatePerSqft}}</td>
+          <td Class="tbldata">{{plot.p.BookingRemarkName}}</td>
+          <td class="tbldata">
+            <span style="margin-left: 9px;" (click)="onEditClicked(plot);">
+              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+            </span>
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(plot);">
+              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+  <div class="fixed-pagination">
+    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+      (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+    </nz-pagination>
+  </div>
+</div>
+<div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
+  <div style="height: 200px" class="d-flex align-items-center justify-content-center">
+    <span class="title_light"> Data Not Found</span>
   </div>
 </div>
