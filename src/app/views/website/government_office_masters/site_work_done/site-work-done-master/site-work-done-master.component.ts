@@ -152,7 +152,7 @@ export class SiteWorkDoneMasterComponent implements OnInit {
 
   async AddSiteWorkDone() {
     if (this.companyRef() <= 0) {
-      this.uiUtils.showErrorToster('Company not Selected');
+      this.uiUtils.showWarningToster('Please select company');
       return;
     } else if (this.SiteWorkRef <= 0) {
       this.uiUtils.showErrorToster('Please Select site work Name');

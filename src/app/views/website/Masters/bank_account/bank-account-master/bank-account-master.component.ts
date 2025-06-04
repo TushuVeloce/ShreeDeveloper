@@ -98,7 +98,7 @@ export class BankAccountMasterComponent implements OnInit {
 
   AddBankAccount = () => {
     if (this.companyRef() <= 0) {
-      this.uiUtils.showErrorToster('Company not Selected');
+      this.uiUtils.showWarningToster('Please select company');
       return;
     }
     this.router.navigate(['/homepage/Website/Bank_Account_Master_Details']);

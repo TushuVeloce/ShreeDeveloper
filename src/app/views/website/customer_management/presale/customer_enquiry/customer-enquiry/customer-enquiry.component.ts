@@ -118,7 +118,7 @@ export class CustomerEnquiryComponent implements OnInit {
 
   async AddCustomerEnquiryForm() {
     if (this.companyRef() <= 0) {
-      this.uiUtils.showErrorToster('Company not Selected');
+      this.uiUtils.showWarningToster('Please select company');
       return;
     }
     this.router.navigate(['/homepage/Website/Customer_Enquiry_Details']);

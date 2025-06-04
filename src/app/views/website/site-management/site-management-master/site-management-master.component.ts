@@ -24,18 +24,18 @@ export class SiteManagementMasterComponent implements OnInit {
   currentPage = 1;
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.', 'Site Name', 'No of Plots', 'Site Incharge','Site Location', 'Action'];
+  headers: string[] = ['Sr.No.', 'Site Name', 'No of Plots', 'Site Incharge', 'Site Location', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
-    effect(async() => {
+    effect(async () => {
       // this.getMaterialListByCompanyRef()
-    await this.getSiteListByCompanyRef();
+      await this.getSiteListByCompanyRef();
     });
   }
   ngOnInit() {
-      this.appStateManage.setDropdownDisabled();
-   }
+    this.appStateManage.setDropdownDisabled();
+  }
 
   getSiteListByCompanyRef = async () => {
     this.MasterList = [];
@@ -53,13 +53,10 @@ export class SiteManagementMasterComponent implements OnInit {
 
   AddSite = async () => {
     if (this.companyRef() <= 0) {
-      this.uiUtils.showErrorToster('Company not Selected');
+      this.uiUtils.showWarningToster('Please select company');
       return;
     }
-    else {
-
-      await this.router.navigate(['/homepage/Website/Site_Management_Details']);
-    }
+    await this.router.navigate(['/homepage/Website/Site_Management_Details']);
   }
 
   onEditClicked = async (item: Site) => {

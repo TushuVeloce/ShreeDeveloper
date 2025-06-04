@@ -260,6 +260,10 @@ export class SiteManagementActualStagesComponent implements OnInit {
   };
 
   AddActualStages = async () => {
+    if (this.companyRef() <= 0) {
+      this.uiUtils.showWarningToster('Please select company');
+      return;
+    }
     await this.router.navigate(['/homepage/Website/Actual_Stage_Details']);
   }
 

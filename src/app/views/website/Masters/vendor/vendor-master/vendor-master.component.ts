@@ -118,12 +118,11 @@ export class VendorMasterComponent implements OnInit {
   }
 
   AddVendor = () => {
-    if (this.companyRef()) {
-      this.router.navigate(['/homepage/Website/Vendor_Master_Details']);
-    }
-    else {
+    if (this.companyRef() <= 0) {
       this.uiUtils.showWarningToster('Please select company');
+      return;
     }
+    this.router.navigate(['/homepage/Website/Vendor_Master_Details']);
   }
 
   filterTable = () => {

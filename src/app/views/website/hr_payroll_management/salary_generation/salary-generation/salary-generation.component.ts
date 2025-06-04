@@ -146,7 +146,7 @@ export class SalaryGenerationComponent implements OnInit {
 
   AddSalaryDetails = () => {
     if (this.companyRef() <= 0) {
-      this.uiUtils.showErrorToster('Company not Selected');
+      this.uiUtils.showWarningToster('Please select company');
       return;
     }
     this.router.navigate(['/homepage/Website/Salary_Generation_Details']);

@@ -231,6 +231,10 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   AddAttendance = () => {
+    if (this.companyRef() <= 0) {
+      this.uiUtils.showWarningToster('Please select company');
+      return;
+    }
     this.router.navigate(['/homepage/Website/Attendance_Details']);
   }
 

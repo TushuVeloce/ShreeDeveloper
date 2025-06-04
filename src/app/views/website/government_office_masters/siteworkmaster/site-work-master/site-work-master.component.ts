@@ -134,7 +134,7 @@ export class SiteWorkMasterComponent implements OnInit {
 
   async AddSiteWorkMaster() {
     if (this.companyRef() <= 0) {
-      this.uiUtils.showErrorToster('Company not Selected');
+      this.uiUtils.showWarningToster('Please select company');
       return;
     } else if (this.Entity.p.SiteWorkGroupRef <= 0) {
       this.uiUtils.showErrorToster('Please Select site work group');

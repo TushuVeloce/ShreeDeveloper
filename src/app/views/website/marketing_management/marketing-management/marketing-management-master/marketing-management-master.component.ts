@@ -323,7 +323,7 @@ export class MarketingManagementMasterComponent implements OnInit {
 
   AddMarketing = () => {
     if (this.companyRef() <= 0) {
-      this.uiUtils.showErrorToster('Company not Selected');
+      this.uiUtils.showWarningToster('Please select company');
       return;
     }
     this.router.navigate(['/homepage/Website/Marketing_Management_Details']);

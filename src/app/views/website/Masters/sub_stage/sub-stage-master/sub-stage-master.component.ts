@@ -139,7 +139,7 @@ export class SubStageMasterComponent implements OnInit {
 
   AddSubStage = () => {
     if (this.companyRef() <= 0) {
-      this.uiUtils.showErrorToster('Company not Selected');
+      this.uiUtils.showWarningToster('Please select company');
       return;
     }
     this.router.navigate(['/homepage/Website/Sub_Stage_Master_Details']);

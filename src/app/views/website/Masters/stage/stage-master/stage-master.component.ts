@@ -117,7 +117,7 @@ export class StageMasterComponent implements OnInit {
 
   AddStage = () => {
     if (this.companyRef() <= 0) {
-      this.uiUtils.showErrorToster('Company not Selected');
+      this.uiUtils.showWarningToster('Please select company');
       return;
     }
     this.router.navigate(['/homepage/Website/Stage_Master_Details']);
