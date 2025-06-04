@@ -29,7 +29,7 @@
           <tr *ngFor="let overtime of paginatedList(); index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata" style="white-space: nowrap;">{{formatDate(overtime.p.Date)}}</td>
-            <td Class="tbldata">{{overtime.p.EmployeeRef}}</td>
+            <td Class="tbldata">{{overtime.p.EmployeeName}}</td>
             <td Class="tbldata">{{overtime.p.OverTimeInMin}}</td>
             <td Class="tbldata">{{overtime.p.OverTimeInHrs}}</td>
             <td class="tbldata">

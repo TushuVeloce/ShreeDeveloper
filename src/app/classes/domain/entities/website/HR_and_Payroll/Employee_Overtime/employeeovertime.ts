@@ -18,6 +18,7 @@ export class EmployeeOvertimeProps {
   public Ref: number = 0;
   public Date: string = '';
   public EmployeeRef: number = 0;
+  public EmployeeName: string = '';
   public OverTimeInMin: number = 0;
   public OverTimeInHrs: number = 0;
   public CompanyRef: number = 0;
