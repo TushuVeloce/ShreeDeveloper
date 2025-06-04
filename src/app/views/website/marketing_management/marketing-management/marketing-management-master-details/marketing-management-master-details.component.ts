@@ -203,8 +203,18 @@ export class MarketingManagementMasterDetailsComponent implements OnInit {
     }
   };
 
-  BackMarketingManagement = () => {
+  BackMarketingManagement = async () => {
+     if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Marketing Management Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Marketing_Management']);
+        });
+    } else {
     this.router.navigate(['/homepage/Website/Marketing_Management']);
+    }
   }
 
   resetAllControls = () => {

@@ -44,7 +44,7 @@ export class ExpenseTypeMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    this.StageList = await Stage.FetchEntireListByCompanyRef(this.companyRef());
+    // this.StageList = await Stage.FetchEntireListByCompanyRef(this.companyRef());
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.IsDropdownDisabled = true;
