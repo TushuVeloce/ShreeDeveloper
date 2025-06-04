@@ -76,10 +76,10 @@
   <nz-layout Class="layout_light">
     <nz-header class="container-fluid">
       <div class="row">
-        <div class="col-3" style="display: flex; align-items: center; margin: 0 1rem">
+        <div class="col-3" style="display: flex; align-items: center;">
           <span>
             <img src="/assets/icons/menu.png" alt="logo" (click)="toggleCollapsed()"
-              style="width: 25px; height: 25px; cursor: pointer" />
+              style="width: 2vw; height: 2vw; cursor: pointer" />
           </span>
           <span style="margin-left: 15px">
             <div>
@@ -88,37 +88,35 @@
             </div>
           </span>
         </div>
-        <div class="col-4"></div>
-        <div class="col-4" style="display: flex; justify-content: end; align-items: center">
-          <div>
-            <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzPlaceHolder="Select"
-              [nzSize]="'large'" [(ngModel)]="CompanyRef" name="CompanyRef" required id="CompanyRef"
-              (ngModelChange)="changecompany(CompanyRef)" [nzDropdownMatchSelectWidth]="true" [style.width.px]="300"
-              [disabled]="appStateManagement.isDropdownDisabled()">
-              <nz-option *ngFor="let company of CompnyList" [nzLabel]="company.p.Name"
-                [nzValue]="company.p.Ref"></nz-option>
-            </nz-select>
-          </div>
-          <div>
-            <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
-              <img width="50px" class="img-thumbnail rounded-circle mb-2" height="40px" src="/assets/logos/ShreeIcon.png"
-                alt="logo" />
-            </a>
-            <nz-dropdown-menu #menu="nzDropdownMenu" Class="profile_dropdwon_light">
-              <ul class="dropdown-list" nz-menu Class="profile_dropdwon_light">
-                <li class="options" nz-menu-item routerLinkActive="active" routerLink="/homepage/Website/your_profile">
-                  Your Profile
-                </li>
-                <li class="options" nz-menu-item routerLinkActive="active"
-                  routerLink="/homepage/Website/change_password/">
-                  Change Password
-                </li>
-                <li class="options" nz-menu-item routerLinkActive="active" (click)="logout()">
-                  Log Out
-                </li>
-              </ul>
-            </nz-dropdown-menu>
-          </div>
+        <div class="col-5"></div>
+        <div class="col-3" style="display: flex; justify-content: space-between; align-items: center">
+          <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzPlaceHolder="Select"
+            [nzSize]="'large'" [(ngModel)]="CompanyRef" name="CompanyRef" required id="CompanyRef"
+            (ngModelChange)="changecompany(CompanyRef)" [nzDropdownMatchSelectWidth]="true" [style.width.px]="300"
+            [disabled]="appStateManagement.isDropdownDisabled()">
+            <nz-option *ngFor="let company of CompnyList" [nzLabel]="company.p.Name"
+              [nzValue]="company.p.Ref"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-1 d-flex align-items-center">
+          <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
+            <img width="50px" class="img-thumbnail rounded-circle" height="40px" src="/assets/logos/ShreeIcon.png"
+              alt="logo" />
+          </a>
+          <nz-dropdown-menu #menu="nzDropdownMenu" Class="profile_dropdwon_light">
+            <ul class="dropdown-list" nz-menu Class="profile_dropdwon_light">
+              <li class="options" nz-menu-item routerLinkActive="active" routerLink="/homepage/Website/your_profile">
+                Your Profile
+              </li>
+              <li class="options" nz-menu-item routerLinkActive="active"
+                routerLink="/homepage/Website/change_password/">
+                Change Password
+              </li>
+              <li class="options" nz-menu-item routerLinkActive="active" (click)="logout()">
+                Log Out
+              </li>
+            </ul>
+          </nz-dropdown-menu>
         </div>
       </div>
     </nz-header>
