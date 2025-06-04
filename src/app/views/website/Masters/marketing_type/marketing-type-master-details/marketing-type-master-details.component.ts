@@ -82,8 +82,18 @@ export class MarketingTypeMasterDetailsComponent implements OnInit {
     }
   }
 
-  BackMarketingType = () => {
+  BackMarketingType = async() => {
+     if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Marketing Type Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Marketing_Type_Master']);
+        });
+    } else {
     this.router.navigate(['/homepage/Website/Marketing_Type_Master']);
+    }
   }
 
   resetAllControls = () => {
