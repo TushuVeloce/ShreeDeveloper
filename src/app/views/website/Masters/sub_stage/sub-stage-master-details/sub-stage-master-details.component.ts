@@ -110,7 +110,7 @@ export class SubStageMasterDetailsComponent implements OnInit {
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Sub Stage Updated successfully!');
-        this.BackSubStage()
+        await this.router.navigate(['/homepage/Website/Sub_Stage_Master']);
       }
     }
   };

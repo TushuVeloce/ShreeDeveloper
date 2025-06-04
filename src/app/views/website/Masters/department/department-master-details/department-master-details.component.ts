@@ -82,13 +82,23 @@ export class DepartmentMasterDetailsComponent implements OnInit {
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Department Updated successfully!');
-        this.BackDepartment();
+        await this.router.navigate(['/homepage/Website/Department_Master']);
       }
     }
   }
 
-  BackDepartment = () => {
-    this.router.navigate(['/homepage/Website/Department_Master']);
+  BackDepartment = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Department Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Department_Master']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Department_Master']);
+    }
   }
 
   resetAllControls = () => {

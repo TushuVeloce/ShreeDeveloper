@@ -76,13 +76,22 @@ export class VendorServicesMasterDetailsComponent implements OnInit {
       } else {
         await this.uiUtils.showSuccessToster('Vendor Service Updated successfully!');
         await this.router.navigate(['/homepage/Website/Vendor_Services_Master']);
-        this.BackVendorService();
       }
     }
   }
 
-  BackVendorService = () => {
-    this.router.navigate(['/homepage/Website/Vendor_Services_Master']);
+  BackVendorService = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Vendor Service Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Vendor_Services_Master']);
+        });
+    } else {
+      this.router.navigate(['/homepage/Website/Vendor_Services_Master']);
+    }
   }
 
   resetAllControls = () => {

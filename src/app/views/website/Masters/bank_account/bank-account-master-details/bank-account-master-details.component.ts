@@ -112,7 +112,7 @@ export class BankAccountMasterDetailsComponent implements OnInit {
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Bank Account Updated successfully!');
-        this.BackBankAccount()
+        await this.router.navigate(['/homepage/Website/Bank_Account_Master']);
       }
     }
   }
@@ -144,11 +144,21 @@ export class BankAccountMasterDetailsComponent implements OnInit {
   // }
 
   resetAllControls() {
-  this.bankForm.resetForm(); // this will reset all form controls to their initial state
-}
+    this.bankForm.resetForm(); // this will reset all form controls to their initial state
+  }
 
-  BackBankAccount = () => {
-    this.router.navigate(['/homepage/Website/Bank_Account_Master']);
+  BackBankAccount = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Bank Account Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Bank_Account_Master']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Bank_Account_Master']);
+    }
   }
 
 }

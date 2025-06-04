@@ -86,7 +86,7 @@ export class DesignationMasterDetailsComponent implements OnInit {
   //     async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
   //   );
   //   this.DepartmentList = lst;
-    // this.Entity.p.DepartmentRef = this.DepartmentList[0].p.Ref;
+  // this.Entity.p.DepartmentRef = this.DepartmentList[0].p.Ref;
   // };
 
   // for value 0 selected while click on Input //
@@ -120,13 +120,23 @@ export class DesignationMasterDetailsComponent implements OnInit {
         this.Entity.p.DepartmentRef = DepartmentRef;
       } else {
         await this.uiUtils.showSuccessToster('Designation Updated successfully!');
-        this.BackDesignation();
+        await this.router.navigate(['/homepage/Website/Designation_Master']);
       }
     }
   };
 
-  BackDesignation = () => {
-    this.router.navigate(['/homepage/Website/Designation_Master']);
+  BackDesignation = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Designation Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Designation_Master']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Designation_Master']);
+    }
   }
 
   resetAllControls = () => {

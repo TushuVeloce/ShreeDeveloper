@@ -85,8 +85,9 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     private router: Router,
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
-    private utils: Utils, private companystatemanagement: CompanyStateManagement
-    , private dtu: DTU,
+    private utils: Utils,
+    private companystatemanagement: CompanyStateManagement,
+    private dtu: DTU,
     private datePipe: DatePipe) { }
 
   async ngOnInit() {
@@ -266,8 +267,18 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     input.select();
   }
 
-  BackEmployee = () => {
-    this.router.navigate(['/homepage/Website/Employee_Master']);
+  BackEmployee = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Employee Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Employee_Master']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Employee_Master']);
+    }
   }
 
   // resetAllControls = () => {
@@ -306,37 +317,37 @@ export class EmployeeMasterDetailsComponent implements OnInit {
   //   this.IFSCInputControl.control.markAsPristine();
   // }
 
-// resetAllControls() {
-//   this.employeeForm.resetForm(); // resets form state
-// }
+  // resetAllControls() {
+  //   this.employeeForm.resetForm(); // resets form state
+  // }
 
-resetAllControls = () => {
-  const controlMap: { [key: string]: any } = {
-    Name: this.NameInputControl,
-    DOB: this.DOBInputControl,
-    AddressLine1: this.AddressLine1InputControl,
-    ContactNo: this.ContactNoInputControl,
-    PersonalEmailId: this.PersonalEmailIdInputControl,
-    OfficialEmailId: this.OfficialEmailIdInputControl,
-    EmergencyContactName: this.EmergencyContactNameInputControl,
-    EmergencyContactNo: this.EmergencyContactNoInputControl,
-    DateOfJoining: this.DateOfJoiningInputControl,
-    SalaryPerMonth: this.SalaryPerMonthInputControl,
-    SalaryPerYear: this.SalaryPerYearInputControl,
-    BankName: this.BankNameInputControl,
-    BranchName: this.BranchNameInputControl,
-    AccountNumber: this.AccountNumberInputControl,
-    IFSC: this.IFSCInputControl
-  };
+  resetAllControls = () => {
+    const controlMap: { [key: string]: any } = {
+      Name: this.NameInputControl,
+      DOB: this.DOBInputControl,
+      AddressLine1: this.AddressLine1InputControl,
+      ContactNo: this.ContactNoInputControl,
+      PersonalEmailId: this.PersonalEmailIdInputControl,
+      OfficialEmailId: this.OfficialEmailIdInputControl,
+      EmergencyContactName: this.EmergencyContactNameInputControl,
+      EmergencyContactNo: this.EmergencyContactNoInputControl,
+      DateOfJoining: this.DateOfJoiningInputControl,
+      SalaryPerMonth: this.SalaryPerMonthInputControl,
+      SalaryPerYear: this.SalaryPerYearInputControl,
+      BankName: this.BankNameInputControl,
+      BranchName: this.BranchNameInputControl,
+      AccountNumber: this.AccountNumberInputControl,
+      IFSC: this.IFSCInputControl
+    };
 
-  for (const key in controlMap) {
-    const ctrl = controlMap[key]?.control;
-    if (ctrl) {
-      ctrl.markAsUntouched();
-      ctrl.markAsPristine();
-      ctrl.updateValueAndValidity(); // ensures required msg disappears
+    for (const key in controlMap) {
+      const ctrl = controlMap[key]?.control;
+      if (ctrl) {
+        ctrl.markAsUntouched();
+        ctrl.markAsPristine();
+        ctrl.updateValueAndValidity(); // ensures required msg disappears
+      }
     }
-  }
-};
+  };
 
 }

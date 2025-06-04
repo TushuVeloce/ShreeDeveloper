@@ -271,9 +271,24 @@ export class CompanyMasterDetailsComponent implements OnInit {
     }
   };
 
-  BackCompany = () => {
-    this.router.navigate(['/homepage/Website/Company_Master']);
+  // BackCompany = () => {
+  //   this.router.navigate(['/homepage/Website/Company_Master']);
+  // }
+
+  BackCompany = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Company Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Company_Master']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Company_Master']);
+    }
   }
+
 
   resetAllControls = () => {
     // reset touched

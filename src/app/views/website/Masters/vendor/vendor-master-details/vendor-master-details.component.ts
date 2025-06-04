@@ -205,13 +205,23 @@ export class VendorMasterDetailsComponent implements OnInit {
         this.Entity = Vendor.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster('Vendor Updated successfully!');
-        this.BackVendor();
+        this.router.navigate(['/homepage/Website/Vendor_Master']);
       }
     }
   }
 
-  BackVendor = () => {
-    this.router.navigate(['/homepage/Website/Vendor_Master']);
+  BackVendor = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Vendor Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Vendor_Master']);
+        });
+    } else {
+      this.router.navigate(['/homepage/Website/Vendor_Master']);
+    }
   }
 
   resetAllControls = () => {
