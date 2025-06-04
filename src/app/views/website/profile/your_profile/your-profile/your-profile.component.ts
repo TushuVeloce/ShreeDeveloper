@@ -67,17 +67,17 @@ export class YourProfileComponent implements OnInit {
   getEmployeeDetails = async () => {
     if (this.currentemployee && this.companyRef()) {
       let EmployeeData = await Employee.FetchInstance(this.currentemployee, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      console.log('EmployeeData :', EmployeeData);
       this.Entity = EmployeeData
       if (this.Entity.p.DOB != '') {
         this.Entity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.DOB)
       }
       this.imageUrl = this.Entity.p.ProfilePicPath;
-      console.log('this.Entity.p.ProfilePicPath :', this.Entity.p.ProfilePicPath);
       this.loadImageFromBackend(this.Entity.p.ProfilePicPath)
     }
   }
+
   loadImageFromBackend(imageUrl: string): void {
+  console.log('imageUrl :', imageUrl);
     if (imageUrl) {
       this.imagePreviewUrl = `${this.ImageBaseUrl}${imageUrl}/${this.LoginToken}?${this.TimeStamp}`;
       console.log('this.imagePreviewUrl :', this.imagePreviewUrl);
@@ -88,29 +88,39 @@ export class YourProfileComponent implements OnInit {
   }
 
   // Handle file selection
-  handleFileChange = (event: any) => {
-    const fileInput = event.target.files[0];
+  // handleFileChange = (event: any) => {
+  //   const fileInput = event.target.files[0];
 
-    // Check if a file was selected
-    if (fileInput) {
-      // Validate file type
-      if (this.allowedImageTypes.includes(fileInput.type)) {
-        this.file = fileInput;
-        this.errors.profile_image = '';  // Clear error if valid file
+  //   if (fileInput) {
+  //     if (this.allowedImageTypes.includes(fileInput.type)) {
+  //       this.file = fileInput;
+  //       this.errors.profile_image = ''; 
 
-        // Create a URL for the image only if the file is not null
-        if (this.file) {
-          this.imageUrl = this.createObjectURL(this.file);  // No more error here
-        }
+  //       if (this.file) {
+  //         this.imageUrl = this.createObjectURL(this.file);  
+  //       }
 
-        // Manually trigger change detection to avoid ExpressionChangedAfterItHasBeenCheckedError
-        this.cdr.detectChanges();
-      } else {
-        // If file type is not an image, show an error message
-        this.errors.profile_image = 'Only image files (JPG, PNG, GIF) are allowed';
-        this.file = null;  // Reset file if it's invalid
-        this.imageUrl = null;  // Clear the image URL
-      }
+  //       this.cdr.detectChanges();
+  //     } else {
+  //       this.errors.profile_image = 'Only image files (JPG, PNG, GIF) are allowed';
+  //       this.file = null;  
+  //       this.imageUrl = null; 
+  //     }
+  //   }
+  // }
+
+
+   handleFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      this.Entity.p.ProfilePicFile = input.files[0];
+      this.selectedFileName = this.Entity.p.ProfilePicFile.name;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreviewUrl = reader.result as string;
+      };
+      reader.readAsDataURL(this.Entity.p.ProfilePicFile);
     }
   }
 
@@ -131,16 +141,16 @@ export class YourProfileComponent implements OnInit {
 
   SaveProfile = async () => {
     let file: FileTransferObject[] | undefined = []
-    if (this.file) {
-      let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("ProfilePicFile", this.file, this.file.name)];
-      // let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("LogoFile", this.Entity.p.ProfilePic, this.Entity.p.ProfilePic.name)];
-      console.log(lstFTO);
-      file = lstFTO
-    }
+    // if (this.file) {
+    //   let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("ProfilePicFile", this.file, this.file.name)];
+    //   console.log(lstFTO);
+    //   file = lstFTO
+    // }
+    let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("ProfilePicFile", this.Entity.p.ProfilePicFile, this.Entity.p.ProfilePicFile.name)];
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     await this.Entity.EnsurePrimaryKeysWithValidValues()
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave, file);
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
     if (!tr.Successful) {
       this.uiUtils.showErrorMessage('Error', tr.Message);
     }
@@ -149,6 +159,10 @@ export class YourProfileComponent implements OnInit {
       // this.Entity = Employee.CreateNewInstance();
       this.router.navigate(['/homepage']);
     }
+  }
+
+    BackProfile = () => {
+    this.router.navigate(['/homepage']);
   }
 }
 

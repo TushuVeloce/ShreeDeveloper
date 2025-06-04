@@ -1,22 +1,38 @@
 <div class="container">
-  <div class="row">
-    <div class="col-12">
-      <h5 class="title title_light text-center mb-4">Your Profile</h5>
-    </div>
-  </div>
   <div class="card shadow-sm p-2 mb-2">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackProfile()">
+          <img
+            src="/assets/icons/arrow-button.png"
+            alt=""
+            width="34px"
+            height="34px"
+          />
+        </button>
+      </div>
+      <div class="col-md-11 mt-2">
+        <span class="detail_title">Your Profile</span>
+      </div>
+    </div>
     <form #AddForm="ngForm" (ngSubmit)="SaveProfile()">
       <div class="row justify-content-center">
         <!-- Profile Image Upload -->
         <div class="d-flex flex-column align-items-center">
-          <ng-container *ngIf="Entity.p.ProfilePicPath; else defaultImage">
+          <ng-container *ngIf="Entity.p.ProfilePicPath; else AddPreviewImage">
             <img
-              [src]="imageUrl"
+              [src]="imagePreviewUrl"
               alt="Profile Image"
               class="img-thumbnail rounded-circle mb-2"
               style="width: 150px; height: 150px; object-fit: cover"
             />
           </ng-container>
+
+           <ng-template #AddPreviewImage>
+                <ng-container *ngIf="imagePreviewUrl ; else defaultImage">
+                  <img [src]="imagePreviewUrl" alt="Profile Image"  class="img-thumbnail rounded-circle mb-2"  style="width: 150px; height: 150px; object-fit: cover"/>
+                </ng-container>
+              </ng-template>
 
           <ng-template #defaultImage>
             <img
@@ -38,7 +54,6 @@
             <!-- Styled Label Button -->
             <label
               for="profileImage"
-              class="text-primary"
               style="cursor: pointer; color: #832828"
             >
               {{ imageUrl ? "Edit Image" : "Add Image" }}
