@@ -52,9 +52,6 @@ export class YourProfileComponent implements OnInit {
     private dtu: DTU,
   ) { }
 
-  // CountryCodeList = DomainEnums.CountryCodeList(true, '--Select Status--');
-
-
   ngOnInit() {
     this.currentemployee = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.LoginToken = this.appStateManage.getLoginToken();
@@ -87,29 +84,6 @@ export class YourProfileComponent implements OnInit {
     }
   }
 
-  // Handle file selection
-  // handleFileChange = (event: any) => {
-  //   const fileInput = event.target.files[0];
-
-  //   if (fileInput) {
-  //     if (this.allowedImageTypes.includes(fileInput.type)) {
-  //       this.file = fileInput;
-  //       this.errors.profile_image = ''; 
-
-  //       if (this.file) {
-  //         this.imageUrl = this.createObjectURL(this.file);  
-  //       }
-
-  //       this.cdr.detectChanges();
-  //     } else {
-  //       this.errors.profile_image = 'Only image files (JPG, PNG, GIF) are allowed';
-  //       this.file = null;  
-  //       this.imageUrl = null; 
-  //     }
-  //   }
-  // }
-
-
    handleFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
@@ -140,26 +114,32 @@ export class YourProfileComponent implements OnInit {
   }
 
   SaveProfile = async () => {
-    let file: FileTransferObject[] | undefined = []
-    // if (this.file) {
-    //   let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("ProfilePicFile", this.file, this.file.name)];
-    //   console.log(lstFTO);
-    //   file = lstFTO
-    // }
-    let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("ProfilePicFile", this.Entity.p.ProfilePicFile, this.Entity.p.ProfilePicFile.name)];
-    let entityToSave = this.Entity.GetEditableVersion();
-    let entitiesToSave = [entityToSave];
-    await this.Entity.EnsurePrimaryKeysWithValidValues()
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
-    if (!tr.Successful) {
-      this.uiUtils.showErrorMessage('Error', tr.Message);
-    }
-    else {
-      await this.uiUtils.showSuccessToster('Employee Updated successfully!');
-      // this.Entity = Employee.CreateNewInstance();
-      this.router.navigate(['/homepage']);
-    }
+  let entityToSave = this.Entity.GetEditableVersion();
+  let entitiesToSave = [entityToSave];
+
+  let lstFTO: FileTransferObject[] = [];
+
+  if (this.Entity.p.ProfilePicFile) {
+    lstFTO.push(
+      FileTransferObject.FromFile(
+        "ProfilePicFile",
+        this.Entity.p.ProfilePicFile,
+        this.Entity.p.ProfilePicFile.name
+      )
+    );
   }
+
+  await this.Entity.EnsurePrimaryKeysWithValidValues();
+  let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+
+  if (!tr.Successful) {
+    this.uiUtils.showErrorMessage('Error', tr.Message);
+  } else {
+    await this.uiUtils.showSuccessToster('Profile Updated successfully!');
+    this.router.navigate(['/homepage']);
+  }
+};
+
 
     BackProfile = () => {
     this.router.navigate(['/homepage']);
