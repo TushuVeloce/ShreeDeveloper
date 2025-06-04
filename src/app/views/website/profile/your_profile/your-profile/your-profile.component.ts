@@ -5,6 +5,7 @@ import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/c
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
+<<<<<<< Updated upstream
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -12,6 +13,9 @@ import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
+=======
+import { DateconversionService } from 'src/app/services/dateconversion.service';
+>>>>>>> Stashed changes
 
 @Component({
   selector: 'app-your-profile',
@@ -42,6 +46,7 @@ export class YourProfileComponent implements OnInit {
   @ViewChild('PhoneNosCtrl') phoneNosInputControl!: NgModel;
 
 
+<<<<<<< Updated upstream
   constructor(private cdr: ChangeDetectorRef, private DateconversionService: DateconversionService,
     private router: Router,
     private uiUtils: UIUtils,
@@ -51,6 +56,9 @@ export class YourProfileComponent implements OnInit {
     private baseUrl: BaseUrlService,
     private dtu: DTU,
   ) { }
+=======
+  constructor(private cdr: ChangeDetectorRef,private DateconversionService: DateconversionService,) { }
+>>>>>>> Stashed changes
 
   // CountryCodeList = DomainEnums.CountryCodeList(true, '--Select Status--');
 
@@ -119,7 +127,11 @@ export class YourProfileComponent implements OnInit {
     return URL.createObjectURL(file);
   }
 
+<<<<<<< Updated upstream
   // Extracted from services date conversion //
+=======
+   // Extracted from services date conversion //
+>>>>>>> Stashed changes
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   }
