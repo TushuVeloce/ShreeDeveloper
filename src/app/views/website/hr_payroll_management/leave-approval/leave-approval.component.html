@@ -1,13 +1,13 @@
 <div>
   <div class="row">
-    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2">
+     <div class="col-4 mb-2">
       <h5 style="padding-top: 3px;" class="title title_light">Leave Approval</h5>
     </div>
-    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
+    <div class="col-4 mb-2 search-container_light">
       <app-shared-filter [masterList]="MasterList" [filterFields]="['LeaveRequestName', 'Description', 'HalfDay', 'ToDate', 'HalfDayDate', 'Days']"
         (filteredList)="DisplayMasterList = $event"></app-shared-filter>
     </div>
-    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 btn-container" routerLinkActive="active">
+    <div class="col-4 mb-2" routerLinkActive="active">
     </div>
     <ng-template #noDataTpl>
       <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">

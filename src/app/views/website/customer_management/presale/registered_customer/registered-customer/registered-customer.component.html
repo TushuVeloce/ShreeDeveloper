@@ -1,9 +1,9 @@
 <div>
   <div class="row">
-    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2">
-      <h5 style="padding-top: 3px;" class="title title_light">Registered Customer</h5>
+    <div class="col-4 mb-2">
+      <h1 style="padding-top: 3px;" class="title title_light">Registered Customer</h1>
     </div>
-    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mb-2 search-container_light">
+    <div class="col-4 mb-2 search-container_light">
       <app-shared-filter [masterList]="MasterList"
         [filterFields]="['SiteName', 'PlotName', 'CustomerName', 'CustomerMobileNo', 'CustomerAddress']"
         (filteredList)="DisplayMasterList = $event"></app-shared-filter>
