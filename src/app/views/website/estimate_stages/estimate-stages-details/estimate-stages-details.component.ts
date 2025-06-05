@@ -40,11 +40,11 @@ export class EstimateStagesDetailsComponent implements OnInit {
   @ViewChild('AmountCtrl') AmountInputControl!: NgModel;
   @ViewChild('DescriptionCtrl') DescriptionInputControl!: NgModel;
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement,private dtu: DTU,) {
-      effect(async () => {
-        await this.getStageListByCompanyRef();
-      });
-    }
+  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private dtu: DTU,) {
+    effect(async () => {
+      await this.getStageListByCompanyRef();
+    });
+  }
 
 
   async ngOnInit() {
@@ -56,9 +56,9 @@ export class EstimateStagesDetailsComponent implements OnInit {
       this.Entity = EstimateStages.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable')
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      if(this.Entity.p.TransDateTime != ''){
-        this.Entity.p.TransDateTime  = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.TransDateTime)
-       }
+      if (this.Entity.p.TransDateTime != '') {
+        this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.TransDateTime)
+      }
     } else {
       this.Entity = EstimateStages.CreateNewInstance();
       EstimateStages.SetCurrentInstance(this.Entity);
@@ -95,8 +95,8 @@ export class EstimateStagesDetailsComponent implements OnInit {
     this.StageList = lst;
   }
 
-    getSubStageListByStageRef = async (stageref: number) => {
-      this.Entity.p.SubStageRef = 0
+  getSubStageListByStageRef = async (stageref: number) => {
+    this.Entity.p.SubStageRef = 0
     this.SubStageList = [];
     if (stageref > 0) {
       let lst = await SubStage.FetchEntireListByStageRef(stageref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
@@ -108,7 +108,7 @@ export class EstimateStagesDetailsComponent implements OnInit {
   SaveStageMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-    this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat( this.Entity.p.TransDateTime)
+    this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.TransDateTime)
     if (!this.Entity.p.Amount) {
       this.Entity.p.Amount = 0;
     }
@@ -117,7 +117,6 @@ export class EstimateStagesDetailsComponent implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
-    console.log('entitiesToSave :', entitiesToSave);
     await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
@@ -133,7 +132,7 @@ export class EstimateStagesDetailsComponent implements OnInit {
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Estimate Stage Updated successfully!');
-       this.BackEstimateStage()
+        await this.router.navigate(['/homepage/Website/Estimate_Stages']);
       }
     }
   }
@@ -144,26 +143,24 @@ export class EstimateStagesDetailsComponent implements OnInit {
     input.select();
   }
 
-  BackEstimateStage() {
-    this.router.navigate(['/homepage/Website/Estimate_Stages']);
-  }
-
-  // resetAllControls = () => {
-  //   // reset touched
-  //   this.NameInputControl.control.markAsUntouched();
-  //   this.AmountInputControl.control.markAsUntouched();
-  //   this.DescriptionInputControl.control.markAsUntouched();
-
-  //   // reset dirty
-  //   this.NameInputControl.control.markAsPristine();
-  //   this.AmountInputControl.control.markAsPristine();
-  //   this.DescriptionInputControl.control.markAsPristine();
-  // }
-
-    resetAllControls() {
-  this.estimateForm.resetForm(); // this will reset all form controls to their initial state
+  BackEstimateStage = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Estimate Stages Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Estimate_Stages']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Estimate_Stages']);
     }
   }
+
+  resetAllControls() {
+    this.estimateForm.resetForm(); // this will reset all form controls to their initial state
+  }
+}
 
 
 

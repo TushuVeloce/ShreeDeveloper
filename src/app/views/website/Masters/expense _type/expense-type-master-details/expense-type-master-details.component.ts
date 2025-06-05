@@ -111,7 +111,7 @@ export class ExpenseTypeMasterDetailsComponent implements OnInit {
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Expense Type Updated successfully!');
-        this.BackExpenseType()
+        await this.router.navigate(['/homepage/Website/Expense_Type_Master']);
       }
     }
   };

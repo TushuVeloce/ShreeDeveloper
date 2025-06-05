@@ -89,14 +89,14 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   }
 
   EmployeeData = async (employee: number, month: number) => {
-    if(month != 0){
+    if (month != 0) {
       const selectedMonthData = this.MonthList.find(m => m.Ref === month);
       if (selectedMonthData) {
         this.Entity.p.TotalDays = selectedMonthData.Days;
       }
-    }else {
-         this.Entity.p.TotalDays =0;
-      }
+    } else {
+      this.Entity.p.TotalDays = 0;
+    }
     if (employee === 0 || month === 0) {
       return;
     }
@@ -150,12 +150,22 @@ export class SalaryGenerationDetailsComponent implements OnInit {
         this.Entity = SalaryGeneration.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster('Salary Generation Details Updated successfully!');
-        this.BackSalaryGenaration()
+        await this.router.navigate(['/homepage/Website/Salary_Generation']);
       }
     }
   };
 
-  async BackSalaryGenaration() {
-    this.router.navigate(['/homepage/Website/Salary_Generation']);
+  BackSalaryGenaration = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Salary Generation Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Salary_Generation']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Salary_Generation']);
+    }
   }
 }

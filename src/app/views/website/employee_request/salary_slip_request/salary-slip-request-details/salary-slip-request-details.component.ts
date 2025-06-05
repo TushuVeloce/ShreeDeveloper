@@ -69,10 +69,7 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
       SalarySlipRequest.SetCurrentInstance(this.Entity);
       this.getSingleEmployeeDetails();
     }
-    this.InitialEntity = Object.assign(
-      SalarySlipRequest.CreateNewInstance(),
-      this.utils.DeepCopy(this.Entity)
-    ) as SalarySlipRequest;
+
     this.getFinancialYearListByCompanyRef();
   }
 
@@ -107,6 +104,11 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
     let data = await Employee.FetchInstance(this.EmployeeRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.Entity.p.EmployeeRef = data.p.Ref;
     this.Entity.p.EmployeeName = data.p.Name;
+
+    this.InitialEntity = Object.assign(
+      SalarySlipRequest.CreateNewInstance(),
+      this.utils.DeepCopy(this.Entity)
+    ) as SalarySlipRequest;
   }
 
   onSelectedMonthsChange = (Selectedservice: any) => {
@@ -146,8 +148,18 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
     input.select();
   }
 
-  BackSalarySlipRequest = () => {
-    this.router.navigate(['/homepage/Website/Salary_Slip_Request']);
+  BackSalarySlipRequest = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Salary Slip Request Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Salary_Slip_Request']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Salary_Slip_Request']);
+    }
   }
 
   resetAllControls = () => {

@@ -70,8 +70,8 @@ export class SiteWorkDoneMasterDetailsComponent implements OnInit {
         ? 'New Site Work Done'
         : 'Edit Site Work Done';
       this.Entity = SiteWorkDone.GetCurrentInstance();
-      this.SiteGroupRef =this.Entity.p.SiteWorkGroupRef
-      this.DisplaySiteWorkMasterList = this.SiteWorkMasterList.filter(e=> e.p.SiteWorkGroupRef == this.Entity.p.SiteWorkGroupRef)
+      this.SiteGroupRef = this.Entity.p.SiteWorkGroupRef
+      this.DisplaySiteWorkMasterList = this.SiteWorkMasterList.filter(e => e.p.SiteWorkGroupRef == this.Entity.p.SiteWorkGroupRef)
 
       this.appStateManage.StorageKey.removeItem('Editable');
     } else {
@@ -100,7 +100,7 @@ export class SiteWorkDoneMasterDetailsComponent implements OnInit {
       // if (!selectedSiteWorkref) {
       //   return;
       // }
-      this.DisplaySiteWorkMasterList = this.SiteWorkMasterList.filter(e=> e.p.SiteWorkGroupRef == siteGroupRef)
+      this.DisplaySiteWorkMasterList = this.SiteWorkMasterList.filter(e => e.p.SiteWorkGroupRef == siteGroupRef)
     }
   }
 
@@ -131,13 +131,23 @@ export class SiteWorkDoneMasterDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster(
           'Site Work Done Updated successfully!'
         );
-        this.BackSiteWorkDone()
+        await this.router.navigate(['/homepage/Website/Site_Work_Done']);
       }
     }
   };
 
-  BackSiteWorkDone() {
-    this.router.navigate(['/homepage/Website/Site_Work_Done']);
+  BackSiteWorkDone = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Site Work Done Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Site_Work_Done']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Site_Work_Done']);
+    }
   }
 
   resetAllControls = () => {

@@ -318,7 +318,7 @@ export class SiteManagementDetailsComponent implements OnInit {
         this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster('Site Updated successfully!');
-        this.BackSiteManagement()
+        await this.router.navigate(['/homepage/Website/Site_Management']);
       }
     }
   };
@@ -344,8 +344,18 @@ export class SiteManagementDetailsComponent implements OnInit {
     input.select();
   }
 
-  BackSiteManagement() {
-    this.router.navigate(['/homepage/Website/Site_Management']);
+  BackSiteManagement = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Site Management Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Site_Management']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Site_Management']);
+    }
   }
 
   resetAllControls = () => {

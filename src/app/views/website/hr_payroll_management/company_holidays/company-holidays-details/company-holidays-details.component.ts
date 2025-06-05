@@ -16,8 +16,8 @@ import { Utils } from 'src/app/services/utils.service';
   templateUrl: './company-holidays-details.component.html',
   styleUrls: ['./company-holidays-details.component.scss'],
 })
-export class CompanyHolidaysDetailsComponent  implements OnInit {
-Entity: CompanyHolidays = CompanyHolidays.CreateNewInstance();
+export class CompanyHolidaysDetailsComponent implements OnInit {
+  Entity: CompanyHolidays = CompanyHolidays.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Holiday' | 'Edit Holiday' = 'New Holiday';
@@ -38,7 +38,7 @@ Entity: CompanyHolidays = CompanyHolidays.CreateNewInstance();
     private utils: Utils,
     private companystatemanagement: CompanyStateManagement,
     private dtu: DTU,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -52,7 +52,7 @@ Entity: CompanyHolidays = CompanyHolidays.CreateNewInstance();
       this.Entity.p.UpdatedBy = Number(
         this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
       );
-      this.Entity.p.Date =  this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
+      this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
     } else {
       this.Entity = CompanyHolidays.CreateNewInstance();
       CompanyHolidays.SetCurrentInstance(this.Entity);
@@ -69,16 +69,11 @@ Entity: CompanyHolidays = CompanyHolidays.CreateNewInstance();
     txtName.focus();
   };
 
-   // for value 0 selected while click on Input //
+  // for value 0 selected while click on Input //
   selectAllValue = (event: MouseEvent): void => {
     const input = event.target as HTMLInputElement;
     input.select();
   }
-
-
-  BackCompanyHoliday = async () => {
-    this.router.navigate(['/homepage/Website/Company_Holidays']);
-  };
 
   SaveCompanyHoliday = async () => {
     this.Entity.p.CompanyRef =
@@ -112,10 +107,24 @@ Entity: CompanyHolidays = CompanyHolidays.CreateNewInstance();
         await this.uiUtils.showSuccessToster(
           'Office Duty and Time  Updated successfully!'
         );
-        this.BackCompanyHoliday();
+        await this.router.navigate(['/homepage/Website/Plot_Master']);
       }
     }
   };
+
+  BackCompanyHoliday = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Company Holidays Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Company_Holidays']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Company_Holidays']);
+    }
+  }
 
   resetAllControls() {
     this.companyForm.resetForm(); // this will reset all form controls to their initial state

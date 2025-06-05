@@ -130,13 +130,23 @@ export class SiteWorkMasterDetailComponent implements OnInit {
         await this.uiUtils.showSuccessToster(
           'Site Work Master Updated successfully!'
         );
-        this.BackSiteWorkMaster()
+        await this.router.navigate(['/homepage/Website/Site_Work_Master']);
       }
     }
   };
 
-  BackSiteWorkMaster() {
-    this.router.navigate(['/homepage/Website/Site_Work_Master']);
+  BackSiteWorkMaster = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Site Work Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Site_Work_Master']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Site_Work_Master']);
+    }
   }
 
   resetAllControls = () => {

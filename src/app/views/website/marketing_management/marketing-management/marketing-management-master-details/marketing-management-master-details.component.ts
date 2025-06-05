@@ -110,11 +110,11 @@ export class MarketingManagementMasterDetailsComponent implements OnInit {
     // this.getVendorServiceListByVendorRef();
   }
 
-  ClearPage =() =>{
+  ClearPage = () => {
     this.Entity.p.Page = 0
   }
 
-   private FormulateVendorServiceList = async () => {
+  private FormulateVendorServiceList = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -198,13 +198,13 @@ export class MarketingManagementMasterDetailsComponent implements OnInit {
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Marketin Updated successfully!');
-        this.BackMarketingManagement()
+        this.router.navigate(['/homepage/Website/Marketing_Management']);
       }
     }
   };
 
   BackMarketingManagement = async () => {
-     if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
       await this.uiUtils.showConfirmationMessage('Cancel',
         `This process is IRREVERSIBLE!
       <br/>
@@ -213,7 +213,7 @@ export class MarketingManagementMasterDetailsComponent implements OnInit {
           await this.router.navigate(['/homepage/Website/Marketing_Management']);
         });
     } else {
-    this.router.navigate(['/homepage/Website/Marketing_Management']);
+      this.router.navigate(['/homepage/Website/Marketing_Management']);
     }
   }
 

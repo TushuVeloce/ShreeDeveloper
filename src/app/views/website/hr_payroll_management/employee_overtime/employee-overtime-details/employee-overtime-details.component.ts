@@ -16,8 +16,8 @@ import { Utils } from 'src/app/services/utils.service';
   templateUrl: './employee-overtime-details.component.html',
   styleUrls: ['./employee-overtime-details.component.scss'],
 })
-export class EmployeeOvertimeDetailsComponent  implements OnInit {
-Entity: EmployeeOvertime = EmployeeOvertime.CreateNewInstance();
+export class EmployeeOvertimeDetailsComponent implements OnInit {
+  Entity: EmployeeOvertime = EmployeeOvertime.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Employee Overtime' | 'Edit Employee Overtime' = 'New Employee Overtime';
@@ -40,11 +40,11 @@ Entity: EmployeeOvertime = EmployeeOvertime.CreateNewInstance();
     private utils: Utils,
     private companystatemanagement: CompanyStateManagement,
     private dtu: DTU,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-     this.getEmployeeListByCompanyRef()
+    this.getEmployeeListByCompanyRef()
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity
@@ -55,7 +55,7 @@ Entity: EmployeeOvertime = EmployeeOvertime.CreateNewInstance();
       this.Entity.p.UpdatedBy = Number(
         this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
       );
-      this.Entity.p.Date =  this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
+      this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
     } else {
       this.Entity = EmployeeOvertime.CreateNewInstance();
       EmployeeOvertime.SetCurrentInstance(this.Entity);
@@ -72,18 +72,18 @@ Entity: EmployeeOvertime = EmployeeOvertime.CreateNewInstance();
     txtName.focus();
   };
 
-   // for value 0 selected while click on Input //
+  // for value 0 selected while click on Input //
   selectAllValue = (event: MouseEvent): void => {
     const input = event.target as HTMLInputElement;
     input.select();
   }
 
-   getEmployeeListByCompanyRef = async () => {
+  getEmployeeListByCompanyRef = async () => {
     let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.EmployeeList = lst;
   }
 
-    converthrtomin() {
+  converthrtomin() {
     if (this.Entity.p.OverTimeInHrs) {
       this.Entity.p.OverTimeInMin = parseFloat((this.Entity.p.OverTimeInHrs * 60).toFixed(2));
     } else {
@@ -98,10 +98,6 @@ Entity: EmployeeOvertime = EmployeeOvertime.CreateNewInstance();
       this.Entity.p.OverTimeInHrs = 0;
     }
   }
-
-  BackEmployeeOverTime = async () => {
-    this.router.navigate(['/homepage/Website/Employee_Overtime']);
-  };
 
   SaveEmployeeOvertime = async () => {
     this.Entity.p.CompanyRef =
@@ -135,10 +131,24 @@ Entity: EmployeeOvertime = EmployeeOvertime.CreateNewInstance();
         await this.uiUtils.showSuccessToster(
           'Office Duty and Time  Updated successfully!'
         );
-        this.BackEmployeeOverTime();
+        await this.router.navigate(['/homepage/Website/Employee_Overtime']);
       }
     }
   };
+
+  BackEmployeeOverTime = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Employee Overtime Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Employee_Overtime']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Employee_Overtime']);
+    }
+  }
 
   resetAllControls() {
     this.OvertimeForm.resetForm(); // this will reset all form controls to their initial state

@@ -631,13 +631,23 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Actual Stage Updated successfully!');
-        this.BackActualStages()
+        await this.router.navigate(['/homepage/Website/Actual_Stage']);
       }
     }
   }
 
-  BackActualStages = () => {
-    this.router.navigate(['/homepage/Website/Actual_Stage']);
+  BackActualStages = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Actual Stage Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Actual_Stage']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Actual_Stage']);
+    }
   }
 }
 

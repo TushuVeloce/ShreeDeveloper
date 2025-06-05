@@ -83,7 +83,6 @@ export class StageMasterDetailsComponent implements OnInit {
       } else {
         await this.uiUtils.showSuccessToster('Stage Updated successfully!');
         await this.router.navigate(['/homepage/Website/Stage_Master']);
-
       }
     }
   }

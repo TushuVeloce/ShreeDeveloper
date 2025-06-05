@@ -102,13 +102,23 @@ export class SiteWorkGroupMasterDetailsComponent implements OnInit {
         this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster('Site Wor Group Updated successfully!');
-        this.BackSiteWorkGroup()
+        await this.router.navigate(['/homepage/Website/Site_Work_Group']);
       }
     }
   }
 
-  BackSiteWorkGroup() {
-    this.router.navigate(['/homepage/Website/Site_Work_Group']);
+  BackSiteWorkGroup = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Work Group Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Site_Work_Group']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Site_Work_Group']);
+    }
   }
 
   resetAllControls = () => {

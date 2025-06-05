@@ -107,7 +107,7 @@ export class PlotMasterDetailsComponent implements OnInit {
 
   getCompanySingleRecord = async () => {
     this.CompanyEntity = Company.CreateNewInstance();
-    this.Entity.p.CurrentOwnerRef = 0 
+    this.Entity.p.CurrentOwnerRef = 0
     this.CustomerEntity = Owner.CreateNewInstance();
     if (this.Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked) {
       let CompanyData = await Company.FetchInstance(this.CompanyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
@@ -148,7 +148,7 @@ export class PlotMasterDetailsComponent implements OnInit {
         this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster('Plot Updated successfully!');
-        this.BackPlot()
+        await this.router.navigate(['/homepage/Website/Plot_Master']);
       }
     }
   };
@@ -174,9 +174,18 @@ export class PlotMasterDetailsComponent implements OnInit {
     input.select();
   }
 
-
-  BackPlot = () => {
-    this.router.navigate(['/homepage/Website/Plot_Master']);
+  BackPlot = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Plot Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Plot_Master']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Plot_Master']);
+    }
   }
 
   resetAllControls = () => {

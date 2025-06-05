@@ -347,7 +347,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
   //       return false;
   //     }
   //   }
-  //    return true; 
+  //    return true;
   // };
 
 
@@ -430,9 +430,19 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     }
   };
 
-  BackCustomerFollowUp = () => {
-    this.router.navigate(['/homepage/Website/Customer_FollowUp']);
-  };
+  BackCustomerFollowUp = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Customer FollowUp Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Customer_FollowUp']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Customer_FollowUp']);
+    }
+  }
 
   // function for preselected values in field
   selectAll(event: any) {

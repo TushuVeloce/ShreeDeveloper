@@ -42,7 +42,7 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
     private appStateManage: AppStateManageService,
     private utils: Utils,
     private companystatemanagement: CompanyStateManagement
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -70,10 +70,6 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
   focusInput = () => {
     let txtName = document.getElementById('FromTime')!;
     txtName.focus();
-  };
-
-  BackOfficeTime = async () => {
-    this.router.navigate(['/homepage/Website/Office_Duty_Time']);
   };
 
   SaveOfficeDutyTimeMaster = async () => {
@@ -108,10 +104,24 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster(
           'Office Duty and Time  Updated successfully!'
         );
-        this.BackOfficeTime();
+        await this.router.navigate(['/homepage/Website/Office_Duty_Time']);
       }
     }
   };
+
+  BackOfficeTime = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Office Duty Time Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Office_Duty_Time']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Office_Duty_Time']);
+    }
+  }
 
   resetAllControls() {
     this.officedutyandtimeForm.resetForm(); // this will reset all form controls to their initial state

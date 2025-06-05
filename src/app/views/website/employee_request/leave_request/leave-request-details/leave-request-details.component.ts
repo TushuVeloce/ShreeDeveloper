@@ -212,9 +212,19 @@ export class LeaveRequestDetailsComponent implements OnInit {
     input.select();
   };
 
-  BackLeaveRequest = () => {
-    this.router.navigate(['/homepage/Website/Leave_Request']);
-  };
+  BackLeaveRequest = async () => {
+    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+      await this.uiUtils.showConfirmationMessage('Cancel',
+        `This process is IRREVERSIBLE!
+      <br/>
+      Are you sure that you want to Cancel this Leave Request Form?`,
+        async () => {
+          await this.router.navigate(['/homepage/Website/Leave_Request']);
+        });
+    } else {
+      await this.router.navigate(['/homepage/Website/Leave_Request']);
+    }
+  }
 
   resetAllControls = () => {
     // reset touched

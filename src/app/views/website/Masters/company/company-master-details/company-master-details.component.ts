@@ -266,7 +266,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster('Company Updated successfully!');
         this.dateOfInCorporation = '';
         this.lastDateOfFirstFinancialYear = '';
-        this.BackCompany();
+        await this.router.navigate(['/homepage/Website/Company_Master']);
       }
     }
   };
