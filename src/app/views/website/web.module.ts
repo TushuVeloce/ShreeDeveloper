@@ -136,6 +136,7 @@ import { CompanyHolidays } from 'src/app/classes/domain/entities/website/HR_and_
 import { CompanyHolidaysComponent } from './hr_payroll_management/company_holidays/company-holidays/company-holidays.component';
 import { CompanyHolidaysDetailsComponent } from './hr_payroll_management/company_holidays/company-holidays-details/company-holidays-details.component';
 import { AttendanceDetailsComponent } from './hr_payroll_management/attendance_logs/attendance-details/attendance-details.component';
+import { ForgotPasswordComponent } from '../sidebarlayout/forgot_password/forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent, StageMasterComponent, StageMasterDetailsComponent, AccountMainLedgerComponent, AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent, MarketingTypeMasterDetailsComponent,

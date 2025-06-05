@@ -121,6 +121,8 @@ import { CompanyHolidays } from 'src/app/classes/domain/entities/website/HR_and_
 import { CompanyHolidaysComponent } from './hr_payroll_management/company_holidays/company-holidays/company-holidays.component';
 import { CompanyHolidaysDetailsComponent } from './hr_payroll_management/company_holidays/company-holidays-details/company-holidays-details.component';
 import { AttendanceDetailsComponent } from './hr_payroll_management/attendance_logs/attendance-details/attendance-details.component';
+import { ForgotPasswordComponent } from '../sidebarlayout/forgot_password/forgot-password/forgot-password.component';
+import { CreatePasswordComponent } from '../login-page/create_password/create-password/create-password.component';
 
 
 const routes: Routes = [
@@ -306,6 +308,7 @@ const routes: Routes = [
       // Razorpay
       { path: 'Razorpay', component: RazorpayComponent },
       { path: 'your_profile', component: YourProfileComponent },
+      { path: 'create_password', component: CreatePasswordComponent, },
       // { path: 'change_password', component: ChangePasswordComponent},
 
       // { path: 'Progress_Report', component: ProgressReportComponent },

@@ -4,6 +4,7 @@ import { LoginPageComponent } from './views/login-page/login-page.component';
 import { CreatePasswordComponent } from './views/login-page/create_password/create-password/create-password.component';
 import { MobileAppLoginPageComponent } from './views/mobile-app/mobile-app-login-page/mobile-app-login-page.component';
 import { CreatePasswordMobileAppComponent } from './views/mobile-app/mobile-app-login-page/create-password-mobile-app/create-password-mobile-app.component';
+import { ForgotPasswordComponent } from './views/sidebarlayout/forgot_password/forgot-password/forgot-password.component';
 
 
 const routes: Routes = [
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/login' },
   { path: 'login', component: LoginPageComponent, },
   { path: 'create_password', component: CreatePasswordComponent, },
+  { path: 'forgot_password', component: ForgotPasswordComponent },
   { path: 'login_mobile_app', component: MobileAppLoginPageComponent, },
   { path: 'create_password_mobile', component: CreatePasswordMobileAppComponent, },
   {

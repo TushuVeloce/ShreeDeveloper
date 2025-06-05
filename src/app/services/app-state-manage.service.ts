@@ -218,5 +218,14 @@ export class AppStateManageService {
     this.companyInitTrigger.next();
   }
 
+    getIsForgetPasswordClickedValue() {
+    return this.IsForgetPasswordClickedValue;
+  }
+  setIsForgetPasswordClickedValue(val: boolean) {
+    this.IsForgetPasswordClickedValue = val;
+  }
+  resetIsForgetPasswordClickedValue() {
+    this.IsForgetPasswordClickedValue = false;
+  }
 
 }

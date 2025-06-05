@@ -64,7 +64,7 @@
         <i class="{{ showPassword ? 'fas fa-eye' : 'fas fa-eye-slash' }}" (click)="togglePasswordVisibility()"
           style="position: absolute; top: 70%; right: 10px; transform: translateY(-50%); cursor: pointer; color: black;"></i>
       </div>
-      <h6 style="margin-bottom: 4%;" class="text-end mb-3">Forgot Password ?</h6>
+      <h6 style="margin-bottom: 4%; cursor: pointer;" class="text-end mb-3" (click)="ForgetPassword()">Forgot Password ?</h6>
       <div>
         <button type="submit" class="btn btn-gradient w-100" (click)="Login()" id="login_btn">LOG IN</button>
       </div>
