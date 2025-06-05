@@ -98,11 +98,13 @@ export class LoginPageComponent implements OnInit {
       body
     );
     if (!response.Successful) {
+      alert("no")
       await this.uiUtils.showInformationalMessage('Error', response.Message);
       this.isForgetPasswordDisabled = false;
       this.isSpinning = false;
       return;
     } else {
+      alert("yes")
       this.isForgetPasswordDisabled = false;
       this.isSpinning = false;
       await this.uiUtils.showInformationalMessage(
