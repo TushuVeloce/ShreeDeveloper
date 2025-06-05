@@ -87,8 +87,8 @@ export class SessionValues {
     return this.formulateControllerUrlString('cloudui');
   }
   
-  public get mobileApp(): string {
-    return this.formulateControllerUrlString('mobileapp');
+  public get generateuserotp(): string {
+    return this.formulateControllerUrlString('generateuserotp');
   }
 
   public get guestOperations(): string {

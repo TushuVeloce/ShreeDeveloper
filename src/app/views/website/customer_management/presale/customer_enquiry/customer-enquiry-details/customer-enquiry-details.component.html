@@ -138,7 +138,7 @@
           </nz-select>
         </div>
         <!-- Add button  -->
-        <div class="col-md-4" style="margin-top: 48px;">
+        <div class="col-md-4" style="margin-top: 48px;" *ngIf="InterestedPlotRef != 0 && SiteManagementRef != 0">
           <div>
             <button type="button" class="btn" (click)="addDataToTable()">Add</button>
           </div>

@@ -470,7 +470,7 @@ export class ServerCommunicatorService {
   }
 
   public async FetchRequestForMobileApp(endPoint: string, body: any) {
-    let apiRoot = this.sessionValues.mobileApp;
+    let apiRoot = this.sessionValues.generateuserotp;
     let url = `${apiRoot}/${endPoint}`;
 
     const headers = new HttpHeaders({
@@ -491,6 +491,7 @@ export class ServerCommunicatorService {
     let result = Object.assign(new UserLoginResponse(), resp) as UserLoginResponse;
     return result;
   }
+  
   public async SaveSuperUser(body: any) {
     let apiRoot = this.sessionValues.userManagement;
     let url = `${apiRoot}/savecustomeruser/${this.sessionValues.CurrentLoginToken}/${this.sessionValues.LoginDeviceId}`;

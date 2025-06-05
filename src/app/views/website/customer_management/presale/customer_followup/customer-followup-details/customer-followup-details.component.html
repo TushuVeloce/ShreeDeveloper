@@ -111,7 +111,7 @@
         </div>
 
         <!-- Add button  -->
-        <div class="col-md-4 mt-2 d-flex justify-content-start align-items-end" style="margin-top: 33px;">
+        <div class="col-md-4 mt-2 d-flex justify-content-start align-items-end" style="margin-top: 33px;" *ngIf="InterestedPlotRef != 0 && SiteManagementRef != 0">
           <div>
             <button type="button" class="btn" (click)="addDataToCustomerFollowUpPlotDetail()">Add</button>
           </div>
