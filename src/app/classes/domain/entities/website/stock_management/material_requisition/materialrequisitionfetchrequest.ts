@@ -4,18 +4,18 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class SalaryGenerationFetchRequest
+export class MaterialRequisitionFetchRequest
 {
-    public static readonly FetchRequestType: string = "SalarySlipGenerationFetchRequest";
+    // public static readonly FetchRequestType: string = "GAAProjectSpaceGroupFetchRequest";
+    public static readonly FetchRequestType: string = "MaterialRequisitionManagementFetchRequest";
 
+    MaterialRequisitionManagementRefs: number[] = [];
+    BookingRemarkRefs: number[] = [];
     CompanyRefs: number[] = [];
-    EmployeeRefs:Number=0;
-    Month:Number = 0;
-    SalaryGenerationRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, SalaryGenerationFetchRequest.FetchRequestType) as DataCollection;
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, MaterialRequisitionFetchRequest.FetchRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 

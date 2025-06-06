@@ -90,10 +90,7 @@ export class LeaveRequestDetailsComponent implements OnInit {
       this.Entity.p.LeaveRequestType = this.LeaveRequestTypeList[1].Ref;
       this.getSingleEmployeeDetails();
     }
-    this.InitialEntity = Object.assign(
-      LeaveRequest.CreateNewInstance(),
-      this.utils.DeepCopy(this.Entity)
-    ) as LeaveRequest;
+
     this.focusInput();
   }
 
@@ -114,6 +111,10 @@ export class LeaveRequestDetailsComponent implements OnInit {
     this.Entity.p.EmployeeRef = data.p.Ref;
     this.Entity.p.EmployeeName = data.p.Name;
     this.TotalWorkingHrs = data.p.TotalWorkingHrs;
+    this.InitialEntity = Object.assign(
+      LeaveRequest.CreateNewInstance(),
+      this.utils.DeepCopy(this.Entity)
+    ) as LeaveRequest;
   };
 
   formatDateToYYYYMMDD = (date: Date): string => {
