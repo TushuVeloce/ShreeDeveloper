@@ -44,7 +44,6 @@ import { EmployeeMasterDetailsComponent } from './Masters/employee/employee-mast
 import { SiteManagementActualStagesDetailsComponent } from './site-management/site-management-actual-stages-details/site-management-actual-stages-details.component';
 import { EstimateStagesComponent } from './estimate_stages/estimate-stages/estimate-stages.component';
 import { EstimateStagesDetailsComponent } from './estimate_stages/estimate-stages-details/estimate-stages-details.component';
-import { MaterialRequisitionComponent } from './stock management/material-requisition/material-requisition.component';
 import { StockConsumeComponent } from './stock management/stock-consume/stock-consume.component';
 import { StockInwardComponent } from './stock management/stock-inward/stock-inward.component';
 import { StockOrderComponent } from './stock management/stock-order/stock-order.component';
@@ -123,6 +122,8 @@ import { CompanyHolidaysDetailsComponent } from './hr_payroll_management/company
 import { AttendanceDetailsComponent } from './hr_payroll_management/attendance_logs/attendance-details/attendance-details.component';
 import { ForgotPasswordComponent } from '../sidebarlayout/forgot_password/forgot-password/forgot-password.component';
 import { CreatePasswordComponent } from '../login-page/create_password/create-password/create-password.component';
+import { MaterialRequisitionDetailsComponent } from './stock management/material_requisition/material-requisition-details/material-requisition-details.component';
+import { MaterialRequisitionComponent } from './stock management/material_requisition/material-requisition/material-requisition.component';
 
 
 const routes: Routes = [
@@ -217,7 +218,8 @@ const routes: Routes = [
       { path: 'Actual_Stage_Print', component: ActualStagePrintComponent },
 
       // Stock Management
-      { path: 'Material_Requisition', component: MaterialRequisitionComponent },
+      { path: 'material_requisition', component: MaterialRequisitionComponent },
+      { path: 'material_requisition_Details', component: MaterialRequisitionDetailsComponent },
       { path: 'Stock_Consume', component: StockConsumeComponent },
       { path: 'Stock_Inward', component: StockInwardComponent },
       { path: 'Stock_Order', component: StockOrderComponent },
@@ -304,6 +306,7 @@ const routes: Routes = [
 
       { path: 'Site_Work_Done', component: SiteWorkDoneMasterComponent },
       { path: 'Site_Work_Done_Details', component: SiteWorkDoneMasterDetailsComponent },
+
 
       // Razorpay
       { path: 'Razorpay', component: RazorpayComponent },

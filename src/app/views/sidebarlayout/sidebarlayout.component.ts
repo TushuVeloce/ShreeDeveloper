@@ -644,6 +644,15 @@ isRouteActive(route: string, ModuleName: string) {
 
     ]
 
+    let StockManagement = [
+      {
+        Name: 'Material Requisition',
+        RouterLink: '/homepage/Website/material_requisition',
+        LogoPath: '/assets/icons/Office Duty_Time.png',
+      },
+
+    ]
+
     let RequestSubModulelist = [
       {
         Name: 'Employee Attendance Logs',
@@ -717,6 +726,12 @@ isRouteActive(route: string, ModuleName: string) {
         RouterLink: '/homepage/Website/Marketing_Management',
         WhiteLogo: '/assets/icons/Marketing Management.png',
         // SubModuleList: MarketingManagementSubModuleList,
+      },
+      {
+        Name: 'Stock Management',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/Hr-Payroll Management.png',
+        SubModuleList: StockManagement,
       },
       {
         Name: 'Hr-Payroll Management',
