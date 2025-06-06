@@ -1,0 +1,23 @@
+<!-- <ion-button [type]="type" [expand]="expand" [color]="color" [fill]="fill" [shape]="shape !== 'default' ? shape : null"
+  [disabled]="disabled || loading" [ngClass]="customClass" [ngStyle]="customStyle">
+  <ion-spinner *ngIf="loading" name="dots" slot="start"></ion-spinner>
+
+  <ion-icon *ngIf="icon && !loading && iconPosition === 'start'" [name]="icon" slot="start"></ion-icon>
+
+  {{ label }}
+
+  <ion-icon *ngIf="icon && !loading && iconPosition === 'end'" [name]="icon" slot="end"></ion-icon>
+</ion-button> -->
+<ion-button [type]="type" [expand]="expand" [color]="color" [fill]="fill" [shape]="shape !== 'default' ? shape : null"
+  [disabled]="disabled || loading" [ngClass]="customClass" [ngStyle]="customStyle">
+  <!-- Loading Spinner -->
+  <ion-spinner *ngIf="loading" name="dots" slot="start"></ion-spinner>
+
+  <!-- Start Icon -->
+  <ion-icon *ngIf="icon && !loading && iconPosition === 'start'" [name]="icon" slot="start"></ion-icon>
+
+  {{ label }}
+
+  <!-- End Icon -->
+  <ion-icon *ngIf="icon && !loading && iconPosition === 'end'" [name]="icon" slot="end"></ion-icon>
+</ion-button>

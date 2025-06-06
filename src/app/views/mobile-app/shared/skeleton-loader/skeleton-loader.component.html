@@ -1,0 +1,10 @@
+<ion-card *ngFor="let _ of skeletons; let i = index; trackBy: trackByIndex">
+  <ion-card-header>
+    <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
+  </ion-card-content>
+</ion-card>

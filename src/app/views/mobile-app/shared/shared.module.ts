@@ -4,23 +4,21 @@ import { IonicModule } from '@ionic/angular';
 
 import { HeaderComponent } from './header/header.component';
 import { HeaderWithBackHandlerComponent } from './header-with-back-handler/header-with-back-handler.component';
-import { FormsModule } from '@angular/forms';
-import { SearchableSelectComponent } from './searchable-select/searchable-select.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SelectModalComponent } from './select-modal/select-modal.component';
-import { FilterBottomsheetComponent } from './filter-bottomsheet/filter-bottomsheet.component';
-import { DynamicFilterBottomsheetComponent } from './dynamic-filter-bottomsheet/dynamic-filter-bottomsheet.component';
-import { CardListComponent } from './card-list/card-list.component';
-import { DateTimeModelComponent } from './date-time-model/date-time-model.component';
 import { FilterSheetComponent } from './filter-sheet/filter-sheet.component';
-
+import { SkeletonLoaderComponent } from './skeleton-loader/skeleton-loader.component';
+import { InputFieldComponent } from './input-field/input-field.component';
+import { CustomButtonComponent } from './custom-button/custom-button.component';
 @NgModule({
-  declarations: [HeaderComponent, HeaderWithBackHandlerComponent, SearchableSelectComponent, SelectModalComponent, FilterBottomsheetComponent, DynamicFilterBottomsheetComponent, CardListComponent, DateTimeModelComponent, FilterSheetComponent],
+  declarations: [HeaderComponent, HeaderWithBackHandlerComponent, SelectModalComponent, FilterSheetComponent, SkeletonLoaderComponent, InputFieldComponent, CustomButtonComponent],
   imports: [
     CommonModule,
     IonicModule,
     FormsModule,
+    ReactiveFormsModule 
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA] ,
-  exports: [HeaderComponent, HeaderWithBackHandlerComponent, SearchableSelectComponent, SelectModalComponent, FilterBottomsheetComponent, DynamicFilterBottomsheetComponent, CardListComponent, DateTimeModelComponent, FilterSheetComponent]
+  exports: [HeaderComponent, HeaderWithBackHandlerComponent, SelectModalComponent,FilterSheetComponent,SkeletonLoaderComponent,InputFieldComponent,CustomButtonComponent]
 })
 export class SharedModule { }

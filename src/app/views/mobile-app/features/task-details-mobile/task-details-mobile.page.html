@@ -1,0 +1,58 @@
+<app-header-with-back-handler [title]="isEditMode ? 'Edit Task' : 'Add Task'"></app-header-with-back-handler>
+
+<ion-content class="form-container ">
+  <ion-list lines="none" class="ion-padding">
+    <!-- Task Name -->
+    <ion-item class="input-item">
+      <ion-label position="floating">Task Name</ion-label>
+      <ion-input [(ngModel)]="taskName" required></ion-input>
+    </ion-item>
+
+    <!-- Task Details -->
+    <ion-item class="input-item">
+      <ion-label position="floating">Task Details</ion-label>
+      <ion-textarea [(ngModel)]="taskDetails" rows="4" required></ion-textarea>
+    </ion-item>
+
+    <!-- Site Selection -->
+    <ion-item class="input-item" button (click)="selectSite()">
+      <ion-label position="floating">Select Site</ion-label>
+      <ion-input [(ngModel)]="siteName" disabled required></ion-input>
+    </ion-item>
+
+    <!-- Priority -->
+    <ion-item class="input-item">
+      <ion-label position="floating">Priority</ion-label>
+      <ion-input [(ngModel)]="priority" required></ion-input>
+    </ion-item>
+
+    <!-- Start Date -->
+    <!-- <ion-item class="input-item" button (click)="selectStartDate()">
+      <ion-label position="floating">Start Date</ion-label>
+      <ion-input [(ngModel)]="startDate" disabled required></ion-input>
+    </ion-item> -->
+
+    <!-- Due Date -->
+    <!-- <ion-item class="input-item" button (click)="selectEndDate()">
+      <ion-label position="floating">Due Date</ion-label>
+      <ion-input [(ngModel)]="endDate" disabled required></ion-input>
+    </ion-item> -->
+
+    <!-- Status -->
+    <ion-item class="input-item">
+      <ion-label position="floating">Status</ion-label>
+      <ion-input [(ngModel)]="status" required></ion-input>
+    </ion-item>
+
+    <!-- Buttons -->
+    <div class="button-row">
+      <ion-button expand="block" (click)="save()" class="submit-button primary-button">
+        {{ isEditMode ? 'Update' : 'Add' }}
+      </ion-button>
+      <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
+        Cancel
+      </ion-button>
+    </div>
+
+  </ion-list>
+</ion-content>

@@ -1,0 +1,73 @@
+.login-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0 16px;
+  
+    .logo-container {
+      margin: 40px 0 20px;
+      display: flex;
+      justify-content: center;
+  
+      img {
+        width: 160px;
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        object-fit: contain;
+      }
+    }
+  
+    .form-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      max-width: 400px; // Limits form width on larger screens
+      margin-top: 12px;
+    }
+  }
+  
+  /* ---------- Responsive Media Queries ---------- */
+  
+  // Small Devices (phones)
+  @media (max-width: 599px) {
+    .login-content {
+      .logo-container img {
+        width: 140px;
+      }
+  
+      .form-wrapper {
+        max-width: 100%;
+      }
+    }
+  }
+  
+  // Tablets
+  @media (min-width: 600px) and (max-width: 1023px) {
+    .login-content {
+      .logo-container img {
+        width: 160px;
+      }
+  
+      .form-wrapper {
+        max-width: 360px;
+      }
+    }
+  }
+  
+  // Desktops
+  @media (min-width: 1024px) {
+    .login-content {
+      .logo-container img {
+        width: 200px;
+      }
+  
+      .form-wrapper {
+        max-width: 400px;
+      }
+    }
+  }
+  

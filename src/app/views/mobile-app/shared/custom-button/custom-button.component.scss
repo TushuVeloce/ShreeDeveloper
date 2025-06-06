@@ -1,0 +1,36 @@
+ion-button {
+    --border-radius: 6px;
+    --padding-start: 14px;
+    --padding-end: 14px;
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    --box-shadow: none;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s ease-in-out;
+
+    &[disabled] {
+        opacity: 0.6;
+    }
+
+    ion-icon {
+        font-size: 16px;
+    }
+
+    ion-spinner {
+        width: 16px;
+        height: 16px;
+    }
+
+    &.my-btn {
+        margin-top: 16px;
+        // You can override more styles here if needed
+    }
+}

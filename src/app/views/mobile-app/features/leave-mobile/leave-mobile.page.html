@@ -1,0 +1,140 @@
+<app-loader *ngIf="isLoading"></app-loader>
+<app-header-with-back-handler title="Leave Requests" backRoute="mobileapp/tabs/attendance"></app-header-with-back-handler>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <!-- Status Filter -->
+  <ion-segment [(ngModel)]="selectedStatus" class="modern-segment" (ngModelChange)="filterLeaveRequests()">
+    <ion-segment-button *ngFor="let status of statusOptions" [value]="status.value">
+      <ion-label>{{ status.label }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- Leave Requests List -->
+  <div class="Leaves">
+    <ion-card *ngFor="let leave of filteredLeaveRequestData" class="Leaves-card">
+      <ion-card-header>
+        <div class="card-header-flex">
+          <ion-card-title class="leave-title">
+            <ion-icon name="document-text-outline" class="title-icon"></ion-icon>
+            {{ leave.p.LeaveRequestName }}
+          </ion-card-title>
+          <div class="button-group">
+            <ion-button fill="clear" size="small" color="primary" (click)="openModal(leave)">
+              <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(leave)"
+              *ngIf="(leave.p.IsCancelled == 0 && leave.p.IsApproved == 0)">
+              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="Leave-details">
+          <div *ngIf="leave.p.LeaveRequestType != LeaveRequestTypeEnum.HalfDay">
+            <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
+            <small><strong>From Date:</strong> {{ formatDate(leave.p.FromDate) }}</small><br />
+            <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
+            <small><strong>To Date:</strong> {{ formatDate(leave.p.ToDate) }}</small><br />
+          </div>
+          <div *ngIf="leave.p.LeaveRequestType == LeaveRequestTypeEnum.HalfDay">
+            <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
+            <small><strong>Date:</strong> {{ formatDate(leave.p.HalfDayDate) }}</small><br />
+          </div>
+          <ion-icon name="person-outline" class="detail-icon"></ion-icon>
+          <small><strong>Status:</strong>{{ (leave.p.IsApproved == 1)?'Approved':(leave.p.IsCancelled == 1 &&
+            leave.p.IsApproved == 0)?'Rejected':'Pending'}}</small>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    <!-- Show "Data not found" if list is empty -->
+    <div *ngIf="filteredLeaveRequestData.length === 0 && !isLoading" class="no-data-mobile-app">
+      <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+      <p>No Leave Request records found.</p>
+    </div>
+  </div>
+
+
+  <!-- FAB -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="primary" (click)="addLeaveRequest()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- Leave Details Modal -->
+  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="modal-card">
+    <ng-template>
+      <div class="modal-container">
+        <ion-header>
+          <ion-toolbar color="primary" class="modal-toolbar">
+            <ion-title>Leave Details</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" (click)="closeModal()">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <!-- Scrollable Body -->
+        <div class="modal-body">
+          <ion-content scroll-y="true" class="modal-scroll-content ion-padding">
+
+            <div class="info-row-of-model">
+              <strong class="label">Employee Name:</strong>
+              <span class="value">{{ SelectedLeaveRequest.p.EmployeeName }}</span>
+            </div>
+
+            <div class="info-row-of-model"
+              *ngIf="SelectedLeaveRequest.p.LeaveRequestType != LeaveRequestTypeEnum.HalfDay">
+              <strong class="label">From date:</strong>
+              <span class="value">{{formatDate(SelectedLeaveRequest.p.FromDate)}}</span>
+            </div>
+
+            <div class="info-row-of-model"
+              *ngIf="SelectedLeaveRequest.p.LeaveRequestType != LeaveRequestTypeEnum.HalfDay">
+              <strong class="label">To date:</strong>
+              <span class="value">{{ formatDate(SelectedLeaveRequest.p.ToDate)}}</span>
+            </div>
+            <div class="info-row-of-model"
+              *ngIf="SelectedLeaveRequest.p.LeaveRequestType == LeaveRequestTypeEnum.HalfDay">
+              <strong class="label">Date:</strong>
+              <span class="value">{{ formatDate(SelectedLeaveRequest.p.HalfDayDate) }}</span>
+            </div>
+            <div class="info-row-of-model">
+              <strong class="label">Days:</strong>
+              <span class="value">{{ SelectedLeaveRequest.p.Days ? SelectedLeaveRequest.p.Days : '-' }}</span>
+            </div>
+            <div class="info-row-of-model">
+              <strong class="label">Leave Hours:</strong>
+              <span class="value">{{ SelectedLeaveRequest.p.LeaveHours ? SelectedLeaveRequest.p.LeaveHours : '-'
+                }}</span>
+            </div>
+
+            <div class="info-row-of-model">
+              <strong class="label">Status</strong>
+              <span class="value">{{ SelectedLeaveRequest.p.IsApproved == 1?'Approved':'Pending'}}</span>
+            </div>
+
+            <div class="info-row-of-model">
+              <strong class="label">Description:</strong>
+              <span class="value">{{ SelectedLeaveRequest.p.Description ? SelectedLeaveRequest.p.Description : '-'
+                }}</span>
+            </div>
+          </ion-content>
+        </div>
+
+        <ion-footer class="modal-footer">
+          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
+            Close
+          </ion-button>
+        </ion-footer>
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>

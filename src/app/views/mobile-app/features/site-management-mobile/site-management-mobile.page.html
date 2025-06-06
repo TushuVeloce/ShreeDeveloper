@@ -1,0 +1,143 @@
+<app-loader *ngIf="isLoading"></app-loader>
+<app-header-with-back-handler title="Site Management"></app-header-with-back-handler>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <!-- Sites List -->
+  <div class="site">
+    <ion-card *ngFor="let site of DisplayMasterList" class="site-card">
+      <ion-card-header>
+        <div class="card-header-flex">
+          <ion-card-title class="site-title">
+            <!-- <ion-icon name="document-text-outline" class="title-icon"></ion-icon> -->
+            <img src="assets\icons\Site Management.png" alt="Sites" style="height: 30px; width: 30px;">
+            {{ site.p.Name }}
+          </ion-card-title>
+          <div class="button-group">
+            <ion-button fill="clear" size="small" color="primary" (click)="openModal(site)">
+              <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" size="small" color="primary" (click)="OpenActualStage(site)">
+              <ion-icon name="arrow-forward-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="site-details">
+          <div>
+            <ion-icon name="calendar-outline"></ion-icon>
+            <small><strong>Estimated Starting Date:</strong> {{formatDate(site.p.EstimatedStartingDate)}}</small><br />
+          </div>
+          <div>
+            <ion-icon name="calendar-outline"></ion-icon>
+            <small><strong>Estimated End Date:</strong> {{formatDate(site.p.EstimatedEndDate)}}</small><br />
+          </div>
+          <div>
+            <ion-icon name="person-outline"></ion-icon>
+            <small><strong>Site In charge Name:</strong> {{ site.p.SiteInchargeName }}</small><br />
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    <!-- Show "Data not found" if list is empty -->
+    <div *ngIf="DisplayMasterList.length === 0 && !isLoading" class="no-data-mobile-app">
+      <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+      <p>No Site found.</p>
+    </div>
+  </div>
+
+  <!-- Site Details Modal -->
+  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="modal-card">
+    <ng-template>
+      <div class="modal-container">
+        <ion-header>
+          <ion-toolbar color="primary" class="modal-toolbar">
+            <ion-title>Site Details</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" (click)="closeModal()">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <!-- Scrollable Body -->
+        <div class="modal-body">
+          <ion-content scroll-y="true" class="modal-scroll-content ion-padding">
+
+            <div class="info-row-of-model">
+              <strong class="label">Site Name:</strong>
+              <span class="value">{{ SelectedSite.p.Name?SelectedSite.p.Name:'-' }}</span>
+            </div>
+
+            <div class="info-row-of-model">
+              <strong class="label">Address Line 1 :</strong>
+              <span class="value">{{ SelectedSite.p.AddressLine1?SelectedSite.p.AddressLine1:'-' }}</span>
+            </div>
+
+            <div class="info-row-of-model">
+              <strong class="label">Address Line 2:</strong>
+              <span class="value">{{ SelectedSite.p.AddressLine2?SelectedSite.p.AddressLine2:'-' }}</span>
+            </div>
+
+            <div class="info-row-of-model">
+              <strong class="label">City Name:</strong>
+              <span class="value">{{ SelectedSite.p.CityName?SelectedSite.p.CityName:'-' }}</span>
+            </div>
+
+            <div class="info-row-of-model">
+              <strong class="label">PinCode:</strong>
+              <span class="value">{{ SelectedSite.p.PinCode?SelectedSite.p.PinCode:'-'
+                }}</span>
+            </div>
+
+            <div class="info-row-of-model">
+              <strong class="label">Estimated Starting Date:</strong>
+              <span class="value">{{
+                SelectedSite.p.EstimatedStartingDate?formatDate(SelectedSite.p.EstimatedStartingDate):'-' }}</span>
+            </div>
+
+            <div class="info-row-of-model">
+              <strong class="label">Estimated End Date:</strong>
+              <span class="value">{{ SelectedSite.p.EstimatedEndDate?formatDate(SelectedSite.p.EstimatedEndDate):'-'
+                }}</span>
+            </div>
+
+            <div class="info-row-of-model">
+              <strong class="label">Number Of Plots:</strong>
+              <span class="value">{{ SelectedSite.p.NumberOfPlots?SelectedSite.p.NumberOfPlots:'-'
+                }}</span>
+            </div>
+
+            <div class="info-row-of-model">
+              <strong class="label">Site Incharge Name:</strong>
+              <span class="value">{{ SelectedSite.p.SiteInchargeName?SelectedSite.p.SiteInchargeName:'-'
+                }}</span>
+            </div>
+
+            <div class="info-row-of-model">
+              <strong class="label">Total Land Area In Sqft:</strong>
+              <span class="value">{{ SelectedSite.p.TotalLandAreaInSqft?SelectedSite.p.TotalLandAreaInSqft:'-'
+                }}</span>
+            </div>
+            <div class="info-row-of-model">
+              <strong class="label">Total Land Area In Sqm:</strong>
+              <span class="value">{{ SelectedSite.p.TotalLandAreaInSqm?SelectedSite.p.TotalLandAreaInSqm:'-'
+                }}</span>
+            </div>
+          </ion-content>
+        </div>
+
+        <ion-footer class="modal-footer">
+          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
+            Close
+          </ion-button>
+        </ion-footer>
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>

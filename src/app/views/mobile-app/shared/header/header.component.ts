@@ -97,10 +97,10 @@ export class HeaderComponent implements OnInit {
   }
 
   goToNotificationPage() {
-    this.router.navigate(['/app_homepage/notifications']);
+    this.router.navigate(['/mobileapp/tabs/settings/notification']);
   }
   goToProfilePage() {
-    this.router.navigate(['/app_homepage/user-profile']);
+    this.router.navigate(['/mobileapp/tabs/settings/user-profile']);
   }
 
   onGetCompany = () => {

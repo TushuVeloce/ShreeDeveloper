@@ -1,30 +1,32 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { loginMobileGuard } from './core/login-mobile.guard';
+import { authMobileGuard } from './core/auth-mobile.guard';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'auth/login-mobile', pathMatch: 'full' },
   {
-    path: '',
-    redirectTo: 'tabs',
-    pathMatch: 'full'
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
+    canActivate: [loginMobileGuard]
   },
+  // {
+  //   path: 'features',
+  //   loadChildren: () => import('./features/features.module').then(m => m.FeaturesModule),
+  //   canActivate: [authMobileGuard] 
+  // },
   {
     path: 'tabs',
-    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsModule)
+    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsModule),
+    canActivate: [authMobileGuard] 
   },
-  {
-    path: 'user-profile',
-    loadChildren: () => import('./screens/user-profile/user-profile.module').then( m => m.UserProfilePageModule)
-  },
-  {
-    path: 'notifications',
-    loadChildren: () => import('./screens/notifications/notifications.module').then( m => m.NotificationsPageModule)
-  },
-  {
-    path: 'privacy-and-security',
-    loadChildren: () => import('./screens/privacy-and-security/privacy-and-security.module').then( m => m.PrivacyAndSecurityPageModule)
-  },
+  { path: '**', redirectTo: 'auth/login-mobile' }
+];
 
- ];
+// logout() {
+//   localStorage.removeItem('authToken');
+//   this.router.navigate(['/login'], { replaceUrl: true });
+// }
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
