@@ -210,54 +210,54 @@ export class SidebarlayoutComponent implements OnInit {
   // }
 
   updateActiveModuleAndSubmodule(): void {
-  this.activeModule = null;
-  this.activeSubmodule = null;
+    this.activeModule = null;
+    this.activeSubmodule = null;
 
-  this.previousActiveModule = null;
-  this.previousActiveSubmodule = null;
+    this.previousActiveModule = null;
+    this.previousActiveSubmodule = null;
 
-  // Find the current module and submodule by matching if currentRoute starts with submodule's RouterLink
-  const currentModule = this.ModuleList.filter(module =>
-    module.SubModuleList?.some(submodule => this.currentRoute.startsWith(submodule.RouterLink))
-  );
-
-  const previousModule = this.ModuleList.filter(module =>
-    module.SubModuleList?.some(submodule => this.previousRoute.startsWith(submodule.RouterLink))
-  );
-
-  if (currentModule.length > 0) {
-    this.activeModule = currentModule[0].Name;
-
-    const currentSubmodule = currentModule[0]?.SubModuleList?.find(
-      (submodule: SubModule) => this.currentRoute.startsWith(submodule.RouterLink)
+    // Find the current module and submodule by matching if currentRoute starts with submodule's RouterLink
+    const currentModule = this.ModuleList.filter(module =>
+      module.SubModuleList?.some(submodule => this.currentRoute.startsWith(submodule.RouterLink))
     );
 
-    if (currentSubmodule) {
-      this.activeSubmodule = currentSubmodule.Name;
+    const previousModule = this.ModuleList.filter(module =>
+      module.SubModuleList?.some(submodule => this.previousRoute.startsWith(submodule.RouterLink))
+    );
+
+    if (currentModule.length > 0) {
+      this.activeModule = currentModule[0].Name;
+
+      const currentSubmodule = currentModule[0]?.SubModuleList?.find(
+        (submodule: SubModule) => this.currentRoute.startsWith(submodule.RouterLink)
+      );
+
+      if (currentSubmodule) {
+        this.activeSubmodule = currentSubmodule.Name;
+      }
     }
-  }
 
-  if (previousModule.length > 0) {
-    this.previousActiveModule = previousModule[0].Name;
+    if (previousModule.length > 0) {
+      this.previousActiveModule = previousModule[0].Name;
 
-    const previousSubmodule = previousModule[0]?.SubModuleList?.find(
-      (submodule: SubModule) => this.previousRoute.startsWith(submodule.RouterLink)
-    );
+      const previousSubmodule = previousModule[0]?.SubModuleList?.find(
+        (submodule: SubModule) => this.previousRoute.startsWith(submodule.RouterLink)
+      );
 
-    if (this.previousActiveModule === this.activeModule) {
-      return;
-    } else if (this.previousActiveModule !== this.activeModule && this.BrowserBack) {
-      if (this.activeModule) {
-        this.SideMenuHideShowForModule(this.activeModule, true);
+      if (this.previousActiveModule === this.activeModule) {
+        return;
+      } else if (this.previousActiveModule !== this.activeModule && this.BrowserBack) {
+        if (this.activeModule) {
+          this.SideMenuHideShowForModule(this.activeModule, true);
+        }
       }
     }
   }
-}
 
-// Also update your isRouteActive() to use startsWith:
-isRouteActive(route: string, ModuleName: string) {
-  return this.currentRoute.startsWith(route);
-}
+  // Also update your isRouteActive() to use startsWith:
+  isRouteActive(route: string, ModuleName: string) {
+    return this.currentRoute.startsWith(route);
+  }
 
   ngOnDestroy(): void {
     if (this.routerChangedSubscription) {
@@ -511,27 +511,32 @@ isRouteActive(route: string, ModuleName: string) {
       {
         Name: 'Material Requisition',
         RouterLink: '/homepage/Website/Material_Requisition',
-        LogoPath: '/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/Office Duty_Time.png',
+      },
+      {
+        Name: 'Quotation',
+        RouterLink: '/homepage/Website/Quotation',
+        LogoPath: '/assets/icons/Office Duty_Time.png',
       },
       {
         Name: 'Stock Order',
         RouterLink: '/homepage/Website/Stock_Order',
-        LogoPath: '/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/Office Duty_Time.png',
       },
       {
         Name: 'Stock Inward',
         RouterLink: '/homepage/Website/Stock_Inward',
-        LogoPath: '/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/Office Duty_Time.png',
       },
       {
         Name: 'Stock Consume',
         RouterLink: '/homepage/Website/Stock_Consume',
-        LogoPath: '/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/Office Duty_Time.png',
       },
       {
         Name: 'Stock Transfer',
         RouterLink: '/homepage/Website/Stock_Transfer',
-        LogoPath: '/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/Office Duty_Time.png',
       },
     ]
 
@@ -644,14 +649,13 @@ isRouteActive(route: string, ModuleName: string) {
 
     ]
 
-    let StockManagement = [
-      {
-        Name: 'Material Requisition',
-        RouterLink: '/homepage/Website/material_requisition',
-        LogoPath: '/assets/icons/Office Duty_Time.png',
-      },
-
-    ]
+    // let StockManagement = [
+    //   {
+    //     Name: 'Material Requisition',
+    //     RouterLink: '/homepage/Website/material_requisition',
+    //     LogoPath: '/assets/icons/Office Duty_Time.png',
+    //   },
+    // ]
 
     let RequestSubModulelist = [
       {
@@ -697,12 +701,6 @@ isRouteActive(route: string, ModuleName: string) {
         WhiteLogo: '/assets/icons/Site Management.png',
         SubModuleList: SiteManagementSubModuleList,
       },
-      // {
-      //   Name: 'Stock Management',
-      //   RouterLink: '',
-      //   WhiteLogo: '/assets/icons/stock.png',
-      //   SubModuleList: StockManagementSubModuleList,
-      // },
       {
         Name: 'Customer Management',
         RouterLink: '',
@@ -731,8 +729,14 @@ isRouteActive(route: string, ModuleName: string) {
         Name: 'Stock Management',
         RouterLink: '',
         WhiteLogo: '/assets/icons/Hr-Payroll Management.png',
-        SubModuleList: StockManagement,
+        SubModuleList: StockManagementSubModuleList,
       },
+      // {
+      //   Name: 'Stock Management',
+      //   RouterLink: '',
+      //   WhiteLogo: '/assets/icons/Hr-Payroll Management.png',
+      //   SubModuleList: StockManagement,
+      // },
       {
         Name: 'Hr-Payroll Management',
         RouterLink: '',

@@ -1,0 +1,240 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackQuotation()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">{{DetailsFormTitle}}</span>
+      </div>
+    </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-6">
+          <label>Date</label>
+          <input type="date" name="localEstimatedStartingDate" class="form-control date-input"
+            id="localEstimatedStartingDate" [(ngModel)]="localEstimatedStartingDate" placeholder="Select Date"
+            #EstimatedStartingDateCtrl="ngModel" required (blur)="EstimatedStartingDateCtrl.control.markAsTouched()" />
+          <div
+            *ngIf="(EstimatedStartingDateCtrl.invalid && (EstimatedStartingDateCtrl.touched || EstimatedStartingDateCtrl.dirty))">
+            <span class="validation-text"
+              *ngIf="EstimatedStartingDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label><b>Site Name</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
+            <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+          </nz-select>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-4">
+          <label>Number Of Plots</label>
+          <input type="number" name="NumberOfPlots" class="form-control" id="NumberOfPlots"
+            [(ngModel)]="Entity.p.SiteRef" #NumberOfPlotsCtrl="ngModel" required
+            (blur)="NumberOfPlotsCtrl.control.markAsTouched()" placeholder="Enter Number of Plots"
+            (click)="selectAllValue($event)" />
+          <div *ngIf="(NumberOfPlotsCtrl.invalid && (NumberOfPlotsCtrl.touched || NumberOfPlotsCtrl.dirty))">
+            <span class="validation-text" *ngIf="NumberOfPlotsCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 2rem; padding: 1rem">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+          <h5 style="padding-top: 3px; color: black">
+            <b>Add Material Details</b>
+          </h5>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
+          style="display: flex; justify-content: end" routerLinkActive="active">
+          <nz-button nz-button class="btn1" (click)="isQuotatedMaterialModalOpen = true">Add Material</nz-button>
+        </div>
+      </div>
+
+      <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem"
+        *ngIf="Entity.p.QuotationMaterialDetails.length > 0">
+        <div class="table-container" style="margin-top: 2rem">
+          <div class="row">
+            <div class="col-12">
+              <label class="TableHeading">Quotated Material Details</label>
+            </div>
+          </div>
+          <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
+            nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.QuotationMaterialDetails">
+            <thead>
+              <tr>
+                <th *ngFor="let header of QuotatedMaterialheaders" class="tblsubheader">
+                  {{ header }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="
+                  let material of Entity.p.QuotationMaterialDetails;
+                  let i = index
+                ">
+                <td Class="tbldata">{{ i + 1 }}</td>
+                <td Class="tbldata">{{ material.MaterialName }}</td>
+                <td Class="tbldata">{{ material.Unit }}</td>
+                <td Class="tbldata">{{ material.RequiredQuantity }}</td>
+                <td Class="tbldata">{{ material.OrderedQuantity }}</td>
+                <td Class="tbldata">{{ material.Rate }}</td>
+                <td Class="tbldata">{{ material.DiscountRate }}</td>
+                <td Class="tbldata">{{ material.Gst }}</td>
+                <td Class="tbldata">{{ material.DeliveryCharges }}</td>
+                <td Class="tbldata">{{ material.ExpectedDeliveryDate }}</td>
+                <td Class="tbldata">{{ material.NetAmount }}</td>
+                <td Class="tbldata">{{ material.TotalAmount }}</td>
+                <td class="tbldata">
+                  <span style="margin-left: 9px" (click)="editQuotatedMaterial(i)">
+                    <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+                  </span>
+                  <span style="margin-left: 9px" (click)="removeQuotatedMaterial(i)">
+                    <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </div>
+      <div *ngIf="Entity.p.QuotationMaterialDetails.length === 0" class="card-body_light">
+        <div style="height: 200px; background-color: white" class="d-flex align-items-center justify-content-center">
+          <span class="title_light"> Data Not Found</span>
+        </div>
+      </div>
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
+        <div>
+          <nz-button nz-button class="btn1" (click)="SaveQuotation()">Save</nz-button>
+        </div>
+        <div>
+          <nz-button nz-button class="btn1" (click)="BackQuotation()">
+            Cancel
+          </nz-button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="isQuotatedMaterialModalOpen" class="custom-modal-overlay">
+  <div class="custom-modal">
+    <div class="custom-modal-header">
+      <h5>Add Material</h5>
+      <button type="button" class="btn-close" (click)="closeModal('QuotatedMaterial')"></button>
+    </div>
+    <div class="custom-modal-body">
+      <form autocomplete="off">
+        <div class="row" style="margin-top: 1rem">
+          <div>
+            <label for="MaterialRef"><b>Material</b></label>
+            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
+              nzPlaceHolder="Select" [nzSize]="'large'" name="MaterialRef" required id="MaterialRef"
+              [(ngModel)]="newQuotatedMaterial.MaterialRef">
+              <nz-option *ngFor="let material of SiteList" [nzLabel]="material.p.Name"
+                [nzValue]="material.p.Ref"></nz-option>
+            </nz-select>
+          </div>
+          <div class="col-md-6">
+            <label>Unit</label>
+            <input type="text" name="Unit" class="form-control" [(ngModel)]="newQuotatedMaterial.Unit" readonly />
+          </div>
+          <div class="col-md-6">
+            <label>Required Quantity</label>
+            <input type="text" name="RequiredQuantity" class="form-control"
+              [(ngModel)]="newQuotatedMaterial.RequiredQuantity" readonly />
+          </div>
+        </div>
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-6">
+            <label>Ordered Quantity</label>
+            <input type="number" name="OrderedQuantity" class="form-control"
+              [(ngModel)]="newQuotatedMaterial.OrderedQuantity" #OrderedQuantityCtrl="ngModel" required
+              (blur)="OrderedQuantityCtrl.control.markAsTouched()" placeholder="Enter Ordered Quantity" />
+            <div *ngIf="(OrderedQuantityCtrl.invalid && (OrderedQuantityCtrl.touched || OrderedQuantityCtrl.dirty))">
+              <span class="validation-text" *ngIf="OrderedQuantityCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label>Rate</label>
+            <input type="number" name="Rate" class="form-control" [(ngModel)]="newQuotatedMaterial.Rate"
+              #RateCtrl="ngModel" required (blur)="RateCtrl.control.markAsTouched()" placeholder="Enter Rate" />
+            <div *ngIf="(RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty))">
+              <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label>Discount Rate</label>
+            <input type="number" name="DiscountRate" class="form-control" [(ngModel)]="newQuotatedMaterial.DiscountRate"
+              #DiscountRateCtrl="ngModel" required (blur)="DiscountRateCtrl.control.markAsTouched()"
+              placeholder="Enter Discount Rate" />
+            <div *ngIf="(DiscountRateCtrl.invalid && (DiscountRateCtrl.touched || DiscountRateCtrl.dirty))">
+              <span class="validation-text" *ngIf="DiscountRateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div>
+              <label for="Gst"><b>Gst</b></label>
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
+                nzPlaceHolder="Select" [nzSize]="'large'" name="Gst" required id="Gst"
+                [(ngModel)]="newQuotatedMaterial.Gst">
+                <nz-option *ngFor="let Gst of SiteList" [nzLabel]="Gst.p.Name" [nzValue]="Gst.p.Ref"></nz-option>
+              </nz-select>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-6">
+            <label>DeliveryCharges</label>
+            <input type="text" name="DeliveryCharges" class="form-control" [(ngModel)]="newQuotatedMaterial.DeliveryCharges"
+              #DeliveryCharges="ngModel" required (blur)="DeliveryCharges.control.markAsTouched()"
+              placeholder="Enter DeliveryCharges" />
+            <div *ngIf="(DeliveryCharges.invalid && (DeliveryCharges.touched || DeliveryCharges.dirty))">
+              <span class="validation-text" *ngIf="DeliveryCharges.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label>Expected Delivery Date</label>
+            <input type="text" name="ExpectedDeliveryDate" class="form-control" [(ngModel)]="newQuotatedMaterial.ExpectedDeliveryDate"
+               #ExpectedDeliveryDate="ngModel" required
+              (blur)="ExpectedDeliveryDate.control.markAsTouched()" placeholder="Enter Pin Code" />
+            <div *ngIf="(ExpectedDeliveryDate.invalid && (ExpectedDeliveryDate.touched || ExpectedDeliveryDate.dirty))">
+              <span class="validation-text" *ngIf="ExpectedDeliveryDate.errors?.['required']">{{ RequiredFieldMsg }}</span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="custom-modal-footer">
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
+        <div>
+          <nz-button nz-button class="btn1" (click)="addQuotatedMaterial()">Save</nz-button>
+        </div>
+        <div>
+          <nz-button nz-button class="btn1" (click)="closeModal('QuotatedMaterial')">
+            Cancel
+          </nz-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

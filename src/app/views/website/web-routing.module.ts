@@ -124,6 +124,8 @@ import { ForgotPasswordComponent } from '../sidebarlayout/forgot_password/forgot
 import { CreatePasswordComponent } from '../login-page/create_password/create-password/create-password.component';
 import { MaterialRequisitionDetailsComponent } from './stock management/material_requisition/material-requisition-details/material-requisition-details.component';
 import { MaterialRequisitionComponent } from './stock management/material_requisition/material-requisition/material-requisition.component';
+import { QuotationComponent } from './stock management/Quotation/quotation/quotation.component';
+import { QuotationDetailsComponent } from './stock management/Quotation/quotation-details/quotation-details.component';
 
 
 const routes: Routes = [
@@ -140,14 +142,14 @@ const routes: Routes = [
       { path: 'Stage_Master', component: StageMasterComponent },
       { path: 'Stage_Master_Details', component: StageMasterDetailsComponent },
 
-      { path: 'Sub_Stage_Master', component: SubStageMasterComponent},
-      { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent},
+      { path: 'Sub_Stage_Master', component: SubStageMasterComponent },
+      { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent },
 
-      { path: 'Expense_Type_Master', component: ExpenseTypeMasterComponent},
-      { path: 'Expense_Type_Master_Details', component: ExpenseTypeMasterDetailsComponent},
+      { path: 'Expense_Type_Master', component: ExpenseTypeMasterComponent },
+      { path: 'Expense_Type_Master_Details', component: ExpenseTypeMasterDetailsComponent },
 
-      { path: 'Sub_Stage_Master', component: SubStageMasterComponent},
-      { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent},
+      { path: 'Sub_Stage_Master', component: SubStageMasterComponent },
+      { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent },
 
       { path: 'Account_Main_Ledger', component: AccountMainLedgerComponent },
       { path: 'Account_Main_Ledger_Details', component: AccountMainLedgerDetailsComponent },
@@ -218,8 +220,10 @@ const routes: Routes = [
       { path: 'Actual_Stage_Print', component: ActualStagePrintComponent },
 
       // Stock Management
-      { path: 'material_requisition', component: MaterialRequisitionComponent },
-      { path: 'material_requisition_Details', component: MaterialRequisitionDetailsComponent },
+      { path: 'Material_Requisition', component: MaterialRequisitionComponent },
+      { path: 'Material_Requisition_Details', component: MaterialRequisitionDetailsComponent },
+      { path: 'Quotation', component: QuotationComponent },
+      { path: 'Quotation_Details', component: QuotationDetailsComponent },
       { path: 'Stock_Consume', component: StockConsumeComponent },
       { path: 'Stock_Inward', component: StockInwardComponent },
       { path: 'Stock_Order', component: StockOrderComponent },
@@ -243,8 +247,8 @@ const routes: Routes = [
       { path: 'Registrar_Office_Details', component: RegistrarOfficeDetailComponent },
 
       { path: 'Plot_Resell_By_Third_Party', component: PlotResellByThirdPartyComponent },
-      { path: 'Marketing_Management', component:MarketingManagementMasterComponent},
-      { path: 'Marketing_Management_Details', component:MarketingManagementMasterDetailsComponent},
+      { path: 'Marketing_Management', component: MarketingManagementMasterComponent },
+      { path: 'Marketing_Management_Details', component: MarketingManagementMasterDetailsComponent },
       { path: 'Accounting_Transaction', component: AccountTransactionsComponent },
       { path: 'Expense_Transactions', component: ExpenseTransactionsComponent },
       { path: 'Client_Income', component: ClientIncomeComponent },
@@ -275,10 +279,10 @@ const routes: Routes = [
       { path: 'Leave_Approval', component: LeaveApprovalComponent },
 
       { path: 'Salary_Slip_Approval', component: SalarySlipApprovalComponent },
-      { path: 'Employee_Overtime', component: EmployeeOvertimeComponent},
-      { path: 'Employee_Overtime_Details', component: EmployeeOvertimeDetailsComponent},
-      { path: 'Company_Holidays', component: CompanyHolidaysComponent},
-      { path: 'Company_Holidays_Details', component: CompanyHolidaysDetailsComponent},
+      { path: 'Employee_Overtime', component: EmployeeOvertimeComponent },
+      { path: 'Employee_Overtime_Details', component: EmployeeOvertimeDetailsComponent },
+      { path: 'Company_Holidays', component: CompanyHolidaysComponent },
+      { path: 'Company_Holidays_Details', component: CompanyHolidaysDetailsComponent },
 
       // Request
       { path: 'Leave_Request', component: LeaveRequestComponent },
