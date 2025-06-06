@@ -1,3 +1,159 @@
-<p>
-  material-requisition-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackMaterialRequisition()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">New Site</span>
+      </div>
+    </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-4">
+          <label>Date</label>
+          <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Entity.p.Date"
+            #DateCtrl="ngModel" required (blur)="DateCtrl.control.markAsTouched()"
+            placeholder="Enter Site Name" />
+          <div *ngIf="DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty)">
+            <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label>Site Name</label>
+             <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear nzPlaceHolder="Select" id="SiteRef"
+                name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef" required >
+                <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref"
+                  [nzLabel]="site.p.Name"></nz-option>
+              </nz-select>
+        </div>
+      </div>
+       <div class="row" style="margin-top: 2rem; padding: 1rem">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+          <h5 style="padding-top: 3px; color: black">
+            <b>Add Material Details</b>
+          </h5>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
+          style="display: flex; justify-content: end" routerLinkActive="active">
+          <nz-button nz-button class="btn1" (click)="ismaterialModalOpen = true">Add Material</nz-button>
+        </div>
+      </div>
+
+      <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem"
+        *ngIf="Entity.p.MaterialRequisitionDetailsArray.length > 0">
+        <div class="table-container" style="margin-top: 2rem">
+          <div class="row">
+            <div class="col-12">
+              <label class="TableHeading">Materials Details</label>
+            </div>
+          </div>
+          <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
+            nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.MaterialRequisitionDetailsArray">
+            <thead>
+              <tr>
+                <th *ngFor="let header of materialheaders" class="tblsubheader">
+                  {{ header }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="
+                  let material of Entity.p.MaterialRequisitionDetailsArray;
+                  let i = index
+                ">
+                <td Class="tbldata">{{ i + 1 }}</td>
+                <td Class="tbldata">{{ material.MaterialName}}</td>
+                <td Class="tbldata">{{ material.UnitName}}</td>
+                <td Class="tbldata">{{ material.EstimatedQty}}</td>
+                <td class="tbldata">
+                  <span style="margin-left: 9px" (click)="editMaterial(i)">
+                    <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+                  </span>
+                  <span style="margin-left: 9px" (click)="removeMaterial(i)">
+                    <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </div>
+      <div *ngIf="Entity.p.MaterialRequisitionDetailsArray.length === 0" class="card-body_light">
+        <div style="height: 200px; background-color: white" class="d-flex align-items-center justify-content-center">
+          <span class="title_light"> Data Not Found</span>
+        </div>
+      </div>
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
+        <div>
+          <nz-button nz-button class="btn1" (click)="SaveMaterialRequisition()">Save</nz-button>
+        </div>
+        <div>
+          <nz-button nz-button class="btn1" (click)="BackMaterialRequisition()">
+            Cancel
+          </nz-button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="ismaterialModalOpen" class="custom-modal-overlay">
+  <div class="custom-modal">
+    <div class="custom-modal-header">
+      <h5>Add material</h5>
+      <button type="button" class="btn-close" (click)="closeModal('material')"></button>
+    </div>
+    <div class="custom-modal-body">
+      <form autocomplete="off">
+        <div class="row" style="margin-top: 1rem">
+          <div class="col-md-4">
+            <label>Material Name</label>
+             <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear nzPlaceHolder="Select" id="MaterialRef"
+                name="MaterialRef" [nzSize]="'large'" [(ngModel)]="newRequisition.MaterialRef" required (ngModelChange)="getUnitByMaterialRef(newRequisition.MaterialRef)" >
+                <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
+                  [nzLabel]="material.p.Name"></nz-option>
+              </nz-select>
+          </div>
+          <div class="col-md-4">
+            <label>Unit</label>
+            <input type="text" name="UnitRef" class="form-control" [(ngModel)]="newRequisition.UnitName"/>
+          </div>
+          <div class="col-md-4">
+            <label>Estimated Qty</label>
+            <input type="number" name="EstimatedQty" class="form-control" [(ngModel)]="newRequisition.EstimatedQty" required placeholder="Enter Estimated Qty"/>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="custom-modal-footer">
+      <!-- <button type="button" class="btn btn-secondary" (click)="isModalOpen = false">Close</button> -->
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
+        <div>
+          <nz-button nz-button class="btn1" (click)="addMaterial()">Save</nz-button>
+        </div>
+        <div>
+          <nz-button nz-button class="btn1" (click)="closeModal('material')">
+            Cancel
+          </nz-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

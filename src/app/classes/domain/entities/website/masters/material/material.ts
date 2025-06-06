@@ -154,9 +154,10 @@ export class Material implements IPersistable<Material> {
     return tdResponse;
   }
 
-  public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchInstance(ref: number,companyRef:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MaterialFetchRequest();
     req.MaterialRefs.push(ref);
+    req.CompanyRefs.push(companyRef);
 
     let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
     return Material.SingleInstanceFromTransportData(tdResponse);

@@ -7,7 +7,7 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 export class MaterialRequisitionFetchRequest
 {
     // public static readonly FetchRequestType: string = "GAAProjectSpaceGroupFetchRequest";
-    public static readonly FetchRequestType: string = "MaterialRequisitionManagementFetchRequest";
+    public static readonly FetchRequestType: string = "MaterialRequisitionFetchRequest";
 
     MaterialRequisitionManagementRefs: number[] = [];
     BookingRemarkRefs: number[] = [];

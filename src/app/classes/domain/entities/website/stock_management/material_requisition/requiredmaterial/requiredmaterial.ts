@@ -10,20 +10,23 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { MaterialFetchRequest } from "./materialfetchrequest";
+import { RequiredMaterialFetchRequest } from "./requiredmaterialfetchrequest";
 import { CountryStateCityRefs } from "src/app/classes/domain/constants";
 
 
-export class MaterialDetailProps {
-  public readonly Db_Table_Name = "SiteManagementMaterialDetails";
+export class RequiredMaterialDetailProps {
+  public readonly Db_Table_Name = "MaterialRequisitionDetails";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
   public Ref: number = 0;
   public MaterialRef: number = 0;
-  public Unit: number = 0;
-  public materialrequisitionRef: number = 0;
+  public MaterialName: string = '';
+  public UnitRef: number = 0;
+  public UnitName: string = '';
+  public EstimatedQty : number = 0;
+  public MaterialRequisitionRef: number = 0;
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -34,14 +37,14 @@ export class MaterialDetailProps {
   }
 
   public static Blank() {
-    return new MaterialDetailProps(true);
+    return new RequiredMaterialDetailProps(true);
   }
 }
 
-export class Material implements IPersistable<Material> {
-  public static readonly Db_Table_Name: string = 'SiteManagementMaterialDetails';
+export class RequiredMaterial implements IPersistable<RequiredMaterial> {
+  public static readonly Db_Table_Name: string = 'MaterialRequisitionDetails';
 
-  public constructor(public readonly p: MaterialDetailProps, public readonly AllowEdit: boolean) {
+  public constructor(public readonly p: RequiredMaterialDetailProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -54,46 +57,47 @@ export class Material implements IPersistable<Material> {
     }
   }
 
-  public GetEditableVersion(): Material {
-    let newState: MaterialDetailProps = Utils.GetInstance().DeepCopy(this.p);
-    return Material.CreateInstance(newState, true);
+  public GetEditableVersion(): RequiredMaterial {
+    let newState: RequiredMaterialDetailProps = Utils.GetInstance().DeepCopy(this.p);
+    return RequiredMaterial.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new Material(MaterialDetailProps.Blank(), true);
+    return new RequiredMaterial(RequiredMaterialDetailProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new Material(data as MaterialDetailProps, allowEdit);
+    return new RequiredMaterial(data as RequiredMaterialDetailProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
+    // if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Material.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, RequiredMaterial.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: Material = Material.CreateNewInstance();
+  private static m_currentInstance: RequiredMaterial = RequiredMaterial.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return Material.m_currentInstance;
+    return RequiredMaterial.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: Material) {
-    Material.m_currentInstance = value;
+  public static SetCurrentInstance(value: RequiredMaterial) {
+    RequiredMaterial.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): Material {
+  public static SingleInstanceFromTransportData(td: TransportData): RequiredMaterial {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, Material.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, Material.Db_Table_Name)!.Entries) {
-        return Material.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, RequiredMaterial.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, RequiredMaterial.Db_Table_Name)!.Entries) {
+        return RequiredMaterial.CreateInstance(data, false);
       }
     }
 
@@ -102,13 +106,13 @@ export class Material implements IPersistable<Material> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): Material[] {
-    let result: Material[] = [];
+   sortPropertyName: string = ""): RequiredMaterial[] {
+    let result: RequiredMaterial[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, Material.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, Material.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, RequiredMaterial.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, RequiredMaterial.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -118,18 +122,18 @@ export class Material implements IPersistable<Material> {
       }
 
       for (let data of entries) {
-        result.push(Material.CreateInstance(data, false));
+        result.push(RequiredMaterial.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): Material[] {
-    return Material.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): RequiredMaterial[] {
+    return RequiredMaterial.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: MaterialFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: RequiredMaterialFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -144,37 +148,37 @@ export class Material implements IPersistable<Material> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MaterialFetchRequest();
-    req.MaterialRefs.push(ref);
+    let req = new RequiredMaterialFetchRequest();
+    req.RequiredMaterialRefs.push(ref);
 
-    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-    return Material.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await RequiredMaterial.FetchTransportData(req, errorHandler) as TransportData;
+    return RequiredMaterial.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: MaterialFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-    return Material.ListFromTransportData(tdResponse);
+  public static async FetchList(req: RequiredMaterialFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await RequiredMaterial.FetchTransportData(req, errorHandler) as TransportData;
+    return RequiredMaterial.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MaterialFetchRequest();
-    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-    return Material.ListFromTransportData(tdResponse);
+    let req = new RequiredMaterialFetchRequest();
+    let tdResponse = await RequiredMaterial.FetchTransportData(req, errorHandler) as TransportData;
+    return RequiredMaterial.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MaterialFetchRequest();
+    let req = new RequiredMaterialFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     req.SiteManagementRefs.push(SiteRef)
-    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-    return Material.ListFromTransportData(tdResponse);
+    let tdResponse = await RequiredMaterial.FetchTransportData(req, errorHandler) as TransportData;
+    return RequiredMaterial.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListBySiteRef(siteref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MaterialFetchRequest();
+    let req = new RequiredMaterialFetchRequest();
     req.SiteManagementRefs.push(siteref)
-    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-    return Material.ListFromTransportData(tdResponse);
+    let tdResponse = await RequiredMaterial.FetchTransportData(req, errorHandler) as TransportData;
+    return RequiredMaterial.ListFromTransportData(tdResponse);
   }
 
 

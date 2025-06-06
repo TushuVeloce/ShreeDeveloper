@@ -12,39 +12,24 @@ import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { MaterialRequisitionFetchRequest } from "./materialrequisitionfetchrequest";
 import { CountryStateCityRefs, ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
-import { MaterialDetailProps } from "./material/material";
+import { RequiredMaterialDetailProps } from "./requiredmaterial/requiredmaterial";
 
 
 
 export class MaterialRequisitionProps {
-  public readonly Db_Table_Name = "MaterialRequisitionManagement";
+  public readonly Db_Table_Name = "MaterialRequisition";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
   public Ref: number = 0;
-  public Name: string = '';
-  public AddressLine1: string = '';
-  public AddressLine2: string = '';
-  public PinCode: string = '';
-  public CountryRef: number = CountryStateCityRefs.IndiaRef;
-  public readonly CountryName: string = '';
-  public StateRef: number = CountryStateCityRefs.MaharashtraRef;
-  public readonly StateName: string = '';
-  public CityRef: number = CountryStateCityRefs.KolhapurRef;
-  public readonly CityName: string = '';
-  public MaterialRequisitionInchargeRef: number = 0;
-  public MaterialRequisitionInchargeName: string = '';
-  public EstimatedStartingDate: string = '';
-  public EstimatedEndDate: string = '';
-  public EstimatedCost: number = 0;
-  public TotalLandAreaInSqm: number = 0;
-  public TotalLandAreaInSqft: number = 0;
-  public NumberOfPlots: number = 0;
+  public Date: string = '';
+  public SiteRef: number = 0;
+  public readonly SiteName: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public LoginEmployeeRef: number = 26893;
-  public MaterialRequisitionMaterialDetails: MaterialDetailProps[] = [];
+  public Status: string = ''
+  public MaterialRequisitionDetailsArray: RequiredMaterialDetailProps[] = [];
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -58,7 +43,7 @@ export class MaterialRequisitionProps {
 }
 
 export class MaterialRequisition implements IPersistable<MaterialRequisition> {
-  public static readonly Db_Table_Name: string = 'MaterialRequisitionManagement';
+  public static readonly Db_Table_Name: string = 'MaterialRequisition';
 
   public constructor(public readonly p: MaterialRequisitionProps, public readonly AllowEdit: boolean) {
 
@@ -88,22 +73,6 @@ export class MaterialRequisition implements IPersistable<MaterialRequisition> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') vra.add('Name', 'MaterialRequisition Name cannot be blank.'); else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.NameWithoutNosMsg);
-    }
-    if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'Address Line  cannot be blank.');
-    if (this.p.AddressLine2 == '') vra.add('AddressLine2', 'MaterialRequisition Location cannot be blank.');
-    // if (this.p.PinCode == '') vra.add('PinCode', 'PinCode cannot be blank.');else if (!new RegExp(ValidationPatterns.PinCode).test(this.p.Name)) {
-    //   vra.add('Name', ValidationMessages.PinCodeMsg);
-    // }
-    if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country cannot be blank.');
-    if (this.p.StateRef == 0) vra.add('StateRef', 'State cannot be blank.');
-    if (this.p.CityRef == 0) vra.add('CityRef', 'City cannot be blank.');
-    if (this.p.MaterialRequisitionInchargeRef == 0) vra.add('MaterialRequisitionInchargeRef', 'MaterialRequisition Incharge cannot be blank.');
-    if (this.p.EstimatedStartingDate == '') vra.add('EstimatedStartingDate', 'Estimated Starting Date cannot be blank.');
-    if (this.p.EstimatedEndDate == '') vra.add('EstimatedEndDate', 'Estimated End Date cannot be blank.');
-    if (this.p.TotalLandAreaInSqm == 0) vra.add('TotalLandAreaInSqm', 'Total Land Area In Sqm cannot be blank.');
-    if (this.p.TotalLandAreaInSqft == 0) vra.add('TotalLandAreaInSqft', 'Total Land Area In Sqft cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
