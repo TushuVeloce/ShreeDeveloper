@@ -15,17 +15,27 @@
  <div class="row" style="margin-top: 1rem; ">
     <!-- <div class="col-md-4" style="margin-top: 1rem; ">
       <label for="Date"><b>Date</b></label>
-      <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Entity.p.Date" (ngModelChange)="getActualStageListByAllFilters()" />
+      <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Entity.p.Date" (ngModelChange)="getRequisitionListByAllFilters()" />
     </div> -->
-    <div class="col-md-4" style="margin-top: 1rem; ">
+    <div class="col-md-4">
       <div>
         <label for="SiteRef"><b>site</b></label>
         <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-          nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"  (ngModelChange)="getActualStageListByAllFilters()" >
+          nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"  (ngModelChange)="getRequisitionListByAllFilters()" >
           <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
         </nz-select>
       </div>
     </div>
+    <div class="col-md-4">
+            <label>Status</label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="Status" name="Status" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.Status"
+              (ngModelChange)="getRequisitionListByAllFilters()">
+              <nz-option *ngFor="let status of StatusList" [nzValue]="status.Ref"
+                [nzLabel]="status.Name"></nz-option>
+            </nz-select>
+          </div>
   </div>
    <ng-template #noDataTpl>
       <div class="no-data-text">Data Not Found</div>

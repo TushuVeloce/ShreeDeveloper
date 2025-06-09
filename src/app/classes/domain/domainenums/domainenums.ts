@@ -183,6 +183,15 @@ export enum Unit {
   MTR = 200,
 }
 
+export enum MaterialRequisitionStatuses {
+  None = 0,
+  Approved = 100,
+  Rejected  = 200,
+  Pending  = 300,
+  Completed   = 400,
+  Incomplete  = 500,
+}
+
 export class DomainEnums {
   public static MarketingModeName(MarketingMode: MarketingModes) {
     switch (MarketingMode) {
@@ -1494,6 +1503,59 @@ export class DomainEnums {
     if (withAllOption) {
       let allEntry = {
         Ref: Unit.None,
+        Name: allOptionName,
+      };
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+   public static MaterialRequisitionStatusesName(itemType: MaterialRequisitionStatuses) {
+    switch (itemType) {
+      case MaterialRequisitionStatuses.Approved:
+        return 'Approved';
+      case MaterialRequisitionStatuses.Rejected:
+        return 'Rejected';
+      case MaterialRequisitionStatuses.Pending:
+        return 'Pending';
+      case MaterialRequisitionStatuses.Completed:
+        return 'Completed';
+      case MaterialRequisitionStatuses.Incomplete:
+        return 'Incomplete';
+      default:
+        return '';
+    }
+  }
+
+  public static MaterialRequisitionStatusesList(
+    withAllOption: boolean = false,
+    allOptionName: string = '<All>'
+  ) {
+    let result = [
+      {
+        Ref: MaterialRequisitionStatuses.Approved,
+        Name: DomainEnums.MaterialRequisitionStatusesName(MaterialRequisitionStatuses.Approved),
+      },
+      {
+        Ref: MaterialRequisitionStatuses.Rejected,
+        Name: DomainEnums.MaterialRequisitionStatusesName(MaterialRequisitionStatuses.Rejected),
+      },
+      {
+        Ref: MaterialRequisitionStatuses.Pending,
+        Name: DomainEnums.MaterialRequisitionStatusesName(MaterialRequisitionStatuses.Pending),
+      },
+      {
+        Ref: MaterialRequisitionStatuses.Completed,
+        Name: DomainEnums.MaterialRequisitionStatusesName(MaterialRequisitionStatuses.Completed),
+      },
+      {
+        Ref: MaterialRequisitionStatuses.Incomplete,
+        Name: DomainEnums.MaterialRequisitionStatusesName(MaterialRequisitionStatuses.Incomplete),
+      },
+    ];
+    if (withAllOption) {
+      let allEntry = {
+        Ref: MaterialRequisitionStatuses.None,
         Name: allOptionName,
       };
       result.unshift(allEntry);
