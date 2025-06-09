@@ -79,11 +79,6 @@ export class MaterialRequisitionComponent  implements OnInit {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
       }
-      if(this.SiteList.length <= 0){
-        this.Entity.p.SiteRef = 0
-      }else{
-        this.getSiteListByCompanyRef()
-      }
       console.log(' this.Entity.p.Status, this.Entity.p.SiteRef :',  this.Entity.p.Status, this.Entity.p.SiteRef);
       let lst = await MaterialRequisition.FetchEntireListByAllFilters(this.companyRef(), this.Entity.p.Status, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.MasterList = lst;

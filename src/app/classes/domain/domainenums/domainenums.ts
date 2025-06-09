@@ -187,9 +187,9 @@ export enum MaterialRequisitionStatuses {
   None = 0,
   Approved = 100,
   Rejected  = 200,
-  Pending  = 100,
-  Completed   = 200,
-  Incomplete  = 100,
+  Pending  = 300,
+  Completed   = 400,
+  Incomplete  = 500,
 }
 
 export class DomainEnums {

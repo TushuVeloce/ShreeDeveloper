@@ -100,8 +100,8 @@ export class ForgotPasswordComponent  implements OnInit {
     }
     this.isVerifyOtpDisabled = true;
     // ---------------------using new mqtt service --------------------
-    const response = await this.servercommunicator.FetchRequestForMobileApp(
-      'generateuserotp',
+    const response = await this.servercommunicator.VerifyOTP(
+      'verifyuserotp',
       body
     );
     if (!response.Successful) {
