@@ -23,7 +23,7 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
   Entity: MaterialRequisition = MaterialRequisition.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
-  DetailsFormTitle: 'New MaterialRequisition' | 'Edit MaterialRequisition' = 'New MaterialRequisition';
+  DetailsFormTitle: 'New Material Requisition' | 'Edit Material Requisition' = 'New Material Requisition';
   IsDropdownDisabled: boolean = false;
   InitialEntity: MaterialRequisition = null as any;
   SiteList: Site[] = [];
@@ -63,7 +63,7 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
     this.getMaterialListByCompanyRef()
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity ? 'New MaterialRequisition' : 'Edit MaterialRequisition';
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Material Requisition' : 'Edit Material Requisition';
       this.Entity = MaterialRequisition.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       if (this.Entity.p.Date != '') {
