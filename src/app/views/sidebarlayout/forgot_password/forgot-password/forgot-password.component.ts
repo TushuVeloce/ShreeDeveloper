@@ -27,7 +27,7 @@ export class ForgotPasswordComponent  implements OnInit {
   showConfirmPassword: boolean = false;
   Password: string = '';
   ConfirmPassword: string = '';
-  OTP: number = 0;
+  OTP: string = '';
 
   constructor( private router: Router,
     private appStateManage: AppStateManageService, private uiUtils: UIUtils, private servercommunicator: ServerCommunicatorService,) {
@@ -35,7 +35,7 @@ export class ForgotPasswordComponent  implements OnInit {
   UserEmailId: string | null = '';
   ngOnInit() {
     this.UserEmailId = this.appStateManage.StorageKey.getItem('userEmailId');
-    this.OTP = 0;
+    this.OTP = '';
     this.Password = "";
     this.ConfirmPassword = "";
     this.startResendOtpTimer();
@@ -66,7 +66,7 @@ export class ForgotPasswordComponent  implements OnInit {
  
   ResendOtp = async () => {
     if (this.isResendOtpDisabled) return
-    this.OTP = 0;
+    this.OTP = '';
     let body = {
       EMailId: this.UserEmailId,
     }
@@ -88,14 +88,14 @@ export class ForgotPasswordComponent  implements OnInit {
       this.startResendOtpTimer();
     }
   }
-  isDisableInput: boolean = true;
+  isDisableInput: boolean = false;
   verifyotp = async () => {
     let body = {
       EMailId: this.UserEmailId,
       OTP: this.OTP
     }
-    if (this.OTP <= 0) {
-      await this.uiUtils.showInformationalMessage('', 'Enter OTP');
+    if (this.OTP == '') {
+      await this.uiUtils.showErrorMessage('', 'Enter OTP');
       return
     }
     this.isVerifyOtpDisabled = true;
@@ -105,7 +105,7 @@ export class ForgotPasswordComponent  implements OnInit {
       body
     );
     if (!response.Successful) {
-      await this.uiUtils.showInformationalMessage('Error', response.Message);
+      await this.uiUtils.showErrorMessage('Error', response.Message);
       this.isVerifyOtpDisabled = false;
       this.isOTPVerified = false;
       return
@@ -114,53 +114,54 @@ export class ForgotPasswordComponent  implements OnInit {
       this.isVerifyOtpDisabled = true;
       this.isOTPVerified = true;
       this.isDisableInput = false;
-      await this.uiUtils.showInformationalMessage('Successfull', 'OTP Verified Successfuly');
+      await this.uiUtils.showSuccessToster('OTP Verified Successfuly');
     }
   }
 
   verifyPassword = async () => {
     if (this.UserEmailId == '') {
-      await this.uiUtils.showInformationalMessage('Information', 'E-mail Id not Specified');
+      await this.uiUtils.showErrorMessage('Information', 'E-mail Id not Specified');
       return
     }
-    else if (this.OTP <= 0) {
-      await this.uiUtils.showInformationalMessage('Information', 'OTP not Specified');
+    else if (this.OTP == '') {
+      await this.uiUtils.showErrorMessage('Information', 'OTP not Specified');
       return
     }
     else if (this.Password == '') {
-      await this.uiUtils.showInformationalMessage('Information', 'Password not Specified');
+      await this.uiUtils.showErrorMessage('Information', 'Password not Specified');
       return
     }
     else if (this.ConfirmPassword == '') {
-      await this.uiUtils.showInformationalMessage('Information', 'Confirm Password not Specified');
+      await this.uiUtils.showErrorMessage('Information', 'Confirm Password not Specified');
       return
     }
     else if (this.Password != this.ConfirmPassword) {
-      await this.uiUtils.showInformationalMessage('Information', 'Password & Confirm Password is not Same');
+      await this.uiUtils.showErrorMessage('Information', 'Password & Confirm Password is not Same');
       return
     }
     let body = {
-      EMailId: this.UserEmailId,
+      EmailId: this.UserEmailId,
       OTP: this.OTP,
       Password: this.Password,
       ConfirmPassword: this.ConfirmPassword
     }
     this.isVerifyPassword = true;
     // ---------------------using new mqtt service --------------------
-    const response = await this.servercommunicator.FetchRequestForMobileApp(
-      'changepassword',
+    const response = await this.servercommunicator.UpdatePassword(
+      'updatepassword',
       body
     );
-
+    
+    console.log('response :', response);
     if (!response.Successful) {
-      await this.uiUtils.showInformationalMessage('Error', response.Message);
+      await this.uiUtils.showErrorMessage('Error', response.Message);
       this.isVerifyPassword = false;
 
       return
     }
     else {
       this.isVerifyPassword = false;
-      await this.uiUtils.showInformationalMessage('Successfull', 'Password Change Successfuly');
+      await this.uiUtils.showSuccessToster('Password Change Successfuly');
       await this.router.navigate(['login']);
     }
   }

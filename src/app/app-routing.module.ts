@@ -5,7 +5,7 @@ import { CreatePasswordComponent } from './views/login-page/create_password/crea
 import { ForgotPasswordComponent } from './views/sidebarlayout/forgot_password/forgot-password/forgot-password.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'splash-screen', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginPageComponent },
   { path: 'create_password', component: CreatePasswordComponent },
   { path: 'forgot_password', component: ForgotPasswordComponent },

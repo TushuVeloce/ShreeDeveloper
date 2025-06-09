@@ -55,6 +55,7 @@ export class ForgotPasswordMobilePage implements OnInit, OnDestroy {
       this.appStateManage.localStorage.setItem('userEMailId', email);
 
       const response = await this.servercommunicator.FetchRequestForMobileApp('generateuserotp', body);
+      console.log('response :', response);
       if (response.Successful) {
         this.toastService.present(response.Message, 1000, 'success');
         console.log('OTP generation successfully:', response.Message);
@@ -151,10 +152,11 @@ export class ForgotPasswordMobilePage implements OnInit, OnDestroy {
         OTP: otpValue
       };
 
-      const response = await this.servercommunicator.FetchRequestForMobileApp(
+      const response = await this.servercommunicator.VerifyOTP(
         'verifyuserotp', 
         body
       );
+      console.log('response :', response);
 
       if (!response.Successful) {
         this.toastService.present(response.Message, 1000, 'danger');
@@ -194,6 +196,7 @@ export class ForgotPasswordMobilePage implements OnInit, OnDestroy {
       'changepassword',
       body
     );
+    console.log('response :', response);
 
     if (!response.Successful) {
       console.log('Password change failed:', response.Message);

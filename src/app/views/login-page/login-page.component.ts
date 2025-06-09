@@ -93,25 +93,25 @@ export class LoginPageComponent implements OnInit {
     this.isForgetPasswordDisabled = true;
     this.isSpinning = true;
     this.appStateManage.StorageKey.setItem('userEmailId', this.UserId);
-    await this.servercommunicator.FetchRequestForMobileApp(
+    const response = await this.servercommunicator.FetchRequestForMobileApp(
       'generateuserotp',
       body
     );
-    // if (!response.Successful) {
-    //   await this.uiUtils.showInformationalMessage('Error', response.Message);
-    //   this.isForgetPasswordDisabled = false;
-    //   this.isSpinning = false;
-    //   return;
-    // } else {
-    //   this.isForgetPasswordDisabled = false;
-    //   this.isSpinning = false;
-    //   await this.uiUtils.showInformationalMessage(
-    //     'Successfull',
-    //     'Please Check Your Mail, OTP Send On Your Email Id'
-    //   );
-    //   this.appStateManage.setIsForgetPasswordClickedValue(true);
-    // }
-    await this.router.navigate(['/forgot_password']);
+    console.log('response :', response);
+    if (!response.Successful) {
+      await this.uiUtils.showErrorMessage('Error', response.Message);
+      this.isForgetPasswordDisabled = false;
+      this.isSpinning = false;
+      return;
+    } else {
+      this.isForgetPasswordDisabled = false;
+      this.isSpinning = false;
+      await this.uiUtils.showSuccessToster(
+        'Please Check Your Mail, OTP Send On Your Email Id'
+      );
+      this.appStateManage.setIsForgetPasswordClickedValue(true);
+      await this.router.navigate(['/forgot_password']);
+    }
   };
 
   togglePasswordVisibility = () => {

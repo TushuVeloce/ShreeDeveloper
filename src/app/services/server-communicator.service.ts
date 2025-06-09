@@ -516,6 +516,30 @@ export class ServerCommunicatorService {
     let result = Object.assign(new UserLoginResponse(), resp) as UserLoginResponse;
     return result;
   }
+
+   public async UpdatePassword(endPoint: string, body: any) {
+    // let apiRoot = this.sessionValues.generateuserotp;
+    let apiRoot = this.sessionValues.requestController;
+    let url = `${apiRoot}/updatepassword`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    let request = this.http.post(url, body, { headers: headers });
+
+    let resp = await (request.toPromise()
+      .then(resp => resp as any)
+      .catch(err => {
+        let tr = new UserLoginResponse();
+        tr.Successful = false;
+        tr.Message = err.statusText;
+        return tr
+      }));
+
+    let result = Object.assign(new UserLoginResponse(), resp) as UserLoginResponse;
+    return result;
+  }
   
   public async SaveSuperUser(body: any) {
     let apiRoot = this.sessionValues.userManagement;
