@@ -12,6 +12,24 @@
     </nz-button>
   </div>
 </div>
+ <div class="row" style="margin-top: 1rem; ">
+    <!-- <div class="col-md-4" style="margin-top: 1rem; ">
+      <label for="Date"><b>Date</b></label>
+      <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Entity.p.Date" (ngModelChange)="getActualStageListByAllFilters()" />
+    </div> -->
+    <div class="col-md-4" style="margin-top: 1rem; ">
+      <div>
+        <label for="SiteRef"><b>site</b></label>
+        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+          nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"  (ngModelChange)="getActualStageListByAllFilters()" >
+          <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+  </div>
+   <ng-template #noDataTpl>
+      <div class="no-data-text">Data Not Found</div>
+  </ng-template>
 <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
@@ -42,41 +60,69 @@
 </tr>
 
       </tbody> -->
-      <tbody>
+      <!-- <tbody>
   <ng-container *ngFor="let requisition of paginatedList; let i = index">
     <ng-container *ngFor="let detail of requisition.p.MaterialRequisitionDetailsArray; let j = index">
-      <tr  [ngStyle]="{
-          'border-bottom': j === requisition.p.MaterialRequisitionDetailsArray.length - 1
-            ? '2px solid #6c757d'
-            : ''
-        }">
-        <!-- Sr.No. -->
+      <tr >
         <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
           {{ (currentPage - 1) * pageSize + i + 1 }}
         </td>
 
-        <!-- Date -->
         <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
           {{ formatDate(requisition.p.Date) }}
         </td>
 
-        <!-- Site name -->
         <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
           {{ requisition.p.SiteName }}
         </td>
 
-        <!-- Material Name, Unit, Qty (always shown) -->
         <td class="tbldata">{{ detail.MaterialName }}</td>
         <td class="tbldata">{{ detail.UnitName }}</td>
         <td class="tbldata">{{ detail.EstimatedQty }}</td>
 
-        <!-- Status (if you have it) -->
         <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
           {{ requisition.p.Status }}
         </td>
 
-        <!-- Action buttons -->
         <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
+          <span style="margin-left: 9px;" (click)="onEditClicked(requisition)">
+            <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
+          </span>
+          <span style="margin-left: 9px;" (click)="onDeleteClicked(requisition)">
+            <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
+          </span>
+        </td>
+      </tr>
+      <tr *ngIf="j === requisition.p.MaterialRequisitionDetailsArray.length - 1">
+        <td colspan="8" style="background-color: #333; height: 2px; padding: 0;"></td>
+      </tr>
+    </ng-container>
+  </ng-container>
+</tbody> -->
+
+<tbody>
+  <ng-container *ngFor="let requisition of paginatedList; let i = index">
+    <ng-container *ngFor="let detail of requisition.p.MaterialRequisitionDetailsArray">
+      <tr>
+        <!-- Sr.No. (optional: can be based on loop index instead) -->
+        <td class="tbldata">
+          {{ (currentPage - 1) * pageSize + i + 1 }}
+        </td>
+
+        <!-- Requisition level data -->
+        <td class="tbldata">{{ formatDate(requisition.p.Date) }}</td>
+        <td class="tbldata">{{ requisition.p.SiteName }}</td>
+
+        <!-- Material level data -->
+        <td class="tbldata">{{ detail.MaterialName }}</td>
+        <td class="tbldata">{{ detail.UnitName }}</td>
+        <td class="tbldata">{{ detail.EstimatedQty }}</td>
+
+        <!-- Optional: Requisition status -->
+        <td class="tbldata">{{ requisition.p.Status }}</td>
+
+        <!-- Actions -->
+        <td class="tbldata">
           <span style="margin-left: 9px;" (click)="onEditClicked(requisition)">
             <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
           </span>
@@ -88,6 +134,7 @@
     </ng-container>
   </ng-container>
 </tbody>
+
 
     </nz-table>
   </div>

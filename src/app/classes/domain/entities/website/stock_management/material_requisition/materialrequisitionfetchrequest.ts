@@ -12,6 +12,8 @@ export class MaterialRequisitionFetchRequest
     MaterialRequisitionManagementRefs: number[] = [];
     BookingRemarkRefs: number[] = [];
     CompanyRefs: number[] = [];
+    Date: string[] = [];
+    SiteRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

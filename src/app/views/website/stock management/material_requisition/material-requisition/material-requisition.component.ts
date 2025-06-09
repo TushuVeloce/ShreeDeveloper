@@ -1,10 +1,12 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { MaterialRequisition } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/materialrequisition';
 import { RequiredMaterial } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/requiredmaterial/requiredmaterial';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
+import { DTU } from 'src/app/services/dtu.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -20,6 +22,7 @@ export class MaterialRequisitionComponent  implements OnInit {
   MasterList: MaterialRequisition[] = [];
   DisplayMasterList: MaterialRequisition[] = [];
   list:[]=[]
+  SiteList: Site[] = [];
   SearchString: string = '';
   SelectedMaterialRequisition: MaterialRequisition = MaterialRequisition.CreateNewInstance();
   CustomerRef: number = 0;
@@ -29,15 +32,26 @@ export class MaterialRequisitionComponent  implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   headers: string[] = ['Sr.No.', 'Date', 'Site name', 'Material Name', 'Unit','Estimated Qty','Status', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement,private DateconversionService: DateconversionService,
+    private companystatemanagement: CompanyStateManagement,private DateconversionService: DateconversionService,private dtu: DTU,
   ) {
     effect(async () => {
       // this.getMaterialListByCompanyRef()
+       this.getSiteListByCompanyRef()
       await this.getMaterialRequisitionListByCompanyRef();
     });
   }
+
   ngOnInit() {
     this.appStateManage.setDropdownDisabled();
+  }
+
+   getSiteListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SiteList = lst;
   }
 
   getMaterialRequisitionListByCompanyRef = async () => {
@@ -54,6 +68,19 @@ export class MaterialRequisitionComponent  implements OnInit {
     this.loadPaginationData();
   }
 
+  getActualStageListByAllFilters = async () => {
+      this.MasterList = [];
+      this.DisplayMasterList = [];
+      let Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date);
+      if (this.companyRef() <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
+      let lst = await MaterialRequisition.FetchEntireListByAllFilters(this.companyRef(), Date, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.MasterList = lst;
+      this.DisplayMasterList = this.MasterList;
+      this.loadPaginationData();
+    }
 
    // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
