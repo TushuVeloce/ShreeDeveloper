@@ -132,7 +132,7 @@
           </div>
           <div class="col-md-4">
             <label>Estimated Qty</label>
-            <input type="number" name="EstimatedQty" class="form-control" [(ngModel)]="newRequisition.EstimatedQty" required placeholder="Enter Estimated Qty"/>
+            <input type="number" name="EstimatedQty" class="form-control" [(ngModel)]="newRequisition.EstimatedQty" required placeholder="Enter Estimated Qty" (click)="selectAllValue($event)"/>
           </div>
         </div>
       </form>

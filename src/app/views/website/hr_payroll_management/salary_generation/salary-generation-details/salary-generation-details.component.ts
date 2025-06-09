@@ -88,6 +88,46 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     input.select();
   }
 
+  // EmployeeData = async (employee: number, month: number) => {
+  //   if (month != 0) {
+  //     const selectedMonthData = this.MonthList.find(m => m.Ref === month);
+  //     if (selectedMonthData) {
+  //       this.Entity.p.TotalDays = selectedMonthData.Days;
+  //     }
+  //   } else {
+  //     this.Entity.p.TotalDays = 0;
+  //   }
+  //   if (employee === 0 || month === 0) {
+  //     return;
+  //   }
+  //   this.Entity.p.TotalWorkingDays = 0
+  //   this.Entity.p.TotalLeaves = 0
+  //   this.Entity.p.TotalOverTimeHrs = 0
+  //   this.Entity.p.TotalWorkingHrs = 0
+  //   this.Entity.p.TotalLeavesHrs = 0
+  //   this.Entity.p.OverAllWorkingHrs = 0
+  //   let req = new SalaryGenerationCustomRequest();
+  //   req.EmployeeRef = employee;
+  //   req.Month = month;
+  //   let td = req.FormulateTransportData();
+  //   let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+  //   let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+
+  //   if (!tr.Successful) {
+  //     await this.uiUtils.showErrorMessage('Error', tr.Message);
+  //     return;
+  //   }
+
+  //   let tdResult = JSON.parse(tr.Tag) as TransportData;
+  //   let res = SalaryGenerationCustomRequest.FromTransportData(tdResult);
+  //   console.log('res :', res);
+  //   if (res.Data.length > 0) {
+  //     let checkInData: SalaryGenerationProps[] = res.Data as SalaryGenerationProps[];
+  //     Object.assign(this.Entity.p, checkInData[0]);
+  //   }
+  // };
+
+
   EmployeeData = async (employee: number, month: number) => {
     if (month != 0) {
       const selectedMonthData = this.MonthList.find(m => m.Ref === month);
@@ -97,35 +137,26 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     } else {
       this.Entity.p.TotalDays = 0;
     }
-    if (employee === 0 || month === 0) {
-      return;
-    }
-    this.Entity.p.TotalWorkingDays = 0
+      this.Entity.p.TotalWorkingDays = 0
     this.Entity.p.TotalLeaves = 0
     this.Entity.p.TotalOverTimeHrs = 0
     this.Entity.p.TotalWorkingHrs = 0
     this.Entity.p.TotalLeavesHrs = 0
     this.Entity.p.OverAllWorkingHrs = 0
-    let req = new SalaryGenerationCustomRequest();
-    req.EmployeeRef = employee;
-    req.Month = month;
-    let td = req.FormulateTransportData();
-    let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-
-    if (!tr.Successful) {
-      await this.uiUtils.showErrorMessage('Error', tr.Message);
+    this.Entity.p.BasicSalary = 0
+    if (employee === 0 || month === 0) {
       return;
     }
-
-    let tdResult = JSON.parse(tr.Tag) as TransportData;
-    let res = SalaryGenerationCustomRequest.FromTransportData(tdResult);
-    if (res.Data.length > 0) {
-      let checkInData: SalaryGenerationProps[] = res.Data as SalaryGenerationProps[];
-      Object.assign(this.Entity.p, checkInData[0]);
-    }
-  };
-
+    let lst = await SalaryGeneration.FetchEmployeeDataByEmployeeRefandMonth(employee,month, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    this.Entity.p.TotalWorkingDays = lst[0]?.p?.TotalWorkingDays
+    this.Entity.p.TotalLeaves = lst[0]?.p?.TotalLeaves
+    this.Entity.p.TotalOverTimeHrs = lst[0]?.p?.TotalOverTimeHrs
+    this.Entity.p.TotalWorkingHrs = lst[0]?.p?.TotalWorkingHrs
+    this.Entity.p.TotalLeavesHrs = lst[0]?.p?.TotalLeavesHrs
+    this.Entity.p.OverAllWorkingHrs = lst[0]?.p?.OverAllWorkingHrs
+    this.Entity.p.BasicSalary = lst[0]?.p?.BasicSalary
+  }
 
   SaveSalaryGeneration = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();

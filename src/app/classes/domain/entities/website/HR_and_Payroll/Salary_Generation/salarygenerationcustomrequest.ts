@@ -6,12 +6,15 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class SalaryGenerationCustomRequest
 {
-    public static readonly CustomProcessRequestType: string = "SalarySlipGenerationFetchCustomRequest";
+    public static readonly CustomProcessRequestType: string = "PayrollInputAggregatorFetchRequest";
     public static readonly MasterTableName: string = "EmployeeData";
     // CompanyRef:Number=0;
     EmployeeRef:Number=0;
     Month:Number = 0;
     Data: any[] = []
+    CompanyRefs: number[] = [];
+    EmployeeRefs:Number=0;
+    SalaryGenerationRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
@@ -20,7 +23,7 @@ export class SalaryGenerationCustomRequest
     }
 
     public FormulateTransportData = () => {
-        let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.CustomProcess);
+        let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.Fetch);
         this.MergeIntoTransportData(td);
 
         return td;

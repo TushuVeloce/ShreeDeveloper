@@ -472,7 +472,7 @@ export class ServerCommunicatorService {
   public async FetchRequestForMobileApp(endPoint: string, body: any) {
     // let apiRoot = this.sessionValues.generateuserotp;
     let apiRoot = this.sessionValues.requestController;
-    let url = `${apiRoot}/generatemobileuserotp`;
+    let url = `${apiRoot}/generateuserotp`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'

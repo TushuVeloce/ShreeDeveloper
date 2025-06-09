@@ -11,6 +11,7 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { SalaryGenerationFetchRequest } from "./salarygenerationfetchrequest";
+import { SalaryGenerationCustomRequest } from "./salarygenerationcustomrequest";
 
 
 export class SalaryGenerationProps {
@@ -185,6 +186,14 @@ export class SalaryGeneration implements IPersistable<SalaryGeneration> {
  public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new SalaryGenerationFetchRequest();
     req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await SalaryGeneration.FetchTransportData(req, errorHandler) as TransportData;
+    return SalaryGeneration.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEmployeeDataByEmployeeRefandMonth(EmployeeRef:number,Month:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new SalaryGenerationCustomRequest();
+    req.EmployeeRef = EmployeeRef
+    req.Month = Month
     let tdResponse = await SalaryGeneration.FetchTransportData(req, errorHandler) as TransportData;
     return SalaryGeneration.ListFromTransportData(tdResponse);
   }
