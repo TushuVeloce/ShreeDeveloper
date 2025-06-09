@@ -5,25 +5,24 @@ import { CreatePasswordComponent } from './views/login-page/create_password/crea
 import { ForgotPasswordComponent } from './views/sidebarlayout/forgot_password/forgot-password/forgot-password.component';
 
 const routes: Routes = [
-
-  { path: '', pathMatch: 'full', redirectTo: '/login' },
-  { path: 'login', component: LoginPageComponent, },
-  { path: 'create_password', component: CreatePasswordComponent, },
+  { path: '', redirectTo: 'splash-screen', pathMatch: 'full' },
+  { path: 'login', component: LoginPageComponent },
+  { path: 'create_password', component: CreatePasswordComponent },
   { path: 'forgot_password', component: ForgotPasswordComponent },
   {
     path: 'homepage',
     loadChildren: () => import('./views/sidebarlayout/sidebarlayout.routes').then(m => m.SidebarLayout_ROUTES)
   },
-  // ,
-  // {
-  //   path: 'app_homepage',a
-  //   loadChildren: () => import('./views/mobile-app/mobile.module').then(m => m.MobileModule)
-  // },
+  {
+    path: 'splash-screen',
+    loadChildren: () => import('./views/mobile-app/splash/splash.module').then(m => m.SplashPageModule)
+  },
   {
     path: 'mobileapp',
-    loadChildren: () => import('./views/mobile-app/mobile-routing.module').then(m => m.MobileRoutingModule)
-  }
+    loadChildren: () => import('./views/mobile-app/mobile.module').then(m => m.MobileModule)
+  },
 ];
+
 
 @NgModule({
   imports: [
