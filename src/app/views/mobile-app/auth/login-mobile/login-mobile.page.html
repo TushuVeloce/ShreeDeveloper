@@ -1,27 +1,42 @@
 <ion-content [fullscreen]="true" class="login-content ion-padding">
-  <!-- Company Logo -->
-  <div class="logo-container">
-    <img src="assets/logos/ShreeIcon.png" alt="Company Logo" />
-  </div>
+  <ion-grid class="h-100">
+    <ion-row class="ion-justify-content-center ion-align-items-center h-100">
+      <ion-col size="12" size-sm="10" size-md="6" size-lg="4" class="ion-text-center">
 
-  <!-- Login Form -->
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form-wrapper">
-    <app-input-field label="Email" controlName="email" type="email" icon="mail" [clearInput]="true"
-      [formGroup]="loginForm" placeholder="Enter your email"></app-input-field>
+        <!-- Logo -->
+        <div class="logo-wrapper">
+          <img src="assets/logos/ShreeIcon.png" class="logo-img" alt="Shree Logo" />
+        </div>
 
-    <app-input-field label="Password" controlName="password" type="password" icon="lock-closed" [formGroup]="loginForm"
-      placeholder="Enter your password" [maxlength]="20"
-      [pattern]="'^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$'"></app-input-field>
+        <!-- Heading -->
+        <h2 class="login-title">Log In</h2>
 
-    <!-- Login Button -->
-    <app-custom-button label="Login" type="submit" [loading]="isLoggingIn" color="primary" icon="log-in"
-      iconPosition="end" shape="round" fill="solid" [disabled]="loginForm.invalid" [customStyle]="{
-        'margin-top': '16px',
-        'margin-bottom': '24px'
-      }"></app-custom-button>
-  </form>
+        <!-- Login Form -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form-wrapper">
 
-  <ion-button fill="clear" expand="full" (click)="goToForgotPassword()">
-    Forgot Password?
-  </ion-button>
+          <app-input-field label="Email" controlName="email" type="email" icon="mail" [clearInput]="true"
+            [formGroup]="loginForm" placeholder="Enter your email" customClass="input-wrapper">
+          </app-input-field>
+
+          <app-input-field label="Password" controlName="password" type="password" icon="lock-closed"
+            [formGroup]="loginForm" placeholder="Enter your password" [maxlength]="20"
+            [pattern]="'^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$'" customClass="input-wrapper">
+          </app-input-field>
+
+          <!-- Align forget password to right below password -->
+          <div class="forgot-password-wrapper">
+            <ion-button fill="clear" size="small" (click)="goToForgotPassword()">forgot Password?</ion-button>
+          </div>
+
+          <!-- Login Button -->
+          <app-custom-button label="Login" type="submit" [loading]="isLoggingIn" color="primary" icon="log-in"
+            iconPosition="end" shape="round" fill="solid" [disabled]="loginForm.invalid">
+          </app-custom-button>
+        </form>
+
+        <ion-button fill="clear" expand="full"  class="Button-In-loginPage">New User? Contact Admin</ion-button>
+<!-- (click)="goToForgotPassword()" -->
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

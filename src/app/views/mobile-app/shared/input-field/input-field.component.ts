@@ -18,6 +18,8 @@ export class InputFieldComponent {
   @Input() pattern?: string | RegExp;
   @Input() readonly: boolean = false;
   @Input() clearInput: boolean = false;
+  @Input() customClass?: string;
+  @Input() customStyle?: { [key: string]: any };
 
   showPassword = false;
 

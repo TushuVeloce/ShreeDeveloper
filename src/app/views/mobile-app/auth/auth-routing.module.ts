@@ -6,6 +6,10 @@ import { CreateNewPasswordMobilePage } from './create-new-password-mobile/create
 const routes: Routes = [
   { path: 'login-mobile', component: LoginMobilePage },
   { path: 'create-new-password-mobile', component: CreateNewPasswordMobilePage },
+  {
+    path: 'forgot-password-mobile',
+    loadChildren: () => import('./forgot-password-mobile/forgot-password-mobile.module').then( m => m.ForgotPasswordMobilePageModule)
+  },
   { path: '', redirectTo: 'login-mobile', pathMatch: 'full' },
 ];
 

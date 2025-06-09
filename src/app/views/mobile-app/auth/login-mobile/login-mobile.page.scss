@@ -1,73 +1,76 @@
-.login-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding: 0 16px;
-  
-    .logo-container {
-      margin: 40px 0 20px;
-      display: flex;
-      justify-content: center;
-  
-      img {
-        width: 160px;
-        max-width: 100%;
-        height: auto;
-        border-radius: 12px;
-        object-fit: contain;
-      }
-    }
-  
-    .form-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      width: 100%;
-      max-width: 400px; // Limits form width on larger screens
-      margin-top: 12px;
-    }
+ion-content.login-content {
+  --background:
+    radial-gradient(circle at 2% 7%, rgba(123, 34, 28, 0.5) 0%, transparent 25%),
+    radial-gradient(circle at 2% 90%, rgba(123, 34, 28, 0.5) 0%, transparent 25%),
+    radial-gradient(circle at 100% 40%, rgba(123, 34, 28, 0.5) 0%, transparent 30%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+}
+
+.logo-wrapper {
+  margin: 12px 0;
+  display: flex;
+  justify-content: center;
+
+  .logo-img {
+    width: 200px;
+    height: auto;
   }
-  
-  /* ---------- Responsive Media Queries ---------- */
-  
-  // Small Devices (phones)
-  @media (max-width: 599px) {
-    .login-content {
-      .logo-container img {
-        width: 140px;
-      }
-  
-      .form-wrapper {
-        max-width: 100%;
-      }
-    }
+}
+
+.login-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 12px;
+}
+
+.form-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.forgot-password-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -24px;
+  /* Slightly pull up closer to password input */
+  margin-bottom: 4px;
+
+  ion-button {
+    font-size: 12px;
+    height: auto;
+    padding: 0 6px;
+    line-height: 1.2;
+    color: #000;
   }
-  
-  // Tablets
-  @media (min-width: 600px) and (max-width: 1023px) {
-    .login-content {
-      .logo-container img {
-        width: 160px;
-      }
-  
-      .form-wrapper {
-        max-width: 360px;
-      }
-    }
+}
+.Button-In-loginPage{
+  color: #000;
+}
+
+// Input field wrapper class
+.input-wrapper {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-top: 8px;
+
+  ion-input {
+    font-size: 16px;
   }
-  
-  // Desktops
-  @media (min-width: 1024px) {
-    .login-content {
-      .logo-container img {
-        width: 200px;
-      }
-  
-      .form-wrapper {
-        max-width: 400px;
-      }
-    }
+
+  ion-icon {
+    color: #555;
   }
-  
+}
+
+// Responsive logo size
+@media (max-width: 599px) {
+  .logo-img {
+    width: 120px;
+  }
+}

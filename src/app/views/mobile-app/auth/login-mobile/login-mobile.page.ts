@@ -66,20 +66,21 @@ export class LoginMobilePage implements OnInit {
         this.toastService.present('Logged in successfully!', 2000, 'success');
         this.isLoggingIn = false;
         this.loginForm.reset();
-        this.router.navigate(['mobileapp/auth/create-new-password-mobile']);
+        this.router.navigate(['/mobileapp/auth/create-new-password-mobile']);
         await this.haptic.success();
       } else {
         this.toastService.present('Logged in successfully!', 2000, 'success');
         this.isLoggingIn = false;
         this.loginForm.reset();
-        this.router.navigate(['mobileapp/tabs/dashboard']);
+        this.router.navigate(['/mobileapp/tabs/dashboard']);
         await this.haptic.success();
       }
     }
   }
 
-  goToForgotPassword() {
-    this.router.navigate(['mobileapp/auth/create-new-password-mobile']);
+  goToForgotPassword = async () => {
+    await this.router.navigate(['mobileapp/auth/forgot-password-mobile'], { replaceUrl: true });
+    await this.haptic.selectionChanged();
   }
 
 }

@@ -3,7 +3,7 @@
 
   <ion-input label="{{ label }}" labelPlacement="stacked" [clearInput]="clearInput" [type]="inputType"
     [formControl]="control" [placeholder]="placeholder" [attr.maxlength]="maxlength" [attr.pattern]="pattern"
-    [readonly]="readonly" class="input-field"></ion-input>
+    [readonly]="readonly"  [ngClass]="customClass" [ngStyle]="customStyle" class="input-field"></ion-input>
 
   <ion-button *ngIf="type === 'password'" fill="clear" slot="end" size="small" (click)="togglePasswordVisibility()"
     type="button" class="toggle-password">

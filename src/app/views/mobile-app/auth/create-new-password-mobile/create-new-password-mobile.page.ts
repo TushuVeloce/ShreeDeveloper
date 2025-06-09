@@ -71,4 +71,7 @@ export class CreateNewPasswordMobilePage implements OnInit {
       // }, 1500);
     }
   }
+  goToLogin() {
+    this.router.navigate(['mobileapp/auth/login-mobile', { replaceUrl: true }]);
+  }
 }

@@ -11,7 +11,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.component.html',
-  styleUrls: ['./forgot-password.component.scss'],
+  styleUrls: ['./forgot-password.component.scss'], 
  imports: [CommonModule, NzLayoutModule,
       NzMenuModule, FormsModule]
     })
