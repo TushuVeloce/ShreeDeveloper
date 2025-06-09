@@ -16,28 +16,24 @@ import { QuotatedMaterialFetchRequest } from "./quotatedmaterialfetchrequest";
 
 export class QuotatedMaterialDetailProps {
   public readonly Db_Table_Name = "QuotatedMaterialDetails";
-  public CreatedBy: number = 0;
-  public CreatedByName: string = '';
-  public UpdatedBy: number = 0;
-  public UpdatedByName: number = 0;
   public Ref: number = 0;
 
-  public MaterialRef: number = 0;
+  public MaterialRequisitionDetailsRef: number = 0;
+  public MaterialRequisitionDetailsName: string = '';
   public MaterialName: string = '';
-  public Unit: number = 0;
-  public RequiredQuantity: number = 0;
+  public UnitName: string = '';
+  public EstimatedQty: number = 0;
   public OrderedQuantity: number = 0;
   public Rate: number = 0;
   public DiscountRate: number = 0;
   public Gst: number = 0;
   public DeliveryCharges: number = 0;
-  public ExpectedDeliveryDate: string = '';
+  public ExceptedDeliveryDate: string = '';
   public NetAmount: number = 0;
   public TotalAmount: number = 0;
-  public UploadInvoice: number = 0;
-  public UploadInvoiceFile: File = null as any
-  public UploadInvoicePath: string = "";
-  public QuotationRef: number = 0;
+  public InvoiceFile: File = null as any
+  public InvoicePath: string = "";
+  public MaterialQuotationRef: number = 0;
 
 
   public readonly IsNewlyCreated: boolean = false;

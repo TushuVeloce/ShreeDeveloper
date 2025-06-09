@@ -7,11 +7,12 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 export class QuotationFetchRequest
 {
     // public static readonly FetchRequestType: string = "GAAProjectSpaceGroupFetchRequest";
-    public static readonly FetchRequestType: string = "QuotationFetchRequest";
+    public static readonly FetchRequestType: string = "MaterialQuotationFetchRequest";
 
     QuotationRefs: number[] = [];
     BookingRemarkRefs: number[] = [];
     CompanyRefs: number[] = [];
+    SiteRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

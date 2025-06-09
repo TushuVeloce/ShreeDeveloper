@@ -17,7 +17,7 @@ import { QuotatedMaterialDetailProps } from "./QuotatedMaterial/quotatedmaterial
 
 
 export class QuotationProps {
-  public readonly Db_Table_Name = "Quotation";
+  public readonly Db_Table_Name = "MaterialQuotation";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
@@ -32,7 +32,7 @@ export class QuotationProps {
   public VendorName: string = '';
   public VendorTradeName: string = '';
   public VendorAddress: string = '';
-  public QuotationMaterialDetails: QuotatedMaterialDetailProps[] = [];
+  public MaterialQuotationDetailsArray: QuotatedMaterialDetailProps[] = [];
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -46,7 +46,7 @@ export class QuotationProps {
 }
 
 export class Quotation implements IPersistable<Quotation> {
-  public static readonly Db_Table_Name: string = 'Quotation';
+  public static readonly Db_Table_Name: string = 'MaterialQuotation';
 
   public constructor(public readonly p: QuotationProps, public readonly AllowEdit: boolean) {
 
@@ -174,6 +174,13 @@ export class Quotation implements IPersistable<Quotation> {
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new QuotationFetchRequest();
     req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Quotation.FetchTransportData(req, errorHandler) as TransportData;
+    return Quotation.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListBySiteRef(SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new QuotationFetchRequest();
+    req.SiteRefs.push(SiteRef)
     let tdResponse = await Quotation.FetchTransportData(req, errorHandler) as TransportData;
     return Quotation.ListFromTransportData(tdResponse);
   }

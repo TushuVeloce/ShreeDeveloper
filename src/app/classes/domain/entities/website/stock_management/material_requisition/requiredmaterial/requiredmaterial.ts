@@ -12,6 +12,7 @@ import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { RequiredMaterialFetchRequest } from "./requiredmaterialfetchrequest";
 import { CountryStateCityRefs } from "src/app/classes/domain/constants";
+import { QuotationMaterialCustomRequest } from "../../Quotation/QuotatedMaterial/quotatedmaterialcustomrequest";
 
 
 export class RequiredMaterialDetailProps {
@@ -25,7 +26,7 @@ export class RequiredMaterialDetailProps {
   public MaterialName: string = '';
   public UnitRef: number = 0;
   public UnitName: string = '';
-  public EstimatedQty : number = 0;
+  public EstimatedQty: number = 0;
   public MaterialRequisitionRef: number = 0;
 
 
@@ -106,7 +107,7 @@ export class RequiredMaterial implements IPersistable<RequiredMaterial> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): RequiredMaterial[] {
+    sortPropertyName: string = ""): RequiredMaterial[] {
     let result: RequiredMaterial[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -181,6 +182,14 @@ export class RequiredMaterial implements IPersistable<RequiredMaterial> {
     return RequiredMaterial.ListFromTransportData(tdResponse);
   }
 
+  public static async FetchEntireListByCompanyVendorAndSiteRef(CompanyRef: number, VendorRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new QuotationMaterialCustomRequest();
+    req.CompanyRefs.push(CompanyRef)
+    req.VendorRefs.push(VendorRef)
+    req.SiteManagementRefs.push(SiteRef)
+    let tdResponse = await RequiredMaterial.FetchTransportData(req, errorHandler) as TransportData;
+    return RequiredMaterial.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

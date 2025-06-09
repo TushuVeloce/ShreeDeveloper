@@ -19,8 +19,8 @@
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-6">
           <label>Date</label>
-          <input type="date" name="localEstimatedStartingDate" class="form-control date-input"
-            id="localEstimatedStartingDate" [(ngModel)]="localEstimatedStartingDate" placeholder="Select Date"
+          <input type="date" name="QuotationDate" class="form-control date-input"
+            id="QuotationDate" [(ngModel)]="QuotationDate" placeholder="Select Date"
             #EstimatedStartingDateCtrl="ngModel" required (blur)="EstimatedStartingDateCtrl.control.markAsTouched()" />
           <div
             *ngIf="(EstimatedStartingDateCtrl.invalid && (EstimatedStartingDateCtrl.touched || EstimatedStartingDateCtrl.dirty))">
@@ -41,7 +41,7 @@
           <label><b>Vendor Name</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="VendorRef" name="VendorRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorRef"
-            (ngModelChange)="onVendorclick(Entity.p.VendorRef)">
+            (ngModelChange)="onVendorSelection(Entity.p.VendorRef)">
             <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -65,12 +65,12 @@
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
           style="display: flex; justify-content: end" routerLinkActive="active">
-          <nz-button nz-button class="btn1" (click)="isQuotatedMaterialModalOpen = true">Add Material</nz-button>
+          <nz-button nz-button class="btn1" (click)="openModal('QuotatedMaterial')">Add Material</nz-button>
         </div>
       </div>
 
       <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem"
-        *ngIf="Entity.p.QuotationMaterialDetails.length > 0">
+        *ngIf="Entity.p.MaterialQuotationDetailsArray.length > 0">
         <div class="table-container" style="margin-top: 2rem">
           <div class="row">
             <div class="col-12">
@@ -78,7 +78,7 @@
             </div>
           </div>
           <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
-            nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.QuotationMaterialDetails">
+            nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.MaterialQuotationDetailsArray">
             <thead>
               <tr>
                 <th *ngFor="let header of QuotatedMaterialheaders" class="tblsubheader">
@@ -88,19 +88,19 @@
             </thead>
             <tbody>
               <tr *ngFor="
-                  let material of Entity.p.QuotationMaterialDetails;
+                  let material of Entity.p.MaterialQuotationDetailsArray;
                   let i = index
                 ">
                 <td Class="tbldata">{{ i + 1 }}</td>
-                <td Class="tbldata">{{ material.MaterialName }}</td>
-                <td Class="tbldata">{{ material.Unit }}</td>
-                <td Class="tbldata">{{ material.RequiredQuantity }}</td>
+                <td Class="tbldata">{{ material.MaterialRequisitionDetailsName }}</td>
+                <td Class="tbldata">{{ material.UnitName }}</td>
+                <td Class="tbldata">{{ material.EstimatedQty }}</td>
                 <td Class="tbldata">{{ material.OrderedQuantity }}</td>
                 <td Class="tbldata">{{ material.Rate }}</td>
                 <td Class="tbldata">{{ material.DiscountRate }}</td>
                 <td Class="tbldata">{{ material.Gst }}</td>
                 <td Class="tbldata">{{ material.DeliveryCharges }}</td>
-                <td Class="tbldata">{{ material.ExpectedDeliveryDate }}</td>
+                <td Class="tbldata">{{ formatDate(material.ExceptedDeliveryDate) }}</td>
                 <td Class="tbldata">{{ material.NetAmount }}</td>
                 <td Class="tbldata">{{ material.TotalAmount }}</td>
                 <td class="tbldata">
@@ -115,7 +115,7 @@
           </nz-table>
         </div>
       </div>
-      <div *ngIf="Entity.p.QuotationMaterialDetails.length === 0" class="card-body_light">
+      <div *ngIf="Entity.p.MaterialQuotationDetailsArray.length === 0" class="card-body_light">
         <div style="height: 200px; background-color: white" class="d-flex align-items-center justify-content-center">
           <span class="title_light"> Data Not Found</span>
         </div>
@@ -149,30 +149,32 @@
       <form autocomplete="off">
         <div class="row" style="margin-top: 1rem">
           <div>
-            <label for="MaterialRef"><b>Material</b></label>
+            <label for="MaterialRequisitionDetailsRef"><b>Material</b></label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
-              nzPlaceHolder="Select" [nzSize]="'large'" name="MaterialRef" required id="MaterialRef"
-              [(ngModel)]="newQuotatedMaterial.MaterialRef">
-              <nz-option *ngFor="let material of SiteList" [nzLabel]="material.p.Name"
+              nzPlaceHolder="Select" [nzSize]="'large'" name="MaterialRequisitionDetailsRef" required
+              id="MaterialRequisitionDetailsRef" [(ngModel)]="newQuotatedMaterial.MaterialRequisitionDetailsRef"
+              (ngModelChange)="onMaterialSelection(newQuotatedMaterial.MaterialRequisitionDetailsRef)">
+              <nz-option *ngFor="let material of MaterialRequisitionList" [nzLabel]="material.p.MaterialName"
                 [nzValue]="material.p.Ref"></nz-option>
             </nz-select>
           </div>
           <div class="col-md-6">
             <label>Unit</label>
-            <input type="text" name="Unit" class="form-control" [(ngModel)]="newQuotatedMaterial.Unit" readonly />
+            <input type="text" name="Unit" class="form-control" [(ngModel)]="newQuotatedMaterial.UnitName" readonly />
           </div>
           <div class="col-md-6">
             <label>Required Quantity</label>
-            <input type="text" name="RequiredQuantity" class="form-control"
-              [(ngModel)]="newQuotatedMaterial.RequiredQuantity" readonly />
+            <input type="number" name="EstimatedQty" class=" form-control"
+              [(ngModel)]="newQuotatedMaterial.EstimatedQty" readonly />
           </div>
         </div>
-        <div class="row" style="margin-top: 1rem">
+        <div class=" row" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Ordered Quantity</label>
             <input type="number" name="OrderedQuantity" class="form-control"
               [(ngModel)]="newQuotatedMaterial.OrderedQuantity" #OrderedQuantityCtrl="ngModel" required
-              (blur)="OrderedQuantityCtrl.control.markAsTouched()" placeholder="Enter Ordered Quantity" />
+              (blur)="OrderedQuantityCtrl.control.markAsTouched()" placeholder="Enter Ordered Quantity"
+              (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
             <div *ngIf="(OrderedQuantityCtrl.invalid && (OrderedQuantityCtrl.touched || OrderedQuantityCtrl.dirty))">
               <span class="validation-text" *ngIf="OrderedQuantityCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
@@ -180,7 +182,8 @@
           <div class="col-md-6">
             <label>Rate</label>
             <input type="number" name="Rate" class="form-control" [(ngModel)]="newQuotatedMaterial.Rate"
-              #RateCtrl="ngModel" required (blur)="RateCtrl.control.markAsTouched()" placeholder="Enter Rate" />
+              #RateCtrl="ngModel" required (blur)="RateCtrl.control.markAsTouched()" placeholder="Enter Rate"
+              (click)="selectAllValue($event)" />
             <div *ngIf="(RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty))">
               <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
@@ -188,8 +191,9 @@
           <div class="col-md-6">
             <label>Discount Rate</label>
             <input type="number" name="DiscountRate" class="form-control" [(ngModel)]="newQuotatedMaterial.DiscountRate"
-              #DiscountRateCtrl="ngModel" required (blur)="DiscountRateCtrl.control.markAsTouched()"
-              placeholder="Enter Discount Rate" />
+              (ngModelChange)="CalculateNetAmountAndTotalAmount()" #DiscountRateCtrl="ngModel" required
+              (blur)="DiscountRateCtrl.control.markAsTouched()" placeholder="Enter Discount Rate"
+              (click)="selectAllValue($event)" />
             <div *ngIf="(DiscountRateCtrl.invalid && (DiscountRateCtrl.touched || DiscountRateCtrl.dirty))">
               <span class="validation-text" *ngIf="DiscountRateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
@@ -199,36 +203,46 @@
               <label for="Gst"><b>Gst</b></label>
               <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
                 nzPlaceHolder="Select" [nzSize]="'large'" name="Gst" required id="Gst"
-                [(ngModel)]="newQuotatedMaterial.Gst">
-                <nz-option *ngFor="let Gst of SiteList" [nzLabel]="Gst.p.Name" [nzValue]="Gst.p.Ref"></nz-option>
+                [(ngModel)]="newQuotatedMaterial.Gst" (ngModelChange)="CalculateNetAmountAndTotalAmount()">
+                <nz-option nzLabel="None" [nzValue]="0"></nz-option>
+                <nz-option nzLabel="5%" [nzValue]="5"></nz-option>
+                <nz-option nzLabel="9%" [nzValue]="9"></nz-option>
+                <nz-option nzLabel="18%" [nzValue]="18"></nz-option>
+                <nz-option nzLabel="27%" [nzValue]="27"></nz-option>
               </nz-select>
             </div>
           </div>
         </div>
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
-            <label>DeliveryCharges</label>
-            <input type="text" name="DeliveryCharges" class="form-control"
+            <label>Delivery Charges</label>
+            <input type="number" name="DeliveryCharges" class="form-control"
               [(ngModel)]="newQuotatedMaterial.DeliveryCharges" #DeliveryCharges="ngModel" required
-              (blur)="DeliveryCharges.control.markAsTouched()" placeholder="Enter DeliveryCharges" />
+              (blur)="DeliveryCharges.control.markAsTouched()" placeholder="Enter DeliveryCharges"
+              (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
             <div *ngIf="(DeliveryCharges.invalid && (DeliveryCharges.touched || DeliveryCharges.dirty))">
               <span class="validation-text" *ngIf="DeliveryCharges.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
           <div class="col-md-6">
             <label>Expected Delivery Date</label>
-            <input type="text" name="ExpectedDeliveryDate" class="form-control"
-              [(ngModel)]="newQuotatedMaterial.ExpectedDeliveryDate" #ExpectedDeliveryDate="ngModel" required
-              (blur)="ExpectedDeliveryDate.control.markAsTouched()" placeholder="Enter Pin Code" />
-            <div *ngIf="(ExpectedDeliveryDate.invalid && (ExpectedDeliveryDate.touched || ExpectedDeliveryDate.dirty))">
-              <span class="validation-text" *ngIf="ExpectedDeliveryDate.errors?.['required']">{{ RequiredFieldMsg
-                }}</span>
-            </div>
+            <input type="date" name="ExceptedDeliveryDate" class="form-control"
+              [(ngModel)]="ExceptedDeliveryDate" placeholder="Enter Date" />
+          </div>
+          <div class="col-md-6">
+            <label>Net Amount</label>
+            <input type="number" name="NetAmount" class="form-control" [(ngModel)]="newQuotatedMaterial.NetAmount"
+              readonly />
+          </div>
+          <div class="col-md-6">
+            <label>Total Amount</label>
+            <input type="number" name="TotalAmount" class=" form-control" [(ngModel)]="newQuotatedMaterial.TotalAmount"
+              readonly />
           </div>
         </div>
       </form>
     </div>
-    <div class="custom-modal-footer">
+    <div class=" custom-modal-footer">
       <div style="
           justify-content: center;
           display: flex;

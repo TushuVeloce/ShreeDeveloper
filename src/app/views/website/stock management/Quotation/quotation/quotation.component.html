@@ -1,15 +1,102 @@
 <div class="row">
   <div class="col-4 mb-2">
-    <h1 style="padding-top: 3px;" class="title title_light">Quotation</h1>
+    <h1 style="padding-top: 3px;" class="title title_light">Material Requisition List</h1>
   </div>
   <div class="col-4 mb-2 search-container_light">
-    <!-- <app-shared-filter [masterList]="MasterList"
-      [filterFields]="['Name']"
-      (filteredList)="DisplayMasterList = $event"></app-shared-filter> -->
+    <app-shared-filter [masterList]="MasterList"
+      [filterFields]="['Name', 'NumberOfPlots', 'SiteInchargeName', 'AddressLine2']"
+      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">
     <nz-button nz-button class="btn1" (click)='AddQuotation()'>
-      Add Quotation
+      Add Requisition
     </nz-button>
+  </div>
+</div>
+<div class="row" style="margin-top: 1rem; ">
+  <!-- <div class="col-md-4" style="margin-top: 1rem; ">
+      <label for="Date"><b>Date</b></label>
+      <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Entity.p.Date" (ngModelChange)="getActualStageListByAllFilters()" />
+    </div> -->
+  <div class="col-md-4" style="margin-top: 1rem; ">
+    <div>
+      <label for="SiteRef"><b>Site</b></label>
+      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+        [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
+        (ngModelChange)="getActualStageListByAllFilters()">
+        <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+      </nz-select>
+    </div>
+  </div>
+</div>
+<ng-template #noDataTpl>
+  <div class="no-data-text">Data Not Found</div>
+</ng-template>
+<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+  <div class="table-container">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let Quotation of paginatedList; let i = index">
+          <ng-container *ngFor="let detail of Quotation.p.MaterialQuotationDetailsArray; let j = index">
+            <tr>
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
+                {{ (currentPage - 1) * pageSize + i + 1 }}
+              </td>
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
+                {{ Quotation.p.SiteName }}
+              </td>
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
+                {{ formatDate(Quotation.p.Date) }}
+              </td>
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
+                {{ Quotation.p.VendorName }}
+              </td>
+
+              <td class="tbldata">{{ detail.MaterialName }}</td>
+              <td class="tbldata">{{ detail.UnitName }}</td>
+              <td class="tbldata">{{ detail.EstimatedQty }}</td>
+              <td class="tbldata">{{ detail.OrderedQuantity }}</td>
+              <td class="tbldata">{{ detail.Rate }}</td>
+              <td class="tbldata">{{ formatDate(detail.ExceptedDeliveryDate) }}</td>
+              <td class="tbldata">{{ detail.NetAmount }}</td>
+              <td class="tbldata">{{ detail.TotalAmount }}</td>
+
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
+                {{ 'Status' }}
+              </td>
+
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
+                <span style="margin-left: 9px;" (click)="onEditClicked(Quotation)">
+                  <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
+                </span>
+                <span style="margin-left: 9px;" (click)="onDeleteClicked(Quotation)">
+                  <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
+                </span>
+              </td>
+            </tr>
+            <tr *ngIf="j === Quotation.p.MaterialQuotationDetailsArray.length - 1">
+              <td colspan="8" style="background-color: #333; height: 2px; padding: 0;"></td>
+            </tr>
+          </ng-container>
+        </ng-container>
+      </tbody>
+
+    </nz-table>
+  </div>
+  <div class="fixed-pagination">
+    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+      (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+    </nz-pagination>
+  </div>
+</div>
+<div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
+  <div style="height: 200px" class="d-flex align-items-center justify-content-center">
+    <span class="title_light"> Data Not Found</span>
   </div>
 </div>
