@@ -17,7 +17,6 @@ export class SettingsPage implements OnInit {
 
   employeeName: string = '';
   userImage: string = '';
-  // defaultAvatar: string = 'https://avatar.iran.liara.run/public/6';
   defaultAvatar: string = 'assets/logos/dp.png';
 
   constructor(
@@ -30,7 +29,7 @@ export class SettingsPage implements OnInit {
     private servercommunicator: ServerCommunicatorService
   ) { }
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     this.employeeName = localStorage.getItem('UserDisplayName') || 'User';
   }
 
@@ -52,28 +51,37 @@ export class SettingsPage implements OnInit {
       message: 'Are you sure you want to logout?',
       buttons: [
         { text: 'Cancel', role: 'cancel' },
-        { text: 'Logout', handler: () => this.logout() },
-      ],
+        { text: 'Logout', handler: () => this.logout() }
+      ]
     });
     await alert.present();
   }
 
   async logout() {
-    let req = new UserLogoutRequest();
+    const req = new UserLogoutRequest();
     req.LoginToken = this.sessionValues.CurrentLoginToken;
     req.LastSelectedCompanyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
     req.EmployeeRef = this.appStateManagement.getEmployeeRef();
-    // localStorage.removeItem('activeSubmodule');
-    // localStorage.removeItem('activeModule');
-    let _ = await this.servercommunicator.LogoutUser(req)
+
+    try {
+      await this.servercommunicator.LogoutUser(req);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+
+    // Clear all storage and reset app state
+    this.appStateManagement.StorageKey.clear();
+    localStorage.clear();
+
     const toast = await this.toastController.create({
       message: 'Logged out successfully!',
       duration: 2000,
       color: 'danger',
     });
-    toast.present();
-    await this.router.navigate(['/']);
-    // this.router.navigate(['/mobileapp/auth/login_mobile']);
+    await toast.present();
+
+    // Navigate to login
+    this.router.navigate(['/mobileapp/auth/login-mobile']);
   }
 
   async selectImage() {
@@ -109,7 +117,7 @@ export class SettingsPage implements OnInit {
         resultType: CameraResultType.DataUrl,
         source
       });
-      this.userImage = image.dataUrl!;
+      this.userImage = image.dataUrl || '';
     } catch (error) {
       console.error('Image pick error:', error);
     }

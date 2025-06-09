@@ -154,14 +154,27 @@ export class AppStateManageService {
   getUserJSON(): Object | null {
     const UserJSON = this.StorageKey.getItem('UserJSON');
     return UserJSON // Return the UserJSON or 0 if not found
+  
+  }
+  getUserJSONForMobile(): Object | null {
+    const UserJSON = this.localStorage.getItem('UserJSON');
+    return UserJSON // Return the UserJSON or 0 if not found
   }
 
   setUserJSON(val: Object | null): void {
     this.StorageKey.setItem('UserJSON', JSON.stringify(val)); // Store UserJSON reference in local storage
   }
 
+  setUserJSONForMobile(val: Object | null): void {
+    this.localStorage.setItem('UserJSON', JSON.stringify(val)); // Store UserJSON reference in local storage
+  }
+
   resetUserJSON(): void {
     this.StorageKey.setItem('UserJSON', '0');
+  }
+
+  resetUserJSONForMobile(): void {
+    this.localStorage.setItem('UserJSON', '0');
   }
 
   // for Department Ref Start
@@ -198,14 +211,27 @@ export class AppStateManageService {
     const logtoken = this.StorageKey.getItem('LoginToken');
     return logtoken ? logtoken : ''; // Return the project reference or 0 if not found
   }
+  getLoginTokenForMobile(): string {
+    const logtoken = this.localStorage.getItem('LoginToken');
+    return logtoken ? logtoken : ''; // Return the project reference or 0 if not found
+  }
 
   setLoginToken(val: string): void {
     this.LoginToken = val;
     this.StorageKey.setItem('LoginToken', val); // Store project reference in local storage
   }
 
+  setLoginTokenForMobile(val: string): void {
+    this.LoginToken = val;
+    this.localStorage.setItem('LoginToken', val); // Store project reference in local storage
+  }
+
   resetLoginToken(): void {
     this.StorageKey.setItem('LoginToken', '');
+  }
+
+  resetLoginTokenForMobile(): void {
+    this.localStorage.setItem('LoginToken', '');
   }
 
   // ==================================== Login Token End =========================================================

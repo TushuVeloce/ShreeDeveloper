@@ -7,6 +7,7 @@ import { ServerCommunicatorService } from 'src/app/services/server-communicator.
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { UserLoginRequest } from 'src/app/classes/infrastructure/request_response/userloginrequest';
+import { HapticService } from '../../core/haptic.service';
 
 @Component({
   selector: 'app-login-mobile',
@@ -20,7 +21,7 @@ export class LoginMobilePage implements OnInit {
   isLoggingIn = false;
 
   constructor(private fb: FormBuilder, private router: Router, private servercommunicator: ServerCommunicatorService,
-    private sessionValues: SessionValues,
+    private sessionValues: SessionValues, private haptic: HapticService,
     private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement, private toastService: ToastService) { }
 
 
@@ -41,16 +42,23 @@ export class LoginMobilePage implements OnInit {
     req.LoginDeviceId = this.sessionValues.LoginDeviceId;
     const response = await this.servercommunicator.LoginUser(req);
     this.appStateManage.setEmployeeRef(response.LoginEmployeeRef)
-    this.appStateManage.setLoginToken(response.LoginToken)
-    this.appStateManage.StorageKey.setItem("IsDefaultUser", response.IsDefault.toString())
-    this.appStateManage.StorageKey.setItem("UserDisplayName", response.UserDisplayName)
-    this.appStateManage.StorageKey.setItem('SelectedCompanyRef', response.LastSelectedCompanyRef.toString());
-    this.appStateManage.StorageKey.setItem('companyName', response.CompanyName);
-    this.appStateManage.StorageKey.setItem('LoginEmployeeRef', response.LoginEmployeeRef.toString());
+    // this.appStateManage.setLoginToken(response.LoginToken)
+    // this.appStateManage.StorageKey.setItem("IsDefaultUser", response.IsDefault.toString())
+    // this.appStateManage.StorageKey.setItem("UserDisplayName", response.UserDisplayName)
+    // this.appStateManage.StorageKey.setItem('SelectedCompanyRef', response.LastSelectedCompanyRef.toString());
+    // this.appStateManage.StorageKey.setItem('companyName', response.CompanyName);
+    // this.appStateManage.StorageKey.setItem('LoginEmployeeRef', response.LoginEmployeeRef.toString());
+    this.appStateManage.setLoginTokenForMobile(response.LoginToken)
+    this.appStateManage.localStorage.setItem("IsDefaultUser", response.IsDefault.toString())
+    this.appStateManage.localStorage.setItem("UserDisplayName", response.UserDisplayName)
+    this.appStateManage.localStorage.setItem('SelectedCompanyRef', response.LastSelectedCompanyRef.toString());
+    this.appStateManage.localStorage.setItem('companyName', response.CompanyName);
+    this.appStateManage.localStorage.setItem('LoginEmployeeRef', response.LoginEmployeeRef.toString());
     this.companystatemanagement.setCompanyRef(response.LastSelectedCompanyRef, response.CompanyName)
 
     if (!response.Successful) {
       this.toastService.present(response.Message, 2000, 'danger');
+      await this.haptic.error();
       this.isLoggingIn = false;
       return
     } else {
@@ -59,11 +67,13 @@ export class LoginMobilePage implements OnInit {
         this.isLoggingIn = false;
         this.loginForm.reset();
         this.router.navigate(['mobileapp/auth/create-new-password-mobile']);
+        await this.haptic.success();
       } else {
         this.toastService.present('Logged in successfully!', 2000, 'success');
         this.isLoggingIn = false;
         this.loginForm.reset();
         this.router.navigate(['mobileapp/tabs/dashboard']);
+        await this.haptic.success();
       }
     }
   }

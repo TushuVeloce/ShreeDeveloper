@@ -1,5 +1,6 @@
 <ion-tabs>
-  <ion-tab-bar slot="bottom" class="BottomBar">
+  <!-- <ion-router-outlet></ion-router-outlet> -->
+  <ion-tab-bar slot="bottom" class="BottomBar" *ngIf="showTabs">
     <ion-tab-button tab="dashboard">
       <ion-icon name="home"></ion-icon>
       <ion-label>dashboard</ion-label>

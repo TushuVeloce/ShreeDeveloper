@@ -27,6 +27,9 @@ const routes: Routes = [
 //   localStorage.removeItem('authToken');
 //   this.router.navigate(['/login'], { replaceUrl: true });
 // }
+// { path: '', redirectTo: 'splash', pathMatch: 'full' },
+// { path: 'splash', loadChildren: () => import('./features/splash/splash.module').then(m => m.SplashPageModule) },
+
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

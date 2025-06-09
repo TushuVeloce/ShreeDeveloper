@@ -1,5 +1,5 @@
 <app-loader *ngIf="isLoading"></app-loader>
-<app-header-with-back-handler title="Site Management"></app-header-with-back-handler>
+<app-header-with-back-handler title="Site Management" backRoute="mobileapp/tabs/dashboard"></app-header-with-back-handler>
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
