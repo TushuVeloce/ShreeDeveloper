@@ -38,14 +38,22 @@
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
-          <label>Number Of Plots</label>
-          <input type="number" name="NumberOfPlots" class="form-control" id="NumberOfPlots"
-            [(ngModel)]="Entity.p.SiteRef" #NumberOfPlotsCtrl="ngModel" required
-            (blur)="NumberOfPlotsCtrl.control.markAsTouched()" placeholder="Enter Number of Plots"
-            (click)="selectAllValue($event)" />
-          <div *ngIf="(NumberOfPlotsCtrl.invalid && (NumberOfPlotsCtrl.touched || NumberOfPlotsCtrl.dirty))">
-            <span class="validation-text" *ngIf="NumberOfPlotsCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+          <label><b>Vendor Name</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="VendorRef" name="VendorRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorRef"
+            (ngModelChange)="onVendorclick(Entity.p.VendorRef)">
+            <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4">
+          <label>Vendor Trade Name</label>
+          <input type="text" name="VendorTradeName" class="form-control date-input" id="VendorTradeName"
+            [(ngModel)]="Entity.p.VendorTradeName" placeholder="Trade Name" readonly>
+        </div>
+        <div class="col-md-4">
+          <label>Address</label>
+          <input type="text" name="VendorAddress" class="form-control date-input" id="VendorAddress"
+            [(ngModel)]="Entity.p.VendorAddress" placeholder="Address" readonly>
         </div>
       </div>
 
@@ -200,20 +208,21 @@
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>DeliveryCharges</label>
-            <input type="text" name="DeliveryCharges" class="form-control" [(ngModel)]="newQuotatedMaterial.DeliveryCharges"
-              #DeliveryCharges="ngModel" required (blur)="DeliveryCharges.control.markAsTouched()"
-              placeholder="Enter DeliveryCharges" />
+            <input type="text" name="DeliveryCharges" class="form-control"
+              [(ngModel)]="newQuotatedMaterial.DeliveryCharges" #DeliveryCharges="ngModel" required
+              (blur)="DeliveryCharges.control.markAsTouched()" placeholder="Enter DeliveryCharges" />
             <div *ngIf="(DeliveryCharges.invalid && (DeliveryCharges.touched || DeliveryCharges.dirty))">
               <span class="validation-text" *ngIf="DeliveryCharges.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
           <div class="col-md-6">
             <label>Expected Delivery Date</label>
-            <input type="text" name="ExpectedDeliveryDate" class="form-control" [(ngModel)]="newQuotatedMaterial.ExpectedDeliveryDate"
-               #ExpectedDeliveryDate="ngModel" required
+            <input type="text" name="ExpectedDeliveryDate" class="form-control"
+              [(ngModel)]="newQuotatedMaterial.ExpectedDeliveryDate" #ExpectedDeliveryDate="ngModel" required
               (blur)="ExpectedDeliveryDate.control.markAsTouched()" placeholder="Enter Pin Code" />
             <div *ngIf="(ExpectedDeliveryDate.invalid && (ExpectedDeliveryDate.touched || ExpectedDeliveryDate.dirty))">
-              <span class="validation-text" *ngIf="ExpectedDeliveryDate.errors?.['required']">{{ RequiredFieldMsg }}</span>
+              <span class="validation-text" *ngIf="ExpectedDeliveryDate.errors?.['required']">{{ RequiredFieldMsg
+                }}</span>
             </div>
           </div>
         </div>

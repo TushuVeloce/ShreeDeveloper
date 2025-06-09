@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, effect, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { QuotatedMaterial, QuotatedMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/Quotation/QuotatedMaterial/quotatedmaterial';
 import { Quotation } from 'src/app/classes/domain/entities/website/stock_management/Quotation/quotation';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -26,6 +27,7 @@ export class QuotationDetailsComponent implements OnInit {
   IsDropdownDisabled: boolean = false;
   InitialEntity: Quotation = null as any;
   SiteList: Site[] = [];
+  VendorList: Vendor[] = [];
   localEstimatedStartingDate: string = '';
   localEstimatedEndDate: string = '';
   BookingRemarkList = DomainEnums.BookingRemarkList(true, '---Select Booking Remark---');
@@ -52,7 +54,11 @@ export class QuotationDetailsComponent implements OnInit {
     private appStateManage: AppStateManageService,
     private utils: Utils, private companystatemanagement: CompanyStateManagement,
     private dtu: DTU,
-  ) { }
+  ) {
+    effect(async () => {
+      await this.getVendorListByCompanyRef(); await this.getSiteListByCompanyRef();
+    });
+  }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
@@ -85,7 +91,23 @@ export class QuotationDetailsComponent implements OnInit {
     // }
   }
 
+  getVendorListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.VendorList = lst;
+    // if (this.SiteList.length > 0) {
+    //   this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
+    // }
+  }
 
+  onVendorclick = (vendorRef: number) => {
+    const SingleRecord = this.VendorList.filter(data => data.p.Ref == vendorRef);
+    this.Entity.p.VendorTradeName = SingleRecord[0].p.TradeName
+    this.Entity.p.VendorAddress = SingleRecord[0].p.AddressLine1
+  }
 
   openModal(type: string) {
     if (type === 'QuotatedMaterial') this.isQuotatedMaterialModalOpen = true;
@@ -139,6 +161,7 @@ export class QuotationDetailsComponent implements OnInit {
       await this.uiUtils.showSuccessToster('Quotated Material added successfully!');
       this.resetMaterialControls()
     }
+    console.log('this.Entity.p.QuotationMaterialDetails :', this.Entity.p.QuotationMaterialDetails);
 
     this.newQuotatedMaterial = QuotatedMaterialDetailProps.Blank();
     this.editingIndex = null;
