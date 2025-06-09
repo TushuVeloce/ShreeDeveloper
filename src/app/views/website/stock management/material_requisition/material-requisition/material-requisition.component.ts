@@ -1,5 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { MaterialRequisition } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/materialrequisition';
 import { RequiredMaterial } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/requiredmaterial/requiredmaterial';
@@ -25,6 +26,7 @@ export class MaterialRequisitionComponent  implements OnInit {
   SiteList: Site[] = [];
   SearchString: string = '';
   SelectedMaterialRequisition: MaterialRequisition = MaterialRequisition.CreateNewInstance();
+  StatusList = DomainEnums.MaterialRequisitionStatusesList(true,);
   CustomerRef: number = 0;
   pageSize = 10;
   currentPage = 1;
@@ -52,6 +54,7 @@ export class MaterialRequisitionComponent  implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
+    this.Entity.p.SiteRef = this.SiteList[0].p.Ref
   }
 
   getMaterialRequisitionListByCompanyRef = async () => {
@@ -68,15 +71,21 @@ export class MaterialRequisitionComponent  implements OnInit {
     this.loadPaginationData();
   }
 
-  getActualStageListByAllFilters = async () => {
+  getRequisitionListByAllFilters = async () => {
       this.MasterList = [];
       this.DisplayMasterList = [];
-      let Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date);
+      // let Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date);
       if (this.companyRef() <= 0) {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
       }
-      let lst = await MaterialRequisition.FetchEntireListByAllFilters(this.companyRef(), Date, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      if(this.SiteList.length <= 0){
+        this.Entity.p.SiteRef = 0
+      }else{
+        this.getSiteListByCompanyRef()
+      }
+      console.log(' this.Entity.p.Status, this.Entity.p.SiteRef :',  this.Entity.p.Status, this.Entity.p.SiteRef);
+      let lst = await MaterialRequisition.FetchEntireListByAllFilters(this.companyRef(), this.Entity.p.Status, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
       this.loadPaginationData();

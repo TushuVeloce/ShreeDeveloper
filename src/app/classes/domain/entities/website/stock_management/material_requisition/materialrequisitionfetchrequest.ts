@@ -12,7 +12,7 @@ export class MaterialRequisitionFetchRequest
     MaterialRequisitionManagementRefs: number[] = [];
     BookingRemarkRefs: number[] = [];
     CompanyRefs: number[] = [];
-    Date: string[] = [];
+    Status: string[] = [];
     SiteRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>

@@ -172,11 +172,11 @@ export class MaterialRequisition implements IPersistable<MaterialRequisition> {
     return MaterialRequisition.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchEntireListByAllFilters(CompanyRef: number, Date: string,SiteRef: number,  errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+   public static async FetchEntireListByAllFilters(CompanyRef: number, Status: string,SiteRef: number,  errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
         let req = new MaterialRequisitionFetchRequest();
         req.CompanyRefs.push(CompanyRef)
-        if (Date) {
-          req.Date.push(Date)
+        if (Status) {
+          req.Status.push(Status)
         }
         if (SiteRef) {
           req.SiteRefs.push(SiteRef)
