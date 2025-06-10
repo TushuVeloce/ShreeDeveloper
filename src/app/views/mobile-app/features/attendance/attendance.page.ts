@@ -413,11 +413,13 @@ export class AttendancePage implements OnInit {
     }
   }
 
+  
   submitPunchOut = async () => {
     try {
+      debugger
       await this.loadingService.show();
       this.attendanceLog.p.IsCheckIn = false;
-      this.attendanceLog.p.CompanyRef = this.companyState.getCurrentCompanyRef();
+      this.attendanceLog.p.CompanyRef = this.companyRef;
       this.attendanceLog.p.EmployeeRef = this.employeeRef;
       this.attendanceLog.p.HandleBy = 100;
       // Convert date to full format
