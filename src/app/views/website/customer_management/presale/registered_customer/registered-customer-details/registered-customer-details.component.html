@@ -187,7 +187,7 @@
           <div>
             <label>Goods & Services Tax (GST)</label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
-            name="GoodsServicesTax" [(ngModel)]="Entity.p.GoodsServicesTax" required id="GoodsServicesTax" (ngModelChange)="calculateGrandTotal()">
+            name="GoodsServicesTax" [(ngModel)]="Entity.p.GoodsServicesTax" required id="GoodsServicesTax" (ngModelChange)="calculateExtraCharges()">
             <nz-option
             *ngFor="let goodsservices of GoodandServicesTaxList"
             [nzValue]="goodsservices.Ref"

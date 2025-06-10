@@ -102,7 +102,9 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
     const LegalCharges = Number(this.Entity.p.LegalCharges);
     const StampDuties = Number(this.Entity.p.StampDuties);
     const RegistrationFees = Number(this.Entity.p.RegistrationFees);
-    this.Entity.p.TotalExtraCharges = Math.ceil(LegalCharges + StampDuties + RegistrationFees);
+     const GSTonValueofAgreement = Number((this.Entity.p.GoodsServicesTax / 100) * (this.Entity.p.ValueOfAgreement));
+    this.Entity.p.TotalExtraCharges = Math.ceil(LegalCharges + StampDuties + RegistrationFees + GSTonValueofAgreement);
+    this.Entity.p.GstToatalAmount = GSTonValueofAgreement
     this.calculateGrandTotal()
   }
 
@@ -110,9 +112,9 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
     const TotalPlotAmount = Number(this.Entity.p.TotalPlotAmount);
     const ValueOfAgreement = Number(this.Entity.p.ValueOfAgreement);
     const TotalExtraCharges = Number(this.Entity.p.TotalExtraCharges);
-    const GSTonValueofAgreement = Number((this.Entity.p.GoodsServicesTax / 100) * (this.Entity.p.ValueOfAgreement));
-    this.Entity.p.GrandTotal = Math.ceil(TotalPlotAmount + ValueOfAgreement + TotalExtraCharges + GSTonValueofAgreement);
-    this.Entity.p.GstToatalAmount = GSTonValueofAgreement
+    // const GSTonValueofAgreement = Number((this.Entity.p.GoodsServicesTax / 100) * (this.Entity.p.ValueOfAgreement));
+    this.Entity.p.GrandTotal = Math.ceil(TotalPlotAmount + ValueOfAgreement + TotalExtraCharges);
+    // this.Entity.p.GstToatalAmount = GSTonValueofAgreement
   }
 
   selectAllValue(event: MouseEvent): void {
