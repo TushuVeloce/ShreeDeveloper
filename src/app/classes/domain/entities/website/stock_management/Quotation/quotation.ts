@@ -32,6 +32,8 @@ export class QuotationProps {
   public VendorName: string = '';
   public VendorTradeName: string = '';
   public AddressLine1: string = '';
+  // public InvoiceFile: File = null as any
+  public InvoicePath: string = "";
   public MaterialQuotationDetailsArray: QuotatedMaterialDetailProps[] = [];
 
 
@@ -178,9 +180,10 @@ export class Quotation implements IPersistable<Quotation> {
     return Quotation.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListBySiteRef(SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new QuotationFetchRequest();
     req.SiteRefs.push(SiteRef)
+    req.CompanyRefs.push(CompanyRef)
     let tdResponse = await Quotation.FetchTransportData(req, errorHandler) as TransportData;
     return Quotation.ListFromTransportData(tdResponse);
   }

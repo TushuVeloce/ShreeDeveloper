@@ -71,7 +71,6 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'F5' || (event.ctrlKey && event.key.toLowerCase() === 'r')) {
       event.preventDefault();
-      console.log('Reload prevented');
     }
   }
 
@@ -104,10 +103,6 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
     this.LoginToken = this.appStateManage.getLoginToken();
     this.Entity = RegistrarOffice.GetCurrentInstance();
-    // this.Entity = RegistrarOffice.CreateNewInstance();
-    //  this.Entity = history.state.registrarData;
-
-    console.log('this.Entity :', this.Entity);
 
     this.filePostViews['CustomerAadharFile'] = `${this.ImageBaseUrl}${this.Entity.p.CustomerAadharPath}/${this.LoginToken}?${this.TimeStamp}`;
     this.selectedFileNames['CustomerAadharFile'] = this.Entity.p.CustomerAadharPath;
@@ -171,12 +166,6 @@ export class RegistrarOfficeDetailComponent implements OnInit {
   selectAllValue(event: MouseEvent): void {
     const input = event.target as HTMLInputElement;
     input.select();
-  }
-
-
-  // Trigger file input when clicking the image
-  CustomerAadharTriggerFileInput(): void {
-    this.CustomerAadharFileInputRef.nativeElement.click();
   }
 
   onFileUpload(event: Event, type: string, pathKey: 'CustomerPanPath' | 'CustomerAadharPath' | 'Witness1AadharPath' | 'Witness1PanPath' | 'Witness2AadharPath' | 'Witness2PanPath' | 'AgreementDocumentPath' | 'SaleDeedDocumentPath' | 'IndexOriginalDocumentPath' | 'DastZeroxDocumentPath' | 'FerfarNoticeDocumentPath' | 'FinalCustomer712DocumentPath'): void {
@@ -284,7 +273,6 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-    // this.Entity.p.UpdatedDate = await CurrentDateTimeRequest.GetCurrentDateTime();
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.SiteRef = Number(this.appStateManage.StorageKey.getItem('siteRef'))
 
@@ -299,10 +287,6 @@ export class RegistrarOfficeDetailComponent implements OnInit {
     const lstFTO: FileTransferObject[] = this.uploadedFiles.map(f =>
       FileTransferObject.FromFile(f.label, f.file, f.filename)
     );
-    console.log('lstFTO :', lstFTO);
-
-    // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-    console.log('entitiesToSave :', entitiesToSave);
 
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
 

@@ -19,7 +19,7 @@
       <label for="SiteRef"><b>Site</b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
         [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
-        (ngModelChange)="getActualStageListByAllFilters()">
+        (ngModelChange)="getVendorQuotationListByCompanyRefAndSiteRef()">
         <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
       </nz-select>
     </div>
