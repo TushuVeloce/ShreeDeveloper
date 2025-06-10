@@ -130,11 +130,6 @@ export class EmployeeMasterDetailsComponent implements OnInit {
       this.Entity = Employee.CreateNewInstance();
       Employee.SetCurrentInstance(this.Entity);
     }
-    
-    this.InitialEntity = Object.assign(
-      Employee.CreateNewInstance(),
-      this.utils.DeepCopy(this.Entity)
-    ) as Employee;
   }
 
   getDepartmentListByCompanyRef = async () => {
@@ -201,6 +196,10 @@ export class EmployeeMasterDetailsComponent implements OnInit {
       const defaultCity = this.CityList.find(c => c.p.Ref === this.Entity.p.CityRef);
       this.Entity.p.CityRef = defaultCity ? defaultCity.p.Ref : this.CityList[0].p.Ref;
     }
+    this.InitialEntity = Object.assign(
+      Employee.CreateNewInstance(),
+      this.utils.DeepCopy(this.Entity)
+    ) as Employee;
   }
 
 

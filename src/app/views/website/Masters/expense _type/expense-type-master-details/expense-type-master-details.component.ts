@@ -59,10 +59,7 @@ export class ExpenseTypeMasterDetailsComponent implements OnInit {
       ExpenseType.SetCurrentInstance(this.Entity);
       this.getStageListByCompanyRef()
     }
-    this.InitialEntity = Object.assign(
-      ExpenseType.CreateNewInstance(),
-      this.utils.DeepCopy(this.Entity)
-    ) as ExpenseType;
+
     this.focusInput();
   }
 
@@ -81,6 +78,10 @@ export class ExpenseTypeMasterDetailsComponent implements OnInit {
     if (this.StageList.length > 0) {
       this.Entity.p.StageRef = this.StageList[0].p.Ref;
     }
+    this.InitialEntity = Object.assign(
+      ExpenseType.CreateNewInstance(),
+      this.utils.DeepCopy(this.Entity)
+    ) as ExpenseType;
   }
 
   AlertforStageSelection = () => {
