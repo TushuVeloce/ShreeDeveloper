@@ -8,7 +8,6 @@ import { AttendancePageRoutingModule } from './attendance-routing.module';
 
 import { AttendancePage } from './attendance.page';
 import { SharedModule } from "../../shared/shared.module";
-import { LoaderComponent } from "../../shared/loader/loader.component";
 
 @NgModule({
   imports: [
@@ -17,7 +16,6 @@ import { LoaderComponent } from "../../shared/loader/loader.component";
     IonicModule,
     AttendancePageRoutingModule,
     SharedModule,
-    LoaderComponent
 ],
   declarations: [AttendancePage]
 })

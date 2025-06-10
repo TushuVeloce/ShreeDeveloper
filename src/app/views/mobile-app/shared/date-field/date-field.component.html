@@ -1,0 +1,21 @@
+<ion-item lines="none" class="input-item" button>
+  <ion-label>{{ label }}</ion-label>
+  <ion-datetime-button [datetime]="controlName"></ion-datetime-button>
+</ion-item>
+
+<ion-modal keepContentsMounted="true">
+  <ng-template>
+    <ion-datetime [id]="controlName" [formControl]="control" [presentation]="presentation" [min]="min" [max]="max"
+      [readonly]="readonly" [placeholder]="placeholder" [show-default-buttons]="true" [displayFormat]="displayFormat"
+      [value]="control.value" showDefaultButtons>
+    </ion-datetime>
+  </ng-template>
+</ion-modal>
+
+<ion-text color="danger" *ngIf="control?.touched && control?.invalid">
+  <small *ngIf="control.errors?.['required']">This field is required.</small>
+</ion-text>
+
+<!-- <ion-text color="medium" *ngIf="control.value && !control.invalid">
+  <small>Selected: {{ control.value | date: displayFormat }}</small>
+</ion-text> -->

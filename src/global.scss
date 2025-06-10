@@ -762,3 +762,60 @@ ion-textarea {
 input[type="time"] {
   color-scheme: light;
 }
+
+.custom-alert .alert-wrapper {
+  border-radius: 16px;
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+  animation: fadeZoom 0.3s ease-in-out;
+}
+
+.custom-alert .alert-icon {
+  text-align: center;
+  font-size: 40px;
+  color: #e67e22;
+  margin-bottom: 10px;
+}
+
+.custom-alert .alert-msg {
+  font-size: 16px;
+  color: #444;
+  text-align: center;
+}
+
+.custom-alert .custom-cancel {
+  color: #c0392b;
+}
+
+.custom-alert .custom-confirm {
+  color: #27ae60;
+}
+
+@keyframes fadeZoom {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.custom-loading .custom-loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.custom-loading .custom-loading-message {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #444;
+}
+
+.custom-loading ion-spinner {
+  width: 40px;
+  height: 40px;
+}

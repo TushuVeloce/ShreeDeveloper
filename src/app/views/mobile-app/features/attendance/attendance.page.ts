@@ -14,20 +14,23 @@ import { CompanyStateManagement } from 'src/app/services/companystatemanagement'
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
-import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
+import { ToastService } from '../../core/toast.service';
+import { HapticService } from '../../core/haptic.service';
+import { AlertService } from '../../core/alert.service';
+import { LoadingService } from '../../core/loading.service';
 
 @Component({
   selector: 'app-attendance',
   templateUrl: './attendance.page.html',
   styleUrls: ['./attendance.page.scss'],
-  standalone:false
+  standalone: false
 })
 export class AttendancePage implements OnInit {
 
   // State and UI flags
   punchModalOpen = false;
-  isLoading = false;
+  // isLoading = false;
   isSubmitting = false;
 
   // Data fields
@@ -73,214 +76,110 @@ export class AttendancePage implements OnInit {
   constructor(
     private router: Router,
     private companyState: CompanyStateManagement,
-    private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
     private utils: Utils,
     private dtu: DTU,
     private payloadPacketFacade: PayloadPacketFacade,
     private serverCommunicator: ServerCommunicatorService,
     private dateConversionService: DateconversionService,
-    private bottomsheetMobileAppService: BottomsheetMobileAppService
+    private bottomsheetMobileAppService: BottomsheetMobileAppService,
+    private toastService: ToastService,
+    private haptic: HapticService,
+    private alertService: AlertService,
+    private loadingService: LoadingService
   ) { }
 
   async ngOnInit() {
     await this.loadAttendanceIfEmployeeExists();
   }
-
-  private async loadAttendanceIfEmployeeExists(): Promise<void> {
-    this.companyRef = Number(this.appStateManage.StorageKey.getItem('SelectedCompanyRef'));
-    this.employeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
-    if (this.employeeRef > 0) {
-      // Retrieve employee reference from storage (ensure proper type conversion)
-      this.employeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
-
-      // Get current date time and set state
-      try {
-        const strCurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
-        this.DateValue = strCurrentDateTime.substring(0, 10);
-        this.currentDateTime = strCurrentDateTime;
-      } catch (error) {
-        console.error('Error obtaining current date/time:', error);
-      }
-
-      // Load check-in data and weekly attendance logs
-      await Promise.all([
-        this.getCheckInData(),
-        this.getWeekWiseAttendanceLogByAttendanceListType()
-      ]);
-    } else {
-      await this.uiUtils.showErrorToster('Employee not selected');
-    }
+  ionViewWillEnter = async () => {
+    await this.loadAttendanceIfEmployeeExists();
   }
-
-
-  // ionViewWillEnter = async () => {
-  //   await this.getCheckInData(),
-  //   await this.getWeekWiseAttendanceLogByAttendanceListType(), // ← Called every time user comes back
-  // }
-  ngOnDestroy(): void {
+  ngOnDestroy = () => {
     // cleanup logic if needed later
   }
 
-  async handleRefresh(event: CustomEvent): Promise<void> {
-    await this.getCheckInData(),
-      await this.getWeekWiseAttendanceLogByAttendanceListType(),
-      (event.target as HTMLIonRefresherElement).complete();
+  private loadAttendanceIfEmployeeExists = async () => {
+    try {
+      await this.loadingService.show();
+      this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
+      this.employeeRef = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
+      if (this.employeeRef > 0) {
+        // Retrieve employee reference from storage (ensure proper type conversion)
+        this.employeeRef = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
+
+        // Get current date time and set state
+        try {
+          const strCurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
+          this.DateValue = strCurrentDateTime.substring(0, 10);
+          this.currentDateTime = strCurrentDateTime;
+        } catch (error) {
+          this.toastService.present('Error obtaining current date/time', 1000, 'danger');
+          await this.haptic.warning();
+          // console.error('Error obtaining current date/time:', error);
+        }
+
+        // Load check-in data and weekly attendance logs
+        await Promise.all([
+          this.getCheckInData(),
+          this.getWeekWiseAttendanceLogByAttendanceListType()
+        ]);
+      } else {
+        this.toastService.present('Employee not selected', 1000, 'danger');
+        await this.haptic.warning();
+        // await this.uiUtils.showErrorToster('Employee not selected');
+      }
+    } catch (error) {
+
+    } finally {
+      await this.loadingService.hide();
+    }
   }
 
-  // async getCheckInData(): Promise<void> {
-  //   try {
-  //     this.isLoading = true;
-  //     this.isOnLeave = false;
-  //     this.checkInTime = '';
-  //     this.checkOutTime = '';
-  //     this.attendanceLog = AttendanceLog.CreateNewInstance();
-
-  //     const tranDate = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
-  //     const req = new AttendanceLogCheckInCustomRequest();
-  //     req.TransDateTime = tranDate;
-  //     // Instead of calling companyRef as a function, use the proper method from the service
-  //     req.CompanyRef = this.companyState.getCurrentCompanyRef();
-  //     req.EmployeeRef = this.employeeRef;
-
-  //     const transportData = req.FormulateTransportData();
-  //     const payload = this.payloadPacketFacade.CreateNewPayloadPacket2(transportData);
-  //     const response = await this.serverCommunicator.sendHttpRequest(payload);
-
-  //     if (!response.Successful) {
-  //       this.bothButtonsEnabled = false;
-  //       await this.uiUtils.showErrorMessage('Error', response.Message);
-  //       return;
-  //     }
-
-  //     const tdResult = JSON.parse(response.Tag) as TransportData;
-  //     const res = AttendanceLogCheckInCustomRequest.FromTransportData(tdResult);
-  //     console.log('res :', res);
-
-  //     if (res.Data.length > 0) {
-  //       const checkInData: AttendanceLogProps[] = res.Data as AttendanceLogProps[];
-  //       console.log('checkInData :', checkInData);
-  //       const pendingCheckIn = checkInData.filter(e => e.CheckOutTime === '');
-  //       if (pendingCheckIn.length > 0) {
-  //         Object.assign(this.attendanceLog.p, pendingCheckIn[0]);
-  //       } else {
-  //         const completedCheckIns = checkInData.filter(e => e.CheckOutTime !== '');
-  //         if (completedCheckIns.length > 0) {
-  //           Object.assign(this.attendanceLog.p, completedCheckIns[0]);
-  //         }
-  //       }
-  //       this.isOnLeave = Boolean(this.attendanceLog.p.IsLeave);
-  //       this.checkInTime = this.attendanceLog.p.CheckInTime;
-  //       this.checkOutTime = this.attendanceLog.p.CheckOutTime;
-  //     }
-  //     // Set button statuses based on attendanceLog properties
-  //     if (!this.attendanceLog.p.FirstCheckInTime && !this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime) {
-  //       this.isCheckInEnabled = true;
-  //       this.bothButtonsEnabled = true;
-
-  //     } else if (this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime) {
-  //       this.isCheckInEnabled = false;
-  //       this.bothButtonsEnabled = true;
-
-  //     } else if (this.attendanceLog.p.CheckInTime && this.attendanceLog.p.CheckOutTime) {
-  //       this.isCheckInEnabled = true;
-  //       this.bothButtonsEnabled = true;
-
-  //     } else {
-  //       this.isCheckInEnabled = false;
-  //       this.bothButtonsEnabled = false;
-
-  //     }
-  //   } catch (error) {
-  //     // console.error('Error in getCheckInData:', error);
-  //   } finally {
-  //     this.isLoading = false;
-  //   }
-  // }
-  // async getCheckInData(): Promise<void> {
-  //   try {
-  //     this.isLoading = true;
-  //     this.isOnLeave = false;
-  //     this.checkInTime = '';
-  //     this.checkOutTime = '';
-  //     this.attendanceLog = AttendanceLog.CreateNewInstance();
-
-  //     const tranDate = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
-  //     console.log('this.employeeRef, this.companyRef,tranDate :', this.employeeRef, this.companyRef, tranDate);
-  //     // return;
-  //     let lst = await AttendanceLog.FetchEntireListByCompanyRef(this.employeeRef, this.companyRef, tranDate, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //     if (lst.length > 0) {
-  //       // const checkInData: AttendanceLogProps[] = lst as AttendanceLogProps[];
-  //       const checkInData: any[] = lst;
-  //       console.log('checkInData :', checkInData);
-  //       const pendingCheckIn = checkInData.filter(e => e.CheckOutTime === '');
-  //       if (pendingCheckIn.length > 0) {
-  //         Object.assign(this.attendanceLog.p, pendingCheckIn[0]);
-  //       } else {
-  //         const completedCheckIns = checkInData.filter(e => e.CheckOutTime !== '');
-  //         if (completedCheckIns.length > 0) {
-  //           Object.assign(this.attendanceLog.p, completedCheckIns[0]);
-  //         }
-  //       }
-  //       this.isOnLeave = Boolean(this.attendanceLog.p.IsLeave);
-  //       this.checkInTime = this.attendanceLog.p.CheckInTime;
-  //       this.checkOutTime = this.attendanceLog.p.CheckOutTime;
-  //     } else {
-  //       this.bothButtonsEnabled = false;
-  //       await this.uiUtils.showErrorMessage('Error', "unable to get data");
-  //       return;
-  //     }
-
-  //     // Set button statuses based on attendanceLog properties
-  //     if (!this.attendanceLog.p.FirstCheckInTime && !this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime) {
-  //       this.isCheckInEnabled = true;
-  //       this.bothButtonsEnabled = true;
-
-  //     } else if (this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime) {
-  //       this.isCheckInEnabled = false;
-  //       this.bothButtonsEnabled = true;
-
-  //     } else if (this.attendanceLog.p.CheckInTime && this.attendanceLog.p.CheckOutTime) {
-  //       this.isCheckInEnabled = true;
-  //       this.bothButtonsEnabled = true;
-
-  //     } else {
-  //       this.isCheckInEnabled = false;
-  //       this.bothButtonsEnabled = false;
-
-  //     }
-  //   } catch (error) {
-  //     // console.error('Error in getCheckInData:', error);
-  //   } finally {
-  //     this.isLoading = false;
-  //   }
-  // }
-  
-  async getCheckInData(): Promise<void> {
+  handleRefresh = async (event: CustomEvent) => {
     try {
-      this.isLoading = true;
+      await this.loadingService.show();
+      await this.getCheckInData(),
+        await this.getWeekWiseAttendanceLogByAttendanceListType(),
+        (event.target as HTMLIonRefresherElement).complete();
+    } catch (error) {
+
+    } finally {
+      await this.loadingService.hide();
+    }
+  }
+
+  getCheckInData = async () => {
+    try {
+      // await this.loadingService.show();
       this.isOnLeave = false;
       this.checkInTime = '';
       this.checkOutTime = '';
       this.attendanceLog = AttendanceLog.CreateNewInstance();
 
       const tranDate = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
-      const companyRef = this.companyState.getCurrentCompanyRef(); // fixed here
-      console.log('employeeRef, companyRef, tranDate :', this.employeeRef, companyRef, tranDate);
+      // const companyRef = this.companyState.getCurrentCompanyRef(); 
+      // console.log('employeeRef, companyRef, tranDate :', this.employeeRef, companyRef, tranDate);
 
       const lst = await AttendanceLog.FetchEntireListByCompanyRef(
         this.employeeRef,
-        companyRef,
+        this.companyRef,
         tranDate,
-        async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
+        async errMsg => {
+          this.toastService.present('Error ' + errMsg, 1000, 'danger'),
+            await this.haptic.error()
+        }
       );
-      console.log('lst :', lst);
+      console.log('lst :', lst, this.employeeRef,
+        this.companyRef,
+        tranDate,);
 
       if (!lst || lst.length === 0) {
         // this.bothButtonsEnabled = false;
         this.isCheckInEnabled = true;
         this.bothButtonsEnabled = true;
-        // await this.uiUtils.showErrorMessage('Error', "Unable to get attendance data.");
+        // this.toastService.present('Error Unable to get attendance data', 1000, 'danger');
+        // await this.haptic.warning();
         return;
       }
 
@@ -318,9 +217,10 @@ export class AttendancePage implements OnInit {
         this.bothButtonsEnabled = false;
       }
     } catch (error) {
-      await this.uiUtils.showErrorMessage('Error', 'Unexpected error while fetching attendance.');
+      this.toastService.present('Error Unexpected error while fetching attendance.', 1000, 'danger');
+      await this.haptic.error();
     } finally {
-      this.isLoading = false;
+      // await this.loadingService.hide();
     }
   }
 
@@ -329,7 +229,7 @@ export class AttendancePage implements OnInit {
     return this.dateConversionService.formatDate(date);
   }
 
-  gridItemsFunction(id: number): void {
+  gridItemsFunction = (id: number) => {
     switch (id) {
       case 100:
         this.getSalarySlip();
@@ -345,7 +245,7 @@ export class AttendancePage implements OnInit {
     }
   }
 
-  public async selectAttendanceLocationBottomsheet(): Promise<void> {
+  public selectAttendanceLocationBottomsheet = async () => {
     try {
       const options = this.attendanceLocationTypeList.map((item) => ({ p: item }));
 
@@ -359,7 +259,7 @@ export class AttendancePage implements OnInit {
     }
   }
 
-  public async selectSiteBottomsheet(): Promise<void> {
+  public selectSiteBottomsheet = async () => {
     try {
       const options = this.siteList;
       // const options = this.attendanceLocationTypeList.map((item) => ({ p: item }));
@@ -375,33 +275,37 @@ export class AttendancePage implements OnInit {
     }
   }
 
-  private async openSelectModal(
+  private openSelectModal = async (
     dataList: any[],
     selectedItems: any[],
     multiSelect: boolean,
     title: string,
     MaxSelection: number,
     updateCallback: (selected: any[]) => void
-  ): Promise<void> {
+  ) => {
     const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, multiSelect, title, MaxSelection);
     if (selected) updateCallback(selected);
   }
 
-  async openPunchModal(): Promise<void> {
+  openPunchModal = async () => {
     if (this.isCheckInEnabled) {
       this.punchModalOpen = true;
     }
     try {
       this.siteList = await Site.FetchEntireListByCompanyRef(
         this.companyState.getCurrentCompanyRef(),
-        async (errMsg: string) => await this.uiUtils.showErrorMessage('Error', errMsg)
+        async (errMsg: string) => {
+          this.toastService.present('Error' + errMsg, 1000, 'danger');
+          await this.haptic.error();
+        }
       );
     } catch (error) {
-      console.error('Error fetching site list:', error);
+      this.toastService.present('Error fetching site list:' + error, 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
-  async takePhoto(type: 'before' | 'after'): Promise<void> {
+  takePhoto = async (type: 'before' | 'after') => {
     try {
       const image = await Camera.getPhoto({
         quality: 80,
@@ -420,21 +324,23 @@ export class AttendancePage implements OnInit {
         this.capturedWorkLocationPhoto = image.webPath ?? null;
       }
     } catch (error) {
-      console.error(`Error capturing ${type} photo:`, error);
+      this.toastService.present(`Error capturing ${type} photo:` + error, 1000, 'danger');
+      await this.haptic.error();
+      // console.error(`Error capturing ${type} photo:`, error);
     }
   }
 
 
-  async uriToFile(uri: string, fileName: string, mimeType = 'image/jpeg'): Promise<File> {
+  uriToFile = async (uri: string, fileName: string, mimeType = 'image/jpeg') => {
     const response = await fetch(uri);
     const blob = await response.blob();
     return new File([blob], fileName, { type: mimeType });
   }
 
 
-  async submitPunchIn(): Promise<void> {
+  submitPunchIn = async () => {
     try {
-      this.isLoading = true;
+      await this.loadingService.show();
       this.isSubmitting = true;
 
       this.attendanceLog.p.IsCheckIn = true;
@@ -477,11 +383,15 @@ export class AttendancePage implements OnInit {
       const tr = await this.utils.SavePersistableEntities(entitiesToSave, filesToUpload);
 
       if (!tr.Successful) {
-        await this.uiUtils.showErrorMessage('Error', tr.Message);
+        // await this.uiUtils.showErrorMessage('Error', tr.Message);
+        this.toastService.present(`Error ${tr.Message}`, 1000, 'danger');
+        await this.haptic.error();
         return;
       }
 
-      await this.uiUtils.showSuccessToster('Punch in successfully!');
+      // await this.uiUtils.showSuccessToster('Punch in successfully!');
+      this.toastService.present(`Punch in successfully!`, 1000, 'success');
+      await this.haptic.success();
 
       // Reset state
       this.attendanceLog = AttendanceLog.CreateNewInstance();
@@ -493,17 +403,19 @@ export class AttendancePage implements OnInit {
         this.getWeekWiseAttendanceLogByAttendanceListType()
       ]);
     } catch (error) {
-      console.error('Error in submitPunchIn:', error);
+      // console.error('Error in submitPunchIn:', error);
+      this.toastService.present(`Error ${error}`, 1000, 'danger');
+      await this.haptic.error();
     } finally {
       this.isSubmitting = false;
       this.punchModalOpen = false;
-      this.isLoading = false;
+      await this.loadingService.hide();
     }
   }
 
-  async submitPunchOut(): Promise<void> {
+  submitPunchOut = async () => {
     try {
-      this.isLoading = true;
+      await this.loadingService.show();
       this.attendanceLog.p.IsCheckIn = false;
       this.attendanceLog.p.CompanyRef = this.companyState.getCurrentCompanyRef();
       this.attendanceLog.p.EmployeeRef = this.employeeRef;
@@ -515,10 +427,13 @@ export class AttendancePage implements OnInit {
 
       const tr = await this.utils.SavePersistableEntities(entitiesToSave);
       if (!tr.Successful) {
-        await this.uiUtils.showErrorMessage('Error', tr.Message);
+        this.toastService.present(`Error ${tr.Message}`, 1000, 'danger');
+        console.log('tr.Message :', tr.Message);
+        await this.haptic.error();
         return;
       }
-      await this.uiUtils.showSuccessToster('Punch out successfully!');
+      this.toastService.present(`Punch out successfully!`, 1000, 'success');
+      await this.haptic.success();
       // Reset and refresh data
       this.attendanceLog = AttendanceLog.CreateNewInstance();
       await Promise.all([
@@ -529,33 +444,37 @@ export class AttendancePage implements OnInit {
       // console.error('Error in submitPunchOut:', error);
     } finally {
       this.isSubmitting = false;
-      this.isLoading = false;
+      await this.loadingService.hide();
     }
   }
 
-  async getWeekWiseAttendanceLogByAttendanceListType(): Promise<void> {
+  getWeekWiseAttendanceLogByAttendanceListType = async () => {
     try {
-      this.isLoading = true;
-      const logs = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(
-        this.companyState.getCurrentCompanyRef(),
-        AttendanceLogType.WeeklyAttendanceLog,
-        async (errMsg: string) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      // await this.loadingService.show();
+      const logs = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(
+        this.companyRef,
+        AttendanceLogType.WeeklyAttendanceLog, this.employeeRef,
+        async (errMsg: string) => {
+          this.toastService.present(`Error ${errMsg}`, 1000, 'success');
+          await this.haptic.error();
+        }
       );
       this.weeklyAttendanceLogs = logs;
       // Optionally, apply further filtering before assigning to filteredWeeklyAttendanceLogs
       this.filteredWeeklyAttendanceLogs = logs;
+      console.log('filteredWeeklyAttendanceLogs :', this.filteredWeeklyAttendanceLogs);
     } catch (error) {
       // console.error('Error fetching weekly attendance logs:', error);
     } finally {
-      this.isLoading = false;
+      // await this.loadingService.hide();
     }
   }
 
-  getSalarySlip(): void {
+  getSalarySlip = () => {
     this.router.navigate(['/mobileapp/tabs/attendance/salary-slip']);
   }
 
-  requestLeave(): void {
+  requestLeave = () => {
     this.router.navigate(['/mobileapp/tabs/attendance/leave']);
   }
 
@@ -563,7 +482,7 @@ export class AttendancePage implements OnInit {
   //   this.router.navigate(['/app_homepage/tabs/attendance-management/present-employee']);
   // }
 
-  viewAllAttendance(): void {
+  viewAllAttendance = () => {
     this.router.navigate(['/mobileapp/tabs/attendance/attendance-details']);
   }
 

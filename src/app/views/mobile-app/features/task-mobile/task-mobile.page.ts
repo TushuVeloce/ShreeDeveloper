@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { FilterService } from 'src/app/services/filter.service';
+import { AlertService } from '../../core/alert.service';
 
 type Task = {
   id: string;
@@ -208,7 +209,7 @@ export class TaskMobilePage implements OnInit {
   }
 
 
-  constructor(private router: Router, private modalCtrl: ModalController, private filterService: FilterService) { }
+  constructor(private router: Router, private modalCtrl: ModalController, private filterService: FilterService, private alertService: AlertService) { }
 
   ngOnInit() {
     this.highPriorityTasks = this.tasks.filter(task => task.priority === 200);
@@ -223,7 +224,31 @@ export class TaskMobilePage implements OnInit {
   }
 
   editTask(taskId: string) {
-    this.router.navigate(['mobileapp/tabs/task/edit']);
+    this.alertService.presentDynamicAlert({
+      header: 'Are you sure?',
+      subHeader: 'Confirmation needed',
+      message: 'This action will delete your data permanently.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'custom-cancel',
+          handler: () => {
+            console.log('User cancelled.');
+          }
+        },
+        {
+          text: 'Yes, Delete',
+          cssClass: 'custom-confirm',
+          handler: () => {
+            console.log('User confirmed deletion.');
+            // perform deletion logic here
+            this.router.navigate(['mobileapp/tabs/task/edit']);
+          }
+        }
+      ]
+    });
+
   }
 
   // selectedFilters:any = {};

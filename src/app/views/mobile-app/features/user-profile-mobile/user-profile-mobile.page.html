@@ -1,67 +1,69 @@
-<app-loader *ngIf="isLoading"></app-loader>
 <app-header-with-back-handler title="Profile"></app-header-with-back-handler>
-<ion-content [fullscreen]="true">
-  <!-- <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">UserProfile</ion-title>
-    </ion-toolbar>
-  </ion-header> -->
 
-  <ion-grid>
-    <!-- Loader -->
-    <!-- <ion-row *ngIf="isLoading" class="ion-justify-content-center ion-padding">
-      <ion-spinner name="dots"></ion-spinner>
-    </ion-row> -->
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-grid class="h-100">
+    <ion-row class="ion-justify-content-center ion-align-items-center h-100">
+      <ion-col size="12" size-sm="10" size-md="6" size-lg="4" class="ion-text-center">
 
-    <!-- Profile Image -->
-    <ion-row class="ion-justify-content-center ion-padding-top">
-      <ion-avatar>
-        <img [src]="imagePreviewUrl || 'assets/logos/dp.png'" />
-      </ion-avatar>
-    </ion-row>
+        <!-- Profile Picture Upload -->
+        <div class="profile-image-wrapper">
+          <img *ngIf="imagePreviewUrl; else placeholderImage" [src]="imagePreviewUrl" class="profile-img"
+            alt="Profile" />
+          <ng-template #placeholderImage>
+            <ion-icon name="person-circle-outline" class="placeholder-icon"></ion-icon>
+          </ng-template>
+          <ion-button fill="clear" size="small" (click)="addImage()">Change Photo</ion-button>
+        </div>
 
-    <ion-row class="ion-justify-content-center">
-      <ion-button size="small" fill="outline" (click)="addImage()">Add image</ion-button>
-    </ion-row>
+        <!-- Profile Form -->
+        <form [formGroup]="employeeForm" (ngSubmit)="SaveProfile()" class="form-wrapper">
 
-    <!-- Profile Form -->
-    <ion-list lines="full" class="ion-padding">
-      <ion-item class="input-item">
-        <ion-label position="stacked">Name</ion-label>
-        <ion-input [(ngModel)]="Entity.p.Name" placeholder="Enter name"></ion-input>
-        <ion-icon slot="end" name="pencil-outline"></ion-icon>
-      </ion-item>
+          <app-input-field label="Name" controlName="name" type="text" [formGroup]="employeeForm"
+            placeholder="Enter your name" customClass="input-wrapper">
+          </app-input-field>
 
-      <ion-item class="input-item">
-        <ion-label position="stacked">Date of Birth</ion-label>
-        <ion-input [(ngModel)]="Entity.p.DOB" placeholder="YYYY-MM-DD"></ion-input>
-        <ion-icon slot="end" name="calendar-outline"></ion-icon>
-      </ion-item>
+          <app-input-field label="Email" controlName="email" type="email" [formGroup]="employeeForm"
+            placeholder="Enter your email" customClass="input-wrapper">
+          </app-input-field>
 
-      <ion-item disabled class="input-item">
-        <ion-label position="stacked">Phone</ion-label>
-        <ion-input [(ngModel)]="Entity.p.ContactNos" type="tel" placeholder="+1234567890"></ion-input>
-        <ion-icon slot="end" name="call-outline"></ion-icon>
-      </ion-item>
+          <app-input-field label="Mobile Number" controlName="mobilenumber" type="tel" [formGroup]="employeeForm"
+            placeholder="Enter your phone" customClass="input-wrapper">
+          </app-input-field>
 
-      <ion-item disabled class="input-item">
-        <ion-label position="stacked">Email</ion-label>
-        <ion-input [(ngModel)]="Entity.p.OfficialEmailId" type="email" placeholder="example@mail.com"></ion-input>
-        <ion-icon slot="end" name="mail-outline"></ion-icon>
-      </ion-item>
+          <app-input-field label="Address" controlName="address" type="text" [formGroup]="employeeForm"
+            placeholder="Enter your address" customClass="input-wrapper">
+          </app-input-field>
 
-      <ion-item class="input-item">
-        <ion-label position="stacked">Gender</ion-label>
-        <ion-select [(ngModel)]="Entity.p.Gender" placeholder="Select">
-          <ion-select-option value="Male">Male</ion-select-option>
-          <ion-select-option value="Female">Female</ion-select-option>
-          <ion-select-option value="Other">Other</ion-select-option>
-        </ion-select>
-      </ion-item>
-    </ion-list>
+          <!-- <app-input-field label="Date of Birth" controlName="DOB" type="date" [formGroup]="employeeForm"
+            placeholder="Select DOB" customClass="input-wrapper">
+          </app-input-field> -->
+          
+          <app-date-field label="Date of Birth" controlName="DOB" [formGroup]="employeeForm"
+          displayFormat="dd MMM yyyy" placeholder="Choose your birthdate" presentation="date" customClass="input-wrapper">
+          </app-date-field>
 
-    <ion-row class="ion-justify-content-center ion-padding">
-      <ion-button expand="block" (click)="SaveProfile()">Update Profile</ion-button>
+          <app-input-field label="Gender" controlName="gender" type="text" [formGroup]="employeeForm"
+            placeholder="Enter your Gender" customClass="input-wrapper">
+          </app-input-field>
+
+          <ion-item lines="none" class="input-wrapper">
+            <ion-label>Gender</ion-label>
+            <ion-select formControlName="gender" placeholder="Select Gender">
+              <ion-select-option *ngFor="let gender of GenderList" [value]="gender.Ref">
+                {{ gender.Name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <app-custom-button label="Update Profile" type="submit" [loading]="isLoggingIn" color="primary" icon="save"
+            iconPosition="end" shape="round" fill="solid" [disabled]="employeeForm.invalid">
+          </app-custom-button>
+
+        </form>
+
+        <ion-button fill="clear" expand="full" class="Button-In-loginPage" (click)="BackProfile()">Back to
+          Home</ion-button>
+      </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>

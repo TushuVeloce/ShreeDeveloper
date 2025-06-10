@@ -60,7 +60,7 @@ export class TabsPage implements OnInit {
         const lastSegment = url.split('/').pop();
 
         // Hide tab bar if last segment is 'add' or 'edit'
-        this.showTabs = !(lastSegment === 'add' || lastSegment === 'edit');
+        this.showTabs = !(lastSegment === 'add' || lastSegment === 'edit' || lastSegment === 'user-profile');
       });
   }
 

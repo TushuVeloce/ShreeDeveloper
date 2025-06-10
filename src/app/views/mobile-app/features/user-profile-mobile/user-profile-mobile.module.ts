@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -8,7 +8,6 @@ import { UserProfileMobilePageRoutingModule } from './user-profile-mobile-routin
 
 import { UserProfileMobilePage } from './user-profile-mobile.page';
 import { SharedModule } from "../../shared/shared.module";
-import { LoaderComponent } from "../../shared/loader/loader.component";
 
 @NgModule({
   imports: [
@@ -17,7 +16,7 @@ import { LoaderComponent } from "../../shared/loader/loader.component";
     IonicModule,
     UserProfileMobilePageRoutingModule,
     SharedModule,
-    LoaderComponent
+    ReactiveFormsModule
 ],
   declarations: [UserProfileMobilePage]
 })
