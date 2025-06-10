@@ -1,7 +1,7 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AttendanceLogType, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
-import { AttendanceLogCountCustomRequest } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogcountcustomrequest';
+import { AttendanceLogsCount } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogcount/attendancelogsCount';
 import { AttendanceLogs, AttendanceLogsProps } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogs';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
@@ -23,6 +23,7 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class AttendanceLogsComponent implements OnInit {
   Entity: AttendanceLogs = AttendanceLogs.CreateNewInstance();
+  AttendanceLogCount: AttendanceLogsCount = AttendanceLogsCount.CreateNewInstance();
   MasterList: AttendanceLogs[] = [];
   DisplayMasterList: AttendanceLogs[] = [];
   SelectedAttendanceLogs: AttendanceLogs = AttendanceLogs.CreateNewInstance();
@@ -63,6 +64,7 @@ export class AttendanceLogsComponent implements OnInit {
     private serverCommunicator: ServerCommunicatorService,
     private DateconversionService: DateconversionService,
     private router: Router,
+    private appStateManage: AppStateManageService, 
   ) {
     effect(async () => {
       await this.getTodayAttendanceLogByAttendanceListType();
@@ -72,6 +74,7 @@ export class AttendanceLogsComponent implements OnInit {
   ngOnInit() {
     this.loadPaginationData();
     this.getEmployeeListByCompanyRef()
+      this.appStateManage.setDropdownDisabled(false);
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
     this.isTodayAttendanceView = true;
   }
@@ -199,36 +202,55 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   // CustomFetchRequest
+  // getAttendanceCount = async (AttendanceLogType: number) => {
+  //   // let tranDate = this.dtu.ConvertStringDateToFullFormat(this.Date!)
+  //   let req = new AttendanceLogCountCustomRequest();
+  //   // req.TransDateTime = tranDate;
+  //   req.CompanyRef = this.companyRef();
+  //   req.EmployeeRef = this.Entity.p.EmployeeRef;
+  //   req.Months = this.Entity.p.Months
+  //   req.AttendanceLogTypes = AttendanceLogType
+
+  //   let td = req.FormulateTransportData();
+  //   let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+  //   let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+
+  //   if (!tr.Successful) {
+  //     await this.uiUtils.showErrorMessage('Error', tr.Message);
+  //     return;
+  //   }
+  //   let tdResult = JSON.parse(tr.Tag) as TransportData;
+  //   let res = AttendanceLogCountCustomRequest.FromTransportData(tdResult);
+
+  //   const summaryCollection = tdResult.MainData?.Collections?.find((c: any) =>
+  //     c?.Name === '' && c?.Entries?.length > 0
+  //   );
+
+  //   if (summaryCollection && summaryCollection.Entries.length > 0) {
+  //     let DailyRecord: AttendanceLogsProps[] = res.Data as AttendanceLogsProps[];
+  //     Object.assign(this.Entity.p, summaryCollection.Entries[0]);
+
+  //   }
+  // }
+
+
   getAttendanceCount = async (AttendanceLogType: number) => {
-    // let tranDate = this.dtu.ConvertStringDateToFullFormat(this.Date!)
-    let req = new AttendanceLogCountCustomRequest();
-    // req.TransDateTime = tranDate;
-    req.CompanyRef = this.companyRef();
-    req.EmployeeRef = this.Entity.p.EmployeeRef;
-    req.Months = this.Entity.p.Months
-    req.AttendanceLogTypes = AttendanceLogType
-
-    let td = req.FormulateTransportData();
-    let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-
-    if (!tr.Successful) {
-      await this.uiUtils.showErrorMessage('Error', tr.Message);
-      return;
+      this.AttendanceLogCount.p.TeamSize = 0
+      this.AttendanceLogCount.p.Present = 0
+      this.AttendanceLogCount.p.Absent = 0
+      this.AttendanceLogCount.p.OnLeaveDaily = 0
+      this.AttendanceLogCount.p.TotalDaysInMonth = 0
+      this.AttendanceLogCount.p.TotalDaysInWeek = 0
+      let lst = await AttendanceLogsCount.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(),AttendanceLogType,this.Entity.p.Months,this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      console.log('lst :', lst);
+      this.AttendanceLogCount.p.TeamSize = lst[0]?.p?.TeamSize
+      this.AttendanceLogCount.p.Present = lst[0]?.p?.Present
+      this.AttendanceLogCount.p.Absent = lst[0]?.p?.Absent
+      this.AttendanceLogCount.p.OnLeaveDaily = lst[0]?.p?.OnLeaveDaily
+      this.AttendanceLogCount.p.TotalDaysInMonth = lst[0]?.p?.TotalDaysInMonth
+      this.AttendanceLogCount.p.TotalDaysInWeek = lst[0]?.p?.TotalDaysInWeek
     }
-    let tdResult = JSON.parse(tr.Tag) as TransportData;
-    let res = AttendanceLogCountCustomRequest.FromTransportData(tdResult);
-
-    const summaryCollection = tdResult.MainData?.Collections?.find((c: any) =>
-      c?.Name === '' && c?.Entries?.length > 0
-    );
-
-    if (summaryCollection && summaryCollection.Entries.length > 0) {
-      let DailyRecord: AttendanceLogsProps[] = res.Data as AttendanceLogsProps[];
-      Object.assign(this.Entity.p, summaryCollection.Entries[0]);
-
-    }
-  }
+  
 
   AddAttendance = () => {
     if (this.companyRef() <= 0) {

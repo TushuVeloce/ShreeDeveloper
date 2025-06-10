@@ -4,20 +4,21 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class AttendanceLogsFetchRequest
-{
-    public static readonly FetchRequestType: string = "AttendanceLogFetchRequest";
 
-    CompanyRefs: number[] = [];
-    Months: number[] = [];
-    EmployeeRefs: number[] = [];
-    // AttendanceLogsRefs: number[] = [];
-    AttendanceLogTypes: number[] = [];
+
+export class AttendanceLogCountFetchRequest
+{
+    public static readonly FetchRequestType: string = "AttendanceEvaluatorFetchRequest";
+
+     EmployeeRef: number = 0;
+    CompanyRef: number = 0;
+    Months : number = 0;
+    AttendanceLogTypes : number = 0;
     
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, AttendanceLogsFetchRequest.FetchRequestType) as DataCollection;
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, AttendanceLogCountFetchRequest.FetchRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 
@@ -28,4 +29,3 @@ export class AttendanceLogsFetchRequest
         return td;
     }
 }
-
