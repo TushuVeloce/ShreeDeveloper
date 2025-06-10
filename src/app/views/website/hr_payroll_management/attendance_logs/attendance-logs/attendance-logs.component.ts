@@ -187,7 +187,7 @@ export class AttendanceLogsComponent implements OnInit {
   }
 
   // headers as per required
-  baseHeaders: string[] = ['Sr. no', 'Employee Name', 'Date', 'Check In Time', 'Check Out Time', 'Total Time', 'In OfficeHours'];
+  baseHeaders: string[] = ['Sr. no', 'Employee Name', 'Date', 'Latest Check In Time', 'First Check In Time', 'Last Check Out Time', 'Total Time', 'In Office Hours'];
   get headers(): string[] {
     if (this.isTodayAttendanceView) {
       return [...this.baseHeaders, 'On Leave', 'Leave Type'];
@@ -241,7 +241,6 @@ export class AttendanceLogsComponent implements OnInit {
     this.AttendanceLogCount.p.TotalDaysInMonth = 0
     this.AttendanceLogCount.p.TotalDaysInWeek = 0
     let lst = await AttendanceLogsCount.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendanceLogType, this.Entity.p.Months, this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.AttendanceLogCount.p.TeamSize = lst[0]?.p?.TeamSize
     this.AttendanceLogCount.p.Present = lst[0]?.p?.Present
     this.AttendanceLogCount.p.Absent = lst[0]?.p?.Absent

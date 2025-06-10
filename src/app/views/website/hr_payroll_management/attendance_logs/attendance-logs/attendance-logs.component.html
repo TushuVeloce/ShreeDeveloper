@@ -117,11 +117,12 @@
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{attendancelog.p.EmployeeName}}</td>
             <td Class="tbldata">{{ formatDate(attendancelog.p.TransDateTime) }}</td>
+            <td Class="tbldata">{{attendancelog.p.LatestCheckInTime}}</td>
             <td Class="tbldata">{{attendancelog.p.FirstCheckInTime}}</td>
             <td Class="tbldata">{{attendancelog.p.LastCheckOutTime}}</td>
             <td Class="tbldata">{{attendancelog.p.TotalWorkingHrs}}</td>
 
-            <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.InOfficeHrs}}</td>
+            <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.TotalWorkingHrs}}</td>
             <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.OnLeave}}</td>
             <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.LeaveType}}</td>
             <!-- <td class="tbldata">

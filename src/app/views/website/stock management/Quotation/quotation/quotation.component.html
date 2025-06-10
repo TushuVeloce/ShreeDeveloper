@@ -4,7 +4,7 @@
   </div>
   <div class="col-4 mb-2 search-container_light">
     <app-shared-filter [masterList]="MasterList"
-      [filterFields]="['Name', 'NumberOfPlots', 'SiteInchargeName', 'AddressLine2']"
+      [filterFields]="['SiteName', 'Date', 'VendorName', 'AddressLine2']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">
