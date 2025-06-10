@@ -18,6 +18,7 @@ import { ToastService } from '../../core/toast.service';
 import { HapticService } from '../../core/haptic.service';
 import { AlertService } from '../../core/alert.service';
 import { LoadingService } from '../../core/loading.service';
+import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
 
 @Component({
   selector: 'app-user-profile-mobile',
@@ -43,6 +44,7 @@ export class UserProfileMobilePage implements OnInit {
   allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
   isLoading: boolean = false;
   Date: string | null = null;
+  selectedGender: any[] = [];
 
 
   INDPhoneNo: string = ValidationPatterns.INDPhoneNo
@@ -63,11 +65,12 @@ export class UserProfileMobilePage implements OnInit {
     private haptic: HapticService,
     private alertService: AlertService,
     private loadingService: LoadingService,
-    private fb: FormBuilder
+    private fb: FormBuilder, 
+    private bottomsheetMobileAppService: BottomsheetMobileAppService,
   ) { }
 
   ngOnInit() {
-    this.currentemployee = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    this.currentemployee = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
     this.LoginToken = this.appStateManage.getLoginToken();
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
     if (this.currentemployee != 0 && this.currentemployee != 1001) {
@@ -78,14 +81,14 @@ export class UserProfileMobilePage implements OnInit {
       name: ['', Validators.required],
       address: ['', Validators.required],
       gender: ['', Validators.required],
-      mobilenumber: ['', Validators.required, Validators.maxLength(10)],
+      mobilenumber: ['', Validators.required],
       DOB: new FormControl(new Date().toISOString(), Validators.required),
     });
   }
 
   ionViewWillEnter = async () => {
     await this.loadingService.show();
-    this.currentemployee = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    this.currentemployee = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
     this.LoginToken = this.appStateManage.getLoginToken();
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
     if (this.currentemployee != 0 && this.currentemployee != 1001) {
@@ -98,6 +101,64 @@ export class UserProfileMobilePage implements OnInit {
     this.Date = value;
     console.log('value :', value);
     // this.Entity.p.Date = value || '';
+  }
+
+  public async selectGenderBottomsheet(): Promise<void> {
+    try {
+      const options = this.GenderList.map((item) => ({ p: item }));
+
+      this.openSelectModal(
+        options,
+        this.selectedGender,
+        false,
+        'Select Gender',
+        1,
+        (selected) => {
+          this.selectedGender = selected;
+
+          // Optional: update the form control with selected gender
+          const selectedRef = selected?.[0]?.p?.Ref;
+          const selectedName = selected?.[0]?.p?.Name;
+          if (selectedRef) {
+            this.employeeForm.get('gender')?.setValue(selectedName);
+          }
+        }
+      );
+    } catch (error) {
+      console.error('Error in selectGenderBottomsheet:', error);
+    }
+  }
+
+  // private async openSelectModal(
+  //   dataList: any[],
+  //   selectedItems: any[],
+  //   multiSelect: boolean,
+  //   title: string,
+  //   MaxSelection: number,
+  //   updateCallback: (selected: any[]) => void
+  // ): Promise<void> {
+  //   const selected = await this.bottomsheetMobileAppService.openSelectModal(
+  //     dataList,
+  //     selectedItems,
+  //     multiSelect,
+  //     title,
+  //     MaxSelection
+  //   );
+
+  //   if (selected) {
+  //     updateCallback(selected);
+  //   }
+  // }
+  private async openSelectModal(
+    dataList: any[],
+    selectedItems: any[],
+    multiSelect: boolean,
+    title: string,
+    MaxSelection: number,
+    updateCallback: (selected: any[]) => void
+  ): Promise<void> {
+    const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, multiSelect, title, MaxSelection);
+    if (selected) updateCallback(selected);
   }
 
   getEmployeeDetails = async () => {
@@ -162,6 +223,7 @@ export class UserProfileMobilePage implements OnInit {
       });
 
       this.imageUrl = image.dataUrl!;
+      this.imagePreviewUrl = this.imageUrl;
     } catch (error) {
       console.error('Image picking error:', error);
     }
@@ -218,13 +280,13 @@ export class UserProfileMobilePage implements OnInit {
       this.uiUtils.showErrorMessage('Error', tr.Message);
     } else {
       await this.uiUtils.showSuccessToster('Profile Updated successfully!');
-      this.router.navigate(['/']);
+      this.router.navigate(['/mobileapp/tabs/settings']);
     }
   };
 
 
   BackProfile = () => {
-    this.router.navigate(['/homepage']);
+    this.router.navigate(['/mobileapp/tabs/settings']);
   }
 
 }

@@ -1,4 +1,3 @@
-<app-loader *ngIf="isLoading"></app-loader>
 
 <app-header-with-back-handler [title]="DetailsFormTitle"></app-header-with-back-handler>
 
@@ -18,8 +17,10 @@
     </ion-item> -->
 
     <ion-item class="input-item">
-      <ion-label>Site</ion-label>
-      <ion-text>{{ Entity.p.SiteName}}</ion-text>
+      <!-- <ion-label>Site</ion-label>
+      <ion-text class="input-field">{{ Entity.p.SiteName}}</ion-text> -->
+      <ion-input type="text" label="Site" labelPlacement="floating" placeholder="Enter Site Name"
+        [(ngModel)]="Entity.p.SiteName" disabled class="input-field"></ion-input>
     </ion-item>
 
     <!-- Date -->

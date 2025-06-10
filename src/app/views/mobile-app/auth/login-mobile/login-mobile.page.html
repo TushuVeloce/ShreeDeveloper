@@ -18,9 +18,13 @@
             [formGroup]="loginForm" placeholder="Enter your email" customClass="input-wrapper">
           </app-input-field>
 
-          <app-input-field label="Password" controlName="password" type="password" icon="lock-closed"
+          <!-- <app-input-field label="Password" controlName="password" type="password" icon="lock-closed"
             [formGroup]="loginForm" placeholder="Enter your password" [maxlength]="20"
             [pattern]="'^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$'" customClass="input-wrapper">
+          </app-input-field> -->
+          <app-input-field label="Password" controlName="password" type="password" icon="lock-closed" [formGroup]="loginForm"
+            placeholder="Enter your password" [maxlength]="20"
+            customClass="input-wrapper">
           </app-input-field>
 
           <!-- Align forget password to right below password -->

@@ -64,8 +64,8 @@ export class MarketingManagementDetailsMobilePage implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.companyRef = Number(this.appStateManage.StorageKey.getItem('SelectedCompanyRef'));
-    this.companyName = this.appStateManage.StorageKey.getItem('companyName') ? this.appStateManage.StorageKey.getItem('companyName') : '';
+    this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
+    this.companyName = this.appStateManage.localStorage.getItem('companyName') ? this.appStateManage.localStorage.getItem('companyName') : '';
     this.loadMarketingManagementIfEmployeeExists();
   }
   ngOnDestroy(): void {
@@ -78,12 +78,12 @@ export class MarketingManagementDetailsMobilePage implements OnInit {
       this.getVendorListByCompanyRef()
       this.getEmployeeListByCompanyRef()
       this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+      if (this.appStateManage.localStorage.getItem('Editable') == 'Edit') {
         this.IsNewEntity = false;
         this.DetailsFormTitle = this.IsNewEntity ? 'New Marketing' : 'Edit Marketing';
         this.Entity = MarketingManagement.GetCurrentInstance();
-        this.appStateManage.StorageKey.removeItem('Editable');
-        this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+        this.appStateManage.localStorage.removeItem('Editable');
+        this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
         if (this.Entity.p.Date != '') {
           this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
         }
@@ -200,7 +200,7 @@ export class MarketingManagementDetailsMobilePage implements OnInit {
     this.Entity.p.CompanyName = this.companyName;
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
     if (this.Entity.p.CreatedBy == 0) {
-      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
@@ -216,10 +216,10 @@ export class MarketingManagementDetailsMobilePage implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Marketing saved successfully!');
         this.Entity = MarketingManagement.CreateNewInstance();
-        this.router.navigate(['/app_homepage/tabs/marketing-management']);
+        this.router.navigate(['/mobileapp/tabs/dashboard/marketing-management']);
       } else {
         await this.uiUtils.showSuccessToster('Marketin Updated successfully!');
-        this.router.navigate(['/app_homepage/tabs/marketing-management']);
+        this.router.navigate(['/mobileapp/tabs/dashboard/marketing-management']);
       }
     }
   };
@@ -335,11 +335,11 @@ export class MarketingManagementDetailsMobilePage implements OnInit {
         'Warning',
         `You have unsaved data. Are you sure you want to go back? All data will be lost.`,
         async () => {
-          this.router.navigate(['/app_homepage/tabs/marketing-management']);
+          this.router.navigate(['/mobileapp/tabs/dashboard/marketing-managementt'], { replaceUrl: true });
         }
       );
     } else {
-      this.router.navigate(['/app_homepage/tabs/marketing-management']);
+      this.router.navigate(['/mobileapp/tabs/dashboard/marketing-management'], { replaceUrl: true });
     }
   }
 }

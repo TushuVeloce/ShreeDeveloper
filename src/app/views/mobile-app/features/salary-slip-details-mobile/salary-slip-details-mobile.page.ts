@@ -15,7 +15,7 @@ import { Utils } from 'src/app/services/utils.service';
   selector: 'app-salary-slip-details-mobile',
   templateUrl: './salary-slip-details-mobile.page.html',
   styleUrls: ['./salary-slip-details-mobile.page.scss'],
-  standalone:false
+  standalone: false
 })
 export class SalarySlipDetailsMobilePage implements OnInit {
 
@@ -62,21 +62,21 @@ export class SalarySlipDetailsMobilePage implements OnInit {
   private async loadSalarySlipRequestsIfEmployeeExists(): Promise<void> {
     try {
       this.isLoading = true;
-      this.CompanyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
+      this.CompanyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
       this.CompanyName = this.companystatemanagement.getCurrentCompanyName();
       this.Entity.p.EmployeeRef = Number(this.appStateManagement.getEmployeeRef());
       if (this.Entity.p.EmployeeRef > 0) {
-        const editMode = this.appStateManagement.StorageKey.getItem('Editable') === 'Edit';
+        const editMode = this.appStateManagement.localStorage.getItem('Editable') === 'Edit';
 
         this.IsNewEntity = !editMode;
         this.DetailsFormTitle = editMode ? 'Edit Salary Slip Request' : 'New Salary Slip Request';
 
         if (editMode) {
           this.Entity = SalarySlipRequest.GetCurrentInstance();
-          this.Entity.p.UpdatedBy = Number(this.appStateManagement.StorageKey.getItem('LoginEmployeeRef'));
-          this.appStateManagement.StorageKey.removeItem('Editable');
+          this.Entity.p.UpdatedBy = Number(this.appStateManagement.localStorage.getItem('LoginEmployeeRef'));
+          this.appStateManagement.localStorage.removeItem('Editable');
         } else {
-          this.EmployeeRef = Number(this.appStateManagement.StorageKey.getItem('LoginEmployeeRef'));
+          this.EmployeeRef = Number(this.appStateManagement.localStorage.getItem('LoginEmployeeRef'));
           this.Entity = SalarySlipRequest.CreateNewInstance();
           SalarySlipRequest.SetCurrentInstance(this.Entity);
           await this.getSingleEmployeeDetails();
@@ -109,6 +109,7 @@ export class SalarySlipDetailsMobilePage implements OnInit {
         await this.uiUtils.showErrorMessage('Error', errMsg)
       );
 
+      console.log('employee :', employee);
       this.Entity.p.EmployeeRef = employee.p.Ref;
       this.Entity.p.EmployeeName = employee.p.Name;
     } catch (error) {
@@ -220,7 +221,7 @@ export class SalarySlipDetailsMobilePage implements OnInit {
       this.Entity.p.CompanyName = this.CompanyName;
 
       if (this.Entity.p.CreatedBy == 0) {
-        this.Entity.p.CreatedBy = Number(this.appStateManagement.StorageKey.getItem('LoginEmployeeRef'))
+        this.Entity.p.CreatedBy = Number(this.appStateManagement.localStorage.getItem('LoginEmployeeRef'))
       }
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
@@ -236,7 +237,7 @@ export class SalarySlipDetailsMobilePage implements OnInit {
           await this.uiUtils.showSuccessToster('Salary Slip successfully!');
           this.Entity = SalarySlipRequest.CreateNewInstance();
           this.resetForm();
-          this.router.navigate(['app_homepage/tabs/attendance-management/salary-slip'], { replaceUrl: true });
+          this.router.navigate(['mobileapp/tabs/attendance/salary-slip'], { replaceUrl: true });
         }
       }
     } catch (error) {
@@ -252,9 +253,47 @@ export class SalarySlipDetailsMobilePage implements OnInit {
     this.Entity = SalarySlipRequest.CreateNewInstance();
   }
 
-  public goBack(): void {
-    this.router.navigate(['app_homepage/tabs/attendance-management/salary-slip'], { replaceUrl: true });
-  }
-
+ isDataFilled(): boolean {
+      const emptyEntity = SalarySlipRequest.CreateNewInstance();
+      console.log('emptyEntity :', emptyEntity);
+      console.log('this Entity :', this.Entity);
+      return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, []);
+    }
+  
+    deepEqualIgnoringKeys(obj1: any, obj2: any, ignorePaths: string[]): boolean {
+      const clean = (obj: any, path = ''): any => {
+        if (obj === null || typeof obj !== 'object') return obj;
+  
+        const result: any = Array.isArray(obj) ? [] : {};
+        for (const key in obj) {
+          const fullPath = path ? `${path}.${key}` : key;
+          if (ignorePaths.includes(fullPath)) continue;
+          result[key] = clean(obj[key], fullPath);
+        }
+        return result;
+      };
+  
+      const cleanedObj1 = clean(obj1);
+      const cleanedObj2 = clean(obj2);
+  
+      return JSON.stringify(cleanedObj1) === JSON.stringify(cleanedObj2);
+    }
+  
+    goBack = async () => {
+      // Replace this with your actual condition to check if data is filled
+      const isDataFilled = this.isDataFilled(); // Implement this function based on your form
+  
+      if (isDataFilled) {
+        await this.uiUtils.showConfirmationMessage(
+          'Warning',
+          `You have unsaved data. Are you sure you want to go back? All data will be lost.`,
+          async () => {
+            this.router.navigate(['/mobileapp/tabs/attendance/salary-slip'], { replaceUrl: true });
+          }
+        );
+      } else {
+        this.router.navigate(['/mobileapp/tabs/attendance/salary-slip'], { replaceUrl: true });
+      }
+    }
 
 }

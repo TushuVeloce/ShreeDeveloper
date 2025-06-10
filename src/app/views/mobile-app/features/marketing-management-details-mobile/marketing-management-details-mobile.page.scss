@@ -1,0 +1,53 @@
+.input-item {
+    --background: #fff;
+    --highlight-color-focused: #f4a825;
+    --border-color: #ccc;
+    --padding-start: 6px;
+    --inner-padding-end: 6px;
+    --min-height: 40px; // Reasonable minimum for touch targets
+
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    margin-top: 12px;
+    padding: 2px 6px;
+    gap: 4px;
+    transition: border-color 0.2s ease-in-out;
+
+    &:focus-within {
+        border-color: var(--highlight-color-focused);
+        box-shadow: 0 0 0 2px rgba(244, 168, 37, 0.15);
+    }
+
+    ion-icon.input-icon {
+        font-size: 16px;
+        color: #888;
+        margin-right: 4px;
+        align-self: center;
+    }
+
+    ion-input.input-field {
+        font-size: 14px;
+        font-weight: 500;
+        color: #000;
+        flex: 1;
+        min-width: 0;
+        --padding-top: 2px;
+        --padding-bottom: 2px;
+        --padding-start: 0;
+        --padding-end: 0;
+    }
+
+    .toggle-password {
+        margin-left: auto;
+        padding: 0;
+        display: flex;
+        align-items: center;
+
+        ion-icon {
+            font-size: 18px;
+            color: #666;
+        }
+    }
+}

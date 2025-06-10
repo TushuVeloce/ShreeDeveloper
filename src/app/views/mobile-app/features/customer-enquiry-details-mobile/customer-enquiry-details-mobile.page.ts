@@ -766,17 +766,57 @@ export class CustomerEnquiryDetailsMobilePage implements OnInit {
           'Customer Enquiry saved successfully!'
         );
         this.Entity = CustomerEnquiry.CreateNewInstance();
-        this.router.navigate(['/homepage/Website/Customer_Enquiry']);
+        this.router.navigate(['/mobileapp/tabs/dashboard/customer-relationship-management/customer-enquiry']);
       } else {
         await this.uiUtils.showSuccessToster(
           'Customer Enquiry Updated successfully!'
         );
-        this.router.navigate(['app_homepage/tabs/crm/customer-enquiry']);
+        this.router.navigate(['/mobileapp/tabs/dashboard/customer-relationship-management/customer-enquiry']);
       }
     }
   };
 
-  public goBack(): void {
-    this.router.navigate(['app_homepage/tabs/crm/customer-enquiry'], { replaceUrl: true });
-  }
+
+    isDataFilled(): boolean {
+      const emptyEntity = CustomerEnquiry.CreateNewInstance();
+      console.log('emptyEntity :', emptyEntity);
+      console.log('this Entity :', this.Entity);
+      return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, []);
+    }
+  
+    deepEqualIgnoringKeys(obj1: any, obj2: any, ignorePaths: string[]): boolean {
+      const clean = (obj: any, path = ''): any => {
+        if (obj === null || typeof obj !== 'object') return obj;
+  
+        const result: any = Array.isArray(obj) ? [] : {};
+        for (const key in obj) {
+          const fullPath = path ? `${path}.${key}` : key;
+          if (ignorePaths.includes(fullPath)) continue;
+          result[key] = clean(obj[key], fullPath);
+        }
+        return result;
+      };
+  
+      const cleanedObj1 = clean(obj1);
+      const cleanedObj2 = clean(obj2);
+  
+      return JSON.stringify(cleanedObj1) === JSON.stringify(cleanedObj2);
+    }
+  
+    goBack = async () => {
+      // Replace this with your actual condition to check if data is filled
+      const isDataFilled = this.isDataFilled(); // Implement this function based on your form
+  
+      if (isDataFilled) {
+        await this.uiUtils.showConfirmationMessage(
+          'Warning',
+          `You have unsaved data. Are you sure you want to go back? All data will be lost.`,
+          async () => {
+            this.router.navigate(['/mobileapp/tabs/dashboard/customer-relationship-management/customer-enquiry'], { replaceUrl: true });
+          }
+        );
+      } else {
+        this.router.navigate(['/mobileapp/tabs/dashboard/customer-relationship-management/customer-enquiry'], { replaceUrl: true });
+      }
+    }
 }

@@ -1,9 +1,14 @@
-<ion-item class="input-item" lines="none">
+<ion-item class="input-item" lines="none" [button]="buttonType" (click)="onFieldClick()">
   <ion-icon *ngIf="icon" [name]="icon" slot="start" class="input-icon"></ion-icon>
 
-  <ion-input label="{{ label }}" labelPlacement="stacked" [clearInput]="clearInput" [type]="inputType"
-    [formControl]="control" [placeholder]="placeholder" [attr.maxlength]="maxlength" [attr.pattern]="pattern"
-    [readonly]="readonly"  [ngClass]="customClass" [ngStyle]="customStyle" class="input-field"></ion-input>
+  <!-- <ion-input label="{{ label }}" labelPlacement="stacked" [clearInput]="clearInput" [type]="inputType"
+    [formControl]="control" [placeholder]="placeholder" [attr.maxlength]="maxlength" [attr.minlength]="minlength" [attr.pattern]="pattern"
+    [readonly]="readonly"  [ngClass]="customClass" [ngStyle]="customStyle" class="input-field"></ion-input> -->
+
+    <ion-input label="{{ label }}" labelPlacement="stacked" [clearInput]="clearInput" [type]="inputType"
+      [formControl]="control" [placeholder]="placeholder" [maxlength]="maxlength" [minlength]="minlength"
+      [pattern]="pattern" [readonly]="readonly" [ngClass]="customClass" [ngStyle]="customStyle"
+      class="input-field"></ion-input>
 
   <ion-button *ngIf="type === 'password'" fill="clear" slot="end" size="small" (click)="togglePasswordVisibility()"
     type="button" class="toggle-password">
@@ -16,6 +21,6 @@
 <ion-text color="danger" *ngIf="control && control.touched && control.errors" class="error-messages">
   <small *ngIf="control.errors['required']">This field is required.</small>
   <small *ngIf="control.errors['email']">Enter a valid email.</small>
-  <small *ngIf="control.errors['pattern']">Invalid format.</small>
+  <small *ngIf="control.errors['pattern']">Invalid format.</small>  
   <small *ngIf="control.errors['maxlength']">Maximum length exceeded.</small>
 </ion-text>
