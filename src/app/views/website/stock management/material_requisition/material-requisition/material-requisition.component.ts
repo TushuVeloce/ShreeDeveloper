@@ -52,9 +52,14 @@ export class MaterialRequisitionComponent  implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
+    this.Entity.p.SiteRef = 0
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
-    this.Entity.p.SiteRef = this.SiteList[0].p.Ref
+    if(this.SiteList.length > 0){
+      this.Entity.p.SiteRef = this.SiteList[0].p.Ref
+    }
+    this.Entity.p.Status = 0
+    this.getRequisitionListByAllFilters()
   }
 
   getMaterialRequisitionListByCompanyRef = async () => {
@@ -69,6 +74,11 @@ export class MaterialRequisitionComponent  implements OnInit {
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
+  }
+
+  onSiteChange = async () => {
+     this.Entity.p.Status = 0
+     this.getRequisitionListByAllFilters()
   }
 
   getRequisitionListByAllFilters = async () => {

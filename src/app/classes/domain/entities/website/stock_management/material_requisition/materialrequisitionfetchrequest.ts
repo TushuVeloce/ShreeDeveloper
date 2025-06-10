@@ -10,9 +10,8 @@ export class MaterialRequisitionFetchRequest
     public static readonly FetchRequestType: string = "MaterialRequisitionFetchRequest";
 
     MaterialRequisitionManagementRefs: number[] = [];
-    BookingRemarkRefs: number[] = [];
     CompanyRefs: number[] = [];
-    Status: string[] = [];
+    MaterialRequisitionStatus: number[] = [];
     SiteRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>

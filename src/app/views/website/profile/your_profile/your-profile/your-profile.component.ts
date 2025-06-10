@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
+import { AdminProfile } from 'src/app/classes/domain/entities/website/profile/adminprofile/adminprofile';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
@@ -21,6 +22,7 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class YourProfileComponent implements OnInit {
   Entity: Employee = Employee.CreateNewInstance();
+  AdminEntity: AdminProfile = AdminProfile.CreateNewInstance();
   GenderList = DomainEnums.GenderTypeList(true, '--- Select Gender ---');
   currentemployee: number = 0
   companyRef = this.companystatemanagement.SelectedCompanyRef;
@@ -33,7 +35,8 @@ export class YourProfileComponent implements OnInit {
   imageUrl: string | null = null;  // Add imageUrl to bind to src
   errors = { profile_image: '' };
   allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
-
+  IsEmployee:boolean = false
+  IsAdmin:boolean = false
   INDPhoneNo: string = ValidationPatterns.INDPhoneNo
 
   INDPhoneNoMsg: string = ValidationMessages.INDPhoneNoMsg
@@ -56,7 +59,7 @@ export class YourProfileComponent implements OnInit {
     this.currentemployee = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.LoginToken = this.appStateManage.getLoginToken();
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
-    if (this.currentemployee !=0 && this.currentemployee != 1001) {
+    if (this.currentemployee !=0 ) {
       this.getEmployeeDetails()
     }
   }
@@ -64,12 +67,30 @@ export class YourProfileComponent implements OnInit {
   getEmployeeDetails = async () => {
     if (this.currentemployee && this.companyRef()) {
       let EmployeeData = await Employee.FetchInstance(this.currentemployee, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.Entity = EmployeeData
-      if (this.Entity.p.DOB != '') {
-        this.Entity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.DOB)
-      }
-      this.imageUrl = this.Entity.p.ProfilePicPath;
-      this.loadImageFromBackend(this.Entity.p.ProfilePicPath)
+     if(EmployeeData == null){
+      let AdminData = await AdminProfile.FetchAdminData(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.IsAdmin = true
+       this.IsEmployee = false
+      console.log('AdminData :', AdminData); 
+      this.AdminEntity = AdminData[0]   
+      console.log('Entity :', this.Entity);
+      // if (this.AdminEntity.p.DOB != '') {
+      //      this.AdminEntity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.AdminEntity.p.DOB)
+      //    }
+      //    this.imageUrl = this.AdminEntity.p.ProfilePicPath;
+         this.loadImageFromBackend(this.AdminEntity.p.ProfilePicPath)
+     }else{
+       this.IsAdmin = false
+       this.IsEmployee = true
+       this.Entity = EmployeeData
+       if (this.Entity.p.DOB != '') {
+         this.Entity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.DOB)
+       }
+       this.imageUrl = this.Entity.p.ProfilePicPath;
+       this.loadImageFromBackend(this.Entity.p.ProfilePicPath)
+       this.AdminEntity = [] as any;
+     }
+
     }
   }
 
@@ -84,19 +105,40 @@ export class YourProfileComponent implements OnInit {
     }
   }
 
-   handleFileChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      this.Entity.p.ProfilePicFile = input.files[0];
-      this.selectedFileName = this.Entity.p.ProfilePicFile.name;
+  //  handleFileChange(event: Event): void {
+  //   const input = event.target as HTMLInputElement;
+  //   if (input.files && input.files[0]) {
+  //     this.Entity.p.ProfilePicFile = input.files[0];
+  //     this.selectedFileName = this.Entity.p.ProfilePicFile.name;
 
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreviewUrl = reader.result as string;
-      };
-      reader.readAsDataURL(this.Entity.p.ProfilePicFile);
-    }
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       this.imagePreviewUrl = reader.result as string;
+  //     };
+  //     reader.readAsDataURL(this.Entity.p.ProfilePicFile);
+  //   }
+  // }
+
+  handleFileChange(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+  if (!file) return;
+  // Assign to Entity or AdminEntity based on availability
+  if (this.IsEmployee) {
+    this.Entity.p.ProfilePicFile = file;
+    this.selectedFileName = file.name;
+  } else if (this.AdminEntity && this.AdminEntity.p) {
+    this.AdminEntity.p.ProfilePicFile = file;
+    this.selectedFileName = file.name;
   }
+  // Create preview
+  const reader = new FileReader();
+  reader.onload = () => {
+    this.imagePreviewUrl = reader.result as string;
+  };
+  reader.readAsDataURL(file);
+}
+
 
   // Utility function to create object URL
   createObjectURL(file: File): string {
@@ -113,33 +155,87 @@ export class YourProfileComponent implements OnInit {
     input.select();
   }
 
-  SaveProfile = async () => {
-  let entityToSave = this.Entity.GetEditableVersion();
-  let entitiesToSave = [entityToSave];
+//   SaveProfile = async () => {
+//   let entityToSave = this.Entity.GetEditableVersion();
+//   let entitiesToSave = [entityToSave];
 
+//   let lstFTO: FileTransferObject[] = [];
+
+//   if (this.Entity.p.ProfilePicFile) {
+//     lstFTO.push(
+//       FileTransferObject.FromFile(
+//         "ProfilePicFile",
+//         this.Entity.p.ProfilePicFile,
+//         this.Entity.p.ProfilePicFile.name
+//       )
+//     );
+//   }
+
+//   await this.Entity.EnsurePrimaryKeysWithValidValues();
+//   let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+
+//   if (!tr.Successful) {
+//     this.uiUtils.showErrorMessage('Error', tr.Message);
+//   } else {
+//     await this.uiUtils.showSuccessToster('Profile Updated successfully!');
+//     this.router.navigate(['/homepage']);
+//   }
+// };
+
+
+SaveProfile = async () => {
   let lstFTO: FileTransferObject[] = [];
+  if (this.IsEmployee) {
+    // Saving Employee
+    let entityToSave = this.Entity.GetEditableVersion();
+    let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
 
-  if (this.Entity.p.ProfilePicFile) {
-    lstFTO.push(
-      FileTransferObject.FromFile(
-        "ProfilePicFile",
-        this.Entity.p.ProfilePicFile,
-        this.Entity.p.ProfilePicFile.name
-      )
-    );
-  }
+    if (this.Entity.p.ProfilePicFile) {
+      lstFTO.push(
+        FileTransferObject.FromFile(
+          "ProfilePicFile",
+          this.Entity.p.ProfilePicFile,
+          this.Entity.p.ProfilePicFile.name
+        )
+      );
+    }
+    await this.Entity.EnsurePrimaryKeysWithValidValues();
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
 
-  await this.Entity.EnsurePrimaryKeysWithValidValues();
-  let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+    if (!tr.Successful) {
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+    } else {
+      await this.uiUtils.showSuccessToster('Employee Profile Updated successfully!');
+      this.router.navigate(['/homepage']);
+    }
+  } else if (this.AdminEntity && this.AdminEntity.p) {
+    // Saving AdminProfile
+    let adminToSave = this.AdminEntity.GetEditableVersion();
+    let adminEntitiesToSave = [adminToSave];
+    console.log('adminEntitiesToSave :', adminEntitiesToSave);
+    if (this.AdminEntity.p.ProfilePicFile) {
+      lstFTO.push(
+        FileTransferObject.FromFile(
+          "ProfilePicFile",
+          this.AdminEntity.p.ProfilePicFile,
+          this.AdminEntity.p.ProfilePicFile.name
+        )
+      );
+    }
+    await this.AdminEntity.EnsurePrimaryKeysWithValidValues();
+    let tr = await this.utils.SavePersistableEntities(adminEntitiesToSave, lstFTO);
+    if (!tr.Successful) {
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+    } else {
+      await this.uiUtils.showSuccessToster('Admin Profile Updated successfully!');
+      this.router.navigate(['/homepage']);
+    }
 
-  if (!tr.Successful) {
-    this.uiUtils.showErrorMessage('Error', tr.Message);
   } else {
-    await this.uiUtils.showSuccessToster('Profile Updated successfully!');
-    this.router.navigate(['/homepage']);
+    this.uiUtils.showErrorMessage('Error', 'No profile found to save.');
   }
 };
-
 
     BackProfile = () => {
     this.router.navigate(['/homepage']);

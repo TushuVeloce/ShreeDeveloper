@@ -3,12 +3,7 @@
     <div class="row">
       <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
         <button type="button" class="backbtn" (click)="BackProfile()">
-          <img
-            src="/assets/icons/arrow-button.png"
-            alt=""
-            width="34px"
-            height="34px"
-          />
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
         </button>
       </div>
       <div class="col-md-11 mt-2">
@@ -19,43 +14,27 @@
       <div class="row justify-content-center">
         <!-- Profile Image Upload -->
         <div class="d-flex flex-column align-items-center">
-          <ng-container *ngIf="Entity.p.ProfilePicPath; else AddPreviewImage">
-            <img
-              [src]="imagePreviewUrl"
-              alt="Profile Image"
-              class="img-thumbnail rounded-circle mb-2"
-              style="width: 150px; height: 150px; object-fit: cover"
-            />
+          <ng-container
+            *ngIf="(IsEmployee && Entity.p.ProfilePicPath) || (IsAdmin && AdminEntity.p.ProfilePicPath); else AddPreviewImage">
+            <img [src]="imagePreviewUrl" alt="Profile Image"
+              class="img-thumbnail rounded-circle mb-2" style="width: 150px; height: 150px; object-fit: cover" />
           </ng-container>
-
-           <ng-template #AddPreviewImage>
-                <ng-container *ngIf="imagePreviewUrl ; else defaultImage">
-                  <img [src]="imagePreviewUrl" alt="Profile Image"  class="img-thumbnail rounded-circle mb-2"  style="width: 150px; height: 150px; object-fit: cover"/>
-                </ng-container>
-              </ng-template>
-
+          <ng-template #AddPreviewImage>
+            <ng-container *ngIf="imagePreviewUrl ; else defaultImage">
+              <img [src]="imagePreviewUrl" alt="Profile Image" class="img-thumbnail rounded-circle mb-2"
+                style="width: 150px; height: 150px; object-fit: cover" />
+            </ng-container>
+          </ng-template>
           <ng-template #defaultImage>
-            <img
-              src="/assets/images/noimage.png"
-              alt="No Image"
-              class="img-thumbnail rounded-circle mb-2"
-              style="width: 150px; height: 150px; object-fit: cover"
-            />
+            <img src="/assets/images/noimage.png" alt="No Image" class="img-thumbnail rounded-circle mb-2"
+              style="width: 150px; height: 150px; object-fit: cover" />
           </ng-template>
 
           <!-- File input wrapped for alignment -->
           <div>
-            <input
-              type="file"
-              id="profileImage"
-              (change)="handleFileChange($event)"
-              class="d-none"
-            />
+            <input type="file" id="profileImage" (change)="handleFileChange($event)" class="d-none" />
             <!-- Styled Label Button -->
-            <label
-              for="profileImage"
-              style="cursor: pointer; color: #832828"
-            >
+            <label for="profileImage" style="cursor: pointer; color: #832828">
               {{ imageUrl ? "Edit Image" : "Add Image" }}
             </label>
             <!-- Error Message -->
@@ -71,83 +50,62 @@
           <div class="row gy-3">
             <div class="col-md-6">
               <label for="Name">Name</label>
-              <input
-                type="text"
-                [(ngModel)]="Entity.p.Name"
-                name="Name"
-                class="form-control"
-                id="Name"
-                required
-                placeholder="Enter Name"
-              />
+              <input *ngIf="IsEmployee" type="text" [(ngModel)]="Entity.p.Name" class="form-control" name="Name"
+                placeholder="Enter Name" />
+              <!-- For Admin -->
+              <input *ngIf="IsAdmin" type="text" [(ngModel)]="AdminEntity.p.Name" class="form-control" name="Name"
+                placeholder="Enter Name" />
             </div>
             <div class="col-md-6">
               <label>Gender</label>
-              <nz-select
-                class="nzSelect-light"
-                nzShowSearch
-                nzAllowClear
-                nzPlaceHolder="Select"
-                id="gender"
-                name="gender"
-                [nzSize]="'large'"
-                [(ngModel)]="Entity.p.Gender"
-              >
-                <nz-option
-                  *ngFor="let gender of GenderList"
-                  [nzValue]="gender.Ref"
-                  [nzLabel]="gender.Name"
-                ></nz-option>
+              <!-- For Employee -->
+              <nz-select *ngIf="IsEmployee" class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+                id="gender" name="gender" [nzSize]="'large'" [(ngModel)]="Entity.p.Gender">
+                <nz-option *ngFor="let gender of GenderList" [nzValue]="gender.Ref" [nzLabel]="gender.Name"></nz-option>
+              </nz-select>
+              <!-- For Admin -->
+              <nz-select *ngIf="IsAdmin" class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+                id="gender" name="gender" [nzSize]="'large'" [(ngModel)]="AdminEntity.p.Gender">
+                <nz-option *ngFor="let gender of GenderList" [nzValue]="gender.Ref" [nzLabel]="gender.Name"></nz-option>
               </nz-select>
             </div>
             <div class="col-md-6">
               <label for="DOB">Date of Birth</label>
-              <input
-                type="date"
-                [(ngModel)]="Entity.p.DOB"
-                name="DOB"
-                class="form-control"
-                id="DOB"
-                required
-                placeholder="Enter DOB"
-              />
+              <!-- For Employee -->
+              <input *ngIf="IsEmployee" type="date" name="DOB" [(ngModel)]="Entity.p.DOB" name="DOB" class="form-control" id="DOB"
+                required placeholder="Enter DOB" />
+              <!-- For Admin -->
+              <input *ngIf="IsAdmin" type="date" name="DOB" [(ngModel)]="AdminEntity.p.DOB" name="DOB" class="form-control"
+                id="DOB" required placeholder="Enter DOB" />
             </div>
             <div class="col-md-6">
-              <label for="PersonalEmailId">Email ID</label>
-              <input
-                type="email"
-                [(ngModel)]="Entity.p.PersonalEmailId"
-                name="PersonalEmailId"
-                class="form-control"
-                id="PersonalEmailId"
-                required
-                placeholder="Enter Email Id"
-              />
+              <label for="OfficialEmailId">Email ID</label>
+              <!-- For Employee -->
+              <input *ngIf="IsEmployee" type="email" [(ngModel)]="Entity.p.OfficialEmailId" name="OfficialEmailId"
+                class="form-control" id="OfficialEmailId" required placeholder="Enter Email Id" />
+              <!-- For Admin -->
+              <input *ngIf="IsAdmin" type="email" [(ngModel)]="AdminEntity.p.EmailId" name="EmailId"
+                class="form-control" id="EmailId" required placeholder="Enter Email Id" />
             </div>
             <div class="col-md-6">
               <label for="ContactNos">Mob No</label>
-              <input
-                type="text"
-                [(ngModel)]="Entity.p.ContactNos"
-                name="ContactNos"
-                class="form-control"
-                id="ContactNos"
-                required
-                placeholder="Enter Mob Number"
-                (click)="selectAllValue($event)"
-              />
+              <!-- For Employee -->
+              <input *ngIf="IsEmployee" type="text" [(ngModel)]="Entity.p.ContactNos" name="ContactNos"
+                class="form-control" id="ContactNos" required placeholder="Enter Mob Number"
+                (click)="selectAllValue($event)" />
+              <!-- For Admin -->
+              <input *ngIf="IsAdmin" type="text" [(ngModel)]="AdminEntity.p.Contacts" name="Contacts"
+                class="form-control" id="Contacts" required placeholder="Enter Mob Number"
+                (click)="selectAllValue($event)" />
             </div>
             <div class="col-md-6">
               <label for="AddressLine1">Address</label>
-              <input
-                type="text"
-                [(ngModel)]="Entity.p.AddressLine1"
-                name="AddressLine1"
-                class="form-control"
-                id="AddressLine1"
-                required
-                placeholder="Enter Address"
-              />
+              <!-- For Employee -->
+              <input *ngIf="IsEmployee" type="text" [(ngModel)]="Entity.p.AddressLine1" name="AddressLine1"
+                class="form-control" id="AddressLine1" required placeholder="Enter Address" />
+              <!-- For Admin -->
+              <input *ngIf="IsAdmin" type="text" [(ngModel)]="AdminEntity.p.Address" name="Address" class="form-control"
+                id="Address" required placeholder="Enter Address" />
             </div>
           </div>
         </div>

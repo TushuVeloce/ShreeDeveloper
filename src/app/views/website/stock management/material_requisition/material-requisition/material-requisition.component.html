@@ -3,7 +3,7 @@
     <h1 style="padding-top: 3px;" class="title title_light">Material Requisition List</h1>
   </div>
    <div class="col-4 mb-2 search-container_light">
-    <app-shared-filter [masterList]="MasterList" [filterFields]="['Name', 'NumberOfPlots', 'SiteInchargeName', 'AddressLine2']"
+    <app-shared-filter [masterList]="MasterList" [filterFields]="['Date', 'Site name', 'SiteInchargeName', 'AddressLine2']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">
@@ -21,7 +21,7 @@
       <div>
         <label for="SiteRef"><b>site</b></label>
         <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-          nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"  (ngModelChange)="getRequisitionListByAllFilters()" >
+          nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"  (ngModelChange)="getRequisitionListByAllFilters(); onSiteChange()" >
           <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
         </nz-select>
       </div>

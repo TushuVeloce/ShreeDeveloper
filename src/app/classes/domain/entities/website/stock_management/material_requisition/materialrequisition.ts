@@ -28,7 +28,7 @@ export class MaterialRequisitionProps {
   public readonly SiteName: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public Status: string = ''
+  public Status: number = 0
   public MaterialRequisitionDetailsArray: RequiredMaterialDetailProps[] = [];
 
 
@@ -172,11 +172,11 @@ export class MaterialRequisition implements IPersistable<MaterialRequisition> {
     return MaterialRequisition.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchEntireListByAllFilters(CompanyRef: number, Status: string,SiteRef: number,  errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+   public static async FetchEntireListByAllFilters(CompanyRef: number, Status: number, SiteRef: number,  errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
         let req = new MaterialRequisitionFetchRequest();
         req.CompanyRefs.push(CompanyRef)
         if (Status) {
-          req.Status.push(Status)
+          req.MaterialRequisitionStatus.push(Status)
         }
         if (SiteRef) {
           req.SiteRefs.push(SiteRef)
