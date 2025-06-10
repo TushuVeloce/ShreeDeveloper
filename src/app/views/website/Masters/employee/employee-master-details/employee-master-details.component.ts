@@ -130,11 +130,11 @@ export class EmployeeMasterDetailsComponent implements OnInit {
       this.Entity = Employee.CreateNewInstance();
       Employee.SetCurrentInstance(this.Entity);
     }
+    
     this.InitialEntity = Object.assign(
       Employee.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as Employee;
-    // this.focusInput();
   }
 
   getDepartmentListByCompanyRef = async () => {

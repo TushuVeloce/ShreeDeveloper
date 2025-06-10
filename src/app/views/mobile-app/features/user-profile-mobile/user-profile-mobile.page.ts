@@ -40,6 +40,7 @@ export class UserProfileMobilePage implements OnInit {
   LoginToken = '';
   file: File | null = null;
   imageUrl: string | null = null;  // Add imageUrl to bind to src
+  ProfilePicFile: File = null as any
   errors = { profile_image: '' };
   allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
   isLoading: boolean = false;
@@ -65,7 +66,7 @@ export class UserProfileMobilePage implements OnInit {
     private haptic: HapticService,
     private alertService: AlertService,
     private loadingService: LoadingService,
-    private fb: FormBuilder, 
+    private fb: FormBuilder,
     private bottomsheetMobileAppService: BottomsheetMobileAppService,
   ) { }
 
@@ -231,14 +232,14 @@ export class UserProfileMobilePage implements OnInit {
   handleFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
-      this.Entity.p.ProfilePicFile = input.files[0];
-      this.selectedFileName = this.Entity.p.ProfilePicFile.name;
+      this.ProfilePicFile = input.files[0];
+      this.selectedFileName = this.ProfilePicFile.name;
 
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreviewUrl = reader.result as string;
       };
-      reader.readAsDataURL(this.Entity.p.ProfilePicFile);
+      reader.readAsDataURL(this.ProfilePicFile);
     }
   }
 
@@ -263,12 +264,12 @@ export class UserProfileMobilePage implements OnInit {
 
     let lstFTO: FileTransferObject[] = [];
 
-    if (this.Entity.p.ProfilePicFile) {
+    if (this.ProfilePicFile) {
       lstFTO.push(
         FileTransferObject.FromFile(
           "ProfilePicFile",
-          this.Entity.p.ProfilePicFile,
-          this.Entity.p.ProfilePicFile.name
+          this.ProfilePicFile,
+          this.ProfilePicFile.name
         )
       );
     }
