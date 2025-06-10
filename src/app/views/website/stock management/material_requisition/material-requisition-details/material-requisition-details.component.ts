@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgModel } from '@angular/forms';
+import { NgForm, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
@@ -46,6 +46,7 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
   INDPhoneNoMsg: string = ValidationMessages.INDPhoneNoMsg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
+  @ViewChild('requisitionForm') requisitionForm!: NgForm;
   @ViewChild('DateCtrl') DateInputControl!: NgModel;
   @ViewChild('SiteCtrl') SiteInputControl!: NgModel;
 
@@ -243,8 +244,7 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
     }
   }
 
-  resetAllControls = () => {
-    this.DateInputControl.control.markAsUntouched();
-    this.SiteInputControl.control.markAsUntouched();
+  resetAllControls() {
+    this.requisitionForm.resetForm(); // this will reset all form controls to their initial state
   }
 }
