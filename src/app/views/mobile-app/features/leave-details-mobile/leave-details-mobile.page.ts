@@ -71,10 +71,10 @@ export class LeaveDetailsMobilePage implements OnInit {
   private async loadLeaveRequestsIfEmployeeExists(): Promise<void> {
     try {
       this.isLoading = true;
-      this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
-      this.Entity.p.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+      this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
+      this.Entity.p.EmployeeRef = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
       if (this.Entity.p.EmployeeRef > 0) {
-        const editMode = this.appStateManage.StorageKey.getItem('Editable') === 'Edit';
+        const editMode = this.appStateManage.localStorage.getItem('Editable') === 'Edit';
 
         this.IsNewEntity = !editMode;
         this.DetailsFormTitle = editMode ? 'Edit Leave Request' : 'New Leave Request';
@@ -83,10 +83,10 @@ export class LeaveDetailsMobilePage implements OnInit {
           this.Entity = LeaveRequest.GetCurrentInstance();
           this.fromDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.FromDate);
           this.toDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.ToDate);
-          this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
-          this.appStateManage.StorageKey.removeItem('Editable');
+          this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
+          this.appStateManage.localStorage.removeItem('Editable');
         } else {
-          this.EmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+          this.EmployeeRef = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
           this.Entity = LeaveRequest.CreateNewInstance();
           LeaveRequest.SetCurrentInstance(this.Entity);
           this.Entity.p.LeaveRequestType = this.LeaveRequestTypeList[1].Ref;
@@ -285,8 +285,47 @@ export class LeaveDetailsMobilePage implements OnInit {
     this.Entity.p.LeaveHours = 0;
   }
 
-  goBack() {
-    this.router.navigate(['mobileapp/tabs/attendance/leave'], { replaceUrl: true });
-  }
 
+    isDataFilled(): boolean {
+      const emptyEntity = LeaveRequest.CreateNewInstance();
+      console.log('emptyEntity :', emptyEntity);
+      console.log('this Entity :', this.Entity);
+      return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, []);
+    }
+  
+    deepEqualIgnoringKeys(obj1: any, obj2: any, ignorePaths: string[]): boolean {
+      const clean = (obj: any, path = ''): any => {
+        if (obj === null || typeof obj !== 'object') return obj;
+  
+        const result: any = Array.isArray(obj) ? [] : {};
+        for (const key in obj) {
+          const fullPath = path ? `${path}.${key}` : key;
+          if (ignorePaths.includes(fullPath)) continue;
+          result[key] = clean(obj[key], fullPath);
+        }
+        return result;
+      };
+  
+      const cleanedObj1 = clean(obj1);
+      const cleanedObj2 = clean(obj2);
+  
+      return JSON.stringify(cleanedObj1) === JSON.stringify(cleanedObj2);
+    }
+  
+    goBack = async () => {
+      // Replace this with your actual condition to check if data is filled
+      const isDataFilled = this.isDataFilled(); // Implement this function based on your form
+  
+      if (isDataFilled) {
+        await this.uiUtils.showConfirmationMessage(
+          'Warning',
+          `You have unsaved data. Are you sure you want to go back? All data will be lost.`,
+          async () => {
+            this.router.navigate(['/mobileapp/tabs/attendance/leave'], { replaceUrl: true });
+          }
+        );
+      } else {
+        this.router.navigate(['/mobileapp/tabs/attendance/leave'], { replaceUrl: true });
+      }
+    }
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
@@ -14,12 +14,15 @@ export class InputFieldComponent {
   @Input() icon?: string;
   @Input() formGroup!: FormGroup;
   @Input() placeholder: string = '';
-  @Input() maxlength?: number;
-  @Input() pattern?: string | RegExp;
+  @Input() maxlength: number | null = null;
+  @Input() minlength: number | null = null;
+  @Input() pattern: string | RegExp  = '';
   @Input() readonly: boolean = false;
   @Input() clearInput: boolean = false;
+  @Input() buttonType: boolean = false;
   @Input() customClass?: string;
   @Input() customStyle?: { [key: string]: any };
+  @Output() fieldClick = new EventEmitter<void>();
 
   showPassword = false;
 
@@ -39,5 +42,24 @@ export class InputFieldComponent {
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
+  }
+
+  // onFieldClick() {
+  //   debugger
+  //   if (this.readonly && this.buttonType) {
+  //     this.fieldClick.emit();
+  //   }
+  // }
+  private isClickHandling = false;
+
+  onFieldClick() {
+    if (this.readonly && this.buttonType) {
+      if (this.isClickHandling) return; // Ignore if already handling
+      this.isClickHandling = true;
+      this.fieldClick.emit();
+      setTimeout(() => {
+        this.isClickHandling = false; // Reset after 300ms (adjust as needed)
+      }, 300);
+    }
   }
 }

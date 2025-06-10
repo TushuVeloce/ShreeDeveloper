@@ -744,7 +744,7 @@ export class SidebarlayoutComponent implements OnInit {
         SubModuleList: HrPayrollManagement,
       },
       {
-        Name: 'Request',
+        Name: 'Employee Request',
         RouterLink: '',
         WhiteLogo: '/assets/icons/Request.png',
         SubModuleList: RequestSubModulelist,

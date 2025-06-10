@@ -49,7 +49,6 @@ export class FinalLayoutDetailsComponent implements OnInit {
   }
 
   BindApplicableTypeValueStatusToRadioButton = () => {
-    // debugger
     for (let i = 0; i < this.FinalLayoutList.length; i++) {
       let SiteWorksList = this.FinalLayoutList[i].SiteWorks;
       let ApplicableTypesList = SiteWorksList.filter((item: { SiteWorkName: string }) => item.SiteWorkName == 'रोड NOC 2');

@@ -83,7 +83,7 @@ export class GovernmentTransactionMasterComponent implements OnInit {
     // get Transaction Type List Status
 
     for (let i = 0; i < this.MasterList.length; i++) {
-      // debugger
+
       let obj = this.MasterList[i];
       let transactionJson = obj.p.TransactionJson;
       let transactionRef = obj.p.Ref;

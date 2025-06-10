@@ -113,6 +113,7 @@ export class QuotationDetailsComponent implements OnInit {
       return;
     }
     let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.VendorList = lst;
   }
 
   getMaterialRequisitionListByVendorRefAndSiteRef = async () => {

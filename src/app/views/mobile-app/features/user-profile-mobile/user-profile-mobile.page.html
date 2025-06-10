@@ -26,8 +26,10 @@
             placeholder="Enter your email" customClass="input-wrapper">
           </app-input-field>
 
-          <app-input-field label="Mobile Number" controlName="mobilenumber" type="tel" [formGroup]="employeeForm"
-            placeholder="Enter your phone" customClass="input-wrapper">
+          <app-input-field label="Mobile Number" controlName="mobilenumber" type="number" [formGroup]="employeeForm"
+            placeholder="Enter your phone" customClass="input-wrapper"   [maxlength]="10"
+            [minlength]="10"
+            pattern="[0-9]{10}">
           </app-input-field>
 
           <app-input-field label="Address" controlName="address" type="text" [formGroup]="employeeForm"
@@ -43,17 +45,17 @@
           </app-date-field>
 
           <app-input-field label="Gender" controlName="gender" type="text" [formGroup]="employeeForm"
-            placeholder="Enter your Gender" customClass="input-wrapper">
+            placeholder="Select your Gender" customClass="input-wrapper" [buttonType]='true' [readonly]="true"  (fieldClick)="selectGenderBottomsheet()">
           </app-input-field>
 
-          <ion-item lines="none" class="input-wrapper">
+          <!-- <ion-item lines="none" class="input-wrapper">
             <ion-label>Gender</ion-label>
             <ion-select formControlName="gender" placeholder="Select Gender">
               <ion-select-option *ngFor="let gender of GenderList" [value]="gender.Ref">
                 {{ gender.Name }}
               </ion-select-option>
             </ion-select>
-          </ion-item>
+          </ion-item> -->
 
           <app-custom-button label="Update Profile" type="submit" [loading]="isLoggingIn" color="primary" icon="save"
             iconPosition="end" shape="round" fill="solid" [disabled]="employeeForm.invalid">
@@ -62,7 +64,7 @@
         </form>
 
         <ion-button fill="clear" expand="full" class="Button-In-loginPage" (click)="BackProfile()">Back to
-          Home</ion-button>
+          settings</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

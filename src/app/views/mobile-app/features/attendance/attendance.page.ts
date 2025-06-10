@@ -158,7 +158,7 @@ export class AttendancePage implements OnInit {
       this.attendanceLog = AttendanceLog.CreateNewInstance();
 
       const tranDate = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
-      // const companyRef = this.companyState.getCurrentCompanyRef(); 
+      // const companyRef = this.companyState.getCurrentCompanyRef();
       // console.log('employeeRef, companyRef, tranDate :', this.employeeRef, companyRef, tranDate);
 
       const lst = await AttendanceLog.FetchEntireListByCompanyRef(
@@ -413,10 +413,9 @@ export class AttendancePage implements OnInit {
     }
   }
 
-  
+
   submitPunchOut = async () => {
     try {
-      debugger
       await this.loadingService.show();
       this.attendanceLog.p.IsCheckIn = false;
       this.attendanceLog.p.CompanyRef = this.companyRef;

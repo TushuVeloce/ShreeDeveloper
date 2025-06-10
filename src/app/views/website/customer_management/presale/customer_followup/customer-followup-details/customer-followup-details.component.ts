@@ -101,7 +101,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     this.getSiteListByCompanyRef();
     // Check if CountryRef is already set (e.g., India is preselected)
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-      // debugger
       this.IsNewEntity = false;
       this.Entity = CustomerFollowUp.GetCurrentInstance();
       console.log('this.Entity :', this.Entity);

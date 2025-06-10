@@ -77,7 +77,6 @@ export class RazorpayComponent  implements OnInit {
     let td = req.FormulateTransportData();
     let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
     let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-    debugger
     if (!tr.Successful) {
       await this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
@@ -97,7 +96,6 @@ export class RazorpayComponent  implements OnInit {
     req.PaymentId = response.razorpay_payment_id ;
     req.OrderId = response.razorpay_order_id  ;
     req.Signature = response.razorpay_signature  ;
-debugger
     let td = req.FormulateTransportData();
     let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
     let tr = await this.serverCommunicator.sendHttpRequest(pkt);

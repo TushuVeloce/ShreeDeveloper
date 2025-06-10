@@ -106,7 +106,6 @@ export class BankAccountMasterDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Bank Account saved successfully!');
-        debugger
         this.dateofopening = '';
         this.Entity = BankAccount.CreateNewInstance();
         this.resetAllControls();

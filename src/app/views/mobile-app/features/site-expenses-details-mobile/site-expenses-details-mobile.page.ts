@@ -41,7 +41,7 @@ export class SiteExpensesDetailsMobilePage implements OnInit {
   ExpenseTypeEntity: ExpenseType = ExpenseType.CreateNewInstance();
   VendorServicesEntity: Vendor = Vendor.CreateNewInstance();
   IsNewEntity: boolean = true;
-  DetailsFormTitle: 'New Actual Stage' | 'Edit Actual Stage' = 'New Actual Stage';
+  DetailsFormTitle: 'New Site Expense' | 'Edit Site Expense' = 'New Site Expense';
   InitialEntity: ActualStages = null as any;
   isSaveDisabled: boolean = false;
   VendorList: Vendor[] = [];
@@ -108,8 +108,8 @@ export class SiteExpensesDetailsMobilePage implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
-    this.companyName = this.appStateManagement.StorageKey.getItem('companyName') ? this.appStateManagement.StorageKey.getItem('companyName') : '';
+    this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
+    this.companyName = this.appStateManagement.localStorage.getItem('companyName') ? this.appStateManagement.localStorage.getItem('companyName') : '';
     await this.loadCustomerEnquiryIfEmployeeExists();
   }
 
@@ -303,7 +303,7 @@ export class SiteExpensesDetailsMobilePage implements OnInit {
       await this.getSiteListByCompanyRef();
       if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
         this.IsNewEntity = false;
-        this.DetailsFormTitle = this.IsNewEntity ? 'New Actual Stage' : 'Edit Actual Stage';
+        this.DetailsFormTitle = this.IsNewEntity ? 'New Site Expense' : 'Edit Site Expense';
         this.Entity = ActualStages.GetCurrentInstance();
         console.log(' this.Entity  :', this.Entity);
         if (this.Entity.p.Date != '') {
@@ -344,7 +344,7 @@ export class SiteExpensesDetailsMobilePage implements OnInit {
         ActualStages.SetCurrentInstance(this.Entity);
         this.Entity.p.SiteRef = this.siteRef;
         this.Entity.p.SiteName = this.siteName ?? '';
-        const CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
+        const CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
         if (CreatedBy != 0) {
           this.Entity.p.CreatedBy = CreatedBy
           await this.getSingleEmployeeDetails();
@@ -565,7 +565,7 @@ export class SiteExpensesDetailsMobilePage implements OnInit {
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
       );
       if (!employee) {
-        this.Entity.p.CreatedByName = this.appStateManage.StorageKey.getItem('UserDisplayName') ?? '';
+        this.Entity.p.CreatedByName = this.appStateManage.localStorage.getItem('UserDisplayName') ?? '';
       }
       this.Entity.p.CreatedByName = employee.p.Name;
     } catch (error) {
@@ -959,7 +959,46 @@ export class SiteExpensesDetailsMobilePage implements OnInit {
 
     }
   }
-  public goBack(): void {
-    this.router.navigate(['mobileapp/tabs/dashboard/site-management/site-expenses'], { replaceUrl: true });
+  isDataFilled(): boolean {
+    const emptyEntity = ActualStages.CreateNewInstance();
+    console.log('emptyEntity :', emptyEntity);
+    console.log('this Entity :', this.Entity);
+    return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, []);
+  }
+
+  deepEqualIgnoringKeys(obj1: any, obj2: any, ignorePaths: string[]): boolean {
+    const clean = (obj: any, path = ''): any => {
+      if (obj === null || typeof obj !== 'object') return obj;
+
+      const result: any = Array.isArray(obj) ? [] : {};
+      for (const key in obj) {
+        const fullPath = path ? `${path}.${key}` : key;
+        if (ignorePaths.includes(fullPath)) continue;
+        result[key] = clean(obj[key], fullPath);
+      }
+      return result;
+    };
+
+    const cleanedObj1 = clean(obj1);
+    const cleanedObj2 = clean(obj2);
+
+    return JSON.stringify(cleanedObj1) === JSON.stringify(cleanedObj2);
+  }
+
+  goBack = async () => {
+    // Replace this with your actual condition to check if data is filled
+    const isDataFilled = this.isDataFilled(); // Implement this function based on your form
+
+    if (isDataFilled) {
+      await this.uiUtils.showConfirmationMessage(
+        'Warning',
+        `You have unsaved data. Are you sure you want to go back? All data will be lost.`,
+        async () => {
+          this.router.navigate(['mobileapp/tabs/dashboard/site-management/site-expenses'], { replaceUrl: true });
+        }
+      );
+    } else {
+      this.router.navigate(['mobileapp/tabs/dashboard/site-management/site-expenses'], { replaceUrl: true });
+    }
   }
 }

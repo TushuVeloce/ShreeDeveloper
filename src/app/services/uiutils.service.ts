@@ -29,7 +29,6 @@ export class UIUtils {
 
   public async showErrorMessage(title: string, msg: string,
     okHandler: () => Promise<void> = null as any) {
-    // debugger
     let result: SweetAlertResult = await Swal.fire({
       title: title,
       text: msg,
