@@ -18,6 +18,7 @@ export class AttendanceLogsProps {
   public Ref: number = 0;
   public EmployeeRef: number = 0;
   public TransDateTime: string = '';
+  public LatestCheckInTime: string = '';
   public FirstCheckInTime: string = '';
   public LastCheckOutTime: string = '';
   public TotalWorkingHrs: string = '';
