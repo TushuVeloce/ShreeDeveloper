@@ -1,15 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Quotation } from 'src/app/classes/domain/entities/website/stock_management/Quotation/quotation';
-import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
-import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
-import { DTU } from 'src/app/services/dtu.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
-import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
 @Component({
@@ -39,15 +35,15 @@ export class QuotationComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement,
     private appStateManage: AppStateManageService,
     private screenSizeService: ScreenSizeService,
-    private payloadPacketFacade: PayloadPacketFacade,
-    private serverCommunicator: ServerCommunicatorService,
     private DateconversionService: DateconversionService,
-    private dtu: DTU,
-  ) { }
+  ) {
+    effect(async () => {
+      await this.getQuotationListByCompanyRef(); await this.getSiteListByCompanyRef();
+    });
+  }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    await this.FormulateQuotationList();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
@@ -61,38 +57,36 @@ export class QuotationComponent implements OnInit {
     this.SiteList = lst;
   }
 
-  getActualStageListByAllFilters = async () => {
-    this.MasterList = [];
-    this.DisplayMasterList = [];
-    let Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date);
+  private getQuotationListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Quotation.FetchEntireListBySiteRef(this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList;
-    this.loadPaginationData();
-  }
-
-  private FormulateQuotationList = async () => {
     let lst = await Quotation.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
-    console.log('lst :', lst);
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  };
+
+  getVendorQuotationListByCompanyRefAndSiteRef = async () => {
+    if (this.Entity.p.SiteRef <= 0) {
+      await this.uiUtils.showErrorToster('Site not Selected');
+      return;
+    }
+    let lst = await Quotation.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
 
   onEditClicked = async (item: Quotation) => {
-
     this.SelectedQuotation = item.GetEditableVersion();
-
     Quotation.SetCurrentInstance(this.SelectedQuotation);
-
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-
     await this.router.navigate(['/homepage/Website/Quotation_Details']);
   };
 
@@ -105,7 +99,11 @@ export class QuotationComponent implements OnInit {
           await this.uiUtils.showSuccessToster(`Quotation of ${Quotation.p.VendorName} has been deleted!`);
           this.SearchString = '';
           this.loadPaginationData();
-          this.FormulateQuotationList();
+          if (this.Entity.p.SiteRef <= 0) {
+            this.getQuotationListByCompanyRef();
+          } else {
+            this.getVendorQuotationListByCompanyRefAndSiteRef();
+          }
         });
       });
   }

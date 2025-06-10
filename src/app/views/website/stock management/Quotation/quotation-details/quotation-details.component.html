@@ -15,17 +15,30 @@
         No Data
       </div>
     </ng-template>
+    <!-- If file not selected -->
+    <ng-template #NoFile>
+      No file selected
+    </ng-template>
+
+    <!-- Fallback: If file is missing entirely -->
+    <ng-template #defaultImage>
+      <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
+    </ng-template>
+
+    <!-- Fallback: If file is not an image (e.g., PDF/DOC) -->
+    <ng-template #defaultDocImage>
+      <img src="/assets/icons/doc-placeholder.png" alt="Document File" class="file-preview" />
+    </ng-template>
+
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-6">
           <label>Date</label>
-          <input type="date" name="QuotationDate" class="form-control date-input"
-            id="QuotationDate" [(ngModel)]="QuotationDate" placeholder="Select Date"
-            #QuotationDateCtrl="ngModel" required (blur)="QuotationDateCtrl.control.markAsTouched()" />
-          <div
-            *ngIf="(QuotationDateCtrl.invalid && (QuotationDateCtrl.touched || QuotationDateCtrl.dirty))">
-            <span class="validation-text"
-              *ngIf="QuotationDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <input type="date" name="QuotationDate" class="form-control date-input" id="QuotationDate"
+            [(ngModel)]="QuotationDate" placeholder="Select Date" #QuotationDateCtrl="ngModel" required
+            (blur)="QuotationDateCtrl.control.markAsTouched()" />
+          <div *ngIf="(QuotationDateCtrl.invalid && (QuotationDateCtrl.touched || QuotationDateCtrl.dirty))">
+            <span class="validation-text" *ngIf="QuotationDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
         <div class="col-md-6">
@@ -56,7 +69,41 @@
             [(ngModel)]="Entity.p.AddressLine1" placeholder="Address" readonly>
         </div>
       </div>
+      <div class="row mt-3">
+        <div class="col-md-2 d-flex justify-content-center align-items-center">
+          <label>Invoice</label>
+        </div>
+        <div class="col-md-5 d-flex align-items-center justify-content-between">
+          <!-- Upload icon triggers file input -->
+          <img src="/assets/icons/upload.png" alt="Invoice" title="Upload Invoice" class="Upload-Icon"
+            (click)="triggerFileInput()" />
 
+          <ng-container *ngIf="selectedFileName; else NoFile">
+            <span style="cursor: pointer;" (click)="fileNavigation(Entity.p.InvoicePath)">
+              {{ selectedFileName}}
+            </span>
+          </ng-container>
+
+          <!-- Hidden File Input -->
+          <input type="file" #fileInput accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
+            (change)="onFileUpload($event);" />
+
+          <!-- Customer Aadhar Image Display -->
+          <ng-container *ngIf="Entity.p.InvoicePath; else AddDocImage">
+            <img [src]="isImageFile(Entity.p.InvoicePath) ? imagePostView : '/assets/icons/doc-placeholder.png'"
+              alt="Invoice" title="Invoice" (click)="fileNavigation(Entity.p.InvoicePath)"
+              [class]="isImageFile(Entity.p.InvoicePath) ?  'img-preview' : 'file-preview'" />
+          </ng-container>
+
+          <ng-template #AddDocImage>
+            <ng-container *ngIf="imagePreView; else defaultImage">
+              <img [src]="isImageFile(selectedFileName) ? imagePreView : '/assets/icons/doc-placeholder.png'"
+                alt="Invoice" title="Invoice" (click)="fileNavigation(this.Entity.p.InvoicePath)"
+                [class]="isImageFile(selectedFileName) ? 'img-preview' : 'file-preview'" />
+            </ng-container>
+          </ng-template>
+        </div>
+      </div>
       <div class="row" style="margin-top: 2rem;">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 d-flex align-items-end">
           <h5 style="color: black; align-self: self-end;">
@@ -171,10 +218,10 @@
         <div class=" row" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Ordered Quantity</label>
-            <input type="number" name="OrderedQty" class="form-control"
-              [(ngModel)]="newQuotatedMaterial.OrderedQty" #OrderedQtyCtrl="ngModel" required
-              (blur)="OrderedQtyCtrl.control.markAsTouched()" placeholder="Enter Ordered Quantity"
-              (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
+            <input type="number" name="OrderedQty" class="form-control" [(ngModel)]="newQuotatedMaterial.OrderedQty"
+              #OrderedQtyCtrl="ngModel" required (blur)="OrderedQtyCtrl.control.markAsTouched()"
+              placeholder="Enter Ordered Quantity" (click)="selectAllValue($event)"
+              (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
             <div *ngIf="(OrderedQtyCtrl.invalid && (OrderedQtyCtrl.touched || OrderedQtyCtrl.dirty))">
               <span class="validation-text" *ngIf="OrderedQtyCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
@@ -190,10 +237,10 @@
           </div>
           <div class="col-md-6">
             <label>Discount Rate</label>
-            <input type="number" name="DiscountedRate" class="form-control" [(ngModel)]="newQuotatedMaterial.DiscountedRate"
-              (ngModelChange)="CalculateNetAmountAndTotalAmount()" #DiscountedRateCtrl="ngModel" required
-              (blur)="DiscountedRateCtrl.control.markAsTouched()" placeholder="Enter Discount Rate"
-              (click)="selectAllValue($event)" />
+            <input type="number" name="DiscountedRate" class="form-control"
+              [(ngModel)]="newQuotatedMaterial.DiscountedRate" (ngModelChange)="CalculateNetAmountAndTotalAmount()"
+              #DiscountedRateCtrl="ngModel" required (blur)="DiscountedRateCtrl.control.markAsTouched()"
+              placeholder="Enter Discount Rate" (click)="selectAllValue($event)" />
             <div *ngIf="(DiscountedRateCtrl.invalid && (DiscountedRateCtrl.touched || DiscountedRateCtrl.dirty))">
               <span class="validation-text" *ngIf="DiscountedRateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
@@ -226,8 +273,8 @@
           </div>
           <div class="col-md-6">
             <label>Expected Delivery Date</label>
-            <input type="date" name="ExceptedDeliveryDate" class="form-control"
-              [(ngModel)]="ExceptedDeliveryDate" placeholder="Enter Date" />
+            <input type="date" name="ExceptedDeliveryDate" class="form-control" [(ngModel)]="ExceptedDeliveryDate"
+              placeholder="Enter Date" />
           </div>
           <div class="col-md-6">
             <label>Net Amount</label>

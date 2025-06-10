@@ -31,8 +31,6 @@ export class QuotatedMaterialDetailProps {
   public ExceptedDeliveryDate: string = '';
   public NetAmount: number = 0;
   public TotalAmount: number = 0;
-  public InvoiceFile: File = null as any
-  public InvoicePath: string = "";
   public MaterialQuotationRef: number = 0;
 
 
