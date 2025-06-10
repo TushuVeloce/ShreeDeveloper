@@ -64,17 +64,16 @@ export class AttendanceLogsComponent implements OnInit {
     private serverCommunicator: ServerCommunicatorService,
     private DateconversionService: DateconversionService,
     private router: Router,
-    private appStateManage: AppStateManageService, 
+    private appStateManage: AppStateManageService,
   ) {
     effect(async () => {
-      await this.getTodayAttendanceLogByAttendanceListType();
+      await this.getTodayAttendanceLogByAttendanceListType(); this.getEmployeeListByCompanyRef();
     });
   }
 
   ngOnInit() {
     this.loadPaginationData();
-    this.getEmployeeListByCompanyRef()
-      this.appStateManage.setDropdownDisabled(false);
+    this.appStateManage.setDropdownDisabled(false);
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
     this.isTodayAttendanceView = true;
   }
@@ -235,22 +234,22 @@ export class AttendanceLogsComponent implements OnInit {
 
 
   getAttendanceCount = async (AttendanceLogType: number) => {
-      this.AttendanceLogCount.p.TeamSize = 0
-      this.AttendanceLogCount.p.Present = 0
-      this.AttendanceLogCount.p.Absent = 0
-      this.AttendanceLogCount.p.OnLeaveDaily = 0
-      this.AttendanceLogCount.p.TotalDaysInMonth = 0
-      this.AttendanceLogCount.p.TotalDaysInWeek = 0
-      let lst = await AttendanceLogsCount.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(),AttendanceLogType,this.Entity.p.Months,this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      console.log('lst :', lst);
-      this.AttendanceLogCount.p.TeamSize = lst[0]?.p?.TeamSize
-      this.AttendanceLogCount.p.Present = lst[0]?.p?.Present
-      this.AttendanceLogCount.p.Absent = lst[0]?.p?.Absent
-      this.AttendanceLogCount.p.OnLeaveDaily = lst[0]?.p?.OnLeaveDaily
-      this.AttendanceLogCount.p.TotalDaysInMonth = lst[0]?.p?.TotalDaysInMonth
-      this.AttendanceLogCount.p.TotalDaysInWeek = lst[0]?.p?.TotalDaysInWeek
-    }
-  
+    this.AttendanceLogCount.p.TeamSize = 0
+    this.AttendanceLogCount.p.Present = 0
+    this.AttendanceLogCount.p.Absent = 0
+    this.AttendanceLogCount.p.OnLeaveDaily = 0
+    this.AttendanceLogCount.p.TotalDaysInMonth = 0
+    this.AttendanceLogCount.p.TotalDaysInWeek = 0
+    let lst = await AttendanceLogsCount.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendanceLogType, this.Entity.p.Months, this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    this.AttendanceLogCount.p.TeamSize = lst[0]?.p?.TeamSize
+    this.AttendanceLogCount.p.Present = lst[0]?.p?.Present
+    this.AttendanceLogCount.p.Absent = lst[0]?.p?.Absent
+    this.AttendanceLogCount.p.OnLeaveDaily = lst[0]?.p?.OnLeaveDaily
+    this.AttendanceLogCount.p.TotalDaysInMonth = lst[0]?.p?.TotalDaysInMonth
+    this.AttendanceLogCount.p.TotalDaysInWeek = lst[0]?.p?.TotalDaysInWeek
+  }
+
 
   AddAttendance = () => {
     if (this.companyRef() <= 0) {
