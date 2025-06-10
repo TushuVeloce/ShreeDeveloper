@@ -96,7 +96,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Actual Stage' : 'Edit Actual Stage';
-      debugger
       this.Entity = ActualStages.GetCurrentInstance();
       if (this.Entity.p.Date != '') {
         this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
@@ -345,7 +344,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
 
   ClearInputsOnExpenseChange = (ExpenseTypeRef: number) => {
     this.AddExpenseTypeToOther(ExpenseTypeRef)
-    debugger
     this.Entity.p.GrandTotal = 0;
     this.Entity.p.UnitRef = 0;
     this.Entity.p.Quantity = 0;
@@ -380,7 +378,6 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     if (UnitRef == this.TimeUnitRef) {
       this.Entity.p.Rate = 0
       this.Entity.p.Quantity = 0
-      debugger
       this.Entity.p.GrandTotal = 0,
         this.Entity.p.Amount = 0
     }

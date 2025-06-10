@@ -22,7 +22,7 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
     this.TpOfficeList = arr.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
     this.BindApplicableTypeValueStatusToRadioButton();
     console.log(this.TpOfficeList);
-    
+
   }
 
   ngOnInit() {
@@ -30,7 +30,7 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
   }
 
   BindApplicableTypeValueStatusToRadioButton = () => {
-    // debugger
+
     for (let i = 0; i < this.TpOfficeList.length; i++) {
       let SiteWorksList = this.TpOfficeList[i].SiteWorks;
       let ApplicableTypesList = SiteWorksList.filter((item: { SiteWorkName: string }) => item.SiteWorkName == 'Report NOC & Airport NOC');

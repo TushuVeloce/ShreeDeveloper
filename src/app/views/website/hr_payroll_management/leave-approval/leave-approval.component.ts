@@ -98,7 +98,6 @@ export class LeaveApprovalComponent implements OnInit {
   }
 
   handleApproval = async (leaveapproval: LeaveRequest) => {
-    debugger
     await this.uiUtils.showStatusConfirmationMessage(
       'Update Leave Status',
       `Please confirm the new status for this leave request.`,
@@ -122,14 +121,12 @@ export class LeaveApprovalComponent implements OnInit {
         this.Entity.p.LeaveCancelledBy = currentEmployeeRef;
 
         if (selectedStatus === 'Approved') {
-          debugger
           this.Entity.p.IsApproved = 1;
           this.Entity.p.LeaveApprovedBy = currentEmployeeRef
           this.Entity.p.LeaveCancelledBy = currentEmployeeRef
           this.Entity.p.IsCancelled = 0;
         }
         else if (selectedStatus === 'Rejected') {
-          debugger
           this.Entity.p.IsApproved = 0;
           this.Entity.p.LeaveApprovedBy = currentEmployeeRef
           this.Entity.p.LeaveCancelledBy = currentEmployeeRef

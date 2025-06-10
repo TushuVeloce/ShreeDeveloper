@@ -116,7 +116,7 @@ export class FinancialYearMasterComponent implements OnInit {
 
   // To Create New Financial Year Custom Request
   AddNewFinancialYear = async () => {
-    // debugger
+
     if (this.localpassword.trim().length > 0) {
 
       let req = new GenerateNewFinancialYearCustomRequest();
@@ -149,7 +149,7 @@ export class FinancialYearMasterComponent implements OnInit {
 
    // To Set New Financial Year Custom Request
    SetNewFinancialYear = async () => {
-    // debugger
+
     if (this.localpassword.trim().length > 0) {
 
       let req = new SetCurrentFinancialYearCustomRequest();

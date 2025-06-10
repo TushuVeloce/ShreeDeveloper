@@ -137,7 +137,6 @@ export class UserrolerightsComponent implements OnInit {
   }
 
   getUserRoleRights = async (departmentref: number, designationref: number) => {
-    debugger
     // For Fetching Data
     this.FeatureGroupRef = 0;
     this.DisplayFeature = []

@@ -46,7 +46,7 @@ export class NaLetterDetailsComponent implements OnInit {
     }
   }
   BindApplicableTypeValueStatusToRadioButton = () => {
-    // debugger
+
     for (let i = 0; i < this.NALetterList.length; i++) {
       let SiteWorksList = this.NALetterList[i].SiteWorks;
       let ApplicableTypesList = SiteWorksList.filter((item: { SiteWorkName: string }) => item.SiteWorkName == 'इनामपत्र 2');

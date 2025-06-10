@@ -64,7 +64,6 @@ export class UserRoleMasterComponent implements OnInit {
   };
 
   onDeleteClicked = async (userrole: UserRole) => {
-    debugger;
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
