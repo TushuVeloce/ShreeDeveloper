@@ -130,7 +130,7 @@ export class QuotationComponent implements OnInit {
   };
 
   AddQuotation = () => {
-    this.router.navigate(['/homepage/Website/Quotation_Master_Details']);
+    this.router.navigate(['/homepage/Website/Quotation_Details']);
   }
 
   filterTable = () => {

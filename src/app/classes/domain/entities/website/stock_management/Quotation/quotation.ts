@@ -31,7 +31,7 @@ export class QuotationProps {
   public VendorRef: number = 0;
   public VendorName: string = '';
   public VendorTradeName: string = '';
-  public VendorAddress: string = '';
+  public AddressLine1: string = '';
   public MaterialQuotationDetailsArray: QuotatedMaterialDetailProps[] = [];
 
 

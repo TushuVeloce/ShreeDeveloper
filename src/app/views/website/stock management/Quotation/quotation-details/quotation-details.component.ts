@@ -67,16 +67,14 @@ export class QuotationDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Quotation' : 'Edit Quotation';
       this.Entity = Quotation.GetCurrentInstance();
+      this.QuotationDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
       this.appStateManage.StorageKey.removeItem('Editable');
 
     } else {
       this.Entity = Quotation.CreateNewInstance();
       Quotation.SetCurrentInstance(this.Entity);
     }
-    this.InitialEntity = Object.assign(
-      Quotation.CreateNewInstance(),
-      this.utils.DeepCopy(this.Entity)
-    ) as Quotation;
+    this.InitialEntity = Object.assign(Quotation.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Quotation;
   }
 
   getSiteListByCompanyRef = async () => {
@@ -127,7 +125,7 @@ export class QuotationDetailsComponent implements OnInit {
   onVendorSelection = (VendorRef: number) => {
     const SingleRecord = this.VendorList.filter(data => data.p.Ref == VendorRef);
     this.Entity.p.VendorTradeName = SingleRecord[0].p.TradeName
-    this.Entity.p.VendorAddress = SingleRecord[0].p.AddressLine1
+    this.Entity.p.AddressLine1 = SingleRecord[0].p.AddressLine1
   }
 
   onMaterialSelection = (MaterialRef: number) => {
@@ -177,8 +175,10 @@ export class QuotationDetailsComponent implements OnInit {
 
 
   async addQuotatedMaterial() {
-    if (!this.newQuotatedMaterial.EstimatedQty || !this.newQuotatedMaterial.OrderedQuantity || !this.newQuotatedMaterial.Rate || !this.newQuotatedMaterial.DiscountRate || !this.newQuotatedMaterial.Gst || !this.newQuotatedMaterial.DeliveryCharges || !this.newQuotatedMaterial.NetAmount || !this.newQuotatedMaterial.TotalAmount) {
-      await this.uiUtils.showErrorMessage('Error', 'Material, OrderedQuantity, Rate, DiscountRate, GST, Delivery Charges, Expected Delivery Date, Net Amount, TotalAmount Adderss are Required!');
+
+    
+    if (!this.newQuotatedMaterial.EstimatedQty || !this.newQuotatedMaterial.OrderedQty || !this.newQuotatedMaterial.Rate || !this.newQuotatedMaterial.DiscountedRate || !this.newQuotatedMaterial.Gst || !this.newQuotatedMaterial.DeliveryCharges || !this.newQuotatedMaterial.NetAmount || !this.newQuotatedMaterial.TotalAmount) {
+      await this.uiUtils.showErrorMessage('Error', 'Material, Ordered Qty, Rate, Discount Rate, GST, Delivery Charges, Expected Delivery Date, Net Amount, TotalAmount Adderss are Required!');
       return;
     }
     this.newQuotatedMaterial.ExceptedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExceptedDeliveryDate);
@@ -209,6 +209,9 @@ export class QuotationDetailsComponent implements OnInit {
     this.isQuotatedMaterialModalOpen = true
     this.newQuotatedMaterial = { ...this.Entity.p.MaterialQuotationDetailsArray[index] }
     this.editingIndex = index;
+    this.ExceptedDeliveryDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialQuotationDetailsArray[index].ExceptedDeliveryDate);
+    console.log(' this.newQuotatedMaterial :', this.newQuotatedMaterial);
+    this.getMaterialRequisitionListByVendorRefAndSiteRef();
   }
 
   async removeQuotatedMaterial(index: number) {
@@ -226,10 +229,8 @@ export class QuotationDetailsComponent implements OnInit {
   SaveQuotation = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.newQuotatedMaterial.MaterialQuotationRef = this.Entity.p.Ref
-    if (this.Entity.p.CreatedBy == 0) {
-      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    }
+    this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.QuotationDate);
 
     let entityToSave = this.Entity.GetEditableVersion();
@@ -253,8 +254,8 @@ export class QuotationDetailsComponent implements OnInit {
   };
 
   CalculateNetAmountAndTotalAmount = () => {
-    let GstAmount = (this.newQuotatedMaterial.DiscountRate / 100) * this.newQuotatedMaterial.Gst;
-    this.newQuotatedMaterial.NetAmount = (this.newQuotatedMaterial.DiscountRate * this.newQuotatedMaterial.OrderedQuantity);
+    let GstAmount = (this.newQuotatedMaterial.DiscountedRate / 100) * this.newQuotatedMaterial.Gst;
+    this.newQuotatedMaterial.NetAmount = (this.newQuotatedMaterial.DiscountedRate * this.newQuotatedMaterial.OrderedQty);
     this.newQuotatedMaterial.TotalAmount = this.newQuotatedMaterial.NetAmount + GstAmount + this.newQuotatedMaterial.DeliveryCharges;
   }
 
@@ -268,7 +269,7 @@ export class QuotationDetailsComponent implements OnInit {
       await this.uiUtils.showConfirmationMessage('Cancel',
         `This process is IRREVERSIBLE!
       <br/>
-      Are you sure that you want to Cancel this Quotation Management Form?`,
+      Are you sure that you want to Cancel this Quotation Form?`,
         async () => {
           await this.router.navigate(['/homepage/Website/Quotation']);
         });

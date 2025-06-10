@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-4 mb-2">
-    <h1 style="padding-top: 3px;" class="title title_light">Material Requisition List</h1>
+    <h1 style="padding-top: 3px;" class="title title_light">Vendor Quotaion List</h1>
   </div>
   <div class="col-4 mb-2 search-container_light">
     <app-shared-filter [masterList]="MasterList"
@@ -9,15 +9,11 @@
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">
     <nz-button nz-button class="btn1" (click)='AddQuotation()'>
-      Add Requisition
+      Add Quotation
     </nz-button>
   </div>
 </div>
 <div class="row" style="margin-top: 1rem; ">
-  <!-- <div class="col-md-4" style="margin-top: 1rem; ">
-      <label for="Date"><b>Date</b></label>
-      <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Entity.p.Date" (ngModelChange)="getActualStageListByAllFilters()" />
-    </div> -->
   <div class="col-md-4" style="margin-top: 1rem; ">
     <div>
       <label for="SiteRef"><b>Site</b></label>
@@ -61,8 +57,8 @@
               <td class="tbldata">{{ detail.MaterialName }}</td>
               <td class="tbldata">{{ detail.UnitName }}</td>
               <td class="tbldata">{{ detail.EstimatedQty }}</td>
-              <td class="tbldata">{{ detail.OrderedQuantity }}</td>
-              <td class="tbldata">{{ detail.Rate }}</td>
+              <td class="tbldata">{{ detail.OrderedQty }}</td>
+              <td class="tbldata">{{ detail.DiscountedRate }}</td>
               <td class="tbldata">{{ formatDate(detail.ExceptedDeliveryDate) }}</td>
               <td class="tbldata">{{ detail.NetAmount }}</td>
               <td class="tbldata">{{ detail.TotalAmount }}</td>

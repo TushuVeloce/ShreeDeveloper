@@ -21,11 +21,11 @@
           <label>Date</label>
           <input type="date" name="QuotationDate" class="form-control date-input"
             id="QuotationDate" [(ngModel)]="QuotationDate" placeholder="Select Date"
-            #EstimatedStartingDateCtrl="ngModel" required (blur)="EstimatedStartingDateCtrl.control.markAsTouched()" />
+            #QuotationDateCtrl="ngModel" required (blur)="QuotationDateCtrl.control.markAsTouched()" />
           <div
-            *ngIf="(EstimatedStartingDateCtrl.invalid && (EstimatedStartingDateCtrl.touched || EstimatedStartingDateCtrl.dirty))">
+            *ngIf="(QuotationDateCtrl.invalid && (QuotationDateCtrl.touched || QuotationDateCtrl.dirty))">
             <span class="validation-text"
-              *ngIf="EstimatedStartingDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              *ngIf="QuotationDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
         <div class="col-md-6">
@@ -52,14 +52,14 @@
         </div>
         <div class="col-md-4">
           <label>Address</label>
-          <input type="text" name="VendorAddress" class="form-control date-input" id="VendorAddress"
-            [(ngModel)]="Entity.p.VendorAddress" placeholder="Address" readonly>
+          <input type="text" name="AddressLine1" class="form-control date-input" id="AddressLine1"
+            [(ngModel)]="Entity.p.AddressLine1" placeholder="Address" readonly>
         </div>
       </div>
 
-      <div class="row" style="margin-top: 2rem; padding: 1rem">
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
-          <h5 style="padding-top: 3px; color: black">
+      <div class="row" style="margin-top: 2rem;">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 d-flex align-items-end">
+          <h5 style="color: black; align-self: self-end;">
             <b>Add Material Details</b>
           </h5>
         </div>
@@ -92,12 +92,12 @@
                   let i = index
                 ">
                 <td Class="tbldata">{{ i + 1 }}</td>
-                <td Class="tbldata">{{ material.MaterialRequisitionDetailsName }}</td>
+                <td Class="tbldata">{{ material.MaterialName }}</td>
                 <td Class="tbldata">{{ material.UnitName }}</td>
                 <td Class="tbldata">{{ material.EstimatedQty }}</td>
-                <td Class="tbldata">{{ material.OrderedQuantity }}</td>
+                <td Class="tbldata">{{ material.OrderedQty }}</td>
                 <td Class="tbldata">{{ material.Rate }}</td>
-                <td Class="tbldata">{{ material.DiscountRate }}</td>
+                <td Class="tbldata">{{ material.DiscountedRate }}</td>
                 <td Class="tbldata">{{ material.Gst }}</td>
                 <td Class="tbldata">{{ material.DeliveryCharges }}</td>
                 <td Class="tbldata">{{ formatDate(material.ExceptedDeliveryDate) }}</td>
@@ -171,12 +171,12 @@
         <div class=" row" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Ordered Quantity</label>
-            <input type="number" name="OrderedQuantity" class="form-control"
-              [(ngModel)]="newQuotatedMaterial.OrderedQuantity" #OrderedQuantityCtrl="ngModel" required
-              (blur)="OrderedQuantityCtrl.control.markAsTouched()" placeholder="Enter Ordered Quantity"
+            <input type="number" name="OrderedQty" class="form-control"
+              [(ngModel)]="newQuotatedMaterial.OrderedQty" #OrderedQtyCtrl="ngModel" required
+              (blur)="OrderedQtyCtrl.control.markAsTouched()" placeholder="Enter Ordered Quantity"
               (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
-            <div *ngIf="(OrderedQuantityCtrl.invalid && (OrderedQuantityCtrl.touched || OrderedQuantityCtrl.dirty))">
-              <span class="validation-text" *ngIf="OrderedQuantityCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <div *ngIf="(OrderedQtyCtrl.invalid && (OrderedQtyCtrl.touched || OrderedQtyCtrl.dirty))">
+              <span class="validation-text" *ngIf="OrderedQtyCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
           <div class="col-md-6">
@@ -190,12 +190,12 @@
           </div>
           <div class="col-md-6">
             <label>Discount Rate</label>
-            <input type="number" name="DiscountRate" class="form-control" [(ngModel)]="newQuotatedMaterial.DiscountRate"
-              (ngModelChange)="CalculateNetAmountAndTotalAmount()" #DiscountRateCtrl="ngModel" required
-              (blur)="DiscountRateCtrl.control.markAsTouched()" placeholder="Enter Discount Rate"
+            <input type="number" name="DiscountedRate" class="form-control" [(ngModel)]="newQuotatedMaterial.DiscountedRate"
+              (ngModelChange)="CalculateNetAmountAndTotalAmount()" #DiscountedRateCtrl="ngModel" required
+              (blur)="DiscountedRateCtrl.control.markAsTouched()" placeholder="Enter Discount Rate"
               (click)="selectAllValue($event)" />
-            <div *ngIf="(DiscountRateCtrl.invalid && (DiscountRateCtrl.touched || DiscountRateCtrl.dirty))">
-              <span class="validation-text" *ngIf="DiscountRateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <div *ngIf="(DiscountedRateCtrl.invalid && (DiscountedRateCtrl.touched || DiscountedRateCtrl.dirty))">
+              <span class="validation-text" *ngIf="DiscountedRateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
           <div class="col-md-6">

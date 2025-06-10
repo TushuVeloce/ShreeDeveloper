@@ -23,9 +23,9 @@ export class QuotatedMaterialDetailProps {
   public MaterialName: string = '';
   public UnitName: string = '';
   public EstimatedQty: number = 0;
-  public OrderedQuantity: number = 0;
+  public OrderedQty: number = 0;
   public Rate: number = 0;
-  public DiscountRate: number = 0;
+  public DiscountedRate: number = 0;
   public Gst: number = 0;
   public DeliveryCharges: number = 0;
   public ExceptedDeliveryDate: string = '';
