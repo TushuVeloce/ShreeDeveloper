@@ -81,22 +81,22 @@
     <div class="p-3 rounded border bg-white shadow-sm">
       <div class="row g-3">
         <div class="col-6 col-md-3" *ngIf="!isDaysShow && !isDaysShowMonth">
-          <button class="attbtn w-100">Team Size: <strong>{{ Entity.p.TeamSize }}</strong></button>
+          <button class="attbtn w-100">Team Size: <strong>{{ AttendanceLogCount.p.TeamSize }}</strong></button>
         </div>
         <div class="col-6 col-md-3" *ngIf="isDaysShow">
-          <button class="attbtn w-100">Days: <strong>{{ Entity.p.TotalDaysInWeek }}</strong></button>
+          <button class="attbtn w-100">Days: <strong>{{ AttendanceLogCount.p.TotalDaysInWeek }}</strong></button>
         </div>
         <div class="col-6 col-md-3" *ngIf="isDaysShowMonth">
-          <button class="attbtn w-100">Days: <strong>{{ Entity.p.TotalDaysInMonth }}</strong></button>
+          <button class="attbtn w-100">Days: <strong>{{ AttendanceLogCount.p.TotalDaysInMonth }}</strong></button>
         </div>
         <div class="col-6 col-md-3">
-          <button class="attbtn w-100">Present: <strong>{{ Entity.p.Present }}</strong></button>
+          <button class="attbtn w-100">Present: <strong>{{ AttendanceLogCount.p.Present }}</strong></button>
         </div>
         <div class="col-6 col-md-3">
-          <button class="attbtn w-100">Absent: <strong>{{ Entity.p.Absent }}</strong></button>
+          <button class="attbtn w-100">Absent: <strong>{{ AttendanceLogCount.p.Absent }}</strong></button>
         </div>
         <div class="col-6 col-md-3">
-          <button class="attbtn w-100">On Leave: <strong>{{ Entity.p.OnLeaveDaily }}</strong></button>
+          <button class="attbtn w-100">On Leave: <strong>{{ AttendanceLogCount.p.OnLeaveDaily }}</strong></button>
         </div>
       </div>
     </div>
