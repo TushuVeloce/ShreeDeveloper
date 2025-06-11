@@ -49,6 +49,8 @@ export class QuotationComponent implements OnInit {
   }
 
   getSiteListByCompanyRef = async () => {
+    this.Entity.p.SiteRef = 0
+    this.Entity.p.SiteName = ''
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -58,6 +60,8 @@ export class QuotationComponent implements OnInit {
   }
 
   private getQuotationListByCompanyRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -71,13 +75,16 @@ export class QuotationComponent implements OnInit {
   };
 
   getVendorQuotationListByCompanyRefAndSiteRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
     if (this.Entity.p.SiteRef <= 0) {
       await this.uiUtils.showErrorToster('Site not Selected');
       return;
     }
     let lst = await Quotation.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
+    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+  );
+  console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();

@@ -114,6 +114,10 @@ export class QuotationDetailsComponent implements OnInit {
   }
 
   getVendorListByCompanyRef = async () => {
+    this.Entity.p.VendorRef = 0
+    this.Entity.p.VendorName = ''
+    this.Entity.p.VendorTradeName = ''
+    this.Entity.p.AddressLine1 = ''
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -266,12 +270,17 @@ export class QuotationDetailsComponent implements OnInit {
     }
   };
 
-
   async addQuotedMaterial() {
-    if (!this.newQuotedMaterial.EstimatedQty || !this.newQuotedMaterial.OrderedQty || !this.newQuotedMaterial.Rate || !this.newQuotedMaterial.NetAmount || !this.newQuotedMaterial.TotalAmount) {
-      await this.uiUtils.showErrorMessage('Error', 'Material, Ordered Qty, Rate');
-      return;
+    if (this.newQuotedMaterial.MaterialRequisitionDetailsRef == 0) {
+      return this.uiUtils.showWarningToster('Material Name cannot be blank.');
     }
+    if (this.newQuotedMaterial.OrderedQty == 0) {
+      return this.uiUtils.showWarningToster('Ordered Quantity cannot be blank.');
+    }
+    if (this.newQuotedMaterial.Rate == 0) {
+      return this.uiUtils.showWarningToster('Rate cannot be blank.');
+    }
+
     this.newQuotedMaterial.ExceptedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExceptedDeliveryDate);
     this.ExceptedDeliveryDate = '';
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
@@ -314,6 +323,7 @@ export class QuotationDetailsComponent implements OnInit {
   }
 
   SaveQuotation = async () => {
+    let lstFTO: FileTransferObject[] = [];
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.newQuotedMaterial.MaterialQuotationRef = this.Entity.p.Ref
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
@@ -323,8 +333,17 @@ export class QuotationDetailsComponent implements OnInit {
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
 
-    let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("InvoiceFile", this.InvoiceFile, this.InvoiceFile.name)];
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO); if (!tr.Successful) {
+    if (this.InvoiceFile) {
+      lstFTO.push(
+        FileTransferObject.FromFile(
+          "InvoiceFile",
+          this.InvoiceFile,
+          this.InvoiceFile.name
+        )
+      );
+    }
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+    if (!tr.Successful) {
       this.isSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message)
       return;
@@ -341,7 +360,11 @@ export class QuotationDetailsComponent implements OnInit {
     }
   };
 
-  CalculateNetAmountAndTotalAmount = () => {
+  CalculateNetAmountAndTotalAmount = async () => {
+    if (this.newQuotedMaterial.OrderedQty > this.newQuotedMaterial.EstimatedQty) {
+      this.newQuotedMaterial.OrderedQty = 0;
+      return this.uiUtils.showWarningToster('Ordered Qty should be less then or equal to Required Qty');
+    }
     if (this.newQuotedMaterial.DiscountedRate == 0) {
       this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.Rate * this.newQuotedMaterial.OrderedQty);
     } else {
