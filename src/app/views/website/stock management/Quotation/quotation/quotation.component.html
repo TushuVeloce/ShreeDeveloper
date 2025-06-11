@@ -1,20 +1,20 @@
 <div class="row">
-  <div class="col-4 mb-2">
-    <h1 style="padding-top: 3px;" class="title title_light">Vendor Quotaion List</h1>
+  <div class="col-4">
+    <h1 style="padding-top: 3px;" class="title title_light">Vendor Quotation List</h1>
   </div>
-  <div class="col-4 mb-2 search-container_light">
+  <div class="col-4 search-container_light">
     <!-- <app-shared-filter [masterList]="MasterList"
       [filterFields]="['SiteName', 'Date', 'VendorName', 'MaterialName', 'UnitName']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter> -->
   </div>
-  <div class="col-4 mb-2" routerLinkActive="active">
+  <div class="col-4" routerLinkActive="active">
     <nz-button nz-button class="btn1" (click)='AddQuotation()'>
       Add Quotation
     </nz-button>
   </div>
 </div>
 <div class="row" style="margin-top: 1rem; ">
-  <div class="col-md-4" style="margin-top: 1rem; ">
+  <div class="col-md-4">
     <div>
       <label for="SiteRef"><b>Site</b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"

@@ -11,11 +11,11 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { CountryStateCityRefs } from "src/app/classes/domain/constants";
-import { QuotatedMaterialFetchRequest } from "./quotatedmaterialfetchrequest";
+import { QuotedMaterialFetchRequest } from "./quotatedmaterialfetchrequest";
 
 
-export class QuotatedMaterialDetailProps {
-  public readonly Db_Table_Name = "QuotatedMaterialDetails";
+export class QuotedMaterialDetailProps {
+  public readonly Db_Table_Name = "QuotedMaterialDetails";
   public Ref: number = 0;
 
   public MaterialRequisitionDetailsRef: number = 0;
@@ -42,14 +42,14 @@ export class QuotatedMaterialDetailProps {
   }
 
   public static Blank() {
-    return new QuotatedMaterialDetailProps(true);
+    return new QuotedMaterialDetailProps(true);
   }
 }
 
-export class QuotatedMaterial implements IPersistable<QuotatedMaterial> {
-  public static readonly Db_Table_Name: string = 'QuotatedMaterialDetails';
+export class QuotedMaterial implements IPersistable<QuotedMaterial> {
+  public static readonly Db_Table_Name: string = 'QuotedMaterialDetails';
 
-  public constructor(public readonly p: QuotatedMaterialDetailProps, public readonly AllowEdit: boolean) {
+  public constructor(public readonly p: QuotedMaterialDetailProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -62,17 +62,17 @@ export class QuotatedMaterial implements IPersistable<QuotatedMaterial> {
     }
   }
 
-  public GetEditableVersion(): QuotatedMaterial {
-    let newState: QuotatedMaterialDetailProps = Utils.GetInstance().DeepCopy(this.p);
-    return QuotatedMaterial.CreateInstance(newState, true);
+  public GetEditableVersion(): QuotedMaterial {
+    let newState: QuotedMaterialDetailProps = Utils.GetInstance().DeepCopy(this.p);
+    return QuotedMaterial.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new QuotatedMaterial(QuotatedMaterialDetailProps.Blank(), true);
+    return new QuotedMaterial(QuotedMaterialDetailProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new QuotatedMaterial(data as QuotatedMaterialDetailProps, allowEdit);
+    return new QuotedMaterial(data as QuotedMaterialDetailProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
@@ -80,28 +80,28 @@ export class QuotatedMaterial implements IPersistable<QuotatedMaterial> {
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, QuotatedMaterial.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, QuotedMaterial.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: QuotatedMaterial = QuotatedMaterial.CreateNewInstance();
+  private static m_currentInstance: QuotedMaterial = QuotedMaterial.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return QuotatedMaterial.m_currentInstance;
+    return QuotedMaterial.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: QuotatedMaterial) {
-    QuotatedMaterial.m_currentInstance = value;
+  public static SetCurrentInstance(value: QuotedMaterial) {
+    QuotedMaterial.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): QuotatedMaterial {
+  public static SingleInstanceFromTransportData(td: TransportData): QuotedMaterial {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, QuotatedMaterial.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, QuotatedMaterial.Db_Table_Name)!.Entries) {
-        return QuotatedMaterial.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, QuotedMaterial.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, QuotedMaterial.Db_Table_Name)!.Entries) {
+        return QuotedMaterial.CreateInstance(data, false);
       }
     }
 
@@ -110,13 +110,13 @@ export class QuotatedMaterial implements IPersistable<QuotatedMaterial> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = ""): QuotatedMaterial[] {
-    let result: QuotatedMaterial[] = [];
+    sortPropertyName: string = ""): QuotedMaterial[] {
+    let result: QuotedMaterial[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, QuotatedMaterial.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, QuotatedMaterial.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, QuotedMaterial.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, QuotedMaterial.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -126,18 +126,18 @@ export class QuotatedMaterial implements IPersistable<QuotatedMaterial> {
       }
 
       for (let data of entries) {
-        result.push(QuotatedMaterial.CreateInstance(data, false));
+        result.push(QuotedMaterial.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): QuotatedMaterial[] {
-    return QuotatedMaterial.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): QuotedMaterial[] {
+    return QuotedMaterial.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: QuotatedMaterialFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: QuotedMaterialFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -152,37 +152,37 @@ export class QuotatedMaterial implements IPersistable<QuotatedMaterial> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new QuotatedMaterialFetchRequest();
-    req.QuotatedMaterialRefs.push(ref);
+    let req = new QuotedMaterialFetchRequest();
+    req.QuotedMaterialRefs.push(ref);
 
-    let tdResponse = await QuotatedMaterial.FetchTransportData(req, errorHandler) as TransportData;
-    return QuotatedMaterial.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await QuotedMaterial.FetchTransportData(req, errorHandler) as TransportData;
+    return QuotedMaterial.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: QuotatedMaterialFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await QuotatedMaterial.FetchTransportData(req, errorHandler) as TransportData;
-    return QuotatedMaterial.ListFromTransportData(tdResponse);
+  public static async FetchList(req: QuotedMaterialFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await QuotedMaterial.FetchTransportData(req, errorHandler) as TransportData;
+    return QuotedMaterial.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new QuotatedMaterialFetchRequest();
-    let tdResponse = await QuotatedMaterial.FetchTransportData(req, errorHandler) as TransportData;
-    return QuotatedMaterial.ListFromTransportData(tdResponse);
+    let req = new QuotedMaterialFetchRequest();
+    let tdResponse = await QuotedMaterial.FetchTransportData(req, errorHandler) as TransportData;
+    return QuotedMaterial.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new QuotatedMaterialFetchRequest();
+    let req = new QuotedMaterialFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     req.SiteManagementRefs.push(SiteRef)
-    let tdResponse = await QuotatedMaterial.FetchTransportData(req, errorHandler) as TransportData;
-    return QuotatedMaterial.ListFromTransportData(tdResponse);
+    let tdResponse = await QuotedMaterial.FetchTransportData(req, errorHandler) as TransportData;
+    return QuotedMaterial.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListBySiteRef(siteref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new QuotatedMaterialFetchRequest();
+    let req = new QuotedMaterialFetchRequest();
     req.SiteManagementRefs.push(siteref)
-    let tdResponse = await QuotatedMaterial.FetchTransportData(req, errorHandler) as TransportData;
-    return QuotatedMaterial.ListFromTransportData(tdResponse);
+    let tdResponse = await QuotedMaterial.FetchTransportData(req, errorHandler) as TransportData;
+    return QuotedMaterial.ListFromTransportData(tdResponse);
   }
 
 

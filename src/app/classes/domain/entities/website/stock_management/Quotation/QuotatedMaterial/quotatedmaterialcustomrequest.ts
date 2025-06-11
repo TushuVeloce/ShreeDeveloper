@@ -9,7 +9,7 @@ export class QuotationMaterialCustomRequest {
   public static readonly MasterTableName: string = "MaterialRequisitionDetails";
   CompanyRefs: number[] = [];
   SiteManagementRefs: number[] = [];
-  QuotatedMaterialRefs: number[] = [];
+  QuotedMaterialRefs: number[] = [];
   VendorRefs: number[] = [];
   RequiredMaterialRefs: number[] = [];
 

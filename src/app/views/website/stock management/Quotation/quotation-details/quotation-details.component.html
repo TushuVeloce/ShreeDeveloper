@@ -112,7 +112,7 @@
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
           style="display: flex; justify-content: end" routerLinkActive="active">
-          <nz-button nz-button class="btn1" (click)="openModal('QuotatedMaterial')">Add Material</nz-button>
+          <nz-button nz-button class="btn1" (click)="openModal('QuotedMaterial')">Add Material</nz-button>
         </div>
       </div>
 
@@ -121,14 +121,14 @@
         <div class="table-container" style="margin-top: 2rem">
           <div class="row">
             <div class="col-12">
-              <label class="TableHeading">Quotated Material Details</label>
+              <label class="TableHeading">Quoted Material Details</label>
             </div>
           </div>
           <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
             nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.MaterialQuotationDetailsArray">
             <thead>
               <tr>
-                <th *ngFor="let header of QuotatedMaterialheaders" class="tblsubheader">
+                <th *ngFor="let header of QuotedMaterialheaders" class="tblsubheader">
                   {{ header }}
                 </th>
               </tr>
@@ -151,10 +151,10 @@
                 <td Class="tbldata">{{ material.NetAmount }}</td>
                 <td Class="tbldata">{{ material.TotalAmount }}</td>
                 <td class="tbldata">
-                  <span style="margin-left: 9px" (click)="editQuotatedMaterial(i)">
+                  <span style="margin-left: 9px" (click)="editQuotedMaterial(i)">
                     <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
                   </span>
-                  <span style="margin-left: 9px" (click)="removeQuotatedMaterial(i)">
+                  <span style="margin-left: 9px" (click)="removeQuotedMaterial(i)">
                     <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
                 </td>
               </tr>
@@ -163,7 +163,7 @@
         </div>
       </div>
       <div *ngIf="Entity.p.MaterialQuotationDetailsArray.length === 0" class="card-body_light">
-        <div style="height: 200px; background-color: white" class="d-flex align-items-center justify-content-center">
+        <div style="height: 20vh; background-color: white" class="d-flex align-items-center justify-content-center">
           <span class="title_light"> Data Not Found</span>
         </div>
       </div>
@@ -186,11 +186,11 @@
   </div>
 </div>
 
-<div *ngIf="isQuotatedMaterialModalOpen" class="custom-modal-overlay">
+<div *ngIf="isQuotedMaterialModalOpen" class="custom-modal-overlay">
   <div class="custom-modal">
     <div class="custom-modal-header">
       <h5>Add Material</h5>
-      <button type="button" class="btn-close" (click)="closeModal('QuotatedMaterial')"></button>
+      <button type="button" class="btn-close" (click)="closeModal('QuotedMaterial')"></button>
     </div>
     <div class="custom-modal-body">
       <form autocomplete="off">
@@ -199,26 +199,26 @@
             <label for="MaterialRequisitionDetailsRef"><b>Material</b></label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
               nzPlaceHolder="Select" [nzSize]="'large'" name="MaterialRequisitionDetailsRef" required
-              id="MaterialRequisitionDetailsRef" [(ngModel)]="newQuotatedMaterial.MaterialRequisitionDetailsRef"
-              (ngModelChange)="onMaterialSelection(newQuotatedMaterial.MaterialRequisitionDetailsRef)">
+              id="MaterialRequisitionDetailsRef" [(ngModel)]="newQuotedMaterial.MaterialRequisitionDetailsRef"
+              (ngModelChange)="onMaterialSelection(newQuotedMaterial.MaterialRequisitionDetailsRef)">
               <nz-option *ngFor="let material of MaterialRequisitionList" [nzLabel]="material.p.MaterialName"
                 [nzValue]="material.p.Ref"></nz-option>
             </nz-select>
           </div>
           <div class="col-md-6">
             <label>Unit</label>
-            <input type="text" name="Unit" class="form-control" [(ngModel)]="newQuotatedMaterial.UnitName" readonly />
+            <input type="text" name="Unit" class="form-control" [(ngModel)]="newQuotedMaterial.UnitName" readonly />
           </div>
           <div class="col-md-6">
             <label>Required Quantity</label>
             <input type="number" name="EstimatedQty" class=" form-control"
-              [(ngModel)]="newQuotatedMaterial.EstimatedQty" readonly />
+              [(ngModel)]="newQuotedMaterial.EstimatedQty" readonly />
           </div>
         </div>
         <div class=" row" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Ordered Quantity</label>
-            <input type="number" name="OrderedQty" class="form-control" [(ngModel)]="newQuotatedMaterial.OrderedQty"
+            <input type="number" name="OrderedQty" class="form-control" [(ngModel)]="newQuotedMaterial.OrderedQty"
               #OrderedQtyCtrl="ngModel" required (blur)="OrderedQtyCtrl.control.markAsTouched()"
               placeholder="Enter Ordered Quantity" (click)="selectAllValue($event)"
               (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
@@ -228,7 +228,7 @@
           </div>
           <div class="col-md-6">
             <label>Rate</label>
-            <input type="number" name="Rate" class="form-control" [(ngModel)]="newQuotatedMaterial.Rate"
+            <input type="number" name="Rate" class="form-control" [(ngModel)]="newQuotedMaterial.Rate"
               #RateCtrl="ngModel" required (blur)="RateCtrl.control.markAsTouched()" placeholder="Enter Rate"
               (click)="selectAllValue($event)" />
             <div *ngIf="(RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty))">
@@ -238,7 +238,7 @@
           <div class="col-md-6">
             <label>Discount Rate</label>
             <input type="number" name="DiscountedRate" class="form-control"
-              [(ngModel)]="newQuotatedMaterial.DiscountedRate" (ngModelChange)="CalculateNetAmountAndTotalAmount()"
+              [(ngModel)]="newQuotedMaterial.DiscountedRate" (ngModelChange)="CalculateNetAmountAndTotalAmount()"
               #DiscountedRateCtrl="ngModel" required (blur)="DiscountedRateCtrl.control.markAsTouched()"
               placeholder="Enter Discount Rate" (click)="selectAllValue($event)" />
             <div *ngIf="(DiscountedRateCtrl.invalid && (DiscountedRateCtrl.touched || DiscountedRateCtrl.dirty))">
@@ -250,7 +250,7 @@
               <label for="Gst"><b>Gst</b></label>
               <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
                 nzPlaceHolder="Select" [nzSize]="'large'" name="Gst" required id="Gst"
-                [(ngModel)]="newQuotatedMaterial.Gst" (ngModelChange)="CalculateNetAmountAndTotalAmount()">
+                [(ngModel)]="newQuotedMaterial.Gst" (ngModelChange)="CalculateNetAmountAndTotalAmount()">
                 <nz-option nzLabel="None" [nzValue]="0"></nz-option>
                 <nz-option nzLabel="5%" [nzValue]="5"></nz-option>
                 <nz-option nzLabel="9%" [nzValue]="9"></nz-option>
@@ -264,7 +264,7 @@
           <div class="col-md-6">
             <label>Delivery Charges</label>
             <input type="number" name="DeliveryCharges" class="form-control"
-              [(ngModel)]="newQuotatedMaterial.DeliveryCharges" #DeliveryCharges="ngModel" required
+              [(ngModel)]="newQuotedMaterial.DeliveryCharges" #DeliveryCharges="ngModel" required
               (blur)="DeliveryCharges.control.markAsTouched()" placeholder="Enter DeliveryCharges"
               (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
             <div *ngIf="(DeliveryCharges.invalid && (DeliveryCharges.touched || DeliveryCharges.dirty))">
@@ -278,12 +278,12 @@
           </div>
           <div class="col-md-6">
             <label>Net Amount</label>
-            <input type="number" name="NetAmount" class="form-control" [(ngModel)]="newQuotatedMaterial.NetAmount"
+            <input type="number" name="NetAmount" class="form-control" [(ngModel)]="newQuotedMaterial.NetAmount"
               readonly />
           </div>
           <div class="col-md-6">
             <label>Total Amount</label>
-            <input type="number" name="TotalAmount" class=" form-control" [(ngModel)]="newQuotatedMaterial.TotalAmount"
+            <input type="number" name="TotalAmount" class=" form-control" [(ngModel)]="newQuotedMaterial.TotalAmount"
               readonly />
           </div>
         </div>
@@ -297,10 +297,10 @@
           margin-top: 2rem;
         ">
         <div>
-          <nz-button nz-button class="btn1" (click)="addQuotatedMaterial()">Save</nz-button>
+          <nz-button nz-button class="btn1" (click)="addQuotedMaterial()">Save</nz-button>
         </div>
         <div>
-          <nz-button nz-button class="btn1" (click)="closeModal('QuotatedMaterial')">
+          <nz-button nz-button class="btn1" (click)="closeModal('QuotedMaterial')">
             Cancel
           </nz-button>
         </div>

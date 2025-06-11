@@ -4,7 +4,7 @@ import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/c
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { RequiredMaterial } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/requiredmaterial/requiredmaterial';
-import { QuotatedMaterial, QuotatedMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/Quotation/QuotatedMaterial/quotatedmaterial';
+import { QuotedMaterial, QuotedMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/Quotation/QuotatedMaterial/quotatedmaterial';
 import { Quotation } from 'src/app/classes/domain/entities/website/stock_management/Quotation/quotation';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -33,9 +33,9 @@ export class QuotationDetailsComponent implements OnInit {
   MaterialRequisitionList: RequiredMaterial[] = [];
   QuotationDate: string = '';
   ExceptedDeliveryDate: string = '';
-  QuotatedMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount', 'Action'];
-  isQuotatedMaterialModalOpen: boolean = false;
-  newQuotatedMaterial: QuotatedMaterialDetailProps = QuotatedMaterialDetailProps.Blank();
+  QuotedMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount', 'Action'];
+  isQuotedMaterialModalOpen: boolean = false;
+  newQuotedMaterial: QuotedMaterialDetailProps = QuotedMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -142,9 +142,9 @@ export class QuotationDetailsComponent implements OnInit {
 
   onMaterialSelection = (MaterialRef: number) => {
     const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.Ref == MaterialRef);
-    this.newQuotatedMaterial.UnitName = SingleRecord[0].p.UnitName
-    this.newQuotatedMaterial.EstimatedQty = SingleRecord[0].p.EstimatedQty
-    this.newQuotatedMaterial.MaterialRequisitionDetailsName = SingleRecord[0].p.MaterialName
+    this.newQuotedMaterial.UnitName = SingleRecord[0].p.UnitName
+    this.newQuotedMaterial.EstimatedQty = SingleRecord[0].p.EstimatedQty
+    this.newQuotedMaterial.MaterialRequisitionDetailsName = SingleRecord[0].p.MaterialName
   }
 
   // Trigger file input when clicking the image
@@ -232,15 +232,15 @@ export class QuotationDetailsComponent implements OnInit {
       return;
     }
     this.getMaterialRequisitionListByVendorRefAndSiteRef();
-    if (type === 'QuotatedMaterial') this.isQuotatedMaterialModalOpen = true;
+    if (type === 'QuotedMaterial') this.isQuotedMaterialModalOpen = true;
   }
 
   closeModal = async (type: string) => {
-    if (type === 'QuotatedMaterial') {
+    if (type === 'QuotedMaterial') {
       const keysToCheck = ['Name', 'Address', 'ContactNo', 'EmailId', 'PinCode', 'CityName', 'StateName', 'CountryName'] as const;
 
       const hasData = keysToCheck.some(
-        key => (this.newQuotatedMaterial as any)[key]?.toString().trim()
+        key => (this.newQuotedMaterial as any)[key]?.toString().trim()
       );
 
       if (hasData) {
@@ -249,58 +249,58 @@ export class QuotationDetailsComponent implements OnInit {
           `This process is <strong>IRREVERSIBLE!</strong><br/>
            Are you sure you want to close this modal?`,
           async () => {
-            this.isQuotatedMaterialModalOpen = false;
-            this.newQuotatedMaterial = QuotatedMaterialDetailProps.Blank();
+            this.isQuotedMaterialModalOpen = false;
+            this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
           }
         );
       } else {
-        this.isQuotatedMaterialModalOpen = false;
-        this.newQuotatedMaterial = QuotatedMaterialDetailProps.Blank();
+        this.isQuotedMaterialModalOpen = false;
+        this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
       }
     }
   };
 
 
-  async addQuotatedMaterial() {
-    if (!this.newQuotatedMaterial.EstimatedQty || !this.newQuotatedMaterial.OrderedQty || !this.newQuotatedMaterial.Rate || !this.newQuotatedMaterial.DiscountedRate || !this.newQuotatedMaterial.Gst || !this.newQuotatedMaterial.DeliveryCharges || !this.newQuotatedMaterial.NetAmount || !this.newQuotatedMaterial.TotalAmount) {
+  async addQuotedMaterial() {
+    if (!this.newQuotedMaterial.EstimatedQty || !this.newQuotedMaterial.OrderedQty || !this.newQuotedMaterial.Rate || !this.newQuotedMaterial.DiscountedRate || !this.newQuotedMaterial.Gst || !this.newQuotedMaterial.DeliveryCharges || !this.newQuotedMaterial.NetAmount || !this.newQuotedMaterial.TotalAmount) {
       await this.uiUtils.showErrorMessage('Error', 'Material, Ordered Qty, Rate, Discount Rate, GST, Delivery Charges, Expected Delivery Date, Net Amount, TotalAmount Adderss are Required!');
       return;
     }
-    this.newQuotatedMaterial.ExceptedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExceptedDeliveryDate);
+    this.newQuotedMaterial.ExceptedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExceptedDeliveryDate);
     this.ExceptedDeliveryDate = '';
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
-      this.Entity.p.MaterialQuotationDetailsArray[this.editingIndex] = { ...this.newQuotatedMaterial };
-      await this.uiUtils.showSuccessToster('Quotated Material details updated successfully!');
-      this.isQuotatedMaterialModalOpen = false;
+      this.Entity.p.MaterialQuotationDetailsArray[this.editingIndex] = { ...this.newQuotedMaterial };
+      await this.uiUtils.showSuccessToster('Quoted Material details updated successfully!');
+      this.isQuotedMaterialModalOpen = false;
 
     } else {
-      let QuotatedMaterialInstance = new QuotatedMaterial(this.newQuotatedMaterial, true);
+      let QuotedMaterialInstance = new QuotedMaterial(this.newQuotedMaterial, true);
       let QuotationInstance = new Quotation(this.Entity.p, true);
-      await QuotatedMaterialInstance.EnsurePrimaryKeysWithValidValues();
+      await QuotedMaterialInstance.EnsurePrimaryKeysWithValidValues();
       await QuotationInstance.EnsurePrimaryKeysWithValidValues();
 
-      this.newQuotatedMaterial.MaterialQuotationRef = this.Entity.p.Ref;
-      this.Entity.p.MaterialQuotationDetailsArray.push({ ...QuotatedMaterialInstance.p });
-      await this.uiUtils.showSuccessToster('Quotated Material added successfully!');
+      this.newQuotedMaterial.MaterialQuotationRef = this.Entity.p.Ref;
+      this.Entity.p.MaterialQuotationDetailsArray.push({ ...QuotedMaterialInstance.p });
+      await this.uiUtils.showSuccessToster('Quoted Material added successfully!');
       this.resetMaterialControls()
     }
-    this.newQuotatedMaterial = QuotatedMaterialDetailProps.Blank();
+    this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
     this.editingIndex = null;
   }
 
-  editQuotatedMaterial(index: number) {
-    this.isQuotatedMaterialModalOpen = true
-    this.newQuotatedMaterial = { ...this.Entity.p.MaterialQuotationDetailsArray[index] }
+  editQuotedMaterial(index: number) {
+    this.isQuotedMaterialModalOpen = true
+    this.newQuotedMaterial = { ...this.Entity.p.MaterialQuotationDetailsArray[index] }
     this.editingIndex = index;
     this.ExceptedDeliveryDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialQuotationDetailsArray[index].ExceptedDeliveryDate);
     this.getMaterialRequisitionListByVendorRefAndSiteRef();
   }
 
-  async removeQuotatedMaterial(index: number) {
+  async removeQuotedMaterial(index: number) {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-     Are you sure that you want to DELETE this Quotated Material?`,
+     Are you sure that you want to DELETE this Quoted Material?`,
       async () => {
         this.Entity.p.MaterialQuotationDetailsArray.splice(index, 1);
       }
@@ -309,7 +309,7 @@ export class QuotationDetailsComponent implements OnInit {
 
   SaveQuotation = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    this.newQuotatedMaterial.MaterialQuotationRef = this.Entity.p.Ref
+    this.newQuotedMaterial.MaterialQuotationRef = this.Entity.p.Ref
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.QuotationDate);
@@ -336,9 +336,9 @@ export class QuotationDetailsComponent implements OnInit {
   };
 
   CalculateNetAmountAndTotalAmount = () => {
-    let GstAmount = (this.newQuotatedMaterial.DiscountedRate / 100) * this.newQuotatedMaterial.Gst;
-    this.newQuotatedMaterial.NetAmount = (this.newQuotatedMaterial.DiscountedRate * this.newQuotatedMaterial.OrderedQty);
-    this.newQuotatedMaterial.TotalAmount = this.newQuotatedMaterial.NetAmount + GstAmount + this.newQuotatedMaterial.DeliveryCharges;
+    let GstAmount = (this.newQuotedMaterial.DiscountedRate / 100) * this.newQuotedMaterial.Gst;
+    this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.DiscountedRate * this.newQuotedMaterial.OrderedQty);
+    this.newQuotedMaterial.TotalAmount = this.newQuotedMaterial.NetAmount + GstAmount + this.newQuotedMaterial.DeliveryCharges;
   }
 
   selectAllValue(event: MouseEvent): void {
