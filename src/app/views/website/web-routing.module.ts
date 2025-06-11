@@ -45,7 +45,6 @@ import { SiteManagementActualStagesDetailsComponent } from './site-management/si
 import { EstimateStagesComponent } from './estimate_stages/estimate-stages/estimate-stages.component';
 import { EstimateStagesDetailsComponent } from './estimate_stages/estimate-stages-details/estimate-stages-details.component';
 import { StockConsumeComponent } from './stock management/stock-consume/stock-consume.component';
-import { StockInwardComponent } from './stock management/stock-inward/stock-inward.component';
 import { StockOrderComponent } from './stock management/stock-order/stock-order.component';
 import { StockTransferComponent } from './stock management/stock-transfer/stock-transfer.component';
 import { CountryComponent } from './Masters/country/country.component';
@@ -126,6 +125,8 @@ import { MaterialRequisitionDetailsComponent } from './stock management/material
 import { MaterialRequisitionComponent } from './stock management/material_requisition/material-requisition/material-requisition.component';
 import { QuotationComponent } from './stock management/Quotation/quotation/quotation.component';
 import { QuotationDetailsComponent } from './stock management/Quotation/quotation-details/quotation-details.component';
+import { StockInwardComponent } from './stock management/stock_inward/stock_inward/stock-inward.component';
+import { StockInwardDetailsComponent } from './stock management/stock_inward/stock-inward-details/stock-inward-details.component';
 
 
 const routes: Routes = [
@@ -226,6 +227,9 @@ const routes: Routes = [
       { path: 'Quotation_Details', component: QuotationDetailsComponent },
       { path: 'Stock_Consume', component: StockConsumeComponent },
       { path: 'Stock_Inward', component: StockInwardComponent },
+       { path: 'Stock_Inward', component: StockInwardDetailsComponent
+        
+        },
       { path: 'Stock_Order', component: StockOrderComponent },
       { path: 'Stock_Transfer', component: StockTransferComponent },
 
