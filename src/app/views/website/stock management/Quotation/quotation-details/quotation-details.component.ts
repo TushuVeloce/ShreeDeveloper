@@ -332,6 +332,7 @@ export class QuotationDetailsComponent implements OnInit {
 
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
 
     if (this.InvoiceFile) {
       lstFTO.push(
@@ -377,6 +378,12 @@ export class QuotationDetailsComponent implements OnInit {
   selectAllValue(event: MouseEvent): void {
     const input = event.target as HTMLInputElement;
     input.select();
+  }
+
+  getGrandTotal(): number {
+    return this.Entity.p.MaterialQuotationDetailsArray.reduce((total: number, item: any) => {
+      return total + Number(item.TotalAmount || 0);
+    }, 0);
   }
 
   BackQuotation = async () => {

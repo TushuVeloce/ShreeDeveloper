@@ -29,6 +29,7 @@ export class QuotationComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   headers: string[] = ['Sr.No.', 'Site', 'Date', 'Vendor', 'Material', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Discount Rate', 'Delivery Date', 'Net Amount', 'Total Amount', 'Status', 'Action'];
+  headerswithoutsite: string[] = ['Sr.No.', 'Date', 'Vendor', 'Material', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Discount Rate', 'Delivery Date', 'Net Amount', 'Total Amount', 'Status', 'Action'];
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
@@ -78,13 +79,12 @@ export class QuotationComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.Entity.p.SiteRef <= 0) {
-      await this.uiUtils.showErrorToster('Site not Selected');
+      this.getQuotationListByCompanyRef();
       return;
     }
     let lst = await Quotation.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
-    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-  );
-  console.log('lst :', lst);
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();

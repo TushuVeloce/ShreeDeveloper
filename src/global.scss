@@ -212,7 +212,22 @@ textarea.form-control:focus {
   color: var(--ion-color-primary-tint);
   font-size: large;
   font-weight: 600;
-  font-size: 22px;
+  font-size: 1rem;
+}
+
+
+@media (min-width: 480px) {
+  .detail_title {
+    font-size: 1.25rem;
+    /* tablets */
+  }
+}
+
+@media (min-width: 768px) {
+  .detail_title {
+    font-size: 1.5rem;
+    /* medium devices */
+  }
 }
 
 form {
