@@ -3,8 +3,8 @@
     <h1 style="padding-top: 3px;" class="title title_light">Material Requisition List</h1>
   </div>
    <div class="col-4 mb-2 search-container_light">
-    <app-shared-filter [masterList]="MasterList" [filterFields]="['Date', 'Site name', 'SiteInchargeName', 'AddressLine2']"
-      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
+    <!-- <app-shared-filter [masterList]="MasterList" [filterFields]="['Date', 'Site name', 'SiteInchargeName', 'AddressLine2']"
+      (filteredList)="DisplayMasterList = $event"></app-shared-filter> -->
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">
     <nz-button nz-button class="btn1" (click)='AddMaterialRequisition()'>
@@ -22,6 +22,7 @@
         <label for="SiteRef"><b>site</b></label>
         <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
           nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"  (ngModelChange)="getRequisitionListByAllFilters(); onSiteChange()" >
+          <nz-option [nzValue]="0" nzLabel="All"></nz-option>
           <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
         </nz-select>
       </div>
@@ -113,23 +114,18 @@
 <tbody>
   <ng-container *ngFor="let requisition of paginatedList; let i = index">
     <ng-container *ngFor="let detail of requisition.p.MaterialRequisitionDetailsArray; let materialRowIndex = index">
-
       <tr>
         <!-- Sr.No. (optional: can be based on loop index instead) -->
        <td class="tbldata">{{ (currentPage - 1) * pageSize + materialRowIndex + 1 }}</td>
-
         <!-- Requisition level data -->
         <td class="tbldata">{{ formatDate(requisition.p.Date) }}</td>
         <td class="tbldata">{{ requisition.p.SiteName }}</td>
-
         <!-- Material level data -->
         <td class="tbldata">{{ detail.MaterialName }}</td>
         <td class="tbldata">{{ detail.UnitName }}</td>
         <td class="tbldata">{{ detail.EstimatedQty }}</td>
-
         <!-- Optional: Requisition status -->
         <td class="tbldata">{{ requisition.p.Status }}</td>
-
         <!-- Actions -->
         <td class="tbldata">
           <span style="margin-left: 9px;" (click)="onEditClicked(requisition)">
@@ -140,15 +136,12 @@
           </span>
         </td>
       </tr>
-          <!-- <tr *ngIf="materialRowIndex + 1 === requisition.p.MaterialRequisitionDetailsArray.length">
+          <tr *ngIf="materialRowIndex + 1 === requisition.p.MaterialRequisitionDetailsArray.length">
       <td colspan="100%" style="border-top: 2px solid #444;"></td>
-    </tr> -->
-
+    </tr>
     </ng-container>
   </ng-container>
 </tbody>
-
-
     </nz-table>
   </div>
   <div class="fixed-pagination">

@@ -17,12 +17,12 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   styleUrls: ['./material-requisition.component.scss'],
   standalone: false,
 })
-export class MaterialRequisitionComponent  implements OnInit {
+export class MaterialRequisitionComponent implements OnInit {
 
   Entity: MaterialRequisition = MaterialRequisition.CreateNewInstance();
   MasterList: MaterialRequisition[] = [];
   DisplayMasterList: MaterialRequisition[] = [];
-  list:[]=[]
+  list: [] = []
   SiteList: Site[] = [];
   SearchString: string = '';
   SelectedMaterialRequisition: MaterialRequisition = MaterialRequisition.CreateNewInstance();
@@ -32,13 +32,12 @@ export class MaterialRequisitionComponent  implements OnInit {
   currentPage = 1;
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.', 'Date', 'Site name', 'Material Name', 'Unit','Estimated Qty','Status', 'Action'];
+  headers: string[] = ['Sr.No.', 'Date', 'Site Name', 'Material Name', 'Unit', 'Required Qty.', 'Status', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement,private DateconversionService: DateconversionService,private dtu: DTU,
+    private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService, private dtu: DTU,
   ) {
     effect(async () => {
-      // this.getMaterialListByCompanyRef()
-       this.getSiteListByCompanyRef()
+      this.getSiteListByCompanyRef()
       await this.getMaterialRequisitionListByCompanyRef();
     });
   }
@@ -46,8 +45,8 @@ export class MaterialRequisitionComponent  implements OnInit {
   ngOnInit() {
     this.appStateManage.setDropdownDisabled();
   }
-
-   getSiteListByCompanyRef = async () => {
+  
+  getSiteListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -55,8 +54,8 @@ export class MaterialRequisitionComponent  implements OnInit {
     this.Entity.p.SiteRef = 0
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
-    if(this.SiteList.length > 0){
-      this.Entity.p.SiteRef = this.SiteList[0].p.Ref
+    if (this.SiteList.length > 0) {
+      this.Entity.p.SiteRef = 0
     }
     this.Entity.p.Status = 0
     this.getRequisitionListByAllFilters()
@@ -70,33 +69,31 @@ export class MaterialRequisitionComponent  implements OnInit {
       return;
     }
     let lst = await MaterialRequisition.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
 
   onSiteChange = async () => {
-     this.Entity.p.Status = 0
-     this.getRequisitionListByAllFilters()
+    this.Entity.p.Status = 0
+    this.getRequisitionListByAllFilters()
   }
 
   getRequisitionListByAllFilters = async () => {
-      this.MasterList = [];
-      this.DisplayMasterList = [];
-      // let Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date);
-      if (this.companyRef() <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
-        return;
-      }
-      console.log(' this.Entity.p.Status, this.Entity.p.SiteRef :',  this.Entity.p.Status, this.Entity.p.SiteRef);
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
       let lst = await MaterialRequisition.FetchEntireListByAllFilters(this.companyRef(), this.Entity.p.Status, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      console.log(' this.Entity.p.Status, this.Entity.p.SiteRef :',  this.Entity.p.Status, this.Entity.p.SiteRef);
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
       this.loadPaginationData();
-    }
+  }
 
-   // Extracted from services date conversion //
+  // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   }
@@ -126,7 +123,7 @@ export class MaterialRequisitionComponent  implements OnInit {
           await this.uiUtils.showSuccessToster(
             `MaterialRequisition ${MaterialRequisition.p.Date} has been deleted!`
           );
-          await this.getMaterialRequisitionListByCompanyRef();
+          await this.getRequisitionListByAllFilters();
           this.SearchString = '';
           this.loadPaginationData();
           // await this.FormulateMaterialList();
@@ -135,7 +132,8 @@ export class MaterialRequisitionComponent  implements OnInit {
       }
     );
   };
-
+  
+  
   // For Pagination  start ----
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data

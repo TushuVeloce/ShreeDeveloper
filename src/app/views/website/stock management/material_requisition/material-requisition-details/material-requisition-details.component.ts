@@ -7,6 +7,7 @@ import { Material } from 'src/app/classes/domain/entities/website/masters/materi
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { MaterialRequisition } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/materialrequisition';
 import { RequiredMaterial, RequiredMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/requiredmaterial/requiredmaterial';
+import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
@@ -36,7 +37,7 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
   newRequisition: RequiredMaterialDetailProps = RequiredMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-
+  strCDT: string = ''
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos
   PinCodePattern: string = ValidationPatterns.PinCode;
   INDPhoneNo: string = ValidationPatterns.INDPhoneNo;
@@ -74,6 +75,13 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
     } else {
       this.Entity = MaterialRequisition.CreateNewInstance();
       MaterialRequisition.SetCurrentInstance(this.Entity);
+      if (this.Entity.p.Date == '') {
+        this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+        let parts = this.strCDT.substring(0, 16).split('-');
+        // Construct the new date format
+        this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
+        this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+      }
     }
     this.InitialEntity = Object.assign(
       MaterialRequisition.CreateNewInstance(),
@@ -171,10 +179,11 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
       // await materialInstance.EnsurePrimaryKeysWithValidValues();
       // await MaterialRequisitionInstance.EnsurePrimaryKeysWithValidValues();
       this.newRequisition.MaterialRequisitionRef = this.Entity.p.Ref;
-      this.Entity.p.MaterialRequisitionDetailsArray.push({ ...this.newRequisition});
+      this.Entity.p.MaterialRequisitionDetailsArray.push({ ...this.newRequisition });
       await this.uiUtils.showSuccessToster('material added successfully!');
     }
     this.newRequisition = RequiredMaterialDetailProps.Blank();
+    this.editingIndex = null;
   }
 
   editMaterial(index: number) {
@@ -213,7 +222,6 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        
         await this.uiUtils.showSuccessToster('MaterialRequisition saved successfully!');
         this.Entity = MaterialRequisition.CreateNewInstance();
         this.resetAllControls()
