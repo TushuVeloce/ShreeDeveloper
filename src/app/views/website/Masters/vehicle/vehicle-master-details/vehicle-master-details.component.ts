@@ -56,10 +56,10 @@ export class VehicleMasterDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Vehicle saved successfully!');
+        await this.uiUtils.showSuccessToster('Vehicle saved successfully');
         this.Entity = Vehicle.CreateNewInstance();
       } else {
-        await this.uiUtils.showSuccessToster('Vehicle Updated successfully!');
+        await this.uiUtils.showSuccessToster('Vehicle Updated successfully');
       }
     }
   }

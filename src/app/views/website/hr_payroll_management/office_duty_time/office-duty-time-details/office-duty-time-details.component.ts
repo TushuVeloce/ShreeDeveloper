@@ -96,13 +96,13 @@ export class OfficeDutyTimeDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster(
-          'Office Duty and Time saved successfully!'
+          'Office Duty and Time saved successfully'
         );
         this.Entity = OfficeDutyandTime.CreateNewInstance();
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster(
-          'Office Duty and Time  Updated successfully!'
+          'Office Duty and Time  Updated successfully'
         );
         await this.router.navigate(['/homepage/Website/Office_Duty_Time']);
       }

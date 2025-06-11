@@ -26,7 +26,7 @@ export class SettingsPage implements OnInit {
   constructor(
     private router: Router,
     private actionSheetCtrl: ActionSheetController,
-    public appStateManagement: AppStateManageService, 
+    public appStateManagement: AppStateManageService,
     private sessionValues: SessionValues,
     private servercommunicator: ServerCommunicatorService,
     private toastService: ToastService,
@@ -104,7 +104,7 @@ export class SettingsPage implements OnInit {
       this.appStateManagement.StorageKey.clear();
       localStorage.clear();
 
-      this.toastService.present('Logout successfully!', 2000, 'danger');
+      this.toastService.present('Logout successfully', 2000, 'danger');
       await this.haptic.success();
       // Navigate to login
       this.router.navigate(['/mobileapp/auth/login-mobile']);

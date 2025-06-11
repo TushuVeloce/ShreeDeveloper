@@ -143,10 +143,10 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Registered Customer saved successfully!');
+        await this.uiUtils.showSuccessToster('Registered Customer saved successfully');
         this.Entity = RegisteredCustomer.CreateNewInstance();
       } else {
-        await this.uiUtils.showSuccessToster('Registered Customer Updated successfully!');
+        await this.uiUtils.showSuccessToster('Registered Customer Updated successfully');
         await this.router.navigate(['/homepage/Website/Registered_Customer']);
       }
     }

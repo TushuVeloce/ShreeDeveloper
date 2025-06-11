@@ -255,13 +255,13 @@ export class CompanyMasterDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Company saved successfully!');
+        await this.uiUtils.showSuccessToster('Company saved successfully');
         this.dateOfInCorporation = '';
         this.lastDateOfFirstFinancialYear = '';
         this.Entity = Company.CreateNewInstance();
         this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster('Company Updated successfully!');
+        await this.uiUtils.showSuccessToster('Company Updated successfully');
         this.dateOfInCorporation = '';
         this.lastDateOfFirstFinancialYear = '';
         await this.router.navigate(['/homepage/Website/Company_Master']);

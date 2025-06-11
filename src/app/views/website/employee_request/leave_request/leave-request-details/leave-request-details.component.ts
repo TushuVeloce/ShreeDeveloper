@@ -199,7 +199,7 @@ export class LeaveRequestDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Leave Request Master saved successfully!');
+        await this.uiUtils.showSuccessToster('Leave Request Master saved successfully');
         this.Entity = LeaveRequest.CreateNewInstance();
         this.resetAllControls();
         await this.router.navigate(['/homepage/Website/Leave_Request']);

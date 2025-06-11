@@ -105,12 +105,12 @@ export class BankAccountMasterDetailsComponent implements OnInit {
     else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Bank Account saved successfully!');
+        await this.uiUtils.showSuccessToster('Bank Account saved successfully');
         this.dateofopening = '';
         this.Entity = BankAccount.CreateNewInstance();
         this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster('Bank Account Updated successfully!');
+        await this.uiUtils.showSuccessToster('Bank Account Updated successfully');
         await this.router.navigate(['/homepage/Website/Bank_Account_Master']);
       }
     }

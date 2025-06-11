@@ -96,11 +96,11 @@ export class MaterialMasterDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Material saved successfully!');
+        await this.uiUtils.showSuccessToster('Material saved successfully');
         this.Entity = Material.CreateNewInstance();
         this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster('Material Updated successfully!');
+        await this.uiUtils.showSuccessToster('Material Updated successfully');
         await this.router.navigate(['/homepage/Website/Material_Master']);
       }
     }

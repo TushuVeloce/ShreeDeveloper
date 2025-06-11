@@ -3,9 +3,6 @@
     <h1 style="padding-top: 3px;" class="title title_light">Vendor Quotation List</h1>
   </div>
   <div class="col-4 search-container_light">
-    <!-- <app-shared-filter [masterList]="MasterList"
-      [filterFields]="['SiteName', 'Date', 'VendorName', 'MaterialName', 'UnitName']"
-      (filteredList)="DisplayMasterList = $event"></app-shared-filter> -->
   </div>
   <div class="col-4" routerLinkActive="active">
     <nz-button nz-button class="btn1" (click)='AddQuotation()'>
@@ -20,6 +17,7 @@
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
         [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
         (ngModelChange)="getVendorQuotationListByCompanyRefAndSiteRef()">
+        <nz-option nzLabel="All" [nzValue]="0"></nz-option>
         <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
       </nz-select>
     </div>

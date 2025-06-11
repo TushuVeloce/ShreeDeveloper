@@ -255,7 +255,7 @@ export class SiteManagementDetailsComponent implements OnInit {
 
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
       this.Entity.p.SiteManagementOwnerDetails[this.editingIndex] = { ...this.newOwner };
-      await this.uiUtils.showSuccessToster('Owner details updated successfully!');
+      await this.uiUtils.showSuccessToster('Owner details updated successfully');
       this.isOwnerModalOpen = false;
 
     } else {
@@ -266,7 +266,7 @@ export class SiteManagementDetailsComponent implements OnInit {
 
       this.newOwner.SiteManagementRef = this.Entity.p.Ref;
       this.Entity.p.SiteManagementOwnerDetails.push({ ...ownerInstance.p });
-      await this.uiUtils.showSuccessToster('Owner added successfully!');
+      await this.uiUtils.showSuccessToster('Owner added successfully');
       this.resetOwnerControls()
     }
 
@@ -313,11 +313,11 @@ export class SiteManagementDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Site saved successfully!');
+        await this.uiUtils.showSuccessToster('Site saved successfully');
         this.Entity = Site.CreateNewInstance();
         this.resetAllControls()
       } else {
-        await this.uiUtils.showSuccessToster('Site Updated successfully!');
+        await this.uiUtils.showSuccessToster('Site Updated successfully');
         await this.router.navigate(['/homepage/Website/Site_Management']);
       }
     }

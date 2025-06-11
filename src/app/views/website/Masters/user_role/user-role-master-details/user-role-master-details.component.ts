@@ -60,10 +60,10 @@ export class UserRoleMasterDetailsComponent  implements OnInit {
       this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('User Role saved successfully!');
+        await this.uiUtils.showSuccessToster('User Role saved successfully');
         this.Entity = UserRole.CreateNewInstance();
       } else {
-        await this.uiUtils.showSuccessToster('User Role Updated successfully!');
+        await this.uiUtils.showSuccessToster('User Role Updated successfully');
         await this.router.navigate(['/homepage/Website/User_Role_Master']);
 
       }

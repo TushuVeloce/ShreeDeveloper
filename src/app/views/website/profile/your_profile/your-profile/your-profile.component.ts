@@ -178,7 +178,7 @@ export class YourProfileComponent implements OnInit {
   //   if (!tr.Successful) {
   //     this.uiUtils.showErrorMessage('Error', tr.Message);
   //   } else {
-  //     await this.uiUtils.showSuccessToster('Profile Updated successfully!');
+  //     await this.uiUtils.showSuccessToster('Profile Updated successfully');
   //     this.router.navigate(['/homepage']);
   //   }
   // };
@@ -207,7 +207,7 @@ export class YourProfileComponent implements OnInit {
       if (!tr.Successful) {
         this.uiUtils.showErrorMessage('Error', tr.Message);
       } else {
-        await this.uiUtils.showSuccessToster('Employee Profile Updated successfully!');
+        await this.uiUtils.showSuccessToster('Employee Profile Updated successfully');
         this.router.navigate(['/homepage']);
       }
     } else if (this.AdminEntity && this.AdminEntity.p) {
@@ -229,7 +229,7 @@ export class YourProfileComponent implements OnInit {
       if (!tr.Successful) {
         this.uiUtils.showErrorMessage('Error', tr.Message);
       } else {
-        await this.uiUtils.showSuccessToster('Admin Profile Updated successfully!');
+        await this.uiUtils.showSuccessToster('Admin Profile Updated successfully');
         this.router.navigate(['/homepage']);
       }
 

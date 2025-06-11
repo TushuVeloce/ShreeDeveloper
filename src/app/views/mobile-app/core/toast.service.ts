@@ -20,4 +20,4 @@ export class ToastService {
 
 // constructor(private toastService: ToastService) { }
 
-// this.toastService.present('Logged in successfully!', 2000, 'success');
+// this.toastService.present('Logged in successfully', 2000, 'success');

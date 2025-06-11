@@ -141,13 +141,13 @@ export class PlotMasterDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Plot saved successfully!');
+        await this.uiUtils.showSuccessToster('Plot saved successfully');
         this.Entity = Plot.CreateNewInstance();
         this.CustomerEntity = Owner.CreateNewInstance();
         this.CompanyEntity = Company.CreateNewInstance();
         this.resetAllControls()
       } else {
-        await this.uiUtils.showSuccessToster('Plot Updated successfully!');
+        await this.uiUtils.showSuccessToster('Plot Updated successfully');
         await this.router.navigate(['/homepage/Website/Plot_Master']);
       }
     }

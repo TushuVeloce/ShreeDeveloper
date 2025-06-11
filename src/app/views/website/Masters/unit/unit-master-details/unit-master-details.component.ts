@@ -76,11 +76,11 @@ export class UnitMasterDetailsComponent implements OnInit {
     else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Unit saved successfully!');
+        await this.uiUtils.showSuccessToster('Unit saved successfully');
         this.Entity = Unit.CreateNewInstance();
         this.resetAllControls()
       } else {
-        await this.uiUtils.showSuccessToster('Unit Updated successfully!');
+        await this.uiUtils.showSuccessToster('Unit Updated successfully');
         await this.router.navigate(['/homepage/Website/Unit_Master']);
       }
     }

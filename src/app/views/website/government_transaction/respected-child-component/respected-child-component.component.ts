@@ -62,7 +62,7 @@ export class RespectedChildComponentComponent implements OnInit {
       this.uiUtils.showErrorMessage('Error', tr.Message);
       return;
     } else {
-      await this.uiUtils.showSuccessToster(`${this.SelectedTransactionType} 'saved successfully!`);
+      await this.uiUtils.showSuccessToster(`${this.SelectedTransactionType} 'saved successfully`);
       this.Entity = GovernmentTransaction.CreateNewInstance();
     }
   }

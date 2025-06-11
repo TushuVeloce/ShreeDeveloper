@@ -201,10 +201,10 @@ export class VendorMasterDetailsComponent implements OnInit {
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         this.resetAllControls()
-        await this.uiUtils.showSuccessToster('Vendor saved successfully!');
+        await this.uiUtils.showSuccessToster('Vendor saved successfully');
         this.Entity = Vendor.CreateNewInstance();
       } else {
-        await this.uiUtils.showSuccessToster('Vendor Updated successfully!');
+        await this.uiUtils.showSuccessToster('Vendor Updated successfully');
         this.router.navigate(['/homepage/Website/Vendor_Master']);
       }
     }

@@ -77,11 +77,11 @@ export class DepartmentMasterDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Department saved successfully!');
+        await this.uiUtils.showSuccessToster('Department saved successfully');
         this.Entity = Department.CreateNewInstance();
         this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster('Department Updated successfully!');
+        await this.uiUtils.showSuccessToster('Department Updated successfully');
         await this.router.navigate(['/homepage/Website/Department_Master']);
       }
     }

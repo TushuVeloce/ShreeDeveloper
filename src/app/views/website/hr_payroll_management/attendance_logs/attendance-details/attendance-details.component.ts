@@ -103,11 +103,11 @@ export class AttendanceDetailsComponent implements OnInit {
     else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Attendance saved successfully!');
+        await this.uiUtils.showSuccessToster('Attendance saved successfully');
         this.Entity = AttendanceLog.CreateNewInstance();
         this.resetAllControls()
       } else {
-        await this.uiUtils.showSuccessToster('Attendance Updated successfully!');
+        await this.uiUtils.showSuccessToster('Attendance Updated successfully');
         await this.router.navigate(['/homepage/Website/Attendance_Logs']);
       }
     }

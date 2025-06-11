@@ -7,6 +7,7 @@ import { RequiredMaterial } from 'src/app/classes/domain/entities/website/stock_
 import { QuotedMaterial, QuotedMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/Quotation/QuotatedMaterial/quotatedmaterial';
 import { Quotation } from 'src/app/classes/domain/entities/website/stock_management/Quotation/quotation';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
+import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -32,17 +33,17 @@ export class QuotationDetailsComponent implements OnInit {
   VendorList: Vendor[] = [];
   MaterialRequisitionList: RequiredMaterial[] = [];
   QuotationDate: string = '';
+  CurrentDate: string = '';
   ExceptedDeliveryDate: string = '';
   QuotedMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount', 'Action'];
   isQuotedMaterialModalOpen: boolean = false;
   newQuotedMaterial: QuotedMaterialDetailProps = QuotedMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  strCDT: string = ''
 
   errors: string = "";
-
   InvoiceFile: File = null as any
-
   ImageBaseUrl: string = "";
   TimeStamp = Date.now()
   LoginToken = '';
@@ -94,6 +95,11 @@ export class QuotationDetailsComponent implements OnInit {
     } else {
       this.Entity = Quotation.CreateNewInstance();
       Quotation.SetCurrentInstance(this.Entity);
+      this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+      let parts = this.strCDT.substring(0, 16).split('-');
+      // Construct the new date format
+      this.QuotationDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+      this.CurrentDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
     }
     this.InitialEntity = Object.assign(Quotation.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Quotation;
   }
@@ -262,15 +268,15 @@ export class QuotationDetailsComponent implements OnInit {
 
 
   async addQuotedMaterial() {
-    if (!this.newQuotedMaterial.EstimatedQty || !this.newQuotedMaterial.OrderedQty || !this.newQuotedMaterial.Rate || !this.newQuotedMaterial.DiscountedRate || !this.newQuotedMaterial.Gst || !this.newQuotedMaterial.DeliveryCharges || !this.newQuotedMaterial.NetAmount || !this.newQuotedMaterial.TotalAmount) {
-      await this.uiUtils.showErrorMessage('Error', 'Material, Ordered Qty, Rate, Discount Rate, GST, Delivery Charges, Expected Delivery Date, Net Amount, TotalAmount Adderss are Required!');
+    if (!this.newQuotedMaterial.EstimatedQty || !this.newQuotedMaterial.OrderedQty || !this.newQuotedMaterial.Rate || !this.newQuotedMaterial.NetAmount || !this.newQuotedMaterial.TotalAmount) {
+      await this.uiUtils.showErrorMessage('Error', 'Material, Ordered Qty, Rate');
       return;
     }
     this.newQuotedMaterial.ExceptedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExceptedDeliveryDate);
     this.ExceptedDeliveryDate = '';
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
       this.Entity.p.MaterialQuotationDetailsArray[this.editingIndex] = { ...this.newQuotedMaterial };
-      await this.uiUtils.showSuccessToster('Quoted Material details updated successfully!');
+      await this.uiUtils.showSuccessToster('Material updated successfully');
       this.isQuotedMaterialModalOpen = false;
 
     } else {
@@ -281,7 +287,7 @@ export class QuotationDetailsComponent implements OnInit {
 
       this.newQuotedMaterial.MaterialQuotationRef = this.Entity.p.Ref;
       this.Entity.p.MaterialQuotationDetailsArray.push({ ...QuotedMaterialInstance.p });
-      await this.uiUtils.showSuccessToster('Quoted Material added successfully!');
+      await this.uiUtils.showSuccessToster('Material added successfully');
       this.resetMaterialControls()
     }
     this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
@@ -325,19 +331,23 @@ export class QuotationDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Quotation saved successfully!');
+        await this.uiUtils.showSuccessToster('Quotation saved successfully');
         this.Entity = Quotation.CreateNewInstance();
         this.resetAllControls()
       } else {
-        await this.uiUtils.showSuccessToster('Quotation Updated successfully!');
-        await this.router.navigate(['/homepage/Website/Quotation']);
+        await this.uiUtils.showSuccessToster('Quotation Updated successfully');
       }
+      await this.router.navigate(['/homepage/Website/Quotation']);
     }
   };
 
   CalculateNetAmountAndTotalAmount = () => {
-    let GstAmount = (this.newQuotedMaterial.DiscountedRate / 100) * this.newQuotedMaterial.Gst;
-    this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.DiscountedRate * this.newQuotedMaterial.OrderedQty);
+    if (this.newQuotedMaterial.DiscountedRate == 0) {
+      this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.Rate * this.newQuotedMaterial.OrderedQty);
+    } else {
+      this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.DiscountedRate * this.newQuotedMaterial.OrderedQty);
+    }
+    let GstAmount = (this.newQuotedMaterial.NetAmount / 100) * this.newQuotedMaterial.Gst;
     this.newQuotedMaterial.TotalAmount = this.newQuotedMaterial.NetAmount + GstAmount + this.newQuotedMaterial.DeliveryCharges;
   }
 

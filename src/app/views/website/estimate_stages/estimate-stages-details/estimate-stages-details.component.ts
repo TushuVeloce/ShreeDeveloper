@@ -127,11 +127,11 @@ export class EstimateStagesDetailsComponent implements OnInit {
     else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Estimate Stage saved successfully!');
+        await this.uiUtils.showSuccessToster('Estimate Stage saved successfully');
         this.Entity = EstimateStages.CreateNewInstance();
         this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster('Estimate Stage Updated successfully!');
+        await this.uiUtils.showSuccessToster('Estimate Stage Updated successfully');
         await this.router.navigate(['/homepage/Website/Estimate_Stages']);
       }
     }

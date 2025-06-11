@@ -124,12 +124,12 @@ export class SiteWorkDoneMasterDetailsComponent implements OnInit {
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster(
-          'Site Work Done saved successfully!'
+          'Site Work Done saved successfully'
         );
         this.Entity = SiteWorkDone.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster(
-          'Site Work Done Updated successfully!'
+          'Site Work Done Updated successfully'
         );
         await this.router.navigate(['/homepage/Website/Site_Work_Done']);
       }

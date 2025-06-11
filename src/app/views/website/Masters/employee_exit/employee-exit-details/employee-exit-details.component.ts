@@ -63,11 +63,11 @@ export class EmployeeExitDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Employee Exit saved successfully!');
+        await this.uiUtils.showSuccessToster('Employee Exit saved successfully');
         this.Entity = EmployeeExit.CreateNewInstance();
       } else {
         await this.router.navigate(['/homepage/Website/Employee_Exit_Master'])
-        await this.uiUtils.showSuccessToster('Employee Exit Updated successfully!');
+        await this.uiUtils.showSuccessToster('Employee Exit Updated successfully');
       }
     }
   }

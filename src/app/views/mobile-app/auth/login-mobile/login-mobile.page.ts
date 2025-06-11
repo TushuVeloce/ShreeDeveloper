@@ -63,13 +63,13 @@ export class LoginMobilePage implements OnInit {
       return
     } else {
       if (response.LoginForFirstTime == 0) {
-        this.toastService.present('Logged in successfully!', 2000, 'success');
+        this.toastService.present('Logged in successfully', 2000, 'success');
         this.isLoggingIn = false;
         this.loginForm.reset();
         this.router.navigate(['/mobileapp/auth/create-new-password-mobile']);
         await this.haptic.success();
       } else {
-        this.toastService.present('Logged in successfully!', 2000, 'success');
+        this.toastService.present('Logged in successfully', 2000, 'success');
         this.isLoggingIn = false;
         this.loginForm.reset();
         this.router.navigate(['/mobileapp/tabs/dashboard']);

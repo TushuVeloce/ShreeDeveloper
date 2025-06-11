@@ -123,13 +123,13 @@ export class EmployeeOvertimeDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster(
-          'Office Duty and Time saved successfully!'
+          'Office Duty and Time saved successfully'
         );
         this.Entity = EmployeeOvertime.CreateNewInstance();
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster(
-          'Office Duty and Time  Updated successfully!'
+          'Office Duty and Time  Updated successfully'
         );
         await this.router.navigate(['/homepage/Website/Employee_Overtime']);
       }

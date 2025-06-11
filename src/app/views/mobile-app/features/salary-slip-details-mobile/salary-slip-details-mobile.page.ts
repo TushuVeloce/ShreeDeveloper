@@ -234,7 +234,7 @@ export class SalarySlipDetailsMobilePage implements OnInit {
       } else {
         this.isSaveDisabled = false;
         if (this.IsNewEntity) {
-          await this.uiUtils.showSuccessToster('Salary Slip successfully!');
+          await this.uiUtils.showSuccessToster('Salary Slip successfully');
           this.Entity = SalarySlipRequest.CreateNewInstance();
           this.resetForm();
           this.router.navigate(['mobileapp/tabs/attendance/salary-slip'], { replaceUrl: true });
@@ -259,11 +259,11 @@ export class SalarySlipDetailsMobilePage implements OnInit {
       console.log('this Entity :', this.Entity);
       return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, []);
     }
-  
+
     deepEqualIgnoringKeys(obj1: any, obj2: any, ignorePaths: string[]): boolean {
       const clean = (obj: any, path = ''): any => {
         if (obj === null || typeof obj !== 'object') return obj;
-  
+
         const result: any = Array.isArray(obj) ? [] : {};
         for (const key in obj) {
           const fullPath = path ? `${path}.${key}` : key;
@@ -272,17 +272,17 @@ export class SalarySlipDetailsMobilePage implements OnInit {
         }
         return result;
       };
-  
+
       const cleanedObj1 = clean(obj1);
       const cleanedObj2 = clean(obj2);
-  
+
       return JSON.stringify(cleanedObj1) === JSON.stringify(cleanedObj2);
     }
-  
+
     goBack = async () => {
       // Replace this with your actual condition to check if data is filled
       const isDataFilled = this.isDataFilled(); // Implement this function based on your form
-  
+
       if (isDataFilled) {
         await this.uiUtils.showConfirmationMessage(
           'Warning',

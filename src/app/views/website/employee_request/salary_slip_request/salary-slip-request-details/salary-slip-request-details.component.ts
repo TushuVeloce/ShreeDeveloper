@@ -134,7 +134,7 @@ export class SalarySlipRequestDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('SalarySlipRequest Master saved successfully!');
+        await this.uiUtils.showSuccessToster('SalarySlipRequest Master saved successfully');
         this.Entity = SalarySlipRequest.CreateNewInstance();
         await this.router.navigate(['/homepage/Website/Salary_Slip_Request']);
         this.resetAllControls();

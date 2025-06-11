@@ -99,13 +99,13 @@ export class CompanyHolidaysDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster(
-          'Office Duty and Time saved successfully!'
+          'Office Duty and Time saved successfully'
         );
         this.Entity = CompanyHolidays.CreateNewInstance();
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster(
-          'Office Duty and Time  Updated successfully!'
+          'Office Duty and Time  Updated successfully'
         );
         await this.router.navigate(['/homepage/Website/Plot_Master']);
       }

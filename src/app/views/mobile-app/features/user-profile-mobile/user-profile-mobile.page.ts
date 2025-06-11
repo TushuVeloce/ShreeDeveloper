@@ -280,7 +280,7 @@ export class UserProfileMobilePage implements OnInit {
     if (!tr.Successful) {
       this.uiUtils.showErrorMessage('Error', tr.Message);
     } else {
-      await this.uiUtils.showSuccessToster('Profile Updated successfully!');
+      await this.uiUtils.showSuccessToster('Profile Updated successfully');
       this.router.navigate(['/mobileapp/tabs/settings']);
     }
   };

@@ -508,7 +508,7 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       return
     }
     else {
-      await this.uiUtils.showSuccessToster('Expense Type saved successfully!');
+      await this.uiUtils.showSuccessToster('Expense Type saved successfully');
       this.ExpenseTypeEntity = ExpenseType.CreateNewInstance();
       this.ExpenseTypeEntity.p.Name = ''
       this.isAddingExpense = false
@@ -531,13 +531,13 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
 
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
       this.Entity.p.TimeDetails[this.editingIndex] = { ...this.TimeEntity };
-      await this.uiUtils.showSuccessToster('Machinary Time updated successfully!');
+      await this.uiUtils.showSuccessToster('Machinary Time updated successfully');
       this.isModalOpen = false;
     } else {
       this.TimeEntity.SiteManagementRef = this.Entity.p.Ref;
       this.Entity.p.TimeDetails.push({ ...this.TimeEntity });
       this.CalculateAmountOnRateAndQuantity()
-      await this.uiUtils.showSuccessToster('Machinary Time added successfully!');
+      await this.uiUtils.showSuccessToster('Machinary Time added successfully');
       this.resetTimeControls();
     }
 
@@ -623,11 +623,11 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Actual Stage saved successfully!');
+        await this.uiUtils.showSuccessToster('Actual Stage saved successfully');
         this.Entity = ActualStages.CreateNewInstance();
         this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster('Actual Stage Updated successfully!');
+        await this.uiUtils.showSuccessToster('Actual Stage Updated successfully');
         await this.router.navigate(['/homepage/Website/Actual_Stage']);
       }
     }

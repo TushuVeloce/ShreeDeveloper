@@ -416,12 +416,12 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster(
-          'Customer Enquiry saved successfully!'
+          'Customer Enquiry saved successfully'
         );
         this.Entity = CustomerFollowUp.CreateNewInstance();
       } else {
         await this.uiUtils.showSuccessToster(
-          'Customer Enquiry Updated successfully!'
+          'Customer Enquiry Updated successfully'
         );
         this.Entity = CustomerFollowUp.CreateNewInstance();
         this.router.navigate(['/homepage/Website/Customer_FollowUp']);

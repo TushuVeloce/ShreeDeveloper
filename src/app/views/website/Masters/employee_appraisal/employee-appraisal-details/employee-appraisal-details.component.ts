@@ -66,11 +66,11 @@ export class EmployeeAppraisalDetailsComponent implements OnInit {
     else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Employee Appraisal saved successfully!');
+        await this.uiUtils.showSuccessToster('Employee Appraisal saved successfully');
         this.Entity = EmployeeAppraisal.CreateNewInstance();
       } else {
         await this.router.navigate(['/homepage/Website/Employee_Appraisal_Master'])
-        await this.uiUtils.showSuccessToster('Employee Appraisal Updated successfully!');
+        await this.uiUtils.showSuccessToster('Employee Appraisal Updated successfully');
       }
     }
   }

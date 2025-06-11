@@ -222,12 +222,12 @@ export class SiteExpensesDetailsMobilePage implements OnInit {
 
     if (this.editingIndex != null && this.editingIndex >= 0) {
       this.Entity.p.TimeDetails[this.editingIndex] = { ...this.TimeEntity };
-      await this.uiUtils.showSuccessToster('Time updated successfully!');
+      await this.uiUtils.showSuccessToster('Time updated successfully');
     } else {
       this.TimeEntity.SiteManagementRef = this.Entity.p.Ref;
       this.Entity.p.TimeDetails.push({ ...this.TimeEntity });
       this.CalculateAmountOnRateAndQuantity();
-      await this.uiUtils.showSuccessToster('Time added successfully!');
+      await this.uiUtils.showSuccessToster('Time added successfully');
     }
 
     this.resetTimeEntry();
@@ -910,7 +910,7 @@ export class SiteExpensesDetailsMobilePage implements OnInit {
         return
       }
       else {
-        await this.uiUtils.showSuccessToster('Expense Type saved successfully!');
+        await this.uiUtils.showSuccessToster('Expense Type saved successfully');
         this.ExpenseTypeEntity = ExpenseType.CreateNewInstance();
         this.ExpenseTypeEntity.p.Name = ''
         this.isAddingExpense = false
@@ -947,11 +947,11 @@ export class SiteExpensesDetailsMobilePage implements OnInit {
       else {
         this.isSaveDisabled = false;
         if (this.IsNewEntity) {
-          await this.uiUtils.showSuccessToster('Actual Stage saved successfully!');
+          await this.uiUtils.showSuccessToster('Actual Stage saved successfully');
           this.Entity = ActualStages.CreateNewInstance();
           await this.router.navigate(['app_homepage/tabs/site-management/actual-stage'], { replaceUrl: true });
         } else {
-          await this.uiUtils.showSuccessToster('Stage Updated successfully!');
+          await this.uiUtils.showSuccessToster('Stage Updated successfully');
           await this.router.navigate(['app_homepage/tabs/site-management/actual-stage'], { replaceUrl: true });
         }
       }

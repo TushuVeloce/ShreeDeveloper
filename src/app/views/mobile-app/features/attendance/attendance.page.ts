@@ -389,8 +389,8 @@ export class AttendancePage implements OnInit {
         return;
       }
 
-      // await this.uiUtils.showSuccessToster('Punch in successfully!');
-      this.toastService.present(`Punch in successfully!`, 1000, 'success');
+      // await this.uiUtils.showSuccessToster('Punch in successfully');
+      this.toastService.present(`Punch in successfully`, 1000, 'success');
       await this.haptic.success();
 
       // Reset state
@@ -433,7 +433,7 @@ export class AttendancePage implements OnInit {
         await this.haptic.error();
         return;
       }
-      this.toastService.present(`Punch out successfully!`, 1000, 'success');
+      this.toastService.present(`Punch out successfully`, 1000, 'success');
       await this.haptic.success();
       // Reset and refresh data
       this.attendanceLog = AttendanceLog.CreateNewInstance();

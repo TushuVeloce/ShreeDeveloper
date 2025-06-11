@@ -77,11 +77,11 @@ export class StageMasterDetailsComponent implements OnInit {
     else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Stage saved successfully!');
+        await this.uiUtils.showSuccessToster('Stage saved successfully');
         this.Entity = Stage.CreateNewInstance();
         this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster('Stage Updated successfully!');
+        await this.uiUtils.showSuccessToster('Stage Updated successfully');
         await this.router.navigate(['/homepage/Website/Stage_Master']);
       }
     }

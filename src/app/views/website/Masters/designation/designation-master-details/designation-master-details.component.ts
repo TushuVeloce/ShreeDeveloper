@@ -114,12 +114,12 @@ export class DesignationMasterDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Designation saved successfully!');
+        await this.uiUtils.showSuccessToster('Designation saved successfully');
         this.Entity = Designation.CreateNewInstance();
         this.resetAllControls();
         this.Entity.p.DepartmentRef = DepartmentRef;
       } else {
-        await this.uiUtils.showSuccessToster('Designation Updated successfully!');
+        await this.uiUtils.showSuccessToster('Designation Updated successfully');
         await this.router.navigate(['/homepage/Website/Designation_Master']);
       }
     }

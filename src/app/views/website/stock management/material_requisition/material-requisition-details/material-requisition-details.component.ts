@@ -170,7 +170,7 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
 
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
       this.Entity.p.MaterialRequisitionDetailsArray[this.editingIndex] = { ...this.newRequisition };
-      await this.uiUtils.showSuccessToster('material details updated successfully!');
+      await this.uiUtils.showSuccessToster('material details updated successfully');
       this.ismaterialModalOpen = false;
 
     } else {
@@ -180,7 +180,7 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
       // await MaterialRequisitionInstance.EnsurePrimaryKeysWithValidValues();
       this.newRequisition.MaterialRequisitionRef = this.Entity.p.Ref;
       this.Entity.p.MaterialRequisitionDetailsArray.push({ ...this.newRequisition });
-      await this.uiUtils.showSuccessToster('material added successfully!');
+      await this.uiUtils.showSuccessToster('material added successfully');
     }
     this.newRequisition = RequiredMaterialDetailProps.Blank();
     this.editingIndex = null;
@@ -222,11 +222,11 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('MaterialRequisition saved successfully!');
+        await this.uiUtils.showSuccessToster('MaterialRequisition saved successfully');
         this.Entity = MaterialRequisition.CreateNewInstance();
         this.resetAllControls()
       } else {
-        await this.uiUtils.showSuccessToster('Material Requisition Updated successfully!');
+        await this.uiUtils.showSuccessToster('Material Requisition Updated successfully');
         await this.router.navigate(['/homepage/Website/Material_Requisition']);
       }
     }

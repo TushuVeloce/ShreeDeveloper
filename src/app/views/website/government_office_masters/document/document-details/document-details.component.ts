@@ -95,13 +95,13 @@ export class DocumentDetailsComponent implements OnInit {
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster(
-          'Document Master saved successfully!'
+          'Document Master saved successfully'
         );
         this.Entity = Document.CreateNewInstance();
         this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster(
-          'Document Master Updated successfully!'
+          'Document Master Updated successfully'
         );
        this.BackDocument()
       }

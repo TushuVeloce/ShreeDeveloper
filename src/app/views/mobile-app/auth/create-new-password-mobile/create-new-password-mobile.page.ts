@@ -22,7 +22,7 @@ export class CreateNewPasswordMobilePage implements OnInit {
 
   constructor(private fb: FormBuilder, private router: Router, private payloadPacketFacade: PayloadPacketFacade, private serverCommunicator: ServerCommunicatorService, private appStateManage: AppStateManageService,private toastService: ToastService) {}
 
-  ngOnInit() { 
+  ngOnInit() {
     this.passwordForm = this.fb.group({
       oldPassword: ['', Validators.required],
       newPassword: ['', Validators.required],
@@ -56,7 +56,7 @@ export class CreateNewPasswordMobilePage implements OnInit {
         this.toastService.present(tr.Message, 2000, 'danger');
           return;
         }
-  
+
       this.toastService.present("New Password Created Successfully", 2000, 'success');
       let tdResult = JSON.parse(tr.Tag) as TransportData;
       this.isUpdating = false;
@@ -67,7 +67,7 @@ export class CreateNewPasswordMobilePage implements OnInit {
       //   this.isUpdating = false;
       //   console.log('Password updated successfully');
       //   this.router.navigate(['mobileapp/tabs/dashboard']);
-      //   this.toastService.present('Logged in successfully!', 2000, 'success');
+      //   this.toastService.present('Logged in successfully', 2000, 'success');
       // }, 1500);
     }
   }

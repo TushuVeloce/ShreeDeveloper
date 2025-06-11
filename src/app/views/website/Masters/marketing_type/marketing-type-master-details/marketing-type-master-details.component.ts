@@ -72,11 +72,11 @@ export class MarketingTypeMasterDetailsComponent implements OnInit {
     else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Marketing Type saved successfully!');
+        await this.uiUtils.showSuccessToster('Marketing Type saved successfully');
         this.Entity = MarketingType.CreateNewInstance();
         this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster('Marketing Type Updated successfully!');
+        await this.uiUtils.showSuccessToster('Marketing Type Updated successfully');
         this.BackMarketingType()
       }
     }

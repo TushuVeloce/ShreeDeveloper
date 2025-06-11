@@ -111,7 +111,7 @@ export class NotificationService {
 // constructor(private notificationService: NotificationService) { }
 
 // // Show toast-style notifications
-// this.notificationService.showSuccess('Data saved successfully!');
+// this.notificationService.showSuccess('Data saved successfully');
 // this.notificationService.showError('Something went wrong!');
 
 // // Schedule a daily reminder at 9:30 AM

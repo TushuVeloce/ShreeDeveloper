@@ -183,7 +183,7 @@ export class UserrolerightsComponent implements OnInit {
       // this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('User Role Rights saved successfully!');
+        await this.uiUtils.showSuccessToster('User Role Rights saved successfully');
         let departmentRef = this.Entity.p.DepartmentRef;
         let designationRef = this.Entity.p.DesignationRef;
         let featureGroupRef = this.FeatureGroupRef;
@@ -196,7 +196,7 @@ export class UserrolerightsComponent implements OnInit {
         // this.onFeatureGroupSelected(featureGroupRef);
 
       } else {
-        await this.uiUtils.showSuccessToster('User Role Rights Updated successfully!');
+        await this.uiUtils.showSuccessToster('User Role Rights Updated successfully');
       }
     }
   }

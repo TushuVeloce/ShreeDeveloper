@@ -78,10 +78,10 @@ export class ExternalUsersMasterDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('External User saved successfully!');
+        await this.uiUtils.showSuccessToster('External User saved successfully');
         this.Entity = ExternalUsers.CreateNewInstance();
       } else {
-        await this.uiUtils.showSuccessToster('External User Updated successfully!');
+        await this.uiUtils.showSuccessToster('External User Updated successfully');
       }
     }
   }

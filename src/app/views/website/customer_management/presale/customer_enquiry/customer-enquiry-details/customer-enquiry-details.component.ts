@@ -450,14 +450,14 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
       // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster(
-          'Customer Enquiry saved successfully!'
+          'Customer Enquiry saved successfully'
         );
         this.Entity = CustomerEnquiry.CreateNewInstance();
         this.router.navigate(['/homepage/Website/Customer_Enquiry']);
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster(
-          'Customer Enquiry Updated successfully!'
+          'Customer Enquiry Updated successfully'
         );
         await this.router.navigate(['/homepage/Website/Customer_Enquiry']);
       }

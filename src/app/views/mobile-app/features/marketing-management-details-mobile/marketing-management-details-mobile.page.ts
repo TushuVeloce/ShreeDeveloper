@@ -214,11 +214,11 @@ export class MarketingManagementDetailsMobilePage implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Marketing saved successfully!');
+        await this.uiUtils.showSuccessToster('Marketing saved successfully');
         this.Entity = MarketingManagement.CreateNewInstance();
         this.router.navigate(['/mobileapp/tabs/dashboard/marketing-management']);
       } else {
-        await this.uiUtils.showSuccessToster('Marketin Updated successfully!');
+        await this.uiUtils.showSuccessToster('Marketin Updated successfully');
         this.router.navigate(['/mobileapp/tabs/dashboard/marketing-management']);
       }
     }
