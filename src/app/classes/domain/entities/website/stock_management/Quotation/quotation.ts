@@ -11,7 +11,6 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { QuotationFetchRequest } from "./quotationfetchrequest";
-import { CountryStateCityRefs, ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 import { QuotedMaterialDetailProps } from "./QuotatedMaterial/quotatedmaterial";
 
 
@@ -32,7 +31,7 @@ export class QuotationProps {
   public VendorName: string = '';
   public VendorTradeName: string = '';
   public AddressLine1: string = '';
-  // public InvoiceFile: File = null as any
+  public GrandTotal: number = 0;
   public InvoicePath: string = "";
   public MaterialQuotationDetailsArray: QuotedMaterialDetailProps[] = [];
 

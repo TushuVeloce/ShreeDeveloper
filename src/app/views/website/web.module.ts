@@ -41,7 +41,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { EstimateStagesDetailsComponent } from './estimate_stages/estimate-stages-details/estimate-stages-details.component';
 import { EstimateStagesComponent } from './estimate_stages/estimate-stages/estimate-stages.component';
 import { StockConsumeComponent } from './stock management/stock-consume/stock-consume.component';
-import { StockOrderComponent } from './stock management/stock-order/stock-order.component';
+import { StockOrderComponent } from './stock management/stock_order/stock-order/stock-order.component';
 import { StockTransferComponent } from './stock management/stock-transfer/stock-transfer.component';
 import { CountryComponent } from './Masters/country/country.component';
 import { StateComponent } from './Masters/state/state.component';

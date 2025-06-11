@@ -61,10 +61,14 @@
               <td class="tbldata">{{ detail.EstimatedQty }}</td>
               <td class="tbldata">{{ detail.OrderedQty }}</td>
               <td class="tbldata">{{ detail.DiscountedRate }}</td>
-              <td class="tbldata">{{ formatDate(detail.ExceptedDeliveryDate) }}</td>
-              <td class="tbldata">{{ detail.NetAmount }}</td>
+              <td Class="tbldata">
+                {{ detail.ExpectedDeliveryDate ? formatDate(detail.ExpectedDeliveryDate) : '--'}}
+              </td>
               <td class="tbldata">{{ detail.TotalAmount }}</td>
 
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
+                {{ Quotation.p.GrandTotal }}
+              </td>
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
                 {{ 'Status' }}
               </td>

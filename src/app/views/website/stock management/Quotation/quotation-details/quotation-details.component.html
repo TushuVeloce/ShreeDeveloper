@@ -148,7 +148,7 @@
                 <td Class="tbldata">{{ material.Gst }}</td>
                 <td Class="tbldata">{{ material.DeliveryCharges }}</td>
                 <td Class="tbldata">
-                  {{ material.ExceptedDeliveryDate ? formatDate(material.ExceptedDeliveryDate) : '--'}}
+                  {{ material.ExpectedDeliveryDate ? formatDate(material.ExpectedDeliveryDate) : '--'}}
                 </td>
                 <td Class="tbldata">{{ material.NetAmount }}</td>
                 <td Class="tbldata">{{ material.TotalAmount }}</td>
@@ -203,7 +203,7 @@
     <div class="custom-modal-body">
       <form autocomplete="off">
         <div class="row" style="margin-top: 1rem">
-          <div class="col-12 mb-1">
+          <div class="col-6 mb-1">
             <label for="MaterialRequisitionDetailsRef"><b>Material</b></label>
             <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
               nzPlaceHolder="Select" [nzSize]="'large'" name="MaterialRequisitionDetailsRef" required
@@ -231,6 +231,11 @@
             <div *ngIf="(OrderedQtyCtrl.invalid && (OrderedQtyCtrl.touched || OrderedQtyCtrl.dirty))">
               <span class="validation-text" *ngIf="OrderedQtyCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
+          </div>
+          <div class="col-6 mb-1">
+            <label>Required Remaining Quantity</label>
+            <input type="number" name="RequiredRemainingQuantity" class=" form-control" [(ngModel)]="newQuotedMaterial.RequiredRemainingQuantity"
+              readonly />
           </div>
           <div class="col-6 mb-1">
             <label>Rate</label>
@@ -282,7 +287,7 @@
           </div>
           <div class="col-6 mb-1">
             <label>Expected Delivery Date</label>
-            <input type="date" name="ExceptedDeliveryDate" class="form-control" [(ngModel)]="ExceptedDeliveryDate"
+            <input type="date" name="ExpectedDeliveryDate" class="form-control" [(ngModel)]="ExpectedDeliveryDate"
               placeholder="Enter Date" />
           </div>
           <div class="col-6 mb-1">

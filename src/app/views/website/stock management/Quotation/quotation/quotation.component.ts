@@ -28,8 +28,8 @@ export class QuotationComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Site', 'Date', 'Vendor', 'Material', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Discount Rate', 'Delivery Date', 'Net Amount', 'Total Amount', 'Status', 'Action'];
-  headerswithoutsite: string[] = ['Sr.No.', 'Date', 'Vendor', 'Material', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Discount Rate', 'Delivery Date', 'Net Amount', 'Total Amount', 'Status', 'Action'];
+  headers: string[] = ['Sr.No.', 'Site', 'Date', 'Vendor', 'Material', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
+  headerswithoutsite: string[] = ['Sr.No.', 'Date', 'Vendor', 'Material', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
@@ -68,8 +68,9 @@ export class QuotationComponent implements OnInit {
       return;
     }
     let lst = await Quotation.FetchEntireListByCompanyRef(this.companyRef(),
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
+    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+  );
+  console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();

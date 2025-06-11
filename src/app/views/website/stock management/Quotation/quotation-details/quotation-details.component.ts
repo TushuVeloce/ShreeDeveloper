@@ -34,7 +34,7 @@ export class QuotationDetailsComponent implements OnInit {
   MaterialRequisitionList: RequiredMaterial[] = [];
   QuotationDate: string = '';
   CurrentDate: string = '';
-  ExceptedDeliveryDate: string = '';
+  ExpectedDeliveryDate: string = '';
   QuotedMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount', 'Action'];
   isQuotedMaterialModalOpen: boolean = false;
   newQuotedMaterial: QuotedMaterialDetailProps = QuotedMaterialDetailProps.Blank();
@@ -281,8 +281,8 @@ export class QuotationDetailsComponent implements OnInit {
       return this.uiUtils.showWarningToster('Rate cannot be blank.');
     }
 
-    this.newQuotedMaterial.ExceptedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExceptedDeliveryDate);
-    this.ExceptedDeliveryDate = '';
+    this.newQuotedMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate);
+    this.ExpectedDeliveryDate = '';
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
       this.Entity.p.MaterialQuotationDetailsArray[this.editingIndex] = { ...this.newQuotedMaterial };
       await this.uiUtils.showSuccessToster('Material updated successfully');
@@ -307,7 +307,7 @@ export class QuotationDetailsComponent implements OnInit {
     this.isQuotedMaterialModalOpen = true
     this.newQuotedMaterial = { ...this.Entity.p.MaterialQuotationDetailsArray[index] }
     this.editingIndex = index;
-    this.ExceptedDeliveryDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialQuotationDetailsArray[index].ExceptedDeliveryDate);
+    this.ExpectedDeliveryDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialQuotationDetailsArray[index].ExpectedDeliveryDate);
     this.getMaterialRequisitionListByVendorRefAndSiteRef();
   }
 
@@ -366,6 +366,8 @@ export class QuotationDetailsComponent implements OnInit {
       this.newQuotedMaterial.OrderedQty = 0;
       return this.uiUtils.showWarningToster('Ordered Qty should be less then or equal to Required Qty');
     }
+
+    this.newQuotedMaterial.RequiredRemainingQuantity = this.newQuotedMaterial.EstimatedQty - this.newQuotedMaterial.OrderedQty;
     if (this.newQuotedMaterial.DiscountedRate == 0) {
       this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.Rate * this.newQuotedMaterial.OrderedQty);
     } else {
@@ -382,7 +384,7 @@ export class QuotationDetailsComponent implements OnInit {
 
   getGrandTotal(): number {
     return this.Entity.p.MaterialQuotationDetailsArray.reduce((total: number, item: any) => {
-      return total + Number(item.TotalAmount || 0);
+      return this.Entity.p.GrandTotal = total + Number(item.TotalAmount || 0);
     }, 0);
   }
 
