@@ -2,14 +2,19 @@ import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
-import { MaterialRequisition } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/materialrequisition';
-import { RequiredMaterial } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/requiredmaterial/requiredmaterial';
+import { MaterialRequisition, MaterialRequisitionProps } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/materialrequisition';
+import { RequiredMaterial, RequiredMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/requiredmaterial/requiredmaterial';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+
+interface FlattenedMaterial {
+  requisition: MaterialRequisition;
+  detail: RequiredMaterialDetailProps;
+}
 
 @Component({
   selector: 'app-material-requisition',
@@ -135,13 +140,44 @@ export class MaterialRequisitionComponent implements OnInit {
   
   
   // For Pagination  start ----
-  loadPaginationData = () => {
-    this.total = this.DisplayMasterList.length; // Update total based on loaded data
-  };
-  get paginatedList() {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.DisplayMasterList.slice(start, start + this.pageSize);
-  }
+loadPaginationData = () => {
+  this.total = this.flattenedMaterials.length;
+};
+
+get flattenedMaterials(): { requisition: MaterialRequisition; detail: RequiredMaterialDetailProps }[] {
+  return this.MasterList
+    .map((requisition: MaterialRequisition) =>
+      requisition.p.MaterialRequisitionDetailsArray.map((detail: RequiredMaterialDetailProps) => ({
+        requisition,
+        detail
+      }))
+    )
+    .reduce((acc, val) => acc.concat(val), []);
+}
+
+get paginatedMaterials() {
+  const start = (this.currentPage - 1) * this.pageSize;
+  return this.flattenedMaterials.slice(start, start + this.pageSize);
+}
+
+get paginatedList(): MaterialRequisition[] {
+  const groupedMap = new Map<number, MaterialRequisition>();
+
+  this.paginatedMaterials.forEach(({ requisition, detail }) => {
+    const ref = requisition.p.Ref;
+
+    if (!groupedMap.has(ref)) {
+      // Deep clone the whole requisition (with all properties), but reset the material list
+      const requisitionClone: MaterialRequisition = JSON.parse(JSON.stringify(requisition));
+      requisitionClone.p.MaterialRequisitionDetailsArray = [];
+      groupedMap.set(ref, requisitionClone);
+    }
+
+    groupedMap.get(ref)!.p.MaterialRequisitionDetailsArray.push(detail);
+  });
+
+  return Array.from(groupedMap.values());
+}
 
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page
