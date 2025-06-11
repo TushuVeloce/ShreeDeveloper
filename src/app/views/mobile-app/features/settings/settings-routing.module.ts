@@ -19,6 +19,10 @@ const routes: Routes = [
   {
     path: 'privacy-and-security',
     loadChildren: () => import('../privacy-and-security-mobile/privacy-and-security-mobile.module').then(m => m.PrivacyAndSecurityMobilePageModule)
+  },
+  {
+    path: 'change-password',
+    loadChildren: () => import('../change-password-mobile/change-password-mobile.module').then(m => m.ChangePasswordMobilePageModule)
   }
 ];
 

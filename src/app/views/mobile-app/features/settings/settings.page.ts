@@ -53,6 +53,10 @@ export class SettingsPage implements OnInit {
   openNotifications = async () => {
     this.router.navigate(['/mobileapp/tabs/settings/notification']);
   }
+  
+  openChangePassword = async () => {
+    this.router.navigate(['/mobileapp/tabs/settings/change-password']);
+  }
 
   openPrivacy = async () => {
     this.router.navigate(['/mobileapp/tabs/settings/privacy-and-security']);
