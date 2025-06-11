@@ -26,6 +26,7 @@ export class QuotationProps {
   public CompanyName: string = '';
   public SiteRef: number = 0;
   public SiteName: string = '';
+  public MaterialQuotationStatus: number = 0;
   public Date: string = '';
   public VendorRef: number = 0;
   public VendorName: string = '';

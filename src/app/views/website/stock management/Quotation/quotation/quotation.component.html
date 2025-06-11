@@ -60,6 +60,7 @@
               <td class="tbldata">{{ detail.UnitName }}</td>
               <td class="tbldata">{{ detail.EstimatedQty }}</td>
               <td class="tbldata">{{ detail.OrderedQty }}</td>
+              <td class="tbldata">{{ detail.RequiredRemainingQuantity }}</td>
               <td class="tbldata">{{ detail.DiscountedRate }}</td>
               <td Class="tbldata">
                 {{ detail.ExpectedDeliveryDate ? formatDate(detail.ExpectedDeliveryDate) : '--'}}
@@ -70,7 +71,23 @@
                 {{ Quotation.p.GrandTotal }}
               </td>
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
-                {{ 'Status' }}
+                <!-- PENDING -->
+                <span class="status" style="cursor: pointer;" (click)="ChangeQuotationstatus()" *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Pending"
+                  ngClass="pending">
+                  Pending
+                </span>
+
+                <!-- APPROVED -->
+                <span class="status" *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Approved"
+                  ngClass="approved">
+                  Approved
+                </span>
+
+                <!-- REJECTED -->
+                <span class="status" *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Rejected"
+                  ngClass="rejected">
+                  Rejected
+                </span>
               </td>
 
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
@@ -83,7 +100,7 @@
               </td>
             </tr>
             <tr *ngIf="j === Quotation.p.MaterialQuotationDetailsArray.length - 1 && !Entity.p.SiteRef">
-              <td colspan="14" style="background-color: #333; height: 2px; padding: 0;"></td>
+              <td colspan="15" style="background-color: #333; height: 2px; padding: 0;"></td>
             </tr>
           </ng-container>
         </ng-container>

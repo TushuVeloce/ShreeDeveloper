@@ -127,6 +127,7 @@ import { QuotationComponent } from './stock management/Quotation/quotation/quota
 import { QuotationDetailsComponent } from './stock management/Quotation/quotation-details/quotation-details.component';
 import { StockInwardComponent } from './stock management/stock_inward/stock_inward/stock-inward.component';
 import { StockInwardDetailsComponent } from './stock management/stock_inward/stock-inward-details/stock-inward-details.component';
+import { QuotationApprovalComponent } from './stock management/Quotation/quotation-approval/quotation-approval.component';
 
 
 const routes: Routes = [
@@ -225,11 +226,10 @@ const routes: Routes = [
       { path: 'Material_Requisition_Details', component: MaterialRequisitionDetailsComponent },
       { path: 'Quotation', component: QuotationComponent },
       { path: 'Quotation_Details', component: QuotationDetailsComponent },
+      { path: 'Quotation_Approval', component: QuotationApprovalComponent },
       { path: 'Stock_Consume', component: StockConsumeComponent },
       { path: 'Stock_Inward', component: StockInwardComponent },
-       { path: 'Stock_Inward', component: StockInwardDetailsComponent
-
-        },
+      { path: 'Stock_Inward', component: StockInwardDetailsComponent },
       { path: 'Stock_Order', component: StockOrderComponent },
       { path: 'Stock_Transfer', component: StockTransferComponent },
 

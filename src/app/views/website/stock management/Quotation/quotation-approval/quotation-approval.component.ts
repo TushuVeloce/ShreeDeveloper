@@ -15,13 +15,14 @@ import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
+
 @Component({
-  selector: 'app-quotation-details',
+  selector: 'app-quotation-approval',
   standalone: false,
-  templateUrl: './quotation-details.component.html',
-  styleUrls: ['./quotation-details.component.scss'],
+  templateUrl: './quotation-approval.component.html',
+  styleUrls: ['./quotation-approval.component.scss'],
 })
-export class QuotationDetailsComponent implements OnInit {
+export class QuotationApprovalComponent implements OnInit {
 
   Entity: Quotation = Quotation.CreateNewInstance();
   private IsNewEntity: boolean = true;
@@ -95,11 +96,6 @@ export class QuotationDetailsComponent implements OnInit {
     } else {
       this.Entity = Quotation.CreateNewInstance();
       Quotation.SetCurrentInstance(this.Entity);
-      this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-      let parts = this.strCDT.substring(0, 16).split('-');
-      // Construct the new date format
-      this.QuotationDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
-      this.CurrentDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
     }
     this.InitialEntity = Object.assign(Quotation.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Quotation;
   }

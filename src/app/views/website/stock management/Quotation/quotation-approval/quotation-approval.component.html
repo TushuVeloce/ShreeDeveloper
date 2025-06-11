@@ -7,7 +7,7 @@
         </button>
       </div>
       <div class="col-md-11">
-        <span class="detail_title">{{DetailsFormTitle}}</span>
+        <span class="detail_title">Quotation Approval</span>
       </div>
     </div>
     <ng-template #noDataTpl>
@@ -35,7 +35,7 @@
         <div class="col-md-6">
           <label>Date</label>
           <input type="date" name="QuotationDate" class="form-control date-input" id="QuotationDate"
-            [(ngModel)]="QuotationDate" placeholder="Select Date" [min]="CurrentDate" #QuotationDateCtrl="ngModel"
+            [(ngModel)]="QuotationDate" placeholder="Select Date" readonly [min]="CurrentDate" #QuotationDateCtrl="ngModel"
             required (blur)="QuotationDateCtrl.control.markAsTouched()" />
           <div *ngIf="(QuotationDateCtrl.invalid && (QuotationDateCtrl.touched || QuotationDateCtrl.dirty))">
             <span class="validation-text" *ngIf="QuotationDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
@@ -112,7 +112,6 @@
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
           style="display: flex; justify-content: end" routerLinkActive="active">
-          <nz-button nz-button class="btn1" (click)="openModal('QuotedMaterial')">Add Material</nz-button>
         </div>
       </div>
 
