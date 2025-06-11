@@ -63,7 +63,7 @@ export class DashboardPage implements OnInit, OnDestroy {
     { label: 'Stock Management', icon: 'grid-outline', routerPath: '/mobileapp/tabs/dashboard/stock-management' },
     { label: 'Marketing Management', icon: 'bar-chart-outline', routerPath: '/mobileapp/tabs/dashboard/marketing-management' },
     { label: 'CRM', icon: 'people-outline', routerPath: '/mobileapp/tabs/dashboard/customer-relationship-management' },
-    { label: 'Report', icon: 'reader-outline', routerPath: '/mobileapp/tabs/dashboard/report' },
+    // { label: 'Report', icon: 'reader-outline', routerPath: '/mobileapp/tabs/dashboard/report' },
   ];
 
   async goToRouterPath(path: string) {

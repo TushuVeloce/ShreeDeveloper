@@ -14,7 +14,7 @@ const routes: Routes = [
   },
   {
     path: 'stock-management',
-    loadChildren: () => import('../site-management-mobile/site-management-mobile.module').then(m => m.SiteManagementMobilePageModule)
+    loadChildren: () => import('../stock-management-mobile/stock-management-mobile.module').then(m => m.StockManagementMobilePageModule)
   },
   {
     path: 'marketing-management',
