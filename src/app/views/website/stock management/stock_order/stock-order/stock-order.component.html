@@ -16,7 +16,7 @@
       <label for="SiteRef"><b>Site</b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
         [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
-        (ngModelChange)="getVendorQuotationListByCompanyRefAndSiteRef()">
+        (ngModelChange)="getOrderListByCompanyRefAndSiteRef()">
         <nz-option nzLabel="All" [nzValue]="0"></nz-option>
         <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
       </nz-select>
@@ -26,7 +26,7 @@
 <ng-template #noDataTpl>
   <div class="no-data-text">Data Not Found</div>
 </ng-template>
-<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+<div class="table-wrapper tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
       [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
@@ -39,21 +39,21 @@
         </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let Quotation of paginatedList; let i = index">
-          <ng-container *ngFor="let detail of Quotation.p.MaterialQuotationDetailsArray; let j = index">
+        <ng-container *ngFor="let Order of paginatedList; let i = index">
+          <ng-container *ngFor="let detail of Order.p.MaterialQuotationDetailsArray; let j = index">
             <tr>
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialQuotationDetailsArray.length">
                 {{ (currentPage - 1) * pageSize + i + 1 }}
               </td>
               <td class="tbldata" *ngIf="j === 0 && !Entity.p.SiteRef"
-                [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
-                {{ Quotation.p.SiteName }}
+                [attr.rowspan]="Order.p.MaterialQuotationDetailsArray.length">
+                {{ Order.p.SiteName }}
               </td>
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
-                {{ formatDate(Quotation.p.Date) }}
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialQuotationDetailsArray.length">
+                {{ formatDate(Order.p.Date) }}
               </td>
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
-                {{ Quotation.p.VendorName }}
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialQuotationDetailsArray.length">
+                {{ Order.p.VendorName }}
               </td>
 
               <td class="tbldata">{{ detail.MaterialName }}</td>
@@ -67,39 +67,39 @@
               </td>
               <td class="tbldata">{{ detail.TotalAmount }}</td>
 
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
-                {{ Quotation.p.GrandTotal }}
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialQuotationDetailsArray.length">
+                {{ Order.p.GrandTotal }}
               </td>
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialQuotationDetailsArray.length">
                 <!-- PENDING -->
-                <span class="status" style="cursor: pointer;" (click)="NavigateQuotationstatus(Quotation)" *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Pending"
+                <span class="status" style="cursor: pointer;" (click)="NavigateOrderstatus(Order)" *ngIf="Order.p.MaterialQuotationStatus == MaterialOrderStatus.Pending"
                   ngClass="pending">
                   Pending
                 </span>
 
                 <!-- APPROVED -->
-                <span class="status" *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Approved"
+                <span class="status" *ngIf="Order.p.MaterialQuotationStatus == MaterialOrderStatus.Approved"
                   ngClass="approved">
                   Approved
                 </span>
 
                 <!-- REJECTED -->
-                <span class="status" *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Rejected"
+                <span class="status" *ngIf="Order.p.MaterialQuotationStatus == MaterialOrderStatus.Rejected"
                   ngClass="rejected">
                   Rejected
                 </span>
               </td>
 
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
-                <span style="margin-left: 9px;" (click)="onEditClicked(Quotation)">
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialQuotationDetailsArray.length">
+                <span style="margin-left: 9px;" (click)="onEditClicked(Order)">
                   <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
                 </span>
-                <span style="margin-left: 9px;" (click)="onDeleteClicked(Quotation)">
+                <span style="margin-left: 9px;" (click)="onDeleteClicked(Order)">
                   <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
                 </span>
               </td>
             </tr>
-            <tr *ngIf="j === Quotation.p.MaterialQuotationDetailsArray.length - 1 && !Entity.p.SiteRef">
+            <tr *ngIf="j === Order.p.MaterialQuotationDetailsArray.length - 1 && !Entity.p.SiteRef">
               <td colspan="15" style="background-color: #333; height: 2px; padding: 0;"></td>
             </tr>
           </ng-container>

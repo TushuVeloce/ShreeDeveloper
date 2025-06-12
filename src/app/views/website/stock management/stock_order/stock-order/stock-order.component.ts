@@ -21,12 +21,12 @@ export class StockOrderComponent implements OnInit {
   DisplayMasterList: Quotation[] = [];
   SearchString: string = '';
   SiteList: Site[] = [];
-  SelectedQuotation: Quotation = Quotation.CreateNewInstance();
+  SelectedOrder: Quotation = Quotation.CreateNewInstance();
   CustomerRef: number = 0;
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  MaterialQuotationStatus = MaterialRequisitionStatuses
+  MaterialOrderStatus = MaterialRequisitionStatuses
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -41,7 +41,7 @@ export class StockOrderComponent implements OnInit {
     private DateconversionService: DateconversionService,
   ) {
     effect(async () => {
-      await this.getQuotationListByCompanyRef(); await this.getSiteListByCompanyRef();
+      await this.getOrderListByCompanyRef(); await this.getSiteListByCompanyRef();
     });
   }
 
@@ -62,7 +62,7 @@ export class StockOrderComponent implements OnInit {
     this.SiteList = lst;
   }
 
-  private getQuotationListByCompanyRef = async () => {
+  private getOrderListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef() <= 0) {
@@ -78,11 +78,11 @@ export class StockOrderComponent implements OnInit {
     this.loadPaginationData();
   };
 
-  getVendorQuotationListByCompanyRefAndSiteRef = async () => {
+  getOrderListByCompanyRefAndSiteRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.Entity.p.SiteRef <= 0) {
-      this.getQuotationListByCompanyRef();
+      this.getOrderListByCompanyRef();
       return;
     }
     let lst = await Quotation.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
@@ -94,25 +94,25 @@ export class StockOrderComponent implements OnInit {
   };
 
   onEditClicked = async (item: Quotation) => {
-    this.SelectedQuotation = item.GetEditableVersion();
-    Quotation.SetCurrentInstance(this.SelectedQuotation);
+    this.SelectedOrder = item.GetEditableVersion();
+    Quotation.SetCurrentInstance(this.SelectedOrder);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/homepage/Website/Stock_Order_Details']);
   };
 
-  onDeleteClicked = async (Quotation: Quotation) => {
+  onDeleteClicked = async (Order: Quotation) => {
     await this.uiUtils.showConfirmationMessage('Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-        Are you sure that you want to DELETE this Quotation?`,
+        Are you sure that you want to DELETE this Order?`,
       async () => {
-        await Quotation.DeleteInstance(async () => {
-          await this.uiUtils.showSuccessToster(`Quotation of ${Quotation.p.VendorName} has been deleted!`);
+        await Order.DeleteInstance(async () => {
+          await this.uiUtils.showSuccessToster(`Order of ${Order.p.VendorName} has been deleted!`);
           this.SearchString = '';
           this.loadPaginationData();
           if (this.Entity.p.SiteRef <= 0) {
-            this.getQuotationListByCompanyRef();
+            this.getOrderListByCompanyRef();
           } else {
-            this.getVendorQuotationListByCompanyRefAndSiteRef();
+            this.getOrderListByCompanyRefAndSiteRef();
           }
         });
       });
@@ -145,9 +145,9 @@ export class StockOrderComponent implements OnInit {
     this.router.navigate(['/homepage/Website/Stock_Order_Details']);
   }
 
-  NavigateQuotationstatus = (item: Quotation) => {
-    this.SelectedQuotation = item.GetEditableVersion();
-    Quotation.SetCurrentInstance(this.SelectedQuotation);
+  NavigateOrderstatus = (item: Quotation) => {
+    this.SelectedOrder = item.GetEditableVersion();
+    Quotation.SetCurrentInstance(this.SelectedOrder);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     this.router.navigate(['/homepage/Website/Quotation_Approval']);
   }
