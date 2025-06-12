@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { StockInwardComponent } from './stock-inward.component';
+import { QuotationApprovalComponent } from './quotation-approval.component';
 
-describe('StockInwardComponent', () => {
-  let component: StockInwardComponent;
-  let fixture: ComponentFixture<StockInwardComponent>;
+describe('QuotationApprovalComponent', () => {
+  let component: QuotationApprovalComponent;
+  let fixture: ComponentFixture<QuotationApprovalComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ StockInwardComponent ],
+      declarations: [ QuotationApprovalComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(StockInwardComponent);
+    fixture = TestBed.createComponent(QuotationApprovalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

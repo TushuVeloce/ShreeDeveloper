@@ -1,5 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Quotation } from 'src/app/classes/domain/entities/website/stock_management/Quotation/quotation';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -25,10 +26,12 @@ export class QuotationComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
+  MaterialQuotationStatus = MaterialRequisitionStatuses
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Site', 'Date', 'Vendor', 'Material', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Discount Rate', 'Delivery Date', 'Net Amount', 'Total Amount', 'Status', 'Action'];
+  headers: string[] = ['Sr.No.', 'Site', 'Date', 'Vendor', 'Material', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Required Remaining Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
+  headerswithoutsite: string[] = ['Sr.No.', 'Date', 'Vendor', 'Material', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Required Remaining Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
@@ -69,6 +72,7 @@ export class QuotationComponent implements OnInit {
     let lst = await Quotation.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
+    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -78,13 +82,12 @@ export class QuotationComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.Entity.p.SiteRef <= 0) {
-      await this.uiUtils.showErrorToster('Site not Selected');
+      this.getQuotationListByCompanyRef();
       return;
     }
     let lst = await Quotation.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
-    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-  );
-  console.log('lst :', lst);
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -136,6 +139,10 @@ export class QuotationComponent implements OnInit {
 
   AddQuotation = () => {
     this.router.navigate(['/homepage/Website/Quotation_Details']);
+  }
+
+  ChangeQuotationstatus = () => {
+    this.router.navigate(['/homepage/Website/Quotation_Approval']);
   }
 
   filterTable = () => {

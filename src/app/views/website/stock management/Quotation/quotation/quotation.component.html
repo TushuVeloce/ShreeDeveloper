@@ -31,8 +31,11 @@
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
       [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
-        <tr>
+        <tr *ngIf="!Entity.p.SiteRef">
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+        <tr *ngIf="Entity.p.SiteRef">
+          <th *ngFor="let header of headerswithoutsite" class="tblheader">{{ header }}</th>
         </tr>
       </thead>
       <tbody>
@@ -42,7 +45,8 @@
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
                 {{ (currentPage - 1) * pageSize + i + 1 }}
               </td>
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
+              <td class="tbldata" *ngIf="j === 0 && !Entity.p.SiteRef"
+                [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
                 {{ Quotation.p.SiteName }}
               </td>
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
@@ -56,13 +60,34 @@
               <td class="tbldata">{{ detail.UnitName }}</td>
               <td class="tbldata">{{ detail.EstimatedQty }}</td>
               <td class="tbldata">{{ detail.OrderedQty }}</td>
+              <td class="tbldata">{{ detail.RequiredRemainingQuantity }}</td>
               <td class="tbldata">{{ detail.DiscountedRate }}</td>
-              <td class="tbldata">{{ formatDate(detail.ExceptedDeliveryDate) }}</td>
-              <td class="tbldata">{{ detail.NetAmount }}</td>
+              <td Class="tbldata">
+                {{ detail.ExpectedDeliveryDate ? formatDate(detail.ExpectedDeliveryDate) : '--'}}
+              </td>
               <td class="tbldata">{{ detail.TotalAmount }}</td>
 
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
-                {{ 'Status' }}
+                {{ Quotation.p.GrandTotal }}
+              </td>
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
+                <!-- PENDING -->
+                <span class="status" style="cursor: pointer;" (click)="ChangeQuotationstatus()" *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Pending"
+                  ngClass="pending">
+                  Pending
+                </span>
+
+                <!-- APPROVED -->
+                <span class="status" *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Approved"
+                  ngClass="approved">
+                  Approved
+                </span>
+
+                <!-- REJECTED -->
+                <span class="status" *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Rejected"
+                  ngClass="rejected">
+                  Rejected
+                </span>
               </td>
 
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
@@ -74,8 +99,8 @@
                 </span>
               </td>
             </tr>
-            <tr *ngIf="j === Quotation.p.MaterialQuotationDetailsArray.length - 1">
-              <td colspan="14" style="background-color: #333; height: 2px; padding: 0;"></td>
+            <tr *ngIf="j === Quotation.p.MaterialQuotationDetailsArray.length - 1 && !Entity.p.SiteRef">
+              <td colspan="15" style="background-color: #333; height: 2px; padding: 0;"></td>
             </tr>
           </ng-container>
         </ng-container>

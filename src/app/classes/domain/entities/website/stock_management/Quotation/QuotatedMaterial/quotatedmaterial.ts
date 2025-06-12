@@ -24,11 +24,12 @@ export class QuotedMaterialDetailProps {
   public UnitName: string = '';
   public EstimatedQty: number = 0;
   public OrderedQty: number = 0;
+  public RequiredRemainingQuantity: number = 0;
   public Rate: number = 0;
   public DiscountedRate: number = 0;
   public Gst: number = 0;
   public DeliveryCharges: number = 0;
-  public ExceptedDeliveryDate: string = '';
+  public ExpectedDeliveryDate: string = '';
   public NetAmount: number = 0;
   public TotalAmount: number = 0;
   public MaterialQuotationRef: number = 0;

@@ -11,8 +11,8 @@
       </div>
     </div>
     <form autocomplete="off" #officedutyandtimeForm="ngForm">
-      <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
+      <div class="row">
+        <div class="col-md-6"  style="margin-top: 1rem; ">
           <div>
             <label for="FromTime">Working Time From:</label>
             <input type="time" name="FromTime" required class="form-control" id="FromTime" [(ngModel)]="Entity.p.FromTime"
@@ -22,7 +22,7 @@
           </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6"  style="margin-top: 1rem; ">
           <div>
             <label for="ToTime">Working Time To:</label>
             <input type="time" name="ToTime" required class="form-control" id="ToTime" [(ngModel)]="Entity.p.ToTime"
@@ -32,7 +32,7 @@
           </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6"  style="margin-top: 1rem; ">
           <div>
             <label>Late Mark Grace Time (mins):</label>
             <input type="text" name="LateMarkGraceTimeInMins" class="form-control" id="LateMarkGraceTimeInMins" [(ngModel)]="Entity.p.LateMarkGraceTimeInMins"
@@ -42,9 +42,7 @@
           </div>
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem;">
-        <div class="col-md-4">
+        <div class="col-md-6"  style="margin-top: 1rem; ">
           <div>
             <label>Overtime Grace Time (mins):</label>
             <input type="text" name="OvertimeGraceTimeInMins " class="form-control" id="OvertimeGraceTimeInMins " [(ngModel)]="Entity.p.OvertimeGraceTimeInMins"
