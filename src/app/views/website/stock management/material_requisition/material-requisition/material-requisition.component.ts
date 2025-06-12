@@ -1,6 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { MaterialRequisition } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/materialrequisition';
 import { RequiredMaterial } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/requiredmaterial/requiredmaterial';
@@ -31,6 +31,7 @@ export class MaterialRequisitionComponent implements OnInit {
   pageSize = 10;
   currentPage = 1;
   total = 0;
+
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   headers: string[] = ['Sr.No.', 'Date', 'Site Name', 'Material Name', 'Unit', 'Required Qty.', 'Status', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
@@ -45,7 +46,7 @@ export class MaterialRequisitionComponent implements OnInit {
   ngOnInit() {
     this.appStateManage.setDropdownDisabled();
   }
-  
+
   getSiteListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
@@ -86,11 +87,11 @@ export class MaterialRequisitionComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-      let lst = await MaterialRequisition.FetchEntireListByAllFilters(this.companyRef(), this.Entity.p.Status, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      console.log(' this.Entity.p.Status, this.Entity.p.SiteRef :',  this.Entity.p.Status, this.Entity.p.SiteRef);
-      this.MasterList = lst;
-      this.DisplayMasterList = this.MasterList;
-      this.loadPaginationData();
+    let lst = await MaterialRequisition.FetchEntireListByAllFilters(this.companyRef(), this.Entity.p.Status, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log(' this.Entity.p.Status, this.Entity.p.SiteRef :', this.Entity.p.Status, this.Entity.p.SiteRef);
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
   }
 
   // Extracted from services date conversion //
@@ -132,8 +133,8 @@ export class MaterialRequisitionComponent implements OnInit {
       }
     );
   };
-  
-  
+
+
   // For Pagination  start ----
   loadPaginationData = () => {
     this.total = this.DisplayMasterList.length; // Update total based on loaded data

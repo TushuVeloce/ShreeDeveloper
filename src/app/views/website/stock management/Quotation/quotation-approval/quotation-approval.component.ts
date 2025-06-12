@@ -1,6 +1,7 @@
 import { Component, effect, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
+import { MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { RequiredMaterial } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/requiredmaterial/requiredmaterial';
@@ -36,11 +37,12 @@ export class QuotationApprovalComponent implements OnInit {
   QuotationDate: string = '';
   CurrentDate: string = '';
   ExpectedDeliveryDate: string = '';
-  QuotedMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Required Remaining Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount', 'Action'];
+  QuotedMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Required Remaining Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount'];
   isQuotedMaterialModalOpen: boolean = false;
   newQuotedMaterial: QuotedMaterialDetailProps = QuotedMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  MaterialQuotationStatus = MaterialRequisitionStatuses;
   strCDT: string = ''
 
   errors: string = "";
@@ -73,7 +75,6 @@ export class QuotationApprovalComponent implements OnInit {
 
   ) {
     effect(async () => {
-      await this.getVendorListByCompanyRef(); await this.getSiteListByCompanyRef();
     });
   }
 
@@ -82,7 +83,6 @@ export class QuotationApprovalComponent implements OnInit {
 
     this.LoginToken = this.appStateManage.getLoginToken();
     this.appStateManage.setDropdownDisabled(true);
-    await this.getSiteListByCompanyRef();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Quotation' : 'Edit Quotation';
@@ -100,62 +100,9 @@ export class QuotationApprovalComponent implements OnInit {
     this.InitialEntity = Object.assign(Quotation.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Quotation;
   }
 
-  getSiteListByCompanyRef = async () => {
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.SiteList = lst;
-  }
-
-  getVendorListByCompanyRef = async () => {
-    this.Entity.p.VendorRef = 0
-    this.Entity.p.VendorName = ''
-    this.Entity.p.VendorTradeName = ''
-    this.Entity.p.AddressLine1 = ''
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.VendorList = lst;
-  }
-
-  getMaterialRequisitionListByVendorRefAndSiteRef = async () => {
-    if (this.Entity.p.VendorRef <= 0) {
-      await this.uiUtils.showErrorToster('Vendor not Selected');
-      return;
-    }
-    if (this.Entity.p.SiteRef <= 0) {
-      await this.uiUtils.showErrorToster('Site not Selected');
-      return;
-    }
-    let lst = await RequiredMaterial.FetchEntireListByCompanyVendorAndSiteRef(this.companyRef(), this.Entity.p.VendorRef, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MaterialRequisitionList = lst;
-  }
-
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
-  }
-
-  onVendorSelection = (VendorRef: number) => {
-    const SingleRecord = this.VendorList.filter(data => data.p.Ref == VendorRef);
-    this.Entity.p.VendorTradeName = SingleRecord[0].p.TradeName
-    this.Entity.p.AddressLine1 = SingleRecord[0].p.AddressLine1
-  }
-
-  onMaterialSelection = (MaterialRef: number) => {
-    const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.Ref == MaterialRef);
-    this.newQuotedMaterial.UnitName = SingleRecord[0].p.UnitName
-    this.newQuotedMaterial.EstimatedQty = SingleRecord[0].p.EstimatedQty
-    this.newQuotedMaterial.MaterialRequisitionDetailsName = SingleRecord[0].p.MaterialName
-  }
-
-  // Trigger file input when clicking the image
-  triggerFileInput(): void {
-    this.fileInputRef.nativeElement.click();
   }
 
   isImageFile(filePath: string): boolean {
@@ -183,149 +130,11 @@ export class QuotationApprovalComponent implements OnInit {
     }
   }
 
-  // On file selected
-
-  onFileUpload(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-      this.InvoiceFile = file;
-
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
-      const maxSizeMB = 2;
-
-      if (file) {
-        const isPdf = file.type === 'application/pdf';
-        const isImage = file.type.startsWith('image/');
-
-        if (isPdf || isImage) {
-          this.imagePostViewUrl = URL.createObjectURL(file);
-          this.Entity.p.InvoicePath = '';
-        } else {
-          this.uiUtils.showWarningToster('Only PDF or image files are supported.')
-        }
-      }
-
-      if (!allowedTypes.includes(file.type)) {
-        this.errors = 'Only JPG, PNG, GIF, and PDF files are allowed.';
-        return;
-      }
-
-      if (file.size / 1024 / 1024 > maxSizeMB) {
-        this.errors = 'File size should not exceed 2 MB.';
-        return;
-      }
-
-      this.errors = '';
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreView = reader.result as string;
-        this.selectedFileName = file.name;
-
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  openModal(type: string) {
-    if (this.Entity.p.SiteRef <= 0) {
-      this.uiUtils.showErrorToster('Site not Selected');
-      return;
-    }
-    if (this.Entity.p.VendorRef <= 0) {
-      this.uiUtils.showErrorToster('Vendor not Selected');
-      return;
-    }
-    this.getMaterialRequisitionListByVendorRefAndSiteRef();
-    if (type === 'QuotedMaterial') this.isQuotedMaterialModalOpen = true;
-  }
-
-  closeModal = async (type: string) => {
-    if (type === 'QuotedMaterial') {
-      const keysToCheck = ['Name', 'MaterialRequisitionDetailsRef', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
-
-      const hasData = keysToCheck.some(
-        key => (this.newQuotedMaterial as any)[key]?.toString().trim()
-      );
-
-      if (hasData) {
-        await this.uiUtils.showConfirmationMessage(
-          'Close',
-          `This process is <strong>IRREVERSIBLE!</strong><br/>
-           Are you sure you want to close this modal?`,
-          async () => {
-            this.isQuotedMaterialModalOpen = false;
-            this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
-          }
-        );
-      } else {
-        this.isQuotedMaterialModalOpen = false;
-        this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
-      }
-    }
-  };
-
-  async addQuotedMaterial() {
-    if (this.newQuotedMaterial.MaterialRequisitionDetailsRef == 0) {
-      return this.uiUtils.showWarningToster('Material Name cannot be blank.');
-    }
-    if (this.newQuotedMaterial.OrderedQty == 0) {
-      return this.uiUtils.showWarningToster('Ordered Quantity cannot be blank.');
-    }
-    if (this.newQuotedMaterial.Rate == 0) {
-      return this.uiUtils.showWarningToster('Rate cannot be blank.');
-    }
-
-    this.newQuotedMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate);
-    this.ExpectedDeliveryDate = '';
-    if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
-      this.Entity.p.MaterialQuotationDetailsArray[this.editingIndex] = { ...this.newQuotedMaterial };
-      await this.uiUtils.showSuccessToster('Material updated successfully');
-      this.isQuotedMaterialModalOpen = false;
-
-    } else {
-      let QuotedMaterialInstance = new QuotedMaterial(this.newQuotedMaterial, true);
-      let QuotationInstance = new Quotation(this.Entity.p, true);
-      await QuotedMaterialInstance.EnsurePrimaryKeysWithValidValues();
-      await QuotationInstance.EnsurePrimaryKeysWithValidValues();
-
-      this.newQuotedMaterial.MaterialQuotationRef = this.Entity.p.Ref;
-      this.Entity.p.MaterialQuotationDetailsArray.push({ ...QuotedMaterialInstance.p });
-      await this.uiUtils.showSuccessToster('Material added successfully');
-      this.resetMaterialControls()
-    }
-    this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
-    this.editingIndex = null;
-  }
-
-  editQuotedMaterial(index: number) {
-    this.isQuotedMaterialModalOpen = true
-    this.newQuotedMaterial = { ...this.Entity.p.MaterialQuotationDetailsArray[index] }
-    this.editingIndex = index;
-    this.ExpectedDeliveryDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialQuotationDetailsArray[index].ExpectedDeliveryDate);
-    this.getMaterialRequisitionListByVendorRefAndSiteRef();
-  }
-
-  async removeQuotedMaterial(index: number) {
-    await this.uiUtils.showConfirmationMessage(
-      'Delete',
-      `This process is <strong>IRREVERSIBLE!</strong> <br/>
-     Are you sure that you want to DELETE this Quoted Material?`,
-      async () => {
-        this.Entity.p.MaterialQuotationDetailsArray.splice(index, 1);
-      }
-    );
-  }
-
-  SaveQuotation = async () => {
+  SaveQuotation = async (status: number) => {
     let lstFTO: FileTransferObject[] = [];
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    this.newQuotedMaterial.MaterialQuotationRef = this.Entity.p.Ref
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.QuotationDate);
-
+    this.Entity.p.MaterialQuotationStatus = status;
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
@@ -349,69 +158,20 @@ export class QuotationApprovalComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Quotation saved successfully');
         this.Entity = Quotation.CreateNewInstance();
-        this.resetAllControls()
       } else {
-        await this.uiUtils.showSuccessToster('Quotation Updated successfully');
+        await this.uiUtils.showSuccessToster('Quotation Status Updated successfully');
       }
       await this.router.navigate(['/homepage/Website/Quotation']);
     }
   };
-
-  CalculateNetAmountAndTotalAmount = async () => {
-    if (this.newQuotedMaterial.OrderedQty > this.newQuotedMaterial.EstimatedQty) {
-      this.newQuotedMaterial.OrderedQty = 0;
-      return this.uiUtils.showWarningToster('Ordered Qty should be less then or equal to Required Qty');
-    }
-
-    this.newQuotedMaterial.RequiredRemainingQuantity = this.newQuotedMaterial.EstimatedQty - this.newQuotedMaterial.OrderedQty;
-    if (this.newQuotedMaterial.DiscountedRate == 0) {
-      this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.Rate * this.newQuotedMaterial.OrderedQty);
-    } else {
-      this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.DiscountedRate * this.newQuotedMaterial.OrderedQty);
-    }
-    let GstAmount = (this.newQuotedMaterial.NetAmount / 100) * this.newQuotedMaterial.Gst;
-    this.newQuotedMaterial.TotalAmount = this.newQuotedMaterial.NetAmount + GstAmount + this.newQuotedMaterial.DeliveryCharges;
-  }
 
   selectAllValue(event: MouseEvent): void {
     const input = event.target as HTMLInputElement;
     input.select();
   }
 
-  getGrandTotal(): number {
-    return this.Entity.p.MaterialQuotationDetailsArray.reduce((total: number, item: any) => {
-      return this.Entity.p.GrandTotal = total + Number(item.TotalAmount || 0);
-    }, 0);
-  }
-
   BackQuotation = async () => {
-    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
-      await this.uiUtils.showConfirmationMessage('Cancel',
-        `This process is IRREVERSIBLE!
-      <br/>
-      Are you sure that you want to Cancel this Quotation Form?`,
-        async () => {
-          await this.router.navigate(['/homepage/Website/Quotation']);
-        });
-    } else {
-      await this.router.navigate(['/homepage/Website/Quotation']);
-    }
-  }
-
-  resetAllControls = () => {
-
-  }
-
-  resetMaterialControls = () => {
-    // this.OwnerNameInputControl.control.markAsUntouched();
-    // this.OwnerContactNosInputControl.control.markAsUntouched();
-    // this.OwnerAddressInputControl.control.markAsUntouched();
-    // this.OwnerPincodeInputControl.control.markAsUntouched();
-
-    // this.OwnerNameInputControl.control.markAsPristine();
-    // this.OwnerContactNosInputControl.control.markAsPristine();
-    // this.OwnerAddressInputControl.control.markAsPristine();
-    // this.OwnerPincodeInputControl.control.markAsPristine();
+    await this.router.navigate(['/homepage/Website/Quotation']);
   }
 }
 

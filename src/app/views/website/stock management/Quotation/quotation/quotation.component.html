@@ -72,8 +72,8 @@
               </td>
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
                 <!-- PENDING -->
-                <span class="status" style="cursor: pointer;" (click)="ChangeQuotationstatus()" *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Pending"
-                  ngClass="pending">
+                <span class="status" style="cursor: pointer;" (click)="ChangeQuotationstatus(Quotation)"
+                  *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Pending" ngClass="pending">
                   Pending
                 </span>
 
@@ -91,11 +91,26 @@
               </td>
 
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
-                <span style="margin-left: 9px;" (click)="onEditClicked(Quotation)">
+                <span style="margin-left: 9px;"
+                  *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Pending"
+                  (click)="onEditClicked(Quotation)">
                   <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
                 </span>
-                <span style="margin-left: 9px;" (click)="onDeleteClicked(Quotation)">
+                <span style="margin-left: 9px;"
+                  *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Pending"
+                  (click)="onDeleteClicked(Quotation)">
                   <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
+                </span>
+
+                <span style="margin-left: 9px;"
+                  *ngIf="Quotation.p.MaterialQuotationStatus != MaterialQuotationStatus.Pending">
+                  <img src="/assets/icons/GrayEditIcon.png" alt="Edit" title="Disable Edit" width="20px"
+                    height="20px" />
+                </span>
+                <span style="margin-left: 9px;"
+                  *ngIf="Quotation.p.MaterialQuotationStatus != MaterialQuotationStatus.Pending">
+                  <img src="/assets/icons/GreyDustbin.png" alt="Delete" title="Disable Delete" width="20px"
+                    height="20px" />
                 </span>
               </td>
             </tr>

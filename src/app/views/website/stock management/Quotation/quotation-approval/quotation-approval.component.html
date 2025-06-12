@@ -35,28 +35,19 @@
         <div class="col-md-6">
           <label>Date</label>
           <input type="date" name="QuotationDate" class="form-control date-input" id="QuotationDate"
-            [(ngModel)]="QuotationDate" placeholder="Select Date" readonly [min]="CurrentDate" #QuotationDateCtrl="ngModel"
-            required (blur)="QuotationDateCtrl.control.markAsTouched()" />
-          <div *ngIf="(QuotationDateCtrl.invalid && (QuotationDateCtrl.touched || QuotationDateCtrl.dirty))">
-            <span class="validation-text" *ngIf="QuotationDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+            [(ngModel)]="QuotationDate" placeholder="Select Date" readonly [min]="CurrentDate" />
         </div>
         <div class="col-md-6">
           <label><b>Site Name</b></label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
-            <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
-          </nz-select>
+          <input type="text" name="SiteRef" class="form-control date-input" id="SiteRef" [(ngModel)]="Entity.p.SiteName"
+            placeholder="Enter Site" readonly />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label><b>Vendor Name</b></label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="VendorRef" name="VendorRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorRef"
-            (ngModelChange)="onVendorSelection(Entity.p.VendorRef)">
-            <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
-          </nz-select>
+          <input type="text" name="VendorName" class="form-control date-input" id="VendorName"
+            [(ngModel)]="Entity.p.VendorName" placeholder="Enter Vendor" readonly />
         </div>
         <div class="col-md-4">
           <label>Vendor Trade Name</label>
@@ -74,19 +65,11 @@
           <label>Invoice</label>
         </div>
         <div class="col-md-5 d-flex align-items-center justify-content-between">
-          <!-- Upload icon triggers file input -->
-          <img src="/assets/icons/upload.png" alt="Invoice" title="Upload Invoice" class="Upload-Icon"
-            (click)="triggerFileInput()" />
-
           <ng-container *ngIf="selectedFileName; else NoFile">
             <span style="cursor: pointer;" (click)="fileNavigation(Entity.p.InvoicePath)">
               {{ selectedFileName}}
             </span>
           </ng-container>
-
-          <!-- Hidden File Input -->
-          <input type="file" #fileInput accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
-            (change)="onFileUpload($event);" />
 
           <!-- Customer Aadhar Image Display -->
           <ng-container *ngIf="Entity.p.InvoicePath; else AddDocImage">
@@ -152,19 +135,11 @@
                 </td>
                 <td Class="tbldata">{{ material.NetAmount }}</td>
                 <td Class="tbldata">{{ material.TotalAmount }}</td>
-                <td class="tbldata">
-                  <span style="margin-left: 9px" (click)="editQuotedMaterial(i)">
-                    <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-                  </span>
-                  <span style="margin-left: 9px" (click)="removeQuotedMaterial(i)">
-                    <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-                </td>
               </tr>
               <tr>
                 <td class="tbldata" colspan="2"><b>Grand Total</b></td>
-                <td class="tbldata" colspan="9"></td>
-                <td class="tbldata"><b>{{ getGrandTotal() }}</b></td>
-                <td class="tbldata"><b></b></td>
+                <td class="tbldata" colspan="10"></td>
+                <td class="tbldata"><b>{{ Entity.p.GrandTotal }}</b></td>
               </tr>
             </tbody>
           </nz-table>
@@ -181,9 +156,20 @@
           gap: 2rem;
           margin-top: 2rem;
         ">
-        <div>
-          <nz-button nz-button class="btn1" (click)="SaveQuotation()">Save</nz-button>
-        </div>
+
+        <!-- APPROVED -->
+        <nz-button nz-button class="status" (click)="SaveQuotation(MaterialQuotationStatus.Approved)"
+          ngClass="approved">
+          Approved
+        </nz-button>
+
+        <!-- REJECTED -->
+        <nz-button nz-button class="status" (click)="SaveQuotation(MaterialQuotationStatus.Rejected)"
+        ngClass="rejected">
+        Rejected
+      </nz-button>
+
+      <!-- Cancel -->
         <div>
           <nz-button nz-button class="btn1" (click)="BackQuotation()">
             Cancel
@@ -191,129 +177,5 @@
         </div>
       </div>
     </form>
-  </div>
-</div>
-
-<div *ngIf="isQuotedMaterialModalOpen" class="custom-modal-overlay">
-  <div class="custom-modal">
-    <div class="custom-modal-header">
-      <h5>Add Material</h5>
-      <button type="button" class="btn-close" (click)="closeModal('QuotedMaterial')"></button>
-    </div>
-    <div class="custom-modal-body">
-      <form autocomplete="off">
-        <div class="row" style="margin-top: 1rem">
-          <div class="col-6 mb-1">
-            <label for="MaterialRequisitionDetailsRef"><b>Material</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
-              nzPlaceHolder="Select" [nzSize]="'large'" name="MaterialRequisitionDetailsRef" required
-              id="MaterialRequisitionDetailsRef" [(ngModel)]="newQuotedMaterial.MaterialRequisitionDetailsRef"
-              (ngModelChange)="onMaterialSelection(newQuotedMaterial.MaterialRequisitionDetailsRef)">
-              <nz-option *ngFor="let material of MaterialRequisitionList" [nzLabel]="material.p.MaterialName"
-                [nzValue]="material.p.Ref"></nz-option>
-            </nz-select>
-          </div>
-          <div class="col-6 mb-1">
-            <label>Unit</label>
-            <input type="text" name="Unit" class="form-control" [(ngModel)]="newQuotedMaterial.UnitName" readonly />
-          </div>
-          <div class="col-6 mb-1">
-            <label>Required Quantity</label>
-            <input type="number" name="EstimatedQty" class=" form-control" [(ngModel)]="newQuotedMaterial.EstimatedQty"
-              readonly />
-          </div>
-          <div class="col-6 mb-1">
-            <label>Ordered Quantity</label>
-            <input type="number" name="OrderedQty" class="form-control" [(ngModel)]="newQuotedMaterial.OrderedQty"
-              #OrderedQtyCtrl="ngModel" required (blur)="OrderedQtyCtrl.control.markAsTouched()"
-              placeholder="Enter Ordered Quantity" (click)="selectAllValue($event)"
-              (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
-            <div *ngIf="(OrderedQtyCtrl.invalid && (OrderedQtyCtrl.touched || OrderedQtyCtrl.dirty))">
-              <span class="validation-text" *ngIf="OrderedQtyCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
-          </div>
-          <div class="col-6 mb-1">
-            <label>Required Remaining Quantity</label>
-            <input type="number" name="RequiredRemainingQuantity" class=" form-control" [(ngModel)]="newQuotedMaterial.RequiredRemainingQuantity"
-              readonly />
-          </div>
-          <div class="col-6 mb-1">
-            <label>Rate</label>
-            <input type="number" name="Rate" class="form-control" [(ngModel)]="newQuotedMaterial.Rate"
-              #RateCtrl="ngModel" required (blur)="RateCtrl.control.markAsTouched()" placeholder="Enter Rate"
-              (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
-            <div *ngIf="(RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty))">
-              <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
-          </div>
-          <div class="col-6 mb-1">
-            <label>Discount Rate</label>
-            <input type="number" name="DiscountedRate" class="form-control"
-              [(ngModel)]="newQuotedMaterial.DiscountedRate" (ngModelChange)="CalculateNetAmountAndTotalAmount()"
-              #DiscountedRateCtrl="ngModel" required (blur)="DiscountedRateCtrl.control.markAsTouched()"
-              placeholder="Enter Discount Rate" (click)="selectAllValue($event)" />
-            <div *ngIf="(DiscountedRateCtrl.invalid && (DiscountedRateCtrl.touched || DiscountedRateCtrl.dirty))">
-              <span class="validation-text" *ngIf="DiscountedRateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
-          </div>
-          <div class="col-6 mb-1">
-            <label>Net Amount</label>
-            <input type="number" name="NetAmount" class="form-control" [(ngModel)]="newQuotedMaterial.NetAmount"
-              readonly />
-          </div>
-          <div class="col-6 mb-1">
-            <div>
-              <label for="Gst"><b>GST</b></label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
-                nzPlaceHolder="Select" [nzSize]="'large'" name="Gst" required id="Gst"
-                [(ngModel)]="newQuotedMaterial.Gst" (ngModelChange)="CalculateNetAmountAndTotalAmount()">
-                <nz-option nzLabel="None" [nzValue]="0"></nz-option>
-                <nz-option nzLabel="5%" [nzValue]="5"></nz-option>
-                <nz-option nzLabel="9%" [nzValue]="9"></nz-option>
-                <nz-option nzLabel="18%" [nzValue]="18"></nz-option>
-                <nz-option nzLabel="27%" [nzValue]="27"></nz-option>
-              </nz-select>
-            </div>
-          </div>
-          <div class="col-6 mb-1">
-            <label>Delivery Charges</label>
-            <input type="number" name="DeliveryCharges" class="form-control"
-              [(ngModel)]="newQuotedMaterial.DeliveryCharges" #DeliveryCharges="ngModel" required
-              (blur)="DeliveryCharges.control.markAsTouched()" placeholder="Enter DeliveryCharges"
-              (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
-            <div *ngIf="(DeliveryCharges.invalid && (DeliveryCharges.touched || DeliveryCharges.dirty))">
-              <span class="validation-text" *ngIf="DeliveryCharges.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
-          </div>
-          <div class="col-6 mb-1">
-            <label>Expected Delivery Date</label>
-            <input type="date" name="ExpectedDeliveryDate" class="form-control" [(ngModel)]="ExpectedDeliveryDate"
-              placeholder="Enter Date" />
-          </div>
-          <div class="col-6 mb-1">
-            <label>Total Amount</label>
-            <input type="number" name="TotalAmount" class=" form-control" [(ngModel)]="newQuotedMaterial.TotalAmount"
-              readonly />
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class=" custom-modal-footer">
-      <div style="
-          justify-content: center;
-          display: flex;
-          gap: 2rem;
-          margin-top: 2rem;
-        ">
-        <div>
-          <nz-button nz-button class="btn1" (click)="addQuotedMaterial()">Save</nz-button>
-        </div>
-        <div>
-          <nz-button nz-button class="btn1" (click)="closeModal('QuotedMaterial')">
-            Cancel
-          </nz-button>
-        </div>
-      </div>
-    </div>
   </div>
 </div>

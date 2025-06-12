@@ -137,11 +137,18 @@ export class QuotationComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
-  AddQuotation = () => {
+  AddQuotation = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
     this.router.navigate(['/homepage/Website/Quotation_Details']);
   }
 
-  ChangeQuotationstatus = () => {
+  ChangeQuotationstatus = (item: Quotation) => {
+    this.SelectedQuotation = item.GetEditableVersion();
+    Quotation.SetCurrentInstance(this.SelectedQuotation);
+    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     this.router.navigate(['/homepage/Website/Quotation_Approval']);
   }
 

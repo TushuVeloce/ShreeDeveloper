@@ -106,7 +106,7 @@ export class MaterialRequisition implements IPersistable<MaterialRequisition> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): MaterialRequisition[] {
+    sortPropertyName: string = ""): MaterialRequisition[] {
     let result: MaterialRequisition[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -172,18 +172,18 @@ export class MaterialRequisition implements IPersistable<MaterialRequisition> {
     return MaterialRequisition.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchEntireListByAllFilters(CompanyRef: number, Status: number, SiteRef: number,  errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-        let req = new MaterialRequisitionFetchRequest();
-        req.CompanyRefs.push(CompanyRef)
-        if (Status) {
-          req.MaterialRequisitionStatus.push(Status)
-        }
-        if (SiteRef) {
-          req.SiteRefs.push(SiteRef)
-        }
-        let tdResponse = await MaterialRequisition.FetchTransportData(req, errorHandler) as TransportData;
-        return MaterialRequisition.ListFromTransportData(tdResponse);
-      }
+  public static async FetchEntireListByAllFilters(CompanyRef: number, Status: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new MaterialRequisitionFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    if (Status) {
+      req.MaterialRequisitionStatus.push(Status)
+    }
+    if (SiteRef) {
+      req.SiteRefs.push(SiteRef)
+    }
+    let tdResponse = await MaterialRequisition.FetchTransportData(req, errorHandler) as TransportData;
+    return MaterialRequisition.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

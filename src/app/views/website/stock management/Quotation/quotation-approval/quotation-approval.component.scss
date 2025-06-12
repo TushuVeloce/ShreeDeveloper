@@ -64,3 +64,31 @@
 .bgtable_light {
   background-color: white;
 }
+
+.status {
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 14px;
+  width: 100px;
+  cursor: pointer;
+  border: 1px solid;
+  text-align: center;
+  display: inline-block;
+  color: black;
+
+  &.approved {
+    border-color: green;
+    background-color: #e6ffe6;
+  }
+
+  &.pending {
+    border-color: rgb(180, 180, 2);
+    background-color: rgb(252, 252, 213);
+  }
+
+  &.rejected {
+    border-color: red;
+    background-color: #ffe6e6;
+  }
+}

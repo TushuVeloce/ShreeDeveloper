@@ -128,6 +128,7 @@ import { QuotationDetailsComponent } from './stock management/Quotation/quotatio
 import { StockInwardComponent } from './stock management/stock_inward/stock_inward/stock-inward.component';
 import { StockInwardDetailsComponent } from './stock management/stock_inward/stock-inward-details/stock-inward-details.component';
 import { QuotationApprovalComponent } from './stock management/Quotation/quotation-approval/quotation-approval.component';
+import { StockOrderDetailsComponent } from './stock management/stock_order/stock-order-details/stock-order-details.component';
 
 
 const routes: Routes = [
@@ -231,6 +232,7 @@ const routes: Routes = [
       { path: 'Stock_Inward', component: StockInwardComponent },
       { path: 'Stock_Inward_Details', component: StockInwardDetailsComponent},
       { path: 'Stock_Order', component: StockOrderComponent },
+      { path: 'Stock_Order_Details', component: StockOrderDetailsComponent },
       { path: 'Stock_Transfer', component: StockTransferComponent },
 
       // Customer Management
