@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { StockTransferMobilePageRoutingModule } from './stock-transfer-mobile-routing.module';
 
 import { StockTransferMobilePage } from './stock-transfer-mobile.page';
+import { SharedModule } from "../../shared/shared.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    StockTransferMobilePageRoutingModule
-  ],
+    StockTransferMobilePageRoutingModule,
+    SharedModule
+],
   declarations: [StockTransferMobilePage]
 })
 export class StockTransferMobilePageModule {}

@@ -22,16 +22,16 @@ export class StockManagementMobilePage implements OnInit {
   ngOnInit() {
   }
   stockOptions = [
-    { label: 'Material Requisition', route: 'material-requisition', icon: 'document-text-outline' },
-    { label: 'Quotation', route: 'vendor-quotation', icon: 'pricetag-outline' },
-    { label: 'Stock Order', route: 'stock-order', icon: 'clipboard-outline' },
-    { label: 'Stock Inward', route: 'stock-inward', icon: 'download-outline' },
-    { label: 'Stock Transfer', route: 'stock-transfer', icon: 'swap-horizontal-outline' },
-    { label: 'Stock Consume', route: 'stock-consume', icon: 'swap-horizontal-outline' }
+    { label: 'Material Requisition', route: '/mobileapp/tabs/dashboard/stock-management/material-requisition', icon: 'document-text-outline' },
+    { label: 'Quotation', route: '/mobileapp/tabs/dashboard/stock-management/vendor-quotation', icon: 'pricetag-outline' },
+    { label: 'Stock Order', route: '/mobileapp/tabs/dashboard/stock-management/stock-order', icon: 'clipboard-outline' },
+    { label: 'Stock Inward', route: '/mobileapp/tabs/dashboard/stock-management/stock-inward', icon: 'download-outline' },
+    { label: 'Stock Transfer', route: '/mobileapp/tabs/dashboard/stock-management/stock-transfer', icon: 'swap-horizontal-outline' },
+    { label: 'Stock Consume', route: '/mobileapp/tabs/dashboard/stock-management/stock-consume', icon: 'swap-horizontal-outline' }
   ];
 
   async navigateTo(route: string) {
     await this.haptic.mediumImpact();
-    this.router.navigate([`mobileapp/tabs/stock/${route}`]);
+    this.router.navigate([`/mobileapp/tabs/dashboard/stock-management/${route}`]);
   }
 }

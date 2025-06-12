@@ -6,7 +6,7 @@
   <ion-grid fixed>
     <ion-row>
       <ion-col size="6" size-sm="6" size-md="4" *ngFor="let option of stockOptions">
-        <ion-card button class="stock-card" (click)="navigateTo(option.route)">
+        <ion-card button class="stock-card" routerLink={{option.route}}>
           <ion-card-content class="card-content">
             <ion-icon [name]="option.icon" class="stock-icon"></ion-icon>
             <div class="stock-title">{{ option.label }}</div>

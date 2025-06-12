@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { LeaveRequestType } from 'src/app/classes/domain/domainenums/domainenums';
 import { LeaveRequest } from 'src/app/classes/domain/entities/website/request/leaverequest/leaverequest';
@@ -16,7 +16,7 @@ import { HapticService } from '../../core/haptic.service';
   styleUrls: ['./leave-mobile.page.scss'],
   standalone: false
 })
-export class LeaveMobilePage implements OnInit {
+export class LeaveMobilePage implements OnInit, OnDestroy {
   LeaveRequestList: LeaveRequest[] = [];
   filteredLeaveRequestData: LeaveRequest[] = [];
 
@@ -24,10 +24,8 @@ export class LeaveMobilePage implements OnInit {
   Entity: LeaveRequest = LeaveRequest.CreateNewInstance();
 
   companyRef = 0;
-  selectedStatus: number = 1;
+  selectedStatus = 1;
   modalOpen = false;
-  isLoading = false;
-
 
   readonly LeaveRequestTypeEnum = LeaveRequestType;
 
@@ -48,55 +46,53 @@ export class LeaveMobilePage implements OnInit {
     private loadingService: LoadingService
   ) { }
 
-  async ngOnInit(): Promise<void> {
+  async ngOnInit() {
     await this.loadLeaveRequestsIfEmployeeExists();
   }
 
-  ionViewWillEnter = async () => {
+  async ionViewWillEnter() {
     await this.loadLeaveRequestsIfEmployeeExists();
-  };
-
-  ngOnDestroy(): void {
-    // cleanup logic if needed later
   }
 
-  async handleRefresh(event: CustomEvent): Promise<void> {
+  ngOnDestroy() {
+    // Cleanup if needed
+  }
+
+  async handleRefresh(event: CustomEvent) {
     await this.loadLeaveRequestsIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
-  private async loadLeaveRequestsIfEmployeeExists(): Promise<void> {
+  private async loadLeaveRequestsIfEmployeeExists() {
     try {
       this.loadingService.show();
+
       const employeeRef = this.appStateManagement.getEmployeeRef();
       this.Entity.p.EmployeeRef = employeeRef;
-      this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
+      this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
 
       if (employeeRef > 0) {
         await this.getLeaveRequests();
       } else {
-        // await this.uiUtils.showErrorToster('Employee not selected');
         await this.toastService.present('Employee not selected', 1000, 'danger');
         await this.haptic.error();
       }
     } catch (error) {
-      
-    }finally{
+      console.error('Error loading leave requests:', error);
+      await this.toastService.present('Failed to load leave requests', 1000, 'danger');
+      await this.haptic.error();
+    } finally {
       this.loadingService.hide();
     }
   }
 
+  formatDate(date: string | Date): string {
+    return this.dateService.formatDate(date);
+  }
 
-  formatDate = (date: string | Date): string =>
-    this.dateService.formatDate(date);
-
-  async getLeaveRequests(): Promise<void> {
-    // this.loadingService.show();
-    this.LeaveRequestList = [];
-
+  async getLeaveRequests() {
     try {
       if (this.Entity.p.EmployeeRef <= 0) {
-        // await this.uiUtils.showErrorToster('Employee not selected');
         await this.toastService.present('Employee not selected', 1000, 'danger');
         await this.haptic.error();
         return;
@@ -104,18 +100,21 @@ export class LeaveMobilePage implements OnInit {
 
       this.LeaveRequestList = await LeaveRequest.FetchEntireListByEmployeeRef(
         this.Entity.p.EmployeeRef,
-        async (errMsg) => { await this.toastService.present(errMsg, 1000, 'danger'), await this.haptic.error() }
+        async (errMsg) => {
+          await this.toastService.present(errMsg, 1000, 'danger');
+          await this.haptic.error();
+        }
       );
 
       this.filterLeaveRequests();
     } catch (error) {
       console.error('Error fetching leave requests:', error);
-    } finally {
-      // this.loadingService.hide();
+      await this.toastService.present('Unable to fetch leave requests', 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
-  filterLeaveRequests(): void {
+  filterLeaveRequests() {
     this.filteredLeaveRequestData = this.LeaveRequestList.filter(({ p }) => {
       const { IsApproved, IsCancelled } = p;
 
@@ -127,78 +126,74 @@ export class LeaveMobilePage implements OnInit {
     });
   }
 
-
-  openModal(leave: LeaveRequest): void {
+  openModal(leave: LeaveRequest) {
     this.SelectedLeaveRequest = leave;
     this.modalOpen = true;
   }
 
-  closeModal(): void {
+  closeModal() {
     this.modalOpen = false;
     this.SelectedLeaveRequest = LeaveRequest.CreateNewInstance();
   }
 
-  async onDeleteClicked(request: LeaveRequest): Promise<void> {
+  async onDeleteClicked(request: LeaveRequest) {
     try {
-      // await this.uiUtils.showConfirmationMessage(
-      //   'Delete',
-      //   `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure you want to DELETE this Leave Request?`,
-      //   async () => {
-      //     await request.DeleteInstance(async () => {
-      //       await this.uiUtils.showSuccessToster(
-      //         `Leave request for ${request.p.EmployeeName} deleted!`
-      //       );
-      //       await this.getLeaveRequests();
-      //     });
-      //   }
-      // );
       this.alertService.presentDynamicAlert({
         header: 'Delete',
         subHeader: 'Confirmation needed',
-        message: 'Are you sure you want to Delete this Leave Request?',
+        message: 'Are you sure you want to delete this Leave Request?',
         buttons: [
           {
             text: 'Cancel',
             role: 'cancel',
             cssClass: 'custom-cancel',
-            handler: async () => {
-              console.log('Leave Request.');
+            handler: () => {
+              console.log('Leave deletion cancelled.');
             }
           },
           {
             text: 'Yes, Delete',
             cssClass: 'custom-confirm',
             handler: async () => {
-              await request.DeleteInstance(async () => {
-                await this.toastService.present(
-                  `Leave request for ${request.p.EmployeeName} deleted!`
-                ,1000, 'success');
-                await this.haptic.success();
-              })
-              await this.getLeaveRequests();
+              try {
+                await request.DeleteInstance(async () => {
+                  await this.toastService.present(
+                    `Leave request for ${request.p.EmployeeName} deleted!`,
+                    1000,
+                    'success'
+                  );
+                  await this.haptic.success();
+                });
+                await this.getLeaveRequests();
+              } catch (err) {
+                console.error('Error deleting leave request:', err);
+                await this.toastService.present('Failed to delete leave request', 1000, 'danger');
+                await this.haptic.error();
+              }
             }
           }
         ]
       });
     } catch (error) {
-      // console.error('Error deleting leave requests:', error);
-      await this.uiUtils.showErrorMessage('Error', 'Unable to deleting leave requests.');
+      console.error('Error presenting delete confirmation:', error);
+      await this.toastService.present('Something went wrong', 1000, 'danger');
+      await this.haptic.error();
     }
-
   }
 
   async addLeaveRequest() {
     try {
       if (this.companyRef <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
+        await this.toastService.present('Company not selected', 1000, 'danger');
+        await this.haptic.error();
         return;
       }
-      this.router.navigate([
-        '/mobileapp/tabs/attendance/leave/add',
-      ]);
+
+      this.router.navigate(['/mobileapp/tabs/attendance/leave/add']);
     } catch (error) {
-      console.error('Error to move to add leave requests:', error);
-      await this.uiUtils.showErrorMessage('Error', 'Unable to move to add leave requests.');
+      console.error('Error navigating to add leave request:', error);
+      await this.toastService.present('Navigation error', 1000, 'danger');
+      await this.haptic.error();
     }
   }
 }

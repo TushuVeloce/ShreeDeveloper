@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { VendorQuotationMobilePageRoutingModule } from './vendor-quotation-mobile-routing.module';
 
 import { VendorQuotationMobilePage } from './vendor-quotation-mobile.page';
+import { SharedModule } from "../../shared/shared.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    VendorQuotationMobilePageRoutingModule
-  ],
+    VendorQuotationMobilePageRoutingModule,
+    SharedModule
+],
   declarations: [VendorQuotationMobilePage]
 })
 export class VendorQuotationMobilePageModule {}

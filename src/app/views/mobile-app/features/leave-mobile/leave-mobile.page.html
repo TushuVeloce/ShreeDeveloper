@@ -1,4 +1,4 @@
-<app-loader *ngIf="isLoading"></app-loader>
+<!-- <app-loader *ngIf="isLoading"></app-loader> -->
 <app-header-with-back-handler title="Leave Requests" backRoute="mobileapp/tabs/attendance"></app-header-with-back-handler>
 
 <ion-content [fullscreen]="true" class="ion-padding">
@@ -52,7 +52,7 @@
       </ion-card-content>
     </ion-card>
     <!-- Show "Data not found" if list is empty -->
-    <div *ngIf="filteredLeaveRequestData.length === 0 && !isLoading" class="no-data-mobile-app">
+    <div *ngIf="filteredLeaveRequestData.length === 0" class="no-data-mobile-app">
       <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
       <p>No Leave Request records found.</p>
     </div>

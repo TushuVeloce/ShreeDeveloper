@@ -19,7 +19,7 @@ import { LoadingService } from '../../core/loading.service';
 export class AttendanceDetailsMobilePage implements OnInit {
   selectedMonth: number = 0;
   months: any[] = [];
-  isLoading: boolean = false;
+  // isLoading: boolean = false;
   companyRef: number = 0;
 
   attendanceLogFilter: AttendanceLogs = AttendanceLogs.CreateNewInstance();
