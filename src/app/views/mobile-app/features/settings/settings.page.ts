@@ -20,8 +20,16 @@ import { LoadingService } from '../../core/loading.service';
 export class SettingsPage implements OnInit {
 
   employeeName: string = '';
+  employeeEmail: string = '';
   userImage: string = '';
   defaultAvatar: string = 'assets/logos/dp.png';
+
+  profileOptions = [
+    { title: 'Notifications', icon: 'notifications-outline', action: () => this.openNotifications() },
+    { title: 'change password', icon: 'finger-print', action: () => this.openChangePassword() },
+    { title: 'Privacy and Security', icon: 'lock-closed-outline', action: () => this.openPrivacy() },
+    { title: 'Logout', icon: 'log-out-outline', action: () => this.confirmLogout() },
+  ];
 
   constructor(
     private router: Router,
@@ -38,11 +46,13 @@ export class SettingsPage implements OnInit {
   ngOnInit = async () => {
     await this.loadingService.show();
     this.employeeName = localStorage.getItem('UserDisplayName') || 'User';
+    this.employeeEmail = localStorage.getItem('userEmail') || 'email';
     await this.loadingService.hide();
   }
   ionViewWillEnter = async () => {
     await this.loadingService.show();
     this.employeeName = localStorage.getItem('UserDisplayName') || 'User';
+    this.employeeEmail = localStorage.getItem('userEmail') || 'email';
     await this.loadingService.hide();
   }
 
@@ -90,7 +100,7 @@ export class SettingsPage implements OnInit {
 
   logout = async () => {
     try {
-      await this.loadingService.show('Loading...', 'crescent');
+      await this.loadingService.show();
       const req = new UserLogoutRequest();
       req.LoginToken = this.sessionValues.CurrentLoginToken;
       req.LastSelectedCompanyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));

@@ -5,12 +5,16 @@ import { LeaveRequest } from 'src/app/classes/domain/entities/website/request/le
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+import { ToastService } from '../../core/toast.service';
+import { LoadingService } from '../../core/loading.service';
+import { AlertService } from '../../core/alert.service';
+import { HapticService } from '../../core/haptic.service';
 
 @Component({
   selector: 'app-leave-mobile',
   templateUrl: './leave-mobile.page.html',
   styleUrls: ['./leave-mobile.page.scss'],
-  standalone:false
+  standalone: false
 })
 export class LeaveMobilePage implements OnInit {
   LeaveRequestList: LeaveRequest[] = [];
@@ -37,7 +41,11 @@ export class LeaveMobilePage implements OnInit {
     private router: Router,
     private uiUtils: UIUtils,
     private appStateManagement: AppStateManageService,
-    private dateService: DateconversionService
+    private dateService: DateconversionService,
+    private toastService: ToastService,
+    private haptic: HapticService,
+    private alertService: AlertService,
+    private loadingService: LoadingService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -58,14 +66,23 @@ export class LeaveMobilePage implements OnInit {
   }
 
   private async loadLeaveRequestsIfEmployeeExists(): Promise<void> {
-    const employeeRef = this.appStateManagement.getEmployeeRef();
-    this.Entity.p.EmployeeRef = employeeRef;
-    this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
+    try {
+      this.loadingService.show();
+      const employeeRef = this.appStateManagement.getEmployeeRef();
+      this.Entity.p.EmployeeRef = employeeRef;
+      this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
 
-    if (employeeRef > 0) {
-      await this.getLeaveRequests();
-    } else {
-      await this.uiUtils.showErrorToster('Employee not selected');
+      if (employeeRef > 0) {
+        await this.getLeaveRequests();
+      } else {
+        // await this.uiUtils.showErrorToster('Employee not selected');
+        await this.toastService.present('Employee not selected', 1000, 'danger');
+        await this.haptic.error();
+      }
+    } catch (error) {
+      
+    }finally{
+      this.loadingService.hide();
     }
   }
 
@@ -74,25 +91,27 @@ export class LeaveMobilePage implements OnInit {
     this.dateService.formatDate(date);
 
   async getLeaveRequests(): Promise<void> {
-    this.isLoading = true;
+    // this.loadingService.show();
     this.LeaveRequestList = [];
 
     try {
       if (this.Entity.p.EmployeeRef <= 0) {
-        await this.uiUtils.showErrorToster('Employee not selected');
+        // await this.uiUtils.showErrorToster('Employee not selected');
+        await this.toastService.present('Employee not selected', 1000, 'danger');
+        await this.haptic.error();
         return;
       }
 
       this.LeaveRequestList = await LeaveRequest.FetchEntireListByEmployeeRef(
         this.Entity.p.EmployeeRef,
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+        async (errMsg) => { await this.toastService.present(errMsg, 1000, 'danger'), await this.haptic.error() }
       );
 
       this.filterLeaveRequests();
     } catch (error) {
       console.error('Error fetching leave requests:', error);
     } finally {
-      this.isLoading = false;
+      // this.loadingService.hide();
     }
   }
 
@@ -121,18 +140,46 @@ export class LeaveMobilePage implements OnInit {
 
   async onDeleteClicked(request: LeaveRequest): Promise<void> {
     try {
-      await this.uiUtils.showConfirmationMessage(
-        'Delete',
-        `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure you want to DELETE this Leave Request?`,
-        async () => {
-          await request.DeleteInstance(async () => {
-            await this.uiUtils.showSuccessToster(
-              `Leave request for ${request.p.EmployeeName} deleted!`
-            );
-            await this.getLeaveRequests();
-          });
-        }
-      );
+      // await this.uiUtils.showConfirmationMessage(
+      //   'Delete',
+      //   `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure you want to DELETE this Leave Request?`,
+      //   async () => {
+      //     await request.DeleteInstance(async () => {
+      //       await this.uiUtils.showSuccessToster(
+      //         `Leave request for ${request.p.EmployeeName} deleted!`
+      //       );
+      //       await this.getLeaveRequests();
+      //     });
+      //   }
+      // );
+      this.alertService.presentDynamicAlert({
+        header: 'Delete',
+        subHeader: 'Confirmation needed',
+        message: 'Are you sure you want to Delete this Leave Request?',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'custom-cancel',
+            handler: async () => {
+              console.log('Leave Request.');
+            }
+          },
+          {
+            text: 'Yes, Delete',
+            cssClass: 'custom-confirm',
+            handler: async () => {
+              await request.DeleteInstance(async () => {
+                await this.toastService.present(
+                  `Leave request for ${request.p.EmployeeName} deleted!`
+                ,1000, 'success');
+                await this.haptic.success();
+              })
+              await this.getLeaveRequests();
+            }
+          }
+        ]
+      });
     } catch (error) {
       // console.error('Error deleting leave requests:', error);
       await this.uiUtils.showErrorMessage('Error', 'Unable to deleting leave requests.');

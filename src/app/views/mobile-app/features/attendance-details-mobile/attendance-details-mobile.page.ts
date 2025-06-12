@@ -5,12 +5,16 @@ import { AttendanceLogs } from 'src/app/classes/domain/entities/website/HR_and_P
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+import { ToastService } from '../../core/toast.service';
+import { HapticService } from '../../core/haptic.service';
+import { AlertService } from '../../core/alert.service';
+import { LoadingService } from '../../core/loading.service';
 
 @Component({
   selector: 'app-attendance-details-mobile',
   templateUrl: './attendance-details-mobile.page.html',
   styleUrls: ['./attendance-details-mobile.page.scss'],
-  standalone:false
+  standalone: false
 })
 export class AttendanceDetailsMobilePage implements OnInit {
   selectedMonth: number = 0;
@@ -30,7 +34,11 @@ export class AttendanceDetailsMobilePage implements OnInit {
     private uiUtils: UIUtils,
     private appState: AppStateManageService,
     private dateConversionService: DateconversionService,
-    private dateService: DateconversionService
+    private dateService: DateconversionService,
+    private toastService: ToastService,
+    private haptic: HapticService,
+    private alertService: AlertService,
+    private loadingService: LoadingService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -52,19 +60,20 @@ export class AttendanceDetailsMobilePage implements OnInit {
 
   async loadAttendanceDetailsIfEmployeeExists(): Promise<void> {
     try {
-      this.isLoading = true;
+      this.loadingService.show();
       this.attendanceLogFilter.p.EmployeeRef = this.appState.getEmployeeRef();
       this.companyRef = Number(this.appState.StorageKey.getItem('SelectedCompanyRef'));
       if (this.attendanceLogFilter.p.EmployeeRef > 0) {
         this.months = DomainEnums.MonthList();
         await this.fetchAttendanceByMonth(new Date().getMonth());
       } else {
-        await this.uiUtils.showErrorToster('Employee not selected');
+        await this.toastService.present('Employee not selected', 1000, 'danger');
+        await this.haptic.error();
       }
     } catch (error) {
       this.handleError(error, 'Loading attendance details');
     } finally {
-      this.isLoading = false;
+      this.loadingService.hide();
     }
   }
 
@@ -90,7 +99,7 @@ export class AttendanceDetailsMobilePage implements OnInit {
         AttendanceLogType.MonthlyAttendanceLog,
         month,
         employeeRef,
-        async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
+        async errMsg => { await this.toastService.present(errMsg, 1000, 'danger'), await this.haptic.error() }
       );
       this.monthlyAttendanceLogsList = logs;
       this.filteredMonthlyAttendanceLogsList = logs;
@@ -133,6 +142,8 @@ export class AttendanceDetailsMobilePage implements OnInit {
 
   private handleError(error: any, context: string): void {
     console.error(`${context} failed:`, error);
-    this.uiUtils.showErrorToster(`${context} failed`);
+    // this.uiUtils.showErrorToster(`${context} failed`);
+    this.toastService.present(`Error ${error}`, 1000, 'danger');
+    this.haptic.error();
   }
 }

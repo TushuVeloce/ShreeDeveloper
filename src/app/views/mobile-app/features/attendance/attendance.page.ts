@@ -32,6 +32,7 @@ export class AttendancePage implements OnInit {
   punchModalOpen = false;
   // isLoading = false;
   isSubmitting = false;
+  disableTopCard = false;
 
   // Data fields
   currentDateTime: string = "";
@@ -102,6 +103,7 @@ export class AttendancePage implements OnInit {
   private loadAttendanceIfEmployeeExists = async () => {
     try {
       await this.loadingService.show();
+      this.disableTopCard = await this.appStateManage.localStorage.getItem('IsDefaultUser') == "1" ? true : false;
       this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
       this.employeeRef = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
       if (this.employeeRef > 0) {

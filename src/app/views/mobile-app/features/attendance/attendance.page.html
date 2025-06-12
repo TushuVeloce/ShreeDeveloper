@@ -5,7 +5,7 @@
   </ion-refresher>
 
   <!-- Top Card -->
-  <div class="top-card">
+  <!-- <div class="top-card">
     <h2>Today, {{ currentDateTime ? formatDate(currentDateTime) : '--' }}</h2>
     <div class="btn-group">
       <div>
@@ -31,8 +31,34 @@
         CHECKOUT
       </ion-button>
     </div>
-  </div>
+  </div> -->
 
+  <div class="top-card" [class.disabled]="disableTopCard">
+    <h2>Today, {{ currentDateTime ? formatDate(currentDateTime) : '--' }}</h2>
+    <div class="btn-group">
+      <div>
+        <p class="label">Check In</p>
+        <h1>{{ checkInTime || '--' }}</h1>
+      </div>
+      <div>
+        <p class="label">Check Out</p>
+        <h1>{{ checkOutTime || '--' }}</h1>
+      </div>
+    </div>
+  
+    <div class="btn-group">
+      <ion-button fill="outline" color="light" (click)="openPunchModal()" [disabled]="true">
+        <ion-ripple-effect></ion-ripple-effect>
+        CHECKIN
+      </ion-button>
+  
+      <ion-button color="warning" (click)="submitPunchOut()" [disabled]="true">
+        <ion-ripple-effect></ion-ripple-effect>
+        CHECKOUT
+      </ion-button>
+    </div>
+  </div>
+  
   <!-- Quick Actions -->
   <ion-grid class="grid">
     <ion-row>

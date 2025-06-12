@@ -13,6 +13,10 @@ const routes: Routes = [
     loadChildren: () => import('../material-requisition-mobile/material-requisition-mobile.module').then(m => m.MaterialRequisitionMobilePageModule)
   },
   {
+    path: 'vendor-quotation',
+    loadChildren: () => import('../vendor-quotation-mobile/vendor-quotation-mobile.module').then(m => m.VendorQuotationMobilePageModule)
+  },
+  {
     path: 'stock-transfer',
     loadChildren: () => import('../stock-transfer-mobile/stock-transfer-mobile.module').then(m => m.StockTransferMobilePageModule)
   },

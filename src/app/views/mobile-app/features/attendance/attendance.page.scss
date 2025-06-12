@@ -47,7 +47,11 @@
         }
     }
 }
-
+.top-card.disabled {
+    opacity: 0.5;
+    pointer-events: none; // Prevent interaction
+    filter: grayscale(0.3); }
+    
 .section-header {
     display: flex;
     justify-content: space-between;

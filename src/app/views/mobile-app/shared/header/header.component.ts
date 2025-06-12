@@ -33,8 +33,8 @@ export class HeaderComponent implements OnInit {
   private async loadCompanyList(): Promise<void> {
     try {
       // Load from local storage or default
-      const storedRef = await this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
-      const storedName = await this.appStateManagement.StorageKey.getItem('companyName');
+      const storedRef = await this.appStateManagement.localStorage.getItem('SelectedCompanyRef');
+      const storedName = await this.appStateManagement.localStorage.getItem('companyName');
       this.selectedCompany = [
         {
           "p": {
@@ -43,7 +43,7 @@ export class HeaderComponent implements OnInit {
           }
         }
       ];
-      this.IsDefaultUser = await this.appStateManagement.StorageKey.getItem('IsDefaultUser') == "1" ? false : true;
+      this.IsDefaultUser = await this.appStateManagement.localStorage.getItem('IsDefaultUser') == "1" ? false : true;
       console.log('this.IsDefaultUser :', this.IsDefaultUser);
       const list = await Company.FetchEntireList(
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
@@ -68,8 +68,8 @@ export class HeaderComponent implements OnInit {
       this.CompanyRef = selected.p.Ref;
       this.CompanyName = selected.p.Name;
 
-      this.appStateManagement.StorageKey.setItem('SelectedCompanyRef', `${selected.p.Ref}`);
-      this.appStateManagement.StorageKey.setItem('companyName', selected.p.Name);
+      this.appStateManagement.localStorage.setItem('SelectedCompanyRef', `${selected.p.Ref}`);
+      this.appStateManagement.localStorage.setItem('companyName', selected.p.Name);
 
       this.companystatemanagement.setCompanyRef(this.CompanyRef, this.CompanyName);
     }
@@ -105,9 +105,9 @@ export class HeaderComponent implements OnInit {
 
   onGetCompany = () => {
     const storedCompanyRef =
-      this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
+      this.appStateManagement.localStorage.getItem('SelectedCompanyRef');
     const storedCompanyName =
-      this.appStateManagement.StorageKey.getItem('companyName');
+      this.appStateManagement.localStorage.getItem('companyName');
 
     if (storedCompanyRef && storedCompanyName) {
       const ref = Number(storedCompanyRef);

@@ -53,6 +53,8 @@ export class LoginMobilePage implements OnInit {
     this.appStateManage.localStorage.setItem("UserDisplayName", response.UserDisplayName)
     this.appStateManage.localStorage.setItem('SelectedCompanyRef', response.LastSelectedCompanyRef.toString());
     this.appStateManage.localStorage.setItem('companyName', response.CompanyName);
+    this.appStateManage.localStorage.setItem('userEmail', response.EMailId);
+    // this.appStateManage.localStorage.setItem('userRole', response.);
     this.appStateManage.localStorage.setItem('LoginEmployeeRef', response.LoginEmployeeRef.toString());
     this.companystatemanagement.setCompanyRef(response.LastSelectedCompanyRef, response.CompanyName)
 
