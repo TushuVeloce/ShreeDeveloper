@@ -21,7 +21,7 @@
           <label>Date</label>
           <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Entity.p.Date"
             #DateCtrl="ngModel" required (blur)="DateCtrl.control.markAsTouched()"
-            placeholder="Enter Site Name" />
+            placeholder="Enter Date" />
           <div *ngIf="DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty)">
             <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>

@@ -229,7 +229,7 @@ const routes: Routes = [
       { path: 'Quotation_Approval', component: QuotationApprovalComponent },
       { path: 'Stock_Consume', component: StockConsumeComponent },
       { path: 'Stock_Inward', component: StockInwardComponent },
-      { path: 'Stock_Inward', component: StockInwardDetailsComponent },
+      { path: 'Stock_Inward_Details', component: StockInwardDetailsComponent},
       { path: 'Stock_Order', component: StockOrderComponent },
       { path: 'Stock_Transfer', component: StockTransferComponent },
 
