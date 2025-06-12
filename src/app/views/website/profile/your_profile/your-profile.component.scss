@@ -1,0 +1,118 @@
+/* Profile image styling */
+.profile-image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+.profile-image {
+  width: 294px;
+  height: 250px;
+  margin-bottom: 1rem;
+  // margin-top: 1rem;
+}
+
+
+.file-upload {
+  width: 294px;
+}
+
+body, html {
+  overflow-x: hidden; /* prevents horizontal scroll */
+}
+
+// =========================== Nz Select Menu  Css start ==============================
+nz-select {
+  width: 100%;
+}
+
+.nzSelect-light ::ng-deep.ant-select-selector {
+  background-color: #ffffff;
+  /* White background */
+  color: #000000;
+  /* Black text */
+  // border-color: rgb(34, 34, 34);     /* Light border */
+  border: 0.2px solid rgb(133, 130, 130);
+  /* Darker border */
+  border-radius: 7px !important;
+}
+
+.nzSelect-dark:hover ::ng-deep.ant-select-selector {
+  border-color: orangered !important;
+}
+
+.nzSelect-light:hover ::ng-deep.ant-select-selector {
+  border-color: orangered !important;
+}
+
+.nzSelect-dark ::ng-deep.ant-select-selector {
+  background-color: rgb(34, 34, 34);
+  /* Dark background */
+  color: #ffffff;
+  /* White text */
+  border: 0.2px solid rgb(133, 130, 130);
+  /* Darker border */
+  border-radius: 7px !important;
+}
+
+.nzSelect-light ::ng-deep .ant-select-focused .ant-select-selector,
+.nzSelect-light ::ng-deep .ant-select-selector:focus-within {
+  border-color: orangered !important;
+  /* Change border color on focus for light theme */
+}
+
+.nzSelect-dark ::ng-deep .ant-select-focused .ant-select-selector,
+.nzSelect-dark ::ng-deep .ant-select-selector:focus-within {
+  border-color: orangered !important;
+  /* Change border color on focus for dark theme */
+}
+
+.nzSelect-light ::ng-deep .ant-select-clear {
+  color: black !important;
+  /* Change clear icon color in light theme */
+}
+
+.nzSelect-dark ::ng-deep .ant-select-clear {
+  color: white !important;
+  /* Change clear icon color in dark theme */
+  background: black;
+}
+
+.nzSelect-light ::ng-deep .anticon {
+  color: black !important;
+  /* Change icon color in light theme */
+}
+
+.nzSelect-dark ::ng-deep .anticon {
+  color: white !important;
+  /* Change icon color in dark theme */
+}
+
+::ng-deep .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: #8dd0f0 !important
+}
+
+::ng-deep .ant-empty-description {
+  color: black !important;
+  /* Color for light theme */
+}
+
+
+/* Light theme disabled state */
+.nzSelect-light-disabled ::ng-deep .ant-select-selector {
+  background-color: rgb(229, 231, 235) !important;
+  color: black !important;
+  border: 0.2px solid rgb(133, 130, 130) !important;
+  border-radius: 7px !important;
+}
+
+/* Dark theme disabled state */
+.nzSelect-dark-disabled ::ng-deep .ant-select-selector {
+  background-color: rgb(34, 34, 34) !important;
+  color: white !important;
+  border: 0.2px solid rgb(133, 130, 130) !important;
+  border-radius: 7px !important;
+}
+
+
+// =========================== Nz Select Menu  Css End ==============================
