@@ -4,19 +4,19 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class StockInwardFetchRequest
+export class StockTransferFetchRequest
 {
     // public static readonly FetchRequestType: string = "GAAProjectSpaceGroupFetchRequest";
-    public static readonly FetchRequestType: string = "StockInwardFetchRequest";
+    public static readonly FetchRequestType: string = "StockTransferFetchRequest";
 
-    StockInwardManagementRefs: number[] = [];
+    StockTransferManagementRefs: number[] = [];
     CompanyRefs: number[] = [];
-    StockInwardStatus: number[] = [];
+    StockTransferStatus: number[] = [];
     SiteRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, StockInwardFetchRequest.FetchRequestType) as DataCollection;
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, StockTransferFetchRequest.FetchRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 

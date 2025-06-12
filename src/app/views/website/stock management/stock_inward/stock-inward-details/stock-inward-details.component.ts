@@ -21,7 +21,7 @@ export class StockInwardDetailsComponent  implements OnInit {
  Entity: StockInward = StockInward.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
-  DetailsFormTitle: 'New Material Requisition' | 'Edit Material Requisition' = 'New Material Requisition';
+  DetailsFormTitle: 'New Stock Inward' | 'Edit Stock Inward' = 'New Stock Inward';
   IsDropdownDisabled: boolean = false;
   InitialEntity: StockInward = null as any;
   SiteList: Site[] = [];
@@ -62,7 +62,7 @@ export class StockInwardDetailsComponent  implements OnInit {
     // this.getMaterialListByCompanyRef()
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Material Requisition' : 'Edit Material Requisition';
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Inward' : 'Edit Stock Inward';
       this.Entity = StockInward.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       if (this.Entity.p.Date != '') {

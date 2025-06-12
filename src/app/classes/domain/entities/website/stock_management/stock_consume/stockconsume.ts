@@ -20,14 +20,22 @@ export class StockConsumeProps {
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
   public Ref: number = 0;
-  public Date: string = '';
   public SiteRef: number = 0;
   public readonly SiteName: string = '';
+  public ConsumptionDate: string = '';
+  public MaterialRef: number = 0;
+  public MaterialName: string = '';
+  public UnitRef: number = 0;
+  public UnitName: string = '';
+  public CurrentQuantity: number = 0;
+  public ConsumedQuantity: number = 0;
+  public RemainingQuantity: number = 0;
+  public StageRef: number = 0;
+  public StageName: string = '';
+  public Description: string = '';
+  public Remark: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public Status: number = 0
-  // public StockConsumeDetailsArray: RequiredMaterialDetailProps[] = [];
-
 
   public readonly IsNewlyCreated: boolean = false;
   private constructor(isNewlyCreated: boolean) {

@@ -1,0 +1,110 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackEstimateStage()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">{{ this.DetailsFormTitle }}</span>
+      </div>
+    </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
+    </ng-template>
+    <form autocomplete="off" #consumptionForm="ngForm">
+      <div class="row">
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label for="SiteRef"><b>Site Name</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
+            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label>Consumption Date</label>
+          <input type="date" name="ConsumptionDate" class="form-control" id="ConsumptionDate"
+            [(ngModel)]="Entity.p.ConsumptionDate" #ConsumptionDateCtrl="ngModel" required
+            (blur)="ConsumptionDateCtrl.control.markAsTouched()" placeholder="Enter Consumption Date" />
+          <div *ngIf="ConsumptionDateCtrl.invalid && (ConsumptionDateCtrl.touched || ConsumptionDateCtrl.dirty)">
+            <span class="validation-text" *ngIf="ConsumptionDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label for="MaterialRef"><b>Material Name</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="MaterialRef" name="MaterialRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.MaterialRef" (ngModelChange)="getUnitByMaterialRef(Entity.p.MaterialRef)">
+            <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
+              [nzLabel]="material.p.Name"></nz-option>
+          </nz-select>
+        </div>
+       <div class="col-md-4" style="margin-top: 1rem">
+          <label for="UnitRef">Unit</label>
+          <input type="text" name="UnitRef" class="form-control" [(ngModel)]="Entity.p.UnitName" />
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label for="CurrentQuantity"><b>Current Quantity</b></label>
+          <input type="number" [(ngModel)]="Entity.p.CurrentQuantity" name="CurrentQuantity" class="form-control"
+            id="CurrentQuantity" required placeholder="Enter Current Quantity" readonly/>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label for="ConsumedQuantity"><b>Consumption Quantity</b></label>
+          <input type="number" [(ngModel)]="Entity.p.ConsumedQuantity" name="ConsumedQuantity"
+            class="form-control" id="ConsumedQuantity" required placeholder="Enter Consumption Quantity"
+            #ConsumedQuantityCtrl="ngModel"  required (blur)="ConsumedQuantityCtrl.control.markAsTouched()" />
+          <div *ngIf="ConsumedQuantityCtrl.invalid && (ConsumedQuantityCtrl.touched || ConsumedQuantityCtrl.dirty)">
+            <span class="validation-text" *ngIf="ConsumedQuantityCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label for="RemainingQuantity"><b>Remaining Quantity</b></label>
+          <input type="number" [(ngModel)]="Entity.p.RemainingQuantity" name="RemainingQuantity" class="form-control"
+            id="RemainingQuantity" required placeholder="Enter Remaining Quantity" readonly/>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label for="StageRef"><b>Stage</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="StageRef" name="StageRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StageRef">
+            <nz-option *ngFor="let stage of StageList" [nzValue]="stage.p.Ref" [nzLabel]="stage.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label for="Description"><b>Description</b></label>
+          <textarea type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
+            id="Description" rows="1" required placeholder="Enter Description" #DescriptionCtrl="ngModel"
+            (blur)="DescriptionCtrl.control.markAsTouched()"></textarea>
+          <div style="height: 25px" *ngIf="
+              DescriptionCtrl.invalid &&
+              (DescriptionCtrl.touched || DescriptionCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label for="Remark"><b>Remark</b></label>
+          <input type="text" [(ngModel)]="Entity.p.Remark" name="Remark" class="form-control" id="Remark"
+            rows="1" required placeholder="Enter Remark" />
+        </div>
+      </div>
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
+        <div>
+          <button type="button" class="btn" (click)="SaveStageMaster()">
+            Save
+          </button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackEstimateStage()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
