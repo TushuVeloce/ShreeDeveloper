@@ -27,57 +27,67 @@
         </div>
          <div class="col-md-4"  style="margin-top: 1rem">
           <label>Ordered Date</label>
-          <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Entity.p.Date"
-            #DateCtrl="ngModel" required (blur)="DateCtrl.control.markAsTouched()"
+          <input type="date" name="OrderedDate" class="form-control" id="OrderedDate" [(ngModel)]="Entity.p.OrderedDate"
+            #OrderedDateCtrl="ngModel" required (blur)="OrderedDateCtrl.control.markAsTouched()"
             placeholder="Enter Site Name" />
-          <div *ngIf="DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty)">
-            <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+          <div *ngIf="OrderedDateCtrl.invalid && (OrderedDateCtrl.touched || OrderedDateCtrl.dirty)">
+            <span class="validation-text" *ngIf="OrderedDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
          <div class="col-md-4"  style="margin-top: 1rem">
           <label>Inward Date</label>
-          <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Entity.p.Date"
-            #DateCtrl="ngModel" required (blur)="DateCtrl.control.markAsTouched()"
+          <input type="date" name="InwardDate" class="form-control" id="InwardDate" [(ngModel)]="Entity.p.InwardDate"
+            #InwardDateCtrl="ngModel" required (blur)="InwardDateCtrl.control.markAsTouched()"
             placeholder="Enter Site Name" />
-          <div *ngIf="DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty)">
-            <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+          <div *ngIf="InwardDateCtrl.invalid && (InwardDateCtrl.touched || InwardDateCtrl.dirty)">
+            <span class="validation-text" *ngIf="InwardDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
          <div class="col-md-4" style="margin-top: 1rem">
           <label><b>Vendor Name</b></label>
-          <input type="text" [(ngModel)]="Entity.p.SiteRef" name="VehicleNo" class="form-control" id="VehicleNo"
+          <input type="text" [(ngModel)]="Entity.p.VendorName" name="VendorName" class="form-control" id="VendorName"
             placeholder="Vendor Name" />
         </div>
          <div class="col-md-4" style="margin-top: 1rem">
+          <label><b>Vendor Trade Name</b></label>
+          <input type="text" [(ngModel)]="Entity.p.VendorTradeName" name="VendorTradeName" class="form-control" id="VendorTradeName"
+            placeholder="Vendor Trade Name" />
+        </div>
+         <div class="col-md-4" style="margin-top: 1rem">
           <label><b>Vendor Mob No</b></label>
-          <input type="text" [(ngModel)]="Entity.p.SiteRef" name="VehicleNo" class="form-control" id="VehicleNo"
+          <input type="text" [(ngModel)]="Entity.p.VendorMobNo" name="VendorMobNo" class="form-control" id="VendorMobNo"
             placeholder="Vendor Mob No" />
         </div>
          <div class="col-md-4" style="margin-top: 1rem">
+          <label><b>Chalan No</b></label>
+          <input type="number" [(ngModel)]="Entity.p.ChalanNo" name="ChalanNo" class="form-control" id="ChalanNo"
+            placeholder="Chalan No" />
+        </div>
+         <div class="col-md-4" style="margin-top: 1rem">
           <label><b>Vehicle No</b></label>
-          <input type="text" [(ngModel)]="Entity.p.SiteRef" name="VehicleNo" class="form-control" id="VehicleNo"
+          <input type="text" [(ngModel)]="Entity.p.VehicleNo" name="VehicleNo" class="form-control" id="VehicleNo"
             placeholder="Vehicle No" />
         </div>
           <div class="col-md-4" style="margin-top: 1rem">
           <label><b>Remaining Required Quantity</b></label>
-          <input type="text" [(ngModel)]="Entity.p.SiteRef" name="VehicleNo" class="form-control" id="VehicleNo"
+          <input type="number" [(ngModel)]="Entity.p.RemainingQty" name="RemainingQty" class="form-control" id="RemainingQty"
             placeholder="Remaining Required Quantity" />
         </div>
       </div>
-       <!-- <div class="row" style="margin-top: 2rem; padding: 1rem">
+       <div class="row" style="margin-top: 2rem; padding: 1rem">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
           <h5 style="padding-top: 3px; color: black">
-            <b>Requisition Material List</b>
+            <b>Inwarded Material List</b>
           </h5>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
           style="display: flex; justify-content: end" routerLinkActive="active">
           <nz-button nz-button class="btn1" (click)="ismaterialModalOpen = true">Add Material</nz-button>
         </div>
-      </div> -->
+      </div>
 
-      <!-- <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem"
-        *ngIf="Entity.p.StockInwardDetailsArray.length > 0">
+      <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem"
+        *ngIf="Entity.p.MaterialInwardDetailsArray.length > 0">
         <div class="table-container" style="margin-top: 2rem">
           <div class="row">
             <div class="col-12">
@@ -85,7 +95,7 @@
             </div>
           </div>
           <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
-            nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.StockInwardDetailsArray">
+            nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.MaterialInwardDetailsArray">
             <thead>
               <tr>
                 <th *ngFor="let header of materialheaders" class="tblsubheader">
@@ -95,13 +105,14 @@
             </thead>
             <tbody>
               <tr *ngFor="
-                  let material of Entity.p.StockInwardDetailsArray;
+                  let material of Entity.p.MaterialInwardDetailsArray;
                   let i = index
                 ">
                 <td Class="tbldata">{{ i + 1 }}</td>
                 <td Class="tbldata">{{ material.MaterialName}}</td>
                 <td Class="tbldata">{{ material.UnitName}}</td>
-                <td Class="tbldata">{{ material.EstimatedQty}}</td>
+                <td Class="tbldata">{{ material.OrderedQty}}</td>
+                <td Class="tbldata">{{ material.RemainingQty}}</td>
                 <td class="tbldata">
                   <span style="margin-left: 9px" (click)="editMaterial(i)">
                     <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
@@ -114,11 +125,11 @@
           </nz-table>
         </div>
       </div>
-      <div *ngIf="Entity.p.StockInwardDetailsArray.length === 0" class="card-body_light">
+      <div *ngIf="Entity.p.MaterialInwardDetailsArray.length === 0" class="card-body_light">
         <div style="height: 200px; background-color: white" class="d-flex align-items-center justify-content-center">
           <span class="title_light"> Data Not Found</span>
         </div>
-      </div> -->
+      </div>
       <div style="
           justify-content: center;
           display: flex;
@@ -137,7 +148,7 @@
     </form>
   </div>
 </div>
-<!-- 
+
 <div *ngIf="ismaterialModalOpen" class="custom-modal-overlay">
   <div class="custom-modal">
     <div class="custom-modal-header">
@@ -146,22 +157,30 @@
     </div>
     <div class="custom-modal-body">
       <form autocomplete="off">
-        <div class="row" style="margin-top: 1rem">
-          <div class="col-md-4">
+        <div class="row">
+          <div class="col-md-6" style="margin-top: 1rem">
             <label>Material Name</label>
              <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear nzPlaceHolder="Select" id="MaterialRef"
-                name="MaterialRef" [nzSize]="'large'" [(ngModel)]="newRequisition.MaterialRef" required (ngModelChange)="getUnitByMaterialRef(newRequisition.MaterialRef)" >
+                name="MaterialRef" [nzSize]="'large'" [(ngModel)]="newInward.MaterialRef" required (ngModelChange)="getUnitByMaterialRef(newInward.MaterialRef)" >
                 <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
                   [nzLabel]="material.p.Name"></nz-option>
               </nz-select>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-6" style="margin-top: 1rem">
             <label>Unit</label>
-            <input type="text" name="UnitRef" class="form-control" [(ngModel)]="newRequisition.UnitName"/>
+            <input type="text" name="UnitRef" class="form-control" [(ngModel)]="newInward.UnitName"/>
           </div>
-          <div class="col-md-4">
-            <label>Required Quantity</label>
-            <input type="number" name="EstimatedQty" class="form-control" [(ngModel)]="newRequisition.EstimatedQty" required placeholder="Enter Estimated Qty" (click)="selectAllValue($event)"/>
+           <div class="col-md-6" style="margin-top: 1rem">
+            <label>Ordered Quantity</label>
+            <input type="number" name="OrderedQty" class="form-control" [(ngModel)]="newInward.OrderedQty" required placeholder="Ordered Quantity" (click)="selectAllValue($event)"/>
+          </div>
+           <div class="col-md-6" style="margin-top: 1rem">
+            <label>Inward Quantity</label>
+            <input type="number" name="InwardQty" class="form-control" [(ngModel)]="newInward.InwardQty" required placeholder="Inward Quantity" (click)="selectAllValue($event)"/>
+          </div>
+          <div class="col-md-6" style="margin-top: 1rem">
+            <label>Remaining Quantity</label>
+            <input type="number" name="RemainingQty" class="form-control" [(ngModel)]="newInward.RemainingQty" required placeholder="Remaining Quantity" (click)="selectAllValue($event)"/>
           </div>
         </div>
       </form>
@@ -184,4 +203,4 @@
       </div>
     </div>
   </div>
-</div> -->
+</div>

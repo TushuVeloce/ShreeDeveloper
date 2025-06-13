@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { InwardMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/inwardmaterial/inwardmaterial';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -31,7 +32,7 @@ export class StockInwardDetailsComponent  implements OnInit {
   plotheaders: string[] = ['Sr.No.', 'Plot No', 'Area sq.m', 'Area sq.ft', 'Goverment Rate', 'Company Rate', 'Action'];
   materialheaders: string[] = ['Sr.No.', 'Material Name ', 'Unit', 'Estimated Qty', 'Action'];
   ismaterialModalOpen: boolean = false;
-  // newRequisition: RequiredMaterialDetailProps = RequiredMaterialDetailProps.Blank();
+  newInward: InwardMaterialDetailProps = InwardMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   strCDT: string = ''
@@ -65,10 +66,13 @@ export class StockInwardDetailsComponent  implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Inward' : 'Edit Stock Inward';
       this.Entity = StockInward.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
-      if (this.Entity.p.Date != '') {
-        this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
+      if (this.Entity.p.OrderedDate != '') {
+        this.Entity.p.OrderedDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.OrderedDate)
       }
-      // this.getUnitByMaterialRef(this.Entity.p.StockInwardDetailsArray[0].MaterialRef)
+       if (this.Entity.p.InwardDate != '') {
+        this.Entity.p.OrderedDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate)
+      }
+      // this.getUnitByMaterialRef(this.Entity.p.MaterialInwardDetailsArray[0].MaterialRef)
     } else {
       this.Entity = StockInward.CreateNewInstance();
       StockInward.SetCurrentInstance(this.Entity);
@@ -95,119 +99,120 @@ export class StockInwardDetailsComponent  implements OnInit {
     this.SiteList = lst;
   }
 
-  // getMaterialListByCompanyRef = async () => {
-  //   if (this.companyRef() <= 0) {
-  //     await this.uiUtils.showErrorToster('Company not Selected');
-  //     return;
-  //   }
-  //   let lst = await Material.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.MaterialList = lst;
-  // }
+  getMaterialListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Material.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MaterialList = lst;
+  }
 
-  // getUnitByMaterialRef = async (materialref: number) => {
-  //   console.log('materialref :', materialref);
-  //   // this.newRequisition.UnitRef = 0;
-  //   // this.newRequisition.UnitName = '';
-  //   // this.newRequisition.MaterialName = ''
-  //   if (materialref <= 0 || materialref <= 0) {
-  //     await this.uiUtils.showErrorToster('Material not Selected');
-  //     return;
-  //   }
-  //   let lst = await Material.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   console.log('lst :', lst);
-  //   // this.newRequisition.UnitRef = lst.p.UnitRef;
-  //   // this.newRequisition.UnitName = lst.p.UnitName;
-  //   // this.newRequisition.MaterialName = lst.p.Name
-  // }
+  getUnitByMaterialRef = async (materialref: number) => {
+    console.log('materialref :', materialref);
+    // this.newInward.UnitRef = 0;
+    // this.newInward.UnitName = '';
+    // this.newInward.MaterialName = ''
+    if (materialref <= 0 || materialref <= 0) {
+      await this.uiUtils.showErrorToster('Material not Selected');
+      return;
+    }
+    let lst = await Material.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    // this.newInward.UnitRef = lst.p.UnitRef;
+    // this.newInward.UnitName = lst.p.UnitName;
+    // this.newInward.MaterialName = lst.p.Name
+  }
 
-  // openModal(type: string) {
-  //   if (type === 'material') this.ismaterialModalOpen = true;
-  // }
+  openModal(type: string) {
+    if (type === 'material') this.ismaterialModalOpen = true;
+  }
 
-  // closeModal = async (type: string) => {
-  //   if (type === 'material') {
-  //     const keysToCheck = ['MaterialRef', 'UnitRef', 'EstimatedQty'] as const;
+  closeModal = async (type: string) => {
+    if (type === 'material') {
+      const keysToCheck = ['MaterialRef', 'UnitRef', 'OrderedQty', 'InwardQty', 'RemainingQty'] as const;
 
-  //     const hasData = keysToCheck.some(key => {
-  //       const value = (this.newRequisition as any)[key];
+      const hasData = keysToCheck.some(key => {
+        const value = (this.newInward as any)[key];
 
-  //       // Check for non-null, non-undefined, non-empty string or non-zero number
-  //       if (typeof value === 'string') {
-  //         return value.trim() !== '';
-  //       } else if (typeof value === 'number') {
-  //         return !isNaN(value) && value !== 0;
-  //       } else {
-  //         return value != null; // for cases like object refs or non-primitive types
-  //       }
-  //     });
+        // Check for non-null, non-undefined, non-empty string or non-zero number
+        if (typeof value === 'string') {
+          return value.trim() !== '';
+        } else if (typeof value === 'number') {
+          return !isNaN(value) && value !== 0;
+        } else {
+          return value != null; // for cases like object refs or non-primitive types
+        }
+      });
 
-  //     if (hasData) {
-  //       await this.uiUtils.showConfirmationMessage(
-  //         'Close',
-  //         `This process is <strong>IRREVERSIBLE!</strong><br/>
-  //        Are you sure you want to close this modal?`,
-  //         async () => {
-  //           this.ismaterialModalOpen = false;
-  //           this.newRequisition = RequiredMaterialDetailProps.Blank();
-  //         }
-  //       );
-  //     } else {
-  //       this.ismaterialModalOpen = false;
-  //       this.newRequisition = RequiredMaterialDetailProps.Blank();
-  //     }
-  //   }
-  // };
+      if (hasData) {
+        await this.uiUtils.showConfirmationMessage(
+          'Close',
+          `This process is <strong>IRREVERSIBLE!</strong><br/>
+         Are you sure you want to close this modal?`,
+          async () => {
+            this.ismaterialModalOpen = false;
+            this.newInward = InwardMaterialDetailProps.Blank();
+          }
+        );
+      } else {
+        this.ismaterialModalOpen = false;
+        this.newInward = InwardMaterialDetailProps.Blank();
+      }
+    }
+  };
 
 
-  // async addMaterial() {
-  //   if (!this.newRequisition.MaterialRef || !this.newRequisition.UnitRef || this.newRequisition.EstimatedQty <= 0) {
-  //     await this.uiUtils.showErrorMessage('Error', 'Material Name, Unit, Estimated Qty are Required!');
-  //     return;
-  //   }
+  async addMaterial() {
+    if (!this.newInward.MaterialRef || !this.newInward.UnitRef || this.newInward.InwardQty <= 0) {
+      await this.uiUtils.showErrorMessage('Error', 'Material Name, Unit, Estimated Qty are Required!');
+      return;
+    }
 
-  //   if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
-  //     this.Entity.p.StockInwardDetailsArray[this.editingIndex] = { ...this.newRequisition };
-  //     await this.uiUtils.showSuccessToster('material details updated successfully');
-  //     this.ismaterialModalOpen = false;
+    if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
+      this.Entity.p.MaterialInwardDetailsArray[this.editingIndex] = { ...this.newInward };
+      await this.uiUtils.showSuccessToster('material details updated successfully');
+      this.ismaterialModalOpen = false;
 
-  //   } else {
-  //     // let materialInstance = new RequiredMaterial(this.newRequisition, true);
-  //     // let StockInwardInstance = new StockInward(this.Entity.p, true);
-  //     // await materialInstance.EnsurePrimaryKeysWithValidValues();
-  //     // await StockInwardInstance.EnsurePrimaryKeysWithValidValues();
-  //     this.newRequisition.StockInwardRef = this.Entity.p.Ref;
-  //     this.Entity.p.StockInwardDetailsArray.push({ ...this.newRequisition });
-  //     await this.uiUtils.showSuccessToster('material added successfully');
-  //   }
-  //   this.newRequisition = RequiredMaterialDetailProps.Blank();
-  //   this.editingIndex = null;
-  // }
+    } else {
+      // let materialInstance = new RequiredMaterial(this.newInward, true);
+      // let StockInwardInstance = new StockInward(this.Entity.p, true);
+      // await materialInstance.EnsurePrimaryKeysWithValidValues();
+      // await StockInwardInstance.EnsurePrimaryKeysWithValidValues();
+      this.newInward.MaterialInwardRef = this.Entity.p.Ref;
+      this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
+      await this.uiUtils.showSuccessToster('material added successfully');
+    }
+    this.newInward = InwardMaterialDetailProps.Blank();
+    this.editingIndex = null;
+  }
 
-  // editMaterial(index: number) {
-  //   this.ismaterialModalOpen = true
-  //   this.newRequisition = { ...this.Entity.p.StockInwardDetailsArray[index] }
-  //   this.editingIndex = index;
-  // }
+  editMaterial(index: number) {
+    this.ismaterialModalOpen = true
+    this.newInward = { ...this.Entity.p.MaterialInwardDetailsArray[index] }
+    this.editingIndex = index;
+  }
 
-  // async removeMaterial(index: number) {
-  //   // this.Entity.p.StockInwardManagementmaterialDetails.splice(index, 1); // Remove material
-  //   await this.uiUtils.showConfirmationMessage(
-  //     'Delete',
-  //     `This process is <strong>IRREVERSIBLE!</strong> <br/>
-  //    Are you sure that you want to DELETE this material?`,
-  //     async () => {
-  //       this.Entity.p.StockInwardDetailsArray.splice(index, 1);
-  //     }
-  //   );
-  // }
+  async removeMaterial(index: number) {
+    // this.Entity.p.StockInwardManagementmaterialDetails.splice(index, 1); // Remove material
+    await this.uiUtils.showConfirmationMessage(
+      'Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+     Are you sure that you want to DELETE this material?`,
+      async () => {
+        this.Entity.p.MaterialInwardDetailsArray.splice(index, 1);
+      }
+    );
+  }
 
   SaveStockInward = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     // this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    // this.newRequisition.StockInwardRef = this.Entity.p.Ref
-    this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
+    // this.newInward.StockInwardRef = this.Entity.p.Ref
+    this.Entity.p.OrderedDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.OrderedDate)
+    this.Entity.p.InwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.InwardDate)
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
@@ -224,7 +229,7 @@ export class StockInwardDetailsComponent  implements OnInit {
         this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster('Stock Inward Updated successfully');
-        await this.router.navigate(['/homepage/Website/Material_Requisition']);
+        await this.router.navigate(['/homepage/Website/Stock_Inward']);
       }
     }
   };
@@ -242,10 +247,10 @@ export class StockInwardDetailsComponent  implements OnInit {
       <br/>
       Are you sure that you want to Cancel this Stock Inward Form?`,
         async () => {
-          await this.router.navigate(['/homepage/Website/Material_Requisition']);
+          await this.router.navigate(['/homepage/Website/Stock_Inward']);
         });
     } else {
-      await this.router.navigate(['/homepage/Website/Material_Requisition']);
+      await this.router.navigate(['/homepage/Website/Stock_Inward']);
     }
   }
 

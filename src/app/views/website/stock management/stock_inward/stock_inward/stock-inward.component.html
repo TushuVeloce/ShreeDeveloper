@@ -1,14 +1,157 @@
 <div class="row">
- <div class="col-4 mb-2">
+  <div class="col-4 mb-2">
     <h1 style="padding-top: 3px;" class="title title_light">Stock Inward List</h1>
   </div>
-   <div class="col-4 mb-2 search-container_light">
+  <div class="col-4 mb-2 search-container_light">
     <!-- <app-shared-filter [masterList]="MasterList" [filterFields]="['Date', 'Site name', 'SiteInchargeName', 'AddressLine2']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter> -->
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">
-    <nz-button nz-button class="btn1" (click)='AddInward()'>
+    <nz-button nz-button class="btn1" (click)='AddStockInward()'>
       Add Inward
     </nz-button>
+  </div>
+</div>
+<!-- <div class="row" style="margin-top: 1rem; ">
+  <div class="col-md-4">
+    <div>
+      <label for="SiteRef"><b>site</b></label>
+      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+        [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
+        >
+        <nz-option [nzValue]="0" nzLabel="All"></nz-option>
+        <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+      </nz-select>
+    </div>
+  </div>
+</div> -->
+<ng-template #noDataTpl>
+  <div class="no-data-text">Data Not Found</div>
+</ng-template>
+<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+  <div class="table-container">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <!-- <tbody>
+        <tr *ngFor="let requisition of paginatedList; index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{requisition.p.Date}}</td>
+          <td Class="tbldata">{{requisition.p.SiteName}}</td>
+          <td Class="tbldata">{{requisition.p.MaterialRequisitionDetailsArray[0].MaterialName}}</td>
+           <td Class="tbldata">{{requisition.p.MaterialRequisitionDetailsArray[0].UnitName}}</td>
+            <td Class="tbldata">{{requisition.p.MaterialRequisitionDetailsArray[0].EstimatedQty}}</td>
+            <td Class="tbldata">{{requisition.p.Status}}</td>
+          <td class="tbldata">
+            <span style="margin-left: 9px;" (click)="onEditClicked(requisition);">
+              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+            </span>
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(requisition);">
+              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+          </td>
+        </tr>
+  </ng-container>
+</tr>
+
+      </tbody> -->
+      <!-- <tbody>
+  <ng-container *ngFor="let requisition of paginatedList; let i = index">
+    <ng-container *ngFor="let detail of requisition.p.MaterialRequisitionDetailsArray; let j = index">
+      <tr >
+        <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
+          {{ (currentPage - 1) * pageSize + i + 1 }}
+        </td>
+
+        <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
+          {{ formatDate(requisition.p.Date) }}
+        </td>
+
+        <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
+          {{ requisition.p.SiteName }}
+        </td>
+
+        <td class="tbldata">{{ detail.MaterialName }}</td>
+        <td class="tbldata">{{ detail.UnitName }}</td>
+        <td class="tbldata">{{ detail.EstimatedQty }}</td>
+
+        <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
+          {{ requisition.p.Status }}
+        </td>
+
+        <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="requisition.p.MaterialRequisitionDetailsArray.length">
+          <span style="margin-left: 9px;" (click)="onEditClicked(requisition)">
+            <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
+          </span>
+          <span style="margin-left: 9px;" (click)="onDeleteClicked(requisition)">
+            <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
+          </span>
+        </td>
+      </tr>
+      <tr *ngIf="j === requisition.p.MaterialRequisitionDetailsArray.length - 1">
+        <td colspan="8" style="background-color: #333; height: 2px; padding: 0;"></td>
+      </tr>
+    </ng-container>
+  </ng-container>
+</tbody> -->
+
+      <tbody>
+        <ng-container *ngFor="let inward of paginatedList; let i = index">
+          <ng-container
+            *ngFor="let detail of inward.p.MaterialInwardDetailsArray; let materialRowIndex = index">
+            <tr>
+              <!-- Sr.No. (optional: can be based on loop index instead) -->
+              <td class="tbldata">{{ (currentPage - 1) * pageSize + materialRowIndex + 1 }}</td>
+              <!-- Requisition level data -->
+                <td class="tbldata">{{ inward.p.ChalanNo }}</td>
+                <td class="tbldata">{{ inward.p.SiteName }}</td>
+                  <td class="tbldata">{{ formatDate(inward.p.OrderedDate)}}</td>
+                  <td class="tbldata">{{ formatDate(inward.p.InwardDate)}}</td>
+                <td class="tbldata">{{ inward.p.VendorName }}</td>
+            
+              <!-- Material level data -->
+              <td class="tbldata">{{ detail.MaterialName }}</td>
+              <td class="tbldata">{{ detail.UnitName }}</td>
+              <td class="tbldata">{{ detail.OrderedQty }}</td>
+               <td class="tbldata">{{ detail.InwardQty }}</td>
+                <td class="tbldata">{{ detail.RemainingQty }}</td>
+              <!-- Optional: Requisition status -->
+              <td class="tbldata">
+                <!-- PENDING -->
+                <span class="status" style="cursor: pointer;" ngClass="pending">
+                  Pending
+                </span>
+
+              </td>
+              <!-- Actions -->
+              <td class="tbldata">
+                <span style="margin-left: 9px;" (click)="onEditClicked(inward)">
+                  <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
+                </span>
+                <span style="margin-left: 9px;" (click)="onDeleteClicked(inward)">
+                  <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
+                </span>
+              </td>
+            </tr>
+            <tr *ngIf="materialRowIndex + 1 === inward.p.MaterialInwardDetailsArray.length">
+              <td colspan="100%" style="border-top: 2px solid #444;"></td>
+            </tr>
+          </ng-container>
+        </ng-container>
+      </tbody>
+    </nz-table>
+  </div>
+  <div class="fixed-pagination">
+    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+      (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+    </nz-pagination>
+  </div>
+</div>
+<div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
+  <div style="height: 200px" class="d-flex align-items-center justify-content-center">
+    <span class="title_light"> Data Not Found</span>
   </div>
 </div>

@@ -11,22 +11,29 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { StockInwardFetchRequest } from "./stockinwardfetchrequest";
-
+import { InwardMaterialDetailProps } from "./inwardmaterial/inwardmaterial";
 
 export class StockInwardProps {
-  public readonly Db_Table_Name = "StockInward";
+  public readonly Db_Table_Name = "MaterialInward";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
   public Ref: number = 0;
-  public Date: string = '';
   public SiteRef: number = 0;
   public readonly SiteName: string = '';
+  public OrderedDate: string = '';
+  public InwardDate: string = '';
+  public VendorRef: number = 0;
+  public readonly VendorName: string = '';
+  public VendorTradeName: string = '';
+  public VendorMobNo: string = '';
+  public ChalanNo: number = 0
+  public VehicleNo: string = ''
+  public RemainingQty : number = 0
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public Status: number = 0
-  // public StockInwardDetailsArray: RequiredMaterialDetailProps[] = [];
+  public MaterialInwardDetailsArray: InwardMaterialDetailProps[] = [];
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -40,7 +47,7 @@ export class StockInwardProps {
 }
 
 export class StockInward implements IPersistable<StockInward> {
-  public static readonly Db_Table_Name: string = 'StockInward';
+  public static readonly Db_Table_Name: string = 'MaterialInward';
 
   public constructor(public readonly p: StockInwardProps, public readonly AllowEdit: boolean) {
 
