@@ -11,8 +11,9 @@ import { SkeletonLoaderComponent } from './skeleton-loader/skeleton-loader.compo
 import { InputFieldComponent } from './input-field/input-field.component';
 import { CustomButtonComponent } from './custom-button/custom-button.component';
 import { DateFieldComponent } from './date-field/date-field.component';
+import { TransactionFilterComponent } from './transaction-filter/transaction-filter.component';
 @NgModule({
-  declarations: [HeaderComponent, HeaderWithBackHandlerComponent, SelectModalComponent, FilterSheetComponent, SkeletonLoaderComponent, InputFieldComponent, CustomButtonComponent, DateFieldComponent],
+  declarations: [HeaderComponent, HeaderWithBackHandlerComponent, SelectModalComponent, FilterSheetComponent, SkeletonLoaderComponent, InputFieldComponent, CustomButtonComponent, DateFieldComponent, TransactionFilterComponent],
   imports: [
     CommonModule,
     IonicModule,
@@ -20,6 +21,6 @@ import { DateFieldComponent } from './date-field/date-field.component';
     ReactiveFormsModule 
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA] ,
-  exports: [HeaderComponent, HeaderWithBackHandlerComponent, SelectModalComponent,FilterSheetComponent,SkeletonLoaderComponent,InputFieldComponent,CustomButtonComponent,DateFieldComponent]
+  exports: [HeaderComponent, HeaderWithBackHandlerComponent, SelectModalComponent,FilterSheetComponent,SkeletonLoaderComponent,InputFieldComponent,CustomButtonComponent,DateFieldComponent,TransactionFilterComponent]
 })
 export class SharedModule { }
