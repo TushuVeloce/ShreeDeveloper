@@ -21,7 +21,7 @@ export class StockInwardDetailsComponent  implements OnInit {
  Entity: StockInward = StockInward.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
-  DetailsFormTitle: 'New Material Requisition' | 'Edit Material Requisition' = 'New Material Requisition';
+  DetailsFormTitle: 'New Stock Inward' | 'Edit Stock Inward' = 'New Stock Inward';
   IsDropdownDisabled: boolean = false;
   InitialEntity: StockInward = null as any;
   SiteList: Site[] = [];
@@ -62,7 +62,7 @@ export class StockInwardDetailsComponent  implements OnInit {
     // this.getMaterialListByCompanyRef()
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Material Requisition' : 'Edit Material Requisition';
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Inward' : 'Edit Stock Inward';
       this.Entity = StockInward.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       if (this.Entity.p.Date != '') {
@@ -219,11 +219,11 @@ export class StockInwardDetailsComponent  implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('StockInward saved successfully');
+        await this.uiUtils.showSuccessToster('Stock Inward saved successfully');
         this.Entity = StockInward.CreateNewInstance();
         this.resetAllControls()
       } else {
-        await this.uiUtils.showSuccessToster('Material Requisition Updated successfully');
+        await this.uiUtils.showSuccessToster('Stock Inward Updated successfully');
         await this.router.navigate(['/homepage/Website/Material_Requisition']);
       }
     }
@@ -240,7 +240,7 @@ export class StockInwardDetailsComponent  implements OnInit {
       await this.uiUtils.showConfirmationMessage('Cancel',
         `This process is IRREVERSIBLE!
       <br/>
-      Are you sure that you want to Cancel this Material Requisition Form?`,
+      Are you sure that you want to Cancel this Stock Inward Form?`,
         async () => {
           await this.router.navigate(['/homepage/Website/Material_Requisition']);
         });

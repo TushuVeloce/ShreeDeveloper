@@ -28,6 +28,7 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
   IsDropdownDisabled: boolean = false;
   InitialEntity: MaterialRequisition = null as any;
   SiteList: Site[] = [];
+  AllMaterialList: Material[] = [];
   MaterialList: Material[] = [];
   localEstimatedStartingDate: string = '';
   localEstimatedEndDate: string = '';
@@ -38,6 +39,7 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   strCDT: string = ''
+  ModalEditable: boolean = false;
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos
   PinCodePattern: string = ValidationPatterns.PinCode;
   INDPhoneNo: string = ValidationPatterns.INDPhoneNo;
@@ -104,11 +106,11 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
       return;
     }
     let lst = await Material.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MaterialList = lst;
+    this.AllMaterialList = lst;
+    this.filterMaterialList();
   }
 
   getUnitByMaterialRef = async (materialref: number) => {
-    console.log('materialref :', materialref);
     this.newRequisition.UnitRef = 0;
     this.newRequisition.UnitName = '';
     this.newRequisition.MaterialName = ''
@@ -117,7 +119,6 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
       return;
     }
     let lst = await Material.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.newRequisition.UnitRef = lst.p.UnitRef;
     this.newRequisition.UnitName = lst.p.UnitName;
     this.newRequisition.MaterialName = lst.p.Name
@@ -125,6 +126,7 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
 
   openModal(type: string) {
     if (type === 'material') this.ismaterialModalOpen = true;
+    this.ModalEditable = false;
   }
 
   closeModal = async (type: string) => {
@@ -151,6 +153,7 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
          Are you sure you want to close this modal?`,
           async () => {
             this.ismaterialModalOpen = false;
+            this.ModalEditable = false;
             this.newRequisition = RequiredMaterialDetailProps.Blank();
           }
         );
@@ -161,11 +164,20 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
     }
   };
 
+  filterMaterialList() {
+    const usedRefs = this.Entity.p.MaterialRequisitionDetailsArray.map(item => item.MaterialRef);
+    this.MaterialList = this.AllMaterialList.filter(
+      material => !usedRefs.includes(material.p.Ref)
+    );
+  }
+
 
   async addMaterial() {
-    if (!this.newRequisition.MaterialRef || !this.newRequisition.UnitRef || this.newRequisition.EstimatedQty <= 0) {
-      await this.uiUtils.showErrorMessage('Error', 'Material Name, Unit, Estimated Qty are Required!');
-      return;
+    if (this.newRequisition.MaterialRef == 0) {
+      return this.uiUtils.showWarningToster('Material cannot be blank.');
+    }
+    if (this.newRequisition.EstimatedQty == 0) {
+      return this.uiUtils.showWarningToster('Required Quantity cannot be blank.');
     }
 
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
@@ -174,21 +186,19 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
       this.ismaterialModalOpen = false;
 
     } else {
-      // let materialInstance = new RequiredMaterial(this.newRequisition, true);
-      // let MaterialRequisitionInstance = new MaterialRequisition(this.Entity.p, true);
-      // await materialInstance.EnsurePrimaryKeysWithValidValues();
-      // await MaterialRequisitionInstance.EnsurePrimaryKeysWithValidValues();
       this.newRequisition.MaterialRequisitionRef = this.Entity.p.Ref;
       this.Entity.p.MaterialRequisitionDetailsArray.push({ ...this.newRequisition });
       await this.uiUtils.showSuccessToster('material added successfully');
     }
     this.newRequisition = RequiredMaterialDetailProps.Blank();
     this.editingIndex = null;
+    this.filterMaterialList();
   }
 
   editMaterial(index: number) {
     this.ismaterialModalOpen = true
     this.newRequisition = { ...this.Entity.p.MaterialRequisitionDetailsArray[index] }
+    this.ModalEditable = true;
     this.editingIndex = index;
   }
 
@@ -200,6 +210,7 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
      Are you sure that you want to DELETE this material?`,
       async () => {
         this.Entity.p.MaterialRequisitionDetailsArray.splice(index, 1);
+        this.filterMaterialList();
       }
     );
   }
@@ -208,7 +219,6 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    // this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.newRequisition.MaterialRequisitionRef = this.Entity.p.Ref
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
     let entityToSave = this.Entity.GetEditableVersion();
@@ -227,8 +237,8 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
         this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster('Material Requisition Updated successfully');
-        await this.router.navigate(['/homepage/Website/Material_Requisition']);
       }
+      await this.router.navigate(['/homepage/Website/Material_Requisition']);
     }
   };
 

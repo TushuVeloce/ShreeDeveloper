@@ -19,23 +19,22 @@
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Date</label>
-          <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Entity.p.Date"
-            #DateCtrl="ngModel" required (blur)="DateCtrl.control.markAsTouched()"
-            placeholder="Enter Date" />
+          <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="Entity.p.Date" #DateCtrl="ngModel"
+            required (blur)="DateCtrl.control.markAsTouched()" placeholder="Enter Date" />
           <div *ngIf="DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty)">
             <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
         <div class="col-md-4">
           <label>Site Name</label>
-             <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear nzPlaceHolder="Select" id="SiteRef"
-                name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef" required >
-                <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref"
-                  [nzLabel]="site.p.Name"></nz-option>
-              </nz-select>
+          <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear
+            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
+            required>
+            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+          </nz-select>
         </div>
       </div>
-       <div class="row" style="margin-top: 2rem; padding: 1rem">
+      <div class="row" style="margin-top: 2rem; padding: 1rem">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
           <h5 style="padding-top: 3px; color: black">
             <b>Requisition Material List</b>
@@ -112,7 +111,7 @@
 <div *ngIf="ismaterialModalOpen" class="custom-modal-overlay">
   <div class="custom-modal">
     <div class="custom-modal-header">
-      <h5>Add material</h5>
+      <h5>{{ ModalEditable ? 'Edit Material' : 'Add Material'}}</h5>
       <button type="button" class="btn-close" (click)="closeModal('material')"></button>
     </div>
     <div class="custom-modal-body">
@@ -120,19 +119,24 @@
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-4">
             <label>Material Name</label>
-             <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear nzPlaceHolder="Select" id="MaterialRef"
-                name="MaterialRef" [nzSize]="'large'" [(ngModel)]="newRequisition.MaterialRef" required (ngModelChange)="getUnitByMaterialRef(newRequisition.MaterialRef)" >
-                <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
-                  [nzLabel]="material.p.Name"></nz-option>
-              </nz-select>
+            <nz-select *ngIf="!ModalEditable" class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl"
+              nzAllowClear nzPlaceHolder="Select" id="MaterialRef" name="MaterialRef" [nzSize]="'large'"
+              [(ngModel)]="newRequisition.MaterialRef" required
+              (ngModelChange)="getUnitByMaterialRef(newRequisition.MaterialRef)">
+              <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
+                [nzLabel]="material.p.Name"></nz-option>
+            </nz-select>
+            <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control" readonly
+              [(ngModel)]="newRequisition.MaterialName" />
           </div>
           <div class="col-md-4">
             <label>Unit</label>
-            <input type="text" name="UnitRef" class="form-control" [(ngModel)]="newRequisition.UnitName"/>
+            <input type="text" name="UnitRef" class="form-control" readonly [(ngModel)]="newRequisition.UnitName" />
           </div>
           <div class="col-md-4">
             <label>Required Quantity</label>
-            <input type="number" name="EstimatedQty" class="form-control" [(ngModel)]="newRequisition.EstimatedQty" required placeholder="Enter Estimated Qty" (click)="selectAllValue($event)"/>
+            <input type="number" name="EstimatedQty" class="form-control" [(ngModel)]="newRequisition.EstimatedQty"
+              required placeholder="Enter Estimated Qty" (click)="selectAllValue($event)" />
           </div>
         </div>
       </form>
@@ -146,7 +150,7 @@
           margin-top: 2rem;
         ">
         <div>
-          <nz-button nz-button class="btn1" (click)="addMaterial()">Save</nz-button>
+          <nz-button nz-button class="btn1" (click)="addMaterial()">{{ ModalEditable ? 'Upadte' : 'Save'}}</nz-button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="closeModal('material')">

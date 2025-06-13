@@ -44,10 +44,6 @@ import { EmployeeMasterDetailsComponent } from './Masters/employee/employee-mast
 import { SiteManagementActualStagesDetailsComponent } from './site-management/site-management-actual-stages-details/site-management-actual-stages-details.component';
 import { EstimateStagesComponent } from './estimate_stages/estimate-stages/estimate-stages.component';
 import { EstimateStagesDetailsComponent } from './estimate_stages/estimate-stages-details/estimate-stages-details.component';
-import { StockConsumeComponent } from './stock management/stock-consume/stock-consume.component';
-import { StockOrderComponent } from './stock management/stock_order/stock-order/stock-order.component';
-import { StockTransferComponent } from './stock management/stock-transfer/stock-transfer.component';
-import { CountryComponent } from './Masters/country/country.component';
 import { StateComponent } from './Masters/state/state.component';
 import { CityComponent } from './Masters/city/city.component';
 import { UnitMasterComponent } from './Masters/unit/unit-master/unit-master.component';
@@ -129,206 +125,214 @@ import { StockInwardComponent } from './stock management/stock_inward/stock_inwa
 import { StockInwardDetailsComponent } from './stock management/stock_inward/stock-inward-details/stock-inward-details.component';
 import { QuotationApprovalComponent } from './stock management/Quotation/quotation-approval/quotation-approval.component';
 import { StockOrderDetailsComponent } from './stock management/stock_order/stock-order-details/stock-order-details.component';
+import { CountryComponent } from './Masters/country/country.component';
+import { StockConsumeComponent } from './stock management/stock_consume/stock-consume/stock-consume.component';
+import { StockTransferComponent } from './stock management/stock_transfer/stock-transfer/stock-transfer.component';
+import { StockOrderComponent } from './stock management/stock_order/stock-order/stock-order.component';
+import { StockConsumeDetailsComponent } from './stock management/stock_consume/stock-consume-details/stock-consume-details.component';
+import { StockTransferDetailsComponent } from './stock management/stock_transfer/stock-transfer-details/stock-transfer-details.component';
 
 
 const routes: Routes = [
   {
     path: '', component: WebComponent,
     children: [
-      { path: 'Dashboard', component: DashboardComponent },
-      { path: 'Unit_Master', component: UnitMasterComponent },
-      { path: 'Unit_Master_Details', component: UnitMasterDetailsComponent },
+      { path: 'Dashboard', component: DashboardComponent},
+      { path: 'Unit_Master', component: UnitMasterComponent},
+      { path: 'Unit_Master_Details', component: UnitMasterDetailsComponent},
 
-      { path: 'Material_Master', component: MaterialMasterComponent },
-      { path: 'Material_Master_Details', component: MaterialMasterDetailsComponent },
+      { path: 'Material_Master', component: MaterialMasterComponent},
+      { path: 'Material_Master_Details', component: MaterialMasterDetailsComponent},
 
-      { path: 'Stage_Master', component: StageMasterComponent },
-      { path: 'Stage_Master_Details', component: StageMasterDetailsComponent },
+      { path: 'Stage_Master', component: StageMasterComponent},
+      { path: 'Stage_Master_Details', component: StageMasterDetailsComponent},
 
-      { path: 'Sub_Stage_Master', component: SubStageMasterComponent },
-      { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent },
+      { path: 'Sub_Stage_Master', component: SubStageMasterComponent},
+      { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent},
 
-      { path: 'Expense_Type_Master', component: ExpenseTypeMasterComponent },
-      { path: 'Expense_Type_Master_Details', component: ExpenseTypeMasterDetailsComponent },
+      { path: 'Expense_Type_Master', component: ExpenseTypeMasterComponent},
+      { path: 'Expense_Type_Master_Details', component: ExpenseTypeMasterDetailsComponent},
 
-      { path: 'Sub_Stage_Master', component: SubStageMasterComponent },
-      { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent },
+      { path: 'Sub_Stage_Master', component: SubStageMasterComponent},
+      { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent},
 
-      { path: 'Account_Main_Ledger', component: AccountMainLedgerComponent },
-      { path: 'Account_Main_Ledger_Details', component: AccountMainLedgerDetailsComponent },
+      { path: 'Account_Main_Ledger', component: AccountMainLedgerComponent},
+      { path: 'Account_Main_Ledger_Details', component: AccountMainLedgerDetailsComponent},
 
-      { path: 'Account_Sub_Ledger', component: AccountSubLedgerComponent },
-      { path: 'Account_Sub_Ledger_Details', component: AccountSubLedgerDetailsComponent },
+      { path: 'Account_Sub_Ledger', component: AccountSubLedgerComponent},
+      { path: 'Account_Sub_Ledger_Details', component: AccountSubLedgerDetailsComponent},
 
-      { path: 'Marketing_Type_Master', component: MarketingTypeMasterComponent },
-      { path: 'Marketing_Type_Master_Details', component: MarketingTypeMasterDetailsComponent },
+      { path: 'Marketing_Type_Master', component: MarketingTypeMasterComponent},
+      { path: 'Marketing_Type_Master_Details', component: MarketingTypeMasterDetailsComponent},
 
-      { path: 'Vendor_Master', component: VendorMasterComponent },
-      { path: 'Vendor_Master_Details', component: VendorMasterDetailsComponent },
+      { path: 'Vendor_Master', component: VendorMasterComponent},
+      { path: 'Vendor_Master_Details', component: VendorMasterDetailsComponent},
 
-      { path: 'Vendor_Services_Master', component: VendorServicesMasterComponent },
-      { path: 'Vendor_Services_Master_Details', component: VendorServicesMasterDetailsComponent },
+      { path: 'Vendor_Services_Master', component: VendorServicesMasterComponent},
+      { path: 'Vendor_Services_Master_Details', component: VendorServicesMasterDetailsComponent},
 
-      { path: 'Vehicle_Master', component: VehicleMasterComponent },
-      { path: 'Vehicle_Master_Details', component: VehicleMasterDetailsComponent },
+      { path: 'Vehicle_Master', component: VehicleMasterComponent},
+      { path: 'Vehicle_Master_Details', component: VehicleMasterDetailsComponent},
 
-      { path: 'Bank_Account_Master', component: BankAccountMasterComponent },
-      { path: 'Bank_Account_Master_Details', component: BankAccountMasterDetailsComponent },
+      { path: 'Bank_Account_Master', component: BankAccountMasterComponent},
+      { path: 'Bank_Account_Master_Details', component: BankAccountMasterDetailsComponent},
 
-      { path: 'External_Users', component: ExternalUsersComponent },
-      { path: 'External_Users_Details', component: ExternalUsersMasterDetailsComponent },
+      { path: 'External_Users', component: ExternalUsersComponent},
+      { path: 'External_Users_Details', component: ExternalUsersMasterDetailsComponent},
 
-      { path: 'Company_Master', component: CompanyMasterComponent },
-      { path: 'Company_Master_Details', component: CompanyMasterDetailsComponent },
+      { path: 'Company_Master', component: CompanyMasterComponent},
+      { path: 'Company_Master_Details', component: CompanyMasterDetailsComponent},
 
-      { path: 'Department_Master', component: DepartmentMasterComponent },
-      { path: 'Department_Master_Details', component: DepartmentMasterDetailsComponent },
+      { path: 'Department_Master', component: DepartmentMasterComponent},
+      { path: 'Department_Master_Details', component: DepartmentMasterDetailsComponent},
 
-      { path: 'Designation_Master', component: DesignationMasterComponent },
-      { path: 'Designation_Master_Details', component: DesignationMasterDetailsComponent },
+      { path: 'Designation_Master', component: DesignationMasterComponent},
+      { path: 'Designation_Master_Details', component: DesignationMasterDetailsComponent},
 
-      { path: 'User_Role_Master', component: UserRoleMasterComponent },
-      { path: 'User_Role_Master_Details', component: UserRoleMasterDetailsComponent },
+      { path: 'User_Role_Master', component: UserRoleMasterComponent},
+      { path: 'User_Role_Master_Details', component: UserRoleMasterDetailsComponent},
 
-      { path: 'Employee_Master', component: EmployeeMasterComponent },
-      { path: 'Employee_Master_Details', component: EmployeeMasterDetailsComponent },
+      { path: 'Employee_Master', component: EmployeeMasterComponent},
+      { path: 'Employee_Master_Details', component: EmployeeMasterDetailsComponent},
 
-      { path: 'Employee_Appraisal_Master_Details', component: EmployeeAppraisalDetailsComponent },
-      { path: 'Employee_Appraisal_Master', component: EmployeeAppraisalMasterComponent },
+      { path: 'Employee_Appraisal_Master_Details', component: EmployeeAppraisalDetailsComponent},
+      { path: 'Employee_Appraisal_Master', component: EmployeeAppraisalMasterComponent},
 
-      { path: 'Employee_Exit_Master_Details', component: EmployeeExitDetailsComponent },
-      { path: 'Employee_Exit_Master', component: EmployeeExitMasterComponent },
+      { path: 'Employee_Exit_Master_Details', component: EmployeeExitDetailsComponent},
+      { path: 'Employee_Exit_Master', component: EmployeeExitMasterComponent},
 
-      { path: 'Estimate_Stages', component: EstimateStagesComponent },
-      { path: 'Estimate_Stages_details', component: EstimateStagesDetailsComponent },
+      { path: 'Estimate_Stages', component: EstimateStagesComponent},
+      { path: 'Estimate_Stages_details', component: EstimateStagesDetailsComponent},
 
-      { path: 'Country', component: CountryComponent },
-      { path: 'State', component: StateComponent },
-      { path: 'City', component: CityComponent },
-      { path: 'User_Role_Rights', component: UserrolerightsComponent },
+      { path: 'Country', component: CountryComponent},
+      { path: 'State', component: StateComponent},
+      { path: 'City', component: CityComponent},
+      { path: 'User_Role_Rights', component: UserrolerightsComponent},
 
-      { path: 'Financial_Year_Master', component: FinancialYearMasterComponent },
+      { path: 'Financial_Year_Master', component: FinancialYearMasterComponent},
 
       // Site management
-      { path: 'Plot_Master', component: PlotMasterComponent },
-      { path: 'Plot_Master_Details', component: PlotMasterDetailsComponent },
+      { path: 'Plot_Master', component: PlotMasterComponent},
+      { path: 'Plot_Master_Details', component: PlotMasterDetailsComponent},
 
 
-      { path: 'Site_Management', component: SiteManagementMasterComponent },
-      { path: 'Site_Management_Details', component: SiteManagementDetailsComponent },
+      { path: 'Site_Management', component: SiteManagementMasterComponent},
+      { path: 'Site_Management_Details', component: SiteManagementDetailsComponent},
 
-      { path: 'Actual_Stage', component: SiteManagementActualStagesComponent },
-      { path: 'Actual_Stage_Details', component: SiteManagementActualStagesDetailsComponent },
+      { path: 'Actual_Stage', component: SiteManagementActualStagesComponent},
+      { path: 'Actual_Stage_Details', component: SiteManagementActualStagesDetailsComponent},
 
-      { path: 'Actual_Stage_Print', component: ActualStagePrintComponent },
+      { path: 'Actual_Stage_Print', component: ActualStagePrintComponent},
 
       // Stock Management
-      { path: 'Material_Requisition', component: MaterialRequisitionComponent },
-      { path: 'Material_Requisition_Details', component: MaterialRequisitionDetailsComponent },
-      { path: 'Quotation', component: QuotationComponent },
-      { path: 'Quotation_Details', component: QuotationDetailsComponent },
-      { path: 'Quotation_Approval', component: QuotationApprovalComponent },
-      { path: 'Stock_Consume', component: StockConsumeComponent },
-      { path: 'Stock_Inward', component: StockInwardComponent },
+      { path: 'Material_Requisition', component: MaterialRequisitionComponent},
+      { path: 'Material_Requisition_Details', component: MaterialRequisitionDetailsComponent},
+      { path: 'Quotation', component: QuotationComponent},
+      { path: 'Quotation_Details', component: QuotationDetailsComponent},
+      { path: 'Quotation_Approval', component: QuotationApprovalComponent},
+      { path: 'Stock_Order', component: StockOrderComponent},
+      { path: 'Stock_Order_Details', component: StockOrderDetailsComponent},
+      { path: 'Stock_Inward', component: StockInwardComponent},
       { path: 'Stock_Inward_Details', component: StockInwardDetailsComponent},
-      { path: 'Stock_Order', component: StockOrderComponent },
-      { path: 'Stock_Order_Details', component: StockOrderDetailsComponent },
-      { path: 'Stock_Transfer', component: StockTransferComponent },
+      { path: 'Stock_Consume', component: StockConsumeComponent},
+      { path: 'Stock_Consume_Details', component: StockConsumeDetailsComponent},
+      { path: 'Stock_Transfer', component: StockTransferComponent},
+      { path: 'Stock_Transfer_Details', component: StockTransferDetailsComponent},
 
       // Customer Management
-      { path: 'Customer_Enquiry', component: CustomerEnquiryComponent },
-      { path: 'Customer_Enquiry_Details', component: CustomerEnquiryDetailsComponent },
+      { path: 'Customer_Enquiry', component: CustomerEnquiryComponent},
+      { path: 'Customer_Enquiry_Details', component: CustomerEnquiryDetailsComponent},
 
-      { path: 'Customer_FollowUp', component: CustomerFollowupComponent },
-      { path: 'Pending_FollowUp', component: CustomerPendingFollowupComponent },
-      { path: 'Customer_FollowUp_Details', component: CustomerFollowupDetailsComponent },
+      { path: 'Customer_FollowUp', component: CustomerFollowupComponent},
+      { path: 'Pending_FollowUp', component: CustomerPendingFollowupComponent},
+      { path: 'Customer_FollowUp_Details', component: CustomerFollowupDetailsComponent},
 
-      { path: 'Registered_Customer', component: RegisteredCustomerComponent },
-      { path: 'Registered_Customer_Details', component: RegisteredCustomerDetailsComponent },
+      { path: 'Registered_Customer', component: RegisteredCustomerComponent},
+      { path: 'Registered_Customer_Details', component: RegisteredCustomerDetailsComponent},
 
 
       //Registrar Office
 
-      { path: 'Registrar_Office', component: RegistrarOfficeComponent },
-      { path: 'Registrar_Office_Details', component: RegistrarOfficeDetailComponent },
+      { path: 'Registrar_Office', component: RegistrarOfficeComponent},
+      { path: 'Registrar_Office_Details', component: RegistrarOfficeDetailComponent},
 
-      { path: 'Plot_Resell_By_Third_Party', component: PlotResellByThirdPartyComponent },
-      { path: 'Marketing_Management', component: MarketingManagementMasterComponent },
-      { path: 'Marketing_Management_Details', component: MarketingManagementMasterDetailsComponent },
-      { path: 'Accounting_Transaction', component: AccountTransactionsComponent },
-      { path: 'Expense_Transactions', component: ExpenseTransactionsComponent },
-      { path: 'Client_Income', component: ClientIncomeComponent },
+      { path: 'Plot_Resell_By_Third_Party', component: PlotResellByThirdPartyComponent},
+      { path: 'Marketing_Management', component: MarketingManagementMasterComponent},
+      { path: 'Marketing_Management_Details', component: MarketingManagementMasterDetailsComponent},
+      { path: 'Accounting_Transaction', component: AccountTransactionsComponent},
+      { path: 'Expense_Transactions', component: ExpenseTransactionsComponent},
+      { path: 'Client_Income', component: ClientIncomeComponent},
 
       // Reports
-      { path: 'Billing_Report', component: BillingReportComponent },
-      { path: 'Office_Report', component: OfficeReportComponent },
-      { path: 'Booking_Report', component: BookingReportComponent },
-      { path: 'Stock_Report', component: StockReportComponent },
-      { path: 'CRM_Report', component: CrmReportComponent },
-      { path: 'Follow_Up_Report', component: FollowUpReportComponent },
-      { path: 'Employee_Report', component: EmployeeReportComponent },
-      { path: 'Marketing_Report', component: MarketingReportComponent },
-      { path: 'Stages_Report', component: StagesReportComponent },
-      { path: 'Account_Report', component: AccountReportComponent },
+      { path: 'Billing_Report', component: BillingReportComponent},
+      { path: 'Office_Report', component: OfficeReportComponent},
+      { path: 'Booking_Report', component: BookingReportComponent},
+      { path: 'Stock_Report', component: StockReportComponent},
+      { path: 'CRM_Report', component: CrmReportComponent},
+      { path: 'Follow_Up_Report', component: FollowUpReportComponent},
+      { path: 'Employee_Report', component: EmployeeReportComponent},
+      { path: 'Marketing_Report', component: MarketingReportComponent},
+      { path: 'Stages_Report', component: StagesReportComponent},
+      { path: 'Account_Report', component: AccountReportComponent},
 
       // HR Payroll Management
 
-      { path: 'Office_Duty_Time', component: OfficeDutyTimeComponent },
-      { path: 'Office_Duty_Time_Details', component: OfficeDutyTimeDetailsComponent },
+      { path: 'Office_Duty_Time', component: OfficeDutyTimeComponent},
+      { path: 'Office_Duty_Time_Details', component: OfficeDutyTimeDetailsComponent},
 
-      { path: 'Attendance_Logs', component: AttendanceLogsComponent },
-      { path: 'Attendance_Details', component: AttendanceDetailsComponent },
+      { path: 'Attendance_Logs', component: AttendanceLogsComponent},
+      { path: 'Attendance_Details', component: AttendanceDetailsComponent},
 
-      { path: 'Salary_Generation', component: SalaryGenerationComponent },
-      { path: 'Salary_Generation_Details', component: SalaryGenerationDetailsComponent },
+      { path: 'Salary_Generation', component: SalaryGenerationComponent},
+      { path: 'Salary_Generation_Details', component: SalaryGenerationDetailsComponent},
 
-      { path: 'Leave_Approval', component: LeaveApprovalComponent },
+      { path: 'Leave_Approval', component: LeaveApprovalComponent},
 
-      { path: 'Salary_Slip_Approval', component: SalarySlipApprovalComponent },
-      { path: 'Employee_Overtime', component: EmployeeOvertimeComponent },
-      { path: 'Employee_Overtime_Details', component: EmployeeOvertimeDetailsComponent },
-      { path: 'Company_Holidays', component: CompanyHolidaysComponent },
-      { path: 'Company_Holidays_Details', component: CompanyHolidaysDetailsComponent },
+      { path: 'Salary_Slip_Approval', component: SalarySlipApprovalComponent},
+      { path: 'Employee_Overtime', component: EmployeeOvertimeComponent},
+      { path: 'Employee_Overtime_Details', component: EmployeeOvertimeDetailsComponent},
+      { path: 'Company_Holidays', component: CompanyHolidaysComponent},
+      { path: 'Company_Holidays_Details', component: CompanyHolidaysDetailsComponent},
 
       // Request
-      { path: 'Leave_Request', component: LeaveRequestComponent },
-      { path: 'Leave_Request_Details', component: LeaveRequestDetailsComponent },
+      { path: 'Leave_Request', component: LeaveRequestComponent},
+      { path: 'Leave_Request_Details', component: LeaveRequestDetailsComponent},
 
-      { path: 'Salary_Slip_Request', component: SalarySlipRequestComponent },
-      { path: 'Salary_Slip_Request_Details', component: SalarySlipRequestDetailsComponent },
+      { path: 'Salary_Slip_Request', component: SalarySlipRequestComponent},
+      { path: 'Salary_Slip_Request_Details', component: SalarySlipRequestDetailsComponent},
 
-      { path: 'Employee_Attendance_Logs', component: EmployeeAttendanceLogsComponent },
+      { path: 'Employee_Attendance_Logs', component: EmployeeAttendanceLogsComponent},
 
       // Government Office
-      { path: 'Document', component: DocumentListComponent },
-      { path: 'Document_Details', component: DocumentDetailsComponent },
+      { path: 'Document', component: DocumentListComponent},
+      { path: 'Document_Details', component: DocumentDetailsComponent},
 
-      { path: 'Site_Progress_Report', component: GovernmentTransactionMasterComponent },
-      { path: 'Site_Progress_Report_Details', component: GovernmentTransactionDetailsComponent },
-      { path: 'Respected_child', component: RespectedChildComponentComponent },
+      { path: 'Site_Progress_Report', component: GovernmentTransactionMasterComponent},
+      { path: 'Site_Progress_Report_Details', component: GovernmentTransactionDetailsComponent},
+      { path: 'Respected_child', component: RespectedChildComponentComponent},
 
-      { path: 'Site_Work_Master', component: SiteWorkMasterComponent },
-      { path: 'Site_Work_Master_Detail', component: SiteWorkMasterDetailComponent },
+      { path: 'Site_Work_Master', component: SiteWorkMasterComponent},
+      { path: 'Site_Work_Master_Detail', component: SiteWorkMasterDetailComponent},
 
-      { path: 'Site_Work_Group', component: SiteWorkGroupMasterComponent },
-      { path: 'Site_Work_Group_Details', component: SiteWorkGroupMasterDetailsComponent },
+      { path: 'Site_Work_Group', component: SiteWorkGroupMasterComponent},
+      { path: 'Site_Work_Group_Details', component: SiteWorkGroupMasterDetailsComponent},
 
 
-      { path: 'Site_Work_Done', component: SiteWorkDoneMasterComponent },
-      { path: 'Site_Work_Done_Details', component: SiteWorkDoneMasterDetailsComponent },
+      { path: 'Site_Work_Done', component: SiteWorkDoneMasterComponent},
+      { path: 'Site_Work_Done_Details', component: SiteWorkDoneMasterDetailsComponent},
 
 
       // Razorpay
-      { path: 'Razorpay', component: RazorpayComponent },
-      { path: 'your_profile', component: YourProfileComponent },
-      { path: 'create_password', component: CreatePasswordComponent, },
+      { path: 'Razorpay', component: RazorpayComponent},
+      { path: 'your_profile', component: YourProfileComponent},
+      { path: 'create_password', component: CreatePasswordComponent,},
       // { path: 'change_password', component: ChangePasswordComponent},
 
-      // { path: 'Progress_Report', component: ProgressReportComponent },
+      // { path: 'Progress_Report', component: ProgressReportComponent},
     ]
 
 
-  },
+},
 ];
 
 @NgModule({

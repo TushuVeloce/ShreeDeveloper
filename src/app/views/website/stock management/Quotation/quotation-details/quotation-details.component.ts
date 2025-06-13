@@ -32,13 +32,15 @@ export class QuotationDetailsComponent implements OnInit {
   SiteList: Site[] = [];
   VendorList: Vendor[] = [];
   MaterialRequisitionList: RequiredMaterial[] = [];
+  AllMaterialRequisitionList: RequiredMaterial[] = [];
   QuotationDate: string = '';
   CurrentDate: string = '';
+  ModalEditable: boolean = false;
   ExpectedDeliveryDate: string = '';
   QuotedMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Required Remaining Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount', 'Action'];
   isQuotedMaterialModalOpen: boolean = false;
   newQuotedMaterial: QuotedMaterialDetailProps = QuotedMaterialDetailProps.Blank();
-  editingIndex: null | undefined | number
+  editingIndex: null | undefined | number;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   strCDT: string = ''
 
@@ -136,7 +138,15 @@ export class QuotationDetailsComponent implements OnInit {
       return;
     }
     let lst = await RequiredMaterial.FetchEntireListByCompanyVendorAndSiteRef(this.companyRef(), this.Entity.p.VendorRef, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MaterialRequisitionList = lst;
+    this.AllMaterialRequisitionList = lst;
+    this.filterMaterialList();
+  }
+
+  filterMaterialList() {
+    const usedRefs = this.Entity.p.MaterialQuotationDetailsArray.map(item => item.MaterialRequisitionDetailsRef);
+    this.MaterialRequisitionList = this.AllMaterialRequisitionList.filter(
+      material => !usedRefs.includes(material.p.Ref)
+    );
   }
 
   // Extracted from services date conversion //
@@ -241,13 +251,14 @@ export class QuotationDetailsComponent implements OnInit {
       this.uiUtils.showErrorToster('Vendor not Selected');
       return;
     }
+    this.ModalEditable = false;
     this.getMaterialRequisitionListByVendorRefAndSiteRef();
     if (type === 'QuotedMaterial') this.isQuotedMaterialModalOpen = true;
   }
 
   closeModal = async (type: string) => {
     if (type === 'QuotedMaterial') {
-      const keysToCheck = ['Name', 'MaterialRequisitionDetailsRef', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
+      const keysToCheck = ['MaterialRequisitionDetailsRef', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
 
       const hasData = keysToCheck.some(
         key => (this.newQuotedMaterial as any)[key]?.toString().trim()
@@ -265,6 +276,7 @@ export class QuotationDetailsComponent implements OnInit {
         );
       } else {
         this.isQuotedMaterialModalOpen = false;
+        this.ModalEditable = false;
         this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
       }
     }
@@ -296,6 +308,8 @@ export class QuotationDetailsComponent implements OnInit {
 
       this.newQuotedMaterial.MaterialQuotationRef = this.Entity.p.Ref;
       this.Entity.p.MaterialQuotationDetailsArray.push({ ...QuotedMaterialInstance.p });
+      console.log('this.Entity.p.MaterialQuotationDetailsArray :', this.Entity.p.MaterialQuotationDetailsArray);
+      this.filterMaterialList();
       await this.uiUtils.showSuccessToster('Material added successfully');
       this.resetMaterialControls()
     }
@@ -307,8 +321,8 @@ export class QuotationDetailsComponent implements OnInit {
     this.isQuotedMaterialModalOpen = true
     this.newQuotedMaterial = { ...this.Entity.p.MaterialQuotationDetailsArray[index] }
     this.editingIndex = index;
+    this.ModalEditable = true;
     this.ExpectedDeliveryDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialQuotationDetailsArray[index].ExpectedDeliveryDate);
-    this.getMaterialRequisitionListByVendorRefAndSiteRef();
   }
 
   async removeQuotedMaterial(index: number) {
@@ -318,6 +332,7 @@ export class QuotationDetailsComponent implements OnInit {
      Are you sure that you want to DELETE this Quoted Material?`,
       async () => {
         this.Entity.p.MaterialQuotationDetailsArray.splice(index, 1);
+        this.filterMaterialList();
       }
     );
   }

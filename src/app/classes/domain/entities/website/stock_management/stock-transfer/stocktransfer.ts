@@ -10,23 +10,33 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { StockInwardFetchRequest } from "./stockinwardfetchrequest";
+import { StockTransferFetchRequest } from "./stocktransferfetchrequest";
 
 
-export class StockInwardProps {
-  public readonly Db_Table_Name = "StockInward";
+export class StockTransferProps {
+  public readonly Db_Table_Name = "StockTransfer";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
   public Ref: number = 0;
+  public FromSiteRef: number = 0;
+  public readonly FromSiteName: string = '';
+  public ToSiteRef: number = 0;
+  public readonly ToSiteName: string = '';
   public Date: string = '';
-  public SiteRef: number = 0;
-  public readonly SiteName: string = '';
+  public MaterialRef: number = 0;
+  public readonly MaterialName: string = '';
+  public UnitRef: number = 0;
+  public UnitName: string = '';
+  public CurrentQuantity: number = 0;
+  public TransferredQuantity: number = 0;
+  public Rate: number = 0;
+  public GST: number = 0;
+  public Amount: number = 0;
+  public RemainingQuantity: number = 0;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public Status: number = 0
-  // public StockInwardDetailsArray: RequiredMaterialDetailProps[] = [];
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -35,14 +45,14 @@ export class StockInwardProps {
   }
 
   public static Blank() {
-    return new StockInwardProps(true);
+    return new StockTransferProps(true);
   }
 }
 
-export class StockInward implements IPersistable<StockInward> {
-  public static readonly Db_Table_Name: string = 'StockInward';
+export class StockTransfer implements IPersistable<StockTransfer> {
+  public static readonly Db_Table_Name: string = 'StockTransfer';
 
-  public constructor(public readonly p: StockInwardProps, public readonly AllowEdit: boolean) {
+  public constructor(public readonly p: StockTransferProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -55,17 +65,17 @@ export class StockInward implements IPersistable<StockInward> {
     }
   }
 
-  public GetEditableVersion(): StockInward {
-    let newState: StockInwardProps = Utils.GetInstance().DeepCopy(this.p);
-    return StockInward.CreateInstance(newState, true);
+  public GetEditableVersion(): StockTransfer {
+    let newState: StockTransferProps = Utils.GetInstance().DeepCopy(this.p);
+    return StockTransfer.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new StockInward(StockInwardProps.Blank(), true);
+    return new StockTransfer(StockTransferProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new StockInward(data as StockInwardProps, allowEdit);
+    return new StockTransfer(data as StockTransferProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
@@ -73,28 +83,28 @@ export class StockInward implements IPersistable<StockInward> {
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, StockInward.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, StockTransfer.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: StockInward = StockInward.CreateNewInstance();
+  private static m_currentInstance: StockTransfer = StockTransfer.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return StockInward.m_currentInstance;
+    return StockTransfer.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: StockInward) {
-    StockInward.m_currentInstance = value;
+  public static SetCurrentInstance(value: StockTransfer) {
+    StockTransfer.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): StockInward {
+  public static SingleInstanceFromTransportData(td: TransportData): StockTransfer {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, StockInward.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, StockInward.Db_Table_Name)!.Entries) {
-        return StockInward.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, StockTransfer.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, StockTransfer.Db_Table_Name)!.Entries) {
+        return StockTransfer.CreateInstance(data, false);
       }
     }
 
@@ -103,13 +113,13 @@ export class StockInward implements IPersistable<StockInward> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): StockInward[] {
-    let result: StockInward[] = [];
+    sortPropertyName: string = ""): StockTransfer[] {
+    let result: StockTransfer[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, StockInward.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, StockInward.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, StockTransfer.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, StockTransfer.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -119,18 +129,18 @@ export class StockInward implements IPersistable<StockInward> {
       }
 
       for (let data of entries) {
-        result.push(StockInward.CreateInstance(data, false));
+        result.push(StockTransfer.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): StockInward[] {
-    return StockInward.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): StockTransfer[] {
+    return StockTransfer.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: StockInwardFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: StockTransferFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -145,42 +155,42 @@ export class StockInward implements IPersistable<StockInward> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new StockInwardFetchRequest();
-    req.StockInwardManagementRefs.push(ref);
+    let req = new StockTransferFetchRequest();
+    req.StockTransferManagementRefs.push(ref);
 
-    let tdResponse = await StockInward.FetchTransportData(req, errorHandler) as TransportData;
-    return StockInward.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await StockTransfer.FetchTransportData(req, errorHandler) as TransportData;
+    return StockTransfer.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: StockInwardFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await StockInward.FetchTransportData(req, errorHandler) as TransportData;
-    return StockInward.ListFromTransportData(tdResponse);
+  public static async FetchList(req: StockTransferFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await StockTransfer.FetchTransportData(req, errorHandler) as TransportData;
+    return StockTransfer.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new StockInwardFetchRequest();
-    let tdResponse = await StockInward.FetchTransportData(req, errorHandler) as TransportData;
-    return StockInward.ListFromTransportData(tdResponse);
+    let req = new StockTransferFetchRequest();
+    let tdResponse = await StockTransfer.FetchTransportData(req, errorHandler) as TransportData;
+    return StockTransfer.ListFromTransportData(tdResponse);
   }
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new StockInwardFetchRequest();
+    let req = new StockTransferFetchRequest();
     req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await StockInward.FetchTransportData(req, errorHandler) as TransportData;
-    return StockInward.ListFromTransportData(tdResponse);
+    let tdResponse = await StockTransfer.FetchTransportData(req, errorHandler) as TransportData;
+    return StockTransfer.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchEntireListByAllFilters(CompanyRef: number, Status: number, SiteRef: number,  errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-        let req = new StockInwardFetchRequest();
-        req.CompanyRefs.push(CompanyRef)
-        if (Status) {
-          req.StockInwardStatus.push(Status)
-        }
-        if (SiteRef) {
-          req.SiteRefs.push(SiteRef)
-        }
-        let tdResponse = await StockInward.FetchTransportData(req, errorHandler) as TransportData;
-        return StockInward.ListFromTransportData(tdResponse);
-      }
+  public static async FetchEntireListByAllFilters(CompanyRef: number, Status: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new StockTransferFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    if (Status) {
+      req.StockTransferStatus.push(Status)
+    }
+    if (SiteRef) {
+      req.SiteRefs.push(SiteRef)
+    }
+    let tdResponse = await StockTransfer.FetchTransportData(req, errorHandler) as TransportData;
+    return StockTransfer.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

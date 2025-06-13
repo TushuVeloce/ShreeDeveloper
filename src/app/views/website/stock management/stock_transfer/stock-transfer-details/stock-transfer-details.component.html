@@ -1,0 +1,121 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackStockTransfer()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">{{DetailsFormTitle}}</span>
+      </div>
+    </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
+    </ng-template>
+    <form autocomplete="off" #consumptionForm="ngForm">
+      <div class="row">
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label for="FromSiteRef"><b>From Site</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="FromSiteRef" name="FromSiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.FromSiteRef">
+            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+          </nz-select>
+        </div>
+         <div class="col-md-4" style="margin-top: 1rem">
+          <label for="ToSiteRef"><b>To Site</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="ToSiteRef" name="ToSiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.ToSiteRef">
+            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label>Date</label>
+          <input type="date" name="Date" class="form-control" id="Date"
+            [(ngModel)]="Entity.p.Date" #DateCtrl="ngModel" required
+            (blur)="DateCtrl.control.markAsTouched()" placeholder="Enter Consumption Date" />
+          <div *ngIf="DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty)">
+            <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label for="MaterialRef"><b>Material Name</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="MaterialRef" name="MaterialRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.MaterialRef" (ngModelChange)="getUnitByMaterialRef(Entity.p.MaterialRef)">
+            <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
+              [nzLabel]="material.p.Name"></nz-option>
+          </nz-select>
+        </div>
+       <div class="col-md-4" style="margin-top: 1rem">
+          <label for="UnitRef">Unit</label>
+          <input type="text" name="UnitRef" class="form-control" [(ngModel)]="Entity.p.UnitName" />
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label for="CurrentQuantity"><b>Current Quantity</b></label>
+          <input type="number" [(ngModel)]="Entity.p.CurrentQuantity" name="CurrentQuantity" class="form-control"
+            id="CurrentQuantity" required placeholder="Enter Current Quantity" readonly/>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label for="TransferredQuantity"><b>Transffered Quantity</b></label>
+          <input type="number" [(ngModel)]="Entity.p.TransferredQuantity" name="TransferredQuantity"
+            class="form-control" id="TransferredQuantity" required placeholder="Enter Consumption Quantity" (ngModelChange)="calculateRemainingQuantity()"
+            #TransferredQuantityCtrl="ngModel"  required (blur)="TransferredQuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>
+          <div *ngIf="TransferredQuantityCtrl.invalid && (TransferredQuantityCtrl.touched || TransferredQuantityCtrl.dirty)">
+            <span class="validation-text" *ngIf="TransferredQuantityCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label for="Rate"><b>Rate</b></label>
+          <input type="number" [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control"
+            id="Rate" rows="1" required placeholder="Enter Rate" #RateCtrl="ngModel" (ngModelChange)="calculateAmount()"
+            (blur)="RateCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>
+          <div style="height: 25px" *ngIf="
+              RateCtrl.invalid &&
+              (RateCtrl.touched || RateCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label for="GST"><b>GST</b></label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'"
+            name="GST" [(ngModel)]="Entity.p.GST" required id="GST" (ngModelChange)="calculateAmount()">
+            <nz-option
+            *ngFor="let gst of GSTList"
+            [nzValue]="gst.Ref"
+            [nzLabel]="gst.Name"
+          ></nz-option>
+          </nz-select>
+        </div>
+         <div class="col-md-4" style="margin-top: 1rem">
+          <label for="Amount"><b>Amount</b></label>
+          <input type="number" [(ngModel)]="Entity.p.Amount" name="Amount" class="form-control" id="Amount"
+             readonly/>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label for="RemainingQuantity"><b>Remaining Quantity</b></label>
+          <input type="number" [(ngModel)]="Entity.p.RemainingQuantity" name="RemainingQuantity" class="form-control"
+            id="RemainingQuantity" required placeholder="Enter Remaining Quantity" readonly/>
+        </div>
+      </div>
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
+        <div>
+          <button type="button" class="btn" (click)="SaveStockTransfer()">
+            Save
+          </button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackStockTransfer()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

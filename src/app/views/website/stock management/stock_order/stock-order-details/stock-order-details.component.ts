@@ -323,7 +323,7 @@ export class StockOrderDetailsComponent implements OnInit {
     );
   }
 
-  SaveQuotation = async () => {
+  SaveOrder = async () => {
     let lstFTO: FileTransferObject[] = [];
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.newQuotedMaterial.MaterialQuotationRef = this.Entity.p.Ref
@@ -352,11 +352,11 @@ export class StockOrderDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Quotation saved successfully');
+        await this.uiUtils.showSuccessToster('Order saved successfully');
         this.Entity = Quotation.CreateNewInstance();
         this.resetAllControls()
       } else {
-        await this.uiUtils.showSuccessToster('Quotation Updated successfully');
+        await this.uiUtils.showSuccessToster('Order Updated successfully');
       }
       await this.router.navigate(['/homepage/Website/Stock_Order']);
     }
@@ -389,12 +389,12 @@ export class StockOrderDetailsComponent implements OnInit {
     }, 0);
   }
 
-  BackQuotation = async () => {
+  BackOrder = async () => {
     if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
       await this.uiUtils.showConfirmationMessage('Cancel',
         `This process is IRREVERSIBLE!
         <br/>
-        Are you sure that you want to Cancel this Quotation Form?`,
+        Are you sure that you want to Cancel this Order Form?`,
         async () => {
           await this.router.navigate(['/homepage/Website/Stock_Order']);
         });

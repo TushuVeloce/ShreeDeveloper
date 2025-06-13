@@ -1,0 +1,132 @@
+import { Component, effect, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { StockTransfer } from 'src/app/classes/domain/entities/website/stock_management/stock-transfer/stocktransfer';
+import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { ScreenSizeService } from 'src/app/services/screensize.service';
+import { UIUtils } from 'src/app/services/uiutils.service';
+
+@Component({
+  selector: 'app-stock-transfer',
+  templateUrl: './stock-transfer.component.html',
+  styleUrls: ['./stock-transfer.component.scss'],
+  standalone: false,
+})
+export class StockTransferComponent  implements OnInit {
+Entity: StockTransfer = StockTransfer.CreateNewInstance();
+  MasterList: StockTransfer[] = [];
+  DisplayMasterList: StockTransfer[] = [];
+  SearchString: string = '';
+  SelectedStockTransfer: StockTransfer = StockTransfer.CreateNewInstance();
+  CustomerRef: number = 0;
+  pageSize = 10; // Items per page
+  currentPage = 1; // Initialize current page
+  total = 0;
+
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+
+  headers: string[] = ['Sr.No.','Date', 'From Site', 'To Site','Material Name','Unit', 'Current Qty.' ,'Transferred Qty.','Rate','GST','Amount','Remaining Qty.','Action'];
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
+    private companystatemanagement: CompanyStateManagement
+  ) {
+    effect(async () => {
+      await this.getStockTransferListByCompanyRef();
+    });
+  }
+
+  async ngOnInit() {
+    this.appStateManage.setDropdownDisabled();
+    this.loadPaginationData();
+    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+  }
+
+  getStockTransferListByCompanyRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await StockTransfer.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  }
+
+  onEditClicked = async (item: StockTransfer) => {
+    this.SelectedStockTransfer = item.GetEditableVersion();
+    StockTransfer.SetCurrentInstance(this.SelectedStockTransfer);
+    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+    await this.router.navigate(['/homepage/Website/Stock_Transfer_Details']);
+  };
+
+  onDeleteClicked = async (StockTransfer: StockTransfer) => {
+    await this.uiUtils.showConfirmationMessage(
+      'Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+    Are you sure that you want to DELETE this Stock Transfer?`,
+      async () => {
+        await StockTransfer.DeleteInstance(async () => {
+          await this.uiUtils.showSuccessToster(
+            `StockTransfer ${StockTransfer.p.MaterialName} has been deleted!`
+          );
+          await this.getStockTransferListByCompanyRef();
+          this.SearchString = '';
+          this.loadPaginationData();
+        });
+      }
+    );
+  };
+
+  // For Pagination  start ----
+  loadPaginationData = () => {
+    this.total = this.DisplayMasterList.length; // Update total based on loaded data
+  };
+
+  paginatedList = () => {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  onPageChange = (pageIndex: number): void => {
+    this.currentPage = pageIndex; // Update the current page
+  };
+
+  AddStockTransfer = () => {
+    if (this.companyRef() <= 0) {
+      this.uiUtils.showWarningToster('Please select company');
+      return;
+    }
+    this.router.navigate(['/homepage/Website/Stock_Transfer_Details']);
+  }
+
+  // filterTable = () => {
+  //   if (this.SearchString != '') {
+  //     this.DisplayMasterList = this.MasterList.filter((data: any) => {
+  //       return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
+  //     })
+  //   }
+  //   else {
+  //     this.DisplayMasterList = this.MasterList
+  //   }
+  // }
+
+  // filterFields: string[] = ['Code', 'Name', 'UnitName'];
+
+  // filterTable = () => {
+  //   const search = this.SearchString?.toLowerCase() || '';
+
+  //   if (search) {
+  //     this.DisplayMasterList = this.MasterList.filter((item: any) => {
+  //       return this.filterFields.some((field) => {
+  //         const value = item.p?.[field];
+  //         return value && value.toString().toLowerCase().includes(search);
+  //       });
+  //     });
+  //   } else {
+  //     this.DisplayMasterList = this.MasterList;
+  //   }
+  // }
+}
+
