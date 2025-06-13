@@ -2,7 +2,7 @@ import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
-import { Quotation } from 'src/app/classes/domain/entities/website/stock_management/Quotation/quotation';
+import { Order } from 'src/app/classes/domain/entities/website/stock_management/stock_order/order';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
@@ -16,12 +16,12 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   standalone: false,
 })
 export class StockOrderComponent implements OnInit {
-  Entity: Quotation = Quotation.CreateNewInstance();
-  MasterList: Quotation[] = [];
-  DisplayMasterList: Quotation[] = [];
+  Entity: Order = Order.CreateNewInstance();
+  MasterList: Order[] = [];
+  DisplayMasterList: Order[] = [];
   SearchString: string = '';
   SiteList: Site[] = [];
-  SelectedOrder: Quotation = Quotation.CreateNewInstance();
+  SelectedOrder: Order = Order.CreateNewInstance();
   CustomerRef: number = 0;
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
@@ -69,7 +69,7 @@ export class StockOrderComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Quotation.FetchEntireListByCompanyRef(this.companyRef(),
+    let lst = await Order.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     console.log('lst :', lst);
@@ -85,7 +85,7 @@ export class StockOrderComponent implements OnInit {
       this.getOrderListByCompanyRef();
       return;
     }
-    let lst = await Quotation.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
+    let lst = await Order.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
@@ -93,14 +93,14 @@ export class StockOrderComponent implements OnInit {
     this.loadPaginationData();
   };
 
-  onEditClicked = async (item: Quotation) => {
+  onEditClicked = async (item: Order) => {
     this.SelectedOrder = item.GetEditableVersion();
-    Quotation.SetCurrentInstance(this.SelectedOrder);
+    Order.SetCurrentInstance(this.SelectedOrder);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/homepage/Website/Stock_Order_Details']);
   };
 
-  onDeleteClicked = async (Order: Quotation) => {
+  onDeleteClicked = async (Order: Order) => {
     await this.uiUtils.showConfirmationMessage('Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
         Are you sure that you want to DELETE this Order?`,
@@ -145,11 +145,11 @@ export class StockOrderComponent implements OnInit {
     this.router.navigate(['/homepage/Website/Stock_Order_Details']);
   }
 
-  NavigateOrderstatus = (item: Quotation) => {
+  NavigateOrderstatus = (item: Order) => {
     this.SelectedOrder = item.GetEditableVersion();
-    Quotation.SetCurrentInstance(this.SelectedOrder);
+    Order.SetCurrentInstance(this.SelectedOrder);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    this.router.navigate(['/homepage/Website/Quotation_Approval']);
+    this.router.navigate(['/homepage/Website/Order_Approval']);
   }
 
   filterTable = () => {

@@ -4,8 +4,8 @@ import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/c
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { RequiredMaterial } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/requiredmaterial/requiredmaterial';
-import { QuotedMaterial, QuotedMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/Quotation/QuotatedMaterial/quotatedmaterial';
-import { Quotation } from 'src/app/classes/domain/entities/website/stock_management/Quotation/quotation';
+import { Order } from 'src/app/classes/domain/entities/website/stock_management/stock_order/order';
+import { OrderMaterial, OrderMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/stock_order/OrderMaterial/ordermaterial';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -24,21 +24,21 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class StockOrderDetailsComponent implements OnInit {
 
-  Entity: Quotation = Quotation.CreateNewInstance();
+  Entity: Order = Order.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Order' | 'Edit Order' = 'New Order';
   IsDropdownDisabled: boolean = false;
-  InitialEntity: Quotation = null as any;
+  InitialEntity: Order = null as any;
   SiteList: Site[] = [];
   VendorList: Vendor[] = [];
   MaterialRequisitionList: RequiredMaterial[] = [];
-  QuotationDate: string = '';
+  OrderDate: string = '';
   CurrentDate: string = '';
   ExpectedDeliveryDate: string = '';
-  QuotedMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Required Remaining Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount', 'Action'];
-  isQuotedMaterialModalOpen: boolean = false;
-  newQuotedMaterial: QuotedMaterialDetailProps = QuotedMaterialDetailProps.Blank();
+  OrderMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Required Remaining Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount', 'Action'];
+  isOrderMaterialModalOpen: boolean = false;
+  newOrderMaterial: OrderMaterialDetailProps = OrderMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   strCDT: string = ''
@@ -86,23 +86,23 @@ export class StockOrderDetailsComponent implements OnInit {
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Order' : 'Edit Order';
-      this.Entity = Quotation.GetCurrentInstance();
+      this.Entity = Order.GetCurrentInstance();
       this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.InvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
       this.selectedFileName = this.Entity.p.InvoicePath;
 
-      this.QuotationDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
+      this.OrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
       this.appStateManage.StorageKey.removeItem('Editable');
 
     } else {
-      this.Entity = Quotation.CreateNewInstance();
-      Quotation.SetCurrentInstance(this.Entity);
+      this.Entity = Order.CreateNewInstance();
+      Order.SetCurrentInstance(this.Entity);
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       let parts = this.strCDT.substring(0, 16).split('-');
       // Construct the new date format
-      this.QuotationDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+      this.OrderDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
       this.CurrentDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
     }
-    this.InitialEntity = Object.assign(Quotation.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Quotation;
+    this.InitialEntity = Object.assign(Order.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Order;
   }
 
   getSiteListByCompanyRef = async () => {
@@ -153,9 +153,9 @@ export class StockOrderDetailsComponent implements OnInit {
 
   onMaterialSelection = (MaterialRef: number) => {
     const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.Ref == MaterialRef);
-    this.newQuotedMaterial.UnitName = SingleRecord[0].p.UnitName
-    this.newQuotedMaterial.EstimatedQty = SingleRecord[0].p.EstimatedQty
-    this.newQuotedMaterial.MaterialRequisitionDetailsName = SingleRecord[0].p.MaterialName
+    this.newOrderMaterial.UnitName = SingleRecord[0].p.UnitName
+    this.newOrderMaterial.EstimatedQty = SingleRecord[0].p.EstimatedQty
+    this.newOrderMaterial.MaterialRequisitionDetailsName = SingleRecord[0].p.MaterialName
   }
 
   // Trigger file input when clicking the image
@@ -243,15 +243,15 @@ export class StockOrderDetailsComponent implements OnInit {
       return;
     }
     this.getMaterialRequisitionListByVendorRefAndSiteRef();
-    if (type === 'QuotedMaterial') this.isQuotedMaterialModalOpen = true;
+    if (type === 'OrderMaterial') this.isOrderMaterialModalOpen = true;
   }
 
   closeModal = async (type: string) => {
-    if (type === 'QuotedMaterial') {
+    if (type === 'OrderMaterial') {
       const keysToCheck = ['Name', 'MaterialRequisitionDetailsRef', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
 
       const hasData = keysToCheck.some(
-        key => (this.newQuotedMaterial as any)[key]?.toString().trim()
+        key => (this.newOrderMaterial as any)[key]?.toString().trim()
       );
 
       if (hasData) {
@@ -260,65 +260,65 @@ export class StockOrderDetailsComponent implements OnInit {
           `This process is <strong>IRREVERSIBLE!</strong><br/>
              Are you sure you want to close this modal?`,
           async () => {
-            this.isQuotedMaterialModalOpen = false;
-            this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
+            this.isOrderMaterialModalOpen = false;
+            this.newOrderMaterial = OrderMaterialDetailProps.Blank();
           }
         );
       } else {
-        this.isQuotedMaterialModalOpen = false;
-        this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
+        this.isOrderMaterialModalOpen = false;
+        this.newOrderMaterial = OrderMaterialDetailProps.Blank();
       }
     }
   };
 
-  async addQuotedMaterial() {
-    if (this.newQuotedMaterial.MaterialRequisitionDetailsRef == 0) {
+  async addOrderMaterial() {
+    if (this.newOrderMaterial.MaterialRequisitionDetailsRef == 0) {
       return this.uiUtils.showWarningToster('Material Name cannot be blank.');
     }
-    if (this.newQuotedMaterial.OrderedQty == 0) {
+    if (this.newOrderMaterial.OrderedQty == 0) {
       return this.uiUtils.showWarningToster('Ordered Quantity cannot be blank.');
     }
-    if (this.newQuotedMaterial.Rate == 0) {
+    if (this.newOrderMaterial.Rate == 0) {
       return this.uiUtils.showWarningToster('Rate cannot be blank.');
     }
 
-    this.newQuotedMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate);
+    this.newOrderMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate);
     this.ExpectedDeliveryDate = '';
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
-      this.Entity.p.MaterialQuotationDetailsArray[this.editingIndex] = { ...this.newQuotedMaterial };
+      this.Entity.p.MaterialStockOrderDetailsArray[this.editingIndex] = { ...this.newOrderMaterial };
       await this.uiUtils.showSuccessToster('Material updated successfully');
-      this.isQuotedMaterialModalOpen = false;
+      this.isOrderMaterialModalOpen = false;
 
     } else {
-      let QuotedMaterialInstance = new QuotedMaterial(this.newQuotedMaterial, true);
-      let QuotationInstance = new Quotation(this.Entity.p, true);
-      await QuotedMaterialInstance.EnsurePrimaryKeysWithValidValues();
-      await QuotationInstance.EnsurePrimaryKeysWithValidValues();
+      let OrderMaterialInstance = new OrderMaterial(this.newOrderMaterial, true);
+      let OrderInstance = new Order(this.Entity.p, true);
+      await OrderMaterialInstance.EnsurePrimaryKeysWithValidValues();
+      await OrderInstance.EnsurePrimaryKeysWithValidValues();
 
-      this.newQuotedMaterial.MaterialQuotationRef = this.Entity.p.Ref;
-      this.Entity.p.MaterialQuotationDetailsArray.push({ ...QuotedMaterialInstance.p });
+      this.newOrderMaterial.MaterialStockOrderRef = this.Entity.p.Ref;
+      this.Entity.p.MaterialStockOrderDetailsArray.push({ ...OrderMaterialInstance.p });
       await this.uiUtils.showSuccessToster('Material added successfully');
       this.resetMaterialControls()
     }
-    this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
+    this.newOrderMaterial = OrderMaterialDetailProps.Blank();
     this.editingIndex = null;
   }
 
-  editQuotedMaterial(index: number) {
-    this.isQuotedMaterialModalOpen = true
-    this.newQuotedMaterial = { ...this.Entity.p.MaterialQuotationDetailsArray[index] }
+  editOrderMaterial(index: number) {
+    this.isOrderMaterialModalOpen = true
+    this.newOrderMaterial = { ...this.Entity.p.MaterialStockOrderDetailsArray[index] }
     this.editingIndex = index;
-    this.ExpectedDeliveryDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialQuotationDetailsArray[index].ExpectedDeliveryDate);
+    this.ExpectedDeliveryDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialStockOrderDetailsArray[index].ExpectedDeliveryDate);
     this.getMaterialRequisitionListByVendorRefAndSiteRef();
   }
 
-  async removeQuotedMaterial(index: number) {
+  async removeOrderMaterial(index: number) {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-       Are you sure that you want to DELETE this Quoted Material?`,
+       Are you sure that you want to DELETE this Order Material?`,
       async () => {
-        this.Entity.p.MaterialQuotationDetailsArray.splice(index, 1);
+        this.Entity.p.MaterialStockOrderDetailsArray.splice(index, 1);
       }
     );
   }
@@ -326,10 +326,10 @@ export class StockOrderDetailsComponent implements OnInit {
   SaveOrder = async () => {
     let lstFTO: FileTransferObject[] = [];
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    this.newQuotedMaterial.MaterialQuotationRef = this.Entity.p.Ref
+    this.newOrderMaterial.MaterialStockOrderRef = this.Entity.p.Ref
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.QuotationDate);
+    this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.OrderDate);
 
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
@@ -353,7 +353,7 @@ export class StockOrderDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Order saved successfully');
-        this.Entity = Quotation.CreateNewInstance();
+        this.Entity = Order.CreateNewInstance();
         this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster('Order Updated successfully');
@@ -363,19 +363,19 @@ export class StockOrderDetailsComponent implements OnInit {
   };
 
   CalculateNetAmountAndTotalAmount = async () => {
-    if (this.newQuotedMaterial.OrderedQty > this.newQuotedMaterial.EstimatedQty) {
-      this.newQuotedMaterial.OrderedQty = 0;
-      return this.uiUtils.showWarningToster('Ordered Qty should be less then or equal to Required Qty');
+    if (this.newOrderMaterial.OrderedQty > this.newOrderMaterial.EstimatedQty) {
+      this.newOrderMaterial.ExtraOrderedQty = this.newOrderMaterial.OrderedQty - this.newOrderMaterial.EstimatedQty;
+      this.uiUtils.showWarningToster('Ordered Qty is greater then Required Qty');
     }
 
-    this.newQuotedMaterial.RequiredRemainingQuantity = this.newQuotedMaterial.EstimatedQty - this.newQuotedMaterial.OrderedQty;
-    if (this.newQuotedMaterial.DiscountedRate == 0) {
-      this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.Rate * this.newQuotedMaterial.OrderedQty);
+    this.newOrderMaterial.RequiredRemainingQuantity = this.newOrderMaterial.EstimatedQty - this.newOrderMaterial.OrderedQty;
+    if (this.newOrderMaterial.DiscountedRate == 0) {
+      this.newOrderMaterial.NetAmount = (this.newOrderMaterial.Rate * this.newOrderMaterial.OrderedQty);
     } else {
-      this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.DiscountedRate * this.newQuotedMaterial.OrderedQty);
+      this.newOrderMaterial.NetAmount = (this.newOrderMaterial.DiscountedRate * this.newOrderMaterial.OrderedQty);
     }
-    let GstAmount = (this.newQuotedMaterial.NetAmount / 100) * this.newQuotedMaterial.Gst;
-    this.newQuotedMaterial.TotalAmount = this.newQuotedMaterial.NetAmount + GstAmount + this.newQuotedMaterial.DeliveryCharges;
+    let GstAmount = (this.newOrderMaterial.NetAmount / 100) * this.newOrderMaterial.Gst;
+    this.newOrderMaterial.TotalAmount = this.newOrderMaterial.NetAmount + GstAmount + this.newOrderMaterial.DeliveryCharges;
   }
 
   selectAllValue(event: MouseEvent): void {
@@ -384,7 +384,7 @@ export class StockOrderDetailsComponent implements OnInit {
   }
 
   getGrandTotal(): number {
-    return this.Entity.p.MaterialQuotationDetailsArray.reduce((total: number, item: any) => {
+    return this.Entity.p.MaterialStockOrderDetailsArray.reduce((total: number, item: any) => {
       return this.Entity.p.GrandTotal = total + Number(item.TotalAmount || 0);
     }, 0);
   }

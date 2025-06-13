@@ -40,19 +40,19 @@
       </thead>
       <tbody>
         <ng-container *ngFor="let Order of paginatedList; let i = index">
-          <ng-container *ngFor="let detail of Order.p.MaterialQuotationDetailsArray; let j = index">
+          <ng-container *ngFor="let detail of Order.p.MaterialStockOrderDetailsArray; let j = index">
             <tr>
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialQuotationDetailsArray.length">
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
                 {{ (currentPage - 1) * pageSize + i + 1 }}
               </td>
               <td class="tbldata" *ngIf="j === 0 && !Entity.p.SiteRef"
-                [attr.rowspan]="Order.p.MaterialQuotationDetailsArray.length">
+                [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
                 {{ Order.p.SiteName }}
               </td>
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialQuotationDetailsArray.length">
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
                 {{ formatDate(Order.p.Date) }}
               </td>
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialQuotationDetailsArray.length">
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
                 {{ Order.p.VendorName }}
               </td>
 
@@ -67,30 +67,30 @@
               </td>
               <td class="tbldata">{{ detail.TotalAmount }}</td>
 
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialQuotationDetailsArray.length">
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
                 {{ Order.p.GrandTotal }}
               </td>
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialQuotationDetailsArray.length">
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
                 <!-- PENDING -->
-                <span class="status" style="cursor: pointer;" (click)="NavigateOrderstatus(Order)" *ngIf="Order.p.MaterialQuotationStatus == MaterialOrderStatus.Pending"
+                <span class="status" style="cursor: pointer;" (click)="NavigateOrderstatus(Order)" *ngIf="Order.p.MaterialStockOrderStatus == MaterialOrderStatus.Pending"
                   ngClass="pending">
                   Pending
                 </span>
 
                 <!-- APPROVED -->
-                <span class="status" *ngIf="Order.p.MaterialQuotationStatus == MaterialOrderStatus.Approved"
+                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialOrderStatus.Approved"
                   ngClass="approved">
                   Approved
                 </span>
 
                 <!-- REJECTED -->
-                <span class="status" *ngIf="Order.p.MaterialQuotationStatus == MaterialOrderStatus.Rejected"
+                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialOrderStatus.Rejected"
                   ngClass="rejected">
                   Rejected
                 </span>
               </td>
 
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialQuotationDetailsArray.length">
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
                 <span style="margin-left: 9px;" (click)="onEditClicked(Order)">
                   <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
                 </span>
@@ -99,7 +99,7 @@
                 </span>
               </td>
             </tr>
-            <tr *ngIf="j === Order.p.MaterialQuotationDetailsArray.length - 1 && !Entity.p.SiteRef">
+            <tr *ngIf="j === Order.p.MaterialStockOrderDetailsArray.length - 1 && !Entity.p.SiteRef">
               <td colspan="15" style="background-color: #333; height: 2px; padding: 0;"></td>
             </tr>
           </ng-container>
