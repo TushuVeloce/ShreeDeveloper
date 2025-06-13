@@ -35,21 +35,19 @@ export class StockConsumeDetailsComponent  implements OnInit {
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
 
-  @ViewChild('estimateForm') estimateForm!: NgForm;
+  @ViewChild('consumptionForm') consumptionForm!: NgForm;
   @ViewChild('ConsumptionDateCtrl') ConsumptionDateInputControl!: NgModel;
   @ViewChild('ConsumedQuantityCtrl') ConsumedQuantityCtrlInputControl!: NgModel;
   @ViewChild('DescriptionCtrl') DescriptionInputControl!: NgModel;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private dtu: DTU,) {
-    effect(async () => {
-      await this.getStageListByCompanyRef();
-    });
   }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.getSiteListByCompanyRef();
     this.getMaterialListByCompanyRef();
+    this.getStageListByCompanyRef()
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Consumption' : 'Edit Stock Consumption';
@@ -119,7 +117,7 @@ export class StockConsumeDetailsComponent  implements OnInit {
   }
 
 
-  SaveStageMaster = async () => {
+  SaveStockConsumption = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     this.Entity.p.ConsumptionDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.ConsumptionDate)
@@ -136,11 +134,11 @@ export class StockConsumeDetailsComponent  implements OnInit {
     else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Estimate Stage saved successfully');
+        await this.uiUtils.showSuccessToster('Stock Consume saved successfully');
         this.Entity = StockConsume.CreateNewInstance();
         this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster('Estimate Stage Updated successfully');
+        await this.uiUtils.showSuccessToster('Stock Consume Updated successfully');
         await this.router.navigate(['/homepage/Website/Stock_Consume']);
       }
     }
@@ -152,12 +150,12 @@ export class StockConsumeDetailsComponent  implements OnInit {
     input.select();
   }
 
-  BackEstimateStage = async () => {
+  BackStockConsumption = async () => {
     if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
       await this.uiUtils.showConfirmationMessage('Cancel',
         `This process is IRREVERSIBLE!
       <br/>
-      Are you sure that you want to Cancel this Estimate Stages Form?`,
+      Are you sure that you want to Cancel this Stock Consume Form?`,
         async () => {
           await this.router.navigate(['/homepage/Website/Stock_Consume']);
         });
@@ -167,6 +165,6 @@ export class StockConsumeDetailsComponent  implements OnInit {
   }
 
   resetAllControls() {
-    this.estimateForm.resetForm(); // this will reset all form controls to their initial state
+    this.consumptionForm.resetForm(); // this will reset all form controls to their initial state
   }
 }

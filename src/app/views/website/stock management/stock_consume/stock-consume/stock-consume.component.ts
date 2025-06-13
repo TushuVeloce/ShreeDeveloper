@@ -25,7 +25,7 @@ export class StockConsumeComponent  implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Site Name', 'Consumption Date', 'Material Name','Unit', 'Current Qty.' ,'Consumption Qty','Remaining Qty.','Stage Name','Description','Remark','Action'];
+  headers: string[] = ['Sr.No.', 'Site Name', 'Consumption Date', 'Material Name','Unit', 'Current Qty.' ,'Consumption Qty.','Remaining Qty.','Stage Name','Description','Remark','Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
@@ -58,14 +58,14 @@ export class StockConsumeComponent  implements OnInit {
     this.SelectedStockConsume = item.GetEditableVersion();
     StockConsume.SetCurrentInstance(this.SelectedStockConsume);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/StockConsume_Master_Details']);
+    await this.router.navigate(['/homepage/Website/Stock_Consume_Details']);
   };
 
   onDeleteClicked = async (StockConsume: StockConsume) => {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-    Are you sure that you want to DELETE this StockConsume?`,
+    Are you sure that you want to DELETE this Stock Consume?`,
       async () => {
         await StockConsume.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(

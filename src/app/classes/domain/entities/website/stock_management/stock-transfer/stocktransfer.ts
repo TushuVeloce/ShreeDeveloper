@@ -20,13 +20,23 @@ export class StockTransferProps {
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
   public Ref: number = 0;
+  public FromSiteRef: number = 0;
+  public readonly FromSiteName: string = '';
+  public ToSiteRef: number = 0;
+  public readonly ToSiteName: string = '';
   public Date: string = '';
-  public SiteRef: number = 0;
-  public readonly SiteName: string = '';
+  public MaterialRef: number = 0;
+  public readonly MaterialName: string = '';
+  public UnitRef: number = 0;
+  public UnitName: string = '';
+  public CurrentQuantity: number = 0;
+  public TransferredQuantity: number = 0;
+  public Rate: number = 0;
+  public GST: number = 0;
+  public Amount: number = 0;
+  public RemainingQuantity: number = 0;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public Status: number = 0
-  // public StockTransferDetailsArray: RequiredMaterialDetailProps[] = [];
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -103,7 +113,7 @@ export class StockTransfer implements IPersistable<StockTransfer> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): StockTransfer[] {
+    sortPropertyName: string = ""): StockTransfer[] {
     let result: StockTransfer[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -169,18 +179,18 @@ export class StockTransfer implements IPersistable<StockTransfer> {
     return StockTransfer.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchEntireListByAllFilters(CompanyRef: number, Status: number, SiteRef: number,  errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-        let req = new StockTransferFetchRequest();
-        req.CompanyRefs.push(CompanyRef)
-        if (Status) {
-          req.StockTransferStatus.push(Status)
-        }
-        if (SiteRef) {
-          req.SiteRefs.push(SiteRef)
-        }
-        let tdResponse = await StockTransfer.FetchTransportData(req, errorHandler) as TransportData;
-        return StockTransfer.ListFromTransportData(tdResponse);
-      }
+  public static async FetchEntireListByAllFilters(CompanyRef: number, Status: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new StockTransferFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    if (Status) {
+      req.StockTransferStatus.push(Status)
+    }
+    if (SiteRef) {
+      req.SiteRefs.push(SiteRef)
+    }
+    let tdResponse = await StockTransfer.FetchTransportData(req, errorHandler) as TransportData;
+    return StockTransfer.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

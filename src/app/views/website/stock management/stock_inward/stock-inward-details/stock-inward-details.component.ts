@@ -219,11 +219,11 @@ export class StockInwardDetailsComponent  implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('StockInward saved successfully');
+        await this.uiUtils.showSuccessToster('Stock Inward saved successfully');
         this.Entity = StockInward.CreateNewInstance();
         this.resetAllControls()
       } else {
-        await this.uiUtils.showSuccessToster('Material Requisition Updated successfully');
+        await this.uiUtils.showSuccessToster('Stock Inward Updated successfully');
         await this.router.navigate(['/homepage/Website/Material_Requisition']);
       }
     }
@@ -240,7 +240,7 @@ export class StockInwardDetailsComponent  implements OnInit {
       await this.uiUtils.showConfirmationMessage('Cancel',
         `This process is IRREVERSIBLE!
       <br/>
-      Are you sure that you want to Cancel this Material Requisition Form?`,
+      Are you sure that you want to Cancel this Stock Inward Form?`,
         async () => {
           await this.router.navigate(['/homepage/Website/Material_Requisition']);
         });

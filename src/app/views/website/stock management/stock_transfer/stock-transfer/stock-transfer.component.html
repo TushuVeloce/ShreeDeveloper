@@ -1,3 +1,53 @@
-<p>
-  stock-transfer works!
-</p>
+<div class="row">
+   <div class="col-4 mb-2">
+    <h1 style="padding-top: 3px;" class="title title_light">Stock Transfer</h1>
+  </div>
+   <div class="col-4 mb-2 search-container_light">
+    <app-shared-filter [masterList]="MasterList" [filterFields]="['Code', 'Name', 'UnitName']"
+      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
+  </div>
+  <div class="col-4 mb-2" routerLinkActive="active">
+    <nz-button nz-button class="btn1" (click)='AddStockTransfer()'>
+      Add Stock Transfer
+    </nz-button>
+  </div>
+</div>
+<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+  <div class="table-container">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let consume of paginatedList(); index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{consume.p.Date}}</td>
+          <td Class="tbldata">{{consume.p.FromSiteName}}</td>
+          <td Class="tbldata">{{consume.p.ToSiteName}}</td>
+          <td Class="tbldata">{{consume.p.MaterialName}}</td>
+           <td Class="tbldata">{{consume.p.UnitName}}</td>
+          <td Class="tbldata">{{consume.p.CurrentQuantity}}</td>
+          <td Class="tbldata">{{consume.p.TransferredQuantity}}</td>
+          <td Class="tbldata">{{consume.p.Rate}}</td>
+          <td Class="tbldata">{{consume.p.GST}}</td>
+          <td Class="tbldata">{{consume.p.Amount}}</td>
+          <td Class="tbldata">{{consume.p.RemainingQuantity}}</td>
+          <td class="tbldata">
+            <Edit-Icon (editClick)="onEditClicked(consume)" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(consume)" />
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+ <div class="fixed-pagination">
+    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+      (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+    </nz-pagination>
+  </div></div>
+<div *ngIf="DisplayMasterList.length === 0">
+  <Data-Not-Found />
+</div>

@@ -2,12 +2,12 @@
   <div class="card" style="padding: 1rem">
     <div class="row">
       <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
-        <button type="button" class="backbtn" (click)="BackEstimateStage()">
+        <button type="button" class="backbtn" (click)="BackStockConsumption()">
           <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
         </button>
       </div>
       <div class="col-md-11">
-        <span class="detail_title">{{ this.DetailsFormTitle }}</span>
+        <span class="detail_title">{{DetailsFormTitle }}</span>
       </div>
     </div>
     <ng-template #noDataTpl>
@@ -50,10 +50,10 @@
             id="CurrentQuantity" required placeholder="Enter Current Quantity" readonly/>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
-          <label for="ConsumedQuantity"><b>Consumption Quantity</b></label>
+          <label for="ConsumedQuantity"><b>Consumed Quantity</b></label>
           <input type="number" [(ngModel)]="Entity.p.ConsumedQuantity" name="ConsumedQuantity"
             class="form-control" id="ConsumedQuantity" required placeholder="Enter Consumption Quantity"
-            #ConsumedQuantityCtrl="ngModel"  required (blur)="ConsumedQuantityCtrl.control.markAsTouched()" />
+            #ConsumedQuantityCtrl="ngModel"  required (blur)="ConsumedQuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
           <div *ngIf="ConsumedQuantityCtrl.invalid && (ConsumedQuantityCtrl.touched || ConsumedQuantityCtrl.dirty)">
             <span class="validation-text" *ngIf="ConsumedQuantityCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
@@ -95,12 +95,12 @@
           margin-top: 2rem;
         ">
         <div>
-          <button type="button" class="btn" (click)="SaveStageMaster()">
+          <button type="button" class="btn" (click)="SaveStockConsumption()">
             Save
           </button>
         </div>
         <div>
-          <button type="button" class="btn" (click)="BackEstimateStage()">
+          <button type="button" class="btn" (click)="BackStockConsumption()">
             Cancel
           </button>
         </div>
