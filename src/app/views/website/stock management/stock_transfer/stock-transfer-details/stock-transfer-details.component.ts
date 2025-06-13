@@ -118,11 +118,11 @@ export class StockTransferDetailsComponent  implements OnInit {
     else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Stock Consume saved successfully');
+        await this.uiUtils.showSuccessToster('Stock Transfer saved successfully');
         this.Entity = StockTransfer.CreateNewInstance();
         this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster('Stock Consume Updated successfully');
+        await this.uiUtils.showSuccessToster('Stock Transfer Updated successfully');
         await this.router.navigate(['/homepage/Website/Stock_Transfer']);
       }
     }
@@ -151,7 +151,7 @@ export class StockTransferDetailsComponent  implements OnInit {
       await this.uiUtils.showConfirmationMessage('Cancel',
         `This process is IRREVERSIBLE!
       <br/>
-      Are you sure that you want to Cancel this Stock Consume Form?`,
+      Are you sure that you want to Cancel this Stock Transfer Form?`,
         async () => {
           await this.router.navigate(['/homepage/Website/Stock_Transfer']);
         });
