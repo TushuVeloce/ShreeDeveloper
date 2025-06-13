@@ -1,0 +1,76 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Filter Transactions</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="dismiss()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card class="filter-card">
+    <ion-card-header>
+      <ion-card-title>Filter Transactions</ion-card-title>
+      <ion-button fill="clear" color="success" size="small" slot="end" (click)="onReset()">Reset</ion-button>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <!-- Type Filter -->
+      <ion-label>Transaction Type</ion-label>
+      <ion-segment [(ngModel)]="filterForm.value.type" (ionChange)="filterForm.patchValue({ type: $event.detail.value })">
+        <ion-segment-button value="">
+          <ion-label>All</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="income">
+          <ion-label>Income</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="expense">
+          <ion-label>Expense</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+  
+      <!-- Category -->
+      <ion-label class="mt-3">Transaction Category</ion-label>
+      <div class="chip-group">
+        <ion-chip *ngFor="let cat of categories" [outline]="!filterForm.value.category.includes(cat)"
+          (click)="toggleCategory(cat)">
+          <ion-label>{{ cat }}</ion-label>
+        </ion-chip>
+      </div>
+  
+      <!-- Amount Range -->
+      <ion-label class="mt-3">Transaction Amount</ion-label>
+      <ion-range dualKnobs="true" [(ngModel)]="filterForm.value.amount"
+        (ionChange)="filterForm.patchValue({ amount: $event.detail.value })" min="0" max="500" step="1">
+        <ion-label slot="start">$0</ion-label>
+        <ion-label slot="end">$500</ion-label>
+      </ion-range>
+  
+      <!-- Merchant -->
+      <ion-label class="mt-3">Transaction Merchant</ion-label>
+      <ion-item>
+        <ion-select placeholder="Select Merchant" [(ngModel)]="filterForm.value.merchant"
+          (ionChange)="filterForm.patchValue({ merchant: $event.detail.value })">
+          <ion-select-option *ngFor="let m of merchants" [value]="m">{{ m }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+  
+      <!-- Date Range -->
+      <ion-label class="mt-3">Date (From)</ion-label>
+      <ion-datetime placeholder="Select From Date" [(ngModel)]="filterForm.value.dateFrom"
+        (ionChange)="filterForm.patchValue({ dateFrom: $event.detail.value })"></ion-datetime>
+  
+      <ion-label class="mt-2">Date (To)</ion-label>
+      <ion-datetime placeholder="Select To Date" [(ngModel)]="filterForm.value.dateTo"
+        (ionChange)="filterForm.patchValue({ dateTo: $event.detail.value })"></ion-datetime>
+  
+      <!-- Apply Button -->
+      <ion-button expand="block" class="mt-4" color="success" (click)="onApply()">
+        <ion-icon name="filter-outline" slot="start"></ion-icon>
+        Apply Filter
+      </ion-button>
+    </ion-card-content>
+  </ion-card>  
+</ion-content>

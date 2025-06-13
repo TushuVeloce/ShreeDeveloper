@@ -1,0 +1,29 @@
+.filter-card {
+    border-radius: 20px;
+    padding: 16px;
+
+    ion-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .chip-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    .mt-2 {
+        margin-top: 12px;
+    }
+
+    .mt-3 {
+        margin-top: 20px;
+    }
+
+    .mt-4 {
+        margin-top: 24px;
+    }
+}

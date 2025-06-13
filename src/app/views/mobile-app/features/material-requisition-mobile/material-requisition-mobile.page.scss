@@ -1,0 +1,109 @@
+ion-item-divider {
+    background-color: var(--ion-color-light);
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.divider-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.date-label {
+    font-size: 12px;
+    color: var(--ion-color-medium);
+}
+
+.requisition-card {
+    margin-bottom: 12px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+ion-card-content {
+    padding: 12px 16px;
+}
+
+.requisition-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.left-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+    }
+
+    .label {
+        font-weight: 600;
+        color: var(--ion-color-medium);
+    }
+
+    .value {
+        font-weight: 500;
+        text-align: right;
+        color: var(--ion-color-dark);
+        word-break: break-word;
+    }
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 6px;
+    padding-top: 4px;
+}
+
+/* Modal Styling */
+.modal-card {
+    --height: 60%;
+    --width: 90%;
+    --border-radius: 20px;
+    --background: var(--ion-background-color-step-50);
+
+    .modal-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .modal-toolbar {
+        border-radius: 20px 20px 0 0;
+    }
+
+    .modal-body {
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .info-row-of-model {
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+
+        .label {
+            font-weight: 600;
+        }
+
+        .value {
+            font-weight: 500;
+        }
+    }
+
+    .modal-footer {
+        padding: 12px;
+    }
+}

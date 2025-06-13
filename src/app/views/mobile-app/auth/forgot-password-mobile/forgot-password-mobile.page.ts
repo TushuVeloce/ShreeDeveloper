@@ -40,7 +40,7 @@ export class ForgotPasswordMobilePage implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy(): void { 
     this.step = 1;
     if (this.resendInterval) {
       clearInterval(this.resendInterval);
@@ -52,10 +52,11 @@ export class ForgotPasswordMobilePage implements OnInit, OnDestroy {
     if (this.forgotForm.get('email')?.valid) {
       const { email } = this.forgotForm.value;
       let body = { EMailId: email };
+      console.log('body : sendOtp', body);
       this.appStateManage.localStorage.setItem('userEMailId', email);
 
       const response = await this.servercommunicator.FetchRequestForMobileApp('generateuserotp', body);
-      console.log('response :', response);
+      console.log('response :sendOtp', response);
       if (response.Successful) {
         this.toastService.present(response.Message, 1000, 'success');
         console.log('OTP generation successfully:', response.Message);
@@ -93,11 +94,13 @@ export class ForgotPasswordMobilePage implements OnInit, OnDestroy {
       const { email } = this.forgotForm.value;
       this.otpDigits = ['', '', '', '', '', ''];
       let body = { EMailId: email };
+      console.log('body :resendOtp', body);
 
       const response = await this.servercommunicator.FetchRequestForMobileApp(
         'sendpasswordchangeemailotp',
         body
       );
+      console.log('response :resendOtp', response);
 
       if (!response.Successful) {
         console.log('Resend OTP Error:', response.Message);
@@ -151,12 +154,13 @@ export class ForgotPasswordMobilePage implements OnInit, OnDestroy {
         EMailId: email,
         OTP: otpValue
       };
-
+      
+      console.log('body :verifyOtp', body);
       const response = await this.servercommunicator.VerifyOTP(
         'verifyuserotp', 
         body
       );
-      console.log('response :', response);
+      console.log('response :verifyOtp', response);
 
       if (!response.Successful) {
         this.toastService.present(response.Message, 1000, 'danger');
@@ -191,12 +195,13 @@ export class ForgotPasswordMobilePage implements OnInit, OnDestroy {
       Password: newPassword,
       ConfirmPassword: confirmPassword
     };
-
+    
+    console.log('body :onSubmit', body);
     const response = await this.servercommunicator.FetchRequestForMobileApp(
       'changepassword',
       body
     );
-    console.log('response :', response);
+    console.log('response :onSubmit', response);
 
     if (!response.Successful) {
       console.log('Password change failed:', response.Message);
