@@ -12,6 +12,7 @@ import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { MaterialFetchRequest } from "./materialfetchrequest";
 import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
+import { MaterialFromOrderFetchRequest } from "./materialfromorderfetchrequest";
 
 
 export class MaterialProps {
@@ -177,6 +178,12 @@ export class Material implements IPersistable<Material> {
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MaterialFetchRequest();
     req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
+    return Material.ListFromTransportData(tdResponse);
+  }
+
+   public static async FetchOrderedMaterials( errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new MaterialFromOrderFetchRequest();
     let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
     return Material.ListFromTransportData(tdResponse);
   }
