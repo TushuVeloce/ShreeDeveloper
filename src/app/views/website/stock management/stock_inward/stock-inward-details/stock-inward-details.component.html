@@ -162,9 +162,9 @@
           <div class="col-md-6" style="margin-top: 1rem">
             <label>Material Name</label>
             <nz-select *ngIf="!ModalEditable" class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl"
-              nzAllowClear nzPlaceHolder="Select" id="MaterialRef" name="MaterialRef" [nzSize]="'large'"
-              [(ngModel)]="newInward.MaterialRef" required
-              (ngModelChange)="getUnitByMaterialRef(newInward.MaterialRef)">
+              nzAllowClear nzPlaceHolder="Select" id="MaterialRequisitionDetailsRef" name="MaterialRequisitionDetailsRef" [nzSize]="'large'"
+              [(ngModel)]="newInward.MaterialRequisitionDetailsRef" required
+              (ngModelChange)="getUnitByMaterialRef(newInward.MaterialRequisitionDetailsRef)">
               <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
                 [nzLabel]="material.p.MaterialName"></nz-option>
             </nz-select>
@@ -178,17 +178,17 @@
           <div class="col-md-6" style="margin-top: 1rem">
             <label>Ordered Quantity</label>
             <input type="number" name="OrderedQty" class="form-control" [(ngModel)]="newInward.OrderedQty" required
-              placeholder="Ordered Quantity" (click)="selectAllValue($event)" />
+              placeholder="Ordered Quantity" (click)="selectAllValue($event)" (ngModelChange)="CalculateRemainingQty()"/>
           </div>
           <div class="col-md-6" style="margin-top: 1rem">
             <label>Inward Quantity</label>
             <input type="number" name="InwardQty" class="form-control" [(ngModel)]="newInward.InwardQty" required
-              placeholder="Inward Quantity" (click)="selectAllValue($event)" />
+              placeholder="Inward Quantity" (click)="selectAllValue($event)" (ngModelChange)="CalculateRemainingQty()"/>
           </div>
           <div class="col-md-6" style="margin-top: 1rem">
             <label>Remaining Quantity</label>
             <input type="number" name="RemainingQty" class="form-control" [(ngModel)]="newInward.RemainingQty" required
-              placeholder="Remaining Quantity" (click)="selectAllValue($event)" />
+              placeholder="Remaining Quantity" (click)="selectAllValue($event)" readonly/>
           </div>
         </div>
       </form>

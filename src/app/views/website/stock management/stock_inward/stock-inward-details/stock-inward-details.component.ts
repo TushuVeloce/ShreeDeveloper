@@ -69,12 +69,13 @@ export class StockInwardDetailsComponent  implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Inward' : 'Edit Stock Inward';
       this.Entity = StockInward.GetCurrentInstance();
+      console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       if (this.Entity.p.OrderedDate != '') {
         this.Entity.p.OrderedDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.OrderedDate)
       }
        if (this.Entity.p.InwardDate != '') {
-        this.Entity.p.OrderedDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate)
+        this.Entity.p.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate)
       }
       this.getVendorDataByVendorRef(this.Entity.p.VendorRef)
       // this.getUnitByMaterialRef(this.Entity.p.MaterialInwardDetailsArray[0].MaterialRef)
@@ -124,7 +125,7 @@ export class StockInwardDetailsComponent  implements OnInit {
   }
 
    filterMaterialList() {
-    const usedRefs = this.Entity.p.MaterialInwardDetailsArray.map(item => item.MaterialRef);
+    const usedRefs = this.Entity.p.MaterialInwardDetailsArray.map(item => item.MaterialRequisitionDetailsRef);
     this.MaterialList = this.AllMaterialList.filter(
       material => !usedRefs.includes(material.p.Ref)
     );
@@ -158,6 +159,12 @@ export class StockInwardDetailsComponent  implements OnInit {
     console.log('lst :', lst);
     this.Entity.p.VendorTradeName = lst.p.TradeName;
     this.Entity.p.VendorMobNo = lst.p.MobileNo;
+  }
+
+  CalculateRemainingQty = () =>{
+    const OrderedQty = Number(this.newInward.OrderedQty)
+    const InwardQty = Number(this.newInward.InwardQty)
+    this.newInward.RemainingQty = OrderedQty - InwardQty
   }
 
   openModal(type: string) {
@@ -202,7 +209,7 @@ export class StockInwardDetailsComponent  implements OnInit {
 
 
   async addMaterial() {
-    if (this.newInward.InwardQty < 0) {
+    if (this.newInward.MaterialRequisitionDetailsRef <= 0 || this.newInward.InwardQty < 0) {
       await this.uiUtils.showErrorMessage('Error', 'Inward Quantity can not be less than 0');
       return;
     }

@@ -3,6 +3,7 @@ import { NgForm, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
+import { MaterialFromOrder } from 'src/app/classes/domain/entities/website/masters/material/orderedmaterial/materialfromorder';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { StockConsume } from 'src/app/classes/domain/entities/website/stock_management/stock_consume/stockconsume';
@@ -26,7 +27,7 @@ export class StockConsumeDetailsComponent  implements OnInit {
   DetailsFormTitle: 'New Stock Consumption' | 'Edit Stock Consumption' = 'New Stock Consumption';
   InitialEntity: StockConsume = null as any;
   SiteList: Site[] = [];
-  MaterialList: Material[] = [];
+  MaterialList: MaterialFromOrder[] = [];
   StageList: Stage[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -90,7 +91,7 @@ export class StockConsumeDetailsComponent  implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Material.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await MaterialFromOrder.FetchOrderedMaterials(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MaterialList = lst;
     // this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
   }
@@ -108,10 +109,11 @@ export class StockConsumeDetailsComponent  implements OnInit {
 
    getUnitByMaterialRef = async (materialref: number) => {
     this.Entity.p.UnitRef = 0
+    this.Entity.p.UnitName = ''
     if (materialref <= 0 || materialref <= 0) {
       return;
     }
-    let lst = await Material.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await MaterialFromOrder.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.Entity.p.UnitRef = lst.p.UnitRef
     this.Entity.p.UnitName = lst.p.UnitName
   }

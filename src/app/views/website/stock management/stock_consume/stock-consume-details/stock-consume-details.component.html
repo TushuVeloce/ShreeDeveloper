@@ -37,7 +37,7 @@
             nzPlaceHolder="Select" id="MaterialRef" name="MaterialRef" [nzSize]="'large'"
             [(ngModel)]="Entity.p.MaterialRef" (ngModelChange)="getUnitByMaterialRef(Entity.p.MaterialRef)">
             <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
-              [nzLabel]="material.p.Name"></nz-option>
+              [nzLabel]="material.p.MaterialName"></nz-option>
           </nz-select>
         </div>
        <div class="col-md-4" style="margin-top: 1rem">
