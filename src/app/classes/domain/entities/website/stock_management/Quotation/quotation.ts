@@ -188,6 +188,15 @@ export class Quotation implements IPersistable<Quotation> {
     return Quotation.ListFromTransportData(tdResponse);
   }
 
+  public static async FetchEntireListByCompanyVendorAndSiteRef(CompanyRef: number, VendorRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new QuotationFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    req.VendorRefs.push(VendorRef)
+    req.SiteRefs.push(SiteRef)
+    let tdResponse = await Quotation.FetchTransportData(req, errorHandler) as TransportData;
+    return Quotation.ListFromTransportData(tdResponse);
+  }
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

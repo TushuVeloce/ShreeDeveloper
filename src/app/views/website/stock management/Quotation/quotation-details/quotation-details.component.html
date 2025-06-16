@@ -44,7 +44,8 @@
         <div class="col-md-6">
           <label><b>Site Name</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
+            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
+            (ngModelChange)="onSiteSelection(Entity.p.SiteRef)">
             <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -68,9 +69,9 @@
           <input type="text" name="AddressLine1" class="form-control date-input" id="AddressLine1"
             [(ngModel)]="Entity.p.AddressLine1" placeholder="Address" readonly>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 d-flex align-items-end justify-content-center">
           <nz-button nz-button class="btn1" (click)="openCopyModal('CopyMaterial')">
-            Add Quotation
+            Copy Material
           </nz-button>
         </div>
       </div>
@@ -332,47 +333,42 @@
 <div *ngIf="isCopyMaterialModalOpen" class="custom-modal-overlay">
   <div class="custom-modal">
     <div class="custom-modal-header">
-      <h5>{{ ModalEditable ? 'Edit Material' : 'Add Material'}}</h5>
+      <h5>Copy Material</h5>
       <button type="button" class="btn-close" (click)="closeCopyModal('CopyMaterial')"></button>
     </div>
     <div class="custom-modal-body">
       <form autocomplete="off">
         <div class="row" style="margin-top: 1rem">
-          <!-- <div class="col-md-4">
-            <label>Material Name</label>
-            <nz-select *ngIf="!ModalEditable" class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl"
-              nzAllowClear nzPlaceHolder="Select" id="MaterialRef" name="MaterialRef" [nzSize]="'large'"
-              [(ngModel)]="newRequisition.MaterialRef" required
-              (ngModelChange)="getUnitByMaterialRef(newRequisition.MaterialRef)">
-              <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
-                [nzLabel]="material.p.Name"></nz-option>
+          <div class="col-md-6">
+            <label>Site Name</label>
+            <!-- <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear
+              nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="this.Entity.p.SiteRef">
+              <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+            </nz-select> -->
+            <input type="text" name="SiteName" class="form-control date-input" id="SiteName"
+              [(ngModel)]="Entity.p.SiteName" placeholder="Site Name" readonly>
+          </div>
+          <div class="col-md-6">
+            <label>Vendor Name</label>
+            <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear
+              nzPlaceHolder="Select" id="VendorRef" name="VendorRef" [nzSize]="'large'" [(ngModel)]="this.VendorRef">
+              <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref"
+                [nzLabel]="Vendor.p.Name"></nz-option>
             </nz-select>
-            <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control" readonly
-              [(ngModel)]="newRequisition.MaterialName" />
           </div>
-          <div class="col-md-4">
-            <label>Unit</label>
-            <input type="text" name="UnitRef" class="form-control" readonly [(ngModel)]="newRequisition.UnitName" />
-          </div>
-          <div class="col-md-4">
-            <label>Required Quantity</label>
-            <input type="number" name="EstimatedQty" class="form-control" [(ngModel)]="newRequisition.EstimatedQty"
-              required placeholder="Enter Estimated Qty" (click)="selectAllValue($event)" />
-          </div> -->
         </div>
       </form>
     </div>
     <div class="custom-modal-footer">
-      <!-- <button type="button" class="btn btn-secondary" (click)="isModalOpen = false">Close</button> -->
       <div style="
           justify-content: center;
           display: flex;
           gap: 2rem;
           margin-top: 2rem;
         ">
-        <!-- <div>
-          <nz-button nz-button class="btn1" (click)="addMaterial()">{{ ModalEditable ? 'Upadte' : 'Save'}}</nz-button>
-        </div> -->
+        <div>
+          <nz-button nz-button class="btn1" (click)="getCopyMaterialListByVendorRefAndSiteRef()">Copy</nz-button>
+        </div>
         <div>
           <nz-button nz-button class="btn1" (click)="closeCopyModal('CopyMaterial')">
             Cancel

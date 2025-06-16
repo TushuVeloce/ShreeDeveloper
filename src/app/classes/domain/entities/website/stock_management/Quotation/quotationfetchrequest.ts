@@ -13,6 +13,7 @@ export class QuotationFetchRequest
     BookingRemarkRefs: number[] = [];
     CompanyRefs: number[] = [];
     SiteRefs: number[] = [];
+    VendorRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

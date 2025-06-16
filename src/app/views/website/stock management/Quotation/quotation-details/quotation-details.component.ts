@@ -33,6 +33,9 @@ export class QuotationDetailsComponent implements OnInit {
   VendorList: Vendor[] = [];
   MaterialRequisitionList: RequiredMaterial[] = [];
   AllMaterialRequisitionList: RequiredMaterial[] = [];
+  VendorRef: number = 0;
+  VendorName: string = '';
+  VendorTradeName: string = '';
   QuotationDate: string = '';
   CurrentDate: string = '';
   ModalEditable: boolean = false;
@@ -153,6 +156,12 @@ export class QuotationDetailsComponent implements OnInit {
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
+  }
+
+  onSiteSelection = (SiteRef: number) => {
+    const SingleRecord = this.SiteList.filter(data => data.p.Ref == SiteRef);
+    this.Entity.p.SiteName = SingleRecord[0].p.Name;
+    this.Entity.p.MaterialQuotationDetailsArray = [];
   }
 
   onVendorSelection = (VendorRef: number) => {
@@ -283,45 +292,6 @@ export class QuotationDetailsComponent implements OnInit {
     }
   };
 
-  openCopyModal(type: string) {
-    if (this.Entity.p.SiteRef <= 0) {
-      this.uiUtils.showErrorToster('Site not Selected');
-      return;
-    }
-    if (this.Entity.p.VendorRef <= 0) {
-      this.uiUtils.showErrorToster('Vendor not Selected');
-      return;
-    }
-    this.ModalEditable = false;
-    this.getMaterialRequisitionListByVendorRefAndSiteRef();
-    if (type === 'QuotedMaterial') this.isQuotedMaterialModalOpen = true;
-  }
-
-  closeCopyModal = async (type: string) => {
-    if (type === 'QuotedMaterial') {
-      const keysToCheck = ['MaterialRequisitionDetailsRef', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
-
-      const hasData = keysToCheck.some(
-        key => (this.newQuotedMaterial as any)[key]?.toString().trim()
-      );
-
-      if (hasData) {
-        await this.uiUtils.showConfirmationMessage(
-          'Close',
-          `This process is <strong>IRREVERSIBLE!</strong><br/>
-           Are you sure you want to close this modal?`,
-          async () => {
-            this.isQuotedMaterialModalOpen = false;
-            this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
-          }
-        );
-      } else {
-        this.isQuotedMaterialModalOpen = false;
-        this.ModalEditable = false;
-        this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
-      }
-    }
-  };
 
   async addQuotedMaterial() {
     if (this.newQuotedMaterial.MaterialRequisitionDetailsRef == 0) {
@@ -369,12 +339,41 @@ export class QuotationDetailsComponent implements OnInit {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-     Are you sure that you want to DELETE this Quoted Material?`,
+      Are you sure that you want to DELETE this Quoted Material?`,
       async () => {
         this.Entity.p.MaterialQuotationDetailsArray.splice(index, 1);
         this.filterMaterialList();
       }
     );
+  }
+
+  openCopyModal = async (type: string) => {
+    if (this.Entity.p.SiteRef <= 0) {
+      await this.uiUtils.showErrorToster('Site not Selected');
+      return;
+    }
+    this.getVendorListByCompanyRef();
+    if (type === 'CopyMaterial') this.isCopyMaterialModalOpen = true;
+  }
+
+  closeCopyModal = async (type: string) => {
+    this.isCopyMaterialModalOpen = false;
+  };
+
+  getCopyMaterialListByVendorRefAndSiteRef = async () => {
+    if (this.VendorRef <= 0) {
+      await this.uiUtils.showErrorToster('Vendor not Selected');
+      return;
+    }
+
+    let lst = await Quotation.FetchEntireListByCompanyVendorAndSiteRef(this.companyRef(), this.VendorRef, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    if (lst.length > 0) {
+      this.Entity.p.MaterialQuotationDetailsArray = lst[0].p.MaterialQuotationDetailsArray;
+      this.isCopyMaterialModalOpen = false;
+    } else {
+      await this.uiUtils.showErrorToster('No Data Found');
+    }
+    // this.AllMaterialRequisitionList = lst;
   }
 
   SaveQuotation = async () => {
