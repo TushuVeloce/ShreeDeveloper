@@ -131,6 +131,7 @@ import { StockTransferComponent } from './stock management/stock_transfer/stock-
 import { StockOrderComponent } from './stock management/stock_order/stock-order/stock-order.component';
 import { StockConsumeDetailsComponent } from './stock management/stock_consume/stock-consume-details/stock-consume-details.component';
 import { StockTransferDetailsComponent } from './stock management/stock_transfer/stock-transfer-details/stock-transfer-details.component';
+import { OrderApprovalComponent } from './stock management/stock_order/order-approval/order-approval.component';
 
 
 const routes: Routes = [
@@ -238,6 +239,7 @@ const routes: Routes = [
       { path: 'Stock_Consume_Details', component: StockConsumeDetailsComponent},
       { path: 'Stock_Transfer', component: StockTransferComponent},
       { path: 'Stock_Transfer_Details', component: StockTransferDetailsComponent},
+      { path: 'Order_Approval', component: OrderApprovalComponent},
 
       // Customer Management
       { path: 'Customer_Enquiry', component: CustomerEnquiryComponent},

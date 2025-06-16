@@ -1,0 +1,179 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackOrder()">
+          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">Order Approval</span>
+      </div>
+    </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
+    <!-- If file not selected -->
+    <ng-template #NoFile>
+      No file selected
+    </ng-template>
+
+    <!-- Fallback: If file is missing entirely -->
+    <ng-template #defaultImage>
+      <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
+    </ng-template>
+
+    <!-- Fallback: If file is not an image (e.g., PDF/DOC) -->
+    <ng-template #defaultDocImage>
+      <img src="/assets/icons/doc-placeholder.png" alt="Document File" class="file-preview" />
+    </ng-template>
+
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-6">
+          <label>Date</label>
+          <input type="date" name="QuotationDate" class="form-control date-input" id="QuotationDate"
+            [(ngModel)]="QuotationDate" placeholder="Select Date" readonly [min]="CurrentDate" />
+        </div>
+        <div class="col-md-6">
+          <label><b>Site Name</b></label>
+          <input type="text" name="SiteRef" class="form-control date-input" id="SiteRef" [(ngModel)]="Entity.p.SiteName"
+            placeholder="Enter Site" readonly />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-4">
+          <label><b>Vendor Name</b></label>
+          <input type="text" name="VendorName" class="form-control date-input" id="VendorName"
+            [(ngModel)]="Entity.p.VendorName" placeholder="Enter Vendor" readonly />
+        </div>
+        <div class="col-md-4">
+          <label>Vendor Trade Name</label>
+          <input type="text" name="VendorTradeName" class="form-control date-input" id="VendorTradeName"
+            [(ngModel)]="Entity.p.VendorTradeName" placeholder="Trade Name" readonly>
+        </div>
+        <div class="col-md-4">
+          <label>Address</label>
+          <input type="text" name="AddressLine1" class="form-control date-input" id="AddressLine1"
+            [(ngModel)]="Entity.p.AddressLine1" placeholder="Address" readonly>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-2 d-flex justify-content-center align-items-center">
+          <label>Invoice</label>
+        </div>
+        <div class="col-md-5 d-flex align-items-center justify-content-between">
+          <ng-container *ngIf="selectedFileName; else NoFile">
+            <span style="cursor: pointer;" (click)="fileNavigation(Entity.p.InvoicePath)">
+              {{ selectedFileName}}
+            </span>
+          </ng-container>
+
+          <!-- Customer Aadhar Image Display -->
+          <ng-container *ngIf="Entity.p.InvoicePath; else AddDocImage">
+            <img [src]="isImageFile(Entity.p.InvoicePath) ? imagePostView : '/assets/icons/doc-placeholder.png'"
+              alt="Invoice" title="Invoice" (click)="fileNavigation(Entity.p.InvoicePath)"
+              [class]="isImageFile(Entity.p.InvoicePath) ?  'img-preview' : 'file-preview'" />
+          </ng-container>
+
+          <ng-template #AddDocImage>
+            <ng-container *ngIf="imagePreView; else defaultImage">
+              <img [src]="isImageFile(selectedFileName) ? imagePreView : '/assets/icons/doc-placeholder.png'"
+                alt="Invoice" title="Invoice" (click)="fileNavigation(this.Entity.p.InvoicePath)"
+                [class]="isImageFile(selectedFileName) ? 'img-preview' : 'file-preview'" />
+            </ng-container>
+          </ng-template>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 2rem;">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 d-flex align-items-end">
+          <h5 style="color: black; align-self: self-end;">
+            <b>Order Material List</b>
+          </h5>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
+          style="display: flex; justify-content: end" routerLinkActive="active">
+        </div>
+      </div>
+
+      <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem"
+        *ngIf="Entity.p.MaterialStockOrderDetailsArray">
+        <div class="table-container" style="margin-top: 2rem">
+          <div class="row">
+            <div class="col-12">
+              <label class="TableHeading">Quoted Material Details</label>
+            </div>
+          </div>
+          <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
+            nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.MaterialStockOrderDetailsArray">
+            <thead>
+              <tr>
+                <th *ngFor="let header of QuotedMaterialheaders" class="tblsubheader">
+                  {{ header }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="
+                  let material of Entity.p.MaterialStockOrderDetailsArray;
+                  let i = index
+                ">
+                <td Class="tbldata">{{ i + 1 }}</td>
+                <td Class="tbldata">{{ material.MaterialName }}</td>
+                <td Class="tbldata">{{ material.UnitName }}</td>
+                <td Class="tbldata">{{ material.EstimatedQty }}</td>
+                <td Class="tbldata">{{ material.OrderedQty }}</td>
+                <td Class="tbldata">{{ material.RequiredRemainingQuantity }}</td>
+                <td Class="tbldata">{{ material.Rate }}</td>
+                <td Class="tbldata">{{ material.DiscountedRate }}</td>
+                <td Class="tbldata">{{ material.Gst }}</td>
+                <td Class="tbldata">{{ material.DeliveryCharges }}</td>
+                <td Class="tbldata">
+                  {{ material.ExpectedDeliveryDate ? formatDate(material.ExpectedDeliveryDate) : '--'}}
+                </td>
+                <td Class="tbldata">{{ material.NetAmount }}</td>
+                <td Class="tbldata">{{ material.TotalAmount }}</td>
+              </tr>
+              <tr>
+                <td class="tbldata" colspan="2"><b>Grand Total</b></td>
+                <td class="tbldata" colspan="10"></td>
+                <td class="tbldata"><b>{{ Entity.p.GrandTotal }}</b></td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </div>
+      <div *ngIf="Entity.p.MaterialStockOrderDetailsArray" class="card-body_light">
+        <div style="height: 20vh; background-color: white" class="d-flex align-items-center justify-content-center">
+          <span class="title_light"> Data Not Found</span>
+        </div>
+      </div>
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
+
+        <!-- APPROVED -->
+        <nz-button nz-button class="status" (click)="SaveOrder(MaterialStockOrderStatus.Completed)" ngClass="approved">
+          Approved
+        </nz-button>
+
+        <!-- REJECTED -->
+        <nz-button nz-button class="status" (click)="SaveOrder(MaterialStockOrderStatus.Incomplete)" ngClass="rejected">
+          Rejected
+        </nz-button>
+
+        <!-- Cancel -->
+        <div>
+          <nz-button nz-button class="btn1" (click)="BackOrder()">
+            Cancel
+          </nz-button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

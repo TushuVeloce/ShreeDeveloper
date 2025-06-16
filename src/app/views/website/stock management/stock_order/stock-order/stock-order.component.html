@@ -71,20 +71,20 @@
                 {{ Order.p.GrandTotal }}
               </td>
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
-                <!-- PENDING -->
-                <span class="status" style="cursor: pointer;" (click)="NavigateOrderstatus(Order)" *ngIf="Order.p.MaterialStockOrderStatus == MaterialOrderStatus.Pending"
-                  ngClass="pending">
-                  Pending
+                <!-- Completed -->
+                <span class="status"
+                  *ngIf="Order.p.MaterialStockOrderStatus == MaterialOrderStatus.Completed" ngClass="approved">
+                  Completed
                 </span>
 
                 <!-- APPROVED -->
-                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialOrderStatus.Approved"
-                  ngClass="approved">
+                <span class="status" (click)="NavigateOrderstatus(Order)" style="cursor: pointer;"
+                  *ngIf="Order.p.MaterialStockOrderStatus == MaterialOrderStatus.Approved" ngClass="pending">
                   Approved
                 </span>
 
                 <!-- REJECTED -->
-                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialOrderStatus.Rejected"
+                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialOrderStatus.Incomplete"
                   ngClass="rejected">
                   Rejected
                 </span>
