@@ -8,6 +8,7 @@ import { Site } from 'src/app/classes/domain/entities/website/masters/site/site'
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { InwardMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/inwardmaterial/inwardmaterial';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
+import { MaterialStockOrder } from 'src/app/classes/domain/entities/website/stock_management/stock_order/materialstockorder/materialstockorder';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
@@ -113,6 +114,15 @@ export class StockInwardDetailsComponent  implements OnInit {
      this.filterMaterialList();
   }
 
+  getMaterialOrderedQtyByMaterialRef = async (materialref:number) => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await MaterialStockOrder.FetchMaterialQuantity(materialref,this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+  }
+
    filterMaterialList() {
     const usedRefs = this.Entity.p.MaterialInwardDetailsArray.map(item => item.MaterialRef);
     this.MaterialList = this.MaterialList.filter(
@@ -133,6 +143,7 @@ export class StockInwardDetailsComponent  implements OnInit {
     this.newInward.UnitRef = lst.p.UnitRef;
     this.newInward.UnitName = lst.p.UnitName;
     this.newInward.MaterialName = lst.p.MaterialName
+    this.getMaterialOrderedQtyByMaterialRef(lst.p.Ref)
   }
 
   getVendorDataByVendorRef = async (vendorref: number) => {
