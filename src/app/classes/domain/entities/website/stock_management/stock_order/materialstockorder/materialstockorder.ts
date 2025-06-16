@@ -158,7 +158,7 @@ export class MaterialStockOrder implements IPersistable<MaterialStockOrder> {
 
   public static async FetchInstance(ref: number,companyRef:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MaterialStockOrderFetchRequest();
-    req.MaterialRefs.push(ref);
+    req.MaterialStockOrderDetailsRefs.push(ref);
     req.CompanyRefs.push(companyRef);
 
     let tdResponse = await MaterialStockOrder.FetchTransportData(req, errorHandler) as TransportData;
@@ -189,10 +189,10 @@ export class MaterialStockOrder implements IPersistable<MaterialStockOrder> {
     let tdResponse = await MaterialStockOrder.FetchTransportData(req, errorHandler) as TransportData;
     return MaterialStockOrder.ListFromTransportData(tdResponse);
   }
-   public static async FetchMaterialQuantity(materialref: number, CompanyRef: number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+   public static async FetchMaterialQuantity(ref: number, CompanyRef: number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MaterialStockOrderFetchRequest();
      req.CompanyRefs.push(CompanyRef)
-     req.MaterialRefs.push(materialref)
+     req.MaterialStockOrderDetailsRefs.push(ref)
     let tdResponse = await MaterialStockOrder.FetchTransportData(req, errorHandler) as TransportData;
     return MaterialStockOrder.ListFromTransportData(tdResponse);
   }

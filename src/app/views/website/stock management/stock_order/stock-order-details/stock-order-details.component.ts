@@ -1,6 +1,7 @@
 import { Component, effect, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
+import { MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { RequiredMaterial } from 'src/app/classes/domain/entities/website/stock_management/material_requisition/requiredmaterial/requiredmaterial';
@@ -33,15 +34,19 @@ export class StockOrderDetailsComponent implements OnInit {
   SiteList: Site[] = [];
   VendorList: Vendor[] = [];
   MaterialRequisitionList: RequiredMaterial[] = [];
+  AllMaterialRequisitionList: RequiredMaterial[] = [];
   OrderDate: string = '';
   CurrentDate: string = '';
+  ModalEditable: boolean = false;
   ExpectedDeliveryDate: string = '';
   OrderMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Required Remaining Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount', 'Action'];
   isOrderMaterialModalOpen: boolean = false;
   newOrderMaterial: OrderMaterialDetailProps = OrderMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  strCDT: string = ''
+  strCDT: string = '';
+  MaterialOrderStatus = MaterialRequisitionStatuses;
+
 
   errors: string = "";
   InvoiceFile: File = null as any
@@ -137,7 +142,15 @@ export class StockOrderDetailsComponent implements OnInit {
       return;
     }
     let lst = await RequiredMaterial.FetchEntireListByCompanyVendorAndSiteRef(this.companyRef(), this.Entity.p.VendorRef, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MaterialRequisitionList = lst;
+    this.AllMaterialRequisitionList = lst;
+    this.filterMaterialList();
+  }
+
+  filterMaterialList() {
+    const usedRefs = this.Entity.p.MaterialStockOrderDetailsArray.map(item => item.MaterialRequisitionDetailsRef);
+    this.MaterialRequisitionList = this.AllMaterialRequisitionList.filter(
+      material => !usedRefs.includes(material.p.Ref)
+    );
   }
 
   // Extracted from services date conversion //
@@ -242,6 +255,7 @@ export class StockOrderDetailsComponent implements OnInit {
       this.uiUtils.showErrorToster('Vendor not Selected');
       return;
     }
+    this.ModalEditable = false;
     this.getMaterialRequisitionListByVendorRefAndSiteRef();
     if (type === 'OrderMaterial') this.isOrderMaterialModalOpen = true;
   }
@@ -266,6 +280,7 @@ export class StockOrderDetailsComponent implements OnInit {
         );
       } else {
         this.isOrderMaterialModalOpen = false;
+        this.ModalEditable = false;
         this.newOrderMaterial = OrderMaterialDetailProps.Blank();
       }
     }
@@ -297,6 +312,7 @@ export class StockOrderDetailsComponent implements OnInit {
 
       this.newOrderMaterial.MaterialStockOrderRef = this.Entity.p.Ref;
       this.Entity.p.MaterialStockOrderDetailsArray.push({ ...OrderMaterialInstance.p });
+      this.filterMaterialList();
       await this.uiUtils.showSuccessToster('Material added successfully');
       this.resetMaterialControls()
     }
@@ -308,6 +324,7 @@ export class StockOrderDetailsComponent implements OnInit {
     this.isOrderMaterialModalOpen = true
     this.newOrderMaterial = { ...this.Entity.p.MaterialStockOrderDetailsArray[index] }
     this.editingIndex = index;
+    this.ModalEditable = true;
     this.ExpectedDeliveryDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialStockOrderDetailsArray[index].ExpectedDeliveryDate);
     this.getMaterialRequisitionListByVendorRefAndSiteRef();
   }
@@ -319,6 +336,7 @@ export class StockOrderDetailsComponent implements OnInit {
        Are you sure that you want to DELETE this Order Material?`,
       async () => {
         this.Entity.p.MaterialStockOrderDetailsArray.splice(index, 1);
+        this.filterMaterialList();
       }
     );
   }
@@ -365,10 +383,16 @@ export class StockOrderDetailsComponent implements OnInit {
   CalculateNetAmountAndTotalAmount = async () => {
     if (this.newOrderMaterial.OrderedQty > this.newOrderMaterial.EstimatedQty) {
       this.newOrderMaterial.ExtraOrderedQty = this.newOrderMaterial.OrderedQty - this.newOrderMaterial.EstimatedQty;
-      this.uiUtils.showWarningToster('Ordered Qty is greater then Required Qty');
+      // this.uiUtils.showWarningToster('Ordered Qty is greater then Required Qty');
+    } else {
+      this.newOrderMaterial.ExtraOrderedQty = 0;
     }
 
-    this.newOrderMaterial.RequiredRemainingQuantity = this.newOrderMaterial.EstimatedQty - this.newOrderMaterial.OrderedQty;
+    if (this.newOrderMaterial.OrderedQty < this.newOrderMaterial.EstimatedQty) {
+      this.newOrderMaterial.RequiredRemainingQuantity = this.newOrderMaterial.EstimatedQty - this.newOrderMaterial.OrderedQty;
+    } else {
+      this.newOrderMaterial.RequiredRemainingQuantity = 0;
+    }
     if (this.newOrderMaterial.DiscountedRate == 0) {
       this.newOrderMaterial.NetAmount = (this.newOrderMaterial.Rate * this.newOrderMaterial.OrderedQty);
     } else {

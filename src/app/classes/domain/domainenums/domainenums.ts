@@ -186,10 +186,11 @@ export enum Unit {
 export enum MaterialRequisitionStatuses {
   None = 0,
   Approved = 100,
-  Rejected  = 200,
-  Pending  = 300,
-  Completed   = 400,
-  Incomplete  = 500,
+  Rejected = 200,
+  Pending = 300,
+  Completed = 400,
+  Incomplete = 500,
+  Ordered = 600,
 }
 
 export class DomainEnums {
@@ -1510,7 +1511,7 @@ export class DomainEnums {
     return result;
   }
 
-   public static MaterialRequisitionStatusesName(itemType: MaterialRequisitionStatuses) {
+  public static MaterialRequisitionStatusesName(itemType: MaterialRequisitionStatuses) {
     switch (itemType) {
       case MaterialRequisitionStatuses.Approved:
         return 'Approved';
@@ -1522,6 +1523,8 @@ export class DomainEnums {
         return 'Completed';
       case MaterialRequisitionStatuses.Incomplete:
         return 'Incomplete';
+      case MaterialRequisitionStatuses.Ordered:
+        return 'Ordered';
       default:
         return '';
     }
@@ -1551,6 +1554,10 @@ export class DomainEnums {
       {
         Ref: MaterialRequisitionStatuses.Incomplete,
         Name: DomainEnums.MaterialRequisitionStatusesName(MaterialRequisitionStatuses.Incomplete),
+      },
+      {
+        Ref: MaterialRequisitionStatuses.Ordered,
+        Name: DomainEnums.MaterialRequisitionStatusesName(MaterialRequisitionStatuses.Ordered),
       },
     ];
     if (withAllOption) {

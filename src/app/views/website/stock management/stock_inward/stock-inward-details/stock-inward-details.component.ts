@@ -30,6 +30,7 @@ export class StockInwardDetailsComponent  implements OnInit {
   InitialEntity: StockInward = null as any;
   SiteList: Site[] = [];
   MaterialList: MaterialFromOrder[] = [];
+  AllMaterialList: MaterialFromOrder[] = [];
   localEstimatedStartingDate: string = '';
   localEstimatedEndDate: string = '';
   ModalEditable: boolean = false;
@@ -109,23 +110,22 @@ export class StockInwardDetailsComponent  implements OnInit {
       return;
     }
     let lst = await MaterialFromOrder.FetchOrderedMaterials(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
-    this.MaterialList = lst;
+    this.AllMaterialList = lst;
      this.filterMaterialList();
   }
 
-  getMaterialOrderedQtyByMaterialRef = async (materialref:number) => {
+  getMaterialOrderedQtyByMaterialRef = async (ref:number) => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await MaterialStockOrder.FetchMaterialQuantity(materialref,this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await MaterialStockOrder.FetchMaterialQuantity(ref,this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
   }
 
    filterMaterialList() {
     const usedRefs = this.Entity.p.MaterialInwardDetailsArray.map(item => item.MaterialRef);
-    this.MaterialList = this.MaterialList.filter(
+    this.MaterialList = this.AllMaterialList.filter(
       material => !usedRefs.includes(material.p.Ref)
     );
   }

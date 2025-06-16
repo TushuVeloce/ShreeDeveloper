@@ -139,7 +139,7 @@
                   let i = index
                 ">
                 <td Class="tbldata">{{ i + 1 }}</td>
-                <td Class="tbldata">{{ material.MaterialName }}</td>
+                <td Class="tbldata">{{ material.MaterialRequisitionDetailsName }}</td>
                 <td Class="tbldata">{{ material.UnitName }}</td>
                 <td Class="tbldata">{{ material.EstimatedQty }}</td>
                 <td Class="tbldata">{{ material.OrderedQty }}</td>
@@ -206,13 +206,16 @@
         <div class="row" style="margin-top: 1rem">
           <div class="col-6 mb-1">
             <label for="MaterialRequisitionDetailsRef"><b>Material</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
-              nzPlaceHolder="Select" [nzSize]="'large'" name="MaterialRequisitionDetailsRef" required
-              id="MaterialRequisitionDetailsRef" [(ngModel)]="newOrderMaterial.MaterialRequisitionDetailsRef"
+            <nz-select *ngIf="!ModalEditable" class="nzSelect-light" nzShowSearch nzAllowClear
+              [nzNotFoundContent]="noDataTpl" nzPlaceHolder="Select" [nzSize]="'large'"
+              name="MaterialRequisitionDetailsRef" required id="MaterialRequisitionDetailsRef"
+              [(ngModel)]="newOrderMaterial.MaterialRequisitionDetailsRef"
               (ngModelChange)="onMaterialSelection(newOrderMaterial.MaterialRequisitionDetailsRef)">
               <nz-option *ngFor="let material of MaterialRequisitionList" [nzLabel]="material.p.MaterialName"
                 [nzValue]="material.p.Ref"></nz-option>
             </nz-select>
+            <input *ngIf="ModalEditable" type="text" name="MaterialRequisitionDetailsName" class="form-control"
+              [(ngModel)]="newOrderMaterial.MaterialRequisitionDetailsName" readonly />
           </div>
           <div class="col-6 mb-1">
             <label>Unit</label>

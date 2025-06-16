@@ -72,30 +72,53 @@
               </td>
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
                 <!-- Completed -->
-                <span class="status"
-                  *ngIf="Order.p.MaterialStockOrderStatus == MaterialOrderStatus.Completed" ngClass="approved">
+                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Completed"
+                  ngClass="approved">
                   Completed
                 </span>
 
                 <!-- APPROVED -->
                 <span class="status" (click)="NavigateOrderstatus(Order)" style="cursor: pointer;"
-                  *ngIf="Order.p.MaterialStockOrderStatus == MaterialOrderStatus.Approved" ngClass="pending">
+                  *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Approved" ngClass="pending">
                   Approved
                 </span>
 
                 <!-- REJECTED -->
-                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialOrderStatus.Incomplete"
+                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Incomplete"
                   ngClass="rejected">
                   Rejected
                 </span>
               </td>
 
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
+              <!-- <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
                 <span style="margin-left: 9px;" (click)="onEditClicked(Order)">
                   <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
                 </span>
                 <span style="margin-left: 9px;" (click)="onDeleteClicked(Order)">
                   <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
+                </span>
+              </td> -->
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
+                <span style="margin-left: 9px;"
+                  *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Approved"
+                  (click)="onEditClicked(Order)">
+                  <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
+                </span>
+                <span style="margin-left: 9px;"
+                  *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Approved"
+                  (click)="onDeleteClicked(Order)">
+                  <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
+                </span>
+
+                <span style="margin-left: 9px;"
+                  *ngIf="Order.p.MaterialStockOrderStatus != MaterialStockOrderStatus.Approved">
+                  <img src="/assets/icons/GrayEditIcon.png" alt="Edit" title="Disable Edit" width="20px"
+                    height="20px" />
+                </span>
+                <span style="margin-left: 9px;"
+                  *ngIf="Order.p.MaterialStockOrderStatus != MaterialStockOrderStatus.Approved">
+                  <img src="/assets/icons/GreyDustbin.png" alt="Delete" title="Disable Delete" width="20px"
+                    height="20px" />
                 </span>
               </td>
             </tr>

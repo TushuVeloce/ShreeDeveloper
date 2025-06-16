@@ -26,7 +26,7 @@ export class StockOrderComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  MaterialOrderStatus = MaterialRequisitionStatuses
+  MaterialStockOrderStatus = MaterialRequisitionStatuses;
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 

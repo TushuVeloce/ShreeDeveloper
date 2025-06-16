@@ -39,6 +39,7 @@ export class QuotationDetailsComponent implements OnInit {
   ExpectedDeliveryDate: string = '';
   QuotedMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Required Remaining Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount', 'Action'];
   isQuotedMaterialModalOpen: boolean = false;
+  isCopyMaterialModalOpen: boolean = false;
   newQuotedMaterial: QuotedMaterialDetailProps = QuotedMaterialDetailProps.Blank();
   editingIndex: null | undefined | number;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
@@ -282,6 +283,46 @@ export class QuotationDetailsComponent implements OnInit {
     }
   };
 
+  openCopyModal(type: string) {
+    if (this.Entity.p.SiteRef <= 0) {
+      this.uiUtils.showErrorToster('Site not Selected');
+      return;
+    }
+    if (this.Entity.p.VendorRef <= 0) {
+      this.uiUtils.showErrorToster('Vendor not Selected');
+      return;
+    }
+    this.ModalEditable = false;
+    this.getMaterialRequisitionListByVendorRefAndSiteRef();
+    if (type === 'QuotedMaterial') this.isQuotedMaterialModalOpen = true;
+  }
+
+  closeCopyModal = async (type: string) => {
+    if (type === 'QuotedMaterial') {
+      const keysToCheck = ['MaterialRequisitionDetailsRef', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
+
+      const hasData = keysToCheck.some(
+        key => (this.newQuotedMaterial as any)[key]?.toString().trim()
+      );
+
+      if (hasData) {
+        await this.uiUtils.showConfirmationMessage(
+          'Close',
+          `This process is <strong>IRREVERSIBLE!</strong><br/>
+           Are you sure you want to close this modal?`,
+          async () => {
+            this.isQuotedMaterialModalOpen = false;
+            this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
+          }
+        );
+      } else {
+        this.isQuotedMaterialModalOpen = false;
+        this.ModalEditable = false;
+        this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
+      }
+    }
+  };
+
   async addQuotedMaterial() {
     if (this.newQuotedMaterial.MaterialRequisitionDetailsRef == 0) {
       return this.uiUtils.showWarningToster('Material Name cannot be blank.');
@@ -308,7 +349,6 @@ export class QuotationDetailsComponent implements OnInit {
 
       this.newQuotedMaterial.MaterialQuotationRef = this.Entity.p.Ref;
       this.Entity.p.MaterialQuotationDetailsArray.push({ ...QuotedMaterialInstance.p });
-      console.log('this.Entity.p.MaterialQuotationDetailsArray :', this.Entity.p.MaterialQuotationDetailsArray);
       this.filterMaterialList();
       await this.uiUtils.showSuccessToster('Material added successfully');
       this.resetMaterialControls()
