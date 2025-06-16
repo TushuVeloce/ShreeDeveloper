@@ -51,28 +51,28 @@
          <div class="col-md-4" style="margin-top: 1rem">
           <label><b>Vendor Trade Name</b></label>
           <input type="text" [(ngModel)]="Entity.p.VendorTradeName" name="VendorTradeName" class="form-control" id="VendorTradeName"
-            placeholder="Vendor Trade Name" />
+            placeholder="Vendor Trade Name" readonly/>
         </div>
          <div class="col-md-4" style="margin-top: 1rem">
           <label><b>Vendor Mob No</b></label>
           <input type="text" [(ngModel)]="Entity.p.VendorMobNo" name="VendorMobNo" class="form-control" id="VendorMobNo"
-            placeholder="Vendor Mob No" />
+            placeholder="Vendor Mob No" readonly/>
         </div>
          <div class="col-md-4" style="margin-top: 1rem">
           <label><b>Chalan No</b></label>
           <input type="number" [(ngModel)]="Entity.p.ChalanNo" name="ChalanNo" class="form-control" id="ChalanNo"
-            placeholder="Chalan No" />
+            placeholder="Chalan No" readonly/>
         </div>
          <div class="col-md-4" style="margin-top: 1rem">
           <label><b>Vehicle No</b></label>
           <input type="text" [(ngModel)]="Entity.p.VehicleNo" name="VehicleNo" class="form-control" id="VehicleNo"
             placeholder="Vehicle No" />
         </div>
-          <div class="col-md-4" style="margin-top: 1rem">
+          <!-- <div class="col-md-4" style="margin-top: 1rem">
           <label><b>Remaining Required Quantity</b></label>
           <input type="number" [(ngModel)]="Entity.p.RemainingQty" name="RemainingQty" class="form-control" id="RemainingQty"
             placeholder="Remaining Required Quantity" />
-        </div>
+        </div> -->
       </div>
        <div class="row" style="margin-top: 2rem; padding: 1rem">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
@@ -113,6 +113,7 @@
                 <td Class="tbldata">{{ material.UnitName}}</td>
                 <td Class="tbldata">{{ material.OrderedQty}}</td>
                 <td Class="tbldata">{{ material.RemainingQty}}</td>
+                <td Class="tbldata">{{ material.RemainingQty}}</td>
                 <td class="tbldata">
                   <span style="margin-left: 9px" (click)="editMaterial(i)">
                     <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
@@ -152,23 +153,27 @@
 <div *ngIf="ismaterialModalOpen" class="custom-modal-overlay">
   <div class="custom-modal">
     <div class="custom-modal-header">
-      <h5>Add material</h5>
+       <h5>{{ ModalEditable ? 'Edit Material' : 'Add Material'}}</h5>
       <button type="button" class="btn-close" (click)="closeModal('material')"></button>
     </div>
     <div class="custom-modal-body">
       <form autocomplete="off">
         <div class="row">
-          <div class="col-md-6" style="margin-top: 1rem">
+         <div class="col-md-6" style="margin-top: 1rem">
             <label>Material Name</label>
-             <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear nzPlaceHolder="Select" id="MaterialRef"
-                name="MaterialRef" [nzSize]="'large'" [(ngModel)]="newInward.MaterialRef" required (ngModelChange)="getUnitByMaterialRef(newInward.MaterialRef)" >
-                <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
-                  [nzLabel]="material.p.Name"></nz-option>
-              </nz-select>
+            <nz-select *ngIf="!ModalEditable" class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl"
+              nzAllowClear nzPlaceHolder="Select" id="MaterialRef" name="MaterialRef" [nzSize]="'large'"
+              [(ngModel)]="newInward.MaterialRef" required
+              (ngModelChange)="getUnitByMaterialRef(newInward.MaterialRef)">
+              <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
+                [nzLabel]="material.p.MaterialName"></nz-option>
+            </nz-select>
+            <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control" readonly
+              [(ngModel)]="newInward.MaterialName" />
           </div>
           <div class="col-md-6" style="margin-top: 1rem">
             <label>Unit</label>
-            <input type="text" name="UnitRef" class="form-control" [(ngModel)]="newInward.UnitName"/>
+            <input type="text" name="UnitRef" class="form-control" [(ngModel)]="newInward.UnitName" readonly/>
           </div>
            <div class="col-md-6" style="margin-top: 1rem">
             <label>Ordered Quantity</label>
@@ -193,7 +198,7 @@
           margin-top: 2rem;
         ">
         <div>
-          <nz-button nz-button class="btn1" (click)="addMaterial()">Save</nz-button>
+          <nz-button nz-button class="btn1" (click)="addMaterial()">{{ ModalEditable ? 'Upadte' : 'Save'}}</nz-button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="closeModal('material')">

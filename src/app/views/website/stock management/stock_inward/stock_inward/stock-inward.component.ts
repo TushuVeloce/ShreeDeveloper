@@ -30,7 +30,7 @@ export class StockInwardComponent  implements OnInit {
   total = 0;
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.','Chalan No','Site Name','Ordered Date','Inward Date','Vendor Name', 'Material Name', 'Unit', 'Ordered Qty.','Inward Qty.','Remaining Qty.', 'Action'];
+  headers: string[] = ['Sr.No.','Chalan No','Site Name','Ordered Date','Inward Date','Vendor Name','Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService, private dtu: DTU,
   ) {
@@ -67,6 +67,7 @@ export class StockInwardComponent  implements OnInit {
     }
     let lst = await StockInward.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
+    console.log('MasterList :', this.MasterList);
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }

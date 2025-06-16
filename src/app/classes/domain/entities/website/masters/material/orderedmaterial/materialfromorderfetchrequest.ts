@@ -6,14 +6,10 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class MaterialFromOrderFetchRequest
 {
-    // public static readonly FetchRequestType: string = "GAAProjectSpaceGroupFetchRequest";
     public static readonly FetchRequestType: string = "GetMaterialFromMaterialStockOrderedFetchRequest";
 
-    // MaterialFromOrderManagementRefs: number[] = [];
     CompanyRefs: number[] = [];
-    // MaterialFromOrderStatus: number[] = [];
-    // SiteRefs: number[] = [];
-      MaterialRefs: number[] = [];
+    MaterialRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

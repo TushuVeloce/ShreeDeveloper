@@ -98,35 +98,27 @@
   </ng-container>
 </tbody> -->
 
-      <tbody>
+      <!-- <tbody>
         <ng-container *ngFor="let inward of paginatedList; let i = index">
           <ng-container
             *ngFor="let detail of inward.p.MaterialInwardDetailsArray; let materialRowIndex = index">
             <tr>
-              <!-- Sr.No. (optional: can be based on loop index instead) -->
               <td class="tbldata">{{ (currentPage - 1) * pageSize + materialRowIndex + 1 }}</td>
-              <!-- Requisition level data -->
                 <td class="tbldata">{{ inward.p.ChalanNo }}</td>
                 <td class="tbldata">{{ inward.p.SiteName }}</td>
                   <td class="tbldata">{{ formatDate(inward.p.OrderedDate)}}</td>
                   <td class="tbldata">{{ formatDate(inward.p.InwardDate)}}</td>
                 <td class="tbldata">{{ inward.p.VendorName }}</td>
-            
-              <!-- Material level data -->
               <td class="tbldata">{{ detail.MaterialName }}</td>
               <td class="tbldata">{{ detail.UnitName }}</td>
               <td class="tbldata">{{ detail.OrderedQty }}</td>
                <td class="tbldata">{{ detail.InwardQty }}</td>
                 <td class="tbldata">{{ detail.RemainingQty }}</td>
-              <!-- Optional: Requisition status -->
               <td class="tbldata">
-                <!-- PENDING -->
                 <span class="status" style="cursor: pointer;" ngClass="pending">
                   Pending
                 </span>
-
               </td>
-              <!-- Actions -->
               <td class="tbldata">
                 <span style="margin-left: 9px;" (click)="onEditClicked(inward)">
                   <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
@@ -141,6 +133,22 @@
             </tr>
           </ng-container>
         </ng-container>
+      </tbody> -->
+    
+
+      <tbody>
+        <tr *ngFor="let inward of paginatedList; index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{inward.p.ChalanNo}}</td>
+          <td Class="tbldata">{{inward.p.SiteName}}</td>
+          <td Class="tbldata">{{formatDate(inward.p.OrderedDate)}}</td>
+          <td Class="tbldata">{{formatDate(inward.p.InwardDate)}}</td>
+           <td Class="tbldata">{{inward.p.VendorName}}</td>
+          <td class="tbldata">
+            <Edit-Icon (editClick)="onEditClicked(inward)" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(inward)" />
+          </td>
+        </tr>
       </tbody>
     </nz-table>
   </div>

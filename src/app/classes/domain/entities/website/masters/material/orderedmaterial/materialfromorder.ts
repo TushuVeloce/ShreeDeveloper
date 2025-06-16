@@ -10,19 +10,18 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { MaterialFetchRequest } from "./materialfetchrequest";
-import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
+import { MaterialFromOrderFetchRequest } from "./materialfromorderfetchrequest";
 
 
-export class MaterialProps {
-  public readonly Db_Table_Name = "MaterialMaster";
+export class MaterialFromOrderProps {
+  public readonly Db_Table_Name = "MaterialRequisitionDetails";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Code: string = '';
-  public Name: string = '';
+  public MaterialName: string = '';
   public UnitRef: number = 0;
   public readonly UnitName: string = '';
   public CompanyRef: number = 0;
@@ -36,14 +35,14 @@ export class MaterialProps {
   }
 
   public static Blank() {
-    return new MaterialProps(true);
+    return new MaterialFromOrderProps(true);
   }
 }
 
-export class Material implements IPersistable<Material> {
-  public static readonly Db_Table_Name: string = 'MaterialMaster';
+export class MaterialFromOrder implements IPersistable<MaterialFromOrder> {
+  public static readonly Db_Table_Name: string = 'MaterialRequisitionDetails';
 
-  private constructor(public readonly p: MaterialProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: MaterialFromOrderProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -56,22 +55,22 @@ export class Material implements IPersistable<Material> {
     }
   }
 
-  public GetEditableVersion(): Material {
-    let newState: MaterialProps = Utils.GetInstance().DeepCopy(this.p);
-    return Material.CreateInstance(newState, true);
+  public GetEditableVersion(): MaterialFromOrder {
+    let newState: MaterialFromOrderProps = Utils.GetInstance().DeepCopy(this.p);
+    return MaterialFromOrder.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new Material(MaterialProps.Blank(), true);
+    return new MaterialFromOrder(MaterialFromOrderProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new Material(data as MaterialProps, allowEdit);
+    return new MaterialFromOrder(data as MaterialFromOrderProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') {
+    if (this.p.MaterialName == '') {
       vra.add('Name', 'Name cannot be blank.');
     }
     // else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
@@ -83,28 +82,28 @@ export class Material implements IPersistable<Material> {
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Material.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, MaterialFromOrder.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: Material = Material.CreateNewInstance();
+  private static m_currentInstance: MaterialFromOrder = MaterialFromOrder.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return Material.m_currentInstance;
+    return MaterialFromOrder.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: Material) {
-    Material.m_currentInstance = value;
+  public static SetCurrentInstance(value: MaterialFromOrder) {
+    MaterialFromOrder.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): Material {
+  public static SingleInstanceFromTransportData(td: TransportData): MaterialFromOrder {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, Material.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, Material.Db_Table_Name)!.Entries) {
-        return Material.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, MaterialFromOrder.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, MaterialFromOrder.Db_Table_Name)!.Entries) {
+        return MaterialFromOrder.CreateInstance(data, false);
       }
     }
 
@@ -113,13 +112,13 @@ export class Material implements IPersistable<Material> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): Material[] {
-    let result: Material[] = [];
+   sortPropertyName: string = ""): MaterialFromOrder[] {
+    let result: MaterialFromOrder[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, Material.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, Material.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, MaterialFromOrder.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, MaterialFromOrder.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -129,18 +128,18 @@ export class Material implements IPersistable<Material> {
       }
 
       for (let data of entries) {
-        result.push(Material.CreateInstance(data, false));
+        result.push(MaterialFromOrder.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): Material[] {
-    return Material.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): MaterialFromOrder[] {
+    return MaterialFromOrder.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: MaterialFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: MaterialFromOrderFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -155,30 +154,37 @@ export class Material implements IPersistable<Material> {
   }
 
   public static async FetchInstance(ref: number,companyRef:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MaterialFetchRequest();
+    let req = new MaterialFromOrderFetchRequest();
     req.MaterialRefs.push(ref);
     req.CompanyRefs.push(companyRef);
 
-    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-    return Material.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await MaterialFromOrder.FetchTransportData(req, errorHandler) as TransportData;
+    return MaterialFromOrder.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: MaterialFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-    return Material.ListFromTransportData(tdResponse);
+  public static async FetchList(req: MaterialFromOrderFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await MaterialFromOrder.FetchTransportData(req, errorHandler) as TransportData;
+    return MaterialFromOrder.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MaterialFetchRequest();
-    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-    return Material.ListFromTransportData(tdResponse);
+    let req = new MaterialFromOrderFetchRequest();
+    let tdResponse = await MaterialFromOrder.FetchTransportData(req, errorHandler) as TransportData;
+    return MaterialFromOrder.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MaterialFetchRequest();
+    let req = new MaterialFromOrderFetchRequest();
     req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await Material.FetchTransportData(req, errorHandler) as TransportData;
-    return Material.ListFromTransportData(tdResponse);
+    let tdResponse = await MaterialFromOrder.FetchTransportData(req, errorHandler) as TransportData;
+    return MaterialFromOrder.ListFromTransportData(tdResponse);
+  }
+
+   public static async FetchOrderedMaterials(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new MaterialFromOrderFetchRequest();
+     req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await MaterialFromOrder.FetchTransportData(req, errorHandler) as TransportData;
+    return MaterialFromOrder.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {

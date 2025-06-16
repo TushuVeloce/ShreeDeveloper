@@ -3,7 +3,9 @@ import { NgForm, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
+import { MaterialFromOrder } from 'src/app/classes/domain/entities/website/masters/material/orderedmaterial/materialfromorder';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { InwardMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/inwardmaterial/inwardmaterial';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -26,11 +28,11 @@ export class StockInwardDetailsComponent  implements OnInit {
   IsDropdownDisabled: boolean = false;
   InitialEntity: StockInward = null as any;
   SiteList: Site[] = [];
-  MaterialList: Material[] = [];
+  MaterialList: MaterialFromOrder[] = [];
   localEstimatedStartingDate: string = '';
   localEstimatedEndDate: string = '';
-  plotheaders: string[] = ['Sr.No.', 'Plot No', 'Area sq.m', 'Area sq.ft', 'Goverment Rate', 'Company Rate', 'Action'];
-  materialheaders: string[] = ['Sr.No.', 'Material Name ', 'Unit', 'Estimated Qty', 'Action'];
+  ModalEditable: boolean = false;
+  materialheaders: string[] = ['Sr.No.', 'Material Name ', 'Unit', 'Ordered Qty.','Inward Qty.','Remaining Qty.', 'Action'];
   ismaterialModalOpen: boolean = false;
   newInward: InwardMaterialDetailProps = InwardMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
@@ -72,6 +74,7 @@ export class StockInwardDetailsComponent  implements OnInit {
        if (this.Entity.p.InwardDate != '') {
         this.Entity.p.OrderedDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate)
       }
+      this.getVendorDataByVendorRef(this.Entity.p.VendorRef)
       // this.getUnitByMaterialRef(this.Entity.p.MaterialInwardDetailsArray[0].MaterialRef)
     } else {
       this.Entity = StockInward.CreateNewInstance();
@@ -104,29 +107,51 @@ export class StockInwardDetailsComponent  implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Material.FetchOrderedMaterials(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await MaterialFromOrder.FetchOrderedMaterials(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
     this.MaterialList = lst;
+     this.filterMaterialList();
+  }
+
+   filterMaterialList() {
+    const usedRefs = this.Entity.p.MaterialInwardDetailsArray.map(item => item.MaterialRef);
+    this.MaterialList = this.MaterialList.filter(
+      material => !usedRefs.includes(material.p.Ref)
+    );
   }
 
   getUnitByMaterialRef = async (materialref: number) => {
     console.log('materialref :', materialref);
-    // this.newInward.UnitRef = 0;
-    // this.newInward.UnitName = '';
-    // this.newInward.MaterialName = ''
+    this.newInward.UnitRef = 0;
+    this.newInward.UnitName = '';
+    this.newInward.MaterialName = ''
     if (materialref <= 0 || materialref <= 0) {
       await this.uiUtils.showErrorToster('Material not Selected');
       return;
     }
-    let lst = await Material.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await MaterialFromOrder.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.newInward.UnitRef = lst.p.UnitRef;
+    this.newInward.UnitName = lst.p.UnitName;
+    this.newInward.MaterialName = lst.p.MaterialName
+  }
+
+  getVendorDataByVendorRef = async (vendorref: number) => {
+    console.log('vendorref :', vendorref);
+    this.Entity.p.VendorTradeName = '';
+    this.Entity.p.VendorMobNo = '';
+    if (vendorref <= 0 || vendorref <= 0) {
+      await this.uiUtils.showErrorToster('Material not Selected');
+      return;
+    }
+    let lst = await Vendor.FetchInstance(vendorref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
-    // this.newInward.UnitRef = lst.p.UnitRef;
-    // this.newInward.UnitName = lst.p.UnitName;
-    // this.newInward.MaterialName = lst.p.Name
+    this.Entity.p.VendorTradeName = lst.p.TradeName;
+    this.Entity.p.VendorMobNo = lst.p.MobileNo;
   }
 
   openModal(type: string) {
     if (type === 'material') this.ismaterialModalOpen = true;
+    this.ModalEditable = false;
   }
 
   closeModal = async (type: string) => {
@@ -153,6 +178,7 @@ export class StockInwardDetailsComponent  implements OnInit {
          Are you sure you want to close this modal?`,
           async () => {
             this.ismaterialModalOpen = false;
+            this.ModalEditable = false;
             this.newInward = InwardMaterialDetailProps.Blank();
           }
         );
@@ -165,8 +191,8 @@ export class StockInwardDetailsComponent  implements OnInit {
 
 
   async addMaterial() {
-    if (!this.newInward.MaterialRef || !this.newInward.UnitRef || this.newInward.InwardQty <= 0) {
-      await this.uiUtils.showErrorMessage('Error', 'Material Name, Unit, Estimated Qty are Required!');
+    if (this.newInward.InwardQty < 0) {
+      await this.uiUtils.showErrorMessage('Error', 'Inward Quantity can not be less than 0');
       return;
     }
 
@@ -186,11 +212,13 @@ export class StockInwardDetailsComponent  implements OnInit {
     }
     this.newInward = InwardMaterialDetailProps.Blank();
     this.editingIndex = null;
+    this.filterMaterialList();
   }
 
   editMaterial(index: number) {
     this.ismaterialModalOpen = true
     this.newInward = { ...this.Entity.p.MaterialInwardDetailsArray[index] }
+    this.ModalEditable = true;
     this.editingIndex = index;
   }
 
@@ -202,6 +230,7 @@ export class StockInwardDetailsComponent  implements OnInit {
      Are you sure that you want to DELETE this material?`,
       async () => {
         this.Entity.p.MaterialInwardDetailsArray.splice(index, 1);
+        this.filterMaterialList();
       }
     );
   }
