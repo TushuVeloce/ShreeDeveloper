@@ -1,33 +1,31 @@
-<app-header-with-back-handler title="Add Material Requisition"></app-header-with-back-handler>
+<app-header-with-back-handler title={{DetailsFormTitle}}></app-header-with-back-handler>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-    <form autocomplete="off" #requisitionForm="ngForm">
-        <!-- Date & Site -->
-        <ion-grid>
-            <ion-row>
-                <ion-col size="12" size-md="6">
-                    <ion-item>
-                        <ion-label position="floating">Date</ion-label>
-                        <ion-datetime presentation="date" [(ngModel)]="Entity.p.Date" name="Date" #DateCtrl="ngModel"
-                            required (ionBlur)="DateCtrl.control.markAsTouched()"></ion-datetime>
-                    </ion-item>
-                    <ion-text color="danger" *ngIf="DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty)">
-                        <small *ngIf="DateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</small>
-                    </ion-text>
-                </ion-col>
+<ion-content class="form-container">
+    <ion-list lines="none" class="ion-padding">
+        <!--  Date -->
+        <ion-item class="input-item">
+            <ion-label>Select Date</ion-label>
+            <ion-datetime-button datetime="FromDate" trigger="entry-date-modal"></ion-datetime-button>
+        </ion-item>
+        <ion-modal keepContentsMounted="true" trigger="entry-date-modal">
+            <ng-template>
+                <ion-datetime id="FromDate" presentation="date" [(ngModel)]="Date" show-default-buttons="true"
+                    (ionChange)="onDateChange($event.detail.value)"></ion-datetime>
+            </ng-template>
+        </ion-modal>
 
-                <ion-col size="12" size-md="6">
-                    <ion-item>
-                        <ion-label position="floating">Site Name</ion-label>
-                        <ion-select interface="popover" placeholder="Select Site" [(ngModel)]="Entity.p.SiteRef"
-                            name="SiteRef" required>
-                            <ion-select-option *ngFor="let site of SiteList" [value]="site.p.Ref">{{ site.p.Name
-                                }}</ion-select-option>
-                        </ion-select>
-                    </ion-item>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
+        <!-- Select site -->
+        <ion-item class="input-item" button (click)="selectSiteBottomsheet()">
+            <ion-label>Site</ion-label>
+
+            <!-- Text showing the selected status -->
+            <ion-text slot="end" class="status-text">
+                {{ SiteName|| 'Select' }}
+            </ion-text>
+
+            <!-- Dropdown icon (chevron) on the right -->
+            <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+        </ion-item>
 
         <!-- Material List Header -->
         <ion-grid class="ion-margin-top">
@@ -52,7 +50,7 @@
                     <ion-col size="4"><strong>Material</strong></ion-col>
                     <ion-col size="3"><strong>Unit</strong></ion-col>
                     <ion-col size="2"><strong>Qty</strong></ion-col>
-                    <ion-col size="2"><strong>Actions</strong></ion-col>
+                    <ion-col size="3"><strong>Actions</strong></ion-col>
                 </ion-row>
 
                 <ion-row *ngFor="let material of Entity.p.MaterialRequisitionDetailsArray; let i = index"
@@ -79,55 +77,91 @@
             </div>
         </ng-template>
 
-        <!-- Action Buttons -->
-        <ion-grid class="ion-margin-top">
-            <ion-row class="ion-justify-content-center ion-gap-10">
-                <ion-button expand="block" color="primary" shape="round"
-                    (click)="SaveMaterialRequisition()">Save</ion-button>
-                <ion-button expand="block" color="medium" shape="round"
-                    (click)="BackMaterialRequisition()">Cancel</ion-button>
+        <ion-modal [isOpen]="ismaterialModalOpen" (didDismiss)="closeModal(100)" class="modal-card">
+            <ng-template>
+                <div class="modal-container">
+                    <ion-header>
+                        <ion-toolbar color="primary">
+                            <ion-title>Material Details</ion-title>
+                            <ion-buttons slot="end">
+                                <ion-button fill="clear" (click)="closeModal(100)">
+                                    <ion-icon name="close-outline"></ion-icon>
+                                </ion-button>
+                            </ion-buttons>
+                        </ion-toolbar>
+                    </ion-header>
+
+                    <ion-content class="ion-padding">
+                        <ion-list lines="none">
+                            <!-- Material Dropdown -->
+                            <ion-item class="input-item" button (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable">
+                                <ion-label>Material Name</ion-label>
+
+                                <!-- Text showing the selected status -->
+                                <ion-text slot="end" class="status-text">
+                                    {{ MaterialName|| 'Select' }}
+                                </ion-text>
+
+                                <!-- Dropdown icon (chevron) on the right -->
+                                <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+                            </ion-item>
+
+                            <!-- Material input-->
+                            <ion-item class="input-item" *ngIf="ModalEditable">
+                                <ion-input label="Material Name" labelPlacement="floating" placeholder="Enter Material Name"
+                                    [(ngModel)]="newRequisition.MaterialName" readonly></ion-input>
+                            </ion-item>
+
+                            <!-- Unit -->
+                            <ion-item class="input-item">
+                                <ion-input label="Unit" labelPlacement="floating" placeholder="Enter Unit"
+                                    [(ngModel)]="newRequisition.UnitName" readonly></ion-input>
+                            </ion-item>
+
+                            <!-- Quantity -->
+                            <ion-item class="input-item">
+                                <ion-input label="Required Qty" labelPlacement="floating" type="number"
+                                    placeholder="Enter Quantity" [(ngModel)]="newRequisition.EstimatedQty"
+                                    clearInput="true" clearOnEdit="true"></ion-input>
+                            </ion-item>
+                        </ion-list>
+                    </ion-content>
+
+                    <ion-footer>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col size="6">
+                                    <ion-button expand="block" color="primary" shape="round" (click)="closeModal(100)">
+                                        Close
+                                    </ion-button>
+                                </ion-col>
+                                <ion-col size="6">
+                                    <ion-button expand="block" color="primary" shape="round" (click)="addMaterial()">
+                                        {{ModalEditable ? "Update" : "Save"}}
+                                    </ion-button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-footer>
+                </div>
+            </ng-template>
+        </ion-modal>
+
+        <!-- Main Buttons -->
+        <ion-grid>
+            <ion-row>
+                <ion-col size="6">
+                    <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
+                        Cancel
+                    </ion-button>
+                </ion-col>
+                <ion-col size="6">
+                    <ion-button expand="block" (click)="SaveMaterialRequisition()"
+                        class="submit-button primary-button">
+                        Save
+                    </ion-button>
+                </ion-col>
             </ion-row>
         </ion-grid>
-    </form>
-    <ion-modal [isOpen]="ismaterialModalOpen" (didDismiss)="ismaterialModalOpen = false" class="custom-modal">
-        <ng-template>
-            <ion-header class="modal-toolbar">
-                <ion-toolbar color="primary">
-                    <ion-title>{{ editIndex !== null ? 'Edit Material' : 'Add Material' }}</ion-title>
-                    <ion-buttons slot="end">
-                        <ion-button (click)="closeMaterialModal()">
-                            <ion-icon name="close-outline"></ion-icon>
-                        </ion-button>
-                    </ion-buttons>
-                </ion-toolbar>
-            </ion-header>
-    
-            <ion-content class="modal-body ion-padding">
-                <form #materialForm="ngForm">
-                    <ion-item>
-                        <ion-label position="floating">Material Name</ion-label>
-                        <ion-input [(ngModel)]="CurrentMaterial.MaterialName" name="MaterialName" required></ion-input>
-                    </ion-item>
-    
-                    <ion-item>
-                        <ion-label position="floating">Unit</ion-label>
-                        <ion-input [(ngModel)]="CurrentMaterial.UnitName" name="UnitName" required></ion-input>
-                    </ion-item>
-    
-                    <ion-item>
-                        <ion-label position="floating">Estimated Quantity</ion-label>
-                        <ion-input type="number" [(ngModel)]="CurrentMaterial.EstimatedQty" name="EstimatedQty"
-                            required></ion-input>
-                    </ion-item>
-                </form>
-            </ion-content>
-    
-            <ion-footer class="modal-footer ion-padding">
-                <ion-button expand="block" color="primary" (click)="SaveMaterialRequisition()" [disabled]="!materialForm.form.valid">
-                    {{ editIndex !== null ? 'Update' : 'Add' }} Material
-                </ion-button>
-            </ion-footer>
-        </ng-template>
-    </ion-modal>
-      
+    </ion-list>
 </ion-content>

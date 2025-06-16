@@ -12,6 +12,7 @@ export class InputFieldComponent {
   @Input() controlName!: string;
   @Input() type: string = 'text';
   @Input() icon?: string;
+  @Input() iconSlot?: string='start';
   @Input() formGroup!: FormGroup;
   @Input() placeholder: string = '';
   @Input() maxlength: number | null = null;

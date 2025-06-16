@@ -1,11 +1,128 @@
 <app-header-with-back-handler title="vendor Quotation"
   backRoute="mobileapp/tabs/dashboard/stock-management"></app-header-with-back-handler>
-
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">vendorQuotationMobile</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+  
+  <ion-content [fullscreen]="true" class="ion-padding">
+    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+  
+    <ng-container *ngFor="let requisition of DisplayMasterList">
+      <ion-item-group>
+        <ion-item-divider color="light" class="requisition-card">
+          <ion-label slot="start">
+            <div class="divider-row">
+              <span><strong>{{ requisition.p.SiteName || 'Unknown Site' }}</strong></span>
+            </div>
+          </ion-label>
+          <ion-label slot="end">
+            <div class="divider-row">
+              <span class="date-label">{{ formatDate(requisition.p.Date) || 'Unknown Date' }}</span>
+            </div>
+          </ion-label>
+        </ion-item-divider>
+  
+        <ion-card class="requisition-card" *ngFor="let item of requisition.p.MaterialRequisitionDetailsArray">
+          <ion-card-content>
+            <div class="requisition-details">
+              <!-- Info Column -->
+              <div class="left-info">
+                <div class="info-row">
+                  <span class="label">Material:</span>
+                  <span class="value">{{ item.MaterialName }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="label">Unit:</span>
+                  <span class="value">{{ item.UnitName }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="label">Required Qty:</span>
+                  <span class="value">{{ item.EstimatedQty }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="label">Status:</span>
+                  <span class="value">{{ requisition.p.Status || 'N/A' }}</span>
+                </div>
+              </div>
+  
+              <!-- Actions -->
+              <div class="action-buttons">
+                <ion-button size="small" fill="clear" color="primary" (click)="openModal(requisition, item)">
+                  <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+                <ion-button size="small" fill="clear" color="warning" (click)="onEditClicked(requisition)">
+                  <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+                <ion-button size="small" fill="clear" color="danger" (click)="onDeleteClicked(requisition)">
+                  <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-item-group>
+    </ng-container>
+  
+    <!-- Modal -->
+    <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="modal-card">
+      <ng-template>
+        <div class="modal-container">
+          <ion-header>
+            <ion-toolbar color="primary">
+              <ion-title>Material Details</ion-title>
+              <ion-buttons slot="end">
+                <ion-button fill="clear" (click)="closeModal()">
+                  <ion-icon name="close-outline"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+  
+          <ion-content class="ion-padding">
+            <div class="info-row-of-model">
+              <strong class="label">Date:</strong>
+              <span class="value">{{ formatDate(SelectedMaterialRequisition.p.Date) || '-' }}</span>
+            </div>
+            <div class="info-row-of-model">
+              <strong class="label">Site:</strong>
+              <span class="value">{{ SelectedMaterialRequisition.p.SiteName || '-' }}</span>
+            </div>
+            <div class="info-row-of-model">
+              <strong class="label">Material:</strong>
+              <span class="value">{{ SelectedMaterialItem.MaterialName || '-'}}</span>
+            </div>
+            <div class="info-row-of-model">
+              <strong class="label">Unit:</strong>
+              <span class="value">{{ SelectedMaterialItem.UnitName || '-'}}</span>
+            </div>
+            <div class="info-row-of-model">
+              <strong class="label">Required Qty:</strong>
+              <span class="value">{{ SelectedMaterialItem.EstimatedQty || '-'}}</span>
+            </div>
+            <div class="info-row-of-model">
+              <strong class="label">Status:</strong>
+              <span class="value">{{ SelectedMaterialRequisition.p.Status || '-' }}</span>
+            </div>
+          </ion-content>
+  
+          <ion-footer class="ion-padding">
+            <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
+              Close
+            </ion-button>
+          </ion-footer>
+        </div>
+      </ng-template>
+    </ion-modal>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button>
+        <ion-icon name="ellipsis-vertical"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-list side="top">
+        <ion-fab-button color="primary" (click)="AddMaterialRequisition()">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button color="tertiary" (click)="AddMaterialRequisition()">
+          <ion-icon name="filter-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
+    </ion-fab>
+    </ion-content>

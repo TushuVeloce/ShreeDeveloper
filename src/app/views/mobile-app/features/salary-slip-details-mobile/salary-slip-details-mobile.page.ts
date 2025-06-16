@@ -128,7 +128,7 @@ export class SalarySlipDetailsMobilePage implements OnInit {
 
       // let selectData: any[] = [];
 
-      this.openSelectModal(options, this.SelectedMonth, true, 'Select Leave Type', 3, (selected) => {
+      this.openSelectModal(options, this.SelectedMonth, true, 'Select Months', 3, (selected) => {
         this.SelectedMonth = selected;
         this.Entity.p.SelectedMonths = selected.map(item => item.p.Ref);
         this.Entity.p.SelectedMonthsName = selected.map(item => item.p.Name);

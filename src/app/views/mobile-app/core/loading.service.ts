@@ -42,6 +42,7 @@ import { LoadingController, Platform } from '@ionic/angular';
 })
 export class LoadingService {
   private loading: HTMLIonLoadingElement | null = null;
+  private isLoading = false;
   private backButtonSubscription: any;
 
   constructor(
@@ -63,34 +64,60 @@ export class LoadingService {
       | 'lines-sharp-small'
       | null = 'crescent'
   ) {
-    // Prevent multiple spinners
-    if (this.loading) return;
+    try {
+      if (this.isLoading || this.loading) return;
 
-    this.loading = await this.loadingCtrl.create({
-      message,
-      spinner,
-      cssClass: 'custom-loading',
-      backdropDismiss: false
-    });
+      this.isLoading = true;
 
-    await this.loading.present();
+      this.loading = await this.loadingCtrl.create({
+        message,
+        spinner,
+        cssClass: 'custom-loading',
+        backdropDismiss: false
+      });
 
-    // Subscribe to hardware back button
-    this.backButtonSubscription = this.platform.backButton.subscribeWithPriority(9999, async () => {
-      await this.hide(); // Hide loader if back button is pressed
-    });
+      await this.loading.present();
+
+      // Prevent double loaders
+      const result = await this.loading.onDidDismiss();
+      if (!this.isLoading) return;
+
+      this.loading = null;
+      this.isLoading = false;
+
+      // Subscribe to back button
+      this.backButtonSubscription = this.platform.backButton.subscribeWithPriority(9999, async () => {
+        await this.hide();
+      });
+    } catch (error) {
+      console.error('Error showing loader:', error);
+    }
   }
 
   async hide() {
-    if (this.loading) {
-      await this.loading.dismiss();
-      this.loading = null;
+    try {
+      if (this.loading) {
+        await this.loading.dismiss();
+        this.loading = null;
+      }
 
-      // Unsubscribe from back button event when loader is hidden
+      this.isLoading = false;
+
+      // Unsubscribe back button
       if (this.backButtonSubscription) {
         this.backButtonSubscription.unsubscribe();
         this.backButtonSubscription = null;
       }
+    } catch (error) {
+      // In case loader is already dismissed
+      console.warn('Loader dismiss error (likely already dismissed):', error);
+      this.loading = null;
+      this.isLoading = false;
     }
   }
+
+  isLoaderActive(): boolean {
+    return this.isLoading;
+  }
 }
+

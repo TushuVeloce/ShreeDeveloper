@@ -1,5 +1,5 @@
 <ion-item class="input-item" lines="none" [button]="buttonType" (click)="onFieldClick()">
-  <ion-icon *ngIf="icon" [name]="icon" slot="start" class="input-icon"></ion-icon>
+  <ion-icon *ngIf="icon" [name]="icon" [slot]="iconSlot" class="input-icon"></ion-icon>
 
   <!-- <ion-input label="{{ label }}" labelPlacement="stacked" [clearInput]="clearInput" [type]="inputType"
     [formControl]="control" [placeholder]="placeholder" [attr.maxlength]="maxlength" [attr.minlength]="minlength" [attr.pattern]="pattern"

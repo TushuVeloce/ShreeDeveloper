@@ -19,7 +19,7 @@ export class loginMobileGuard implements CanActivate {
     // const token = localStorage.getItem('authToken');
     // const token = this.appStateManage.localStorage.getItem('CurrentLoginToken');
     // const token = this.appStateManage.StorageKey.getItem('CurrentLoginToken');
-    const token = this.appStateManage.localStorage.getItem('CurrentLoginToken') ? this.appStateManage.localStorage.getItem('CurrentLoginToken') : this.appStateManage.StorageKey.getItem('CurrentLoginToken');
+    const token = this.appStateManage.localStorage.getItem('LoginToken') ? this.appStateManage.localStorage.getItem('LoginToken') : this.appStateManage.StorageKey.getItem('LoginToken');
     if (token) {
       this.router.navigate(['mobileapp/tabs/dashboard'], { replaceUrl: true });
       return false;

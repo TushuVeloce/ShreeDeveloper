@@ -64,7 +64,7 @@ export class MaterialRequisitionMobilePage implements OnInit {
 
   private async loadMaterialRequisitionIfEmployeeExists() {
     try {
-      this.loadingService.show();
+      await this.loadingService.show();
       this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
 
       if (this.companyRef > 0) {
@@ -79,7 +79,7 @@ export class MaterialRequisitionMobilePage implements OnInit {
       await this.toastService.present('Failed to load Material Requisition', 1000, 'danger');
       await this.haptic.error();
     } finally {
-      this.loadingService.hide();
+      await this.loadingService.hide();
     }
   }
 
@@ -185,7 +185,7 @@ export class MaterialRequisitionMobilePage implements OnInit {
               try {
                 await item.DeleteInstance(async () => {
                   await this.toastService.present(
-                    `MaterialRequisition on ${item.p.Date} has been deleted!`,
+                    `MaterialRequisition on ${this.formatDate(item.p.Date)} has been deleted!`,
                     1000,
                     'success'
                   );
