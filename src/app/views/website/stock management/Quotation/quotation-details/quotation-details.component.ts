@@ -316,8 +316,6 @@ export class QuotationDetailsComponent implements OnInit {
       let QuotationInstance = new Quotation(this.Entity.p, true);
       await QuotedMaterialInstance.EnsurePrimaryKeysWithValidValues();
       await QuotationInstance.EnsurePrimaryKeysWithValidValues();
-
-      this.newQuotedMaterial.MaterialQuotationRef = this.Entity.p.Ref;
       this.Entity.p.MaterialQuotationDetailsArray.push({ ...QuotedMaterialInstance.p });
       this.filterMaterialList();
       await this.uiUtils.showSuccessToster('Material added successfully');
@@ -352,7 +350,7 @@ export class QuotationDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Site not Selected');
       return;
     }
-    this.getVendorListByCompanyRef();
+    // this.getVendorListByCompanyRef();
     if (type === 'CopyMaterial') this.isCopyMaterialModalOpen = true;
   }
 
@@ -368,25 +366,26 @@ export class QuotationDetailsComponent implements OnInit {
 
     let lst = await Quotation.FetchEntireListByCompanyVendorAndSiteRef(this.companyRef(), this.VendorRef, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     if (lst.length > 0) {
-      this.Entity.p.MaterialQuotationDetailsArray = lst[0].p.MaterialQuotationDetailsArray;
+      let BlankRefData = lst[0].p.MaterialQuotationDetailsArray.map((data) => {
+        data.Ref = 0;
+        return data;
+      });
+      this.Entity.p.MaterialQuotationDetailsArray = BlankRefData;
       this.isCopyMaterialModalOpen = false;
     } else {
       await this.uiUtils.showErrorToster('No Data Found');
     }
-    // this.AllMaterialRequisitionList = lst;
   }
 
   SaveQuotation = async () => {
     let lstFTO: FileTransferObject[] = [];
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    this.newQuotedMaterial.MaterialQuotationRef = this.Entity.p.Ref
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.QuotationDate);
 
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
 
     if (this.InvoiceFile) {
       lstFTO.push(
@@ -418,6 +417,9 @@ export class QuotationDetailsComponent implements OnInit {
   CalculateNetAmountAndTotalAmount = async () => {
     if (this.newQuotedMaterial.OrderedQty > this.newQuotedMaterial.EstimatedQty) {
       this.newQuotedMaterial.OrderedQty = 0;
+      this.newQuotedMaterial.RequiredRemainingQuantity = 0;
+      this.newQuotedMaterial.NetAmount = 0;
+      this.newQuotedMaterial.TotalAmount = 0;
       return this.uiUtils.showWarningToster('Ordered Qty should be less then or equal to Required Qty');
     }
 
