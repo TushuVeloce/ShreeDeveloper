@@ -31,6 +31,7 @@ export class QuotationDetailsComponent implements OnInit {
   InitialEntity: Quotation = null as any;
   SiteList: Site[] = [];
   VendorList: Vendor[] = [];
+  CopyVendorList: Quotation[] = [];
   MaterialRequisitionList: RequiredMaterial[] = [];
   AllMaterialRequisitionList: RequiredMaterial[] = [];
   VendorRef: number = 0;
@@ -174,7 +175,7 @@ export class QuotationDetailsComponent implements OnInit {
     const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.Ref == MaterialRef);
     this.newQuotedMaterial.UnitName = SingleRecord[0].p.UnitName
     this.newQuotedMaterial.EstimatedQty = SingleRecord[0].p.EstimatedQty
-    this.newQuotedMaterial.MaterialRequisitionDetailsName = SingleRecord[0].p.MaterialName
+    this.newQuotedMaterial.MaterialName = SingleRecord[0].p.MaterialName
   }
 
   // Trigger file input when clicking the image
@@ -345,12 +346,20 @@ export class QuotationDetailsComponent implements OnInit {
     );
   }
 
+  getQuotationVendorListBySiteRefAndCompanyRef = async () => {
+    let lst = await Quotation.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
+    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+  );
+  console.log('lst :', lst);
+    this.CopyVendorList = lst;
+  };
+
   openCopyModal = async (type: string) => {
     if (this.Entity.p.SiteRef <= 0) {
       await this.uiUtils.showErrorToster('Site not Selected');
       return;
     }
-    // this.getVendorListByCompanyRef();
+    this.getQuotationVendorListBySiteRefAndCompanyRef();
     if (type === 'CopyMaterial') this.isCopyMaterialModalOpen = true;
   }
 

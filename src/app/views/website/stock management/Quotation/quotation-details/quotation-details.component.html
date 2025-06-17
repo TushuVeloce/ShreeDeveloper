@@ -145,7 +145,7 @@
                   let i = index
                 ">
                 <td Class="tbldata">{{ i + 1 }}</td>
-                <td Class="tbldata">{{ material.MaterialRequisitionDetailsName }}</td>
+                <td Class="tbldata">{{ material.MaterialName }}</td>
                 <td Class="tbldata">{{ material.UnitName }}</td>
                 <td Class="tbldata">{{ material.EstimatedQty }}</td>
                 <td Class="tbldata">{{ material.OrderedQty }}</td>
@@ -297,7 +297,7 @@
           </div>
           <div class="col-6 mb-1">
             <label>Expected Delivery Date</label>
-            <input type="date" name="ExpectedDeliveryDate" class="form-control" [(ngModel)]="ExpectedDeliveryDate"
+            <input type="date" name="ExpectedDeliveryDate" [min]="CurrentDate" class="form-control" [(ngModel)]="ExpectedDeliveryDate"
               placeholder="Enter Date" />
           </div>
           <div class="col-6 mb-1">
@@ -341,10 +341,6 @@
         <div class="row" style="margin-top: 1rem">
           <div class="col-md-6">
             <label>Site Name</label>
-            <!-- <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear
-              nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="this.Entity.p.SiteRef">
-              <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
-            </nz-select> -->
             <input type="text" name="SiteName" class="form-control date-input" id="SiteName"
               [(ngModel)]="Entity.p.SiteName" placeholder="Site Name" readonly>
           </div>
@@ -352,8 +348,8 @@
             <label>Vendor Name</label>
             <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear
               nzPlaceHolder="Select" id="VendorRef" name="VendorRef" [nzSize]="'large'" [(ngModel)]="this.VendorRef">
-              <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref"
-                [nzLabel]="Vendor.p.Name"></nz-option>
+              <nz-option *ngFor="let Vendor of CopyVendorList" [nzValue]="Vendor.p.VendorRef"
+                [nzLabel]="Vendor.p.VendorName"></nz-option>
             </nz-select>
           </div>
         </div>

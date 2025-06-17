@@ -168,7 +168,7 @@ export class StockOrderDetailsComponent implements OnInit {
     const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.Ref == MaterialRef);
     this.newOrderMaterial.UnitName = SingleRecord[0].p.UnitName
     this.newOrderMaterial.EstimatedQty = SingleRecord[0].p.EstimatedQty
-    this.newOrderMaterial.MaterialRequisitionDetailsName = SingleRecord[0].p.MaterialName
+    this.newOrderMaterial.MaterialName = SingleRecord[0].p.MaterialName
   }
 
   // Trigger file input when clicking the image
