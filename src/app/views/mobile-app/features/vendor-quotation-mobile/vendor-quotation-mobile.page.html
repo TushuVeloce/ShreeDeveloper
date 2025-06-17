@@ -8,7 +8,7 @@
   
     <ng-container *ngFor="let requisition of DisplayMasterList">
       <ion-item-group>
-        <ion-item-divider color="light" class="requisition-card">
+        <ion-item-divider color="light" class="requisition-card" (click)="toggleItemDetails(requisition.p.Ref)">
           <ion-label slot="start">
             <div class="divider-row">
               <span><strong>{{ requisition.p.SiteName || 'Unknown Site' }}</strong></span>
@@ -22,29 +22,32 @@
         </ion-item-divider>
   
         <ion-card class="requisition-card" *ngFor="let item of requisition.p.MaterialRequisitionDetailsArray">
-          <ion-card-content>
+          <ion-card-content
+            [@expandCollapse]="expandedRequisitions.has(requisition.p.Ref) ? 'expanded' : 'collapsed'">
             <div class="requisition-details">
-              <!-- Info Column -->
+              <!-- Material Info -->
               <div class="left-info">
                 <div class="info-row">
-                  <span class="label">Material:</span>
+                  <span class="label">Material</span>
                   <span class="value">{{ item.MaterialName }}</span>
                 </div>
                 <div class="info-row">
-                  <span class="label">Unit:</span>
+                  <span class="label">Unit</span>
                   <span class="value">{{ item.UnitName }}</span>
                 </div>
                 <div class="info-row">
-                  <span class="label">Required Qty:</span>
+                  <span class="label">Required Qty</span>
                   <span class="value">{{ item.EstimatedQty }}</span>
                 </div>
                 <div class="info-row">
-                  <span class="label">Status:</span>
-                  <span class="value">{{ requisition.p.Status || 'N/A' }}</span>
+                  <span class="label">Status</span>
+                  <span class="value">
+                    <span class="status-badge">{{ requisition.p.Status || 'N/A' }}</span>
+                  </span>
                 </div>
               </div>
-  
-              <!-- Actions -->
+        
+              <!-- Action Buttons -->
               <div class="action-buttons">
                 <ion-button size="small" fill="clear" color="primary" (click)="openModal(requisition, item)">
                   <ion-icon name="eye-outline" slot="icon-only"></ion-icon>

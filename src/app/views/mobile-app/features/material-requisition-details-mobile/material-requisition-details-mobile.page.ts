@@ -516,7 +516,7 @@ export class MaterialRequisitionDetailsMobilePage implements OnInit {
             }
           },
           {
-            text: 'Yes, Delete',
+            text: 'Yes, Close',
             cssClass: 'custom-confirm',
             handler: () => {
               this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/material-requisition'], { replaceUrl: true });

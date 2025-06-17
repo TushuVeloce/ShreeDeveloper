@@ -46,7 +46,7 @@ export class LoginMobilePage implements OnInit {
     let req = new UserLoginRequest();
     req.UserId = email;
     req.Password = password;
-    req.LoginDeviceId = this.sessionValues.LoginDeviceId;
+    req.LoginDeviceId = this.sessionValues.MobileLoginDeviceId;
 
     const response = await this.servercommunicator.LoginUser(req);
 

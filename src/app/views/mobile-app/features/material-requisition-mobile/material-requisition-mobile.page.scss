@@ -56,6 +56,50 @@ ion-card-content {
         color: var(--ion-color-dark);
         word-break: break-word;
     }
+
+    .status-badge {
+        // display: inline-block;
+        // padding: 4px 8px;
+        // border-radius: 8px;
+        // // background-color: #e0f7fa;
+        // // color: #00796b;
+        // font-size: 12px;
+        // font-weight: 600;
+        // text-transform: uppercase;
+        padding: 0.25em 0.75em;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            display: inline-block;
+            min-width: 70px;
+            text-align: center;
+    }
+        .status-badge.pending {
+            background-color: #fbbf24;
+            /* amber-400 */
+            color: #92400e;
+            /* dark amber */
+        }
+    
+        .status-badge.rejected {
+            background-color: #ef4444;
+            /* red-500 */
+            color: #7f1d1d;
+            /* dark red */
+        }
+    
+        .status-badge.approved {
+            background-color: #22c55e;
+            /* green-500 */
+            color: #14532d;
+            /* dark green */
+        }
+    
+        .status-badge.default {
+            background-color: #6b7280;
+            color: #fff;
+            /* gray-500 */     }
 }
 
 .action-buttons {
