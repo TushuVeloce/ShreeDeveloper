@@ -1,13 +1,16 @@
 <div class="card-body">
   <div class="card" style="padding: 1rem">
-    <div class="row">
-      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+    <div class="row align-items-center">
+      <!-- Back Button Column -->
+      <div class="col-2 col-md-1 d-flex justify-content-center">
         <button type="button" class="backbtn" (click)="BackMaterial()">
-          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+          <img src="/assets/icons/arrow-button.png" alt="Back" class="backbtnimg" />
         </button>
       </div>
-      <div class="col-md-11">
-        <span class="detail_title">{{DetailsFormTitle}}</span>
+
+      <!-- Title Column -->
+      <div class="col-10 col-md-11">
+        <span class="detail_title text-truncate d-block">{{ DetailsFormTitle }}</span>
       </div>
     </div>
     <ng-template #noDataTpl>
@@ -16,30 +19,30 @@
       </div>
     </ng-template>
     <form autocomplete="off">
-      <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
+      <div class="row mt-2">
+        <!-- <div class="col-12 col-md-4">
           <div>
             <label>Material Code</label>
             <input type="text" [(ngModel)]="Entity.p.Code" name="Code" class="form-control" id="Code" required
               placeholder="Enter Material Code" #CodeCtrl="ngModel" (blur)="CodeCtrl.control.markAsTouched()" />
-            <Validation [control]="CodeCtrl" />
           </div>
-        </div>
-        <div class="col-md-4">
+        </div> -->
+        <div class="col-12 col-md-6 mb-2">
           <div>
             <label>Material Name</label>
             <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
               placeholder="Enter Material Name" pattern="{{NameWithNosAndSpace}}" #NameCtrl="ngModel"
               (blur)="NameCtrl.control.markAsTouched()" />
-            <!-- <Validation [control]="NameCtrl" [patternMessage]="NameWithNosAndSpaceMsg" /> -->
           </div>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
-          <label>Material Unit</label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="UnitRef" name="UnitRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UnitRef">
-            <nz-option *ngFor="let unit of UnitList" [nzValue]="unit.p.Ref" [nzLabel]="unit.p.Name"></nz-option>
-          </nz-select>
+        <div class="col-12 col-md-6 mb-2">
+          <div>
+            <label>Material Unit</label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="UnitRef" name="UnitRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UnitRef">
+              <nz-option *ngFor="let unit of UnitList" [nzValue]="unit.p.Ref" [nzLabel]="unit.p.Name"></nz-option>
+            </nz-select>
+          </div>
         </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">

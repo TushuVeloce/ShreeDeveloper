@@ -1,13 +1,16 @@
 <div class="card-body">
   <div class="card" style="padding: 1rem">
-    <div class="row">
-      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+    <div class="row align-items-center">
+      <!-- Back Button Column -->
+      <div class="col-2 col-md-1 d-flex justify-content-center">
         <button type="button" class="backbtn" (click)="BackCompany()">
-          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+          <img src="/assets/icons/arrow-button.png" alt="Back" class="backbtnimg" />
         </button>
       </div>
-      <div class="col-md-11">
-        <span class="detail_title">{{ DetailsFormTitle }}</span>
+
+      <!-- Title Column -->
+      <div class="col-10 col-md-11">
+        <span class="detail_title text-truncate d-block">{{ DetailsFormTitle }}</span>
       </div>
     </div>
     <ng-template #noDataTpl>
@@ -17,7 +20,7 @@
     </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label for="Name">Company Name</label>
           <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name"
             placeholder="Enter Company Name" [pattern]="NameWithNosAndSpace" #NameCtrl="ngModel" required
@@ -27,17 +30,17 @@
             <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label for="Contacts">Contact No</label>
           <input type="text" [(ngModel)]="Entity.p.Contacts" name="Contacts" class="form-control" id="Contacts"
-            placeholder="Enter Contact No"  pattern="{{INDPhoneNo}}" #ContactsCtrl="ngModel" required
+            placeholder="Enter Contact No" pattern="{{INDPhoneNo}}" #ContactsCtrl="ngModel" required
             (blur)="ContactsCtrl.control.markAsTouched()" />
           <div *ngIf="(ContactsCtrl.invalid && (ContactsCtrl.touched || ContactsCtrl.dirty))">
             <span class="validation-text" *ngIf="ContactsCtrl.errors?.['pattern']">{{INDPhoneNoMsg}}</span>
             <span class="validation-text" *ngIf="ContactsCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>Company Email Id </label>
           <input type="email" [(ngModel)]="Entity.p.EmailId" name="EmailId" class="form-control" id="EmailId"
             placeholder="Enter Company Email Id" [pattern]="Email" #EmailIdCtrl="ngModel" required
@@ -47,9 +50,7 @@
             <span class="validation-text" *ngIf="EmailIdCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
-        <div class="col-lg-4 col-md-4 col-sm-12">
+        <div class="col-md-4 col-6">
           <label>Company Type</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="CompanyTypeRef" name="CompanyTypeRef" [nzSize]="'large'"
@@ -58,7 +59,7 @@
               [nzLabel]="company.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label for="OwnerName">Owner Name</label>
           <input type="text" [(ngModel)]="Entity.p.OwnerName" name="OwnerName" class="form-control" id="OwnerName"
             placeholder="Enter Owner Name" [pattern]="NameWithNosAndSpace" #OwnerNameCtrl="ngModel" required
@@ -68,7 +69,7 @@
             <span class="validation-text" *ngIf="OwnerNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-md-4 col-sm-12">
+        <div class="col-md-4 col-6">
           <label>Pin Code</label>
           <input type="text" [(ngModel)]="Entity.p.PinCode" name="PinCode" class="form-control" id="PinCode"
             placeholder="Enter Pin Code" pattern="{{PinCode}}" #PinCodeCtrl="ngModel" required
@@ -93,8 +94,6 @@
             <input type="text" [(ngModel)]="Entity.p.AddressLine2" name="AddressLine2" class="form-control"
               id="AddressLine2" required placeholder="Enter Address Line 2" />
           </div>
-        </div>
-        <div class="row" style="margin-top: 1rem; ">
           <div class="col-md-4 col-sm-12">
             <label for="CountryRef"><b>Country</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -143,9 +142,8 @@
           </div>
           <div class="col-md-4">
             <label>CIN</label>
-            <input type="text" [(ngModel)]="Entity.p.CINNO" name="CINNO" class="form-control" id="CINNO" 
-              placeholder="Enter CIN" pattern="{{CIN}}" #CINCtrl="ngModel"
-              (blur)="CINCtrl.control.markAsTouched()" />
+            <input type="text" [(ngModel)]="Entity.p.CINNO" name="CINNO" class="form-control" id="CINNO"
+              placeholder="Enter CIN" pattern="{{CIN}}" #CINCtrl="ngModel" (blur)="CINCtrl.control.markAsTouched()" />
             <div *ngIf="(CINCtrl.invalid && (CINCtrl.touched || CINCtrl.dirty))">
               <span class="validation-text" *ngIf="CINCtrl.errors?.['pattern']">{{CINMsg}}</span>
             </div>
@@ -163,19 +161,24 @@
           <div class="col-md-12 mb-3">
             <label><b>Date Of Incorporation</b></label>
             <input type="date" name="DateOfInCorporation" [(ngModel)]="dateOfInCorporation"
-              class="form-control date-input" id="DateOfInCorporation" required placeholder="Select Date" #DateOfInCorporationCtrl="ngModel"
-              (blur)="DateOfInCorporationCtrl.control.markAsTouched()" />
-            <div *ngIf="(DateOfInCorporationCtrl.invalid && (DateOfInCorporationCtrl.touched || DateOfInCorporationCtrl.dirty))">
-              <span class="validation-text" *ngIf="DateOfInCorporationCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              class="form-control date-input" id="DateOfInCorporation" required placeholder="Select Date"
+              #DateOfInCorporationCtrl="ngModel" (blur)="DateOfInCorporationCtrl.control.markAsTouched()" />
+            <div
+              *ngIf="(DateOfInCorporationCtrl.invalid && (DateOfInCorporationCtrl.touched || DateOfInCorporationCtrl.dirty))">
+              <span class="validation-text"
+                *ngIf="DateOfInCorporationCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
           <div class="col-md-12">
             <label><b>Last Date Of First Financial Year </b></label>
             <input type="date" name="LastDateOfFirstFinancialYear " [(ngModel)]="lastDateOfFirstFinancialYear"
-              class="form-control date-input" id="LastDateOfFirstFinancialYear " required placeholder="Select Date" #LastDateOfFirstFinancialYearCtrl="ngModel"
+              class="form-control date-input" id="LastDateOfFirstFinancialYear " required placeholder="Select Date"
+              #LastDateOfFirstFinancialYearCtrl="ngModel"
               (blur)="LastDateOfFirstFinancialYearCtrl.control.markAsTouched()" />
-            <div *ngIf="(LastDateOfFirstFinancialYearCtrl.invalid && (LastDateOfFirstFinancialYearCtrl.touched || LastDateOfFirstFinancialYearCtrl.dirty))">
-              <span class="validation-text" *ngIf="LastDateOfFirstFinancialYearCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <div
+              *ngIf="(LastDateOfFirstFinancialYearCtrl.invalid && (LastDateOfFirstFinancialYearCtrl.touched || LastDateOfFirstFinancialYearCtrl.dirty))">
+              <span class="validation-text"
+                *ngIf="LastDateOfFirstFinancialYearCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
         </div>

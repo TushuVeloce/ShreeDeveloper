@@ -149,8 +149,8 @@ export class Vendor implements IPersistable<Vendor> {
       vra.add('CIN', ValidationMessages.CINMsg);
     }
 
-    if (this.p.MaterialListSuppliedByVendor.length <= 0) vra.add('MaterialListSuppliedByVendor', 'Material list cannot be blank.');
-    if (this.p.ServiceListSuppliedByVendor.length <= 0) vra.add('ServiceListSuppliedByVendor', 'Service list cannot be blank.');
+    if (this.p.MaterialListSuppliedByVendor.length <= 0 && this.p.ServiceListSuppliedByVendor.length == 0) vra.add('MaterialListSuppliedByVendor', 'Material list cannot be blank.');
+    if (this.p.ServiceListSuppliedByVendor.length <= 0 && this.p.MaterialListSuppliedByVendor.length == 0) vra.add('ServiceListSuppliedByVendor', 'Service list cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {

@@ -77,7 +77,6 @@ export class Material implements IPersistable<Material> {
     // else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
     //   vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     // }
-    if (this.p.Code == '') vra.add('Code', 'Code cannot be blank.');
     if (this.p.UnitRef == 0) vra.add('UnitRef', 'Unit cannot be blank.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company cannot be blank.');
   }

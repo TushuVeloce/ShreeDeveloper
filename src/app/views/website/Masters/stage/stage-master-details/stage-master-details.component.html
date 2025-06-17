@@ -1,13 +1,16 @@
 <div class="card-body">
   <div class="card" style="padding: 1rem">
-    <div class="row">
-      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+    <div class="row align-items-center">
+      <!-- Back Button Column -->
+      <div class="col-2 col-md-1 d-flex justify-content-center">
         <button type="button" class="backbtn" (click)="BackStage()">
-          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+          <img src="/assets/icons/arrow-button.png" alt="Back" class="backbtnimg" />
         </button>
       </div>
-      <div class="col-md-11">
-        <span class="detail_title">{{DetailsFormTitle}}</span>
+
+      <!-- Title Column -->
+      <div class="col-10 col-md-11">
+        <span class="detail_title text-truncate d-block">{{ DetailsFormTitle }}</span>
       </div>
     </div>
     <ng-template #noDataTpl>
@@ -50,31 +53,31 @@
       </div>
       <hr style="margin-top: 2rem; margin-bottom: 2rem;">
       <div class="row">
-        <div class="col-md-4" style="margin-bottom: 1.5rem; ">
-          <input type="checkbox" id="IsStageTypeApplicable" [(ngModel)]="Entity.p.IsStageTypeApplicable"  (ngModelChange)="onStageTypeApplicableChange($event)"
-            name="IsStageTypeApplicable" class="form-check-input me-2 large-dark-checkbox"
-            style="width: 20px; height: 20px;">
+        <div class="col-md-4 col-6" style="margin-bottom: 1.5rem; ">
+          <input type="checkbox" id="IsStageTypeApplicable" [(ngModel)]="Entity.p.IsStageTypeApplicable"
+            (ngModelChange)="onStageTypeApplicableChange($event)" name="IsStageTypeApplicable"
+            class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
           <label for="IsStageTypeApplicable" class="form-check-label mb-0">Has Stage Type</label>
         </div>
-        <div class="col-md-4" style="margin-bottom: 1.5rem; ">
+        <div class="col-md-4 col-6" style="margin-bottom: 1.5rem; ">
           <input type="checkbox" id="IsSubStageApplicable" [(ngModel)]="Entity.p.IsSubStageApplicable"
             name="IsSubStageApplicable" class="form-check-input me-2 large-dark-checkbox"
             style="width: 20px; height: 20px;">
           <label for="IsSubStageApplicable" class="form-check-label mb-0">Has Sub Stage</label>
         </div>
-        <div class="col-md-4" style="margin-bottom: 1.5rem; ">
+        <div class="col-md-4 col-6" style="margin-bottom: 1.5rem; ">
           <input type="checkbox" id="IsMachinaryExpenseApplicable" [(ngModel)]="Entity.p.IsMachinaryExpenseApplicable"
             name="IsMachinaryExpenseApplicable" class="form-check-input me-2 large-dark-checkbox"
             style="width: 20px; height: 20px;">
           <label for="IsMachinaryExpenseApplicable" class="form-check-label mb-0">Machinary expense</label>
         </div>
-        <div class="col-md-4" style="margin-bottom: 1.5rem; ">
+        <div class="col-md-4 col-6" style="margin-bottom: 1.5rem; ">
           <input type="checkbox" id="IsLabourExpenseApplicable" [(ngModel)]="Entity.p.IsLabourExpenseApplicable"
             name="IsLabourExpenseApplicable" class="form-check-input me-2 large-dark-checkbox"
             style="width: 20px; height: 20px;">
           <label for="IsLabourExpenseApplicable" class="form-check-label mb-0">Labour Expense</label>
         </div>
-        <div class="col-md-4" style="margin-bottom: 1.5rem; ">
+        <div class="col-md-4 col-6" style="margin-bottom: 1.5rem; ">
           <input type="checkbox" id="IsOtherExpenseApplicable" [(ngModel)]="Entity.p.IsOtherExpenseApplicable"
             name="IsOtherExpenseApplicable" class="form-check-input me-2 large-dark-checkbox"
             style="width: 20px; height: 20px;">

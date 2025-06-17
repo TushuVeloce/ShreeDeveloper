@@ -31,7 +31,8 @@ export class UIUtils {
     okHandler: () => Promise<void> = null as any) {
     let result: SweetAlertResult = await Swal.fire({
       title: title,
-      text: msg,
+      // text: msg,
+      html: msg.replace(/\n/g, '<br>'), // <- REPLACE '\n' with <br> for line breaks
       icon: 'error',
       confirmButtonText: 'OK',
       allowOutsideClick: false,
