@@ -72,7 +72,7 @@
               </td>
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
                 <!-- Completed -->
-                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Completed"
+                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Ordered"
                   ngClass="approved">
                   Completed
                 </span>
