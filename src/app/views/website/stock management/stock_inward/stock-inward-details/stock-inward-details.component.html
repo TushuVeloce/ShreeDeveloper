@@ -29,7 +29,7 @@
           <label>Ordered Date</label>
           <input type="date" name="OrderedDate" class="form-control" id="OrderedDate" [(ngModel)]="Entity.p.OrderedDate"
             #OrderedDateCtrl="ngModel" required (blur)="OrderedDateCtrl.control.markAsTouched()"
-            placeholder="Enter Site Name" />
+            placeholder="Enter Site Name" readonly/>
           <div *ngIf="OrderedDateCtrl.invalid && (OrderedDateCtrl.touched || OrderedDateCtrl.dirty)">
             <span class="validation-text" *ngIf="OrderedDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
@@ -38,7 +38,7 @@
           <label>Inward Date</label>
           <input type="date" name="InwardDate" class="form-control" id="InwardDate" [(ngModel)]="Entity.p.InwardDate"
             #InwardDateCtrl="ngModel" required (blur)="InwardDateCtrl.control.markAsTouched()"
-            placeholder="Enter Site Name" />
+            placeholder="Enter Site Name" max="today" />
           <div *ngIf="InwardDateCtrl.invalid && (InwardDateCtrl.touched || InwardDateCtrl.dirty)">
             <span class="validation-text" *ngIf="InwardDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>

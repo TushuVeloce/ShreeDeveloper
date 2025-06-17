@@ -14,7 +14,7 @@ import { MaterialFromOrderFetchRequest } from "./materialfromorderfetchrequest";
 
 
 export class MaterialFromOrderProps {
-  public readonly Db_Table_Name = "MaterialRequisitionDetails";
+  public readonly Db_Table_Name = "MaterialStockOrderDetails";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
@@ -40,7 +40,7 @@ export class MaterialFromOrderProps {
 }
 
 export class MaterialFromOrder implements IPersistable<MaterialFromOrder> {
-  public static readonly Db_Table_Name: string = 'MaterialRequisitionDetails';
+  public static readonly Db_Table_Name: string = 'MaterialStockOrderDetails';
 
   private constructor(public readonly p: MaterialFromOrderProps, public readonly AllowEdit: boolean) {
 

@@ -40,6 +40,7 @@ export class StockInwardDetailsComponent  implements OnInit {
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   strCDT: string = ''
+  today: string = new Date().toISOString().split('T')[0];
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos
   PinCodePattern: string = ValidationPatterns.PinCode;
   INDPhoneNo: string = ValidationPatterns.INDPhoneNo;
@@ -144,6 +145,7 @@ export class StockInwardDetailsComponent  implements OnInit {
     }
     // let lst = await MaterialFromOrder.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     const UnitData = this.MaterialList.find((data)=> data.p.Ref == materialref)
+    console.log('UnitData :', UnitData);
     if(UnitData){
       this.newInward.UnitRef = UnitData.p.UnitRef;
       this.newInward.UnitName = UnitData.p.UnitName;
@@ -153,7 +155,6 @@ export class StockInwardDetailsComponent  implements OnInit {
   }
 
   getVendorDataByVendorRef = async (vendorref: number) => {
-    console.log('vendorref :', vendorref);
     this.Entity.p.VendorTradeName = '';
     this.Entity.p.VendorMobNo = '';
     if (vendorref <= 0 || vendorref <= 0) {
@@ -161,7 +162,6 @@ export class StockInwardDetailsComponent  implements OnInit {
       return;
     }
     let lst = await Vendor.FetchInstance(vendorref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.Entity.p.VendorTradeName = lst.p.TradeName;
     this.Entity.p.VendorMobNo = lst.p.MobileNo;
   }
