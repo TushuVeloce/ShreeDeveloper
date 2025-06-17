@@ -14,7 +14,7 @@ import { StockConsumeFetchRequest } from "./stockconsumefetchrequest";
 
 
 export class StockConsumeProps {
-  public readonly Db_Table_Name = "StockConsume";
+  public readonly Db_Table_Name = "MaterialConsume";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
@@ -48,7 +48,7 @@ export class StockConsumeProps {
 }
 
 export class StockConsume implements IPersistable<StockConsume> {
-  public static readonly Db_Table_Name: string = 'StockConsume';
+  public static readonly Db_Table_Name: string = 'MaterialConsume';
 
   public constructor(public readonly p: StockConsumeProps, public readonly AllowEdit: boolean) {
 
