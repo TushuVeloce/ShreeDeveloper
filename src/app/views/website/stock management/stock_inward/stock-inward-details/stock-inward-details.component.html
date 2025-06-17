@@ -38,7 +38,7 @@
           <label>Inward Date</label>
           <input type="date" name="InwardDate" class="form-control" id="InwardDate" [(ngModel)]="Entity.p.InwardDate"
             #InwardDateCtrl="ngModel" required (blur)="InwardDateCtrl.control.markAsTouched()"
-            placeholder="Enter Site Name" max="today" />
+            placeholder="Enter Site Name" [min]="Entity.p.OrderedDate"/>
           <div *ngIf="InwardDateCtrl.invalid && (InwardDateCtrl.touched || InwardDateCtrl.dirty)">
             <span class="validation-text" *ngIf="InwardDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
@@ -165,7 +165,7 @@
               nzAllowClear nzPlaceHolder="Select" id="MaterialRequisitionDetailsRef" name="MaterialRequisitionDetailsRef" [nzSize]="'large'"
               [(ngModel)]="newInward.MaterialRequisitionDetailsRef" required
               (ngModelChange)="getUnitByMaterialRef(newInward.MaterialRequisitionDetailsRef)">
-              <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
+              <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.MaterialRequisitionDetailsRef"
                 [nzLabel]="material.p.MaterialName"></nz-option>
             </nz-select>
             <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control" readonly

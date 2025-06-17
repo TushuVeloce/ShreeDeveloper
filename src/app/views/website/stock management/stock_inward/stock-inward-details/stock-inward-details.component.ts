@@ -113,7 +113,6 @@ export class StockInwardDetailsComponent  implements OnInit {
       return;
     }
     let lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef,this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.AllMaterialList = lst;
      this.filterMaterialList();
   }
@@ -139,17 +138,18 @@ export class StockInwardDetailsComponent  implements OnInit {
     this.newInward.UnitRef = 0;
     this.newInward.UnitName = '';
     this.newInward.MaterialName = ''
+    this.newInward.OrderedQty = 0
     if (materialref <= 0 || materialref <= 0) {
       await this.uiUtils.showErrorToster('Material not Selected');
       return;
     }
     // let lst = await MaterialFromOrder.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    const UnitData = this.MaterialList.find((data)=> data.p.Ref == materialref)
-    console.log('UnitData :', UnitData);
+    const UnitData = this.MaterialList.find((data)=> data.p.MaterialRequisitionDetailsRef == materialref)
     if(UnitData){
       this.newInward.UnitRef = UnitData.p.UnitRef;
       this.newInward.UnitName = UnitData.p.UnitName;
       this.newInward.MaterialName = UnitData.p.MaterialName
+      this.newInward.OrderedQty = UnitData.p.OrderedQty
       this.getMaterialOrderedQtyByMaterialRef(UnitData.p.Ref)
     }
   }
