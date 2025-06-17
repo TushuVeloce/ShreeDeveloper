@@ -220,8 +220,8 @@
               <nz-option *ngFor="let material of MaterialRequisitionList" [nzLabel]="material.p.MaterialName"
                 [nzValue]="material.p.Ref"></nz-option>
             </nz-select>
-            <input *ngIf="ModalEditable" type="text" name="MaterialRequisitionDetailsName" class="form-control"
-              [(ngModel)]="newQuotedMaterial.MaterialRequisitionDetailsName" readonly />
+            <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control"
+              [(ngModel)]="newQuotedMaterial.MaterialName" readonly />
           </div>
           <div class="col-6 mb-1">
             <label>Unit</label>
