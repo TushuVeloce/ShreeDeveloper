@@ -127,8 +127,21 @@
               <!-- Optional: Requisition status -->
               <td class="tbldata">
                 <!-- PENDING -->
-                <span class="status" style="cursor: pointer;" ngClass="pending">
+                <span class="status" style="cursor: pointer;"
+                  *ngIf="requisition.p.MaterialRequisitionStatus == MaterialRequisitionStatuses.Pending" ngClass="pending">
                   Pending
+                </span>
+
+                <!-- APPROVED -->
+                <span class="status" *ngIf="requisition.p.MaterialRequisitionStatus == MaterialRequisitionStatuses.Approved"
+                  ngClass="approved">
+                  Approved
+                </span>
+
+                <!-- REJECTED -->
+                <span class="status" *ngIf="requisition.p.MaterialRequisitionStatus == MaterialRequisitionStatuses.Rejected"
+                  ngClass="rejected">
+                  Rejected
                 </span>
 
               </td>

@@ -18,14 +18,14 @@
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="FromSiteRef"><b>From Site</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="FromSiteRef" name="FromSiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.FromSiteRef">
+            nzPlaceHolder="Select" id="FromSiteRef" name="FromSiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.FromSiteRef" (ngModelChange)="SiteValidation()">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
          <div class="col-md-4" style="margin-top: 1rem">
           <label for="ToSiteRef"><b>To Site</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="ToSiteRef" name="ToSiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.ToSiteRef">
+            nzPlaceHolder="Select" id="ToSiteRef" name="ToSiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.ToSiteRef" (ngModelChange)="SiteValidation()">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -65,7 +65,7 @@
             <span class="validation-text" *ngIf="TransferredQuantityCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem">
+        <!-- <div class="col-md-4" style="margin-top: 1rem">
           <label for="Rate"><b>Rate</b></label>
           <input type="number" [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control"
             id="Rate" rows="1" required placeholder="Enter Rate" #RateCtrl="ngModel" (ngModelChange)="calculateAmount()"
@@ -92,7 +92,7 @@
           <label for="Amount"><b>Amount</b></label>
           <input type="number" [(ngModel)]="Entity.p.Amount" name="Amount" class="form-control" id="Amount"
              readonly/>
-        </div>
+        </div> -->
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="RemainingQuantity"><b>Remaining Quantity</b></label>
           <input type="number" [(ngModel)]="Entity.p.RemainingQuantity" name="RemainingQuantity" class="form-control"
