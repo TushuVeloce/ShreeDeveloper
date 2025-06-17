@@ -18,7 +18,7 @@
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="SiteRef"><b>Site Name</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
+            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef" (ngModelChange)="getMaterialListBySiteRef(Entity.p.SiteRef); onSiteChange()">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -32,11 +32,11 @@
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
-          <label for="MaterialRef"><b>Material Name</b></label>
+          <label for="MaterialRequisitionDetailsRef"><b>Material Name</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="MaterialRef" name="MaterialRef" [nzSize]="'large'"
-            [(ngModel)]="Entity.p.MaterialRef" (ngModelChange)="getUnitByMaterialRef(Entity.p.MaterialRef)">
-            <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
+            nzPlaceHolder="Select" id="MaterialRequisitionDetailsRef" name="MaterialRequisitionDetailsRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.MaterialRequisitionDetailsRef" (ngModelChange)="getUnitByMaterialRef(Entity.p.MaterialRequisitionDetailsRef)">
+            <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.MaterialRequisitionDetailsRef"
               [nzLabel]="material.p.MaterialName"></nz-option>
           </nz-select>
         </div>
@@ -53,7 +53,7 @@
           <label for="ConsumedQuantity"><b>Consumed Quantity</b></label>
           <input type="number" [(ngModel)]="Entity.p.ConsumedQuantity" name="ConsumedQuantity"
             class="form-control" id="ConsumedQuantity" required placeholder="Enter Consumption Quantity"
-            #ConsumedQuantityCtrl="ngModel"  required (blur)="ConsumedQuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+            #ConsumedQuantityCtrl="ngModel"  required (blur)="ConsumedQuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)" (ngModelChange)="CalculateRemainingQty()"/>
           <div *ngIf="ConsumedQuantityCtrl.invalid && (ConsumedQuantityCtrl.touched || ConsumedQuantityCtrl.dirty)">
             <span class="validation-text" *ngIf="ConsumedQuantityCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>

@@ -184,9 +184,10 @@ export class InwardMaterial implements IPersistable<InwardMaterial> {
     return InwardMaterial.ListFromTransportData(tdResponse);
   }
 
-     public static async FetchInwardMaterials(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+     public static async FetchInwardMaterials(SiteRef:number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new InwardMaterialFetchRequest();
      req.CompanyRefs.push(CompanyRef)
+     req.SiteRefs.push(SiteRef)
     let tdResponse = await InwardMaterial.FetchTransportData(req, errorHandler) as TransportData;
     return InwardMaterial.ListFromTransportData(tdResponse);
   }

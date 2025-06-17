@@ -9,6 +9,7 @@ export class InwardMaterialFetchRequest {
   public static readonly FetchRequestType: string = "MaterialInwardDetailsFetchRequest";
   CompanyRefs: number[] = [];
   SiteManagementRefs: number[] = [];
+  SiteRefs: number[] = [];
   VendorRefs: number[] = [];
   InwardMaterialRefs: number[] = [];
 

@@ -49,28 +49,30 @@ export class StockConsumeDetailsComponent  implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.getSiteListByCompanyRef();
-    this.getMaterialListByCompanyRef();
     this.getStageListByCompanyRef()
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Consumption' : 'Edit Stock Consumption';
       this.Entity = StockConsume.GetCurrentInstance();
+      console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable')
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.Entity.p.ConsumptionDate != '') {
         this.Entity.p.ConsumptionDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.ConsumptionDate)
       }
+      this.getMaterialListBySiteRef(this.Entity.p.SiteRef)
     } else {
       this.Entity = StockConsume.CreateNewInstance();
       StockConsume.SetCurrentInstance(this.Entity);
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
     this.InitialEntity = Object.assign(StockConsume.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as StockConsume;
     this.focusInput();
   }
 
   focusInput = () => {
-    let txtName = document.getElementById('Amount')!;
+    let txtName = document.getElementById('SiteRef')!;
     txtName.focus();
   }
 
@@ -86,17 +88,21 @@ export class StockConsumeDetailsComponent  implements OnInit {
     // this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
   }
 
-   getMaterialListByCompanyRef = async () => {
+   getMaterialListBySiteRef = async (SiteRef:number) => {
     this.MaterialList = [];
-    this.Entity.p.MaterialRef = 0;
-    if (this.companyRef() <= 0) {
+    // this.Entity.p.MaterialRequisitionDetailsRef = 0;
+    if (this.companyRef() <= 0 && SiteRef < 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await InwardMaterial.FetchInwardMaterials(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await InwardMaterial.FetchInwardMaterials(SiteRef,this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
     this.MaterialList = lst;
     // this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
+  }
+
+  onSiteChange = () => {
+     this.Entity.p.MaterialRequisitionDetailsRef = 0;
   }
 
   getStageListByCompanyRef = async () => {
@@ -113,7 +119,8 @@ export class StockConsumeDetailsComponent  implements OnInit {
    getUnitByMaterialRef = async (materialref: number) => {
     this.Entity.p.UnitRef = 0
     this.Entity.p.UnitName = ''
-    if (materialref <= 0 || materialref <= 0) {
+    this.Entity.p.CurrentQuantity = 0
+    if (materialref <= 0) {
       return;
     }
     // let lst = await MaterialFromOrder.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
@@ -121,9 +128,16 @@ export class StockConsumeDetailsComponent  implements OnInit {
      if(UnitData){
     this.Entity.p.UnitRef = UnitData.p.UnitRef
     this.Entity.p.UnitName = UnitData.p.UnitName
+    this.Entity.p.CurrentQuantity = UnitData.p.RemainingQty
+    this.CalculateRemainingQty()
      }
   }
 
+  CalculateRemainingQty = () =>{
+    const inwardqty = Number(this.Entity.p.ConsumedQuantity)
+    const currentqty = Number(this.Entity.p.CurrentQuantity )
+    this.Entity.p.RemainingQuantity = currentqty - inwardqty
+  }
 
   SaveStockConsumption = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
@@ -144,7 +158,7 @@ export class StockConsumeDetailsComponent  implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Stock Consume saved successfully');
         this.Entity = StockConsume.CreateNewInstance();
-        this.resetAllControls();
+        // this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Stock Consume Updated successfully');
         await this.router.navigate(['/homepage/Website/Stock_Consume']);

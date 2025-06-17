@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { StockConsume } from 'src/app/classes/domain/entities/website/stock_management/stock_consume/stockconsume';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -27,7 +28,7 @@ export class StockConsumeComponent  implements OnInit {
 
   headers: string[] = ['Sr.No.', 'Site Name', 'Consumption Date', 'Material Name','Unit', 'Current Qty.' ,'Consumption Qty.','Remaining Qty.','Stage Name','Description','Remark','Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
   ) {
     effect(async () => {
       await this.getStockConsumeListByCompanyRef();
@@ -52,6 +53,11 @@ export class StockConsumeComponent  implements OnInit {
 
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
+  }
+
+    // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
   }
 
   onEditClicked = async (item: StockConsume) => {
