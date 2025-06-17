@@ -64,7 +64,6 @@ export class StockInwardDetailsComponent  implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.getSiteListByCompanyRef()
-    this.getMaterialListByCompanyRef()
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Inward' : 'Edit Stock Inward';
@@ -74,9 +73,10 @@ export class StockInwardDetailsComponent  implements OnInit {
       if (this.Entity.p.OrderedDate != '') {
         this.Entity.p.OrderedDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.OrderedDate)
       }
-       if (this.Entity.p.InwardDate != '') {
+      if (this.Entity.p.InwardDate != '') {
         this.Entity.p.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate)
       }
+      this.getMaterialListByCompanyRef(this.Entity.p.SiteRef)
       this.getVendorDataByVendorRef(this.Entity.p.VendorRef)
       // this.getUnitByMaterialRef(this.Entity.p.MaterialInwardDetailsArray[0].MaterialRef)
     } else {
@@ -105,12 +105,14 @@ export class StockInwardDetailsComponent  implements OnInit {
     this.SiteList = lst;
   }
 
-  getMaterialListByCompanyRef = async () => {
+  getMaterialListByCompanyRef = async (SiteRef:number) => {
+  console.log('SiteRef :', SiteRef);
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await MaterialFromOrder.FetchOrderedMaterials(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef,this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.AllMaterialList = lst;
      this.filterMaterialList();
   }
@@ -140,11 +142,14 @@ export class StockInwardDetailsComponent  implements OnInit {
       await this.uiUtils.showErrorToster('Material not Selected');
       return;
     }
-    let lst = await MaterialFromOrder.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.newInward.UnitRef = lst.p.UnitRef;
-    this.newInward.UnitName = lst.p.UnitName;
-    this.newInward.MaterialName = lst.p.MaterialName
-    this.getMaterialOrderedQtyByMaterialRef(lst.p.Ref)
+    // let lst = await MaterialFromOrder.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    const UnitData = this.MaterialList.find((data)=> data.p.Ref == materialref)
+    if(UnitData){
+      this.newInward.UnitRef = UnitData.p.UnitRef;
+      this.newInward.UnitName = UnitData.p.UnitName;
+      this.newInward.MaterialName = UnitData.p.MaterialName
+      this.getMaterialOrderedQtyByMaterialRef(UnitData.p.Ref)
+    }
   }
 
   getVendorDataByVendorRef = async (vendorref: number) => {

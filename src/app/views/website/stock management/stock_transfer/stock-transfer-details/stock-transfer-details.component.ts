@@ -102,11 +102,9 @@ export class StockTransferDetailsComponent  implements OnInit {
 
     SiteValidation = async() =>{
     if(this.Entity.p.FromSiteRef == this.Entity.p.ToSiteRef){
-       await this.uiUtils.showWarningToster(
-            "From Site and To Site can not be same"
-          );
-          this.Entity.p.FromSiteRef = 0,
-          this.Entity.p.ToSiteRef = 0
+       await this.uiUtils.showWarningToster("From Site and To Site can not be same");
+         this.Entity.p.FromSiteRef = 0
+         this.Entity.p.ToSiteRef = 0
     }
   }
 

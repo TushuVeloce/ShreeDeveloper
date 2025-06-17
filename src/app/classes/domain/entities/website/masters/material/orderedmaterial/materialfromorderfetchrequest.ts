@@ -10,6 +10,7 @@ export class MaterialFromOrderFetchRequest
 
     CompanyRefs: number[] = [];
     MaterialRefs: number[] = [];
+    SiteRefs:number[]=[]
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

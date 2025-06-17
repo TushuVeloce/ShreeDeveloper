@@ -116,9 +116,12 @@ export class StockConsumeDetailsComponent  implements OnInit {
     if (materialref <= 0 || materialref <= 0) {
       return;
     }
-    let lst = await MaterialFromOrder.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.Entity.p.UnitRef = lst.p.UnitRef
-    this.Entity.p.UnitName = lst.p.UnitName
+    // let lst = await MaterialFromOrder.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    const UnitData = this.MaterialList.find((data)=> data.p.Ref == materialref)
+     if(UnitData){
+    this.Entity.p.UnitRef = UnitData.p.UnitRef
+    this.Entity.p.UnitName = UnitData.p.UnitName
+     }
   }
 
 
