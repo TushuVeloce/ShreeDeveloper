@@ -11,12 +11,32 @@ import { ToastService } from '../../core/toast.service';
 import { HapticService } from '../../core/haptic.service';
 import { LoadingService } from '../../core/loading.service';
 import { AlertService } from '../../core/alert.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-material-requisition-mobile',
   templateUrl: './material-requisition-mobile.page.html',
   styleUrls: ['./material-requisition-mobile.page.scss'],
-  standalone: false
+  standalone: false,
+  animations: [
+    trigger('expandCollapse', [
+      state('collapsed', style({
+        height: '0px',
+        opacity: 0,
+        padding: '0px',
+        overflow: 'hidden',
+      })),
+      state('expanded', style({
+        height: '*',
+        opacity: 1,
+        padding: '*',
+        overflow: 'hidden',
+      })),
+      transition('collapsed <=> expanded', [
+        animate('300ms ease')
+      ]),
+    ])
+  ]
 })
 export class MaterialRequisitionMobilePage implements OnInit {
   Entity: MaterialRequisition = MaterialRequisition.CreateNewInstance();
@@ -60,6 +80,16 @@ export class MaterialRequisitionMobilePage implements OnInit {
   async handleRefresh(event: CustomEvent) {
     await this.loadMaterialRequisitionIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
+  }
+
+  expandedRequisitions: Set<number> = new Set();
+
+  toggleItemDetails(requisitionId: number) {
+    if (this.expandedRequisitions.has(requisitionId)) {
+      this.expandedRequisitions.delete(requisitionId);
+    } else {
+      this.expandedRequisitions.add(requisitionId);
+    }
   }
 
   private async loadMaterialRequisitionIfEmployeeExists() {
@@ -113,6 +143,7 @@ export class MaterialRequisitionMobilePage implements OnInit {
         await this.haptic.error();
       });
       this.MasterList = lst;
+      console.log('lst :', lst);
       this.DisplayMasterList = this.MasterList;
     } catch (error) {
       console.error('Error fetching material requisitions:', error);

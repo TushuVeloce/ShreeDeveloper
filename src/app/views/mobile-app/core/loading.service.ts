@@ -33,7 +33,6 @@
 //     }
 //   }
 // }
-
 import { Injectable } from '@angular/core';
 import { LoadingController, Platform } from '@ionic/angular';
 
@@ -52,20 +51,14 @@ export class LoadingService {
 
   async show(
     message: string = 'Loading...',
-    spinner:
-      | 'bubbles'
-      | 'circles'
-      | 'circular'
-      | 'crescent'
-      | 'dots'
-      | 'lines'
-      | 'lines-small'
-      | 'lines-sharp'
-      | 'lines-sharp-small'
-      | null = 'crescent'
+    spinner: 'bubbles' | 'circles' | 'circular' | 'crescent' | 'dots' | 'lines' | 'lines-small' | 'lines-sharp' | 'lines-sharp-small' | null = 'crescent'
   ) {
     try {
-      if (this.isLoading || this.loading) return;
+      console.log('Loading started');
+      if (this.isLoading || this.loading) {
+        console.log('Loader is already active, not showing again.');
+        return;
+      }
 
       this.isLoading = true;
 
@@ -78,14 +71,7 @@ export class LoadingService {
 
       await this.loading.present();
 
-      // Prevent double loaders
-      const result = await this.loading.onDidDismiss();
-      if (!this.isLoading) return;
-
-      this.loading = null;
-      this.isLoading = false;
-
-      // Subscribe to back button
+      // Subscribe to back button only when loader is active
       this.backButtonSubscription = this.platform.backButton.subscribeWithPriority(9999, async () => {
         await this.hide();
       });
@@ -96,6 +82,7 @@ export class LoadingService {
 
   async hide() {
     try {
+      console.log('Loading ended');
       if (this.loading) {
         await this.loading.dismiss();
         this.loading = null;
@@ -109,7 +96,6 @@ export class LoadingService {
         this.backButtonSubscription = null;
       }
     } catch (error) {
-      // In case loader is already dismissed
       console.warn('Loader dismiss error (likely already dismissed):', error);
       this.loading = null;
       this.isLoading = false;
@@ -120,4 +106,5 @@ export class LoadingService {
     return this.isLoading;
   }
 }
+
 

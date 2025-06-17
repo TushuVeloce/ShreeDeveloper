@@ -11,12 +11,32 @@ import { ToastService } from '../../core/toast.service';
 import { HapticService } from '../../core/haptic.service';
 import { AlertService } from '../../core/alert.service';
 import { LoadingService } from '../../core/loading.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-vendor-quotation-mobile',
   templateUrl: './vendor-quotation-mobile.page.html',
   styleUrls: ['./vendor-quotation-mobile.page.scss'],
-  standalone:false
+  standalone:false,
+  animations: [
+    trigger('expandCollapse', [
+      state('collapsed', style({
+        height: '0px',
+        opacity: 0,
+        padding: '0px',
+        overflow: 'hidden',
+      })),
+      state('expanded', style({
+        height: '*',
+        opacity: 1,
+        padding: '*',
+        overflow: 'hidden',
+      })),
+      transition('collapsed <=> expanded', [
+        animate('300ms ease')
+      ]),
+    ])
+  ]
 })
 export class VendorQuotationMobilePage implements OnInit {
 
@@ -33,6 +53,7 @@ export class VendorQuotationMobilePage implements OnInit {
   CustomerRef = 0;
   companyRef = 0;
   modalOpen = false;
+  showItemDetails = false;
 
 
   constructor(
@@ -62,6 +83,19 @@ export class VendorQuotationMobilePage implements OnInit {
     await this.loadMaterialRequisitionIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
+
+  expandedRequisitions: Set<number> = new Set();
+
+  toggleItemDetails(requisitionId: number) {
+    if (this.expandedRequisitions.has(requisitionId)) {
+      this.expandedRequisitions.delete(requisitionId);
+    } else {
+      this.expandedRequisitions.add(requisitionId);
+    }
+  }
+  
+  
+
 
   private async loadMaterialRequisitionIfEmployeeExists() {
     try {

@@ -159,4 +159,18 @@ export class SessionValues {
 
     return this.m_loginDeviceId;
   }
+  public get MobileLoginDeviceId(): string {
+    if (this.m_loginDeviceId.length == 0) {
+      let ldid = this.appStateManage.localStorage.getItem('LoginDeviceId');
+
+      if (isNullOrUndefined(ldid)) {
+        ldid = uuid.v7();
+        this.appStateManage.localStorage.setItem('LoginDeviceId', JSON.stringify(ldid));
+      }
+
+      this.m_loginDeviceId = ldid!;
+    }
+
+    return this.m_loginDeviceId;
+  }
 }

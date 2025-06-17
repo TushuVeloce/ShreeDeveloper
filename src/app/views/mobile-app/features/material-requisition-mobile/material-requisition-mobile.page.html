@@ -8,7 +8,7 @@
 
   <ng-container *ngFor="let requisition of DisplayMasterList">
     <ion-item-group>
-      <ion-item-divider color="light" class="requisition-card">
+      <ion-item-divider color="light" class="requisition-card" (click)="toggleItemDetails(requisition.p.Ref)">
         <ion-label slot="start">
           <div class="divider-row">
             <span><strong>{{ requisition.p.SiteName || 'Unknown Site' }}</strong></span>
@@ -22,7 +22,7 @@
       </ion-item-divider>
 
       <ion-card class="requisition-card" *ngFor="let item of requisition.p.MaterialRequisitionDetailsArray">
-        <ion-card-content>
+        <ion-card-content [@expandCollapse]="expandedRequisitions.has(requisition.p.Ref) ? 'expanded' : 'collapsed'">
           <div class="requisition-details">
             <!-- Info Column -->
             <div class="left-info">
@@ -39,8 +39,21 @@
                 <span class="value">{{ item.EstimatedQty }}</span>
               </div>
               <div class="info-row">
-                <span class="label">Status:</span>
-                <span class="value">{{ requisition.p.Status || 'N/A' }}</span>
+                <!-- <span class="label">Status:</span>
+                <span class="value">{{ requisition.p.Status || 'N/A' }}</span> -->
+                <span class="label">Status</span>
+                <span class="value">
+                  <span class="status-badge" [ngClass]="{
+                                      'pending': requisition.p.MaterialRequisitionStatus === MaterialRequisitionStatuses.Pending,
+                                      'rejected': requisition.p.MaterialRequisitionStatus === MaterialRequisitionStatuses.Rejected,
+                                      'approved': requisition.p.MaterialRequisitionStatus === MaterialRequisitionStatuses.Approved,
+                                      'default': ![
+                                        MaterialRequisitionStatuses.Pending,
+                                        MaterialRequisitionStatuses.Rejected,
+                                        MaterialRequisitionStatuses.Approved
+                                      ].includes(requisition.p.MaterialRequisitionStatus)
+                                    }">{{ requisition.p.MaterialRequisitionStatus || 'N/A' }}</span>
+                </span>
               </div>
             </div>
 
@@ -76,7 +89,7 @@
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
-  
+
         <ion-content class="ion-padding">
           <div class="info-row-of-model">
             <strong class="label">Date:</strong>
@@ -103,7 +116,7 @@
             <span class="value">{{ SelectedMaterialRequisition.p.Status || '-' }}</span>
           </div>
         </ion-content>
-  
+
         <ion-footer class="ion-padding">
           <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
             Close
