@@ -31,6 +31,7 @@ export class MaterialRequisitionComponent implements OnInit {
   pageSize = 10;
   currentPage = 1;
   total = 0;
+  MaterialRequisitionStatuses = MaterialRequisitionStatuses
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   headers: string[] = ['Sr.No.', 'Date', 'Site Name', 'Material Name', 'Unit', 'Required Qty.', 'Status', 'Action'];

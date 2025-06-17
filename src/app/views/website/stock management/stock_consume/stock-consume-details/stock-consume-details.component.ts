@@ -7,6 +7,8 @@ import { MaterialFromOrder } from 'src/app/classes/domain/entities/website/maste
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { StockConsume } from 'src/app/classes/domain/entities/website/stock_management/stock_consume/stockconsume';
+import { InwardMaterial } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/inwardmaterial/inwardmaterial';
+import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
@@ -27,7 +29,7 @@ export class StockConsumeDetailsComponent  implements OnInit {
   DetailsFormTitle: 'New Stock Consumption' | 'Edit Stock Consumption' = 'New Stock Consumption';
   InitialEntity: StockConsume = null as any;
   SiteList: Site[] = [];
-  MaterialList: MaterialFromOrder[] = [];
+  MaterialList: InwardMaterial[] = [];
   StageList: Stage[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -91,7 +93,8 @@ export class StockConsumeDetailsComponent  implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await MaterialFromOrder.FetchOrderedMaterials(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await InwardMaterial.FetchInwardMaterials(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.MaterialList = lst;
     // this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
   }

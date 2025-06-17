@@ -100,6 +100,15 @@ export class StockTransferDetailsComponent  implements OnInit {
     this.Entity.p.UnitName = lst.p.UnitName
   }
 
+    SiteValidation = async() =>{
+    if(this.Entity.p.FromSiteRef == this.Entity.p.ToSiteRef){
+       await this.uiUtils.showWarningToster(
+            "From Site and To Site can not be same"
+          );
+          this.Entity.p.FromSiteRef = 0,
+          this.Entity.p.ToSiteRef = 0
+    }
+  }
 
   SaveStockTransfer = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()

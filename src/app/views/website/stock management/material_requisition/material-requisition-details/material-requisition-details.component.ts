@@ -125,8 +125,8 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
   }
 
   openModal(type: string) {
-    if (type === 'material') this.ismaterialModalOpen = true;
     this.ModalEditable = false;
+    if (type === 'material') this.ismaterialModalOpen = true;
   }
 
   closeModal = async (type: string) => {
@@ -188,18 +188,18 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
     } else {
       this.newRequisition.MaterialRequisitionRef = this.Entity.p.Ref;
       this.Entity.p.MaterialRequisitionDetailsArray.push({ ...this.newRequisition });
+       this.filterMaterialList();
       await this.uiUtils.showSuccessToster('material added successfully');
     }
     this.newRequisition = RequiredMaterialDetailProps.Blank();
     this.editingIndex = null;
-    this.filterMaterialList();
   }
 
   editMaterial(index: number) {
     this.ismaterialModalOpen = true
     this.newRequisition = { ...this.Entity.p.MaterialRequisitionDetailsArray[index] }
-    this.ModalEditable = true;
     this.editingIndex = index;
+    this.ModalEditable = true;
   }
 
   async removeMaterial(index: number) {

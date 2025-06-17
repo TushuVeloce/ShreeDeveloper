@@ -226,11 +226,11 @@ export class StockInwardDetailsComponent  implements OnInit {
       // await StockInwardInstance.EnsurePrimaryKeysWithValidValues();
       this.newInward.MaterialInwardRef = this.Entity.p.Ref;
       this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
+       this.filterMaterialList();
       await this.uiUtils.showSuccessToster('material added successfully');
     }
     this.newInward = InwardMaterialDetailProps.Blank();
     this.editingIndex = null;
-    this.filterMaterialList();
   }
 
   editMaterial(index: number) {
