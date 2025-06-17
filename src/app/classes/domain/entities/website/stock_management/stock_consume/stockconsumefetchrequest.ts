@@ -7,7 +7,7 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 export class StockConsumeFetchRequest
 {
     // public static readonly FetchRequestType: string = "GAAProjectSpaceGroupFetchRequest";
-    public static readonly FetchRequestType: string = "StockConsumeFetchRequest";
+    public static readonly FetchRequestType: string = "MaterialConsumeFetchRequest";
 
     StockConsumeManagementRefs: number[] = [];
     CompanyRefs: number[] = [];
