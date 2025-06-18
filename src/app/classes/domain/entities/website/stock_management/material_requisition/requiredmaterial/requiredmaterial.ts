@@ -27,6 +27,7 @@ export class RequiredMaterialDetailProps {
   public UnitRef: number = 0;
   public UnitName: string = '';
   public EstimatedQty: number = 0;
+  public MaterialStatus: number = 0
   public MaterialRequisitionRef: number = 0;
 
 

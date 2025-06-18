@@ -30,7 +30,7 @@ export class MaterialRequisitionProps {
   public CompanyName: string = '';
   public Status: number = 0
   public MaterialRequisitionDetailsArray: RequiredMaterialDetailProps[] = [];
-  public MaterialRequisitionStatus: number = 0;
+  // public MaterialRequisitionStatus: number = 0;
 
 
   public readonly IsNewlyCreated: boolean = false;

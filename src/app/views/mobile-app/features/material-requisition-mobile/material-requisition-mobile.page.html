@@ -45,14 +45,14 @@
                 <span class="value">
                   <span class="status-badge" 
                   [ngClass]="{
-                    'pending': requisition.p.MaterialRequisitionStatus === MaterialRequisitionStatuses.Pending,
-                    'rejected': requisition.p.MaterialRequisitionStatus === MaterialRequisitionStatuses.Rejected,
-                    'approved': requisition.p.MaterialRequisitionStatus === MaterialRequisitionStatuses.Approved,
+                    'pending': item.MaterialStatus === MaterialRequisitionStatuses.Pending,
+                    'rejected': item.MaterialStatus === MaterialRequisitionStatuses.Rejected,
+                    'approved': item.MaterialStatus === MaterialRequisitionStatuses.Approved,
                     'default': ![
                                 MaterialRequisitionStatuses.Pending,
                                 MaterialRequisitionStatuses.Rejected,
                                 MaterialRequisitionStatuses.Approved
-                                ].includes(requisition.p.MaterialRequisitionStatus)
+                                ].includes(item.MaterialStatus)
                                     }">
                   {{ requisition.p.Status || 'N/A' }}</span>
                 </span>
