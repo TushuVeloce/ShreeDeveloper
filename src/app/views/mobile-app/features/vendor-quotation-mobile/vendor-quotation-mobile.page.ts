@@ -12,12 +12,18 @@ import { HapticService } from '../../core/haptic.service';
 import { AlertService } from '../../core/alert.service';
 import { LoadingService } from '../../core/loading.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Quotation } from 'src/app/classes/domain/entities/website/stock_management/Quotation/quotation';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { BaseUrlService } from 'src/app/services/baseurl.service';
+import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
+import { Order } from 'src/app/classes/domain/entities/website/stock_management/stock_order/order';
+import { Utils } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-vendor-quotation-mobile',
   templateUrl: './vendor-quotation-mobile.page.html',
   styleUrls: ['./vendor-quotation-mobile.page.scss'],
-  standalone:false,
+  standalone: false,
   animations: [
     trigger('expandCollapse', [
       state('collapsed', style({
@@ -40,20 +46,29 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 })
 export class VendorQuotationMobilePage implements OnInit {
 
- Entity: MaterialRequisition = MaterialRequisition.CreateNewInstance();
-  MasterList: MaterialRequisition[] = [];
-  DisplayMasterList: MaterialRequisition[] = [];
-  list: any[] = []; // Define proper type if known
+  Entity: Quotation = Quotation.CreateNewInstance();
+  MasterList: Quotation[] = [];
+  DisplayMasterList: Quotation[] = [];
+  SearchString: string = '';
   SiteList: Site[] = [];
-  SearchString = '';
-  SelectedMaterialRequisition: MaterialRequisition = MaterialRequisition.CreateNewInstance();
-  SelectedMaterialItem: any = null;
-  StatusList = DomainEnums.MaterialRequisitionStatusesList();
-  MaterialRequisitionStatuses = MaterialRequisitionStatuses
-  CustomerRef = 0;
+  SelectedQuotation: Quotation = Quotation.CreateNewInstance();
+  SelectedQuotationItem: any = null;
+  CustomerRef: number = 0;
+  pageSize = 10; // Items per page
+  currentPage = 1; // Initialize current page
+  total = 0;
+  MaterialQuotationStatus = MaterialRequisitionStatuses
+
+  EntityOfOrder: Order = Order.CreateNewInstance();
+
+
+
   companyRef = 0;
   modalOpen = false;
   showItemDetails = false;
+  tableHeaderData = ['Material', 'Unit', 'Required Qty', 'Ordered Qty', 'Required Remaining Qty', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount']
+  showInvoicePreview = false;
+  sanitizedInvoiceUrl: SafeResourceUrl | null = null;
 
 
   constructor(
@@ -65,14 +80,17 @@ export class VendorQuotationMobilePage implements OnInit {
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private sanitizer: DomSanitizer,
+    private baseUrl: BaseUrlService,
+    private utils: Utils,
   ) { }
 
   ngOnInit = async () => {
     await this.loadMaterialRequisitionIfEmployeeExists();
 
   }
-  ionViewWillEnter = async ()=>{
+  ionViewWillEnter = async () => {
     await this.loadMaterialRequisitionIfEmployeeExists();
   }
   ngOnDestroy() {
@@ -93,8 +111,26 @@ export class VendorQuotationMobilePage implements OnInit {
       this.expandedRequisitions.add(requisitionId);
     }
   }
-  
-  
+
+  prepareInvoiceUrl(path: string) {
+    this.showInvoicePreview = !this.showInvoicePreview
+    const ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
+    const LoginToken = this.appStateManage.localStorage.getItem('LoginToken');
+    // const path = this.SelectedQuotation.p.InvoicePath;
+
+
+    if (!path) return;
+
+    const TimeStamp = Date.now();
+    const fileUrl = `${ImageBaseUrl}${path}/${LoginToken}?${TimeStamp}`;
+    console.log('Invoice Preview URL:', fileUrl);
+
+    this.sanitizedInvoiceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
+  }
+
+  isPDF(filePath: string): boolean {
+    return filePath?.toLowerCase().endsWith('.pdf');
+  }
 
 
   private async loadMaterialRequisitionIfEmployeeExists() {
@@ -104,14 +140,15 @@ export class VendorQuotationMobilePage implements OnInit {
 
       if (this.companyRef > 0) {
         await this.getSiteListByCompanyRef();
-        await this.getMaterialRequisitionListByCompanyRef();
+        await this.getQuotationListByCompanyRef();
+        // this.prepareInvoiceUrl();
       } else {
         await this.toastService.present('company not selected', 1000, 'danger');
         await this.haptic.error();
       }
     } catch (error) {
-      console.error('Error loading Material Requisition:', error);
-      await this.toastService.present('Failed to load Material Requisition', 1000, 'danger');
+      console.error('Error loading Vendor Quotation:', error);
+      await this.toastService.present('Failed to load Vendor Quotation', 1000, 'danger');
       await this.haptic.error();
     } finally {
       await this.loadingService.hide();
@@ -124,86 +161,85 @@ export class VendorQuotationMobilePage implements OnInit {
       await this.haptic.error();
       return;
     }
-    this.Entity.p.SiteRef = 0;
+    this.Entity.p.SiteRef = 0
+    this.Entity.p.SiteName = ''
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
     this.SiteList = lst;
-    this.Entity.p.SiteRef = 0;
-    this.Entity.p.Status = 0;
   }
 
-  getMaterialRequisitionListByCompanyRef = async () => {
-    try {
-      this.MasterList = [];
-      this.DisplayMasterList = [];
-      if (this.companyRef <= 0) {
-        await this.toastService.present('Company not Selected', 1000, 'danger');
-        await this.haptic.error();
-        return;
-      }
-      let lst = await MaterialRequisition.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-        await this.toastService.present(errMsg, 1000, 'danger');
-        await this.haptic.error();
-      });
-      this.MasterList = lst;
-      this.DisplayMasterList = this.MasterList;
-    } catch (error) {
-      console.error('Error fetching material requisitions:', error);
-    } finally {
-      // await this.loadingService.hide();
-    }
-  }
 
-  getRequisitionListByAllFilters = async () => {
+  private getQuotationListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef <= 0) {
-      await this.toastService.present('Company not Selected', 1000, 'danger');
-      await this.haptic.error();
+      this.toastService.present('Company not Selected', 1000, 'danger');
+      this.haptic.error();
       return;
     }
-    let lst = await MaterialRequisition.FetchEntireListByAllFilters(
-      this.companyRef,
-      this.Entity.p.Status,
-      this.Entity.p.SiteRef,
-      async errMsg => {
-        await this.toastService.present(errMsg, 1000, 'danger');
-        await this.haptic.error();
+    let lst = await Quotation.FetchEntireListByCompanyRef(this.companyRef,
+      async (errMsg) => {
+        this.toastService.present(errMsg, 1000, 'danger');
+        this.haptic.error();
       }
     );
-    console.log('Status & SiteRef:', this.Entity.p.Status, this.Entity.p.SiteRef);
+    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-  }
+  };
+
+  getVendorQuotationListByCompanyRefAndSiteRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.Entity.p.SiteRef <= 0) {
+      this.getQuotationListByCompanyRef();
+      return;
+    }
+    let lst = await Quotation.FetchEntireListByCompanyRefAndSiteRef(this.companyRef, this.Entity.p.SiteRef,
+      async (errMsg) => {
+        this.toastService.present(errMsg, 1000, 'danger');
+        this.haptic.error();
+      }
+    );
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+  };
 
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   }
 
-  AddMaterialRequisition = async () => {
+  AddVendorQuotation = async () => {
     if (this.companyRef <= 0) {
       await this.toastService.present('Company not Selected', 1000, 'danger');
       await this.haptic.error();
       return;
     }
-    await this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/material-requisition/add']);
+    await this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/vendor-quotation/add']);
   }
 
-  onEditClicked = async (item: MaterialRequisition) => {
-    this.SelectedMaterialRequisition = item.GetEditableVersion();
-    MaterialRequisition.SetCurrentInstance(this.SelectedMaterialRequisition);
+  // ChangeQuotationstatus = (item: Quotation) => {
+  //   this.SelectedQuotation = item.GetEditableVersion();
+  //   Quotation.SetCurrentInstance(this.SelectedQuotation);
+  //   this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+  //   this.router.navigate(['/homepage/Website/Quotation_Approval']);
+  // }
+
+  onEditClicked = async (item: Quotation) => {
+    this.SelectedQuotation = item.GetEditableVersion();
+    Quotation.SetCurrentInstance(this.SelectedQuotation);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/material-requisition/edit']);
+    await this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/vendor-quotation/edit']);
   }
 
-  async onDeleteClicked(item: MaterialRequisition) {
+  async onDeleteClicked(item: Quotation) {
     try {
       this.alertService.presentDynamicAlert({
         header: 'Delete',
         subHeader: 'Confirmation needed',
-        message: 'Are you sure you want to delete this Material Requisition?',
+        message: 'Are you sure you want to delete this Vendor Quotation?',
         buttons: [
           {
             text: 'Cancel',
@@ -220,16 +256,16 @@ export class VendorQuotationMobilePage implements OnInit {
               try {
                 await item.DeleteInstance(async () => {
                   await this.toastService.present(
-                    `MaterialRequisition on ${this.formatDate(item.p.Date)} has been deleted!`,
+                    `Vendor Quotation on ${this.formatDate(item.p.Date)} has been deleted!`,
                     1000,
                     'success'
                   );
                   await this.haptic.success();
                 });
-                await this.getRequisitionListByAllFilters();
+                await this.getQuotationListByCompanyRef();
               } catch (err) {
-                console.error('Error deleting material requisition:', err);
-                await this.toastService.present('Failed to delete material requisition', 1000, 'danger');
+                console.error('Error deleting Vendor Quotation:', err);
+                await this.toastService.present('Failed to delete Vendor Quotation', 1000, 'danger');
                 await this.haptic.error();
               }
             }
@@ -243,15 +279,45 @@ export class VendorQuotationMobilePage implements OnInit {
     }
   }
 
-  openModal(requisition: any, materialItem: any) {
-  console.log('requisition: any, materialItem: any :', requisition, materialItem);
-    this.SelectedMaterialRequisition = requisition;
-    this.SelectedMaterialItem = materialItem;
+  openModal(requisition: any) {
+    console.log('requisition: any:', requisition);
+    this.SelectedQuotation = requisition;
     this.modalOpen = true;
   }
-  
-    closeModal() {
-      this.modalOpen = false;
-      this.SelectedMaterialRequisition = MaterialRequisition.CreateNewInstance();
+
+  closeModal() {
+    this.modalOpen = false;
+    this.SelectedQuotation = Quotation.CreateNewInstance();
+  }
+
+
+  SaveOrder = async (status: number) => {
+    let lstFTO: FileTransferObject[] = [];
+    this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+    this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+    this.EntityOfOrder.p.MaterialStockOrderStatus = status;
+    let entityToSave = this.EntityOfOrder.GetEditableVersion();
+    let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
+
+    // if (this.InvoiceFile) {
+    //   lstFTO.push(
+    //     FileTransferObject.FromFile(
+    //       "InvoiceFile",
+    //       this.InvoiceFile,
+    //       this.InvoiceFile.name
+    //     )
+    //   );
+    // }
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+    if (!tr.Successful) {
+      await this.toastService.present(tr.Message, 1000, 'danger');
+      await this.haptic.error();
+      return;
+    } else {
+      await this.toastService.present('Order Status Updated successfully', 1000, 'success');
+      await this.haptic.success();
+      this.EntityOfOrder = Order.CreateNewInstance();
     }
+  };
 }

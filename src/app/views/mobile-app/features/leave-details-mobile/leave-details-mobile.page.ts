@@ -10,12 +10,16 @@ import { CompanyStateManagement } from 'src/app/services/companystatemanagement'
 import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
+import { ToastService } from '../../core/toast.service';
+import { HapticService } from '../../core/haptic.service';
+import { AlertService } from '../../core/alert.service';
+import { LoadingService } from '../../core/loading.service';
 
 @Component({
   selector: 'app-leave-details-mobile',
   templateUrl: './leave-details-mobile.page.html',
   styleUrls: ['./leave-details-mobile.page.scss'],
-  standalone:false
+  standalone: false
 })
 export class LeaveDetailsMobilePage implements OnInit {
 
@@ -28,7 +32,7 @@ export class LeaveDetailsMobilePage implements OnInit {
   public toDate: string | null = null;
   public halfDayDate: string | null = null;
   public isHalfDay = false;
-  public isLoading = false;
+  // public isLoading = false;
 
 
   public TotalWorkingHrs = 0;
@@ -53,7 +57,11 @@ export class LeaveDetailsMobilePage implements OnInit {
     private appStateManagement: AppStateManageService,
     private bottomsheetMobileAppService: BottomsheetMobileAppService,
     // private dateTimePickerService: DateTimePickerService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private toastService: ToastService,
+    private haptic: HapticService,
+    private alertService: AlertService,
+    private loadingService: LoadingService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -70,7 +78,8 @@ export class LeaveDetailsMobilePage implements OnInit {
 
   private async loadLeaveRequestsIfEmployeeExists(): Promise<void> {
     try {
-      this.isLoading = true;
+      // this.isLoading = true;
+      this.loadingService.show();
       this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
       this.Entity.p.EmployeeRef = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
       if (this.Entity.p.EmployeeRef > 0) {
@@ -99,13 +108,16 @@ export class LeaveDetailsMobilePage implements OnInit {
           this.utils.DeepCopy(this.Entity)
         ) as LeaveRequest;
       } else {
-        await this.uiUtils.showErrorToster('Employee not selected');
+        // await this.uiUtils.showErrorToster('Employee not selected');
+        await this.toastService.present('Employee not selected', 1000, 'danger');
+        await this.haptic.error();
       }
     } catch (error) {
 
 
     } finally {
-      this.isLoading = false;
+      // this.isLoading = false;
+      this.loadingService.hide();
     }
   }
 
@@ -116,12 +128,17 @@ export class LeaveDetailsMobilePage implements OnInit {
       //   return;
       // }
       if (this.companyRef <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
+        // await this.uiUtils.showErrorToster('Company not Selected');
+        await this.toastService.present('Company not Selected', 1000, 'danger');
+        await this.haptic.error();
         return;
       }
       const employee = await Employee.FetchInstance(
         this.EmployeeRef, this.companyRef,
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+        async (errMsg) =>{
+          await this.toastService.present(errMsg, 1000, 'danger')
+          await this.haptic.error()
+        }
       );
 
       this.Entity.p.EmployeeRef = employee.p.Ref;
@@ -239,7 +256,9 @@ export class LeaveDetailsMobilePage implements OnInit {
 
   public async SaveLeaveRequest(): Promise<void> {
     try {
-      this.isLoading = true;
+      // this.isLoading = true;
+      this.loadingService.show();
+
       this.Entity.p.CompanyRef = this.companyRef;
       this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
 
@@ -259,20 +278,25 @@ export class LeaveDetailsMobilePage implements OnInit {
 
       if (!tr.Successful) {
         this.isSaveDisabled = false;
-        this.uiUtils.showErrorMessage('Error', tr.Message);
+        // this.uiUtils.showErrorMessage('Error', tr.Message);
+        await this.toastService.present(tr.Message, 1000, 'danger');
+        await this.haptic.error();
         return;
       }
 
       this.isSaveDisabled = false;
-      await this.uiUtils.showSuccessToster('Leave Request saved successfully');
+      // await this.uiUtils.showSuccessToster('Leave Request saved successfully');
+      await this.toastService.present('Leave Request saved successfully', 1000, 'success');
+      await this.haptic.success();
       this.Entity = LeaveRequest.CreateNewInstance();
       this.SelectedLeaveType = [];
       this.resetForm();
-      await this.router.navigate(['app_homepage/tabs/attendance-management/leave-request'], { replaceUrl: true });
+      await this.router.navigate(['/mobileapp/tabs/attendance/leave'], { replaceUrl: true });
     } catch (error) {
 
     } finally {
-      this.isLoading = false;
+      // this.isLoading = false;
+      this.loadingService.hide();
     }
   }
 
@@ -286,46 +310,46 @@ export class LeaveDetailsMobilePage implements OnInit {
   }
 
 
-    isDataFilled(): boolean {
-      const emptyEntity = LeaveRequest.CreateNewInstance();
-      console.log('emptyEntity :', emptyEntity);
-      console.log('this Entity :', this.Entity);
-      return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, []);
-    }
+  isDataFilled(): boolean {
+    const emptyEntity = LeaveRequest.CreateNewInstance();
+    console.log('emptyEntity :', emptyEntity);
+    console.log('this Entity :', this.Entity);
+    return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, []);
+  }
 
-    deepEqualIgnoringKeys(obj1: any, obj2: any, ignorePaths: string[]): boolean {
-      const clean = (obj: any, path = ''): any => {
-        if (obj === null || typeof obj !== 'object') return obj;
+  deepEqualIgnoringKeys(obj1: any, obj2: any, ignorePaths: string[]): boolean {
+    const clean = (obj: any, path = ''): any => {
+      if (obj === null || typeof obj !== 'object') return obj;
 
-        const result: any = Array.isArray(obj) ? [] : {};
-        for (const key in obj) {
-          const fullPath = path ? `${path}.${key}` : key;
-          if (ignorePaths.includes(fullPath)) continue;
-          result[key] = clean(obj[key], fullPath);
-        }
-        return result;
-      };
-
-      const cleanedObj1 = clean(obj1);
-      const cleanedObj2 = clean(obj2);
-
-      return JSON.stringify(cleanedObj1) === JSON.stringify(cleanedObj2);
-    }
-
-    goBack = async () => {
-      // Replace this with your actual condition to check if data is filled
-      const isDataFilled = this.isDataFilled(); // Implement this function based on your form
-
-      if (isDataFilled) {
-        await this.uiUtils.showConfirmationMessage(
-          'Warning',
-          `You have unsaved data. Are you sure you want to go back? All data will be lost.`,
-          async () => {
-            this.router.navigate(['/mobileapp/tabs/attendance/leave'], { replaceUrl: true });
-          }
-        );
-      } else {
-        this.router.navigate(['/mobileapp/tabs/attendance/leave'], { replaceUrl: true });
+      const result: any = Array.isArray(obj) ? [] : {};
+      for (const key in obj) {
+        const fullPath = path ? `${path}.${key}` : key;
+        if (ignorePaths.includes(fullPath)) continue;
+        result[key] = clean(obj[key], fullPath);
       }
+      return result;
+    };
+
+    const cleanedObj1 = clean(obj1);
+    const cleanedObj2 = clean(obj2);
+
+    return JSON.stringify(cleanedObj1) === JSON.stringify(cleanedObj2);
+  }
+
+  goBack = async () => {
+    // Replace this with your actual condition to check if data is filled
+    const isDataFilled = this.isDataFilled(); // Implement this function based on your form
+
+    if (isDataFilled) {
+      await this.uiUtils.showConfirmationMessage(
+        'Warning',
+        `You have unsaved data. Are you sure you want to go back? All data will be lost.`,
+        async () => {
+          this.router.navigate(['/mobileapp/tabs/attendance/leave'], { replaceUrl: true });
+        }
+      );
+    } else {
+      this.router.navigate(['/mobileapp/tabs/attendance/leave'], { replaceUrl: true });
     }
+  }
 }

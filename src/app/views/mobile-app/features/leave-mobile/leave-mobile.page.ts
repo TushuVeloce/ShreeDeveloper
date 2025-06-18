@@ -92,6 +92,7 @@ export class LeaveMobilePage implements OnInit, OnDestroy {
 
   async getLeaveRequests() {
     try {
+      this.loadingService.show();
       if (this.Entity.p.EmployeeRef <= 0) {
         await this.toastService.present('Employee not selected', 1000, 'danger');
         await this.haptic.error();
@@ -111,6 +112,8 @@ export class LeaveMobilePage implements OnInit, OnDestroy {
       console.error('Error fetching leave requests:', error);
       await this.toastService.present('Unable to fetch leave requests', 1000, 'danger');
       await this.haptic.error();
+    } finally {
+      this.loadingService.hide();
     }
   }
 

@@ -43,16 +43,18 @@
                 <span class="value">{{ requisition.p.Status || 'N/A' }}</span> -->
                 <span class="label">Status</span>
                 <span class="value">
-                  <span class="status-badge" [ngClass]="{
-                                      'pending': requisition.p.MaterialRequisitionStatus === MaterialRequisitionStatuses.Pending,
-                                      'rejected': requisition.p.MaterialRequisitionStatus === MaterialRequisitionStatuses.Rejected,
-                                      'approved': requisition.p.MaterialRequisitionStatus === MaterialRequisitionStatuses.Approved,
-                                      'default': ![
-                                        MaterialRequisitionStatuses.Pending,
-                                        MaterialRequisitionStatuses.Rejected,
-                                        MaterialRequisitionStatuses.Approved
-                                      ].includes(requisition.p.MaterialRequisitionStatus)
-                                    }">{{ requisition.p.MaterialRequisitionStatus || 'N/A' }}</span>
+                  <span class="status-badge" 
+                  [ngClass]="{
+                    'pending': requisition.p.MaterialRequisitionStatus === MaterialRequisitionStatuses.Pending,
+                    'rejected': requisition.p.MaterialRequisitionStatus === MaterialRequisitionStatuses.Rejected,
+                    'approved': requisition.p.MaterialRequisitionStatus === MaterialRequisitionStatuses.Approved,
+                    'default': ![
+                                MaterialRequisitionStatuses.Pending,
+                                MaterialRequisitionStatuses.Rejected,
+                                MaterialRequisitionStatuses.Approved
+                                ].includes(requisition.p.MaterialRequisitionStatus)
+                                    }">
+                  {{ requisition.p.Status || 'N/A' }}</span>
                 </span>
               </div>
             </div>

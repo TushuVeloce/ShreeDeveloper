@@ -458,7 +458,7 @@ export class AttendancePage implements OnInit {
         this.companyRef,
         AttendanceLogType.WeeklyAttendanceLog, this.employeeRef,
         async (errMsg: string) => {
-          this.toastService.present(`Error ${errMsg}`, 1000, 'success');
+          this.toastService.present(`Error ${errMsg}`, 1000, 'danger');
           await this.haptic.error();
         }
       );

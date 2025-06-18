@@ -8,6 +8,15 @@ const routes: Routes = [
     path: '',
     component: VendorQuotationMobilePage
   }
+  ,
+  {
+    path: 'add',
+    loadChildren: () => import('../vendor-quotation-details-mobile/vendor-quotation-details-mobile.module').then(m => m.VendorQuotationDetailsMobilePageModule)
+  },
+  {
+    path: 'edit',
+    loadChildren: () => import('../vendor-quotation-details-mobile/vendor-quotation-details-mobile.module').then(m => m.VendorQuotationDetailsMobilePageModule)
+  }
 ];
 
 @NgModule({

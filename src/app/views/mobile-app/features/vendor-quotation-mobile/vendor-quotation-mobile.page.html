@@ -1,131 +1,277 @@
-<app-header-with-back-handler title="vendor Quotation"
+<app-header-with-back-handler title="Vendor Quotation"
   backRoute="mobileapp/tabs/dashboard/stock-management"></app-header-with-back-handler>
-  
-  <ion-content [fullscreen]="true" class="ion-padding">
-    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
-      <ion-refresher-content></ion-refresher-content>
-    </ion-refresher>
-  
-    <ng-container *ngFor="let requisition of DisplayMasterList">
-      <ion-item-group>
-        <ion-item-divider color="light" class="requisition-card" (click)="toggleItemDetails(requisition.p.Ref)">
-          <ion-label slot="start">
-            <div class="divider-row">
-              <span><strong>{{ requisition.p.SiteName || 'Unknown Site' }}</strong></span>
-            </div>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ng-container *ngFor="let requisition of DisplayMasterList">
+    <ion-item-group>
+      <ion-item-divider color="light" class="requisition-card">
+        <div class="divider-row">
+          <!-- Left: Vendor Name -->
+          <ion-label class="label-start">
+            <strong>{{ requisition.p.VendorTradeName || 'Unknown Vendor' }}</strong>
           </ion-label>
-          <ion-label slot="end">
-            <div class="divider-row">
-              <span class="date-label">{{ formatDate(requisition.p.Date) || 'Unknown Date' }}</span>
-            </div>
-          </ion-label>
-        </ion-item-divider>
-  
-        <ion-card class="requisition-card" *ngFor="let item of requisition.p.MaterialRequisitionDetailsArray">
-          <ion-card-content
-            [@expandCollapse]="expandedRequisitions.has(requisition.p.Ref) ? 'expanded' : 'collapsed'">
-            <div class="requisition-details">
-              <!-- Material Info -->
-              <div class="left-info">
-                <div class="info-row">
-                  <span class="label">Material</span>
-                  <span class="value">{{ item.MaterialName }}</span>
-                </div>
-                <div class="info-row">
-                  <span class="label">Unit</span>
-                  <span class="value">{{ item.UnitName }}</span>
-                </div>
-                <div class="info-row">
-                  <span class="label">Required Qty</span>
-                  <span class="value">{{ item.EstimatedQty }}</span>
-                </div>
-                <div class="info-row">
-                  <span class="label">Status</span>
-                  <span class="value">
-                    <span class="status-badge">{{ requisition.p.Status || 'N/A' }}</span>
-                  </span>
-                </div>
-              </div>
-        
-              <!-- Action Buttons -->
-              <div class="action-buttons">
-                <ion-button size="small" fill="clear" color="primary" (click)="openModal(requisition, item)">
-                  <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
-                </ion-button>
-                <ion-button size="small" fill="clear" color="warning" (click)="onEditClicked(requisition)">
-                  <ion-icon name="create-outline" slot="icon-only"></ion-icon>
-                </ion-button>
-                <ion-button size="small" fill="clear" color="danger" (click)="onDeleteClicked(requisition)">
-                  <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-                </ion-button>
-              </div>
-            </div>
-          </ion-card-content>
-        </ion-card>
-      </ion-item-group>
-    </ng-container>
-  
-    <!-- Modal -->
-    <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="modal-card">
-      <ng-template>
-        <div class="modal-container">
-          <ion-header>
-            <ion-toolbar color="primary">
-              <ion-title>Material Details</ion-title>
-              <ion-buttons slot="end">
-                <ion-button fill="clear" (click)="closeModal()">
-                  <ion-icon name="close-outline"></ion-icon>
-                </ion-button>
-              </ion-buttons>
-            </ion-toolbar>
-          </ion-header>
-  
-          <ion-content class="ion-padding">
-            <div class="info-row-of-model">
-              <strong class="label">Date:</strong>
-              <span class="value">{{ formatDate(SelectedMaterialRequisition.p.Date) || '-' }}</span>
-            </div>
-            <div class="info-row-of-model">
-              <strong class="label">Site:</strong>
-              <span class="value">{{ SelectedMaterialRequisition.p.SiteName || '-' }}</span>
-            </div>
-            <div class="info-row-of-model">
-              <strong class="label">Material:</strong>
-              <span class="value">{{ SelectedMaterialItem.MaterialName || '-'}}</span>
-            </div>
-            <div class="info-row-of-model">
-              <strong class="label">Unit:</strong>
-              <span class="value">{{ SelectedMaterialItem.UnitName || '-'}}</span>
-            </div>
-            <div class="info-row-of-model">
-              <strong class="label">Required Qty:</strong>
-              <span class="value">{{ SelectedMaterialItem.EstimatedQty || '-'}}</span>
-            </div>
-            <div class="info-row-of-model">
-              <strong class="label">Status:</strong>
-              <span class="value">{{ SelectedMaterialRequisition.p.Status || '-' }}</span>
-            </div>
-          </ion-content>
-  
-          <ion-footer class="ion-padding">
-            <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
-              Close
-            </ion-button>
-          </ion-footer>
         </div>
-      </ng-template>
-    </ion-modal>
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-      <ion-fab-button>
-        <ion-icon name="ellipsis-vertical"></ion-icon>
+        <div class="divider-row">
+          <!-- Right: Status Badge and Action Buttons -->
+          <div class="action-area">
+            <!-- Action Buttons -->
+            <div class="button-group">
+              <!-- Status Badge -->
+              <span class="status-badge" [ngClass]="{
+                                    'pending': requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Pending,
+                                    'rejected': requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Rejected,
+                                    'approved': requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Approved,
+                                    'default': ![
+                                      MaterialQuotationStatus.Pending,
+                                      MaterialQuotationStatus.Rejected,
+                                      MaterialQuotationStatus.Approved
+                                    ].includes(requisition.p.MaterialQuotationStatus)
+                                  }"
+                (click)="requisition.p.MaterialQuotationStatus == MaterialQuotationStatus.Pending ? openModal(requisition):''">
+                {{ requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Pending?'Pending'
+                :requisition.p.MaterialQuotationStatus ===
+                MaterialQuotationStatus.Rejected?'Rejected':requisition.p.MaterialQuotationStatus ===
+                MaterialQuotationStatus.Approved?'Approved':'-' }}
+              </span>
+              <ion-button size="small" fill="clear" color="warning" (click)="onEditClicked(requisition)">
+                <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+
+              <ion-button size="small" fill="clear" color="danger" (click)="onDeleteClicked(requisition)">
+                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+
+              <ion-button size="small" fill="clear" color="medium" (click)="toggleItemDetails(requisition.p.Ref)">
+                <ion-icon
+                  [name]="expandedRequisitions.has(requisition.p.Ref) ? 'chevron-up-outline' : 'chevron-down-outline'"
+                  slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      </ion-item-divider>
+
+      <ion-card class="requisition-card" *ngFor="let item of requisition.p.MaterialQuotationDetailsArray">
+        <ion-card-content [@expandCollapse]="expandedRequisitions.has(requisition.p.Ref) ? 'expanded' : 'collapsed'">
+          <div class="requisition-details">
+            <!-- Info Column -->
+            <div class="left-info">
+              <div class="info-row">
+                <span class="label">Material:</span>
+                <span class="value">{{ item.MaterialName || '-' }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Unit:</span>
+                <span class="value">{{ item.UnitName || '-' }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Required Qty:</span>
+                <span class="value">{{ item.EstimatedQty || '-' }}</span>
+              </div>
+              <div class="info-row">
+                <span class="label">Expected Delivery Date:</span>
+                <span class="value">{{formatDate(item.ExpectedDeliveryDate) || '-' }}</span>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ion-item-group>
+  </ng-container>
+  <!-- Show "Data not found" if list is empty -->
+  <div *ngIf="DisplayMasterList.length === 0 " class="no-data-mobile-app">
+    <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+    <p>No Material Quotation records found.</p>
+  </div>
+
+  <!-- Modal -->
+  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="modal-card">
+    <ng-template>
+      <div class="modal-container">
+        <!-- Header -->
+        <ion-header>
+          <ion-toolbar color="primary" class="modal-toolbar">
+            <ion-title>Material Details</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" (click)="closeModal()">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <!-- Body -->
+        <ion-content class="ion-padding modal-body">
+          <!-- Info Rows -->
+          <div class="info-row-of-model">
+            <span class="label">Date:</span>
+            <span class="value">{{ formatDate(SelectedQuotation.p.Date) || '-' }}</span>
+          </div>
+          <div class="info-row-of-model">
+            <span class="label">Site:</span>
+            <span class="value">{{ SelectedQuotation.p.SiteName || '-' }}</span>
+          </div>
+          <div class="info-row-of-model">
+            <span class="label">Vendor:</span>
+            <span class="value">{{ SelectedQuotation.p.VendorName || '-' }}</span>
+          </div>
+          <div class="info-row-of-model">
+            <span class="label">Trade Name:</span>
+            <span class="value">{{ SelectedQuotation.p.VendorTradeName || '-' }}</span>
+          </div>
+          <div class="info-row-of-model">
+            <span class="label">Address:</span>
+            <span class="value">{{ SelectedQuotation.p.AddressLine1 || '-' }}</span>
+          </div>
+          <!-- <div class="info-row-of-model">
+            <span class="label">Invoice:</span>
+            <ion-button size="small" fill="clear" color="primary" (click)="openfile(SelectedQuotation.p.InvoicePath)">
+              <ion-icon [name]="'eye-outline'"
+                slot="icon-only"></ion-icon>
+            </ion-button>
+          </div> -->
+        <!-- Invoice Preview Button -->
+        <div class="info-row-of-model" *ngIf="SelectedQuotation?.p?.InvoicePath">
+          <span class="label">Invoice:</span>
+          <ion-button size="small" fill="clear" color="primary" (click)="prepareInvoiceUrl(SelectedQuotation.p.InvoicePath)">
+            <ion-icon [name]="showInvoicePreview?'eye-outline':'eye-off-outline'" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+        
+        <!-- Invoice Viewer Section -->
+        <div *ngIf="showInvoicePreview" class="invoice-preview-container">
+          <ng-container *ngIf="isPDF(SelectedQuotation.p.InvoicePath); else imageBlock">
+            <iframe [src]="sanitizedInvoiceUrl" width="100%" height="400px" style="border: none;"></iframe>
+          </ng-container>
+        
+          <ng-template #imageBlock>
+            <img [src]="sanitizedInvoiceUrl" alt="Invoice Image" class="invoice-image" />
+          </ng-template>
+        </div>
+
+
+          <div class="table-container">
+            <div class="table-scroll">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th class="sticky-col sticky-header">#</th>
+                    <th *ngFor="let item of tableHeaderData" class="sticky-header">{{ item }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of SelectedQuotation.p.MaterialQuotationDetailsArray; let i = index">
+                    <td class="sticky-col">{{i + 1 }}</td>
+                    <td>
+                      {{ item.MaterialName || '-' }}
+                    </td>
+                    <td>
+                      {{ item.UnitName || '-' }}
+                    </td>
+                    <td>
+                      {{ item.EstimatedQty || '-' }}
+                    </td>
+                    <td>
+                      {{ item.OrderedQty || '-' }}
+                    </td>
+                    <td>
+                      {{ item.RequiredRemainingQuantity || '-' }}
+                    </td>
+                    <td>
+                      {{ item.DiscountedRate || item.Rate || '-' }}
+                    </td>
+                    <td>
+                      {{ formatDate(item.ExpectedDeliveryDate) || '-' }}
+                    </td>
+                    <td>
+                      {{ item.TotalAmount || '-' }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- Material Table -->
+          <!-- <ng-container *ngIf="SelectedQuotation.p.MaterialQuotationDetailsArray.length > 0; else noMaterials">
+            <ion-grid class="material-grid">
+              <ion-row class="material-header">
+                <ion-col size="1">#</ion-col>
+                <ion-col size="4">Material</ion-col>
+                <ion-col size="2">Unit</ion-col>
+                <ion-col size="2">Required</ion-col>
+                <ion-col size="2">Ordered</ion-col>
+                <ion-col size="2">Remaining</ion-col>
+                <ion-col size="2">Rate</ion-col>
+                <ion-col size="2">Delivery</ion-col>
+                <ion-col size="2">Total</ion-col>
+              </ion-row>
+  
+              <ion-row *ngFor="let material of SelectedQuotation.p.MaterialQuotationDetailsArray; let i = index"
+                class="material-row">
+                <ion-col size="1">{{ i + 1 }}</ion-col>
+                <ion-col size="4">{{ material.MaterialName }}</ion-col>
+                <ion-col size="2">{{ material.UnitName }}</ion-col>
+                <ion-col size="2">{{ material.EstimatedQty }}</ion-col>
+                <ion-col size="2">{{ material.OrderedQty }}</ion-col>
+                <ion-col size="2">{{ material.RequiredRemainingQuantity }}</ion-col>
+                <ion-col size="2">{{ material.DiscountedRate || material.Rate }}</ion-col>
+                <ion-col size="2">{{ formatDate(material.ExpectedDeliveryDate) }}</ion-col>
+                <ion-col size="2">{{ material.TotalAmount }}</ion-col>
+              </ion-row>
+            </ion-grid>
+          </ng-container> -->
+
+          <!-- No Materials Message -->
+          <!-- <ng-template #noMaterials>
+            <div class="ion-padding ion-text-center">
+              <ion-text color="medium">
+                <p>No material data available.</p>
+              </ion-text>
+            </div>
+          </ng-template> -->
+
+          <!-- Summary -->
+          <div class="info-row-of-model">
+            <span class="label">Grand Total:</span>
+            <span class="value">{{ SelectedQuotation.p.GrandTotal || '-' }}</span>
+          </div>
+          <div class="info-row-of-model">
+            <span class="label">Status:</span>
+            <span class="value">{{ SelectedQuotation.p.MaterialQuotationStatus || '-' }}</span>
+          </div>
+        </ion-content>
+
+        <!-- Footer -->
+        <ion-footer class="modal-footer">
+          <div class="action-buttons">
+            <ion-button expand="block" color="success" shape="round" (click)="SaveOrder(MaterialQuotationStatus.Ordered)">
+              Approve
+            </ion-button>
+            <ion-button expand="block" color="danger" shape="round" (click)="SaveOrder(MaterialQuotationStatus.Incomplete)">
+              Reject
+            </ion-button>
+          </div>
+        </ion-footer>
+      </div>
+    </ng-template>
+  </ion-modal>
+
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="ellipsis-vertical"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button color="primary" (click)="AddVendorQuotation()">
+        <ion-icon name="add-outline"></ion-icon>
       </ion-fab-button>
-      <ion-fab-list side="top">
-        <ion-fab-button color="primary" (click)="AddMaterialRequisition()">
-          <ion-icon name="add-outline"></ion-icon>
-        </ion-fab-button>
-        <ion-fab-button color="tertiary" (click)="AddMaterialRequisition()">
-          <ion-icon name="filter-outline"></ion-icon>
-        </ion-fab-button>
-      </ion-fab-list>
-    </ion-fab>
-    </ion-content>
+      <ion-fab-button color="tertiary" (click)="AddVendorQuotation()">
+        <ion-icon name="filter-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>
