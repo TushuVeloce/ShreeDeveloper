@@ -304,10 +304,6 @@ export class QuotationDetailsComponent implements OnInit {
     if (!this.newQuotedMaterial.Rate) {
       return this.uiUtils.showWarningToster('Rate cannot be blank.');
     }
-    // if (this.newQuotedMaterial.DiscountedRate) {
-    //   this.newQuotedMaterial.DiscountedRate = 0;
-    //   this.CalculateNetAmountAndTotalAmount();
-    // }
 
     this.newQuotedMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate);
     this.ExpectedDeliveryDate = '';
