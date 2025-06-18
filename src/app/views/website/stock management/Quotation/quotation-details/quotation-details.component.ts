@@ -304,6 +304,10 @@ export class QuotationDetailsComponent implements OnInit {
     if (this.newQuotedMaterial.Rate == 0) {
       return this.uiUtils.showWarningToster('Rate cannot be blank.');
     }
+    // if (this.newQuotedMaterial.DiscountedRate) {
+    //   this.newQuotedMaterial.DiscountedRate = 0;
+    //   this.CalculateNetAmountAndTotalAmount();
+    // }
 
     this.newQuotedMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate);
     this.ExpectedDeliveryDate = '';
@@ -348,9 +352,8 @@ export class QuotationDetailsComponent implements OnInit {
 
   getQuotationVendorListBySiteRefAndCompanyRef = async () => {
     let lst = await Quotation.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
-    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-  );
-  console.log('lst :', lst);
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.CopyVendorList = lst;
   };
 
@@ -433,7 +436,8 @@ export class QuotationDetailsComponent implements OnInit {
     }
 
     this.newQuotedMaterial.RequiredRemainingQuantity = this.newQuotedMaterial.EstimatedQty - this.newQuotedMaterial.OrderedQty;
-    if (this.newQuotedMaterial.DiscountedRate == 0) {
+    if (!this.newQuotedMaterial.DiscountedRate) {
+      this.newQuotedMaterial.DiscountedRate = 0;
       this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.Rate * this.newQuotedMaterial.OrderedQty);
     } else {
       this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.DiscountedRate * this.newQuotedMaterial.OrderedQty);
