@@ -111,9 +111,9 @@ export class Vendor implements IPersistable<Vendor> {
     }
     if (this.p.TradeName == '') vra.add('TradeName', 'Trade Name cannot be blank.');
     if (this.p.MobileNo == '') {
-      vra.add('Mobile No', 'Mobile No cannot be blank.');
+      vra.add('MobileNo', 'Mobile No cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.MobileNo)) {
-      vra.add('IFSC', ValidationMessages.INDPhoneNoMsg);
+      vra.add('MobileNo', ValidationMessages.INDPhoneNoMsg);
     }
     if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'Address Line 1 cannot be blank.');
     if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country cannot be blank.');

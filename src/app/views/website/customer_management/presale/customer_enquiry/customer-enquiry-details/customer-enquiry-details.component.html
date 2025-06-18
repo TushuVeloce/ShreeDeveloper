@@ -148,7 +148,7 @@
       <div class="table-container" style="margin-top: 2rem" *ngIf="IsPlotDetails && IsNewEntity">
         <div class="row">
           <div class="col-12">
-            <label class="TableHeading">Intrested Plots</label>
+            <h3 class="TableHeading">Intrested Plots</h3>
           </div>
         </div>
         <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
@@ -174,7 +174,7 @@
                   <ng-container *ngFor="let customerstatus of CustomerStatusList">
               <nz-option *ngIf="customerstatus.Ref !== 30 && customerstatus.Ref !== 40" [nzValue]="customerstatus.Ref"
                 [nzLabel]="customerstatus.Name"></nz-option>
-            </ng-container>   
+            </ng-container>
                 </nz-select>
               </td>
               <td class="tbldata">

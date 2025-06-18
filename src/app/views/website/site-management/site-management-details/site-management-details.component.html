@@ -1,13 +1,16 @@
 <div class="card-body">
   <div class="card" style="padding: 1rem">
-    <div class="row">
-      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+    <div class="row align-items-center">
+      <!-- Back Button Column -->
+      <div class="col-2 col-md-1 d-flex justify-content-center">
         <button type="button" class="backbtn" (click)="BackSiteManagement()">
-          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+          <img src="/assets/icons/arrow-button.png" alt="Back" class="backbtnimg" />
         </button>
       </div>
-      <div class="col-md-11">
-        <span class="detail_title">New Site</span>
+
+      <!-- Title Column -->
+      <div class="col-10 col-md-11">
+        <span class="detail_title text-truncate d-block">{{ DetailsFormTitle }}</span>
       </div>
     </div>
     <ng-template #noDataTpl>
@@ -17,7 +20,7 @@
     </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>Site Name</label>
           <input type="text" name="Name" class="form-control" id="Name" [(ngModel)]="Entity.p.Name"
             [pattern]="NameWithoutNos" #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()"
@@ -27,7 +30,7 @@
             <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>Address</label>
           <input type="text" name="AddressLine1" class="form-control" id="AddressLine1"
             [(ngModel)]="Entity.p.AddressLine1" #AddressLine1Ctrl="ngModel" required
@@ -39,7 +42,7 @@
             <span class="validation-text" *ngIf="AddressLine1Ctrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>Site Location</label>
           <input type="text" name="AddressLine2" class="form-control" id="AddressLine2"
             [(ngModel)]="Entity.p.AddressLine2" #AddressLine2Ctrl="ngModel" required
@@ -51,9 +54,7 @@
             <span class="validation-text" *ngIf="AddressLine2Ctrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>Pin Code</label>
           <input type="text" name="PinCode" class="form-control" id="PinCode" [(ngModel)]="Entity.p.PinCode"
             pattern="{{ PinCodePattern }}" #PinCodeCtrl="ngModel" required (blur)="PinCodeCtrl.control.markAsTouched()"
@@ -65,7 +66,7 @@
             <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <div>
             <label for="CountryRef"><b>Country</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -78,7 +79,7 @@
             </nz-select>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <div>
             <label for="StateRef"><b>State</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -89,9 +90,7 @@
             </nz-select>
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <div>
             <label for="CityRef"><b>City</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -101,7 +100,7 @@
             </nz-select>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>Site Incharge</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" [nzSize]="'large'" name="SiteInchargeRef" required id="SiteInchargeRef"
@@ -110,40 +109,36 @@
               [nzValue]="employee.p.Ref"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>Starting Date</label>
           <input type="date" name="localEstimatedStartingDate" class="form-control date-input"
-            id="localEstimatedStartingDate" [(ngModel)]="localEstimatedStartingDate" placeholder="Select Date"   #EstimatedStartingDateCtrl="ngModel" required (blur)="EstimatedStartingDateCtrl.control.markAsTouched()"/>
+            id="localEstimatedStartingDate" [(ngModel)]="localEstimatedStartingDate" placeholder="Select Date"
+            #EstimatedStartingDateCtrl="ngModel" required (blur)="EstimatedStartingDateCtrl.control.markAsTouched()" />
           <div
             *ngIf="(EstimatedStartingDateCtrl.invalid && (EstimatedStartingDateCtrl.touched || EstimatedStartingDateCtrl.dirty))">
             <span class="validation-text"
               *ngIf="EstimatedStartingDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
-          </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4">
+        </div>
+        <div class="col-md-4 col-6">
           <label>Estimated End Date</label>
           <input type="date" name="localEstimatedEndDate" class="form-control date-input" id="localEstimatedEndDate"
-            [(ngModel)]="localEstimatedEndDate"  placeholder="Select Date" #EstimatedEndDateCtrl="ngModel" required (blur)="EstimatedEndDateCtrl.control.markAsTouched()"/>
-          <div
-            *ngIf="(EstimatedEndDateCtrl.invalid && (EstimatedEndDateCtrl.touched || EstimatedEndDateCtrl.dirty))">
-            <span class="validation-text"
-              *ngIf="EstimatedEndDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            [(ngModel)]="localEstimatedEndDate" placeholder="Select Date" #EstimatedEndDateCtrl="ngModel" required
+            (blur)="EstimatedEndDateCtrl.control.markAsTouched()" />
+          <div *ngIf="(EstimatedEndDateCtrl.invalid && (EstimatedEndDateCtrl.touched || EstimatedEndDateCtrl.dirty))">
+            <span class="validation-text" *ngIf="EstimatedEndDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
-          </div>
-        <div class="col-md-4">
+        </div>
+        <div class="col-md-4 col-6">
           <label>Estimated Cost</label>
           <input type="number" name="EstimatedCost" class="form-control" id="EstimatedCost"
-            [(ngModel)]="Entity.p.EstimatedCost" placeholder="Enter Estimated Cost"
-            (click)="selectAllValue($event)"   #EstimatedCostCtrl="ngModel" required (blur)="EstimatedCostCtrl.control.markAsTouched()"/>
-          <div
-            *ngIf="(EstimatedCostCtrl.invalid && (EstimatedCostCtrl.touched || EstimatedCostCtrl.dirty))">
-            <span class="validation-text"
-              *ngIf="EstimatedCostCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            [(ngModel)]="Entity.p.EstimatedCost" placeholder="Enter Estimated Cost" (click)="selectAllValue($event)"
+            #EstimatedCostCtrl="ngModel" required (blur)="EstimatedCostCtrl.control.markAsTouched()" />
+          <div *ngIf="(EstimatedCostCtrl.invalid && (EstimatedCostCtrl.touched || EstimatedCostCtrl.dirty))">
+            <span class="validation-text" *ngIf="EstimatedCostCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
-          </div>
-        <div class="col-md-4">
+        </div>
+        <div class="col-md-4 col-6">
           <label for="TotalLandAreaInSqm">Total Land Area in Sqm</label>
           <input type="number" class="form-control" name="TotalLandAreaInSqm" id="TotalLandAreaInSqm"
             [(ngModel)]="Entity.p.TotalLandAreaInSqm" (ngModelChange)="convertSqmToSqft()"
@@ -155,9 +150,7 @@
               *ngIf="TotalLandAreaInSqmCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label for="TotalLandAreaInSqft">Total Land Area in Sqft</label>
           <input type="number" class="form-control" name="TotalLandAreaInSqft" id="TotalLandAreaInSqft"
             [(ngModel)]="Entity.p.TotalLandAreaInSqft" (ngModelChange)="convertSqftToSqm()"
@@ -169,7 +162,7 @@
               *ngIf="TotalLandAreaInSqftCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>Number Of Plots</label>
           <input type="number" name="NumberOfPlots" class="form-control" id="NumberOfPlots"
             [(ngModel)]="Entity.p.NumberOfPlots" #NumberOfPlotsCtrl="ngModel" required
@@ -181,7 +174,7 @@
         </div>
       </div>
 
-      <div class="row" style="margin-top: 2rem; padding: 1rem">
+      <div class="row" style="margin-top: 1rem;">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
           <h5 style="padding-top: 3px; color: black">
             <b>Add Owner Details</b>
@@ -198,7 +191,7 @@
         <div class="table-container" style="margin-top: 2rem">
           <div class="row">
             <div class="col-12">
-              <label class="TableHeading">Owner Details</label>
+              <h3 class="TableHeading">Owner Details</h3>
             </div>
           </div>
           <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
@@ -266,7 +259,7 @@
     <div class="custom-modal-body">
       <form autocomplete="off">
         <div class="row" style="margin-top: 1rem">
-          <div class="col-md-6">
+          <div class="col-6">
             <label>Name</label>
             <input type="text" name="Name" class="form-control" [(ngModel)]="newOwner.Name" #OwnerNameCtrl="ngModel"
               required (blur)="OwnerNameCtrl.control.markAsTouched()" placeholder="Enter Name" />
@@ -274,28 +267,32 @@
               <span class="validation-text" *ngIf="OwnerNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-6">
             <label>Contact Numbers</label>
             <input type="text" name="ContactNo" class="form-control" [(ngModel)]="newOwner.ContactNo"
-             pattern="{{INDPhoneNo}}" #OwnerContactNosCtrl="ngModel" required
-            (blur)="OwnerContactNosCtrl.control.markAsTouched()" />
-          <div *ngIf="(OwnerContactNosCtrl.invalid && (OwnerContactNosCtrl.touched || OwnerContactNosCtrl.dirty))">
-            <span class="validation-text" *ngIf="OwnerContactNosCtrl.errors?.['pattern']">{{INDPhoneNoMsg}}</span>
-            <span class="validation-text" *ngIf="OwnerContactNosCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              [pattern]="INDPhoneNo" #OwnerContactNosCtrl="ngModel" required
+              (blur)="OwnerContactNosCtrl.control.markAsTouched()" />
+            <div *ngIf="(OwnerContactNosCtrl.invalid && (OwnerContactNosCtrl.touched || OwnerContactNosCtrl.dirty))">
+              <span class="validation-text" *ngIf="OwnerContactNosCtrl.errors?.['pattern']">{{INDPhoneNoMsg}}</span>
+              <span class="validation-text" *ngIf="OwnerContactNosCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
           </div>
-          </div>
-        </div>
-        <div class="row" style="margin-top: 1rem">
-          <div class="col-md-6">
+          <div class="col-6">
             <label>Email Id</label>
-            <input type="email" name="EmailId" class="form-control" [(ngModel)]="newOwner.EmailId" required
-              placeholder="Enter Email Id" />
+            <input type="email" name="EmailId" class="form-control" [(ngModel)]="newOwner.EmailId"
+              placeholder="Enter Email Id" [pattern]="Email" #OwnerEmailCtrl="ngModel" required
+              (blur)="OwnerEmailCtrl.control.markAsTouched()" />
+            <div *ngIf="(OwnerEmailCtrl.invalid && (OwnerEmailCtrl.touched || OwnerEmailCtrl.dirty))">
+              <span class="validation-text" *ngIf="OwnerEmailCtrl.errors?.['pattern']">{{ EmailMsg }}</span>
+              <span class="validation-text" *ngIf="OwnerEmailCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+            </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-6">
             <div>
               <label for="CountryRef"><b>Country</b></label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl" nzPlaceHolder="Select" [nzSize]="'large'"
-                name="CountryRef" required id="CountryRef" [(ngModel)]="newOwner.CountryRef" (ngModelChange)="
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
+                nzPlaceHolder="Select" [nzSize]="'large'" name="CountryRef" required id="CountryRef"
+                [(ngModel)]="newOwner.CountryRef" (ngModelChange)="
                   getStateListByCountryRefforOwner(newOwner.CountryRef)
                 ">
                 <nz-option *ngFor="let country of CountryListforOwner" [nzLabel]="country.p.Name"
@@ -303,13 +300,12 @@
               </nz-select>
             </div>
           </div>
-        </div>
-        <div class="row" style="margin-top: 1rem">
-          <div class="col-md-6">
+          <div class="col-6">
             <div>
               <label for="StateRef"><b>State</b></label>
-              <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear nzPlaceHolder="Select" id="StateRef"
-                name="StateRef" [nzSize]="'large'" [(ngModel)]="newOwner.StateRef" required (ngModelChange)="
+              <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear
+                nzPlaceHolder="Select" id="StateRef" name="StateRef" [nzSize]="'large'" [(ngModel)]="newOwner.StateRef"
+                required (ngModelChange)="
                   getCityListByStateRefforOwner(newOwner.StateRef)
                 ">
                 <nz-option *ngFor="let state of StateListforOwner" [nzValue]="state.p.Ref"
@@ -317,17 +313,16 @@
               </nz-select>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-6">
             <label for="CityRef"><b>City</b></label>
-            <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear nzPlaceHolder="Select" id="CityRef"
-              name="CityRef" [nzSize]="'large'" required [(ngModel)]="newOwner.CityRef">
+            <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear
+              nzPlaceHolder="Select" id="CityRef" name="CityRef" [nzSize]="'large'" required
+              [(ngModel)]="newOwner.CityRef">
               <nz-option *ngFor="let city of CityListforOwner" [nzValue]="city.p.Ref"
                 [nzLabel]="city.p.Name"></nz-option>
             </nz-select>
           </div>
-        </div>
-        <div class="row" style="margin-top: 1rem">
-          <div class="col-md-6">
+          <div class="col-6">
             <label>Address</label>
             <input type="text" name="Address" class="form-control" [(ngModel)]="newOwner.Address"
               #OwnerAddressCtrl="ngModel" required (blur)="OwnerAddressCtrl.control.markAsTouched()"
@@ -336,12 +331,7 @@
               <span class="validation-text" *ngIf="OwnerAddressCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
-          <!-- <div class="col-md-6">
-            <label>Address Line 2</label>
-            <input type="text" name="AddressLine2" class="form-control" [(ngModel)]="newOwner.AddressLine2" required
-              placeholder="Enter AddressLine 2" />
-          </div> -->
-          <div class="col-md-6">
+          <div class="col-6">
             <label>Pin Code</label>
             <input type="text" name="PinCode" class="form-control" [(ngModel)]="newOwner.PinCode"
               pattern="{{ PinCodePattern }}" #OwnerPincodeCtrl="ngModel" required
@@ -352,17 +342,10 @@
             </div>
           </div>
         </div>
-        <!-- <div class="row" style="margin-top: 1rem">
-            <div class="col-md-6">
-              <label>Pin Code</label>
-              <input type="text" name="PinCode" class="form-control" [(ngModel)]="newOwner.PinCode" required
-                placeholder="Enter Pin Code" />
-            </div>
-          </div> -->
+
       </form>
     </div>
     <div class="custom-modal-footer">
-      <!-- <button type="button" class="btn btn-secondary" (click)="isModalOpen = false">Close</button> -->
       <div style="
           justify-content: center;
           display: flex;

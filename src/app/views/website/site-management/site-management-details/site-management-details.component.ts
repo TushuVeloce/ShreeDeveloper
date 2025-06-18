@@ -48,10 +48,12 @@ export class SiteManagementDetailsComponent implements OnInit {
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos
   PinCodePattern: string = ValidationPatterns.PinCode;
   INDPhoneNo: string = ValidationPatterns.INDPhoneNo;
+  Email: string = ValidationPatterns.Email;
 
   NameWithoutNosMsg: string = ValidationMessages.NameWithoutNosMsg
   PinCodeMsg: string = ValidationMessages.PinCodeMsg;
   INDPhoneNoMsg: string = ValidationMessages.INDPhoneNoMsg;
+  EmailMsg: string = ValidationMessages.EmailMsg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
@@ -65,6 +67,7 @@ export class SiteManagementDetailsComponent implements OnInit {
   @ViewChild('TotalLandAreaInSqftCtrl') TotalLandAreaInSqftInputControl!: NgModel;
   @ViewChild('NumberOfPlotsCtrl') NumberOfPlotsInputControl!: NgModel;
   @ViewChild('OwnerNameCtrl') OwnerNameInputControl!: NgModel;
+  @ViewChild('OwnerEmailCtrl') OwnerEmailInputControl!: NgModel;
   @ViewChild('OwnerContactNosCtrl') OwnerContactNosInputControl!: NgModel;
   @ViewChild('OwnerAddressCtrl') OwnerAddressInputControl!: NgModel;
   @ViewChild('OwnerPincodeCtrl') OwnerPincodeInputControl!: NgModel;
@@ -248,9 +251,35 @@ export class SiteManagementDetailsComponent implements OnInit {
 
 
   async addOwner() {
-    if (!this.newOwner.Name || !this.newOwner.ContactNo || !this.newOwner.CountryRef || !this.newOwner.StateRef || !this.newOwner.CityRef || !this.newOwner.Address) {
-      await this.uiUtils.showErrorMessage('Error', 'Name, Contact No, Country, State, City, Adderss are Required!');
-      return;
+    // if (!this.newOwner.Name || !this.newOwner.ContactNo || !this.newOwner.CountryRef || !this.newOwner.StateRef || !this.newOwner.CityRef || !this.newOwner.Address) {
+    //   await this.uiUtils.showErrorMessage('Error', 'Name, Contact No, Country, State, City, Adderss are Required!');
+    //   return;
+    // }
+
+    if (!this.newOwner.Name) {
+      return this.uiUtils.showWarningToster('Owner Name cannot be blank.');
+    }
+    if (!this.newOwner.ContactNo) {
+      return this.uiUtils.showWarningToster('Contact No cannot be blank.');
+    } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.newOwner.ContactNo)) {
+      return this.uiUtils.showWarningToster(ValidationMessages.INDPhoneNoMsg);
+    }
+
+    if (!new RegExp(ValidationPatterns.Email).test(this.newOwner.EmailId)) {
+      return this.uiUtils.showWarningToster(ValidationMessages.EmailMsg);
+    }
+
+    if (!this.newOwner.CountryRef) {
+      return this.uiUtils.showWarningToster('Country cannot be blank.');
+    }
+    if (!this.newOwner.StateRef) {
+      return this.uiUtils.showWarningToster('State cannot be blank.');
+    }
+    if (!this.newOwner.CityRef) {
+      return this.uiUtils.showWarningToster('City cannot be blank.');
+    }
+    if (!this.newOwner.Address) {
+      return this.uiUtils.showWarningToster('Address cannot be blank.');
     }
 
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
@@ -385,11 +414,13 @@ export class SiteManagementDetailsComponent implements OnInit {
 
   resetOwnerControls = () => {
     this.OwnerNameInputControl.control.markAsUntouched();
+    this.OwnerEmailInputControl.control.markAsUntouched();
     this.OwnerContactNosInputControl.control.markAsUntouched();
     this.OwnerAddressInputControl.control.markAsUntouched();
     this.OwnerPincodeInputControl.control.markAsUntouched();
 
     this.OwnerNameInputControl.control.markAsPristine();
+    this.OwnerEmailInputControl.control.markAsPristine();
     this.OwnerContactNosInputControl.control.markAsPristine();
     this.OwnerAddressInputControl.control.markAsPristine();
     this.OwnerPincodeInputControl.control.markAsPristine();

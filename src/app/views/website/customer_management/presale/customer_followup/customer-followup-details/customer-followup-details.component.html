@@ -125,7 +125,7 @@
       <div class="table-container" style="margin-top: 2rem" *ngIf="Entity.p.CustomerFollowUpPlotDetails.length > 0">
         <div class="row">
           <div class="col-12">
-            <label class="TableHeading">Follow Up Plots</label>
+            <h3 class="TableHeading">Follow Up Plots</h3>
           </div>
         </div>
         <nz-table #basicTable [nzNoResult]="noDataTpl" nzSize="small" class="no-hover-table bgtable_light"
@@ -203,7 +203,7 @@
           <input type="text" name="Remark" class="form-control" id="Remark " required placeholder="Enter Remark"
             [(ngModel)]="Entity.p.Remark" (focus)="selectAll($event)" />
         </div>
-      
+
         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="showAgentBrokerInput">
           <label>Remark</label>
           <input type="text" name="Remark" class="form-control" id="Remark " required placeholder="Enter Remark"

@@ -386,7 +386,9 @@ img[title="Delete"] {
   background-color: var(--ion-color-primary-tint);
   height: 36px;
   color: white;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   font-size: larger;
   font-weight: bold;
@@ -644,6 +646,14 @@ nz-select {
 
 .validation-text {
   color: red !important;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
+
+  @media (max-width: 468px) {
+    font-size: 12px;
+  }
 }
 
 /* Chrome, Safari, Edge, Opera */
