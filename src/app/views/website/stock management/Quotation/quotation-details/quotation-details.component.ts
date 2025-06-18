@@ -295,13 +295,13 @@ export class QuotationDetailsComponent implements OnInit {
 
 
   async addQuotedMaterial() {
-    if (this.newQuotedMaterial.MaterialRequisitionDetailsRef == 0) {
+    if (!this.newQuotedMaterial.MaterialRequisitionDetailsRef) {
       return this.uiUtils.showWarningToster('Material Name cannot be blank.');
     }
-    if (this.newQuotedMaterial.OrderedQty == 0) {
+    if (!this.newQuotedMaterial.OrderedQty) {
       return this.uiUtils.showWarningToster('Ordered Quantity cannot be blank.');
     }
-    if (this.newQuotedMaterial.Rate == 0) {
+    if (!this.newQuotedMaterial.Rate) {
       return this.uiUtils.showWarningToster('Rate cannot be blank.');
     }
     // if (this.newQuotedMaterial.DiscountedRate) {
