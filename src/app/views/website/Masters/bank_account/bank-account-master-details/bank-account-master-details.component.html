@@ -44,7 +44,7 @@
             <span class="validation-text" *ngIf="AccountNumberCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-6 col-md-4 col-sm-12">
+        <div class="col-6">
           <label for="IFSCCode">IFSC Code</label>
           <input type="text" [(ngModel)]="Entity.p.IFSCCode" name="IFSCCode" class="form-control" id="IFSCCode"
             pattern="{{IFSCPattern}}" placeholder="Enter IFSC" #IFSCCodeCtrl="ngModel" required

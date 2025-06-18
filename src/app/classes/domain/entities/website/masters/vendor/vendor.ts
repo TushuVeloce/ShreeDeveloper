@@ -103,7 +103,6 @@ export class Vendor implements IPersistable<Vendor> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
-    if (this.p.Code == '') vra.add('Code', 'Vendor Code cannot be blank.');
     if (this.p.CompanyType == 0) vra.add('CompanyType', 'Company Type cannot be blank.');
     if (this.p.Name == '') {
       vra.add('Name', 'Vendor Name cannot be blank.');
@@ -135,18 +134,13 @@ export class Vendor implements IPersistable<Vendor> {
     } else if (!new RegExp(ValidationPatterns.IFSC).test(this.p.IFSC)) {
       vra.add('IFSC', ValidationMessages.IFSCMsg);
     }
-    if (this.p.GSTIN == '') {
-      vra.add('GSTIN', 'GST IN cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN)) {
+    if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN)) {
       vra.add('GSTIN', ValidationMessages.GSTINMsg);
     }
     if (this.p.Pan == '') {
       vra.add('Pan', 'PAN cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan)) {
       vra.add('Pan', ValidationMessages.PANMsg);
-    }
-    if (this.p.CINNO && !new RegExp(ValidationPatterns.CIN).test(this.p.CINNO)) {
-      vra.add('CIN', ValidationMessages.CINMsg);
     }
 
     if (this.p.MaterialListSuppliedByVendor.length <= 0 && this.p.ServiceListSuppliedByVendor.length == 0) vra.add('MaterialListSuppliedByVendor', 'Material list cannot be blank.');

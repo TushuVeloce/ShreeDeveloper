@@ -189,6 +189,30 @@ textarea.form-control:focus {
   /* same #8B0000 in rgba */
 }
 
+.col-md-4,
+.col-md-6,
+.col-6>* {
+  margin-bottom: 10px;
+
+  @media (max-width: 468px) {
+    margin-bottom: 5px;
+  }
+}
+
+:root label,
+body label,
+form label {
+  margin-bottom: 1px !important;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
+
+  @media (max-width: 468px) {
+    font-size: 12px;
+  }
+}
+
 /* ------------------------- Search Box Styles End ------------------------- */
 
 .btn:hover {
@@ -196,43 +220,6 @@ textarea.form-control:focus {
   color: white;
 }
 
-// .backbtn {
-//   background-color: rgb(252, 252, 252);
-//   border: 2px solid var(--ion-color-primary-tint);
-//   color: white;
-//   padding: 1px 1px;
-//   border-radius: 6px;
-// }
-
-// .backbtn:hover {
-//   color: white;
-// }
-
-// .backbtnimg {
-//   width: 60%;
-// }
-
-// .detail_title {
-//   color: var(--ion-color-primary-tint);
-//   font-size: large;
-//   font-weight: 600;
-//   font-size: 1rem;
-// }
-
-
-// @media (min-width: 480px) {
-//   .detail_title {
-//     font-size: 1.25rem;
-//     /* tablets */
-//   }
-// }
-
-// @media (min-width: 768px) {
-//   .detail_title {
-//     font-size: 1.5rem;
-//     /* medium devices */
-//   }
-// }
 
 .backbtn {
   background-color: rgb(252, 252, 252);
@@ -249,6 +236,11 @@ textarea.form-control:focus {
   @media (max-width: 768px) {
     height: 6vh;
     width: 8vw;
+  }
+
+  @media (max-width: 468px) {
+    height: 4vh;
+    width: 10vw;
   }
 
   &:hover {
@@ -893,4 +885,37 @@ input[type="time"] {
 .custom-loading ion-spinner {
   width: 40px;
   height: 40px;
+}
+
+
+/* Base placeholder style */
+input[placeholder]::placeholder,
+textarea[placeholder]::placeholder {
+  font-size: 14px;
+  color: gray;
+}
+
+/* Responsive font-size using media queries */
+@media (min-width: 640px) {
+
+  input[placeholder]::placeholder,
+  textarea[placeholder]::placeholder {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+
+  input[placeholder]::placeholder,
+  textarea[placeholder]::placeholder {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 1024px) {
+
+  input[placeholder]::placeholder,
+  textarea[placeholder]::placeholder {
+    font-size: 16px;
+  }
 }

@@ -7,7 +7,6 @@
           <img src="/assets/icons/arrow-button.png" alt="Back" class="backbtnimg" />
         </button>
       </div>
-
       <!-- Title Column -->
       <div class="col-10 col-md-11">
         <span class="detail_title text-truncate d-block">{{ DetailsFormTitle }}</span>
@@ -20,7 +19,7 @@
     </ng-template>
     <form autocomplete="off" #employeeForm="ngForm">
       <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label>Employee Name</label>
             <input type="text" name="Name " [(ngModel)]="Entity.p.Name " class="form-control" id="Name " required
@@ -32,7 +31,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label>Date of Birth</label>
             <input type="date" name="DOB " [(ngModel)]="dob " class="form-control" id="DOB " required #DOBCtrl="ngModel"
@@ -42,7 +41,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label>Gender</label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -51,7 +50,7 @@
             </nz-select>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label>Contact No</label>
             <input type="text" name="ContactNos" class="form-control" [(ngModel)]="Entity.p.ContactNos" id="ContactNos"
@@ -63,7 +62,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label>Personal Email Id</label>
             <input type="email" name="PersonalEmailId" [(ngModel)]="Entity.p.PersonalEmailId" class="form-control"
@@ -75,7 +74,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label>Official Email Id</label>
             <input type="email" name="OfficialEmailId" [(ngModel)]="Entity.p.OfficialEmailId" class="form-control"
@@ -87,7 +86,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-md-6">
           <div>
             <label>Address Line 1</label>
             <input type="text" name="address" [(ngModel)]="Entity.p.AddressLine1" class="form-control" id="address"
@@ -98,14 +97,14 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-md-6">
           <div>
             <label>Address Line 2</label>
             <input type="text" name="address" [(ngModel)]="Entity.p.AddressLine2" class="form-control" id="address"
               required placeholder="Enter Address Line 2" />
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label for="CountryRef"><b>Country</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -116,7 +115,7 @@
             </nz-select>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label for="StateRef"><b>State</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -126,7 +125,7 @@
             </nz-select>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label for="CityRef"><b>City</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -135,7 +134,7 @@
             </nz-select>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label>Emergency Contact Name</label>
             <input type="text" name="EmergencyContactName " [(ngModel)]="Entity.p.EmergencyContactName "
@@ -151,7 +150,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label>Emergency Contact No</label>
             <input type="text" name="EmergencyContactNo " [(ngModel)]="Entity.p.EmergencyContactNo"
@@ -166,7 +165,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label>Marital Status</label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -177,7 +176,7 @@
             </nz-select>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label>Department Name </label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -189,7 +188,7 @@
             </nz-select>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label for="DesignationRef">Designation</label>
             <nz-select class="nzSelect-light" [disabled]="Entity.p.DepartmentRef == 0" [nzNotFoundContent]="noDataTpl"
@@ -200,7 +199,7 @@
             </nz-select>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label for="OfficeDutyTimeRef">Office Duty Time</label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -211,7 +210,7 @@
             </nz-select>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label>Date Of Joining</label>
             <input type="date" name="DateOfJoining " [(ngModel)]="dateofjoining " class="form-control"
@@ -222,7 +221,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label>Salary Per Month</label>
             <input type="number" name="SalaryPerMonth" [(ngModel)]="Entity.p.SalaryPerMonth  " class="form-control"
@@ -233,7 +232,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label>Salary Per Year</label>
             <input type="number" name="SalaryPerYear" [(ngModel)]="Entity.p.SalaryPerYear  " class="form-control"
@@ -244,7 +243,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label>Bank Name</label>
             <input type="text" name="BankName  " [(ngModel)]="Entity.p.BankName  " class="form-control" id="BankName"
@@ -256,7 +255,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label>Branch Name</label>
             <input type="text" name="BranchName" [(ngModel)]="Entity.p.BranchName" class="form-control" id="BranchName"
@@ -268,7 +267,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label>IFSC</label>
             <input type="text" name="IFSC" [(ngModel)]="Entity.p.IFSC" class="form-control" id="IFSC" required
@@ -280,7 +279,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 col-6">
           <div>
             <label>Account No</label>
             <input type="text" name="BanckAccountNo" [(ngModel)]="Entity.p.BanckAccountNo" class="form-control"

@@ -1,25 +1,30 @@
 /* Company image styling */
 .Company-Logo-container {
-    // display: flex;
-    flex-direction: column;
-    align-items: end;
+  // display: flex;
+  flex-direction: column;
+  align-items: end;
 
-  }
+}
 
-  .Company-Logo {
-    width: 250px;
-    height: 200px;
-    margin-bottom: 1rem;
-    border-radius: 8PX;
-    // margin-top: 1rem;
-  }
+.Company-Logo {
+  width: 250px;
+  height: 200px;
+  margin-bottom: 1rem;
+  border-radius: 8PX;
+  // margin-top: 1rem;
+}
 
-  .file-upload {
-    width: 220px;
-  }
+.file-upload {
+  width: 220px;
+}
 
-  .Upload-Icon{
-    cursor: pointer;
-    width: 50px;
-    height: 50px;
-  }
+.Upload-Icon {
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+}
+
+.row>* {
+  padding-right: calc(var(--bs-gutter-x) * .2);
+  padding-left: calc(var(--bs-gutter-x) * .2);
+}

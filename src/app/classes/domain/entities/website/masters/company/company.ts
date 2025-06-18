@@ -94,7 +94,7 @@ export class Company implements IPersistable<Company> {
     } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
       vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     }
-     if (this.p.Contacts == '') {
+    if (this.p.Contacts == '') {
       vra.add('Contact No', 'Contact No cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.Contacts)) {
       vra.add('Contact No', ValidationMessages.INDPhoneNoMsg);
@@ -119,18 +119,13 @@ export class Company implements IPersistable<Company> {
     if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country cannot be blank.');
     if (this.p.StateRef == 0) vra.add('StateRef', 'State cannot be blank.');
     if (this.p.CityRef == 0) vra.add('CityRef', 'City cannot be blank.');
-    if (this.p.GSTIN == '') {
-      vra.add('GSTIN', 'GST IN cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN)) {
+    if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN)) {
       vra.add('GSTIN', ValidationMessages.GSTINMsg);
     }
     if (this.p.Pan == '') {
       vra.add('Pan', 'PAN cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan)) {
       vra.add('Pan', ValidationMessages.PANMsg);
-    }
-    if (this.p.CINNO && !new RegExp(ValidationPatterns.CIN).test(this.p.CINNO)) {
-      vra.add('CIN', ValidationMessages.CINMsg);
     }
 
     if (this.p.IsNewlyCreated == true && this.p.CompanyLogo == null) {

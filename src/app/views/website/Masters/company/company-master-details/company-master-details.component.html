@@ -79,80 +79,65 @@
             <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="row" style="margin-top: 1rem">
-          <div class="col-md-6">
-            <label for="AddressLine1">Address Line 1</label>
-            <input type="text" [(ngModel)]="Entity.p.AddressLine1" name="AddressLine1" class="form-control"
-              id="AddressLine1" placeholder="Enter Address Line 1" #AddressLine1Ctrl="ngModel" required
-              (blur)="AddressLine1Ctrl.control.markAsTouched()" />
-            <div *ngIf="(AddressLine1Ctrl.invalid && (AddressLine1Ctrl.touched || AddressLine1Ctrl.dirty))">
-              <span class="validation-text" *ngIf="AddressLine1Ctrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <label>Address Line 2</label>
-            <input type="text" [(ngModel)]="Entity.p.AddressLine2" name="AddressLine2" class="form-control"
-              id="AddressLine2" required placeholder="Enter Address Line 2" />
-          </div>
-          <div class="col-md-4 col-sm-12">
-            <label for="CountryRef"><b>Country</b></label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" [nzSize]="'large'" name="CountryRef" id="CountryRef"
-              [(ngModel)]="Entity.p.CountryRef" (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
-              <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
-                [nzValue]="country.p.Ref"></nz-option>
-            </nz-select>
-          </div>
-          <div class="col-md-4 col-sm-12">
-            <label for="StateRef"><b>State</b></label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" id="StateRef" name="StateRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StateRef"
-              (ngModelChange)="getCityListByStateRef(Entity.p.StateRef)">
-              <nz-option *ngFor="let state of StateList" [nzValue]="state.p.Ref" [nzLabel]="state.p.Name"></nz-option>
-            </nz-select>
-          </div>
-          <div class="col-md-4 col-sm-12">
-            <label for="CityRef"><b>City</b></label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" id="CityRef" name="CityRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CityRef">
-              <nz-option *ngFor="let city of CityList" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
-            </nz-select>
-          </div>
-        </div>
-        <div class="row mb-3" style="margin-top: 1rem">
-          <div class="col-md-4 col-sm-12">
-            <label for="GSTIN">GSTIN</label>
-            <input type="text" [(ngModel)]="Entity.p.GSTIN" name="GSTIN" class="form-control" id="GSTIN"
-              placeholder="Enter GSTIN" pattern="{{GSTIN}}" #GSTINCtrl="ngModel" required
-              (blur)="GSTINCtrl.control.markAsTouched()" />
-            <div *ngIf="(GSTINCtrl.invalid && (GSTINCtrl.touched || GSTINCtrl.dirty))">
-              <span class="validation-text" *ngIf="GSTINCtrl.errors?.['pattern']">{{GSTINMsg}}</span>
-              <span class="validation-text" *ngIf="GSTINCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label for="Pan">PAN</label>
-            <input type="text" [(ngModel)]="Entity.p.Pan" name="Pan" class="form-control" id="Pan"
-              placeholder="Enter PAN" pattern="{{PAN}}" #PanCtrl="ngModel" required
-              (blur)="PanCtrl.control.markAsTouched()" />
-            <div *ngIf="(PanCtrl.invalid && (PanCtrl.touched || PanCtrl.dirty))">
-              <span class="validation-text" *ngIf="PanCtrl.errors?.['pattern']">{{PANMsg}}</span>
-              <span class="validation-text" *ngIf="PanCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label>CIN</label>
-            <input type="text" [(ngModel)]="Entity.p.CINNO" name="CINNO" class="form-control" id="CINNO"
-              placeholder="Enter CIN" pattern="{{CIN}}" #CINCtrl="ngModel" (blur)="CINCtrl.control.markAsTouched()" />
-            <div *ngIf="(CINCtrl.invalid && (CINCtrl.touched || CINCtrl.dirty))">
-              <span class="validation-text" *ngIf="CINCtrl.errors?.['pattern']">{{CINMsg}}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
         <div class="col-6">
+          <label for="AddressLine1">Address Line 1</label>
+          <input type="text" [(ngModel)]="Entity.p.AddressLine1" name="AddressLine1" class="form-control"
+            id="AddressLine1" placeholder="Enter Address Line 1" #AddressLine1Ctrl="ngModel" required
+            (blur)="AddressLine1Ctrl.control.markAsTouched()" />
+          <div *ngIf="(AddressLine1Ctrl.invalid && (AddressLine1Ctrl.touched || AddressLine1Ctrl.dirty))">
+            <span class="validation-text" *ngIf="AddressLine1Ctrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+        <div class="col-6">
+          <label>Address Line 2</label>
+          <input type="text" [(ngModel)]="Entity.p.AddressLine2" name="AddressLine2" class="form-control"
+            id="AddressLine2" required placeholder="Enter Address Line 2" />
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <label for="CountryRef"><b>Country</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" [nzSize]="'large'" name="CountryRef" id="CountryRef"
+            [(ngModel)]="Entity.p.CountryRef" (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
+            <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
+              [nzValue]="country.p.Ref"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <label for="StateRef"><b>State</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="StateRef" name="StateRef" [nzSize]="'large'" [(ngModel)]="Entity.p.StateRef"
+            (ngModelChange)="getCityListByStateRef(Entity.p.StateRef)">
+            <nz-option *ngFor="let state of StateList" [nzValue]="state.p.Ref" [nzLabel]="state.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <label for="CityRef"><b>City</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="CityRef" name="CityRef" [nzSize]="'large'" [(ngModel)]="Entity.p.CityRef">
+            <nz-option *ngFor="let city of CityList" [nzValue]="city.p.Ref" [nzLabel]="city.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4 col-6">
+          <label for="GSTIN">GSTIN</label>
+          <input type="text" [(ngModel)]="Entity.p.GSTIN" name="GSTIN" class="form-control" id="GSTIN"
+            placeholder="Enter GSTIN" pattern="{{GSTIN}}" #GSTINCtrl="ngModel" required
+            (blur)="GSTINCtrl.control.markAsTouched()" />
+          <div *ngIf="(GSTINCtrl.invalid && (GSTINCtrl.touched || GSTINCtrl.dirty))">
+            <span class="validation-text" *ngIf="GSTINCtrl.errors?.['pattern']">{{GSTINMsg}}</span>
+            <span class="validation-text" *ngIf="GSTINCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+        <div class="col-md-4 col-6">
+          <label for="Pan">PAN</label>
+          <input type="text" [(ngModel)]="Entity.p.Pan" name="Pan" class="form-control" id="Pan" placeholder="Enter PAN"
+            pattern="{{PAN}}" #PanCtrl="ngModel" required (blur)="PanCtrl.control.markAsTouched()" />
+          <div *ngIf="(PanCtrl.invalid && (PanCtrl.touched || PanCtrl.dirty))">
+            <span class="validation-text" *ngIf="PanCtrl.errors?.['pattern']">{{PANMsg}}</span>
+            <span class="validation-text" *ngIf="PanCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-12 ">
           <div class="col-md-12 mb-3">
             <label>Notes</label>
             <textarea type="text" [(ngModel)]="Entity.p.Notes" name="Notes" class="form-control" id="Notes" rows="2"
@@ -188,35 +173,6 @@
             <div class="text-align-center">
               <label><b>Company Logo </b></label>
             </div>
-            <!-- <div class="Company-Logo-container">
-              <ng-container *ngIf="imageUrl; else defaultImage">
-                <img [src]="ImageBaseUrl + imageUrl +'/' + LoginToken +'?' + TimeStamp" alt="Company Logo"
-                  class="Company-Logo" />
-              </ng-container>
-              <ng-template #defaultImage>
-                <img src="/assets/images/noimage.png" alt="No Image" class="Company-Logo" />
-              </ng-template>
-              <input type="file" (change)="onImageUpload($event)" id="CompanyLogo" class="file-upload" accept="image/*"
-                name="image" accept=".jpg, .jpeg, .png, .gif" />
-              <p *ngIf="errors.company_image" class="validation-error">
-                {{ errors.company_image }}
-              </p>
-            </div> -->
-            <!-- <div class="Company-Logo-container">
-              <ng-container *ngIf="imagePreviewUrl; else defaultImage">
-                <img [src]="imagePreviewUrl" alt="Company Logo" class="Company-Logo" />
-              </ng-container>
-              <ng-template #defaultImage>
-                <img src="/assets/images/noimage.png" alt="No Image" class="Company-Logo" />
-              </ng-template>
-
-              <input type="file" (change)="onImageUpload($event)" id="CompanyLogo" class="file-upload" name="image"
-                accept=".jpg, .jpeg, .png, .gif" />
-
-              <p *ngIf="errors.company_image" class="validation-error">
-                {{ errors.company_image }}
-              </p>
-            </div> -->
 
             <div class="Company-Logo-container">
               <!-- Image Preview -->
