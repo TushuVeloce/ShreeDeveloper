@@ -144,19 +144,22 @@
                   Rejected
                 </span>
 
-                  <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Completed"
+                <!-- Completed -->
+                <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Completed"
                   ngClass="completed">
-                  completed
+                  Completed
                 </span>
 
-                  <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Incomplete"
+                <!-- Incomplete -->
+                <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Incomplete"
                   ngClass="incomplete">
-                  incomplete
+                  Incomplete
                 </span>
 
-                  <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Ordered"
+                <!-- Ordered -->
+                <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Ordered"
                   ngClass="ordered">
-                  ordered
+                  Ordered
                 </span>
 
               </td>

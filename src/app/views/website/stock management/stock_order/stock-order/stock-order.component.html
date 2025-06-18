@@ -70,34 +70,45 @@
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
                 {{ Order.p.GrandTotal }}
               </td>
+              <!-- Optional: Requisition status -->
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
-                <!-- Completed -->
-                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Ordered"
-                  ngClass="approved">
-                  Completed
+                <!-- PENDING -->
+                <span class="status"
+                  *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Pending" ngClass="pending">
+                  Pending
                 </span>
 
                 <!-- APPROVED -->
-                <span class="status" (click)="NavigateOrderstatus(Order)" style="cursor: pointer;"
-                  *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Approved" ngClass="pending">
+                <span class="status" style="cursor: pointer;" (click)="NavigateOrderstatus(Order)" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Approved"
+                  ngClass="approved">
                   Approved
                 </span>
 
                 <!-- REJECTED -->
-                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Incomplete"
+                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Rejected"
                   ngClass="rejected">
                   Rejected
                 </span>
+
+                <!-- Completed -->
+                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Completed"
+                  ngClass="completed">
+                  Completed
+                </span>
+
+                <!-- Incomplete -->
+                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Incomplete"
+                  ngClass="incomplete">
+                  Incomplete
+                </span>
+
+                <!-- Ordered -->
+                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Ordered"
+                  ngClass="ordered">
+                  Ordered
+                </span>
               </td>
 
-              <!-- <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
-                <span style="margin-left: 9px;" (click)="onEditClicked(Order)">
-                  <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
-                </span>
-                <span style="margin-left: 9px;" (click)="onDeleteClicked(Order)">
-                  <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
-                </span>
-              </td> -->
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
                 <span style="margin-left: 9px;"
                   *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Approved"

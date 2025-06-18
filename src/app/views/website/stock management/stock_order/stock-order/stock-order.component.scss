@@ -31,5 +31,19 @@
     border-color: red;
     background-color: #ffe6e6;
   }
-  
+
+  &.completed {
+    border-color: #007bff;
+    background-color: #e6f0ff;
+  }
+
+  &.incomplete {
+    border-color: #ff9900;
+    background-color: #fff5e6;
+  }
+
+  &.ordered {
+    border-color: #800080;
+    background-color: #f3e6f9;
+  }
 }

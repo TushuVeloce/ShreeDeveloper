@@ -70,10 +70,12 @@
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
                 {{ Quotation.p.GrandTotal }}
               </td>
+
+              <!-- Optional: Requisition status -->
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
                 <!-- PENDING -->
-                <span class="status" style="cursor: pointer;" (click)="ChangeQuotationstatus(Quotation)"
-                  *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Pending" ngClass="pending">
+                <span class="status" style="cursor: pointer;"
+                  *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Pending" (click)="ChangeQuotationstatus(Quotation)" ngClass="pending">
                   Pending
                 </span>
 
@@ -88,6 +90,25 @@
                   ngClass="rejected">
                   Rejected
                 </span>
+
+                <!-- Completed -->
+                <span class="status" *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Completed"
+                  ngClass="completed">
+                  Completed
+                </span>
+
+                <!-- Incomplete -->
+                <span class="status" *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Incomplete"
+                  ngClass="incomplete">
+                  Incomplete
+                </span>
+
+                <!-- Ordered -->
+                <span class="status" *ngIf="Quotation.p.MaterialQuotationStatus == MaterialQuotationStatus.Ordered"
+                  ngClass="ordered">
+                  Ordered
+                </span>
+
               </td>
 
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
