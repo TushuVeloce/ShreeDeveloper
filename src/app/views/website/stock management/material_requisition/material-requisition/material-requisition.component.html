@@ -144,6 +144,21 @@
                   Rejected
                 </span>
 
+                  <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Completed"
+                  ngClass="completed">
+                  completed
+                </span>
+
+                  <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Incomplete"
+                  ngClass="incomplete">
+                  incomplete
+                </span>
+
+                  <span class="status" *ngIf="detail.MaterialStatus == MaterialRequisitionStatuses.Ordered"
+                  ngClass="ordered">
+                  ordered
+                </span>
+
               </td>
               <!-- Actions -->
               <td class="tbldata">

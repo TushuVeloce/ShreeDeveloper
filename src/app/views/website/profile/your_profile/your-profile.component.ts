@@ -242,4 +242,3 @@ export class YourProfileComponent implements OnInit {
     this.router.navigate(['/homepage']);
   }
 }
-

@@ -132,6 +132,7 @@ import { StockOrderComponent } from './stock management/stock_order/stock-order/
 import { StockConsumeDetailsComponent } from './stock management/stock_consume/stock-consume-details/stock-consume-details.component';
 import { StockTransferDetailsComponent } from './stock management/stock_transfer/stock-transfer-details/stock-transfer-details.component';
 import { OrderApprovalComponent } from './stock management/stock_order/order-approval/order-approval.component';
+import { ChangePasswordComponent } from './profile/change_password/change-password/change-password.component';
 
 
 const routes: Routes = [
@@ -326,8 +327,9 @@ const routes: Routes = [
 
       // Razorpay
       { path: 'Razorpay', component: RazorpayComponent},
-      { path: 'your_profile', component: YourProfileComponent},
-      { path: 'create_password', component: CreatePasswordComponent,},
+      { path: 'Your_Profile', component: YourProfileComponent},
+      { path: 'Create_Password', component: CreatePasswordComponent},
+       { path: 'Change_Password', component: ChangePasswordComponent},
       // { path: 'change_password', component: ChangePasswordComponent},
 
       // { path: 'Progress_Report', component: ProgressReportComponent},

@@ -79,7 +79,7 @@ export class LoginPageComponent implements OnInit {
         // await this.router.navigate(['/splash-screen']);  // Navigate to mobile
         await this.router.navigate(['/homepage']);  // Navigate to webŚ
       } else if (response.LoginForFirstTime == 0) {
-        await this.router.navigate(['/create_password']);
+        await this.router.navigate(['/Create_Password']);
       } else {
         await this.router.navigate(['/homepage']);  // Navigate to web
         this.appStateManage.triggerCompanyInit(); 
