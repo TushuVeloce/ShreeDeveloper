@@ -76,7 +76,8 @@ export class LoginPageComponent implements OnInit {
       //   const user = { UserDisplayName: response.UserDisplayName, EMailId: response.EMailId, PhoneNos: response.PhoneNos }
       // this.appStateManage.setUserJSON(user);
       if (this.isMobile) {
-        await this.router.navigate(['/app_homepage']);  // Navigate to mobile
+        // await this.router.navigate(['/splash-screen']);  // Navigate to mobile
+        await this.router.navigate(['/homepage']);  // Navigate to webŚ
       } else if (response.LoginForFirstTime == 0) {
         await this.router.navigate(['/create_password']);
       } else {
