@@ -21,6 +21,7 @@ export class MaterialFromOrderProps {
   public UpdatedByName: number = 0;
   public Ref: number = 0;
   public MaterialRequisitionDetailsRef:number=0
+  public MaterialStockOrderDetailsRef:number=0
   public Code: string = '';
   public MaterialName: string = '';
   public UnitRef: number = 0;
