@@ -30,9 +30,10 @@ export class StockInwardProps {
   public VendorMobNo: string = '';
   public ChalanNo: number = 0
   public VehicleNo: string = ''
-  public RemainingQty : number = 0
+  public RemainingQty: number = 0
   public CompanyRef: number = 0;
   public CompanyName: string = '';
+  public InvoicePath: string = "";
   public MaterialInwardDetailsArray: InwardMaterialDetailProps[] = [];
 
 
@@ -110,7 +111,7 @@ export class StockInward implements IPersistable<StockInward> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): StockInward[] {
+    sortPropertyName: string = ""): StockInward[] {
     let result: StockInward[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -176,18 +177,18 @@ export class StockInward implements IPersistable<StockInward> {
     return StockInward.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchEntireListByAllFilters(CompanyRef: number, Status: number, SiteRef: number,  errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-        let req = new StockInwardFetchRequest();
-        req.CompanyRefs.push(CompanyRef)
-        if (Status) {
-          req.StockInwardStatus.push(Status)
-        }
-        if (SiteRef) {
-          req.SiteRefs.push(SiteRef)
-        }
-        let tdResponse = await StockInward.FetchTransportData(req, errorHandler) as TransportData;
-        return StockInward.ListFromTransportData(tdResponse);
-      }
+  public static async FetchEntireListByAllFilters(CompanyRef: number, Status: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new StockInwardFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    if (Status) {
+      req.StockInwardStatus.push(Status)
+    }
+    if (SiteRef) {
+      req.SiteRefs.push(SiteRef)
+    }
+    let tdResponse = await StockInward.FetchTransportData(req, errorHandler) as TransportData;
+    return StockInward.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

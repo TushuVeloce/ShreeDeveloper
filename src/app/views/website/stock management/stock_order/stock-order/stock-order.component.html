@@ -49,7 +49,7 @@
                 [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
                 {{ Order.p.SiteName }}
               </td>
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length" width="9%">
                 {{ formatDate(Order.p.Date) }}
               </td>
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
@@ -62,7 +62,7 @@
               <td class="tbldata">{{ detail.OrderedQty }}</td>
               <td class="tbldata">{{ detail.RequiredRemainingQuantity }}</td>
               <td class="tbldata">{{ detail.DiscountedRate }}</td>
-              <td Class="tbldata">
+              <td Class="tbldata" width="9%">
                 {{ detail.ExpectedDeliveryDate ? formatDate(detail.ExpectedDeliveryDate) : '--'}}
               </td>
               <td class="tbldata">{{ detail.TotalAmount }}</td>

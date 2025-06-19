@@ -49,7 +49,7 @@
                 [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
                 {{ Quotation.p.SiteName }}
               </td>
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length" width="10%">
                 {{ formatDate(Quotation.p.Date) }}
               </td>
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
@@ -62,7 +62,7 @@
               <td class="tbldata">{{ detail.OrderedQty }}</td>
               <td class="tbldata">{{ detail.RequiredRemainingQuantity }}</td>
               <td class="tbldata">{{ detail.DiscountedRate }}</td>
-              <td Class="tbldata">
+              <td Class="tbldata" width="10%">
                 {{ detail.ExpectedDeliveryDate ? formatDate(detail.ExpectedDeliveryDate) : '--'}}
               </td>
               <td class="tbldata">{{ detail.TotalAmount }}</td>

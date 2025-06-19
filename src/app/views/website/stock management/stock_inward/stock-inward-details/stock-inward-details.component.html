@@ -15,6 +15,21 @@
         No Data
       </div>
     </ng-template>
+    <!-- If file not selected -->
+    <ng-template #NoFile>
+      No file selected
+    </ng-template>
+
+    <!-- Fallback: If file is missing entirely -->
+    <ng-template #defaultImage>
+      <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
+    </ng-template>
+
+    <!-- Fallback: If file is not an image (e.g., PDF/DOC) -->
+    <ng-template #defaultDocImage>
+      <img src="/assets/icons/doc-placeholder.png" alt="Document File" class="file-preview" />
+    </ng-template>
+
     <form autocomplete="off" #requisitionForm="ngForm">
       <div class="row">
         <div class="col-md-4" style="margin-top: 1rem">
@@ -29,7 +44,7 @@
           <label>Ordered Date</label>
           <input type="date" name="OrderedDate" class="form-control" id="OrderedDate" [(ngModel)]="Entity.p.OrderedDate"
             #OrderedDateCtrl="ngModel" required (blur)="OrderedDateCtrl.control.markAsTouched()"
-            placeholder="Enter Site Name" readonly/>
+            placeholder="Enter Site Name" readonly />
           <div *ngIf="OrderedDateCtrl.invalid && (OrderedDateCtrl.touched || OrderedDateCtrl.dirty)">
             <span class="validation-text" *ngIf="OrderedDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
@@ -38,7 +53,7 @@
           <label>Inward Date</label>
           <input type="date" name="InwardDate" class="form-control" id="InwardDate" [(ngModel)]="Entity.p.InwardDate"
             #InwardDateCtrl="ngModel" required (blur)="InwardDateCtrl.control.markAsTouched()"
-            placeholder="Enter Site Name" [min]="Entity.p.OrderedDate"/>
+            placeholder="Enter Site Name" [min]="Entity.p.OrderedDate" />
           <div *ngIf="InwardDateCtrl.invalid && (InwardDateCtrl.touched || InwardDateCtrl.dirty)">
             <span class="validation-text" *ngIf="InwardDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
@@ -73,6 +88,41 @@
           <input type="number" [(ngModel)]="Entity.p.RemainingQty" name="RemainingQty" class="form-control" id="RemainingQty"
             placeholder="Remaining Required Quantity" />
         </div> -->
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-2 d-flex justify-content-center align-items-center">
+          <label>Invoice</label>
+        </div>
+        <div class="col-md-5 d-flex align-items-center justify-content-between">
+          <!-- Upload icon triggers file input -->
+          <img src="/assets/icons/upload.png" alt="Invoice" title="Upload Invoice" class="Upload-Icon"
+            (click)="triggerFileInput()" />
+
+          <ng-container *ngIf="selectedFileName; else NoFile">
+            <span style="cursor: pointer;" (click)="fileNavigation(Entity.p.InvoicePath)">
+              {{ selectedFileName}}
+            </span>
+          </ng-container>
+
+          <!-- Hidden File Input -->
+          <input type="file" #fileInput accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
+            (change)="onFileUpload($event);" />
+
+          <!-- Customer Aadhar Image Display -->
+          <ng-container *ngIf="Entity.p.InvoicePath; else AddDocImage">
+            <img [src]="isImageFile(Entity.p.InvoicePath) ? imagePostView : '/assets/icons/doc-placeholder.png'"
+              alt="Invoice" title="Invoice" (click)="fileNavigation(Entity.p.InvoicePath)"
+              [class]="isImageFile(Entity.p.InvoicePath) ?  'img-preview' : 'file-preview'" />
+          </ng-container>
+
+          <ng-template #AddDocImage>
+            <ng-container *ngIf="imagePreView; else defaultImage">
+              <img [src]="isImageFile(selectedFileName) ? imagePreView : '/assets/icons/doc-placeholder.png'"
+                alt="Invoice" title="Invoice" (click)="fileNavigation(this.Entity.p.InvoicePath)"
+                [class]="isImageFile(selectedFileName) ? 'img-preview' : 'file-preview'" />
+            </ng-container>
+          </ng-template>
+        </div>
       </div>
       <div class="row" style="margin-top: 2rem; padding: 1rem">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
@@ -162,7 +212,8 @@
           <div class="col-md-6" style="margin-top: 1rem">
             <label>Material Name</label>
             <nz-select *ngIf="!ModalEditable" class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl"
-              nzAllowClear nzPlaceHolder="Select" id="MaterialRequisitionDetailsRef" name="MaterialRequisitionDetailsRef" [nzSize]="'large'"
+              nzAllowClear nzPlaceHolder="Select" id="MaterialRequisitionDetailsRef"
+              name="MaterialRequisitionDetailsRef" [nzSize]="'large'"
               [(ngModel)]="newInward.MaterialRequisitionDetailsRef" required
               (ngModelChange)="getUnitByMaterialRef(newInward.MaterialRequisitionDetailsRef)">
               <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.MaterialRequisitionDetailsRef"
@@ -178,17 +229,19 @@
           <div class="col-md-6" style="margin-top: 1rem">
             <label>Ordered Quantity</label>
             <input type="number" name="OrderedQty" class="form-control" [(ngModel)]="newInward.OrderedQty" required
-              placeholder="Ordered Quantity" (click)="selectAllValue($event)" (ngModelChange)="CalculateRemainingQty()"/>
+              placeholder="Ordered Quantity" (click)="selectAllValue($event)"
+              (ngModelChange)="CalculateRemainingQty()" />
           </div>
           <div class="col-md-6" style="margin-top: 1rem">
             <label>Inward Quantity</label>
             <input type="number" name="InwardQty" class="form-control" [(ngModel)]="newInward.InwardQty" required
-              placeholder="Inward Quantity" (click)="selectAllValue($event)" (ngModelChange)="CalculateRemainingQty()"/>
+              placeholder="Inward Quantity" (click)="selectAllValue($event)"
+              (ngModelChange)="CalculateRemainingQty()" />
           </div>
           <div class="col-md-6" style="margin-top: 1rem">
             <label>Remaining Quantity</label>
             <input type="number" name="RemainingQty" class="form-control" [(ngModel)]="newInward.RemainingQty" required
-              placeholder="Remaining Quantity" (click)="selectAllValue($event)" readonly/>
+              placeholder="Remaining Quantity" (click)="selectAllValue($event)" readonly />
           </div>
         </div>
       </form>

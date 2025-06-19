@@ -62,7 +62,7 @@
       </div>
       <div class="row mt-3">
         <div class="col-md-2 d-flex justify-content-center align-items-center">
-          <label>Invoice</label>
+          <label>Quotation</label>
         </div>
         <div class="col-md-5 d-flex align-items-center justify-content-between">
           <ng-container *ngIf="selectedFileName; else NoFile">
@@ -74,14 +74,14 @@
           <!-- Customer Aadhar Image Display -->
           <ng-container *ngIf="Entity.p.InvoicePath; else AddDocImage">
             <img [src]="isImageFile(Entity.p.InvoicePath) ? imagePostView : '/assets/icons/doc-placeholder.png'"
-              alt="Invoice" title="Invoice" (click)="fileNavigation(Entity.p.InvoicePath)"
+              alt="Quotation" title="Quotation" (click)="fileNavigation(Entity.p.InvoicePath)"
               [class]="isImageFile(Entity.p.InvoicePath) ?  'img-preview' : 'file-preview'" />
           </ng-container>
 
           <ng-template #AddDocImage>
             <ng-container *ngIf="imagePreView; else defaultImage">
               <img [src]="isImageFile(selectedFileName) ? imagePreView : '/assets/icons/doc-placeholder.png'"
-                alt="Invoice" title="Invoice" (click)="fileNavigation(this.Entity.p.InvoicePath)"
+                alt="Quotation" title="Quotation" (click)="fileNavigation(this.Entity.p.InvoicePath)"
                 [class]="isImageFile(selectedFileName) ? 'img-preview' : 'file-preview'" />
             </ng-container>
           </ng-template>
