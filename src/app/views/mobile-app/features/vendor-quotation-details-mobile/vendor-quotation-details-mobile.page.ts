@@ -43,7 +43,6 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
   VendorTradeName: string = '';
   QuotationDate: string = '';
   CurrentDate: string = '';
-  ExpectedDeliveryDate: string = '';
   QuotedMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Required Remaining Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount', 'Action'];
   isQuotedMaterialModalOpen: boolean = false;
   isCopyMaterialModalOpen: boolean = false;
@@ -59,8 +58,16 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
 
   MaterialName: string = '';
   selectedMaterial: any[] = [];
+
+  gstName: string = '';
+  selectedGST: any[] = [];
   Date: string | null = null;
-  // ismaterialModalOpen: boolean = false;
+  ExpectedDeliveryDate: string | null = null;
+
+  CopyVendorList: Quotation[] = [];
+  CopyVendorName: string = '';
+  selectedCopyVendor: any[] = [];
+
   errors: string = '';
 
   //image details
@@ -73,6 +80,18 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
   imagePostView: string = '';
   imagePostViewUrl: string = '';
   selectedFileName: string = '';
+
+  GSTList: any[] = [
+    { Name: "None", Ref: 0 },
+    { Name: "5%", Ref: 5 },
+    { Name: "9%", Ref: 9 },
+    { Name: "18%", Ref: 18 },
+    { Name: "27%", Ref: 27 }
+  ];
+
+  tableHeaderData = ['Material', 'Unit', 'Required Qty', 'Ordered Qty', 'Required Remaining Qty', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount']
+
+
 
   constructor(
     private router: Router,
@@ -159,25 +178,34 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
         this.LoginToken = this.appStateManage.getLoginToken();
         this.appStateManage.setDropdownDisabled(true);
         await this.getSiteListByCompanyRef();
+        await this.getVendorListByCompanyRef()
         if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
           this.IsNewEntity = false;
           this.DetailsFormTitle = this.IsNewEntity ? 'New Quotation' : 'Edit Quotation';
           this.Entity = Quotation.GetCurrentInstance();
+          this.appStateManage.StorageKey.removeItem('Editable');
           this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.InvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
           this.selectedFileName = this.Entity.p.InvoicePath;
 
-          this.QuotationDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
-          this.appStateManage.StorageKey.removeItem('Editable');
-          // if (this.Entity.p.Date != '') {
-          //   this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
-          // }
-          // this.selectedSite = [{
-          //   p: {
-          //     Ref: this.Entity.p.SiteRef,
-          //     Name: this.Entity.p.SiteName
-          //   }
-          // }];
-          // this.SiteName = this.selectedSite[0].p.Name;
+          // this.QuotationDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
+          if (this.Entity.p.Date != '') {
+            this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
+          }
+          this.selectedSite = [{
+            p: {
+              Ref: this.Entity.p.SiteRef,
+              Name: this.Entity.p.SiteName
+            }
+          }];
+          this.SiteName = this.selectedSite[0].p.Name;
+          this.selectedVendorName = [{
+            p: {
+              Ref: this.Entity.p.VendorRef,
+              Name: this.Entity.p.VendorName
+            }
+          }];
+          this.VendorName = this.selectedVendorName[0].p.Name;
+          this.onVendorSelection(this.Entity.p.VendorRef);
 
         } else {
           this.Entity = Quotation.CreateNewInstance();
@@ -213,6 +241,12 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
   public async onDateChange(date: any): Promise<void> {
     this.Date = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
     this.Entity.p.Date = this.Date;
+  }
+
+  public async onExpectedDeliveryDateChange(date: any): Promise<void> {
+    this.Date = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
+    // this.Entity.p.MaterialQuotationDetailsArray[this.editingIndex].ExpectedDeliveryDate = this.Date;
+    this.newQuotedMaterial.ExpectedDeliveryDate = this.Date;
   }
 
   openModal = async (type: number) => {
@@ -287,46 +321,6 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
     }
   };
 
-  // openModal(type: string) {
-  //   if (this.Entity.p.SiteRef <= 0) {
-  //     this.uiUtils.showErrorToster('Site not Selected');
-  //     return;
-  //   }
-  //   if (this.Entity.p.VendorRef <= 0) {
-  //     this.uiUtils.showErrorToster('Vendor not Selected');
-  //     return;
-  //   }
-  //   this.ModalEditable = false;
-  //   this.getMaterialRequisitionListByVendorRefAndSiteRef();
-  //   if (type === 'QuotedMaterial') this.isQuotedMaterialModalOpen = true;
-  // }
-
-  // closeModal = async (type: string) => {
-  //   if (type === 'QuotedMaterial') {
-  //     const keysToCheck = ['MaterialRequisitionDetailsRef', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
-
-  //     const hasData = keysToCheck.some(
-  //       key => (this.newQuotedMaterial as any)[key]?.toString().trim()
-  //     );
-
-  //     if (hasData) {
-  //       await this.uiUtils.showConfirmationMessage(
-  //         'Close',
-  //         `This process is <strong>IRREVERSIBLE!</strong><br/>
-  //          Are you sure you want to close this modal?`,
-  //         async () => {
-  //           this.isQuotedMaterialModalOpen = false;
-  //           this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
-  //         }
-  //       );
-  //     } else {
-  //       this.isQuotedMaterialModalOpen = false;
-  //       this.ModalEditable = false;
-  //       this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
-  //     }
-  //   }
-  // };
-
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
       // await this.uiUtils.showErrorToster('Company not Selected');
@@ -375,6 +369,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
       return;
     }
     let lst = await RequiredMaterial.FetchEntireListByCompanyVendorAndSiteRef(this.companyRef, this.Entity.p.VendorRef, this.Entity.p.SiteRef, async errMsg => {
+      console.log('RequiredMaterial :', this.companyRef, this.Entity.p.VendorRef, this.Entity.p.SiteRef);
       // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present('Error' + errMsg, 1000, 'danger');
       await this.haptic.error();
@@ -408,7 +403,11 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
   }
 
   onMaterialSelection = (MaterialRef: number) => {
-    const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.Ref == MaterialRef);
+    console.log('MaterialRef :', MaterialRef);
+    
+    console.log('MaterialRequisitionList :', this.MaterialRequisitionList);
+    const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.MaterialRef == MaterialRef);
+    console.log('SingleRecord :', SingleRecord);
     this.newQuotedMaterial.UnitName = SingleRecord[0].p.UnitName
     this.newQuotedMaterial.EstimatedQty = SingleRecord[0].p.EstimatedQty
     this.newQuotedMaterial.MaterialRequisitionDetailsName = SingleRecord[0].p.MaterialName
@@ -504,7 +503,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
       return await this.toastService.present('Rate cannot be blank.', 1000, 'warning'), await this.haptic.warning();
     }
 
-    this.newQuotedMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate);
+    this.newQuotedMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate ? this.ExpectedDeliveryDate:'');
     this.ExpectedDeliveryDate = '';
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
       this.Entity.p.MaterialQuotationDetailsArray[this.editingIndex] = { ...this.newQuotedMaterial };
@@ -521,6 +520,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
       this.Entity.p.MaterialQuotationDetailsArray.push({ ...QuotedMaterialInstance.p });
       this.filterMaterialList();
       // await this.uiUtils.showSuccessToster('Material added successfully');
+      this.isQuotedMaterialModalOpen = false;
       await this.toastService.present('Material added successfully', 1000, 'success');
       await this.haptic.success();
     }
@@ -533,6 +533,13 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
     this.newQuotedMaterial = { ...this.Entity.p.MaterialQuotationDetailsArray[index] }
     this.editingIndex = index;
     this.ModalEditable = true;
+    this.selectedGST = [{
+      p: {
+        Ref: this.Entity.p.MaterialQuotationDetailsArray[index].ExpectedDeliveryDate,
+        Name: this.GSTList.filter(data => data.Ref == this.Entity.p.MaterialQuotationDetailsArray[index].Gst)[0].Name
+      }
+    }];
+    this.gstName = this.selectedGST[0].p.Name;
     this.ExpectedDeliveryDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialQuotationDetailsArray[index].ExpectedDeliveryDate);
   }
 
@@ -573,7 +580,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
     });
   }
 
-  openCopyModal = async (type: string) => {
+  openCopyModal = async (type: number) => {
     if (this.Entity.p.SiteRef <= 0) {
       // await this.uiUtils.showErrorToster('Site not Selected');
       this.toastService.present('Site not Selected', 1000, 'danger');
@@ -581,10 +588,10 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
       return;
     }
     // this.getVendorListByCompanyRef();
-    if (type === 'CopyMaterial') this.isCopyMaterialModalOpen = true;
+    if (type === 200) this.isCopyMaterialModalOpen = true;
   }
 
-  closeCopyModal = async (type: string) => {
+  closeCopyModal = async (type: number) => {
     this.isCopyMaterialModalOpen = false;
   };
 
@@ -613,7 +620,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
       await this.toastService.present('No Data Found', 1000, 'danger');
       await this.haptic.error();
     }
-  }
+  } 
 
   SaveQuotation = async () => {
     let lstFTO: FileTransferObject[] = [];
@@ -701,15 +708,46 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
     }
   }
 
+  public async selectCopyVenodrBottomsheet(): Promise<void> {
+    try {
+      const options = this.CopyVendorList;
+      this.openSelectModal(options, this.selectedCopyVendor, false, 'Select Copy Vendor', 1, (selected) => {
+        this.selectedCopyVendor = selected;
+        // this.newQuotedMaterial.ma = selected[0].p.MaterialRef;
+        this.CopyVendorName = selected[0].p.MaterialName;
+        // this.onMaterialSelection(selected[0].p.MaterialRef)
+      });
+
+    } catch (error) {
+
+    }
+  }
+  public async selectGSTBottomsheet(): Promise<void> {
+    try {
+      const options = this.GSTList.map((item) => ({ p: item }));;
+      this.openSelectModal(options, this.selectedGST, false, 'Select GST', 1, (selected) => {
+        this.selectedGST = selected;
+        this.newQuotedMaterial.Gst = selected[0].p.Ref;
+        this.gstName = selected[0].p.Name;
+        this.CalculateNetAmountAndTotalAmount()
+      });
+
+    } catch (error) {
+
+    }
+  }
+
   public async selectMaterialBottomsheet(): Promise<void> {
     try {
-      // const options = this.MaterialList;
-      // this.openSelectModal(options, this.selectedMaterial, false, 'Select Material', 1, (selected) => {
-      //   this.selectedMaterial = selected;
-      //   this.newRequisition.MaterialRef = selected[0].p.Ref;
-      //   this.MaterialName = selected[0].p.Name;
-      //   this.getUnitByMaterialRef(this.newRequisition.MaterialRef)
-      // });
+      const options = this.MaterialRequisitionList;
+      this.openSelectModal(options, this.selectedMaterial, false, 'Select Material', 1, (selected) => {
+        this.selectedMaterial = selected;
+        console.log('selected :', selected);
+        this.newQuotedMaterial.MaterialRequisitionDetailsRef = selected[0].p.MaterialRef;
+        this.MaterialName = selected[0].p.MaterialName;
+        this.onMaterialSelection(this.newQuotedMaterial.MaterialRequisitionDetailsRef)
+      });
+      
     } catch (error) {
 
     }
@@ -717,7 +755,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
 
   public async selectVendorNameBottomsheet(): Promise<void> {
     try {
-      const options = this.SiteList;
+      const options = this.VendorList;
       this.openSelectModal(options, this.selectedVendorName, false, 'Select Vendor Name', 1, (selected) => {
         this.selectedVendorName = selected;
         this.Entity.p.VendorRef = selected[0].p.Ref;
@@ -801,7 +839,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
             text: 'Yes, Close',
             cssClass: 'custom-confirm',
             handler: () => {
-              this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/material-requisition'], { replaceUrl: true });
+              this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/vendor-quotation'], { replaceUrl: true });
               this.haptic.success();
               console.log('User confirmed.');
             }
@@ -809,7 +847,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
         ]
       });
     } else {
-      this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/material-requisition'], { replaceUrl: true });
+      this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/vendor-quotation'], { replaceUrl: true });
       this.haptic.success();
     }
   }

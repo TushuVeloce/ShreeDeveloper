@@ -108,3 +108,51 @@
         }
     }
 }
+
+.table-container {
+    width: 100%;
+    max-height: 400px;
+    overflow: auto;
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.table-scroll {
+    overflow: auto;
+}
+
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: max-content;
+    /* Allows horizontal scroll */
+    min-width: 100%;
+}
+
+.custom-table th,
+.custom-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    white-space: nowrap;
+    background-color: #fff;
+}
+
+.sticky-header {
+    position: sticky;
+    top: 0;
+    background-color: var(--ion-background-color-step-100);
+    z-index: 10;
+}
+
+.sticky-col {
+    position: sticky;
+    left: 0;
+    background-color: var(--ion-background-color-step-100);
+    z-index: 9;
+}
+
+.custom-table thead .sticky-col {
+    z-index: 11;
+    /* Higher than header for top-left cell */
+}
