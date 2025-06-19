@@ -25,6 +25,7 @@ export class OrderMaterialDetailProps {
   public OrderedQty: number = 0;
   public ExtraOrderedQty: number = 0;
   public RequiredRemainingQuantity: number = 0;
+  public QuotationOrderedQty: number = 0;
   public Rate: number = 0;
   public DiscountedRate: number = 0;
   public Gst: number = 0;
