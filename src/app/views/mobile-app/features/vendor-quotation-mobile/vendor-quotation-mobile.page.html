@@ -182,10 +182,22 @@
                       {{ item.RequiredRemainingQuantity || '-' }}
                     </td>
                     <td>
-                      {{ item.DiscountedRate || item.Rate || '-' }}
+                      {{ item.Rate || '-' }}
+                    </td>
+                    <td>
+                      {{ item.DiscountedRate || '-' }}
+                    </td>
+                    <td>
+                      {{ item.Gst || '-' }}
+                    </td>
+                    <td>
+                      {{ item.DeliveryCharges || '-' }}
                     </td>
                     <td>
                       {{ formatDate(item.ExpectedDeliveryDate) || '-' }}
+                    </td>
+                    <td>
+                      {{ item.NetAmount || '-' }}
                     </td>
                     <td>
                       {{ item.TotalAmount || '-' }}
