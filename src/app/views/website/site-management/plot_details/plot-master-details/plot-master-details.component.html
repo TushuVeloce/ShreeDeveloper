@@ -1,13 +1,16 @@
 <div class="card-body">
   <div class="card" style="padding: 1rem">
-    <div class="row">
-      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+    <div class="row align-items-center">
+      <!-- Back Button Column -->
+      <div class="col-2 col-md-1 d-flex justify-content-center">
         <button type="button" class="backbtn" (click)="BackPlot()">
-          <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
+          <img src="/assets/icons/arrow-button.png" alt="Back" class="backbtnimg" />
         </button>
       </div>
-      <div class="col-md-11">
-        <span class="detail_title">{{ DetailsFormTitle }}</span>
+
+      <!-- Title Column -->
+      <div class="col-10 col-md-11">
+        <span class="detail_title text-truncate d-block">{{ DetailsFormTitle }}</span>
       </div>
     </div>
     <ng-template #noDataTpl>
@@ -17,11 +20,11 @@
     </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>Site Name</label>
           <input class="form-control date-input" value={{SiteName}} readonly />
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>Plot No.</label>
           <input type="text" name="PlotNo" class="form-control date-input" id="PlotNo" [(ngModel)]="Entity.p.PlotNo"
             #PlotNoCtrl="ngModel" required (blur)="PlotNoCtrl.control.markAsTouched()" placeholder="Enter Plot No."
@@ -30,7 +33,7 @@
             <span class="validation-text" *ngIf="PlotNoCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label for="AreaInSqm">Area in Sqm</label>
           <input type="number" class="form-control" name="AreaInSqm" id="AreaInSqm" [(ngModel)]="Entity.p.AreaInSqm"
             (ngModelChange)="convertSqmToSqft()" #AreaInSqmCtrl="ngModel" required
@@ -40,9 +43,7 @@
             <span class="validation-text" *ngIf="AreaInSqmCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label for="AreaInSqft">Area in Sqft</label>
           <input type="number" class="form-control" name="AreaInSqft" id="AreaInSqft" [(ngModel)]="Entity.p.AreaInSqft"
             (ngModelChange)="convertSqftToSqm()" #AreaInSqftCtrl="ngModel" required
@@ -52,7 +53,7 @@
             <span class="validation-text" *ngIf="AreaInSqftCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>Goverment Rate Per Sqm </label>
           <input type="number" name="GovermentRatePerSqm" class="form-control date-input" id="GovermentRatePerSqm"
             [(ngModel)]="Entity.p.GovermentRatePerSqm" #GovermentRatePerSqmCtrl="ngModel" required
@@ -64,7 +65,7 @@
               *ngIf="GovermentRatePerSqmCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>Basic Rate Per Sqft </label>
           <input type="number" name="BasicRatePerSqft" class="form-control date-input" id="BasicRatePerSqft"
             [(ngModel)]="Entity.p.BasicRatePerSqft" #BasicRatePerSqftCtrl="ngModel" required
@@ -74,9 +75,7 @@
             <span class="validation-text" *ngIf="BasicRatePerSqftCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>Booking Remark</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="CurrentBookingRemark" name="CurrentBookingRemark" [nzSize]="'large'"
@@ -85,12 +84,12 @@
               [nzLabel]="bookingremark.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked">
+        <div class="col-md-4 col-6" *ngIf="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked">
           <label>Company Name</label>
           <input type="text" name="CompanyName" class="form-control date-input" id="CompanyName" value={{CompanyName()}}
             readonly />
         </div>
-        <div class="col-md-4" *ngIf="Entity.p.CurrentBookingRemark != BookingRemark.Shree_Booked">
+        <div class="col-md-4 col-6" *ngIf="Entity.p.CurrentBookingRemark != BookingRemark.Shree_Booked">
           <label>Owner Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="Entity.p.CurrentOwnerRef" name="CurrentOwnerRef"
@@ -99,35 +98,31 @@
               [nzValue]="customer.p.Ref"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>Mobile No</label>
           <input class="form-control date-input"
             [value]="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked ? CompanyEntity.p.Contacts : CustomerEntity.p.ContactNo"
             readonly />
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>Country</label>
           <input class="form-control date-input"
             [value]="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked ? CompanyEntity.p.CountryName : CustomerEntity.p.CountryName"
             readonly />
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>State</label>
           <input class="form-control date-input"
             [value]="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked ? CompanyEntity.p.StateName : CustomerEntity.p.StateName"
             readonly />
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>City</label>
           <input class="form-control date-input"
             [value]="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked ? CompanyEntity.p.CityName : CustomerEntity.p.CityName"
             readonly />
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4">
+        <div class="col-md-4 col-6">
           <label>Address</label>
           <input class="form-control date-input"
             [value]="Entity.p.CurrentBookingRemark == BookingRemark.Shree_Booked ? CompanyEntity.p.AddressLine1 : CustomerEntity.p.Address"
