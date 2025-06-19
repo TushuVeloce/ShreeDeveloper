@@ -198,7 +198,7 @@
 <div *ngIf="isOrderMaterialModalOpen" class="custom-modal-overlay">
   <div class="custom-modal">
     <div class="custom-modal-header">
-      <h5>Add Material</h5>
+      <h5><b> Add Material</b></h5>
       <button type="button" class="btn-close" (click)="closeModal('OrderMaterial')"></button>
     </div>
     <div class="custom-modal-body">
@@ -223,6 +223,11 @@
           </div>
           <div class="col-6 mb-1">
             <label>Required Quantity</label>
+            <input type="number" name="EstimatedQty" class=" form-control" [(ngModel)]="newOrderMaterial.EstimatedQty"
+              readonly />
+          </div>
+          <div class="col-6 mb-1">
+            <label>Remaining Quoted Quantity</label>
             <input type="number" name="EstimatedQty" class=" form-control" [(ngModel)]="newOrderMaterial.EstimatedQty"
               readonly />
           </div>
