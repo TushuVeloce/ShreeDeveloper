@@ -150,12 +150,12 @@ export class StockInwardDetailsComponent implements OnInit {
   }
 
   getUnitByMaterialRef = async (materialref: number) => {
-    console.log('materialref :', materialref);
     this.newInward.UnitRef = 0;
     this.newInward.UnitName = '';
     this.newInward.MaterialName = ''
     this.newInward.OrderedQty = 0
-    if (materialref <= 0 || materialref <= 0) {
+     this.newInward.MaterialStockOrderDetailsRef = 0
+    if (materialref <= 0) {
       await this.uiUtils.showErrorToster('Material not Selected');
       return;
     }
@@ -166,6 +166,7 @@ export class StockInwardDetailsComponent implements OnInit {
       this.newInward.UnitName = UnitData.p.UnitName;
       this.newInward.MaterialName = UnitData.p.MaterialName
       this.newInward.OrderedQty = UnitData.p.OrderedQty
+      this.newInward.MaterialStockOrderDetailsRef = UnitData.p.Ref
       this.getMaterialOrderedQtyByMaterialRef(UnitData.p.Ref)
     }
   }
