@@ -49,7 +49,8 @@
                 [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
                 {{ Order.p.SiteName }}
               </td>
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length" width="9%">
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length"
+                width="9%">
                 {{ formatDate(Order.p.Date) }}
               </td>
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
@@ -61,7 +62,7 @@
               <td class="tbldata">{{ detail.EstimatedQty }}</td>
               <td class="tbldata">{{ detail.OrderedQty }}</td>
               <td class="tbldata">{{ detail.RequiredRemainingQuantity }}</td>
-             <td class="tbldata">{{ !detail.DiscountedRate ? detail.Rate : detail.DiscountedRate }}</td>
+              <td class="tbldata">{{ !detail.DiscountedRate ? detail.Rate : detail.DiscountedRate }}</td>
               <td Class="tbldata" width="9%">
                 {{ detail.ExpectedDeliveryDate ? formatDate(detail.ExpectedDeliveryDate) : '--'}}
               </td>
@@ -73,14 +74,14 @@
               <!-- Optional: Requisition status -->
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
                 <!-- PENDING -->
-                <span class="status"
-                  *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Pending" ngClass="pending">
+                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Pending"
+                  ngClass="pending">
                   Pending
                 </span>
 
                 <!-- APPROVED -->
-                <span class="status" style="cursor: pointer;" (click)="NavigateOrderstatus(Order)" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Approved"
-                  ngClass="approved">
+                <span class="status" style="cursor: pointer;" (click)="NavigateOrderstatus(Order)"
+                  *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Approved" ngClass="approved">
                   Approved
                 </span>
 
@@ -110,6 +111,8 @@
               </td>
 
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
+                <span style="margin-left: 9px; margin-right: 9px; cursor: pointer;" (click)="navigateToPrint(Order)">
+                  <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
                 <span style="margin-left: 9px;"
                   *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Approved"
                   (click)="onEditClicked(Order)">
@@ -120,8 +123,6 @@
                   (click)="onDeleteClicked(Order)">
                   <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
                 </span>
- <span style="margin-left: 9px; margin-right: 9px; cursor: pointer;" (click)="navigateToPrint(Order)">
-              <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
                 <span style="margin-left: 9px;"
                   *ngIf="Order.p.MaterialStockOrderStatus != MaterialStockOrderStatus.Approved">
                   <img src="/assets/icons/GrayEditIcon.png" alt="Edit" title="Disable Edit" width="20px"
