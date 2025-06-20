@@ -11,7 +11,7 @@
     justify-content: center;
     z-index: 1050;
   }
-  
+
   /* Modal Box */
   .custom-modal {
     background: white;
@@ -20,7 +20,7 @@
     width: 600px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
   }
-  
+
   /* Header */
   .custom-modal-header {
     display: flex;
@@ -29,13 +29,13 @@
     border-bottom: 1px solid #ccc;
     padding-bottom: 10px;
   }
-  
+
   /* Footer */
   .custom-modal-footer {
     margin-top: 15px;
     text-align: right;
   }
-  
+
   .input-with-icon {
   position: relative;
 }
@@ -51,4 +51,9 @@
   transform: translateY(-50%);
   pointer-events: none;
   color: #aaa;
+}
+
+.row>* {
+  padding-right: calc(var(--bs-gutter-x) * .2);
+  padding-left: calc(var(--bs-gutter-x) * .2);
 }
