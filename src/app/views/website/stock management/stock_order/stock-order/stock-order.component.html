@@ -68,8 +68,8 @@
               </td>
               <td class="tbldata">{{ detail.TotalAmount }}</td>
 
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
-                {{ Order.p.GrandTotal }}
+              <td class="tbldata" width="8%" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
+                 <b>₹ {{ Order.p.GrandTotal }}</b>
               </td>
               <!-- Optional: Requisition status -->
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
