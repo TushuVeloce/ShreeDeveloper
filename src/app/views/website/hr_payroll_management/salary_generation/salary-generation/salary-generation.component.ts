@@ -61,7 +61,7 @@ export class SalaryGenerationComponent implements OnInit {
     this.CompnyList = lst;
   }
 
-  openSalarySlipModal = (SalaryGeneration: SalaryGeneration) => {
+  openSalarySlipModal = async(SalaryGeneration: SalaryGeneration) => {
     this.isModalVisible = true;
     this.Entity = SalaryGeneration
     if (this.Entity.p.CompanyRef != 0) {
@@ -71,13 +71,13 @@ export class SalaryGenerationComponent implements OnInit {
       }
     }
     if (this.Entity.p.EmployeeRef != 0) {
-      const employeedetails = this.EmployeeList.find(item => item.p.Ref == this.Entity.p.EmployeeRef); {
-        this.EmployeeDesignation = employeedetails?.p.DesignationName || '';
-        this.EmployeeBankName = employeedetails?.p?.BankName || '';
-        this.EmployeeBankBranch = employeedetails?.p?.BranchName || '';
-        this.EmployeeBankAccountNo = employeedetails?.p?.BanckAccountNo || '';
-        this.EmployeeBankIFSCCode = employeedetails?.p?.IFSC || '';
-      }
+      let lst = await Employee.FetchInstance(this.Entity.p.EmployeeRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      // const employeedetails = this.EmployeeList.find(item => item.p.Ref == this.Entity.p.EmployeeRef); 
+        this.EmployeeDesignation = lst?.p?.DesignationName || '';
+        this.EmployeeBankName = lst?.p?.BankName || '';
+        this.EmployeeBankBranch = lst?.p?.BranchName || '';
+        this.EmployeeBankAccountNo = lst?.p?.BanckAccountNo || '';
+        this.EmployeeBankIFSCCode = lst?.p?.IFSC || '';
     }
   }
 
