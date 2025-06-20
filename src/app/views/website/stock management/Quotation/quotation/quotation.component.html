@@ -67,8 +67,8 @@
               </td>
               <td class="tbldata">{{ detail.TotalAmount }}</td>
 
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
-                {{ Quotation.p.GrandTotal }}
+              <td class="tbldata" width="10%" *ngIf="j === 0" [attr.rowspan]="Quotation.p.MaterialQuotationDetailsArray.length">
+                <b>₹ {{ Quotation.p.GrandTotal }}</b>
               </td>
 
               <!-- Optional: Requisition status -->

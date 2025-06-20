@@ -157,7 +157,7 @@
               <strong>TOTAL</strong>
             </td>
             <td style="padding: 8px; border: none; font-weight: bold; background-color: #fef4d4;"><strong>₹
-                {{Entity.p.GrandTotal}}</strong>
+                ₹ {{Entity.p.GrandTotal}}</strong>
             </td>
           </tr>
           <!-- In Words -->
@@ -165,7 +165,7 @@
             <td style="border: none;"></td>
             <td style="border: none;"></td>
             <td style="border: none;"></td>
-            <td colspan="2" style="padding: 8px; border: none; text-align: start;"><strong>Inwords</strong></td>
+            <td colspan="2" style="padding: 8px; border: none; text-align: start;"><strong>Inwords - {{ this.totalAmountInWords(Entity.p.GrandTotal) }}</strong></td>
           </tr>
         </tbody>
       </table>

@@ -7,6 +7,7 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+import { Utils } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-estimate-stages',
@@ -30,7 +31,8 @@ export class EstimateStagesComponent implements OnInit {
   SiteRef: number = 0
   shouldDestroy: boolean = true;
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
+  constructor(private uiUtils: UIUtils, private router: Router, private utils: Utils,
+    private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement,) {
     effect(() => {
       this.getEstimatedStagesListByCompanyRef(); this.getSiteListByCompanyRef();
@@ -157,42 +159,8 @@ export class EstimateStagesComponent implements OnInit {
   }
 
   get totalAmountInWords(): string {
-    return this.convertNumberToWords(this.totalAmount);
+    return this.utils.convertNumberToWords(this.totalAmount);
   }
-
-  convertNumberToWords(amount: number): string {
-    const a = [  
-      '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
-      'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen',
-      'Seventeen', 'Eighteen', 'Nineteen'
-    ];
-    const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-
-    if (isNaN(amount)) return 'Invalid amount';
-
-    let [rupees, paise] = amount.toFixed(2).split('.').map(Number);
-
-    if (rupees === 0) return 'Zero Rupees Only';
-
-    const numToWords = (num: number): string => {
-      if (num < 20) return a[num];
-      if (num < 100) return b[Math.floor(num / 10)] + (num % 10 ? ' ' + a[num % 10] : '');
-      if (num < 1000) return a[Math.floor(num / 100)] + ' Hundred' + (num % 100 ? ' and ' + numToWords(num % 100) : '');
-
-      if (num < 100000) return numToWords(Math.floor(num / 1000)) + ' Thousand' + (num % 1000 ? ' ' + numToWords(num % 1000) : '');
-      if (num < 10000000) return numToWords(Math.floor(num / 100000)) + ' Lakh' + (num % 100000 ? ' ' + numToWords(num % 100000) : '');
-      return numToWords(Math.floor(num / 10000000)) + ' Crore' + (num % 10000000 ? ' ' + numToWords(num % 10000000) : '');
-    };
-
-    let result = numToWords(rupees) + ' Rupees';
-
-    if (paise) {
-      result += ' and ' + numToWords(paise) + ' Paise';
-    }
-
-    return result + ' Only';
-  }
-
 
   onPageChange = (pageIndex: number): void => {
     this.currentPage = pageIndex; // Update the current page

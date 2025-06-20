@@ -52,6 +52,10 @@ export class ActualStagePrintComponent implements OnInit {
     this.InitialEntity = Object.assign(ActualStages.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as ActualStages;
   }
 
+  totalAmountInWords(number: number): string {
+    return this.utils.convertNumberToWords(number);
+  }
+
   // printSection = (sectionId: string) => {
   //   const printContents = document.getElementById(sectionId)?.innerHTML;
   //   const originalContents = document.body.innerHTML;
