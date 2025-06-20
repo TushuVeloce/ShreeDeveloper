@@ -133,6 +133,7 @@ import { StockConsumeDetailsComponent } from './stock management/stock_consume/s
 import { StockTransferDetailsComponent } from './stock management/stock_transfer/stock-transfer-details/stock-transfer-details.component';
 import { OrderApprovalComponent } from './stock management/stock_order/order-approval/order-approval.component';
 import { ChangePasswordComponent } from './profile/change_password/change-password/change-password.component';
+import { StockOrderPrintComponent } from './stock management/stock_order/stock-order-print/stock-order-print.component';
 
 
 const routes: Routes = [
@@ -234,6 +235,7 @@ const routes: Routes = [
       { path: 'Quotation_Approval', component: QuotationApprovalComponent},
       { path: 'Stock_Order', component: StockOrderComponent},
       { path: 'Stock_Order_Details', component: StockOrderDetailsComponent},
+      { path: 'Stock_Order_Print', component: StockOrderPrintComponent},
       { path: 'Stock_Inward', component: StockInwardComponent},
       { path: 'Stock_Inward_Details', component: StockInwardDetailsComponent},
       { path: 'Stock_Consume', component: StockConsumeComponent},

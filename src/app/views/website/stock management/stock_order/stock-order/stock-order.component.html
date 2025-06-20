@@ -120,7 +120,8 @@
                   (click)="onDeleteClicked(Order)">
                   <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
                 </span>
-
+ <span style="margin-left: 9px; margin-right: 9px; cursor: pointer;" (click)="navigateToPrint(Order)">
+              <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
                 <span style="margin-left: 9px;"
                   *ngIf="Order.p.MaterialStockOrderStatus != MaterialStockOrderStatus.Approved">
                   <img src="/assets/icons/GrayEditIcon.png" alt="Edit" title="Disable Edit" width="20px"

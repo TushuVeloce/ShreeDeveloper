@@ -137,6 +137,12 @@ export class StockOrderComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
+   navigateToPrint = async (item: Order) => {
+      this.router.navigate(['/homepage/Website/Stock_Order_Print'], {
+        state: { printData: item.GetEditableVersion() }
+      });
+    }
+
   AddOrder = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');

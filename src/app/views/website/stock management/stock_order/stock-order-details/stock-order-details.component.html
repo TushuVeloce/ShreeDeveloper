@@ -4,72 +4,140 @@
       <!-- Back Button Column -->
       <div class="col-2 col-md-1 d-flex justify-content-center">
         <button type="button" class="backbtn" (click)="BackOrder()">
-          <img src="/assets/icons/arrow-button.png" alt="Back" class="backbtnimg" />
+          <img
+            src="/assets/icons/arrow-button.png"
+            alt="Back"
+            class="backbtnimg"
+          />
         </button>
       </div>
 
       <!-- Title Column -->
       <div class="col-10 col-md-11">
-        <span class="detail_title text-truncate d-block">{{ DetailsFormTitle }}</span>
+        <span class="detail_title text-truncate d-block">{{
+          DetailsFormTitle
+        }}</span>
       </div>
     </div>
     <ng-template #noDataTpl>
-      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
-        No Data
-      </div>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
     </ng-template>
     <!-- If file not selected -->
-    <ng-template #NoFile>
-      No file selected
-    </ng-template>
+    <ng-template #NoFile> No file selected </ng-template>
 
     <!-- Fallback: If file is missing entirely -->
     <ng-template #defaultImage>
-      <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
+      <img
+        src="/assets/images/noimagelandscape.jpeg"
+        alt="No Image"
+        class="img-preview"
+      />
     </ng-template>
 
     <!-- Fallback: If file is not an image (e.g., PDF/DOC) -->
     <ng-template #defaultDocImage>
-      <img src="/assets/icons/doc-placeholder.png" alt="Document File" class="file-preview" />
+      <img
+        src="/assets/icons/doc-placeholder.png"
+        alt="Document File"
+        class="file-preview"
+      />
     </ng-template>
 
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-6">
           <label>Date</label>
-          <input type="date" name="OrderDate" class="form-control date-input" id="OrderDate" [(ngModel)]="OrderDate"
-            placeholder="Select Date" [min]="CurrentDate" #OrderDateCtrl="ngModel" required
-            (blur)="OrderDateCtrl.control.markAsTouched()" />
-          <div *ngIf="(OrderDateCtrl.invalid && (OrderDateCtrl.touched || OrderDateCtrl.dirty))">
-            <span class="validation-text" *ngIf="OrderDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <input
+            type="date"
+            name="OrderDate"
+            class="form-control date-input"
+            id="OrderDate"
+            [(ngModel)]="OrderDate"
+            placeholder="Select Date"
+            [min]="CurrentDate"
+            #OrderDateCtrl="ngModel"
+            required
+            (blur)="OrderDateCtrl.control.markAsTouched()"
+          />
+          <div
+            *ngIf="
+              OrderDateCtrl.invalid &&
+              (OrderDateCtrl.touched || OrderDateCtrl.dirty)
+            "
+          >
+            <span
+              class="validation-text"
+              *ngIf="OrderDateCtrl.errors?.['required']"
+              >{{ RequiredFieldMsg }}</span
+            >
           </div>
         </div>
         <div class="col-md-6">
           <label><b>Site Name</b></label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
-            <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+          <nz-select
+            class="nzSelect-light"
+            [nzNotFoundContent]="noDataTpl"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Select"
+            id="SiteRef"
+            name="SiteRef"
+            [nzSize]="'large'"
+            [(ngModel)]="Entity.p.SiteRef"
+          >
+            <nz-option
+              *ngFor="let Site of SiteList"
+              [nzValue]="Site.p.Ref"
+              [nzLabel]="Site.p.Name"
+            ></nz-option>
           </nz-select>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label><b>Vendor Name</b></label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="VendorRef" name="VendorRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorRef"
-            (ngModelChange)="onVendorSelection(Entity.p.VendorRef)">
-            <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
+          <nz-select
+            class="nzSelect-light"
+            [nzNotFoundContent]="noDataTpl"
+            nzShowSearch
+            nzAllowClear
+            nzPlaceHolder="Select"
+            id="VendorRef"
+            name="VendorRef"
+            [nzSize]="'large'"
+            [(ngModel)]="Entity.p.VendorRef"
+            (ngModelChange)="onVendorSelection(Entity.p.VendorRef)"
+          >
+            <nz-option
+              *ngFor="let Vendor of VendorList"
+              [nzValue]="Vendor.p.Ref"
+              [nzLabel]="Vendor.p.Name"
+            ></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4">
           <label>Vendor Trade Name</label>
-          <input type="text" name="VendorTradeName" class="form-control date-input" id="VendorTradeName"
-            [(ngModel)]="Entity.p.VendorTradeName" placeholder="Trade Name" readonly>
+          <input
+            type="text"
+            name="VendorTradeName"
+            class="form-control date-input"
+            id="VendorTradeName"
+            [(ngModel)]="Entity.p.VendorTradeName"
+            placeholder="Trade Name"
+            readonly
+          />
         </div>
         <div class="col-md-4">
           <label>Address</label>
-          <input type="text" name="AddressLine1" class="form-control date-input" id="AddressLine1"
-            [(ngModel)]="Entity.p.AddressLine1" placeholder="Address" readonly>
+          <input
+            type="text"
+            name="AddressLine1"
+            class="form-control date-input"
+            id="AddressLine1"
+            [(ngModel)]="Entity.p.AddressLine1"
+            placeholder="Address"
+            readonly
+          />
         </div>
       </div>
       <div class="row mt-3">
@@ -78,115 +146,206 @@
         </div>
         <div class="col-md-5 d-flex align-items-center justify-content-between">
           <!-- Upload icon triggers file input -->
-          <img src="/assets/icons/upload.png" alt="Invoice" title="Upload Invoice" class="Upload-Icon"
-            (click)="triggerFileInput()" />
+          <img
+            src="/assets/icons/upload.png"
+            alt="Invoice"
+            title="Upload Invoice"
+            class="Upload-Icon"
+            (click)="triggerFileInput()"
+          />
 
           <ng-container *ngIf="selectedFileName; else NoFile">
-            <span style="cursor: pointer;" (click)="fileNavigation(Entity.p.InvoicePath)">
-              {{ selectedFileName}}
+            <span
+              style="cursor: pointer"
+              (click)="fileNavigation(Entity.p.InvoicePath)"
+            >
+              {{ selectedFileName }}
             </span>
           </ng-container>
 
           <!-- Hidden File Input -->
-          <input type="file" #fileInput accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
-            (change)="onFileUpload($event);" />
+          <input
+            type="file"
+            #fileInput
+            accept=".jpg,.jpeg,.png,.gif,.pdf"
+            style="display: none"
+            (change)="onFileUpload($event)"
+          />
 
           <!-- Customer Aadhar Image Display -->
           <ng-container *ngIf="Entity.p.InvoicePath; else AddDocImage">
-            <img [src]="isImageFile(Entity.p.InvoicePath) ? imagePostView : '/assets/icons/doc-placeholder.png'"
-              alt="Invoice" title="Invoice" (click)="fileNavigation(Entity.p.InvoicePath)"
-              [class]="isImageFile(Entity.p.InvoicePath) ?  'img-preview' : 'file-preview'" />
+            <img
+              [src]="
+                isImageFile(Entity.p.InvoicePath)
+                  ? imagePostView
+                  : '/assets/icons/doc-placeholder.png'
+              "
+              alt="Invoice"
+              title="Invoice"
+              (click)="fileNavigation(Entity.p.InvoicePath)"
+              [class]="
+                isImageFile(Entity.p.InvoicePath)
+                  ? 'img-preview'
+                  : 'file-preview'
+              "
+            />
           </ng-container>
 
           <ng-template #AddDocImage>
             <ng-container *ngIf="imagePreView; else defaultImage">
-              <img [src]="isImageFile(selectedFileName) ? imagePreView : '/assets/icons/doc-placeholder.png'"
-                alt="Invoice" title="Invoice" (click)="fileNavigation(this.Entity.p.InvoicePath)"
-                [class]="isImageFile(selectedFileName) ? 'img-preview' : 'file-preview'" />
+              <img
+                [src]="
+                  isImageFile(selectedFileName)
+                    ? imagePreView
+                    : '/assets/icons/doc-placeholder.png'
+                "
+                alt="Invoice"
+                title="Invoice"
+                (click)="fileNavigation(this.Entity.p.InvoicePath)"
+                [class]="
+                  isImageFile(selectedFileName) ? 'img-preview' : 'file-preview'
+                "
+              />
             </ng-container>
           </ng-template>
         </div>
       </div>
-      <div class="row" style="margin-top: 2rem;">
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 d-flex align-items-end">
-          <h5 style="color: black; align-self: self-end;">
+      <div class="row" style="margin-top: 2rem">
+        <div
+          class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 d-flex align-items-end"
+        >
+          <h5 style="color: black; align-self: self-end">
             <b>Order Material List</b>
           </h5>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
-          style="display: flex; justify-content: end" routerLinkActive="active">
-          <nz-button nz-button class="btn1" (click)="openModal('OrderMaterial')">Add Material</nz-button>
+        <div
+          class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
+          style="display: flex; justify-content: end"
+          routerLinkActive="active"
+        >
+          <nz-button nz-button class="btn1" (click)="openModal('OrderMaterial')"
+            >Add Material</nz-button
+          >
         </div>
       </div>
 
-      <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem"
-        *ngIf="Entity.p.MaterialStockOrderDetailsArray.length > 0">
+      <div
+        class="table-wrapper"
+        class="tblcard_light"
+        style="margin-top: 2rem"
+        *ngIf="Entity.p.MaterialStockOrderDetailsArray.length > 0"
+      >
         <div class="table-container" style="margin-top: 2rem">
           <div class="row">
             <div class="col-12">
               <h3 class="TableHeading">Order Material Details</h3>
             </div>
           </div>
-          <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
-            nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.MaterialStockOrderDetailsArray">
+          <nz-table
+            #basicTable
+            nzSize="small"
+            class="no-hover-table bgtable_light"
+            [nzScroll]="{ x: 'auto' }"
+            nzFrontPagination="false"
+            [nzShowSizeChanger]="false"
+            [nzData]="Entity.p.MaterialStockOrderDetailsArray"
+          >
             <thead>
               <tr>
-                <th *ngFor="let header of OrderMaterialheaders" class="tblsubheader">
+                <th
+                  *ngFor="let header of OrderMaterialheaders"
+                  class="tblsubheader"
+                >
                   {{ header }}
                 </th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="
+              <tr
+                *ngFor="
                   let material of Entity.p.MaterialStockOrderDetailsArray;
                   let i = index
-                ">
+                "
+              >
                 <td Class="tbldata">{{ i + 1 }}</td>
                 <td Class="tbldata">{{ material.MaterialName }}</td>
                 <td Class="tbldata">{{ material.UnitName }}</td>
                 <td Class="tbldata">{{ material.EstimatedQty }}</td>
                 <td Class="tbldata">{{ material.OrderedQty }}</td>
-                <td Class="tbldata">{{ material.RequiredRemainingQuantity }}</td>
+                <td Class="tbldata">
+                  {{ material.RequiredRemainingQuantity }}
+                </td>
                 <td Class="tbldata">{{ material.Rate }}</td>
                 <td Class="tbldata">{{ material.DiscountedRate }}</td>
                 <td Class="tbldata">{{ material.Gst }}</td>
                 <td Class="tbldata">{{ material.DeliveryCharges }}</td>
                 <td Class="tbldata">
-                  {{ material.ExpectedDeliveryDate ? formatDate(material.ExpectedDeliveryDate) : '--'}}
+                  {{
+                    material.ExpectedDeliveryDate
+                      ? formatDate(material.ExpectedDeliveryDate)
+                      : "--"
+                  }}
                 </td>
                 <td Class="tbldata">{{ material.NetAmount }}</td>
                 <td Class="tbldata">{{ material.TotalAmount }}</td>
                 <td class="tbldata">
                   <span style="margin-left: 9px" (click)="editOrderMaterial(i)">
-                    <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+                    <img
+                      src="\assets\icons\edit.png"
+                      alt="logo"
+                      title="Edit"
+                      width="20px"
+                      height="20px"
+                    />
                   </span>
-                  <span style="margin-left: 9px" (click)="removeOrderMaterial(i)">
-                    <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+                  <span
+                    style="margin-left: 9px"
+                    (click)="removeOrderMaterial(i)"
+                  >
+                    <img
+                      src="\assets\icons\delete.png"
+                      alt="logo"
+                      title="Delete"
+                      width="20px"
+                      height="20px"
+                  /></span>
                 </td>
               </tr>
               <tr>
                 <td class="tbldata" colspan="2"><b>Grand Total</b></td>
                 <td class="tbldata" colspan="10"></td>
-                <td class="tbldata"><b>{{ getGrandTotal() }}</b></td>
+                <td class="tbldata">
+                  <b>{{ getGrandTotal() }}</b>
+                </td>
                 <td class="tbldata"><b></b></td>
               </tr>
             </tbody>
           </nz-table>
         </div>
       </div>
-      <div *ngIf="Entity.p.MaterialStockOrderDetailsArray.length === 0" class="card-body_light">
-        <div style="height: 20vh; background-color: white" class="d-flex align-items-center justify-content-center">
+      <div
+        *ngIf="Entity.p.MaterialStockOrderDetailsArray.length === 0"
+        class="card-body_light"
+      >
+        <div
+          style="height: 20vh; background-color: white"
+          class="d-flex align-items-center justify-content-center"
+        >
           <span class="title_light"> Data Not Found</span>
         </div>
       </div>
-      <div style="
+      <div
+        style="
           justify-content: center;
           display: flex;
           gap: 2rem;
           margin-top: 2rem;
-        ">
+        "
+      >
         <div>
-          <nz-button nz-button class="btn1" (click)="SaveOrder()">Save</nz-button>
+          <nz-button nz-button class="btn1" (click)="SaveOrder()"
+            >Save</nz-button
+          >
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="BackOrder()">
@@ -202,88 +361,204 @@
   <div class="custom-modal">
     <div class="custom-modal-header">
       <h5><b> Add Material</b></h5>
-      <button type="button" class="btn-close" (click)="closeModal('OrderMaterial')"></button>
+      <button
+        type="button"
+        class="btn-close"
+        (click)="closeModal('OrderMaterial')"
+      ></button>
     </div>
     <div class="custom-modal-body">
       <form autocomplete="off">
         <div class="row" style="margin-top: 1rem">
           <div class="col-6 mb-1">
             <label for="MaterialRequisitionDetailsRef"><b>Material</b></label>
-            <nz-select *ngIf="!ModalEditable" class="nzSelect-light" nzShowSearch nzAllowClear
-              [nzNotFoundContent]="noDataTpl" nzPlaceHolder="Select" [nzSize]="'large'"
-              name="MaterialRequisitionDetailsRef" required id="MaterialRequisitionDetailsRef"
+            <nz-select
+              *ngIf="!ModalEditable"
+              class="nzSelect-light"
+              nzShowSearch
+              nzAllowClear
+              [nzNotFoundContent]="noDataTpl"
+              nzPlaceHolder="Select"
+              [nzSize]="'large'"
+              name="MaterialRequisitionDetailsRef"
+              required
+              id="MaterialRequisitionDetailsRef"
               [(ngModel)]="newOrderMaterial.MaterialRequisitionDetailsRef"
-              (ngModelChange)="onMaterialSelection(newOrderMaterial.MaterialRequisitionDetailsRef)">
-              <nz-option *ngFor="let material of MaterialRequisitionList" [nzLabel]="material.p.MaterialName"
-                [nzValue]="material.p.Ref"></nz-option>
+              (ngModelChange)="
+                onMaterialSelection(
+                  newOrderMaterial.MaterialRequisitionDetailsRef
+                )
+              "
+            >
+              <nz-option
+                *ngFor="let material of MaterialRequisitionList"
+                [nzLabel]="material.p.MaterialName"
+                [nzValue]="material.p.Ref"
+              ></nz-option>
             </nz-select>
-            <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control"
-              [(ngModel)]="newOrderMaterial.MaterialName" readonly />
+            <input
+              *ngIf="ModalEditable"
+              type="text"
+              name="MaterialName"
+              class="form-control"
+              [(ngModel)]="newOrderMaterial.MaterialName"
+              readonly
+            />
           </div>
           <div class="col-6 mb-1">
             <label>Unit</label>
-            <input type="text" name="Unit" class="form-control" [(ngModel)]="newOrderMaterial.UnitName" readonly />
+            <input
+              type="text"
+              name="Unit"
+              class="form-control"
+              [(ngModel)]="newOrderMaterial.UnitName"
+              readonly
+            />
           </div>
           <div class="col-6 mb-1">
             <label>Required Quantity</label>
-            <input type="number" name="EstimatedQty" class=" form-control" [(ngModel)]="newOrderMaterial.EstimatedQty"
-              readonly />
+            <input
+              type="number"
+              name="EstimatedQty"
+              class="form-control"
+              [(ngModel)]="newOrderMaterial.EstimatedQty"
+              readonly
+            />
           </div>
           <div class="col-6 mb-1">
             <label>Previous Ordered Quantity</label>
-            <input type="number" name="QuotationOrderedQty" class=" form-control"
-              [(ngModel)]="newOrderMaterial.QuotationOrderedQty" readonly />
+            <input
+              type="number"
+              name="QuotationOrderedQty"
+              class="form-control"
+              [(ngModel)]="newOrderMaterial.QuotationOrderedQty"
+              readonly
+            />
           </div>
           <div class="col-6 mb-1">
             <label>Ordered Quantity</label>
-            <input type="number" name="OrderedQty" class="form-control" [(ngModel)]="newOrderMaterial.OrderedQty"
-              #OrderedQtyCtrl="ngModel" required (blur)="OrderedQtyCtrl.control.markAsTouched()"
-              placeholder="Enter Ordered Quantity" (click)="selectAllValue($event)"
-              (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
-            <div *ngIf="(OrderedQtyCtrl.invalid && (OrderedQtyCtrl.touched || OrderedQtyCtrl.dirty))">
-              <span class="validation-text" *ngIf="OrderedQtyCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <input
+              type="number"
+              name="OrderedQty"
+              class="form-control"
+              [(ngModel)]="newOrderMaterial.OrderedQty"
+              #OrderedQtyCtrl="ngModel"
+              required
+              (blur)="OrderedQtyCtrl.control.markAsTouched()"
+              placeholder="Enter Ordered Quantity"
+              (click)="selectAllValue($event)"
+              (ngModelChange)="CalculateNetAmountAndTotalAmount()"
+            />
+            <div
+              *ngIf="
+                OrderedQtyCtrl.invalid &&
+                (OrderedQtyCtrl.touched || OrderedQtyCtrl.dirty)
+              "
+            >
+              <span
+                class="validation-text"
+                *ngIf="OrderedQtyCtrl.errors?.['required']"
+                >{{ RequiredFieldMsg }}</span
+              >
             </div>
           </div>
           <div class="col-6 mb-1">
             <label>Required Remaining Quantity</label>
-            <input type="number" name="RequiredRemainingQuantity" class=" form-control"
-              [(ngModel)]="newOrderMaterial.RequiredRemainingQuantity" readonly />
+            <input
+              type="number"
+              name="RequiredRemainingQuantity"
+              class="form-control"
+              [(ngModel)]="newOrderMaterial.RequiredRemainingQuantity"
+              readonly
+            />
           </div>
           <div class="col-6 mb-1">
             <label>Extra Ordered Quantity</label>
-            <input type="number" name="ExtraOrderedQty" class=" form-control"
-              [(ngModel)]="newOrderMaterial.ExtraOrderedQty" readonly />
+            <input
+              type="number"
+              name="ExtraOrderedQty"
+              class="form-control"
+              [(ngModel)]="newOrderMaterial.ExtraOrderedQty"
+              readonly
+            />
           </div>
           <div class="col-6 mb-1">
             <label>Rate</label>
-            <input type="number" name="Rate" class="form-control" [(ngModel)]="newOrderMaterial.Rate"
-              #RateCtrl="ngModel" required (blur)="RateCtrl.control.markAsTouched()" placeholder="Enter Rate"
-              (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
-            <div *ngIf="(RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty))">
-              <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <input
+              type="number"
+              name="Rate"
+              class="form-control"
+              [(ngModel)]="newOrderMaterial.Rate"
+              #RateCtrl="ngModel"
+              required
+              (blur)="RateCtrl.control.markAsTouched()"
+              placeholder="Enter Rate"
+              (click)="selectAllValue($event)"
+              (ngModelChange)="CalculateNetAmountAndTotalAmount()"
+            />
+            <div
+              *ngIf="RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty)"
+            >
+              <span
+                class="validation-text"
+                *ngIf="RateCtrl.errors?.['required']"
+                >{{ RequiredFieldMsg }}</span
+              >
             </div>
           </div>
           <div class="col-6 mb-1">
             <label>Discount Rate</label>
-            <input type="number" name="DiscountedRate" class="form-control"
-              [(ngModel)]="newOrderMaterial.DiscountedRate" (ngModelChange)="CalculateNetAmountAndTotalAmount()"
-              #DiscountedRateCtrl="ngModel" required (blur)="DiscountedRateCtrl.control.markAsTouched()"
-              placeholder="Enter Discount Rate" (click)="selectAllValue($event)" />
-            <div *ngIf="(DiscountedRateCtrl.invalid && (DiscountedRateCtrl.touched || DiscountedRateCtrl.dirty))">
-              <span class="validation-text" *ngIf="DiscountedRateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <input
+              type="number"
+              name="DiscountedRate"
+              class="form-control"
+              [(ngModel)]="newOrderMaterial.DiscountedRate"
+              (ngModelChange)="CalculateNetAmountAndTotalAmount()"
+              #DiscountedRateCtrl="ngModel"
+              required
+              (blur)="DiscountedRateCtrl.control.markAsTouched()"
+              placeholder="Enter Discount Rate"
+              (click)="selectAllValue($event)"
+            />
+            <div
+              *ngIf="
+                DiscountedRateCtrl.invalid &&
+                (DiscountedRateCtrl.touched || DiscountedRateCtrl.dirty)
+              "
+            >
+              <span
+                class="validation-text"
+                *ngIf="DiscountedRateCtrl.errors?.['required']"
+                >{{ RequiredFieldMsg }}</span
+              >
             </div>
           </div>
           <div class="col-6 mb-1">
             <label>Net Amount</label>
-            <input type="number" name="NetAmount" class="form-control" [(ngModel)]="newOrderMaterial.NetAmount"
-              readonly />
+            <input
+              type="number"
+              name="NetAmount"
+              class="form-control"
+              [(ngModel)]="newOrderMaterial.NetAmount"
+              readonly
+            />
           </div>
           <div class="col-6 mb-1">
             <div>
               <label for="Gst"><b>GST</b></label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
-                nzPlaceHolder="Select" [nzSize]="'large'" name="Gst" required id="Gst"
-                [(ngModel)]="newOrderMaterial.Gst" (ngModelChange)="CalculateNetAmountAndTotalAmount()">
+              <nz-select
+                class="nzSelect-light"
+                nzShowSearch
+                nzAllowClear
+                [nzNotFoundContent]="noDataTpl"
+                nzPlaceHolder="Select"
+                [nzSize]="'large'"
+                name="Gst"
+                required
+                id="Gst"
+                [(ngModel)]="newOrderMaterial.Gst"
+                (ngModelChange)="CalculateNetAmountAndTotalAmount()"
+              >
                 <nz-option nzLabel="None" [nzValue]="0"></nz-option>
                 <nz-option nzLabel="5%" [nzValue]="5"></nz-option>
                 <nz-option nzLabel="9%" [nzValue]="9"></nz-option>
@@ -294,39 +569,74 @@
           </div>
           <div class="col-6 mb-1">
             <label>Delivery Charges</label>
-            <input type="number" name="DeliveryCharges" class="form-control"
-              [(ngModel)]="newOrderMaterial.DeliveryCharges" #DeliveryCharges="ngModel" required
-              (blur)="DeliveryCharges.control.markAsTouched()" placeholder="Enter DeliveryCharges"
-              (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
-            <div *ngIf="(DeliveryCharges.invalid && (DeliveryCharges.touched || DeliveryCharges.dirty))">
-              <span class="validation-text" *ngIf="DeliveryCharges.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <input
+              type="number"
+              name="DeliveryCharges"
+              class="form-control"
+              [(ngModel)]="newOrderMaterial.DeliveryCharges"
+              #DeliveryCharges="ngModel"
+              required
+              (blur)="DeliveryCharges.control.markAsTouched()"
+              placeholder="Enter DeliveryCharges"
+              (click)="selectAllValue($event)"
+              (ngModelChange)="CalculateNetAmountAndTotalAmount()"
+            />
+            <div
+              *ngIf="
+                DeliveryCharges.invalid &&
+                (DeliveryCharges.touched || DeliveryCharges.dirty)
+              "
+            >
+              <span
+                class="validation-text"
+                *ngIf="DeliveryCharges.errors?.['required']"
+                >{{ RequiredFieldMsg }}</span
+              >
             </div>
           </div>
           <div class="col-6 mb-1">
             <label>Expected Delivery Date</label>
-            <input type="date" name="ExpectedDeliveryDate" class="form-control" [(ngModel)]="ExpectedDeliveryDate"
-              placeholder="Enter Date" />
+            <input
+              type="date"
+              name="ExpectedDeliveryDate"
+              class="form-control"
+              [(ngModel)]="ExpectedDeliveryDate"
+              placeholder="Enter Date"
+            />
           </div>
           <div class="col-6 mb-1">
             <label>Total Amount</label>
-            <input type="number" name="TotalAmount" class=" form-control" [(ngModel)]="newOrderMaterial.TotalAmount"
-              readonly />
+            <input
+              type="number"
+              name="TotalAmount"
+              class="form-control"
+              [(ngModel)]="newOrderMaterial.TotalAmount"
+              readonly
+            />
           </div>
         </div>
       </form>
     </div>
-    <div class=" custom-modal-footer">
-      <div style="
+    <div class="custom-modal-footer">
+      <div
+        style="
           justify-content: center;
           display: flex;
           gap: 2rem;
-          margin-top:1rem;
-        ">
+          margin-top: 1rem;
+        "
+      >
         <div>
-          <nz-button nz-button class="btn1" (click)="addOrderMaterial()">Save</nz-button>
+          <nz-button nz-button class="btn1" (click)="addOrderMaterial()"
+            >Save</nz-button
+          >
         </div>
         <div>
-          <nz-button nz-button class="btn1" (click)="closeModal('OrderMaterial')">
+          <nz-button
+            nz-button
+            class="btn1"
+            (click)="closeModal('OrderMaterial')"
+          >
             Cancel
           </nz-button>
         </div>

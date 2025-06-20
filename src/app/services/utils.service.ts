@@ -249,166 +249,197 @@ export class Utils {
     return String(value);
   }
 
- // for file uploading
-public async handleImageSelection(
-  event: any,
-  allowedTypes: string[] = ['image/jpeg', 'image/png', 'image/gif']
-): Promise<{
-  file: File | null;
-  imageUrl: string | null;
-  selectedImage: string | null;
-  error: string;
-}> {
-  return new Promise((resolve) => {
-    const files: FileList = event.target.files;
-    const file: File | null = files.item(0);
+  // for file uploading
+  public async handleImageSelection(
+    event: any,
+    allowedTypes: string[] = ['image/jpeg', 'image/png', 'image/gif']
+  ): Promise<{
+    file: File | null;
+    imageUrl: string | null;
+    selectedImage: string | null;
+    error: string;
+  }> {
+    return new Promise((resolve) => {
+      const files: FileList = event.target.files;
+      const file: File | null = files.item(0);
 
-    if (!file) {
-      resolve({
-        file: null,
-        imageUrl: null,
-        selectedImage: null,
-        error: 'No file selected',
-      });
-      return;
-    }
+      if (!file) {
+        resolve({
+          file: null,
+          imageUrl: null,
+          selectedImage: null,
+          error: 'No file selected',
+        });
+        return;
+      }
 
-    // Validate the file type (MIME type)
-    if (!allowedTypes.includes(file.type)) {
-      resolve({
-        file: null,
-        imageUrl: null,
-        selectedImage: null,
-        error: 'Only image files (JPG, PNG, GIF) are allowed',
-      });
-      return;
-    }
+      // Validate the file type (MIME type)
+      if (!allowedTypes.includes(file.type)) {
+        resolve({
+          file: null,
+          imageUrl: null,
+          selectedImage: null,
+          error: 'Only image files (JPG, PNG, GIF) are allowed',
+        });
+        return;
+      }
 
-    // Validate the file extension
-    const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
-    const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif','pdf'];
+      // Validate the file extension
+      const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+      const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif', 'pdf'];
 
-    if (!allowedExtensions.includes(fileExtension)) {
-      resolve({
-        file: null,
-        imageUrl: null,
-        selectedImage: null,
-        error: 'Invalid file extension. Only JPG, PNG, and GIF,pdf are allowed.',
-      });
-      return;
-    }
+      if (!allowedExtensions.includes(fileExtension)) {
+        resolve({
+          file: null,
+          imageUrl: null,
+          selectedImage: null,
+          error: 'Invalid file extension. Only JPG, PNG, and GIF,pdf are allowed.',
+        });
+        return;
+      }
 
-    // Proceed with image preview if file is valid
-    const reader = new FileReader();
+      // Proceed with image preview if file is valid
+      const reader = new FileReader();
 
-    reader.onload = () => {
-      const selectedImage = reader.result as string;
-      const imageUrl = URL.createObjectURL(file);
-      resolve({
-        file,
-        imageUrl,
-        selectedImage,
-        error: '', // No error
-      });
+      reader.onload = () => {
+        const selectedImage = reader.result as string;
+        const imageUrl = URL.createObjectURL(file);
+        resolve({
+          file,
+          imageUrl,
+          selectedImage,
+          error: '', // No error
+        });
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
+
+  public getMimeTypeFromFileName = (mimeType: string): string => {
+
+    const mimeToExtensionMap: { [key: string]: string[] } = {
+      // Documents
+      'application/pdf': ['.pdf'],
+      'text/plain': ['.txt'],
+      'text/markdown': ['.md'],
+      'application/msword': ['.doc'],
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+      'application/vnd.ms-excel': ['.xls'],
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+      'application/vnd.ms-powerpoint': ['.ppt'],
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
+      'application/epub+zip': ['.epub'],
+      'application/x-mobipocket-ebook': ['.mobi'],
+      'application/rtf': ['.rtf'],
+      'application/vnd.oasis.opendocument.text': ['.odt'],
+      'application/vnd.oasis.opendocument.spreadsheet': ['.ods'],
+      'application/vnd.oasis.opendocument.presentation': ['.odp'],
+
+      // Images
+      'image/jpeg': ['.jpg', '.jpeg'],
+      'image/png': ['.png'],
+      'image/gif': ['.gif'],
+      'image/bmp': ['.bmp'],
+      'image/tiff': ['.tiff'],
+      'image/svg+xml': ['.svg'],
+      'image/x-icon': ['.ico'],
+
+      // Audio
+      'audio/mpeg': ['.mp3'],
+      'audio/wav': ['.wav'],
+      'audio/ogg': ['.ogg'],
+      'audio/flac': ['.flac'],
+      'audio/aac': ['.aac'],
+      'audio/midi': ['.midi', '.mid'],
+
+      // Video
+      'video/mp4': ['.mp4'],
+      'video/x-msvideo': ['.avi'],
+      'video/quicktime': ['.mov'],
+      'video/x-ms-wmv': ['.wmv'],
+      'video/webm': ['.webm'],
+      'video/ogg': ['.ogv'],
+
+      // Archives
+      'application/zip': ['.zip'],
+      'application/x-tar': ['.tar'],
+      'application/gzip': ['.gz'],
+      'application/x-bzip2': ['.bz2'],
+      'application/x-7z-compressed': ['.7z'],
+      'application/x-rar-compressed': ['.rar'],
+      'application/x-iso9660-image': ['.iso'],
+      'application/x-debian-package': ['.deb'],
+      'application/x-rpm': ['.rpm'],
+
+      // Web
+      'text/html': ['.html', '.htm'],
+      'text/css': ['.css'],
+      'application/javascript': ['.js'],
+      'application/json': ['.json'],
+      'application/xml': ['.xml'],
+      'text/csv': ['.csv'],
+      'application/ld+json': ['.jsonld'],
+      'application/xhtml+xml': ['.xhtml'],
+
+      // Fonts
+      'font/woff': ['.woff'],
+      'font/woff2': ['.woff2'],
+      'font/ttf': ['.ttf'],
+      'font/otf': ['.otf'],
+
+      // Miscellaneous
+      'application/postscript': ['.ps'],
+      'application/vnd.android.package-archive': ['.apk'],
+      'application/vnd.apple.installer+xml': ['.ipa'],
+      'application/x-xpinstall': ['.xpi'],
+      'application/x-shockwave-flash': ['.swf'],
+      'application/x-bittorrent': ['.torrent'],
+      'application/x-apple-diskimage': ['.dmg'],
+      'application/octet-stream': ['.bin'],
+      'application/vnd.ms-fontobject': ['.eot'],
+
+      // Other
+      'text/yaml': ['.yaml', '.yml'],
+      'text/calendar': ['.ics'],
+      'text/vcard': ['.vcf'],
+      'application/xml-dtd': ['.dtd'],
     };
 
-    reader.readAsDataURL(file);
-  });
-}
+    return mimeToExtensionMap[mimeType]?.[0] || '';
+  }
 
-public getMimeTypeFromFileName = (mimeType: string): string => {
+  public convertNumberToWords(number: number): string {
+    const a = [
+      '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+      'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen',
+      'Seventeen', 'Eighteen', 'Nineteen'
+    ];
+    const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
 
-  const mimeToExtensionMap: { [key: string]: string[] } = {
-    // Documents
-    'application/pdf': ['.pdf'],
-    'text/plain': ['.txt'],
-    'text/markdown': ['.md'],
-    'application/msword': ['.doc'],
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
-    'application/vnd.ms-excel': ['.xls'],
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
-    'application/vnd.ms-powerpoint': ['.ppt'],
-    'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
-    'application/epub+zip': ['.epub'],
-    'application/x-mobipocket-ebook': ['.mobi'],
-    'application/rtf': ['.rtf'],
-    'application/vnd.oasis.opendocument.text': ['.odt'],
-    'application/vnd.oasis.opendocument.spreadsheet': ['.ods'],
-    'application/vnd.oasis.opendocument.presentation': ['.odp'],
-    
-    // Images
-    'image/jpeg': ['.jpg', '.jpeg'],
-    'image/png': ['.png'],
-    'image/gif': ['.gif'],
-    'image/bmp': ['.bmp'],
-    'image/tiff': ['.tiff'],
-    'image/svg+xml': ['.svg'],
-    'image/x-icon': ['.ico'],
-    
-    // Audio
-    'audio/mpeg': ['.mp3'],
-    'audio/wav': ['.wav'],
-    'audio/ogg': ['.ogg'],
-    'audio/flac': ['.flac'],
-    'audio/aac': ['.aac'],
-    'audio/midi': ['.midi', '.mid'],
-    
-    // Video
-    'video/mp4': ['.mp4'],
-    'video/x-msvideo': ['.avi'],
-    'video/quicktime': ['.mov'],
-    'video/x-ms-wmv': ['.wmv'],
-    'video/webm': ['.webm'],
-    'video/ogg': ['.ogv'],
-    
-    // Archives
-    'application/zip': ['.zip'],
-    'application/x-tar': ['.tar'],
-    'application/gzip': ['.gz'],
-    'application/x-bzip2': ['.bz2'],
-    'application/x-7z-compressed': ['.7z'],
-    'application/x-rar-compressed': ['.rar'],
-    'application/x-iso9660-image': ['.iso'],
-    'application/x-debian-package': ['.deb'],
-    'application/x-rpm': ['.rpm'],
-    
-    // Web
-    'text/html': ['.html', '.htm'],
-    'text/css': ['.css'],
-    'application/javascript': ['.js'],
-    'application/json': ['.json'],
-    'application/xml': ['.xml'],
-    'text/csv': ['.csv'],
-    'application/ld+json': ['.jsonld'],
-    'application/xhtml+xml': ['.xhtml'],
-    
-    // Fonts
-    'font/woff': ['.woff'],
-    'font/woff2': ['.woff2'],
-    'font/ttf': ['.ttf'],
-    'font/otf': ['.otf'],
-    
-    // Miscellaneous
-    'application/postscript': ['.ps'],
-    'application/vnd.android.package-archive': ['.apk'],
-    'application/vnd.apple.installer+xml': ['.ipa'],
-    'application/x-xpinstall': ['.xpi'],
-    'application/x-shockwave-flash': ['.swf'],
-    'application/x-bittorrent': ['.torrent'],
-    'application/x-apple-diskimage': ['.dmg'],
-    'application/octet-stream': ['.bin'],
-    'application/vnd.ms-fontobject': ['.eot'],
-    
-    // Other
-    'text/yaml': ['.yaml', '.yml'],
-    'text/calendar': ['.ics'],
-    'text/vcard': ['.vcf'],
-    'application/xml-dtd': ['.dtd'],
-  };
-  
-  return mimeToExtensionMap[mimeType]?.[0] || '';
-}
+    if (isNaN(number)) return 'Invalid amount';
 
+    let [rupees, paise] = number.toFixed(2).split('.').map(Number);
 
+    if (rupees === 0) return 'Zero Rupees Only';
+
+    const numToWords = (num: number): string => {
+      if (num < 20) return a[num];
+      if (num < 100) return b[Math.floor(num / 10)] + (num % 10 ? ' ' + a[num % 10] : '');
+      if (num < 1000) return a[Math.floor(num / 100)] + ' Hundred' + (num % 100 ? ' and ' + numToWords(num % 100) : '');
+
+      if (num < 100000) return numToWords(Math.floor(num / 1000)) + ' Thousand' + (num % 1000 ? ' ' + numToWords(num % 1000) : '');
+      if (num < 10000000) return numToWords(Math.floor(num / 100000)) + ' Lakh' + (num % 100000 ? ' ' + numToWords(num % 100000) : '');
+      return numToWords(Math.floor(num / 10000000)) + ' Crore' + (num % 10000000 ? ' ' + numToWords(num % 10000000) : '');
+    };
+
+    let result = numToWords(rupees) + ' Rupees';
+
+    if (paise) {
+      result += ' and ' + numToWords(paise) + ' Paise';
+    }
+
+    return result + ' Only';
+  }
 
 }

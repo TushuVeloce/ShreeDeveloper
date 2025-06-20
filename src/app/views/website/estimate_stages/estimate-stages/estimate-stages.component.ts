@@ -161,7 +161,7 @@ export class EstimateStagesComponent implements OnInit {
   }
 
   convertNumberToWords(amount: number): string {
-    const a = [
+    const a = [  
       '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
       'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen',
       'Seventeen', 'Eighteen', 'Nineteen'

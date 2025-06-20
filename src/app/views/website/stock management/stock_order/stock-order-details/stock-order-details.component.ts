@@ -345,8 +345,8 @@ export class StockOrderDetailsComponent implements OnInit {
     let lstFTO: FileTransferObject[] = [];
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.newOrderMaterial.MaterialStockOrderRef = this.Entity.p.Ref
-    this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.OrderDate);
 
     let entityToSave = this.Entity.GetEditableVersion();
