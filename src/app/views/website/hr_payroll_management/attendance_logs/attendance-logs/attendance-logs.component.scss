@@ -1,6 +1,5 @@
 .attbtn {
-  background-color: brown;
-  color: white;
+  // color: white;
   padding: 8px 16px;
   font-size: medium;
   border-radius: 5px;
@@ -10,8 +9,46 @@
   justify-self: right
 }
 
+.teamsize {
+  background-color: #dbeef3;
+}
+
+.present {
+  background-color: #cbecb0;
+}
+
+.days {
+  background-color: #dbeef3;
+}
+
+.onleave {
+  background-color: #f2a3a7;
+}
+
+.absent {
+  background-color: #fbd5b5;
+}
+
+
 .attbtn:hover {
   background-color: maroon;
+  color: white;
+}
+
+.btnglow {
+  background-color: maroon !important;
+  color: white !important;
+  padding: 0.4rem 1.1rem !important;
+  border: none !important;
+  border-radius: 6px !important;
+  width: 100%;
+  cursor: pointer !important;
+  font-size: 100% !important;
+  font-weight: 500 !important;
+  box-shadow: 0 4px 6px rgba(241, 25, 25, 0.2) !important;
+  transition: background-color 0.1s ease, transform 0.2s ease, box-shadow 0.3s ease !important;
+  // position: relative !important;
+  overflow: hidden !important;
 }
 
 @media (max-width: 768px) {
@@ -29,9 +66,9 @@
   }
 }
 
-.btn {
-  background-color: var(--ion-color-primary-tint) !important;
+.mybtn {
   color: white !important;
+  background-color: brown;
   padding: 0.4rem 1.1rem !important;
   border: none !important;
   border-radius: 6px !important;

@@ -176,6 +176,7 @@ export class QuotationDetailsComponent implements OnInit {
     this.newQuotedMaterial.UnitName = SingleRecord[0].p.UnitName
     this.newQuotedMaterial.EstimatedQty = SingleRecord[0].p.EstimatedQty
     this.newQuotedMaterial.MaterialName = SingleRecord[0].p.MaterialName
+    this.newQuotedMaterial.MaterialQuotationDetailsRef = SingleRecord[0].p.Ref
   }
 
   // Trigger file input when clicking the image

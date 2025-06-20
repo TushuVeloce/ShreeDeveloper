@@ -56,6 +56,7 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
   isShowMonthlyData: boolean = false;
   isDaysShow: boolean = false;
   isDaysShowMonth: boolean = false;
+  IsEmployeeDisable = false
 
   constructor(
     private uiUtils: UIUtils,
@@ -73,9 +74,10 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
 
   ngOnInit() {
     this.loadPaginationData();
-    this.appStateManage.setDropdownDisabled(false);
+    this.appStateManage.setDropdownDisabled();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
     this.isTodayAttendanceView = true;
+
   }
 
   getEmployeeListByCompanyRef = async () => {
@@ -85,6 +87,12 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
     }
     let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.EmployeeList = lst;
+    const IsDefaultUser = Number(this.appStateManage.StorageKey.getItem("IsDefaultUser"))
+    const LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem("LoginEmployeeRef"))
+    if(IsDefaultUser == 0 && LoginEmployeeRef){
+    this.Entity.p.EmployeeRef = LoginEmployeeRef
+    this.IsEmployeeDisable = true
+  }
   }
 
   getTodayAttendanceLogByAttendanceListType = async () => {
@@ -95,6 +103,11 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
     this.ToDisplayWeeklyRequirement = false;
     this.isTodayAttendanceView = true;
     this.isShowMonthlyData = false;
+     this.AttendanceLogCount.p.TotalDaysInWeek = 0;
+    this.AttendanceLogCount.p.TotalDaysInMonth = 0;
+    this.AttendanceLogCount.p.Present = 0;
+    this.AttendanceLogCount.p.Absent = 0;
+    this.AttendanceLogCount.p.OnLeaveDaily = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -106,7 +119,7 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
 
   // On Week Selected
   selectWeek = async () => {
-    this.Entity.p.EmployeeRef = 0;
+    // this.Entity.p.EmployeeRef = 0;
     this.DisplayMasterList = [];
     this.ToDispayMonthlyRequirement = false;
     this.ToDisplayWeeklyRequirement = true;
@@ -114,6 +127,9 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
     this.isShowMonthlyData = false
     this.isDaysShow = true
     this.isDaysShowMonth = false
+    if(this.Entity.p.EmployeeRef > 0){
+      await this.getWeekWiseAttendanceLogByAttendanceListType()
+    }
   }
 
   getWeekWiseAttendanceLogByAttendanceListType = async () => {
@@ -134,8 +150,13 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
   }
 
   selectMonth = async () => {
-    this.Entity.p.EmployeeRef = 0;
+    // this.Entity.p.EmployeeRef = 0;
     this.Entity.p.Months = 0;
+    this.AttendanceLogCount.p.TotalDaysInWeek = 0;
+    this.AttendanceLogCount.p.TotalDaysInMonth = 0;
+    this.AttendanceLogCount.p.Present = 0;
+    this.AttendanceLogCount.p.Absent = 0;
+    this.AttendanceLogCount.p.OnLeaveDaily = 0;
     this.DisplayMasterList = [];
     this.ToDispayMonthlyRequirement = true;
     this.ToDisplayWeeklyRequirement = false;
@@ -143,6 +164,9 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
     this.isShowMonthlyData = true
     this.isDaysShow = false
     this.isDaysShowMonth = true
+    if(this.Entity.p.EmployeeRef > 0){
+    this.IsEmployeeDisable = true
+    }
   }
 
   getMonthWiseAttendanceLogByAttendanceListType = async () => {
@@ -241,10 +265,11 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
     this.AttendanceLogCount.p.TotalDaysInMonth = 0
     this.AttendanceLogCount.p.TotalDaysInWeek = 0
     let lst = await AttendanceLogsCount.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendanceLogType, this.Entity.p.Months, this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.AttendanceLogCount.p.TeamSize = lst[0]?.p?.TeamSize
     this.AttendanceLogCount.p.Present = lst[0]?.p?.Present
     this.AttendanceLogCount.p.Absent = lst[0]?.p?.Absent
-    this.AttendanceLogCount.p.OnLeaveDaily = lst[0]?.p?.OnLeaveDaily
+    this.AttendanceLogCount.p.OnLeaveDaily = lst[0]?.p?.OnLeaveDaily || 0
     this.AttendanceLogCount.p.TotalDaysInMonth = lst[0]?.p?.TotalDaysInMonth
     this.AttendanceLogCount.p.TotalDaysInWeek = lst[0]?.p?.TotalDaysInWeek
   }
