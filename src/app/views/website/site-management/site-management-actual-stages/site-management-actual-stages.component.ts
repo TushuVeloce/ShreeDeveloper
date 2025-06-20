@@ -44,6 +44,9 @@ export class SiteManagementActualStagesComponent implements OnInit {
   ExpenseTypeRef: number = ExpenseTypeRefs.MachinaryExpense
   LabourExpenseRef: number = ExpenseTypeRefs.LabourExpense
   OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense
+  HideMachinaryTable: boolean = false
+  HideLabourTable: boolean = false
+  HideOtherTable: boolean = false
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   MachinaryHeaders: string[] = ['Sr.No.', 'Date', 'Chalan No.', 'Site Name', 'Vehicle No', 'Vendor Name', 'Quantity', 'Rate', 'Unit', 'Grand Total', 'Action'];
@@ -174,6 +177,23 @@ export class SiteManagementActualStagesComponent implements OnInit {
           this.OtherExpenseList.push(item);
           break;
       }
+    }
+     if (this.Entity.p.ExpenseTypeRef == this.ExpenseTypeRef) {
+      this.HideMachinaryTable = false
+      this.HideLabourTable = true
+      this.HideOtherTable = true
+    } else if (this.Entity.p.ExpenseTypeRef == this.LabourExpenseRef) {
+    this.HideMachinaryTable = true
+      this.HideLabourTable = false
+      this.HideOtherTable = true
+    } else if(this.Entity.p.ExpenseTypeRef == 0){
+     this.HideMachinaryTable = false
+      this.HideLabourTable = false
+      this.HideOtherTable = false
+    }else{
+      this.HideMachinaryTable = true
+      this.HideLabourTable = true
+      this.HideOtherTable = false
     }
     this.loadPaginationData();
   }

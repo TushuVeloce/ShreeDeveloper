@@ -77,7 +77,7 @@
       </form>
     </div>
   </div>
-  <div class="table-container" style="margin-top: 2rem;">
+  <div class="table-container" style="margin-top: 2rem;" *ngIf="!HideMachinaryTable">
     <div class="row">
       <div class="col-12">
         <h3 class="TableHeading">
@@ -134,7 +134,7 @@
   </div>
 
   <!-- Labour Expense -->
-  <div class="table-container" style="margin-top: 2rem;">
+  <div class="table-container" style="margin-top: 2rem;" *ngIf="!HideLabourTable">
     <div class="row">
       <div class="col-12">
         <h3 class="TableHeading">
@@ -183,7 +183,7 @@
   </div>
 
   <!-- Other Expense -->
-  <div class="table-container" style="margin-top: 2rem;">
+  <div class="table-container" style="margin-top: 2rem;" *ngIf="!HideOtherTable">
     <div class="row">
       <div class="col-12">
         <h3 class="TableHeading">
