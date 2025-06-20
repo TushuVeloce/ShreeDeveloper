@@ -17,6 +17,11 @@
     </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-6">
+          <label>Date</label>
+          <input type="date" name="Date" class="form-control date-input" id="Date" readonly
+            [(ngModel)]="Date" placeholder="Select Date" />
+        </div>
         <div class="col-6">
           <label>Employee</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear

@@ -33,7 +33,7 @@ export class QuotedMaterialDetailProps {
   public NetAmount: number = 0;
   public TotalAmount: number = 0;
   public MaterialQuotationRef: number = 0;
-
+  public MaterialQuotationDetailsRef: number = 0;
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';

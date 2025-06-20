@@ -32,6 +32,9 @@ export class AttendanceDetailsComponent implements OnInit {
   AttendanceLocationTypeList = DomainEnums.AttendanceLocationTypeList();
   AttendanceLocationType = AttendanceLocationType;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  strCDT: string = ''
+  Date: string = ''
+
 
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos
 
@@ -42,13 +45,13 @@ export class AttendanceDetailsComponent implements OnInit {
 
   constructor(private router: Router, private uiUtils: UIUtils, private dtu: DTU, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.getEmployeeListByCompanyRef();
     this.getSiteListByCompanyRef();
+
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-
       this.DetailsFormTitle = this.IsNewEntity ? 'New Attendance' : 'Edit Attendance';
       this.Entity = AttendanceLog.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable')
@@ -56,8 +59,11 @@ export class AttendanceDetailsComponent implements OnInit {
     } else {
       this.Entity = AttendanceLog.CreateNewInstance();
       AttendanceLog.SetCurrentInstance(this.Entity);
-
     }
+    this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+    let parts = this.strCDT.substring(0, 16).split('-');
+    // Construct the new date format
+    this.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
     this.InitialEntity = Object.assign(AttendanceLog.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as AttendanceLog;
   }
 
