@@ -63,35 +63,37 @@ export class MarketingManagementMasterComponent implements OnInit {
     private dtu: DTU,
     private DateconversionService: DateconversionService
   ) {
-    effect(async () => {
-      await this.getMarketingListByCompanyRef();
+    effect(() => {
+      this.getSiteListByCompanyRef(); this.getMarketingListByCompanyRef(); this.getVendorListByCompanyRef();
     });
   }
 
   async ngOnInit() {
-    this.getSiteListByCompanyRef();
-    this.getVendorListByCompanyRef();
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     // this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
   getSiteListByCompanyRef = async () => {
+    this.Entity.p.SiteRef = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
+    console.log('this.SiteList :', this.SiteList);
   }
 
   getVendorListByCompanyRef = async () => {
+    this.Entity.p.VendorRef = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
     let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.VendorList = lst;
+    console.log('this.VendorList :', this.VendorList);
   }
 
   getMarketingListByCompanyRef = async () => {

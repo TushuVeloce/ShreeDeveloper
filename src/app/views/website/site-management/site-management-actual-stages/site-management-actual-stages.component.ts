@@ -63,17 +63,18 @@ export class SiteManagementActualStagesComponent implements OnInit {
   ) {
     effect(async () => {
       await this.getActualStageListByCompanyRef();
+      await this.getSiteListByCompanyRef();
+      await this.getStageListByCompanyRef();
+      await this.getVendorListByCompanyRef();
     });
   }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled();
-    this.getSiteListByCompanyRef()
-    this.getStageListByCompanyRef()
-    this.getVendorListByCompanyRef()
   }
 
   getSiteListByCompanyRef = async () => {
+    this.Entity.p.SiteRef = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -83,15 +84,19 @@ export class SiteManagementActualStagesComponent implements OnInit {
   }
 
   getStageListByCompanyRef = async () => {
+    this.Entity.p.StageRef = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
     let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.StageList = lst;
+    this.Entity.p.ExpenseTypeRef = 0;
+    this.ExpenseTypeList = [];
   }
 
   getVendorListByCompanyRef = async () => {
+    this.Entity.p.VendorRef = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -111,6 +116,7 @@ export class SiteManagementActualStagesComponent implements OnInit {
   }
 
   getExpenseListByStageRef = async () => {
+    this.Entity.p.ExpenseTypeRef = 0;
     if (this.Entity.p.StageRef <= 0) {
       await this.uiUtils.showErrorToster('Stage not Selected');
       return;
@@ -178,19 +184,19 @@ export class SiteManagementActualStagesComponent implements OnInit {
           break;
       }
     }
-     if (this.Entity.p.ExpenseTypeRef == this.ExpenseTypeRef) {
+    if (this.Entity.p.ExpenseTypeRef == this.ExpenseTypeRef) {
       this.HideMachinaryTable = false
       this.HideLabourTable = true
       this.HideOtherTable = true
     } else if (this.Entity.p.ExpenseTypeRef == this.LabourExpenseRef) {
-    this.HideMachinaryTable = true
+      this.HideMachinaryTable = true
       this.HideLabourTable = false
       this.HideOtherTable = true
-    } else if(this.Entity.p.ExpenseTypeRef == 0){
-     this.HideMachinaryTable = false
+    } else if (this.Entity.p.ExpenseTypeRef == 0) {
+      this.HideMachinaryTable = false
       this.HideLabourTable = false
       this.HideOtherTable = false
-    }else{
+    } else {
       this.HideMachinaryTable = true
       this.HideLabourTable = true
       this.HideOtherTable = false
