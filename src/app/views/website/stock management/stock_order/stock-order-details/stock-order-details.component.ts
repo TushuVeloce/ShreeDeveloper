@@ -33,8 +33,8 @@ export class StockOrderDetailsComponent implements OnInit {
   InitialEntity: Order = null as any;
   SiteList: Site[] = [];
   VendorList: Vendor[] = [];
-  MaterialRequisitionList: RequiredMaterial[] = [];
-  AllMaterialRequisitionList: RequiredMaterial[] = [];
+  MaterialRequisitionList: OrderMaterial[] = [];
+  AllMaterialRequisitionList: OrderMaterial[] = [];
   OrderDate: string = '';
   CurrentDate: string = '';
   ModalEditable: boolean = false;
@@ -141,7 +141,8 @@ export class StockOrderDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Site not Selected');
       return;
     }
-    let lst = await RequiredMaterial.FetchEntireListByCompanyVendorAndSiteRef(this.companyRef(), this.Entity.p.VendorRef, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await OrderMaterial.FetchEntireListByCompanyVendorAndSiteRef(this.companyRef(), this.Entity.p.VendorRef, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.AllMaterialRequisitionList = lst;
     this.filterMaterialList();
   }

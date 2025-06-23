@@ -180,6 +180,15 @@ export class OrderMaterial implements IPersistable<OrderMaterial> {
     return OrderMaterial.ListFromTransportData(tdResponse);
   }
 
+  public static async FetchEntireListByCompanyVendorAndSiteRef(CompanyRef: number, VendorRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new OrderMaterialFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    req.VendorRefs.push(VendorRef)
+    req.SiteManagementRefs.push(SiteRef)
+    let tdResponse = await OrderMaterial.FetchTransportData(req, errorHandler) as TransportData;
+    return OrderMaterial.ListFromTransportData(tdResponse);
+  }
+
   public static async FetchEntireListBySiteRef(siteref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new OrderMaterialFetchRequest();
     req.SiteManagementRefs.push(siteref)
