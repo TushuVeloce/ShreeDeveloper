@@ -43,6 +43,7 @@ export class StockInwardDetailsComponent implements OnInit {
 
   strCDT: string = ''
   today: string = new Date().toISOString().split('T')[0];
+  NewRemainingQty: number = 0;
 
   errors: string = "";
   InvoiceFile: File = null as any
@@ -129,6 +130,7 @@ export class StockInwardDetailsComponent implements OnInit {
       return;
     }
     let lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.AllMaterialList = lst;
     this.filterMaterialList();
   }
@@ -139,7 +141,6 @@ export class StockInwardDetailsComponent implements OnInit {
       return;
     }
     let lst = await MaterialStockOrder.FetchMaterialQuantity(ref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
   }
 
   filterMaterialList() {
@@ -154,7 +155,8 @@ export class StockInwardDetailsComponent implements OnInit {
     this.newInward.UnitName = '';
     this.newInward.MaterialName = ''
     this.newInward.OrderedQty = 0
-     this.newInward.MaterialStockOrderDetailsRef = 0
+    this.newInward.RemainingQty = 0
+    this.newInward.MaterialStockOrderDetailsRef = 0
     if (materialref <= 0) {
       await this.uiUtils.showErrorToster('Material not Selected');
       return;
@@ -168,6 +170,13 @@ export class StockInwardDetailsComponent implements OnInit {
       this.newInward.OrderedQty = UnitData.p.OrderedQty
       this.newInward.MaterialStockOrderDetailsRef = UnitData.p.Ref
       this.getMaterialOrderedQtyByMaterialRef(UnitData.p.Ref)
+      if(UnitData.p.RequiredRemaningQty == 0){
+         this.newInward.RemainingQty = this.newInward.OrderedQty - this.newInward.InwardQty
+         this.NewRemainingQty = this.newInward.OrderedQty
+      }else{
+         this.newInward.RemainingQty = Number( UnitData.p.OrderedQty) - Number(UnitData.p.RequiredRemaningQty)
+         this.NewRemainingQty =  Number( UnitData.p.OrderedQty) - Number(UnitData.p.RequiredRemaningQty)
+      }
     }
   }
 
@@ -183,11 +192,14 @@ export class StockInwardDetailsComponent implements OnInit {
     this.Entity.p.VendorMobNo = lst.p.MobileNo;
   }
 
-  CalculateRemainingQty = () => {
-    const OrderedQty = Number(this.newInward.OrderedQty)
-    const InwardQty = Number(this.newInward.InwardQty)
-    this.newInward.RemainingQty = OrderedQty - InwardQty
+  CalculateRemainingQty = (InwardQty: number,RemainingQty: number) => {
+    // Ensure inwardQty is a valid number
+    InwardQty = Number(InwardQty) || 0;
+    // Calculate the new RemainingQty
+    this.NewRemainingQty = RemainingQty - InwardQty;
   }
+
+
 
   // Trigger file input when clicking the image
   triggerFileInput(): void {
@@ -295,11 +307,13 @@ export class StockInwardDetailsComponent implements OnInit {
             this.ismaterialModalOpen = false;
             this.ModalEditable = false;
             this.newInward = InwardMaterialDetailProps.Blank();
+             this.NewRemainingQty = 0
           }
         );
       } else {
         this.ismaterialModalOpen = false;
         this.newInward = InwardMaterialDetailProps.Blank();
+         this.NewRemainingQty = 0
       }
     }
   };
@@ -322,11 +336,15 @@ export class StockInwardDetailsComponent implements OnInit {
       // await materialInstance.EnsurePrimaryKeysWithValidValues();
       // await StockInwardInstance.EnsurePrimaryKeysWithValidValues();
       this.newInward.MaterialInwardRef = this.Entity.p.Ref;
+      this.newInward.RemainingQty = this.NewRemainingQty;
+      // this.newInward.InwardQty = this.Entity.p.Ref;
       this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
+      console.log('this.Entity.p.MaterialInwardDetailsArray :', this.Entity.p.MaterialInwardDetailsArray);
       this.filterMaterialList();
       await this.uiUtils.showSuccessToster('material added successfully');
     }
     this.newInward = InwardMaterialDetailProps.Blank();
+    this.NewRemainingQty = 0
     this.editingIndex = null;
   }
 

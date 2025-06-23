@@ -27,6 +27,7 @@ export class MaterialFromOrderProps {
   public UnitRef: number = 0;
   public readonly UnitName: string = '';
   public OrderedQty: number = 0
+  public RequiredRemaningQty: number = 0
   public CompanyRef: number = 0;
   public CompanyName: string = '';
 

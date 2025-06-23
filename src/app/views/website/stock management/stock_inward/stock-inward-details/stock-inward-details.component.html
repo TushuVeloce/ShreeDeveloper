@@ -165,9 +165,9 @@
                 <td Class="tbldata">{{ material.InwardQty}}</td>
                 <td Class="tbldata">{{ material.RemainingQty}}</td>
                 <td class="tbldata">
-                  <span style="margin-left: 9px" (click)="editMaterial(i)">
+                  <!-- <span style="margin-left: 9px" (click)="editMaterial(i)">
                     <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-                  </span>
+                  </span> -->
                   <span style="margin-left: 9px" (click)="removeMaterial(i)">
                     <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
                 </td>
@@ -230,17 +230,17 @@
             <label>Ordered Quantity</label>
             <input type="number" name="OrderedQty" class="form-control" [(ngModel)]="newInward.OrderedQty" required
               placeholder="Ordered Quantity" (click)="selectAllValue($event)"
-              (ngModelChange)="CalculateRemainingQty()" />
+           />
           </div>
           <div class="col-md-6" style="margin-top: 1rem">
             <label>Inward Quantity</label>
             <input type="number" name="InwardQty" class="form-control" [(ngModel)]="newInward.InwardQty" required
               placeholder="Inward Quantity" (click)="selectAllValue($event)"
-              (ngModelChange)="CalculateRemainingQty()" />
+              (ngModelChange)="CalculateRemainingQty(newInward.InwardQty,newInward.RemainingQty)" />
           </div>
           <div class="col-md-6" style="margin-top: 1rem">
             <label>Remaining Quantity</label>
-            <input type="number" name="RemainingQty" class="form-control" [(ngModel)]="newInward.RemainingQty" required
+            <input type="number" name="RemainingQty" class="form-control" [(ngModel)]="NewRemainingQty" required
               placeholder="Remaining Quantity" (click)="selectAllValue($event)" readonly />
           </div>
         </div>
