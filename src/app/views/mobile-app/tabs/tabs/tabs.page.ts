@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { AlertController, Platform } from '@ionic/angular';
+import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { filter, Subscription } from 'rxjs';
 import { App as CapacitorApp } from '@capacitor/app'; // ✅ Correct import
 import { Location } from '@angular/common';
+import { NetworkService } from '../../core/network.service';
+import { ToastService } from '../../core/toast.service';
 
 
 @Component({
@@ -18,12 +20,35 @@ export class TabsPage implements OnInit {
   backPressTimer: any;
   showTabs = true;
 
+  private offlineToast: HTMLIonToastElement | null = null;
   constructor(
     private platform: Platform,
     private alertCtrl: AlertController,
     private location: Location,
-    private router: Router
-  ) { }
+    private router: Router,
+    private networkService: NetworkService,
+    private toastController: ToastController,
+    private toastService: ToastService,
+  ) {
+    this.monitorNetworkConnection();
+   }
+
+  monitorNetworkConnection() {
+    this.networkService.getOnlineStatus().subscribe((connected: boolean) => {
+      console.log('Network connected:', connected);
+
+      if (!connected) {
+        this.toastService.presentPersistent(
+          'No Internet Connection',
+          'danger',
+          () => this.networkService.retryConnectionCheck()
+        );
+      } else {
+        this.toastService.dismiss();
+      }
+    });
+  }
+  
 
   ngOnInit() {
     this.backButtonSub = this.platform.backButton.subscribeWithPriority(10, async () => {

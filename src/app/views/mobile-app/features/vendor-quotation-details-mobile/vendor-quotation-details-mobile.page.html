@@ -152,6 +152,11 @@
                     (click)="removeQuotedMaterial(i)"></ion-icon>
                 </td>
               </tr>
+              <tr>
+                <td class="sticky-col" colspan="2"><b>Grand Total</b></td>
+                <td colspan="10"></td>
+                <td><b>₹ {{ getGrandTotal() }}</b></td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -166,7 +171,7 @@
       </div>
     </ng-template>
 
-    <ion-modal [isOpen]="isQuotedMaterialModalOpen" (didDismiss)="closeModal(100)" class="modal-card">
+    <ion-modal [isOpen]="isQuotedMaterialModalOpen" (didDismiss)="isQuotedMaterialModalOpen=false" class="modal-card">
       <ng-template>
         <div class="modal-container">
           <ion-header>
@@ -210,7 +215,7 @@
               <!-- Quantity -->
               <ion-item class="input-item">
                 <ion-input label="Required Qty" labelPlacement="floating" type="number" placeholder="Enter Quantity"
-                  [(ngModel)]="newQuotedMaterial.EstimatedQty" clearInput="true" clearOnEdit="true"></ion-input>
+                  [(ngModel)]="newQuotedMaterial.EstimatedQty" clearInput="true" clearOnEdit="true" readonly></ion-input>
               </ion-item>
 
               <!--Ordered  Quantity -->
@@ -282,7 +287,7 @@
               <!--Total Amount -->
               <ion-item class="input-item">
                 <ion-input label="Total Amount" labelPlacement="floating" type="number" placeholder="Enter Total Amount"
-                  [(ngModel)]="newQuotedMaterial.TotalAmount" clearInput="true" clearOnEdit="true"></ion-input>
+                  [(ngModel)]="newQuotedMaterial.TotalAmount" clearInput="true" clearOnEdit="true" readonly></ion-input>
               </ion-item>
             </ion-list>
           </ion-content>
@@ -323,17 +328,10 @@
 
           <ion-content class="ion-padding">
             <ion-list lines="none">
-              <!-- site Dropdown -->
-              <ion-item class="input-item" button (click)="selectSiteBottomsheet()">
-                <ion-label>Site Name</ion-label>
-
-                <!-- Text showing the selected status -->
-                <ion-text slot="end" class="status-text">
-                  {{ SiteName|| 'Select' }}
-                </ion-text>
-
-                <!-- Dropdown icon (chevron) on the right -->
-                <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+              <!-- site -->
+              <ion-item class="input-item">
+                <ion-input label="Site" labelPlacement="floating" placeholder="Enter Site Name"
+                  [(ngModel)]="SiteName" readonly></ion-input>
               </ion-item>
 
               <!--vendor Dropdown  -->
@@ -362,7 +360,7 @@
                 <ion-col size="6">
                   <ion-button expand="block" color="primary" shape="round"
                     (click)="getCopyMaterialListByVendorRefAndSiteRef()">
-                    {{ModalEditable ? "Update" : "Save"}}
+                    {{ "Copy"}}
                   </ion-button>
                 </ion-col>
               </ion-row>
@@ -382,7 +380,7 @@
         </ion-col>
         <ion-col size="6">
           <ion-button expand="block" (click)="SaveQuotation()" class="submit-button primary-button">
-            Save
+            {{IsNewEntity ? 'Save' : 'Update'}}
           </ion-button>
         </ion-col>
       </ion-row>

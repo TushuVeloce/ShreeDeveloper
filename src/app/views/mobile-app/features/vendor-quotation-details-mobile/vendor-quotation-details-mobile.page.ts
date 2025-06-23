@@ -29,7 +29,7 @@ import { FileTransferObject } from 'src/app/classes/infrastructure/filetransfero
 export class VendorQuotationDetailsMobilePage implements OnInit {
 
   Entity: Quotation = Quotation.CreateNewInstance();
-  private IsNewEntity: boolean = true;
+  IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Quotation' | 'Edit Quotation' = 'New Quotation';
   IsDropdownDisabled: boolean = false;
@@ -66,6 +66,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
 
   CopyVendorList: Quotation[] = [];
   CopyVendorName: string = '';
+  CopyVendorRef: number = 0;
   selectedCopyVendor: any[] = [];
 
   errors: string = '';
@@ -119,53 +120,6 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
   ngOnDestroy() {
     // Cleanup if needed
   }
-  // private async loadMaterialRequisitionDetailsIfCompanyExists() {
-  //   try {
-  //     this.loadingService.show();
-  //     this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
-
-  //     if (this.companyRef > 0) {
-  //       this.appStateManage.setDropdownDisabled(true);
-  //       this.getSiteListByCompanyRef()
-  //       this.getMaterialListByCompanyRef()
-  //       if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-  //         this.IsNewEntity = false;
-  //         this.DetailsFormTitle = this.IsNewEntity ? 'New Material Requisition' : 'Edit Material Requisition';
-  //         this.Entity = MaterialRequisition.GetCurrentInstance();
-  //         this.appStateManage.StorageKey.removeItem('Editable');
-  //         if (this.Entity.p.Date != '') {
-  //           this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
-  //         }
-  //         this.selectedSite = [{ p: { Ref: this.Entity.p.SiteRef, Name: this.Entity.p.SiteName } }];
-  //         this.SiteName = this.selectedSite[0].p.Name;
-  //         // this.getUnitByMaterialRef(this.Entity.p.MaterialRequisitionDetailsArray[0].MaterialRef)
-  //       } else {
-  //         this.Entity = MaterialRequisition.CreateNewInstance();
-  //         MaterialRequisition.SetCurrentInstance(this.Entity);
-  //         if (this.Entity.p.Date == '') {
-  //           this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-  //           let parts = this.strCDT.substring(0, 16).split('-');
-  //           // Construct the new date format
-  //           this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
-  //           this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
-  //         }
-  //       }
-  //       this.InitialEntity = Object.assign(
-  //         MaterialRequisition.CreateNewInstance(),
-  //         this.utils.DeepCopy(this.Entity)
-  //       ) as MaterialRequisition;
-  //     } else {
-  //       await this.toastService.present('company not selected', 1000, 'danger');
-  //       await this.haptic.error();
-  //     }
-  //   } catch (error) {
-  //     console.error('Error loading Material Requisition details:', error);
-  //     await this.toastService.present('Failed to load Material Requisition details', 1000, 'danger');
-  //     await this.haptic.error();
-  //   } finally {
-  //     this.loadingService.hide();
-  //   }
-  // }
 
   private async loadMaterialRequisitionDetailsIfCompanyExists() {
     try {
@@ -183,6 +137,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
           this.IsNewEntity = false;
           this.DetailsFormTitle = this.IsNewEntity ? 'New Quotation' : 'Edit Quotation';
           this.Entity = Quotation.GetCurrentInstance();
+          console.log('this.Entity :', this.Entity);
           this.appStateManage.StorageKey.removeItem('Editable');
           this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.InvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
           this.selectedFileName = this.Entity.p.InvoicePath;
@@ -190,6 +145,12 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
           // this.QuotationDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
           if (this.Entity.p.Date != '') {
             this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
+          } else {
+            this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+            let parts = this.strCDT.substring(0, 16).split('-');
+            this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
+            this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+
           }
           this.selectedSite = [{
             p: {
@@ -216,12 +177,12 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
           this.QuotationDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
           this.CurrentDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
 
-          // if (this.Entity.p.Date == '') {
-          //   this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-          //   let parts = this.strCDT.substring(0, 16).split('-');
-          //   this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
-          //   this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
-          // }
+          if (this.Entity.p.Date == '') {
+            this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+            let parts = this.strCDT.substring(0, 16).split('-');
+            this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
+            this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+          }
         }
         this.InitialEntity = Object.assign(Quotation.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Quotation;
       } else {
@@ -269,7 +230,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
 
   closeModal = async (type: number) => {
     if (type === 100) {
-      const keysToCheck = ['MaterialRequisitionDetailsRef', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
+      const keysToCheck = ['MaterialRequisitionDetailsName', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
 
       const hasData = keysToCheck.some(key => {
         const value = (this.newQuotedMaterial as any)[key];
@@ -305,6 +266,8 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
                 // this.ismaterialModalOpen = false;
                 this.ModalEditable = false;
                 this.isQuotedMaterialModalOpen = false;
+                this.MaterialName = '';
+                this.gstName = '';
                 this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
                 this.haptic.success();
                 console.log('User confirmed.');
@@ -314,8 +277,12 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
         });
       } else {
         // this.ismaterialModalOpen = false;
+
         this.isQuotedMaterialModalOpen = false;
         this.ModalEditable = false;
+        this.MaterialName = '';
+        this.gstName = '';
+        // this.ExpectedDeliveryDate='';
         this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
       }
     }
@@ -403,14 +370,16 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
   }
 
   onMaterialSelection = (MaterialRef: number) => {
+    // debugger
     console.log('MaterialRef :', MaterialRef);
-    
+
     console.log('MaterialRequisitionList :', this.MaterialRequisitionList);
-    const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.MaterialRef == MaterialRef);
+    const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.Ref == MaterialRef);
     console.log('SingleRecord :', SingleRecord);
     this.newQuotedMaterial.UnitName = SingleRecord[0].p.UnitName
     this.newQuotedMaterial.EstimatedQty = SingleRecord[0].p.EstimatedQty
     this.newQuotedMaterial.MaterialRequisitionDetailsName = SingleRecord[0].p.MaterialName
+    this.newQuotedMaterial.MaterialQuotationDetailsRef = SingleRecord[0].p.Ref
   }
 
   // Trigger file input when clicking the image
@@ -503,7 +472,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
       return await this.toastService.present('Rate cannot be blank.', 1000, 'warning'), await this.haptic.warning();
     }
 
-    this.newQuotedMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate ? this.ExpectedDeliveryDate:'');
+    this.newQuotedMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate ? this.ExpectedDeliveryDate : '');
     this.ExpectedDeliveryDate = '';
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
       this.Entity.p.MaterialQuotationDetailsArray[this.editingIndex] = { ...this.newQuotedMaterial };
@@ -511,8 +480,10 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
       await this.toastService.present('Material updated successfully', 1000, 'success');
       await this.haptic.success();
       this.isQuotedMaterialModalOpen = false;
-
     } else {
+      this.newQuotedMaterial.ExpectedDeliveryDate = this.strCDT;
+      console.log('this.newQuotedMaterial :', this.newQuotedMaterial);
+
       let QuotedMaterialInstance = new QuotedMaterial(this.newQuotedMaterial, true);
       let QuotationInstance = new Quotation(this.Entity.p, true);
       await QuotedMaterialInstance.EnsurePrimaryKeysWithValidValues();
@@ -526,6 +497,9 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
     }
     this.newQuotedMaterial = QuotedMaterialDetailProps.Blank();
     this.editingIndex = null;
+    this.gstName = '';
+    this.MaterialName = '';
+    this.ExpectedDeliveryDate = null;
   }
 
   editQuotedMaterial(index: number) {
@@ -544,15 +518,6 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
   }
 
   async removeQuotedMaterial(index: number) {
-    // await this.uiUtils.showConfirmationMessage(
-    //   'Delete',
-    //   `This process is <strong>IRREVERSIBLE!</strong> <br/>
-    //   Are you sure that you want to DELETE this Quoted Material?`,
-    //   async () => {
-    //     this.Entity.p.MaterialQuotationDetailsArray.splice(index, 1);
-    //     this.filterMaterialList();
-    //   }
-    // );
     this.alertService.presentDynamicAlert({
       header: 'Delete',
       subHeader: 'Confirmation needed',
@@ -588,7 +553,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
       return;
     }
     // this.getVendorListByCompanyRef();
-    if (type === 200) this.isCopyMaterialModalOpen = true;
+    if (type === 200) this.isCopyMaterialModalOpen = true, await this.getQuotationVendorListBySiteRefAndCompanyRef();
   }
 
   closeCopyModal = async (type: number) => {
@@ -596,14 +561,14 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
   };
 
   getCopyMaterialListByVendorRefAndSiteRef = async () => {
-    if (this.VendorRef <= 0) {
+    if (this.CopyVendorRef <= 0) {
       // await this.uiUtils.showErrorToster('Vendor not Selected');
       await this.toastService.present('Vendor not Selected', 1000, 'danger');
       await this.haptic.error();
       return;
     }
 
-    let lst = await Quotation.FetchEntireListByCompanyVendorAndSiteRef(this.companyRef, this.VendorRef, this.Entity.p.SiteRef, async errMsg => {
+    let lst = await Quotation.FetchEntireListByCompanyVendorAndSiteRef(this.companyRef, this.CopyVendorRef, this.Entity.p.SiteRef, async errMsg => {
       // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present('Error' + errMsg, 1000, 'danger');
       await this.haptic.error();
@@ -620,17 +585,18 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
       await this.toastService.present('No Data Found', 1000, 'danger');
       await this.haptic.error();
     }
-  } 
+  }
 
   SaveQuotation = async () => {
     let lstFTO: FileTransferObject[] = [];
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
+    this.Entity.p.CompanyRef = this.companyRef;
     this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
     this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-    this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.QuotationDate);
+    // this.Entity.p.Date = this.strCDT;
 
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
+    console.log('entityToSave :', entityToSave);
 
     if (this.InvoiceFile) {
       lstFTO.push(
@@ -660,7 +626,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
         await this.toastService.present('Quotation Updated successfully', 1000, 'success');
         await this.haptic.success();
       }
-      await this.router.navigate(['/homepage/Website/Quotation']);
+      await this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/vendor-quotation']);
     }
   };
 
@@ -670,7 +636,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
       this.newQuotedMaterial.RequiredRemainingQuantity = 0;
       this.newQuotedMaterial.NetAmount = 0;
       this.newQuotedMaterial.TotalAmount = 0;
-      return await this.toastService.present('Ordered Qty should be less then or equal to Required Qty', 1000, 'warning'),await this.haptic.warning();
+      return await this.toastService.present('Ordered Qty should be less then or equal to Required Qty', 1000, 'warning'), await this.haptic.warning();
     }
 
     this.newQuotedMaterial.RequiredRemainingQuantity = this.newQuotedMaterial.EstimatedQty - this.newQuotedMaterial.OrderedQty;
@@ -693,28 +659,34 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
       return this.Entity.p.GrandTotal = total + Number(item.TotalAmount || 0);
     }, 0);
   }
-
-  BackQuotation = async () => {
-    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
-      // await this.uiUtils.showConfirmationMessage('Cancel',
-      //   `This process is IRREVERSIBLE!
-      // <br/>
-      // Are you sure that you want to Cancel this Quotation Form?`,
-      //   async () => {
-      //     await this.router.navigate(['/homepage/Website/Quotation']);
-      //   });
-    } else {
-      await this.router.navigate(['/homepage/Website/Quotation']);
+  getQuotationVendorListBySiteRefAndCompanyRef = async () => {
+    try {
+      this.loadingService.show();
+      let lst = await Quotation.FetchEntireListByCompanyRefAndSiteRef(this.companyRef, this.Entity.p.SiteRef,
+        async (errMsg) => {
+          //  await this.uiUtils.showErrorMessage('Error', errMsg)
+          await this.toastService.present('Error' + errMsg, 1000, 'danger');
+          await this.haptic.error();
+        }
+      );
+      this.CopyVendorList = lst;
+      console.log('lst :', lst);
+    } catch (error) {
+      
+    }finally{
+      this.loadingService.hide();
     }
-  }
+  };
 
   public async selectCopyVenodrBottomsheet(): Promise<void> {
     try {
       const options = this.CopyVendorList;
       this.openSelectModal(options, this.selectedCopyVendor, false, 'Select Copy Vendor', 1, (selected) => {
         this.selectedCopyVendor = selected;
+        console.log('selected :', selected);
         // this.newQuotedMaterial.ma = selected[0].p.MaterialRef;
-        this.CopyVendorName = selected[0].p.MaterialName;
+        this.CopyVendorName = selected[0].p.VendorName;
+        this.CopyVendorRef = selected[0].p.VendorRef;
         // this.onMaterialSelection(selected[0].p.MaterialRef)
       });
 
@@ -739,15 +711,19 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
 
   public async selectMaterialBottomsheet(): Promise<void> {
     try {
+      // debugger
       const options = this.MaterialRequisitionList;
       this.openSelectModal(options, this.selectedMaterial, false, 'Select Material', 1, (selected) => {
         this.selectedMaterial = selected;
         console.log('selected :', selected);
-        this.newQuotedMaterial.MaterialRequisitionDetailsRef = selected[0].p.MaterialRef;
+        // this.newQuotedMaterial.MaterialRequisitionDetailsRef = selected[0].p.MaterialName;
+        // this.newQuotedMaterial.MaterialName = selected[0].p.MaterialName;
+        this.newQuotedMaterial.MaterialRequisitionDetailsRef = selected[0].p.Ref;
+        this.newQuotedMaterial.MaterialName = selected[0].p.MaterialName;
         this.MaterialName = selected[0].p.MaterialName;
         this.onMaterialSelection(this.newQuotedMaterial.MaterialRequisitionDetailsRef)
       });
-      
+
     } catch (error) {
 
     }

@@ -25,23 +25,29 @@
                                     'pending': requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Pending,
                                     'rejected': requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Rejected,
                                     'approved': requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Approved,
+                                    'ordered': requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Ordered,
+                                    'incomplete': requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Incomplete,
+                                    'completed': requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Completed,
                                     'default': ![
                                       MaterialQuotationStatus.Pending,
                                       MaterialQuotationStatus.Rejected,
-                                      MaterialQuotationStatus.Approved
+                                      MaterialQuotationStatus.Approved,
+                                      MaterialQuotationStatus.Ordered,
+                                      MaterialQuotationStatus.Incomplete,
+                                      MaterialQuotationStatus.Completed
                                     ].includes(requisition.p.MaterialQuotationStatus)
                                   }"
                 (click)="requisition.p.MaterialQuotationStatus == MaterialQuotationStatus.Pending ? openModal(requisition):''">
                 {{ requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Pending?'Pending'
                 :requisition.p.MaterialQuotationStatus ===
                 MaterialQuotationStatus.Rejected?'Rejected':requisition.p.MaterialQuotationStatus ===
-                MaterialQuotationStatus.Approved?'Approved':'-' }}
+                MaterialQuotationStatus.Approved?'Approved':requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Ordered?'Ordered':requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Incomplete?'Incomplete':requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Completed?'Completed':'-' }}
               </span>
-              <ion-button size="small" fill="clear" color="warning" (click)="onEditClicked(requisition)">
+              <ion-button size="small" fill="clear" color="warning" (click)="onEditClicked(requisition)" [disabled]="requisition.p.MaterialQuotationStatus !== MaterialQuotationStatus.Pending">
                 <ion-icon name="create-outline" slot="icon-only"></ion-icon>
               </ion-button>
 
-              <ion-button size="small" fill="clear" color="danger" (click)="onDeleteClicked(requisition)">
+              <ion-button size="small" fill="clear" color="danger" (click)="onDeleteClicked(requisition)" [disabled]="requisition.p.MaterialQuotationStatus !== MaterialQuotationStatus.Pending">
                 <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
               </ion-button>
 
@@ -203,49 +209,15 @@
                       {{ item.TotalAmount || '-' }}
                     </td>
                   </tr>
+                  <tr>
+                    <td class="sticky-col" colspan="2"><b>Grand Total</b></td>
+                    <td colspan="10"></td>
+                    <td><b>₹ {{SelectedQuotation.p.GrandTotal }}</b></td>
+                  </tr>
                 </tbody>
               </table>
             </div>
           </div>
-          <!-- Material Table -->
-          <!-- <ng-container *ngIf="SelectedQuotation.p.MaterialQuotationDetailsArray.length > 0; else noMaterials">
-            <ion-grid class="material-grid">
-              <ion-row class="material-header">
-                <ion-col size="1">#</ion-col>
-                <ion-col size="4">Material</ion-col>
-                <ion-col size="2">Unit</ion-col>
-                <ion-col size="2">Required</ion-col>
-                <ion-col size="2">Ordered</ion-col>
-                <ion-col size="2">Remaining</ion-col>
-                <ion-col size="2">Rate</ion-col>
-                <ion-col size="2">Delivery</ion-col>
-                <ion-col size="2">Total</ion-col>
-              </ion-row>
-  
-              <ion-row *ngFor="let material of SelectedQuotation.p.MaterialQuotationDetailsArray; let i = index"
-                class="material-row">
-                <ion-col size="1">{{ i + 1 }}</ion-col>
-                <ion-col size="4">{{ material.MaterialName }}</ion-col>
-                <ion-col size="2">{{ material.UnitName }}</ion-col>
-                <ion-col size="2">{{ material.EstimatedQty }}</ion-col>
-                <ion-col size="2">{{ material.OrderedQty }}</ion-col>
-                <ion-col size="2">{{ material.RequiredRemainingQuantity }}</ion-col>
-                <ion-col size="2">{{ material.DiscountedRate || material.Rate }}</ion-col>
-                <ion-col size="2">{{ formatDate(material.ExpectedDeliveryDate) }}</ion-col>
-                <ion-col size="2">{{ material.TotalAmount }}</ion-col>
-              </ion-row>
-            </ion-grid>
-          </ng-container> -->
-
-          <!-- No Materials Message -->
-          <!-- <ng-template #noMaterials>
-            <div class="ion-padding ion-text-center">
-              <ion-text color="medium">
-                <p>No material data available.</p>
-              </ion-text>
-            </div>
-          </ng-template> -->
-
           <!-- Summary -->
           <div class="info-row-of-model">
             <span class="label">Grand Total:</span>
@@ -260,10 +232,10 @@
         <!-- Footer -->
         <ion-footer class="modal-footer">
           <div class="action-buttons">
-            <ion-button expand="block" color="success" shape="round" (click)="SaveOrder(MaterialQuotationStatus.Ordered)">
+            <ion-button expand="block" color="success" shape="round" (click)="SaveOrder(MaterialQuotationStatus.Approved)">
               Approve
             </ion-button>
-            <ion-button expand="block" color="danger" shape="round" (click)="SaveOrder(MaterialQuotationStatus.Incomplete)">
+            <ion-button expand="block" color="danger" shape="round" (click)="SaveOrder(MaterialQuotationStatus.Rejected)">
               Reject
             </ion-button>
           </div>

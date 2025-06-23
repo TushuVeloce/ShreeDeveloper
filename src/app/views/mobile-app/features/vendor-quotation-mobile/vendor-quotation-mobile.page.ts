@@ -59,7 +59,8 @@ export class VendorQuotationMobilePage implements OnInit {
   total = 0;
   MaterialQuotationStatus = MaterialRequisitionStatuses
 
-  EntityOfOrder: Order = Order.CreateNewInstance();
+  EntityOfApprove: Quotation = Quotation.CreateNewInstance();
+  expandedRequisitions: Set<number> = new Set();
 
 
 
@@ -101,8 +102,6 @@ export class VendorQuotationMobilePage implements OnInit {
     await this.loadMaterialRequisitionIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
-
-  expandedRequisitions: Set<number> = new Set();
 
   toggleItemDetails(requisitionId: number) {
     if (this.expandedRequisitions.has(requisitionId)) {
@@ -220,13 +219,6 @@ export class VendorQuotationMobilePage implements OnInit {
     await this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/vendor-quotation/add']);
   }
 
-  // ChangeQuotationstatus = (item: Quotation) => {
-  //   this.SelectedQuotation = item.GetEditableVersion();
-  //   Quotation.SetCurrentInstance(this.SelectedQuotation);
-  //   this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-  //   this.router.navigate(['/homepage/Website/Quotation_Approval']);
-  // }
-
   onEditClicked = async (item: Quotation) => {
     this.SelectedQuotation = item.GetEditableVersion();
     Quotation.SetCurrentInstance(this.SelectedQuotation);
@@ -255,14 +247,16 @@ export class VendorQuotationMobilePage implements OnInit {
             handler: async () => {
               try {
                 await item.DeleteInstance(async () => {
+                  this.loadingService.show();
                   await this.toastService.present(
-                    `Vendor Quotation on ${this.formatDate(item.p.Date)} has been deleted!`,
+                    `Vendor Quotation of ${item.p.VendorName},${this.formatDate(item.p.Date)} has been deleted!`,
                     1000,
                     'success'
                   );
                   await this.haptic.success();
                 });
                 await this.getQuotationListByCompanyRef();
+                this.loadingService.hide();
               } catch (err) {
                 console.error('Error deleting Vendor Quotation:', err);
                 await this.toastService.present('Failed to delete Vendor Quotation', 1000, 'danger');
@@ -293,10 +287,14 @@ export class VendorQuotationMobilePage implements OnInit {
 
   SaveOrder = async (status: number) => {
     let lstFTO: FileTransferObject[] = [];
-    this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-    this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-    this.EntityOfOrder.p.MaterialStockOrderStatus = status;
-    let entityToSave = this.EntityOfOrder.GetEditableVersion();
+    
+    this.EntityOfApprove= this.SelectedQuotation;
+    this.EntityOfApprove.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+    this.EntityOfApprove.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+    this.EntityOfApprove.p.MaterialQuotationStatus = status;
+    console.log('this.EntityOfApprove :', this.EntityOfApprove);
+
+    let entityToSave = this.EntityOfApprove.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
 
@@ -308,16 +306,17 @@ export class VendorQuotationMobilePage implements OnInit {
     //       this.InvoiceFile.name
     //     )
     //   );
-    // }
+    // } 
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
     if (!tr.Successful) {
       await this.toastService.present(tr.Message, 1000, 'danger');
       await this.haptic.error();
       return;
     } else {
-      await this.toastService.present('Order Status Updated successfully', 1000, 'success');
+      await this.toastService.present(status == this.MaterialQuotationStatus.Approved ? 'Order is Approved' : status == this.MaterialQuotationStatus.Rejected ?'Order is Rejected':'N/A', 1000, 'success');
       await this.haptic.success();
-      this.EntityOfOrder = Order.CreateNewInstance();
+      this.EntityOfApprove = Quotation.CreateNewInstance();
+      this.closeModal();
     }
   };
 }
