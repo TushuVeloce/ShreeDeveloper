@@ -145,6 +145,8 @@
           <td Class="tbldata">{{formatDate(inward.p.InwardDate)}}</td>
            <td Class="tbldata">{{inward.p.VendorName}}</td>
           <td class="tbldata">
+             <span style="margin-left: 9px; margin-right: 9px; cursor: pointer;" (click)="navigateToPrint(inward)">
+                  <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
             <Edit-Icon (editClick)="onEditClicked(inward)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(inward)" />
           </td>

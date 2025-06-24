@@ -30,6 +30,7 @@ export class InwardMaterialDetailProps {
   public OrderedQty: number = 0;
   public InwardQty: number = 0;
   public RemainingQty: number = 0;
+  public TotalInwardQty : number = 0;
   public MaterialInwardRef: number = 0;
 
 

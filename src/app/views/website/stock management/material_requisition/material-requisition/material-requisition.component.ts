@@ -89,7 +89,6 @@ export class MaterialRequisitionComponent implements OnInit {
       return;
     }
     let lst = await MaterialRequisition.FetchEntireListByAllFilters(this.companyRef(), this.Entity.p.Status, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log(' this.Entity.p.Status, this.Entity.p.SiteRef :', this.Entity.p.Status, this.Entity.p.SiteRef);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();

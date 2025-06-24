@@ -67,7 +67,6 @@ export class StockInwardComponent  implements OnInit {
     }
     let lst = await StockInward.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
-    console.log('MasterList :', this.MasterList);
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
@@ -108,6 +107,12 @@ export class StockInwardComponent  implements OnInit {
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/homepage/Website/Stock_Inward_Details']);
   };
+
+    navigateToPrint = async (item: StockInward) => {
+        this.router.navigate(['/homepage/Website/Stock_Inward_Print'], {
+          state: { printData: item.GetEditableVersion() }
+        });
+      }
 
   onDeleteClicked = async (StockInward: StockInward) => {
     await this.uiUtils.showConfirmationMessage(

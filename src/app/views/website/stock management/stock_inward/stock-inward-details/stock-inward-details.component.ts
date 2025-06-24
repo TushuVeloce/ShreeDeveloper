@@ -86,7 +86,6 @@ export class StockInwardDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Inward' : 'Edit Stock Inward';
       this.Entity = StockInward.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       if (this.Entity.p.OrderedDate != '') {
         this.Entity.p.OrderedDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.OrderedDate)
@@ -124,13 +123,18 @@ export class StockInwardDetailsComponent implements OnInit {
   }
 
   getMaterialListByCompanyRef = async (SiteRef: number) => {
-    console.log('SiteRef :', SiteRef);
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
     let lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
+    const allMatched = lst.every(item => item.p.OrderedQty === item.p.TotalInwardQty);
+    if (allMatched) {
+      this.isSaveDisabled = true
+    }else{
+            this.isSaveDisabled = false
+
+    }
     this.AllMaterialList = lst;
     this.filterMaterialList();
   }
@@ -170,12 +174,12 @@ export class StockInwardDetailsComponent implements OnInit {
       this.newInward.OrderedQty = UnitData.p.OrderedQty
       this.newInward.MaterialStockOrderDetailsRef = UnitData.p.Ref
       this.getMaterialOrderedQtyByMaterialRef(UnitData.p.Ref)
-      if(UnitData.p.RequiredRemaningQty == 0){
-         this.newInward.RemainingQty = this.newInward.OrderedQty - this.newInward.InwardQty
-         this.NewRemainingQty = this.newInward.OrderedQty
-      }else{
-         this.newInward.RemainingQty = Number( UnitData.p.OrderedQty) - Number(UnitData.p.RequiredRemaningQty)
-         this.NewRemainingQty =  Number( UnitData.p.OrderedQty) - Number(UnitData.p.RequiredRemaningQty)
+      if (UnitData.p.TotalInwardQty == 0) {
+        this.newInward.RemainingQty = this.newInward.OrderedQty - this.newInward.InwardQty
+        this.NewRemainingQty = this.newInward.OrderedQty
+      } else {
+        this.newInward.RemainingQty = Number(UnitData.p.OrderedQty) - Number(UnitData.p.TotalInwardQty)
+        this.NewRemainingQty = Number(UnitData.p.OrderedQty) - Number(UnitData.p.TotalInwardQty)
       }
     }
   }
@@ -192,7 +196,7 @@ export class StockInwardDetailsComponent implements OnInit {
     this.Entity.p.VendorMobNo = lst.p.MobileNo;
   }
 
-  CalculateRemainingQty = (InwardQty: number,RemainingQty: number) => {
+  CalculateRemainingQty = (InwardQty: number, RemainingQty: number) => {
     // Ensure inwardQty is a valid number
     InwardQty = Number(InwardQty) || 0;
     // Calculate the new RemainingQty
@@ -307,13 +311,13 @@ export class StockInwardDetailsComponent implements OnInit {
             this.ismaterialModalOpen = false;
             this.ModalEditable = false;
             this.newInward = InwardMaterialDetailProps.Blank();
-             this.NewRemainingQty = 0
+            this.NewRemainingQty = 0
           }
         );
       } else {
         this.ismaterialModalOpen = false;
         this.newInward = InwardMaterialDetailProps.Blank();
-         this.NewRemainingQty = 0
+        this.NewRemainingQty = 0
       }
     }
   };
@@ -339,7 +343,6 @@ export class StockInwardDetailsComponent implements OnInit {
       this.newInward.RemainingQty = this.NewRemainingQty;
       // this.newInward.InwardQty = this.Entity.p.Ref;
       this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
-      console.log('this.Entity.p.MaterialInwardDetailsArray :', this.Entity.p.MaterialInwardDetailsArray);
       this.filterMaterialList();
       await this.uiUtils.showSuccessToster('material added successfully');
     }
@@ -390,7 +393,7 @@ export class StockInwardDetailsComponent implements OnInit {
         )
       );
     }
-    
+
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
@@ -432,5 +435,6 @@ export class StockInwardDetailsComponent implements OnInit {
   resetAllControls() {
     this.requisitionForm.resetForm(); // this will reset all form controls to their initial state
   }
+
 }
 

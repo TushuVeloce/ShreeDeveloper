@@ -7,18 +7,14 @@
         </button>
       </div>
       <div class="col-md-11">
-        <span class="detail_title">{{DetailsFormTitle}}</span>
+        <span class="detail_title">{{ DetailsFormTitle }}</span>
       </div>
     </div>
     <ng-template #noDataTpl>
-      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
-        No Data
-      </div>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
     </ng-template>
     <!-- If file not selected -->
-    <ng-template #NoFile>
-      No file selected
-    </ng-template>
+    <ng-template #NoFile> No file selected </ng-template>
 
     <!-- Fallback: If file is missing entirely -->
     <ng-template #defaultImage>
@@ -45,7 +41,10 @@
           <input type="date" name="OrderedDate" class="form-control" id="OrderedDate" [(ngModel)]="Entity.p.OrderedDate"
             #OrderedDateCtrl="ngModel" required (blur)="OrderedDateCtrl.control.markAsTouched()"
             placeholder="Enter Site Name" readonly />
-          <div *ngIf="OrderedDateCtrl.invalid && (OrderedDateCtrl.touched || OrderedDateCtrl.dirty)">
+          <div *ngIf="
+              OrderedDateCtrl.invalid &&
+              (OrderedDateCtrl.touched || OrderedDateCtrl.dirty)
+            ">
             <span class="validation-text" *ngIf="OrderedDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
@@ -54,7 +53,10 @@
           <input type="date" name="InwardDate" class="form-control" id="InwardDate" [(ngModel)]="Entity.p.InwardDate"
             #InwardDateCtrl="ngModel" required (blur)="InwardDateCtrl.control.markAsTouched()"
             placeholder="Enter Site Name" [min]="Entity.p.OrderedDate" />
-          <div *ngIf="InwardDateCtrl.invalid && (InwardDateCtrl.touched || InwardDateCtrl.dirty)">
+          <div *ngIf="
+              InwardDateCtrl.invalid &&
+              (InwardDateCtrl.touched || InwardDateCtrl.dirty)
+            ">
             <span class="validation-text" *ngIf="InwardDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
@@ -99,27 +101,37 @@
             (click)="triggerFileInput()" />
 
           <ng-container *ngIf="selectedFileName; else NoFile">
-            <span style="cursor: pointer;" (click)="fileNavigation(Entity.p.InvoicePath)">
-              {{ selectedFileName}}
+            <span style="cursor: pointer" (click)="fileNavigation(Entity.p.InvoicePath)">
+              {{ selectedFileName }}
             </span>
           </ng-container>
 
           <!-- Hidden File Input -->
           <input type="file" #fileInput accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
-            (change)="onFileUpload($event);" />
+            (change)="onFileUpload($event)" />
 
           <!-- Customer Aadhar Image Display -->
           <ng-container *ngIf="Entity.p.InvoicePath; else AddDocImage">
-            <img [src]="isImageFile(Entity.p.InvoicePath) ? imagePostView : '/assets/icons/doc-placeholder.png'"
-              alt="Invoice" title="Invoice" (click)="fileNavigation(Entity.p.InvoicePath)"
-              [class]="isImageFile(Entity.p.InvoicePath) ?  'img-preview' : 'file-preview'" />
+            <img [src]="
+                isImageFile(Entity.p.InvoicePath)
+                  ? imagePostView
+                  : '/assets/icons/doc-placeholder.png'
+              " alt="Invoice" title="Invoice" (click)="fileNavigation(Entity.p.InvoicePath)" [class]="
+                isImageFile(Entity.p.InvoicePath)
+                  ? 'img-preview'
+                  : 'file-preview'
+              " />
           </ng-container>
 
           <ng-template #AddDocImage>
             <ng-container *ngIf="imagePreView; else defaultImage">
-              <img [src]="isImageFile(selectedFileName) ? imagePreView : '/assets/icons/doc-placeholder.png'"
-                alt="Invoice" title="Invoice" (click)="fileNavigation(this.Entity.p.InvoicePath)"
-                [class]="isImageFile(selectedFileName) ? 'img-preview' : 'file-preview'" />
+              <img [src]="
+                  isImageFile(selectedFileName)
+                    ? imagePreView
+                    : '/assets/icons/doc-placeholder.png'
+                " alt="Invoice" title="Invoice" (click)="fileNavigation(this.Entity.p.InvoicePath)" [class]="
+                  isImageFile(selectedFileName) ? 'img-preview' : 'file-preview'
+                " />
             </ng-container>
           </ng-template>
         </div>
@@ -159,11 +171,11 @@
                   let i = index
                 ">
                 <td Class="tbldata">{{ i + 1 }}</td>
-                <td Class="tbldata">{{ material.MaterialName}}</td>
-                <td Class="tbldata">{{ material.UnitName}}</td>
-                <td Class="tbldata">{{ material.OrderedQty}}</td>
-                <td Class="tbldata">{{ material.InwardQty}}</td>
-                <td Class="tbldata">{{ material.RemainingQty}}</td>
+                <td Class="tbldata">{{ material.MaterialName }}</td>
+                <td Class="tbldata">{{ material.UnitName }}</td>
+                <td Class="tbldata">{{ material.OrderedQty }}</td>
+                <td Class="tbldata">{{ material.InwardQty }}</td>
+                <td Class="tbldata">{{ material.RemainingQty }}</td>
                 <td class="tbldata">
                   <!-- <span style="margin-left: 9px" (click)="editMaterial(i)">
                     <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
@@ -188,7 +200,9 @@
           margin-top: 2rem;
         ">
         <div>
-          <nz-button nz-button class="btn1" (click)="SaveStockInward()">Save</nz-button>
+          <button  type="button" class="btn" (click)="SaveStockInward()" [disabled]="isSaveDisabled">
+            Save
+          </button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="BackStockInward()">
@@ -203,7 +217,7 @@
 <div *ngIf="ismaterialModalOpen" class="custom-modal-overlay">
   <div class="custom-modal">
     <div class="custom-modal-header">
-      <h5>{{ ModalEditable ? 'Edit Material' : 'Add Material'}}</h5>
+      <h5>{{ ModalEditable ? "Edit Material" : "Add Material" }}</h5>
       <button type="button" class="btn-close" (click)="closeModal('material')"></button>
     </div>
     <div class="custom-modal-body">
@@ -214,8 +228,9 @@
             <nz-select *ngIf="!ModalEditable" class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl"
               nzAllowClear nzPlaceHolder="Select" id="MaterialRequisitionDetailsRef"
               name="MaterialRequisitionDetailsRef" [nzSize]="'large'"
-              [(ngModel)]="newInward.MaterialRequisitionDetailsRef" required
-              (ngModelChange)="getUnitByMaterialRef(newInward.MaterialRequisitionDetailsRef)">
+              [(ngModel)]="newInward.MaterialRequisitionDetailsRef" required (ngModelChange)="
+                getUnitByMaterialRef(newInward.MaterialRequisitionDetailsRef)
+              ">
               <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.MaterialRequisitionDetailsRef"
                 [nzLabel]="material.p.MaterialName"></nz-option>
             </nz-select>
@@ -229,14 +244,17 @@
           <div class="col-md-6" style="margin-top: 1rem">
             <label>Ordered Quantity</label>
             <input type="number" name="OrderedQty" class="form-control" [(ngModel)]="newInward.OrderedQty" required
-              placeholder="Ordered Quantity" (click)="selectAllValue($event)"
-           />
+              placeholder="Ordered Quantity" (click)="selectAllValue($event)" />
           </div>
           <div class="col-md-6" style="margin-top: 1rem">
             <label>Inward Quantity</label>
             <input type="number" name="InwardQty" class="form-control" [(ngModel)]="newInward.InwardQty" required
-              placeholder="Inward Quantity" (click)="selectAllValue($event)"
-              (ngModelChange)="CalculateRemainingQty(newInward.InwardQty,newInward.RemainingQty)" />
+              placeholder="Inward Quantity" (click)="selectAllValue($event)" (ngModelChange)="
+                CalculateRemainingQty(
+                  newInward.InwardQty,
+                  newInward.RemainingQty
+                )
+              " />
           </div>
           <div class="col-md-6" style="margin-top: 1rem">
             <label>Remaining Quantity</label>
@@ -254,7 +272,9 @@
           margin-top: 2rem;
         ">
         <div>
-          <nz-button nz-button class="btn1" (click)="addMaterial()">{{ ModalEditable ? 'Upadte' : 'Save'}}</nz-button>
+          <nz-button nz-button class="btn1" (click)="addMaterial()">{{
+            ModalEditable ? "Upadte" : "Save"
+            }}</nz-button>
         </div>
         <div>
           <nz-button nz-button class="btn1" (click)="closeModal('material')">
