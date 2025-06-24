@@ -26,7 +26,7 @@ import { Utils } from 'src/app/services/utils.service';
 export class StockOrderDetailsComponent implements OnInit {
 
   Entity: Order = Order.CreateNewInstance();
-  private IsNewEntity: boolean = true;
+  IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Order' | 'Edit Order' = 'New Order';
   IsDropdownDisabled: boolean = false;
@@ -97,7 +97,6 @@ export class StockOrderDetailsComponent implements OnInit {
 
       this.OrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
       this.appStateManage.StorageKey.removeItem('Editable');
-
     } else {
       this.Entity = Order.CreateNewInstance();
       Order.SetCurrentInstance(this.Entity);
@@ -166,10 +165,12 @@ export class StockOrderDetailsComponent implements OnInit {
   }
 
   onMaterialSelection = (MaterialRef: number) => {
-    const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.Ref == MaterialRef);
+    const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.MaterialRequisitionDetailsRef == MaterialRef);
     this.newOrderMaterial.UnitName = SingleRecord[0].p.UnitName
-    this.newOrderMaterial.EstimatedQty = SingleRecord[0].p.EstimatedQty
+    this.newOrderMaterial.QuotationOrderedQty = SingleRecord[0].p.OrderedQty
     this.newOrderMaterial.MaterialName = SingleRecord[0].p.MaterialName
+    this.newOrderMaterial.MaterialQuotationDetailsRef = SingleRecord[0].p.Ref
+    this.newOrderMaterial.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty
   }
 
   // Trigger file input when clicking the image
@@ -324,6 +325,10 @@ export class StockOrderDetailsComponent implements OnInit {
   editOrderMaterial(index: number) {
     this.isOrderMaterialModalOpen = true
     this.newOrderMaterial = { ...this.Entity.p.MaterialStockOrderDetailsArray[index] }
+    if(!this.IsNewEntity){
+      this.newOrderMaterial.TotalOrderedQty = 0;
+      this.newOrderMaterial.QuotationRemainingQuantity = 0;
+    }
     this.editingIndex = index;
     this.ModalEditable = true;
     this.ExpectedDeliveryDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialStockOrderDetailsArray[index].ExpectedDeliveryDate);
@@ -382,17 +387,17 @@ export class StockOrderDetailsComponent implements OnInit {
   };
 
   CalculateNetAmountAndTotalAmount = async () => {
-    if (this.newOrderMaterial.OrderedQty > this.newOrderMaterial.EstimatedQty) {
-      this.newOrderMaterial.ExtraOrderedQty = this.newOrderMaterial.OrderedQty - this.newOrderMaterial.EstimatedQty;
+    if (this.newOrderMaterial.OrderedQty > this.newOrderMaterial.QuotationOrderedQty) {
+      this.newOrderMaterial.ExtraOrderedQty = (this.newOrderMaterial.OrderedQty + this.newOrderMaterial.TotalOrderedQty) - this.newOrderMaterial.QuotationOrderedQty;
       // this.uiUtils.showWarningToster('Ordered Qty is greater then Required Qty');
     } else {
       this.newOrderMaterial.ExtraOrderedQty = 0;
     }
 
-    if (this.newOrderMaterial.OrderedQty < this.newOrderMaterial.EstimatedQty) {
-      this.newOrderMaterial.RequiredRemainingQuantity = this.newOrderMaterial.EstimatedQty - this.newOrderMaterial.OrderedQty;
+    if (this.newOrderMaterial.OrderedQty < this.newOrderMaterial.QuotationOrderedQty) {
+      this.newOrderMaterial.QuotationRemainingQuantity = this.newOrderMaterial.QuotationOrderedQty - (this.newOrderMaterial.OrderedQty + this.newOrderMaterial.TotalOrderedQty);
     } else {
-      this.newOrderMaterial.RequiredRemainingQuantity = 0;
+      this.newOrderMaterial.QuotationRemainingQuantity = 0;
     }
     if (this.newOrderMaterial.DiscountedRate == 0) {
       this.newOrderMaterial.NetAmount = (this.newOrderMaterial.Rate * this.newOrderMaterial.OrderedQty);

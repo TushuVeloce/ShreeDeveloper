@@ -23,8 +23,10 @@ export class OrderMaterialDetailProps {
   public UnitName: string = '';
   public EstimatedQty: number = 0;
   public OrderedQty: number = 0;
+  public TotalOrderedQty: number = 0;
   public ExtraOrderedQty: number = 0;
   public RequiredRemainingQuantity: number = 0;
+  public QuotationRemainingQuantity: number = 0;
   public MaterialQuotationDetailsRef: number = 0;
   public QuotationOrderedQty: number = 0;
   public Rate: number = 0;

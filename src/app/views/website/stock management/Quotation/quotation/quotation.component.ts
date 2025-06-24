@@ -30,8 +30,8 @@ export class QuotationComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Site', 'Date', 'Vendor', 'Material', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Required Remaining Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
-  headerswithoutsite: string[] = ['Sr.No.', 'Date', 'Vendor', 'Material', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Required Remaining Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
+  headers: string[] = ['Sr.No.', 'Site', 'Date', 'Vendor', 'Material', 'Unit', 'Required Quantity', 'Quotation Quantity', 'Required Remaining Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
+  headerswithoutsite: string[] = ['Sr.No.', 'Date', 'Vendor', 'Material', 'Unit', 'Required Quantity', 'Quotation Quantity', 'Required Remaining Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
