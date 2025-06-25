@@ -67,40 +67,64 @@ ion-card-content {
         // font-weight: 600;
         // text-transform: uppercase;
         padding: 0.25em 0.75em;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: white;
-            display: inline-block;
-            min-width: 70px;
-            text-align: center;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: white;
+        display: inline-block;
+        min-width: 70px;
+        text-align: center;
     }
-        .status-badge.pending {
-            background-color: #fbbf24;
-            /* amber-400 */
-            color: #92400e;
-            /* dark amber */
-        }
-    
-        .status-badge.rejected {
-            background-color: #ef4444;
-            /* red-500 */
-            color: #7f1d1d;
-            /* dark red */
-        }
-    
-        .status-badge.approved {
-            background-color: #22c55e;
-            /* green-500 */
-            color: #14532d;
-            /* dark green */
-        }
-    
-        .status-badge.default {
-            background-color: #6b7280;
-            color: #fff;
-            /* gray-500 */     }
+
+    .status-badge.pending {
+        background-color: #fbbf24;
+        /* amber-400 */
+        color: #92400e;
+        /* dark amber */
+    }
+
+    .status-badge.rejected {
+        background-color: #ef4444;
+        /* red-500 */
+        color: #7f1d1d;
+        /* dark red */
+    }
+
+    .status-badge.approved {
+        background-color: #22c55e;
+        /* green-500 */
+        color: #14532d;
+        /* dark green */
+    }
+
+    .status-badge.ordered {
+        background-color: #3b82f6;
+        /* blue-500 */
+        color: #1e3a8a;
+        /* dark blue */
+    }
+
+    .status-badge.incomplete {
+        background-color: #f59e0b;
+        /* amber-500 */
+        color: #7c4d00;
+        /* dark amber */
+    }
+
+    .status-badge.completed {
+        background-color: #4ade80;
+        /* green-400 */
+        color: #1f3a1f;
+        /* dark green */
+    }
+
+    .status-badge.default {
+        background-color: #6b7280;
+        color: #fff;
+        /* gray-500 */
+    }
 }
+
 
 .action-buttons {
     display: flex;

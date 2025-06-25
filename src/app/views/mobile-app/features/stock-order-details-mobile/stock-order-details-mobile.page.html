@@ -1,108 +1,133 @@
 <app-header-with-back-handler title={{DetailsFormTitle}}></app-header-with-back-handler>
 
-<ion-content class="form-container">
-  <ion-list lines="none" class="ion-padding">
-    <!--  Date -->
-    <ion-item class="input-item">
-      <ion-label>Select Date</ion-label>
-      <ion-datetime-button datetime="FromDate" trigger="entry-date-modal"></ion-datetime-button>
-    </ion-item>
-    <ion-modal keepContentsMounted="true" trigger="entry-date-modal">
-      <ng-template>
-        <ion-datetime id="FromDate" presentation="date" [(ngModel)]="Date" show-default-buttons="true"
-          (ionChange)="onDateChange($event.detail.value)"></ion-datetime>
-      </ng-template>
-    </ion-modal>
+<ion-content class="form-container ion-padding">
+  <ng-template #noDataTpl>
+    <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
+  </ng-template>
+  <!-- If file not selected -->
+  <ng-template #NoFile> No file selected </ng-template>
 
-    <!-- Select site -->
-    <ion-item class="input-item" button (click)="selectSiteBottomsheet()">
-      <ion-label>Site</ion-label>
+  <!-- Fallback: If file is missing entirely -->
+  <ng-template #defaultImage>
+    <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
+  </ng-template>
 
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ SiteName|| 'Select' }}
-      </ion-text>
+  <!-- Fallback: If file is not an image (e.g., PDF/DOC) -->
+  <ng-template #defaultDocImage>
+    <img src="/assets/icons/doc-placeholder.png" alt="Document File" class="file-preview" />
+  </ng-template>
 
-      <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-    </ion-item>
+  <form autocomplete="off">
+    <div class="row" style="margin-top: 1rem">
+      <div class="col-md-6">
+        <label>Date</label>
+        <input type="date" name="OrderDate" class="form-control date-input" id="OrderDate" [(ngModel)]="OrderDate"
+          placeholder="Select Date" [min]="CurrentDate" #OrderDateCtrl="ngModel" required
+          (blur)="OrderDateCtrl.control.markAsTouched()" />
+        <div *ngIf="
+              OrderDateCtrl.invalid &&
+              (OrderDateCtrl.touched || OrderDateCtrl.dirty)
+            ">
+          <span class="validation-text" *ngIf="OrderDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label><b>Site Name</b></label>
+        <!-- <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+          id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
+          <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+        </nz-select> -->
+      </div>
+    </div>
+    <div class="row" style="margin-top: 1rem">
+      <div class="col-md-4">
+        <label><b>Vendor Name</b></label>
+        <!-- <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+          id="VendorRef" name="VendorRef" [nzSize]="'large'" [(ngModel)]="Entity.p.VendorRef"
+          (ngModelChange)="onVendorSelection(Entity.p.VendorRef)">
+          <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
+        </nz-select> -->
+      </div>
+      <div class="col-md-4">
+        <label>Vendor Trade Name</label>
+        <input type="text" name="VendorTradeName" class="form-control date-input" id="VendorTradeName"
+          [(ngModel)]="Entity.p.VendorTradeName" placeholder="Trade Name" readonly />
+      </div>
+      <div class="col-md-4">
+        <label>Address</label>
+        <input type="text" name="AddressLine1" class="form-control date-input" id="AddressLine1"
+          [(ngModel)]="Entity.p.AddressLine1" placeholder="Address" readonly />
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-md-2 d-flex justify-content-center align-items-center">
+        <label>Invoice</label>
+      </div>
+      <div class="col-md-5 d-flex align-items-center justify-content-between">
+        <!-- Upload icon triggers file input -->
+        <!-- <img src="/assets/icons/upload.png" alt="Invoice" title="Upload Invoice" class="Upload-Icon"
+          (click)="triggerFileInput()" />
 
-    <!-- Select Vendor -->
-    <ion-item class="input-item" button (click)="selectVendorNameBottomsheet()">
-      <ion-label>Vendor Name</ion-label>
+        <ng-container *ngIf="selectedFileName; else NoFile">
+          <span style="cursor: pointer" (click)="fileNavigation(Entity.p.InvoicePath)">
+            {{ selectedFileName }}
+          </span>
+        </ng-container> -->
 
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ VendorName|| 'Select' }}
-      </ion-text>
+        <!-- Hidden File Input -->
+        <!-- <input type="file" #fileInput accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
+          (change)="onFileUpload($event)" /> -->
 
-      <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-    </ion-item>
+        <!-- Customer Aadhar Image Display -->
+        <!-- <ng-container *ngIf="Entity.p.InvoicePath; else AddDocImage">
+          <img [src]="
+                isImageFile(Entity.p.InvoicePath)
+                  ? imagePostView
+                  : '/assets/icons/doc-placeholder.png'
+              " alt="Invoice" title="Invoice" (click)="fileNavigation(Entity.p.InvoicePath)" [class]="
+                isImageFile(Entity.p.InvoicePath)
+                  ? 'img-preview'
+                  : 'file-preview'
+              " />
+        </ng-container>
 
-    <!-- Vendor Trade Name input-->
-    <ion-item class="input-item">
-      <ion-input label="Vendor Trade Name" labelPlacement="floating" placeholder="Enter Vendor Trade Name"
-        [(ngModel)]="Entity.p.VendorTradeName" readonly></ion-input>
-    </ion-item>
-
-    <!-- Address input-->
-    <ion-item class="input-item">
-      <ion-input label="Address" labelPlacement="floating" placeholder="Enter Address"
-        [(ngModel)]="Entity.p.AddressLine1" readonly></ion-input>
-    </ion-item>
-
+        <ng-template #AddDocImage>
+          <ng-container *ngIf="imagePreView; else defaultImage">
+            <img [src]="
+                  isImageFile(selectedFileName)
+                    ? imagePreView
+                    : '/assets/icons/doc-placeholder.png'
+                " alt="Invoice" title="Invoice" (click)="fileNavigation(this.Entity.p.InvoicePath)" [class]="
+                  isImageFile(selectedFileName) ? 'img-preview' : 'file-preview'
+                " />
+          </ng-container>
+        </ng-template> -->
+      </div>
+    </div>
     <!-- Material List Header -->
     <ion-grid class="ion-margin-top">
       <ion-row class="ion-align-items-center">
         <ion-col size="6">
-          <h5><strong>Quotation Material List</strong></h5>
+          <h5><strong>Requisition Material List</strong></h5>
         </ion-col>
         <ion-col size="6" class="ion-text-right">
-          <ion-button fill="outline" size="small" (click)="openModal(100)">
+          <ion-button fill="outline" size="small" (click)="isOrderMaterialModalOpen = true">
             <ion-icon name="add-circle-outline" slot="start"></ion-icon>
-            Add
-          </ion-button>
-          <ion-button fill="outline" size="small" (click)="openModal(200)">
-            <ion-icon name="copy-outline" slot="start"></ion-icon>
-            copy
+            Add Material
           </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
 
     <!-- Material Table -->
-    <ng-container *ngIf="Entity.p.MaterialStockOrderDetailsArray.length>0; else noMaterials">
-      <!-- <ion-grid>
-        <ion-row class="material-header ion-padding-top">
-          <ion-col size="1"><strong>#</strong></ion-col>
-          <ion-col size="4"><strong>Material</strong></ion-col>
-          <ion-col size="3"><strong>Unit</strong></ion-col>
-          <ion-col size="2"><strong>Qty</strong></ion-col>
-          <ion-col size="3"><strong>Actions</strong></ion-col>
-        </ion-row>
-
-        <ion-row *ngFor="let material of Entity.p.MaterialQuotationDetailsArray; let i = index" class="material-row">
-          <ion-col size="1">{{ i + 1 }}</ion-col>
-          <ion-col size="4">{{ material.MaterialName }}</ion-col>
-          <ion-col size="3">{{ material.UnitName }}</ion-col>
-          <ion-col size="2">{{ material.EstimatedQty }}</ion-col> -->
-      <!-- <ion-col size="2" class="ion-text-end">
-            <ion-icon name="create-outline" color="warning" size="small" style="margin-right: 12px; cursor: pointer"
-              (click)="editMaterial(i)"></ion-icon>
-            <ion-icon name="trash-outline" color="danger" size="small" style="cursor: pointer"
-              (click)="removeMaterial(i)"></ion-icon>
-          </ion-col> -->
-      <!-- </ion-row>
-      </ion-grid> -->
-
+    <ng-container *ngIf="Entity.p.MaterialStockOrderDetailsArray.length > 0; else noMaterials">
       <div class="table-container">
         <div class="table-scroll">
           <table class="custom-table">
             <thead>
               <tr>
                 <th class="sticky-col sticky-header">#</th>
-                <th *ngFor="let item of tableHeaderData" class="sticky-header">{{ item }}</th>
+                <th *ngFor="let item of OrderMaterialheaders" class="sticky-header">{{ item }}</th>
                 <th class="sticky-col sticky-header">Actions</th>
               </tr>
             </thead>
@@ -117,33 +142,6 @@
                 </td>
                 <td>
                   {{ item.EstimatedQty || '-' }}
-                </td>
-                <td>
-                  {{ item.OrderedQty || '-' }}
-                </td>
-                <td>
-                  {{ item.RequiredRemainingQuantity || '-' }}
-                </td>
-                <td>
-                  {{ item.Rate || '-' }}
-                </td>
-                <td>
-                  {{ item.DiscountedRate || '-' }}
-                </td>
-                <td>
-                  {{ item.Gst || '-' }}
-                </td>
-                <td>
-                  {{ item.DeliveryCharges || '-' }}
-                </td>
-                <td>
-                  {{ formatDate(item.ExpectedDeliveryDate) || '-' }}
-                </td>
-                <td>
-                  {{ item.NetAmount || '-' }}
-                </td>
-                <td>
-                  {{ item.TotalAmount || '-' }}
                 </td>
                 <td>
                   <ion-icon name="create-outline" color="warning" size="small"
@@ -165,135 +163,161 @@
         </ion-text>
       </div>
     </ng-template>
+    <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
+      <div>
+        <!-- <nz-button nz-button class="btn1" (click)="SaveOrder()">Save</nz-button> -->
+      </div>
+      <div>
+        <!-- <nz-button nz-button class="btn1" (click)="BackOrder()">
+          Cancel
+        </nz-button> -->
+      </div>
+    </div>
+  </form>
 
-    <ion-modal [isOpen]="isOrderMaterialModalOpen" (didDismiss)="isOrderMaterialModalOpen=false" class="modal-card">
+    <ion-modal [isOpen]="isOrderMaterialModalOpen" (didDismiss)="closeModal('OrderMaterial')" class="modal-card">
       <ng-template>
         <div class="modal-container">
           <ion-header>
             <ion-toolbar color="primary">
               <ion-title>Material Details</ion-title>
               <ion-buttons slot="end">
-                <ion-button fill="clear" (click)="closeModal(100)">
+                <ion-button fill="clear" (click)="closeModal('OrderMaterial')">
                   <ion-icon name="close-outline"></ion-icon>
                 </ion-button>
               </ion-buttons>
             </ion-toolbar>
           </ion-header>
-
+    
           <ion-content class="ion-padding">
-            <ion-list lines="none">
-              <!-- Material Dropdown -->
-              <ion-item class="input-item" button (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable">
-                <ion-label>Material Name</ion-label>
-
-                <!-- Text showing the selected status -->
-                <ion-text slot="end" class="status-text">
-                  {{ MaterialName|| 'Select' }}
-                </ion-text>
-
-                <!-- Dropdown icon (chevron) on the right -->
-                <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-              </ion-item>
-
-              <!-- Material input-->
-              <ion-item class="input-item" *ngIf="ModalEditable">
-                <ion-input label="Material Name" labelPlacement="floating" placeholder="Enter Material Name"
-                  [(ngModel)]="newOrderMaterial.MaterialName" readonly></ion-input>
-              </ion-item>
-
-              <!-- Unit -->
-              <ion-item class="input-item">
-                <ion-input label="Unit" labelPlacement="floating" placeholder="Enter Unit"
-                  [(ngModel)]="newOrderMaterial.UnitName" readonly></ion-input>
-              </ion-item>
-
-              <!-- Quantity -->
-              <ion-item class="input-item">
-                <ion-input label="Required Qty" labelPlacement="floating" type="number" placeholder="Enter Quantity"
-                  [(ngModel)]="newOrderMaterial.EstimatedQty" clearInput="true" clearOnEdit="true"></ion-input>
-              </ion-item>
-
-              <!--Ordered  Quantity -->
-              <ion-item class="input-item">
-                <ion-input label="Ordered  Qty" labelPlacement="floating" type="number"
-                  placeholder="Enter Ordered Quantity" [(ngModel)]="newOrderMaterial.OrderedQty" clearInput="true"
-                  clearOnEdit="true" (ngModelChange)="CalculateNetAmountAndTotalAmount()"></ion-input>
-              </ion-item>
-
-              <!-- Required Remaining Quantity -->
-              <ion-item class="input-item">
-                <ion-input label="Required Remaining Qty" labelPlacement="floating"
-                  placeholder="Enter Required Remaining Qty" [(ngModel)]="newOrderMaterial.RequiredRemainingQuantity"
-                  readonly></ion-input>
-              </ion-item>
-
-              <!-- Rate -->
-              <ion-item class="input-item">
-                <ion-input label="Rate" labelPlacement="floating" type="number" placeholder="Enter Rate"
-                  [(ngModel)]="newOrderMaterial.Rate" (ngModelChange)="CalculateNetAmountAndTotalAmount()"
-                  clearInput="true" clearOnEdit="true"></ion-input>
-              </ion-item>
-
-              <!-- Discount Rate -->
-              <ion-item class="input-item">
-                <ion-input label="Discount Rate" labelPlacement="floating" type="number"
-                  placeholder="Enter Discount Rate" [(ngModel)]="newOrderMaterial.DiscountedRate" clearInput="true"
-                  clearOnEdit="true" (ngModelChange)="CalculateNetAmountAndTotalAmount()"></ion-input>
-              </ion-item>
-
-              <!-- Net Amount-->
-              <ion-item class="input-item">
-                <ion-input label="Net Amount" labelPlacement="floating" placeholder="Enter Net Amount"
-                  [(ngModel)]="newOrderMaterial.NetAmount" readonly></ion-input>
-              </ion-item>
-
-              <!-- GST Dropdown -->
-              <ion-item class="input-item" button (click)="selectGSTBottomsheet()">
-                <ion-label>GST</ion-label>
-
-                <!-- Text showing the selected status -->
-                <ion-text slot="end" class="status-text">
-                  {{ gstName|| 'Select' }}
-                </ion-text>
-
-                <!-- Dropdown icon (chevron) on the right -->
-                <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-              </ion-item>
-
-              <!-- Delivery Charges -->
-              <ion-item class="input-item">
-                <ion-input label="Delivery Charges" labelPlacement="floating" type="number"
-                  placeholder="Enter Discount Rate" [(ngModel)]="newOrderMaterial.DeliveryCharges"
-                  (ngModelChange)="CalculateNetAmountAndTotalAmount()" clearInput="true" clearOnEdit="true"></ion-input>
-              </ion-item>
-
-              <!-- Expected Delivery Date -->
-              <ion-item class="input-item">
-                <ion-label>Expected Delivery Date</ion-label>
-                <ion-datetime-button datetime="ExpectedDeliveryDate" trigger="entry-date-modal"></ion-datetime-button>
-              </ion-item>
-
-              <ion-modal keepContentsMounted="true" trigger="entry-date-modal">
-                <ng-template>
-                  <ion-datetime id="ExpectedDeliveryDate" presentation="date" [(ngModel)]="ExpectedDeliveryDate"
-                    show-default-buttons="true"
-                    (ionChange)="onExpectedDeliveryDateChange($event.detail.value)"></ion-datetime>
-                </ng-template>
-              </ion-modal>
-
-              <!--Total Amount -->
-              <ion-item class="input-item">
-                <ion-input label="Total Amount" labelPlacement="floating" type="number" placeholder="Enter Total Amount"
-                  [(ngModel)]="newOrderMaterial.TotalAmount" clearInput="true" clearOnEdit="true"></ion-input>
-              </ion-item>
-            </ion-list>
+            <div class="col-12 mb-1">
+              <label for="MaterialRequisitionDetailsRef"><b>Material</b></label>
+              <!-- <nz-select *ngIf="!ModalEditable" class="nzSelect-light" nzShowSearch nzAllowClear
+                            [nzNotFoundContent]="noDataTpl" nzPlaceHolder="Select" [nzSize]="'large'"
+                            name="MaterialRequisitionDetailsRef" required id="MaterialRequisitionDetailsRef"
+                            [(ngModel)]="newOrderMaterial.MaterialRequisitionDetailsRef" (ngModelChange)="
+                                onMaterialSelection(
+                                  newOrderMaterial.MaterialRequisitionDetailsRef
+                                )
+                              ">
+                            <nz-option *ngFor="let material of MaterialRequisitionList" [nzLabel]="material.p.MaterialName"
+                              [nzValue]="material.p.MaterialRequisitionDetailsRef"></nz-option>
+                          </nz-select> -->
+              <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control"
+                [(ngModel)]="newOrderMaterial.MaterialName" readonly />
+            </div>
+            <div class="col-12 mb-1">
+              <label>Unit</label>
+              <input type="text" name="Unit" class="form-control" [(ngModel)]="newOrderMaterial.UnitName" readonly />
+            </div>
+            <div class="col-12 mb-1">
+              <label>Quotation Ordered Quantity</label>
+              <input type="number" name="QuotationOrderedQty" class="form-control"
+                [(ngModel)]="newOrderMaterial.QuotationOrderedQty" readonly />
+            </div>
+            <div class="col-12 mb-1">
+              <label>Total Ordered Quantity</label>
+              <input type="number" name="TotalOrderedQty" class="form-control" [(ngModel)]="newOrderMaterial.TotalOrderedQty"
+                readonly />
+            </div>
+            <div class="col-12 mb-1">
+              <label>Ordered Quantity</label>
+              <input type="number" name="OrderedQty" class="form-control" [(ngModel)]="newOrderMaterial.OrderedQty"
+                #OrderedQtyCtrl="ngModel" required (blur)="OrderedQtyCtrl.control.markAsTouched()"
+                placeholder="Enter Ordered Quantity" (click)="selectAllValue($event)"
+                (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
+              <div *ngIf="
+                                OrderedQtyCtrl.invalid &&
+                                (OrderedQtyCtrl.touched || OrderedQtyCtrl.dirty)
+                              ">
+                <span class="validation-text" *ngIf="OrderedQtyCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+              </div>
+            </div>
+            <div class="col-12 mb-1">
+              <label>Quotation Remaining Quantity</label>
+              <input type="number" name="QuotationRemainingQuantity" class="form-control"
+                [(ngModel)]="newOrderMaterial.QuotationRemainingQuantity" readonly />
+            </div>
+            <div class="col-12 mb-1">
+              <label>Extra Ordered Quantity</label>
+              <input type="number" name="ExtraOrderedQty" class="form-control" [(ngModel)]="newOrderMaterial.ExtraOrderedQty"
+                readonly />
+            </div>
+            <div class="col-12 mb-1">
+              <label>Rate</label>
+              <input type="number" name="Rate" class="form-control" [(ngModel)]="newOrderMaterial.Rate" #RateCtrl="ngModel" required
+                (blur)="RateCtrl.control.markAsTouched()" placeholder="Enter Rate" (click)="selectAllValue($event)"
+                (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
+              <div *ngIf="RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty)">
+                <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+              </div>
+            </div>
+            <div class="col-12 mb-1">
+              <label>Discount Rate</label>
+              <input type="number" name="DiscountedRate" class="form-control" [(ngModel)]="newOrderMaterial.DiscountedRate"
+                (ngModelChange)="CalculateNetAmountAndTotalAmount()" #DiscountedRateCtrl="ngModel" required
+                (blur)="DiscountedRateCtrl.control.markAsTouched()" placeholder="Enter Discount Rate"
+                (click)="selectAllValue($event)" />
+              <div *ngIf="
+                                DiscountedRateCtrl.invalid &&
+                                (DiscountedRateCtrl.touched || DiscountedRateCtrl.dirty)
+                              ">
+                <span class="validation-text" *ngIf="DiscountedRateCtrl.errors?.['required']">{{ RequiredFieldMsg
+                  }}</span>
+              </div>
+            </div>
+            <div class="col-12 mb-1">
+              <label>Net Amount</label>
+              <input type="number" name="NetAmount" class="form-control" [(ngModel)]="newOrderMaterial.NetAmount" readonly />
+            </div>
+            <div class="col-12 mb-1">
+              <div>
+                <label for="Gst"><b>GST</b></label>
+                <!-- <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
+                              nzPlaceHolder="Select" [nzSize]="'large'" name="Gst" required id="Gst"
+                              [(ngModel)]="newOrderMaterial.Gst" (ngModelChange)="CalculateNetAmountAndTotalAmount()">
+                              <nz-option nzLabel="None" [nzValue]="0"></nz-option>
+                              <nz-option nzLabel="5%" [nzValue]="5"></nz-option>
+                              <nz-option nzLabel="9%" [nzValue]="9"></nz-option>
+                              <nz-option nzLabel="18%" [nzValue]="18"></nz-option>
+                              <nz-option nzLabel="27%" [nzValue]="27"></nz-option>
+                            </nz-select> -->
+              </div>
+            </div>
+            <div class="col-12 mb-1">
+              <label>Delivery Charges</label>
+              <input type="number" name="DeliveryCharges" class="form-control" [(ngModel)]="newOrderMaterial.DeliveryCharges"
+                #DeliveryCharges="ngModel" required (blur)="DeliveryCharges.control.markAsTouched()"
+                placeholder="Enter DeliveryCharges" (click)="selectAllValue($event)"
+                (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
+              <div *ngIf="
+                                DeliveryCharges.invalid &&
+                                (DeliveryCharges.touched || DeliveryCharges.dirty)
+                              ">
+                <span class="validation-text" *ngIf="DeliveryCharges.errors?.['required']">{{ RequiredFieldMsg }}</span>
+              </div>
+            </div>
+            <div class="col-12 mb-1">
+              <label>Expected Delivery Date</label>
+              <input type="date" name="ExpectedDeliveryDate" class="form-control" [(ngModel)]="ExpectedDeliveryDate"
+                placeholder="Enter Date" />
+            </div>
+            <div class="col-12 mb-1">
+              <label>Total Amount</label>
+              <input type="number" name="TotalAmount" class="form-control" [(ngModel)]="newOrderMaterial.TotalAmount" readonly />
+            </div>
           </ion-content>
-
+    
           <ion-footer>
             <ion-grid>
               <ion-row>
                 <ion-col size="6">
-                  <ion-button expand="block" color="primary" shape="round" (click)="closeModal(100)">
+                  <ion-button expand="block" color="primary" shape="round" (click)="closeModal('OrderMaterial')">
                     Close
                   </ion-button>
                 </ion-col>
@@ -308,21 +332,4 @@
         </div>
       </ng-template>
     </ion-modal>
-
-    <!-- Main Buttons -->
-    <ion-grid>
-      <ion-row>
-        <ion-col size="6">
-          <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
-            Cancel
-          </ion-button>
-        </ion-col>
-        <ion-col size="6">
-          <ion-button expand="block" (click)="SaveOrder()" class="submit-button primary-button">
-            Save
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-list>
 </ion-content>

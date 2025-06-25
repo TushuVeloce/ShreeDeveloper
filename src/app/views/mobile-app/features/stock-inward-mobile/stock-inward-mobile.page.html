@@ -1,11 +1,90 @@
 <app-header-with-back-handler title="stock Inward"
   backRoute="mobileapp/tabs/dashboard/stock-management"></app-header-with-back-handler>
 
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">stockInwardMobile</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+  <ion-content [fullscreen]="true" class="ion-padding">
+    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+  
+    <ng-container *ngFor="let stockInward of DisplayMasterList">
+      <ion-item-group>
+        <ion-item-divider color="light" class="requisition-card">
+          <div class="divider-row">
+            <!-- Left: Vendor Name -->
+            <ion-label class="label-start">
+              <strong>{{ stockInward.p.VendorTradeName || 'Unknown Vendor' }}</strong>
+            </ion-label>
+          </div>
+          <div class="divider-row">
+            <!-- Right: Status Badge and Action Buttons -->
+            <div class="action-area">
+              <!-- Action Buttons -->
+              <div class="button-group">
+                <ion-button size="small" fill="clear" color="warning" (click)="onEditClicked(stockInward)">
+                  <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+  
+                <ion-button size="small" fill="clear" color="danger" (click)="onDeleteClicked(stockInward)">
+                  <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+  
+                <ion-button size="small" fill="clear" color="medium" (click)="navigateToPrint(stockInward)">
+                  <ion-icon name="print-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+  
+                <ion-button size="small" fill="clear" color="medium" (click)="toggleItemDetails(stockInward.p.Ref)">
+                  <ion-icon [name]="expandedRequisitions.has(stockInward.p.Ref) ? 'chevron-up-outline' : 'chevron-down-outline'"
+                    slot="icon-only"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+          </div>
+        </ion-item-divider>
+  
+        <ion-card class="requisition-card" *ngFor="let item of stockInward.p.MaterialInwardDetailsArray">
+          <ion-card-content [@expandCollapse]="expandedRequisitions.has(stockInward.p.Ref) ? 'expanded' : 'collapsed'">
+            <div class="requisition-details">
+              <!-- Info Column -->
+              <div class="left-info">
+                <div class="info-row">
+                  <span class="label">Material:</span>
+                  <span class="value">{{ item.MaterialName || '-' }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="label">Unit:</span>
+                  <span class="value">{{ item.UnitName || '-' }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="label">Inward Qty:</span>
+                  <span class="value">{{ item.InwardQty }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="label">Inward Date:</span>
+                  <span class="value">{{formatDate(stockInward.p.InwardDate) || '-' }}</span>
+                </div>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-item-group>
+    </ng-container>
+    <!-- Show "Data not found" if list is empty -->
+    <div *ngIf="DisplayMasterList.length === 0 " class="no-data-mobile-app">
+      <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+      <p>No Stock Order records found.</p>
+    </div>
+    <!-- Floating Action Button for adding new stock inward --> 
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button>
+        <ion-icon name="ellipsis-vertical"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-list side="top">
+        <ion-fab-button color="primary" (click)="AddStockInward()">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button color="tertiary" (click)="AddStockInward()">
+          <ion-icon name="filter-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
+    </ion-fab>
+  </ion-content>

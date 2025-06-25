@@ -49,6 +49,8 @@ export class MaterialRequisitionDetailsMobilePage implements OnInit {
   MaterialName: string = '';
   selectedMaterial: any[] = [];
   Date: string | null = null;
+  tableHeaderData = ['Material', 'Unit', 'Required Qty'];
+
 
   constructor(private uiUtils: UIUtils,
     private router: Router,

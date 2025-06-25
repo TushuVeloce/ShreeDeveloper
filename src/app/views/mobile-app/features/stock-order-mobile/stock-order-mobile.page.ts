@@ -21,10 +21,11 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   selector: 'app-stock-order-mobile',
   templateUrl: './stock-order-mobile.page.html',
   styleUrls: ['./stock-order-mobile.page.scss'],
-  standalone:false,
+  standalone: false,
   animations: [
     trigger('expandCollapse', [
       state('collapsed', style({
+        display: 'none',
         height: '0px',
         opacity: 0,
         padding: '0px',
@@ -48,19 +49,14 @@ export class StockOrderMobilePage implements OnInit {
   DisplayMasterList: Order[] = [];
   SearchString: string = '';
   SiteList: Site[] = [];
-  SelectedQuotation: Order = Order.CreateNewInstance();
-  SelectedQuotationItem: any = null;
+  SelectedOrder: Order = Order.CreateNewInstance();
   CustomerRef: number = 0;
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  MaterialQuotationStatus = MaterialRequisitionStatuses;
   MaterialStockOrderStatus = MaterialRequisitionStatuses;
 
-
   EntityOfOrder: Order = Order.CreateNewInstance();
-
-
 
   companyRef = 0;
   modalOpen = false;
@@ -68,7 +64,6 @@ export class StockOrderMobilePage implements OnInit {
   tableHeaderData = ['Material', 'Unit', 'Required Qty', 'Ordered Qty', 'Required Remaining Qty', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount']
   showInvoicePreview = false;
   sanitizedInvoiceUrl: SafeResourceUrl | null = null;
-
 
   constructor(
     private router: Router,
@@ -83,7 +78,8 @@ export class StockOrderMobilePage implements OnInit {
     private sanitizer: DomSanitizer,
     private baseUrl: BaseUrlService,
     private utils: Utils,
-  ) { }
+  ) {
+  }
 
   ngOnInit = async () => {
     await this.loadMaterialRequisitionIfEmployeeExists();
@@ -99,6 +95,44 @@ export class StockOrderMobilePage implements OnInit {
   async handleRefresh(event: CustomEvent) {
     await this.loadMaterialRequisitionIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
+  }
+
+  getStatusClass(status: any): string {
+    switch (status) {
+      case this.MaterialStockOrderStatus.Pending:
+        return 'pending';
+      case this.MaterialStockOrderStatus.Rejected:
+        return 'rejected';
+      case this.MaterialStockOrderStatus.Approved:
+        return 'approved';
+      case this.MaterialStockOrderStatus.Ordered:
+        return 'ordered';
+      case this.MaterialStockOrderStatus.Incomplete:
+        return 'incomplete';
+      case this.MaterialStockOrderStatus.Completed:
+        return 'completed';
+      default:
+        return 'default';
+    }
+  }
+
+  getStatusText(status: any): string {
+    switch (status) {
+      case this.MaterialStockOrderStatus.Pending:
+        return 'Pending';
+      case this.MaterialStockOrderStatus.Rejected:
+        return 'Rejected';
+      case this.MaterialStockOrderStatus.Approved:
+        return 'Approved';
+      case this.MaterialStockOrderStatus.Ordered:
+        return 'Ordered';
+      case this.MaterialStockOrderStatus.Incomplete:
+        return 'Incomplete';
+      case this.MaterialStockOrderStatus.Completed:
+        return 'Completed';
+      default:
+        return '-';
+    }
   }
 
   expandedRequisitions: Set<number> = new Set();
@@ -155,33 +189,36 @@ export class StockOrderMobilePage implements OnInit {
   }
 
   getSiteListByCompanyRef = async () => {
+    this.Entity.p.SiteRef = 0
+    this.Entity.p.SiteName = ''
     if (this.companyRef <= 0) {
-      await this.toastService.present('Company not selected', 1000, 'danger');
+      // await this.uiUtils.showErrorToster('Company not Selected');
+      await this.toastService.present('Company not Selected', 1000, 'danger');
       await this.haptic.error();
       return;
     }
-    this.Entity.p.SiteRef = 0
-    this.Entity.p.SiteName = ''
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present(errMsg, 1000, 'danger');
       await this.haptic.error();
     });
     this.SiteList = lst;
   }
 
-
   private getOrderListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef <= 0) {
-      this.toastService.present('Company not Selected', 1000, 'danger');
-      this.haptic.error();
+      // await this.uiUtils.showErrorToster('Company not Selected');
+      await this.toastService.present('Company not Selected', 1000, 'danger');
+      await this.haptic.error();
       return;
     }
     let lst = await Order.FetchEntireListByCompanyRef(this.companyRef,
       async (errMsg) => {
-        this.toastService.present(errMsg, 1000, 'danger');
-        this.haptic.error();
+        // await this.uiUtils.showErrorMessage('Error', errMsg)
+        await this.toastService.present(errMsg, 1000, 'danger');
+        await this.haptic.error()
       }
     );
     console.log('lst :', lst);
@@ -189,7 +226,7 @@ export class StockOrderMobilePage implements OnInit {
     this.DisplayMasterList = this.MasterList;
   };
 
-  getVendorQuotationListByCompanyRefAndSiteRef = async () => {
+  getOrderListByCompanyRefAndSiteRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.Entity.p.SiteRef <= 0) {
@@ -198,42 +235,23 @@ export class StockOrderMobilePage implements OnInit {
     }
     let lst = await Order.FetchEntireListByCompanyRefAndSiteRef(this.companyRef, this.Entity.p.SiteRef,
       async (errMsg) => {
-        this.toastService.present(errMsg, 1000, 'danger');
-        this.haptic.error();
+        // await this.uiUtils.showErrorMessage('Error', errMsg)
+        await this.toastService.present(errMsg, 1000, 'danger')
+        await this.haptic.error()
       }
     );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
   };
 
-  formatDate = (date: string | Date): string => {
-    return this.DateconversionService.formatDate(date);
-  }
-
-  AddVendorQuotation = async () => {
-    if (this.companyRef <= 0) {
-      await this.toastService.present('Company not Selected', 1000, 'danger');
-      await this.haptic.error();
-      return;
-    }
-    await this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-order/add']);
-  }
-
-  // ChangeQuotationstatus = (item: Quotation) => {
-  //   this.SelectedQuotation = item.GetEditableVersion();
-  //   Quotation.SetCurrentInstance(this.SelectedQuotation);
-  //   this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-  //   this.router.navigate(['/homepage/Website/Quotation_Approval']);
-  // }
-
   onEditClicked = async (item: Order) => {
-    this.SelectedQuotation = item.GetEditableVersion();
-    Order.SetCurrentInstance(this.SelectedQuotation);
+    this.SelectedOrder = item.GetEditableVersion();
+    Order.SetCurrentInstance(this.SelectedOrder);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-order/edit']);
-  }
+  };
 
-  async onDeleteClicked(item: Order) {
+  onDeleteClicked = async (Order: Order) => {
     try {
       this.alertService.presentDynamicAlert({
         header: 'Delete',
@@ -253,18 +271,22 @@ export class StockOrderMobilePage implements OnInit {
             cssClass: 'custom-confirm',
             handler: async () => {
               try {
-                await item.DeleteInstance(async () => {
+                await Order.DeleteInstance(async () => {
                   await this.toastService.present(
-                    `Vendor Quotation on ${this.formatDate(item.p.Date)} has been deleted!`,
+                    `Stock Order on ${this.formatDate(Order.p.Date)} has been deleted!`,
                     1000,
                     'success'
                   );
                   await this.haptic.success();
                 });
-                await this.getOrderListByCompanyRef();
+                if (this.Entity.p.SiteRef <= 0) {
+                  this.getOrderListByCompanyRef();
+                } else {
+                  this.getOrderListByCompanyRefAndSiteRef();
+                }
               } catch (err) {
-                console.error('Error deleting Vendor Quotation:', err);
-                await this.toastService.present('Failed to delete Vendor Quotation', 1000, 'danger');
+                console.error('Error deleting Stock Order:', err);
+                await this.toastService.present('Failed to delete Stock Order', 1000, 'danger');
                 await this.haptic.error();
               }
             }
@@ -278,46 +300,142 @@ export class StockOrderMobilePage implements OnInit {
     }
   }
 
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
+  }
+
+  navigateToPrint = async (item: Order) => {
+    this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-order/print'], {
+      state: { printData: item.GetEditableVersion() }
+    });
+  }
+
+  AddOrder = async () => {
+    if (this.companyRef <= 0) {
+      // await this.uiUtils.showErrorToster('Company not Selected');
+      await this.toastService.present('Company not Selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-order/add']);
+  }
+
   openModal(requisition: any) {
     console.log('requisition: any:', requisition);
-    this.SelectedQuotation = requisition;
+    this.SelectedOrder = requisition;
     this.modalOpen = true;
   }
 
   closeModal() {
     this.modalOpen = false;
-    this.SelectedQuotation = Order.CreateNewInstance();
+    this.SelectedOrder = Order.CreateNewInstance();
   }
+  // SaveOrder = async (status: number) => {
+  //   let lstFTO: FileTransferObject[] = [];
+  //   this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+  //   this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+  //   this.EntityOfOrder.p.MaterialStockOrderStatus = status;
+  //   let entityToSave = this.EntityOfOrder.GetEditableVersion();
+  //   let entitiesToSave = [entityToSave];
+  //   console.log('entitiesToSave :', entitiesToSave);
 
+  //   // if (this.InvoiceFile) {
+  //   //   lstFTO.push(
+  //   //     FileTransferObject.FromFile(
+  //   //       "InvoiceFile",
+  //   //       this.InvoiceFile,
+  //   //       this.InvoiceFile.name
+  //   //     )
+  //   //   );
+  //   // }
+  //   let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+  //   if (!tr.Successful) {
+  //     await this.toastService.present(tr.Message, 1000, 'danger');
+  //     await this.haptic.error();
+  //     return;
+  //   } else {
+  //     await this.toastService.present('Order Status Updated successfully', 1000, 'success');
+  //     await this.haptic.success();
+  //     this.EntityOfOrder = Order.CreateNewInstance();
+  //   }
+  // };
 
-  SaveOrder = async (status: number) => {
-    let lstFTO: FileTransferObject[] = [];
-    this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-    this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-    this.EntityOfOrder.p.MaterialStockOrderStatus = status;
-    let entityToSave = this.EntityOfOrder.GetEditableVersion();
-    let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
+  // SaveOrder = async (status: number) => {
+  //   let lstFTO: FileTransferObject[] = [];
+  //   this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+  //   this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+  //   this.Entity.p.MaterialStockOrderStatus = status;
+  //   let entityToSave = this.Entity.GetEditableVersion();
+  //   let entitiesToSave = [entityToSave];
+  //   console.log('entitiesToSave :', entitiesToSave);
 
-    // if (this.InvoiceFile) {
-    //   lstFTO.push(
-    //     FileTransferObject.FromFile(
-    //       "InvoiceFile",
-    //       this.InvoiceFile,
-    //       this.InvoiceFile.name
-    //     )
-    //   );
-    // }
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
-    if (!tr.Successful) {
-      await this.toastService.present(tr.Message, 1000, 'danger');
-      await this.haptic.error();
-      return;
-    } else {
-      await this.toastService.present('Order Status Updated successfully', 1000, 'success');
-      await this.haptic.success();
-      this.EntityOfOrder = Order.CreateNewInstance();
-    }
-  };
-
+  //   // if (this.InvoiceFile) {
+  //   //   lstFTO.push(
+  //   //     FileTransferObject.FromFile(
+  //   //       "InvoiceFile",
+  //   //       this.InvoiceFile,
+  //   //       this.InvoiceFile.name
+  //   //     )
+  //   //   );
+  //   // }
+  //   let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+  //   if (!tr.Successful) {
+  //     // this.isSaveDisabled = false;
+  //     // this.uiUtils.showErrorMessage('Error', tr.Message)
+  //     await this.toastService.present(tr.Message, 1000, 'danger');
+  //     await this.haptic.error();
+  //     return;
+  //   } else {
+  //     // this.isSaveDisabled = false;
+  //     // if (this.IsNewEntity) {
+  //     //   // await this.uiUtils.showSuccessToster('Order saved successfully');
+  //     //   await this.toastService.present('Order saved successfully', 1000, 'success');
+  //     //   await this.haptic.success();
+  //     //   this.Entity = Order.CreateNewInstance();
+  //     // } else {
+  //     //   // await this.uiUtils.showSuccessToster('Order Status Updated successfully');
+  //     //   await this.toastService.present('Order Status Updated successfully', 1000, 'success');
+  //     //   await this.haptic.success();
+  //     // }
+  //     // await this.router.navigate(['/homepage/Website/Stock_Order']);
+  //     await this.toastService.present('Order saved successfully', 1000, 'success');
+  //     await this.haptic.success();
+  //     this.Entity = Order.CreateNewInstance();
+  //   }
+  // };
+    SaveOrder = async (status: number) => {
+      let lstFTO: FileTransferObject[] = [];
+      
+      this.EntityOfOrder= this.SelectedOrder;
+      this.EntityOfOrder.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+      this.EntityOfOrder.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+      this.EntityOfOrder.p.MaterialStockOrderStatus = status;
+      console.log('this.EntityOfApprove :', this.EntityOfOrder);
+  
+      let entityToSave = this.EntityOfOrder.GetEditableVersion();
+      let entitiesToSave = [entityToSave];
+      console.log('entitiesToSave :', entitiesToSave);
+  
+      // if (this.InvoiceFile) {
+      //   lstFTO.push(
+      //     FileTransferObject.FromFile(
+      //       "InvoiceFile",
+      //       this.InvoiceFile,
+      //       this.InvoiceFile.name
+      //     )
+      //   );
+      // } 
+      let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+      if (!tr.Successful) {
+        await this.toastService.present(tr.Message, 1000, 'danger');
+        await this.haptic.error();
+        return;
+      } else {
+        await this.toastService.present(status == this.MaterialStockOrderStatus.Ordered ? 'Order is Approved' : status == this.MaterialStockOrderStatus.Rejected ?'Order is Rejected':'N/A', 1000, 'success');
+        await this.haptic.success();
+        this.EntityOfOrder = Order.CreateNewInstance();
+        this.closeModal();
+      }
+    };
 }

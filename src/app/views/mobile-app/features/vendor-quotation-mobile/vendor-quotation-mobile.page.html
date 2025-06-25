@@ -21,27 +21,9 @@
             <!-- Action Buttons -->
             <div class="button-group">
               <!-- Status Badge -->
-              <span class="status-badge" [ngClass]="{
-                                    'pending': requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Pending,
-                                    'rejected': requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Rejected,
-                                    'approved': requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Approved,
-                                    'ordered': requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Ordered,
-                                    'incomplete': requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Incomplete,
-                                    'completed': requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Completed,
-                                    'default': ![
-                                      MaterialQuotationStatus.Pending,
-                                      MaterialQuotationStatus.Rejected,
-                                      MaterialQuotationStatus.Approved,
-                                      MaterialQuotationStatus.Ordered,
-                                      MaterialQuotationStatus.Incomplete,
-                                      MaterialQuotationStatus.Completed
-                                    ].includes(requisition.p.MaterialQuotationStatus)
-                                  }"
-                (click)="requisition.p.MaterialQuotationStatus == MaterialQuotationStatus.Pending ? openModal(requisition):''">
-                {{ requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Pending?'Pending'
-                :requisition.p.MaterialQuotationStatus ===
-                MaterialQuotationStatus.Rejected?'Rejected':requisition.p.MaterialQuotationStatus ===
-                MaterialQuotationStatus.Approved?'Approved':requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Ordered?'Ordered':requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Incomplete?'Incomplete':requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Completed?'Completed':'-' }}
+              <span class="status-badge" [ngClass]="getStatusClass(requisition.p.MaterialQuotationStatus)"
+                (click)="requisition.p.MaterialQuotationStatus === MaterialQuotationStatus.Pending ? openModal(requisition) : ''">
+                {{ getStatusText(requisition.p.MaterialQuotationStatus) }}
               </span>
               <ion-button size="small" fill="clear" color="warning" (click)="onEditClicked(requisition)" [disabled]="requisition.p.MaterialQuotationStatus !== MaterialQuotationStatus.Pending">
                 <ion-icon name="create-outline" slot="icon-only"></ion-icon>

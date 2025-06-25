@@ -43,7 +43,7 @@
                 <span class="value">{{ requisition.p.Status || 'N/A' }}</span> -->
                 <span class="label">Status</span>
                 <span class="value">
-                  <span class="status-badge" 
+                  <!-- <span class="status-badge" 
                   [ngClass]="{
                     'pending': item.MaterialStatus === MaterialRequisitionStatuses.Pending,
                     'rejected': item.MaterialStatus === MaterialRequisitionStatuses.Rejected,
@@ -53,8 +53,10 @@
                                 MaterialRequisitionStatuses.Rejected,
                                 MaterialRequisitionStatuses.Approved
                                 ].includes(item.MaterialStatus)
-                                    }">
-                  {{ requisition.p.Status || 'N/A' }}</span>
+                                    }"> 
+                  {{ requisition.p.Status || 'N/A' }}</span> -->
+                  <span class="status-badge" [ngClass]="getStatusClass(item.MaterialStatus)">
+                    {{ getStatusText(item.MaterialStatus) }} </span>
                 </span>
               </div>
             </div>

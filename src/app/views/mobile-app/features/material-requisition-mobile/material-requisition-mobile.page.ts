@@ -21,6 +21,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   animations: [
     trigger('expandCollapse', [
       state('collapsed', style({
+        display: 'none',
         height: '0px',
         opacity: 0,
         padding: '0px',
@@ -80,6 +81,43 @@ export class MaterialRequisitionMobilePage implements OnInit {
   async handleRefresh(event: CustomEvent) {
     await this.loadMaterialRequisitionIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
+  }
+  getStatusClass(status: any): string {
+    switch (status) {
+      case this.MaterialRequisitionStatuses.Pending:
+        return 'pending';
+      case this.MaterialRequisitionStatuses.Rejected:
+        return 'rejected';
+      case this.MaterialRequisitionStatuses.Approved:
+        return 'approved';
+      case this.MaterialRequisitionStatuses.Ordered:
+        return 'ordered';
+      case this.MaterialRequisitionStatuses.Incomplete:
+        return 'incomplete';
+      case this.MaterialRequisitionStatuses.Completed:
+        return 'completed';
+      default:
+        return 'default';
+    }
+  }
+
+  getStatusText(status: any): string {
+    switch (status) {
+      case this.MaterialRequisitionStatuses.Pending:
+        return 'Pending';
+      case this.MaterialRequisitionStatuses.Rejected:
+        return 'Rejected';
+      case this.MaterialRequisitionStatuses.Approved:
+        return 'Approved';
+      case this.MaterialRequisitionStatuses.Ordered:
+        return 'Ordered';
+      case this.MaterialRequisitionStatuses.Incomplete:
+        return 'Incomplete';
+      case this.MaterialRequisitionStatuses.Completed:
+        return 'Completed';
+      default:
+        return '-';
+    }
   }
 
   expandedRequisitions: Set<number> = new Set();
