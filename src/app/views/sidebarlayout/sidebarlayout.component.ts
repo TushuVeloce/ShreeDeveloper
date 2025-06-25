@@ -58,6 +58,8 @@ export class SidebarlayoutComponent implements OnInit {
   CompanyRef: number = 0;
   isDropdownDisabled: boolean = false;
   isShow = true;
+  isModalOpen: boolean = false;
+
   // Name: string = 'Veloce Tech';
 
   previousActiveSubmodule: string | null = null; // Tracks the active module
@@ -761,11 +763,12 @@ export class SidebarlayoutComponent implements OnInit {
   }
 
   openModal(): void {
-    const modalElement = document.getElementById('sidebarModal');
-    if (modalElement) {
-      const modal = new Modal(modalElement);
-      modal.show();
-    }
+    // const modalElement = document.getElementById('sidebarModal');
+    // if (modalElement) {
+    //   const modal = new Modal(modalElement);
+    //   modal.show();
+    // }
+    this.isModalOpen = true;
   }
 
   closeModal() {
