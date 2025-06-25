@@ -31,7 +31,7 @@ export class StockInwardDetailsComponent implements OnInit {
   InitialEntity: StockInward = null as any;
   SiteList: Site[] = [];
   MaterialList: MaterialFromOrder[] = [];
-  AllMaterialList: MaterialFromOrder[] = [];
+  MaterialListOriginal: MaterialFromOrder[] = [];
   localEstimatedStartingDate: string = '';
   localEstimatedEndDate: string = '';
   ModalEditable: boolean = false;
@@ -40,6 +40,8 @@ export class StockInwardDetailsComponent implements OnInit {
   newInward: InwardMaterialDetailProps = InwardMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  isFormSaved = true; // 🔁 this is set to true after final save
+
 
   strCDT: string = ''
   today: string = new Date().toISOString().split('T')[0];
@@ -128,6 +130,7 @@ export class StockInwardDetailsComponent implements OnInit {
       return;
     }
     let lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MaterialListOriginal = lst; // store full list
     const allMatched = lst.every(item => item.p.OrderedQty === item.p.TotalInwardQty);
     if (allMatched) {
       this.isSaveDisabled = true
@@ -135,7 +138,7 @@ export class StockInwardDetailsComponent implements OnInit {
             this.isSaveDisabled = false
 
     }
-    this.AllMaterialList = lst;
+
     this.filterMaterialList();
   }
 
@@ -147,12 +150,19 @@ export class StockInwardDetailsComponent implements OnInit {
     let lst = await MaterialStockOrder.FetchMaterialQuantity(ref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
   }
 
-  filterMaterialList() {
-    const usedRefs = this.Entity.p.MaterialInwardDetailsArray.map(item => item.MaterialRequisitionDetailsRef);
-    this.MaterialList = this.AllMaterialList.filter(
-      material => !usedRefs.includes(material.p.Ref)
+filterMaterialList() {
+  if (this.isFormSaved) {
+    // After save: don't filter anything
+    this.MaterialList = [...this.MaterialListOriginal];
+  } else {
+    // Before save: filter already selected materials
+    const usedRefs = this.Entity.p.MaterialInwardDetailsArray.map(x => x.MaterialRequisitionDetailsRef);
+    this.MaterialList = this.MaterialListOriginal.filter(
+      item => !usedRefs.includes(item.p.MaterialRequisitionDetailsRef)
     );
   }
+}
+
 
   getUnitByMaterialRef = async (materialref: number) => {
     this.newInward.UnitRef = 0;
@@ -327,13 +337,14 @@ export class StockInwardDetailsComponent implements OnInit {
     if (this.newInward.MaterialRequisitionDetailsRef <= 0 || this.newInward.InwardQty < 0) {
       await this.uiUtils.showErrorMessage('Error', 'Inward Quantity can not be less than 0');
       return;
+    }else if(this.newInward.InwardQty > this.newInward.RemainingQty){
+       await this.uiUtils.showErrorMessage('Error', 'Inward Quantity can not be more than Remaining Quantity');
+      return;
     }
-
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
       this.Entity.p.MaterialInwardDetailsArray[this.editingIndex] = { ...this.newInward };
       await this.uiUtils.showSuccessToster('material details updated successfully');
       this.ismaterialModalOpen = false;
-
     } else {
       // let materialInstance = new RequiredMaterial(this.newInward, true);
       // let StockInwardInstance = new StockInward(this.Entity.p, true);
@@ -343,6 +354,7 @@ export class StockInwardDetailsComponent implements OnInit {
       this.newInward.RemainingQty = this.NewRemainingQty;
       // this.newInward.InwardQty = this.Entity.p.Ref;
       this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
+      this.isFormSaved = false
       this.filterMaterialList();
       await this.uiUtils.showSuccessToster('material added successfully');
     }

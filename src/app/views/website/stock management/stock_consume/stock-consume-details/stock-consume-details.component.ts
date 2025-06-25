@@ -1,7 +1,10 @@
 import { Component, effect, OnInit, ViewChild } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
+import {
+  ValidationMessages,
+  ValidationPatterns,
+} from 'src/app/classes/domain/constants';
 import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
 import { MaterialFromOrder } from 'src/app/classes/domain/entities/website/masters/material/orderedmaterial/materialfromorder';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -21,60 +24,78 @@ import { Utils } from 'src/app/services/utils.service';
   styleUrls: ['./stock-consume-details.component.scss'],
   standalone: false,
 })
-export class StockConsumeDetailsComponent  implements OnInit {
-
+export class StockConsumeDetailsComponent implements OnInit {
   isSaveDisabled: boolean = false;
   private IsNewEntity: boolean = true;
   Entity: StockConsume = StockConsume.CreateNewInstance();
-  DetailsFormTitle: 'New Stock Consumption' | 'Edit Stock Consumption' = 'New Stock Consumption';
+  DetailsFormTitle: 'New Stock Consumption' | 'Edit Stock Consumption' =
+    'New Stock Consumption';
   InitialEntity: StockConsume = null as any;
   SiteList: Site[] = [];
   MaterialList: InwardMaterial[] = [];
   StageList: Stage[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
+  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace;
 
-  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
-  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
+  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg;
 
   @ViewChild('consumptionForm') consumptionForm!: NgForm;
   @ViewChild('ConsumptionDateCtrl') ConsumptionDateInputControl!: NgModel;
   @ViewChild('ConsumedQuantityCtrl') ConsumedQuantityCtrlInputControl!: NgModel;
   @ViewChild('DescriptionCtrl') DescriptionInputControl!: NgModel;
 
-  constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private dtu: DTU,) {
-  }
+  constructor(
+    private router: Router,
+    private uiUtils: UIUtils,
+    private appStateManage: AppStateManageService,
+    private utils: Utils,
+    private companystatemanagement: CompanyStateManagement,
+    private dtu: DTU
+  ) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.getSiteListByCompanyRef();
-    this.getStageListByCompanyRef()
+    this.getStageListByCompanyRef();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Consumption' : 'Edit Stock Consumption';
+      this.DetailsFormTitle = this.IsNewEntity
+        ? 'New Stock Consumption'
+        : 'Edit Stock Consumption';
       this.Entity = StockConsume.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
-      this.appStateManage.StorageKey.removeItem('Editable')
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.appStateManage.StorageKey.removeItem('Editable');
+      this.Entity.p.UpdatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
       if (this.Entity.p.ConsumptionDate != '') {
-        this.Entity.p.ConsumptionDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.ConsumptionDate)
+        this.Entity.p.ConsumptionDate = this.dtu.ConvertStringDateToShortFormat(
+          this.Entity.p.ConsumptionDate
+        );
       }
-      this.getMaterialListBySiteRef(this.Entity.p.SiteRef)
+      this.getMaterialListBySiteRef(this.Entity.p.SiteRef);
     } else {
       this.Entity = StockConsume.CreateNewInstance();
       StockConsume.SetCurrentInstance(this.Entity);
-      this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.Entity.p.CreatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
+      this.Entity.p.UpdatedBy = Number(
+        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      );
     }
-    this.InitialEntity = Object.assign(StockConsume.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as StockConsume;
+    this.InitialEntity = Object.assign(
+      StockConsume.CreateNewInstance(),
+      this.utils.DeepCopy(this.Entity)
+    ) as StockConsume;
     this.focusInput();
   }
 
   focusInput = () => {
     let txtName = document.getElementById('SiteRef')!;
     txtName.focus();
-  }
+  };
 
   getSiteListByCompanyRef = async () => {
     this.SiteList = [];
@@ -83,88 +104,114 @@ export class StockConsumeDetailsComponent  implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Site.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.SiteList = lst;
     // this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
-  }
+  };
 
-   getMaterialListBySiteRef = async (SiteRef:number) => {
+  getMaterialListBySiteRef = async (SiteRef: number) => {
     this.MaterialList = [];
     // this.Entity.p.MaterialRequisitionDetailsRef = 0;
     if (this.companyRef() <= 0 && SiteRef < 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await InwardMaterial.FetchInwardMaterials(SiteRef,this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await InwardMaterial.FetchInwardMaterials(
+      SiteRef,
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     console.log('lst :', lst);
-    this.MaterialList = lst;
+    // this.MaterialList = lst;
+    const uniqueMap = new Map();
+    lst.forEach((item) => {
+      if (!uniqueMap.has(item.p.MaterialRequisitionDetailsRef)) {
+        uniqueMap.set(item.p.MaterialRequisitionDetailsRef, item);
+      }
+    });
+    this.MaterialList = Array.from(uniqueMap.values());
     // this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
-  }
+  };
 
   onSiteChange = () => {
-     this.Entity.p.MaterialRequisitionDetailsRef = 0;
-  }
+    this.Entity.p.MaterialRequisitionDetailsRef = 0;
+  };
 
   getStageListByCompanyRef = async () => {
     // this.Entity.p.StageRef = 0;
-    this.StageList = []
+    this.StageList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Stage.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.StageList = lst;
-  }
+  };
 
-   getUnitByMaterialRef = async (materialref: number) => {
-    this.Entity.p.UnitRef = 0
-    this.Entity.p.UnitName = ''
-    this.Entity.p.CurrentQuantity = 0
+  getUnitByMaterialRef = async (materialref: number) => {
+    this.Entity.p.UnitRef = 0;
+    this.Entity.p.UnitName = '';
+    this.Entity.p.CurrentQuantity = 0;
     if (materialref <= 0) {
       return;
     }
     // let lst = await MaterialFromOrder.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    const UnitData = this.MaterialList.find((data)=> data.p.MaterialRequisitionDetailsRef == materialref)
-     if(UnitData){
-    this.Entity.p.UnitRef = UnitData.p.UnitRef
-    this.Entity.p.UnitName = UnitData.p.UnitName
-    this.Entity.p.CurrentQuantity = UnitData.p.RemainingQty
-    this.CalculateRemainingQty()
-     }
-  }
+    const UnitData = this.MaterialList.find(
+      (data) => data.p.MaterialRequisitionDetailsRef == materialref
+    );
+    if (UnitData) {
+      this.Entity.p.UnitRef = UnitData.p.UnitRef;
+      this.Entity.p.UnitName = UnitData.p.UnitName;
+      this.Entity.p.CurrentQuantity = UnitData.p.RemainingQty;
+      this.CalculateRemainingQty();
+    }
+  };
 
-  CalculateRemainingQty = () =>{
-    const inwardqty = Number(this.Entity.p.ConsumedQuantity)
-    const currentqty = Number(this.Entity.p.CurrentQuantity )
-    this.Entity.p.RemainingQuantity = currentqty - inwardqty
-  }
+  CalculateRemainingQty = () => {
+    const inwardqty = Number(this.Entity.p.ConsumedQuantity);
+    const currentqty = Number(this.Entity.p.CurrentQuantity);
+    this.Entity.p.RemainingQuantity = currentqty - inwardqty;
+  };
 
   SaveStockConsumption = async () => {
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
-    this.Entity.p.ConsumptionDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.ConsumptionDate)
+    this.Entity.p.CompanyRef =
+      this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CompanyName =
+      this.companystatemanagement.getCurrentCompanyName();
+    this.Entity.p.ConsumptionDate = this.dtu.ConvertStringDateToFullFormat(
+      this.Entity.p.ConsumptionDate
+    );
     let entityToSave = this.Entity.GetEditableVersion();
-    let entitiesToSave = [entityToSave]
+    let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
-    await this.Entity.EnsurePrimaryKeysWithValidValues()
+    await this.Entity.EnsurePrimaryKeysWithValidValues();
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message);
-      return
-    }
-    else {
+      return;
+    } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Stock Consume saved successfully');
+        await this.uiUtils.showSuccessToster(
+          'Stock Consume saved successfully'
+        );
         this.Entity = StockConsume.CreateNewInstance();
         // this.resetAllControls();
       } else {
-        await this.uiUtils.showSuccessToster('Stock Consume Updated successfully');
+        await this.uiUtils.showSuccessToster(
+          'Stock Consume Updated successfully'
+        );
         await this.router.navigate(['/homepage/Website/Stock_Consume']);
       }
     }
-  }
+  };
 
   // for value 0 selected while click on Input //
   selectAllValue(event: MouseEvent): void {
@@ -174,17 +221,19 @@ export class StockConsumeDetailsComponent  implements OnInit {
 
   BackStockConsumption = async () => {
     if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
-      await this.uiUtils.showConfirmationMessage('Cancel',
+      await this.uiUtils.showConfirmationMessage(
+        'Cancel',
         `This process is IRREVERSIBLE!
       <br/>
       Are you sure that you want to Cancel this Stock Consume Form?`,
         async () => {
           await this.router.navigate(['/homepage/Website/Stock_Consume']);
-        });
+        }
+      );
     } else {
       await this.router.navigate(['/homepage/Website/Stock_Consume']);
     }
-  }
+  };
 
   resetAllControls() {
     this.consumptionForm.resetForm(); // this will reset all form controls to their initial state
