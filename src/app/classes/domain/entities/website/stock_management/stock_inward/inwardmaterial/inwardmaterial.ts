@@ -11,8 +11,7 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { InwardMaterialFetchRequest } from "./inwardmaterialfetchrequest";
-import { CountryStateCityRefs } from "src/app/classes/domain/constants";
-import { QuotationMaterialCustomRequest } from "../../Quotation/QuotatedMaterial/quotatedmaterialcustomrequest";
+import { GetMaterialFromMaterialInwardFetchRequest } from "./costomefetchrequest";
 
 
 export class InwardMaterialDetailProps {
@@ -194,6 +193,13 @@ export class InwardMaterial implements IPersistable<InwardMaterial> {
     return InwardMaterial.ListFromTransportData(tdResponse);
   }
 
+    public static async FetchMaterialListBySiteRef(SiteRef:number,CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+      let req = new GetMaterialFromMaterialInwardFetchRequest();
+      req.CompanyRefs.push(CompanyRef)
+      req.SiteRefs.push(SiteRef)
+      let tdResponse = await InwardMaterial.FetchTransportData(req, errorHandler) as TransportData;
+      return InwardMaterial.ListFromTransportData(tdResponse);
+    }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

@@ -119,20 +119,20 @@ export class StockConsumeDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await InwardMaterial.FetchInwardMaterials(
+    let lst = await InwardMaterial.FetchMaterialListBySiteRef(
       SiteRef,
       this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     console.log('lst :', lst);
-    // this.MaterialList = lst;
-    const uniqueMap = new Map();
-    lst.forEach((item) => {
-      if (!uniqueMap.has(item.p.MaterialRequisitionDetailsRef)) {
-        uniqueMap.set(item.p.MaterialRequisitionDetailsRef, item);
-      }
-    });
-    this.MaterialList = Array.from(uniqueMap.values());
+    this.MaterialList = lst;
+    // const uniqueMap = new Map();
+    // lst.forEach((item) => {
+    //   if (!uniqueMap.has(item.p.MaterialRequisitionDetailsRef)) {
+    //     uniqueMap.set(item.p.MaterialRequisitionDetailsRef, item);
+    //   }
+    // });
+    // this.MaterialList = Array.from(uniqueMap.values());
     // this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
   };
 
@@ -168,7 +168,7 @@ export class StockConsumeDetailsComponent implements OnInit {
     if (UnitData) {
       this.Entity.p.UnitRef = UnitData.p.UnitRef;
       this.Entity.p.UnitName = UnitData.p.UnitName;
-      this.Entity.p.CurrentQuantity = UnitData.p.RemainingQty;
+      this.Entity.p.CurrentQuantity = UnitData.p.InwardQty;
       this.CalculateRemainingQty();
     }
   };
