@@ -87,7 +87,7 @@
                                     {{ item.UnitName || '-' }}
                                 </td>
                                 <td>
-                                    {{ item.EstimatedQty || '-' }}
+                                    {{ item.RequisitionQty || '-' }}
                                 </td>
                                 <td>
                                     <ion-icon name="create-outline" color="warning" size="small"
@@ -157,7 +157,7 @@
                             <!-- Quantity -->
                             <ion-item class="input-item">
                                 <ion-input label="Required Qty" labelPlacement="floating" type="number"
-                                    placeholder="Enter Quantity" [(ngModel)]="newRequisition.EstimatedQty"
+                                    placeholder="Enter Quantity" [(ngModel)]="newRequisition.RequisitionQty"
                                     clearInput="true" clearOnEdit="true"></ion-input>
                             </ion-item>
                         </ion-list>

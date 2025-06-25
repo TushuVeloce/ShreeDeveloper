@@ -334,7 +334,7 @@ export class StockOrderDetailsMobilePage implements OnInit {
     this.newOrderMaterial = { ...this.Entity.p.MaterialStockOrderDetailsArray[index] }
     if(!this.IsNewEntity){
       this.newOrderMaterial.TotalOrderedQty = 0;
-      this.newOrderMaterial.QuotationRemainingQuantity = 0;
+      this.newOrderMaterial.QuotationRemainingQty = 0;
     }
     this.editingIndex = index;
     this.ModalEditable = true;
@@ -402,9 +402,9 @@ export class StockOrderDetailsMobilePage implements OnInit {
     }
 
     if (this.newOrderMaterial.OrderedQty < this.newOrderMaterial.QuotationOrderedQty) {
-      this.newOrderMaterial.QuotationRemainingQuantity = this.newOrderMaterial.QuotationOrderedQty - (this.newOrderMaterial.OrderedQty + this.newOrderMaterial.TotalOrderedQty);
+      this.newOrderMaterial.QuotationRemainingQty = this.newOrderMaterial.QuotationOrderedQty - (this.newOrderMaterial.OrderedQty + this.newOrderMaterial.TotalOrderedQty);
     } else {
-      this.newOrderMaterial.QuotationRemainingQuantity = 0;
+      this.newOrderMaterial.QuotationRemainingQty = 0;
     }
     if (this.newOrderMaterial.DiscountedRate == 0) {
       this.newOrderMaterial.NetAmount = (this.newOrderMaterial.Rate * this.newOrderMaterial.OrderedQty);

@@ -30,8 +30,8 @@ export class StockOrderComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Site', 'Date', 'Vendor', 'Material', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Required Remaining Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
-  headerswithoutsite: string[] = ['Sr.No.', 'Date', 'Vendor', 'Material', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Required Remaining Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
+  headers: string[] = ['Sr.No.', 'Site', 'Date', 'Vendor', 'Material', 'Unit', 'Requisition Quantity', 'Quotation Quantity', 'Ordered Quantity', 'Quotation Remaining Quantity', 'Requisition Remaining Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
+  headerswithoutsite: string[] = ['Sr.No.', 'Date', 'Vendor', 'Material', 'Unit', 'Requisition Quantity', 'Quotation Quantity', 'Ordered Quantity', 'Quotation Remaining Quantity', 'Requisition Remaining Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
@@ -70,9 +70,10 @@ export class StockOrderComponent implements OnInit {
       return;
     }
     let lst = await Order.FetchEntireListByCompanyRef(this.companyRef(),
-    async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-  );
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
     this.MasterList = lst;
+    console.log('MasterList :', lst);
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
@@ -136,11 +137,11 @@ export class StockOrderComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
-   navigateToPrint = async (item: Order) => {
-      this.router.navigate(['/homepage/Website/Stock_Order_Print'], {
-        state: { printData: item.GetEditableVersion() }
-      });
-    }
+  navigateToPrint = async (item: Order) => {
+    this.router.navigate(['/homepage/Website/Stock_Order_Print'], {
+      state: { printData: item.GetEditableVersion() }
+    });
+  }
 
   AddOrder = async () => {
     if (this.companyRef() <= 0) {

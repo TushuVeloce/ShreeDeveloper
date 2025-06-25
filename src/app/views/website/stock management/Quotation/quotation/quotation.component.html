@@ -58,9 +58,9 @@
 
               <td class="tbldata">{{ detail.MaterialName }}</td>
               <td class="tbldata">{{ detail.UnitName }}</td>
-              <td class="tbldata">{{ detail.EstimatedQty }}</td>
-              <td class="tbldata">{{ detail.OrderedQty }}</td>
-              <td class="tbldata">{{ detail.RequiredRemainingQuantity }}</td>
+              <td class="tbldata">{{ detail.RequisitionQty }}</td>
+              <td class="tbldata">{{ detail.QuotationOrderedQty }}</td>
+              <td class="tbldata">{{ detail.RequisitionRemainingQty }}</td>
              <td class="tbldata">{{ !detail.DiscountedRate ? detail.Rate : detail.DiscountedRate }}</td>
               <td Class="tbldata" width="10%">
                 {{ detail.ExpectedDeliveryDate ? formatDate(detail.ExpectedDeliveryDate) : '--'}}

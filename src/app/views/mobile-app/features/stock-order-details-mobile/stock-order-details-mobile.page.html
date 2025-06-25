@@ -141,7 +141,7 @@
                   {{ item.UnitName || '-' }}
                 </td>
                 <td>
-                  {{ item.EstimatedQty || '-' }}
+                  {{ item.RequisitionQty || '-' }}
                 </td>
                 <td>
                   <ion-icon name="create-outline" color="warning" size="small"
@@ -193,7 +193,7 @@
               </ion-buttons>
             </ion-toolbar>
           </ion-header>
-    
+
           <ion-content class="ion-padding">
             <div class="col-12 mb-1">
               <label for="MaterialRequisitionDetailsRef"><b>Material</b></label>
@@ -240,8 +240,8 @@
             </div>
             <div class="col-12 mb-1">
               <label>Quotation Remaining Quantity</label>
-              <input type="number" name="QuotationRemainingQuantity" class="form-control"
-                [(ngModel)]="newOrderMaterial.QuotationRemainingQuantity" readonly />
+              <input type="number" name="QuotationRemainingQty" class="form-control"
+                [(ngModel)]="newOrderMaterial.QuotationRemainingQty" readonly />
             </div>
             <div class="col-12 mb-1">
               <label>Extra Ordered Quantity</label>
@@ -312,7 +312,7 @@
               <input type="number" name="TotalAmount" class="form-control" [(ngModel)]="newOrderMaterial.TotalAmount" readonly />
             </div>
           </ion-content>
-    
+
           <ion-footer>
             <ion-grid>
               <ion-row>

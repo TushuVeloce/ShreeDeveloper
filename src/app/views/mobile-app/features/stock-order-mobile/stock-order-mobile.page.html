@@ -63,7 +63,7 @@
               </div>
               <div class="info-row">
                 <span class="label">Required Qty:</span>
-                <span class="value">{{ item.EstimatedQty || '-' }}</span>
+                <span class="value">{{ item.RequisitionQty || '-' }}</span>
               </div>
               <div class="info-row">
                 <span class="label">Expected Delivery Date:</span>
@@ -167,13 +167,13 @@
                       {{ item.UnitName || '-' }}
                     </td>
                     <td>
-                      {{ item.EstimatedQty || '-' }}
+                      {{ item.RequisitionQty || '-' }}
                     </td>
                     <td>
                       {{ item.OrderedQty || '-' }}
                     </td>
                     <td>
-                      {{ item.RequiredRemainingQuantity || '-' }}
+                      {{ item.RequisitionRemainingQty || '-' }}
                     </td>
                     <td>
                       {{ item.Rate || '-' }}
@@ -215,7 +215,7 @@
                   <ion-col size="2">Delivery</ion-col>
                   <ion-col size="2">Total</ion-col>
                 </ion-row>
-    
+
                 <ion-row *ngFor="let material of SelectedOrder.p.MaterialQuotationDetailsArray; let i = index"
                   class="material-row">
                   <ion-col size="1">{{ i + 1 }}</ion-col>

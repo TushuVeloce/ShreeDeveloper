@@ -147,9 +147,9 @@
                 <td Class="tbldata">{{ i + 1 }}</td>
                 <td Class="tbldata">{{ material.MaterialName }}</td>
                 <td Class="tbldata">{{ material.UnitName }}</td>
-                <td Class="tbldata">{{ material.EstimatedQty }}</td>
-                <td Class="tbldata">{{ material.OrderedQty }}</td>
-                <td Class="tbldata">{{ material.RequiredRemainingQuantity }}</td>
+                <td Class="tbldata">{{ material.RequisitionQty }}</td>
+                <td Class="tbldata">{{ material.QuotationOrderedQty }}</td>
+                <td Class="tbldata">{{ material.RequisitionRemainingQty }}</td>
                 <td Class="tbldata">{{ material.Rate }}</td>
                 <td Class="tbldata">{{ material.DiscountedRate }}</td>
                 <td Class="tbldata">{{ material.Gst }}</td>
@@ -229,12 +229,12 @@
           </div>
           <div class="col-6 mb-1">
             <label>Required Quantity</label>
-            <input type="number" name="EstimatedQty" class=" form-control" [(ngModel)]="newQuotedMaterial.EstimatedQty"
+            <input type="number" name="RequisitionQty" class=" form-control" [(ngModel)]="newQuotedMaterial.RequisitionQty"
               readonly />
           </div>
           <div class="col-6 mb-1">
             <label>Quotation Quantity</label>
-            <input type="number" name="OrderedQty" class="form-control" [(ngModel)]="newQuotedMaterial.OrderedQty"
+            <input type="number" name="QuotationOrderedQty" class="form-control" [(ngModel)]="newQuotedMaterial.QuotationOrderedQty"
               #OrderedQtyCtrl="ngModel" required (blur)="OrderedQtyCtrl.control.markAsTouched()"
               placeholder="Enter Ordered Quantity" (click)="selectAllValue($event)"
               (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
@@ -244,8 +244,8 @@
           </div>
           <div class="col-6 mb-1">
             <label>Required Remaining Quantity</label>
-            <input type="number" name="RequiredRemainingQuantity" class=" form-control"
-              [(ngModel)]="newQuotedMaterial.RequiredRemainingQuantity" readonly />
+            <input type="number" name="RequisitionRemainingQty" class=" form-control"
+              [(ngModel)]="newQuotedMaterial.RequisitionRemainingQty" readonly />
           </div>
           <div class="col-6 mb-1">
             <label>Rate</label>
