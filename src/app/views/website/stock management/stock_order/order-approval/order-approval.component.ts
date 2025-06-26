@@ -136,8 +136,12 @@ export class OrderApprovalComponent implements OnInit {
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.MaterialStockOrderStatus = status;
+    this.Entity.p.MaterialStockOrderDetailsArray.map((data) => {
+      return data.MaterialOrderedDetailStatus = this.MaterialStockOrderStatus.Ordered;
+    })
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
+
     console.log('entitiesToSave :', entitiesToSave);
 
     if (this.InvoiceFile) {

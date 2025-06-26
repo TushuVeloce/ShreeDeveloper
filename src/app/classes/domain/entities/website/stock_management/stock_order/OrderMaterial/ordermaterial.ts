@@ -31,6 +31,8 @@ export class OrderMaterialDetailProps {
   public TotalOrderedQty: number = 0;
   public ExtraOrderedQty: number = 0;
 
+  public MaterialOrderedDetailStatus: number = 0;
+
   public MaterialQuotationDetailsRef: number = 0;
   public Rate: number = 0;
   public DiscountedRate: number = 0;
