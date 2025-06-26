@@ -230,7 +230,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
 
   closeModal = async (type: number) => {
     if (type === 100) {
-      const keysToCheck = ['MaterialRequisitionDetailsName', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
+      const keysToCheck = ['MaterialRequisitionDetailsName', 'QuotationOrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
 
       const hasData = keysToCheck.some(key => {
         const value = (this.newQuotedMaterial as any)[key];
@@ -377,7 +377,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
     const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.Ref == MaterialRef);
     console.log('SingleRecord :', SingleRecord);
     this.newQuotedMaterial.UnitName = SingleRecord[0].p.UnitName
-    this.newQuotedMaterial.EstimatedQty = SingleRecord[0].p.EstimatedQty
+    this.newQuotedMaterial.RequisitionQty = SingleRecord[0].p.RequisitionQty
     this.newQuotedMaterial.MaterialRequisitionDetailsName = SingleRecord[0].p.MaterialName
     this.newQuotedMaterial.MaterialQuotationDetailsRef = SingleRecord[0].p.Ref
   }
@@ -464,7 +464,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
     if (this.newQuotedMaterial.MaterialRequisitionDetailsRef == 0) {
       return await this.toastService.present('Material not Selected', 1000, 'warning'), await this.haptic.warning();
     }
-    if (this.newQuotedMaterial.OrderedQty == 0) {
+    if (this.newQuotedMaterial.QuotationOrderedQty == 0) {
       return await this.toastService.present('Ordered Qty cannot be blank.', 1000, 'warning'), await this.haptic.warning();
 
     }
@@ -631,19 +631,19 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
   };
 
   CalculateNetAmountAndTotalAmount = async () => {
-    if (this.newQuotedMaterial.OrderedQty > this.newQuotedMaterial.EstimatedQty) {
-      this.newQuotedMaterial.OrderedQty = 0;
-      this.newQuotedMaterial.RequiredRemainingQuantity = 0;
+    if (this.newQuotedMaterial.QuotationOrderedQty > this.newQuotedMaterial.RequisitionQty) {
+      this.newQuotedMaterial.QuotationOrderedQty = 0;
+      this.newQuotedMaterial.RequisitionRemainingQty = 0;
       this.newQuotedMaterial.NetAmount = 0;
       this.newQuotedMaterial.TotalAmount = 0;
       return await this.toastService.present('Ordered Qty should be less then or equal to Required Qty', 1000, 'warning'), await this.haptic.warning();
     }
 
-    this.newQuotedMaterial.RequiredRemainingQuantity = this.newQuotedMaterial.EstimatedQty - this.newQuotedMaterial.OrderedQty;
+    this.newQuotedMaterial.RequisitionRemainingQty = this.newQuotedMaterial.RequisitionQty - this.newQuotedMaterial.QuotationOrderedQty;
     if (this.newQuotedMaterial.DiscountedRate == 0) {
-      this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.Rate * this.newQuotedMaterial.OrderedQty);
+      this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.Rate * this.newQuotedMaterial.QuotationOrderedQty);
     } else {
-      this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.DiscountedRate * this.newQuotedMaterial.OrderedQty);
+      this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.DiscountedRate * this.newQuotedMaterial.QuotationOrderedQty);
     }
     let GstAmount = (this.newQuotedMaterial.NetAmount / 100) * this.newQuotedMaterial.Gst;
     this.newQuotedMaterial.TotalAmount = this.newQuotedMaterial.NetAmount + GstAmount + this.newQuotedMaterial.DeliveryCharges;
@@ -672,7 +672,7 @@ export class VendorQuotationDetailsMobilePage implements OnInit {
       this.CopyVendorList = lst;
       console.log('lst :', lst);
     } catch (error) {
-      
+
     }finally{
       this.loadingService.hide();
     }

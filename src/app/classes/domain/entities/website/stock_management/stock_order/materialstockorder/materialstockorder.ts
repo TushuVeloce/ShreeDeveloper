@@ -20,10 +20,16 @@ export class MaterialStockOrderProps {
   public MaterialRequisitionDetailsName: string = '';
   public MaterialName: string = '';
   public UnitName: string = '';
-  public EstimatedQty: number = 0;
+  
+  public RequisitionQty: number = 0;
+  public QuotedQty: number = 0;
   public OrderedQty: number = 0;
+  public RequisitionRemainingQty: number = 0;
+  public QuotationRemainingQty: number = 0;
+  public QuotationOrderedQty: number = 0;
+  public TotalOrderedQty: number = 0;
   public ExtraOrderedQty: number = 0;
-  public RequiredRemainingQuantity: number = 0;
+
   public Rate: number = 0;
   public DiscountedRate: number = 0;
   public Gst: number = 0;
@@ -115,7 +121,7 @@ export class MaterialStockOrder implements IPersistable<MaterialStockOrder> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): MaterialStockOrder[] {
+    sortPropertyName: string = ""): MaterialStockOrder[] {
     let result: MaterialStockOrder[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -156,7 +162,7 @@ export class MaterialStockOrder implements IPersistable<MaterialStockOrder> {
     return tdResponse;
   }
 
-  public static async FetchInstance(ref: number,companyRef:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchInstance(ref: number, companyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MaterialStockOrderFetchRequest();
     req.MaterialStockOrderDetailsRefs.push(ref);
     req.CompanyRefs.push(companyRef);
@@ -183,16 +189,16 @@ export class MaterialStockOrder implements IPersistable<MaterialStockOrder> {
     return MaterialStockOrder.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchOrderedMaterials(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchOrderedMaterials(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MaterialStockOrderFetchRequest();
-     req.CompanyRefs.push(CompanyRef)
+    req.CompanyRefs.push(CompanyRef)
     let tdResponse = await MaterialStockOrder.FetchTransportData(req, errorHandler) as TransportData;
     return MaterialStockOrder.ListFromTransportData(tdResponse);
   }
-   public static async FetchMaterialQuantity(ref: number, CompanyRef: number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchMaterialQuantity(ref: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MaterialStockOrderFetchRequest();
-     req.CompanyRefs.push(CompanyRef)
-     req.MaterialStockOrderDetailsRefs.push(ref)
+    req.CompanyRefs.push(CompanyRef)
+    req.MaterialStockOrderDetailsRefs.push(ref)
     let tdResponse = await MaterialStockOrder.FetchTransportData(req, errorHandler) as TransportData;
     return MaterialStockOrder.ListFromTransportData(tdResponse);
   }

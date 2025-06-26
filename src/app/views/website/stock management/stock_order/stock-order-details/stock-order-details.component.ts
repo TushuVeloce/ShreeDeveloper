@@ -39,7 +39,7 @@ export class StockOrderDetailsComponent implements OnInit {
   CurrentDate: string = '';
   ModalEditable: boolean = false;
   ExpectedDeliveryDate: string = '';
-  OrderMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Required Quantity', 'Ordered Quantity', 'Required Remaining Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount', 'Action'];
+  OrderMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Requisition Quantity', 'Quotation Quantity', 'Ordered Quantity', 'Quotation Remaining Quantity', 'Requisition Remaining Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount', 'Action'];
   isOrderMaterialModalOpen: boolean = false;
   newOrderMaterial: OrderMaterialDetailProps = OrderMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
@@ -325,9 +325,9 @@ export class StockOrderDetailsComponent implements OnInit {
   editOrderMaterial(index: number) {
     this.isOrderMaterialModalOpen = true
     this.newOrderMaterial = { ...this.Entity.p.MaterialStockOrderDetailsArray[index] }
-    if(!this.IsNewEntity){
+    if (!this.IsNewEntity) {
       this.newOrderMaterial.TotalOrderedQty = 0;
-      this.newOrderMaterial.QuotationRemainingQuantity = 0;
+      this.newOrderMaterial.QuotationRemainingQty = 0;
     }
     this.editingIndex = index;
     this.ModalEditable = true;
@@ -395,9 +395,9 @@ export class StockOrderDetailsComponent implements OnInit {
     }
 
     if (this.newOrderMaterial.OrderedQty < this.newOrderMaterial.QuotationOrderedQty) {
-      this.newOrderMaterial.QuotationRemainingQuantity = this.newOrderMaterial.QuotationOrderedQty - (this.newOrderMaterial.OrderedQty + this.newOrderMaterial.TotalOrderedQty);
+      this.newOrderMaterial.QuotationRemainingQty = this.newOrderMaterial.QuotationOrderedQty - (this.newOrderMaterial.OrderedQty + this.newOrderMaterial.TotalOrderedQty);
     } else {
-      this.newOrderMaterial.QuotationRemainingQuantity = 0;
+      this.newOrderMaterial.QuotationRemainingQty = 0;
     }
     if (this.newOrderMaterial.DiscountedRate == 0) {
       this.newOrderMaterial.NetAmount = (this.newOrderMaterial.Rate * this.newOrderMaterial.OrderedQty);

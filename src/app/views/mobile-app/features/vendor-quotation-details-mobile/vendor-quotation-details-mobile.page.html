@@ -114,15 +114,15 @@
                 </td>
                 <td>
                   {{ item.UnitName || '-' }}
-                </td>     
-                <td>
-                  {{ item.EstimatedQty || '-' }}
                 </td>
                 <td>
-                  {{ item.OrderedQty || '-' }}
+                  {{ item.RequisitionQty || '-' }}
                 </td>
                 <td>
-                  {{ item.RequiredRemainingQuantity || '-' }}
+                  {{ item.QuotationOrderedQty || '-' }}
+                </td>
+                <td>
+                  {{ item.RequisitionRemainingQty || '-' }}
                 </td>
                 <td>
                   {{  item.Rate || '-' }}
@@ -214,21 +214,21 @@
 
               <!-- Quantity -->
               <ion-item class="input-item">
-                <ion-input label="Required Qty" labelPlacement="floating" type="number" placeholder="Enter Quantity"
-                  [(ngModel)]="newQuotedMaterial.EstimatedQty" clearInput="true" clearOnEdit="true" readonly></ion-input>
+                <ion-input label="Requisition Qty" labelPlacement="floating" type="number" placeholder="Enter Quantity"
+                  [(ngModel)]="newQuotedMaterial.RequisitionQty" clearInput="true" clearOnEdit="true" readonly></ion-input>
               </ion-item>
 
               <!--Ordered  Quantity -->
               <ion-item class="input-item">
                 <ion-input label="Ordered  Qty" labelPlacement="floating" type="number"
-                  placeholder="Enter Ordered Quantity" [(ngModel)]="newQuotedMaterial.OrderedQty" clearInput="true"
+                  placeholder="Enter Ordered Quantity" [(ngModel)]="newQuotedMaterial.QuotationOrderedQty" clearInput="true"
                   clearOnEdit="true" (ngModelChange)="CalculateNetAmountAndTotalAmount()"></ion-input>
               </ion-item>
 
               <!-- Required Remaining Quantity -->
               <ion-item class="input-item">
-                <ion-input label="Required Remaining Qty" labelPlacement="floating"
-                  placeholder="Enter Required Remaining Qty" [(ngModel)]="newQuotedMaterial.RequiredRemainingQuantity"
+                <ion-input label="Requisition Remaining Qty" labelPlacement="floating"
+                  placeholder="Enter Requisition Remaining Qty" [(ngModel)]="newQuotedMaterial.RequisitionRemainingQty"
                   readonly></ion-input>
               </ion-item>
 
@@ -336,7 +336,7 @@
 
               <!--vendor Dropdown  -->
               <ion-item class="input-item" button (click)="selectCopyVenodrBottomsheet()">
-                <ion-label>Copy Vendor Name</ion-label>
+                <ion-label>Vendor Name</ion-label>
 
                 <!-- Text showing the selected status -->
                 <ion-text slot="end" class="status-text">

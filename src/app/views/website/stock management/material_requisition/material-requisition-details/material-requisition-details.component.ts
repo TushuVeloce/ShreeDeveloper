@@ -176,7 +176,7 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
     if (this.newRequisition.MaterialRef == 0) {
       return this.uiUtils.showWarningToster('Material cannot be blank.');
     }
-    if (this.newRequisition.EstimatedQty == 0) {
+    if (this.newRequisition.RequisitionQty == 0) {
       return this.uiUtils.showWarningToster('Required Quantity cannot be blank.');
     }
 
@@ -188,7 +188,7 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
     } else {
       this.newRequisition.MaterialRequisitionRef = this.Entity.p.Ref;
       this.Entity.p.MaterialRequisitionDetailsArray.push({ ...this.newRequisition });
-       this.filterMaterialList();
+      this.filterMaterialList();
       await this.uiUtils.showSuccessToster('material added successfully');
     }
     this.newRequisition = RequiredMaterialDetailProps.Blank();

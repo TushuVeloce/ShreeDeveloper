@@ -44,7 +44,7 @@
 
         <!-- Material Table -->
         <ng-container *ngIf="Entity.p.MaterialRequisitionDetailsArray.length > 0; else noMaterials">
-            <ion-grid>
+            <!-- <ion-grid>
                 <ion-row class="material-header ion-padding-top">
                     <ion-col size="1"><strong>#</strong></ion-col>
                     <ion-col size="4"><strong>Material</strong></ion-col>
@@ -66,7 +66,41 @@
                             (click)="removeMaterial(i)"></ion-icon>
                     </ion-col>
                 </ion-row>
-            </ion-grid>
+            </ion-grid> -->
+            <div class="table-container">
+                <div class="table-scroll">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th class="sticky-col sticky-header">#</th>
+                                <th *ngFor="let item of tableHeaderData" class="sticky-header">{{ item }}</th>
+                                <th class="sticky-col sticky-header">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of Entity.p.MaterialRequisitionDetailsArray; let i = index">
+                                <td class="sticky-col">{{i + 1 }}</td>
+                                <td>
+                                    {{ item.MaterialName }}
+                                </td>
+                                <td>
+                                    {{ item.UnitName || '-' }}
+                                </td>
+                                <td>
+                                    {{ item.RequisitionQty || '-' }}
+                                </td>
+                                <td>
+                                    <ion-icon name="create-outline" color="warning" size="small"
+                                        style="margin-right: 12px; cursor: pointer"
+                                        (click)="editMaterial(i)"></ion-icon>
+                                    <ion-icon name="trash-outline" color="danger" size="small" style="cursor: pointer"
+                                        (click)="removeMaterial(i)"></ion-icon>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </ng-container>
 
         <ng-template #noMaterials>
@@ -94,7 +128,8 @@
                     <ion-content class="ion-padding">
                         <ion-list lines="none">
                             <!-- Material Dropdown -->
-                            <ion-item class="input-item" button (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable">
+                            <ion-item class="input-item" button (click)="selectMaterialBottomsheet()"
+                                *ngIf="!ModalEditable">
                                 <ion-label>Material Name</ion-label>
 
                                 <!-- Text showing the selected status -->
@@ -108,8 +143,9 @@
 
                             <!-- Material input-->
                             <ion-item class="input-item" *ngIf="ModalEditable">
-                                <ion-input label="Material Name" labelPlacement="floating" placeholder="Enter Material Name"
-                                    [(ngModel)]="newRequisition.MaterialName" readonly></ion-input>
+                                <ion-input label="Material Name" labelPlacement="floating"
+                                    placeholder="Enter Material Name" [(ngModel)]="newRequisition.MaterialName"
+                                    readonly></ion-input>
                             </ion-item>
 
                             <!-- Unit -->
@@ -121,7 +157,7 @@
                             <!-- Quantity -->
                             <ion-item class="input-item">
                                 <ion-input label="Required Qty" labelPlacement="floating" type="number"
-                                    placeholder="Enter Quantity" [(ngModel)]="newRequisition.EstimatedQty"
+                                    placeholder="Enter Quantity" [(ngModel)]="newRequisition.RequisitionQty"
                                     clearInput="true" clearOnEdit="true"></ion-input>
                             </ion-item>
                         </ion-list>
@@ -156,8 +192,7 @@
                     </ion-button>
                 </ion-col>
                 <ion-col size="6">
-                    <ion-button expand="block" (click)="SaveMaterialRequisition()"
-                        class="submit-button primary-button">
+                    <ion-button expand="block" (click)="SaveMaterialRequisition()" class="submit-button primary-button">
                         Save
                     </ion-button>
                 </ion-col>

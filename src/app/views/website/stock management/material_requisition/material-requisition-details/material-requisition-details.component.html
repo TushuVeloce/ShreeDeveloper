@@ -71,7 +71,7 @@
                 <td Class="tbldata">{{ i + 1 }}</td>
                 <td Class="tbldata">{{ material.MaterialName}}</td>
                 <td Class="tbldata">{{ material.UnitName}}</td>
-                <td Class="tbldata">{{ material.EstimatedQty}}</td>
+                <td Class="tbldata">{{ material.RequisitionQty}}</td>
                 <td class="tbldata">
                   <span style="margin-left: 9px" (click)="editMaterial(i)">
                     <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
@@ -135,7 +135,7 @@
           </div>
           <div class="col-md-4">
             <label>Required Quantity</label>
-            <input type="number" name="EstimatedQty" class="form-control" [(ngModel)]="newRequisition.EstimatedQty"
+            <input type="number" name="EstimatedQty" class="form-control" [(ngModel)]="newRequisition.RequisitionQty"
               required placeholder="Enter Estimated Qty" (click)="selectAllValue($event)" />
           </div>
         </div>

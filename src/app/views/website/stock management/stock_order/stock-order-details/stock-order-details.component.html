@@ -126,7 +126,7 @@
         </div>
         <div *ngIf="IsNewEntity" class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
           style="display: flex; justify-content: end" routerLinkActive="active">
-          <nz-button nz-button  class="btn1" (click)="openModal('OrderMaterial')">Add Material</nz-button>
+          <nz-button nz-button class="btn1" (click)="openModal('OrderMaterial')">Add Material</nz-button>
         </div>
       </div>
 
@@ -155,10 +155,14 @@
                 <td Class="tbldata">{{ i + 1 }}</td>
                 <td Class="tbldata">{{ material.MaterialName }}</td>
                 <td Class="tbldata">{{ material.UnitName }}</td>
-                <td Class="tbldata">{{ material.EstimatedQty }}</td>
+                <td Class="tbldata">{{ material.RequisitionQty }}</td>
+                <td Class="tbldata">{{ material.QuotationOrderedQty }}</td>
                 <td Class="tbldata">{{ material.OrderedQty }}</td>
                 <td Class="tbldata">
-                  {{ material.RequiredRemainingQuantity }}
+                  {{ material.QuotationRemainingQty }}
+                </td>
+                <td Class="tbldata">
+                  {{ material.RequisitionRemainingQty }}
                 </td>
                 <td Class="tbldata">{{ material.Rate }}</td>
                 <td Class="tbldata">{{ material.DiscountedRate }}</td>
@@ -225,7 +229,7 @@
     </div>
     <div class="custom-modal-body">
       <form autocomplete="off">
-        <div class="row" style="margin-top: 1rem">
+        <div class="row" style="margin-top: 1rem;">
           <div class="col-6 mb-1">
             <label for="MaterialRequisitionDetailsRef"><b>Material</b></label>
             <nz-select *ngIf="!ModalEditable" class="nzSelect-light" nzShowSearch nzAllowClear
@@ -271,8 +275,8 @@
           </div>
           <div class="col-6 mb-1">
             <label>Quotation Remaining Quantity</label>
-            <input type="number" name="QuotationRemainingQuantity" class="form-control"
-              [(ngModel)]="newOrderMaterial.QuotationRemainingQuantity" readonly />
+            <input type="number" name="RequisitionRemainingQty" class="form-control"
+              [(ngModel)]="newOrderMaterial.RequisitionRemainingQty" readonly />
           </div>
           <div class="col-6 mb-1">
             <label>Extra Ordered Quantity</label>

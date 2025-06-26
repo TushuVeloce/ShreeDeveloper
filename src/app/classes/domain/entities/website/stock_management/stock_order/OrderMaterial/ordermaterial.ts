@@ -21,14 +21,17 @@ export class OrderMaterialDetailProps {
   public MaterialRequisitionDetailsName: string = '';
   public MaterialName: string = '';
   public UnitName: string = '';
-  public EstimatedQty: number = 0;
+
+  public RequisitionQty: number = 0;
+  public QuotedQty: number = 0;
   public OrderedQty: number = 0;
+  public RequisitionRemainingQty: number = 0;
+  public QuotationRemainingQty: number = 0;
+  public QuotationOrderedQty: number = 0;
   public TotalOrderedQty: number = 0;
   public ExtraOrderedQty: number = 0;
-  public RequiredRemainingQuantity: number = 0;
-  public QuotationRemainingQuantity: number = 0;
+
   public MaterialQuotationDetailsRef: number = 0;
-  public QuotationOrderedQty: number = 0;
   public Rate: number = 0;
   public DiscountedRate: number = 0;
   public Gst: number = 0;

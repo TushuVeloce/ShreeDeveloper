@@ -18,6 +18,7 @@ import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
 import { Order } from 'src/app/classes/domain/entities/website/stock_management/stock_order/order';
 import { Utils } from 'src/app/services/utils.service';
+import { display } from 'html2canvas/dist/types/css/property-descriptors/display';
 
 @Component({
   selector: 'app-vendor-quotation-mobile',
@@ -27,6 +28,7 @@ import { Utils } from 'src/app/services/utils.service';
   animations: [
     trigger('expandCollapse', [
       state('collapsed', style({
+        display: 'none',
         height: '0px',
         opacity: 0,
         padding: '0px',
@@ -101,6 +103,44 @@ export class VendorQuotationMobilePage implements OnInit {
   async handleRefresh(event: CustomEvent) {
     await this.loadMaterialRequisitionIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
+  }
+
+  getStatusClass(status: any): string {
+    switch (status) {
+      case this.MaterialQuotationStatus.Pending:
+        return 'pending';
+      case this.MaterialQuotationStatus.Rejected:
+        return 'rejected';
+      case this.MaterialQuotationStatus.Approved:
+        return 'approved';
+      case this.MaterialQuotationStatus.Ordered:
+        return 'ordered';
+      case this.MaterialQuotationStatus.Incomplete:
+        return 'incomplete';
+      case this.MaterialQuotationStatus.Completed:
+        return 'completed';
+      default:
+        return 'default';
+    }
+  }
+
+  getStatusText(status: any): string {
+    switch (status) {
+      case this.MaterialQuotationStatus.Pending:
+        return 'Pending';
+      case this.MaterialQuotationStatus.Rejected:
+        return 'Rejected';
+      case this.MaterialQuotationStatus.Approved:
+        return 'Approved';
+      case this.MaterialQuotationStatus.Ordered:
+        return 'Ordered';
+      case this.MaterialQuotationStatus.Incomplete:
+        return 'Incomplete';
+      case this.MaterialQuotationStatus.Completed:
+        return 'Completed';
+      default:
+        return '-';
+    }
   }
 
   toggleItemDetails(requisitionId: number) {

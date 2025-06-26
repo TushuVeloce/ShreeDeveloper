@@ -49,6 +49,8 @@ export class MaterialRequisitionDetailsMobilePage implements OnInit {
   MaterialName: string = '';
   selectedMaterial: any[] = [];
   Date: string | null = null;
+  tableHeaderData = ['Material', 'Unit', 'Required Qty'];
+
 
   constructor(private uiUtils: UIUtils,
     private router: Router,
@@ -178,7 +180,7 @@ export class MaterialRequisitionDetailsMobilePage implements OnInit {
       await this.loadingService.hide(); // Also ensure this is awaited
     }
   }
-  
+
 
   public async onDateChange(date: any): Promise<void> {
     this.Date = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
@@ -320,7 +322,7 @@ export class MaterialRequisitionDetailsMobilePage implements OnInit {
         await this.haptic.error();
         return;
       }
-      if (this.newRequisition.EstimatedQty == 0) {
+      if (this.newRequisition.RequisitionQty == 0) {
         await this.toastService.present('Required Quantity cannot be blank.', 1000, 'danger');
         await this.haptic.error();
         return;

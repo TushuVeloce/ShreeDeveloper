@@ -174,7 +174,7 @@ export class QuotationDetailsComponent implements OnInit {
   onMaterialSelection = (MaterialRef: number) => {
     const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.Ref == MaterialRef);
     this.newQuotedMaterial.UnitName = SingleRecord[0].p.UnitName
-    this.newQuotedMaterial.EstimatedQty = SingleRecord[0].p.EstimatedQty
+    this.newQuotedMaterial.RequisitionQty = SingleRecord[0].p.RequisitionQty
     this.newQuotedMaterial.MaterialName = SingleRecord[0].p.MaterialName
     this.newQuotedMaterial.MaterialQuotationDetailsRef = SingleRecord[0].p.Ref
   }
@@ -270,7 +270,7 @@ export class QuotationDetailsComponent implements OnInit {
 
   closeModal = async (type: string) => {
     if (type === 'QuotedMaterial') {
-      const keysToCheck = ['MaterialRequisitionDetailsRef', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
+      const keysToCheck = ['MaterialRequisitionDetailsRef', 'QuotationOrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
 
       const hasData = keysToCheck.some(
         key => (this.newQuotedMaterial as any)[key]?.toString().trim()
@@ -299,7 +299,7 @@ export class QuotationDetailsComponent implements OnInit {
     if (!this.newQuotedMaterial.MaterialRequisitionDetailsRef) {
       return this.uiUtils.showWarningToster('Material Name cannot be blank.');
     }
-    if (!this.newQuotedMaterial.OrderedQty) {
+    if (!this.newQuotedMaterial.QuotationOrderedQty) {
       return this.uiUtils.showWarningToster('Ordered Quantity cannot be blank.');
     }
     if (!this.newQuotedMaterial.Rate) {
@@ -424,20 +424,20 @@ export class QuotationDetailsComponent implements OnInit {
   };
 
   CalculateNetAmountAndTotalAmount = async () => {
-    if (this.newQuotedMaterial.OrderedQty > this.newQuotedMaterial.EstimatedQty) {
-      this.newQuotedMaterial.OrderedQty = 0;
-      this.newQuotedMaterial.RequiredRemainingQuantity = 0;
+    if (this.newQuotedMaterial.QuotationOrderedQty > this.newQuotedMaterial.RequisitionQty) {
+      this.newQuotedMaterial.QuotationOrderedQty = 0;
+      this.newQuotedMaterial.RequisitionRemainingQty = 0;
       this.newQuotedMaterial.NetAmount = 0;
       this.newQuotedMaterial.TotalAmount = 0;
       return this.uiUtils.showWarningToster('Ordered Qty should be less then or equal to Required Qty');
     }
 
-    this.newQuotedMaterial.RequiredRemainingQuantity = this.newQuotedMaterial.EstimatedQty - this.newQuotedMaterial.OrderedQty;
+    this.newQuotedMaterial.RequisitionRemainingQty = this.newQuotedMaterial.RequisitionQty - this.newQuotedMaterial.QuotationOrderedQty;
     if (!this.newQuotedMaterial.DiscountedRate) {
       this.newQuotedMaterial.DiscountedRate = 0;
-      this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.Rate * this.newQuotedMaterial.OrderedQty);
+      this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.Rate * this.newQuotedMaterial.QuotationOrderedQty);
     } else {
-      this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.DiscountedRate * this.newQuotedMaterial.OrderedQty);
+      this.newQuotedMaterial.NetAmount = (this.newQuotedMaterial.DiscountedRate * this.newQuotedMaterial.QuotationOrderedQty);
     }
     let GstAmount = (this.newQuotedMaterial.NetAmount / 100) * this.newQuotedMaterial.Gst;
     this.newQuotedMaterial.TotalAmount = this.newQuotedMaterial.NetAmount + GstAmount + this.newQuotedMaterial.DeliveryCharges;
