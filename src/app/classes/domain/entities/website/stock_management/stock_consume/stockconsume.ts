@@ -11,6 +11,7 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { StockConsumeFetchRequest } from "./stockconsumefetchrequest";
+import { GetMaterialFromMaterialInwardFetchRequest } from "./costomefetchrequest";
 
 
 export class StockConsumeProps {
@@ -28,6 +29,7 @@ export class StockConsumeProps {
   public UnitRef: number = 0;
   public UnitName: string = '';
   public CurrentQuantity: number = 0;
+  public CurrentQty: number = 0;
   public ConsumedQuantity: number = 0;
   public RemainingQuantity: number = 0;
   public StageRef: number = 0;
@@ -189,6 +191,14 @@ export class StockConsume implements IPersistable<StockConsume> {
         let tdResponse = await StockConsume.FetchTransportData(req, errorHandler) as TransportData;
         return StockConsume.ListFromTransportData(tdResponse);
       }
+
+        public static async FetchMaterialListBySiteRef(SiteRef:number,CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+            let req = new GetMaterialFromMaterialInwardFetchRequest();
+            req.CompanyRefs.push(CompanyRef)
+            req.SiteRefs.push(SiteRef)
+            let tdResponse = await StockConsume.FetchTransportData(req, errorHandler) as TransportData;
+            return StockConsume.ListFromTransportData(tdResponse);
+          }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
