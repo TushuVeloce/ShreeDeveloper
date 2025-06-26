@@ -70,8 +70,9 @@
               </td>
               <td class="tbldata">{{ detail.TotalAmount }}</td>
 
-              <td class="tbldata" width="8%" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
-                 <b>₹ {{ Order.p.GrandTotal }}</b>
+              <td class="tbldata" width="8%" *ngIf="j === 0"
+                [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
+                <b>₹ {{ Order.p.GrandTotal }}</b>
               </td>
               <!-- Optional: Requisition status -->
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
@@ -116,22 +117,22 @@
                 <span style="margin-left: 9px; margin-right: 9px; cursor: pointer;" (click)="navigateToPrint(Order)">
                   <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
                 <span style="margin-left: 9px;"
-                  *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Approved"
+                  *ngIf="!checkIsEnable(Order.p.MaterialStockOrderDetailsArray) || Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Approved"
                   (click)="onEditClicked(Order)">
                   <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
                 </span>
                 <span style="margin-left: 9px;"
-                  *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Approved"
+                  *ngIf="!checkIsEnable(Order.p.MaterialStockOrderDetailsArray) || Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Approved"
                   (click)="onDeleteClicked(Order)">
                   <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
                 </span>
                 <span style="margin-left: 9px;"
-                  *ngIf="Order.p.MaterialStockOrderStatus != MaterialStockOrderStatus.Approved">
+                  *ngIf="checkIsEnable(Order.p.MaterialStockOrderDetailsArray) && Order.p.MaterialStockOrderStatus != MaterialStockOrderStatus.Approved">
                   <img src="/assets/icons/GrayEditIcon.png" alt="Edit" title="Disable Edit" width="20px"
                     height="20px" />
                 </span>
                 <span style="margin-left: 9px;"
-                  *ngIf="Order.p.MaterialStockOrderStatus != MaterialStockOrderStatus.Approved">
+                  *ngIf="checkIsEnable(Order.p.MaterialStockOrderDetailsArray) && Order.p.MaterialStockOrderStatus != MaterialStockOrderStatus.Approved">
                   <img src="/assets/icons/GreyDustbin.png" alt="Delete" title="Disable Delete" width="20px"
                     height="20px" />
                 </span>

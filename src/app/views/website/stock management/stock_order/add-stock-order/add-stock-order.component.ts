@@ -1,5 +1,6 @@
 import { Component, effect, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { faBullseye } from '@fortawesome/free-solid-svg-icons';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -18,12 +19,12 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
 @Component({
-  selector: 'app-stock-order-details',
+  selector: 'app-add-stock-order',
   standalone: false,
-  templateUrl: './stock-order-details.component.html',
-  styleUrls: ['./stock-order-details.component.scss'],
+  templateUrl: './add-stock-order.component.html',
+  styleUrls: ['./add-stock-order.component.scss'],
 })
-export class StockOrderDetailsComponent implements OnInit {
+export class AddStockOrderComponent implements OnInit {
 
   Entity: Order = Order.CreateNewInstance();
   IsNewEntity: boolean = true;
@@ -33,7 +34,7 @@ export class StockOrderDetailsComponent implements OnInit {
   InitialEntity: Order = null as any;
   SiteList: Site[] = [];
   VendorList: Vendor[] = [];
-  MaterialRequisitionList: OrderMaterialDetailProps[] = [];
+  MaterialRequisitionList: OrderMaterial[] = [];
   AllMaterialRequisitionList: OrderMaterial[] = [];
   OrderDate: string = '';
   CurrentDate: string = '';
@@ -46,7 +47,6 @@ export class StockOrderDetailsComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   strCDT: string = '';
   MaterialOrderStatus = MaterialRequisitionStatuses;
-  TotalOrderedQty: number = 0;
 
 
   errors: string = "";
@@ -133,16 +133,26 @@ export class StockOrderDetailsComponent implements OnInit {
     this.VendorList = lst;
   }
 
-  getOrderedMaterialList = async () => {
-    this.MaterialRequisitionList = this.Entity.p.MaterialStockOrderDetailsArray;
+  getMaterialRequisitionListByVendorRefAndSiteRef = async () => {
+    if (this.Entity.p.VendorRef <= 0) {
+      await this.uiUtils.showErrorToster('Vendor not Selected');
+      return;
+    }
+    if (this.Entity.p.SiteRef <= 0) {
+      await this.uiUtils.showErrorToster('Site not Selected');
+      return;
+    }
+    let lst = await OrderMaterial.FetchEntireListByCompanyVendorAndSiteRef(this.companyRef(), this.Entity.p.VendorRef, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.AllMaterialRequisitionList = lst;
+    this.filterMaterialList();
   }
 
-  // filterMaterialList() {
-  //   const usedRefs = this.Entity.p.MaterialStockOrderDetailsArray.map(item => item.MaterialRequisitionDetailsRef);
-  //   this.MaterialRequisitionList = this.AllMaterialRequisitionList.filter(
-  //     material => !usedRefs.includes(material.p.Ref)
-  //   );
-  // }
+  filterMaterialList() {
+    const usedRefs = this.Entity.p.MaterialStockOrderDetailsArray.map(item => item.MaterialRequisitionDetailsRef);
+    this.MaterialRequisitionList = this.AllMaterialRequisitionList.filter(
+      material => !usedRefs.includes(material.p.Ref)
+    );
+  }
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
@@ -156,16 +166,12 @@ export class StockOrderDetailsComponent implements OnInit {
   }
 
   onMaterialSelection = (MaterialRef: number) => {
-    const SingleRecord = this.MaterialRequisitionList.filter(data => data.MaterialRequisitionDetailsRef == MaterialRef);
-    this.newOrderMaterial.UnitName = SingleRecord[0].UnitName
-    this.newOrderMaterial.QuotationOrderedQty = SingleRecord[0].QuotationOrderedQty
-    this.newOrderMaterial.MaterialName = SingleRecord[0].MaterialName
-    this.newOrderMaterial.MaterialQuotationDetailsRef = SingleRecord[0].Ref
-    this.newOrderMaterial.TotalOrderedQty = SingleRecord[0].OrderedQty
-    this.newOrderMaterial.Rate = SingleRecord[0].Rate
-    this.newOrderMaterial.DiscountedRate = SingleRecord[0].DiscountedRate
-    this.newOrderMaterial.Gst = SingleRecord[0].Gst
-    this.TotalOrderedQty = SingleRecord[0].OrderedQty
+    const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.MaterialRequisitionDetailsRef == MaterialRef);
+    this.newOrderMaterial.UnitName = SingleRecord[0].p.UnitName
+    this.newOrderMaterial.QuotationOrderedQty = SingleRecord[0].p.OrderedQty
+    this.newOrderMaterial.MaterialName = SingleRecord[0].p.MaterialName
+    this.newOrderMaterial.MaterialQuotationDetailsRef = SingleRecord[0].p.Ref
+    this.newOrderMaterial.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty
   }
 
   // Trigger file input when clicking the image
@@ -253,7 +259,7 @@ export class StockOrderDetailsComponent implements OnInit {
       return;
     }
     this.ModalEditable = false;
-    this.getOrderedMaterialList();
+    this.getMaterialRequisitionListByVendorRefAndSiteRef();
     if (type === 'OrderMaterial') this.isOrderMaterialModalOpen = true;
   }
 
@@ -309,7 +315,7 @@ export class StockOrderDetailsComponent implements OnInit {
 
       this.newOrderMaterial.MaterialStockOrderRef = this.Entity.p.Ref;
       this.Entity.p.MaterialStockOrderDetailsArray.push({ ...OrderMaterialInstance.p });
-      // this.filterMaterialList();
+      this.filterMaterialList();
       await this.uiUtils.showSuccessToster('Material added successfully');
       this.resetMaterialControls()
     }
@@ -327,6 +333,7 @@ export class StockOrderDetailsComponent implements OnInit {
     this.editingIndex = index;
     this.ModalEditable = true;
     this.ExpectedDeliveryDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialStockOrderDetailsArray[index].ExpectedDeliveryDate);
+    // this.getMaterialRequisitionListByVendorRefAndSiteRef();
   }
 
   async removeOrderMaterial(index: number) {
@@ -336,6 +343,7 @@ export class StockOrderDetailsComponent implements OnInit {
        Are you sure that you want to DELETE this Order Material?`,
       async () => {
         this.Entity.p.MaterialStockOrderDetailsArray.splice(index, 1);
+        this.filterMaterialList();
       }
     );
   }
@@ -380,21 +388,18 @@ export class StockOrderDetailsComponent implements OnInit {
   };
 
   CalculateNetAmountAndTotalAmount = async () => {
-
-    this.newOrderMaterial.TotalOrderedQty = this.TotalOrderedQty + this.newOrderMaterial.OrderedQty;
-
-    if (this.newOrderMaterial.TotalOrderedQty > this.newOrderMaterial.QuotationOrderedQty) {
-      this.newOrderMaterial.OrderedQty = 0;
-      this.newOrderMaterial.QuotationRemainingQty = 0;
-      this.newOrderMaterial.TotalOrderedQty = this.TotalOrderedQty;
-      this.newOrderMaterial.NetAmount = 0;
-      this.newOrderMaterial.TotalAmount = 0;
-      return this.uiUtils.showWarningToster('Ordered Qty should be less then or equal to Required Qty');
+    if (this.newOrderMaterial.OrderedQty > this.newOrderMaterial.QuotationOrderedQty) {
+      this.newOrderMaterial.ExtraOrderedQty = (this.newOrderMaterial.OrderedQty + this.newOrderMaterial.TotalOrderedQty) - this.newOrderMaterial.QuotationOrderedQty;
+      // this.uiUtils.showWarningToster('Ordered Qty is greater then Required Qty');
+    } else {
+      this.newOrderMaterial.ExtraOrderedQty = 0;
     }
 
-    this.newOrderMaterial.QuotationRemainingQty = this.newOrderMaterial.QuotationOrderedQty - this.newOrderMaterial.TotalOrderedQty;
-
-
+    if (this.newOrderMaterial.OrderedQty < this.newOrderMaterial.QuotationOrderedQty) {
+      this.newOrderMaterial.QuotationRemainingQty = this.newOrderMaterial.QuotationOrderedQty - (this.newOrderMaterial.OrderedQty + this.newOrderMaterial.TotalOrderedQty);
+    } else {
+      this.newOrderMaterial.QuotationRemainingQty = 0;
+    }
     if (this.newOrderMaterial.DiscountedRate == 0) {
       this.newOrderMaterial.NetAmount = (this.newOrderMaterial.Rate * this.newOrderMaterial.OrderedQty);
     } else {
@@ -445,5 +450,6 @@ export class StockOrderDetailsComponent implements OnInit {
     // this.OwnerPincodeInputControl.control.markAsPristine();
   }
 }
+
 
 

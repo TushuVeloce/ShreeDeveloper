@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Order } from 'src/app/classes/domain/entities/website/stock_management/stock_order/order';
+import { OrderMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/stock_order/OrderMaterial/ordermaterial';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
@@ -73,7 +74,6 @@ export class StockOrderComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.MasterList = lst;
-    console.log('MasterList :', lst);
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
@@ -137,6 +137,14 @@ export class StockOrderComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
+  checkIsEnable = (data: OrderMaterialDetailProps[]): boolean => {
+    // If ANY entry fails (QuotationOrderedQty <= OrderedQty), return false
+    let status = data.every(item => item.QuotationOrderedQty <= item.OrderedQty);
+    return status;
+  };
+
+
+
   navigateToPrint = async (item: Order) => {
     this.router.navigate(['/homepage/Website/Stock_Order_Print'], {
       state: { printData: item.GetEditableVersion() }
@@ -148,7 +156,7 @@ export class StockOrderComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.router.navigate(['/homepage/Website/Stock_Order_Details']);
+    this.router.navigate(['/homepage/Website/Add_Stock_Order']);
   }
 
   NavigateOrderstatus = (item: Order) => {

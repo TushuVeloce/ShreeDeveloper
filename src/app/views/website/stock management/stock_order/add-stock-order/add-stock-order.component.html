@@ -124,9 +124,8 @@
             <b>Order Material List</b>
           </h5>
         </div>
-        <div *ngIf="Entity.p.MaterialStockOrderStatus == MaterialOrderStatus.Ordered"
-          class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" style="display: flex; justify-content: end"
-          routerLinkActive="active">
+        <div *ngIf="IsNewEntity" class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
+          style="display: flex; justify-content: end" routerLinkActive="active">
           <nz-button nz-button class="btn1" (click)="openModal('OrderMaterial')">Add Material</nz-button>
         </div>
       </div>
@@ -254,8 +253,8 @@
                   newOrderMaterial.MaterialRequisitionDetailsRef
                 )
               ">
-              <nz-option *ngFor="let material of MaterialRequisitionList" [nzLabel]="material.MaterialName"
-                [nzValue]="material.MaterialRequisitionDetailsRef"></nz-option>
+              <nz-option *ngFor="let material of MaterialRequisitionList" [nzLabel]="material.p.MaterialName"
+                [nzValue]="material.p.MaterialRequisitionDetailsRef"></nz-option>
             </nz-select>
             <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control"
               [(ngModel)]="newOrderMaterial.MaterialName" readonly />
@@ -299,8 +298,12 @@
           </div>
           <div class="col-6 mb-1">
             <label>Rate</label>
-            <input type="number" name="Rate" readonly class="form-control" [(ngModel)]="newOrderMaterial.Rate"
-              #RateCtrl="ngModel" placeholder="Enter Rate" />
+            <input type="number" name="Rate" class="form-control" [(ngModel)]="newOrderMaterial.Rate"
+              #RateCtrl="ngModel" required (blur)="RateCtrl.control.markAsTouched()" placeholder="Enter Rate"
+              (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
+            <div *ngIf="RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty)">
+              <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+            </div>
           </div>
           <div class="col-6 mb-1">
             <label>Discount Rate</label>
@@ -324,7 +327,7 @@
           <div class="col-6 mb-1">
             <div>
               <label for="Gst"><b>GST</b></label>
-              <nz-select class="nzSelect-light" disabled nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
                 nzPlaceHolder="Select" [nzSize]="'large'" name="Gst" required id="Gst"
                 [(ngModel)]="newOrderMaterial.Gst" (ngModelChange)="CalculateNetAmountAndTotalAmount()">
                 <nz-option nzLabel="None" [nzValue]="0"></nz-option>
