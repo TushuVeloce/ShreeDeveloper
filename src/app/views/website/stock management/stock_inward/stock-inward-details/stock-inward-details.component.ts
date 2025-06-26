@@ -40,8 +40,8 @@ export class StockInwardDetailsComponent implements OnInit {
   newInward: InwardMaterialDetailProps = InwardMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  isFormSaved = true; // 🔁 this is set to true after final save
-
+  InitialTableRefs: number[] = [];
+shouldFilterDropdown = false; // 🔁 Used to toggle filtering after add
 
   strCDT: string = ''
   today: string = new Date().toISOString().split('T')[0];
@@ -68,7 +68,6 @@ export class StockInwardDetailsComponent implements OnInit {
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
   @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
-
   @ViewChild('requisitionForm') requisitionForm!: NgForm;
   @ViewChild('DateCtrl') DateInputControl!: NgModel;
   @ViewChild('SiteCtrl') SiteInputControl!: NgModel;
@@ -89,6 +88,11 @@ export class StockInwardDetailsComponent implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Inward' : 'Edit Stock Inward';
       this.Entity = StockInward.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
+        this.InitialTableRefs = this.Entity.p.MaterialInwardDetailsArray.map(
+    x => x.MaterialRequisitionDetailsRef
+  );
+
+  this.shouldFilterDropdown = false; // 🔁 disable filtering on form open
       if (this.Entity.p.OrderedDate != '') {
         this.Entity.p.OrderedDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.OrderedDate)
       }
@@ -97,17 +101,9 @@ export class StockInwardDetailsComponent implements OnInit {
       }
       this.getMaterialListByCompanyRef(this.Entity.p.SiteRef)
       this.getVendorDataByVendorRef(this.Entity.p.VendorRef)
-      // this.getUnitByMaterialRef(this.Entity.p.MaterialInwardDetailsArray[0].MaterialRef)
     } else {
       this.Entity = StockInward.CreateNewInstance();
       StockInward.SetCurrentInstance(this.Entity);
-      // if (this.Entity.p.Date == '') {
-      //   this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-      //   let parts = this.strCDT.substring(0, 16).split('-');
-      //   // Construct the new date format
-      //   this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
-      //   this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
-      // }
     }
     this.InitialEntity = Object.assign(
       StockInward.CreateNewInstance(),
@@ -125,42 +121,52 @@ export class StockInwardDetailsComponent implements OnInit {
   }
 
   getMaterialListByCompanyRef = async (SiteRef: number) => {
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MaterialListOriginal = lst; // store full list
-    const allMatched = lst.every(item => item.p.OrderedQty === item.p.TotalInwardQty);
-    if (allMatched) {
-      this.isSaveDisabled = true
-    }else{
-            this.isSaveDisabled = false
-
-    }
-
-    this.filterMaterialList();
+  if (this.companyRef() <= 0) {
+    await this.uiUtils.showErrorToster('Company not Selected');
+    return;
   }
 
-  getMaterialOrderedQtyByMaterialRef = async (ref: number) => {
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    let lst = await MaterialStockOrder.FetchMaterialQuantity(ref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  }
+  const lst = await MaterialFromOrder.FetchOrderedMaterials(
+    SiteRef,
+    this.companyRef(),
+    async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
+  );
 
-filterMaterialList() {
-  if (this.isFormSaved) {
-    // After save: don't filter anything
+  this.MaterialListOriginal = lst;
+
+  const allMatched = lst.every(item => item.p.OrderedQty === item.p.TotalInwardQty);
+  this.isSaveDisabled = allMatched;
+
+  if (!this.shouldFilterDropdown) {
+    // ✅ On first load (even in edit), show all materials
     this.MaterialList = [...this.MaterialListOriginal];
   } else {
-    // Before save: filter already selected materials
-    const usedRefs = this.Entity.p.MaterialInwardDetailsArray.map(x => x.MaterialRequisitionDetailsRef);
-    this.MaterialList = this.MaterialListOriginal.filter(
-      item => !usedRefs.includes(item.p.MaterialRequisitionDetailsRef)
-    );
+    // 🔁 After user starts adding, apply filter
+    this.filterMaterialList();
   }
+};
+
+
+ filterMaterialList() {
+  if (!this.shouldFilterDropdown) {
+    this.MaterialList = [...this.MaterialListOriginal]; // Show all
+    return;
+  }
+
+  const currentRefs = this.Entity.p.MaterialInwardDetailsArray.map(
+    x => x.MaterialRequisitionDetailsRef
+  );
+
+  const refCount: Record<number, number> = {};
+  for (const ref of currentRefs) {
+    refCount[ref] = (refCount[ref] || 0) + 1;
+  }
+
+  this.MaterialList = this.MaterialListOriginal.filter(item => {
+    const ref = item.p.MaterialRequisitionDetailsRef;
+    const originalCount = this.InitialTableRefs.includes(ref) ? 1 : 0;
+    return (refCount[ref] || 0) <= originalCount;
+  });
 }
 
 
@@ -183,7 +189,6 @@ filterMaterialList() {
       this.newInward.MaterialName = UnitData.p.MaterialName
       this.newInward.OrderedQty = UnitData.p.OrderedQty
       this.newInward.MaterialStockOrderDetailsRef = UnitData.p.Ref
-      this.getMaterialOrderedQtyByMaterialRef(UnitData.p.Ref)
       if (UnitData.p.TotalInwardQty == 0) {
         this.newInward.RemainingQty = this.newInward.OrderedQty - this.newInward.InwardQty
         this.NewRemainingQty = this.newInward.OrderedQty
@@ -207,13 +212,9 @@ filterMaterialList() {
   }
 
   CalculateRemainingQty = (InwardQty: number, RemainingQty: number) => {
-    // Ensure inwardQty is a valid number
     InwardQty = Number(InwardQty) || 0;
-    // Calculate the new RemainingQty
     this.NewRemainingQty = RemainingQty - InwardQty;
   }
-
-
 
   // Trigger file input when clicking the image
   triggerFileInput(): void {
@@ -246,20 +247,16 @@ filterMaterialList() {
   }
 
   // On file selected
-
   onFileUpload(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
       this.InvoiceFile = file;
-
       const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
       const maxSizeMB = 2;
-
       if (file) {
         const isPdf = file.type === 'application/pdf';
         const isImage = file.type.startsWith('image/');
-
         if (isPdf || isImage) {
           this.imagePostViewUrl = URL.createObjectURL(file);
           this.Entity.p.InvoicePath = '';
@@ -267,24 +264,19 @@ filterMaterialList() {
           this.uiUtils.showWarningToster('Only PDF or image files are supported.')
         }
       }
-
       if (!allowedTypes.includes(file.type)) {
         this.errors = 'Only JPG, PNG, GIF, and PDF files are allowed.';
         return;
       }
-
       if (file.size / 1024 / 1024 > maxSizeMB) {
         this.errors = 'File size should not exceed 2 MB.';
         return;
       }
-
       this.errors = '';
-
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreView = reader.result as string;
         this.selectedFileName = file.name;
-
       };
       reader.readAsDataURL(file);
     }
@@ -298,11 +290,8 @@ filterMaterialList() {
   closeModal = async (type: string) => {
     if (type === 'material') {
       const keysToCheck = ['MaterialRef', 'UnitRef', 'OrderedQty', 'InwardQty', 'RemainingQty'] as const;
-
       const hasData = keysToCheck.some(key => {
         const value = (this.newInward as any)[key];
-
-        // Check for non-null, non-undefined, non-empty string or non-zero number
         if (typeof value === 'string') {
           return value.trim() !== '';
         } else if (typeof value === 'number') {
@@ -311,7 +300,6 @@ filterMaterialList() {
           return value != null; // for cases like object refs or non-primitive types
         }
       });
-
       if (hasData) {
         await this.uiUtils.showConfirmationMessage(
           'Close',
@@ -334,32 +322,32 @@ filterMaterialList() {
 
 
   async addMaterial() {
-    if (this.newInward.MaterialRequisitionDetailsRef <= 0 || this.newInward.InwardQty < 0) {
-      await this.uiUtils.showErrorMessage('Error', 'Inward Quantity can not be less than 0');
-      return;
-    }else if(this.newInward.InwardQty > this.newInward.RemainingQty){
-       await this.uiUtils.showErrorMessage('Error', 'Inward Quantity can not be more than Remaining Quantity');
+    if (
+      this.newInward.MaterialRequisitionDetailsRef <= 0 ||
+      this.newInward.InwardQty < 0
+    ) {
+      await this.uiUtils.showErrorMessage('Error', 'Inward Quantity cannot be less than 0');
       return;
     }
-    if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
+    if (this.newInward.InwardQty > this.newInward.RemainingQty) {
+      await this.uiUtils.showErrorMessage('Error', 'Inward Quantity cannot be more than Remaining Quantity');
+      return;
+    }
+    if (typeof this.editingIndex === 'number' && this.editingIndex >= 0) {
       this.Entity.p.MaterialInwardDetailsArray[this.editingIndex] = { ...this.newInward };
-      await this.uiUtils.showSuccessToster('material details updated successfully');
+      await this.uiUtils.showSuccessToster('Material details updated successfully');
       this.ismaterialModalOpen = false;
     } else {
-      // let materialInstance = new RequiredMaterial(this.newInward, true);
-      // let StockInwardInstance = new StockInward(this.Entity.p, true);
-      // await materialInstance.EnsurePrimaryKeysWithValidValues();
-      // await StockInwardInstance.EnsurePrimaryKeysWithValidValues();
       this.newInward.MaterialInwardRef = this.Entity.p.Ref;
       this.newInward.RemainingQty = this.NewRemainingQty;
-      // this.newInward.InwardQty = this.Entity.p.Ref;
       this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
-      this.isFormSaved = false
-      this.filterMaterialList();
-      await this.uiUtils.showSuccessToster('material added successfully');
+      this.shouldFilterDropdown = true; // 🔁 Start filtering only after first addition
+      this.filterMaterialList();  
+      await this.uiUtils.showSuccessToster('Material added successfully');
     }
+    // this.filterMaterialList();
     this.newInward = InwardMaterialDetailProps.Blank();
-    this.NewRemainingQty = 0
+    this.NewRemainingQty = 0;
     this.editingIndex = null;
   }
 
@@ -371,11 +359,9 @@ filterMaterialList() {
   }
 
   async removeMaterial(index: number) {
-    // this.Entity.p.StockInwardManagementmaterialDetails.splice(index, 1); // Remove material
     await this.uiUtils.showConfirmationMessage(
       'Delete',
-      `This process is <strong>IRREVERSIBLE!</strong> <br/>
-     Are you sure that you want to DELETE this material?`,
+      `This process is <strong>IRREVERSIBLE!</strong><br/>Are you sure that you want to DELETE this material?`,
       async () => {
         this.Entity.p.MaterialInwardDetailsArray.splice(index, 1);
         this.filterMaterialList();
@@ -388,8 +374,6 @@ filterMaterialList() {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    // this.Entity.p.LoginEmployeeRef = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    // this.newInward.StockInwardRef = this.Entity.p.Ref
     this.Entity.p.OrderedDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.OrderedDate)
     this.Entity.p.InwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.InwardDate)
     let entityToSave = this.Entity.GetEditableVersion();
