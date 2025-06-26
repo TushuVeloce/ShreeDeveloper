@@ -8,11 +8,10 @@ export class GetMaterialFromMaterialInwardFetchRequest
 {
     // public static readonly FetchRequestType: string = "GAAProjectSpaceGroupFetchRequest";
     public static readonly FetchRequestType: string = "GetMaterialFromMaterialInwardFetchRequest";
+ StockConsumeManagementRefs: number[] = [];
     CompanyRefs: number[] = [];
-  SiteManagementRefs: number[] = [];
-  SiteRefs: number[] = [];
-  VendorRefs: number[] = [];
-  InwardMaterialRefs: number[] = [];
+    StockConsumeStatus: number[] = [];
+    SiteRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

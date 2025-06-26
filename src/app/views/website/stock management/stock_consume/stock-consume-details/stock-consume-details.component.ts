@@ -32,7 +32,7 @@ export class StockConsumeDetailsComponent implements OnInit {
     'New Stock Consumption';
   InitialEntity: StockConsume = null as any;
   SiteList: Site[] = [];
-  MaterialList: InwardMaterial[] = [];
+  MaterialList: StockConsume[] = [];
   StageList: Stage[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -119,7 +119,7 @@ export class StockConsumeDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await InwardMaterial.FetchMaterialListBySiteRef(
+    let lst = await StockConsume.FetchMaterialListBySiteRef(
       SiteRef,
       this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
@@ -168,7 +168,7 @@ export class StockConsumeDetailsComponent implements OnInit {
     if (UnitData) {
       this.Entity.p.UnitRef = UnitData.p.UnitRef;
       this.Entity.p.UnitName = UnitData.p.UnitName;
-      this.Entity.p.CurrentQuantity = UnitData.p.InwardQty;
+      this.Entity.p.CurrentQuantity = UnitData.p.CurrentQty;
       this.CalculateRemainingQty();
     }
   };
