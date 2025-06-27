@@ -7,9 +7,9 @@
       (filteredList)="DisplayMasterList = $event"></app-shared-filter> -->
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">
-    <!-- <nz-button nz-button class="btn1" (click)='AddStockInward()'>
+    <nz-button nz-button class="btn1" (click)='AddStockInward()'>
       Add Inward
-    </nz-button> -->
+    </nz-button>
   </div>
 </div>
 <!-- <div class="row" style="margin-top: 1rem; ">
@@ -106,7 +106,7 @@
               <td class="tbldata">{{ (currentPage - 1) * pageSize + materialRowIndex + 1 }}</td>
                 <td class="tbldata">{{ inward.p.ChalanNo }}</td>
                 <td class="tbldata">{{ inward.p.SiteName }}</td>
-                  <td class="tbldata">{{ formatDate(inward.p.OrderedDate)}}</td>
+                  <td class="tbldata">{{ formatDate(inward.p.PurchaseOrderDate)}}</td>
                   <td class="tbldata">{{ formatDate(inward.p.InwardDate)}}</td>
                 <td class="tbldata">{{ inward.p.VendorName }}</td>
               <td class="tbldata">{{ detail.MaterialName }}</td>
@@ -141,7 +141,7 @@
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{inward.p.ChalanNo}}</td>
           <td Class="tbldata">{{inward.p.SiteName}}</td>
-          <td Class="tbldata">{{formatDate(inward.p.OrderedDate)}}</td>
+          <td Class="tbldata">{{formatDate(inward.p.PurchaseOrderDate)}}</td>
           <td Class="tbldata">{{formatDate(inward.p.InwardDate)}}</td>
            <td Class="tbldata">{{inward.p.VendorName}}</td>
           <td class="tbldata">

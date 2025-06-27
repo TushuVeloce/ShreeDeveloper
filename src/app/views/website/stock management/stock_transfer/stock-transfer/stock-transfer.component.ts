@@ -69,7 +69,7 @@ Entity: StockTransfer = StockTransfer.CreateNewInstance();
       async () => {
         await StockTransfer.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `StockTransfer ${StockTransfer.p.MaterialName} has been deleted!`
+            `Stock Transfer ${StockTransfer.p.MaterialName} has been deleted!`
           );
           await this.getStockTransferListByCompanyRef();
           this.SearchString = '';

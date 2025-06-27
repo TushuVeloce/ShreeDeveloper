@@ -32,27 +32,27 @@
           <label>Site Name</label>
           <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear
             nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
-            required>
+            required (ngModelChange)="getMaterialListByCompanyRef(Entity.p.SiteRef)">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Ordered Date</label>
-          <input type="date" name="OrderedDate" class="form-control" id="OrderedDate" [(ngModel)]="Entity.p.OrderedDate"
-            #OrderedDateCtrl="ngModel" required (blur)="OrderedDateCtrl.control.markAsTouched()"
+          <input type="date" name="PurchaseOrderDate" class="form-control" id="PurchaseOrderDate" [(ngModel)]="Entity.p.PurchaseOrderDate"
+            #PurchaseOrderDateCtrl="ngModel" required (blur)="PurchaseOrderDateCtrl.control.markAsTouched()"
             placeholder="Enter Site Name" readonly />
           <div *ngIf="
-              OrderedDateCtrl.invalid &&
-              (OrderedDateCtrl.touched || OrderedDateCtrl.dirty)
+              PurchaseOrderDateCtrl.invalid &&
+              (PurchaseOrderDateCtrl.touched || PurchaseOrderDateCtrl.dirty)
             ">
-            <span class="validation-text" *ngIf="OrderedDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+            <span class="validation-text" *ngIf="PurchaseOrderDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Inward Date</label>
           <input type="date" name="InwardDate" class="form-control" id="InwardDate" [(ngModel)]="Entity.p.InwardDate"
             #InwardDateCtrl="ngModel" required (blur)="InwardDateCtrl.control.markAsTouched()"
-            placeholder="Enter Site Name" [min]="Entity.p.OrderedDate" />
+            placeholder="Enter Site Name" [min]="Entity.p.PurchaseOrderDate" />
           <div *ngIf="
               InwardDateCtrl.invalid &&
               (InwardDateCtrl.touched || InwardDateCtrl.dirty)
@@ -226,12 +226,12 @@
           <div class="col-md-6" style="margin-top: 1rem">
             <label>Material Name</label>
             <nz-select *ngIf="!ModalEditable" class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl"
-              nzAllowClear nzPlaceHolder="Select" id="MaterialRequisitionDetailsRef"
-              name="MaterialRequisitionDetailsRef" [nzSize]="'large'"
-              [(ngModel)]="newInward.MaterialRequisitionDetailsRef" required (ngModelChange)="
-                getUnitByMaterialRef(newInward.MaterialRequisitionDetailsRef)
+              nzAllowClear nzPlaceHolder="Select" id="MaterialRef "
+              name="MaterialRef " [nzSize]="'large'"
+              [(ngModel)]="newInward.MaterialRef " required (ngModelChange)="
+                getUnitByMaterialRef(newInward.MaterialRef )
               ">
-              <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.MaterialRequisitionDetailsRef"
+              <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.MaterialRef "
                 [nzLabel]="material.p.MaterialName"></nz-option>
             </nz-select>
             <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control" readonly

@@ -18,7 +18,7 @@
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="FromSiteRef"><b>From Site</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="FromSiteRef" name="FromSiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.FromSiteRef" (ngModelChange)="SiteValidation()">
+            nzPlaceHolder="Select" id="FromSiteRef" name="FromSiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.FromSiteRef" (ngModelChange)="SiteValidation(); getMaterialListBySiteRef(Entity.p.FromSiteRef)">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -43,8 +43,8 @@
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="MaterialRef" name="MaterialRef" [nzSize]="'large'"
             [(ngModel)]="Entity.p.MaterialRef" (ngModelChange)="getUnitByMaterialRef(Entity.p.MaterialRef)">
-            <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.Ref"
-              [nzLabel]="material.p.Name"></nz-option>
+            <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.MaterialRequisitionDetailsRef"
+              [nzLabel]="material.p.MaterialName"></nz-option>
           </nz-select>
         </div>
        <div class="col-md-4" style="margin-top: 1rem">
