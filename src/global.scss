@@ -79,6 +79,12 @@
   color: black !important;
 }
 
+/* Add this for hover */
+::ng-deep nz-table tbody tr:hover {
+  background-color: rgb(243, 244, 246);
+  /* or use .bgtable_light color */
+}
+
 // Alignment classes
 .left-align {
   padding-left: 10px !important;

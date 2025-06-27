@@ -3,8 +3,7 @@
     <h1 style="padding-top: 3px;" class="title title_light">Unit Master</h1>
   </div>
   <div class="col-4 mb-2 search-container_light">
-    <app-shared-filter [masterList]="MasterList"
-      [filterFields]="['Name']"
+    <app-shared-filter [masterList]="MasterList" [filterFields]="['Name']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">
@@ -23,14 +22,16 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let Unit of paginatedList(); index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{Unit.p.Name}}</td>
-          <td class="tbldata">
+        @for (Unit of basicTable.data; track Unit; let i = $index) {
+        <tr class="tbldata">
+          <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td>{{Unit.p.Name}}</td>
+          <td>
             <Edit-Icon (editClick)="onEditClicked(Unit)" [class.disabled-icon]="Unit.p.Ref === TimeUnitRef" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(Unit)" [class.disabled-icon]="Unit.p.Ref === TimeUnitRef" />
           </td>
         </tr>
+        }
       </tbody>
     </nz-table>
   </div>
