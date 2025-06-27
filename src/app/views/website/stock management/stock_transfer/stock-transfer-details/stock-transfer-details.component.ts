@@ -6,6 +6,7 @@ import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { StockTransfer } from 'src/app/classes/domain/entities/website/stock_management/stock-transfer/stocktransfer';
+import { StockConsume } from 'src/app/classes/domain/entities/website/stock_management/stock_consume/stockconsume';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
@@ -26,7 +27,7 @@ export class StockTransferDetailsComponent  implements OnInit {
   DetailsFormTitle: 'New Stock Transfer' | 'Edit Stock Transfer' = 'New Stock Transfer';
   InitialEntity: StockTransfer = null as any;
   SiteList: Site[] = [];
-  MaterialList: Material[] = [];
+  MaterialList: StockConsume[] = [];
   GSTList = DomainEnums.GoodsAndServicesTaxList(true, '--Select GST --');
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
@@ -45,7 +46,6 @@ export class StockTransferDetailsComponent  implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.getSiteListByCompanyRef();
-    this.getMaterialListByCompanyRef();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Transfer' : 'Edit Stock Transfer';
@@ -55,6 +55,7 @@ export class StockTransferDetailsComponent  implements OnInit {
       if (this.Entity.p.Date != '') {
         this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
       }
+      this.getMaterialListBySiteRef(this.Entity.p.FromSiteRef);
     } else {
       this.Entity = StockTransfer.CreateNewInstance();
       StockTransfer.SetCurrentInstance(this.Entity);
@@ -79,25 +80,36 @@ export class StockTransferDetailsComponent  implements OnInit {
     this.SiteList = lst;
   }
 
-   getMaterialListByCompanyRef = async () => {
+getMaterialListBySiteRef = async (SiteRef: number) => {
+    this.Entity.p.MaterialRef = 0
+    this.getUnitByMaterialRef( this.Entity.p.MaterialRef )
     this.MaterialList = [];
-    this.Entity.p.MaterialRef = 0;
-    if (this.companyRef() <= 0) {
+    if (this.companyRef() <= 0 && SiteRef < 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Material.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await StockConsume.FetchMaterialListBySiteRef(
+      SiteRef,
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    console.log('lst :', lst);
     this.MaterialList = lst;
-  }
+  };
 
-   getUnitByMaterialRef = async (materialref: number) => {
-    this.Entity.p.UnitRef = 0
-    if (materialref <= 0 || materialref <= 0) {
+ getUnitByMaterialRef = async (materialref: number) => {
+    this.Entity.p.UnitRef = 0;
+    this.Entity.p.UnitName = '';
+    if (materialref <= 0) {
+      await this.uiUtils.showErrorToster('Material not Selected');
       return;
     }
-    let lst = await Material.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.Entity.p.UnitRef = lst.p.UnitRef
-    this.Entity.p.UnitName = lst.p.UnitName
+    // let lst = await MaterialFromOrder.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    const UnitData = this.MaterialList.find((data) => data.p.MaterialRequisitionDetailsRef == materialref)
+    if (UnitData) {
+      this.Entity.p.UnitRef = UnitData.p.UnitRef;
+      this.Entity.p.UnitName = UnitData.p.UnitName;
+    }
   }
 
     SiteValidation = async() =>{

@@ -41,7 +41,8 @@ export class StockInwardDetailsComponent implements OnInit {
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   InitialTableRefs: number[] = [];
-shouldFilterDropdown = false; // 🔁 Used to toggle filtering after add
+  shouldFilterDropdown = false; // 🔁 Used to toggle filtering after add
+  SessionAddedRefs: number[] = [];
 
   strCDT: string = ''
   today: string = new Date().toISOString().split('T')[0];
@@ -88,13 +89,10 @@ shouldFilterDropdown = false; // 🔁 Used to toggle filtering after add
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Inward' : 'Edit Stock Inward';
       this.Entity = StockInward.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
-        this.InitialTableRefs = this.Entity.p.MaterialInwardDetailsArray.map(
-    x => x.MaterialRequisitionDetailsRef
-  );
-
-  this.shouldFilterDropdown = false; // 🔁 disable filtering on form open
-      if (this.Entity.p.OrderedDate != '') {
-        this.Entity.p.OrderedDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.OrderedDate)
+      this.SessionAddedRefs = []; // ✅ Reset session-added materials
+      this.shouldFilterDropdown = false;
+      if (this.Entity.p.PurchaseOrderDate != '') {
+        this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate)
       }
       if (this.Entity.p.InwardDate != '') {
         this.Entity.p.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate)
@@ -121,54 +119,28 @@ shouldFilterDropdown = false; // 🔁 Used to toggle filtering after add
   }
 
   getMaterialListByCompanyRef = async (SiteRef: number) => {
-  if (this.companyRef() <= 0) {
-    await this.uiUtils.showErrorToster('Company not Selected');
-    return;
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef,this.companyRef(),async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    this.MaterialListOriginal = lst;
+    const allMatched = lst.every(item => item.p.RemainingQty == 0);
+    this.isSaveDisabled = allMatched;
+    if (!this.shouldFilterDropdown) {
+      this.MaterialList = [...this.MaterialListOriginal];
+    } else {
+      this.filterMaterialList();
+    }
+  };
+
+
+  filterMaterialList() {
+    this.MaterialList = this.MaterialListOriginal.filter(item =>
+      !this.SessionAddedRefs.includes(item.p.MaterialRef )
+    );
   }
-
-  const lst = await MaterialFromOrder.FetchOrderedMaterials(
-    SiteRef,
-    this.companyRef(),
-    async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
-  );
-
-  this.MaterialListOriginal = lst;
-
-  const allMatched = lst.every(item => item.p.OrderedQty === item.p.TotalInwardQty);
-  this.isSaveDisabled = allMatched;
-
-  if (!this.shouldFilterDropdown) {
-    // ✅ On first load (even in edit), show all materials
-    this.MaterialList = [...this.MaterialListOriginal];
-  } else {
-    // 🔁 After user starts adding, apply filter
-    this.filterMaterialList();
-  }
-};
-
-
- filterMaterialList() {
-  if (!this.shouldFilterDropdown) {
-    this.MaterialList = [...this.MaterialListOriginal]; // Show all
-    return;
-  }
-
-  const currentRefs = this.Entity.p.MaterialInwardDetailsArray.map(
-    x => x.MaterialRequisitionDetailsRef
-  );
-
-  const refCount: Record<number, number> = {};
-  for (const ref of currentRefs) {
-    refCount[ref] = (refCount[ref] || 0) + 1;
-  }
-
-  this.MaterialList = this.MaterialListOriginal.filter(item => {
-    const ref = item.p.MaterialRequisitionDetailsRef;
-    const originalCount = this.InitialTableRefs.includes(ref) ? 1 : 0;
-    return (refCount[ref] || 0) <= originalCount;
-  });
-}
-
 
   getUnitByMaterialRef = async (materialref: number) => {
     this.newInward.UnitRef = 0;
@@ -182,20 +154,22 @@ shouldFilterDropdown = false; // 🔁 Used to toggle filtering after add
       return;
     }
     // let lst = await MaterialFromOrder.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    const UnitData = this.MaterialList.find((data) => data.p.MaterialRequisitionDetailsRef == materialref)
+    const UnitData = this.MaterialList.find((data) => data.p.MaterialRef  == materialref)
     if (UnitData) {
       this.newInward.UnitRef = UnitData.p.UnitRef;
       this.newInward.UnitName = UnitData.p.UnitName;
       this.newInward.MaterialName = UnitData.p.MaterialName
       this.newInward.OrderedQty = UnitData.p.OrderedQty
       this.newInward.MaterialStockOrderDetailsRef = UnitData.p.Ref
-      if (UnitData.p.TotalInwardQty == 0) {
-        this.newInward.RemainingQty = this.newInward.OrderedQty - this.newInward.InwardQty
-        this.NewRemainingQty = this.newInward.OrderedQty
-      } else {
-        this.newInward.RemainingQty = Number(UnitData.p.OrderedQty) - Number(UnitData.p.TotalInwardQty)
-        this.NewRemainingQty = Number(UnitData.p.OrderedQty) - Number(UnitData.p.TotalInwardQty)
-      }
+      this.newInward.RemainingQty = UnitData.p.RemainingQty 
+      this.NewRemainingQty = UnitData.p.RemainingQty 
+      // if (UnitData.p.TotalInwardQty == 0) {
+      //   this.newInward.RemainingQty = this.newInward.OrderedQty - this.newInward.InwardQty
+      //   this.NewRemainingQty = this.newInward.OrderedQty
+      // } else {
+      //   this.newInward.RemainingQty = Number(UnitData.p.OrderedQty) - Number(UnitData.p.TotalInwardQty)
+      //   this.NewRemainingQty = Number(UnitData.p.OrderedQty) - Number(UnitData.p.TotalInwardQty)
+      // }
     }
   }
 
@@ -323,16 +297,20 @@ shouldFilterDropdown = false; // 🔁 Used to toggle filtering after add
 
   async addMaterial() {
     if (
-      this.newInward.MaterialRequisitionDetailsRef <= 0 ||
+      this.newInward.MaterialRef  <= 0 ||
       this.newInward.InwardQty < 0
     ) {
       await this.uiUtils.showErrorMessage('Error', 'Inward Quantity cannot be less than 0');
       return;
     }
+
     if (this.newInward.InwardQty > this.newInward.RemainingQty) {
       await this.uiUtils.showErrorMessage('Error', 'Inward Quantity cannot be more than Remaining Quantity');
       return;
     }
+
+    const newRef = this.newInward.MaterialRef ;
+
     if (typeof this.editingIndex === 'number' && this.editingIndex >= 0) {
       this.Entity.p.MaterialInwardDetailsArray[this.editingIndex] = { ...this.newInward };
       await this.uiUtils.showSuccessToster('Material details updated successfully');
@@ -341,15 +319,23 @@ shouldFilterDropdown = false; // 🔁 Used to toggle filtering after add
       this.newInward.MaterialInwardRef = this.Entity.p.Ref;
       this.newInward.RemainingQty = this.NewRemainingQty;
       this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
-      this.shouldFilterDropdown = true; // 🔁 Start filtering only after first addition
-      this.filterMaterialList();  
+
+      // ✅ Track fresh additions only
+      if (!this.SessionAddedRefs.includes(newRef)) {
+        this.SessionAddedRefs.push(newRef);
+      }
+
+      this.shouldFilterDropdown = true;
+      this.filterMaterialList();
+
       await this.uiUtils.showSuccessToster('Material added successfully');
     }
-    // this.filterMaterialList();
+
     this.newInward = InwardMaterialDetailProps.Blank();
     this.NewRemainingQty = 0;
     this.editingIndex = null;
   }
+
 
   editMaterial(index: number) {
     this.ismaterialModalOpen = true
@@ -359,22 +345,30 @@ shouldFilterDropdown = false; // 🔁 Used to toggle filtering after add
   }
 
   async removeMaterial(index: number) {
+    const removedItem = this.Entity.p.MaterialInwardDetailsArray[index];
+    const removedRef = removedItem.MaterialRef ;
+
     await this.uiUtils.showConfirmationMessage(
       'Delete',
-      `This process is <strong>IRREVERSIBLE!</strong><br/>Are you sure that you want to DELETE this material?`,
+      `This process is <strong>IRREVERSIBLE!</strong><br/>Are you sure you want to DELETE this material?`,
       async () => {
         this.Entity.p.MaterialInwardDetailsArray.splice(index, 1);
+
+        // ✅ Always remove from session tracking
+        this.SessionAddedRefs = this.SessionAddedRefs.filter(ref => ref !== removedRef);
+
         this.filterMaterialList();
       }
     );
   }
+
 
   SaveStockInward = async () => {
     let lstFTO: FileTransferObject[] = [];
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    this.Entity.p.OrderedDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.OrderedDate)
+    this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.PurchaseOrderDate)
     this.Entity.p.InwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.InwardDate)
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
@@ -401,6 +395,8 @@ shouldFilterDropdown = false; // 🔁 Used to toggle filtering after add
         await this.uiUtils.showSuccessToster('Stock Inward saved successfully');
         this.Entity = StockInward.CreateNewInstance();
         this.resetAllControls()
+        this.SessionAddedRefs = [];
+        this.filterMaterialList();
       } else {
         await this.uiUtils.showSuccessToster('Stock Inward Updated successfully');
         await this.router.navigate(['/homepage/Website/Stock_Inward']);

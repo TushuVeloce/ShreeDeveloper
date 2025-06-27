@@ -268,7 +268,7 @@ export class StockInwardMobilePage implements OnInit {
               try {
                 await StockInward.DeleteInstance(async () => {
                   await this.toastService.present(
-                    `Stock Inward on ${this.formatDate(StockInward.p.OrderedDate)} has been deleted!`,
+                    `Stock Inward on ${this.formatDate(StockInward.p.PurchaseOrderDate)} has been deleted!`,
                     1000,
                     'success'
                   );

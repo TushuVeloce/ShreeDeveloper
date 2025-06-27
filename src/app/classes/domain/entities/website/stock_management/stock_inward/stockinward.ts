@@ -17,12 +17,14 @@ export class StockInwardProps {
   public readonly Db_Table_Name = "MaterialInward";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
+  public CreatedDate: string = '';
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
+  public UpdatedDate: number = 0;
   public Ref: number = 0;
   public SiteRef: number = 0;
   public readonly SiteName: string = '';
-  public OrderedDate: string = '';
+  public PurchaseOrderDate: string = '';
   public InwardDate: string = '';
   public VendorRef: number = 0;
   public readonly VendorName: string = '';

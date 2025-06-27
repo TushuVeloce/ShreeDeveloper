@@ -75,7 +75,7 @@ export class StockConsumeComponent  implements OnInit {
       async () => {
         await StockConsume.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `StockConsume ${StockConsume.p.SiteName} has been deleted!`
+            `Stock Consume ${StockConsume.p.SiteName} has been deleted!`
           );
           await this.getStockConsumeListByCompanyRef();
           this.SearchString = '';
