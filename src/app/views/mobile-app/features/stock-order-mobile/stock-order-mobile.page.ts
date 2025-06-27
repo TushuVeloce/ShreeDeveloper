@@ -54,7 +54,7 @@ export class StockOrderMobilePage implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  MaterialStockOrderStatus = MaterialRequisitionStatuses;
+  MaterialPurchaseOrderStatus = MaterialRequisitionStatuses;
 
   EntityOfOrder: Order = Order.CreateNewInstance();
 
@@ -99,17 +99,17 @@ export class StockOrderMobilePage implements OnInit {
 
   getStatusClass(status: any): string {
     switch (status) {
-      case this.MaterialStockOrderStatus.Pending:
+      case this.MaterialPurchaseOrderStatus.Pending:
         return 'pending';
-      case this.MaterialStockOrderStatus.Rejected:
+      case this.MaterialPurchaseOrderStatus.Rejected:
         return 'rejected';
-      case this.MaterialStockOrderStatus.Approved:
+      case this.MaterialPurchaseOrderStatus.Approved:
         return 'approved';
-      case this.MaterialStockOrderStatus.Ordered:
+      case this.MaterialPurchaseOrderStatus.Ordered:
         return 'ordered';
-      case this.MaterialStockOrderStatus.Incomplete:
+      case this.MaterialPurchaseOrderStatus.Incomplete:
         return 'incomplete';
-      case this.MaterialStockOrderStatus.Completed:
+      case this.MaterialPurchaseOrderStatus.Completed:
         return 'completed';
       default:
         return 'default';
@@ -118,17 +118,17 @@ export class StockOrderMobilePage implements OnInit {
 
   getStatusText(status: any): string {
     switch (status) {
-      case this.MaterialStockOrderStatus.Pending:
+      case this.MaterialPurchaseOrderStatus.Pending:
         return 'Pending';
-      case this.MaterialStockOrderStatus.Rejected:
+      case this.MaterialPurchaseOrderStatus.Rejected:
         return 'Rejected';
-      case this.MaterialStockOrderStatus.Approved:
+      case this.MaterialPurchaseOrderStatus.Approved:
         return 'Approved';
-      case this.MaterialStockOrderStatus.Ordered:
+      case this.MaterialPurchaseOrderStatus.Ordered:
         return 'Ordered';
-      case this.MaterialStockOrderStatus.Incomplete:
+      case this.MaterialPurchaseOrderStatus.Incomplete:
         return 'Incomplete';
-      case this.MaterialStockOrderStatus.Completed:
+      case this.MaterialPurchaseOrderStatus.Completed:
         return 'Completed';
       default:
         return '-';
@@ -273,7 +273,7 @@ export class StockOrderMobilePage implements OnInit {
               try {
                 await Order.DeleteInstance(async () => {
                   await this.toastService.present(
-                    `Stock Order on ${this.formatDate(Order.p.Date)} has been deleted!`,
+                    `Stock Order on ${this.formatDate(Order.p.PurchaseOrderDate)} has been deleted!`,
                     1000,
                     'success'
                   );
@@ -335,7 +335,7 @@ export class StockOrderMobilePage implements OnInit {
   //   let lstFTO: FileTransferObject[] = [];
   //   this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
   //   this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-  //   this.EntityOfOrder.p.MaterialStockOrderStatus = status;
+  //   this.EntityOfOrder.p.MaterialPurchaseOrderStatus = status;
   //   let entityToSave = this.EntityOfOrder.GetEditableVersion();
   //   let entitiesToSave = [entityToSave];
   //   console.log('entitiesToSave :', entitiesToSave);
@@ -365,7 +365,7 @@ export class StockOrderMobilePage implements OnInit {
   //   let lstFTO: FileTransferObject[] = [];
   //   this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
   //   this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-  //   this.Entity.p.MaterialStockOrderStatus = status;
+  //   this.Entity.p.MaterialPurchaseOrderStatus = status;
   //   let entityToSave = this.Entity.GetEditableVersion();
   //   let entitiesToSave = [entityToSave];
   //   console.log('entitiesToSave :', entitiesToSave);
@@ -404,38 +404,38 @@ export class StockOrderMobilePage implements OnInit {
   //     this.Entity = Order.CreateNewInstance();
   //   }
   // };
-    SaveOrder = async (status: number) => {
-      let lstFTO: FileTransferObject[] = [];
-      
-      this.EntityOfOrder= this.SelectedOrder;
-      this.EntityOfOrder.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-      this.EntityOfOrder.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-      this.EntityOfOrder.p.MaterialStockOrderStatus = status;
-      console.log('this.EntityOfApprove :', this.EntityOfOrder);
-  
-      let entityToSave = this.EntityOfOrder.GetEditableVersion();
-      let entitiesToSave = [entityToSave];
-      console.log('entitiesToSave :', entitiesToSave);
-  
-      // if (this.InvoiceFile) {
-      //   lstFTO.push(
-      //     FileTransferObject.FromFile(
-      //       "InvoiceFile",
-      //       this.InvoiceFile,
-      //       this.InvoiceFile.name
-      //     )
-      //   );
-      // } 
-      let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
-      if (!tr.Successful) {
-        await this.toastService.present(tr.Message, 1000, 'danger');
-        await this.haptic.error();
-        return;
-      } else {
-        await this.toastService.present(status == this.MaterialStockOrderStatus.Ordered ? 'Order is Approved' : status == this.MaterialStockOrderStatus.Rejected ?'Order is Rejected':'N/A', 1000, 'success');
-        await this.haptic.success();
-        this.EntityOfOrder = Order.CreateNewInstance();
-        this.closeModal();
-      }
-    };
+  SaveOrder = async (status: number) => {
+    let lstFTO: FileTransferObject[] = [];
+
+    this.EntityOfOrder = this.SelectedOrder;
+    this.EntityOfOrder.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+    this.EntityOfOrder.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+    this.EntityOfOrder.p.MaterialPurchaseOrderStatus = status;
+    console.log('this.EntityOfApprove :', this.EntityOfOrder);
+
+    let entityToSave = this.EntityOfOrder.GetEditableVersion();
+    let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
+
+    // if (this.InvoiceFile) {
+    //   lstFTO.push(
+    //     FileTransferObject.FromFile(
+    //       "InvoiceFile",
+    //       this.InvoiceFile,
+    //       this.InvoiceFile.name
+    //     )
+    //   );
+    // }
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+    if (!tr.Successful) {
+      await this.toastService.present(tr.Message, 1000, 'danger');
+      await this.haptic.error();
+      return;
+    } else {
+      await this.toastService.present(status == this.MaterialPurchaseOrderStatus.Ordered ? 'Order is Approved' : status == this.MaterialPurchaseOrderStatus.Rejected ? 'Order is Rejected' : 'N/A', 1000, 'success');
+      await this.haptic.success();
+      this.EntityOfOrder = Order.CreateNewInstance();
+      this.closeModal();
+    }
+  };
 }

@@ -33,7 +33,7 @@
             <td style="width: 50%;  border: none;"></td>
             <td style="vertical-align: center; border: none;">
               <div style="display: flex; justify-content: space-between;"><strong>DATE</strong> <strong>{{
-                  this.Entity.p.Date }}</strong> </div>
+                  this.Entity.p.PurchaseOrderDate }}</strong> </div>
               <br>
               <!-- <div style="display: flex; justify-content: space-between;"><strong>Challan No</strong> <strong>{{
                   this.Entity.p.ChalanNo }}</strong> </div> -->
@@ -89,7 +89,7 @@
         </thead>
         <tbody>
           <tr *ngFor="
-          let material of Entity.p.MaterialStockOrderDetailsArray;
+          let material of Entity.p.MaterialPurchaseOrderDetailsArray;
           let i = index
         ">
             <td style="padding: 4px; border: none;">1.</td>
@@ -127,7 +127,8 @@
             <td style="border: none;"></td>
             <td style="border: none;"></td>
             <td style="border: none;"></td>
-            <td colspan="3" style="padding: 2px; border: none; text-align: start;"><strong>Inwords-{{ this.totalAmountInWords(Entity.p.GrandTotal) }}</strong></td>
+            <td colspan="3" style="padding: 2px; border: none; text-align: start;"><strong>Inwords-{{
+                this.totalAmountInWords(Entity.p.GrandTotal) }}</strong></td>
           </tr>
         </tbody>
       </table>

@@ -21,17 +21,17 @@
             <!-- Action Buttons -->
             <div class="button-group">
               <!-- Status Badge -->
-              <span class="status-badge" [ngClass]="getStatusClass(order.p.MaterialStockOrderStatus)"
-                (click)="order.p.MaterialStockOrderStatus === MaterialStockOrderStatus.Approved ? openModal(order) : ''">
-                {{ getStatusText(order.p.MaterialStockOrderStatus) }}
+              <span class="status-badge" [ngClass]="getStatusClass(order.p.MaterialPurchaseOrderStatus)"
+                (click)="order.p.MaterialPurchaseOrderStatus === MaterialPurchaseOrderStatus.Approved ? openModal(order) : ''">
+                {{ getStatusText(order.p.MaterialPurchaseOrderStatus) }}
               </span>
               <ion-button size="small" fill="clear" color="warning" (click)="onEditClicked(order)"
-                [disabled]="order.p.MaterialStockOrderStatus !== MaterialStockOrderStatus.Approved">
+                [disabled]="order.p.MaterialPurchaseOrderStatus !== MaterialPurchaseOrderStatus.Approved">
                 <ion-icon name="create-outline" slot="icon-only"></ion-icon>
               </ion-button>
 
               <ion-button size="small" fill="clear" color="danger" (click)="onDeleteClicked(order)"
-                [disabled]="order.p.MaterialStockOrderStatus !== MaterialStockOrderStatus.Approved">
+                [disabled]="order.p.MaterialPurchaseOrderStatus !== MaterialPurchaseOrderStatus.Approved">
                 <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
               </ion-button>
 
@@ -48,7 +48,7 @@
         </div>
       </ion-item-divider>
 
-      <ion-card class="requisition-card" *ngFor="let item of order.p.MaterialStockOrderDetailsArray">
+      <ion-card class="requisition-card" *ngFor="let item of order.p.MaterialPurchaseOrderDetailsArray">
         <ion-card-content [@expandCollapse]="expandedRequisitions.has(order.p.Ref) ? 'expanded' : 'collapsed'">
           <div class="requisition-details">
             <!-- Info Column -->
@@ -102,7 +102,7 @@
           <!-- Info Rows -->
           <div class="info-row-of-model">
             <span class="label">Date:</span>
-            <span class="value">{{ formatDate(SelectedOrder.p.Date) || '-' }}</span>
+            <span class="value">{{ formatDate(SelectedOrder.p.PurchaseOrderDate) || '-' }}</span>
           </div>
           <div class="info-row-of-model">
             <span class="label">Site:</span>
@@ -122,23 +122,23 @@
           </div>
           <!-- <div class="info-row-of-model">
               <span class="label">Invoice:</span>
-              <ion-button size="small" fill="clear" color="primary" (click)="openfile(SelectedOrder.p.InvoicePath)">
+              <ion-button size="small" fill="clear" color="primary" (click)="openfile(SelectedOrder.p.MaterialPurchaseInvoicePath)">
                 <ion-icon [name]="'eye-outline'"
                   slot="icon-only"></ion-icon>
               </ion-button>
             </div> -->
           <!-- Invoice Preview Button -->
-          <div class="info-row-of-model" *ngIf="SelectedOrder?.p?.InvoicePath">
+          <div class="info-row-of-model" *ngIf="SelectedOrder?.p?.MaterialPurchaseInvoicePath">
             <span class="label">Invoice:</span>
             <ion-button size="small" fill="clear" color="primary"
-              (click)="prepareInvoiceUrl(SelectedOrder.p.InvoicePath)">
+              (click)="prepareInvoiceUrl(SelectedOrder.p.MaterialPurchaseInvoicePath)">
               <ion-icon [name]="showInvoicePreview?'eye-outline':'eye-off-outline'" slot="icon-only"></ion-icon>
             </ion-button>
           </div>
 
           <!-- Invoice Viewer Section -->
           <div *ngIf="showInvoicePreview" class="invoice-preview-container">
-            <ng-container *ngIf="isPDF(SelectedOrder.p.InvoicePath); else imageBlock">
+            <ng-container *ngIf="isPDF(SelectedOrder.p.MaterialPurchaseInvoicePath); else imageBlock">
               <iframe [src]="sanitizedInvoiceUrl" width="100%" height="400px" style="border: none;"></iframe>
             </ng-container>
 
@@ -158,7 +158,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of SelectedOrder.p.MaterialStockOrderDetailsArray; let i = index">
+                  <tr *ngFor="let item of SelectedOrder.p.MaterialPurchaseOrderDetailsArray; let i = index">
                     <td class="sticky-col">{{i + 1 }}</td>
                     <td>
                       {{ item.MaterialName || '-' }}
@@ -247,9 +247,9 @@
           </div>
           <div class="info-row-of-model">
             <span class="label">Status:</span>
-            <!-- <span class="value">{{ SelectedOrder.p.MaterialStockOrderStatus || '-' }}</span> -->
-            <span class="status-badge" [ngClass]="getStatusClass(SelectedOrder.p.MaterialStockOrderStatus)">
-              {{ getStatusText(SelectedOrder.p.MaterialStockOrderStatus) }}
+            <!-- <span class="value">{{ SelectedOrder.p.MaterialPurchaseOrderStatus || '-' }}</span> -->
+            <span class="status-badge" [ngClass]="getStatusClass(SelectedOrder.p.MaterialPurchaseOrderStatus)">
+              {{ getStatusText(SelectedOrder.p.MaterialPurchaseOrderStatus) }}
             </span>
           </div>
         </ion-content>
@@ -258,11 +258,11 @@
         <ion-footer class="modal-footer">
           <div class="action-buttons">
             <ion-button expand="block" color="success" shape="round"
-              (click)="SaveOrder(MaterialStockOrderStatus.Ordered)">
+              (click)="SaveOrder(MaterialPurchaseOrderStatus.Ordered)">
               Order
             </ion-button>
             <ion-button expand="block" color="danger" shape="round"
-              (click)="SaveOrder(MaterialStockOrderStatus.Incomplete)">
+              (click)="SaveOrder(MaterialPurchaseOrderStatus.Incomplete)">
               Reject
             </ion-button>
           </div>

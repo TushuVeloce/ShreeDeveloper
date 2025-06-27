@@ -93,10 +93,10 @@ export class AddStockOrderComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Order' : 'Edit Order';
       this.Entity = Order.GetCurrentInstance();
-      this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.InvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
-      this.selectedFileName = this.Entity.p.InvoicePath;
+      this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.MaterialPurchaseInvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
+      this.selectedFileName = this.Entity.p.MaterialPurchaseInvoicePath;
 
-      this.OrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
+      this.OrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate);
       this.appStateManage.StorageKey.removeItem('Editable');
     } else {
       this.Entity = Order.CreateNewInstance();
@@ -148,7 +148,7 @@ export class AddStockOrderComponent implements OnInit {
   }
 
   filterMaterialList() {
-    const usedRefs = this.Entity.p.MaterialStockOrderDetailsArray.map(item => item.MaterialRequisitionDetailsRef);
+    const usedRefs = this.Entity.p.MaterialPurchaseOrderDetailsArray.map(item => item.MaterialRef);
     this.MaterialRequisitionList = this.AllMaterialRequisitionList.filter(
       material => !usedRefs.includes(material.p.Ref)
     );
@@ -166,11 +166,11 @@ export class AddStockOrderComponent implements OnInit {
   }
 
   onMaterialSelection = (MaterialRef: number) => {
-    const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.MaterialRequisitionDetailsRef == MaterialRef);
+    const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.MaterialRef == MaterialRef);
     this.newOrderMaterial.UnitName = SingleRecord[0].p.UnitName
     this.newOrderMaterial.QuotationOrderedQty = SingleRecord[0].p.OrderedQty
     this.newOrderMaterial.MaterialName = SingleRecord[0].p.MaterialName
-    this.newOrderMaterial.MaterialQuotationDetailsRef = SingleRecord[0].p.Ref
+    this.newOrderMaterial.MaterialPurchaseOrderRef = SingleRecord[0].p.Ref
     this.newOrderMaterial.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty
   }
 
@@ -221,7 +221,7 @@ export class AddStockOrderComponent implements OnInit {
 
         if (isPdf || isImage) {
           this.imagePostViewUrl = URL.createObjectURL(file);
-          this.Entity.p.InvoicePath = '';
+          this.Entity.p.MaterialPurchaseInvoicePath = '';
         } else {
           this.uiUtils.showWarningToster('Only PDF or image files are supported.')
         }
@@ -265,7 +265,7 @@ export class AddStockOrderComponent implements OnInit {
 
   closeModal = async (type: string) => {
     if (type === 'OrderMaterial') {
-      const keysToCheck = ['Name', 'MaterialRequisitionDetailsRef', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
+      const keysToCheck = ['Name', 'MaterialRef ', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
 
       const hasData = keysToCheck.some(
         key => (this.newOrderMaterial as any)[key]?.toString().trim()
@@ -290,7 +290,7 @@ export class AddStockOrderComponent implements OnInit {
   };
 
   async addOrderMaterial() {
-    if (this.newOrderMaterial.MaterialRequisitionDetailsRef == 0) {
+    if (this.newOrderMaterial.MaterialRef == 0) {
       return this.uiUtils.showWarningToster('Material Name cannot be blank.');
     }
     if (this.newOrderMaterial.OrderedQty == 0) {
@@ -303,7 +303,7 @@ export class AddStockOrderComponent implements OnInit {
     this.newOrderMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate);
     this.ExpectedDeliveryDate = '';
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
-      this.Entity.p.MaterialStockOrderDetailsArray[this.editingIndex] = { ...this.newOrderMaterial };
+      this.Entity.p.MaterialPurchaseOrderDetailsArray[this.editingIndex] = { ...this.newOrderMaterial };
       await this.uiUtils.showSuccessToster('Material updated successfully');
       this.isOrderMaterialModalOpen = false;
 
@@ -313,8 +313,8 @@ export class AddStockOrderComponent implements OnInit {
       await OrderMaterialInstance.EnsurePrimaryKeysWithValidValues();
       await OrderInstance.EnsurePrimaryKeysWithValidValues();
 
-      this.newOrderMaterial.MaterialStockOrderRef = this.Entity.p.Ref;
-      this.Entity.p.MaterialStockOrderDetailsArray.push({ ...OrderMaterialInstance.p });
+      this.newOrderMaterial.MaterialPurchaseOrderRef = this.Entity.p.Ref;
+      this.Entity.p.MaterialPurchaseOrderDetailsArray.push({ ...OrderMaterialInstance.p });
       this.filterMaterialList();
       await this.uiUtils.showSuccessToster('Material added successfully');
       this.resetMaterialControls()
@@ -325,14 +325,14 @@ export class AddStockOrderComponent implements OnInit {
 
   editOrderMaterial(index: number) {
     this.isOrderMaterialModalOpen = true
-    this.newOrderMaterial = { ...this.Entity.p.MaterialStockOrderDetailsArray[index] }
+    this.newOrderMaterial = { ...this.Entity.p.MaterialPurchaseOrderDetailsArray[index] }
     if (!this.IsNewEntity) {
       this.newOrderMaterial.TotalOrderedQty = 0;
       this.newOrderMaterial.QuotationRemainingQty = 0;
     }
     this.editingIndex = index;
     this.ModalEditable = true;
-    this.ExpectedDeliveryDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialStockOrderDetailsArray[index].ExpectedDeliveryDate);
+    this.ExpectedDeliveryDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialPurchaseOrderDetailsArray[index].ExpectedDeliveryDate);
     // this.getMaterialRequisitionListByVendorRefAndSiteRef();
   }
 
@@ -342,7 +342,7 @@ export class AddStockOrderComponent implements OnInit {
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
        Are you sure that you want to DELETE this Order Material?`,
       async () => {
-        this.Entity.p.MaterialStockOrderDetailsArray.splice(index, 1);
+        this.Entity.p.MaterialPurchaseOrderDetailsArray.splice(index, 1);
         this.filterMaterialList();
       }
     );
@@ -351,10 +351,10 @@ export class AddStockOrderComponent implements OnInit {
   SaveOrder = async () => {
     let lstFTO: FileTransferObject[] = [];
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    this.newOrderMaterial.MaterialStockOrderRef = this.Entity.p.Ref
+    this.newOrderMaterial.MaterialQuotationDetailRef = this.Entity.p.Ref
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.OrderDate);
+    this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToFullFormat(this.OrderDate);
 
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
@@ -415,7 +415,7 @@ export class AddStockOrderComponent implements OnInit {
   }
 
   getGrandTotal(): number {
-    return this.Entity.p.MaterialStockOrderDetailsArray.reduce((total: number, item: any) => {
+    return this.Entity.p.MaterialPurchaseOrderDetailsArray.reduce((total: number, item: any) => {
       return this.Entity.p.GrandTotal = total + Number(item.TotalAmount || 0);
     }, 0);
   }

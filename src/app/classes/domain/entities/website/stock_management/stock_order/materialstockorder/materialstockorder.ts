@@ -20,7 +20,7 @@ export class MaterialStockOrderProps {
   public MaterialRequisitionDetailsName: string = '';
   public MaterialName: string = '';
   public UnitName: string = '';
-  
+
   public RequisitionQty: number = 0;
   public QuotedQty: number = 0;
   public OrderedQty: number = 0;
@@ -37,7 +37,7 @@ export class MaterialStockOrderProps {
   public ExpectedDeliveryDate: string = '';
   public NetAmount: number = 0;
   public TotalAmount: number = 0;
-  public MaterialStockOrderRef: number = 0;
+  public MaterialRef: number = 0;
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';

@@ -14,12 +14,17 @@ import { OrderMaterialFetchRequest } from "./ordermaterialfetchrequest";
 
 
 export class OrderMaterialDetailProps {
-  public readonly Db_Table_Name = "MaterialStockOrderDetails";
+  public readonly Db_Table_Name = "MaterialPurchaseOrderDetails";
   public Ref: number = 0;
 
-  public MaterialRequisitionDetailsRef: number = 0;
-  public MaterialRequisitionDetailsName: string = '';
+  public MaterialPurchaseOrderRef: number = 0;
+  public MaterialPurchaseOrderName: string = '';
+
+  public MaterialQuotationDetailRef: number = 0;
+  public MaterialRef: number = 0;
   public MaterialName: string = '';
+
+  public UnitRef: number = 0;
   public UnitName: string = '';
 
   public RequisitionQty: number = 0;
@@ -31,9 +36,8 @@ export class OrderMaterialDetailProps {
   public TotalOrderedQty: number = 0;
   public ExtraOrderedQty: number = 0;
 
-  public MaterialOrderedDetailStatus: number = 0;
+  public MaterialPurchaseDetailStatus: number = 0;
 
-  public MaterialQuotationDetailsRef: number = 0;
   public Rate: number = 0;
   public DiscountedRate: number = 0;
   public Gst: number = 0;
@@ -41,7 +45,6 @@ export class OrderMaterialDetailProps {
   public ExpectedDeliveryDate: string = '';
   public NetAmount: number = 0;
   public TotalAmount: number = 0;
-  public MaterialStockOrderRef: number = 0;
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -56,7 +59,7 @@ export class OrderMaterialDetailProps {
 }
 
 export class OrderMaterial implements IPersistable<OrderMaterial> {
-  public static readonly Db_Table_Name: string = 'MaterialStockOrderDetails';
+  public static readonly Db_Table_Name: string = 'MaterialPurchaseOrderDetails';
 
   public constructor(public readonly p: OrderMaterialDetailProps, public readonly AllowEdit: boolean) {
 

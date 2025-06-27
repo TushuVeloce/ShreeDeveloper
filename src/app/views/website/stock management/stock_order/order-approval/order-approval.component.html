@@ -66,22 +66,22 @@
         </div>
         <div class="col-md-5 d-flex align-items-center justify-content-between">
           <ng-container *ngIf="selectedFileName; else NoFile">
-            <span style="cursor: pointer;" (click)="fileNavigation(Entity.p.InvoicePath)">
+            <span style="cursor: pointer;" (click)="fileNavigation(Entity.p.MaterialPurchaseInvoicePath)">
               {{ selectedFileName}}
             </span>
           </ng-container>
 
           <!-- Customer Aadhar Image Display -->
-          <ng-container *ngIf="Entity.p.InvoicePath; else AddDocImage">
-            <img [src]="isImageFile(Entity.p.InvoicePath) ? imagePostView : '/assets/icons/doc-placeholder.png'"
-              alt="Invoice" title="Invoice" (click)="fileNavigation(Entity.p.InvoicePath)"
-              [class]="isImageFile(Entity.p.InvoicePath) ?  'img-preview' : 'file-preview'" />
+          <ng-container *ngIf="Entity.p.MaterialPurchaseInvoicePath; else AddDocImage">
+            <img [src]="isImageFile(Entity.p.MaterialPurchaseInvoicePath) ? imagePostView : '/assets/icons/doc-placeholder.png'"
+              alt="Invoice" title="Invoice" (click)="fileNavigation(Entity.p.MaterialPurchaseInvoicePath)"
+              [class]="isImageFile(Entity.p.MaterialPurchaseInvoicePath) ?  'img-preview' : 'file-preview'" />
           </ng-container>
 
           <ng-template #AddDocImage>
             <ng-container *ngIf="imagePreView; else defaultImage">
               <img [src]="isImageFile(selectedFileName) ? imagePreView : '/assets/icons/doc-placeholder.png'"
-                alt="Invoice" title="Invoice" (click)="fileNavigation(this.Entity.p.InvoicePath)"
+                alt="Invoice" title="Invoice" (click)="fileNavigation(this.Entity.p.MaterialPurchaseInvoicePath)"
                 [class]="isImageFile(selectedFileName) ? 'img-preview' : 'file-preview'" />
             </ng-container>
           </ng-template>
@@ -99,7 +99,7 @@
       </div>
 
       <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem"
-        *ngIf="Entity.p.MaterialStockOrderDetailsArray">
+        *ngIf="Entity.p.MaterialPurchaseOrderDetailsArray">
         <div class="table-container" style="margin-top: 2rem">
           <div class="row">
             <div class="col-12">
@@ -107,7 +107,7 @@
             </div>
           </div>
           <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
-            nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.MaterialStockOrderDetailsArray">
+            nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.MaterialPurchaseOrderDetailsArray">
             <thead>
               <tr>
                 <th *ngFor="let header of QuotedMaterialheaders" class="tblsubheader">
@@ -117,7 +117,7 @@
             </thead>
             <tbody>
               <tr *ngFor="
-                  let material of Entity.p.MaterialStockOrderDetailsArray;
+                  let material of Entity.p.MaterialPurchaseOrderDetailsArray;
                   let i = index
                 ">
                 <td Class="tbldata">{{ i + 1 }}</td>
@@ -145,7 +145,7 @@
           </nz-table>
         </div>
       </div>
-      <div *ngIf="Entity.p.MaterialStockOrderDetailsArray" class="card-body_light">
+      <div *ngIf="Entity.p.MaterialPurchaseOrderDetailsArray" class="card-body_light">
         <div style="height: 20vh; background-color: white" class="d-flex align-items-center justify-content-center">
           <span class="title_light"> Data Not Found</span>
         </div>
@@ -158,12 +158,12 @@
         ">
 
         <!-- APPROVED -->
-        <nz-button nz-button class="status" (click)="SaveOrder(MaterialStockOrderStatus.Ordered)" ngClass="approved">
+        <nz-button nz-button class="status" (click)="SaveOrder(MaterialPurchaseOrderStatus.Ordered)" ngClass="approved">
           Order
         </nz-button>
 
         <!-- REJECTED -->
-        <nz-button nz-button class="status" (click)="SaveOrder(MaterialStockOrderStatus.Incomplete)" ngClass="rejected">
+        <nz-button nz-button class="status" (click)="SaveOrder(MaterialPurchaseOrderStatus.Incomplete)" ngClass="rejected">
           Rejected
         </nz-button>
 

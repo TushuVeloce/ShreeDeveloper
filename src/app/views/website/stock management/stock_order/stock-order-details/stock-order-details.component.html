@@ -83,7 +83,7 @@
             (click)="triggerFileInput()" />
 
           <ng-container *ngIf="selectedFileName; else NoFile">
-            <span style="cursor: pointer" (click)="fileNavigation(Entity.p.InvoicePath)">
+            <span style="cursor: pointer" (click)="fileNavigation(Entity.p.MaterialPurchaseInvoicePath)">
               {{ selectedFileName }}
             </span>
           </ng-container>
@@ -93,13 +93,13 @@
             (change)="onFileUpload($event)" />
 
           <!-- Customer Aadhar Image Display -->
-          <ng-container *ngIf="Entity.p.InvoicePath; else AddDocImage">
+          <ng-container *ngIf="Entity.p.MaterialPurchaseInvoicePath; else AddDocImage">
             <img [src]="
-                isImageFile(Entity.p.InvoicePath)
+                isImageFile(Entity.p.MaterialPurchaseInvoicePath)
                   ? imagePostView
                   : '/assets/icons/doc-placeholder.png'
-              " alt="Invoice" title="Invoice" (click)="fileNavigation(Entity.p.InvoicePath)" [class]="
-                isImageFile(Entity.p.InvoicePath)
+              " alt="Invoice" title="Invoice" (click)="fileNavigation(Entity.p.MaterialPurchaseInvoicePath)" [class]="
+                isImageFile(Entity.p.MaterialPurchaseInvoicePath)
                   ? 'img-preview'
                   : 'file-preview'
               " />
@@ -111,7 +111,8 @@
                   isImageFile(selectedFileName)
                     ? imagePreView
                     : '/assets/icons/doc-placeholder.png'
-                " alt="Invoice" title="Invoice" (click)="fileNavigation(this.Entity.p.InvoicePath)" [class]="
+                " alt="Invoice" title="Invoice" (click)="fileNavigation(this.Entity.p.MaterialPurchaseInvoicePath)"
+                [class]="
                   isImageFile(selectedFileName) ? 'img-preview' : 'file-preview'
                 " />
             </ng-container>
@@ -124,7 +125,7 @@
             <b>Order Material List</b>
           </h5>
         </div>
-        <div *ngIf="Entity.p.MaterialStockOrderStatus == MaterialOrderStatus.Ordered"
+        <div *ngIf="Entity.p.MaterialPurchaseOrderStatus == MaterialOrderStatus.Ordered"
           class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" style="display: flex; justify-content: end"
           routerLinkActive="active">
           <nz-button nz-button class="btn1" (click)="openModal('OrderMaterial')">Add Material</nz-button>
@@ -132,7 +133,7 @@
       </div>
 
       <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem"
-        *ngIf="Entity.p.MaterialStockOrderDetailsArray.length > 0">
+        *ngIf="Entity.p.MaterialPurchaseOrderDetailsArray.length > 0">
         <div class="table-container" style="margin-top: 2rem">
           <div class="row">
             <div class="col-12">
@@ -140,7 +141,7 @@
             </div>
           </div>
           <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
-            nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.MaterialStockOrderDetailsArray">
+            nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.MaterialPurchaseOrderDetailsArray">
             <thead>
               <tr>
                 <th *ngFor="let header of OrderMaterialheaders" class="tblsubheader">
@@ -150,7 +151,7 @@
             </thead>
             <tbody>
               <tr *ngFor="
-                  let material of Entity.p.MaterialStockOrderDetailsArray;
+                  let material of Entity.p.MaterialPurchaseOrderDetailsArray;
                   let i = index
                 ">
                 <td Class="tbldata">{{ i + 1 }}</td>
@@ -179,21 +180,21 @@
                 <td Class="tbldata">{{ material.NetAmount }}</td>
                 <td Class="tbldata">{{ material.TotalAmount }}</td>
                 <td class="tbldata">
-                  <span *ngIf="material.MaterialOrderedDetailStatus != MaterialOrderStatus.Ordered"
+                  <span *ngIf="material.MaterialPurchaseDetailStatus != MaterialOrderStatus.Ordered"
                     style="margin-left: 9px" (click)="editOrderMaterial(i)">
                     <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
                   </span>
-                  <span *ngIf="material.MaterialOrderedDetailStatus != MaterialOrderStatus.Ordered"
+                  <span *ngIf="material.MaterialPurchaseDetailStatus != MaterialOrderStatus.Ordered"
                     style="margin-left: 9px" (click)="removeOrderMaterial(i)">
                     <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" />
                   </span>
                   <span style="margin-left: 9px;"
-                    *ngIf="material.MaterialOrderedDetailStatus == MaterialOrderStatus.Ordered">
+                    *ngIf="material.MaterialPurchaseDetailStatus == MaterialOrderStatus.Ordered">
                     <img src="/assets/icons/GrayEditIcon.png" alt="Edit" title="Disable Edit" width="20px"
                       height="20px" />
                   </span>
                   <span style="margin-left: 9px;"
-                    *ngIf="material.MaterialOrderedDetailStatus == MaterialOrderStatus.Ordered">
+                    *ngIf="material.MaterialPurchaseDetailStatus == MaterialOrderStatus.Ordered">
                     <img src="/assets/icons/GreyDustbin.png" alt="Delete" title="Disable Delete" width="20px"
                       height="20px" />
                   </span>
@@ -211,7 +212,7 @@
           </nz-table>
         </div>
       </div>
-      <div *ngIf="Entity.p.MaterialStockOrderDetailsArray.length === 0" class="card-body_light">
+      <div *ngIf="Entity.p.MaterialPurchaseOrderDetailsArray.length === 0" class="card-body_light">
         <div style="height: 20vh; background-color: white" class="d-flex align-items-center justify-content-center">
           <span class="title_light"> Data Not Found</span>
         </div>
@@ -245,17 +246,17 @@
       <form autocomplete="off">
         <div class="row" style="margin-top: 1rem;">
           <div class="col-6 mb-1">
-            <label for="MaterialRequisitionDetailsRef"><b>Material</b></label>
+            <label for="MaterialQuotationDetailRef"><b>Material</b></label>
             <nz-select *ngIf="!ModalEditable" class="nzSelect-light" nzShowSearch nzAllowClear
               [nzNotFoundContent]="noDataTpl" nzPlaceHolder="Select" [nzSize]="'large'"
-              name="MaterialRequisitionDetailsRef" required id="MaterialRequisitionDetailsRef"
-              [(ngModel)]="newOrderMaterial.MaterialRequisitionDetailsRef" (ngModelChange)="
+              name="MaterialQuotationDetailRef" required id="MaterialQuotationDetailRef"
+              [(ngModel)]="newOrderMaterial.MaterialQuotationDetailRef" (ngModelChange)="
                 onMaterialSelection(
-                  newOrderMaterial.MaterialRequisitionDetailsRef
+                  newOrderMaterial.MaterialQuotationDetailRef
                 )
               ">
               <nz-option *ngFor="let material of MaterialRequisitionList" [nzLabel]="material.MaterialName"
-                [nzValue]="material.MaterialRequisitionDetailsRef"></nz-option>
+                [nzValue]="material.MaterialQuotationDetailRef"></nz-option>
             </nz-select>
             <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control"
               [(ngModel)]="newOrderMaterial.MaterialName" readonly />

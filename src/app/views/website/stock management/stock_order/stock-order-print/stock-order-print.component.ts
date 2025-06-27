@@ -46,7 +46,7 @@ export class StockOrderPrintComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(true);
     this.Entity = history.state.printData;
     console.log('this.Entityyyyyyyyyy :', this.Entity);
-    this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
+    this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate);
     this.InitialEntity = Object.assign(Order.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Order;
     this.getCompanySingleRecord()
     this.getVendorSingleRecord()

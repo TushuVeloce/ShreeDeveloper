@@ -16,26 +16,28 @@ import { OrderMaterialDetailProps } from "./OrderMaterial/ordermaterial";
 
 
 export class OrderProps {
-  public readonly Db_Table_Name = "MaterialStockOrder";
+  public readonly Db_Table_Name = "MaterialPurchaseOrder";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
+
   public Ref: number = 0;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
   public SiteRef: number = 0;
   public SiteName: string = '';
-  public MaterialStockOrderStatus : number = 0;
-  public MaterialQuotationRef : number = 0;
-  public Date: string = '';
+  public MaterialPurchaseOrderStatus: number = 0;
+  public MaterialQuotationRef: number = 0;
+  public PurchaseOrderDate: string = '';
   public VendorRef: number = 0;
   public VendorName: string = '';
   public VendorTradeName: string = '';
   public AddressLine1: string = '';
+  public TransDateTime: string = '';
   public GrandTotal: number = 0;
-  public InvoicePath: string = "";
-  public MaterialStockOrderDetailsArray: OrderMaterialDetailProps[] = [];
+  public MaterialPurchaseInvoicePath: string = "";
+  public MaterialPurchaseOrderDetailsArray: OrderMaterialDetailProps[] = [];
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -49,7 +51,7 @@ export class OrderProps {
 }
 
 export class Order implements IPersistable<Order> {
-  public static readonly Db_Table_Name: string = 'MaterialStockOrder';
+  public static readonly Db_Table_Name: string = 'MaterialPurchaseOrder';
 
   public constructor(public readonly p: OrderProps, public readonly AllowEdit: boolean) {
 

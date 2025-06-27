@@ -40,20 +40,20 @@
       </thead>
       <tbody>
         <ng-container *ngFor="let Order of paginatedList; let i = index">
-          <ng-container *ngFor="let detail of Order.p.MaterialStockOrderDetailsArray; let j = index">
+          <ng-container *ngFor="let detail of Order.p.MaterialPurchaseOrderDetailsArray; let j = index">
             <tr>
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
                 {{ (currentPage - 1) * pageSize + i + 1 }}
               </td>
               <td class="tbldata" *ngIf="j === 0 && !Entity.p.SiteRef"
-                [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
+                [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
                 {{ Order.p.SiteName }}
               </td>
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length"
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length"
                 width="9%">
-                {{ formatDate(Order.p.Date) }}
+                {{ formatDate(Order.p.PurchaseOrderDate ) }}
               </td>
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
                 {{ Order.p.VendorName }}
               </td>
 
@@ -71,74 +71,74 @@
               <td class="tbldata">{{ detail.TotalAmount }}</td>
 
               <td class="tbldata" width="8%" *ngIf="j === 0"
-                [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
+                [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
                 <b>₹ {{ Order.p.GrandTotal }}</b>
               </td>
               <!-- Optional: Requisition status -->
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
                 <!-- PENDING -->
-                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Pending"
+                <span class="status" *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending"
                   ngClass="pending">
                   Pending
                 </span>
 
                 <!-- APPROVED -->
                 <span class="status" style="cursor: pointer;" (click)="NavigateOrderstatus(Order)"
-                  *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Approved" ngClass="approved">
+                  *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved" ngClass="approved">
                   Approved
                 </span>
 
                 <!-- REJECTED -->
-                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Rejected"
+                <span class="status" *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Rejected"
                   ngClass="rejected">
                   Rejected
                 </span>
 
                 <!-- Completed -->
-                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Completed"
+                <span class="status" *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Completed"
                   ngClass="completed">
                   Completed
                 </span>
 
                 <!-- Incomplete -->
-                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Incomplete"
+                <span class="status" *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Incomplete"
                   ngClass="incomplete">
                   Incomplete
                 </span>
 
                 <!-- Ordered -->
-                <span class="status" *ngIf="Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Ordered"
+                <span class="status" *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Ordered"
                   ngClass="ordered">
                   Ordered
                 </span>
               </td>
 
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialStockOrderDetailsArray.length">
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
                 <span style="margin-left: 9px; margin-right: 9px; cursor: pointer;" (click)="navigateToPrint(Order)">
                   <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
                 <span style="margin-left: 9px;"
-                  *ngIf="!checkIsEnable(Order.p.MaterialStockOrderDetailsArray) || Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Approved"
+                  *ngIf="!checkIsEnable(Order.p.MaterialPurchaseOrderDetailsArray) || Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved"
                   (click)="onEditClicked(Order)">
                   <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
                 </span>
-                <!-- <span style="margin-left: 9px;"
-                  *ngIf="!checkIsEnable(Order.p.MaterialStockOrderDetailsArray) || Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Approved"
+                <span style="margin-left: 9px;"
+                  *ngIf="!checkIsEnable(Order.p.MaterialPurchaseOrderDetailsArray) || Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved"
                   (click)="onDeleteClicked(Order)">
                   <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
                 </span>
                 <span style="margin-left: 9px;"
-                  *ngIf="checkIsEnable(Order.p.MaterialStockOrderDetailsArray) && Order.p.MaterialStockOrderStatus != MaterialStockOrderStatus.Approved">
+                  *ngIf="checkIsEnable(Order.p.MaterialPurchaseOrderDetailsArray) && Order.p.MaterialPurchaseOrderStatus != MaterialPurchaseOrderStatus.Approved">
                   <img src="/assets/icons/GrayEditIcon.png" alt="Edit" title="Disable Edit" width="20px"
                     height="20px" />
                 </span>
                 <span style="margin-left: 9px;"
-                  *ngIf="checkIsEnable(Order.p.MaterialStockOrderDetailsArray) && Order.p.MaterialStockOrderStatus != MaterialStockOrderStatus.Approved">
+                  *ngIf="checkIsEnable(Order.p.MaterialPurchaseOrderDetailsArray) && Order.p.MaterialPurchaseOrderStatus != MaterialPurchaseOrderStatus.Approved">
                   <img src="/assets/icons/GreyDustbin.png" alt="Delete" title="Disable Delete" width="20px"
                     height="20px" />
-                </span> -->
+                </span>
               </td>
             </tr>
-            <tr *ngIf="j === Order.p.MaterialStockOrderDetailsArray.length - 1 && !Entity.p.SiteRef">
+            <tr *ngIf="j === Order.p.MaterialPurchaseOrderDetailsArray.length - 1 && !Entity.p.SiteRef">
               <td colspan="17" style="background-color: #333; height: 2px; padding: 0;"></td>
             </tr>
           </ng-container>
@@ -147,7 +147,7 @@
 
     </nz-table>
 
-    
+
   </div>
   <div class="fixed-pagination">
     <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"

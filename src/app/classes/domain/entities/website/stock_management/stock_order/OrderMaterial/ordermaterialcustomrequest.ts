@@ -5,7 +5,7 @@ import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class OrderMaterialCustomRequest {
-  public static readonly CustomProcessRequestType: string = "GetMaterialRequisitionOnVendorRefFetchRequest";
+  public static readonly CustomProcessRequestType: string = "MaterialPurchaseOrderDetailsFetchRequest";
   public static readonly MasterTableName: string = "MaterialRequisitionDetails";
   CompanyRefs: number[] = [];
   SiteManagementRefs: number[] = [];

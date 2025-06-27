@@ -68,7 +68,7 @@
     </ion-grid>
 
     <!-- Material Table -->
-    <ng-container *ngIf="Entity.p.MaterialStockOrderDetailsArray.length > 0; else noMaterials">
+    <ng-container *ngIf="Entity.p.MaterialPurchaseOrderDetailsArray.length > 0; else noMaterials">
       <div class="table-container">
         <div class="table-scroll">
           <table class="custom-table">
@@ -80,7 +80,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of Entity.p.MaterialStockOrderDetailsArray; let i = index">
+              <tr *ngFor="let item of Entity.p.MaterialPurchaseOrderDetailsArray; let i = index">
                 <td class="sticky-col">{{i + 1 }}</td>
                 <td>
                   {{ item.MaterialName }}

@@ -43,7 +43,7 @@ export class OrderApprovalComponent implements OnInit {
   newQuotedMaterial: OrderMaterialDetailProps = OrderMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  MaterialStockOrderStatus = MaterialRequisitionStatuses;
+  MaterialPurchaseOrderStatus = MaterialRequisitionStatuses;
   strCDT: string = ''
 
   errors: string = "";
@@ -88,10 +88,10 @@ export class OrderApprovalComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Order' : 'Edit Order';
       this.Entity = Order.GetCurrentInstance();
-      this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.InvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
-      this.selectedFileName = this.Entity.p.InvoicePath;
+      this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.MaterialPurchaseInvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
+      this.selectedFileName = this.Entity.p.MaterialPurchaseInvoicePath;
 
-      this.QuotationDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
+      this.QuotationDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate);
       this.appStateManage.StorageKey.removeItem('Editable');
 
     } else {
@@ -135,9 +135,9 @@ export class OrderApprovalComponent implements OnInit {
     let lstFTO: FileTransferObject[] = [];
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    this.Entity.p.MaterialStockOrderStatus = status;
-    this.Entity.p.MaterialStockOrderDetailsArray.map((data) => {
-      return data.MaterialOrderedDetailStatus = this.MaterialStockOrderStatus.Ordered;
+    this.Entity.p.MaterialPurchaseOrderStatus = status;
+    this.Entity.p.MaterialPurchaseOrderDetailsArray.map((data) => {
+      return data.MaterialPurchaseDetailStatus = this.MaterialPurchaseOrderStatus.Ordered;
     })
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
