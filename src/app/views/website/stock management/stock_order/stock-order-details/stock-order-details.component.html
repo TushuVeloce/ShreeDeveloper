@@ -125,9 +125,8 @@
             <b>Order Material List</b>
           </h5>
         </div>
-        <div *ngIf="Entity.p.MaterialPurchaseOrderStatus == MaterialOrderStatus.Ordered"
-          class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" style="display: flex; justify-content: end"
-          routerLinkActive="active">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
+          style="display: flex; justify-content: end" routerLinkActive="active">
           <nz-button nz-button class="btn1" (click)="openModal('OrderMaterial')">Add Material</nz-button>
         </div>
       </div>
@@ -246,17 +245,13 @@
       <form autocomplete="off">
         <div class="row" style="margin-top: 1rem;">
           <div class="col-6 mb-1">
-            <label for="MaterialQuotationDetailRef"><b>Material</b></label>
+            <label for="MaterialRef"><b>Material</b></label>
             <nz-select *ngIf="!ModalEditable" class="nzSelect-light" nzShowSearch nzAllowClear
-              [nzNotFoundContent]="noDataTpl" nzPlaceHolder="Select" [nzSize]="'large'"
-              name="MaterialQuotationDetailRef" required id="MaterialQuotationDetailRef"
-              [(ngModel)]="newOrderMaterial.MaterialQuotationDetailRef" (ngModelChange)="
-                onMaterialSelection(
-                  newOrderMaterial.MaterialQuotationDetailRef
-                )
-              ">
-              <nz-option *ngFor="let material of MaterialRequisitionList" [nzLabel]="material.MaterialName"
-                [nzValue]="material.MaterialQuotationDetailRef"></nz-option>
+              [nzNotFoundContent]="noDataTpl" nzPlaceHolder="Select" [nzSize]="'large'" name="MaterialRef" required
+              id="MaterialRef" [(ngModel)]="newOrderMaterial.MaterialRef" (ngModelChange)="
+                onMaterialSelection(newOrderMaterial.MaterialRef)">
+              <nz-option *ngFor="let material of MaterialRequisitionList" [nzLabel]="material.p.MaterialName"
+                [nzValue]="material.p.MaterialRef"></nz-option>
             </nz-select>
             <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control"
               [(ngModel)]="newOrderMaterial.MaterialName" readonly />
@@ -300,7 +295,7 @@
           </div>
           <div class="col-6 mb-1">
             <label>Rate</label>
-            <input type="number" name="Rate" readonly class="form-control" [(ngModel)]="newOrderMaterial.Rate"
+            <input type="number" name="Rate" class="form-control" [(ngModel)]="newOrderMaterial.Rate"
               #RateCtrl="ngModel" placeholder="Enter Rate" />
           </div>
           <div class="col-6 mb-1">

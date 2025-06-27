@@ -33,7 +33,7 @@ export class StockOrderDetailsComponent implements OnInit {
   InitialEntity: Order = null as any;
   SiteList: Site[] = [];
   VendorList: Vendor[] = [];
-  MaterialRequisitionList: OrderMaterialDetailProps[] = [];
+  MaterialRequisitionList: OrderMaterial[] = [];
   AllMaterialRequisitionList: OrderMaterial[] = [];
   OrderDate: string = '';
   CurrentDate: string = '';
@@ -134,7 +134,18 @@ export class StockOrderDetailsComponent implements OnInit {
   }
 
   getOrderedMaterialList = async () => {
-    this.MaterialRequisitionList = this.Entity.p.MaterialPurchaseOrderDetailsArray;
+    if (this.Entity.p.VendorRef <= 0) {
+      await this.uiUtils.showErrorToster('Vendor not Selected');
+      return;
+    }
+    if (this.Entity.p.SiteRef <= 0) {
+      await this.uiUtils.showErrorToster('Site not Selected');
+      return;
+    }
+    let lst = await OrderMaterial.FetchEntireListByCompanyVendorAndSiteRef(this.companyRef(), this.Entity.p.VendorRef, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MaterialRequisitionList = lst;
+    console.log(lst);
+    // this.filterMaterialList();
   }
 
   // filterMaterialList() {
@@ -156,16 +167,16 @@ export class StockOrderDetailsComponent implements OnInit {
   }
 
   onMaterialSelection = (MaterialRef: number) => {
-    const SingleRecord = this.MaterialRequisitionList.filter(data => data.MaterialRef == MaterialRef);
-    this.newOrderMaterial.UnitName = SingleRecord[0].UnitName
-    this.newOrderMaterial.QuotationOrderedQty = SingleRecord[0].QuotationOrderedQty
-    this.newOrderMaterial.MaterialName = SingleRecord[0].MaterialName
-    this.newOrderMaterial.MaterialQuotationDetailRef = SingleRecord[0].Ref
-    this.newOrderMaterial.TotalOrderedQty = SingleRecord[0].OrderedQty
-    this.newOrderMaterial.Rate = SingleRecord[0].Rate
-    this.newOrderMaterial.DiscountedRate = SingleRecord[0].DiscountedRate
-    this.newOrderMaterial.Gst = SingleRecord[0].Gst
-    this.TotalOrderedQty = SingleRecord[0].OrderedQty
+    const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.MaterialRef == MaterialRef);
+    this.newOrderMaterial.UnitName = SingleRecord[0].p.UnitName
+    this.newOrderMaterial.QuotationOrderedQty = SingleRecord[0].p.QuotationOrderedQty
+    this.newOrderMaterial.MaterialName = SingleRecord[0].p.MaterialName
+    this.newOrderMaterial.MaterialQuotationDetailRef = SingleRecord[0].p.Ref
+    this.newOrderMaterial.TotalOrderedQty = SingleRecord[0].p.OrderedQty
+    this.newOrderMaterial.Rate = SingleRecord[0].p.Rate
+    this.newOrderMaterial.DiscountedRate = SingleRecord[0].p.DiscountedRate
+    this.newOrderMaterial.Gst = SingleRecord[0].p.Gst
+    this.TotalOrderedQty = SingleRecord[0].p.OrderedQty
   }
 
   // Trigger file input when clicking the image

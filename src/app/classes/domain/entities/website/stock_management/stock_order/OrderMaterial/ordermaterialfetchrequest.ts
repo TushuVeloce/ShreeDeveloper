@@ -5,7 +5,7 @@ import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class OrderMaterialFetchRequest {
-  public static readonly FetchRequestType: string = "MaterialPurchaseOrderDetailsFetchRequest";
+  public static readonly FetchRequestType: string = "GetMaterialForPurchaseOrderFetchRequest";
   CompanyRefs: number[] = [];
   SiteManagementRefs: number[] = [];
   OrderMaterialRefs: number[] = [];
