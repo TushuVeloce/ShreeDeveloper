@@ -121,7 +121,7 @@
                   (click)="onEditClicked(Order)">
                   <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
                 </span>
-                <span style="margin-left: 9px;"
+                <!-- <span style="margin-left: 9px;"
                   *ngIf="!checkIsEnable(Order.p.MaterialStockOrderDetailsArray) || Order.p.MaterialStockOrderStatus == MaterialStockOrderStatus.Approved"
                   (click)="onDeleteClicked(Order)">
                   <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
@@ -135,7 +135,7 @@
                   *ngIf="checkIsEnable(Order.p.MaterialStockOrderDetailsArray) && Order.p.MaterialStockOrderStatus != MaterialStockOrderStatus.Approved">
                   <img src="/assets/icons/GreyDustbin.png" alt="Delete" title="Disable Delete" width="20px"
                     height="20px" />
-                </span>
+                </span> -->
               </td>
             </tr>
             <tr *ngIf="j === Order.p.MaterialStockOrderDetailsArray.length - 1 && !Entity.p.SiteRef">
@@ -146,6 +146,8 @@
       </tbody>
 
     </nz-table>
+
+    
   </div>
   <div class="fixed-pagination">
     <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"

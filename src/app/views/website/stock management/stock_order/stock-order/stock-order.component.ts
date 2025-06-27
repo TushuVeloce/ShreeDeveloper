@@ -33,6 +33,7 @@ export class StockOrderComponent implements OnInit {
 
   headers: string[] = ['Sr.No.', 'Site', 'Date', 'Vendor', 'Material', 'Unit', 'Requisition Quantity', 'Quotation Quantity', 'Ordered Quantity', 'Quotation Remaining Quantity', 'Requisition Remaining Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
   headerswithoutsite: string[] = ['Sr.No.', 'Date', 'Vendor', 'Material', 'Unit', 'Requisition Quantity', 'Quotation Quantity', 'Ordered Quantity', 'Quotation Remaining Quantity', 'Requisition Remaining Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
+
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
@@ -137,11 +138,26 @@ export class StockOrderComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
+  // checkIsEnable = (data: OrderMaterialDetailProps[]): boolean => {
+  // // console.log('data :', data);
+  //   // If ANY entry fails (QuotationOrderedQty <= OrderedQty), return false
+  //   let status = data.every(item => item.QuotationOrderedQty <= item.OrderedQty);
+  //   console.log('status :', status);
+  //   return status;
+  // };
+
   checkIsEnable = (data: OrderMaterialDetailProps[]): boolean => {
+    // Collect boolean values based on the condition
+    const booleanValues = data.map(item => item.QuotationOrderedQty <= item.TotalOrderedQty);
+    console.log('booleanValues :', booleanValues);
+
     // If ANY entry fails (QuotationOrderedQty <= OrderedQty), return false
-    let status = data.every(item => item.QuotationOrderedQty <= item.OrderedQty);
+    const status = booleanValues.every(value => value);
+    console.log('status :', status);
+
     return status;
   };
+
 
 
 

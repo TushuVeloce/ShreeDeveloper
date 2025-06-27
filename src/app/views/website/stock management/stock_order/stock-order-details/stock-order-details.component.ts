@@ -361,6 +361,13 @@ export class StockOrderDetailsComponent implements OnInit {
         )
       );
     }
+
+    if (this.Entity.p.MaterialStockOrderStatus == MaterialRequisitionStatuses.Ordered) {
+      this.Entity.p.MaterialStockOrderDetailsArray.map((data) => {
+        return data.MaterialOrderedDetailStatus = MaterialRequisitionStatuses.Ordered;
+      })
+    }
+
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
