@@ -31,7 +31,7 @@ export class LoginPageComponent implements OnInit {
 
   constructor(private router: Router, private platform: Platform, private servercommunicator: ServerCommunicatorService,
     private uiUtils: UIUtils, private activatedRoute: ActivatedRoute, private sessionValues: SessionValues,
-    private appStateManage: AppStateManageService,private companystatemanagement: CompanyStateManagement,) {
+    private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement,) {
 
     platform.ready().then(async () => {
       this.isIosPlatform = platform.is('ios');
@@ -60,14 +60,16 @@ export class LoginPageComponent implements OnInit {
     // req.SenderURL;
 
     const response = await this.servercommunicator.LoginUser(req);
+    console.log('response :', response);
     this.appStateManage.setEmployeeRef(response.LoginEmployeeRef)
     this.appStateManage.setLoginToken(response.LoginToken)
+    this.appStateManage.StorageKey.setItem("ValidMenuItems", JSON.stringify(response.ValidMenuItems));
     this.appStateManage.StorageKey.setItem("IsDefaultUser", response.IsDefault.toString())
     this.appStateManage.StorageKey.setItem("UserDisplayName", response.UserDisplayName)
     this.appStateManage.StorageKey.setItem('SelectedCompanyRef', response.LastSelectedCompanyRef.toString());
     this.appStateManage.StorageKey.setItem('companyName', response.CompanyName);
     this.appStateManage.StorageKey.setItem('LoginEmployeeRef', response.LoginEmployeeRef.toString());
-    this.companystatemanagement.setCompanyRef(response.LastSelectedCompanyRef,response.CompanyName)
+    this.companystatemanagement.setCompanyRef(response.LastSelectedCompanyRef, response.CompanyName)
 
     if (!response.Successful) {
       await this.uiUtils.showErrorMessage('Error', response.Message);
@@ -82,12 +84,12 @@ export class LoginPageComponent implements OnInit {
         await this.router.navigate(['/Create_Password']);
       } else {
         await this.router.navigate(['/homepage']);  // Navigate to web
-        this.appStateManage.triggerCompanyInit(); 
+        this.appStateManage.triggerCompanyInit();
       }
     }
   }
 
-    ForgetPassword = async () => {
+  ForgetPassword = async () => {
     let body = {
       EMailId: this.UserId,
     };
