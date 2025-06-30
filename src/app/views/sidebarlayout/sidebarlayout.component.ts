@@ -515,11 +515,11 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Material_Requisition',
         LogoPath: '/assets/icons/Office Duty_Time.png',
       },
-      {
-        Name: 'Quotation',
-        RouterLink: '/homepage/Website/Quotation',
-        LogoPath: '/assets/icons/Office Duty_Time.png',
-      },
+      // {
+      //   Name: 'Quotation',
+      //   RouterLink: '/homepage/Website/Quotation',
+      //   LogoPath: '/assets/icons/Office Duty_Time.png',
+      // },
       {
         Name: 'Stock Order',
         RouterLink: '/homepage/Website/Stock_Order',

@@ -26,9 +26,9 @@ export class InwardMaterialDetailProps {
   public MaterialName: string = '';
   public UnitRef: number = 0;
   public UnitName: string = '';
-  public OrderedQty: number = 0;
+  public PurchaseOrderQty: number = 0;
   public InwardQty: number = 0;
-  public RemainingQty: number = 0;
+  public PurchaseOrderRemainingQty: number = 0;
   public MaterialInwardRef: number = 0;
 
 

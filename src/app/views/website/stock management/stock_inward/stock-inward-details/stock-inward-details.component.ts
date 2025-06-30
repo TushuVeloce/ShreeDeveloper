@@ -43,6 +43,7 @@ export class StockInwardDetailsComponent implements OnInit {
   InitialTableRefs: number[] = [];
   shouldFilterDropdown = false; // 🔁 Used to toggle filtering after add
   SessionAddedRefs: number[] = [];
+  PurchaseOrderDate:string=''
 
   strCDT: string = ''
   today: string = new Date().toISOString().split('T')[0];
@@ -88,6 +89,7 @@ export class StockInwardDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Inward' : 'Edit Stock Inward';
       this.Entity = StockInward.GetCurrentInstance();
+      this.PurchaseOrderDate = this.Entity.p.PurchaseOrderDate
       this.appStateManage.StorageKey.removeItem('Editable');
       this.SessionAddedRefs = []; // ✅ Reset session-added materials
       this.shouldFilterDropdown = false;
@@ -97,7 +99,7 @@ export class StockInwardDetailsComponent implements OnInit {
       if (this.Entity.p.InwardDate != '') {
         this.Entity.p.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate)
       }
-      this.getMaterialListByCompanyRef(this.Entity.p.SiteRef)
+      this.getMaterialListByCompanyRef(this.Entity.p.SiteRef,this.Entity.p.VendorRef)
       this.getVendorDataByVendorRef(this.Entity.p.VendorRef)
     } else {
       this.Entity = StockInward.CreateNewInstance();
@@ -118,14 +120,13 @@ export class StockInwardDetailsComponent implements OnInit {
     this.SiteList = lst;
   }
 
-  getMaterialListByCompanyRef = async (SiteRef: number) => {
+  getMaterialListByCompanyRef = async (SiteRef: number, VendorRef:number) => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef,this.companyRef(),async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
-    this.MaterialListOriginal = lst;
+    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef,VendorRef,this.companyRef(),async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
     const allMatched = lst.every(item => item.p.RemainingQty == 0);
     this.isSaveDisabled = allMatched;
     if (!this.shouldFilterDropdown) {
@@ -146,8 +147,8 @@ export class StockInwardDetailsComponent implements OnInit {
     this.newInward.UnitRef = 0;
     this.newInward.UnitName = '';
     this.newInward.MaterialName = ''
-    this.newInward.OrderedQty = 0
-    this.newInward.RemainingQty = 0
+    this.newInward.PurchaseOrderQty = 0
+    this.newInward.PurchaseOrderRemainingQty = 0
     this.newInward.MaterialStockOrderDetailsRef = 0
     if (materialref <= 0) {
       await this.uiUtils.showErrorToster('Material not Selected');
@@ -158,10 +159,11 @@ export class StockInwardDetailsComponent implements OnInit {
     if (UnitData) {
       this.newInward.UnitRef = UnitData.p.UnitRef;
       this.newInward.UnitName = UnitData.p.UnitName;
+      this.newInward.MaterialRef = UnitData.p.MaterialRef
       this.newInward.MaterialName = UnitData.p.MaterialName
-      this.newInward.OrderedQty = UnitData.p.OrderedQty
+      this.newInward.PurchaseOrderQty = UnitData.p.OrderQty
       this.newInward.MaterialStockOrderDetailsRef = UnitData.p.Ref
-      this.newInward.RemainingQty = UnitData.p.RemainingQty 
+      this.newInward.PurchaseOrderRemainingQty = UnitData.p.RemainingQty 
       this.NewRemainingQty = UnitData.p.RemainingQty 
       // if (UnitData.p.TotalInwardQty == 0) {
       //   this.newInward.RemainingQty = this.newInward.OrderedQty - this.newInward.InwardQty
@@ -304,7 +306,7 @@ export class StockInwardDetailsComponent implements OnInit {
       return;
     }
 
-    if (this.newInward.InwardQty > this.newInward.RemainingQty) {
+    if (this.newInward.InwardQty > this.newInward.PurchaseOrderRemainingQty) {
       await this.uiUtils.showErrorMessage('Error', 'Inward Quantity cannot be more than Remaining Quantity');
       return;
     }
@@ -317,7 +319,7 @@ export class StockInwardDetailsComponent implements OnInit {
       this.ismaterialModalOpen = false;
     } else {
       this.newInward.MaterialInwardRef = this.Entity.p.Ref;
-      this.newInward.RemainingQty = this.NewRemainingQty;
+      this.newInward.PurchaseOrderRemainingQty = this.NewRemainingQty;
       this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
 
       // ✅ Track fresh additions only
@@ -327,7 +329,6 @@ export class StockInwardDetailsComponent implements OnInit {
 
       this.shouldFilterDropdown = true;
       this.filterMaterialList();
-
       await this.uiUtils.showSuccessToster('Material added successfully');
     }
 
@@ -347,7 +348,11 @@ export class StockInwardDetailsComponent implements OnInit {
   async removeMaterial(index: number) {
     const removedItem = this.Entity.p.MaterialInwardDetailsArray[index];
     const removedRef = removedItem.MaterialRef ;
-
+    const Ref = removedItem.Ref
+    if(Ref !==0){
+       this.uiUtils.showWarningToster('This record can not be Delete');
+       return
+    }
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong><br/>Are you sure you want to DELETE this material?`,
@@ -368,12 +373,12 @@ export class StockInwardDetailsComponent implements OnInit {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.PurchaseOrderDate)
+    this.Entity.p.PurchaseOrderDate = this.PurchaseOrderDate 
     this.Entity.p.InwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.InwardDate)
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
-
+    // return
     if (this.InvoiceFile) {
       lstFTO.push(
         FileTransferObject.FromFile(

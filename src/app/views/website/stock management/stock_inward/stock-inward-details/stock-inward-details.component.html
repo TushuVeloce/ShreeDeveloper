@@ -29,24 +29,20 @@
     <form autocomplete="off" #requisitionForm="ngForm">
       <div class="row">
         <div class="col-md-4" style="margin-top: 1rem">
-          <label>Site Name</label>
-          <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzAllowClear
-            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
-            required (ngModelChange)="getMaterialListByCompanyRef(Entity.p.SiteRef)">
-            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
-          </nz-select>
+          <label><b>Site Name</b></label>
+          <input type="text" [(ngModel)]="Entity.p.SiteName" name="SiteName" class="form-control" id="SiteName"
+            placeholder="Site Name" readonly/>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Ordered Date</label>
           <input type="date" name="PurchaseOrderDate" class="form-control" id="PurchaseOrderDate" [(ngModel)]="Entity.p.PurchaseOrderDate"
-            #PurchaseOrderDateCtrl="ngModel" required (blur)="PurchaseOrderDateCtrl.control.markAsTouched()"
-            placeholder="Enter Site Name" readonly />
-          <div *ngIf="
+            placeholder="Ordered Date" readonly />
+          <!-- <div *ngIf="
               PurchaseOrderDateCtrl.invalid &&
               (PurchaseOrderDateCtrl.touched || PurchaseOrderDateCtrl.dirty)
             ">
             <span class="validation-text" *ngIf="PurchaseOrderDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
-          </div>
+          </div> -->
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Inward Date</label>
@@ -142,7 +138,7 @@
             <b>Inwarded Material List</b>
           </h5>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container" *ngIf="!isSaveDisabled"
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
           style="display: flex; justify-content: end" routerLinkActive="active">
           <nz-button nz-button class="btn1" (click)="openModal('material')">Add Material</nz-button>
         </div>
@@ -173,9 +169,9 @@
                 <td Class="tbldata">{{ i + 1 }}</td>
                 <td Class="tbldata">{{ material.MaterialName }}</td>
                 <td Class="tbldata">{{ material.UnitName }}</td>
-                <td Class="tbldata">{{ material.OrderedQty }}</td>
+                <td Class="tbldata">{{ material.PurchaseOrderQty }}</td>
                 <td Class="tbldata">{{ material.InwardQty }}</td>
-                <td Class="tbldata">{{ material.RemainingQty }}</td>
+                <td Class="tbldata">{{ material.PurchaseOrderRemainingQty}}</td>
                 <td class="tbldata">
                   <!-- <span style="margin-left: 9px" (click)="editMaterial(i)">
                     <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
@@ -200,7 +196,8 @@
           margin-top: 2rem;
         ">
         <div>
-          <button  type="button" class="btn" (click)="SaveStockInward()" [disabled]="isSaveDisabled">
+          <!-- <button  type="button" class="btn" (click)="SaveStockInward()" [disabled]="isSaveDisabled"> -->
+             <button  type="button" class="btn" (click)="SaveStockInward()">
             Save
           </button>
         </div>
@@ -243,7 +240,7 @@
           </div>
           <div class="col-md-6" style="margin-top: 1rem">
             <label>Ordered Quantity</label>
-            <input type="number" name="OrderedQty" class="form-control" [(ngModel)]="newInward.OrderedQty" required
+            <input type="number" name="PurchaseOrderQty" class="form-control" [(ngModel)]="newInward.PurchaseOrderQty" required
               placeholder="Ordered Quantity" (click)="selectAllValue($event)" />
           </div>
           <div class="col-md-6" style="margin-top: 1rem">
@@ -252,7 +249,7 @@
               placeholder="Inward Quantity" (click)="selectAllValue($event)" (ngModelChange)="
                 CalculateRemainingQty(
                   newInward.InwardQty,
-                  newInward.RemainingQty
+                  newInward.PurchaseOrderRemainingQty
                 )
               " />
           </div>

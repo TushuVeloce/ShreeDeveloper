@@ -14,7 +14,7 @@ import { MaterialFromOrderFetchRequest } from "./materialfromorderfetchrequest";
 
 
 export class MaterialFromOrderProps {
-  public readonly Db_Table_Name = "MaterialStockOrderDetails";
+  public readonly Db_Table_Name = "MaterialPurchaseOrderDetails";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
@@ -26,8 +26,9 @@ export class MaterialFromOrderProps {
   public MaterialName: string = '';
   public UnitRef: number = 0;
   public readonly UnitName: string = '';
-  public OrderedQty: number = 0
+  public OrderQty: number = 0
   public RemainingQty : number = 0
+  public IsMaterialExist : number = 0
   public CompanyRef: number = 0;
   public CompanyName: string = '';
 
@@ -44,7 +45,7 @@ export class MaterialFromOrderProps {
 }
 
 export class MaterialFromOrder implements IPersistable<MaterialFromOrder> {
-  public static readonly Db_Table_Name: string = 'MaterialStockOrderDetails';
+  public static readonly Db_Table_Name: string = 'MaterialPurchaseOrderDetails';
 
   private constructor(public readonly p: MaterialFromOrderProps, public readonly AllowEdit: boolean) {
 
@@ -160,7 +161,7 @@ export class MaterialFromOrder implements IPersistable<MaterialFromOrder> {
   public static async FetchInstance(ref: number,companyRef:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MaterialFromOrderFetchRequest();
     req.MaterialRefs.push(ref);
-    req.CompanyRefs.push(companyRef);
+    req.CompanyRef = companyRef
 
     let tdResponse = await MaterialFromOrder.FetchTransportData(req, errorHandler) as TransportData;
     return MaterialFromOrder.SingleInstanceFromTransportData(tdResponse);
@@ -179,15 +180,16 @@ export class MaterialFromOrder implements IPersistable<MaterialFromOrder> {
 
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MaterialFromOrderFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
+    req.CompanyRef = CompanyRef
     let tdResponse = await MaterialFromOrder.FetchTransportData(req, errorHandler) as TransportData;
     return MaterialFromOrder.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchOrderedMaterials(SiteRef:number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+   public static async FetchOrderedMaterials(SiteRef:number,VendorRef:number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MaterialFromOrderFetchRequest();
-     req.CompanyRefs.push(CompanyRef)
-     req.SiteRefs.push(SiteRef)
+     req.CompanyRef = CompanyRef
+     req.SiteRef = SiteRef
+     req.VendorRef = VendorRef
     let tdResponse = await MaterialFromOrder.FetchTransportData(req, errorHandler) as TransportData;
     return MaterialFromOrder.ListFromTransportData(tdResponse);
   }

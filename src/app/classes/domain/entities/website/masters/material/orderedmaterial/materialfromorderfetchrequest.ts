@@ -8,9 +8,10 @@ export class MaterialFromOrderFetchRequest
 {
     public static readonly FetchRequestType: string = "GetMaterialFromMaterialStockOrderedFetchRequest";
 
-    CompanyRefs: number[] = [];
+    CompanyRef: number=0
     MaterialRefs: number[] = [];
-    SiteRefs:number[]=[]
+    SiteRef:number=0
+    VendorRef :number=0
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
