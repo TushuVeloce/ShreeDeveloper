@@ -35,7 +35,7 @@ export class StockInwardProps {
   public RemainingQty: number = 0
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public InvoicePath: string = "";
+  public MaterialInwardInvoiceFile: string = "";
   public MaterialInwardDetailsArray: InwardMaterialDetailProps[] = [];
 
 

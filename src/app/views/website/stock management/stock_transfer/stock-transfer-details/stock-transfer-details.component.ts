@@ -105,7 +105,7 @@ getMaterialListBySiteRef = async (SiteRef: number) => {
       return;
     }
     // let lst = await MaterialFromOrder.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    const UnitData = this.MaterialList.find((data) => data.p.MaterialRequisitionDetailsRef == materialref)
+    const UnitData = this.MaterialList.find((data) => data.p.MaterialRef == materialref)
     if (UnitData) {
       this.Entity.p.UnitRef = UnitData.p.UnitRef;
       this.Entity.p.UnitName = UnitData.p.UnitName;

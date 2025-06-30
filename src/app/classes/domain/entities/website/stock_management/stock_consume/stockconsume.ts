@@ -24,7 +24,7 @@ export class StockConsumeProps {
   public SiteRef: number = 0;
   public readonly SiteName: string = '';
   public ConsumptionDate: string = '';
-  public MaterialRequisitionDetailsRef: number = 0;
+  public MaterialRef: number = 0;
   public MaterialName: string = '';
   public UnitRef: number = 0;
   public UnitName: string = '';

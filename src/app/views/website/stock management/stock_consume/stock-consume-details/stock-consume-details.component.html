@@ -32,11 +32,11 @@
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
-          <label for="MaterialRequisitionDetailsRef"><b>Material Name</b></label>
+          <label for="MaterialRef"><b>Material Name</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="MaterialRequisitionDetailsRef" name="MaterialRequisitionDetailsRef" [nzSize]="'large'"
-            [(ngModel)]="Entity.p.MaterialRequisitionDetailsRef" (ngModelChange)="getUnitByMaterialRef(Entity.p.MaterialRequisitionDetailsRef)">
-            <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.MaterialRequisitionDetailsRef"
+            nzPlaceHolder="Select" id="MaterialRef" name="MaterialRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.MaterialRef" (ngModelChange)="getUnitByMaterialRef(Entity.p.MaterialRef)">
+            <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.MaterialRef"
               [nzLabel]="material.p.MaterialName"></nz-option>
           </nz-select>
         </div>

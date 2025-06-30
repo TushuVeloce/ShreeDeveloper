@@ -235,7 +235,7 @@ export class StockInwardDetailsComponent implements OnInit {
         const isImage = file.type.startsWith('image/');
         if (isPdf || isImage) {
           this.imagePostViewUrl = URL.createObjectURL(file);
-          this.Entity.p.InvoicePath = '';
+          this.Entity.p.MaterialInwardInvoiceFile = '';
         } else {
           this.uiUtils.showWarningToster('Only PDF or image files are supported.')
         }
@@ -377,18 +377,17 @@ export class StockInwardDetailsComponent implements OnInit {
     this.Entity.p.InwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.InwardDate)
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
     // return
     if (this.InvoiceFile) {
       lstFTO.push(
         FileTransferObject.FromFile(
-          "InvoiceFile",
+          "MaterialInwardInvoiceFile",
           this.InvoiceFile,
           this.InvoiceFile.name
         )
       );
     }
-
+    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
     if (!tr.Successful) {
       this.isSaveDisabled = false;

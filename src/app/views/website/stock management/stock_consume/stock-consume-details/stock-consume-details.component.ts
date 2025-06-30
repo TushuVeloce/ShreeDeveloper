@@ -114,8 +114,8 @@ export class StockConsumeDetailsComponent implements OnInit {
 
   getMaterialListBySiteRef = async (SiteRef: number) => {
     this.MaterialList = [];
-    // this.Entity.p.MaterialRequisitionDetailsRef =0
-    // this.getUnitByMaterialRef(this.Entity.p.MaterialRequisitionDetailsRef)
+    // this.Entity.p.MaterialRef =0
+    // this.getUnitByMaterialRef(this.Entity.p.MaterialRef)
     if (this.companyRef() <= 0 && SiteRef < 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -129,8 +129,8 @@ export class StockConsumeDetailsComponent implements OnInit {
     this.MaterialList = lst;
     // const uniqueMap = new Map();
     // lst.forEach((item) => {
-    //   if (!uniqueMap.has(item.p.MaterialRequisitionDetailsRef)) {
-    //     uniqueMap.set(item.p.MaterialRequisitionDetailsRef, item);
+    //   if (!uniqueMap.has(item.p.MaterialRef)) {
+    //     uniqueMap.set(item.p.MaterialRef, item);
     //   }
     // });
     // this.MaterialList = Array.from(uniqueMap.values());
@@ -138,7 +138,7 @@ export class StockConsumeDetailsComponent implements OnInit {
   };
 
   onSiteChange = () => {
-    this.Entity.p.MaterialRequisitionDetailsRef = 0;
+    this.Entity.p.MaterialRef = 0;
   };
 
   getStageListByCompanyRef = async () => {
@@ -164,7 +164,7 @@ export class StockConsumeDetailsComponent implements OnInit {
     }
     // let lst = await MaterialFromOrder.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     const UnitData = this.MaterialList.find(
-      (data) => data.p.MaterialRequisitionDetailsRef == materialref
+      (data) => data.p.MaterialRef == materialref
     );
     if (UnitData) {
       this.Entity.p.UnitRef = UnitData.p.UnitRef;
