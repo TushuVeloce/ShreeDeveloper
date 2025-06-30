@@ -51,7 +51,6 @@ export class StockTransferDetailsComponent  implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Transfer' : 'Edit Stock Transfer';
       this.Entity = StockTransfer.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable')
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.Entity.p.Date != '') {
         this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
       }
@@ -115,7 +114,9 @@ getMaterialListBySiteRef = async (SiteRef: number) => {
   }
 
     SiteValidation = async() =>{
-    if(this.Entity.p.FromSiteRef == this.Entity.p.ToSiteRef){
+      const FromSite = this.Entity.p.FromSiteRef
+      const ToSite = this.Entity.p.ToSiteRef
+    if(FromSite == ToSite){
        await this.uiUtils.showWarningToster("From Site and To Site can not be same");
          this.Entity.p.FromSiteRef = 0
          this.Entity.p.ToSiteRef = 0
@@ -126,6 +127,8 @@ getMaterialListBySiteRef = async (SiteRef: number) => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
+    this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
     console.log('entitiesToSave :', entitiesToSave);
