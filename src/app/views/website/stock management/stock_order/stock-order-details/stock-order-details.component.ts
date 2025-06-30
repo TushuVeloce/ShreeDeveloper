@@ -28,7 +28,7 @@ export class StockOrderDetailsComponent implements OnInit {
   Entity: Order = Order.CreateNewInstance();
   IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
-  DetailsFormTitle: 'New Order' | 'Edit Order' = 'New Order';
+  DetailsFormTitle: 'New Purchase Order' | 'Edit Purchase Order' = 'New Purchase Order';
   IsDropdownDisabled: boolean = false;
   InitialEntity: Order = null as any;
   SiteList: Site[] = [];
@@ -91,7 +91,7 @@ export class StockOrderDetailsComponent implements OnInit {
     await this.getSiteListByCompanyRef();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Order' : 'Edit Order';
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Purchase Order' : 'Edit Purchase Order';
       this.Entity = Order.GetCurrentInstance();
       this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.MaterialPurchaseInvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
       this.selectedFileName = this.Entity.p.MaterialPurchaseInvoicePath;

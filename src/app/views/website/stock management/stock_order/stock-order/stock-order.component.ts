@@ -138,12 +138,6 @@ export class StockOrderComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
-  // checkIsEnable = (data: OrderMaterialDetailProps[]): boolean => {
-  //   // If ANY entry fails (QuotationOrderedQty <= OrderedQty), return false
-  //   let status = data.every(item => item.QuotationOrderedQty <= item.OrderedQty);
-  //   return status;
-  // };
-
   checkIsEnable = (data: OrderMaterialDetailProps[]): boolean => {
     // Collect boolean values based on the condition
     const booleanValues = data.map(item => item.RequisitionQty <= item.TotalOrderedQty);
@@ -152,9 +146,6 @@ export class StockOrderComponent implements OnInit {
     const status = booleanValues.every(value => value);
     return status;
   };
-
-
-
 
   navigateToPrint = async (item: Order) => {
     this.router.navigate(['/homepage/Website/Stock_Order_Print'], {
@@ -167,7 +158,7 @@ export class StockOrderComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.router.navigate(['/homepage/Website/Add_Stock_Order']);
+    this.router.navigate(['/homepage/Website/Stock_Order_Details']);
   }
 
   NavigateOrderstatus = (item: Order) => {
