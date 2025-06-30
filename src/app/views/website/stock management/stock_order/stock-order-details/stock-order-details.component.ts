@@ -169,6 +169,7 @@ export class StockOrderDetailsComponent implements OnInit {
     this.newOrderMaterial.RequisitionQty = SingleRecord[0].p.RequisitionQty
     this.newOrderMaterial.MaterialQuotationDetailRef = SingleRecord[0].p.Ref
     this.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty
+    this.newOrderMaterial.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty;
   }
 
   // Trigger file input when clicking the image
@@ -389,15 +390,17 @@ export class StockOrderDetailsComponent implements OnInit {
   };
 
   CalculateNetAmountAndTotalAmount = async () => {
-
+    this.newOrderMaterial.TotalOrderedQty = 0;
     this.newOrderMaterial.TotalOrderedQty = this.TotalOrderedQty + this.newOrderMaterial.OrderedQty;
 
     if (this.newOrderMaterial.TotalOrderedQty > this.newOrderMaterial.RequisitionQty) {
       this.newOrderMaterial.RequisitionRemainingQty = 0;
-      this.newOrderMaterial.TotalOrderedQty = this.TotalOrderedQty;
+      this.newOrderMaterial.ExtraOrderedQty = this.newOrderMaterial.TotalOrderedQty - this.newOrderMaterial.RequisitionQty;
+    } else {
+      this.newOrderMaterial.RequisitionRemainingQty = this.newOrderMaterial.RequisitionQty - this.newOrderMaterial.TotalOrderedQty;
+      this.newOrderMaterial.ExtraOrderedQty = 0;
     }
 
-    this.newOrderMaterial.RequisitionRemainingQty = this.newOrderMaterial.RequisitionQty - this.newOrderMaterial.TotalOrderedQty;
 
 
     if (this.newOrderMaterial.DiscountedRate == 0) {
