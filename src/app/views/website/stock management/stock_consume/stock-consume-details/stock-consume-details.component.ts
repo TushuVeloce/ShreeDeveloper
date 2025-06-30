@@ -9,6 +9,7 @@ import { Material } from 'src/app/classes/domain/entities/website/masters/materi
 import { MaterialFromOrder } from 'src/app/classes/domain/entities/website/masters/material/orderedmaterial/materialfromorder';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
+import { MaterialCurrentStock } from 'src/app/classes/domain/entities/website/stock_management/Material-Current-Stock/materialcurrentstock';
 import { StockConsume } from 'src/app/classes/domain/entities/website/stock_management/stock_consume/stockconsume';
 import { InwardMaterial } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/inwardmaterial/inwardmaterial';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
@@ -71,7 +72,9 @@ export class StockConsumeDetailsComponent implements OnInit {
           this.Entity.p.ConsumptionDate
         );
       }
-      this.getMaterialListBySiteRef(this.Entity.p.SiteRef);
+      if(this.Entity.p.SiteRef > 0){
+        this.getMaterialListBySiteRef(this.Entity.p.SiteRef);
+      }
     } else {
       this.Entity = StockConsume.CreateNewInstance();
       StockConsume.SetCurrentInstance(this.Entity);
@@ -108,17 +111,14 @@ export class StockConsumeDetailsComponent implements OnInit {
 
   getMaterialListBySiteRef = async (SiteRef: number) => {
     this.MaterialList = [];
-    // this.Entity.p.MaterialRef =0
-    // this.getUnitByMaterialRef(this.Entity.p.MaterialRef)
-    if (this.companyRef() <= 0 && SiteRef < 0) {
+    if(SiteRef <= 0){
+      return;
+    }
+    if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await StockConsume.FetchMaterialListBySiteRef(
-      SiteRef,
-      this.companyRef(),
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
+    let lst = await StockConsume.FetchMaterialListBySiteRef(SiteRef,this.companyRef(),async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
     this.MaterialList = lst;
     // const uniqueMap = new Map();
@@ -149,21 +149,25 @@ export class StockConsumeDetailsComponent implements OnInit {
     this.StageList = lst;
   };
 
-  getUnitByMaterialRef = async (materialref: number) => {
+  getUnitByMaterialRef = async (siteref:number,materialref: number) => {
     this.Entity.p.UnitRef = 0;
     this.Entity.p.UnitName = '';
     this.Entity.p.CurrentQuantity = 0;
+    if(siteref < 0){
+       return;
+    }
     if (materialref <= 0) {
       return;
     }
-    // let lst = await MaterialFromOrder.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    const UnitData = this.MaterialList.find(
-      (data) => data.p.MaterialRef == materialref
-    );
-    if (UnitData) {
-      this.Entity.p.UnitRef = UnitData.p.UnitRef;
-      this.Entity.p.UnitName = UnitData.p.UnitName;
-      this.Entity.p.CurrentQuantity = UnitData.p.CurrentQty;
+    let lst = await MaterialCurrentStock.FetchMaterialData(siteref,materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    // const UnitData = this.MaterialList.find(
+    //   (data) => data.p.MaterialRef == materialref
+    // );
+    if (lst) {
+      this.Entity.p.UnitRef = lst[0].p.UnitRef;
+      this.Entity.p.UnitName = lst[0].p.UnitName;
+      this.Entity.p.CurrentQuantity = lst[0].p.CurrentQuantity;
       this.CalculateRemainingQty();
     }
   };
@@ -200,7 +204,7 @@ export class StockConsumeDetailsComponent implements OnInit {
           'Stock Consume saved successfully'
         );
         this.Entity = StockConsume.CreateNewInstance();
-        // this.resetAllControls();
+        this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster(
           'Stock Consume Updated successfully'
