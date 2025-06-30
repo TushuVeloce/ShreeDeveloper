@@ -82,7 +82,9 @@ export class StockTransferDetailsComponent  implements OnInit {
 
 getMaterialListBySiteRef = async (SiteRef: number) => {
     this.Entity.p.MaterialRef = 0
-    this.getUnitByMaterialRef( this.Entity.p.MaterialRef )
+    if(this.Entity.p.MaterialRef > 0){
+      this.getUnitByMaterialRef( this.Entity.p.MaterialRef )
+    }
     this.MaterialList = [];
     if (this.companyRef() <= 0 && SiteRef < 0) {
       await this.uiUtils.showErrorToster('Company not Selected');

@@ -66,9 +66,6 @@ export class StockConsumeDetailsComponent implements OnInit {
         : 'Edit Stock Consumption';
       this.Entity = StockConsume.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
-      this.Entity.p.UpdatedBy = Number(
-        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
-      );
       if (this.Entity.p.ConsumptionDate != '') {
         this.Entity.p.ConsumptionDate = this.dtu.ConvertStringDateToShortFormat(
           this.Entity.p.ConsumptionDate
@@ -79,9 +76,6 @@ export class StockConsumeDetailsComponent implements OnInit {
       this.Entity = StockConsume.CreateNewInstance();
       StockConsume.SetCurrentInstance(this.Entity);
       this.Entity.p.CreatedBy = Number(
-        this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
-      );
-      this.Entity.p.UpdatedBy = Number(
         this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
       );
     }
@@ -188,6 +182,8 @@ export class StockConsumeDetailsComponent implements OnInit {
     this.Entity.p.ConsumptionDate = this.dtu.ConvertStringDateToFullFormat(
       this.Entity.p.ConsumptionDate
     );
+    this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
