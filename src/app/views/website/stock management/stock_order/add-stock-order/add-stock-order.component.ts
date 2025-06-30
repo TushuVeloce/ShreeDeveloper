@@ -168,7 +168,6 @@ export class AddStockOrderComponent implements OnInit {
   onMaterialSelection = (MaterialRef: number) => {
     const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.MaterialRef == MaterialRef);
     this.newOrderMaterial.UnitName = SingleRecord[0].p.UnitName
-    this.newOrderMaterial.QuotationOrderedQty = SingleRecord[0].p.OrderedQty
     this.newOrderMaterial.MaterialName = SingleRecord[0].p.MaterialName
     this.newOrderMaterial.MaterialPurchaseOrderRef = SingleRecord[0].p.Ref
     this.newOrderMaterial.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty
@@ -328,7 +327,6 @@ export class AddStockOrderComponent implements OnInit {
     this.newOrderMaterial = { ...this.Entity.p.MaterialPurchaseOrderDetailsArray[index] }
     if (!this.IsNewEntity) {
       this.newOrderMaterial.TotalOrderedQty = 0;
-      this.newOrderMaterial.QuotationRemainingQty = 0;
     }
     this.editingIndex = index;
     this.ModalEditable = true;
@@ -388,25 +386,25 @@ export class AddStockOrderComponent implements OnInit {
   };
 
   CalculateNetAmountAndTotalAmount = async () => {
-    if (this.newOrderMaterial.OrderedQty > this.newOrderMaterial.QuotationOrderedQty) {
-      this.newOrderMaterial.ExtraOrderedQty = (this.newOrderMaterial.OrderedQty + this.newOrderMaterial.TotalOrderedQty) - this.newOrderMaterial.QuotationOrderedQty;
-      // this.uiUtils.showWarningToster('Ordered Qty is greater then Required Qty');
-    } else {
-      this.newOrderMaterial.ExtraOrderedQty = 0;
-    }
+    // if (this.newOrderMaterial.OrderedQty > this.newOrderMaterial.QuotationOrderedQty) {
+    //   this.newOrderMaterial.ExtraOrderedQty = (this.newOrderMaterial.OrderedQty + this.newOrderMaterial.TotalOrderedQty) - this.newOrderMaterial.QuotationOrderedQty;
+    //   // this.uiUtils.showWarningToster('Ordered Qty is greater then Required Qty');
+    // } else {
+    //   this.newOrderMaterial.ExtraOrderedQty = 0;
+    // }
 
-    if (this.newOrderMaterial.OrderedQty < this.newOrderMaterial.QuotationOrderedQty) {
-      this.newOrderMaterial.QuotationRemainingQty = this.newOrderMaterial.QuotationOrderedQty - (this.newOrderMaterial.OrderedQty + this.newOrderMaterial.TotalOrderedQty);
-    } else {
-      this.newOrderMaterial.QuotationRemainingQty = 0;
-    }
-    if (this.newOrderMaterial.DiscountedRate == 0) {
-      this.newOrderMaterial.NetAmount = (this.newOrderMaterial.Rate * this.newOrderMaterial.OrderedQty);
-    } else {
-      this.newOrderMaterial.NetAmount = (this.newOrderMaterial.DiscountedRate * this.newOrderMaterial.OrderedQty);
-    }
-    let GstAmount = (this.newOrderMaterial.NetAmount / 100) * this.newOrderMaterial.Gst;
-    this.newOrderMaterial.TotalAmount = this.newOrderMaterial.NetAmount + GstAmount + this.newOrderMaterial.DeliveryCharges;
+    // if (this.newOrderMaterial.OrderedQty < this.newOrderMaterial.QuotationOrderedQty) {
+    //   this.newOrderMaterial.QuotationRemainingQty = this.newOrderMaterial.QuotationOrderedQty - (this.newOrderMaterial.OrderedQty + this.newOrderMaterial.TotalOrderedQty);
+    // } else {
+    //   this.newOrderMaterial.QuotationRemainingQty = 0;
+    // }
+    // if (this.newOrderMaterial.DiscountedRate == 0) {
+    //   this.newOrderMaterial.NetAmount = (this.newOrderMaterial.Rate * this.newOrderMaterial.OrderedQty);
+    // } else {
+    //   this.newOrderMaterial.NetAmount = (this.newOrderMaterial.DiscountedRate * this.newOrderMaterial.OrderedQty);
+    // }
+    // let GstAmount = (this.newOrderMaterial.NetAmount / 100) * this.newOrderMaterial.Gst;
+    // this.newOrderMaterial.TotalAmount = this.newOrderMaterial.NetAmount + GstAmount + this.newOrderMaterial.DeliveryCharges;
   }
 
   selectAllValue(event: MouseEvent): void {

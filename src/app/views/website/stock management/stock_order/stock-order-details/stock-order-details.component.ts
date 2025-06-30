@@ -39,7 +39,7 @@ export class StockOrderDetailsComponent implements OnInit {
   CurrentDate: string = '';
   ModalEditable: boolean = false;
   ExpectedDeliveryDate: string = '';
-  OrderMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Requisition Quantity', 'Quotation Quantity', 'Ordered Quantity', 'Quotation Remaining Quantity', 'Requisition Remaining Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount', 'Action'];
+  OrderMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Requisition Quantity', 'Ordered Quantity', 'Requisition Remaining Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount', 'Action'];
   isOrderMaterialModalOpen: boolean = false;
   newOrderMaterial: OrderMaterialDetailProps = OrderMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
@@ -107,7 +107,6 @@ export class StockOrderDetailsComponent implements OnInit {
       this.OrderDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
       this.CurrentDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
     }
-    console.log('this.Entity :', this.Entity);
     this.InitialEntity = Object.assign(Order.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Order;
   }
 
@@ -142,18 +141,15 @@ export class StockOrderDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Site not Selected');
       return;
     }
-    let lst = await OrderMaterial.FetchEntireListByCompanyVendorAndSiteRef(this.companyRef(), this.Entity.p.VendorRef, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MaterialRequisitionList = lst;
-    console.log(lst);
-    // this.filterMaterialList();
+    let lst = await OrderMaterial.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    this.AllMaterialRequisitionList = lst;
+    this.filterMaterialList();
   }
 
-  // filterMaterialList() {
-  //   const usedRefs = this.Entity.p.MaterialPurchaseOrderDetailsArray.map(item => item.MaterialRef );
-  //   this.MaterialRequisitionList = this.AllMaterialRequisitionList.filter(
-  //     material => !usedRefs.includes(material.p.Ref)
-  //   );
-  // }
+  filterMaterialList() {
+    this.MaterialRequisitionList = this.AllMaterialRequisitionList.filter(material => material.p.IsRequisitionMaterial == 1)
+  }
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
@@ -169,14 +165,10 @@ export class StockOrderDetailsComponent implements OnInit {
   onMaterialSelection = (MaterialRef: number) => {
     const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.MaterialRef == MaterialRef);
     this.newOrderMaterial.UnitName = SingleRecord[0].p.UnitName
-    this.newOrderMaterial.QuotationOrderedQty = SingleRecord[0].p.QuotationOrderedQty
     this.newOrderMaterial.MaterialName = SingleRecord[0].p.MaterialName
+    this.newOrderMaterial.RequisitionQty = SingleRecord[0].p.RequisitionQty
     this.newOrderMaterial.MaterialQuotationDetailRef = SingleRecord[0].p.Ref
-    this.newOrderMaterial.TotalOrderedQty = SingleRecord[0].p.OrderedQty
-    this.newOrderMaterial.Rate = SingleRecord[0].p.Rate
-    this.newOrderMaterial.DiscountedRate = SingleRecord[0].p.DiscountedRate
-    this.newOrderMaterial.Gst = SingleRecord[0].p.Gst
-    this.TotalOrderedQty = SingleRecord[0].p.OrderedQty
+    this.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty
   }
 
   // Trigger file input when clicking the image
@@ -333,7 +325,6 @@ export class StockOrderDetailsComponent implements OnInit {
     this.newOrderMaterial = { ...this.Entity.p.MaterialPurchaseOrderDetailsArray[index] }
     if (!this.IsNewEntity) {
       this.newOrderMaterial.TotalOrderedQty = 0;
-      this.newOrderMaterial.QuotationRemainingQty = 0;
     }
     this.editingIndex = index;
     this.ModalEditable = true;
@@ -401,16 +392,12 @@ export class StockOrderDetailsComponent implements OnInit {
 
     this.newOrderMaterial.TotalOrderedQty = this.TotalOrderedQty + this.newOrderMaterial.OrderedQty;
 
-    if (this.newOrderMaterial.TotalOrderedQty > this.newOrderMaterial.QuotationOrderedQty) {
-      this.newOrderMaterial.OrderedQty = 0;
-      this.newOrderMaterial.QuotationRemainingQty = 0;
+    if (this.newOrderMaterial.TotalOrderedQty > this.newOrderMaterial.RequisitionQty) {
+      this.newOrderMaterial.RequisitionRemainingQty = 0;
       this.newOrderMaterial.TotalOrderedQty = this.TotalOrderedQty;
-      this.newOrderMaterial.NetAmount = 0;
-      this.newOrderMaterial.TotalAmount = 0;
-      return this.uiUtils.showWarningToster('Ordered Qty should be less then or equal to Required Qty');
     }
 
-    this.newOrderMaterial.QuotationRemainingQty = this.newOrderMaterial.QuotationOrderedQty - this.newOrderMaterial.TotalOrderedQty;
+    this.newOrderMaterial.RequisitionRemainingQty = this.newOrderMaterial.RequisitionQty - this.newOrderMaterial.TotalOrderedQty;
 
 
     if (this.newOrderMaterial.DiscountedRate == 0) {

@@ -157,11 +157,7 @@
                 <td Class="tbldata">{{ material.MaterialName }}</td>
                 <td Class="tbldata">{{ material.UnitName }}</td>
                 <td Class="tbldata">{{ material.RequisitionQty }}</td>
-                <td Class="tbldata">{{ material.QuotationOrderedQty }}</td>
                 <td Class="tbldata">{{ material.OrderedQty }}</td>
-                <td Class="tbldata">
-                  {{ material.QuotationRemainingQty }}
-                </td>
                 <td Class="tbldata">
                   {{ material.RequisitionRemainingQty }}
                 </td>
@@ -261,9 +257,9 @@
             <input type="text" name="Unit" class="form-control" [(ngModel)]="newOrderMaterial.UnitName" readonly />
           </div>
           <div class="col-6 mb-1">
-            <label>Quotation Ordered Quantity</label>
-            <input type="number" name="QuotationOrderedQty" class="form-control"
-              [(ngModel)]="newOrderMaterial.QuotationOrderedQty" readonly />
+            <label>Requisition Quantity</label>
+            <input type="number" name="RequisitionQty" class="form-control"
+              [(ngModel)]="newOrderMaterial.RequisitionQty" readonly />
           </div>
           <div class="col-6 mb-1">
             <label>Total Ordered Quantity</label>
@@ -284,9 +280,9 @@
             </div>
           </div>
           <div class="col-6 mb-1">
-            <label>Quotation Remaining Quantity</label>
+            <label>Requisition Remaining Quantity</label>
             <input type="number" name="QuotationRemainingQty" class="form-control"
-              [(ngModel)]="newOrderMaterial.QuotationRemainingQty" readonly />
+              [(ngModel)]="newOrderMaterial.RequisitionRemainingQty" readonly />
           </div>
           <div class="col-6 mb-1">
             <label>Extra Ordered Quantity</label>
@@ -296,7 +292,11 @@
           <div class="col-6 mb-1">
             <label>Rate</label>
             <input type="number" name="Rate" class="form-control" [(ngModel)]="newOrderMaterial.Rate"
-              #RateCtrl="ngModel" placeholder="Enter Rate" />
+              #RateCtrl="ngModel" required (blur)="RateCtrl.control.markAsTouched()" placeholder="Enter Rate"
+              (click)="selectAllValue($event)" (ngModelChange)="CalculateNetAmountAndTotalAmount()" />
+            <div *ngIf="RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty)">
+              <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+            </div>
           </div>
           <div class="col-6 mb-1">
             <label>Discount Rate</label>
@@ -320,7 +320,7 @@
           <div class="col-6 mb-1">
             <div>
               <label for="Gst"><b>GST</b></label>
-              <nz-select class="nzSelect-light" disabled nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
+              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear [nzNotFoundContent]="noDataTpl"
                 nzPlaceHolder="Select" [nzSize]="'large'" name="Gst" required id="Gst"
                 [(ngModel)]="newOrderMaterial.Gst" (ngModelChange)="CalculateNetAmountAndTotalAmount()">
                 <nz-option nzLabel="None" [nzValue]="0"></nz-option>

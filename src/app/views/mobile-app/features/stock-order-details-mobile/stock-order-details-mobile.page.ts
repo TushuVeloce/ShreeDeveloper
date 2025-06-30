@@ -57,6 +57,7 @@ export class StockOrderDetailsMobilePage implements OnInit {
   selectedVendor: any[] = [];
   VendorName: string = '';
   selectedMaterial: any[] = [];
+  TotalOrderedQty: number = 0;
   MaterialName: string = '';
   GSTList: any[] = [
     { Name: "None", Ref: 0 },
@@ -239,7 +240,6 @@ export class StockOrderDetailsMobilePage implements OnInit {
   onMaterialSelection = (MaterialRef: number) => {
     const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.MaterialRef == MaterialRef);
     this.newOrderMaterial.UnitName = SingleRecord[0].p.UnitName
-    this.newOrderMaterial.QuotationOrderedQty = SingleRecord[0].p.OrderedQty
     this.newOrderMaterial.MaterialName = SingleRecord[0].p.MaterialName
     this.newOrderMaterial.MaterialPurchaseOrderRef = SingleRecord[0].p.Ref
     this.newOrderMaterial.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty
@@ -433,7 +433,6 @@ export class StockOrderDetailsMobilePage implements OnInit {
     this.newOrderMaterial = { ...this.Entity.p.MaterialPurchaseOrderDetailsArray[index] }
     if (!this.IsNewEntity) {
       this.newOrderMaterial.TotalOrderedQty = 0;
-      this.newOrderMaterial.QuotationRemainingQty = 0;
     }
     this.editingIndex = index;
     this.ModalEditable = true;
@@ -514,18 +513,17 @@ export class StockOrderDetailsMobilePage implements OnInit {
   };
 
   CalculateNetAmountAndTotalAmount = async () => {
-    if (this.newOrderMaterial.OrderedQty > this.newOrderMaterial.QuotationOrderedQty) {
-      this.newOrderMaterial.ExtraOrderedQty = (this.newOrderMaterial.OrderedQty + this.newOrderMaterial.TotalOrderedQty) - this.newOrderMaterial.QuotationOrderedQty;
-      // this.uiUtils.showWarningToster('Ordered Qty is greater then Required Qty');
-    } else {
-      this.newOrderMaterial.ExtraOrderedQty = 0;
+
+    this.newOrderMaterial.TotalOrderedQty = this.TotalOrderedQty + this.newOrderMaterial.OrderedQty;
+
+    if (this.newOrderMaterial.TotalOrderedQty > this.newOrderMaterial.RequisitionQty) {
+      this.newOrderMaterial.RequisitionRemainingQty = 0;
+      this.newOrderMaterial.TotalOrderedQty = this.TotalOrderedQty;
     }
 
-    if (this.newOrderMaterial.OrderedQty < this.newOrderMaterial.QuotationOrderedQty) {
-      this.newOrderMaterial.QuotationRemainingQty = this.newOrderMaterial.QuotationOrderedQty - (this.newOrderMaterial.OrderedQty + this.newOrderMaterial.TotalOrderedQty);
-    } else {
-      this.newOrderMaterial.QuotationRemainingQty = 0;
-    }
+    this.newOrderMaterial.RequisitionRemainingQty = this.newOrderMaterial.RequisitionQty - this.newOrderMaterial.TotalOrderedQty;
+
+
     if (this.newOrderMaterial.DiscountedRate == 0) {
       this.newOrderMaterial.NetAmount = (this.newOrderMaterial.Rate * this.newOrderMaterial.OrderedQty);
     } else {

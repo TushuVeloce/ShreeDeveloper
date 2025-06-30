@@ -28,15 +28,13 @@ export class OrderMaterialDetailProps {
   public UnitName: string = '';
 
   public RequisitionQty: number = 0;
-  public QuotedQty: number = 0;
   public OrderedQty: number = 0;
   public RequisitionRemainingQty: number = 0;
-  public QuotationRemainingQty: number = 0;
-  public QuotationOrderedQty: number = 0;
   public TotalOrderedQty: number = 0;
   public ExtraOrderedQty: number = 0;
 
   public MaterialPurchaseDetailStatus: number = 0;
+  public IsRequisitionMaterial: number = 0;
 
   public Rate: number = 0;
   public DiscountedRate: number = 0;
@@ -184,8 +182,8 @@ export class OrderMaterial implements IPersistable<OrderMaterial> {
 
   public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new OrderMaterialFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
-    req.SiteManagementRefs.push(SiteRef)
+    req.CompanyRef = CompanyRef;
+    req.SiteManagementRef = SiteRef;
     let tdResponse = await OrderMaterial.FetchTransportData(req, errorHandler) as TransportData;
     return OrderMaterial.ListFromTransportData(tdResponse);
   }

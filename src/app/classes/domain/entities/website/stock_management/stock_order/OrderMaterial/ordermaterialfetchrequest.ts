@@ -8,6 +8,10 @@ export class OrderMaterialFetchRequest {
   public static readonly FetchRequestType: string = "GetMaterialForPurchaseOrderFetchRequest";
   CompanyRefs: number[] = [];
   SiteManagementRefs: number[] = [];
+
+  SiteManagementRef: number = 0;
+  CompanyRef: number = 0;
+
   OrderMaterialRefs: number[] = [];
   VendorRefs: number[] = [];
 

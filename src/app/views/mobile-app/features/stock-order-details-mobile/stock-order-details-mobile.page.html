@@ -92,9 +92,6 @@
                   {{ item.RequisitionQty || '-' }}
                 </td>
                 <td>
-                  {{ item.QuotationOrderedQty || '-' }}
-                </td>
-                <td>
                   {{ item.RequisitionRemainingQty || '-' }}
                 </td>
                 <td>
@@ -190,13 +187,6 @@
                 <ion-input label="Requisition Qty" labelPlacement="floating" type="number" placeholder="Enter Quantity"
                   [(ngModel)]="newOrderMaterial.RequisitionQty" clearInput="true" clearOnEdit="true"
                   readonly></ion-input>
-              </ion-item>
-
-              <!--Ordered  Quantity -->
-              <ion-item class="input-item">
-                <ion-input label="Ordered  Qty" labelPlacement="floating" type="number"
-                  placeholder="Enter Ordered Quantity" [(ngModel)]="newOrderMaterial.QuotationOrderedQty"
-                  clearInput="true" clearOnEdit="true" (ngModelChange)="CalculateNetAmountAndTotalAmount()"></ion-input>
               </ion-item>
 
               <!-- Required Remaining Quantity -->

@@ -31,8 +31,8 @@ export class StockOrderComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Site', 'Date', 'Vendor', 'Material', 'Unit', 'Requisition Quantity', 'Quotation Quantity', 'Ordered Quantity', 'Quotation Remaining Quantity', 'Requisition Remaining Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
-  headerswithoutsite: string[] = ['Sr.No.', 'Date', 'Vendor', 'Material', 'Unit', 'Requisition Quantity', 'Quotation Quantity', 'Ordered Quantity', 'Quotation Remaining Quantity', 'Requisition Remaining Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
+  headers: string[] = ['Sr.No.', 'Site', 'Date', 'Vendor', 'Material', 'Unit', 'Requisition Quantity', 'Ordered Quantity', 'Requisition Remaining Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
+  headerswithoutsite: string[] = ['Sr.No.', 'Date', 'Vendor', 'Material', 'Unit', 'Requisition Quantity', 'Ordered Quantity', 'Requisition Remaining Quantity', 'Discount Rate', 'Delivery Date', 'Total Amount', 'Grand Total', 'Status', 'Action'];
 
   constructor(
     private uiUtils: UIUtils,
@@ -139,22 +139,17 @@ export class StockOrderComponent implements OnInit {
   };
 
   // checkIsEnable = (data: OrderMaterialDetailProps[]): boolean => {
-  // // console.log('data :', data);
   //   // If ANY entry fails (QuotationOrderedQty <= OrderedQty), return false
   //   let status = data.every(item => item.QuotationOrderedQty <= item.OrderedQty);
-  //   console.log('status :', status);
   //   return status;
   // };
 
   checkIsEnable = (data: OrderMaterialDetailProps[]): boolean => {
     // Collect boolean values based on the condition
-    const booleanValues = data.map(item => item.QuotationOrderedQty <= item.TotalOrderedQty);
-    console.log('booleanValues :', booleanValues);
+    const booleanValues = data.map(item => item.RequisitionQty <= item.TotalOrderedQty);
 
     // If ANY entry fails (QuotationOrderedQty <= OrderedQty), return false
     const status = booleanValues.every(value => value);
-    console.log('status :', status);
-
     return status;
   };
 
