@@ -58,14 +58,47 @@ export class DashboardPage implements OnInit, OnDestroy {
   attendanceData: any = [];
   recentActivities: any = [];
 
+  // gridItems = [
+  //   { label: 'Site Management', icon: 'layers-outline', routerPath: '/mobileapp/tabs/dashboard/site-management' },
+  //   { label: 'Stock Management', icon: 'grid-outline', routerPath: '/mobileapp/tabs/dashboard/stock-management' },
+  //   { label: 'Marketing Management', icon: 'bar-chart-outline', routerPath: '/mobileapp/tabs/dashboard/marketing-management' },
+  //   { label: 'CRM', icon: 'people-outline', routerPath: '/mobileapp/tabs/dashboard/customer-relationship-management' },
+  //   // { label: 'Report', icon: 'reader-outline', routerPath: '/mobileapp/tabs/dashboard/report' },
+  // ];
   gridItems = [
-    { label: 'Site Management', icon: 'layers-outline', routerPath: '/mobileapp/tabs/dashboard/site-management' },
-    { label: 'Stock Management', icon: 'grid-outline', routerPath: '/mobileapp/tabs/dashboard/stock-management' },
-    { label: 'Marketing Management', icon: 'bar-chart-outline', routerPath: '/mobileapp/tabs/dashboard/marketing-management' },
-    { label: 'CRM', icon: 'people-outline', routerPath: '/mobileapp/tabs/dashboard/customer-relationship-management' },
-    // { label: 'Report', icon: 'reader-outline', routerPath: '/mobileapp/tabs/dashboard/report' },
+    {
+      icon: 'assets/icons/site_management_mobile_app.png',
+      label: 'Site',
+      routerPath: '/mobileapp/tabs/dashboard/site-management'
+    },
+    {
+      icon: 'assets/icons/stock_mobile_app.png',
+      label: 'Stock',
+      routerPath: '/mobileapp/tabs/dashboard/stock-management'
+    },
+    {
+      icon: 'assets/icons/marketing_mobile_app.png',
+      label: 'Marketing',
+      routerPath: '/mobileapp/tabs/dashboard/marketing-management'
+    },
+    {
+      icon: 'assets/icons/crm_mobile_app.png',
+      label: 'CRM',
+      routerPath: '/mobileapp/tabs/dashboard/customer-relationship-management'
+    },
+    {
+      icon: 'assets/icons/report_mobile_app.png',
+      label: 'Report',
+      routerPath: '/mobileapp/tabs/dashboard/report'
+    },
   ];
 
+  selectedIndex = 0;
+
+  selectItem(index: number) {
+    this.selectedIndex = index;
+  }
+  
   async goToRouterPath(path: string) {
     await this.router.navigate([path]);
   }

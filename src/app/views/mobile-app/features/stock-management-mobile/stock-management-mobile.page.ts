@@ -21,17 +21,103 @@ export class StockManagementMobilePage implements OnInit {
 
   ngOnInit() {
   }
-  stockOptions = [
-    { label: 'Material Requisition', route: '/mobileapp/tabs/dashboard/stock-management/material-requisition', icon: 'document-text-outline' },
-    { label: 'Quotation', route: '/mobileapp/tabs/dashboard/stock-management/vendor-quotation', icon: 'pricetag-outline' },
-    { label: 'Stock Order', route: '/mobileapp/tabs/dashboard/stock-management/stock-order', icon: 'clipboard-outline' },
-    { label: 'Stock Inward', route: '/mobileapp/tabs/dashboard/stock-management/stock-inward', icon: 'download-outline' },
-    { label: 'Stock Transfer', route: '/mobileapp/tabs/dashboard/stock-management/stock-transfer', icon: 'swap-horizontal-outline' },
-    { label: 'Stock Consume', route: '/mobileapp/tabs/dashboard/stock-management/stock-consume', icon: 'swap-horizontal-outline' }
+  gridItems = [
+    {
+      icon: 'assets/icons/site_management_mobile_app.png',
+      label: 'Material Requisition',
+      routerPath: '/mobileapp/tabs/dashboard/stock-management/material-requisition'
+    },
+    {
+      icon: 'assets/icons/stock_mobile_app.png',
+      label: 'Quotation',
+      routerPath: '/mobileapp/tabs/dashboard/stock-management/vendor-quotation'
+    },
+    {
+      icon: 'assets/icons/marketing_mobile_app.png',
+      label: 'Stock Order',
+      routerPath: '/mobileapp/tabs/dashboard/stock-management/stock-order'
+    },
+    {
+      icon: 'assets/icons/crm_mobile_app.png',
+      label: 'Stock Inward',
+      routerPath: '/mobileapp/tabs/dashboard/stock-management/stock-inward'
+    },
+    {
+      icon: 'assets/icons/report_mobile_app.png',
+      label: 'Stock Transfer',
+      routerPath: '/mobileapp/tabs/dashboard/stock-management/stock-transfer'
+    },
+    {
+      icon: 'assets/icons/report_mobile_app.png',
+      label: 'Stock Consume',
+      routerPath: '/mobileapp/tabs/dashboard/stock-management/stock-consume'
+    },
+    {
+      icon: 'assets/icons/report_mobile_app.png',
+      label: 'Report',
+      routerPath: '/mobileapp/tabs/dashboard/stock-management/stock-consume'
+    },
   ];
 
-  async navigateTo(route: string) {
-    await this.haptic.mediumImpact();
-    this.router.navigate([`/mobileapp/tabs/dashboard/stock-management/${route}`]);
+  // selectedIndex = 0;
+
+  // selectItem(index: number) {
+  //   this.selectedIndex = index;
+  // }
+
+
+  selectedIndex = 0;
+  expensePercent = 30; // Example static percentage
+
+  // gridItems = [
+  //   {
+  //     icon: 'assets/icons/site_management_mobile_app.png',
+  //     label: 'Food',
+  //     routerPath: '/food'
+  //   },
+  //   {
+  //     icon: 'assets/icons/stock_mobile_app.png',
+  //     label: 'Transport',
+  //     routerPath: '/transport'
+  //   },
+  //   {
+  //     icon: 'assets/icons/marketing_mobile_app.png',
+  //     label: 'Medicine',
+  //     routerPath: '/medicine'
+  //   },
+  //   {
+  //     icon: 'assets/icons/crm_mobile_app.png',
+  //     label: 'Groceries',
+  //     routerPath: '/groceries'
+  //   },
+  //   {
+  //     icon: 'assets/icons/report_mobile_app.png',
+  //     label: 'Rent',
+  //     routerPath: '/rent'
+  //   },
+  //   {
+  //     icon: 'assets/icons/report_mobile_app.png',
+  //     label: 'Gifts',
+  //     routerPath: '/gifts'
+  //   },
+  //   {
+  //     icon: 'assets/icons/report_mobile_app.png',
+  //     label: 'Savings',
+  //     routerPath: '/savings'
+  //   },
+  //   {
+  //     icon: 'assets/icons/report_mobile_app.png',
+  //     label: 'Entertainment',
+  //     routerPath: '/entertainment'
+  //   },
+  //   {
+  //     icon: 'assets/icons/report_mobile_app.png',
+  //     label: 'More',
+  //     routerPath: '/more'
+  //   },
+  // ];
+
+  selectItem(index: number) {
+    this.selectedIndex = index;
   }
 }

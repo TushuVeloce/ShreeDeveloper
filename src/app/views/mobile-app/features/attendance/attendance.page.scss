@@ -47,11 +47,13 @@
         }
     }
 }
+
 .top-card.disabled {
     opacity: 0.5;
     pointer-events: none; // Prevent interaction
-    filter: grayscale(0.3); }
-    
+    filter: grayscale(0.3);
+}
+
 .section-header {
     display: flex;
     justify-content: space-between;
@@ -63,38 +65,65 @@
 .attendance-table-card {
     margin: 12px;
     border-radius: 16px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
 
     ion-card-header {
         background: linear-gradient(to bottom right, #7c2424, #c0392b);
         border-top-left-radius: 16px;
         border-top-right-radius: 16px;
+        padding: 8px 12px;
 
-        ion-card-title {
+        .header-row {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-title {
             font-size: 18px;
             font-weight: 600;
-            padding: 10px;
-            color: var(--ion-text-color-dark);
+            color: #fff;
+            margin: 0;
         }
     }
 
-    .attendance-table-header ion-row {
-        background: var(--ion-background-color);
-        border-radius: 8px;
-        border: #7c2424 1px solid;
-        padding: 6px 0;
+    .week-select {
+        max-width: 130px;
         font-size: 14px;
+        --padding-start: 8px;
+        --padding-end: 8px;
+        --background: #fff;
+        --border-radius: 12px;
+        --color: #333;
     }
 
-    .attendance-table-body .attendance-row {
-        background: var(--ion-item-background);
-        padding: 6px 0;
-        border-bottom: 1px solid #ececec;
-        font-size: 13px;
-        align-items: center;
+    .attendance-table-header {
+        ion-row {
+            background-color: var(--ion-background-color);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 6px 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+        }
+    }
 
-        .date-cell {
-            font-weight: 500;
+    .attendance-table-body {
+        .attendance-row {
+            background-color: var(--ion-item-background);
+            padding: 6px 0;
+            border-bottom: 1px solid #ececec;
+            font-size: 13px;
+            align-items: center;
+            display: flex;
+            text-align: center;
+
+            .date-cell {
+                font-weight: 500;
+                color: #444;
+            }
         }
     }
 
@@ -110,62 +139,10 @@
         ion-icon {
             font-size: 24px;
             margin-bottom: 4px;
+            color: #c0392b;
         }
     }
 }
-
-
-.grid {
-    margin: 20px 10px;
-}
-
-.grid-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    /* Ensures text stays centered */
-    background: #a02b2b;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    /* Centers text properly */
-    width: 100%;
-    /* Ensures proper spacing */
-    word-wrap: break-word;
-    /* Breaks long words if necessary */
-    white-space: normal;
-    /* Allows text to wrap */
-    font-weight: 600;
-}
-
-.grid-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.grid-item ion-icon {
-    font-size: 24px;
-    color: #fff;
-    font-weight: 600;
-}
-
-.grid-item p {
-    font-size: 11px;
-    margin-top: 5px;
-    color: #fff;
-    text-align: center;
-    /* Ensures multiline text stays centered */
-    word-break: break-word;
-    /* Forces breaking if necessary */
-    overflow-wrap: break-word;
-    /* Alternative for better support */
-    max-width: 90%;
-    /* Prevents excessive stretching */
-    font-weight: 600;
-}
-
 .punch-modal::part(backdrop) {
     background: rgba(0, 0, 0, 0.5);
 }

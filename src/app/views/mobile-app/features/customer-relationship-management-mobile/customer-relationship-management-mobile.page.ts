@@ -23,6 +23,29 @@ export class CustomerRelationshipManagementMobilePage implements OnInit {
     { title: 'Total Deals Closed', value: 50, icon: 'checkmark-circle-outline' },
     { title: 'Total Deals Done', value: 30, icon: 'trophy-outline' }
   ];
+  gridItems = [
+    {
+      icon: 'assets/icons/salary_slip_request_mobile_app.png',
+      label: 'Customer Enquiry',
+      routerPath: '/mobileapp/tabs/dashboard/customer-relationship-management/customer-enquiry'
+    },
+    {
+      icon: 'assets/icons/leave_requests_mobile_app.png',
+      label: 'Followup',
+      routerPath: '/mobileapp/tabs/dashboard/customer-relationship-management/customer-followup'
+    },
+    {
+      icon: 'assets/icons/attendance _mobile_app.png',
+      label: 'Pending Followup',
+      routerPath: '/mobileapp/tabs/dashboard/customer-relationship-management/pending-customer-followup'
+    }
+  ];
+
+  selectedIndex = 0;
+
+  selectItem(index: number) {
+    this.selectedIndex = index;
+  }
 
   SiteList: Site[] = [];
   PlotList: Plot[] = [];
@@ -37,6 +60,21 @@ export class CustomerRelationshipManagementMobilePage implements OnInit {
   date: string = '';
   strCDT: string = '';
   isLoading: boolean = false;
+  pieData = [
+    {
+      "name": "Groceries",
+      "value": 10
+    },
+    {
+      "name": "Others",
+      "value": 79
+    },
+    {
+      "name": "Utilities",
+      "value": 11
+    }
+  ];
+  
 
   constructor(
     private router: Router,

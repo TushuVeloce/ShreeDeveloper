@@ -17,7 +17,7 @@ import { SharedModule } from "../../shared/shared.module";
     IonicModule,
     CustomerRelationshipManagementMobilePageRoutingModule,
     LoaderComponent,
-    SharedModule
+    SharedModule,
 ],
   declarations: [CustomerRelationshipManagementMobilePage]
 })

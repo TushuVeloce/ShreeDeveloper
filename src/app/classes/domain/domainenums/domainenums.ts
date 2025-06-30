@@ -1388,6 +1388,19 @@ export class DomainEnums {
         return '';
     }
   }
+  // Attendance log type
+  public static AttendanceLogNameMobileApp(itemType: AttendanceLogType) {
+    switch (itemType) {
+      case AttendanceLogType.TodaysAttendanceLog:
+        return 'Todays';
+      case AttendanceLogType.WeeklyAttendanceLog:
+        return 'This Week';
+      case AttendanceLogType.MonthlyAttendanceLog:
+        return 'This Month';
+      default:
+        return '';
+    }
+    }
 
   public static AttendanceLogTypeList(
     withAllOption: boolean = false,
@@ -1409,6 +1422,39 @@ export class DomainEnums {
       {
         Ref: AttendanceLogType.MonthlyAttendanceLog,
         Name: DomainEnums.AttendanceLogName(
+          AttendanceLogType.MonthlyAttendanceLog
+        ),
+      },
+    ];
+    if (withAllOption) {
+      let allEntry = {
+        Ref: AttendanceLogType.None,
+        Name: allOptionName,
+      };
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+  public static AttendanceLogTypeMobileAppList(
+    withAllOption: boolean = false,
+    allOptionName: string = '<All>'
+  ) {
+    let result = [
+      {
+        Ref: AttendanceLogType.TodaysAttendanceLog,
+        Name: DomainEnums.AttendanceLogNameMobileApp(
+          AttendanceLogType.TodaysAttendanceLog
+        ),
+      },
+      {
+        Ref: AttendanceLogType.WeeklyAttendanceLog,
+        Name: DomainEnums.AttendanceLogNameMobileApp(
+          AttendanceLogType.WeeklyAttendanceLog
+        ),
+      },
+      {
+        Ref: AttendanceLogType.MonthlyAttendanceLog,
+        Name: DomainEnums.AttendanceLogNameMobileApp(
           AttendanceLogType.MonthlyAttendanceLog
         ),
       },

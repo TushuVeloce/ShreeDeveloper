@@ -19,7 +19,6 @@ import { ToastService } from '../../core/toast.service';
 import { HapticService } from '../../core/haptic.service';
 import { AlertService } from '../../core/alert.service';
 import { LoadingService } from '../../core/loading.service';
-
 @Component({
   selector: 'app-attendance',
   templateUrl: './attendance.page.html',
@@ -63,14 +62,38 @@ export class AttendancePage implements OnInit {
   AttendanceLocationTypes = AttendanceLocationType;
   attendanceLocationTypeList = DomainEnums.AttendanceLocationTypeList();
   AttendanceLocationTypeName: string = '';
+  AttendanceLogTypeList = DomainEnums.AttendanceLogTypeMobileAppList();
   readonly LeaveRequestTypeEnum = LeaveRequestType;
+  // gridItems = [
+  //   { label: 'Salary Slip', icon: 'layers-outline', gridFunction: 100 },
+  //   { label: 'Leave', icon: 'grid-outline', gridFunction: 200 },
+  //   { label: 'Attendance', icon: 'bar-chart-outline', gridFunction: 300 },
+  // ];
   gridItems = [
-    { label: 'Salary Slip', icon: 'layers-outline', gridFunction: 100 },
-    { label: 'Leave', icon: 'grid-outline', gridFunction: 200 },
-    { label: 'Attendance', icon: 'bar-chart-outline', gridFunction: 300 },
+    {
+      icon: 'assets/icons/salary_slip_request_mobile_app.png',
+      label: 'Salary Slip',
+      routerPath: '/mobileapp/tabs/attendance/salary-slip'
+    },
+    {
+      icon: 'assets/icons/leave_requests_mobile_app.png',
+      label: 'Leave',
+      routerPath: '/mobileapp/tabs/attendance/leave'
+    },
+    {
+      icon: 'assets/icons/attendance _mobile_app.png',
+      label: 'Attendance',
+      routerPath: '/mobileapp/tabs/attendance/attendance-details'
+    }
   ];
 
-  // Company and employee references
+  selectedIndex = 0;
+
+  selectItem(index: number) {
+    this.selectedIndex = index;
+  }
+
+  selectedWeek: number = 0;
   employeeRef: number = 0;
   companyRef: number = 0;
 
@@ -99,17 +122,19 @@ export class AttendancePage implements OnInit {
   ngOnDestroy = () => {
     // cleanup logic if needed later
   }
-
   private loadAttendanceIfEmployeeExists = async () => {
     try {
       await this.loadingService.show();
       this.disableTopCard = await this.appStateManage.localStorage.getItem('IsDefaultUser') == "1" ? true : false;
       this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
       this.employeeRef = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
+      if (this.AttendanceLogTypeList?.length > 0) {
+        this.selectedWeek = this.AttendanceLogTypeList[0].Ref; // Ref is a number
+        this.onWeekChange();
+      }
       if (this.employeeRef > 0) {
         // Retrieve employee reference from storage (ensure proper type conversion)
         this.employeeRef = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
-
         // Get current date time and set state
         try {
           const strCurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
@@ -149,6 +174,14 @@ export class AttendancePage implements OnInit {
     } finally {
       await this.loadingService.hide();
     }
+  }
+
+
+  onWeekChange() {
+    const selected = this.AttendanceLogTypeList.find(
+      (week) => week.Ref === this.selectedWeek
+    );
+    console.log('Selected week:', selected?.Name, '| Ref:', selected?.Ref);
   }
 
   getCheckInData = async () => {

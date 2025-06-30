@@ -1,30 +1,74 @@
-.stock-card {
-    --background: var(--ion-color-light);
-    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border-radius: 16px;
-    text-align: center;
-    transition: transform 0.2s ease;
+.summary-section {
+    margin-bottom: 24px;
+    padding: 12px 16px;
+    background-color: #f7f9fb;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 
-    &:hover {
-        transform: scale(1.03);
-    }
-
-    .card-content {
+    .summary-row {
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 16px;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
     }
 
-    .stock-icon {
-        font-size: 32px;
-        color: var(--ion-color-primary);
-        margin-bottom: 12px;
+    .summary-box {
+        flex: 1;
+        min-width: 45%;
     }
 
-    .stock-title {
-        font-size: 16px;
-        font-weight: 500;
-        color: var(--ion-color-dark);
+    .summary-label {
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 4px;
+    }
+
+    .summary-value {
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1.2;
+        word-break: break-word;
+
+        &.balance {
+            color: #0a915d;
+        }
+
+        &.expense {
+            color: #c0392b;
+        }
+    }
+
+    .summary-hr {
+        margin: 16px auto 0;
+        width: 92%;
+        border: none;
+        height: 1px;
+        background: #ddd;
     }
 }
+
+// .grid-item {
+//     background-color: #e0f2ff;
+//     border-radius: 15px;
+//     padding: 15px;
+//     text-align: center;
+//     margin-bottom: 8px;
+
+//     img {
+//         width: 30px;
+//         height: 30px;
+//     }
+
+//     &.active {
+//         background-color: #027bff;
+
+//         img {
+//             filter: brightness(0) invert(1);
+//         }
+//     }
+// }
+
+// .grid-label {
+//     text-align: center;
+//     font-size: 14px;
+// }

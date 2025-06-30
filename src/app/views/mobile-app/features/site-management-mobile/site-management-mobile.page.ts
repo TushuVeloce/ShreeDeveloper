@@ -83,6 +83,7 @@ export class SiteManagementMobilePage implements OnInit {
       let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
+      console.log('DisplayMasterList :', this.DisplayMasterList);
     } catch (error) {
 
     } finally {

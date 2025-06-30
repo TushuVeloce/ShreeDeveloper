@@ -3,17 +3,50 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
 
-  <ion-grid fixed>
-    <ion-row>
-      <ion-col size="6" size-sm="6" size-md="4" *ngFor="let option of stockOptions">
-        <ion-card button class="stock-card" routerLink={{option.route}}>
-          <ion-card-content class="card-content">
-            <ion-icon [name]="option.icon" class="stock-icon"></ion-icon>
-            <div class="stock-title">{{ option.label }}</div>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <!-- Summary Section -->
+  <div class="summary-section">
+    <div class="summary-row">
+      <div class="summary-box">
+        <ion-row >
+          <ion-col >
+            <p class="summary-label">Total Balance Stock</p>
+          </ion-col>
+          <ion-col>
+            <ion-icon name="trending-up-outline" class="summary-icon" (click)="''"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <h2 class="summary-value balance">77,83,00,000.00</h2>
+      </div>
+      <div class="summary-box">
+        <ion-row>
+          <ion-col>
+            <p class="summary-label">Total Upcoming Stock</p>
+          </ion-col>
+          <ion-col>
+            <ion-icon name="trending-up-outline" class="summary-icon" (click)="''"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <h2 class="summary-value expense">1,18,70,000.00</h2>
+      </div>
+    </div>
+    <hr class="summary-hr" />
+  </div>
+
+  <!-- Quick Actions Grid -->
+  <div class="grid-mobile-app">
+    <ion-grid>
+      <ion-row class="grid-row-mobile-app" [class.single-item-mobile-app]="gridItems.length === 1">
+        <ion-col *ngFor="let item of gridItems; let i = index"
+          [size]="gridItems.length === 1 ? '12' : gridItems.length === 2 ? '6' : '4'"
+          class="grid-item-wrapper-mobile-app">
+          <div class="grid-item-mobile-app" [routerLink]="item.routerPath" [ngClass]="{ active: i === selectedIndex }"
+            (click)="selectItem(i)">
+            <img [src]="item.icon" alt="{{ item.label }} icon" />
+          </div>
+          <p class="grid-label-mobile-app">{{ item.label }}</p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 
 </ion-content>
