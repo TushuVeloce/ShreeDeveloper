@@ -14,7 +14,7 @@ import { StockTransferFetchRequest } from "./stocktransferfetchrequest";
 
 
 export class StockTransferProps {
-  public readonly Db_Table_Name = "MaterialTrasfer";
+  public readonly Db_Table_Name = "MaterialTransfer";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
@@ -50,7 +50,7 @@ export class StockTransferProps {
 }
 
 export class StockTransfer implements IPersistable<StockTransfer> {
-  public static readonly Db_Table_Name: string = 'MaterialTrasfer';
+  public static readonly Db_Table_Name: string = 'MaterialTransfer';
 
   public constructor(public readonly p: StockTransferProps, public readonly AllowEdit: boolean) {
 
