@@ -383,16 +383,16 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Expense_Type_Master',
         LogoPath: '/assets/icons/Expense Type.png',
       },
-      // {
-      //   Name: 'Account Main Ledger',
-      //   RouterLink: '/homepage/Website/Account_Main_Ledger',
-      //  LogoPath:'/assets/icons/Material Master.png',
-      // },
-      // {
-      //   Name: 'Account Sub Ledger',
-      //   RouterLink: '/homepage/Website/Account_Sub_Ledger',
-      //  LogoPath:'/assets/icons/Material Master.png',
-      // },
+      {
+        Name: 'Account Main Ledger',
+        RouterLink: '/homepage/Website/Account_Main_Ledger',
+       LogoPath:'/assets/icons/Material Master.png',
+      },
+      {
+        Name: 'Account Sub Ledger',
+        RouterLink: '/homepage/Website/Account_Sub_Ledger',
+       LogoPath:'/assets/icons/Material Master.png',
+      },
       {
         Name: 'Marketing Type Master',
         RouterLink: '/homepage/Website/Marketing_Type_Master',

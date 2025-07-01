@@ -1,67 +1,44 @@
 <div class="card-body">
   <div class="card" style="padding: 1rem">
-    <div class="row">
-      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
-        <button type="button" class="backbtn" (click)="BackMainLedger()">
-          <img
-            src="/assets/icons/arrow-button.png"
-            alt=""
-            width="34px"
-            height="34px"
-          />
+    <div class="row align-items-center">
+      <!-- Back Button Column -->
+      <div class="col-2 col-md-1 d-flex justify-content-center">
+        <button type="button" class="backbtn" (click)="BackLedger()">
+          <img src="/assets/icons/arrow-button.png" alt="Back" class="backbtnimg" />
         </button>
       </div>
-      <div class="col-md-11">
-        <span class="detail_title">Account Main Ledger </span>
-      </div>
-    </div>
-  <form autocomplete="off">
-    <div class="row" style="margin-top: 1rem; margin-bottom: 2rem; ">
-      <div class="col-md-4">
-        <div>
-         <label>Main ledger</label>
-          <input
-            type="text"
-            name="mainledger"
-            class="form-control"
-            id="mainledger"
-            required
-            placeholder="Enter Main Ledger"
-          />
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div>
-         <label> Type</label>
-            <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="type" name="type" [nzSize]="'large'"
-            [(ngModel)]="TypeRef" (ngModelChange)="getTypeRef(TypeRef)">
-            <nz-option *ngFor="let type of TypeList"
-            [nzValue]="type" [nzLabel]="type"></nz-option>
-          </nz-select>
-        </div>
 
-      </div>
-      <div class="col-md-4">
-        <div>
-         <label>Description</label>
-          <input
-            type="text"
-            name="description"
-            class="form-control"
-            id="description"
-            required
-            placeholder="Enter Description"
-          />
-        </div>
+      <!-- Title Column -->
+      <div class="col-10 col-md-11">
+        <span class="detail_title text-truncate d-block">{{ DetailsFormTitle }}</span>
       </div>
     </div>
-    <div style="justify-content: center; display: flex; gap: 2rem;"   >
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-6">
+          <div>
+            <label>Ledger Name</label>
+            <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
+              placeholder="Enter Ledger Name" pattern="{{NameWithNosAndSpace}}" #NameCtrl="ngModel"
+              (blur)="NameCtrl.control.markAsTouched()" />
+          </div>
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
-          <button type="button" class="btn">Save</button>
+          <button type="button" class="btn" (click)="SaveLedgerMaster()">Save</button>
         </div>
         <div>
-          <button type="button" class="btn" (click)="BackMainLedger()">Cancel</button>
+          <button type="button" class="btn" (click)="BackLedger()">
+            Cancel
+          </button>
         </div>
-    </div>
-  </form>
+      </div>
+    </form>
+  </div>
 </div>

@@ -1,66 +1,54 @@
 <div class="card-body">
   <div class="card" style="padding: 1rem">
-    <div class="row">
-      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+    <div class="row align-items-center">
+      <!-- Back Button Column -->
+      <div class="col-2 col-md-1 d-flex justify-content-center">
         <button type="button" class="backbtn" (click)="BackSubLedger()">
-          <img
-            src="/assets/icons/arrow-button.png"
-            alt=""
-            width="34px"
-            height="34px"
-          />
+          <img src="/assets/icons/arrow-button.png" alt="Back" class="backbtnimg" />
         </button>
       </div>
-      <div class="col-md-11">
-        <span class="detail_title">Account Sub  Ledger</span>
+
+      <!-- Title Column -->
+      <div class="col-10 col-md-11">
+        <span class="detail_title text-truncate d-block">{{ DetailsFormTitle }}</span>
       </div>
     </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div>
-           <label> Under Main Ledger</label>
-              <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="undermainledger" name="undermainledger" [nzSize]="'large'"
-              [(ngModel)]="UnderMainLedgerRef" (ngModelChange)="getUnderMainLedgerRef(UnderMainLedgerRef)">
-              <nz-option *ngFor="let undermainledger of UnderMainLedgerList"
-              [nzValue]="undermainledger" [nzLabel]="undermainledger"></nz-option>
+            <label>Main Ledger</label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.LedgerRef">
+              <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref"
+                [nzLabel]="ledger.p.Name"></nz-option>
             </nz-select>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <div>
-           <label>Sub Ledger</label>
-            <input
-              type="text"
-              name="subledger"
-              class="form-control"
-              id="subledger"
-              required
-              placeholder="Enter Sub Ledger"
-            />
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div>
-           <label>Description</label>
-            <input
-              type="text"
-              name="description"
-              class="form-control"
-              id="description"
-              required
-              placeholder="Enter Description"
-            />
+            <label>Sub Ledger Name</label>
+            <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
+              placeholder="Enter Sub Ledger Name" pattern="{{NameWithNosAndSpace}}" #NameCtrl="ngModel"
+              (blur)="NameCtrl.control.markAsTouched()" />
           </div>
         </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
-          <div>
-            <button type="button" class="btn">Save</button>
-          </div>
-          <div>
-            <button type="button" class="btn" (click)="BackSubLedger()" >Cancel</button>
-          </div>
+        <div>
+          <button type="button" class="btn" (click)="SaveSubLedgerMaster()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackSubLedger()">
+            Cancel
+          </button>
+        </div>
       </div>
     </form>
   </div>

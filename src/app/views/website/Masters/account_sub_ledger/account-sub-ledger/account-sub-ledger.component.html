@@ -1,38 +1,41 @@
 <div class="row">
-  <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
-    <h5 style="padding-top: 3px;" class="title title_light"> Account Sub Ledger</h5>
+   <div class="col-4 mb-2">
+    <h1 style="padding-top: 3px;" class="title title_light">Sub Ledger Master</h1>
   </div>
-  <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 search-container_light">
-    <input type="text" Class="search-box_light" placeholder="Search..." autofocus />
+   <div class="col-4 mb-2 search-container_light">
+    <app-shared-filter [masterList]="MasterList" [filterFields]="['Code', 'Name', 'UnitName']"
+      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
-    <div class="col-4 mb-2" routerLinkActive="active">
+  <div class="col-4 mb-2" routerLinkActive="active">
     <nz-button nz-button class="btn1" (click)='AddSubLedger()'>
       Add Sub Ledger
     </nz-button>
   </div>
 </div>
-<div class="table-container" style="margin-top: 2rem;">
-  <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
-    nzFrontPagination="false" [nzShowSizeChanger]="false">
-    <thead>
-      <tr>
-        <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td Class="tbldata">1</td>
-        <td Class="tbldata">OFFICE EEP</td>
-        <td Class="tbldata">ABC</td>
-        <td Class="tbldata">OK</td>
-        <td class="tbldata">
-          <span style="margin-left: 9px;">
-            <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-          </span>
-          <span style="margin-left: 9px;">
-            <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-        </td>
-      </tr>
-    </tbody>
-  </nz-table>
+<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+  <div class="table-container">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let Ledger of paginatedList(); index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{Ledger.p.LedgerName}}</td>
+          <td Class="tbldata">{{Ledger.p.Name}}</td>
+          <td class="tbldata">
+            <Edit-Icon (editClick)="onEditClicked(Ledger)" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(Ledger)" />
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+  <Pagination [pageSize]="pageSize" [total]="total" [(currentPage)]="currentPage" (pageChange)="onPageChange($event)" />
+</div>
+<div *ngIf="DisplayMasterList.length === 0">
+  <Data-Not-Found />
 </div>
