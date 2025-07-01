@@ -74,7 +74,7 @@
   </ng-template>
 
   <nz-layout Class="layout_light">
-    <nz-header class="container-fluid">
+    <!-- <nz-header class="container-fluid">
       <div class="row">
         <div class="col-3" style="display: flex; align-items: center;">
           <span>
@@ -119,7 +119,95 @@
           </nz-dropdown-menu>
         </div>
       </div>
-    </nz-header>
+    </nz-header> -->
+
+
+    <!-- Navbar for xl, lg, md -->
+    <nav
+      class="navbar navbar-expand-lg bg-light shadow-sm px-3 d-none d-md-flex justify-content-between align-items-center">
+      <!-- Left: Toggle + Date -->
+      <div class="d-flex align-items-center gap-3">
+        <img src="/assets/icons/menu.png" alt="logo" (click)="toggleCollapsed()"
+          style="width: 2vw; height: 2vw; cursor: pointer" />
+        <div>
+          <span style="font-size: 90%;"><b>{{ myDay }}</b></span>
+          <span style="margin-left: 5px; font-size: 90%;"><b>{{ myDate }}</b></span>
+        </div>
+      </div>
+
+      <!-- Middle: Empty -->
+      <div></div>
+
+      <!-- Right: Dropdown + Profile -->
+      <div class="d-flex align-items-center gap-3">
+        <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzPlaceHolder="Select"
+          [nzSize]="'large'" [(ngModel)]="CompanyRef" name="CompanyRef" required id="CompanyRef"
+          (ngModelChange)="changecompany(CompanyRef)" [nzDropdownMatchSelectWidth]="true" [style.width.px]="300"
+          [disabled]="appStateManagement.isDropdownDisabled()">
+          <nz-option *ngFor="let company of CompnyList" [nzLabel]="company.p.Name"
+            [nzValue]="company.p.Ref"></nz-option>
+        </nz-select>
+        <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
+          <img width="50px" class="img-thumbnail rounded-circle" height="40px" src="/assets/logos/ShreeIcon.png"
+            alt="logo" />
+        </a>
+        <nz-dropdown-menu #menu="nzDropdownMenu" Class="profile_dropdwon_light">
+          <ul class="dropdown-list" nz-menu Class="profile_dropdwon_light">
+            <li class="options" nz-menu-item routerLinkActive="active" routerLink="/homepage/Website/Your_Profile">
+              Your Profile
+            </li>
+            <li class="options" nz-menu-item routerLinkActive="active" routerLink="/homepage/Website/Change_Password/">
+              Change Password
+            </li>
+            <li class="options" nz-menu-item routerLinkActive="active" (click)="logout()">
+              Log Out
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </div>
+    </nav>
+
+    <!-- Navbar for sm and below -->
+    <nav class="navbar bg-light shadow-sm py-2 px-2 d-flex d-md-none justify-content-between align-items-center">
+      <div class="row w-100 text-center gx-0">
+        <div class="col-2 d-flex align-items-center">
+          <img src="/assets/icons/menu.png" alt="logo" (click)="openModal()"
+            style="width: 7vw; height: 7vw; cursor: pointer" />
+        </div>
+        <div class="col-8 d-flex justify-content-center">
+          <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzPlaceHolder="Select"
+            [nzSize]="'large'" [(ngModel)]="CompanyRef" name="CompanyRef" required id="CompanyRef"
+            (ngModelChange)="changecompany(CompanyRef)" [nzDropdownMatchSelectWidth]="true" [style.width.px]="300"
+            [disabled]="appStateManagement.isDropdownDisabled()">
+            <nz-option *ngFor="let company of CompnyList" [nzLabel]="company.p.Name"
+              [nzValue]="company.p.Ref"></nz-option>
+          </nz-select>
+        </div>
+
+        <div class="col-2 d-flex justify-content-end">
+          <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
+            <img width="50px" class="img-thumbnail rounded-circle" height="40px" src="/assets/logos/ShreeIcon.png"
+              alt="logo" />
+          </a>
+          <nz-dropdown-menu #menu="nzDropdownMenu" Class="profile_dropdwon_light">
+            <ul class="dropdown-list" nz-menu Class="profile_dropdwon_light">
+              <li class="options" nz-menu-item routerLinkActive="active" routerLink="/homepage/Website/Your_Profile">
+                Your Profile
+              </li>
+              <li class="options" nz-menu-item routerLinkActive="active"
+                routerLink="/homepage/Website/Change_Password/">
+                Change Password
+              </li>
+              <li class="options" nz-menu-item routerLinkActive="active" (click)="logout()">
+                Log Out
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </div>
+    </nav>
+
+
     <nz-content class="scrollable-content">
       <div class="inner-content">
         <router-outlet></router-outlet>

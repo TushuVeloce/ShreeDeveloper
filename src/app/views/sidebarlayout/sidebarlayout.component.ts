@@ -763,12 +763,12 @@ export class SidebarlayoutComponent implements OnInit {
   }
 
   openModal(): void {
-    // const modalElement = document.getElementById('sidebarModal');
-    // if (modalElement) {
-    //   const modal = new Modal(modalElement);
-    //   modal.show();
-    // }
-    this.isModalOpen = true;
+    const modalElement = document.getElementById('sidebarModal');
+    if (modalElement) {
+      const modal = new Modal(modalElement);
+      modal.show();
+    }
+    // this.isModalOpen = true;
   }
 
   closeModal() {
