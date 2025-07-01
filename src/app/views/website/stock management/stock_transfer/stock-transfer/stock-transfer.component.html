@@ -1,8 +1,8 @@
 <div class="row">
-   <div class="col-4 mb-2">
+  <div class="col-4 mb-2">
     <h1 style="padding-top: 3px;" class="title title_light">Stock Transfer</h1>
   </div>
-   <div class="col-4 mb-2 search-container_light">
+  <div class="col-4 mb-2 search-container_light">
     <app-shared-filter [masterList]="MasterList" [filterFields]="['Code', 'Name', 'UnitName']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
@@ -12,6 +12,29 @@
     </nz-button>
   </div>
 </div>
+<div class="row" style="margin-top: 1rem; ">
+  <div class="col-md-4">
+    <label for="FromSiteRef"><b>From Site</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      [nzSize]="'large'" name="FromSiteRef" [(ngModel)]="Entity.p.FromSiteRef" required id="FromSiteRef"
+      (ngModelChange)="getTransferListByCompanyRefAndSiteRef()">
+      <nz-option nzLabel="All" [nzValue]="0"></nz-option>
+      <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+    </nz-select>
+  </div>
+  <div class="col-md-4">
+    <label for="ToSiteRef"><b>To Site</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      [nzSize]="'large'" name="ToSiteRef" [(ngModel)]="Entity.p.ToSiteRef" required id="ToSiteRef"
+      (ngModelChange)="getTransferListByCompanyRefAndSiteRef()">
+      <nz-option nzLabel="All" [nzValue]="0"></nz-option>
+      <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+    </nz-select>
+  </div>
+</div>
+<ng-template #noDataTpl>
+  <div class="no-data-text">Data Not Found</div>
+</ng-template>
 <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
@@ -28,7 +51,7 @@
           <td Class="tbldata">{{consume.p.FromSiteName}}</td>
           <td Class="tbldata">{{consume.p.ToSiteName}}</td>
           <td Class="tbldata">{{consume.p.MaterialName}}</td>
-           <td Class="tbldata">{{consume.p.UnitName}}</td>
+          <td Class="tbldata">{{consume.p.UnitName}}</td>
           <td Class="tbldata">{{consume.p.CurrentQuantity}}</td>
           <td Class="tbldata">{{consume.p.TransferredQuantity}}</td>
           <td Class="tbldata">{{consume.p.RemainingQuantity}}</td>
@@ -40,11 +63,12 @@
       </tbody>
     </nz-table>
   </div>
- <div class="fixed-pagination">
+  <div class="fixed-pagination">
     <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
       (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
     </nz-pagination>
-  </div></div>
+  </div>
+</div>
 <div *ngIf="DisplayMasterList.length === 0">
   <Data-Not-Found />
 </div>

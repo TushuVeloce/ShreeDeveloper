@@ -5,6 +5,7 @@ import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/c
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Material } from 'src/app/classes/domain/entities/website/masters/material/material';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { MaterialCurrentStock } from 'src/app/classes/domain/entities/website/stock_management/Material-Current-Stock/materialcurrentstock';
 import { StockTransfer } from 'src/app/classes/domain/entities/website/stock_management/stock-transfer/stocktransfer';
 import { StockConsume } from 'src/app/classes/domain/entities/website/stock_management/stock_consume/stockconsume';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -54,7 +55,7 @@ export class StockTransferDetailsComponent implements OnInit {
       if (this.Entity.p.Date != '') {
         this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
       }
-      if(this.Entity.p.FromSiteRef){
+      if (this.Entity.p.FromSiteRef) {
         this.getMaterialListBySiteRef(this.Entity.p.FromSiteRef);
       }
     } else {
@@ -100,20 +101,24 @@ export class StockTransferDetailsComponent implements OnInit {
     this.MaterialList = lst;
   };
 
-  getUnitByMaterialRef = async (materialref: number) => {
+  getUnitByMaterialRef = async (siteref: number, materialref: number) => {
     this.Entity.p.UnitRef = 0;
     this.Entity.p.UnitName = '';
-    if (materialref < 0) {
-      await this.uiUtils.showErrorToster('Material not Selected');
+    this.Entity.p.CurrentQuantity = 0;
+    if (siteref < 0) {
       return;
     }
-    // let lst = await MaterialFromOrder.FetchInstance(materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    const UnitData = this.MaterialList.find((data) => data.p.MaterialRef == materialref)
-    if (UnitData) {
-      this.Entity.p.UnitRef = UnitData.p.UnitRef;
-      this.Entity.p.UnitName = UnitData.p.UnitName;
+    if (materialref <= 0) {
+      return;
     }
-  }
+    let lst = await MaterialCurrentStock.FetchMaterialData(siteref, materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    if (lst) {
+      this.Entity.p.UnitRef = lst[0].p.UnitRef;
+      this.Entity.p.UnitName = lst[0].p.UnitName;
+      this.Entity.p.CurrentQuantity = lst[0].p.CurrentQuantity;
+      this.calculateRemainingQuantity();
+    }
+  };
 
   SiteValidation = async () => {
     const FromSite = this.Entity.p.FromSiteRef
@@ -126,6 +131,15 @@ export class StockTransferDetailsComponent implements OnInit {
       }, 0);
     }
   }
+
+  onSiteChange = () => {
+    this.Entity.p.MaterialRef = 0;
+    this.Entity.p.UnitRef = 0;
+    this.Entity.p.UnitName = '';
+    this.Entity.p.CurrentQuantity = 0;
+    this.Entity.p.TransferredQuantity = 0;
+    this.Entity.p.RemainingQuantity = 0;
+  };
 
   SaveStockTransfer = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()

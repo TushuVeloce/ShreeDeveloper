@@ -12,7 +12,8 @@ export class StockTransferFetchRequest
     StockTransferManagementRefs: number[] = [];
     CompanyRefs: number[] = [];
     StockTransferStatus: number[] = [];
-    SiteRefs: number[] = [];
+    FromSiteRefs: number[] = [];
+    ToSiteRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

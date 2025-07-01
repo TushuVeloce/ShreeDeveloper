@@ -71,22 +71,21 @@ export class StockInwardComponent  implements OnInit {
     this.loadPaginationData();
   }
 
-  onSiteChange = async () => {
-    // this.getInwardListByAllFilters()
-  }
-
-  // getInwardListByAllFilters = async () => {
-  //   this.MasterList = [];
-  //   this.DisplayMasterList = [];
-  //   if (this.companyRef() <= 0) {
-  //     await this.uiUtils.showErrorToster('Company not Selected');
-  //     return;
-  //   }
-  //   let lst = await StockInward.FetchEntireListByAllFilters(this.companyRef(), this.Entity.p.Status, this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //   this.MasterList = lst;
-  //   this.DisplayMasterList = this.MasterList;
-  //   this.loadPaginationData();
-  // }
+  
+   getInwardListByCompanyRefAndSiteRef = async () => {
+      this.MasterList = [];
+      this.DisplayMasterList = [];
+      if (this.Entity.p.SiteRef <= 0) {
+        this.getStockInwardListByCompanyRef();
+        return;
+      }
+      let lst = await StockInward.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
+        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+      this.MasterList = lst;
+      this.DisplayMasterList = this.MasterList;
+      this.loadPaginationData();
+    };
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
@@ -124,11 +123,13 @@ export class StockInwardComponent  implements OnInit {
           await this.uiUtils.showSuccessToster(
             `StockInward ${StockInward.p.SiteName} has been deleted!`
           );
-          // await this.getInwardListByAllFilters();
           this.SearchString = '';
           this.loadPaginationData();
-          // await this.FormulateMaterialList();
-
+          if (this.Entity.p.SiteRef <= 0) {
+            this.getStockInwardListByCompanyRef();
+          } else {
+            this.getInwardListByCompanyRefAndSiteRef();
+          }
         });
       }
     );
