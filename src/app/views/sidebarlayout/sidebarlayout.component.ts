@@ -763,23 +763,24 @@ export class SidebarlayoutComponent implements OnInit {
   }
 
   openModal(): void {
-    const modalElement = document.getElementById('sidebarModal');
-    if (modalElement) {
-      const modal = new Modal(modalElement);
-      modal.show();
-    }
-    // this.isModalOpen = true;
+    // const modalElement = document.getElementById('sidebarModal');
+    // if (modalElement) {
+    //   const modal = new Modal(modalElement);
+    //   modal.show();
+    // }
+    this.isModalOpen = true;
   }
 
   closeModal() {
-    const modalElement = document.getElementById('sidebarModal');
-    if (modalElement) {
-      // Bootstrap method to hide the modal
-      const modalInstance = bootstrap.Modal.getInstance(modalElement);
-      if (modalInstance) {
-        modalInstance.hide();
-      }
-    }
+    this.isModalOpen = false;
+    // const modalElement = document.getElementById('sidebarModal');
+    // if (modalElement) {
+    //   // Bootstrap method to hide the modal
+    //   const modalInstance = bootstrap.Modal.getInstance(modalElement);
+    //   if (modalInstance) {
+    //     modalInstance.hide();
+    //   }
+    // }
   }
 
   navigatetodashboard() {
