@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { StockTransfer } from 'src/app/classes/domain/entities/website/stock_management/stock-transfer/stocktransfer';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -25,9 +26,9 @@ Entity: StockTransfer = StockTransfer.CreateNewInstance();
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.','Date', 'From Site', 'To Site','Material Name','Unit', 'Current Qty.' ,'Transferred Qty.','Rate','GST','Amount','Remaining Qty.','Action'];
+  headers: string[] = ['Sr.No.','Date', 'From Site', 'To Site','Material Name','Unit', 'Current Qty.' ,'Transferred Qty.','Remaining Qty.','Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
   ) {
     effect(async () => {
       await this.getStockTransferListByCompanyRef();
@@ -48,10 +49,15 @@ Entity: StockTransfer = StockTransfer.CreateNewInstance();
       return;
     }
     let lst = await StockTransfer.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.MasterList = lst;
-
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
+  }
+
+   // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
   }
 
   onEditClicked = async (item: StockTransfer) => {

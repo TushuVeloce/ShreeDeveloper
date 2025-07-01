@@ -19,7 +19,7 @@ import { Utils } from 'src/app/services/utils.service';
   styleUrls: ['./stock-transfer-details.component.scss'],
   standalone: false,
 })
-export class StockTransferDetailsComponent  implements OnInit {
+export class StockTransferDetailsComponent implements OnInit {
 
   isSaveDisabled: boolean = false;
   private IsNewEntity: boolean = true;
@@ -37,7 +37,7 @@ export class StockTransferDetailsComponent  implements OnInit {
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
 
   @ViewChild('transferForm') transferForm!: NgForm;
-   @ViewChild('DateCtrl') DateInputControl!: NgModel;
+  @ViewChild('DateCtrl') DateInputControl!: NgModel;
   @ViewChild('TransferredQuantityCtrl') TransferredQuantityInputControl!: NgModel;
   @ViewChild('RateCtrl') RateInputControl!: NgModel;
 
@@ -54,7 +54,9 @@ export class StockTransferDetailsComponent  implements OnInit {
       if (this.Entity.p.Date != '') {
         this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
       }
-      this.getMaterialListBySiteRef(this.Entity.p.FromSiteRef);
+      if(this.Entity.p.FromSiteRef){
+        this.getMaterialListBySiteRef(this.Entity.p.FromSiteRef);
+      }
     } else {
       this.Entity = StockTransfer.CreateNewInstance();
       StockTransfer.SetCurrentInstance(this.Entity);
@@ -65,7 +67,7 @@ export class StockTransferDetailsComponent  implements OnInit {
   }
 
   focusInput = () => {
-    let txtName = document.getElementById('Amount')!;
+    let txtName = document.getElementById('FromSiteRef')!;
     txtName.focus();
   }
 
@@ -79,14 +81,14 @@ export class StockTransferDetailsComponent  implements OnInit {
     this.SiteList = lst;
   }
 
-getMaterialListBySiteRef = async (SiteRef: number) => {
-    this.Entity.p.MaterialRef = 0
-    if(this.Entity.p.MaterialRef > 0){
-      this.getUnitByMaterialRef( this.Entity.p.MaterialRef )
-    }
+  getMaterialListBySiteRef = async (SiteRef: number) => {
     this.MaterialList = [];
-    if (this.companyRef() <= 0 && SiteRef < 0) {
+    if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    if (SiteRef <= 0) {
+      await this.uiUtils.showErrorToster('Site not Selected');
       return;
     }
     let lst = await StockConsume.FetchMaterialListBySiteRef(
@@ -98,10 +100,10 @@ getMaterialListBySiteRef = async (SiteRef: number) => {
     this.MaterialList = lst;
   };
 
- getUnitByMaterialRef = async (materialref: number) => {
+  getUnitByMaterialRef = async (materialref: number) => {
     this.Entity.p.UnitRef = 0;
     this.Entity.p.UnitName = '';
-    if (materialref <= 0) {
+    if (materialref < 0) {
       await this.uiUtils.showErrorToster('Material not Selected');
       return;
     }
@@ -113,13 +115,15 @@ getMaterialListBySiteRef = async (SiteRef: number) => {
     }
   }
 
-    SiteValidation = async() =>{
-      const FromSite = this.Entity.p.FromSiteRef
-      const ToSite = this.Entity.p.ToSiteRef
-    if(FromSite == ToSite){
-       await this.uiUtils.showWarningToster("From Site and To Site can not be same");
-         this.Entity.p.FromSiteRef = 0
-         this.Entity.p.ToSiteRef = 0
+  SiteValidation = async () => {
+    const FromSite = this.Entity.p.FromSiteRef
+    const ToSite = this.Entity.p.ToSiteRef
+    if (FromSite == ToSite) {
+      await this.uiUtils.showWarningToster("From Site and To Site can not be same");
+      setTimeout(() => {
+        this.Entity.p.FromSiteRef = 0;
+        this.Entity.p.ToSiteRef = 0;
+      }, 0);
     }
   }
 
@@ -152,16 +156,16 @@ getMaterialListBySiteRef = async (SiteRef: number) => {
     }
   }
 
-   calculateAmount = () => {
+  calculateAmount = () => {
     const Rate = Number(this.Entity.p.Rate);
-     const GSTOnRate = Number((this.Entity.p.GST / 100) * Rate);
-    this.Entity.p.Amount = Math.ceil(Rate + GSTOnRate );
+    const GSTOnRate = Number((this.Entity.p.GST / 100) * Rate);
+    this.Entity.p.Amount = Math.ceil(Rate + GSTOnRate);
   }
 
-   calculateRemainingQuantity = () => {
+  calculateRemainingQuantity = () => {
     const CurrentQuantity = Number(this.Entity.p.CurrentQuantity);
     const TransfferedQuantity = Number(this.Entity.p.TransferredQuantity);
-    this.Entity.p.RemainingQuantity = Math.ceil(CurrentQuantity - TransfferedQuantity );
+    this.Entity.p.RemainingQuantity = Math.ceil(CurrentQuantity - TransfferedQuantity);
   }
 
   // for value 0 selected while click on Input //

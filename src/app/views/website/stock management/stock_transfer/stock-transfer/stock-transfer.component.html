@@ -24,16 +24,13 @@
       <tbody>
         <tr *ngFor="let consume of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{consume.p.Date}}</td>
+          <td Class="tbldata">{{formatDate(consume.p.Date)}}</td>
           <td Class="tbldata">{{consume.p.FromSiteName}}</td>
           <td Class="tbldata">{{consume.p.ToSiteName}}</td>
           <td Class="tbldata">{{consume.p.MaterialName}}</td>
            <td Class="tbldata">{{consume.p.UnitName}}</td>
           <td Class="tbldata">{{consume.p.CurrentQuantity}}</td>
           <td Class="tbldata">{{consume.p.TransferredQuantity}}</td>
-          <td Class="tbldata">{{consume.p.Rate}}</td>
-          <td Class="tbldata">{{consume.p.GST}}</td>
-          <td Class="tbldata">{{consume.p.Amount}}</td>
           <td Class="tbldata">{{consume.p.RemainingQuantity}}</td>
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(consume)" />

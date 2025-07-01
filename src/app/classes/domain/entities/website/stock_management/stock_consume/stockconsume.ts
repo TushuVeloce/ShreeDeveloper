@@ -194,8 +194,8 @@ export class StockConsume implements IPersistable<StockConsume> {
 
         public static async FetchMaterialListBySiteRef(SiteRef:number,CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
             let req = new GetMaterialFromMaterialInwardFetchRequest();
-            req.CompanyRefs.push(CompanyRef)
-            req.SiteRefs.push(SiteRef)
+            req.CompanyRef = CompanyRef
+            req.SiteRef = SiteRef
             let tdResponse = await StockConsume.FetchTransportData(req, errorHandler) as TransportData;
             return StockConsume.ListFromTransportData(tdResponse);
           }

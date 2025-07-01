@@ -163,8 +163,8 @@ export class StockInwardDetailsComponent implements OnInit {
       this.newInward.MaterialName = UnitData.p.MaterialName
       this.newInward.PurchaseOrderQty = UnitData.p.OrderQty
       this.newInward.MaterialStockOrderDetailsRef = UnitData.p.Ref
-      this.newInward.PurchaseOrderRemainingQty = UnitData.p.RemainingQty 
-      this.NewRemainingQty = UnitData.p.RemainingQty 
+      this.newInward.PurchaseOrderRemainingQty = UnitData.p.RemainingQty
+      this.NewRemainingQty = UnitData.p.RemainingQty
       // if (UnitData.p.TotalInwardQty == 0) {
       //   this.newInward.RemainingQty = this.newInward.OrderedQty - this.newInward.InwardQty
       //   this.NewRemainingQty = this.newInward.OrderedQty
@@ -373,7 +373,7 @@ export class StockInwardDetailsComponent implements OnInit {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    this.Entity.p.PurchaseOrderDate = this.PurchaseOrderDate 
+    this.Entity.p.PurchaseOrderDate = this.PurchaseOrderDate
     this.Entity.p.InwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.InwardDate)
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];

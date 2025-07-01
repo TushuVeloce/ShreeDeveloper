@@ -7,6 +7,7 @@ export class UserLoginResponse
     public PhoneNos: string = '';
     public UserDisplayName: string = '';
     public ValidMenuItemIds: string[] = [];
+    public ValidMenuItems: string[] = [];
     public LastSelectedCompanyRef: number = 0;
     public CompanyName: string = '';
     public LoginEmployeeRef: number = 0;
