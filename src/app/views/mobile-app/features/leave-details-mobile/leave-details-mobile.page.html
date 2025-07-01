@@ -1,64 +1,49 @@
-<!-- <app-loader *ngIf="isLoading"></app-loader> -->
 <app-header-with-back-handler [title]="DetailsFormTitle"></app-header-with-back-handler>
 
-<ion-content class="form-container ">
+<ion-content class="form-container">
   <ion-list lines="none" class="ion-padding">
-    <!--  Name -->
+
+    <!-- Name -->
     <ion-item class="input-item">
       <ion-input label="Employee Name" labelPlacement="floating" placeholder="Enter Employee Name"
         [(ngModel)]="Entity.p.EmployeeName" readonly></ion-input>
     </ion-item>
 
-    <!-- Select Request Type -->
-    <ion-item class="input-item" button (click)="selectedLeaveTypeBottomsheet()">
-      <ion-label>Select Request Type</ion-label>
+    <!-- Request Type -->
+    <app-chip-selector [items]="LeaveRequestTypeList" [selected]="preselectedRefs" [disabledItems]="disabledRefs"
+      [singleSelection]="true" [maxSelection]="1" [label]="'Select Request Type'" [showClear]="true"
+      (selectedChanged)="handleLeaveTypeSelection($event)"
+      (validationError)="handleChipError($event)"></app-chip-selector>
 
-      <!-- Text showing the selected status -->
-      <ion-text slot="end" class="status-text">
-        {{ Entity.p.LeaveRequestName }}
-      </ion-text>
-
-      <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
-    </ion-item>
-
-    <!--From Date -->
-    <ion-item class="input-item" *ngIf="!isHalfDay">
+    <!-- From Date -->
+    <ion-item (click)="showFromPicker = true" class="input-item" *ngIf="!isHalfDay">
       <ion-label>From Date</ion-label>
-      <ion-datetime-button datetime="FromDate"></ion-datetime-button>
+      <ion-label slot="end">{{ fromDisplayDate || 'Please select...' }}</ion-label>
     </ion-item>
-    <ion-modal keepContentsMounted="true">
-      <ng-template>
-        <ion-datetime id="FromDate" presentation="date" [(ngModel)]="fromDate" show-default-buttons="true"
-          (ionChange)="onFromDateChange($event.detail.value)"></ion-datetime>
-      </ng-template>
-    </ion-modal>
+    <app-date-picker [show]="showFromPicker" [selectedDate]="fromDate" [defaultToday]="true"
+      (dateChanged)="onFromDateChange($event)" (dateSelected)="fromDisplayDate = $event; showFromPicker = false"
+      (modalDismissed)="showFromPicker = false" />
 
-    <!--To Date -->
-    <ion-item class="input-item" *ngIf="!isHalfDay">
+    <!-- To Date -->
+    <ion-item (click)="showToPicker = true" class="input-item" *ngIf="!isHalfDay">
       <ion-label>To Date</ion-label>
-      <ion-datetime-button datetime="ToDate"></ion-datetime-button>
+      <ion-label slot="end">{{ toDisplayDate || 'Please select...' }}</ion-label>
     </ion-item>
-    <ion-modal keepContentsMounted="true">
-      <ng-template>
-        <ion-datetime id="ToDate" presentation="date" [(ngModel)]="toDate" show-default-buttons="true"
-          (ionChange)="onToDateChange($event.detail.value)"></ion-datetime>
-      </ng-template>
-    </ion-modal>
+    <app-date-picker [show]="showToPicker" [selectedDate]="toDate" [defaultToday]="true"
+      (dateChanged)="onToDateChange($event)" (dateSelected)="toDisplayDate = $event; showToPicker = false"
+      (modalDismissed)="showToPicker = false" />
 
-    <!--Half Day Date -->
-    <ion-item class="input-item" *ngIf="isHalfDay">
+    <!-- Half Day Date -->
+    <ion-item (click)="showHalfPicker = true" class="input-item" *ngIf="isHalfDay">
       <ion-label>Half Day Date</ion-label>
-      <ion-datetime-button datetime="HalfDayDate"></ion-datetime-button>
+      <ion-label slot="end">{{ halfDisplayDate || 'Please select...' }}</ion-label>
     </ion-item>
-    <ion-modal keepContentsMounted="true">
-      <ng-template>
-        <ion-datetime id="HalfDayDate" presentation="date" [(ngModel)]="halfDayDate" show-default-buttons="true"
-          (ionChange)="onHalfDateChange($event.detail.value)"></ion-datetime>
-      </ng-template>
-    </ion-modal>
+    <app-date-picker [show]="showHalfPicker" [selectedDate]="halfDayDate" [defaultToday]="true"
+      (dateChanged)="onHalfDateChange($event)" (dateSelected)="halfDisplayDate = $event; showHalfPicker = false"
+      (modalDismissed)="showHalfPicker = false" />
 
-    <!-- Day -->
+
+    <!-- Days -->
     <ion-item class="input-item" *ngIf="!isHalfDay">
       <ion-input label="Days" labelPlacement="floating" placeholder="Enter Days" [(ngModel)]="Entity.p.Days"
         readonly></ion-input>
@@ -72,8 +57,8 @@
 
     <!-- Description -->
     <ion-item class="input-item">
-      <ion-input label="Description" labelPlacement="floating" placeholder="Enter Description"
-        [(ngModel)]="Entity.p.Description"></ion-input>
+      <ion-textarea label="Description" labelPlacement="floating" placeholder="Enter Description"
+        [(ngModel)]="Entity.p.Description"></ion-textarea>
     </ion-item>
 
     <!-- Buttons -->

@@ -1,0 +1,25 @@
+<ion-modal [isOpen]="show" (willDismiss)="onCancel()" class="custom-modal">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="onCancel()">Cancel</ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-button (click)="onSet()">Set</ion-button>
+        </ion-buttons>
+      </ion-toolbar> 
+    </ion-header>
+
+    <ion-content>
+      <ion-datetime presentation="date"
+      [(ngModel)]="selectedDate"
+      [showDefaultButtons]="false"
+      [max]="maxDate"
+      [min]="minDate"
+      preferWheel="true"
+      class="date-picker"
+      (ionChange)="onChange($event)"></ion-datetime>
+    </ion-content>
+  </ng-template>
+</ion-modal>

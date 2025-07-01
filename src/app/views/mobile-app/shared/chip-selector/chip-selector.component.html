@@ -1,0 +1,15 @@
+<div class="chip-container">
+  <ion-label class="chip-label" *ngIf="label">{{ label }}</ion-label>
+</div>
+
+<div class="chip-container">
+  <ion-chip *ngFor="let item of items" [outline]="!item.selected"
+    [color]="item.selected ? 'primary' : (item.disabled ? 'medium' : '#333')" (click)="toggleItem(item)"
+    [disabled]="item.disabled">
+    <ion-label>{{ item.Name }}</ion-label>
+  </ion-chip>
+
+  <ion-button *ngIf="showClear" fill="clear" color="danger" size="small" (click)="clearAll()">
+    Clear All
+  </ion-button>
+</div>

@@ -1,7 +1,48 @@
+.Leaves-dashboard-card {
+    --background: var(--ion-card-background-color);
+    margin: -4px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: var(--ion-text-color-dark);
+
+    .vertical-line-grid {
+        height: 40px;
+        width: 1px;
+        background-color: #ccc;
+        margin: auto;
+    }
+
+    // .vertical-line-grid {
+    //     width: 1px;
+    //     height: 100%;
+    //     background-color: #fff;
+    // }
+
+    ion-icon {
+        font-size: 18px;
+    }
+        .Leaves-card-header {
+            flex: 1;
+            text-align: center;
+    
+            label {
+                display: block;
+                font-size: calc(10px + 0.2vw);
+                color: #fff;
+            }
+    
+            span {
+                font-size: calc(10px + 0.2vw);
+                font-weight: 600;
+                color: #fff;
+            }   }
+}
+
 .Leaves {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 6px;
     justify-content: center;
 }
 
@@ -15,8 +56,7 @@
     transform: translateY(-4px);
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
-
-ion-card {
+.Leaves-card {
     min-width: 300px;
     scroll-snap-align: start;
     border-left: 4px solid var(--ion-color-danger);

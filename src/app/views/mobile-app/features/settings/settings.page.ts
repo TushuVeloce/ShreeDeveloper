@@ -118,8 +118,8 @@ export class SettingsPage implements OnInit {
       this.appStateManagement.StorageKey.clear();
       localStorage.clear();
 
-      this.toastService.present('Logout successfully', 2000, 'danger');
-      await this.haptic.success();
+      this.toastService.present('Logout successfully', 1000, 'danger');
+      this.haptic.success();
       // Navigate to login
       this.router.navigate(['/mobileapp/auth/login-mobile']);
     } catch (error) {

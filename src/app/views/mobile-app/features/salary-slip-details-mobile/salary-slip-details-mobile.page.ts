@@ -10,6 +10,10 @@ import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
+import { ToastService } from '../../core/toast.service';
+import { HapticService } from '../../core/haptic.service';
+import { AlertService } from '../../core/alert.service';
+import { LoadingService } from '../../core/loading.service';
 
 @Component({
   selector: 'app-salary-slip-details-mobile',
@@ -45,7 +49,11 @@ export class SalarySlipDetailsMobilePage implements OnInit {
     private appStateManagement: AppStateManageService,
     private utils: Utils,
     private companystatemanagement: CompanyStateManagement,
-    private bottomsheetMobileAppService: BottomsheetMobileAppService
+    private bottomsheetMobileAppService: BottomsheetMobileAppService,
+    private toastService: ToastService,
+    private haptic: HapticService,
+    private alertService: AlertService,
+    private loadingService: LoadingService,
   ) { }
   async ngOnInit(): Promise<void> {
     await this.loadSalarySlipRequestsIfEmployeeExists();
@@ -59,9 +67,9 @@ export class SalarySlipDetailsMobilePage implements OnInit {
     // cleanup logic if needed later
   }
 
-  private async loadSalarySlipRequestsIfEmployeeExists(): Promise<void> {
+  private loadSalarySlipRequestsIfEmployeeExists = async ()=> {
     try {
-      this.isLoading = true;
+      await this.loadingService.show();
       this.CompanyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
       this.CompanyName = this.companystatemanagement.getCurrentCompanyName();
       this.Entity.p.EmployeeRef = Number(this.appStateManagement.getEmployeeRef());
@@ -88,25 +96,49 @@ export class SalarySlipDetailsMobilePage implements OnInit {
           this.utils.DeepCopy(this.Entity)
         );
       } else {
-        await this.uiUtils.showErrorToster('Employee not selected');
+        // await this.uiUtils.showErrorToster('Employee not selected');
+        await this.toastService.present('Company not selected', 1000, 'warning');
+        await this.haptic.warning();
       }
     } catch (error) {
 
 
     } finally {
-      this.isLoading = false;
+      // this.isLoading = false;
+      await this.loadingService.hide();
     }
+  }
+
+  preselectedRefs = [];
+  disabledRefs = [];
+
+  handleMonthSelection(selected: any[]) {
+    this.Entity.p.SelectedMonths = selected.map(item => item.Ref);
+    this.Entity.p.SelectedMonthsName = selected.map(item => item.Name);
+    this.isMonthInvalid = this.Entity.p.SelectedMonthsName.length === 0;
+  }
+
+  handleChipError(msg: string) {
+    // console.warn(msg);
+    this.toastService.present(msg, 1000, 'warning');
+    this.haptic.warning();
   }
 
   private async getSingleEmployeeDetails(): Promise<void> {
     try {
       if (this.CompanyRef <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
+        // await this.uiUtils.showErrorToster('Company not Selected');
+        await this.toastService.present('Company not selected', 1000, 'warning');
+        await this.haptic.warning();
         return;
       }
 
       const employee = await Employee.FetchInstance(this.EmployeeRef, this.CompanyRef, async (errMsg) =>
-        await this.uiUtils.showErrorMessage('Error', errMsg)
+      {
+        // await this.uiUtils.showErrorMessage('Error', errMsg);
+        await this.toastService.present('Error '+errMsg, 1000, 'danger');
+        await this.haptic.error();
+      }
       );
 
       console.log('employee :', employee);
@@ -180,7 +212,9 @@ export class SalarySlipDetailsMobilePage implements OnInit {
     try {
       this.FinancialYearList = [];
       if (this.CompanyRef <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
+        // await this.uiUtils.showErrorToster('Company not Selected');
+        await this.toastService.present('Company not selected', 1000, 'warning');
+        await this.haptic.warning();
         return;
       }
       let lst = await FinancialYear.FetchEntireListByCompanyRef(this.CompanyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
@@ -216,7 +250,7 @@ export class SalarySlipDetailsMobilePage implements OnInit {
         // stop submission if invalid
         return;
       }
-      this.isLoading = false;
+      await this.loadingService.show();
       this.Entity.p.CompanyRef = this.CompanyRef;
       this.Entity.p.CompanyName = this.CompanyName;
 
@@ -229,21 +263,26 @@ export class SalarySlipDetailsMobilePage implements OnInit {
 
       if (!tr.Successful) {
         this.isSaveDisabled = false;
-        this.uiUtils.showErrorMessage('Error', tr.Message);
+        // this.uiUtils.showErrorMessage('Error', tr.Message);
+        await this.toastService.present('Error: ' + tr.Message, 1000, 'danger');
+        await this.haptic.error();
         return;
       } else {
         this.isSaveDisabled = false;
         if (this.IsNewEntity) {
-          await this.uiUtils.showSuccessToster('Salary Slip successfully');
+          // await this.uiUtils.showSuccessToster('Salary Slip successfully');
+          await this.toastService.present('Salary Slip successfully', 1000, 'success');
+          this.haptic.success();
           this.Entity = SalarySlipRequest.CreateNewInstance();
           this.resetForm();
-          this.router.navigate(['mobileapp/tabs/attendance/salary-slip'], { replaceUrl: true });
+          this.router.navigate(['/mobileapp/tabs/attendance/salary-slip'], { replaceUrl: true });
         }
       }
     } catch (error) {
 
     } finally {
-      this.isLoading = false;
+      // this.isLoading = false;
+      await this.loadingService.hide();
     }
   }
 
@@ -253,47 +292,62 @@ export class SalarySlipDetailsMobilePage implements OnInit {
     this.Entity = SalarySlipRequest.CreateNewInstance();
   }
 
- isDataFilled(): boolean {
-      const emptyEntity = SalarySlipRequest.CreateNewInstance();
-      console.log('emptyEntity :', emptyEntity);
-      console.log('this Entity :', this.Entity);
-      return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, []);
-    }
+  isDataFilled(): boolean {
+    const emptyEntity = SalarySlipRequest.CreateNewInstance();
+    console.log('emptyEntity :', emptyEntity);
+    console.log('this Entity :', this.Entity);
+    return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, []);
+  }
 
-    deepEqualIgnoringKeys(obj1: any, obj2: any, ignorePaths: string[]): boolean {
-      const clean = (obj: any, path = ''): any => {
-        if (obj === null || typeof obj !== 'object') return obj;
+  deepEqualIgnoringKeys(obj1: any, obj2: any, ignorePaths: string[]): boolean {
+    const clean = (obj: any, path = ''): any => {
+      if (obj === null || typeof obj !== 'object') return obj;
 
-        const result: any = Array.isArray(obj) ? [] : {};
-        for (const key in obj) {
-          const fullPath = path ? `${path}.${key}` : key;
-          if (ignorePaths.includes(fullPath)) continue;
-          result[key] = clean(obj[key], fullPath);
-        }
-        return result;
-      };
-
-      const cleanedObj1 = clean(obj1);
-      const cleanedObj2 = clean(obj2);
-
-      return JSON.stringify(cleanedObj1) === JSON.stringify(cleanedObj2);
-    }
-
-    goBack = async () => {
-      // Replace this with your actual condition to check if data is filled
-      const isDataFilled = this.isDataFilled(); // Implement this function based on your form
-
-      if (isDataFilled) {
-        await this.uiUtils.showConfirmationMessage(
-          'Warning',
-          `You have unsaved data. Are you sure you want to go back? All data will be lost.`,
-          async () => {
-            this.router.navigate(['/mobileapp/tabs/attendance/salary-slip'], { replaceUrl: true });
-          }
-        );
-      } else {
-        this.router.navigate(['/mobileapp/tabs/attendance/salary-slip'], { replaceUrl: true });
+      const result: any = Array.isArray(obj) ? [] : {};
+      for (const key in obj) {
+        const fullPath = path ? `${path}.${key}` : key;
+        if (ignorePaths.includes(fullPath)) continue;
+        result[key] = clean(obj[key], fullPath);
       }
+      return result;
+    };
+
+    const cleanedObj1 = clean(obj1);
+    const cleanedObj2 = clean(obj2);
+
+    return JSON.stringify(cleanedObj1) === JSON.stringify(cleanedObj2);
+  }
+
+  goBack = async () => {
+    // Replace this with your actual condition to check if data is filled
+    const isDataFilled = this.isDataFilled(); // Implement this function based on your form
+
+    if (isDataFilled) {
+      this.alertService.presentDynamicAlert({
+        header: 'Warning',
+        subHeader: 'Confirmation needed',
+        message: 'You have unsaved data. Are you sure you want to go back? All data will be lost.',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'custom-cancel',
+            handler: () => {
+              console.log('Warning cancelled.');
+            }
+          },
+          {
+            text: 'Yes, back',
+            cssClass: 'custom-confirm',
+            handler: async () => {
+              this.router.navigate(['/mobileapp/tabs/attendance/salary-slip'], { replaceUrl: true });
+            }
+          }
+        ]
+      });
+    } else {
+      this.router.navigate(['/mobileapp/tabs/attendance/salary-slip'], { replaceUrl: true });
     }
+  }
 
 }

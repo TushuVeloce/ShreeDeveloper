@@ -9,6 +9,8 @@ import { ToastService } from '../../core/toast.service';
 import { HapticService } from '../../core/haptic.service';
 import { AlertService } from '../../core/alert.service';
 import { LoadingService } from '../../core/loading.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { FinancialYear } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
 
 @Component({
   selector: 'app-attendance-details-mobile',
@@ -24,22 +26,70 @@ export class AttendanceDetailsMobilePage implements OnInit {
 
   attendanceLogFilter: AttendanceLogs = AttendanceLogs.CreateNewInstance();
   monthlyAttendanceLogsList: AttendanceLogs[] = [];
-  filteredMonthlyAttendanceLogsList: AttendanceLogs[] = [];
+  filteredMonthlyAttendanceLogsList: any[] = [];
   selectedAttendanceLog: AttendanceLogs = AttendanceLogs.CreateNewInstance();
+  
+  public SelectedYear: any[] = [];
+  public FinancialYearList: string[] = [];
+  private CompanyRef: number = 0;
+  private CompanyName: string = '';
+  public PresentCount: number = 0;
+  public AbsentCount: number = 0;
 
   readonly leaveTypeEnum = LeaveRequestType;
   readonly DEFAULT_LOCALE = 'en-US';
 
   constructor(
     private uiUtils: UIUtils,
-    private appState: AppStateManageService,
+    private appStateManagement: AppStateManageService,
     private dateConversionService: DateconversionService,
     private dateService: DateconversionService,
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
-    private loadingService: LoadingService
-  ) { }
+    private loadingService: LoadingService,
+    private companystatemanagement: CompanyStateManagement,
+
+  ) { 
+    // this.filteredMonthlyAttendanceLogsList = [
+    //   {
+    //     p: {
+    //       TransDateTime: '2025-07-01',
+    //       FirstCheckInTime: '09:15 AM',
+    //       LastCheckOutTime: '05:45 PM',
+    //       TotalWorkingHrs: '8:30',
+    //       OnLeave: false
+    //     }
+    //   },
+    //   {
+    //     p: {
+    //       TransDateTime: '2025-07-02',
+    //       FirstCheckInTime: '',
+    //       LastCheckOutTime: '',
+    //       TotalWorkingHrs: '',
+    //       OnLeave: true
+    //     }
+    //   },
+    //   {
+    //     p: {
+    //       TransDateTime: '2025-07-03',
+    //       FirstCheckInTime: '',
+    //       LastCheckOutTime: '',
+    //       TotalWorkingHrs: '',
+    //       OnLeave: false
+    //     }
+    //   },
+    //   {
+    //     p: {
+    //       TransDateTime: '2025-07-04',
+    //       FirstCheckInTime: '10:00 AM',
+    //       LastCheckOutTime: '06:00 PM',
+    //       TotalWorkingHrs: '8:00',
+    //       OnLeave: false
+    //     }
+    //   }
+    // ];
+  }
 
   async ngOnInit(): Promise<void> {
     await this.loadAttendanceDetailsIfEmployeeExists();
@@ -61,8 +111,11 @@ export class AttendanceDetailsMobilePage implements OnInit {
   async loadAttendanceDetailsIfEmployeeExists(): Promise<void> {
     try {
       this.loadingService.show();
-      this.attendanceLogFilter.p.EmployeeRef = this.appState.getEmployeeRef();
-      this.companyRef = Number(this.appState.StorageKey.getItem('SelectedCompanyRef'));
+      this.attendanceLogFilter.p.EmployeeRef = this.appStateManagement.getEmployeeRef();
+      this.CompanyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
+      this.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+      await this.getFinancialYearListByCompanyRef();
+
       if (this.attendanceLogFilter.p.EmployeeRef > 0) {
         this.months = DomainEnums.MonthList();
         await this.fetchAttendanceByMonth(new Date().getMonth());
@@ -76,6 +129,40 @@ export class AttendanceDetailsMobilePage implements OnInit {
       this.loadingService.hide();
     }
   }
+
+    getFinancialYearListByCompanyRef = async () => {
+      try {
+        this.FinancialYearList = [];
+        if (this.CompanyRef <= 0) {
+          // await this.uiUtils.showErrorToster('Company not Selected');
+          await this.toastService.present('Company not selected', 1000, 'warning');
+          await this.haptic.warning();
+          return;
+        }
+        let lst = await FinancialYear.FetchEntireListByCompanyRef(this.CompanyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  
+        const updatedArray = lst.map(item => ({
+          ...item,
+          FromDate: item.p.FromDate.substring(0, 4),
+          ToDate: item.p.ToDate.substring(0, 4)
+        }));
+  
+        const years: string[] = [];
+  
+        updatedArray.forEach(item => {
+          years.push(item.FromDate);
+          years.push(item.ToDate);
+        });
+  
+        // Step 2: Sort and remove duplicates
+        const uniqueYears = Array.from(new Set(years)).sort();
+  
+        this.FinancialYearList = uniqueYears;
+      } catch (error) {
+  
+      }
+    }
+  
 
   async fetchAttendanceByMonth(value: SegmentValue | undefined): Promise<void> {
     try {
@@ -103,12 +190,20 @@ export class AttendanceDetailsMobilePage implements OnInit {
       );
       this.monthlyAttendanceLogsList = logs;
       this.filteredMonthlyAttendanceLogsList = logs;
+      this.PresentCount = logs.filter(log => log.p.FirstCheckInTime).length;
+      this.AbsentCount = logs.filter(log => !log.p.FirstCheckInTime || log.p.OnLeave).length;
       console.log('filteredMonthlyAttendanceLogsList :', this.filteredMonthlyAttendanceLogsList);
     } catch (error) {
       this.handleError(error, 'Fetching monthly logs');
     }
   }
 
+
+  onYearChange() {
+    console.log('Selected year:', this.SelectedYear);
+    this.fetchMonthlyLogs();
+  }
+  
   getDayName(dateString: string): string {
     const formatted = this.formatDate(dateString); // returns "23-05-2025"
     const date = this.parseFormattedDate(formatted);
