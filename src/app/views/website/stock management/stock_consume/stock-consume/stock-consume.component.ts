@@ -1,5 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { StockConsume } from 'src/app/classes/domain/entities/website/stock_management/stock_consume/stockconsume';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -17,10 +18,11 @@ export class StockConsumeComponent  implements OnInit {
  Entity: StockConsume = StockConsume.CreateNewInstance();
   MasterList: StockConsume[] = [];
   DisplayMasterList: StockConsume[] = [];
+  SiteList: Site[] = [];
   SearchString: string = '';
   SelectedStockConsume: StockConsume = StockConsume.CreateNewInstance();
   CustomerRef: number = 0;
-  pageSize = 10; // Items per page
+  pageSize = 4; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
 
@@ -31,6 +33,7 @@ export class StockConsumeComponent  implements OnInit {
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
   ) {
     effect(async () => {
+       this.getSiteListByCompanyRef();
       await this.getStockConsumeListByCompanyRef();
     });
   }
@@ -38,7 +41,20 @@ export class StockConsumeComponent  implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
-    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    // this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+  }
+
+ getSiteListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    this.Entity.p.SiteRef = 0
+    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SiteList = lst;
+    if (this.SiteList.length > 0) {
+      this.Entity.p.SiteRef = 0
+    }
   }
 
   getStockConsumeListByCompanyRef = async () => {
@@ -54,6 +70,21 @@ export class StockConsumeComponent  implements OnInit {
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
+
+   getConsumeListByCompanyRefAndSiteRef = async () => {
+        this.MasterList = [];
+        this.DisplayMasterList = [];
+        if (this.Entity.p.SiteRef <= 0) {
+          this.getStockConsumeListByCompanyRef();
+          return;
+        }
+        let lst = await StockConsume.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
+          async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+        );
+        this.MasterList = lst;
+        this.DisplayMasterList = this.MasterList;
+        this.loadPaginationData();
+      };
 
     // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
@@ -80,6 +111,11 @@ export class StockConsumeComponent  implements OnInit {
           await this.getStockConsumeListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
+            if (this.Entity.p.SiteRef <= 0) {
+            this.getStockConsumeListByCompanyRef();
+          } else {
+            this.getConsumeListByCompanyRefAndSiteRef();
+          }
         });
       }
     );

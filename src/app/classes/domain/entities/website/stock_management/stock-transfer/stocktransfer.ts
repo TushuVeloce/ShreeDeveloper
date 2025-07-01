@@ -179,18 +179,18 @@ export class StockTransfer implements IPersistable<StockTransfer> {
     return StockTransfer.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByAllFilters(CompanyRef: number, Status: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new StockTransferFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
-    if (Status) {
-      req.StockTransferStatus.push(Status)
-    }
-    if (SiteRef) {
-      req.SiteRefs.push(SiteRef)
-    }
-    let tdResponse = await StockTransfer.FetchTransportData(req, errorHandler) as TransportData;
-    return StockTransfer.ListFromTransportData(tdResponse);
-  }
+  public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, FromSiteRef: number,ToSiteRef:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+     let req = new StockTransferFetchRequest();
+     req.CompanyRefs.push(CompanyRef)
+     if(FromSiteRef){
+       req.FromSiteRefs.push(FromSiteRef)
+     }
+     if(ToSiteRef){
+       req.ToSiteRefs.push(ToSiteRef)
+     }
+     let tdResponse = await StockTransfer.FetchTransportData(req, errorHandler) as TransportData;
+     return StockTransfer.ListFromTransportData(tdResponse);
+   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

@@ -113,7 +113,7 @@ export class StockConsume implements IPersistable<StockConsume> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): StockConsume[] {
+    sortPropertyName: string = ""): StockConsume[] {
     let result: StockConsume[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -179,26 +179,21 @@ export class StockConsume implements IPersistable<StockConsume> {
     return StockConsume.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchEntireListByAllFilters(CompanyRef: number, Status: number, SiteRef: number,  errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-        let req = new StockConsumeFetchRequest();
-        req.CompanyRefs.push(CompanyRef)
-        if (Status) {
-          req.StockConsumeStatus.push(Status)
-        }
-        if (SiteRef) {
-          req.SiteRefs.push(SiteRef)
-        }
-        let tdResponse = await StockConsume.FetchTransportData(req, errorHandler) as TransportData;
-        return StockConsume.ListFromTransportData(tdResponse);
-      }
+   public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+      let req = new StockConsumeFetchRequest();
+      req.SiteRefs.push(SiteRef)
+      req.CompanyRefs.push(CompanyRef)
+      let tdResponse = await StockConsume.FetchTransportData(req, errorHandler) as TransportData;
+      return StockConsume.ListFromTransportData(tdResponse);
+    }
 
-        public static async FetchMaterialListBySiteRef(SiteRef:number,CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-            let req = new GetMaterialFromMaterialInwardFetchRequest();
-            req.CompanyRef = CompanyRef
-            req.SiteRef = SiteRef
-            let tdResponse = await StockConsume.FetchTransportData(req, errorHandler) as TransportData;
-            return StockConsume.ListFromTransportData(tdResponse);
-          }
+  public static async FetchMaterialListBySiteRef(SiteRef: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new GetMaterialFromMaterialInwardFetchRequest();
+    req.CompanyRef = CompanyRef
+    req.SiteRef = SiteRef
+    let tdResponse = await StockConsume.FetchTransportData(req, errorHandler) as TransportData;
+    return StockConsume.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

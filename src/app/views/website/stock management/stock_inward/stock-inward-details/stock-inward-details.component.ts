@@ -126,6 +126,7 @@ export class StockInwardDetailsComponent implements OnInit {
       return;
     }
     const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef,VendorRef,this.companyRef(),async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
     const allMatched = lst.every(item => item.p.RemainingQty == 0);
     this.isSaveDisabled = allMatched;
@@ -135,7 +136,6 @@ export class StockInwardDetailsComponent implements OnInit {
       this.filterMaterialList();
     }
   };
-
 
   filterMaterialList() {
     this.MaterialList = this.MaterialListOriginal.filter(item =>
@@ -387,7 +387,6 @@ export class StockInwardDetailsComponent implements OnInit {
         )
       );
     }
-    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
     if (!tr.Successful) {
       this.isSaveDisabled = false;

@@ -179,15 +179,10 @@ export class StockInward implements IPersistable<StockInward> {
     return StockInward.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByAllFilters(CompanyRef: number, Status: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new StockInwardFetchRequest();
+    req.SiteRefs.push(SiteRef)
     req.CompanyRefs.push(CompanyRef)
-    if (Status) {
-      req.StockInwardStatus.push(Status)
-    }
-    if (SiteRef) {
-      req.SiteRefs.push(SiteRef)
-    }
     let tdResponse = await StockInward.FetchTransportData(req, errorHandler) as TransportData;
     return StockInward.ListFromTransportData(tdResponse);
   }

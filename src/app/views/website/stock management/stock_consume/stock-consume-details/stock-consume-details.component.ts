@@ -131,8 +131,13 @@ export class StockConsumeDetailsComponent implements OnInit {
     // this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
   };
 
-  onSiteChange = () => {
+ onSiteChange = () => {
     this.Entity.p.MaterialRef = 0;
+    this.Entity.p.UnitRef = 0;
+    this.Entity.p.UnitName = '';
+    this.Entity.p.CurrentQuantity = 0;
+    this.Entity.p.ConsumedQuantity = 0;
+    this.Entity.p.RemainingQuantity = 0;
   };
 
   getStageListByCompanyRef = async () => {
@@ -179,15 +184,14 @@ export class StockConsumeDetailsComponent implements OnInit {
   };
 
   SaveStockConsumption = async () => {
-    this.Entity.p.CompanyRef =
-      this.companystatemanagement.getCurrentCompanyRef();
-    this.Entity.p.CompanyName =
-      this.companystatemanagement.getCurrentCompanyName();
-    this.Entity.p.ConsumptionDate = this.dtu.ConvertStringDateToFullFormat(
-      this.Entity.p.ConsumptionDate
-    );
+    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+    this.Entity.p.ConsumptionDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.ConsumptionDate);
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    if(this.Entity.p.Remark == ''){
+      this.Entity.p.Remark == ''
+    }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);

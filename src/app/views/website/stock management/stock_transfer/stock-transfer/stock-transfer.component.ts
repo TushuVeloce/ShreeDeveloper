@@ -1,5 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { StockTransfer } from 'src/app/classes/domain/entities/website/stock_management/stock-transfer/stocktransfer';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -17,6 +18,7 @@ export class StockTransferComponent  implements OnInit {
 Entity: StockTransfer = StockTransfer.CreateNewInstance();
   MasterList: StockTransfer[] = [];
   DisplayMasterList: StockTransfer[] = [];
+  SiteList: Site[] = [];
   SearchString: string = '';
   SelectedStockTransfer: StockTransfer = StockTransfer.CreateNewInstance();
   CustomerRef: number = 0;
@@ -31,6 +33,7 @@ Entity: StockTransfer = StockTransfer.CreateNewInstance();
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
   ) {
     effect(async () => {
+      this.getSiteListByCompanyRef()
       await this.getStockTransferListByCompanyRef();
     });
   }
@@ -41,6 +44,22 @@ Entity: StockTransfer = StockTransfer.CreateNewInstance();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
+getSiteListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    this.Entity.p.FromSiteRef = 0
+    this.Entity.p.ToSiteRef = 0
+    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SiteList = lst;
+    if (this.SiteList.length > 0) {
+      this.Entity.p.FromSiteRef = 0
+      this.Entity.p.ToSiteRef = 0
+    }
+    // this.getInwardListByAllFilters()
+  }
+
   getStockTransferListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
@@ -49,11 +68,25 @@ Entity: StockTransfer = StockTransfer.CreateNewInstance();
       return;
     }
     let lst = await StockTransfer.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
+
+  getTransferListByCompanyRefAndSiteRef = async () => {
+        this.MasterList = [];
+        this.DisplayMasterList = [];
+        if (this.Entity.p.FromSiteRef <= 0 && this.Entity.p.ToSiteRef == 0) {
+          this.getStockTransferListByCompanyRef();
+          return;
+        }
+        let lst = await StockTransfer.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.FromSiteRef,this.Entity.p.ToSiteRef,
+          async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+        );
+        this.MasterList = lst;
+        this.DisplayMasterList = this.MasterList;
+        this.loadPaginationData();
+      };
 
    // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
@@ -80,6 +113,11 @@ Entity: StockTransfer = StockTransfer.CreateNewInstance();
           await this.getStockTransferListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
+           if (this.Entity.p.FromSiteRef <= 0) {
+            this.getStockTransferListByCompanyRef();
+          } else {
+            this.getTransferListByCompanyRefAndSiteRef();
+          }
         });
       }
     );
