@@ -24,7 +24,7 @@ export class AttendanceLogsProps {
   public TotalWorkingHrs: string = '';
   public TotalOvertimeHours: string = '';
   public InOfficeHrs: string = '';
-  public OnLeave: string = '';
+  public OnLeave: number = 0;
   public LeaveType: string = '';
 
   public TeamSize: number = 0;

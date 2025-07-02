@@ -107,7 +107,7 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
     this.AttendanceLogCount.p.TotalDaysInMonth = 0;
     this.AttendanceLogCount.p.Present = 0;
     this.AttendanceLogCount.p.Absent = 0;
-    this.AttendanceLogCount.p.OnLeaveDaily = 0;
+    this.AttendanceLogCount.p.OnLeave = 0;
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -156,7 +156,7 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
     this.AttendanceLogCount.p.TotalDaysInMonth = 0;
     this.AttendanceLogCount.p.Present = 0;
     this.AttendanceLogCount.p.Absent = 0;
-    this.AttendanceLogCount.p.OnLeaveDaily = 0;
+    this.AttendanceLogCount.p.OnLeave = 0;
     this.DisplayMasterList = [];
     this.ToDispayMonthlyRequirement = true;
     this.ToDisplayWeeklyRequirement = false;
@@ -261,7 +261,7 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
     this.AttendanceLogCount.p.TeamSize = 0
     this.AttendanceLogCount.p.Present = 0
     this.AttendanceLogCount.p.Absent = 0
-    this.AttendanceLogCount.p.OnLeaveDaily = 0
+    this.AttendanceLogCount.p.OnLeave = 0
     this.AttendanceLogCount.p.TotalDaysInMonth = 0
     this.AttendanceLogCount.p.TotalDaysInWeek = 0
     let lst = await AttendanceLogsCount.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendanceLogType, this.Entity.p.Months, this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
@@ -269,7 +269,7 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
     this.AttendanceLogCount.p.TeamSize = lst[0]?.p?.TeamSize
     this.AttendanceLogCount.p.Present = lst[0]?.p?.Present
     this.AttendanceLogCount.p.Absent = lst[0]?.p?.Absent
-    this.AttendanceLogCount.p.OnLeaveDaily = lst[0]?.p?.OnLeaveDaily || 0
+    this.AttendanceLogCount.p.OnLeave = lst[0]?.p?.OnLeave || 0
     this.AttendanceLogCount.p.TotalDaysInMonth = lst[0]?.p?.TotalDaysInMonth
     this.AttendanceLogCount.p.TotalDaysInWeek = lst[0]?.p?.TotalDaysInWeek
   }
@@ -287,7 +287,7 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
     this.Entity.p.TeamSize = 0;
     this.Entity.p.Present = 0;
     this.Entity.p.Absent = 0;
-    this.Entity.p.OnLeaveDaily = 0;
+    this.Entity.p.OnLeave = 0;
     this.Entity.p.TotalDaysInWeek = 0;
     this.Entity.p.TotalDaysInMonth = 0;
   }

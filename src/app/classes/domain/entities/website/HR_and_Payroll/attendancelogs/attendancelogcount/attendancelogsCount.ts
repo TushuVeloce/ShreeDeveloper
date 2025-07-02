@@ -19,7 +19,7 @@ export class AttendanceLogsCountProps {
   public TeamSize: number = 0;
   public Present: number = 0;
   public Absent: number = 0;
-  public OnLeaveDaily: number = 0;
+  public OnLeave: number = 0;
   public TotalDaysInWeek: number = 0;
   public TotalDaysInMonth: number = 0;
 
