@@ -25,6 +25,7 @@ export class InvoiceDetailsComponent implements OnInit {
   SiteList: Site[] = [];
   SubLedgerList: SubLedger[] = [];
   UnitList: Unit[] = [];
+  isDieselPaid: boolean = false
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Invoice' | 'Edit Invoice' = 'New Invoice';
   IsDropdownDisabled: boolean = false;
@@ -118,9 +119,31 @@ export class InvoiceDetailsComponent implements OnInit {
 
   DiselPaid = (DiselPaid: number) => {
     if (DiselPaid == 1) {
+      this.isDieselPaid = true
       this.Entity.p.IsDieselPaid = 1;
     } else {
+      this.Entity.p.DieselQty = 0;
+      this.Entity.p.DieselRate = 0;
+      this.Entity.p.DieselAmount = 0;
       this.Entity.p.IsDieselPaid = 0;
+      this.isDieselPaid = false
+    }
+    this.CalculateAmount()
+  }
+
+  CalculateDieselAmount = () => {
+    const DieselQty = Number(this.Entity.p.DieselQty)
+    const DieselRate = Number(this.Entity.p.DieselRate)
+    this.Entity.p.DieselAmount = DieselQty * DieselRate
+  }
+
+  CalculateAmount = () => {
+    const Qty = Number(this.Entity.p.Qty)
+    const Rate = Number(this.Entity.p.Rate)
+    if(this.Entity.p.DieselAmount == 0){
+      this.Entity.p.InvoiceAmount = Qty * Rate
+    }else{
+      this.Entity.p.InvoiceAmount = (Qty * Rate) - Number(this.Entity.p.DieselAmount)
     }
   }
 

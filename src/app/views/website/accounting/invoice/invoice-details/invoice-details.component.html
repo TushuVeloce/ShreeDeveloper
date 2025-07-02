@@ -82,19 +82,11 @@
             </div>
           </div>
         </div>
-        <div class="col-md-8" style="margin-top: 2.6rem; ">
-          <div class="d-flex align-items-center mb-2">
-            <label for="IsDieselPaid"><b>Diesel Paid</b></label>
-            <input type="checkbox" id="IsDieselPaid" [(ngModel)]="Entity.p.IsDieselPaid" name="IsDieselPaid"
-              class="form-check-input me-4 mb-2 large-dark-checkbox" (ngModelChange)="DiselPaid(Entity.p.IsDieselPaid)"
-              style="width: 20px; height: 20px; margin-left: 1rem;" />
-          </div>
-        </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
           <div>
             <label>Qty</label>
             <input type="number" [(ngModel)]="Entity.p.Qty" name="Qty" class="form-control" id="Qty" required
-              placeholder="Enter Qty" #QtyCtrl="ngModel" (blur)="QtyCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>
+              placeholder="Enter Qty" #QtyCtrl="ngModel" (blur)="QtyCtrl.control.markAsTouched()" (click)="selectAllValue($event)" (ngModelChange)="CalculateAmount()"/>
             <div *ngIf="(QtyCtrl.invalid && (QtyCtrl.touched || QtyCtrl.dirty))">
               <span class="validation-text" *ngIf="QtyCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
@@ -111,18 +103,50 @@
           <div>
             <label>Rate</label>
             <input type="number" [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate" required
-              placeholder="Enter Rate" #RateCtrl="ngModel" (blur)="RateCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>
+              placeholder="Enter Rate" #RateCtrl="ngModel" (blur)="RateCtrl.control.markAsTouched()" (click)="selectAllValue($event)" (ngModelChange)="CalculateAmount()"/>
             <div *ngIf="(RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty))">
               <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
+        </div>
+        <div class="col-md-8" style="margin-top: 2.6rem; ">
+          <div class="d-flex align-items-center mb-2">
+            <label for="IsDieselPaid"><b>Diesel Paid</b></label>
+            <input type="checkbox" id="IsDieselPaid" [(ngModel)]="Entity.p.IsDieselPaid" name="IsDieselPaid"
+              class="form-check-input me-4 mb-2 large-dark-checkbox" (ngModelChange)="DiselPaid(Entity.p.IsDieselPaid)"
+              style="width: 20px; height: 20px; margin-left: 1rem;" />
+          </div>
+        </div>
+         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="isDieselPaid">
+            <label>Diesel Quantity</label>
+            <input type="number" [(ngModel)]="Entity.p.DieselQty" name="DieselQty" class="form-control" id="DieselQty" required
+              placeholder="Enter Diesel Quantity" #DieselQtyCtrl="ngModel" (blur)="DieselQtyCtrl.control.markAsTouched()" (click)="selectAllValue($event)" (ngModelChange)="CalculateDieselAmount()"/>
+            <div *ngIf="(DieselQtyCtrl.invalid && (DieselQtyCtrl.touched || DieselQtyCtrl.dirty))">
+              <span class="validation-text" *ngIf="DieselQtyCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+        </div>
+         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="isDieselPaid">
+            <label>Diesel Rate</label>
+            <input type="number" [(ngModel)]="Entity.p.DieselRate" name="DieselRate" class="form-control" id="DieselRate" required
+              placeholder="Enter Diesel Rate" #DieselRateCtrl="ngModel" (blur)="DieselRateCtrl.control.markAsTouched()" (click)="selectAllValue($event)" (ngModelChange)="CalculateDieselAmount()"/>
+            <div *ngIf="(DieselRateCtrl.invalid && (DieselRateCtrl.touched || DieselRateCtrl.dirty))">
+              <span class="validation-text" *ngIf="DieselRateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+        </div>
+         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="isDieselPaid">
+            <label>Diesel Amount</label>
+            <input type="number" [(ngModel)]="Entity.p.DieselAmount" name="DieselAmount" class="form-control" id="DieselAmount" required
+              placeholder="Enter DieselAmount" #DieselAmountCtrl="ngModel" (blur)="DieselAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>
+            <div *ngIf="(DieselAmountCtrl.invalid && (DieselAmountCtrl.touched || DieselAmountCtrl.dirty))">
+              <span class="validation-text" *ngIf="DieselAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
           <div>
             <label>Invoice Amount</label>
             <input type="number" [(ngModel)]="Entity.p.InvoiceAmount" name="InvoiceAmount" class="form-control"
               id="InvoiceAmount" required placeholder="Enter InvoiceAmount" #InvoiceAmountCtrl="ngModel"
-              (blur)="InvoiceAmountCtrl.control.markAsTouched()" />
+              (blur)="InvoiceAmountCtrl.control.markAsTouched()" readonly/>
             <div *ngIf="(InvoiceAmountCtrl.invalid && (InvoiceAmountCtrl.touched || InvoiceAmountCtrl.dirty))">
               <span class="validation-text" *ngIf="InvoiceAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
