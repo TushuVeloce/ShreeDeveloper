@@ -79,12 +79,12 @@ export class ForgotPasswordComponent  implements OnInit {
     );
     if (!response.Successful) {
       this.isResendOtpDisabled = false;
-      await this.uiUtils.showInformationalMessage('Error', response.Message);
+      await this.uiUtils.showSuccessToster(response.Message);
       return
     }
     else {
       this.isResendOtpDisabled = false;
-      await this.uiUtils.showInformationalMessage('Successfull', 'Please Check Your Mail, Resend OTP Send on Your Email Id');
+      await this.uiUtils.showSuccessToster('Please Check Your Mail, Resend OTP Send on Your Email Id');
       this.startResendOtpTimer();
     }
   }
