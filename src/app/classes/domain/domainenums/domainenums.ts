@@ -193,6 +193,15 @@ export enum MaterialRequisitionStatuses {
   Ordered = 600,
 }
 
+export enum ModeOfPayments {
+  None = 0,
+  Bill = 100,
+  Cash = 200,
+  Cheque = 300,
+  RTGS = 400,
+  GpayPhonePay = 500,
+}
+
 export class DomainEnums {
   public static MarketingModeName(MarketingMode: MarketingModes) {
     switch (MarketingMode) {
@@ -1400,7 +1409,7 @@ export class DomainEnums {
       default:
         return '';
     }
-    }
+  }
 
   public static AttendanceLogTypeList(
     withAllOption: boolean = false,
@@ -1609,6 +1618,59 @@ export class DomainEnums {
     if (withAllOption) {
       let allEntry = {
         Ref: MaterialRequisitionStatuses.None,
+        Name: allOptionName,
+      };
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+  public static ModeOfPaymentsName(itemType: ModeOfPayments) {
+    switch (itemType) {
+      case ModeOfPayments.Bill:
+        return 'Bill';
+      case ModeOfPayments.Cash:
+        return 'Cash';
+      case ModeOfPayments.Cheque:
+        return 'Cheque';
+      case ModeOfPayments.RTGS:
+        return 'RTGS';
+      case ModeOfPayments.GpayPhonePay:
+        return 'GpayPhonePay';
+      default:
+        return '';
+    }
+  }
+
+  public static ModeOfPaymentsList(
+    withAllOption: boolean = false,
+    allOptionName: string = '<All>'
+  ) {
+    let result = [
+      {
+        Ref: ModeOfPayments.Bill,
+        Name: DomainEnums.ModeOfPaymentsName(ModeOfPayments.Bill),
+      },
+      {
+        Ref: ModeOfPayments.Cash,
+        Name: DomainEnums.ModeOfPaymentsName(ModeOfPayments.Cash),
+      },
+      {
+        Ref: ModeOfPayments.Cheque,
+        Name: DomainEnums.ModeOfPaymentsName(ModeOfPayments.Cheque),
+      },
+      {
+        Ref: ModeOfPayments.RTGS,
+        Name: DomainEnums.ModeOfPaymentsName(ModeOfPayments.RTGS),
+      },
+      {
+        Ref: ModeOfPayments.GpayPhonePay,
+        Name: DomainEnums.ModeOfPaymentsName(ModeOfPayments.GpayPhonePay),
+      }
+    ];
+    if (withAllOption) {
+      let allEntry = {
+        Ref: ModeOfPayments.None,
         Name: allOptionName,
       };
       result.unshift(allEntry);
