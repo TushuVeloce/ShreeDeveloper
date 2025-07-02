@@ -12,7 +12,7 @@ export class HomePage {
   constructor(private appStateManage: AppStateManageService) {}
 
    async ngOnInit() {
-    this.appStateManage.setDropdownDisabled(false);
+    this.appStateManage.setDropdownDisabled(true);
   }
 
 }
