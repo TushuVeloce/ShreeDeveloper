@@ -36,7 +36,7 @@ export class InvoiceProps {
   public Description: string = ''
   public RecipientName: string = ''
   public Reason: string = ''
-  public IsDisealPaid: number = 0
+  public IsDieselPaid: number = 0
   public Qty: number = 0
   public UnitRef: number = 0
   public Rate: number = 0

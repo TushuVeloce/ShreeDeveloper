@@ -45,6 +45,8 @@ export class InvoiceDetailsComponent implements OnInit {
 
   async ngOnInit() {
     await this.appStateManage.setDropdownDisabled(true);
+    this.getSiteListByCompanyRef()
+    this.getLedgerListByCompanyRef()
     await this.getUnitList()
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
@@ -92,7 +94,6 @@ export class InvoiceDetailsComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.LedgerList = lst
-    this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef)
   };
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
@@ -100,8 +101,23 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Ledger not Selected');
       return;
     }
+    this.Entity.p.SubLedgerRef = 0
     let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SubLedgerList = lst;
+  }
+
+  DiselPaid = (DiselPaid: number) => {
+    if (DiselPaid == 1) {
+      this.Entity.p.IsDieselPaid = 1;
+    } else {
+      this.Entity.p.IsDieselPaid = 0;
+    }
+  }
+
+   // for value 0 selected while click on Input //
+  selectAllValue = (event: MouseEvent): void => {
+    const input = event.target as HTMLInputElement;
+    input.select();
   }
 
   SaveInvoiceMaster = async () => {

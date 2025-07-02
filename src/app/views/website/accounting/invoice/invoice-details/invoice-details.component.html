@@ -38,7 +38,7 @@
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Ledger</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef">
+            nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef" (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef)">
             <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -82,19 +82,19 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12">
+        <div class="col-md-8" style="margin-top: 2.6rem; ">
           <div class="d-flex align-items-center mb-2">
-            <label for="IsDisealPaid"><b>Diesel Paid</b></label>
-            <input type="checkbox" id="IsDisealPaid" [(ngModel)]="Entity.p.IsDisealPaid" name="IsDisealPaid"
-              class="form-check-input me-4 mb-2 large-dark-checkbox"
+            <label for="IsDieselPaid"><b>Diesel Paid</b></label>
+            <input type="checkbox" id="IsDieselPaid" [(ngModel)]="Entity.p.IsDieselPaid" name="IsDieselPaid"
+              class="form-check-input me-4 mb-2 large-dark-checkbox" (ngModelChange)="DiselPaid(Entity.p.IsDieselPaid)"
               style="width: 20px; height: 20px; margin-left: 1rem;" />
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
           <div>
             <label>Qty</label>
-            <input type="text" [(ngModel)]="Entity.p.Qty" name="Qty" class="form-control" id="Qty" required
-              placeholder="Enter Qty" #QtyCtrl="ngModel" (blur)="QtyCtrl.control.markAsTouched()" />
+            <input type="number" [(ngModel)]="Entity.p.Qty" name="Qty" class="form-control" id="Qty" required
+              placeholder="Enter Qty" #QtyCtrl="ngModel" (blur)="QtyCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>
             <div *ngIf="(QtyCtrl.invalid && (QtyCtrl.touched || QtyCtrl.dirty))">
               <span class="validation-text" *ngIf="QtyCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
@@ -111,7 +111,7 @@
           <div>
             <label>Rate</label>
             <input type="number" [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate" required
-              placeholder="Enter Rate" #RateCtrl="ngModel" (blur)="RateCtrl.control.markAsTouched()" />
+              placeholder="Enter Rate" #RateCtrl="ngModel" (blur)="RateCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>
             <div *ngIf="(RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty))">
               <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
