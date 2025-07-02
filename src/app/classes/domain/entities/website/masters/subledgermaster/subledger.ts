@@ -21,7 +21,7 @@ export class SubLedgerProps {
   public CreatedDate: string = '';
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
-  public UpdatedDate: number = 0;
+  public UpdatedDate: string = '';
   public Ref: number = 0;
   public LedgerRef: number = 0;
   public readonly LedgerName: number = 0;
@@ -72,9 +72,8 @@ export class SubLedger implements IPersistable<SubLedger> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') {
-      vra.add('Name', 'Name cannot be blank.');
-    }
+    if (this.p.LedgerRef == 0) {vra.add('LedgerRef', 'Ledger cannot be blank.');}
+    if (this.p.Name == '') {vra.add('Name', 'Name cannot be blank.');}
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -172,6 +171,13 @@ export class SubLedger implements IPersistable<SubLedger> {
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new SubLedgerFetchRequest();
     req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await SubLedger.FetchTransportData(req, errorHandler) as TransportData;
+    return SubLedger.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByLedgerRef(LedgerRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new SubLedgerFetchRequest();
+    req.LedgerRefs.push(LedgerRef)
     let tdResponse = await SubLedger.FetchTransportData(req, errorHandler) as TransportData;
     return SubLedger.ListFromTransportData(tdResponse);
   }

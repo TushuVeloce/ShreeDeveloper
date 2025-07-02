@@ -35,8 +35,11 @@
           <div>
             <label>Sub Ledger Name</label>
             <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
-              placeholder="Enter Sub Ledger Name" pattern="{{NameWithNosAndSpace}}" #NameCtrl="ngModel"
+              placeholder="Enter Sub Ledger Name" #NameCtrl="ngModel"
               (blur)="NameCtrl.control.markAsTouched()" />
+                <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
+              <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
           </div>
         </div>
       </div>

@@ -1,8 +1,8 @@
 <div class="row">
-   <div class="col-4 mb-2">
+  <div class="col-4 mb-2">
     <h1 style="padding-top: 3px;" class="title title_light">Sub Ledger Master</h1>
   </div>
-   <div class="col-4 mb-2 search-container_light">
+  <div class="col-4 mb-2 search-container_light">
     <app-shared-filter [masterList]="MasterList" [filterFields]="['Code', 'Name', 'UnitName']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
@@ -12,6 +12,22 @@
     </nz-button>
   </div>
 </div>
+<div class="row" style="margin-top: 1rem; ">
+  <div class="col-md-4">
+    <div>
+      <label><b>Main Ledger</b></label>
+      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+        id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"  (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef)">
+        <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
+      </nz-select>
+    </div>
+  </div>
+</div>
+<ng-template #noDataTpl>
+  <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+    No Data
+  </div>
+</ng-template>
 <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"

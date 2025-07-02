@@ -684,6 +684,24 @@ export class SidebarlayoutComponent implements OnInit {
     //   }
     // ]
 
+     let AccountingSubModuleList = [
+      {
+        Name: 'Invoice',
+        RouterLink: '/homepage/Website/Invoice',
+        LogoPath: '/assets/icons/Customer Enquiry.png',
+      },
+      {
+        Name: 'Expense',
+        RouterLink: '/homepage/Website/Expense',
+        LogoPath: '/assets/icons/Customer Followup.png',
+      },
+      {
+        Name: 'Income',
+        RouterLink: '/homepage/Website/Income',
+        LogoPath: '/assets/icons/Customer Followup.png',
+      },
+    ]
+
     let moduleListInternal = [
       {
         Name: 'Dashboards',
@@ -750,6 +768,12 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '',
         WhiteLogo: '/assets/icons/Request.png',
         SubModuleList: RequestSubModulelist,
+      },
+      {
+        Name: 'Accounting',
+        RouterLink: '',
+        WhiteLogo: '/assets/icons/Request.png',
+        SubModuleList: AccountingSubModuleList,
       },
       // {
       //   Name: 'RazorPay',

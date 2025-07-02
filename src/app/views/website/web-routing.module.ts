@@ -12,14 +12,9 @@ import { CompanyMasterDetailsComponent } from './Masters/company/company-master-
 import { VendorMasterComponent } from './Masters/vendor/vendor-master/vendor-master.component';
 import { VendorMasterDetailsComponent } from './Masters/vendor/vendor-master-details/vendor-master-details.component';
 import { SiteManagementDetailsComponent } from './site-management/site-management-details/site-management-details.component';
-import { AccountTransactionsComponent } from './Accounting/account-transactions/account-transactions.component';
-import { ExpenseTransactionsComponent } from './Accounting/expense-transactions/expense-transactions.component';
-import { ClientIncomeComponent } from './Accounting/Income Transactions/client-income/client-income.component';
-import { BillingReportComponent } from './Reports/billing-report/billing-report.component';
-import { OfficeReportComponent } from './Reports/office-report/office-report.component';
 import { BookingReportComponent } from './Reports/booking-report/booking-report.component';
 import { StockReportComponent } from './Reports/stock-report/stock-report.component';
-import { CrmReportComponent } from './Reports/crm-report/crm-report.component';
+// import { CrmReportComponent } from './Reports/crm-report/crm-report.component';
 import { FollowUpReportComponent } from './Reports/follow-up-report/follow-up-report.component';
 import { EmployeeReportComponent } from './Reports/employee-report/employee-report.component';
 import { MarketingReportComponent } from './Reports/marketing-report/marketing-report.component';
@@ -135,6 +130,13 @@ import { OrderApprovalComponent } from './stock management/stock_order/order-app
 import { ChangePasswordComponent } from './profile/change_password/change-password/change-password.component';
 import { StockOrderPrintComponent } from './stock management/stock_order/stock-order-print/stock-order-print.component';
 import { StockInwardPrintComponent } from './stock management/stock_inward/stock-inward-print/stock-inward-print.component';
+import { CrmReportComponent } from './reports/crm-report/crm-report.component';
+import { ExpenseComponent } from './accounting/expense/expense/expense.component';
+import { ExpenseDetailsComponent } from './accounting/expense/expense-details/expense-details.component';
+import { IncomeComponent } from './accounting/income/income/income.component';
+import { IncomeDetailsComponent } from './accounting/income/income-details/income-details.component';
+import { InvoiceComponent } from './accounting/invoice/invoice/invoice.component';
+import { InvoiceDetailsComponent } from './accounting/invoice/invoice-details/invoice-details.component';
 
 
 const routes: Routes = [
@@ -219,7 +221,6 @@ const routes: Routes = [
       { path: 'Plot_Master', component: PlotMasterComponent },
       { path: 'Plot_Master_Details', component: PlotMasterDetailsComponent },
 
-
       { path: 'Site_Management', component: SiteManagementMasterComponent },
       { path: 'Site_Management_Details', component: SiteManagementDetailsComponent },
 
@@ -231,21 +232,26 @@ const routes: Routes = [
       // Stock Management
       { path: 'Material_Requisition', component: MaterialRequisitionComponent },
       { path: 'Material_Requisition_Details', component: MaterialRequisitionDetailsComponent },
+
       { path: 'Quotation', component: QuotationComponent },
       { path: 'Quotation_Details', component: QuotationDetailsComponent },
       { path: 'Quotation_Approval', component: QuotationApprovalComponent },
+
       { path: 'Stock_Order', component: StockOrderComponent },
       { path: 'Stock_Order_Details', component: StockOrderDetailsComponent },
       { path: 'Add_Stock_Order', component: StockOrderDetailsComponent },
+      { path: 'Order_Approval', component: OrderApprovalComponent },
       { path: 'Stock_Order_Print', component: StockOrderPrintComponent },
+
       { path: 'Stock_Inward', component: StockInwardComponent },
       { path: 'Stock_Inward_Details', component: StockInwardDetailsComponent },
       { path: 'Stock_Inward_Print', component: StockInwardPrintComponent },
+
       { path: 'Stock_Consume', component: StockConsumeComponent },
       { path: 'Stock_Consume_Details', component: StockConsumeDetailsComponent },
+
       { path: 'Stock_Transfer', component: StockTransferComponent },
       { path: 'Stock_Transfer_Details', component: StockTransferDetailsComponent },
-      { path: 'Order_Approval', component: OrderApprovalComponent },
 
       // Customer Management
       { path: 'Customer_Enquiry', component: CustomerEnquiryComponent },
@@ -267,13 +273,19 @@ const routes: Routes = [
       { path: 'Plot_Resell_By_Third_Party', component: PlotResellByThirdPartyComponent },
       { path: 'Marketing_Management', component: MarketingManagementMasterComponent },
       { path: 'Marketing_Management_Details', component: MarketingManagementMasterDetailsComponent },
-      { path: 'Accounting_Transaction', component: AccountTransactionsComponent },
-      { path: 'Expense_Transactions', component: ExpenseTransactionsComponent },
-      { path: 'Client_Income', component: ClientIncomeComponent },
+
+      //Accounting
+       { path: 'Invoice', component: InvoiceComponent},
+       { path: 'Invoice_Details', component: InvoiceDetailsComponent},
+
+       { path: 'Expense', component: ExpenseComponent},
+       { path: 'Expense_Details', component: ExpenseDetailsComponent},
+
+       { path: 'Income', component: IncomeComponent},
+       { path: 'Income_Details', component: IncomeDetailsComponent},
+
 
       // Reports
-      { path: 'Billing_Report', component: BillingReportComponent },
-      { path: 'Office_Report', component: OfficeReportComponent },
       { path: 'Booking_Report', component: BookingReportComponent },
       { path: 'Stock_Report', component: StockReportComponent },
       { path: 'CRM_Report', component: CrmReportComponent },

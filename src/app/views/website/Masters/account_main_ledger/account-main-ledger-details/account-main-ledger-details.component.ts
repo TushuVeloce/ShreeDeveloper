@@ -22,9 +22,7 @@ export class AccountMainLedgerDetailsComponent implements OnInit {
   IsDropdownDisabled: boolean = false;
   InitialEntity: Ledger = null as any;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
-  NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;

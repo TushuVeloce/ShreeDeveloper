@@ -1,5 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -16,6 +17,7 @@ export class AccountSubLedgerComponent  implements OnInit {
 Entity: SubLedger = SubLedger.CreateNewInstance();
   MasterList: SubLedger[] = [];
   DisplayMasterList: SubLedger[] = [];
+  LedgerList: Ledger[] = [];
   SearchString: string = '';
   SelectedSubLedger: SubLedger = SubLedger.CreateNewInstance();
   CustomerRef: number = 0;
@@ -29,7 +31,7 @@ Entity: SubLedger = SubLedger.CreateNewInstance();
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
-      await this.getSubLedgerListByCompanyRef();
+      await this.FormulateLedgerList();
     });
   }
 
@@ -39,16 +41,46 @@ Entity: SubLedger = SubLedger.CreateNewInstance();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
   }
 
-  getSubLedgerListByCompanyRef = async () => {
+  // getSubLedgerListByCompanyRef = async () => {
+  //   this.MasterList = [];
+  //   this.DisplayMasterList = [];
+  //   if (this.companyRef() <= 0) {
+  //     await this.uiUtils.showErrorToster('Company not Selected');
+  //     return;
+  //   }
+  //   let lst = await SubLedger.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.MasterList = lst;
+  //   this.DisplayMasterList = this.MasterList;
+  //   this.loadPaginationData();
+  // }
+
+   public FormulateLedgerList = async () => {
+    this.Entity.p.LedgerRef = 0
+      if (this.companyRef() <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
+      let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(),
+        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
+      this.LedgerList = lst
+        if (this.LedgerList.length > 0) {
+      this.Entity.p.LedgerRef = this.LedgerList[0].p.Ref
+     await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef)
+    } else {
+      this.DisplayMasterList = [];
+    }
+    };
+
+   getSubLedgerListByLedgerRef = async (ledgerref:number) => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
+    if (ledgerref <= 0) {
+      await this.uiUtils.showErrorToster('Ledger not Selected');
       return;
     }
-    let lst = await SubLedger.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
-
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
@@ -57,7 +89,7 @@ Entity: SubLedger = SubLedger.CreateNewInstance();
     this.SelectedSubLedger = item.GetEditableVersion();
     SubLedger.SetCurrentInstance(this.SelectedSubLedger);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/SubLedger_Master_Details']);
+    await this.router.navigate(['/homepage/Website/Account_Sub_Ledger_Details']);
   };
 
   onDeleteClicked = async (SubLedger: SubLedger) => {
@@ -70,7 +102,6 @@ Entity: SubLedger = SubLedger.CreateNewInstance();
           await this.uiUtils.showSuccessToster(
             `SubLedger ${SubLedger.p.Name} has been deleted!`
           );
-          await this.getSubLedgerListByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
         });

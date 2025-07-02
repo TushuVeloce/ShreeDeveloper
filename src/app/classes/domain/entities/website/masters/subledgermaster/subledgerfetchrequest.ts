@@ -10,6 +10,7 @@ export class SubLedgerFetchRequest
 
     CompanyRefs: number[] = [];
     SubLedgerRefs: number[] = [];
+    LedgerRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
