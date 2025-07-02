@@ -61,6 +61,17 @@
     </div>
     <div class="custom-modal-body">
       <form autocomplete="off">
+        <div *ngIf="isSetFinancialYearModalOpen" class="col-md-12" style="margin-top: 1rem;">
+          <div>
+            <label>OpeningBalance</label>
+            <input type="number" [(ngModel)]="OpeningBalance" name="OpeningBalance" class="form-control" id="OpeningBalance"
+              required placeholder="Enter OpeningBalance" #OpeningBalanceCtrl="ngModel"
+              (blur)="OpeningBalanceCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+            <div *ngIf="(OpeningBalanceCtrl.invalid && (OpeningBalanceCtrl.touched || OpeningBalanceCtrl.dirty))">
+              <span class="validation-text" *ngIf="OpeningBalanceCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
+        </div>
         <!-- Password Field -->
         <div style="margin-top: 12px;">
           <label for="password">Password</label>

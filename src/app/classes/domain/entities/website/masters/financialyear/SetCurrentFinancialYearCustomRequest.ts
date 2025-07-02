@@ -15,6 +15,8 @@ export class SetCurrentFinancialYearCustomRequest {
   EmployeeRef = 0;
   LoginToken = '';
   FinancialYearRef: number = 0;
+  OpeningBalance:number = 0
+
 
   public MergeIntoTransportData = (td: TransportData) => {
     let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, SetCurrentFinancialYearCustomRequest.FetchRequestType) as DataCollection;

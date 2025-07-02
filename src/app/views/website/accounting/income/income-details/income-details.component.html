@@ -1,3 +1,129 @@
-<p>
-  income-details works!
-</p>
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row align-items-center">
+      <!-- Back Button Column -->
+      <div class="col-2 col-md-1 d-flex justify-content-center">
+        <button type="button" class="backbtn" (click)="BackIncome()">
+          <img src="/assets/icons/arrow-button.png" alt="Back" class="backbtnimg" />
+        </button>
+      </div>
+
+      <!-- Title Column -->
+      <div class="col-10 col-md-11">
+        <span class="detail_title text-truncate d-block">{{ DetailsFormTitle }}</span>
+      </div>
+    </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
+    <form autocomplete="off">
+      <div class="row">
+        <div class="col-md-4" style="margin-top: 1rem; ">
+          <label>Date</label>
+          <input type="date" [(ngModel)]="Date" name="Date" class="form-control" id="Date" required
+            placeholder="Enter Date" #DateCtrl="ngModel" (blur)="DateCtrl.control.markAsTouched()" />
+          <div *ngIf="(DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty))">
+            <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem; ">
+          <label>Site Name</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
+            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem; ">
+          <label>Ledger</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
+            (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef)">
+            <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem; ">
+          <label>Sub Ledger</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="SubLedgerRef" name="SubLedgerRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.SubLedgerRef">
+            <nz-option *ngFor="let sub of SubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem; ">
+          <div>
+            <label>Payer Name</label>
+            <input type="text" [(ngModel)]="Entity.p.PayerName" name="PayerName" class="form-control" id="PayerName"
+              required placeholder="Enter PayerName" #PayerNameCtrl="ngModel"
+              (blur)="PayerNameCtrl.control.markAsTouched()" />
+            <div *ngIf="(PayerNameCtrl.invalid && (PayerNameCtrl.touched || PayerNameCtrl.dirty))">
+              <span class="validation-text" *ngIf="PayerNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem; ">
+          <div>
+            <label>Reason</label>
+            <input type="text" [(ngModel)]="Entity.p.Reason" name="Reason" class="form-control" id="Reason" required
+              placeholder="Enter Reason" #ReasonCtrl="ngModel" (blur)="ReasonCtrl.control.markAsTouched()" />
+            <div *ngIf="(ReasonCtrl.invalid && (ReasonCtrl.touched || ReasonCtrl.dirty))">
+              <span class="validation-text" *ngIf="ReasonCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem; ">
+          <div>
+            <label>Income Amount</label>
+            <input type="number" [(ngModel)]="Entity.p.IncomeAmount" name="IncomeAmount" class="form-control"
+              id="IncomeAmount" required placeholder="Enter IncomeAmount" #IncomeAmountCtrl="ngModel"
+              (blur)="IncomeAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+            <div *ngIf="(IncomeAmountCtrl.invalid && (IncomeAmountCtrl.touched || IncomeAmountCtrl.dirty))">
+              <span class="validation-text" *ngIf="IncomeAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem; ">
+          <div>
+            <label>Shree Balance</label>
+            <input type="number" [(ngModel)]="Entity.p.ShreesBalance" name="ShreesBalance" class="form-control"
+            id="ShreesBalance" required placeholder="Enter ShreesBalance" #ShreesBalanceCtrl="ngModel"
+            (blur)="ShreesBalanceCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+            <div *ngIf="(ShreesBalanceCtrl.invalid && (ShreesBalanceCtrl.touched || ShreesBalanceCtrl.dirty))">
+              <span class="validation-text" *ngIf="ShreesBalanceCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem; ">
+          <label>Mode of Payment</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+          nzPlaceHolder="Select" id="IncomeModeOfPayment" name="IncomeModeOfPayment" [nzSize]="'large'"
+          [(ngModel)]="Entity.p.IncomeModeOfPayment">
+          <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
+        </nz-select>
+      </div>
+      <div class="col-md-4" style="margin-top: 1rem; ">
+        <div>
+          <label>Narration</label>
+          <input type="text" [(ngModel)]="Entity.p.Narration" name="Narration" class="form-control" id="Narration"
+            required placeholder="Enter Narration" #NarrationCtrl="ngModel"
+            (blur)="NarrationCtrl.control.markAsTouched()" />
+          <div *ngIf="(NarrationCtrl.invalid && (NarrationCtrl.touched || NarrationCtrl.dirty))">
+            <span class="validation-text" *ngIf="NarrationCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+      </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn" (click)="SaveIncome()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackIncome()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

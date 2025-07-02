@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ValidationMessages } from 'src/app/classes/domain/constants';
 import { FinancialYear, FinancialYearProps } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
 import { GenerateNewFinancialYearCustomRequest } from 'src/app/classes/domain/entities/website/masters/financialyear/FinancialYearUserCustomRequest';
 import { SetCurrentFinancialYearCustomRequest } from 'src/app/classes/domain/entities/website/masters/financialyear/SetCurrentFinancialYearCustomRequest';
@@ -37,11 +38,15 @@ export class FinancialYearMasterComponent implements OnInit {
   FromDates: string[] = [];
   ToDates: string[] = [];
   newOwner: FinancialYearProps = FinancialYearProps.Blank();
-  editingIndex: null | undefined | number ;
+  editingIndex: null | undefined | number;
   localpassword: string = '';
   showPassword: boolean = false;
+  OpeningBalance: number = 0;
 
-  localRef : number = 0
+  localRef: number = 0
+
+
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
   headers: string[] = ['Sr.No.', 'From Date', 'To Date', 'Status'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private utils: Utils,
@@ -54,7 +59,7 @@ export class FinancialYearMasterComponent implements OnInit {
   }
 
   async ngOnInit() {
-     this.appStateManage.setDropdownDisabled(false);
+    this.appStateManage.setDropdownDisabled(false);
     // await this.FormulateMasterList();
   }
 
@@ -66,6 +71,7 @@ export class FinancialYearMasterComponent implements OnInit {
       return;
     }
     let lst = await FinancialYear.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -90,24 +96,32 @@ export class FinancialYearMasterComponent implements OnInit {
     if (type === 'password') this.isSetFinancialYearModalOpen = true;
   }
 
-   closeModal = async (type: string) => {
-      this.isPasswordModalOpen = false;
-      this.isSetFinancialYearModalOpen = false;
-      this.localpassword = '';
-    };
+  closeModal = async (type: string) => {
+    this.isPasswordModalOpen = false;
+    this.isSetFinancialYearModalOpen = false;
+    this.localpassword = '';
+  };
 
-    togglePasswordVisibility = () => {
-      this.showPassword = !this.showPassword;
-    };
 
-    // Handle Function call For Create Or Set //
-      handleFinancialYearFunctionCall(): void {
-        if (this.isSetFinancialYearModalOpen) {
-          this.SetNewFinancialYear();
-        } else {
-          this.AddNewFinancialYear();
-        }
-      }
+
+  // for value 0 selected while click on Input //
+  selectAllValue(event: MouseEvent): void {
+    const input = event.target as HTMLInputElement;
+    input.select();
+  }
+
+  togglePasswordVisibility = () => {
+    this.showPassword = !this.showPassword;
+  };
+
+  // Handle Function call For Create Or Set //
+  handleFinancialYearFunctionCall(): void {
+    if (this.isSetFinancialYearModalOpen) {
+      this.SetNewFinancialYear();
+    } else {
+      this.AddNewFinancialYear();
+    }
+  }
 
   onSelectedFinanacialYear = async (item: FinancialYear) => {
     this.SelectedFinancialYear = item.GetEditableVersion();
@@ -116,7 +130,10 @@ export class FinancialYearMasterComponent implements OnInit {
 
   // To Create New Financial Year Custom Request
   AddNewFinancialYear = async () => {
-
+    if (this.OpeningBalance <= 0) {
+      await this.uiUtils.showErrorToster('Opening balance Cannot be blank');
+      return;
+    }
     if (this.localpassword.trim().length > 0) {
 
       let req = new GenerateNewFinancialYearCustomRequest();
@@ -128,27 +145,27 @@ export class FinancialYearMasterComponent implements OnInit {
       let td = req.FormulateTransportData();
       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
 
-    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-    if (!tr.Successful) {
-      await this.uiUtils.showErrorMessage('Error', tr.Message);
-      return;
+      let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+      if (!tr.Successful) {
+        await this.uiUtils.showErrorMessage('Error', tr.Message);
+        return;
+      }
+      let tdResult = JSON.parse(tr.Tag) as TransportData;
+      let NewFinancialYear = this.utils.GetString(tdResult);
+      this.Entity.p.FromDate = NewFinancialYear;
+      await this.uiUtils.showSuccessToster('New Financial Year Created Successfully');
+
+      this.closeModal('password');
+      this.getFinancialYearListByCompanyRef();
     }
-    let tdResult = JSON.parse(tr.Tag) as TransportData;
-    let NewFinancialYear = this.utils.GetString(tdResult);
-    this.Entity.p.FromDate = NewFinancialYear;
-    await this.uiUtils.showSuccessToster('New Financial Year Created Successfully');
-
-    this.closeModal('password');
-    this.getFinancialYearListByCompanyRef();
-  }
-  else{
-    await this.uiUtils.showWarningToster('Password Required');
-  }
+    else {
+      await this.uiUtils.showWarningToster('Password Required');
+    }
   }
 
 
-   // To Set New Financial Year Custom Request
-   SetNewFinancialYear = async () => {
+  // To Set New Financial Year Custom Request
+  SetNewFinancialYear = async () => {
 
     if (this.localpassword.trim().length > 0) {
 
@@ -157,54 +174,57 @@ export class FinancialYearMasterComponent implements OnInit {
 
       req.FinancialYearRef = this.Entity.p.Ref
       req.CompanyRef = this.companyRef();
-      req.Password = this.localpassword;
+      req.OpeningBalance = this.OpeningBalance,
+
+        req.Password = this.localpassword;
       req.EmployeeRef = this.appStateManage.getEmployeeRef();
       req.LoginToken = this.appStateManage.getLoginToken();
 
       let td = req.FormulateTransportData();
       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
 
-    let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-    if (!tr.Successful) {
-      await this.uiUtils.showErrorMessage('Error', tr.Message);
-      return;
-    }
-    let tdResult = JSON.parse(tr.Tag) as TransportData;
-    let NewFinancialYear = this.utils.GetString(tdResult);
-    this.Entity.p.FromDate = NewFinancialYear;
-    this.closeModal('password');
-    await this.uiUtils.showSuccessToster('This Financial Year Set Successfully');
-    this.getFinancialYearListByCompanyRef();
-  }
-  else{
-    await this.uiUtils.showWarningToster('Password Required');
-  }
-  }
-
-    // For Pagination  start ----
-    loadPaginationData = () => {
-      this.total = this.DisplayMasterList.length; // Update total based on loaded data
-    }
-
-    paginatedList = () => {
-      const start = (this.currentPage - 1) * this.pageSize;
-      return this.DisplayMasterList.slice(start, start + this.pageSize);
-    }
-
-    onPageChange = (pageIndex: number): void => {
-      this.currentPage = pageIndex; // Update the current page
-    }
-
-    filterTable = () => {
-      if (this.SearchString != '') {
-        this.DisplayMasterList = this.MasterList.filter((data: any) => {
-          return data.p.Description.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
-        })
+      let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+      if (!tr.Successful) {
+        await this.uiUtils.showErrorMessage('Error', tr.Message);
+        return;
       }
-      else {
-        this.DisplayMasterList = this.MasterList
-      }
+      let tdResult = JSON.parse(tr.Tag) as TransportData;
+      let NewFinancialYear = this.utils.GetString(tdResult);
+      this.Entity.p.FromDate = NewFinancialYear;
+      this.OpeningBalance = 0;
+      this.closeModal('password');
+      await this.uiUtils.showSuccessToster('This Financial Year Set Successfully');
+      this.getFinancialYearListByCompanyRef();
     }
+    else {
+      await this.uiUtils.showWarningToster('Password Required');
+    }
+  }
+
+  // For Pagination  start ----
+  loadPaginationData = () => {
+    this.total = this.DisplayMasterList.length; // Update total based on loaded data
+  }
+
+  paginatedList = () => {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  onPageChange = (pageIndex: number): void => {
+    this.currentPage = pageIndex; // Update the current page
+  }
+
+  filterTable = () => {
+    if (this.SearchString != '') {
+      this.DisplayMasterList = this.MasterList.filter((data: any) => {
+        return data.p.Description.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
+      })
+    }
+    else {
+      this.DisplayMasterList = this.MasterList
+    }
+  }
 
 
 }

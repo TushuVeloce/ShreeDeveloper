@@ -4,23 +4,22 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class IncomeFetchRequest
-{
-    public static readonly FetchRequestType: string = "IncomeFetchRequest";
+export class IncomeFetchRequest {
+  public static readonly FetchRequestType: string = "IncomeFetchRequest";
 
-    IncomeRefs: number[] = [];
+  IncomeRefs: number[] = [];
+  CompanyRefs: number[] = [];
 
-    public MergeIntoTransportData = (td: TransportData) =>
-    {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, IncomeFetchRequest.FetchRequestType) as DataCollection;
-        coll.Entries.push(this);
-    }
+  public MergeIntoTransportData = (td: TransportData) => {
+    let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, IncomeFetchRequest.FetchRequestType) as DataCollection;
+    coll.Entries.push(this);
+  }
 
-    public FormulateTransportData = () => {
-        let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.Fetch);
-        this.MergeIntoTransportData(td);
+  public FormulateTransportData = () => {
+    let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.Fetch);
+    this.MergeIntoTransportData(td);
 
-        return td;
-    }
+    return td;
+  }
 }
 

@@ -27,12 +27,14 @@ export class ExpenseProps {
 
   public Date: string = ''
   public SiteRef: number = 0
+  public readonly SiteName: string = ''
   public LedgerRef: number = 0
+  public readonly LedgerName: string = ''
   public SubLedgerRef: number = 0
-  public Recipient: string = ''
+  public readonly SubLedgerName: string = ''
+  public RecipientName: string = ''
   public Reason: string = ''
-  public Rate: number = 0
-  public BillAmount: number = 0
+  public InvoiceAmount: number = 0
   public Narration: string = ''
   public TransDateTime: string = ''
   public CreatedDate: string = ''
@@ -42,7 +44,7 @@ export class ExpenseProps {
   public GivenAmount: number = 0
   public RemainingAmount: number = 0
   public ShreesBalance: number = 0
-  public ModeOfPayment: number = 0
+  public ExpenseModeOfPayment: number = 0
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -193,6 +195,13 @@ export class Expense implements IPersistable<Expense> {
   //   let tdResponse = await Expense.FetchTransportData(req, errorHandler) as TransportData;
   //   return Expense.ListFromTransportData(tdResponse);
   // }
+
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new ExpenseFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Expense.FetchTransportData(req, errorHandler) as TransportData;
+    return Expense.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

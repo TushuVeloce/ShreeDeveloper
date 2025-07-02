@@ -9,6 +9,7 @@ export class ExpenseFetchRequest
     public static readonly FetchRequestType: string = "ExpenseFetchRequest";
 
     ExpenseRefs: number[] = [];
+    CompanyRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

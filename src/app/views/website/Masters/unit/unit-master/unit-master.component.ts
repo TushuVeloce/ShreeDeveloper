@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UnitRefs } from 'src/app/classes/domain/constants';
+import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
 import { DeleteUnitCustomRequest } from 'src/app/classes/domain/entities/website/masters/unit/DeleteUnitCustomRequest';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
@@ -26,14 +27,21 @@ export class UnitMasterComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-  TimeUnitRef:number = UnitRefs.TimeUnitRef
+  TimeUnitRef: number = UnitRefs.TimeUnitRef;
+  // ValidMenuItems: MenuItem[] = [];
+  ApplicationFeatures?: ApplicationFeatures;
 
   headers: string[] = ['Sr.No.', 'Unit', 'Action'];
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,private payloadPacketFacade: PayloadPacketFacade,
-      private serverCommunicator: ServerCommunicatorService) { }
+  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService, private payloadPacketFacade: PayloadPacketFacade,
+    private serverCommunicator: ServerCommunicatorService) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
+    // this.ValidMenuItems = this.appStateManage.StorageKey.getItem('ValidMenuItems');
+    const rawItems = JSON.parse(sessionStorage.getItem('ValidMenuItems') || '[]');
+    console.log('rawItems :', rawItems);
+    // this.ValidMenuItems = rawItems.filter((data: MenuItem) => data.FeatureRef == ApplicationFeatures.UnitMaster);
+    // console.log('this.ValidMenuItems :', this.ValidMenuItems);
     await this.FormulateUnitList();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');

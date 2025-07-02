@@ -27,19 +27,21 @@ export class IncomeProps {
   public PayerName: string = ''
   public Date: string = ''
   public SiteRef: number = 0
+  public readonly SiteName: string = ''
   public LedgerRef: number = 0
+  public readonly LedgerName: string = ''
   public SubLedgerRef: number = 0
-  public Recipient: string = ''
+  public readonly SubLedgerName: string = ''
   public Reason: string = ''
-  public Rate: number = 0
   public IncomeAmount: number = 0
   public Narration: string = ''
   public TransDateTime: string = ''
   public CreatedDate: string = ''
   public UpdatedDate: string = ''
   public IsDeleted: number = 0
+
   public ShreesBalance: number = 0
-  public ModeOfPayment: number = 0
+  public IncomeModeOfPayment: number = 0
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -189,6 +191,13 @@ export class Income implements IPersistable<Income> {
   //   let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
   //   return Income.ListFromTransportData(tdResponse);
   // }
+
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new IncomeFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
+    return Income.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
