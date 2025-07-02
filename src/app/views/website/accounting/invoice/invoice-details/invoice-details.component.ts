@@ -54,6 +54,9 @@ export class InvoiceDetailsComponent implements OnInit {
       this.Entity = Invoice.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      if (this.Entity.p.LedgerRef) {
+        this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef)
+      }
     } else {
       this.Entity = Invoice.CreateNewInstance();
       Invoice.SetCurrentInstance(this.Entity);
@@ -89,7 +92,6 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    this.Entity.p.SubLedgerRef = 0
     let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
@@ -101,9 +103,12 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Ledger not Selected');
       return;
     }
-    this.Entity.p.SubLedgerRef = 0
     let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SubLedgerList = lst;
+  }
+
+  OnLedgerChange = () => {
+    this.Entity.p.SubLedgerRef = 0
   }
 
   DiselPaid = (DiselPaid: number) => {
@@ -114,7 +119,7 @@ export class InvoiceDetailsComponent implements OnInit {
     }
   }
 
-   // for value 0 selected while click on Input //
+  // for value 0 selected while click on Input //
   selectAllValue = (event: MouseEvent): void => {
     const input = event.target as HTMLInputElement;
     input.select();

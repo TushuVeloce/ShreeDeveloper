@@ -38,7 +38,7 @@
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Ledger</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef" (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef)">
+            nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef" (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef); OnLedgerChange()">
             <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
           </nz-select>
         </div>
