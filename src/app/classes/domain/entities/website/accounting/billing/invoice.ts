@@ -28,11 +28,11 @@ export class InvoiceProps {
 
   public Date: string = ''
   public SiteRef: number = 0
-  public readonly SiteName: number = 0
+  public readonly SiteName: string = ''
   public LedgerRef: number = 0
-  public readonly LedgerName: number = 0
+  public readonly LedgerName: string = ''
   public SubLedgerRef: number = 0
-  public readonly SubLedgerName: number = 0
+  public readonly SubLedgerName: string = ''
   public Description: string = ''
   public RecipientName: string = ''
   public Reason: string = ''

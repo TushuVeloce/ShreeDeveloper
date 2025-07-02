@@ -9,6 +9,7 @@ import { SubLedger } from 'src/app/classes/domain/entities/website/masters/suble
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
@@ -40,7 +41,8 @@ export class InvoiceDetailsComponent implements OnInit {
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
     private utils: Utils,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement,
+    private dtu: DTU,
   ) { }
 
   async ngOnInit() {
@@ -56,6 +58,9 @@ export class InvoiceDetailsComponent implements OnInit {
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.Entity.p.LedgerRef) {
         this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef)
+      }
+        if (this.Entity.p.Date != '') {
+        this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
       }
     } else {
       this.Entity = Invoice.CreateNewInstance();
@@ -132,6 +137,7 @@ export class InvoiceDetailsComponent implements OnInit {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
+    this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
