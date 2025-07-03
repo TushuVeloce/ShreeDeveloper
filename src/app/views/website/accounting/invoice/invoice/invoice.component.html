@@ -1,6 +1,6 @@
 <div class="row">
    <div class="col-4 mb-2">
-    <h1 style="padding-top: 3px;" class="title title_light">Invoice</h1>
+    <h1 style="padding-top: 3px;" class="title title_light">Billing List</h1>
   </div>
    <div class="col-4 mb-2 search-container_light">
     <app-shared-filter [masterList]="MasterList" [filterFields]="['Code', 'Name', 'UnitName']"
@@ -8,7 +8,7 @@
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">
     <nz-button nz-button class="btn1" (click)='AddInvoice()'>
-      Add Invoice
+      Add Bill
     </nz-button>
   </div>
 </div>
@@ -24,13 +24,13 @@
       <tbody>
         <tr *ngFor="let Invoice of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{Invoice.p.Date}}</td>
+          <td Class="tbldata">{{formatDate(Invoice.p.Date)}}</td>
           <td Class="tbldata">{{Invoice.p.SiteName}}</td>
           <td Class="tbldata">{{Invoice.p.LedgerName}}</td>
           <td Class="tbldata">{{Invoice.p.SubLedgerName}}</td>
           <td Class="tbldata">{{Invoice.p.Description}}</td>
           <td Class="tbldata">{{Invoice.p.RecipientName}}</td>
-          <td Class="tbldata">{{Invoice.p.Reason}}</td>
+          <td Class="tbldata">{{Invoice.p.InvoiceAmount | currency : "INR" }}</td>
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(Invoice)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(Invoice)" />

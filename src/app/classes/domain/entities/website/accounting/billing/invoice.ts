@@ -12,6 +12,7 @@ import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 import { InvoiceFetchRequest } from "./invoicefetchrequest";
+import { GetDistinctRecipientNameFetchRequest } from "./GetDistinctRecipientNameFetchRequest";
 
 
 export class InvoiceProps {
@@ -195,6 +196,16 @@ export class Invoice implements IPersistable<Invoice> {
    public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
      let req = new InvoiceFetchRequest();
      req.CompanyRefs.push(CompanyRef)
+     let tdResponse = await Invoice.FetchTransportData(req, errorHandler) as TransportData;
+     return Invoice.ListFromTransportData(tdResponse);
+   }
+
+   public static async FetchRecipientByCompanyRef(CompanyRef: number, SiteRef?:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+     let req = new GetDistinctRecipientNameFetchRequest();
+     req.CompanyRefs.push(CompanyRef)
+     if(SiteRef){
+      req.SiteRefs.push(SiteRef)
+     }
      let tdResponse = await Invoice.FetchTransportData(req, errorHandler) as TransportData;
      return Invoice.ListFromTransportData(tdResponse);
    }

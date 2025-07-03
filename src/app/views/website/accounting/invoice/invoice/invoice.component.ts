@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -25,9 +26,9 @@ export class InvoiceComponent  implements OnInit {
  
    companyRef = this.companystatemanagement.SelectedCompanyRef;
  
-   headers: string[] = ['Sr.No.','Date','Site Name','Ledger','Sub Ledger','Description','Recipient Name','Reason','Action'];
+   headers: string[] = ['Sr.No.','Date','Site Name','Ledger','Sub Ledger','Description','Recipient Name','Bill Amount','Action'];
    constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-     private companystatemanagement: CompanyStateManagement
+     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
    ) {
      effect(async () => {
        await this.getInvoiceListByCompanyRef();
@@ -91,7 +92,12 @@ export class InvoiceComponent  implements OnInit {
    onPageChange = (pageIndex: number): void => {
      this.currentPage = pageIndex; // Update the current page
    };
- 
+
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
+  }
+
    AddInvoice = () => {
      if (this.companyRef() <= 0) {
        this.uiUtils.showWarningToster('Please select company');

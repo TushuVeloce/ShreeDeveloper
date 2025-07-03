@@ -23,11 +23,12 @@ export class InvoiceDetailsComponent implements OnInit {
   Entity: Invoice = Invoice.CreateNewInstance();
   private IsNewEntity: boolean = true;
   SiteList: Site[] = [];
+  RecipientList: Invoice[] = [];
   SubLedgerList: SubLedger[] = [];
   UnitList: Unit[] = [];
   isDieselPaid: boolean = false
   isSaveDisabled: boolean = false;
-  DetailsFormTitle: 'New Invoice' | 'Edit Invoice' = 'New Invoice';
+  DetailsFormTitle: 'New Bill' | 'Edit Bill' = 'New Bill';
   IsDropdownDisabled: boolean = false;
   InitialEntity: Invoice = null as any;
   LedgerList: Ledger[] = [];
@@ -53,7 +54,7 @@ export class InvoiceDetailsComponent implements OnInit {
     await this.getUnitList()
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Invoice' : 'Edit Invoice';
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Bill' : 'Edit Bill';
       this.Entity = Invoice.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
@@ -63,10 +64,14 @@ export class InvoiceDetailsComponent implements OnInit {
         if (this.Entity.p.Date != '') {
         this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
       }
+      if(this.Entity.p.IsDieselPaid == 1){
+         this.isDieselPaid = true
+      }
     } else {
       this.Entity = Invoice.CreateNewInstance();
       Invoice.SetCurrentInstance(this.Entity);
     }
+    this.getRecipientListByCompanyRef()
     this.InitialEntity = Object.assign(
       Invoice.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
@@ -91,6 +96,16 @@ export class InvoiceDetailsComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
+  }
+
+  getRecipientListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Invoice.FetchRecipientByCompanyRef(this.companyRef(),this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    this.RecipientList = lst;
   }
 
   getLedgerListByCompanyRef = async () => {
@@ -135,6 +150,7 @@ export class InvoiceDetailsComponent implements OnInit {
     const DieselQty = Number(this.Entity.p.DieselQty)
     const DieselRate = Number(this.Entity.p.DieselRate)
     this.Entity.p.DieselAmount = DieselQty * DieselRate
+    this.CalculateAmount()
   }
 
   CalculateAmount = () => {
@@ -175,6 +191,7 @@ export class InvoiceDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Invoice saved successfully');
         this.Entity = Invoice.CreateNewInstance();
+        this.isDieselPaid = false
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Invoice Updated successfully');
