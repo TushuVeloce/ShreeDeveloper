@@ -69,7 +69,7 @@ export class InvoiceComponent  implements OnInit {
        async () => {
          await Invoice.DeleteInstance(async () => {
            await this.uiUtils.showSuccessToster(
-             `Invoice ${Invoice.p.SubLedgerRef} has been deleted!`
+             `Invoice ${Invoice.p.RecipientName} has been deleted!`
            );
            await this.getInvoiceListByCompanyRef();
            this.SearchString = '';

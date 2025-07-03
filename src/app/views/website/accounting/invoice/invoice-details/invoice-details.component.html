@@ -23,8 +23,8 @@
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Date</label>
           <input type="date" [(ngModel)]="Entity.p.Date" name="Date" class="form-control" id="Date"
-            placeholder="Enter Date"  #DateCtrl="ngModel" required (blur)="DateCtrl.control.markAsTouched()"/>
-          <div *ngIf="DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty)">
+            placeholder="Enter Date" #DateCtrl="ngModel" (blur)="DateCtrl.control.markAsTouched()" />
+          <div style="height: 25px" *ngIf="DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty)">
             <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
@@ -54,36 +54,35 @@
           </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
-          <div>
-            <label>Description</label>
-            <input type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
-              id="Description" required placeholder="Enter Description" #DescriptionCtrl="ngModel"
-              (blur)="DescriptionCtrl.control.markAsTouched()" />
-            <div *ngIf="
-                DescriptionCtrl.invalid &&
-                (DescriptionCtrl.touched || DescriptionCtrl.dirty)
-              ">
-              <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
-            </div>
+          <label for="Description"><b>Description</b></label>
+          <input type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control" id="Description"
+            placeholder="Enter Description" #DescriptionCtrl="ngModel"
+            (blur)="DescriptionCtrl.control.markAsTouched()" />
+          <div style="height: 25px"
+            *ngIf="DescriptionCtrl.invalid && (DescriptionCtrl.touched || DescriptionCtrl.dirty)">
+            <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Recipient Name</label>
           <div class="d-flex align-items-center">
-            <nz-select *ngIf="!RecipientNameInput" class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch
-              nzAllowClear nzPlaceHolder="Select" id="RecipientName" name="RecipientName" [nzSize]="'large'"
-              [(ngModel)]="Entity.p.RecipientName">
+            <nz-select *ngIf="!RecipientNameInput && !RecipientNameReadOnly" class="nzSelect-light"
+              [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="RecipientName"
+              name="RecipientName" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientName">
               <nz-option *ngFor="let name of RecipientList" [nzValue]="name.p.RecipientName"
                 [nzLabel]="name.p.RecipientName | titleCase"></nz-option>
             </nz-select>
-              <input *ngIf="RecipientNameInput" type="text" [(ngModel)]="Entity.p.RecipientName" name="RecipientName"
-                class="form-control" id="RecipientName" required placeholder="Enter Recipient Name"/>
-            <span *ngIf="!RecipientNameInput" (click)="AddRecipientName()"
+            <input *ngIf="RecipientNameReadOnly" type="text" [(ngModel)]="Entity.p.RecipientName" name="RecipientName"
+              class="form-control" id="RecipientName" required placeholder="Enter Recipient Name" readonly/>
+            <input *ngIf="RecipientNameInput && !RecipientNameReadOnly" type="text" [(ngModel)]="Entity.p.RecipientName"
+              name="RecipientName" class="form-control" id="RecipientName" required
+              placeholder="Enter Recipient Name" />
+            <span *ngIf="!RecipientNameInput && !RecipientNameReadOnly" (click)="AddRecipientName()"
               class="ms-2 mb-0.5 d-flex justify-content-center align-items-center border rounded"
               style="width: 36px; height: 36px; cursor: pointer">
               <i class="fa-solid fa-plus" style="color: blue;"></i>
             </span>
-             <span *ngIf="RecipientNameInput" (click)="cancelRecipientName()"
+            <span *ngIf="RecipientNameInput && !RecipientNameReadOnly" (click)="cancelRecipientName()"
               class="ms-2 d-flex justify-content-center align-items-center border rounded text-danger"
               style="width: 36px; height: 36px; cursor: pointer">
               <i class="fa-solid fa-xmark"></i>
@@ -94,12 +93,7 @@
           <div>
             <label>Reason</label>
             <input type="text" [(ngModel)]="Entity.p.Reason" name="Reason" class="form-control" id="Reason" required
-              placeholder="Enter Reason" #ReasonCtrl="ngModel" (blur)="ReasonCtrl.control.markAsTouched()" />
-            <div *ngIf="
-                ReasonCtrl.invalid && (ReasonCtrl.touched || ReasonCtrl.dirty)
-              ">
-              <span class="validation-text" *ngIf="ReasonCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
-            </div>
+              placeholder="Enter Reason" />
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
@@ -168,7 +162,7 @@
         <div class="col-md-4" style="margin-top: 1rem" *ngIf="isDieselPaid">
           <label>Diesel Amount</label>
           <input type="number" [(ngModel)]="Entity.p.DieselAmount" name="DieselAmount" class="form-control"
-            id="DieselAmount" required placeholder="Enter DieselAmount"/>
+            id="DieselAmount" required placeholder="Enter DieselAmount" />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <div>
@@ -181,7 +175,7 @@
           <div>
             <label>Narration</label>
             <input type="text" [(ngModel)]="Entity.p.Narration" name="Narration" class="form-control" id="Narration"
-              required placeholder="Enter Narration"/>
+              required placeholder="Enter Narration" />
           </div>
         </div>
       </div>

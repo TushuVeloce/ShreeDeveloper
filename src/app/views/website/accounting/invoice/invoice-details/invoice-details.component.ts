@@ -7,6 +7,7 @@ import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgerma
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
+import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
@@ -27,12 +28,14 @@ export class InvoiceDetailsComponent implements OnInit {
   RecipientNameInput: boolean = false
   SubLedgerList: SubLedger[] = [];
   isDieselPaid: boolean = false
+  RecipientNameReadOnly: boolean = false
   UnitList: Unit[] = [];
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Bill' | 'Edit Bill' = 'New Bill';
   IsDropdownDisabled: boolean = false;
   InitialEntity: Invoice = null as any;
   LedgerList: Ledger[] = [];
+  strCDT: string = ''
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
@@ -76,9 +79,17 @@ export class InvoiceDetailsComponent implements OnInit {
       if (this.Entity.p.IsDieselPaid == 1) {
         this.isDieselPaid = true
       }
+      this.RecipientNameReadOnly = true
     } else {
       this.Entity = Invoice.CreateNewInstance();
       Invoice.SetCurrentInstance(this.Entity);
+      if (this.Entity.p.Date == '') {
+        this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+        let parts = this.strCDT.substring(0, 16).split('-');
+        // Construct the new date format
+        this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
+        this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+      }
     }
     this.getRecipientListByCompanyRef()
     this.InitialEntity = Object.assign(
