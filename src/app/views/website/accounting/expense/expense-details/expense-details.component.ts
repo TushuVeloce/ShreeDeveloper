@@ -108,6 +108,25 @@ export class ExpenseDetailsComponent implements OnInit {
     this.LedgerList = lst
   };
 
+  getTotalExpenseFromSiteAndRecipientName = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    if (this.Entity.p.SiteRef <= 0) {
+      await this.uiUtils.showErrorToster('Selected Site to get Shree Expense');
+      return;
+    }
+    if (this.Entity.p.RecipientName == '') {
+      await this.uiUtils.showErrorToster('Selected Recipient Name to get Shree Expense');
+      return;
+    }
+    let data = await Expense.FetchTotalExpenseFromSiteAndRecipientName(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientName,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.Entity.p.InvoiceAmount = data[0].p.InvoiceAmount;
+  };
+
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
     if (ledgerref <= 0) {
       await this.uiUtils.showErrorToster('Ledger not Selected');
@@ -117,7 +136,7 @@ export class ExpenseDetailsComponent implements OnInit {
     this.SubLedgerList = lst;
   }
 
-    getRecipientListByCompanyRef = async () => {
+  getRecipientListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -131,7 +150,12 @@ export class ExpenseDetailsComponent implements OnInit {
     this.RecipientNameInput = true
   }
 
-  cancelRecipientName = () => {
+  CancelRecipientName = () => {
+    this.RecipientNameInput = false
+    this.Entity.p.RecipientName = ''
+  }
+
+  SaveRecipientName = () => {
     this.RecipientNameInput = false
     this.Entity.p.RecipientName = ''
   }
@@ -161,7 +185,7 @@ export class ExpenseDetailsComponent implements OnInit {
         this.Entity = Expense.CreateNewInstance();
         this.resetAllControls();
         this.RecipientNameInput = false
-         await this.getRecipientListByCompanyRef()
+        await this.getRecipientListByCompanyRef()
       } else {
         await this.uiUtils.showSuccessToster('Expense Updated successfully');
         await this.router.navigate(['/homepage/Website/Expense']);

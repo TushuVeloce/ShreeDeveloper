@@ -31,7 +31,8 @@
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Site Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
+            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
+            (ngModelChange)="getTotalExpenseFromSiteAndRecipientName()">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -56,18 +57,25 @@
           <div class="d-flex align-items-center">
             <nz-select *ngIf="!RecipientNameInput" class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch
               nzAllowClear nzPlaceHolder="Select" id="RecipientName" name="RecipientName" [nzSize]="'large'"
-              [(ngModel)]="Entity.p.RecipientName">
+              [(ngModel)]="Entity.p.RecipientName" (ngModelChange)="getTotalExpenseFromSiteAndRecipientName()">
               <nz-option *ngFor="let name of RecipientList" [nzValue]="name.p.RecipientName"
                 [nzLabel]="name.p.RecipientName | titleCase"></nz-option>
             </nz-select>
-              <input *ngIf="RecipientNameInput" type="text" [(ngModel)]="Entity.p.RecipientName" name="RecipientName"
-                class="form-control" id="RecipientName" required placeholder="Enter Recipient Name"/>
+
+            <input *ngIf="RecipientNameInput" type="text" [(ngModel)]="Entity.p.RecipientName"
+              (ngModelChange)="getTotalExpenseFromSiteAndRecipientName()" name="RecipientName" class="form-control"
+              id="RecipientName" required placeholder="Enter Recipient Name" />
             <span *ngIf="!RecipientNameInput" (click)="AddRecipientName()"
               class="ms-2 mb-0.5 d-flex justify-content-center align-items-center border rounded"
               style="width: 36px; height: 36px; cursor: pointer">
               <i class="fa-solid fa-plus" style="color: blue;"></i>
             </span>
-             <span *ngIf="RecipientNameInput" (click)="cancelRecipientName()"
+            <span *ngIf="RecipientNameInput" (click)="SaveRecipientName()"
+              class="ms-2 d-flex justify-content-center align-items-center border rounded text-danger"
+              style="width: 36px; height: 36px; cursor: pointer">
+              <i class="fa-solid fa-check" style="color: green;"></i>
+            </span>
+            <span *ngIf="RecipientNameInput" (click)="CancelRecipientName()"
               class="ms-2 d-flex justify-content-center align-items-center border rounded text-danger"
               style="width: 36px; height: 36px; cursor: pointer">
               <i class="fa-solid fa-xmark"></i>
@@ -88,7 +96,7 @@
           <div>
             <label>Expense Amount</label>
             <input type="number" [(ngModel)]="Entity.p.InvoiceAmount" name="InvoiceAmount" class="form-control"
-              id="InvoiceAmount" required placeholder="Enter InvoiceAmount" #InvoiceAmountCtrl="ngModel"
+              id="InvoiceAmount" required placeholder="Enter InvoiceAmount" readonly #InvoiceAmountCtrl="ngModel"
               (blur)="InvoiceAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
             <div *ngIf="(InvoiceAmountCtrl.invalid && (InvoiceAmountCtrl.touched || InvoiceAmountCtrl.dirty))">
               <span class="validation-text" *ngIf="InvoiceAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>

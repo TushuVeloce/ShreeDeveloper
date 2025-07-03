@@ -12,6 +12,7 @@ import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { ExpenseFetchRequest } from "./expensefetchrequest";
 import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
+import { TotalExpenseFetchRequest } from "./totalexpensefetchrequest";
 
 
 export class ExpenseProps {
@@ -199,6 +200,15 @@ export class Expense implements IPersistable<Expense> {
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new ExpenseFetchRequest();
     req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Expense.FetchTransportData(req, errorHandler) as TransportData;
+    return Expense.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchTotalExpenseFromSiteAndRecipientName(CompanyRef: number, SiteRef: number, RecipientName: string, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new TotalExpenseFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    req.SiteRefs.push(SiteRef)
+    req.RecipientNames.push(RecipientName)
     let tdResponse = await Expense.FetchTransportData(req, errorHandler) as TransportData;
     return Expense.ListFromTransportData(tdResponse);
   }

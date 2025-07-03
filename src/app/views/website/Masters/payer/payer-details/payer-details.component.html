@@ -1,0 +1,47 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row align-items-center">
+      <!-- Back Button Column -->
+      <div class="col-2 col-md-1 d-flex justify-content-center">
+        <button type="button" class="backbtn" (click)="BackPayer()">
+          <img src="/assets/icons/arrow-button.png" alt="Back" class="backbtnimg" />
+        </button>
+      </div>
+
+      <!-- Title Column -->
+      <div class="col-10 col-md-11">
+        <span class="detail_title text-truncate d-block">{{ DetailsFormTitle }}</span>
+      </div>
+    </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
+    <form autocomplete="off">
+      <div class="row" style="margin-top: 1rem; ">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <label>Payer Name</label>
+          <input type="text" [readOnly]="isAdd" onclick="" [(ngModel)]="Entity.p.Name" name="Name" class="form-control"
+            id="Name" placeholder="Enter Payer Name" pattern="{{NameWithNosAndSpace}}" #NameCtrl="ngModel"
+            required (blur)="NameCtrl.control.markAsTouched()" />
+          <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
+            <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithNosAndSpaceMsg}}</span>
+            <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn" (click)="SavePayerMaster()"
+            [disabled]="isSaveDisabled">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackPayer()">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div>
+  <div class="row">
+    <div class="col-4 mb-2">
+      <h1 style="padding-top: 3px" class="title title_light">
+        Payer Master
+      </h1>
+    </div>
+    <div class="col-4 mb-2 search-container_light">
+      <app-shared-filter [masterList]="MasterList" [filterFields]="['Name']"
+        (filteredList)="DisplayMasterList = $event"></app-shared-filter>
+    </div>
+    <div class="col-4 mb-2" routerLinkActive="active">
+      <nz-button nz-button class="btn1" (click)="AddPayer()">
+        Add Payer
+      </nz-button>
+    </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
+    </ng-template>
+  </div>
+  <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+    <div class="table-container">
+      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
+        [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+        <thead>
+          <tr>
+            <th *ngFor="let header of headers" class="tblheader">
+              {{ header }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ExpenseType of paginatedList(); index as i">
+            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td Class="tbldata">{{ ExpenseType.p.Name }}</td>
+            <td class="tbldata">
+              <Edit-Icon (editClick)="onEditClicked(ExpenseType)" />
+              <Delete-Icon (deleteClicked)="onDeleteClicked(ExpenseType)" />
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+    <Pagination [pageSize]="pageSize" [total]="total" [(currentPage)]="currentPage"
+      (pageChange)="onPageChange($event)" />
+  </div>
+  <div *ngIf="DisplayMasterList.length === 0">
+    <Data-Not-Found />
+  </div>
+</div>

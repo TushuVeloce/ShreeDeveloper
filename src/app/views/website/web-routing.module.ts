@@ -137,6 +137,10 @@ import { IncomeComponent } from './accounting/income/income/income.component';
 import { IncomeDetailsComponent } from './accounting/income/income-details/income-details.component';
 import { InvoiceComponent } from './accounting/invoice/invoice/invoice.component';
 import { InvoiceDetailsComponent } from './accounting/invoice/invoice-details/invoice-details.component';
+import { RecipientNameMasterComponent } from './Masters/recipient_name/recipient-name-master/recipient-name-master.component';
+import { RecipientNameMasterDetailsComponent } from './Masters/recipient_name/recipient-name-master-details/recipient-name-master-details.component';
+import { PayerComponent } from './Masters/payer/payer/payer.component';
+import { PayerDetailsComponent } from './Masters/payer/payer-details/payer-details.component';
 
 
 const routes: Routes = [
@@ -210,6 +214,12 @@ const routes: Routes = [
       { path: 'Estimate_Stages', component: EstimateStagesComponent },
       { path: 'Estimate_Stages_details', component: EstimateStagesDetailsComponent },
 
+      { path: 'Recipient_Master', component: RecipientNameMasterComponent },
+      { path: 'Recipient_Master_Details', component: RecipientNameMasterDetailsComponent },
+
+      { path: 'Payer_Master', component: PayerComponent },
+      { path: 'Payer_Master_Details', component: PayerDetailsComponent },
+
       { path: 'Country', component: CountryComponent },
       { path: 'State', component: StateComponent },
       { path: 'City', component: CityComponent },
@@ -275,14 +285,14 @@ const routes: Routes = [
       { path: 'Marketing_Management_Details', component: MarketingManagementMasterDetailsComponent },
 
       //Accounting
-       { path: 'Invoice', component: InvoiceComponent},
-       { path: 'Invoice_Details', component: InvoiceDetailsComponent},
+      { path: 'Invoice', component: InvoiceComponent },
+      { path: 'Invoice_Details', component: InvoiceDetailsComponent },
 
-       { path: 'Expense', component: ExpenseComponent},
-       { path: 'Expense_Details', component: ExpenseDetailsComponent},
+      { path: 'Expense', component: ExpenseComponent },
+      { path: 'Expense_Details', component: ExpenseDetailsComponent },
 
-       { path: 'Income', component: IncomeComponent},
-       { path: 'Income_Details', component: IncomeDetailsComponent},
+      { path: 'Income', component: IncomeComponent },
+      { path: 'Income_Details', component: IncomeDetailsComponent },
 
 
       // Reports

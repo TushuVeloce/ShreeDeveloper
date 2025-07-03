@@ -386,12 +386,12 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Account Main Ledger',
         RouterLink: '/homepage/Website/Account_Main_Ledger',
-       LogoPath:'/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/Material Master.png',
       },
       {
         Name: 'Account Sub Ledger',
         RouterLink: '/homepage/Website/Account_Sub_Ledger',
-       LogoPath:'/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/Material Master.png',
       },
       {
         Name: 'Marketing Type Master',
@@ -471,6 +471,16 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Employee Master',
         RouterLink: '/homepage/Website/Employee_Master',
+        LogoPath: '/assets/icons/Employee Master.png',
+      },
+      {
+        Name: 'Recipient Master',
+        RouterLink: '/homepage/Website/Recipient_Master',
+        LogoPath: '/assets/icons/Employee Master.png',
+      },
+      {
+        Name: 'Payer Master',
+        RouterLink: '/homepage/Website/Payer_Master',
         LogoPath: '/assets/icons/Employee Master.png',
       },
       // {
@@ -684,7 +694,7 @@ export class SidebarlayoutComponent implements OnInit {
     //   }
     // ]
 
-     let AccountingSubModuleList = [
+    let AccountingSubModuleList = [
       {
         Name: 'Invoice',
         RouterLink: '/homepage/Website/Invoice',
