@@ -51,15 +51,27 @@
             <nz-option *ngFor="let sub of SubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
-          <div>
-            <label>Recipient Name</label>
-            <input type="text" [(ngModel)]="Entity.p.RecipientName" name="RecipientName" class="form-control"
-              id="RecipientName" required placeholder="Enter Recipient Name" #RecipientNameCtrl="ngModel"
-              (blur)="RecipientNameCtrl.control.markAsTouched()" />
-            <div *ngIf="(RecipientNameCtrl.invalid && (RecipientNameCtrl.touched || RecipientNameCtrl.dirty))">
-              <span class="validation-text" *ngIf="RecipientNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label>Recipient Name</label>
+          <div class="d-flex align-items-center">
+            <nz-select *ngIf="!RecipientNameInput" class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch
+              nzAllowClear nzPlaceHolder="Select" id="RecipientName" name="RecipientName" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.RecipientName">
+              <nz-option *ngFor="let name of RecipientList" [nzValue]="name.p.RecipientName"
+                [nzLabel]="name.p.RecipientName | titleCase"></nz-option>
+            </nz-select>
+              <input *ngIf="RecipientNameInput" type="text" [(ngModel)]="Entity.p.RecipientName" name="RecipientName"
+                class="form-control" id="RecipientName" required placeholder="Enter Recipient Name"/>
+            <span *ngIf="!RecipientNameInput" (click)="AddRecipientName()"
+              class="ms-2 mb-0.5 d-flex justify-content-center align-items-center border rounded"
+              style="width: 36px; height: 36px; cursor: pointer">
+              <i class="fa-solid fa-plus" style="color: blue;"></i>
+            </span>
+             <span *ngIf="RecipientNameInput" (click)="cancelRecipientName()"
+              class="ms-2 d-flex justify-content-center align-items-center border rounded text-danger"
+              style="width: 36px; height: 36px; cursor: pointer">
+              <i class="fa-solid fa-xmark"></i>
+            </span>
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">

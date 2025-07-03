@@ -3,6 +3,7 @@ import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
 import { DomainEnums, } from 'src/app/classes/domain/domainenums/domainenums';
+import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -27,6 +28,8 @@ export class ExpenseDetailsComponent implements OnInit {
   SiteList: Site[] = [];
   SubLedgerList: SubLedger[] = [];
   UnitList: Unit[] = [];
+  RecipientList: Invoice[] = [];
+  RecipientNameInput: boolean = false
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Expense' | 'Edit Expense' = 'New Expense';
   IsDropdownDisabled: boolean = false;
@@ -66,6 +69,7 @@ export class ExpenseDetailsComponent implements OnInit {
       let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       this.Date = strCDT.substring(0, 10);
     }
+    this.getRecipientListByCompanyRef()
     this.InitialEntity = Object.assign(
       Expense.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
@@ -113,6 +117,26 @@ export class ExpenseDetailsComponent implements OnInit {
     this.SubLedgerList = lst;
   }
 
+    getRecipientListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Invoice.FetchRecipientByCompanyRef(this.companyRef(), this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.RecipientList = lst;
+  }
+
+  AddRecipientName = () => {
+    this.Entity.p.RecipientName = ''
+    this.RecipientNameInput = true
+  }
+
+  cancelRecipientName = () => {
+    this.RecipientNameInput = false
+    this.Entity.p.RecipientName = ''
+  }
+
+
   SaveExpense = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
@@ -136,6 +160,8 @@ export class ExpenseDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster('Expense saved successfully');
         this.Entity = Expense.CreateNewInstance();
         this.resetAllControls();
+        this.RecipientNameInput = false
+         await this.getRecipientListByCompanyRef()
       } else {
         await this.uiUtils.showSuccessToster('Expense Updated successfully');
         await this.router.navigate(['/homepage/Website/Expense']);

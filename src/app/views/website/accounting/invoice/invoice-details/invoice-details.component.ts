@@ -1,5 +1,5 @@
 import { Component, effect, OnInit, ViewChild } from '@angular/core';
-import { NgModel } from '@angular/forms';
+import { NgForm, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
@@ -24,9 +24,10 @@ export class InvoiceDetailsComponent implements OnInit {
   private IsNewEntity: boolean = true;
   SiteList: Site[] = [];
   RecipientList: Invoice[] = [];
+  RecipientNameInput: boolean = false
   SubLedgerList: SubLedger[] = [];
-  UnitList: Unit[] = [];
   isDieselPaid: boolean = false
+  UnitList: Unit[] = [];
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Bill' | 'Edit Bill' = 'New Bill';
   IsDropdownDisabled: boolean = false;
@@ -36,7 +37,15 @@ export class InvoiceDetailsComponent implements OnInit {
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
+  // @ViewChild('invoiceForm') invoiceForm!: NgForm;
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('DateCtrl') DateInputControl!: NgModel;
+  @ViewChild('DescriptionCtrl') DescriptionCtrlInputControl!: NgModel;
+  @ViewChild('RecipientNameCtrl') RecipientNameInputControl!: NgModel;
+  @ViewChild('QtyCtrl') QtyInputControl!: NgModel;
+  @ViewChild('RateCtrl') RateInputControl!: NgModel;
+  @ViewChild('DieselQtyCtrl') DieselQtyInputControl!: NgModel;
+  @ViewChild('DieselRateCtrl') DieselRateInputControl!: NgModel;
 
   constructor(
     private router: Router,
@@ -59,13 +68,13 @@ export class InvoiceDetailsComponent implements OnInit {
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.Entity.p.LedgerRef) {
-        this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef)
+        await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef)
       }
-        if (this.Entity.p.Date != '') {
+      if (this.Entity.p.Date != '') {
         this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
       }
-      if(this.Entity.p.IsDieselPaid == 1){
-         this.isDieselPaid = true
+      if (this.Entity.p.IsDieselPaid == 1) {
+        this.isDieselPaid = true
       }
     } else {
       this.Entity = Invoice.CreateNewInstance();
@@ -103,9 +112,18 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Invoice.FetchRecipientByCompanyRef(this.companyRef(),this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
+    let lst = await Invoice.FetchRecipientByCompanyRef(this.companyRef(), this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.RecipientList = lst;
+  }
+
+  AddRecipientName = () => {
+    this.Entity.p.RecipientName = ''
+    this.RecipientNameInput = true
+  }
+
+  cancelRecipientName = () => {
+    this.RecipientNameInput = false
+    this.Entity.p.RecipientName = ''
   }
 
   getLedgerListByCompanyRef = async () => {
@@ -156,9 +174,9 @@ export class InvoiceDetailsComponent implements OnInit {
   CalculateAmount = () => {
     const Qty = Number(this.Entity.p.Qty)
     const Rate = Number(this.Entity.p.Rate)
-    if(this.Entity.p.DieselAmount == 0){
+    if (this.Entity.p.DieselAmount == 0) {
       this.Entity.p.InvoiceAmount = Qty * Rate
-    }else{
+    } else {
       this.Entity.p.InvoiceAmount = (Qty * Rate) - Number(this.Entity.p.DieselAmount)
     }
   }
@@ -191,8 +209,10 @@ export class InvoiceDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Invoice saved successfully');
         this.Entity = Invoice.CreateNewInstance();
+        await this.resetAllControls();
         this.isDieselPaid = false
-        this.resetAllControls();
+        this.RecipientNameInput = false
+        await this.getRecipientListByCompanyRef()
       } else {
         await this.uiUtils.showSuccessToster('Invoice Updated successfully');
         await this.router.navigate(['/homepage/Website/Invoice']);
@@ -214,12 +234,27 @@ export class InvoiceDetailsComponent implements OnInit {
     }
   }
 
-  resetAllControls = () => {
+  resetAllControls = async () => {
     // reset touched
     this.NameInputControl.control.markAsUntouched();
+    this.DateInputControl.control.markAsUntouched();
+    this.DescriptionCtrlInputControl.control.markAsUntouched();
+    this.RecipientNameInputControl.control.markAsUntouched();
+    this.QtyInputControl.control.markAsUntouched();
+    this.RateInputControl.control.markAsUntouched();
+    this.DieselQtyInputControl.control.markAsUntouched();
+    this.DieselRateInputControl.control.markAsUntouched();
 
     // reset dirty
     this.NameInputControl.control.markAsPristine();
+    this.DateInputControl.control.markAsPristine();
+    this.DescriptionCtrlInputControl.control.markAsPristine();
+    this.RecipientNameInputControl.control.markAsPristine();
+    this.QtyInputControl.control.markAsPristine();
+    this.RateInputControl.control.markAsPristine();
+    this.DieselQtyInputControl.control.markAsPristine();
+    this.DieselRateInputControl.control.markAsPristine();
+    // await this.invoiceForm.resetForm(); 
   }
 }
 

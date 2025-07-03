@@ -155,6 +155,7 @@ import { ExpenseComponent } from './accounting/expense/expense/expense.component
 import { ExpenseDetailsComponent } from './accounting/expense/expense-details/expense-details.component';
 import { IncomeComponent } from './accounting/income/income/income.component';
 import { IncomeDetailsComponent } from './accounting/income/income-details/income-details.component';
+import { TitleCasePipe } from 'src/app/services/title-case.pipe';
 
 @NgModule({
   declarations: [MaterialMasterComponent, MaterialMasterDetailsComponent, StageMasterComponent, StageMasterDetailsComponent, AccountMainLedgerComponent, AccountMainLedgerDetailsComponent, AccountSubLedgerComponent, AccountSubLedgerDetailsComponent, MarketingTypeMasterComponent, MarketingTypeMasterDetailsComponent, VendorMasterComponent, VehicleMasterComponent, VendorMasterDetailsComponent, BankAccountMasterComponent, BankAccountMasterDetailsComponent, ExternalUsersComponent, ExternalUsersMasterDetailsComponent, CompanyMasterComponent, CompanyMasterDetailsComponent, DepartmentMasterComponent, DepartmentMasterDetailsComponent, DesignationMasterComponent, DesignationMasterDetailsComponent, UserRoleMasterComponent, UserRoleMasterDetailsComponent, EmployeeMasterComponent, EmployeeMasterDetailsComponent,
@@ -164,10 +165,10 @@ import { IncomeDetailsComponent } from './accounting/income/income-details/incom
   imports: [
     CommonModule, WebRoutingModule, FormsModule, NzDropDownModule, NzTableModule, IonicModule.forRoot(),
     NzPaginationModule, NzUploadModule, NzModalModule, NzCheckboxModule, NzCardModule, NzEmptyModule,
-    CommonModule, NzTableModule, NzIconModule, NzLayoutModule, NzMenuModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzStepsModule, NzButtonModule, NzToolTipModule, SharedFilterComponent
+    CommonModule, NzTableModule, NzIconModule, NzLayoutModule, NzMenuModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzStepsModule, NzButtonModule, NzToolTipModule, SharedFilterComponent,TitleCasePipe
   ],
   providers: [DatePipe],
-  exports: [SharedFilterComponent],
+  exports: [SharedFilterComponent,TitleCasePipe],
 })
 export class WebModule {
   constructor(private injector: Injector) {

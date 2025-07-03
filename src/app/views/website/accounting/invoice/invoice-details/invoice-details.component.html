@@ -10,39 +10,42 @@
 
       <!-- Title Column -->
       <div class="col-10 col-md-11">
-        <span class="detail_title text-truncate d-block">{{ DetailsFormTitle }}</span>
+        <span class="detail_title text-truncate d-block">{{
+          DetailsFormTitle
+          }}</span>
       </div>
     </div>
     <ng-template #noDataTpl>
-      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
-        No Data
-      </div>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
     </ng-template>
-    <form autocomplete="off">
+    <form autocomplete="off" #invoiceForm="ngForm">
       <div class="row">
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <label>Date</label>
-          <input type="date" [(ngModel)]="Entity.p.Date" name="Date" class="form-control" id="Date" required
-            placeholder="Enter Date" #DateCtrl="ngModel" (blur)="DateCtrl.control.markAsTouched()" />
-          <div *ngIf="(DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty))">
-            <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+          <input type="date" [(ngModel)]="Entity.p.Date" name="Date" class="form-control" id="Date"
+            placeholder="Enter Date"  #DateCtrl="ngModel" required (blur)="DateCtrl.control.markAsTouched()"/>
+          <div *ngIf="DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty)">
+            <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <label>Site Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <label>Ledger</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef" (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef); OnLedgerChange()">
+            nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
+            (ngModelChange)="
+              getSubLedgerListByLedgerRef(Entity.p.LedgerRef); OnLedgerChange()
+            ">
             <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <label>Sub Ledger</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="SubLedgerRef" name="SubLedgerRef" [nzSize]="'large'"
@@ -50,123 +53,148 @@
             <nz-option *ngFor="let sub of SubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <div>
             <label>Description</label>
             <input type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
               id="Description" required placeholder="Enter Description" #DescriptionCtrl="ngModel"
               (blur)="DescriptionCtrl.control.markAsTouched()" />
-            <div *ngIf="(DescriptionCtrl.invalid && (DescriptionCtrl.touched || DescriptionCtrl.dirty))">
-              <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <div *ngIf="
+                DescriptionCtrl.invalid &&
+                (DescriptionCtrl.touched || DescriptionCtrl.dirty)
+              ">
+              <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
             </div>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
-          <div>
-            <label>Recipient Name</label>
-            <input type="text" [(ngModel)]="Entity.p.RecipientName" name="RecipientName" class="form-control"
-              id="RecipientName" required placeholder="Enter Recipient Name" #RecipientNameCtrl="ngModel"
-              (blur)="RecipientNameCtrl.control.markAsTouched()" />
-            <div *ngIf="(RecipientNameCtrl.invalid && (RecipientNameCtrl.touched || RecipientNameCtrl.dirty))">
-              <span class="validation-text" *ngIf="RecipientNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+        <div class="col-md-4" style="margin-top: 1rem">
+          <label>Recipient Name</label>
+          <div class="d-flex align-items-center">
+            <nz-select *ngIf="!RecipientNameInput" class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch
+              nzAllowClear nzPlaceHolder="Select" id="RecipientName" name="RecipientName" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.RecipientName">
+              <nz-option *ngFor="let name of RecipientList" [nzValue]="name.p.RecipientName"
+                [nzLabel]="name.p.RecipientName | titleCase"></nz-option>
+            </nz-select>
+              <input *ngIf="RecipientNameInput" type="text" [(ngModel)]="Entity.p.RecipientName" name="RecipientName"
+                class="form-control" id="RecipientName" required placeholder="Enter Recipient Name"/>
+            <span *ngIf="!RecipientNameInput" (click)="AddRecipientName()"
+              class="ms-2 mb-0.5 d-flex justify-content-center align-items-center border rounded"
+              style="width: 36px; height: 36px; cursor: pointer">
+              <i class="fa-solid fa-plus" style="color: blue;"></i>
+            </span>
+             <span *ngIf="RecipientNameInput" (click)="cancelRecipientName()"
+              class="ms-2 d-flex justify-content-center align-items-center border rounded text-danger"
+              style="width: 36px; height: 36px; cursor: pointer">
+              <i class="fa-solid fa-xmark"></i>
+            </span>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <div>
             <label>Reason</label>
             <input type="text" [(ngModel)]="Entity.p.Reason" name="Reason" class="form-control" id="Reason" required
               placeholder="Enter Reason" #ReasonCtrl="ngModel" (blur)="ReasonCtrl.control.markAsTouched()" />
-            <div *ngIf="(ReasonCtrl.invalid && (ReasonCtrl.touched || ReasonCtrl.dirty))">
-              <span class="validation-text" *ngIf="ReasonCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <div *ngIf="
+                ReasonCtrl.invalid && (ReasonCtrl.touched || ReasonCtrl.dirty)
+              ">
+              <span class="validation-text" *ngIf="ReasonCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
             </div>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <div>
-            <label>Qty</label>
+            <label>Quantity</label>
             <input type="number" [(ngModel)]="Entity.p.Qty" name="Qty" class="form-control" id="Qty" required
-              placeholder="Enter Qty" #QtyCtrl="ngModel" (blur)="QtyCtrl.control.markAsTouched()" (click)="selectAllValue($event)" (ngModelChange)="CalculateAmount()"/>
-            <div *ngIf="(QtyCtrl.invalid && (QtyCtrl.touched || QtyCtrl.dirty))">
-              <span class="validation-text" *ngIf="QtyCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              placeholder="Enter Quantity" #QtyCtrl="ngModel" (blur)="QtyCtrl.control.markAsTouched()"
+              (click)="selectAllValue($event)" (ngModelChange)="CalculateAmount()" />
+            <div *ngIf="QtyCtrl.invalid && (QtyCtrl.touched || QtyCtrl.dirty)">
+              <span class="validation-text" *ngIf="QtyCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
             </div>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <label>Unit</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="UnitRef" name="UnitRef" [nzSize]="'large'" [(ngModel)]="Entity.p.UnitRef">
             <nz-option *ngFor="let unit of UnitList" [nzValue]="unit.p.Ref" [nzLabel]="unit.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <div>
             <label>Rate</label>
             <input type="number" [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate" required
-              placeholder="Enter Rate" #RateCtrl="ngModel" (blur)="RateCtrl.control.markAsTouched()" (click)="selectAllValue($event)" (ngModelChange)="CalculateAmount()"/>
-            <div *ngIf="(RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty))">
-              <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              placeholder="Enter Rate" #RateCtrl="ngModel" (blur)="RateCtrl.control.markAsTouched()"
+              (click)="selectAllValue($event)" (ngModelChange)="CalculateAmount()" />
+            <div *ngIf="RateCtrl.invalid && (RateCtrl.touched || RateCtrl.dirty)">
+              <span class="validation-text" *ngIf="RateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
             </div>
           </div>
         </div>
-        <div class="col-md-8" style="margin-top: 2.6rem; ">
+        <div class="col-md-8" style="margin-top: 2.6rem">
           <div class="d-flex align-items-center mb-2">
             <label for="IsDieselPaid"><b>Diesel Paid</b></label>
             <input type="checkbox" id="IsDieselPaid" [(ngModel)]="Entity.p.IsDieselPaid" name="IsDieselPaid"
               class="form-check-input me-4 mb-2 large-dark-checkbox" (ngModelChange)="DiselPaid(Entity.p.IsDieselPaid)"
-              style="width: 20px; height: 20px; margin-left: 1rem;" />
+              style="width: 20px; height: 20px; margin-left: 1rem" />
           </div>
         </div>
-         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="isDieselPaid">
-            <label>Diesel Quantity</label>
-            <input type="number" [(ngModel)]="Entity.p.DieselQty" name="DieselQty" class="form-control" id="DieselQty" required
-              placeholder="Enter Diesel Quantity" #DieselQtyCtrl="ngModel" (blur)="DieselQtyCtrl.control.markAsTouched()" (click)="selectAllValue($event)" (ngModelChange)="CalculateDieselAmount()"/>
-            <div *ngIf="(DieselQtyCtrl.invalid && (DieselQtyCtrl.touched || DieselQtyCtrl.dirty))">
-              <span class="validation-text" *ngIf="DieselQtyCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+        <div class="col-md-4" style="margin-top: 1rem" *ngIf="isDieselPaid">
+          <label>Diesel Quantity</label>
+          <input type="number" [(ngModel)]="Entity.p.DieselQty" name="DieselQty" class="form-control" id="DieselQty"
+            required placeholder="Enter Diesel Quantity" #DieselQtyCtrl="ngModel"
+            (blur)="DieselQtyCtrl.control.markAsTouched()" (click)="selectAllValue($event)"
+            (ngModelChange)="CalculateDieselAmount()" />
+          <div *ngIf="
+              DieselQtyCtrl.invalid &&
+              (DieselQtyCtrl.touched || DieselQtyCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="DieselQtyCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+          </div>
         </div>
-         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="isDieselPaid">
-            <label>Diesel Rate</label>
-            <input type="number" [(ngModel)]="Entity.p.DieselRate" name="DieselRate" class="form-control" id="DieselRate" required
-              placeholder="Enter Diesel Rate" #DieselRateCtrl="ngModel" (blur)="DieselRateCtrl.control.markAsTouched()" (click)="selectAllValue($event)" (ngModelChange)="CalculateDieselAmount()"/>
-            <div *ngIf="(DieselRateCtrl.invalid && (DieselRateCtrl.touched || DieselRateCtrl.dirty))">
-              <span class="validation-text" *ngIf="DieselRateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+        <div class="col-md-4" style="margin-top: 1rem" *ngIf="isDieselPaid">
+          <label>Diesel Rate</label>
+          <input type="number" [(ngModel)]="Entity.p.DieselRate" name="DieselRate" class="form-control" id="DieselRate"
+            required placeholder="Enter Diesel Rate" #DieselRateCtrl="ngModel"
+            (blur)="DieselRateCtrl.control.markAsTouched()" (click)="selectAllValue($event)"
+            (ngModelChange)="CalculateDieselAmount()" />
+          <div *ngIf="
+              DieselRateCtrl.invalid &&
+              (DieselRateCtrl.touched || DieselRateCtrl.dirty)
+            ">
+            <span class="validation-text" *ngIf="DieselRateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+          </div>
         </div>
-         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="isDieselPaid">
-            <label>Diesel Amount</label>
-            <input type="number" [(ngModel)]="Entity.p.DieselAmount" name="DieselAmount" class="form-control" id="DieselAmount" required
-              placeholder="Enter DieselAmount" #DieselAmountCtrl="ngModel" (blur)="DieselAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>
-            <div *ngIf="(DieselAmountCtrl.invalid && (DieselAmountCtrl.touched || DieselAmountCtrl.dirty))">
-              <span class="validation-text" *ngIf="DieselAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+        <div class="col-md-4" style="margin-top: 1rem" *ngIf="isDieselPaid">
+          <label>Diesel Amount</label>
+          <input type="number" [(ngModel)]="Entity.p.DieselAmount" name="DieselAmount" class="form-control"
+            id="DieselAmount" required placeholder="Enter DieselAmount"/>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <div>
             <label>Invoice Amount</label>
             <input type="number" [(ngModel)]="Entity.p.InvoiceAmount" name="InvoiceAmount" class="form-control"
-              id="InvoiceAmount" required placeholder="Enter InvoiceAmount" #InvoiceAmountCtrl="ngModel"
-              (blur)="InvoiceAmountCtrl.control.markAsTouched()" readonly/>
-            <div *ngIf="(InvoiceAmountCtrl.invalid && (InvoiceAmountCtrl.touched || InvoiceAmountCtrl.dirty))">
-              <span class="validation-text" *ngIf="InvoiceAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+              id="InvoiceAmount" required placeholder="Enter InvoiceAmount" readonly />
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <div>
             <label>Narration</label>
             <input type="text" [(ngModel)]="Entity.p.Narration" name="Narration" class="form-control" id="Narration"
-              required placeholder="Enter Narration" #NarrationCtrl="ngModel"
-              (blur)="NarrationCtrl.control.markAsTouched()" />
-            <div *ngIf="(NarrationCtrl.invalid && (NarrationCtrl.touched || NarrationCtrl.dirty))">
-              <span class="validation-text" *ngIf="NarrationCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+              required placeholder="Enter Narration"/>
           </div>
         </div>
       </div>
-      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
         <div>
-          <button type="button" class="btn" (click)="SaveInvoiceMaster()">Save</button>
+          <button type="button" class="btn" (click)="SaveInvoiceMaster()">
+            Save
+          </button>
         </div>
         <div>
           <button type="button" class="btn" (click)="BackInvoice()">
