@@ -109,7 +109,7 @@
             <label>Given Amount</label>
             <input type="number" [(ngModel)]="Entity.p.GivenAmount" name="GivenAmount" class="form-control"
               id="GivenAmount" required placeholder="Enter GivenAmount" #GivenAmountCtrl="ngModel"
-              (blur)="GivenAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+              (blur)="GivenAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)" (ngModelChange)="CalculateRemainingAmountandBalance()"/>
             <div *ngIf="(GivenAmountCtrl.invalid && (GivenAmountCtrl.touched || GivenAmountCtrl.dirty))">
               <span class="validation-text" *ngIf="GivenAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
@@ -118,7 +118,7 @@
         <div class="col-md-4" style="margin-top: 1rem; ">
           <div>
             <label>Remaining Amount</label>
-            <input type="number" [(ngModel)]="Entity.p.RemainingAmount" name="RemainingAmount" class="form-control"
+            <input type="number" [(ngModel)]="Entity.p.RemainingAmount" readonly name="RemainingAmount" class="form-control"
               id="RemainingAmount" required placeholder="Enter RemainingAmount" #RemainingAmountCtrl="ngModel"
               (blur)="RemainingAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
             <div *ngIf="(RemainingAmountCtrl.invalid && (RemainingAmountCtrl.touched || RemainingAmountCtrl.dirty))">

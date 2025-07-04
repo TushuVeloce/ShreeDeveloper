@@ -11,7 +11,6 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { FinancialYearFetchRequest } from "./financialyearfetchrequest";
-import { CurrentBalanceFetchRequest } from "./currentbalancefetchrequest";
 
 export class FinancialYearProps {
   public CreatedBy: number = 0;
@@ -170,14 +169,6 @@ export class FinancialYear implements IPersistable<FinancialYear> {
 
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new FinancialYearFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await FinancialYear.FetchTransportData(req, errorHandler) as TransportData;
-    return FinancialYear.ListFromTransportData(tdResponse);
-  }
-
-
-  public static async FetchCurrentBalanceByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new CurrentBalanceFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await FinancialYear.FetchTransportData(req, errorHandler) as TransportData;
     return FinancialYear.ListFromTransportData(tdResponse);
