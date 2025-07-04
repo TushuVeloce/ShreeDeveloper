@@ -13,7 +13,7 @@ import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { ExpenseFetchRequest } from "./expensefetchrequest";
 import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 import { TotalExpenseFetchRequest } from "./totalexpensefetchrequest";
-
+import { CurrentBalanceFetchRequest } from "./currentbalancefetchrequest";
 
 export class ExpenseProps {
   public readonly Db_Table_Name = "Expense";
@@ -47,6 +47,7 @@ export class ExpenseProps {
   public RemainingAmount: number = 0
   public ShreesBalance: number = 0
   public ExpenseModeOfPayment: number = 0
+  public ModeOfPaymentName: string = ''
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -200,6 +201,14 @@ export class Expense implements IPersistable<Expense> {
 
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new ExpenseFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Expense.FetchTransportData(req, errorHandler) as TransportData;
+    return Expense.ListFromTransportData(tdResponse);
+  }
+
+
+  public static async FetchCurrentBalanceByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new CurrentBalanceFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await Expense.FetchTransportData(req, errorHandler) as TransportData;
     return Expense.ListFromTransportData(tdResponse);

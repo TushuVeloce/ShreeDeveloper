@@ -8,6 +8,7 @@ export class CurrentBalanceFetchRequest {
   public static readonly FetchRequestType: string = "GetCurrentBalanceOfCurrentFinancialYearFetchRequest";
   FinancialYearRefs: number[] = [];
   CompanyRefs: number[] = [];
+  ExpenseRefs: number[] = [];
 
   public MergeIntoTransportData = (td: TransportData) => {
     let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CurrentBalanceFetchRequest.FetchRequestType) as DataCollection;
