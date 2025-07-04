@@ -33,6 +33,7 @@ export class ExpenseProps {
   public readonly LedgerName: string = ''
   public SubLedgerRef: number = 0
   public readonly SubLedgerName: string = ''
+  public RecipientRef: number = 0
   public RecipientName: string = ''
   public Reason: string = ''
   public InvoiceAmount: number = 0
