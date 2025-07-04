@@ -25,6 +25,7 @@ export class IncomeProps {
   public CompanyName: string = ''
 
   public PayerName: string = ''
+  public PayerRef: number = 0
   public Date: string = ''
   public SiteRef: number = 0
   public readonly SiteName: string = ''

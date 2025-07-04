@@ -5,6 +5,7 @@ import { ValidationMessages } from 'src/app/classes/domain/constants';
 import { DomainEnums, } from 'src/app/classes/domain/domainenums/domainenums';
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
+import { Payer } from 'src/app/classes/domain/entities/website/masters/payer/payer';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
@@ -23,10 +24,15 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class IncomeDetailsComponent implements OnInit {
   Entity: Income = Income.CreateNewInstance();
+  PayerEntity: Payer = Payer.CreateNewInstance();
+
   private IsNewEntity: boolean = true;
   SiteList: Site[] = [];
   SubLedgerList: SubLedger[] = [];
   UnitList: Unit[] = [];
+  PayerList: Payer[] = [];
+  PayerNameInput: boolean = false
+  PayerNameReadOnly: boolean = false
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Income' | 'Edit Income' = 'New Income';
   IsDropdownDisabled: boolean = false;
@@ -66,6 +72,8 @@ export class IncomeDetailsComponent implements OnInit {
       let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       this.Date = strCDT.substring(0, 10);
     }
+
+    this.getPayerListByCompanyRef()
     this.InitialEntity = Object.assign(
       Income.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
@@ -82,6 +90,56 @@ export class IncomeDetailsComponent implements OnInit {
     let lst = await Unit.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.UnitList = lst;
   }
+
+  getPayerListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Payer.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.PayerList = lst;
+  }
+
+  AddPayerName = () => {
+    this.Entity.p.PayerRef = 0
+    this.PayerEntity.p.Name = ''
+    this.PayerNameInput = true
+  }
+
+  cancelPayerName = () => {
+    this.PayerNameInput = false
+    this.PayerEntity.p.Name = ''
+  }
+
+  SaveNewPayerName = async () => {
+    if (this.PayerEntity.p.Name == '') {
+      this.uiUtils.showErrorToster('Payer Name can not be Blank');
+      return
+    }
+    this.PayerEntity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+    this.PayerEntity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+    if (this.PayerEntity.p.CreatedBy == 0) {
+      this.PayerEntity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      this.PayerEntity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    }
+    let entityToSave = this.PayerEntity.GetEditableVersion();
+    let entitiesToSave = [entityToSave];
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
+    } else {
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('Payer Name saved successfully');
+        this.PayerNameInput = false
+        await this.getPayerListByCompanyRef()
+        this.PayerEntity = Payer.CreateNewInstance();
+      }
+    }
+  };
+
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
