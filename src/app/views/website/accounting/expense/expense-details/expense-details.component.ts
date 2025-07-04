@@ -34,6 +34,7 @@ export class ExpenseDetailsComponent implements OnInit {
   UnitList: Unit[] = [];
   RecipientNameInput: boolean = false
   isSaveDisabled: boolean = false;
+  ShreeBalance: number = 0;
   DetailsFormTitle: 'New Expense' | 'Edit Expense' = 'New Expense';
   IsDropdownDisabled: boolean = false;
   InitialEntity: Expense = null as any;
@@ -64,6 +65,9 @@ export class ExpenseDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Expense' : 'Edit Expense';
       this.Entity = Expense.GetCurrentInstance();
+      this.Date = this.Entity.p.Date;
+      this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
+      this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
@@ -128,7 +132,6 @@ export class ExpenseDetailsComponent implements OnInit {
     let data = await Expense.FetchTotalExpenseFromSiteAndRecipient(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    console.log('data :', data);
     this.Entity.p.InvoiceAmount = data[0].p.InvoiceAmount;
   };
 
@@ -155,9 +158,23 @@ export class ExpenseDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await FinancialYear.FetchCurrentBalanceByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
-    // this.RecipientList = lst;
+    let lst = await Expense.FetchCurrentBalanceByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.Entity.p.ShreesBalance = lst[0].p.ShreesBalance;
+    this.ShreeBalance = lst[0].p.ShreesBalance;
+  }
+
+  CalculateRemainingAmountandBalance = () => {
+    if (this.Entity.p.GivenAmount <= this.Entity.p.InvoiceAmount) {
+      this.Entity.p.RemainingAmount = this.Entity.p.InvoiceAmount - this.Entity.p.GivenAmount;
+    } else {
+      this.Entity.p.RemainingAmount = 0;
+    }
+
+    if (this.Entity.p.GivenAmount <= this.Entity.p.ShreesBalance) {
+      this.Entity.p.ShreesBalance = this.ShreeBalance - this.Entity.p.GivenAmount;
+    } else {
+      this.Entity.p.ShreesBalance = -(this.Entity.p.GivenAmount - this.ShreeBalance);
+    }
   }
 
   AddRecipientName = () => {
@@ -198,8 +215,8 @@ export class ExpenseDetailsComponent implements OnInit {
     } else {
       await this.uiUtils.showSuccessToster('Recipient Name saved successfully');
       this.RecipientNameInput = false
-      await this.getRecipientListByCompanyRef()
       this.RecipientEntity = Recipient.CreateNewInstance();
+      await this.getRecipientListByCompanyRef()
     }
   };
 
@@ -225,7 +242,8 @@ export class ExpenseDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Expense saved successfully');
         this.Entity = Expense.CreateNewInstance();
-        this.resetAllControls();
+        // this.resetAllControls();
+        await this.getCurrentBalanceByCompanyRef()
       } else {
         await this.uiUtils.showSuccessToster('Expense Updated successfully');
         await this.router.navigate(['/homepage/Website/Expense']);

@@ -10,25 +10,26 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { FinancialYearFetchRequest } from "./financialyearfetchrequest";
+import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
+import { AccountingReportFetchRequest } from "./accountingreportrequest";
 
-export class FinancialYearProps {
-  public CreatedBy: number = 0;
-  public CreatedByName: string = '';
-  public UpdatedBy: number = 0;
-  public UpdatedByName: number = 0;
+
+export class AccountingReportProps {
+  public readonly Db_Table_Name = "AccountingReport";
   public Ref: number = 0;
-  public Name: string = '';
-  public Password: string = '';
-  FromDate: string = '';
-  ToDate: string = '';
-  ShortName: string = '';
-  public CompanyRef: number = 0;
-  public IsCurrentYear: number = 0;
+  public CompanyRef: number = 0
+  public CompanyName: string = ''
+  public TransDateTime: string = ''
+  public PayerName: string = ''
+  public RecipientName: string = ''
+  public SiteName: string = ''
+  public Reason: string = ''
+  public IncomeAmount: number = 0
+  public GivenAmount: number = 0
+  public ShreesBalance: number = 0
+  public ModeOfPaymentName: string = ''
+  public Narration: string = ''
 
-  // public FinancialYear: string = '';
-
-  public readonly CompanyName: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -38,14 +39,14 @@ export class FinancialYearProps {
   }
 
   public static Blank() {
-    return new FinancialYearProps(true);
+    return new AccountingReportProps(true);
   }
 }
 
-export class FinancialYear implements IPersistable<FinancialYear> {
-  public static readonly MasterTableName: string = 'FinancialYearMaster';
+export class AccountingReport implements IPersistable<AccountingReport> {
+  public static readonly Db_Table_Name: string = 'AccountingReport';
 
-  private constructor(public readonly p: FinancialYearProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: AccountingReportProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -58,47 +59,46 @@ export class FinancialYear implements IPersistable<FinancialYear> {
     }
   }
 
-  public GetEditableVersion(): FinancialYear {
-    let newFinancialYear: FinancialYearProps = Utils.GetInstance().DeepCopy(this.p);
-    return FinancialYear.CreateInstance(newFinancialYear, true);
+  public GetEditableVersion(): AccountingReport {
+    let newState: AccountingReportProps = Utils.GetInstance().DeepCopy(this.p);
+    return AccountingReport.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new FinancialYear(FinancialYearProps.Blank(), true);
+    return new AccountingReport(AccountingReportProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new FinancialYear(data as FinancialYearProps, allowEdit);
+    return new AccountingReport(data as AccountingReportProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-    // if (this.p.CompanyRef <= 0) vra.add('Company', 'Company cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, FinancialYear.MasterTableName, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, AccountingReport.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: FinancialYear = FinancialYear.CreateNewInstance();
+  private static m_currentInstance: AccountingReport = AccountingReport.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return FinancialYear.m_currentInstance;
+    return AccountingReport.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: FinancialYear) {
-    FinancialYear.m_currentInstance = value;
+  public static SetCurrentInstance(value: AccountingReport) {
+    AccountingReport.m_currentInstance = value;
   }
+
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): FinancialYear {
+  public static SingleInstanceFromTransportData(td: TransportData): AccountingReport {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, FinancialYear.MasterTableName)) {
-      for (let data of dcs.GetCollection(td.MainData, FinancialYear.MasterTableName)!.Entries) {
-        return FinancialYear.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, AccountingReport.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, AccountingReport.Db_Table_Name)!.Entries) {
+        return AccountingReport.CreateInstance(data, false);
       }
     }
 
@@ -107,13 +107,14 @@ export class FinancialYear implements IPersistable<FinancialYear> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): FinancialYear[] {
-    let result: FinancialYear[] = [];
+    //sortPropertyName: string = "Name"): AccountingReport[] {
+    sortPropertyName: string = ""): AccountingReport[] {
+    let result: AccountingReport[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, FinancialYear.MasterTableName)) {
-      let coll = dcs.GetCollection(cont, FinancialYear.MasterTableName)!;
+    if (dcs.CollectionExists(cont, AccountingReport.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, AccountingReport.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -123,18 +124,18 @@ export class FinancialYear implements IPersistable<FinancialYear> {
       }
 
       for (let data of entries) {
-        result.push(FinancialYear.CreateInstance(data, false));
+        result.push(AccountingReport.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): FinancialYear[] {
-    return FinancialYear.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): AccountingReport[] {
+    return AccountingReport.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: FinancialYearFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: AccountingReportFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -149,30 +150,31 @@ export class FinancialYear implements IPersistable<FinancialYear> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new FinancialYearFetchRequest();
-    req.CompanyRefs.push(ref);
+    let req = new AccountingReportFetchRequest();
+    req.AccountingReportRefs.push(ref);
 
-    let tdResponse = await FinancialYear.FetchTransportData(req, errorHandler) as TransportData;
-    return FinancialYear.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await AccountingReport.FetchTransportData(req, errorHandler) as TransportData;
+    return AccountingReport.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: FinancialYearFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await FinancialYear.FetchTransportData(req, errorHandler) as TransportData;
-    return FinancialYear.ListFromTransportData(tdResponse);
+  public static async FetchList(req: AccountingReportFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await AccountingReport.FetchTransportData(req, errorHandler) as TransportData;
+    return AccountingReport.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new FinancialYearFetchRequest();
-    let tdResponse = await FinancialYear.FetchTransportData(req, errorHandler) as TransportData;
-    return FinancialYear.ListFromTransportData(tdResponse);
+    let req = new AccountingReportFetchRequest();
+    let tdResponse = await AccountingReport.FetchTransportData(req, errorHandler) as TransportData;
+    return AccountingReport.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new FinancialYearFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await FinancialYear.FetchTransportData(req, errorHandler) as TransportData;
-    return FinancialYear.ListFromTransportData(tdResponse);
-  }
+   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+     let req = new AccountingReportFetchRequest();
+     req.CompanyRef = CompanyRef
+     let tdResponse = await AccountingReport.FetchTransportData(req, errorHandler) as TransportData;
+     return AccountingReport.ListFromTransportData(tdResponse);
+   }
+
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

@@ -88,11 +88,11 @@ export class Income implements IPersistable<Income> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
 
-    if (this.p.PayerName == '') {
-      vra.add('PayerName', 'Payer Name cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.PayerName)) {
-      vra.add('PayerName', ValidationMessages.NameWithNosAndSpaceMsg + ' for Payer Name');
-    }
+    // if (this.p.PayerName == '') {
+    //   vra.add('PayerName', 'Payer Name cannot be blank.');
+    // } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.PayerName)) {
+    //   vra.add('PayerName', ValidationMessages.NameWithNosAndSpaceMsg + ' for Payer Name');
+    // }
   }
 
   public MergeIntoTransportData(td: TransportData) {

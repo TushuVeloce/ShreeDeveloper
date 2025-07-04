@@ -141,6 +141,7 @@ import { RecipientMasterDetailsComponent } from './Masters/recipient_name/recipi
 import { PayerComponent } from './Masters/payer/payer/payer.component';
 import { PayerDetailsComponent } from './Masters/payer/payer-details/payer-details.component';
 import { CrmReportComponent } from './Reports/crm-report/crm-report.component';
+import { AccountingReportComponent } from './accounting/accounting_report/accounting-report/accounting-report.component';
 
 
 const routes: Routes = [
@@ -293,6 +294,8 @@ const routes: Routes = [
 
       { path: 'Income', component: IncomeComponent },
       { path: 'Income_Details', component: IncomeDetailsComponent },
+
+      { path: 'Accounting_Report', component: AccountingReportComponent},
 
 
       // Reports
