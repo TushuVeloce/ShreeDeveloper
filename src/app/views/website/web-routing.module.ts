@@ -130,7 +130,6 @@ import { OrderApprovalComponent } from './stock management/stock_order/order-app
 import { ChangePasswordComponent } from './profile/change_password/change-password/change-password.component';
 import { StockOrderPrintComponent } from './stock management/stock_order/stock-order-print/stock-order-print.component';
 import { StockInwardPrintComponent } from './stock management/stock_inward/stock-inward-print/stock-inward-print.component';
-import { CrmReportComponent } from './reports/crm-report/crm-report.component';
 import { ExpenseComponent } from './accounting/expense/expense/expense.component';
 import { ExpenseDetailsComponent } from './accounting/expense/expense-details/expense-details.component';
 import { IncomeComponent } from './accounting/income/income/income.component';
@@ -141,6 +140,7 @@ import { RecipientMasterComponent } from './Masters/recipient_name/recipient-nam
 import { RecipientMasterDetailsComponent } from './Masters/recipient_name/recipient-name-master-details/recipient-name-master-details.component';
 import { PayerComponent } from './Masters/payer/payer/payer.component';
 import { PayerDetailsComponent } from './Masters/payer/payer-details/payer-details.component';
+import { CrmReportComponent } from './Reports/crm-report/crm-report.component';
 
 
 const routes: Routes = [
