@@ -4,16 +4,13 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class TotalExpenseFetchRequest {
-  public static readonly FetchRequestType: string = "GetTotalExpenseFromSiteAndRecipientNameFetchRequest";
-
+export class CurrentBalanceFetchRequest {
+  public static readonly FetchRequestType: string = "GetCurrentBalanceOfCurrentFinancialYearFetchRequest";
+  FinancialYearRefs: number[] = [];
   CompanyRefs: number[] = [];
-  ExpenseRefs: number[] = [];
-  SiteRefs: number[] = [];
-  RecipientRefs: number[] = [];
 
   public MergeIntoTransportData = (td: TransportData) => {
-    let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, TotalExpenseFetchRequest.FetchRequestType) as DataCollection;
+    let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CurrentBalanceFetchRequest.FetchRequestType) as DataCollection;
     coll.Entries.push(this);
   }
 

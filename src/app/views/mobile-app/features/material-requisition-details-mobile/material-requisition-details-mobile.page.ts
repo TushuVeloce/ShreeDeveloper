@@ -36,8 +36,8 @@ export class MaterialRequisitionDetailsMobilePage implements OnInit {
   MaterialList: Material[] = [];
   localEstimatedStartingDate: string = '';
   localEstimatedEndDate: string = '';
-  plotheaders: string[] = ['Sr.No.', 'Plot No', 'Area sq.m', 'Area sq.ft', 'Goverment Rate', 'Company Rate', 'Action'];
-  materialheaders: string[] = ['Sr.No.', 'Material Name ', 'Unit', 'Estimated Qty', 'Action'];
+  // plotheaders: string[] = ['Sr.No.', 'Plot No', 'Area sq.m', 'Area sq.ft', 'Goverment Rate', 'Company Rate', 'Action'];
+  // materialheaders: string[] = ['Sr.No.', 'Material Name ', 'Unit', 'Estimated Qty', 'Action'];
   ismaterialModalOpen: boolean = false;
   newRequisition: RequiredMaterialDetailProps = RequiredMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
@@ -48,9 +48,12 @@ export class MaterialRequisitionDetailsMobilePage implements OnInit {
   selectedSite: any[] = [];
   MaterialName: string = '';
   selectedMaterial: any[] = [];
-  Date: string | null = null;
+  // Date: string | null = null;
   tableHeaderData = ['Material', 'Unit', 'Required Qty'];
 
+  showFromPicker = false;
+  Date = '';
+  DisplayDate = '';
 
   constructor(private uiUtils: UIUtils,
     private router: Router,
@@ -129,7 +132,8 @@ export class MaterialRequisitionDetailsMobilePage implements OnInit {
     try {
       await this.loadingService.show(); // Awaiting this is critical
       this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
-
+      this.Date = this.datePipe.transform(new Date(), 'yyyy-MM-dd') ?? '';
+      this.DisplayDate = this.Date;
       if (this.companyRef > 0) {
         this.appStateManage.setDropdownDisabled(true);
 
@@ -144,6 +148,7 @@ export class MaterialRequisitionDetailsMobilePage implements OnInit {
 
           if (this.Entity.p.Date != '') {
             this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
+            this.DisplayDate = this.datePipe.transform(this.Date, 'yyyy-MM-dd')?? '';
           }
           this.selectedSite = [{
             p: {
@@ -182,8 +187,13 @@ export class MaterialRequisitionDetailsMobilePage implements OnInit {
   }
 
 
+  // public async onDateChange(date: any): Promise<void> {
+  //   this.Date = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
+  //   this.Entity.p.Date = this.Date;
+  // }
   public async onDateChange(date: any): Promise<void> {
     this.Date = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
+    this.DisplayDate = this.Date;
     this.Entity.p.Date = this.Date;
   }
 

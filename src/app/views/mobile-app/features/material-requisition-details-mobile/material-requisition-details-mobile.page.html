@@ -3,7 +3,7 @@
 <ion-content class="form-container">
     <ion-list lines="none" class="ion-padding">
         <!--  Date -->
-        <ion-item class="input-item">
+        <!-- <ion-item class="input-item">
             <ion-label>Select Date</ion-label>
             <ion-datetime-button datetime="FromDate" trigger="entry-date-modal"></ion-datetime-button>
         </ion-item>
@@ -12,7 +12,16 @@
                 <ion-datetime id="FromDate" presentation="date" [(ngModel)]="Date" show-default-buttons="true"
                     (ionChange)="onDateChange($event.detail.value)"></ion-datetime>
             </ng-template>
-        </ion-modal>
+        </ion-modal> -->
+        <!-- Date -->
+        <ion-item (click)="showFromPicker = true" class="input-item">
+            <ion-label>Date</ion-label>
+            <ion-label slot="end">{{ DisplayDate || 'Please select...' }}</ion-label>
+        </ion-item>
+        <app-date-picker [show]="showFromPicker" [selectedDate]="Date" [defaultToday]="true"
+            (dateChanged)="onDateChange($event)" (dateSelected)="DisplayDate = $event; showFromPicker = false"
+            (modalDismissed)="showFromPicker = false" />
+  
 
         <!-- Select site -->
         <ion-item class="input-item" button (click)="selectSiteBottomsheet()">

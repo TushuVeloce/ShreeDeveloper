@@ -15,6 +15,10 @@ const routes: Routes = [
   {
     path: 'edit',
     loadChildren: () => import('../stock-inward-details-mobile/stock-inward-details-mobile.module').then(m => m.StockInwardDetailsMobilePageModule)
+  },
+  {
+    path: 'print',
+    loadChildren: () => import('../stock-inward-print-preview-mobile/stock-inward-print-preview-mobile.module').then(m => m.StockInwardPrintPreviewMobilePageModule)
   }
 ];
 

@@ -6,75 +6,28 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ng-container *ngFor="let order of DisplayMasterList">
-    <ion-item-group>
-      <ion-item-divider color="light" class="requisition-card">
-        <div class="divider-row">
-          <!-- Left: Vendor Name -->
-          <ion-label class="label-start">
-            <strong>{{ order.p.VendorTradeName || 'Unknown Vendor' }}</strong>
-          </ion-label>
-        </div>
-        <div class="divider-row">
-          <!-- Right: Status Badge and Action Buttons -->
-          <div class="action-area">
-            <!-- Action Buttons -->
-            <div class="button-group">
-              <!-- Status Badge -->
-              <span class="status-badge" [ngClass]="getStatusClass(order.p.MaterialPurchaseOrderStatus)"
-                (click)="order.p.MaterialPurchaseOrderStatus === MaterialPurchaseOrderStatus.Approved ? openModal(order) : ''">
-                {{ getStatusText(order.p.MaterialPurchaseOrderStatus) }}
-              </span>
-              <ion-button size="small" fill="clear" color="warning" (click)="onEditClicked(order)"
-                [disabled]="order.p.MaterialPurchaseOrderStatus !== MaterialPurchaseOrderStatus.Approved">
-                <ion-icon name="create-outline" slot="icon-only"></ion-icon>
-              </ion-button>
+  <ion-list class="requisition-list" [lines]="'none'">
+    <ion-item *ngFor="let order of DisplayMasterList" class="requisition-item" button detail (click)="openModal(order)">
+      <ion-label>
+        <h2>Site : {{ order.p.SiteName || 'Unknown Site' }}</h2>
+        <p class="date-label">Date : {{ formatDate(order.p.PurchaseOrderDate) || 'Unknown Date' }}</p>
+        <p class="date-label">Status : <span class="status-badge"
+            [ngClass]="getStatusClass(order.p.MaterialPurchaseOrderStatus)">
+            {{ getStatusText(order.p.MaterialPurchaseOrderStatus) }}
+          </span></p>
+      </ion-label>
 
-              <ion-button size="small" fill="clear" color="danger" (click)="onDeleteClicked(order)"
-                [disabled]="order.p.MaterialPurchaseOrderStatus !== MaterialPurchaseOrderStatus.Approved">
-                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-              </ion-button>
+      <div class="action-buttons" slot="end" (click)="$event.stopPropagation()">
+        <ion-button fill="clear" size="small" color="primary" (click)="onEditClicked(order)">
+          <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(order)">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+    </ion-item>
+  </ion-list>
 
-              <ion-button size="small" fill="clear" color="medium" (click)="navigateToPrint(order)">
-                <ion-icon name="print-outline" slot="icon-only"></ion-icon>
-              </ion-button>
-
-              <ion-button size="small" fill="clear" color="medium" (click)="toggleItemDetails(order.p.Ref)">
-                <ion-icon [name]="expandedRequisitions.has(order.p.Ref) ? 'chevron-up-outline' : 'chevron-down-outline'"
-                  slot="icon-only"></ion-icon>
-              </ion-button>
-            </div>
-          </div>
-        </div>
-      </ion-item-divider>
-
-      <ion-card class="requisition-card" *ngFor="let item of order.p.MaterialPurchaseOrderDetailsArray">
-        <ion-card-content [@expandCollapse]="expandedRequisitions.has(order.p.Ref) ? 'expanded' : 'collapsed'">
-          <div class="requisition-details">
-            <!-- Info Column -->
-            <div class="left-info">
-              <div class="info-row">
-                <span class="label">Material:</span>
-                <span class="value">{{ item.MaterialName || '-' }}</span>
-              </div>
-              <div class="info-row">
-                <span class="label">Unit:</span>
-                <span class="value">{{ item.UnitName || '-' }}</span>
-              </div>
-              <div class="info-row">
-                <span class="label">Required Qty:</span>
-                <span class="value">{{ item.RequisitionQty || '-' }}</span>
-              </div>
-              <div class="info-row">
-                <span class="label">Expected Delivery Date:</span>
-                <span class="value">{{formatDate(item.ExpectedDeliveryDate) || '-' }}</span>
-              </div>
-            </div>
-          </div>
-        </ion-card-content>
-      </ion-card>
-    </ion-item-group>
-  </ng-container>
   <!-- Show "Data not found" if list is empty -->
   <div *ngIf="DisplayMasterList.length === 0 " class="no-data-mobile-app">
     <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
@@ -120,13 +73,6 @@
             <span class="label">Address:</span>
             <span class="value">{{ SelectedOrder.p.AddressLine1 || '-' }}</span>
           </div>
-          <!-- <div class="info-row-of-model">
-              <span class="label">Invoice:</span>
-              <ion-button size="small" fill="clear" color="primary" (click)="openfile(SelectedOrder.p.MaterialPurchaseInvoicePath)">
-                <ion-icon [name]="'eye-outline'"
-                  slot="icon-only"></ion-icon>
-              </ion-button>
-            </div> -->
           <!-- Invoice Preview Button -->
           <div class="info-row-of-model" *ngIf="SelectedOrder?.p?.MaterialPurchaseInvoicePath">
             <span class="label">Invoice:</span>
@@ -201,45 +147,6 @@
               </table>
             </div>
           </div>
-          <!-- Material Table -->
-          <!-- <ng-container *ngIf="SelectedOrder.p.MaterialQuotationDetailsArray.length > 0; else noMaterials">
-              <ion-grid class="material-grid">
-                <ion-row class="material-header">
-                  <ion-col size="1">#</ion-col>
-                  <ion-col size="4">Material</ion-col>
-                  <ion-col size="2">Unit</ion-col>
-                  <ion-col size="2">Required</ion-col>
-                  <ion-col size="2">Ordered</ion-col>
-                  <ion-col size="2">Remaining</ion-col>
-                  <ion-col size="2">Rate</ion-col>
-                  <ion-col size="2">Delivery</ion-col>
-                  <ion-col size="2">Total</ion-col>
-                </ion-row>
-
-                <ion-row *ngFor="let material of SelectedOrder.p.MaterialQuotationDetailsArray; let i = index"
-                  class="material-row">
-                  <ion-col size="1">{{ i + 1 }}</ion-col>
-                  <ion-col size="4">{{ material.MaterialName }}</ion-col>
-                  <ion-col size="2">{{ material.UnitName }}</ion-col>
-                  <ion-col size="2">{{ material.EstimatedQty }}</ion-col>
-                  <ion-col size="2">{{ material.OrderedQty }}</ion-col>
-                  <ion-col size="2">{{ material.RequiredRemainingQuantity }}</ion-col>
-                  <ion-col size="2">{{ material.DiscountedRate || material.Rate }}</ion-col>
-                  <ion-col size="2">{{ formatDate(material.ExpectedDeliveryDate) }}</ion-col>
-                  <ion-col size="2">{{ material.TotalAmount }}</ion-col>
-                </ion-row>
-              </ion-grid>
-            </ng-container> -->
-
-          <!-- No Materials Message -->
-          <!-- <ng-template #noMaterials>
-              <div class="ion-padding ion-text-center">
-                <ion-text color="medium">
-                  <p>No material data available.</p>
-                </ion-text>
-              </div>
-            </ng-template> -->
-
           <!-- Summary -->
           <div class="info-row-of-model">
             <span class="label">Grand Total:</span>
@@ -255,7 +162,7 @@
         </ion-content>
 
         <!-- Footer -->
-        <ion-footer class="modal-footer">
+        <ion-footer class="modal-footer" *ngIf="SelectedOrder.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved">
           <div class="action-buttons">
             <ion-button expand="block" color="success" shape="round"
               (click)="SaveOrder(MaterialPurchaseOrderStatus.Ordered)">
