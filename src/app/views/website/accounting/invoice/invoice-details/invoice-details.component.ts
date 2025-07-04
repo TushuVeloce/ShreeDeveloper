@@ -85,13 +85,10 @@ export class InvoiceDetailsComponent implements OnInit {
     } else {
       this.Entity = Invoice.CreateNewInstance();
       Invoice.SetCurrentInstance(this.Entity);
-      if (this.Entity.p.Date == '') {
         this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
         let parts = this.strCDT.substring(0, 16).split('-');
-        // Construct the new date format
         this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
         this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
-      }
     }
     this.getRecipientListByCompanyRef()
     this.InitialEntity = Object.assign(
@@ -250,6 +247,10 @@ export class InvoiceDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Invoice saved successfully');
         this.Entity = Invoice.CreateNewInstance();
+         this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+        let parts = this.strCDT.substring(0, 16).split('-');
+        this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
+        this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
         await this.resetAllControls();
         this.isDieselPaid = false
       } else {
