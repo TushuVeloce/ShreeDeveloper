@@ -20,6 +20,7 @@ export class MaterialFromOrderProps {
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
   public Ref: number = 0;
+  public InternalRef: number = 0;
   public MaterialRef:number=0
   public MaterialStockOrderDetailsRef:number=0
   public Code: string = '';

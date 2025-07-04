@@ -30,7 +30,7 @@ export class InwardMaterialDetailProps {
   public InwardQty: number = 0;
   public PurchaseOrderRemainingQty: number = 0;
   public MaterialInwardRef: number = 0;
-
+  public InternalRef: number = 0; // ✅ Add this field 
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
