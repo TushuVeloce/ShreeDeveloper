@@ -137,8 +137,8 @@ import { IncomeComponent } from './accounting/income/income/income.component';
 import { IncomeDetailsComponent } from './accounting/income/income-details/income-details.component';
 import { InvoiceComponent } from './accounting/invoice/invoice/invoice.component';
 import { InvoiceDetailsComponent } from './accounting/invoice/invoice-details/invoice-details.component';
-import { RecipientNameMasterComponent } from './Masters/recipient_name/recipient-name-master/recipient-name-master.component';
-import { RecipientNameMasterDetailsComponent } from './Masters/recipient_name/recipient-name-master-details/recipient-name-master-details.component';
+import { RecipientMasterComponent } from './Masters/recipient_name/recipient-name-master/recipient-name-master.component';
+import { RecipientMasterDetailsComponent } from './Masters/recipient_name/recipient-name-master-details/recipient-name-master-details.component';
 import { PayerComponent } from './Masters/payer/payer/payer.component';
 import { PayerDetailsComponent } from './Masters/payer/payer-details/payer-details.component';
 
@@ -214,8 +214,8 @@ const routes: Routes = [
       { path: 'Estimate_Stages', component: EstimateStagesComponent },
       { path: 'Estimate_Stages_details', component: EstimateStagesDetailsComponent },
 
-      { path: 'Recipient_Master', component: RecipientNameMasterComponent },
-      { path: 'Recipient_Master_Details', component: RecipientNameMasterDetailsComponent },
+      { path: 'Recipient_Master', component: RecipientMasterComponent },
+      { path: 'Recipient_Master_Details', component: RecipientMasterDetailsComponent },
 
       { path: 'Payer_Master', component: PayerComponent },
       { path: 'Payer_Master_Details', component: PayerDetailsComponent },

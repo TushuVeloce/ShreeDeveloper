@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
-import { RecipientName } from 'src/app/classes/domain/entities/website/masters/recipientname/recipientname';
+import { Recipient } from 'src/app/classes/domain/entities/website/masters/recipientname/recipientname';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -15,13 +15,13 @@ import { Utils } from 'src/app/services/utils.service';
   templateUrl: './recipient-name-master-details.component.html',
   styleUrls: ['./recipient-name-master-details.component.scss'],
 })
-export class RecipientNameMasterDetailsComponent implements OnInit {
-  Entity: RecipientName = RecipientName.CreateNewInstance();
+export class RecipientMasterDetailsComponent implements OnInit {
+  Entity: Recipient = Recipient.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Recipient Name' | 'Edit Recipient Name' = 'New Recipient Name';
   IsDropdownDisabled: boolean = false;
-  InitialEntity: RecipientName = null as any;
+  InitialEntity: Recipient = null as any;
   isAdd = false;
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
@@ -49,12 +49,12 @@ export class RecipientNameMasterDetailsComponent implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity
         ? 'New Recipient Name'
         : 'Edit Recipient Name';
-      this.Entity = RecipientName.GetCurrentInstance();
+      this.Entity = Recipient.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
-      this.Entity = RecipientName.CreateNewInstance();
-      RecipientName.SetCurrentInstance(this.Entity);
+      this.Entity = Recipient.CreateNewInstance();
+      Recipient.SetCurrentInstance(this.Entity);
     }
 
     this.focusInput();
@@ -65,7 +65,7 @@ export class RecipientNameMasterDetailsComponent implements OnInit {
     txtName.focus();
   }
 
-  SaveRecipientNameMaster = async () => {
+  SaveRecipientMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     if (this.Entity.p.CreatedBy == 0) {
@@ -84,7 +84,7 @@ export class RecipientNameMasterDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Recipient Name saved successfully');
-        this.Entity = RecipientName.CreateNewInstance();
+        this.Entity = Recipient.CreateNewInstance();
         this.resetAllControls();
       } else {
         await this.uiUtils.showSuccessToster('Recipient Name Updated successfully');
@@ -93,7 +93,7 @@ export class RecipientNameMasterDetailsComponent implements OnInit {
     }
   };
 
-  BackRecipientName = async () => {
+  BackRecipient = async () => {
     if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
       await this.uiUtils.showConfirmationMessage('Cancel',
         `This process is IRREVERSIBLE!

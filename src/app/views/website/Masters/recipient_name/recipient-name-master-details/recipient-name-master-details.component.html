@@ -3,7 +3,7 @@
     <div class="row align-items-center">
       <!-- Back Button Column -->
       <div class="col-2 col-md-1 d-flex justify-content-center">
-        <button type="button" class="backbtn" (click)="BackRecipientName()">
+        <button type="button" class="backbtn" (click)="BackRecipient()">
           <img src="/assets/icons/arrow-button.png" alt="Back" class="backbtnimg" />
         </button>
       </div>
@@ -20,8 +20,7 @@
     </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
+        <div class="col-md-6">
           <label>Recipient Name</label>
           <input type="text" [readOnly]="isAdd" onclick="" [(ngModel)]="Entity.p.Name" name="Name" class="form-control"
             id="Name" placeholder="Enter Recipient Name" pattern="{{NameWithNosAndSpace}}" #NameCtrl="ngModel"
@@ -35,11 +34,11 @@
       <br>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
-          <button type="button" class="btn" (click)="SaveRecipientNameMaster()"
+          <button type="button" class="btn" (click)="SaveRecipientMaster()"
             [disabled]="isSaveDisabled">Save</button>
         </div>
         <div>
-          <button type="button" class="btn" (click)="BackRecipientName()">Cancel</button>
+          <button type="button" class="btn" (click)="BackRecipient()">Cancel</button>
         </div>
       </div>
     </form>

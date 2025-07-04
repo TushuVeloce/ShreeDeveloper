@@ -32,7 +32,7 @@
         <tbody>
           <tr *ngFor="let ExpenseType of paginatedList(); index as i">
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td Class="tbldata">{{ ExpenseType.p.Name }}</td>
+            <td Class="tbldata text-capitalize">{{ ExpenseType.p.Name }}</td>
             <td class="tbldata">
               <Edit-Icon (editClick)="onEditClicked(ExpenseType)" />
               <Delete-Icon (deleteClicked)="onDeleteClicked(ExpenseType)" />

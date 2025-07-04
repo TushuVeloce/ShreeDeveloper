@@ -1,6 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { RecipientName } from 'src/app/classes/domain/entities/website/masters/recipientname/recipientname';
+import { Recipient } from 'src/app/classes/domain/entities/website/masters/recipientname/recipientname';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
@@ -16,13 +16,13 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   templateUrl: './recipient-name-master.component.html',
   styleUrls: ['./recipient-name-master.component.scss'],
 })
-export class RecipientNameMasterComponent implements OnInit {
+export class RecipientMasterComponent implements OnInit {
 
-  Entity: RecipientName = RecipientName.CreateNewInstance();
-  MasterList: RecipientName[] = [];
-  DisplayMasterList: RecipientName[] = [];
+  Entity: Recipient = Recipient.CreateNewInstance();
+  MasterList: Recipient[] = [];
+  DisplayMasterList: Recipient[] = [];
   SearchString: string = '';
-  SelectedRecipientName: RecipientName = RecipientName.CreateNewInstance();
+  SelectedRecipient: Recipient = Recipient.CreateNewInstance();
   IsOtherExpenseApplicable: Boolean = false;
   CustomerRef: number = 0;
   pageSize = 10; // Items per page
@@ -53,29 +53,29 @@ export class RecipientNameMasterComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await RecipientName.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Recipient.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
 
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
 
-  onEditClicked = async (item: RecipientName) => {
-    this.SelectedRecipientName = item.GetEditableVersion();
-    RecipientName.SetCurrentInstance(this.SelectedRecipientName);
+  onEditClicked = async (item: Recipient) => {
+    this.SelectedRecipient = item.GetEditableVersion();
+    Recipient.SetCurrentInstance(this.SelectedRecipient);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/homepage/Website/Recipient_Master_Details']);
   };
 
-  onDeleteClicked = async (RecipientName: RecipientName) => {
+  onDeleteClicked = async (Recipient: Recipient) => {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
      Are you sure that you want to DELETE this Expense Type?`,
       async () => {
-        await RecipientName.DeleteInstance(async () => {
+        await Recipient.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `Expense Type ${RecipientName.p.Name} has been deleted!`
+            `Expense Type ${Recipient.p.Name} has been deleted!`
           );
           await this.getRecipientListByCompanyRef();
           this.SearchString = '';
@@ -99,7 +99,7 @@ export class RecipientNameMasterComponent implements OnInit {
     this.currentPage = pageIndex; // Update the current page
   };
 
-  AddRecipientName = async () => {
+  AddRecipient = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;

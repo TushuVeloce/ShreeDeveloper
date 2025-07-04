@@ -11,10 +11,10 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { CountryStateCityRefs, ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
-import { RecipientNameFetchRequest } from "./recipientnamefetchrequest";
+import { RecipientFetchRequest } from "./recipientnamefetchrequest";
 
 
-export class RecipientNameProps {
+export class RecipientProps {
   public readonly Db_Table_Name = "RecipientMaster";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
@@ -32,14 +32,14 @@ export class RecipientNameProps {
   }
 
   public static Blank() {
-    return new RecipientNameProps(true);
+    return new RecipientProps(true);
   }
 }
 
-export class RecipientName implements IPersistable<RecipientName> {
+export class Recipient implements IPersistable<Recipient> {
   public static readonly Db_Table_Name: string = 'RecipientMaster';
 
-  private constructor(public readonly p: RecipientNameProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: RecipientProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -51,17 +51,17 @@ export class RecipientName implements IPersistable<RecipientName> {
     }
   }
 
-  public GetEditableVersion(): RecipientName {
-    let newState: RecipientNameProps = Utils.GetInstance().DeepCopy(this.p);
-    return RecipientName.CreateInstance(newState, true);
+  public GetEditableVersion(): Recipient {
+    let newState: RecipientProps = Utils.GetInstance().DeepCopy(this.p);
+    return Recipient.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new RecipientName(RecipientNameProps.Blank(), true);
+    return new Recipient(RecipientProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new RecipientName(data as RecipientNameProps, allowEdit);
+    return new Recipient(data as RecipientProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
@@ -74,27 +74,27 @@ export class RecipientName implements IPersistable<RecipientName> {
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, RecipientName.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Recipient.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: RecipientName = RecipientName.CreateNewInstance();
+  private static m_currentInstance: Recipient = Recipient.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return RecipientName.m_currentInstance;
+    return Recipient.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: RecipientName) {
-    RecipientName.m_currentInstance = value;
+  public static SetCurrentInstance(value: Recipient) {
+    Recipient.m_currentInstance = value;
   }
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): RecipientName {
+  public static SingleInstanceFromTransportData(td: TransportData): Recipient {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, RecipientName.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, RecipientName.Db_Table_Name)!.Entries) {
-        return RecipientName.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, Recipient.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, Recipient.Db_Table_Name)!.Entries) {
+        return Recipient.CreateInstance(data, false);
       }
     }
 
@@ -103,13 +103,13 @@ export class RecipientName implements IPersistable<RecipientName> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = ""): RecipientName[] {
-    let result: RecipientName[] = [];
+    sortPropertyName: string = ""): Recipient[] {
+    let result: Recipient[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, RecipientName.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, RecipientName.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, Recipient.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, Recipient.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -119,18 +119,18 @@ export class RecipientName implements IPersistable<RecipientName> {
       }
 
       for (let data of entries) {
-        result.push(RecipientName.CreateInstance(data, false));
+        result.push(Recipient.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): RecipientName[] {
-    return RecipientName.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): Recipient[] {
+    return Recipient.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: RecipientNameFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: RecipientFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -145,36 +145,36 @@ export class RecipientName implements IPersistable<RecipientName> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new RecipientNameFetchRequest();
-    req.RecipientNameRefs.push(ref);
+    let req = new RecipientFetchRequest();
+    req.RecipientRefs.push(ref);
 
-    let tdResponse = await RecipientName.FetchTransportData(req, errorHandler) as TransportData;
-    return RecipientName.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await Recipient.FetchTransportData(req, errorHandler) as TransportData;
+    return Recipient.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: RecipientNameFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await RecipientName.FetchTransportData(req, errorHandler) as TransportData;
-    return RecipientName.ListFromTransportData(tdResponse);
+  public static async FetchList(req: RecipientFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await Recipient.FetchTransportData(req, errorHandler) as TransportData;
+    return Recipient.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new RecipientNameFetchRequest();
-    let tdResponse = await RecipientName.FetchTransportData(req, errorHandler) as TransportData;
-    return RecipientName.ListFromTransportData(tdResponse);
+    let req = new RecipientFetchRequest();
+    let tdResponse = await Recipient.FetchTransportData(req, errorHandler) as TransportData;
+    return Recipient.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new RecipientNameFetchRequest();
+    let req = new RecipientFetchRequest();
     req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await RecipientName.FetchTransportData(req, errorHandler) as TransportData;
-    return RecipientName.ListFromTransportData(tdResponse);
+    let tdResponse = await Recipient.FetchTransportData(req, errorHandler) as TransportData;
+    return Recipient.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByStageRef(StageRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new RecipientNameFetchRequest();
+    let req = new RecipientFetchRequest();
     req.StageRefs.push(StageRef)
-    let tdResponse = await RecipientName.FetchTransportData(req, errorHandler) as TransportData;
-    return RecipientName.ListFromTransportData(tdResponse);
+    let tdResponse = await Recipient.FetchTransportData(req, errorHandler) as TransportData;
+    return Recipient.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
