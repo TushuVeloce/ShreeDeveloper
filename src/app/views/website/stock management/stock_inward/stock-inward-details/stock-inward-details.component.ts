@@ -128,8 +128,6 @@ export class StockInwardDetailsComponent implements OnInit {
     const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
     this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
-
-    // ✅ Assign unique InternalRef to each MaterialFromOrderProps
     this.MaterialListOriginal?.forEach((item, index) => {
       item.p.InternalRef = index + 1;
     });
@@ -149,7 +147,6 @@ export class StockInwardDetailsComponent implements OnInit {
 }
 
  getUnitByMaterialRef = async (internalRef: number) => {
-  // Reset current newInward fields
   this.newInward = InwardMaterialDetailProps.Blank();
   this.NewRemainingQty = 0;
 
@@ -164,7 +161,7 @@ export class StockInwardDetailsComponent implements OnInit {
     this.newInward.PurchaseOrderRemainingQty = UnitData.p.RemainingQty;
     this.newInward.MaterialStockOrderDetailsRef = UnitData.p.Ref;
 
-    this.newInward.InternalRef = UnitData.p.InternalRef; // ✅ Track InternalRef
+    this.newInward.InternalRef = UnitData.p.InternalRef; 
     this.NewRemainingQty = UnitData.p.RemainingQty;
   } else {
     await this.uiUtils.showErrorToster('Material not found');
@@ -189,7 +186,6 @@ export class StockInwardDetailsComponent implements OnInit {
     this.NewRemainingQty = RemainingQty - InwardQty;
   }
 
-  // Trigger file input when clicking the image
   triggerFileInput(): void {
     this.fileInputRef.nativeElement.click();
   }
@@ -209,7 +205,6 @@ export class StockInwardDetailsComponent implements OnInit {
     }
   }
 
-  // Call this when editing existing data
   loadFileFromBackend(imageUrl: string): void {
     if (imageUrl) {
       this.imagePreView = `${this.ImageBaseUrl}${imageUrl}/${this.LoginToken}?${this.TimeStamp}`;
@@ -219,7 +214,6 @@ export class StockInwardDetailsComponent implements OnInit {
     }
   }
 
-  // On file selected
   onFileUpload(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
@@ -270,7 +264,7 @@ export class StockInwardDetailsComponent implements OnInit {
         } else if (typeof value === 'number') {
           return !isNaN(value) && value !== 0;
         } else {
-          return value != null; // for cases like object refs or non-primitive types
+          return value != null; 
         }
       });
       if (hasData) {
@@ -357,13 +351,8 @@ export class StockInwardDetailsComponent implements OnInit {
     'Delete',
     `This process is <strong>IRREVERSIBLE!</strong><br/>Are you sure you want to DELETE this material?`,
     async () => {
-      // Remove from array
       this.Entity.p.MaterialInwardDetailsArray.splice(index, 1);
-
-      // ✅ Remove from session-tracked InternalRefs
       this.SessionAddedRefs = this.SessionAddedRefs.filter(ref => ref !== removedInternalRef);
-
-      // Re-filter dropdown
       this.filterMaterialList();
     }
   );
@@ -378,7 +367,6 @@ export class StockInwardDetailsComponent implements OnInit {
     this.Entity.p.InwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.InwardDate)
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    // return
     if (this.InvoiceFile) {
       lstFTO.push(
         FileTransferObject.FromFile(
@@ -429,7 +417,7 @@ export class StockInwardDetailsComponent implements OnInit {
   }
 
   resetAllControls() {
-    this.requisitionForm.resetForm(); // this will reset all form controls to their initial state
+    this.requisitionForm.resetForm(); 
   }
 
 }
