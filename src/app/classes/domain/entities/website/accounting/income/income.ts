@@ -12,6 +12,8 @@ import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { IncomeFetchRequest } from "./incomefetchrequest";
 import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
+import { CurrentBalanceFetchRequest } from "../expense/currentbalancefetchrequest";
+import { TotalIncomeFetchRequest } from "./totalincomefetchrequest";
 
 
 export class IncomeProps {
@@ -43,6 +45,7 @@ export class IncomeProps {
 
   public ShreesBalance: number = 0
   public IncomeModeOfPayment: number = 0
+  public ModeOfPaymentName: string = ''
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -126,7 +129,6 @@ export class Income implements IPersistable<Income> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    //sortPropertyName: string = "Name"): Income[] {
     sortPropertyName: string = ""): Income[] {
     let result: Income[] = [];
 
@@ -186,15 +188,15 @@ export class Income implements IPersistable<Income> {
     let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
     return Income.ListFromTransportData(tdResponse);
   }
-  // public static async FetchEntireListByProjectRef(ProjectRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-  //   let req = new IncomeFetchRequest();
-  //   req.GAAProjectRefs.push(ProjectRef)
-  //   let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
-  //   return Income.ListFromTransportData(tdResponse);
-  // }
 
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new IncomeFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
+    return Income.ListFromTransportData(tdResponse);
+  }
+  public static async FetchCurrentBalanceByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new CurrentBalanceFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
     return Income.ListFromTransportData(tdResponse);

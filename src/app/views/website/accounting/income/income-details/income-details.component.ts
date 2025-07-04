@@ -3,6 +3,7 @@ import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
 import { DomainEnums, } from 'src/app/classes/domain/domainenums/domainenums';
+import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { Payer } from 'src/app/classes/domain/entities/website/masters/payer/payer';
@@ -29,6 +30,7 @@ export class IncomeDetailsComponent implements OnInit {
   private IsNewEntity: boolean = true;
   SiteList: Site[] = [];
   SubLedgerList: SubLedger[] = [];
+  ShreeBalance: number = 0;
   UnitList: Unit[] = [];
   PayerList: Payer[] = [];
   PayerNameInput: boolean = false
@@ -74,6 +76,7 @@ export class IncomeDetailsComponent implements OnInit {
     }
 
     this.getPayerListByCompanyRef()
+    this.getCurrentBalanceByCompanyRef();
     this.InitialEntity = Object.assign(
       Income.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
@@ -89,6 +92,20 @@ export class IncomeDetailsComponent implements OnInit {
   getUnitList = async () => {
     let lst = await Unit.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.UnitList = lst;
+  }
+
+  CalculateShreeBalance = () => {
+    this.Entity.p.ShreesBalance = this.ShreeBalance + this.Entity.p.IncomeAmount;
+  }
+
+  getCurrentBalanceByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Expense.FetchCurrentBalanceByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.Entity.p.ShreesBalance = lst[0].p.ShreesBalance;
+    this.ShreeBalance = lst[0].p.ShreesBalance;
   }
 
   getPayerListByCompanyRef = async () => {
@@ -193,7 +210,9 @@ export class IncomeDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Income saved successfully');
         this.Entity = Income.CreateNewInstance();
-        this.resetAllControls();
+        // this.resetAllControls();
+        this.getCurrentBalanceByCompanyRef();
+
       } else {
         await this.uiUtils.showSuccessToster('Income Updated successfully');
         await this.router.navigate(['/homepage/Website/Income']);
