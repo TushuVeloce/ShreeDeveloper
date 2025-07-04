@@ -221,12 +221,10 @@ export class InvoiceDetailsComponent implements OnInit {
         this.uiUtils.showErrorMessage('Error', tr.Message);
         return;
       } else {
-        if (this.IsNewEntity) {
           await this.uiUtils.showSuccessToster('Recipient Name saved successfully');
            this.RecipientNameInput = false
            await this.getRecipientListByCompanyRef()
           this.RecipientEntity = Recipient.CreateNewInstance();
-        }
       }
     };
 
