@@ -67,15 +67,15 @@
           <label>Recipient Name</label>
           <div class="d-flex align-items-center">
             <nz-select *ngIf="!RecipientNameInput && !RecipientNameReadOnly" class="nzSelect-light"
-              [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="RecipientName"
-              name="RecipientName" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientName">
-              <nz-option *ngFor="let name of RecipientList" [nzValue]="name.p.RecipientName"
-                [nzLabel]="name.p.RecipientName | titleCase"></nz-option>
+              [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="RecipientMasterRef"
+              name="RecipientName" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientMasterRef">
+              <nz-option *ngFor="let name of RecipientList" [nzValue]="name.p.Ref"
+                [nzLabel]="name.p.Name | titleCase"></nz-option>
             </nz-select>
-            <input *ngIf="RecipientNameReadOnly" type="text" [(ngModel)]="Entity.p.RecipientName" name="RecipientName"
-              class="form-control" id="RecipientName" required placeholder="Enter Recipient Name" readonly/>
-            <input *ngIf="RecipientNameInput && !RecipientNameReadOnly" type="text" [(ngModel)]="Entity.p.RecipientName"
-              name="RecipientName" class="form-control" id="RecipientName" required
+            <!-- <input *ngIf="RecipientNameReadOnly" type="text" [(ngModel)]="Entity.p.RecipientName" name="RecipientName"
+              class="form-control" id="RecipientName" required placeholder="Recipient Name" readonly/> -->
+            <input *ngIf="RecipientNameInput && !RecipientNameReadOnly" type="text" [(ngModel)]="RecipientEntity.p.Name"
+              name="Name" class="form-control" id="Name" required
               placeholder="Enter Recipient Name" />
             <span *ngIf="!RecipientNameInput && !RecipientNameReadOnly" (click)="AddRecipientName()"
               class="ms-2 mb-0.5 d-flex justify-content-center align-items-center border rounded"
@@ -86,6 +86,11 @@
               class="ms-2 d-flex justify-content-center align-items-center border rounded text-danger"
               style="width: 36px; height: 36px; cursor: pointer">
               <i class="fa-solid fa-xmark"></i>
+            </span>
+             <span *ngIf="RecipientNameInput && !RecipientNameReadOnly" (click)="SaveNewRecipientName()"
+              class="ms-2 d-flex justify-content-center align-items-center border rounded text-success"
+              style="width: 36px; height: 36px; cursor: pointer">
+              <i class="fa-solid fa-check"></i>
             </span>
           </div>
         </div>

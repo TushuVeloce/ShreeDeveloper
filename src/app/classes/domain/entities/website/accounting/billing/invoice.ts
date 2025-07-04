@@ -35,6 +35,7 @@ export class InvoiceProps {
   public SubLedgerRef: number = 0
   public readonly SubLedgerName: string = ''
   public Description: string = ''
+  public RecipientMasterRef: number = 0
   public RecipientName: string = ''
   public Reason: string = ''
   public IsDieselPaid: number = 0

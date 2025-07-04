@@ -1,6 +1,7 @@
 import { Component, effect, OnInit, ViewChild } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Recipient } from 'src/app/classes/domain/entities/website/masters/recipientname/recipientname';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
@@ -22,9 +23,10 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class InvoiceDetailsComponent implements OnInit {
   Entity: Invoice = Invoice.CreateNewInstance();
+  RecipientEntity: Recipient = Recipient.CreateNewInstance();
   private IsNewEntity: boolean = true;
   SiteList: Site[] = [];
-  RecipientList: Invoice[] = [];
+  RecipientList: Recipient[] = [];
   RecipientNameInput: boolean = false
   SubLedgerList: SubLedger[] = [];
   isDieselPaid: boolean = false
@@ -79,7 +81,7 @@ export class InvoiceDetailsComponent implements OnInit {
       if (this.Entity.p.IsDieselPaid == 1) {
         this.isDieselPaid = true
       }
-      this.RecipientNameReadOnly = true
+      // this.RecipientNameReadOnly = true
     } else {
       this.Entity = Invoice.CreateNewInstance();
       Invoice.SetCurrentInstance(this.Entity);
@@ -123,18 +125,19 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Invoice.FetchRecipientByCompanyRef(this.companyRef(), this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Recipient.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.RecipientList = lst;
   }
 
   AddRecipientName = () => {
-    this.Entity.p.RecipientName = ''
+    this.Entity.p.RecipientMasterRef = 0
+    this.RecipientEntity.p.Name = ''
     this.RecipientNameInput = true
   }
 
   cancelRecipientName = () => {
     this.RecipientNameInput = false
-    this.Entity.p.RecipientName = ''
+    this.RecipientEntity.p.Name = ''
   }
 
   getLedgerListByCompanyRef = async () => {
@@ -198,6 +201,35 @@ export class InvoiceDetailsComponent implements OnInit {
     input.select();
   }
 
+  SaveNewRecipientName = async () => {
+    if(this.RecipientEntity.p.Name == ''){
+        this.uiUtils.showErrorToster('Recipient Name can not be Blank');
+        return
+    }
+      this.RecipientEntity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+      this.RecipientEntity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+      if (this.RecipientEntity.p.CreatedBy == 0) {
+        this.RecipientEntity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+        this.RecipientEntity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      }
+      let entityToSave = this.RecipientEntity.GetEditableVersion();
+      let entitiesToSave = [entityToSave];
+      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+  
+      if (!tr.Successful) {
+        this.isSaveDisabled = false;
+        this.uiUtils.showErrorMessage('Error', tr.Message);
+        return;
+      } else {
+        if (this.IsNewEntity) {
+          await this.uiUtils.showSuccessToster('Recipient Name saved successfully');
+           this.RecipientNameInput = false
+           await this.getRecipientListByCompanyRef()
+          this.RecipientEntity = Recipient.CreateNewInstance();
+        }
+      }
+    };
+
   SaveInvoiceMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
@@ -222,8 +254,6 @@ export class InvoiceDetailsComponent implements OnInit {
         this.Entity = Invoice.CreateNewInstance();
         await this.resetAllControls();
         this.isDieselPaid = false
-        this.RecipientNameInput = false
-        await this.getRecipientListByCompanyRef()
       } else {
         await this.uiUtils.showSuccessToster('Invoice Updated successfully');
         await this.router.navigate(['/homepage/Website/Invoice']);
