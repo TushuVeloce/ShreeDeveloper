@@ -38,12 +38,12 @@ export class StockOrderDetailsMobilePage implements OnInit {
   VendorList: Vendor[] = [];
   MaterialRequisitionList: OrderMaterial[] = [];
   AllMaterialRequisitionList: OrderMaterial[] = [];
-  OrderDate: string | null = null;
+  // OrderDate: string | null = null;
   CurrentDate: string | null = null;
   Date: string | null = null;
   ModalEditable: boolean = false;
-  ExpectedDeliveryDate: string = '';
-  OrderMaterialheaders: string[] = ['Sr.No.', 'Material ', 'Unit', 'Requisition Quantity', 'Quotation Quantity', 'Ordered Quantity', 'Quotation Remaining Quantity', 'Requisition Remaining Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount', 'Action'];
+  // ExpectedDeliveryDate: string = '';
+  OrderMaterialheaders: string[] = ['Material ', 'Unit', 'Requisition Quantity', 'Ordered Quantity', 'Requisition Remaining Quantity', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount'];
   isOrderMaterialModalOpen: boolean = false;
   newOrderMaterial: OrderMaterialDetailProps = OrderMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
@@ -79,6 +79,13 @@ export class StockOrderDetailsMobilePage implements OnInit {
   imagePostViewUrl: string = '';
   selectedFileName: string = '';
 
+  showPurchaseOrderDatePicker = false;
+  PurchaseOrderDate = '';
+  DisplayPurchaseOrderDate = '';
+
+  showExpectedDeliveryDatePicker = false;
+  ExpectedDeliveryDate = '';
+  DisplayExpectedDeliveryDate = '';
 
   constructor(
     private router: Router,
@@ -126,7 +133,16 @@ export class StockOrderDetailsMobilePage implements OnInit {
           this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.MaterialPurchaseInvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
           this.selectedFileName = this.Entity.p.MaterialPurchaseInvoicePath;
 
-          this.OrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate);
+          this.selectedSite = [{ p: { Ref: this.Entity.p.SiteRef, Name: this.Entity.p.SiteName } }];
+          this.SiteName = this.Entity.p.SiteName;
+          this.selectedVendor = [{ p: { Ref: this.Entity.p.VendorRef, Name: this.Entity.p.VendorName } }];
+          this.VendorName = this.Entity.p.VendorName;
+
+          // this.OrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate);
+          //.............New Date Format...........//
+          this.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate);
+          this.DisplayPurchaseOrderDate = this.datePipe.transform(this.PurchaseOrderDate, 'yyyy-MM-dd') ?? '';;
+
           this.appStateManage.StorageKey.removeItem('Editable');
         } else {
           this.Entity = Order.CreateNewInstance();
@@ -134,8 +150,11 @@ export class StockOrderDetailsMobilePage implements OnInit {
           this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
           let parts = this.strCDT.substring(0, 16).split('-');
           // Construct the new date format
-          this.OrderDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+          // this.OrderDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
           this.CurrentDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+          //.............New Date Format...........//
+          this.PurchaseOrderDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+          this.DisplayPurchaseOrderDate = this.datePipe.transform(this.PurchaseOrderDate, 'yyyy-MM-dd') ?? '';;
         }
         this.InitialEntity = Object.assign(Order.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Order;
 
@@ -152,6 +171,30 @@ export class StockOrderDetailsMobilePage implements OnInit {
     }
   }
 
+  public async onPurchaseOrderDateChange(date: any): Promise<void> {
+    this.PurchaseOrderDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
+    this.Entity.p.PurchaseOrderDate = this.PurchaseOrderDate;
+    this.DisplayPurchaseOrderDate = this.PurchaseOrderDate;
+  }
+  public async onExpectedDeliveryDateChange(date: any): Promise<void> {
+    this.ExpectedDeliveryDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
+    this.newOrderMaterial.ExpectedDeliveryDate = this.ExpectedDeliveryDate;
+    this.DisplayExpectedDeliveryDate = this.ExpectedDeliveryDate;
+  }
+
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
+  }
+  public async onDateChange(date: any): Promise<void> {
+    this.Date = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
+    this.Entity.p.PurchaseOrderDate = this.Date;
+  }
+  // public async onExpectedDeliveryDateChange(date: any): Promise<void> {
+  //   this.Date = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
+  //   // this.Entity.p.MaterialQuotationDetailsArray[this.editingIndex].ExpectedDeliveryDate = this.Date;
+  //   this.newOrderMaterial.ExpectedDeliveryDate = this.Date;
+  // }
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
@@ -176,7 +219,7 @@ export class StockOrderDetailsMobilePage implements OnInit {
     if (this.companyRef <= 0) {
       // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('Company not Selected', 1000, 'warning');
-      await this.haptic.error();
+      await this.haptic.warning();
       return;
     }
     let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
@@ -187,48 +230,42 @@ export class StockOrderDetailsMobilePage implements OnInit {
     this.VendorList = lst;
   }
 
-  getMaterialRequisitionListByVendorRefAndSiteRef = async () => {
-    if (this.Entity.p.VendorRef <= 0) {
-      // await this.uiUtils.showErrorToster('Vendor not Selected');
-      await this.toastService.present('Vendor not Selected', 1000, 'warning');
-      await this.haptic.warning();
-      return;
+  getOrderedMaterialList = async () => {
+    try {
+      await this.loadingService.show();
+      if (this.Entity.p.VendorRef <= 0) {
+        await this.toastService.present('Vendor not Selected', 1000, 'warning');
+        await this.haptic.warning();
+        return;
+      }
+      if (this.Entity.p.SiteRef <= 0) {
+        await this.toastService.present('Site not Selected', 1000, 'warning');
+        await this.haptic.warning();
+        return;
+      }
+      let lst = await OrderMaterial.FetchEntireListByCompanyRefAndSiteRef(this.companyRef, this.Entity.p.SiteRef, async errMsg => {
+        // await this.uiUtils.showErrorMessage('Error', errMsg)
+        await this.toastService.present('Error' + errMsg, 1000, 'danger');
+        await this.haptic.error();
+      }
+      );
+      console.log('lst :', lst);
+      // this.AllMaterialRequisitionList = lst;
+      this.AllMaterialRequisitionList = lst.filter(material => material.p.IsRequisitionMaterial == 1)
+      this.filterMaterialList();
+    } catch (error) {
+      
+    }finally {
+      await this.loadingService.hide();
     }
-    if (this.Entity.p.SiteRef <= 0) {
-      // await this.uiUtils.showErrorToster('Site not Selected');
-      await this.toastService.present('Site not Selected', 1000, 'warning');
-      await this.haptic.warning();
-      return;
-    }
-    let lst = await OrderMaterial.FetchEntireListByCompanyVendorAndSiteRef(this.companyRef, this.Entity.p.VendorRef, this.Entity.p.SiteRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
-      await this.toastService.present(errMsg, 1000, 'danger');
-      await this.haptic.error();
-    });
-    console.log('lst :', lst);
-    this.AllMaterialRequisitionList = lst;
-    this.filterMaterialList();
   }
 
   filterMaterialList() {
+    // this.MaterialRequisitionList = this.AllMaterialRequisitionList.filter(material => material.p.IsRequisitionMaterial == 1)
     const usedRefs = this.Entity.p.MaterialPurchaseOrderDetailsArray.map(item => item.MaterialRef);
     this.MaterialRequisitionList = this.AllMaterialRequisitionList.filter(
-      material => !usedRefs.includes(material.p.Ref)
+      material => !usedRefs.includes(material.p.MaterialRef)
     );
-  }
-
-  // Extracted from services date conversion //
-  formatDate = (date: string | Date): string => {
-    return this.DateconversionService.formatDate(date);
-  }
-  public async onDateChange(date: any): Promise<void> {
-    this.Date = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
-    this.Entity.p.PurchaseOrderDate = this.Date;
-  }
-  public async onExpectedDeliveryDateChange(date: any): Promise<void> {
-    this.Date = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
-    // this.Entity.p.MaterialQuotationDetailsArray[this.editingIndex].ExpectedDeliveryDate = this.Date;
-    this.newOrderMaterial.ExpectedDeliveryDate = this.Date;
   }
 
   onVendorSelection = (VendorRef: number) => {
@@ -241,9 +278,12 @@ export class StockOrderDetailsMobilePage implements OnInit {
     const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.MaterialRef == MaterialRef);
     this.newOrderMaterial.UnitName = SingleRecord[0].p.UnitName
     this.newOrderMaterial.MaterialName = SingleRecord[0].p.MaterialName
-    this.newOrderMaterial.MaterialPurchaseOrderRef = SingleRecord[0].p.Ref
-    this.newOrderMaterial.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty
+    this.newOrderMaterial.RequisitionQty = SingleRecord[0].p.RequisitionQty
+    this.newOrderMaterial.MaterialQuotationDetailRef = SingleRecord[0].p.Ref
+    this.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty
+    this.newOrderMaterial.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty;
   }
+
 
   // Trigger file input when clicking the image
   triggerFileInput(): void {
@@ -322,7 +362,7 @@ export class StockOrderDetailsMobilePage implements OnInit {
     }
   }
 
-  openModal(type: number) {
+  openModal= async (type: number)=> {
     if (this.Entity.p.SiteRef <= 0) {
       // this.uiUtils.showErrorToster('Site not Selected');
       this.toastService.present('Site not Selected', 1000, 'warning');
@@ -336,13 +376,13 @@ export class StockOrderDetailsMobilePage implements OnInit {
       return;
     }
     this.ModalEditable = false;
-    this.getMaterialRequisitionListByVendorRefAndSiteRef();
+    this.getOrderedMaterialList();
     if (type === 100) this.isOrderMaterialModalOpen = true;
   }
 
   closeModal = async (type: number) => {
     if (type === 100) {
-      const keysToCheck = ['Name', 'MaterialRef', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
+      const keysToCheck = ['MaterialRef ', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
 
       const hasData = keysToCheck.some(
         key => (this.newOrderMaterial as any)[key]?.toString().trim()
@@ -368,6 +408,12 @@ export class StockOrderDetailsMobilePage implements OnInit {
               handler: () => {
                 this.isOrderMaterialModalOpen = false;
                 this.newOrderMaterial = OrderMaterialDetailProps.Blank();
+                this.selectedGST = [];
+                this.selectedMaterial = [];
+                this.ExpectedDeliveryDate='';
+                this.DisplayExpectedDeliveryDate='';
+                this.MaterialName = '';
+                this.gstName = '';
                 this.haptic.success();
                 console.log('User confirmed.');
               }
@@ -383,7 +429,7 @@ export class StockOrderDetailsMobilePage implements OnInit {
   };
 
   async addOrderMaterial() {
-    if (this.newOrderMaterial.MaterialRef == 0) {
+    if (this.newOrderMaterial.MaterialQuotationDetailRef == 0) {
       // return this.uiUtils.showWarningToster('Material Name cannot be blank.');
       this.toastService.present('Material Name cannot be blank.', 1000, 'warning');
       this.haptic.warning();
@@ -402,13 +448,16 @@ export class StockOrderDetailsMobilePage implements OnInit {
       return;
     }
 
-    this.newOrderMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate);
-    this.ExpectedDeliveryDate = '';
+       // this.ExpectedDeliveryDate = '';
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
       this.Entity.p.MaterialPurchaseOrderDetailsArray[this.editingIndex] = { ...this.newOrderMaterial };
+      this.newOrderMaterial.ExpectedDeliveryDate = this.dtu.ConvertStringDateToFullFormat(this.ExpectedDeliveryDate);
+      console.log('this.newOrderMaterial.ExpectedDeliveryDate  :', this.newOrderMaterial.ExpectedDeliveryDate);
+      console.log('this.ExpectedDeliveryDate :', this.ExpectedDeliveryDate);
+
       // await this.uiUtils.showSuccessToster('Material updated successfully');
       await this.toastService.present('Material updated successfully', 1000, 'success');
-      this.haptic.success();
+      await this.haptic.success();
       this.isOrderMaterialModalOpen = false;
 
     } else {
@@ -417,15 +466,24 @@ export class StockOrderDetailsMobilePage implements OnInit {
       await OrderMaterialInstance.EnsurePrimaryKeysWithValidValues();
       await OrderInstance.EnsurePrimaryKeysWithValidValues();
 
-      this.newOrderMaterial.MaterialRef = this.Entity.p.Ref;
+      this.newOrderMaterial.MaterialPurchaseOrderRef = this.Entity.p.Ref;
       this.Entity.p.MaterialPurchaseOrderDetailsArray.push({ ...OrderMaterialInstance.p });
-      this.filterMaterialList();
+      this.selectedGST = [{ p: { Ref: this.newOrderMaterial.Gst, Name: this.newOrderMaterial.Gst } }];
+      // this.filterMaterialList();
       // await this.uiUtils.showSuccessToster('Material added successfully');
+      console.log('this.newOrderMaterial :', this.newOrderMaterial);
       await this.toastService.present('Material added successfully', 1000, 'success');
-      this.haptic.success();
+      await this.haptic.success();
     }
     this.newOrderMaterial = OrderMaterialDetailProps.Blank();
     this.editingIndex = null;
+    this.isOrderMaterialModalOpen = false;
+    this.selectedMaterial = [];
+    this.selectedGST = [];
+    this.MaterialName = '';
+    this.gstName = '';
+    this.ExpectedDeliveryDate = '';
+    this.DisplayExpectedDeliveryDate='';
   }
 
   editOrderMaterial(index: number) {
@@ -437,11 +495,11 @@ export class StockOrderDetailsMobilePage implements OnInit {
     this.editingIndex = index;
     this.ModalEditable = true;
     this.ExpectedDeliveryDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MaterialPurchaseOrderDetailsArray[index].ExpectedDeliveryDate);
-    this.getMaterialRequisitionListByVendorRefAndSiteRef();
+    this.DisplayExpectedDeliveryDate = this.datePipe.transform(this.ExpectedDeliveryDate, 'yyyy-MM-dd') ?? '';
   }
 
   async removeOrderMaterial(index: number) {
-    this.alertService.presentDynamicAlert({
+    await this.alertService.presentDynamicAlert({
       header: 'Delete',
       subHeader: 'Confirmation needed',
       message: 'Are you sure that you want to DELETE this Order Material?',
@@ -455,11 +513,10 @@ export class StockOrderDetailsMobilePage implements OnInit {
           }
         },
         {
-          text: 'Yes, Close',
+          text: 'Yes, Delete',
           cssClass: 'custom-confirm',
           handler: () => {
             this.Entity.p.MaterialPurchaseOrderDetailsArray.splice(index, 1);
-            this.filterMaterialList();
             this.haptic.success();
             console.log('User confirmed.');
           }
@@ -468,13 +525,14 @@ export class StockOrderDetailsMobilePage implements OnInit {
     });
   }
 
+
   SaveOrder = async () => {
     let lstFTO: FileTransferObject[] = [];
-    this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
-    this.newOrderMaterial.MaterialRef = this.Entity.p.Ref
-    this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToFullFormat(this.OrderDate ?? '');
+    this.Entity.p.CompanyRef = this.companyRef;
+    this.newOrderMaterial.MaterialPurchaseOrderRef = this.Entity.p.Ref
+    this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('EmployeeRef'))
+    this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('EmployeeRef'))
+    this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToFullFormat(this.PurchaseOrderDate);
 
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
@@ -489,6 +547,13 @@ export class StockOrderDetailsMobilePage implements OnInit {
         )
       );
     }
+
+    if (this.Entity.p.MaterialPurchaseOrderStatus == MaterialRequisitionStatuses.Ordered) {
+      this.Entity.p.MaterialPurchaseOrderDetailsArray.map((data) => {
+        return data.MaterialPurchaseDetailStatus = MaterialRequisitionStatuses.Ordered;
+      })
+    }
+
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
@@ -505,23 +570,25 @@ export class StockOrderDetailsMobilePage implements OnInit {
         this.Entity = Order.CreateNewInstance();
       } else {
         // await this.uiUtils.showSuccessToster('Order Updated successfully');
-        this.toastService.present('Order Updated successfully', 1000, 'success');
-        this.haptic.success();
+        await this.toastService.present('Order Updated successfully', 1000, 'success');
+        await this.haptic.success();
       }
-      await this.router.navigate(['/homepage/Website/Stock_Order']);
+      await this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-order']);
     }
   };
 
   CalculateNetAmountAndTotalAmount = async () => {
-
+    this.newOrderMaterial.TotalOrderedQty = 0;
     this.newOrderMaterial.TotalOrderedQty = this.TotalOrderedQty + this.newOrderMaterial.OrderedQty;
 
     if (this.newOrderMaterial.TotalOrderedQty > this.newOrderMaterial.RequisitionQty) {
       this.newOrderMaterial.RequisitionRemainingQty = 0;
-      this.newOrderMaterial.TotalOrderedQty = this.TotalOrderedQty;
+      this.newOrderMaterial.ExtraOrderedQty = this.newOrderMaterial.TotalOrderedQty - this.newOrderMaterial.RequisitionQty;
+    } else {
+      this.newOrderMaterial.RequisitionRemainingQty = this.newOrderMaterial.RequisitionQty - this.newOrderMaterial.TotalOrderedQty;
+      this.newOrderMaterial.ExtraOrderedQty = 0;
     }
 
-    this.newOrderMaterial.RequisitionRemainingQty = this.newOrderMaterial.RequisitionQty - this.newOrderMaterial.TotalOrderedQty;
 
 
     if (this.newOrderMaterial.DiscountedRate == 0) {
@@ -544,45 +611,74 @@ export class StockOrderDetailsMobilePage implements OnInit {
     }, 0);
   }
 
-  BackOrder = async () => {
-    if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
-      // await this.uiUtils.showConfirmationMessage('Cancel',
-      //   `This process is IRREVERSIBLE!
-      //   <br/>
-      //   Are you sure that you want to Cancel this Order Form?`,
-      //   async () => {
-      //     await this.router.navigate(['/homepage/Website/Stock_Order']);
-      //   });
-    } else {
-      await this.router.navigate(['/homepage/Website/Stock_Order']);
-    }
-  }
+
 
   public async selectGSTBottomsheet(): Promise<void> {
     try {
-      const options = this.GSTList;
+      const options = this.GSTList.map((item) => ({ p: item }));
+      console.log('gst options :', options);
+      // const options = this.GSTList;
       this.openSelectModal(options, this.selectedGST, false, 'Select GST', 1, (selected) => {
         this.selectedGST = selected;
         this.newOrderMaterial.Gst = selected[0].p.Ref;
         this.gstName = selected[0].p.Name;
+        this.CalculateNetAmountAndTotalAmount()
       });
     } catch (error) {
 
     }
   }
+
+  // public async selectMaterialBottomsheet(): Promise<void> {
+  //   try {
+  //     const options = this.MaterialRequisitionList;
+  //     console.log('MaterialRequisitionList :', this.MaterialRequisitionList);
+  //     this.openSelectModal(options, this.selectedMaterial, false, 'Select Material', 1, (selected) => {
+  //       this.selectedMaterial = selected;
+  //       this.MaterialName = selected[0].p.MaterialName;
+  //       this.newOrderMaterial.MaterialName = selected[0].p.MaterialName;
+  //       this.newOrderMaterial.MaterialRef = selected[0].p.MaterialRef;
+  //       this.onMaterialSelection(this.newOrderMaterial.MaterialRef)
+  //       // console.log('selected :', selected);
+  //       // this.newOrderMaterial.MaterialRef = selected[0].p.MaterialRef;
+  //       // this.newOrderMaterial.MaterialName = selected[0].p.MaterialName;
+  //       // this.MaterialName = selected[0].p.MaterialName;
+  //       // this.onMaterialSelection(selected[0].p.MaterialRef);
+  //     });
+  //   } catch (error) {
+
+  //   }
+  // }
 
   public async selectMaterialBottomsheet(): Promise<void> {
     try {
-      const options = this.MaterialRequisitionList;
+      // Reformat the options with Name and Ref
+      const options = this.MaterialRequisitionList.map(item => ({
+        ...item,
+        p: {
+          ...item.p,
+          Name: item.p.MaterialName, // Add 'Name'
+          Ref: item.p.MaterialRef   // Add 'Ref'
+        }
+      }));
+
+      console.log('Formatted MaterialRequisitionList:', options);
+
       this.openSelectModal(options, this.selectedMaterial, false, 'Select Material', 1, (selected) => {
-        this.selectedVendor = selected;
-        this.Entity.p.VendorRef = selected[0].p.Ref;
-        this.VendorName = selected[0].p.Name;
+        this.selectedMaterial = selected;
+
+        // Use standardized keys now
+        this.MaterialName = selected[0].p.Name;
+        this.newOrderMaterial.MaterialName = selected[0].p.Name;
+        this.newOrderMaterial.MaterialRef = selected[0].p.Ref;
+
+        this.onMaterialSelection(this.newOrderMaterial.MaterialRef);
       });
     } catch (error) {
-
+      console.error('Error in selectMaterialBottomsheet:', error);
     }
   }
+  
 
   public async selectVendorBottomsheet(): Promise<void> {
     try {
@@ -590,6 +686,8 @@ export class StockOrderDetailsMobilePage implements OnInit {
       this.openSelectModal(options, this.selectedVendor, false, 'Select Vendor Name', 1, (selected) => {
         this.selectedVendor = selected;
         this.Entity.p.VendorRef = selected[0].p.Ref;
+        this.Entity.p.VendorName = selected[0].p.Name;
+        this.Entity.p.VendorTradeName = selected[0].p.TradeName;
         this.VendorName = selected[0].p.Name;
         // this.VendorRef = selected[0].p.Ref;
         this.onVendorSelection(selected[0].p.Ref)

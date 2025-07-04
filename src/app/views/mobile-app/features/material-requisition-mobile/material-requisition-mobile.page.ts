@@ -53,6 +53,8 @@ export class MaterialRequisitionMobilePage implements OnInit {
   CustomerRef = 0;
   companyRef = 0;
   modalOpen = false;
+  tableHeaderData = ['Material', 'Unit', 'Required Qty','Status']
+
 
 
   constructor(

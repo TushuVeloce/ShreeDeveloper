@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Order } from 'src/app/classes/domain/entities/website/stock_management/stock_order/order';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
