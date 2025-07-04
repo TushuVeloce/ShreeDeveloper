@@ -20,7 +20,7 @@ import { DatePickerComponent } from './date-picker/date-picker.component';
     CommonModule,
     IonicModule,
     FormsModule,
-    ReactiveFormsModule 
+    ReactiveFormsModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA] ,
   exports: [HeaderComponent, HeaderWithBackHandlerComponent, SelectModalComponent,FilterSheetComponent,SkeletonLoaderComponent,InputFieldComponent,CustomButtonComponent,DateFieldComponent,TransactionFilterComponent,ChipSelectorComponent,DatePickerComponent]

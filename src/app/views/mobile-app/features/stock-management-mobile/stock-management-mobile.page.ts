@@ -27,11 +27,11 @@ export class StockManagementMobilePage implements OnInit {
       label: 'Material Requisition',
       routerPath: '/mobileapp/tabs/dashboard/stock-management/material-requisition'
     },
-    {
-      icon: 'assets/icons/stock_mobile_app.png',
-      label: 'Quotation',
-      routerPath: '/mobileapp/tabs/dashboard/stock-management/vendor-quotation'
-    },
+    // {
+    //   icon: 'assets/icons/stock_mobile_app.png',
+    //   label: 'Quotation',
+    //   routerPath: '/mobileapp/tabs/dashboard/stock-management/vendor-quotation'
+    // },
     {
       icon: 'assets/icons/marketing_mobile_app.png',
       label: 'Stock Order',
@@ -44,19 +44,19 @@ export class StockManagementMobilePage implements OnInit {
     },
     {
       icon: 'assets/icons/report_mobile_app.png',
-      label: 'Stock Transfer',
-      routerPath: '/mobileapp/tabs/dashboard/stock-management/stock-transfer'
-    },
-    {
-      icon: 'assets/icons/report_mobile_app.png',
       label: 'Stock Consume',
       routerPath: '/mobileapp/tabs/dashboard/stock-management/stock-consume'
     },
     {
       icon: 'assets/icons/report_mobile_app.png',
-      label: 'Report',
-      routerPath: '/mobileapp/tabs/dashboard/stock-management/stock-consume'
+      label: 'Stock Transfer',
+      routerPath: '/mobileapp/tabs/dashboard/stock-management/stock-transfer'
     },
+    // {
+    //   icon: 'assets/icons/report_mobile_app.png',
+    //   label: 'Report',
+    //   routerPath: '/mobileapp/tabs/dashboard/stock-management/stock-consume'
+    // },
   ];
 
   // selectedIndex = 0;
