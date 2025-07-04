@@ -142,6 +142,7 @@ import { PayerComponent } from './Masters/payer/payer/payer.component';
 import { PayerDetailsComponent } from './Masters/payer/payer-details/payer-details.component';
 import { CrmReportComponent } from './Reports/crm-report/crm-report.component';
 import { AccountingReportComponent } from './accounting/accounting_report/accounting-report/accounting-report.component';
+import { InvoicePrintComponent } from './accounting/invoice/invoice-print/invoice-print.component';
 
 
 const routes: Routes = [
@@ -288,6 +289,7 @@ const routes: Routes = [
       //Accounting
       { path: 'Invoice', component: InvoiceComponent },
       { path: 'Invoice_Details', component: InvoiceDetailsComponent },
+      { path: 'Invoice_Print', component: InvoicePrintComponent },
 
       { path: 'Expense', component: ExpenseComponent },
       { path: 'Expense_Details', component: ExpenseDetailsComponent },

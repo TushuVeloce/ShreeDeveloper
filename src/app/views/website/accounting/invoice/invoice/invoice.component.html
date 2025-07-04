@@ -1,8 +1,8 @@
 <div class="row">
-   <div class="col-4 mb-2">
+  <div class="col-4 mb-2">
     <h1 style="padding-top: 3px;" class="title title_light">Billing List</h1>
   </div>
-   <div class="col-4 mb-2 search-container_light">
+  <div class="col-4 mb-2 search-container_light">
     <app-shared-filter [masterList]="MasterList" [filterFields]="['Code', 'Name', 'UnitName']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
@@ -34,6 +34,8 @@
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(Invoice)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(Invoice)" />
+            <span style="margin-left: 9px; cursor: pointer;" (click)="navigateToPrint(Invoice)">
+              <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
           </td>
         </tr>
       </tbody>
