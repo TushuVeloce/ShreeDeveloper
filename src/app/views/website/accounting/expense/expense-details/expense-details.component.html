@@ -57,7 +57,7 @@
           <div class="d-flex align-items-center">
             <nz-select *ngIf="!RecipientNameInput" class="nzSelect-light"
               [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="RecipientRef"
-              name="RecipientRef" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientRef">
+              name="RecipientRef" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientRef" (ngModelChange)="getTotalExpenseFromSiteAndRecipientName()">
               <nz-option *ngFor="let name of RecipientList" [nzValue]="name.p.Ref"
                 [nzLabel]="name.p.Name | titleCase"></nz-option>
             </nz-select>

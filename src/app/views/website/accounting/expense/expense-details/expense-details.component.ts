@@ -5,6 +5,7 @@ import { ValidationMessages } from 'src/app/classes/domain/constants';
 import { DomainEnums, } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
+import { FinancialYear } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { Recipient } from 'src/app/classes/domain/entities/website/masters/recipientname/recipientname';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -72,6 +73,7 @@ export class ExpenseDetailsComponent implements OnInit {
       this.Date = strCDT.substring(0, 10);
     }
     this.getRecipientListByCompanyRef()
+    this.getCurrentBalanceByCompanyRef();
     this.InitialEntity = Object.assign(
       Expense.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
@@ -119,13 +121,14 @@ export class ExpenseDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Selected Site to get Shree Expense');
       return;
     }
-    if (this.Entity.p.RecipientName == '') {
+    if (this.Entity.p.RecipientRef <= 0) {
       await this.uiUtils.showErrorToster('Selected Recipient Name to get Shree Expense');
       return;
     }
-    let data = await Expense.FetchTotalExpenseFromSiteAndRecipientName(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientName,
+    let data = await Expense.FetchTotalExpenseFromSiteAndRecipient(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
+    console.log('data :', data);
     this.Entity.p.InvoiceAmount = data[0].p.InvoiceAmount;
   };
 
@@ -145,6 +148,16 @@ export class ExpenseDetailsComponent implements OnInit {
     }
     let lst = await Recipient.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.RecipientList = lst;
+  }
+
+  getCurrentBalanceByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await FinancialYear.FetchCurrentBalanceByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    // this.RecipientList = lst;
   }
 
   AddRecipientName = () => {

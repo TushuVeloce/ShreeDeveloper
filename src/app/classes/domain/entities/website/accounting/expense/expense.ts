@@ -205,11 +205,11 @@ export class Expense implements IPersistable<Expense> {
     return Expense.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchTotalExpenseFromSiteAndRecipientName(CompanyRef: number, SiteRef: number, RecipientName: string, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTotalExpenseFromSiteAndRecipient(CompanyRef: number, SiteRef: number, RecipientRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new TotalExpenseFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     req.SiteRefs.push(SiteRef)
-    req.RecipientNames.push(RecipientName)
+    req.RecipientRefs.push(RecipientRef)
     let tdResponse = await Expense.FetchTransportData(req, errorHandler) as TransportData;
     return Expense.ListFromTransportData(tdResponse);
   }
