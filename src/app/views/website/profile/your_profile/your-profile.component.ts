@@ -75,10 +75,10 @@ export class YourProfileComponent implements OnInit {
         console.log('AdminData :', AdminData);
         this.AdminEntity = AdminData[0]
         console.log('Entity :', this.Entity);
-        // if (this.AdminEntity.p.DOB != '') {
-        //      this.AdminEntity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.AdminEntity.p.DOB)
-        //    }
-        //    this.imageUrl = this.AdminEntity.p.ProfilePicPath;
+        if (this.AdminEntity.p.DOB != '') {
+             this.AdminEntity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.AdminEntity.p.DOB)
+           }
+        this.imageUrl = this.AdminEntity.p.ProfilePicPath;
         this.loadImageFromBackend(this.AdminEntity.p.ProfilePicPath)
       } else {
         this.IsAdmin = false

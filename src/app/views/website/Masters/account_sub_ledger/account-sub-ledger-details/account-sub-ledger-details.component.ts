@@ -45,6 +45,7 @@ export class AccountSubLedgerDetailsComponent implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity ? 'New Sub Ledger' : 'Edit Sub Ledger';
       this.Entity = SubLedger.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
+      console.log('Entity :', this.Entity);
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
       this.Entity = SubLedger.CreateNewInstance();
@@ -59,7 +60,7 @@ export class AccountSubLedgerDetailsComponent implements OnInit {
   }
 
   focusInput = () => {
-    let txtName = document.getElementById('Code')!;
+    let txtName = document.getElementById('LedgerRef')!;
     txtName.focus();
   }
 
