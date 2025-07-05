@@ -6,6 +6,7 @@ import { Invoice } from 'src/app/classes/domain/entities/website/accounting/bill
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
@@ -38,6 +39,7 @@ export class InvoicePrintComponent implements OnInit {
     private appStateManage: AppStateManageService,
     private utils: Utils,
     private dtu: DTU,
+    private DateconversionService: DateconversionService,
     private companystatemanagement: CompanyStateManagement
   ) { }
 
@@ -54,6 +56,12 @@ export class InvoicePrintComponent implements OnInit {
 
   totalAmountInWords(number: number): string {
     return this.utils.convertNumberToWords(number);
+  }
+
+
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
   }
 
   // printSection = (sectionId: string) => {

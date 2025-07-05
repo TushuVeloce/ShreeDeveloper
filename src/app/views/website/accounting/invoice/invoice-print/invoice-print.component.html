@@ -7,18 +7,20 @@
     </div>
     <div class="col-md-9"></div>
     <div class="col-md-1">
-      <button type="button" class="backbtn" (click)="printSection()">
-        <img src="/assets/icons/printer.png" alt="" width="34px" height="34px" />
-      </button>
+      <!-- <button type="button" class="backbtn" (click)="printSection()">
+      </button> -->
+      <img src="/assets/icons/printer.png" alt="Print" style="cursor: pointer;" width="34px" height="34px"
+        (click)="printSection()" />
     </div>
   </div>
 
-  <div #PrintContainer style="font-family: sans-serif; margin: 0; padding: 10px; font-size: 14px; color: #000;">
+  <div #PrintContainer
+    style="font-family: sans-serif; margin: 0; padding: 10px; font-size: 14px; color: #000; text-transform: capitalize;">
 
     <div style="max-width: full; margin: auto; border: 1px solid #ccc;">
       <!-- Header -->
       <div style="padding-bottom: 10px;">
-        <h2 style="color: maroon; text-align: center; margin-top: 10px; font-weight: 500;"> <b>Receipt</b></h2>
+        <h2 style="color: maroon; text-align: center; margin-top: 10px; font-weight: 500;"> <b>Bill</b></h2>
       </div>
 
       <!-- Logo & Info -->
@@ -28,17 +30,25 @@
             <td style="vertical-align: top; text-align: left; width: 20%; border: none;">
               <img src="/assets/logos/ShreeIcon.png" alt="Company Logo" height="80" class="mb-2" />
               <strong>
-                <!-- <div>{{Entity.p.CompanyName}}</div>
-                <div>{{Entity.p.AddressLine1}}</div>
-                <div>{{Entity.p.AddressLine2}}</div>
-                <div>{{Entity.p.CityName}} - {{Entity.p.PinCode}}</div>
-                <div>{{Entity.p.Contacts}}</div> -->
+                <div>{{Entity.p.CompanyName}}</div>
+                <div> {{ Entity.p.SiteName }}</div>
+                <!-- <div> {{ Entity.p.Contacts }}</div> -->
               </strong>
             </td>
             <td style="width: 50%;  border: none;"></td>
             <td style="vertical-align: center; border: none;">
-              <div style="display: flex; justify-content: space-between;"><strong>DATE</strong> <strong>{{
-                  this.Entity.p.Date }}</strong> </div>
+              <div style="display: flex; justify-content: space-between;">
+                <strong>Date</strong>
+                <strong>{{ this.Entity.p.Date }}</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <strong>Address</strong>
+                <strong>{{ this.Entity.p.AddressLine1 }}</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <strong>City</strong>
+                <strong>{{ this.Entity.p.CityName }}</strong>
+              </div>
               <br>
               <!-- <div style="display: flex; justify-content: space-between;"><strong>Challan No</strong>
                 <strong>{{this.Entity.p.ChalanNo }}</strong> </div> -->
@@ -56,30 +66,20 @@
       <div style="display: flex; justify-content: center;">
         <table style="width: 90%; margin: 10px 0 20px 0;">
           <tr>
-            <!-- <td style="width: 20%; text-align: left; vertical-align: top; border: none;">
-              <strong>
-                <div> {{ Entity.p.VendorName }}</div>
-                <div>{{ Entity.p.VendorCompanyName }}</div>
-                <div>{{ Entity.p.VendorAddressLine1 }}</div>
-                <div>{{ Entity.p.VendorAddressLine2 }}</div>
-                <div>{{ Entity.p.VendorPhone }}</div>
-              </strong>
+            <td style="width: 20%; text-align: left; vertical-align: top; border: none;">
+              <div>
+                <strong>Recipient Name - {{ Entity.p.RecipientName }}</strong>
+              </div>
             </td>
             <td style="width: 50%;  border: none;"></td>
-            <td style="text-align: right; vertical-align: top; border: none;">
-              <strong>
-                <div>{{ Entity.p.VendorCompanyName }}</div>
-                <div>{{ Entity.p.StageName }}</div>
-                <div>Service Type</div>
-                <div>{{ Entity.p.VehicleNo }}</div>
-              </strong>
-            </td> -->
-            <!-- <td style="text-align: left; vertical-align: top;">
-              <div>Site Name: {{ Entity.p.VendorCompanyName }}</div>
-              <div>Stage Name: {{ Entity.p.StageName }}</div>
-              <div>Service Type: {{ Entity.p.VendorCompanyName }}</div>
-              <div>Vehicle No: {{ Entity.p.VehicleNo }}</div>
-            </td> -->
+            <td style="text-align: left; vertical-align: top; border: none;">
+              <div>
+                <strong>Main Ledger - {{ Entity.p.LedgerName }}</strong>
+              </div>
+              <div>
+                <strong>Sub Ledger - {{ Entity.p.SubLedgerName }}</strong>
+              </div>
+            </td>
           </tr>
         </table>
       </div>
@@ -89,7 +89,7 @@
         <thead>
           <tr style="background-color: maroon; color: white;">
             <th style="padding: 8px; border: none;">Sr.No</th>
-            <th style="padding: 8px; border: none;">DESCRIPTION</th>
+            <th style="padding: 8px; border: none;">Details</th>
             <th style="padding: 8px; border: none;">Qty.</th>
             <th style="padding: 8px; border: none;">
               UNIT</th>
@@ -98,54 +98,23 @@
           </tr>
         </thead>
         <tbody>
-         <!--  <tr>
+          <tr>
             <td style="padding: 8px; border: none;">1.</td>
             <td style="padding: 8px; border: none;">{{Entity.p.Description}}</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.Quantity }}</td>
+            <td style="padding: 8px; border: none;">{{ Entity.p.Qty }}</td>
             <td style="padding: 8px; border: none;">{{ Entity.p.UnitName }}</td>
             <td style="padding: 8px; border: none;">{{ Entity.p.Rate }}</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.Amount }}</td>
+            <td style="padding: 8px; border: none;">{{ Entity.p.Qty * Entity.p.Rate }}</td>
           </tr>
-          <tr *ngIf="Entity.p.ExpenseTypeRef == MachinaryExpenseRef">
+          <tr>
             <td style="padding: 8px; border: none;">2.</td>
-            <td style="padding: 8px; border: none;">Disel</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.DieselQuantity }}</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.UnitName }}</td>
+            <td style="padding: 8px; border: none;">Diesel</td>
+            <td style="padding: 8px; border: none;">{{ Entity.p.DieselQty }}</td>
+            <td style="padding: 8px; border: none;">Liter</td>
             <td style="padding: 8px; border: none;">{{ Entity.p.DieselRate }}</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.DieselTotalAmount }}</td>
+            <td style="padding: 8px; border: none;">{{ Entity.p.DieselAmount }}</td>
           </tr>
-          <tr *ngIf="Entity.p.ExpenseTypeRef == LabourExpenseRef">
-            <td style="padding: 8px; border: none;">2.</td>
-            <td style="padding: 8px; border: none;">Skilled</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.SkillQuantity }}</td>
-            <td style="padding: 8px; border: none;"></td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.SkillRate }}</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.SkillAmount }}</td>
-          </tr>
-          <tr *ngIf="Entity.p.ExpenseTypeRef == LabourExpenseRef">
-            <td style="padding: 8px; border: none;">3.</td>
-            <td style="padding: 8px; border: none;">Unskilled</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.UnskillQuantity }}</td>
-            <td style="padding: 8px; border: none;"></td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.UnskillRate }}</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.UnskillAmount }}</td>
-          </tr>
-          <tr *ngIf="Entity.p.ExpenseTypeRef == LabourExpenseRef">
-            <td style="padding: 8px; border: none;">4.</td>
-            <td style="padding: 8px; border: none;">Ladies</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.LadiesQuantity }}</td>
-            <td style="padding: 8px; border: none;"></td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.LadiesRate }}</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.LadiesAmount }}</td>
-          </tr>
-          <tr *ngIf="Entity.p.ExpenseTypeRef == OtherExpenseRef">
-            <td style="padding: 8px; border: none;"></td>
-            <td style="padding: 8px; border: none;">Other</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.Quantity }}</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.UnitName }}</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.Rate }}</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.Amount }}</td>
-          </tr> -->
+
 
           <!-- Total -->
           <tr>
@@ -156,17 +125,17 @@
               style="padding: 8px; border: none; text-align: center; font-weight: bold; background-color: #fef4d4;">
               <strong>TOTAL</strong>
             </td>
-            <!-- <td style="padding: 8px; border: none; font-weight: bold; background-color: #fef4d4;"><strong>₹
-                ₹ {{Entity.p.GrandTotal}}</strong>
-            </td> -->
+            <td style="padding: 8px; border: none; font-weight: bold; background-color: #fef4d4;"><strong>
+                ₹ {{Entity.p.InvoiceAmount}}</strong>
+            </td>
           </tr>
           <!-- In Words -->
           <tr>
             <td style="border: none;"></td>
             <td style="border: none;"></td>
             <td style="border: none;"></td>
-            <!-- <td colspan="2" style="padding: 8px; border: none; text-align: start;"><strong>Inwords - {{
-                this.totalAmountInWords(Entity.p.GrandTotal) }}</strong></td> -->
+            <td colspan="3" style="padding: 8px; border: none; text-align: end;"><strong>Inwords - {{
+                this.totalAmountInWords(Entity.p.InvoiceAmount) }}</strong></td>
           </tr>
         </tbody>
       </table>
@@ -184,13 +153,13 @@
 
       <!-- Footer Signature -->
       <div style="margin-top: 30px; display: flex; justify-content: space-between">
-        <!-- <p style="margin-left: 5%;"><strong>Sign : {{Entity.p.CompanyOwnerName}}</strong></p> -->
-        <!-- <p style="margin-right: 5%;"> <strong>{{Entity.p.CompanyOwnerName}}</strong>
-        </p>-->
+        <p style="margin-left: 5%;"><strong>Sign : {{Entity.p.OwnerName}}</strong></p>
+        <p style="margin-right: 5%;"> <strong>{{Entity.p.OwnerName}}</strong>
+        </p>
       </div>
 
       <p style="text-align: center; line-height: 0.5;">If you have any questions about this invoice, please contact</p>
-      <!-- <p style="text-align: center; line-height: 0.5;">{{Entity.p.CompanyName}} {{Entity.p.Contacts}} </p> -->
+      <p style="text-align: center; line-height: 0.5;">{{Entity.p.CompanyName}} {{Entity.p.Contacts}} </p>
       <h5 style="text-align: center; line-height: 0.5;"><strong><i>Thank You For Your Business!</i></strong></h5>
       <blockquote style="text-align: center; line-height: 0.5; margin-top: 2%;"><strong>Computer Generated
           Print</strong></blockquote>
