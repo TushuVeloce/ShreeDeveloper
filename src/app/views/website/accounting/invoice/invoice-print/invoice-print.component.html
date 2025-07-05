@@ -17,38 +17,30 @@
   <div #PrintContainer
     style="font-family: sans-serif; margin: 0; padding: 10px; font-size: 14px; color: #000; text-transform: capitalize;">
 
-    <div style="max-width: full; margin: auto; border: 1px solid #ccc;">
+    <div style="max-width: full; margin: auto; border: 2px solid black;">
       <!-- Header -->
       <div style="padding-bottom: 10px;">
-        <h2 style="color: maroon; text-align: center; margin-top: 10px; font-weight: 500;"> <b>Bill</b></h2>
+        <h2 style="color: maroon; text-align: center; margin-top: 10px; font-weight: 500;"> <b>Bill Receipt</b></h2>
       </div>
 
       <!-- Logo & Info -->
       <div>
-        <table style="width: 90%; margin: 0 5% 20px 5%;">
+        <table style="width: 100%;">
           <tr>
-            <td style="vertical-align: top; text-align: left; width: 30%; border: none;">
-              <img src="/assets/logos/ShreeIcon.png" alt="Company Logo" height="80" class="mb-2" />
+            <td style="vertical-align: top; text-align: left; width: 40%; padding: 5px; border-width:  1px;">
               <strong>
-                <div>Company - {{Entity.p.CompanyName}}</div>
-                <div>Site - {{ Entity.p.SiteName }}</div>
-                <!-- <div> {{ Entity.p.Contacts }}</div> -->
+                <div><i class="fa-solid fa-file-lines" style="color: maroon; margin-right: 10px;"></i> पोहोच पावती</div>
+                <div> <i class="fa-solid fa-phone" style="color: maroon; margin-right: 10px;"></i> {{ Entity.p.Contacts }}</div>
               </strong>
             </td>
-            <td style="width: 30%;  border: none;"></td>
-            <td style="vertical-align: center; border: none;">
-              <div style="display: flex; justify-content: space-between;">
-                <strong>Date</strong>
-                <strong>{{ formatDate(Entity.p.Date) }}</strong>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <strong>Address</strong>
-                <strong>{{ this.Entity.p.AddressLine1 }}</strong>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <strong>City</strong>
-                <strong>{{ this.Entity.p.CityName }}</strong>
-              </div>
+            <td style="width: 10%; border-width:  1px; padding: 5px;">
+              <img src="/assets/logos/ShreeIcon.png" alt="Company Logo" height="80" class="mb-2" />
+            </td>
+            <td style="vertical-align: center; text-align: start; border-width:  1px; padding: 5px;">
+              <strong>ऑफिस पत्ता <br>
+                {{ this.Entity.p.AddressLine1 }} <br>
+                {{ this.Entity.p.AddressLine2 }}
+              </strong>
             </td>
           </tr>
         </table>
@@ -56,25 +48,33 @@
 
       <!-- Bill To Section -->
 
-      <div
+      <!-- <div
         style="background-color: maroon; color: white; font-weight: bold; padding: 5px 10px; width: fit-content; margin-left: 5%; width: 40%;">
         BILL TO
-      </div>
+      </div> -->
       <div style="display: flex; justify-content: center;">
-        <table style="width: 90%; margin: 10px 0 20px 0;">
+        <table style="width: 100%;">
           <tr>
-            <td style="width: 30%; text-align: left; vertical-align: top; border: none;">
+            <td style="width: 40%; text-align: left; vertical-align: top; padding: 5px; border-width: 1px;">
               <div>
-                <strong>Recipient Name - {{ Entity.p.RecipientName }}</strong>
+                <strong>Site Name - {{ Entity.p.SiteName }}</strong>
               </div>
-            </td>
-            <td style="width: 30%;  border: none;"></td>
-            <td style="text-align: left; vertical-align: top; border: none;">
+              <br>
               <div>
                 <strong>Main Ledger - {{ Entity.p.LedgerName }}</strong>
               </div>
+              <br>
               <div>
                 <strong>Sub Ledger - {{ Entity.p.SubLedgerName }}</strong>
+              </div>
+            </td>
+            <td style="text-align: left; vertical-align: top; padding: 5px; border-width: 1px;">
+              <div>
+                <strong>Recipient Name - {{ Entity.p.RecipientName }}</strong>
+              </div>
+              <br>
+              <div>
+                <strong>Chalan No. - 123</strong>
               </div>
             </td>
           </tr>
@@ -103,7 +103,7 @@
             <td style="padding: 8px; border: none;">{{ Entity.p.Rate }}</td>
             <td style="padding: 8px; border: none;">{{ Entity.p.Qty * Entity.p.Rate }}</td>
           </tr>
-          <tr>
+          <tr *ngIf="Entity.p.DieselQty > 0">
             <td style="padding: 8px; border: none;">2.</td>
             <td style="padding: 8px; border: none;">Diesel</td>
             <td style="padding: 8px; border: none;">{{ Entity.p.DieselQty }}</td>
@@ -115,10 +115,8 @@
 
           <!-- Total -->
           <tr>
-            <td style="border: none;"></td>
-            <td style="border: none;"></td>
-            <td style="border: none;"></td>
-            <td colspan="2"
+
+            <td colspan="5"
               style="padding: 8px; border: none; text-align: center; font-weight: bold; background-color: #fef4d4;">
               <strong>TOTAL</strong>
             </td>

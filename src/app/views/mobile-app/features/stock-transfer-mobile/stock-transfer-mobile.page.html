@@ -1,4 +1,4 @@
-<app-header-with-back-handler title="stock Transfer"
+<app-header-with-back-handler title="Stock Transfer"
   backRoute="mobileapp/tabs/dashboard/stock-management"></app-header-with-back-handler>
 
   <ion-content [fullscreen]="true" class="ion-padding">
@@ -109,10 +109,18 @@
     </ion-modal>
   
   
-    <!-- Floating Action Button for adding new stock inward -->
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-      <ion-fab-button>
+  <!-- FAB -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="ellipsis-vertical"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button color="primary" (click)="AddStockTransfer()">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button color="tertiary" (click)="AddStockTransfer()">
         <ion-icon name="filter-outline"></ion-icon>
       </ion-fab-button>
-    </ion-fab>
+    </ion-fab-list>
+  </ion-fab>
   </ion-content>

@@ -151,14 +151,14 @@ export class StockConsumeMobilePage implements OnInit {
       return;
     }
 
-    this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-inward/add']);
+    this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-consume/add']);
   };
 
   onEditClicked = async (item: StockConsume) => {
     this.SelectedStockConsume = item.GetEditableVersion();
     StockConsume.SetCurrentInstance(this.SelectedStockConsume);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-inward/edit']);
+    await this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-consume/edit']);
   };
 
   onDeleteClicked = async (stockConsume: StockConsume) => {
