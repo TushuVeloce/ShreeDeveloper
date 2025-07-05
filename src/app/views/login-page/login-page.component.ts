@@ -64,7 +64,7 @@ export class LoginPageComponent implements OnInit {
     console.log('response :', response.ValidMenuItems);
     this.appStateManage.setEmployeeRef(response.LoginEmployeeRef)
     this.appStateManage.setLoginToken(response.LoginToken)
-    // this.validmenuitemsstatemanagement.setValidMenuItems(response.ValidMenuItems)
+    this.validmenuitemsstatemanagement.setValidMenuItems(response.ValidMenuItems)
     this.appStateManage.StorageKey.setItem("ValidMenuItems", JSON.stringify(response.ValidMenuItems));
     this.appStateManage.StorageKey.setItem("IsDefaultUser", response.IsDefault.toString())
     this.appStateManage.StorageKey.setItem("UserDisplayName", response.UserDisplayName)

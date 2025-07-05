@@ -31,6 +31,13 @@ export class ValidMenuItemsStateManagement {
     // this.appStateManagement.StorageKey.setItem('SelectedCompanyRef', companyRef.toString());
     // this.appStateManagement.StorageKey.setItem('companyName', companyName);
   }
+
+
+  getData(FeatureRef: number): MenuItem {
+    return this.SelectedValidMenuItems().filter(item => item.FeatureRef === FeatureRef)[0];
+  }
+
+
   getCurrentCompanyRef(): MenuItem[] {
     return this.SelectedValidMenuItems();
   }

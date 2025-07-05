@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UnitRefs } from 'src/app/classes/domain/constants';
-import { ApplicationFeatures } from 'src/app/classes/domain/domainenums/domainenums';
+import { ApplicationFeatures, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { DeleteUnitCustomRequest } from 'src/app/classes/domain/entities/website/masters/unit/DeleteUnitCustomRequest';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
@@ -10,6 +10,7 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+import { ValidMenuItemsStateManagement } from 'src/app/services/ValidMenuItems';
 
 @Component({
   selector: 'app-unit-master',
@@ -28,18 +29,20 @@ export class UnitMasterComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   TimeUnitRef: number = UnitRefs.TimeUnitRef;
+  FeatureRef = ApplicationFeatures
   // ValidMenuItems: MenuItem[] = [];
   ApplicationFeatures?: ApplicationFeatures;
 
   headers: string[] = ['Sr.No.', 'Unit', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService, private payloadPacketFacade: PayloadPacketFacade,
-    private serverCommunicator: ServerCommunicatorService) { }
+    private serverCommunicator: ServerCommunicatorService,private ValidMenuItem: ValidMenuItemsStateManagement) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    // this.ValidMenuItems = this.appStateManage.StorageKey.getItem('ValidMenuItems');
-    const rawItems = JSON.parse(sessionStorage.getItem('ValidMenuItems') || '[]');
-    console.log('rawItems :', rawItems);
+    const ValidMenuItems = this.ValidMenuItem.getData(this.FeatureRef.UnitMaster);
+    console.log('ValidMenuItems :', ValidMenuItems);
+    // const rawItems = JSON.parse(sessionStorage.getItem('ValidMenuItems') || '[]');
+    // console.log('rawItems :', rawItems);
     // this.ValidMenuItems = rawItems.filter((data: MenuItem) => data.FeatureRef == ApplicationFeatures.UnitMaster);
     // console.log('this.ValidMenuItems :', this.ValidMenuItems);
     await this.FormulateUnitList();
