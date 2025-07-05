@@ -10,6 +10,7 @@ import { SessionValues } from 'src/app/services/sessionvalues.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { ValidMenuItemsStateManagement } from 'src/app/services/ValidMenuItems';
 
 
 @Component({
@@ -31,7 +32,7 @@ export class LoginPageComponent implements OnInit {
 
   constructor(private router: Router, private platform: Platform, private servercommunicator: ServerCommunicatorService,
     private uiUtils: UIUtils, private activatedRoute: ActivatedRoute, private sessionValues: SessionValues,
-    private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement,) {
+    private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement, private validmenuitemsstatemanagement: ValidMenuItemsStateManagement) {
 
     platform.ready().then(async () => {
       this.isIosPlatform = platform.is('ios');
@@ -60,9 +61,10 @@ export class LoginPageComponent implements OnInit {
     // req.SenderURL;
 
     const response = await this.servercommunicator.LoginUser(req);
-    console.log('response :', response);
+    console.log('response :', response.ValidMenuItems);
     this.appStateManage.setEmployeeRef(response.LoginEmployeeRef)
     this.appStateManage.setLoginToken(response.LoginToken)
+    // this.validmenuitemsstatemanagement.setValidMenuItems(response.ValidMenuItems)
     this.appStateManage.StorageKey.setItem("ValidMenuItems", JSON.stringify(response.ValidMenuItems));
     this.appStateManage.StorageKey.setItem("IsDefaultUser", response.IsDefault.toString())
     this.appStateManage.StorageKey.setItem("UserDisplayName", response.UserDisplayName)

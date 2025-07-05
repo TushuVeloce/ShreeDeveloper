@@ -27,19 +27,19 @@
       <div>
         <table style="width: 90%; margin: 0 5% 20px 5%;">
           <tr>
-            <td style="vertical-align: top; text-align: left; width: 20%; border: none;">
+            <td style="vertical-align: top; text-align: left; width: 30%; border: none;">
               <img src="/assets/logos/ShreeIcon.png" alt="Company Logo" height="80" class="mb-2" />
               <strong>
-                <div>{{Entity.p.CompanyName}}</div>
-                <div> {{ Entity.p.SiteName }}</div>
+                <div>Company - {{Entity.p.CompanyName}}</div>
+                <div>Site - {{ Entity.p.SiteName }}</div>
                 <!-- <div> {{ Entity.p.Contacts }}</div> -->
               </strong>
             </td>
-            <td style="width: 50%;  border: none;"></td>
+            <td style="width: 30%;  border: none;"></td>
             <td style="vertical-align: center; border: none;">
               <div style="display: flex; justify-content: space-between;">
                 <strong>Date</strong>
-                <strong>{{ this.Entity.p.Date }}</strong>
+                <strong>{{ formatDate(Entity.p.Date) }}</strong>
               </div>
               <div style="display: flex; justify-content: space-between;">
                 <strong>Address</strong>
@@ -49,9 +49,6 @@
                 <strong>City</strong>
                 <strong>{{ this.Entity.p.CityName }}</strong>
               </div>
-              <br>
-              <!-- <div style="display: flex; justify-content: space-between;"><strong>Challan No</strong>
-                <strong>{{this.Entity.p.ChalanNo }}</strong> </div> -->
             </td>
           </tr>
         </table>
@@ -66,12 +63,12 @@
       <div style="display: flex; justify-content: center;">
         <table style="width: 90%; margin: 10px 0 20px 0;">
           <tr>
-            <td style="width: 20%; text-align: left; vertical-align: top; border: none;">
+            <td style="width: 30%; text-align: left; vertical-align: top; border: none;">
               <div>
                 <strong>Recipient Name - {{ Entity.p.RecipientName }}</strong>
               </div>
             </td>
-            <td style="width: 50%;  border: none;"></td>
+            <td style="width: 30%;  border: none;"></td>
             <td style="text-align: left; vertical-align: top; border: none;">
               <div>
                 <strong>Main Ledger - {{ Entity.p.LedgerName }}</strong>

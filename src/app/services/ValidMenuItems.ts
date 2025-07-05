@@ -17,7 +17,7 @@ export interface MenuItem {
 @Injectable({
   providedIn: 'root'
 })
-export class ValidMenuItems {
+export class ValidMenuItemsStateManagement {
   public ValidMenuItems: MenuItem[] = [];
   public SelectedValidMenuItems = signal<MenuItem[]>(this.ValidMenuItems);
   constructor(private appStateManagement: AppStateManageService) {
