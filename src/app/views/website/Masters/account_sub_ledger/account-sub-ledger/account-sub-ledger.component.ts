@@ -104,6 +104,7 @@ Entity: SubLedger = SubLedger.CreateNewInstance();
           );
           this.SearchString = '';
           this.loadPaginationData();
+          this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef)
         });
       }
     );

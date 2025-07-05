@@ -78,24 +78,24 @@ export class BankAccount implements IPersistable<BankAccount> {
     } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
       vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
     }
-    if (this.p.BranchName == '') vra.add('Branch', 'Branch Name cannot be blank.');
-    if (this.p.AccountNumber == 0) {
-      vra.add('AccountNumber', 'Account Number cannot be blank.');
-    } else if (this.p.AccountNumber < 0) {
-      vra.add('AccountNumber', 'Account Number cannot be less then 0.');
-    }
-    if (this.p.IFSCCode == '') {
-      vra.add('IFSCCode', 'IFSC cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.IFSC).test(this.p.IFSCCode)) {
-      vra.add('IFSCCode', ValidationMessages.IFSCMsg);
-    }
-    if (this.p.OpeningBalance == 0) {
-      vra.add('OpeningBalance', 'Opening Balance cannot be blank.');
-    } else if (this.p.OpeningBalance < 0) {
-      vra.add('OpeningBalance', 'Opening Balance cannot be less then 0.');
-    }
-    if (this.p.DateofOpening == '') vra.add('DateofOpening', 'Date of Opening cannot be blank.');
-    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
+    // if (this.p.BranchName == '') vra.add('Branch', 'Branch Name cannot be blank.');
+    // if (this.p.AccountNumber == 0) {
+    //   vra.add('AccountNumber', 'Account Number cannot be blank.');
+    // } else if (this.p.AccountNumber < 0) {
+    //   vra.add('AccountNumber', 'Account Number cannot be less then 0.');
+    // }
+    // if (this.p.IFSCCode == '') {
+    //   vra.add('IFSCCode', 'IFSC cannot be blank.');
+    // } else if (!new RegExp(ValidationPatterns.IFSC).test(this.p.IFSCCode)) {
+    //   vra.add('IFSCCode', ValidationMessages.IFSCMsg);
+    // }
+    // if (this.p.OpeningBalance == 0) {
+    //   vra.add('OpeningBalance', 'Opening Balance cannot be blank.');
+    // } else if (this.p.OpeningBalance < 0) {
+    //   vra.add('OpeningBalance', 'Opening Balance cannot be less then 0.');
+    // }
+    // if (this.p.DateofOpening == '') vra.add('DateofOpening', 'Date of Opening cannot be blank.');
+    // if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
 
   }
 

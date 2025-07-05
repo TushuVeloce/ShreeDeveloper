@@ -54,10 +54,10 @@
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="CurrentQuantity"><b>Current Quantity</b></label>
           <input type="number" [(ngModel)]="Entity.p.CurrentQuantity" name="CurrentQuantity" class="form-control"
-            id="CurrentQuantity" required placeholder="Enter Current Quantity"/>
+            id="CurrentQuantity" required placeholder="Enter Current Quantity" readonly/>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
-          <label for="TransferredQuantity"><b>Transffered Quantity</b></label>
+          <label for="TransferredQuantity"><b>transferred Quantity</b></label>
           <input type="number" [(ngModel)]="Entity.p.TransferredQuantity" name="TransferredQuantity"
             class="form-control" id="TransferredQuantity" required placeholder="Enter Consumption Quantity" (ngModelChange)="calculateRemainingQuantity()"
             #TransferredQuantityCtrl="ngModel"  required (blur)="TransferredQuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>

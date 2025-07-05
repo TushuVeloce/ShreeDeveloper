@@ -34,6 +34,11 @@ export class InvoiceProps {
   public readonly LedgerName: string = ''
   public SubLedgerRef: number = 0
   public readonly SubLedgerName: string = ''
+  public readonly AddressLine1: string = ''
+  public readonly AddressLine2: string = ''
+  public readonly CityName: string = ''
+  public readonly Contacts: string = ''
+  public readonly OwnerName: string = ''
   public Description: string = ''
   public RecipientMasterRef: number = 0
   public RecipientName: string = ''
@@ -44,6 +49,7 @@ export class InvoiceProps {
   public DieselAmount: number = 0
   public Qty: number = 0
   public UnitRef: number = 0
+  public readonly UnitName: string = ''
   public Rate: number = 0
   public InvoiceAmount: number = 0
   public Narration: string = ''
@@ -94,16 +100,16 @@ export class Invoice implements IPersistable<Invoice> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Date == '') {vra.add('Date', 'Date cannot be blank.');} 
-    if (this.p.SiteRef <= 0) {vra.add('SiteRef', 'Site Name cannot be blank.');} 
-    if (this.p.LedgerRef <= 0) {vra.add('LedgerRef', 'Ledger cannot be blank.');} 
-    if (this.p.RecipientMasterRef <= 0) {vra.add('RecipientMasterRef', 'Recipient Name cannot be blank.');} 
-    if (this.p.Description == '') {vra.add('Description', 'Description cannot be blank.');} 
-    if (this.p.Qty <= 0) {vra.add('Qty', 'Quantity cannot be blank.');} 
-    if (this.p.Rate <= 0) {vra.add('Rate', 'Rate cannot be blank.');} 
-    if(this.p.IsDieselPaid == 1){
-      if (this.p.DieselQty <= 0) {vra.add('DieselQty', ' Diesel Quantity cannot be blank.');} 
-      if (this.p.DieselRate <= 0) {vra.add('DieselRate', ' Diesel Rate cannot be blank.');} 
+    if (this.p.Date == '') { vra.add('Date', 'Date cannot be blank.'); }
+    if (this.p.SiteRef <= 0) { vra.add('SiteRef', 'Site Name cannot be blank.'); }
+    if (this.p.LedgerRef <= 0) { vra.add('LedgerRef', 'Ledger cannot be blank.'); }
+    if (this.p.RecipientMasterRef <= 0) { vra.add('RecipientMasterRef', 'Recipient Name cannot be blank.'); }
+    if (this.p.Description == '') { vra.add('Description', 'Description cannot be blank.'); }
+    if (this.p.Qty <= 0) { vra.add('Qty', 'Quantity cannot be blank.'); }
+    if (this.p.Rate <= 0) { vra.add('Rate', 'Rate cannot be blank.'); }
+    if (this.p.IsDieselPaid == 1) {
+      if (this.p.DieselQty <= 0) { vra.add('DieselQty', ' Diesel Quantity cannot be blank.'); }
+      if (this.p.DieselRate <= 0) { vra.add('DieselRate', ' Diesel Rate cannot be blank.'); }
     }
   }
 
@@ -199,22 +205,22 @@ export class Invoice implements IPersistable<Invoice> {
     return Invoice.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-     let req = new InvoiceFetchRequest();
-     req.CompanyRefs.push(CompanyRef)
-     let tdResponse = await Invoice.FetchTransportData(req, errorHandler) as TransportData;
-     return Invoice.ListFromTransportData(tdResponse);
-   }
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new InvoiceFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Invoice.FetchTransportData(req, errorHandler) as TransportData;
+    return Invoice.ListFromTransportData(tdResponse);
+  }
 
-   public static async FetchRecipientByCompanyRef(CompanyRef: number, SiteRef?:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-     let req = new GetDistinctRecipientNameFetchRequest();
-     req.CompanyRefs.push(CompanyRef)
-     if(SiteRef){
+  public static async FetchRecipientByCompanyRef(CompanyRef: number, SiteRef?: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new GetDistinctRecipientNameFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    if (SiteRef) {
       req.SiteRefs.push(SiteRef)
-     }
-     let tdResponse = await Invoice.FetchTransportData(req, errorHandler) as TransportData;
-     return Invoice.ListFromTransportData(tdResponse);
-   }
+    }
+    let tdResponse = await Invoice.FetchTransportData(req, errorHandler) as TransportData;
+    return Invoice.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

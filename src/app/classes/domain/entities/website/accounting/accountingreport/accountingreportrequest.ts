@@ -10,8 +10,8 @@ export class AccountingReportFetchRequest
 
     AccountingReportRefs: number[] = [];
     CompanyRef: number = 0;
-    StartDate: number = 0;
-    EndDate: number = 0;
+    StartDate: string = '';
+    EndDate: string = '';
 
     public MergeIntoTransportData = (td: TransportData) =>
     {
