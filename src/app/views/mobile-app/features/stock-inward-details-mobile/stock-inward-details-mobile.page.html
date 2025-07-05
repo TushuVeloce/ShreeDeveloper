@@ -1,13 +1,228 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>stockInwardDetailsMobile</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header-with-back-handler title={{DetailsFormTitle}}></app-header-with-back-handler>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">stockInwardDetailsMobile</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="form-container">
+  <ion-list lines="none" class="ion-padding">
+        <!-- Select site -->
+        <ion-item class="input-item">
+          <ion-input label="Site Name" labelPlacement="floating" placeholder="Enter Site Name"
+            [(ngModel)]="Entity.p.SiteName" readonly></ion-input>
+        </ion-item>
+
+    <!--  Ordered Date -->
+    <ion-item (click)="showPurchaseOrderDatePicker = false" class="input-item">
+      <ion-label>Ordered Date</ion-label>
+      <ion-label slot="end">{{ DisplayPurchaseOrderDate || 'Select Date' }}</ion-label>
+    </ion-item>
+    <app-date-picker [show]="showPurchaseOrderDatePicker" [selectedDate]="PurchaseOrderDate" [defaultToday]="true"
+      (dateChanged)="onPurchaseOrderDateChange($event)"
+      (dateSelected)="DisplayPurchaseOrderDate = $event; showPurchaseOrderDatePicker = false"
+      (modalDismissed)="showPurchaseOrderDatePicker = false" />
+
+    <!--  Inward Date -->
+    <ion-item (click)="showInwardDatePicker = true" class="input-item" button>
+      <ion-label>Inward Date</ion-label>
+      <ion-label slot="end">{{ DisplayInwardDate || 'Select Date' }}</ion-label>
+    </ion-item>
+    <app-date-picker [show]="showInwardDatePicker" [selectedDate]="InwardDate" [defaultToday]="true"
+      (dateChanged)="onInwardDateChange($event)"
+      (dateSelected)="DisplayInwardDate = $event; showInwardDatePicker = false"
+      (modalDismissed)="showInwardDatePicker = false" />
+
+            <!-- Vendor Trade Name input-->
+    <ion-item class="input-item">
+      <ion-input label="Vendor Name" labelPlacement="floating" placeholder="Enter Vendor Name"
+        [(ngModel)]="Entity.p.VendorName" readonly></ion-input>
+    </ion-item>
+
+      <!-- Vendor Trade Name input-->
+    <ion-item class="input-item">
+      <ion-input label="Vendor Trade" labelPlacement="floating" placeholder="Enter Vendor Trade"
+        [(ngModel)]="Entity.p.VendorTradeName" readonly></ion-input>
+    </ion-item>
+    <ion-item class="input-item">
+      <ion-input label="Vendor Mobile No." labelPlacement="floating" placeholder="Enter Mobile No."
+        [(ngModel)]="Entity.p.VendorMobNo" readonly></ion-input>
+    </ion-item>
+    <ion-item class="input-item">
+      <ion-input label="Chalan No." labelPlacement="floating" placeholder="Enter Chalan No."
+        [(ngModel)]="Entity.p.ChalanNo" readonly></ion-input>
+    </ion-item>
+    <ion-item class="input-item">
+      <ion-input label="Vehicle No." labelPlacement="floating" placeholder="Enter Vehicle No."
+        [(ngModel)]="Entity.p.VehicleNo"></ion-input>
+    </ion-item>
+
+    <!-- Material List Header -->
+    <ion-grid class="ion-margin-top">
+      <ion-row class="ion-align-items-center">
+        <ion-col size="6">
+          <h5><strong>Order Material List</strong></h5>
+        </ion-col>
+        <ion-col size="6" class="ion-text-right">
+          <ion-button fill="outline" size="small" (click)="openModal(100)">
+            <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+            Add
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- Material Table -->
+    <ng-container *ngIf="Entity.p.MaterialInwardDetailsArray.length > 0; else noMaterials">
+      <div class="table-container">
+        <div class="table-scroll">
+          <table class="custom-table ion-text-center">
+            <thead>
+              <tr>
+                <th class="sticky-col sticky-header">#</th>
+                <th *ngFor="let item of materialheaders" class="sticky-header">{{ item }}</th>
+                <th class="sticky-col sticky-header">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of Entity.p.MaterialInwardDetailsArray; let i = index">
+                <td class="sticky-col">{{i + 1 }}</td>
+                <td>
+                  {{ item.MaterialName }}
+                </td>
+                <td>
+                  {{ item.UnitName || '-' }}
+                </td>
+                <td>
+                  {{ item.PurchaseOrderQty || '-' }}
+                </td>
+                <td>
+                  {{ item.InwardQty || '-' }}
+                </td>
+                <td>
+                  {{ item.PurchaseOrderRemainingQty || '-' }}
+                </td>
+                <td>
+                  <!-- <ion-icon name="create-outline" color="warning" size="small"
+                    style="margin-right: 12px; cursor: pointer" (click)="editOrderMaterial(i)"></ion-icon> -->
+                  <ion-icon name="trash-outline" color="danger" size="small" style="cursor: pointer"
+                    (click)="removeMaterial(i)"></ion-icon>
+                </td>
+              </tr>
+              <!-- <tr>
+                <td class="sticky-col" colspan="2"><b>Grand Total</b></td>
+                <td colspan="11"></td>
+                <td><b>₹ {{ getGrandTotal() }}</b></td>
+              </tr> -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #noMaterials>
+      <div class="ion-padding ion-text-center">
+        <ion-text color="medium">
+          <p>No material data available</p>
+        </ion-text>
+      </div>
+    </ng-template>
+
+    <ion-modal [isOpen]="ismaterialModalOpen" (didDismiss)="ismaterialModalOpen=false" class="modal-card">
+      <ng-template>
+        <div class="modal-container">
+          <ion-header>
+            <ion-toolbar color="primary">
+              <ion-title>Material Details</ion-title>
+              <ion-buttons slot="end">
+                <ion-button fill="clear" (click)="closeModal(100)">
+                  <ion-icon name="close-outline"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+
+          <ion-content class="ion-padding">
+            <ion-list lines="none">
+              <!-- Material Dropdown -->
+              <ion-item class="input-item" button (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable">
+                <ion-label>Material Name</ion-label>
+
+                <!-- Text showing the selected status -->
+                <ion-text slot="end" class="status-text">
+                  {{ MaterialName|| 'Select' }}
+                </ion-text>
+
+                <!-- Dropdown icon (chevron) on the right -->
+                <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+              </ion-item>
+
+              <!-- Material input-->
+              <ion-item class="input-item" *ngIf="ModalEditable">
+                <ion-input label="Material Name" labelPlacement="floating" placeholder="Enter Material Name"
+                  [(ngModel)]="newInward.MaterialName" readonly></ion-input>
+              </ion-item>
+
+              <!-- Unit -->
+              <ion-item class="input-item">
+                <ion-input label="Unit" labelPlacement="floating" placeholder="Enter Unit"
+                  [(ngModel)]="newInward.UnitName" readonly></ion-input>
+              </ion-item>
+
+              <!--Requisition Quantity -->
+              <ion-item class="input-item">
+                <ion-input label="Requisition Qty" labelPlacement="floating" type="number" placeholder="Enter Quantity"
+                  [(ngModel)]="newInward.PurchaseOrderQty" clearInput="true" clearOnEdit="true"
+                  readonly></ion-input>
+              </ion-item>
+
+              <!--Inward Quantity -->
+              <ion-item class="input-item">
+                <ion-input label="Inward Quantity" labelPlacement="floating" type="number"
+                  placeholder="Enter Inward Quantity" [(ngModel)]="newInward.InwardQty"
+                  clearInput="true" clearOnEdit="true" (ngModelChange)=" CalculateRemainingQty(
+                    newInward.InwardQty,
+                    newInward.PurchaseOrderRemainingQty
+                  )" ></ion-input> </ion-item>
+
+              <!--NewRemaining Quantity -->
+              <ion-item class="input-item">
+                <ion-input label="Remaining Qty" labelPlacement="floating" type="number"
+                  placeholder="Enter Remaining Quantity" [(ngModel)]="NewRemainingQty" clearInput="true"
+                  clearOnEdit="true" readonly></ion-input> </ion-item>
+            </ion-list>
+          </ion-content>
+
+          <ion-footer>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="6">
+                  <ion-button expand="block" color="primary" shape="round" (click)="closeModal(100)">
+                    Close
+                  </ion-button>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-button expand="block" color="primary" shape="round" (click)="addMaterial()">
+                    {{ModalEditable ? "Update" : "Save"}}
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-footer>
+        </div>
+      </ng-template>
+    </ion-modal>
+
+
+    <!-- Main Buttons -->
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
+            Cancel
+          </ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button expand="block" (click)="SaveStockInward()" class="submit-button primary-button">
+            Save
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-list>
 </ion-content>

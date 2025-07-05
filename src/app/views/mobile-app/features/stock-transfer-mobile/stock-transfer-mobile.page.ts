@@ -150,14 +150,14 @@ export class StockTransferMobilePage implements OnInit {
       return;
     }
 
-    this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-inward/add']);
+    this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-transfer/add']);
   };
 
   onEditClicked = async (item: StockTransfer) => {
     this.SelectedStockTransfer = item.GetEditableVersion();
     StockTransfer.SetCurrentInstance(this.SelectedStockTransfer);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-inward/edit']);
+    await this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-transfer/edit']);
   };
 
   onDeleteClicked = async (StockTransfer: StockTransfer) => {
@@ -189,6 +189,8 @@ export class StockTransferMobilePage implements OnInit {
                 //   await this.haptic.success();
                 //   await this.loadStockTransferIfEmployeeExists();
                 // });
+                // debugger
+                this.loadingService.show();
                 await StockTransfer.DeleteInstance(async () => {
                   await this.toastService.present(
                     `Deleted Stock Transfer on ${this.formatDate(StockTransfer.p.Date)}!`,
@@ -206,6 +208,8 @@ export class StockTransferMobilePage implements OnInit {
                 console.error('Error deleting Stock Transfer:', err);
                 await this.toastService.present('Failed to delete Stock Transfer', 1000, 'danger');
                 await this.haptic.error();
+              }finally{
+                this.loadingService.hide();
               }
             },
           },

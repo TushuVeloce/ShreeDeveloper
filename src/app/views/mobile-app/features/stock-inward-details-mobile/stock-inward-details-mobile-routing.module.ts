@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: StockInwardDetailsMobilePage
+  },
+  {
+    path: 'edit',
+    loadChildren: () => import('../stock-inward-details-mobile/stock-inward-details-mobile.module').then(m => m.StockInwardDetailsMobilePageModule)
   }
 ];
 

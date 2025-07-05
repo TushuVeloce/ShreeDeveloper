@@ -38,6 +38,11 @@ export class DatePickerComponent  implements OnInit {
   }
 
   onSet() {
+    if (!this.selectedDate){
+      const formatted = new Date().toISOString().split('T')[0];
+      this.dateSelected.emit(formatted);
+      return;
+    }
     const formatted = new Date(this.selectedDate).toISOString().split('T')[0];
     this.dateSelected.emit(formatted);
   }
