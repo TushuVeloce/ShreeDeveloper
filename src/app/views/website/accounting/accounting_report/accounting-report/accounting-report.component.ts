@@ -26,12 +26,14 @@ Entity: AccountingReport = AccountingReport.CreateNewInstance();
  
    companyRef = this.companystatemanagement.SelectedCompanyRef;
  
-   headers: string[] = ['Sr.No.','Date','Site Name','Ledger','Sub Ledger','Description','Recipient Name','Bill Amount','Action'];
+   headers: string[] = ['Sr.No.','Date','Payer Name','Recipient Name','Site Name','Reason','Income','Expense','Shree Bal.','Mode of Payment','Narration',];
    constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
      private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
    ) {
      effect(async () => {
        await this.getAccountingReportListByCompanyRef();
+       this.Entity.p.StartDate = ''
+       this.Entity.p.EndDate = ''
      });
    }
  
@@ -49,35 +51,62 @@ Entity: AccountingReport = AccountingReport.CreateNewInstance();
        return;
      }
      let lst = await AccountingReport.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+     console.log('lst :', lst);
      this.MasterList = lst;
      this.DisplayMasterList = this.MasterList;
      this.loadPaginationData();
    }
- 
-  //  onEditClicked = async (item: AccountingReport) => {
-  //    this.SelectedAccountingReport = item.GetEditableVersion();
-  //    AccountingReport.SetCurrentInstance(this.SelectedAccountingReport);
-  //    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-  //    await this.router.navigate(['/homepage/Website/AccountingReport_Details']);
-  //  };
- 
-  //  onDeleteClicked = async (AccountingReport: AccountingReport) => {
-  //    await this.uiUtils.showConfirmationMessage(
-  //      'Delete',
-  //      `This process is <strong>IRREVERSIBLE!</strong> <br/>
-  //    Are you sure that you want to DELETE this AccountingReport?`,
-  //      async () => {
-  //        await AccountingReport.DeleteInstance(async () => {
-  //          await this.uiUtils.showSuccessToster(
-  //            `AccountingReport ${AccountingReport.p.RecipientName} has been deleted!`
-  //          );
-  //          await this.getAccountingReportListByCompanyRef();
-  //          this.SearchString = '';
-  //          this.loadPaginationData();
-  //        });
-  //      }
-  //    );
-  //  };
+
+   FetchEntireListByStartDateandEndDate = async () => {
+     this.MasterList = [];
+     this.DisplayMasterList = [];
+     if (this.companyRef() <= 0) {
+       await this.uiUtils.showErrorToster('Company not Selected');
+       return;
+     }
+     if(this.Entity.p.StartDate == '' && this.Entity.p.EndDate == ''){
+        this.getAccountingReportListByCompanyRef()
+     }
+     let lst = await AccountingReport.FetchEntireListByStartDateandEndDate(this.Entity.p.StartDate, this.Entity.p.EndDate, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+     this.MasterList = lst;
+     this.DisplayMasterList = this.MasterList;
+     this.loadPaginationData();
+   }
+
+   getAllPaginatedPages(): any[][] {
+  const pages = [];
+  for (let i = 0; i < this.DisplayMasterList.length; i += this.pageSize) {
+    pages.push(this.DisplayMasterList.slice(i, i + this.pageSize));
+  }
+  return pages;
+}
+
+printReport(): void {
+  const printContents = document.getElementById('print-section')?.innerHTML;
+  if (printContents) {
+    const popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin?.document.write(`
+      <html>
+        <head>
+          <title>Accounting Report</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 10px; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+            th, td { border: 1px solid black; padding: 8px; text-align: left; }
+            .print-page { page-break-after: always; }
+            @media print {
+              .print-page:last-child { page-break-after: auto; }
+            }
+          </style>
+        </head>
+        <body onload="window.print();window.close()">
+          ${printContents}
+        </body>
+      </html>
+    `);
+    popupWin?.document.close();
+  }
+}
  
    // For Pagination  start ----
    loadPaginationData = () => {

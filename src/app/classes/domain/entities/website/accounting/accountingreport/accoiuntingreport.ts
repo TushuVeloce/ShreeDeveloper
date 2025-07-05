@@ -15,7 +15,7 @@ import { AccountingReportFetchRequest } from "./accountingreportrequest";
 
 
 export class AccountingReportProps {
-  public readonly Db_Table_Name = "AccountingReport";
+  public readonly Db_Table_Name = "IncomeExpenseLedger";
   public Ref: number = 0;
   public CompanyRef: number = 0
   public CompanyName: string = ''
@@ -29,6 +29,8 @@ export class AccountingReportProps {
   public ShreesBalance: number = 0
   public ModeOfPaymentName: string = ''
   public Narration: string = ''
+  public StartDate: string = ''
+  public EndDate: string = ''
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -44,7 +46,7 @@ export class AccountingReportProps {
 }
 
 export class AccountingReport implements IPersistable<AccountingReport> {
-  public static readonly Db_Table_Name: string = 'AccountingReport';
+  public static readonly Db_Table_Name: string = 'IncomeExpenseLedger';
 
   private constructor(public readonly p: AccountingReportProps, public readonly AllowEdit: boolean) {
 
@@ -171,6 +173,19 @@ export class AccountingReport implements IPersistable<AccountingReport> {
    public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
      let req = new AccountingReportFetchRequest();
      req.CompanyRef = CompanyRef
+     let tdResponse = await AccountingReport.FetchTransportData(req, errorHandler) as TransportData;
+     return AccountingReport.ListFromTransportData(tdResponse);
+   }
+
+   public static async FetchEntireListByStartDateandEndDate(StartDate:string, EndDate:string, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+     let req = new AccountingReportFetchRequest();
+     req.CompanyRef = CompanyRef
+     if(StartDate){
+        req.StartDate = StartDate
+     }
+     if(EndDate){
+      req.EndDate = EndDate
+     }
      let tdResponse = await AccountingReport.FetchTransportData(req, errorHandler) as TransportData;
      return AccountingReport.ListFromTransportData(tdResponse);
    }
