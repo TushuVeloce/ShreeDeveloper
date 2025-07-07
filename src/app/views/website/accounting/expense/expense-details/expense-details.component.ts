@@ -126,7 +126,7 @@ export class ExpenseDetailsComponent implements OnInit {
       return;
     }
     if (this.Entity.p.RecipientRef <= 0) {
-      await this.uiUtils.showErrorToster('Selected Recipient Name to get Shree Expense');
+      // await this.uiUtils.showErrorToster('Selected Recipient Name to get Shree Expense');
       return;
     }
     let data = await Expense.FetchTotalExpenseFromSiteAndRecipient(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientRef,
