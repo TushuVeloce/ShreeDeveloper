@@ -12,21 +12,29 @@
     </nz-button>
   </div>
 </div>
+<div class="row">
+  <div class="col-4 mb-2"> </div>
+  <div class="col-4 mb-2"></div>
+  <div class="col-4 mb-2 text-end">
+    <img class="no-print" src="/assets/icons/printer.png" alt="Print" title="Print" width="30px" height="30px"
+      style="cursor: pointer; padding-top: 4px;" (click)="printReport()" />
+  </div>
+</div>
 <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
       [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
-          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+          <th *ngFor="let header of headers" class="tblheader" style="background-color: maroon; color: white;">{{ header }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let Income of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{formatDate(Income.p.Date)}}</td>
+          <td Class="tbldata" style="white-space: nowrap;">{{formatDate(Income.p.Date)}}</td>
           <td Class="tbldata">{{Income.p.SiteName}}</td>
-          <td Class="tbldata">{{Income.p.LedgerName}}</td>
+          <td Class="tbldata">{{Income.p.LedgerName | titleCase}}</td>
           <td Class="tbldata">{{Income.p.SubLedgerName}}</td>
           <td Class="tbldata">{{Income.p.Reason}}</td>
           <td Class="tbldata">{{Income.p.IncomeAmount }}</td>
@@ -45,4 +53,32 @@
 </div>
 <div *ngIf="DisplayMasterList.length === 0">
   <Data-Not-Found />
+</div>
+
+<!-- Print Section -->
+<div id="print-section" style="display: none;">
+  <div *ngFor="let page of getAllPaginatedPages(); let pageIndex = index" class="print-page">
+    <h2>Accounting Report</h2>
+    <table class="table table-bordered print-table">
+      <thead>
+        <tr>
+          <th *ngFor="let header of printheaders" style="background-color: maroon; color: white;">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let Income of page; index as i">
+             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata"  style="white-space: nowrap;">{{formatDate(Income.p.Date)}}</td>
+          <td Class="tbldata">{{Income.p.SiteName}}</td>
+          <td Class="tbldata">{{Income.p.LedgerName}}</td>
+          <td Class="tbldata">{{Income.p.SubLedgerName}}</td>
+          <td Class="tbldata">{{Income.p.Reason}}</td>
+          <td Class="tbldata">{{Income.p.IncomeAmount }}</td>
+          <td Class="tbldata">{{Income.p.ShreesBalance}}</td>
+          <td Class="tbldata">{{Income.p.ModeOfPaymentName}}</td>
+          <td Class="tbldata">{{Income.p.Narration}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

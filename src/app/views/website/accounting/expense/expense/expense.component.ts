@@ -27,6 +27,7 @@ export class ExpenseComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   headers: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Recipient Name', 'Reason', 'Expense Amount', 'Given Amount', 'Remaining Amount', 'Shree Balance', 'Mode of Payment', 'Narration', 'Action'];
+  printheaders: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Recipient Name', 'Reason', 'Expense Amount', 'Given Amount', 'Remaining Amount', 'Shree Balance', 'Mode of Payment', 'Narration'];
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
@@ -89,6 +90,41 @@ export class ExpenseComponent implements OnInit {
       }
     );
   };
+
+  getAllPaginatedPages(): any[][] {
+    const pages = [];
+    for (let i = 0; i < this.DisplayMasterList.length; i += this.pageSize) {
+      pages.push(this.DisplayMasterList.slice(i, i + this.pageSize));
+    }
+    return pages;
+  }
+
+  printReport(): void {
+    const printContents = document.getElementById('print-section')?.innerHTML;
+    if (printContents) {
+      const popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+      popupWin?.document.write(`
+      <html>
+        <head>
+          <title>Accounting Report</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 10px; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+            th, td { border: 1px solid black; padding: 8px; text-align: left; }
+            .print-page { page-break-after: always; }
+            @media print {
+              .print-page:last-child { page-break-after: auto; }
+            }
+          </style>
+        </head>
+        <body onload="window.print();window.close()">
+          ${printContents}
+        </body>
+      </html>
+    `);
+      popupWin?.document.close();
+    }
+  }
 
   // For Pagination  start ----
   loadPaginationData = () => {

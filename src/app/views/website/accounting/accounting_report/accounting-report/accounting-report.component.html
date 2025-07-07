@@ -35,7 +35,7 @@
       <tbody>
         <tr *ngFor="let report of paginatedList(); index as i">
           <td class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td class="tbldata">{{ formatDate(report.p.TransDateTime) }}</td>
+          <td class="tbldata" style="white-space: nowrap;">{{ formatDate(report.p.TransDateTime) }}</td>
           <td class="tbldata">{{ report.p.PayerName?.trim() ? (report.p.PayerName | titleCase) : '--' }} </td>
           <td class="tbldata">{{ report.p.RecipientName?.trim() ? (report.p.RecipientName | titleCase) : '--' }}</td>
           <td class="tbldata">{{ report.p.SiteName }}</td>
@@ -69,22 +69,22 @@
     <table class="table table-bordered print-table">
       <thead>
         <tr>
-          <th *ngFor="let header of headers">{{ header }}</th>
+          <th *ngFor="let header of headers" style="background-color: maroon; color: white;">{{ header }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let report of page; index as i">
-          <td>{{ pageIndex * pageSize + i + 1 }}</td>
-          <td>{{ formatDate(report.p.TransDateTime) }}</td>
+          <td class="tbldata">{{ pageIndex * pageSize + i + 1 }}</td>
+          <td class="tbldata"  style="white-space: nowrap;">{{ formatDate(report.p.TransDateTime) }}</td>
           <td class="tbldata">{{ report.p.PayerName?.trim() ? (report.p.PayerName | titleCase) : '--' }} </td>
           <td class="tbldata">{{ report.p.RecipientName?.trim() ? (report.p.RecipientName | titleCase) : '--' }}</td>
-          <td>{{ report.p.SiteName }}</td>
-          <td>{{ report.p.Reason }}</td>
-          <td>{{ report.p.IncomeAmount | currency: 'INR' }}</td>
-          <td>{{ report.p.GivenAmount | currency: 'INR' }}</td>
-          <td>{{ report.p.ShreesBalance | currency: 'INR' }}</td>
-          <td>{{ report.p.ModeOfPaymentName }}</td>
-          <td>{{ report.p.Narration }}</td>
+          <td class="tbldata">{{ report.p.SiteName }}</td>
+          <td class="tbldata">{{ report.p.Reason }}</td>
+          <td class="tbldata">{{ report.p.IncomeAmount | currency: 'INR' }}</td>
+          <td class="tbldata">{{ report.p.GivenAmount | currency: 'INR' }}</td>
+          <td class="tbldata">{{ report.p.ShreesBalance | currency: 'INR' }}</td>
+          <td class="tbldata">{{ report.p.ModeOfPaymentName }}</td>
+          <td class="tbldata">{{ report.p.Narration }}</td>
         </tr>
       </tbody>
     </table>
