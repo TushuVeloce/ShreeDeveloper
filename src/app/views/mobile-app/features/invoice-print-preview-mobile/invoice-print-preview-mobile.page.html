@@ -1,0 +1,169 @@
+<app-header-with-back-handler [title]="'Preview Print'"></app-header-with-back-handler>
+
+<ion-content class="form-container" style="--padding-top: 0;">
+  <div style="display: flex; justify-content: flex-end; align-items: center; padding: 12px 16px 0 16px;">
+    <ion-button (click)="onShare()" size="small" fill="outline" color="primary">
+      <ion-icon slot="start" name="share-outline"></ion-icon>
+      <ion-label>Share</ion-label>
+    </ion-button>
+  </div>
+
+  <div #PrintContainer style="font-family: sans-serif; margin: 0; padding: 10px; font-size: 14px; color: #000;">
+
+    <div style="max-width: 100%; margin: auto; border: 1px solid #ccc;">
+      <!-- Header -->
+      <div style="padding-bottom: 10px; font-size: small">
+        <h2 style="color: maroon; text-align: center; margin-top: 10px; font-weight: 500;"> <b>Receipt</b></h2>
+      </div>
+
+      <!-- Logo & Info -->
+      <div>
+        <table style="width: 90%; margin: 0 5% 20px 5%; font-size: xx-small">
+          <tr>
+            <td style="vertical-align: top; text-align: left; width: 20%; border: none;">
+              <img src="/assets/logos/ShreeIcon.png" alt="Company Logo" height="60" class="mb-2" />
+              <!-- <strong>
+                <div>{{Entity.p.CompanyName}}</div>
+                <div>{{CompanyEntity.p.AddressLine1}}</div>
+                <div>{{CompanyEntity.p.AddressLine2}}</div>
+                <div>{{CompanyEntity.p.CityName}} - {{CompanyEntity.p.PinCode}}</div>
+                <div>{{CompanyEntity.p.Contacts}}</div>
+              </strong> -->
+            </td>
+            <td style="width: 50%;  border: none;"></td>
+            <td style="vertical-align: center; border: none;">
+              <!-- <div style="display: flex; justify-content: space-between;"><strong>DATE</strong> <strong>{{
+                  this.Entity.p.PurchaseOrderDate }}</strong> </div>
+              <br> -->
+              <!-- <div style="display: flex; justify-content: space-between;"><strong>Challan No</strong> <strong>{{
+                  this.Entity.p.ChalanNo }}</strong> </div> -->
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Bill To Section -->
+
+      <div
+        style="background-color: maroon; color: white; font-weight: bold; padding: 5px 10px; width: fit-content; margin-left: 5%; width: 40%;font-size: x-small">
+        BILL TO
+      </div>
+      <div style="display: flex; justify-content: center;font-size: xx-small">
+        <table style="width: 90%; margin: 10px 0 20px 0;">
+          <tr>
+            <td style="width: 20%; text-align: left; vertical-align: top; border: none;">
+              <strong>
+                <!-- <div> {{ VendorEntity.p.Name }}</div>
+                <div>{{ VendorEntity.p.TradeName }}</div>
+                <div>{{ VendorEntity.p.AddressLine1 }}</div>
+                <div>{{ VendorEntity.p.AddressLine2 }}</div>
+                <div>{{ VendorEntity.p.MobileNo }}</div> -->
+              </strong>
+            </td>
+            <td style="width: 50%;  border: none;"></td>
+            <td style="text-align: right; vertical-align: top; border: none;">
+              <!-- <strong>
+                <div>{{ Entity.p.VendorCompanyName }}</div>
+                <div>{{ Entity.p.StageName }}</div>
+                <div>Service Type</div>
+                <div>{{ Entity.p.VehicleNo }}</div>
+              </strong> -->
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Table Header -->
+      <table style="width: 100%; border-collapse: collapse; text-align: center;font-size: xx-small">
+        <thead>
+          <tr style="background-color: maroon; color: white;">
+            <th style="padding: 4px; border: none;">Sr.No</th>
+            <th style="padding: 4px; border: none;">DESCRIPTION</th>
+            <th style="padding: 4px; border: none;">UNIT</th>
+            <th style="padding: 4px; border: none;">Qty.</th>
+            <th style="padding: 4px; border: none;">RATE</th>
+            <th style="padding: 4px; border: none;">GST</th>
+            <th style="padding: 4px; border: none;">DELIVERY CHARGES</th>
+            <th style="padding: 4px; border: none;">AMOUNT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- <tr *ngFor="
+          let material of Entity.p.MaterialPurchaseOrderDetailsArray;
+          let i = index
+        ">
+            <td style="padding: 4px; border: none;">1.</td>
+            <td style="padding: 4px; border: none;">{{material.MaterialName}}</td>
+            <td style="padding: 4px; border: none;">{{ material.UnitName }}</td>
+            <td style="padding: 4px; border: none;">{{ material.OrderedQty }}</td>
+            <td style="padding: 4px; border: none;">{{
+              !material.DiscountedRate
+              ? material.Rate
+              : material.DiscountedRate
+              }}</td>
+            <td style="padding: 4px; border: none;">{{ material.Gst }}</td>
+            <td style="padding: 4px; border: none;">{{ material.DeliveryCharges }}</td>
+            <td style="padding: 4px; border: none;">{{ material.TotalAmount }}</td>
+          </tr> -->
+          <!-- Total -->
+          <tr>
+            <td style="border: none;"></td>
+            <td style="border: none;"></td>
+            <td style="border: none;"></td>
+            <td style="border: none;"></td>
+            <td style="border: none;"></td>
+            <td colspan="2"
+              style="padding: 8px; border: none; text-align: center; font-weight: bold; background-color: #fef4d4;">
+              <strong>TOTAL</strong>
+            </td>
+            <!-- <td style="padding: 2px; border: none; font-weight: bold; background-color: #fef4d4;"><strong>₹
+                {{Entity.p.GrandTotal}}</strong>
+            </td> -->
+          </tr>
+          <!-- In Words -->
+          <tr>
+            <td style="border: none;"></td>
+            <td style="border: none;"></td>
+            <td style="border: none;"></td>
+            <td style="border: none;"></td>
+            <td style="border: none;"></td>
+            <!-- <td colspan="3" style="padding: 2px; border: none; text-align: start;"><strong>Inwords-{{
+                this.totalAmountInWords(Entity.p.GrandTotal) }}</strong></td> -->
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Comments -->
+      <div style="margin-top: 5px; ">
+        <p
+          style="background-color: #fef4d4; padding-left: 5%; padding-top: 10px; padding-bottom: 10px; font-size: x-small;">
+          <strong>OTHER
+            COMMENTS</strong>
+        </p>
+        <div style="margin-top: 5px; padding-left: 5%; font-size: xx-small;">
+          <p style="line-height: 1;">1. वरील तपशिला प्रमाणे माल ताब्यात मिळाला.</p>
+          <p style="line-height: 1;">2. ही पावती सेवा पुरवठादाराच्या नोंदीसाठी प्रदान करण्यात आली आहे..</p>
+          <p style="line-height: 1;">3. ही पावती भविष्यातील लेखाजोखासाठी जतन करावी.</p>
+        </div>
+      </div>
+
+      <!-- Footer Signature -->
+      <!-- <div style="margin-top: 30px; display: flex; justify-content: space-between;font-size: xx-small">
+        <p style="margin-left: 5%;"><strong>Sign : {{Entity.p.CompanyOwnerName}}</strong></p>
+        <p style="margin-right: 5%;"> <strong>{{Entity.p.CompanyOwnerName}}</strong>
+        </p>
+      </div> -->
+
+      <p style="text-align: center; line-height: 1;font-size: xx-small">If you have any questions about this invoice,
+        please contact</p>
+      <p style="text-align: center; line-height: 1;font-size: xx-small">{{Entity.p.CompanyName}}
+      </p>
+      <h5 style="text-align: center; line-height: 1;font-size: xx-small"><strong><i>Thank You For Your
+            Business!</i></strong></h5>
+      <blockquote style="text-align: center; line-height: 0.5; margin-top: 2%;font-size: xx-small"><strong>Computer
+          Generated
+          Print</strong>
+      </blockquote>
+    </div>
+  </div>
+</ion-content>
