@@ -172,28 +172,28 @@ export class AccountingReport implements IPersistable<AccountingReport> {
     return AccountingReport.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-     let req = new AccountingReportFetchRequest();
-     req.CompanyRef = CompanyRef
-     let tdResponse = await AccountingReport.FetchTransportData(req, errorHandler) as TransportData;
-     return AccountingReport.ListFromTransportData(tdResponse);
-   }
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new AccountingReportFetchRequest();
+    req.CompanyRef = CompanyRef
+    let tdResponse = await AccountingReport.FetchTransportData(req, errorHandler) as TransportData;
+    return AccountingReport.ListFromTransportData(tdResponse);
+  }
 
-   public static async FetchEntireListByStartDateandEndDate(StartDate:string, EndDate:string, accountingreport:number,CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-     let req = new AccountingReportFetchRequest();
-     req.CompanyRef = CompanyRef
-     if(StartDate){
-        req.StartDate = StartDate
-     }
-     if(EndDate){
+  public static async FetchEntireListByStartDateandEndDate(StartDate: string, EndDate: string, accountingreport: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new AccountingReportFetchRequest();
+    req.CompanyRef = CompanyRef
+    if (StartDate) {
+      req.StartDate = StartDate
+    }
+    if (EndDate) {
       req.EndDate = EndDate
-     }
-     if(accountingreport){
+    }
+    if (accountingreport) {
       req.AccountingReport = accountingreport
-     }
-     let tdResponse = await AccountingReport.FetchTransportData(req, errorHandler) as TransportData;
-     return AccountingReport.ListFromTransportData(tdResponse);
-   }
+    }
+    let tdResponse = await AccountingReport.FetchTransportData(req, errorHandler) as TransportData;
+    return AccountingReport.ListFromTransportData(tdResponse);
+  }
 
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
