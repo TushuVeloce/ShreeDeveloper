@@ -1,5 +1,6 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AccountingReports, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { AccountingReport } from 'src/app/classes/domain/entities/website/accounting/accountingreport/accoiuntingreport';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -17,6 +18,8 @@ export class AccountingReportComponent  implements OnInit {
 Entity: AccountingReport = AccountingReport.CreateNewInstance();
    MasterList: AccountingReport[] = [];
    DisplayMasterList: AccountingReport[] = [];
+   AccountingReportList = DomainEnums.AccountingReportList();
+   AccountingReport = AccountingReports;
    SearchString: string = '';
    SelectedAccountingReport: AccountingReport = AccountingReport.CreateNewInstance();
    CustomerRef: number = 0;
@@ -31,7 +34,9 @@ Entity: AccountingReport = AccountingReport.CreateNewInstance();
      private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
    ) {
      effect(async () => {
-       await this.getAccountingReportListByCompanyRef();
+       this.Entity.p.AccountingReport = AccountingReports.CurrentFinancialYear
+      //  await this.getAccountingReportListByCompanyRef();
+       await this.FetchEntireListByStartDateandEndDate();
        this.Entity.p.StartDate = ''
        this.Entity.p.EndDate = ''
      });
@@ -52,7 +57,6 @@ Entity: AccountingReport = AccountingReport.CreateNewInstance();
        return;
      }
      let lst = await AccountingReport.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-     console.log('lst :', lst);
      this.MasterList = lst;
      this.DisplayMasterList = this.MasterList;
      this.loadPaginationData();
@@ -65,10 +69,13 @@ Entity: AccountingReport = AccountingReport.CreateNewInstance();
        await this.uiUtils.showErrorToster('Company not Selected');
        return;
      }
-     if(this.Entity.p.StartDate == '' && this.Entity.p.EndDate == ''){
-        this.getAccountingReportListByCompanyRef()
+     console.log('(this.Entity.p.AccountingReport == AccountingReports.All :', (this.Entity.p.AccountingReport));
+     if(this.Entity.p.AccountingReport == AccountingReports.All){
+     this.getAccountingReportListByCompanyRef()
+     return
      }
-     let lst = await AccountingReport.FetchEntireListByStartDateandEndDate(this.Entity.p.StartDate, this.Entity.p.EndDate, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+     console.log('this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport, :', this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport,);
+     let lst = await AccountingReport.FetchEntireListByStartDateandEndDate(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
      this.MasterList = lst;
      this.DisplayMasterList = this.MasterList;
      this.loadPaginationData();
