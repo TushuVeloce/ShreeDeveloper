@@ -94,11 +94,12 @@ export class Expense implements IPersistable<Expense> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
 
-    // if (this.p.Name == '') {
-    //   vra.add('Name', 'Name cannot be blank.');
-    // } else if (!new RegExp(ValidationPatterns.SIUnit).test(this.p.Name)) {
-    //   vra.add('Name', ValidationMessages.SIUnitMsg + ' for Name');
-    // }
+    if (this.p.CompanyRef <= 0) { vra.add('CompanyRef', 'Company Name cannot be blank.'); }
+    if (this.p.SiteRef <= 0) { vra.add('SiteRef', 'Site Name cannot be blank.'); }
+    if (this.p.LedgerRef <= 0) { vra.add('LedgerRef', 'Ledger cannot be blank.'); }
+    if (this.p.SubLedgerRef <= 0) { vra.add('SubLedgerRef', 'Sub Ledger cannot be blank.'); }
+    if (this.p.GivenAmount <= 0) { vra.add('GivenAmount', 'Given Amount cannot be blank.'); }
+    if (this.p.RecipientRef <= 0) { vra.add('RecipientRef', 'Recipient cannot be blank.'); }
   }
 
   public MergeIntoTransportData(td: TransportData) {
