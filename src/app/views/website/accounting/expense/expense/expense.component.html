@@ -49,6 +49,14 @@
             <Delete-Icon (deleteClicked)="onDeleteClicked(Expense)" />
           </td>
         </tr>
+        <tr>
+          <td class="tbldata" colspan="2"><b>Total Expense</b></td>
+          <td class="tbldata" colspan="5"></td>
+          <td class="tbldata">
+            <b>{{ getTotalExpense() | currency : "INR" }}</b>
+          </td>
+          <td class="tbldata" colspan="5"></td>
+        </tr>
       </tbody>
     </nz-table>
   </div>
@@ -69,19 +77,19 @@
     </thead>
     <tbody>
       <tr *ngFor="let Expense of DisplayMasterList; index as i">
-          <td class="tbldata">{{ i + 1 }}</td>
-           <td Class="tbldata" style="white-space: nowrap;">{{ formatDate(Expense.p.Date) }}</td>
-          <td Class="tbldata">{{ Expense.p.SiteName }}</td>
-          <td Class="tbldata">{{ Expense.p.LedgerName }}</td>
-          <td Class="tbldata">{{ Expense.p.SubLedgerName }}</td>
-          <td Class="tbldata">{{ Expense.p.RecipientName | titleCase}}</td>
-          <td Class="tbldata">{{ Expense.p.Reason }}</td>
-          <td Class="tbldata"> {{ Expense.p.InvoiceAmount| currency : "INR" }}</td>
-          <td Class="tbldata"> {{ Expense.p.GivenAmount | currency : "INR" }}</td>
-          <td Class="tbldata"> {{ Expense.p.RemainingAmount | currency : "INR" }}</td>
-          <td Class="tbldata"> {{ Expense.p.ShreesBalance | currency : "INR" }}</td>
-          <td Class="tbldata">{{ Expense.p.ModeOfPaymentName }}</td>
-          <!-- <td Class="tbldata">{{ Expense.p.Narration }}</td> -->
+        <td class="tbldata">{{ i + 1 }}</td>
+        <td Class="tbldata" style="white-space: nowrap;">{{ formatDate(Expense.p.Date) }}</td>
+        <td Class="tbldata">{{ Expense.p.SiteName }}</td>
+        <td Class="tbldata">{{ Expense.p.LedgerName }}</td>
+        <td Class="tbldata">{{ Expense.p.SubLedgerName }}</td>
+        <td Class="tbldata">{{ Expense.p.RecipientName | titleCase}}</td>
+        <td Class="tbldata">{{ Expense.p.Reason }}</td>
+        <td Class="tbldata"> {{ Expense.p.InvoiceAmount| currency : "INR" }}</td>
+        <td Class="tbldata"> {{ Expense.p.GivenAmount | currency : "INR" }}</td>
+        <td Class="tbldata"> {{ Expense.p.RemainingAmount | currency : "INR" }}</td>
+        <td Class="tbldata"> {{ Expense.p.ShreesBalance | currency : "INR" }}</td>
+        <td Class="tbldata">{{ Expense.p.ModeOfPaymentName }}</td>
+        <!-- <td Class="tbldata">{{ Expense.p.Narration }}</td> -->
       </tr>
     </tbody>
   </table>

@@ -9,6 +9,7 @@ export class AccountingReportFetchRequest
     public static readonly FetchRequestType: string = "IncomeExpenseLedgerFetchRequest";
 
     AccountingReportRefs: number[] = [];
+    AccountingReport: number = 0;
     CompanyRef: number = 0;
     StartDate: string = '';
     EndDate: string = '';

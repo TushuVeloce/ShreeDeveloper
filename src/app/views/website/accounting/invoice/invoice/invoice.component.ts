@@ -18,6 +18,7 @@ export class InvoiceComponent implements OnInit {
   MasterList: Invoice[] = [];
   DisplayMasterList: Invoice[] = [];
   SearchString: string = '';
+  TotalInvoice: number = 0;
   SelectedInvoice: Invoice = Invoice.CreateNewInstance();
   CustomerRef: number = 0;
   pageSize = 10; // Items per page
@@ -26,7 +27,7 @@ export class InvoiceComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Date','Bill No', 'Site Name', 'Ledger', 'Sub Ledger', 'Description', 'Recipient Name', 'Bill Amount', 'Action'];
+  headers: string[] = ['Sr.No.', 'Date', 'Bill No', 'Site Name', 'Ledger', 'Sub Ledger', 'Description', 'Recipient Name', 'Bill Amount', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
   ) {
@@ -93,6 +94,14 @@ export class InvoiceComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  getTotalInvoice = () => {
+    this.TotalInvoice = this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.InvoiceAmount || 0);
+    }, 0);
+
+    return this.TotalInvoice;
   }
 
   onPageChange = (pageIndex: number): void => {

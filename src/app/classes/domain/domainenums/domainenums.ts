@@ -183,6 +183,12 @@ export enum Unit {
   MTR = 200,
 }
 
+export enum AccountingReports {
+  None = 0,
+  All = 100,
+  CurrentFinancialYear = 200,
+}
+
 export enum MaterialRequisitionStatuses {
   None = 0,
   Approved = 100,
@@ -1671,6 +1677,41 @@ export class DomainEnums {
     if (withAllOption) {
       let allEntry = {
         Ref: ModeOfPayments.None,
+        Name: allOptionName,
+      };
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+   public static AccountingReportName(itemType: AccountingReports) {
+    switch (itemType) {
+      case AccountingReports.All:
+        return 'All';
+      case AccountingReports.CurrentFinancialYear:
+        return 'Current Financial Year';
+      default:
+        return '';
+    }
+  }
+
+  public static AccountingReportList(
+    withAllOption: boolean = false,
+    allOptionName: string = '<All>'
+  ) {
+    let result = [
+      {
+        Ref: AccountingReports.All,
+        Name: DomainEnums.AccountingReportName(AccountingReports.All),
+      },
+      {
+        Ref: AccountingReports.CurrentFinancialYear,
+        Name: DomainEnums.AccountingReportName(AccountingReports.CurrentFinancialYear),
+      }
+    ];
+    if (withAllOption) {
+      let allEntry = {
+        Ref: AccountingReports.None,
         Name: allOptionName,
       };
       result.unshift(allEntry);

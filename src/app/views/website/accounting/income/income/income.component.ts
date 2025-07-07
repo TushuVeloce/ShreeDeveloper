@@ -18,6 +18,7 @@ export class IncomeComponent implements OnInit {
   MasterList: Income[] = [];
   DisplayMasterList: Income[] = [];
   SearchString: string = '';
+  TotalIncome: number = 0;
   SelectedIncome: Income = Income.CreateNewInstance();
   CustomerRef: number = 0;
   pageSize = 10; // Items per page
@@ -92,6 +93,13 @@ export class IncomeComponent implements OnInit {
     );
   };
 
+  getTotalIncome = () => {
+    this.TotalIncome = this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.IncomeAmount || 0);
+    }, 0);
+
+    return this.TotalIncome;
+  }
 
   printIncome(): void {
     const printContents = document.getElementById('print-section')?.innerHTML;

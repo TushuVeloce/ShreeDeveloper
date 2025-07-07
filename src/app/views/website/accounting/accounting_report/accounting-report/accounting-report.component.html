@@ -20,6 +20,13 @@
     <input type="date" [(ngModel)]="Entity.p.EndDate" name="EndDate" class="form-control" id="EndDate"
       placeholder="Enter End Date" (ngModelChange)="FetchEntireListByStartDateandEndDate()" />
   </div>
+  <div class="col-md-4">
+    <label><b>Accounting Report</b></label>
+    <nz-select class="nzSelect-light" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      id="AccountingReport" name="AccountingReport" [nzSize]="'large'" [(ngModel)]="Entity.p.AccountingReport" (ngModelChange)="FetchEntireListByStartDateandEndDate()" >
+      <nz-option *ngFor="let mode of AccountingReportList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
+    </nz-select>
+  </div>
 </div>
 
 <!-- Live Table -->
@@ -40,8 +47,10 @@
           <td class="tbldata">{{ report.p.RecipientName?.trim() ? (report.p.RecipientName | titleCase) : '--' }}</td>
           <td class="tbldata">{{ report.p.SiteName }}</td>
           <td class="tbldata">{{ report.p.Reason }}</td>
-          <td class="tbldata">{{ report.p.IncomeAmount && report.p.IncomeAmount !== 0 ? (report.p.IncomeAmount | currency: 'INR') : '--'}}</td>
-          <td class="tbldata">{{ report.p.GivenAmount && report.p.GivenAmount !== 0 ? (report.p.GivenAmount | currency: 'INR') : '--' }}</td>
+          <td class="tbldata">{{ report.p.IncomeAmount && report.p.IncomeAmount !== 0 ? (report.p.IncomeAmount |
+            currency: 'INR') : '--'}}</td>
+          <td class="tbldata">{{ report.p.GivenAmount && report.p.GivenAmount !== 0 ? (report.p.GivenAmount | currency:
+            'INR') : '--' }}</td>
           <td class="tbldata">{{ report.p.ShreesBalance | currency: 'INR' }}</td>
           <td class="tbldata">{{ report.p.ModeOfPaymentName }}</td>
           <td class="tbldata">{{ report.p.Narration }}</td>
@@ -73,17 +82,19 @@
     </thead>
     <tbody>
       <tr *ngFor="let report of DisplayMasterList; index as i">
-          <td class="tbldata">{{ i + 1 }}</td>
-          <td class="tbldata" style="white-space: nowrap;">{{ formatDate(report.p.TransDateTime) }}</td>
-          <td class="tbldata">{{ report.p.PayerName?.trim() ? (report.p.PayerName | titleCase) : '--' }} </td>
-          <td class="tbldata">{{ report.p.RecipientName?.trim() ? (report.p.RecipientName | titleCase) : '--' }}</td>
-          <td class="tbldata">{{ report.p.SiteName }}</td>
-          <td class="tbldata">{{ report.p.Reason }}</td>
-          <td class="tbldata">{{ report.p.IncomeAmount && report.p.IncomeAmount != 0 ? (report.p.IncomeAmount  | currency: 'INR'): '--'}}</td>
-          <td class="tbldata">{{ report.p.GivenAmount && report.p.GivenAmount != 0 ? (report.p.GivenAmount  | currency: 'INR'): '--'}}</td>
-          <td class="tbldata">{{ report.p.ShreesBalance | currency: 'INR' }}</td>
-          <td class="tbldata">{{ report.p.ModeOfPaymentName }}</td>
-          <td class="tbldata">{{ report.p.Narration }}</td>
+        <td class="tbldata">{{ i + 1 }}</td>
+        <td class="tbldata" style="white-space: nowrap;">{{ formatDate(report.p.TransDateTime) }}</td>
+        <td class="tbldata">{{ report.p.PayerName?.trim() ? (report.p.PayerName | titleCase) : '--' }} </td>
+        <td class="tbldata">{{ report.p.RecipientName?.trim() ? (report.p.RecipientName | titleCase) : '--' }}</td>
+        <td class="tbldata">{{ report.p.SiteName }}</td>
+        <td class="tbldata">{{ report.p.Reason }}</td>
+        <td class="tbldata">{{ report.p.IncomeAmount && report.p.IncomeAmount != 0 ? (report.p.IncomeAmount | currency:
+          'INR'): '--'}}</td>
+        <td class="tbldata">{{ report.p.GivenAmount && report.p.GivenAmount != 0 ? (report.p.GivenAmount | currency:
+          'INR'): '--'}}</td>
+        <td class="tbldata">{{ report.p.ShreesBalance | currency: 'INR' }}</td>
+        <td class="tbldata">{{ report.p.ModeOfPaymentName }}</td>
+        <td class="tbldata">{{ report.p.Narration }}</td>
       </tr>
     </tbody>
   </table>

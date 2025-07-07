@@ -12,6 +12,7 @@ import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 import { AccountingReportFetchRequest } from "./accountingreportrequest";
+import { AccountingReports } from "src/app/classes/domain/domainenums/domainenums";
 
 
 export class AccountingReportProps {
@@ -31,6 +32,7 @@ export class AccountingReportProps {
   public Narration: string = ''
   public StartDate: string = ''
   public EndDate: string = ''
+  public AccountingReport: number = AccountingReports.CurrentFinancialYear
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -177,7 +179,7 @@ export class AccountingReport implements IPersistable<AccountingReport> {
      return AccountingReport.ListFromTransportData(tdResponse);
    }
 
-   public static async FetchEntireListByStartDateandEndDate(StartDate:string, EndDate:string, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+   public static async FetchEntireListByStartDateandEndDate(StartDate:string, EndDate:string, accountingreport:number,CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
      let req = new AccountingReportFetchRequest();
      req.CompanyRef = CompanyRef
      if(StartDate){
@@ -185,6 +187,9 @@ export class AccountingReport implements IPersistable<AccountingReport> {
      }
      if(EndDate){
       req.EndDate = EndDate
+     }
+     if(accountingreport){
+      req.AccountingReport = accountingreport
      }
      let tdResponse = await AccountingReport.FetchTransportData(req, errorHandler) as TransportData;
      return AccountingReport.ListFromTransportData(tdResponse);
