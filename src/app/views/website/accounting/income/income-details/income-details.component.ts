@@ -46,8 +46,6 @@ export class IncomeDetailsComponent implements OnInit {
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
-  @ViewChild('NameCtrl') NameInputControl!: NgModel;
-
   constructor(
     private router: Router,
     private uiUtils: UIUtils,
@@ -198,7 +196,6 @@ export class IncomeDetailsComponent implements OnInit {
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Date);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {
@@ -210,7 +207,6 @@ export class IncomeDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Income saved successfully');
         this.Entity = Income.CreateNewInstance();
-        // this.resetAllControls();
         this.getCurrentBalanceByCompanyRef();
 
       } else {
@@ -237,14 +233,6 @@ export class IncomeDetailsComponent implements OnInit {
     } else {
       await this.router.navigate(['/homepage/Website/Income']);
     }
-  }
-
-  resetAllControls = () => {
-    // reset touched
-    this.NameInputControl.control.markAsUntouched();
-
-    // reset dirty
-    this.NameInputControl.control.markAsPristine();
   }
 }
 

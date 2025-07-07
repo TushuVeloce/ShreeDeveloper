@@ -83,10 +83,7 @@
           <div>
             <label>Reason</label>
             <input type="text" [(ngModel)]="Entity.p.Reason" name="Reason" class="form-control" id="Reason" required
-              placeholder="Enter Reason" #ReasonCtrl="ngModel" (blur)="ReasonCtrl.control.markAsTouched()" />
-            <div *ngIf="(ReasonCtrl.invalid && (ReasonCtrl.touched || ReasonCtrl.dirty))">
-              <span class="validation-text" *ngIf="ReasonCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+              placeholder="Enter Reason" />
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
@@ -120,11 +117,7 @@
           <div>
             <label>Narration</label>
             <input type="text" [(ngModel)]="Entity.p.Narration" name="Narration" class="form-control" id="Narration"
-              required placeholder="Enter Narration" #NarrationCtrl="ngModel"
-              (blur)="NarrationCtrl.control.markAsTouched()" />
-            <div *ngIf="(NarrationCtrl.invalid && (NarrationCtrl.touched || NarrationCtrl.dirty))">
-              <span class="validation-text" *ngIf="NarrationCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+              required placeholder="Enter Narration" />
           </div>
         </div>
       </div>
