@@ -71,8 +71,8 @@ export class InvoicePrintPreviewMobilePage implements OnInit {
   totalAmountInWords(number: number): string {
      return this.utils.convertNumberToWords(number);
    }
- 
- 
+
+
    // Extracted from services date conversion //
    formatDate = (date: string | Date): string => {
      return this.DateconversionService.formatDate(date);

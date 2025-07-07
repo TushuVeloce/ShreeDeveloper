@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -12,6 +12,10 @@ import { LoadingService } from '../../core/loading.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { Utils } from 'src/app/services/utils.service';
+import { Directory, Filesystem } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-income-mobile',
@@ -50,6 +54,9 @@ export class IncomeMobilePage implements OnInit {
   ngOnInit = async () => {
     await this.loadIncomeIfEmployeeExists();
   };
+
+   @ViewChild('PrintContainer')
+  PrintContainer!: ElementRef;
 
   ionViewWillEnter = async () => {
     await this.loadIncomeIfEmployeeExists();
@@ -158,40 +165,93 @@ export class IncomeMobilePage implements OnInit {
     }
   }
 
-  printIncome(): void {
-    const printContents = document.getElementById('print-section')?.innerHTML;
-    if (printContents) {
-      const popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
-      popupWin?.document.write(`
-      <html>
-        <head>
-          <title>Income</title>
-          <style>
-         * {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-            font-family: sans-serif;
-           }
-            table {
-              border-collapse: collapse;
-              width: 100%;
-            }
+ printIncome() {
+  const printContents = document.getElementById('print-section')?.innerHTML;
+  const popupWin = window.open('', '_blank', 'width=800,height=600');
+  popupWin?.document.open();
+  popupWin?.document.write(`
+    <html>
+      <head>
+        <title>Print</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; }
+          .info-row-of-model { margin-bottom: 10px; }
+          .label { font-weight: bold; display: inline-block; width: 180px; }
+          .value { display: inline-block; }
+        </style>
+      </head>
+      <body onload="window.print(); window.close();">
+        ${printContents}
+      </body>
+    </html>
+  `);
+  popupWin?.document.close();
+}
 
-            th, td {
-              border: 1px solid  rgb(169, 167, 167);
-              text-align: center;
-              padding: 15px;
-            }
-          </style>
-        </head>
-        <body onload="window.print();window.close()">
-          ${printContents}
-        </body>
-      </html>
-    `);
-      popupWin?.document.close();
+
+    async onShare() {
+    try {
+      const element = this.PrintContainer.nativeElement;
+
+      // 1. Capture the container as canvas
+      const canvas = await html2canvas(element, { scale: 2 });
+
+      // 2. Convert canvas to image data URL
+      const imgData = canvas.toDataURL('image/png');
+
+      // 3. Create PDF from the image
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'px',
+        format: [canvas.width, canvas.height]
+      });
+
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+
+      // 4. Get PDF as blob
+      const pdfBlob = pdf.output('blob');
+
+      // 5. Convert blob to base64
+      const base64 = await this.convertBlobToBase64(pdfBlob) as string;
+
+      // 6. Save PDF file to device storage
+      const fileName = `Receipt_${this.Entity.p.Ref}.pdf`;
+      await Filesystem.writeFile({
+        path: fileName,
+        data: base64,
+        directory: Directory.Documents,
+        recursive: true,
+      });
+
+      // 7. Get native file URI for sharing
+      const fileUriResult = await Filesystem.getUri({
+        directory: Directory.Documents,
+        path: fileName,
+      });
+
+      // 8. Share the actual saved file
+      await Share.share({
+        title: 'Share Receipt PDF',
+        text: 'Here is your receipt PDF.',
+        url: fileUriResult.uri,  // Native file URI — this shares the actual file!
+        dialogTitle: 'Share Receipt PDF'
+      });
+
+    } catch (error) {
+      console.error('Error while sharing receipt PDF:', error);
     }
   }
+  // Helper function to convert blob to base64 string
+  private convertBlobToBase64 = (blob: Blob) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = () => {
+      const dataUrl = reader.result as string;
+      const base64 = dataUrl.split(',')[1]; // remove prefix
+      resolve(base64);
+    };
+    reader.readAsDataURL(blob);
+  });
 
   AddIncome = () => {
     if (this.companyRef <= 0) {
