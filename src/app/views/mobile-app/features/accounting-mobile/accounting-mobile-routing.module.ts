@@ -21,7 +21,7 @@ const routes: Routes = [
     loadChildren: () => import('../invoice-mobile/invoice-mobile.module').then(m => m.InvoiceMobilePageModule)
   },
   {
-    path: 'Office',
+    path: 'office',
     loadChildren: () => import('../accounting-report-mobile/accounting-report-mobile.module').then(m => m.AccountingReportMobilePageModule)
   },
 ];
