@@ -55,7 +55,7 @@ Entity: AccountingReport = AccountingReport.CreateNewInstance();
   ionViewWillEnter = async () => {
     await this.loadAccountingReportIfEmployeeExists();
   };
-
+ 
   async handleRefresh(event: CustomEvent) {
     await this.loadAccountingReportIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
@@ -84,24 +84,24 @@ Entity: AccountingReport = AccountingReport.CreateNewInstance();
   }
 
   
-     getAccountingReportListByCompanyRef = async () => {
-       this.MasterList = [];
-       this.DisplayMasterList = [];
-       if (this.companyRef <= 0) {
-        //  await this.uiUtils.showErrorToster('Company not Selected');
-         await this.toastService.present('Company not selected', 1000, 'warning');
-         await this.haptic.warning();
-         return;
-       }
-       let lst = await AccountingReport.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
-         await this.toastService.present('Error'+errMsg, 1000, 'warning');
-        await this.haptic.error();
-      });
-       console.log('lst :', lst);
-       this.MasterList = lst;
-       this.DisplayMasterList = this.MasterList;
-     }
+    //  getAccountingReportListByCompanyRef = async () => {
+    //    this.MasterList = [];
+    //    this.DisplayMasterList = [];
+    //    if (this.companyRef <= 0) {
+    //     //  await this.uiUtils.showErrorToster('Company not Selected');
+    //      await this.toastService.present('Company not selected', 1000, 'warning');
+    //      await this.haptic.warning();
+    //      return;
+    //    }
+    //    let lst = await AccountingReport.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+    //     // await this.uiUtils.showErrorMessage('Error', errMsg)
+    //      await this.toastService.present('Error'+errMsg, 1000, 'warning');
+    //     await this.haptic.error();
+    //   });
+    //    console.log('lst :', lst);
+    //    this.MasterList = lst;
+    //    this.DisplayMasterList = this.MasterList;
+    //  }
   
     //  FetchEntireListByStartDateandEndDate = async () => {
     //    this.MasterList = [];
@@ -123,7 +123,41 @@ Entity: AccountingReport = AccountingReport.CreateNewInstance();
     //    this.MasterList = lst;
     //    this.DisplayMasterList = this.MasterList;
     //  }
-  
+     getAccountingReportListByCompanyRef = async () => {
+     this.MasterList = [];
+     this.DisplayMasterList = [];
+     if (this.companyRef <= 0) {
+      //  await this.uiUtils.showErrorToster('Company not Selected');
+       return;
+     }
+     let lst = await AccountingReport.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      // await this.uiUtils.showErrorMessage('Error', errMsg)
+    });
+     this.MasterList = lst;
+     this.DisplayMasterList = this.MasterList;
+    //  this.loadPaginationData();
+   }
+
+   FetchEntireListByStartDateandEndDate = async () => {
+     this.MasterList = [];
+     this.DisplayMasterList = [];
+     if (this.companyRef <= 0) {
+      //  await this.uiUtils.showErrorToster('Company not Selected');
+       return;
+     }
+     console.log('this.Entity.p.AccountingReport, :', this.Entity.p.AccountingReport,);
+    //  if(this.Entity.p.AccountingReport == AccountingReports.All){
+    //  this.getAccountingReportListByCompanyRef()
+    //  return
+    //  }
+     let lst = await AccountingReport.FetchEntireListByStartDateandEndDate(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport, this.companyRef, async errMsg => {
+      // await this.uiUtils.showErrorMessage('Error', errMsg)
+    });
+     this.MasterList = lst;
+     this.DisplayMasterList = this.MasterList;
+    //  this.loadPaginationData();
+   }
+
   printReport(): void {
     const printContents = document.getElementById('print-section')?.innerHTML;
     if (printContents) {

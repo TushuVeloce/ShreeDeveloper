@@ -29,11 +29,11 @@ export class AccountingMobilePage implements OnInit {
       label: 'Billing',
       routerPath: '/mobileapp/tabs/dashboard/accounting/invoice'
     },
-    {
-      icon: 'assets/icons/crm_mobile_app.png',
-      label: 'Office',
-      routerPath: '/mobileapp/tabs/dashboard/accounting/office'
-    },
+    // {
+    //   icon: 'assets/icons/crm_mobile_app.png',
+    //   label: 'Office',
+    //   routerPath: '/mobileapp/tabs/dashboard/accounting/office'
+    // },
   ];
 
 
