@@ -207,15 +207,15 @@ export class InvoiceDetailsComponent implements OnInit {
       let td = req.FormulateTransportData();
       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
       let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-  
+
       if (!tr.Successful) {
         await this.uiUtils.showErrorMessage('Error', tr.Message);
         return;
       }
-  
+
       let tdResult = JSON.parse(tr.Tag) as TransportData;
       let collections = tdResult?.MainData?.Collections;
-  
+
       if (Array.isArray(collections)) {
         for (const item of collections) {
           if (
@@ -335,7 +335,6 @@ export class InvoiceDetailsComponent implements OnInit {
     this.RateInputControl.control.markAsPristine();
     this.DieselQtyInputControl.control.markAsPristine();
     this.DieselRateInputControl.control.markAsPristine();
-    // await this.invoiceForm.resetForm();
   }
 }
 
