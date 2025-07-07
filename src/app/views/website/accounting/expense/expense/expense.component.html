@@ -1,21 +1,29 @@
 <div class="row">
   <div class="col-4 mb-2">
-    <h1 style="padding-top: 3px;" class="title title_light">Expense</h1>
+    <h1 style="padding-top: 3px" class="title title_light">Expense</h1>
   </div>
   <div class="col-4 mb-2 search-container_light">
     <app-shared-filter [masterList]="MasterList" [filterFields]="['Code', 'Name', 'UnitName']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">
-    <nz-button nz-button class="btn1" (click)='AddExpense()'>
+    <nz-button nz-button class="btn1" (click)="AddExpense()">
       Add Expense
     </nz-button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-4 mb-2"></div>
+  <div class="col-4 mb-2"></div>
+  <div class="col-4 mb-2 text-end">
+    <img class="no-print" src="/assets/icons/printer.png" alt="Print" title="Print" width="30px" height="30px"
+      style="cursor: pointer; padding-top: 4px" (click)="printReport()" />
   </div>
 </div>
 <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
-      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
           <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
@@ -24,18 +32,18 @@
       <tbody>
         <tr *ngFor="let Expense of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{formatDate(Expense.p.Date)}}</td>
-          <td Class="tbldata">{{Expense.p.SiteName}}</td>
-          <td Class="tbldata">{{Expense.p.LedgerName}}</td>
-          <td Class="tbldata">{{Expense.p.SubLedgerName}}</td>
-          <td Class="tbldata">{{Expense.p.RecipientName}}</td>
-          <td Class="tbldata">{{Expense.p.Reason}}</td>
-          <td Class="tbldata">{{Expense.p.InvoiceAmount}}</td>
-          <td Class="tbldata">{{Expense.p.GivenAmount}}</td>
-          <td Class="tbldata">{{Expense.p.RemainingAmount}}</td>
-          <td Class="tbldata">{{Expense.p.ShreesBalance}}</td>
-          <td Class="tbldata">{{Expense.p.ModeOfPaymentName}}</td>
-          <td Class="tbldata">{{Expense.p.Narration}}</td>
+          <td Class="tbldata" style="white-space: nowrap;">{{ formatDate(Expense.p.Date) }}</td>
+          <td Class="tbldata">{{ Expense.p.SiteName}}</td>
+          <td Class="tbldata">{{ Expense.p.LedgerName}}</td>
+          <td Class="tbldata">{{ Expense.p.SubLedgerName }}</td>
+          <td Class="tbldata">{{ Expense.p.RecipientName | titleCase}}</td>
+          <td Class="tbldata">{{ Expense.p.Reason }}</td>
+          <td Class="tbldata"> {{ Expense.p.InvoiceAmount| currency : "INR" }}</td>
+          <td Class="tbldata"> {{ Expense.p.GivenAmount | currency : "INR" }}</td>
+          <td Class="tbldata"> {{ Expense.p.RemainingAmount | currency : "INR" }}</td>
+          <td Class="tbldata"> {{ Expense.p.ShreesBalance | currency : "INR" }}</td>
+          <td Class="tbldata">{{ Expense.p.ModeOfPaymentName }}</td>
+          <!-- <td Class="tbldata">{{ Expense.p.Narration }}</td> -->
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(Expense)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(Expense)" />
@@ -48,4 +56,33 @@
 </div>
 <div *ngIf="DisplayMasterList.length === 0">
   <Data-Not-Found />
+</div>
+
+<!-- Print Section with automatic page breaks -->
+<div id="print-section" style="display: none;">
+  <h2>Expense</h2>
+  <table class="table table-bordered print-table">
+    <thead>
+      <tr>
+        <th *ngFor="let header of printheaders" style="background-color: maroon; color: white;">{{ header }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let Expense of DisplayMasterList; index as i">
+          <td class="tbldata">{{ i + 1 }}</td>
+           <td Class="tbldata" style="white-space: nowrap;">{{ formatDate(Expense.p.Date) }}</td>
+          <td Class="tbldata">{{ Expense.p.SiteName }}</td>
+          <td Class="tbldata">{{ Expense.p.LedgerName }}</td>
+          <td Class="tbldata">{{ Expense.p.SubLedgerName }}</td>
+          <td Class="tbldata">{{ Expense.p.RecipientName | titleCase}}</td>
+          <td Class="tbldata">{{ Expense.p.Reason }}</td>
+          <td Class="tbldata"> {{ Expense.p.InvoiceAmount| currency : "INR" }}</td>
+          <td Class="tbldata"> {{ Expense.p.GivenAmount | currency : "INR" }}</td>
+          <td Class="tbldata"> {{ Expense.p.RemainingAmount | currency : "INR" }}</td>
+          <td Class="tbldata"> {{ Expense.p.ShreesBalance | currency : "INR" }}</td>
+          <td Class="tbldata">{{ Expense.p.ModeOfPaymentName }}</td>
+          <!-- <td Class="tbldata">{{ Expense.p.Narration }}</td> -->
+      </tr>
+    </tbody>
+  </table>
 </div>

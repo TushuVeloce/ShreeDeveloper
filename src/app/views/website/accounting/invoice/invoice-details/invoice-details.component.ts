@@ -14,6 +14,11 @@ import { CompanyStateManagement } from 'src/app/services/companystatemanagement'
 import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
+import { InvoiceNoFetchRequest } from 'src/app/classes/domain/entities/website/accounting/billing/actualstagechalanfetchrequest';
+import { TransportData } from 'src/app/classes/infrastructure/transportdata';
+import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
+import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 
 @Component({
   selector: 'app-invoice-details',
@@ -32,6 +37,7 @@ export class InvoiceDetailsComponent implements OnInit {
   isDieselPaid: boolean = false
   RecipientNameReadOnly: boolean = false
   UnitList: Unit[] = [];
+   ModeofPaymentList = DomainEnums.ModeOfPaymentsList();
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Bill' | 'Edit Bill' = 'New Bill';
   IsDropdownDisabled: boolean = false;
@@ -59,6 +65,8 @@ export class InvoiceDetailsComponent implements OnInit {
     private utils: Utils,
     private companystatemanagement: CompanyStateManagement,
     private dtu: DTU,
+     private payloadPacketFacade: PayloadPacketFacade,
+      private serverCommunicator: ServerCommunicatorService,
   ) { }
 
   async ngOnInit() {
@@ -89,6 +97,7 @@ export class InvoiceDetailsComponent implements OnInit {
         let parts = this.strCDT.substring(0, 16).split('-');
         this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
         this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+        await this.getChalanNo()
     }
     this.getRecipientListByCompanyRef()
     this.InitialEntity = Object.assign(
@@ -192,6 +201,38 @@ export class InvoiceDetailsComponent implements OnInit {
     }
   }
 
+   getChalanNo = async () => {
+      let req = new InvoiceNoFetchRequest();
+      req.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
+      let td = req.FormulateTransportData();
+      let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+      let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+
+      if (!tr.Successful) {
+        await this.uiUtils.showErrorMessage('Error', tr.Message);
+        return;
+      }
+
+      let tdResult = JSON.parse(tr.Tag) as TransportData;
+      let collections = tdResult?.MainData?.Collections;
+
+      if (Array.isArray(collections)) {
+        for (const item of collections) {
+          if (
+            item.Name === 'Invoice' &&
+            Array.isArray(item.Entries) &&
+            item.Entries.length > 0
+          ) {
+            const entry = item.Entries[0] as { NextInvoiceNo: number };
+            const NextInvoiceNo = entry.NextInvoiceNo;
+            this.Entity.p.InvoiceNo = NextInvoiceNo
+            return;
+          }
+        }
+      }
+      await this.uiUtils.showErrorMessage('Error', 'Chalan number could not be retrieved.');
+    };
+
   // for value 0 selected while click on Input //
   selectAllValue = (event: MouseEvent): void => {
     const input = event.target as HTMLInputElement;
@@ -212,7 +253,7 @@ export class InvoiceDetailsComponent implements OnInit {
       let entityToSave = this.RecipientEntity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
       let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-  
+
       if (!tr.Successful) {
         this.isSaveDisabled = false;
         this.uiUtils.showErrorMessage('Error', tr.Message);
@@ -245,7 +286,7 @@ export class InvoiceDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Invoice saved successfully');
+        await this.uiUtils.showSuccessToster('Bill saved successfully');
         this.Entity = Invoice.CreateNewInstance();
          this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
         let parts = this.strCDT.substring(0, 16).split('-');
@@ -254,8 +295,8 @@ export class InvoiceDetailsComponent implements OnInit {
         await this.resetAllControls();
         this.isDieselPaid = false
       } else {
-        await this.uiUtils.showSuccessToster('Invoice Updated successfully');
-        await this.router.navigate(['/homepage/Website/Invoice']);
+        await this.uiUtils.showSuccessToster('Bill Updated successfully');
+        await this.router.navigate(['/homepage/Website/Billing']);
       }
     }
   };
@@ -265,12 +306,12 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showConfirmationMessage('Cancel',
         `This process is IRREVERSIBLE!
       <br/>
-      Are you sure that you want to Cancel this Invoice Form?`,
+      Are you sure that you want to Cancel this Billing Form?`,
         async () => {
-          await this.router.navigate(['/homepage/Website/Invoice']);
+          await this.router.navigate(['/homepage/Website/Billing']);
         });
     } else {
-      await this.router.navigate(['/homepage/Website/Invoice']);
+      await this.router.navigate(['/homepage/Website/Billing']);
     }
   }
 
@@ -294,7 +335,6 @@ export class InvoiceDetailsComponent implements OnInit {
     this.RateInputControl.control.markAsPristine();
     this.DieselQtyInputControl.control.markAsPristine();
     this.DieselRateInputControl.control.markAsPristine();
-    // await this.invoiceForm.resetForm(); 
   }
 }
 

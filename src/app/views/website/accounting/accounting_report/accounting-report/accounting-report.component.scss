@@ -2,20 +2,21 @@
   .no-print {
     display: none !important;
   }
-  .print-page {
-    page-break-after: always;
+
+  table {
+    page-break-inside: auto;
   }
-  .print-page:last-child {
+
+  tr {
+    page-break-inside: avoid;
     page-break-after: auto;
   }
-  .print-table {
-    width: 100%;
-    border-collapse: collapse;
+
+  thead {
+    display: table-header-group;
   }
-  .print-table th,
-  .print-table td {
-    border: 1px solid black;
-    padding: 6px;
-    text-align: left;
+
+  tfoot {
+    display: table-footer-group;
   }
 }

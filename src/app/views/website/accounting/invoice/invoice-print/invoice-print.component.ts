@@ -148,6 +148,6 @@ export class InvoicePrintComponent implements OnInit {
 
 
   BackInvoice = () => {
-    this.router.navigate(['/homepage/Website/Invoice']);
+    this.router.navigate(['/homepage/Website/Billing']);
   }
 }

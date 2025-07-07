@@ -30,7 +30,8 @@
             <td style="vertical-align: top; text-align: left; width: 40%; padding: 5px; border-width:  1px;">
               <strong>
                 <div><i class="fa-solid fa-file-lines" style="color: maroon; margin-right: 10px;"></i> पोहोच पावती</div>
-                <div> <i class="fa-solid fa-phone" style="color: maroon; margin-right: 10px;"></i> {{ Entity.p.Contacts }}</div>
+                <div> <i class="fa-solid fa-phone" style="color: maroon; margin-right: 10px;"></i> {{ Entity.p.Contacts
+                  }}</div>
               </strong>
             </td>
             <td style="width: 10%; border-width:  1px; padding: 5px;">
@@ -76,6 +77,10 @@
               <div>
                 <strong>Chalan No. - 123</strong>
               </div>
+              <br>
+              <div>
+                <strong>Date - {{formatDate(Entity.p.Date)}}</strong>
+              </div>
             </td>
           </tr>
         </table>
@@ -100,16 +105,16 @@
             <td style="padding: 8px; border: none;">{{Entity.p.Description}}</td>
             <td style="padding: 8px; border: none;">{{ Entity.p.Qty }}</td>
             <td style="padding: 8px; border: none;">{{ Entity.p.UnitName }}</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.Rate }}</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.Qty * Entity.p.Rate }}</td>
+            <td style="padding: 8px; border: none;"> {{ Entity.p.Rate | currency : "INR" }}</td>
+            <td style="padding: 8px; border: none;"> {{ Entity.p.Qty * Entity.p.Rate | currency : "INR" }}</td>
           </tr>
           <tr *ngIf="Entity.p.DieselQty > 0">
             <td style="padding: 8px; border: none;">2.</td>
-            <td style="padding: 8px; border: none;">Diesel</td>
+            <td style="padding: 8px; border: none;">Diesel Supplied by Shree</td>
             <td style="padding: 8px; border: none;">{{ Entity.p.DieselQty }}</td>
             <td style="padding: 8px; border: none;">Liter</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.DieselRate }}</td>
-            <td style="padding: 8px; border: none;">{{ Entity.p.DieselAmount }}</td>
+            <td style="padding: 8px; border: none;"> {{ Entity.p.DieselRate | currency : "INR" }}</td>
+            <td style="padding: 8px; border: none;"> {{ Entity.p.DieselAmount | currency : "INR" }}</td>
           </tr>
 
 
@@ -121,7 +126,7 @@
               <strong>TOTAL</strong>
             </td>
             <td style="padding: 8px; border: none; font-weight: bold; background-color: #fef4d4;"><strong>
-                ₹ {{Entity.p.InvoiceAmount}}</strong>
+                {{Entity.p.InvoiceAmount | currency : "INR" }}</strong>
             </td>
           </tr>
           <!-- In Words -->
@@ -145,11 +150,13 @@
           <p style="line-height: 0.5;">3. ही पावती भविष्यातील लेखाजोखासाठी जतन करावी.</p>
         </div>
       </div>
-
+      <br>
+      <br>
+      <br>
       <!-- Footer Signature -->
       <div style="margin-top: 30px; display: flex; justify-content: space-between">
         <p style="margin-left: 5%;"><strong>Sign : {{Entity.p.OwnerName}}</strong></p>
-        <p style="margin-right: 5%;"> <strong>{{Entity.p.OwnerName}}</strong>
+        <p style="margin-right: 5%;"> <strong>{{Entity.p.CreatedByName}}</strong>
         </p>
       </div>
 

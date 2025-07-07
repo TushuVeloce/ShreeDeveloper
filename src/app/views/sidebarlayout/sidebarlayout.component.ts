@@ -696,8 +696,8 @@ export class SidebarlayoutComponent implements OnInit {
 
     let AccountingSubModuleList = [
       {
-        Name: 'Invoice',
-        RouterLink: '/homepage/Website/Invoice',
+        Name: 'Billing',
+        RouterLink: '/homepage/Website/Billing',
         LogoPath: '/assets/icons/Customer Enquiry.png',
       },
       {
@@ -711,7 +711,7 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '/assets/icons/Customer Followup.png',
       },
       {
-        Name: 'Accounting Report',
+        Name: 'Office Report',
         RouterLink: '/homepage/Website/Accounting_Report',
         LogoPath: '/assets/icons/Customer Followup.png',
       },

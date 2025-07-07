@@ -20,7 +20,7 @@ Entity: AccountingReport = AccountingReport.CreateNewInstance();
    SearchString: string = '';
    SelectedAccountingReport: AccountingReport = AccountingReport.CreateNewInstance();
    CustomerRef: number = 0;
-   pageSize = 10; // Items per page
+   pageSize = 6; // Items per page
    currentPage = 1; // Initialize current page
    total = 0;
  
@@ -40,7 +40,8 @@ Entity: AccountingReport = AccountingReport.CreateNewInstance();
    async ngOnInit() {
      this.appStateManage.setDropdownDisabled();
      this.loadPaginationData();
-     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+     const pageSize = this.screenSizeService.getPageSize('withDropdown');
+    this.pageSize = pageSize - 1
    }
  
    getAccountingReportListByCompanyRef = async () => {
@@ -73,14 +74,6 @@ Entity: AccountingReport = AccountingReport.CreateNewInstance();
      this.loadPaginationData();
    }
 
-   getAllPaginatedPages(): any[][] {
-  const pages = [];
-  for (let i = 0; i < this.DisplayMasterList.length; i += this.pageSize) {
-    pages.push(this.DisplayMasterList.slice(i, i + this.pageSize));
-  }
-  return pages;
-}
-
 printReport(): void {
   const printContents = document.getElementById('print-section')?.innerHTML;
   if (printContents) {
@@ -88,14 +81,22 @@ printReport(): void {
     popupWin?.document.write(`
       <html>
         <head>
-          <title>Accounting Report</title>
-          <style>
-            body { font-family: Arial, sans-serif; margin: 10px; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-            th, td { border: 1px solid black; padding: 8px; text-align: left; }
-            .print-page { page-break-after: always; }
-            @media print {
-              .print-page:last-child { page-break-after: auto; }
+          <title>Office Report</title>
+         <style>
+         * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            font-family: sans-serif;
+           }
+            table {
+              border-collapse: collapse;
+              width: 100%;
+            }
+
+            th, td {
+              border: 1px solid  rgb(169, 167, 167);
+              text-align: center;
+              padding: 15px;
             }
           </style>
         </head>

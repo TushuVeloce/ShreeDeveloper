@@ -26,8 +26,9 @@ export class InvoiceProps {
   public Ref: number = 0;
   public CompanyRef: number = 0
   public CompanyName: string = ''
-
+  
   public Date: string = ''
+  public InvoiceNo: number = 0
   public SiteRef: number = 0
   public readonly SiteName: string = ''
   public LedgerRef: number = 0
@@ -52,6 +53,7 @@ export class InvoiceProps {
   public readonly UnitName: string = ''
   public Rate: number = 0
   public InvoiceAmount: number = 0
+  public InvoiceModeOfPayment: number = 0
   public Narration: string = ''
   public TransDateTime: string = ''
   public IsDeleted: number = 0

@@ -28,6 +28,11 @@
             <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
+         <div class="col-md-4" style="margin-top: 1rem">
+          <label><b>Bill No</b></label>
+          <input type="number" [(ngModel)]="Entity.p.InvoiceNo" name="InvoiceNo" class="form-control" id="InvoiceNo"
+            placeholder="Bill No" readonly />
+        </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Site Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -130,7 +135,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-8" style="margin-top: 2.6rem">
+        <div class="col-md-4" style="margin-top: 2.6rem">
           <div class="d-flex align-items-center mb-2">
             <label for="IsDieselPaid"><b>Diesel Paid</b></label>
             <input type="checkbox" id="IsDieselPaid" [(ngModel)]="Entity.p.IsDieselPaid" name="IsDieselPaid"
@@ -171,10 +176,18 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <div>
-            <label>Invoice Amount</label>
+            <label>Billing Amount</label>
             <input type="number" [(ngModel)]="Entity.p.InvoiceAmount" name="InvoiceAmount" class="form-control"
               id="InvoiceAmount" required placeholder="Enter InvoiceAmount" readonly />
           </div>
+        </div>
+         <div class="col-md-4" style="margin-top: 1rem; ">
+          <label>Mode of Payment</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="InvoiceModeOfPayment" name="InvoiceModeOfPayment" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.InvoiceModeOfPayment">
+            <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
+          </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <div>

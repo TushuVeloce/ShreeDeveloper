@@ -45,7 +45,8 @@ export class ExpenseDetailsComponent implements OnInit {
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
-  @ViewChild('NameCtrl') NameInputControl!: NgModel;
+  @ViewChild('ReasonCtrl') ReasonInputControl!: NgModel;
+  @ViewChild('NarrationCtrl') NarrationInputControl!: NgModel;
 
   constructor(
     private router: Router,
@@ -126,7 +127,7 @@ export class ExpenseDetailsComponent implements OnInit {
       return;
     }
     if (this.Entity.p.RecipientRef <= 0) {
-      await this.uiUtils.showErrorToster('Selected Recipient Name to get Shree Expense');
+      // await this.uiUtils.showErrorToster('Selected Recipient Name to get Shree Expense');
       return;
     }
     let data = await Expense.FetchTotalExpenseFromSiteAndRecipient(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientRef,
@@ -242,7 +243,6 @@ export class ExpenseDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Expense saved successfully');
         this.Entity = Expense.CreateNewInstance();
-        // this.resetAllControls();
         await this.getCurrentBalanceByCompanyRef()
       } else {
         await this.uiUtils.showSuccessToster('Expense Updated successfully');
@@ -270,14 +270,6 @@ export class ExpenseDetailsComponent implements OnInit {
     } else {
       await this.router.navigate(['/homepage/Website/Expense']);
     }
-  }
-
-  resetAllControls = () => {
-    // reset touched
-    this.NameInputControl.control.markAsUntouched();
-
-    // reset dirty
-    this.NameInputControl.control.markAsPristine();
   }
 }
 

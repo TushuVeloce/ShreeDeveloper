@@ -109,7 +109,7 @@ export class VendorMasterDetailsComponent implements OnInit {
   }
 
   focusInput = () => {
-    let txtName = document.getElementById('Code')!;
+    let txtName = document.getElementById('Name')!;
     txtName.focus();
   }
 
@@ -198,11 +198,10 @@ export class VendorMasterDetailsComponent implements OnInit {
     }
     else {
       this.isSaveDisabled = false;
-      // this.onEntitySaved.emit(entityToSave);
       if (this.IsNewEntity) {
-        this.resetAllControls()
         await this.uiUtils.showSuccessToster('Vendor saved successfully');
         this.Entity = Vendor.CreateNewInstance();
+        this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster('Vendor Updated successfully');
         this.router.navigate(['/homepage/Website/Vendor_Master']);
