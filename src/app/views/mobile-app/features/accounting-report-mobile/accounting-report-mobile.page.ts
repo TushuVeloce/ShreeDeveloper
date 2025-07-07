@@ -103,26 +103,26 @@ Entity: AccountingReport = AccountingReport.CreateNewInstance();
        this.DisplayMasterList = this.MasterList;
      }
   
-     FetchEntireListByStartDateandEndDate = async () => {
-       this.MasterList = [];
-       this.DisplayMasterList = [];
-       if (this.companyRef <= 0) {
-        //  await this.uiUtils.showErrorToster('Company not Selected');
-         await this.toastService.present('Company not selected', 1000, 'warning');
-         await this.haptic.warning();
-         return;
-       }
-       if(this.Entity.p.StartDate == '' && this.Entity.p.EndDate == ''){
-          this.getAccountingReportListByCompanyRef()
-       }
-       let lst = await AccountingReport.FetchEntireListByStartDateandEndDate(this.Entity.p.StartDate, this.Entity.p.EndDate, this.companyRef, async errMsg => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
-         await this.toastService.present('Error' + errMsg, 1000, 'warning');
-         await this.haptic.error();
-      });
-       this.MasterList = lst;
-       this.DisplayMasterList = this.MasterList;
-     }
+    //  FetchEntireListByStartDateandEndDate = async () => {
+    //    this.MasterList = [];
+    //    this.DisplayMasterList = [];
+    //    if (this.companyRef <= 0) {
+    //     //  await this.uiUtils.showErrorToster('Company not Selected');
+    //      await this.toastService.present('Company not selected', 1000, 'warning');
+    //      await this.haptic.warning();
+    //      return;
+    //    }
+    //    if(this.Entity.p.StartDate == '' && this.Entity.p.EndDate == ''){
+    //       this.getAccountingReportListByCompanyRef()
+    //    }
+    //    let lst = await AccountingReport.FetchEntireListByStartDateandEndDate(this.Entity.p.StartDate, this.Entity.p.EndDate, this.companyRef, async errMsg => {
+    //             // await this.uiUtils.showErrorMessage('Error', errMsg)
+    //      await this.toastService.present('Error' + errMsg, 1000, 'warning');
+    //      await this.haptic.error();
+    //    });
+    //    this.MasterList = lst;
+    //    this.DisplayMasterList = this.MasterList;
+    //  }
   
   printReport(): void {
     const printContents = document.getElementById('print-section')?.innerHTML;
