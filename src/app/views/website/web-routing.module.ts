@@ -287,9 +287,9 @@ const routes: Routes = [
       { path: 'Marketing_Management_Details', component: MarketingManagementMasterDetailsComponent },
 
       //Accounting
-      { path: 'Invoice', component: InvoiceComponent },
-      { path: 'Invoice_Details', component: InvoiceDetailsComponent },
-      { path: 'Invoice_Print', component: InvoicePrintComponent },
+      { path: 'Billing', component: InvoiceComponent },
+      { path: 'Billing_Details', component: InvoiceDetailsComponent },
+      { path: 'Billing_Print', component: InvoicePrintComponent },
 
       { path: 'Expense', component: ExpenseComponent },
       { path: 'Expense_Details', component: ExpenseDetailsComponent },

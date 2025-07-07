@@ -212,7 +212,7 @@ export class InvoiceDetailsComponent implements OnInit {
       let entityToSave = this.RecipientEntity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
       let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-  
+
       if (!tr.Successful) {
         this.isSaveDisabled = false;
         this.uiUtils.showErrorMessage('Error', tr.Message);
@@ -245,7 +245,7 @@ export class InvoiceDetailsComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Invoice saved successfully');
+        await this.uiUtils.showSuccessToster('Bill saved successfully');
         this.Entity = Invoice.CreateNewInstance();
          this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
         let parts = this.strCDT.substring(0, 16).split('-');
@@ -254,8 +254,8 @@ export class InvoiceDetailsComponent implements OnInit {
         await this.resetAllControls();
         this.isDieselPaid = false
       } else {
-        await this.uiUtils.showSuccessToster('Invoice Updated successfully');
-        await this.router.navigate(['/homepage/Website/Invoice']);
+        await this.uiUtils.showSuccessToster('Bill Updated successfully');
+        await this.router.navigate(['/homepage/Website/Billing']);
       }
     }
   };
@@ -265,12 +265,12 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showConfirmationMessage('Cancel',
         `This process is IRREVERSIBLE!
       <br/>
-      Are you sure that you want to Cancel this Invoice Form?`,
+      Are you sure that you want to Cancel this Billing Form?`,
         async () => {
-          await this.router.navigate(['/homepage/Website/Invoice']);
+          await this.router.navigate(['/homepage/Website/Billing']);
         });
     } else {
-      await this.router.navigate(['/homepage/Website/Invoice']);
+      await this.router.navigate(['/homepage/Website/Billing']);
     }
   }
 
@@ -294,7 +294,7 @@ export class InvoiceDetailsComponent implements OnInit {
     this.RateInputControl.control.markAsPristine();
     this.DieselQtyInputControl.control.markAsPristine();
     this.DieselRateInputControl.control.markAsPristine();
-    // await this.invoiceForm.resetForm(); 
+    // await this.invoiceForm.resetForm();
   }
 }
 

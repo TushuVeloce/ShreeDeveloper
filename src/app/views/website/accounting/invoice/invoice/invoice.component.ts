@@ -58,18 +58,18 @@ export class InvoiceComponent implements OnInit {
     this.SelectedInvoice = item.GetEditableVersion();
     Invoice.SetCurrentInstance(this.SelectedInvoice);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Invoice_Details']);
+    await this.router.navigate(['/homepage/Website/Billing_Details']);
   };
 
   onDeleteClicked = async (Invoice: Invoice) => {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-     Are you sure that you want to DELETE this Invoice?`,
+     Are you sure that you want to DELETE this Bill?`,
       async () => {
         await Invoice.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `Invoice ${Invoice.p.RecipientName} has been deleted!`
+            `Bill ${Invoice.p.RecipientName} has been deleted!`
           );
           await this.getInvoiceListByCompanyRef();
           this.SearchString = '';
@@ -85,7 +85,7 @@ export class InvoiceComponent implements OnInit {
   };
 
   navigateToPrint = async (item: Invoice) => {
-    this.router.navigate(['/homepage/Website/Invoice_Print'], {
+    this.router.navigate(['/homepage/Website/Billing_Print'], {
       state: { printData: item.GetEditableVersion() }
     });
   }
@@ -109,6 +109,6 @@ export class InvoiceComponent implements OnInit {
       this.uiUtils.showWarningToster('Please select company');
       return;
     }
-    this.router.navigate(['/homepage/Website/Invoice_Details']);
+    this.router.navigate(['/homepage/Website/Billing_Details']);
   }
 }
