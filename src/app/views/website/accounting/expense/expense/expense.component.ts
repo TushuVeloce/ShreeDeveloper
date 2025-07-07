@@ -26,8 +26,8 @@ export class ExpenseComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Recipient Name', 'Reason', 'Expense Amount', 'Given Amount', 'Remaining Amount', 'Shree Balance', 'Mode of Payment', 'Narration', 'Action'];
-  printheaders: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Recipient Name', 'Reason', 'Expense Amount', 'Given Amount', 'Remaining Amount', 'Shree Balance', 'Mode of Payment', 'Narration'];
+  headers: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Recipient Name', 'Reason', 'Expense Amount', 'Given Amount', 'Remaining Amount', 'Shree Balance', 'Mode of Payment', 'Action'];
+  printheaders: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Recipient Name', 'Reason', 'Expense Amount', 'Given Amount', 'Remaining Amount', 'Shree Balance', 'Mode of Payment'];
   constructor(
     private uiUtils: UIUtils,
     private router: Router,
@@ -44,7 +44,8 @@ export class ExpenseComponent implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
-    this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+    const pageSize = this.screenSizeService.getPageSize('withDropdown');
+    this.pageSize = pageSize - 1
   }
 
   getExpenseListByCompanyRef = async () => {
@@ -91,14 +92,6 @@ export class ExpenseComponent implements OnInit {
     );
   };
 
-  getAllPaginatedPages(): any[][] {
-    const pages = [];
-    for (let i = 0; i < this.DisplayMasterList.length; i += this.pageSize) {
-      pages.push(this.DisplayMasterList.slice(i, i + this.pageSize));
-    }
-    return pages;
-  }
-
   printReport(): void {
     const printContents = document.getElementById('print-section')?.innerHTML;
     if (printContents) {
@@ -106,14 +99,22 @@ export class ExpenseComponent implements OnInit {
       popupWin?.document.write(`
       <html>
         <head>
-          <title>Accounting Report</title>
-          <style>
-            body { font-family: Arial, sans-serif; margin: 10px; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-            th, td { border: 1px solid black; padding: 8px; text-align: left; }
-            .print-page { page-break-after: always; }
-            @media print {
-              .print-page:last-child { page-break-after: auto; }
+          <title>Expense</title>
+         <style>
+         * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            font-family: sans-serif;
+           }
+            table {
+              border-collapse: collapse;
+              width: 100%;
+            }
+
+            th, td {
+              border: 1px solid  rgb(169, 167, 167);
+              text-align: center;
+              padding: 15px;
             }
           </style>
         </head>

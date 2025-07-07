@@ -40,7 +40,8 @@ Entity: AccountingReport = AccountingReport.CreateNewInstance();
    async ngOnInit() {
      this.appStateManage.setDropdownDisabled();
      this.loadPaginationData();
-     this.pageSize = this.screenSizeService.getPageSize('withDropdown');
+     const pageSize = this.screenSizeService.getPageSize('withDropdown');
+    this.pageSize = pageSize - 1
    }
  
    getAccountingReportListByCompanyRef = async () => {

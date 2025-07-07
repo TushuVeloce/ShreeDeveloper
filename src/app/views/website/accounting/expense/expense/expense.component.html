@@ -32,18 +32,18 @@
       <tbody>
         <tr *ngFor="let Expense of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{ formatDate(Expense.p.Date) }}</td>
-          <td Class="tbldata">{{ Expense.p.SiteName }}</td>
-          <td Class="tbldata">{{ Expense.p.LedgerName }}</td>
+          <td Class="tbldata" style="white-space: nowrap;">{{ formatDate(Expense.p.Date) }}</td>
+          <td Class="tbldata">{{ Expense.p.SiteName}}</td>
+          <td Class="tbldata">{{ Expense.p.LedgerName}}</td>
           <td Class="tbldata">{{ Expense.p.SubLedgerName }}</td>
-          <td Class="tbldata">{{ Expense.p.RecipientName }}</td>
+          <td Class="tbldata">{{ Expense.p.RecipientName | titleCase}}</td>
           <td Class="tbldata">{{ Expense.p.Reason }}</td>
           <td Class="tbldata"> {{ Expense.p.InvoiceAmount| currency : "INR" }}</td>
           <td Class="tbldata"> {{ Expense.p.GivenAmount | currency : "INR" }}</td>
           <td Class="tbldata"> {{ Expense.p.RemainingAmount | currency : "INR" }}</td>
           <td Class="tbldata"> {{ Expense.p.ShreesBalance | currency : "INR" }}</td>
           <td Class="tbldata">{{ Expense.p.ModeOfPaymentName }}</td>
-          <td Class="tbldata">{{ Expense.p.Narration }}</td>
+          <!-- <td Class="tbldata">{{ Expense.p.Narration }}</td> -->
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(Expense)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(Expense)" />
@@ -58,33 +58,31 @@
   <Data-Not-Found />
 </div>
 
-<!-- Print Section -->
-<div id="print-section" style="display: none">
-  <div *ngFor="let page of getAllPaginatedPages(); let pageIndex = index" class="print-page">
-    <h2>Accounting Report</h2>
-    <table class="table table-bordered print-table">
-      <thead>
-        <tr>
-          <th *ngFor="let header of printheaders" style="background-color: maroon; color: white;">{{ header }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let Expense of page; index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata" style="white-space: nowrap;">{{ formatDate(Expense.p.Date) }}</td>
+<!-- Print Section with automatic page breaks -->
+<div id="print-section" style="display: none;">
+  <h2>Office Report</h2>
+  <table class="table table-bordered print-table">
+    <thead>
+      <tr>
+        <th *ngFor="let header of printheaders" style="background-color: maroon; color: white;">{{ header }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let Expense of DisplayMasterList; index as i">
+          <td class="tbldata">{{ i + 1 }}</td>
+           <td Class="tbldata" style="white-space: nowrap;">{{ formatDate(Expense.p.Date) }}</td>
           <td Class="tbldata">{{ Expense.p.SiteName }}</td>
-          <td Class="tbldata">{{ Expense.p.LedgerName | titleCase }}</td>
+          <td Class="tbldata">{{ Expense.p.LedgerName }}</td>
           <td Class="tbldata">{{ Expense.p.SubLedgerName }}</td>
           <td Class="tbldata">{{ Expense.p.RecipientName | titleCase}}</td>
           <td Class="tbldata">{{ Expense.p.Reason }}</td>
-          <td Class="tbldata">{{ Expense.p.InvoiceAmount }}</td>
-          <td Class="tbldata">{{ Expense.p.GivenAmount }}</td>
-          <td Class="tbldata">{{ Expense.p.RemainingAmount }}</td>
-          <td Class="tbldata">{{ Expense.p.ShreesBalance }}</td>
+          <td Class="tbldata"> {{ Expense.p.InvoiceAmount| currency : "INR" }}</td>
+          <td Class="tbldata"> {{ Expense.p.GivenAmount | currency : "INR" }}</td>
+          <td Class="tbldata"> {{ Expense.p.RemainingAmount | currency : "INR" }}</td>
+          <td Class="tbldata"> {{ Expense.p.ShreesBalance | currency : "INR" }}</td>
           <td Class="tbldata">{{ Expense.p.ModeOfPaymentName }}</td>
-          <td Class="tbldata">{{ Expense.p.Narration }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+          <!-- <td Class="tbldata">{{ Expense.p.Narration }}</td> -->
+      </tr>
+    </tbody>
+  </table>
 </div>
