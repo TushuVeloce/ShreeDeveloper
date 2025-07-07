@@ -27,7 +27,11 @@ const routes: Routes = [
   {
     path: 'customer-relationship-management',
     loadChildren: () => import('../customer-relationship-management-mobile/customer-relationship-management-mobile.module').then(m => m.CustomerRelationshipManagementMobilePageModule)
-  }
+  },
+  {
+    path: 'accounting',
+    loadChildren: () => import('../accounting-mobile/accounting-mobile.module').then(m => m.AccountingMobilePageModule)
+  },
 ];
 
 @NgModule({

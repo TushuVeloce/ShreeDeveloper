@@ -88,8 +88,8 @@ export class DashboardPage implements OnInit, OnDestroy {
     },
     {
       icon: 'assets/icons/report_mobile_app.png',
-      label: 'Report',
-      routerPath: '/mobileapp/tabs/dashboard/report'
+      label: 'Accounting',
+      routerPath: '/mobileapp/tabs/dashboard/accounting'
     },
   ];
 
