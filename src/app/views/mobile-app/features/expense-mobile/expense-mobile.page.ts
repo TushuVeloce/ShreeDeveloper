@@ -171,6 +171,42 @@ export class ExpenseMobilePage implements OnInit {
     }
     this.router.navigate(['/mobileapp/tabs/dashboard/accounting/income/add']);
   }
+
+  printReport(): void {
+    const printContents = document.getElementById('print-section')?.innerHTML;
+    if (printContents) {
+      const popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+      popupWin?.document.write(`
+      <html>
+        <head>
+          <title>Expense</title>
+         <style>
+         * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            font-family: sans-serif;
+           }
+            table {
+              border-collapse: collapse;
+              width: 100%;
+            }
+
+            th, td {
+              border: 1px solid  rgb(169, 167, 167);
+              text-align: center;
+              padding: 15px;
+            }
+          </style>
+        </head>
+        <body onload="window.print();window.close()">
+          ${printContents}
+        </body>
+      </html>
+    `);
+      popupWin?.document.close();
+    }
+  }
+
   openModal(Expense: any) {
     // console.log('Expense: any, ExpenseItem: any :', Expense, ExpenseItem);
     this.SelectedExpense = Expense;
