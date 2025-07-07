@@ -26,7 +26,7 @@ Entity: AccountingReport = AccountingReport.CreateNewInstance();
    pageSize = 6; // Items per page
    currentPage = 1; // Initialize current page
    total = 0;
- 
+   
    companyRef = this.companystatemanagement.SelectedCompanyRef;
  
    headers: string[] = ['Sr.No.','Date','Payer Name','Recipient Name','Site Name','Reason','Income','Expense','Shree Bal.','Mode of Payment','Narration',];
@@ -41,11 +41,12 @@ Entity: AccountingReport = AccountingReport.CreateNewInstance();
        this.Entity.p.EndDate = ''
      });
    }
- 
+   
    async ngOnInit() {
      this.appStateManage.setDropdownDisabled();
      this.loadPaginationData();
      const pageSize = this.screenSizeService.getPageSize('withDropdown');
+     console.log('AccountingReportList :', this.AccountingReportList);
     this.pageSize = pageSize - 1
    }
  
@@ -69,12 +70,11 @@ Entity: AccountingReport = AccountingReport.CreateNewInstance();
        await this.uiUtils.showErrorToster('Company not Selected');
        return;
      }
-     console.log('(this.Entity.p.AccountingReport == AccountingReports.All :', (this.Entity.p.AccountingReport));
-     if(this.Entity.p.AccountingReport == AccountingReports.All){
-     this.getAccountingReportListByCompanyRef()
-     return
-     }
-     console.log('this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport, :', this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport,);
+     console.log('this.Entity.p.AccountingReport, :', this.Entity.p.AccountingReport,);
+    //  if(this.Entity.p.AccountingReport == AccountingReports.All){
+    //  this.getAccountingReportListByCompanyRef()
+    //  return
+    //  }
      let lst = await AccountingReport.FetchEntireListByStartDateandEndDate(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
      this.MasterList = lst;
      this.DisplayMasterList = this.MasterList;
