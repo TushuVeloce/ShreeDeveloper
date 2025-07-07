@@ -223,9 +223,9 @@ export class InvoiceDetailsComponent implements OnInit {
             Array.isArray(item.Entries) &&
             item.Entries.length > 0
           ) {
-            const entry = item.Entries[0] as { NextChalanNo: number };
-            const nextChalanNo = entry.NextChalanNo;
-            this.Entity.p.InvoiceNo = nextChalanNo
+            const entry = item.Entries[0] as { NextInvoiceNo: number };
+            const NextInvoiceNo = entry.NextInvoiceNo;
+            this.Entity.p.InvoiceNo = NextInvoiceNo
             return;
           }
         }
