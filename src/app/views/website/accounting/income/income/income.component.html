@@ -47,6 +47,14 @@
             <Delete-Icon (deleteClicked)="onDeleteClicked(Income)" />
           </td>
         </tr>
+        <tr>
+          <td class="tbldata" colspan="2"><b>Total Income</b></td>
+          <td class="tbldata" colspan="4"></td>
+          <td class="tbldata">
+            <b>{{ getTotalIncome() | currency : "INR" }}</b>
+          </td>
+          <td class="tbldata" colspan="3"></td>
+        </tr>
       </tbody>
     </nz-table>
   </div>
@@ -67,16 +75,16 @@
     </thead>
     <tbody>
       <tr *ngFor="let Income of DisplayMasterList; index as i">
-          <td class="tbldata">{{ i + 1 }}</td>
-           <td Class="tbldata" style="white-space: nowrap;">{{formatDate(Income.p.Date)}}</td>
-          <td Class="tbldata">{{Income.p.SiteName}}</td>
-          <td Class="tbldata">{{Income.p.LedgerName | titleCase}}</td>
-          <td Class="tbldata">{{Income.p.SubLedgerName}}</td>
-          <td Class="tbldata">{{Income.p.Reason}}</td>
-          <td Class="tbldata"> {{Income.p.IncomeAmount | currency : "INR" }}</td>
-          <td Class="tbldata"> {{Income.p.ShreesBalance | currency : "INR" }}</td>
-          <td Class="tbldata">{{Income.p.ModeOfPaymentName}}</td>
-          <!-- <td Class="tbldata">{{Income.p.Narration}}</td> -->
+        <td class="tbldata">{{ i + 1 }}</td>
+        <td Class="tbldata" style="white-space: nowrap;">{{formatDate(Income.p.Date)}}</td>
+        <td Class="tbldata">{{Income.p.SiteName}}</td>
+        <td Class="tbldata">{{Income.p.LedgerName | titleCase}}</td>
+        <td Class="tbldata">{{Income.p.SubLedgerName}}</td>
+        <td Class="tbldata">{{Income.p.Reason}}</td>
+        <td Class="tbldata"> {{Income.p.IncomeAmount | currency : "INR" }}</td>
+        <td Class="tbldata"> {{Income.p.ShreesBalance | currency : "INR" }}</td>
+        <td Class="tbldata">{{Income.p.ModeOfPaymentName}}</td>
+        <!-- <td Class="tbldata">{{Income.p.Narration}}</td> -->
       </tr>
     </tbody>
   </table>

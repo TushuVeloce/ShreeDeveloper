@@ -39,6 +39,14 @@
               <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
           </td>
         </tr>
+        <tr>
+          <td class="tbldata" colspan="3"><b>Total Bill Amount</b></td>
+          <td class="tbldata" colspan="5"></td>
+          <td class="tbldata">
+            <b>{{ getTotalInvoice() | currency : "INR" }}</b>
+          </td>
+          <td class="tbldata"></td>
+        </tr>
       </tbody>
     </nz-table>
   </div>

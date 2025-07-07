@@ -20,6 +20,7 @@ export class ExpenseComponent implements OnInit {
   SearchString: string = '';
   SelectedExpense: Expense = Expense.CreateNewInstance();
   CustomerRef: number = 0;
+  TotalExpense: number = 0;
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
@@ -135,6 +136,14 @@ export class ExpenseComponent implements OnInit {
   paginatedList = () => {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.DisplayMasterList.slice(start, start + this.pageSize);
+  }
+
+  getTotalExpense = () => {
+    this.TotalExpense = this.DisplayMasterList.reduce((total: number, item: any) => {
+      return total + Number(item.p?.GivenAmount || 0);
+    }, 0);
+
+    return this.TotalExpense;
   }
 
   onPageChange = (pageIndex: number): void => {
