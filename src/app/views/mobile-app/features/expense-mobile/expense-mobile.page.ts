@@ -102,7 +102,7 @@ export class ExpenseMobilePage implements OnInit {
     this.SelectedExpense = item.GetEditableVersion();
     Expense.SetCurrentInstance(this.SelectedExpense);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Expense_Details']);
+    await this.router.navigate(['/mobileapp/tabs/dashboard/accounting/expense/edit']);
   };
 
   async onDeleteClicked(item: Expense) {
@@ -152,7 +152,7 @@ export class ExpenseMobilePage implements OnInit {
 
 
   navigateToPrint = async (item: Expense) => {
-    this.router.navigate(['/homepage/Website/Expense_Print'], {
+    this.router.navigate(['/mobileapp/tabs/dashboard/accounting/expense/print'], {
       state: { printData: item.GetEditableVersion() }
     });
   }
@@ -169,7 +169,7 @@ export class ExpenseMobilePage implements OnInit {
       this.haptic.warning();
       return;
     }
-    this.router.navigate(['/mobileapp/tabs/dashboard/accounting/income/add']);
+    this.router.navigate(['/mobileapp/tabs/dashboard/accounting/expense/add']);
   }
 
   printReport(): void {
