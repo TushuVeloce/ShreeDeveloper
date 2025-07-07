@@ -711,7 +711,7 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '/assets/icons/Customer Followup.png',
       },
       {
-        Name: 'Accounting Report',
+        Name: 'Office Report',
         RouterLink: '/homepage/Website/Accounting_Report',
         LogoPath: '/assets/icons/Customer Followup.png',
       },
