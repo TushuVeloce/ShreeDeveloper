@@ -1636,7 +1636,7 @@ export class DomainEnums {
       case ModeOfPayments.RTGS:
         return 'RTGS';
       case ModeOfPayments.GpayPhonePay:
-        return 'GpayPhonePay';
+        return 'Gpay/PhonePay';
       default:
         return '';
     }
