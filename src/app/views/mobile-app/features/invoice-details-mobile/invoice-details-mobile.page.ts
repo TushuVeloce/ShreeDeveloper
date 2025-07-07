@@ -67,16 +67,14 @@ export class InvoiceDetailsMobilePage implements OnInit {
     private dtu: DTU,
     private payloadPacketFacade: PayloadPacketFacade,
     private serverCommunicator: ServerCommunicatorService
-  ) {}
+  ) { }
 
   async ngOnInit() {
-    await this.appStateManage.setDropdownDisabled(true);
-    const company = await this.appStateManage.localStorage.getItem(
+    this.appStateManage.setDropdownDisabled(true);
+    const company = this.appStateManage.localStorage.getItem(
       'SelectedCompanyRef'
     );
     this.companyRef = Number(company || 0);
-    await this.getSiteListByCompanyRef;
-    await this.getLedgerListByCompanyRef;
     await this.getUnitList();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
@@ -107,11 +105,13 @@ export class InvoiceDetailsMobilePage implements OnInit {
       this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
       await this.getChalanNo();
     }
-    this.getRecipientListByCompanyRef;
     this.InitialEntity = Object.assign(
       Invoice.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as Invoice;
+    await this.getRecipientListByCompanyRef();
+    await this.getSiteListByCompanyRef();
+    await this.getLedgerListByCompanyRef();
     this.focusInput();
   }
 
@@ -132,6 +132,7 @@ export class InvoiceDetailsMobilePage implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
+
     let lst = await Site.FetchEntireListByCompanyRef(
       this.companyRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
