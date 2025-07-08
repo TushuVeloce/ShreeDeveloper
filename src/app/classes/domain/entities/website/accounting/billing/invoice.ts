@@ -13,6 +13,8 @@ import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 import { InvoiceFetchRequest } from "./invoicefetchrequest";
 import { GetDistinctRecipientNameFetchRequest } from "./GetDistinctRecipientNameFetchRequest";
+import { TimeDetailProps } from "../../site_management/time/time";
+import { LabourTimeProps } from "../../site_management/labourtime/labourtime";
 
 
 export class InvoiceProps {
@@ -35,11 +37,12 @@ export class InvoiceProps {
   public readonly LedgerName: string = ''
   public SubLedgerRef: number = 0
   public readonly SubLedgerName: string = ''
-  public readonly AddressLine1: string = ''
-  public readonly AddressLine2: string = ''
-  public readonly CityName: string = ''
-  public readonly Contacts: string = ''
-  public readonly OwnerName: string = ''
+  public ExpenseType: number = 0
+  public VendorRef: number = 0
+  public readonly VendorName: string = ''
+  public VendorServiceRef : number = 0
+  public readonly VendorServiceName: string = ''
+  public VehicleNo: string = ''
   public Description: string = ''
   public RecipientMasterRef: number = 0
   public RecipientName: string = ''
@@ -57,6 +60,13 @@ export class InvoiceProps {
   public Narration: string = ''
   public TransDateTime: string = ''
   public IsDeleted: number = 0
+  public MachineUsageDetailsArray: TimeDetailProps[] = [];
+  public LabourExpenseDetailsArray: LabourTimeProps[] = [];
+  public readonly AddressLine1: string = ''
+  public readonly AddressLine2: string = ''
+  public readonly CityName: string = ''
+  public readonly Contacts: string = ''
+  public readonly OwnerName: string = ''
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -105,7 +115,6 @@ export class Invoice implements IPersistable<Invoice> {
     if (this.p.Date == '') { vra.add('Date', 'Date cannot be blank.'); }
     if (this.p.SiteRef <= 0) { vra.add('SiteRef', 'Site Name cannot be blank.'); }
     if (this.p.LedgerRef <= 0) { vra.add('LedgerRef', 'Ledger cannot be blank.'); }
-    if (this.p.RecipientMasterRef <= 0) { vra.add('RecipientMasterRef', 'Recipient Name cannot be blank.'); }
     if (this.p.Description == '') { vra.add('Description', 'Description cannot be blank.'); }
     if (this.p.Qty <= 0) { vra.add('Qty', 'Quantity cannot be blank.'); }
     if (this.p.Rate <= 0) { vra.add('Rate', 'Rate cannot be blank.'); }

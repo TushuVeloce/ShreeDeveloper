@@ -10,21 +10,24 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { TimeFetchRequest } from "./timefetchrequest";
+import { LabourTimeFetchRequest } from "./labourtimefetchrequest";
 
 
-export class TimeDetailProps {
-  public readonly Db_Table_Name = "SiteManagementTimeDetails";
+export class LabourTimeProps {
+  public readonly Db_Table_Name = "LabourTimeDetails";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
   public Ref: number = 0;
-  public StartTime: string = '';
-  public EndTime: string = '';
-  public WorkedHours: number = 0;
-  public Total: number = 0;
-  public SiteManagementRef: number = 0;
+  public LabourType : number = 0;
+  public LabourQty: number = 0;
+  public LabourRate: number = 0;
+  public LabourAmount : number = 0;
+  public LabourFromTime: string = '';
+  public LabourToTime: string = '';
+  // public WorkedHours: number = 0;
+  // public Total: number = 0;
   public InvoiceRef: number = 0;
 
   public readonly IsNewlyCreated: boolean = false;
@@ -35,14 +38,14 @@ export class TimeDetailProps {
   }
 
   public static Blank() {
-    return new TimeDetailProps(true);
+    return new LabourTimeProps(true);
   }
 }
 
-export class Time implements IPersistable<Time> {
-  public static readonly Db_Table_Name: string = 'SiteManagementTimeDetails';
+export class LabourTime implements IPersistable<LabourTime> {
+  public static readonly Db_Table_Name: string = 'LabourTimeDetails';
 
-  public constructor(public readonly p: TimeDetailProps, public readonly AllowEdit: boolean) {
+  public constructor(public readonly p: LabourTimeProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -55,17 +58,17 @@ export class Time implements IPersistable<Time> {
     }
   }
 
-  public GetEditableVersion(): Time {
-    let newState: TimeDetailProps = Utils.GetInstance().DeepCopy(this.p);
-    return Time.CreateInstance(newState, true);
+  public GetEditableVersion(): LabourTime {
+    let newState: LabourTimeProps = Utils.GetInstance().DeepCopy(this.p);
+    return LabourTime.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new Time(TimeDetailProps.Blank(), true);
+    return new LabourTime(LabourTimeProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new Time(data as TimeDetailProps, allowEdit);
+    return new LabourTime(data as LabourTimeProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
@@ -73,28 +76,28 @@ export class Time implements IPersistable<Time> {
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Time.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, LabourTime.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: Time = Time.CreateNewInstance();
+  private static m_currentInstance: LabourTime = LabourTime.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return Time.m_currentInstance;
+    return LabourTime.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: Time) {
-    Time.m_currentInstance = value;
+  public static SetCurrentInstance(value: LabourTime) {
+    LabourTime.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): Time {
+  public static SingleInstanceFromTransportData(td: TransportData): LabourTime {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, Time.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, Time.Db_Table_Name)!.Entries) {
-        return Time.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, LabourTime.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, LabourTime.Db_Table_Name)!.Entries) {
+        return LabourTime.CreateInstance(data, false);
       }
     }
 
@@ -103,13 +106,13 @@ export class Time implements IPersistable<Time> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): Time[] {
-    let result: Time[] = [];
+   sortPropertyName: string = ""): LabourTime[] {
+    let result: LabourTime[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, Time.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, Time.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, LabourTime.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, LabourTime.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -119,18 +122,18 @@ export class Time implements IPersistable<Time> {
       }
 
       for (let data of entries) {
-        result.push(Time.CreateInstance(data, false));
+        result.push(LabourTime.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): Time[] {
-    return Time.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): LabourTime[] {
+    return LabourTime.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: TimeFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: LabourTimeFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -145,37 +148,37 @@ export class Time implements IPersistable<Time> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new TimeFetchRequest();
-    req.TimeRefs.push(ref);
+    let req = new LabourTimeFetchRequest();
+    req.LabourTimeRefs.push(ref);
 
-    let tdResponse = await Time.FetchTransportData(req, errorHandler) as TransportData;
-    return Time.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await LabourTime.FetchTransportData(req, errorHandler) as TransportData;
+    return LabourTime.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: TimeFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await Time.FetchTransportData(req, errorHandler) as TransportData;
-    return Time.ListFromTransportData(tdResponse);
+  public static async FetchList(req: LabourTimeFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await LabourTime.FetchTransportData(req, errorHandler) as TransportData;
+    return LabourTime.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new TimeFetchRequest();
-    let tdResponse = await Time.FetchTransportData(req, errorHandler) as TransportData;
-    return Time.ListFromTransportData(tdResponse);
+    let req = new LabourTimeFetchRequest();
+    let tdResponse = await LabourTime.FetchTransportData(req, errorHandler) as TransportData;
+    return LabourTime.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new TimeFetchRequest();
+    let req = new LabourTimeFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     req.SiteManagementRefs.push(SiteRef)
-    let tdResponse = await Time.FetchTransportData(req, errorHandler) as TransportData;
-    return Time.ListFromTransportData(tdResponse);
+    let tdResponse = await LabourTime.FetchTransportData(req, errorHandler) as TransportData;
+    return LabourTime.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListBySiteRef(siteref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new TimeFetchRequest();
+    let req = new LabourTimeFetchRequest();
     req.SiteManagementRefs.push(siteref)
-    let tdResponse = await Time.FetchTransportData(req, errorHandler) as TransportData;
-    return Time.ListFromTransportData(tdResponse);
+    let tdResponse = await LabourTime.FetchTransportData(req, errorHandler) as TransportData;
+    return LabourTime.ListFromTransportData(tdResponse);
   }
 
 
