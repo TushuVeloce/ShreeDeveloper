@@ -449,6 +449,7 @@ export class InvoiceDetailsComponent implements OnInit {
     this.Entity.p.VendorRef = 0
     this.Entity.p.VendorServiceRef = 0
     this.Entity.p.VehicleNo = ''
+    this.DiselPaid(0)
   }
 
     ClearMachineTimeTable = () => {
