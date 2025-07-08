@@ -21,20 +21,19 @@ export class ValidMenuItemsStateManagement {
   public ValidMenuItems: MenuItem[] = [];
   public SelectedValidMenuItems = signal<MenuItem[]>(this.ValidMenuItems);
   constructor(private appStateManagement: AppStateManageService) {
-    // this.companyRef = appStateManage.getTheme() == 'dark'? 'dark':'light'
 
   }
 
 
   setValidMenuItems(ValidMenuItems: MenuItem[]) {
     this.SelectedValidMenuItems.set(ValidMenuItems);
-    // this.appStateManagement.StorageKey.setItem('SelectedCompanyRef', companyRef.toString());
-    // this.appStateManagement.StorageKey.setItem('companyName', companyName);
   }
 
 
-  getData(FeatureRef: number): MenuItem {
-    return this.SelectedValidMenuItems().filter(item => item.FeatureRef === FeatureRef)[0];
+  getData(FeatureRef: number): MenuItem | undefined {
+    // return this.SelectedValidMenuItems().filter(item => item.FeatureRef === FeatureRef)[0];
+    return this.SelectedValidMenuItems().find(feature => feature.FeatureRef === FeatureRef);
+
   }
 
 

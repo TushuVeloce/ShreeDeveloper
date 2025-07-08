@@ -10,39 +10,56 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { TimeFetchRequest } from "./timefetchrequest";
+import { WebAttendaneLogFetchRequest } from "./webattendancelogfetchrequest";
+import { WebAttendaneLogDetailsLogProps } from "../web_attendance_log_details/webattendancelogdetails";
 
 
-export class TimeDetailProps {
-  public readonly Db_Table_Name = "SiteManagementTimeDetails";
+export class WebAttendaneLogProps {
+  public readonly Db_Table_Name = "AttendanceLog";
+
   public CreatedBy: number = 0;
+  public CreatedDate: string = '';
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
+  public UpdatedDate: string = '';
   public UpdatedByName: number = 0;
+
   public Ref: number = 0;
-  public StartTime: string = '';
-  public EndTime: string = '';
-  public WorkedHours: number = 0;
-  public Total: number = 0;
-  public SiteManagementRef: number = 0;
-  public InvoiceRef: number = 0;
+  public EmployeeRef: number = 0;
+  public readonly EmployeeName: string = '';
+  public CompanyRef: number = 0;
+  public readonly CompanyName: string = '';
+  public TransDateTime: string = '';
+  public TotalWorkingHrs: number = 0;
+  public IsLateMark: number = 0;
+  public TotalLateMarkHrs: number = 0;
+  public IsOverTime: number = 0;
+  public TotalOvertimeHrs: number = 0;
+  public FirstCheckInTime: string = '';
+  public LastCheckOutTime: string = '';
+  public IsLeave: number = 0;
+  public IsHalfDay: number = 0;
+  public LeaveType: number = 0;
+  public AttendanceLog: WebAttendaneLogDetailsLogProps[] = [];
+
+
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
 
-  public constructor(isNewlyCreated: boolean) {
+  private constructor(isNewlyCreated: boolean) {
     this.IsNewlyCreated = isNewlyCreated;
   }
 
   public static Blank() {
-    return new TimeDetailProps(true);
+    return new WebAttendaneLogProps(true);
   }
 }
 
-export class Time implements IPersistable<Time> {
-  public static readonly Db_Table_Name: string = 'SiteManagementTimeDetails';
+export class WebAttendaneLog implements IPersistable<WebAttendaneLog> {
+  public static readonly Db_Table_Name: string = 'AttendanceLog';
 
-  public constructor(public readonly p: TimeDetailProps, public readonly AllowEdit: boolean) {
+  constructor(public readonly p: WebAttendaneLogProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -55,17 +72,17 @@ export class Time implements IPersistable<Time> {
     }
   }
 
-  public GetEditableVersion(): Time {
-    let newState: TimeDetailProps = Utils.GetInstance().DeepCopy(this.p);
-    return Time.CreateInstance(newState, true);
+  public GetEditableVersion(): WebAttendaneLog {
+    let newState: WebAttendaneLogProps = Utils.GetInstance().DeepCopy(this.p);
+    return WebAttendaneLog.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new Time(TimeDetailProps.Blank(), true);
+    return new WebAttendaneLog(WebAttendaneLogProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new Time(data as TimeDetailProps, allowEdit);
+    return new WebAttendaneLog(data as WebAttendaneLogProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
@@ -73,28 +90,28 @@ export class Time implements IPersistable<Time> {
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Time.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, WebAttendaneLog.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: Time = Time.CreateNewInstance();
+  private static m_currentInstance: WebAttendaneLog = WebAttendaneLog.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return Time.m_currentInstance;
+    return WebAttendaneLog.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: Time) {
-    Time.m_currentInstance = value;
+  public static SetCurrentInstance(value: WebAttendaneLog) {
+    WebAttendaneLog.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): Time {
+  public static SingleInstanceFromTransportData(td: TransportData): WebAttendaneLog {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, Time.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, Time.Db_Table_Name)!.Entries) {
-        return Time.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, WebAttendaneLog.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, WebAttendaneLog.Db_Table_Name)!.Entries) {
+        return WebAttendaneLog.CreateInstance(data, false);
       }
     }
 
@@ -103,13 +120,13 @@ export class Time implements IPersistable<Time> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): Time[] {
-    let result: Time[] = [];
+    sortPropertyName: string = ""): WebAttendaneLog[] {
+    let result: WebAttendaneLog[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, Time.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, Time.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, WebAttendaneLog.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, WebAttendaneLog.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -119,18 +136,18 @@ export class Time implements IPersistable<Time> {
       }
 
       for (let data of entries) {
-        result.push(Time.CreateInstance(data, false));
+        result.push(WebAttendaneLog.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): Time[] {
-    return Time.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): WebAttendaneLog[] {
+    return WebAttendaneLog.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: TimeFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: WebAttendaneLogFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -145,39 +162,30 @@ export class Time implements IPersistable<Time> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new TimeFetchRequest();
-    req.TimeRefs.push(ref);
+    let req = new WebAttendaneLogFetchRequest();
+    req.WebAttendaneLogRefs.push(ref);
 
-    let tdResponse = await Time.FetchTransportData(req, errorHandler) as TransportData;
-    return Time.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await WebAttendaneLog.FetchTransportData(req, errorHandler) as TransportData;
+    return WebAttendaneLog.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: TimeFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await Time.FetchTransportData(req, errorHandler) as TransportData;
-    return Time.ListFromTransportData(tdResponse);
+  public static async FetchList(req: WebAttendaneLogFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await WebAttendaneLog.FetchTransportData(req, errorHandler) as TransportData;
+    return WebAttendaneLog.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new TimeFetchRequest();
-    let tdResponse = await Time.FetchTransportData(req, errorHandler) as TransportData;
-    return Time.ListFromTransportData(tdResponse);
+    let req = new WebAttendaneLogFetchRequest();
+    let tdResponse = await WebAttendaneLog.FetchTransportData(req, errorHandler) as TransportData;
+    return WebAttendaneLog.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new TimeFetchRequest();
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new WebAttendaneLogFetchRequest();
     req.CompanyRefs.push(CompanyRef)
-    req.SiteManagementRefs.push(SiteRef)
-    let tdResponse = await Time.FetchTransportData(req, errorHandler) as TransportData;
-    return Time.ListFromTransportData(tdResponse);
+    let tdResponse = await WebAttendaneLog.FetchTransportData(req, errorHandler) as TransportData;
+    return WebAttendaneLog.ListFromTransportData(tdResponse);
   }
-
-  public static async FetchEntireListBySiteRef(siteref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new TimeFetchRequest();
-    req.SiteManagementRefs.push(siteref)
-    let tdResponse = await Time.FetchTransportData(req, errorHandler) as TransportData;
-    return Time.ListFromTransportData(tdResponse);
-  }
-
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

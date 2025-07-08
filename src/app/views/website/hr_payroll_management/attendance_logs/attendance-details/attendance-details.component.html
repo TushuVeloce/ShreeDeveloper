@@ -17,45 +17,151 @@
     </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-6">
+        <div class="col-md-4 col-6">
           <label>Date</label>
-          <input type="date" name="Date" class="form-control date-input" id="Date" readonly
-            [(ngModel)]="Date" placeholder="Select Date" />
+          <input type="date" name="Date" class="form-control date-input" id="Date" readonly [(ngModel)]="Date"
+            placeholder="Select Date" />
         </div>
-        <div class="col-6">
+        <div class="col-md-4 col-6">
           <label>Employee</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" [nzSize]="'large'" name="SiteInchargeRef" required id="SiteInchargeRef"
+            nzPlaceHolder="Select" [nzSize]="'large'" name="EmployeeRef" required id="EmployeeRef"
             [(ngModel)]="Entity.p.EmployeeRef">
             <nz-option *ngFor="let employee of EmployeeList" [nzLabel]="employee.p.Name"
               [nzValue]="employee.p.Ref"></nz-option>
           </nz-select>
         </div>
-        <div class="col-6">
+        <div class="col-md-4 col-6">
           <div>
-            <label>From Time</label>
-            <input type="time" [(ngModel)]="Entity.p.FromTime" name="FromDate" class="form-control" id="FromDate"
-              required #FromDateCtrl="ngModel" (blur)="FromDateCtrl.control.markAsTouched()" />
-            <div *ngIf="(FromDateCtrl.invalid && (FromDateCtrl.touched || FromDateCtrl.dirty))">
-              <span class="validation-text" *ngIf="FromDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+            <label>Total Working Hrs</label>
+            <input type="text" [(ngModel)]="Entity.p.TotalWorkingHrs" name="TotalWorkingHrs" class="form-control"
+              id="TotalWorkingHrs" />
           </div>
         </div>
-        <div class="col-6">
-          <label>Attendance Location Type</label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" [nzSize]="'large'" name="AttendanceLocationType" required id="AttendanceLocationType"
-            [(ngModel)]="Entity.p.AttendanceLocationType">
-            <nz-option *ngFor="let Location of AttendanceLocationTypeList" [nzLabel]="Location.Name"
-              [nzValue]="Location.Ref"></nz-option>
-          </nz-select>
+        <div class="col-md-4 col-6">
+          <div>
+            <label>Total Late Mark Hrs</label>
+            <input type="text" [(ngModel)]="Entity.p.TotalLateMarkHrs" name="TotalLateMarkHrs" class="form-control"
+              id="TotalLateMarkHrs" />
+          </div>
         </div>
-        <div class="col-6" *ngIf="Entity.p.AttendanceLocationType == AttendanceLocationType.Site">
-          <label for="SiteRef"><b>Site</b></label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" id="SiteRef">
-            <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
-          </nz-select>
+        <div class="col-md-4 col-6">
+          <div>
+            <label>Total Over Time Hrs</label>
+            <input type="text" [(ngModel)]="Entity.p.TotalOvertimeHrs" name="TotalOvertimeHrs" class="form-control"
+              id="TotalOvertimeHrs" />
+          </div>
+        </div>
+        <div class="col-md-4 col-6">
+          <div>
+            <label>First Check In Time</label>
+            <input type="text" [(ngModel)]="Entity.p.FirstCheckInTime" name="FirstCheckInTime" class="form-control"
+              id="FirstCheckInTime" />
+          </div>
+        </div>
+        <div class="col-md-4 col-6">
+          <div>
+            <label>Last Check Out Time</label>
+            <input type="text" [(ngModel)]="Entity.p.LastCheckOutTime" name="LastCheckOutTime" class="form-control"
+              id="LastCheckOutTime" />
+          </div>
+        </div>
+        <div class="col-md-4 col-6 ">
+          <label style="color: white;">Is Leave</label>
+          <div class="d-flex align-items-center">
+            <input type="checkbox" id="IsLeave" [(ngModel)]="Entity.p.IsLeave" name="IsLeave"
+              class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
+            <label for="IsLeave" class="form-check-label mb-0">Is Leave</label>
+          </div>
+        </div>
+        <div class="col-md-4 col-6 ">
+          <label style="color: white;">Is Half Day</label>
+          <div class="d-flex align-items-center">
+            <input type="checkbox" id="IsHalfDay" [(ngModel)]="Entity.p.IsHalfDay" name="IsHalfDay"
+              class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
+            <label for="IsHalfDay" class="form-check-label mb-0">Is Half Day</label>
+          </div>
+        </div>
+        <div class="col-md-4 col-6 ">
+          <label style="color: white;">Is Late Mark</label>
+          <div class="d-flex align-items-center">
+            <input type="checkbox" id="IsLateMark" [(ngModel)]="Entity.p.IsLateMark" name="IsLateMark"
+              class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
+            <label for="IsLateMark" class="form-check-label mb-0">Is Late Mark</label>
+          </div>
+        </div>
+        <div class="col-md-4 col-6 ">
+          <label style="color: white;">Is Over Time</label>
+          <div class="d-flex align-items-center">
+            <input type="checkbox" id="IsOverTime" [(ngModel)]="Entity.p.IsOverTime" name="IsOverTime"
+              class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
+            <label for="IsOverTime" class="form-check-label mb-0">Is Over Time</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 2rem">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 d-flex align-items-end">
+          <h5 style="color: black; align-self: self-end">
+            <b>Attendance Log List</b>
+          </h5>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 btn-container"
+          style="display: flex; justify-content: end" routerLinkActive="active">
+          <nz-button nz-button class="btn1" (click)="openModal()">Add Attendance</nz-button>
+        </div>
+      </div>
+      <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem"
+        *ngIf="Entity.p.AttendanceLog.length > 0">
+        <div class="table-container" style="margin-top: 2rem">
+          <div class="row">
+            <div class="col-12">
+              <h3 class="TableHeading">Attendance Log Details</h3>
+            </div>
+          </div>
+          <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
+            nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.AttendanceLog">
+            <thead>
+              <tr>
+                <th *ngFor="let header of baseHeaders" class="tblsubheader">
+                  {{ header }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="
+                  let Attendance of Entity.p.AttendanceLog;
+                  let i = index
+                ">
+                <td Class="tbldata">{{ i + 1 }}</td>
+                <td Class="tbldata">{{ Attendance.CheckInTime }}</td>
+                <td Class="tbldata">{{ Attendance.CheckOutMode }}</td>
+                <td Class="tbldata">{{ Attendance.SiteName }}</td>
+                <td Class="tbldata">{{ Attendance.WorkingHrs }}</td>
+                <td class="tbldata">
+                  <span style="margin-left: 9px" (click)="editAttendane(i)">
+                    <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+                  </span>
+                  <span style="margin-left: 9px" (click)="removeAttendane(i)">
+                    <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" />
+                  </span>
+                </td>
+              </tr>
+              <!-- <tr>
+                <td class="tbldata" colspan="2"><b>Grand Total</b></td>
+                <td class="tbldata" colspan="10"></td>
+                <td class="tbldata">
+                  <b>{{ getGrandTotal() }}</b>
+                </td>
+                <td class="tbldata"><b></b></td>
+              </tr> -->
+            </tbody>
+          </nz-table>
+        </div>
+      </div>
+      <div *ngIf="Entity.p.AttendanceLog.length === 0" class="card-body_light">
+        <div style="height: 20vh; background-color: white" class="d-flex align-items-center justify-content-center">
+          <span class="title_light"> Data Not Found</span>
         </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
@@ -67,5 +173,69 @@
         </div>
       </div>
     </form>
+  </div>
+</div>
+
+
+<div *ngIf="isModalOpen" class="custom-modal-overlay">
+  <div class="custom-modal">
+    <div class="custom-modal-header">
+      <h5><b> Add Attendance</b></h5>
+      <button type="button" class="btn-close" (click)="closeModal()"></button>
+    </div>
+    <div class="custom-modal-body">
+      <form autocomplete="off">
+        <div class="row" style="margin-top: 1rem;">
+          <div class="col-md-6">
+            <label><b>Site Name</b></label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="newAttendance.SiteRef">
+              <nz-option [nzValue]="0" [nzLabel]="'Office'"></nz-option>
+              <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+            </nz-select>
+          </div>
+          <div class="col-6">
+            <label>Check In Time</label>
+            <input type="time" [(ngModel)]="newAttendance.CheckInTime" (ngModelChange)="calculateTotalWorkingHours()"
+              name="CheckInTime" class="form-control" id="CheckInTime" required #CheckInTimeCtrl="ngModel"
+              (blur)="CheckInTimeCtrl.control.markAsTouched()" />
+            <div *ngIf="(CheckInTimeCtrl.invalid && (CheckInTimeCtrl.touched || CheckInTimeCtrl.dirty))">
+              <span class="validation-text" *ngIf="CheckInTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
+          <div class="col-6">
+            <label>Check Out Time</label>
+            <input type="time" [(ngModel)]="newAttendance.CheckOutTime" (ngModelChange)="calculateTotalWorkingHours()"
+              name="CheckOutTime" class="form-control" id="CheckOutTime" required #CheckOutTimeCtrl="ngModel"
+              (blur)="CheckOutTimeCtrl.control.markAsTouched()" />
+            <div *ngIf="(CheckOutTimeCtrl.invalid && (CheckOutTimeCtrl.touched || CheckOutTimeCtrl.dirty))">
+              <span class="validation-text" *ngIf="CheckOutTimeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
+          <div class="col-6 mb-1">
+            <label>Working Hrs</label>
+            <input type="number" name="WorkingHrs" class="form-control"
+              [(ngModel)]="newAttendance.WorkingHrs" />
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="custom-modal-footer">
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 1rem;
+        ">
+        <div>
+          <nz-button nz-button class="btn1" (click)="addAttendance()">Save</nz-button>
+        </div>
+        <div>
+          <nz-button nz-button class="btn1" (click)="closeModal()">
+            Cancel
+          </nz-button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

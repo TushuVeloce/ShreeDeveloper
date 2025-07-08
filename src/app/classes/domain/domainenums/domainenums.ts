@@ -208,6 +208,20 @@ export enum ModeOfPayments {
   GpayPhonePay = 500,
 }
 
+export enum ExpenseTypes {
+  None = 0,
+  MachinaryExpense = 105,
+  LabourExpense = 110,
+  OtherExpense = 115,
+}
+
+export enum LabourTypes {
+  None = 0,
+  SkillLabour  = 510,
+  UnskillLabour  = 515,
+  WomenLabour = 520,
+}
+
 export class DomainEnums {
   public static MarketingModeName(MarketingMode: MarketingModes) {
     switch (MarketingMode) {
@@ -1712,6 +1726,88 @@ export class DomainEnums {
     if (withAllOption) {
       let allEntry = {
         Ref: AccountingReports.None,
+        Name: allOptionName,
+      };
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+    public static ExpenseTypeName(itemType: ExpenseTypes) {
+    switch (itemType) {
+      case ExpenseTypes.MachinaryExpense:
+        return 'Machinary Expense';
+      case ExpenseTypes.LabourExpense:
+        return 'Labour Expense';
+      case ExpenseTypes.OtherExpense:
+        return 'Other Expense';
+      default:
+        return '';
+    }
+  }
+
+  public static ExpenseTypeList(
+    withAllOption: boolean = false,
+    allOptionName: string = '<All>'
+  ) {
+    let result = [
+      {
+        Ref: ExpenseTypes.MachinaryExpense,
+        Name: DomainEnums.ExpenseTypeName(ExpenseTypes.MachinaryExpense),
+      },
+      {
+        Ref: ExpenseTypes.LabourExpense,
+        Name: DomainEnums.ExpenseTypeName(ExpenseTypes.LabourExpense),
+      },
+      {
+        Ref: ExpenseTypes.OtherExpense,
+        Name: DomainEnums.ExpenseTypeName(ExpenseTypes.OtherExpense),
+      }
+    ];
+    if (withAllOption) {
+      let allEntry = {
+        Ref: ExpenseTypes.None,
+        Name: allOptionName,
+      };
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+    public static LabourTypesName(itemType: LabourTypes) {
+    switch (itemType) {
+      case LabourTypes.SkillLabour:
+        return 'Skill Labour';
+      case LabourTypes.UnskillLabour:
+        return 'Unskill Labour';
+      case LabourTypes.WomenLabour:
+        return 'Women Labour';
+      default:
+        return '';
+    }
+  }
+
+  public static LabourTypesList(
+    withAllOption: boolean = false,
+    allOptionName: string = '<All>'
+  ) {
+    let result = [
+      {
+        Ref: LabourTypes.SkillLabour,
+        Name: DomainEnums.LabourTypesName(LabourTypes.SkillLabour),
+      },
+      {
+        Ref: LabourTypes.UnskillLabour,
+        Name: DomainEnums.LabourTypesName(LabourTypes.UnskillLabour),
+      },
+      {
+        Ref: LabourTypes.WomenLabour,
+        Name: DomainEnums.LabourTypesName(LabourTypes.WomenLabour),
+      }
+    ];
+    if (withAllOption) {
+      let allEntry = {
+        Ref: LabourTypes.None,
         Name: allOptionName,
       };
       result.unshift(allEntry);
