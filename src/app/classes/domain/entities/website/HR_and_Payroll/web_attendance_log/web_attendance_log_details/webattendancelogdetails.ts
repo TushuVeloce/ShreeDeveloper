@@ -29,13 +29,14 @@ export class WebAttendaneLogDetailsLogProps {
   public AttendanceLogRef: number = 0;
   public CheckInTime: string = '';
   public CheckOutTime: string = '';
-  public AttendanceLogPath1 : string = '';
-  public AttendanceLogPath2 : string = '';
-  public AttendenceLocationType  : number = 0;
+  public AttendanceLogPath1: string = '';
+  public AttendanceLogPath2: string = '';
+  public AttendenceLocationType: number = 0;
   public SiteRef: number = 0;
-  public WorkingHrs : number = 0;
-  public CheckOutMode  : number = 0;
-  public IsCheckOutDone    : number = 0;
+  public SiteName: string = '';
+  public WorkingHrs: number = 0;
+  public CheckOutMode: number = 0;
+  public IsCheckOutDone: number = 0;
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -52,14 +53,14 @@ export class WebAttendaneLogDetailsLogProps {
 export class WebAttendaneLogDetailsLog implements IPersistable<WebAttendaneLogDetailsLog> {
   public static readonly Db_Table_Name: string = 'AttendanceLogDetails';
 
-  private constructor(public readonly p: WebAttendaneLogDetailsLogProps, public readonly AllowEdit: boolean) {
+  constructor(public readonly p: WebAttendaneLogDetailsLogProps, public readonly AllowEdit: boolean) {
 
   }
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -113,7 +114,7 @@ export class WebAttendaneLogDetailsLog implements IPersistable<WebAttendaneLogDe
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): WebAttendaneLogDetailsLog[] {
+    sortPropertyName: string = ""): WebAttendaneLogDetailsLog[] {
     let result: WebAttendaneLogDetailsLog[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -173,7 +174,7 @@ export class WebAttendaneLogDetailsLog implements IPersistable<WebAttendaneLogDe
     return WebAttendaneLogDetailsLog.ListFromTransportData(tdResponse);
   }
 
- public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new WebAttendaneLogDetailsLogFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await WebAttendaneLogDetailsLog.FetchTransportData(req, errorHandler) as TransportData;
