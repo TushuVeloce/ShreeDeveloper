@@ -10,7 +10,7 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
-import { ValidMenuItemsStateManagement } from 'src/app/services/ValidMenuItems';
+import { MenuItem, ValidMenuItemsStateManagement } from 'src/app/services/ValidMenuItems';
 
 @Component({
   selector: 'app-unit-master',
@@ -30,17 +30,17 @@ export class UnitMasterComponent implements OnInit {
   total = 0;
   TimeUnitRef: number = UnitRefs.TimeUnitRef;
   FeatureRef = ApplicationFeatures
-  // ValidMenuItems: MenuItem[] = [];
+  ValidMenuItems: any;
   ApplicationFeatures?: ApplicationFeatures;
 
   headers: string[] = ['Sr.No.', 'Unit', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService, private payloadPacketFacade: PayloadPacketFacade,
-    private serverCommunicator: ServerCommunicatorService,private ValidMenuItem: ValidMenuItemsStateManagement) { }
+    private serverCommunicator: ServerCommunicatorService, private ValidMenuItem: ValidMenuItemsStateManagement) { }
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    const ValidMenuItems = this.ValidMenuItem.getData(this.FeatureRef.UnitMaster);
-    console.log('ValidMenuItems :', ValidMenuItems);
+    this.ValidMenuItems = this.ValidMenuItem.getData(this.FeatureRef.UnitMaster);
+    console.log('ValidMenuItems :', this.ValidMenuItems);
     // const rawItems = JSON.parse(sessionStorage.getItem('ValidMenuItems') || '[]');
     // console.log('rawItems :', rawItems);
     // this.ValidMenuItems = rawItems.filter((data: MenuItem) => data.FeatureRef == ApplicationFeatures.UnitMaster);

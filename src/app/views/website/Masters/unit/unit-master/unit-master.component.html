@@ -6,7 +6,7 @@
     <app-shared-filter [masterList]="MasterList" [filterFields]="['Name']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
-  <div class="col-4 mb-2" routerLinkActive="active">
+  <div *ngIf="ValidMenuItems.CanAdd" class="col-4 mb-2" routerLinkActive="active">
     <nz-button nz-button class="btn1" (click)='AddUnit()'>
       Add Unit
     </nz-button>
