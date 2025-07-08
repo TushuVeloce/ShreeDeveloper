@@ -19,6 +19,9 @@ import { ToastService } from '../../core/toast.service';
 import { HapticService } from '../../core/haptic.service';
 import { AlertService } from '../../core/alert.service';
 import { LoadingService } from '../../core/loading.service';
+import { TransportData } from 'src/app/classes/infrastructure/transportdata';
+import { AttendanceLogCheckInOutCustomProcess } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelogcheckinoutcustomprocess';
+
 @Component({
   selector: 'app-attendance',
   templateUrl: './attendance.page.html',
@@ -50,6 +53,8 @@ export class AttendancePage implements OnInit {
 
   // Attendance and site data
   attendanceLog: AttendanceLog = AttendanceLog.CreateNewInstance();
+  AttendanceLogCheckInOut = new AttendanceLogCheckInOutCustomProcess();
+
   siteList: Site[] = [];
   selectedSite: Site[] = [];
   selectedAttendanceLocationType: any[] = [];
@@ -193,7 +198,7 @@ export class AttendancePage implements OnInit {
       this.attendanceLog = AttendanceLog.CreateNewInstance();
 
       const tranDate = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
-      // const companyRef = this.companyState.getCurrentCompanyRef();
+      // const companyRef = this.companyRef;
       // console.log('employeeRef, companyRef, tranDate :', this.employeeRef, companyRef, tranDate);
 
       const lst = await AttendanceLog.FetchEntireListByCompanyRef(
@@ -231,9 +236,9 @@ export class AttendancePage implements OnInit {
         Object.assign(this.attendanceLog.p, completedCheckIn);
       }
 
-      this.isOnLeave = Boolean(this.attendanceLog.p.IsLeave);
-      this.checkInTime = this.attendanceLog.p.CheckInTime || '';
-      this.checkOutTime = this.attendanceLog.p.CheckOutTime || '';
+      this.isOnLeave = Boolean(this.AttendanceLogCheckInOut.IsLeave);
+      this.checkInTime = this.AttendanceLogCheckInOut.CheckInTime || '';
+      this.checkOutTime = this.AttendanceLogCheckInOut.CheckOutTime || '';
 
       // Set button statuses based on attendanceLog properties
       const { FirstCheckInTime, CheckInTime, CheckOutTime } = this.attendanceLog.p;
@@ -286,7 +291,8 @@ export class AttendancePage implements OnInit {
 
       this.openSelectModal(options, this.selectedAttendanceLocationType, false, 'Select Location Type', 1, (selected) => {
         this.selectedAttendanceLocationType = selected;
-        this.attendanceLog.p.AttendanceLocationType = selected[0].p.Ref;
+        // this.attendanceLog.p.AttendanceLocationType = selected[0].p.Ref;
+        this.AttendanceLogCheckInOut.AttendanceLocationType = selected[0].p.Ref;
         this.AttendanceLocationTypeName = selected[0].p.Name;
       });
     } catch (error) {
@@ -304,6 +310,7 @@ export class AttendancePage implements OnInit {
 
         this.selectedSite = selected;
         this.SiteName = selected[0].p.Name;
+        this.AttendanceLogCheckInOut.SiteRef = selected[0].p.Ref;
       });
     } catch (error) {
 
@@ -328,7 +335,7 @@ export class AttendancePage implements OnInit {
     }
     try {
       this.siteList = await Site.FetchEntireListByCompanyRef(
-        this.companyState.getCurrentCompanyRef(),
+        this.companyRef,
         async (errMsg: string) => {
           this.toastService.present('Error' + errMsg, 1000, 'danger');
           await this.haptic.error();
@@ -372,36 +379,23 @@ export class AttendancePage implements OnInit {
     return new File([blob], fileName, { type: mimeType });
   }
 
-
   submitPunchIn = async () => {
     try {
       await this.loadingService.show();
       this.isSubmitting = true;
 
-      this.attendanceLog.p.IsCheckIn = true;
-      this.attendanceLog.p.CompanyRef = this.companyState.getCurrentCompanyRef();
-      this.attendanceLog.p.EmployeeRef = this.employeeRef;
-      this.attendanceLog.p.HandleBy = 100;
+      this.AttendanceLogCheckInOut.IsCheckIn = true;
+      this.AttendanceLogCheckInOut.CompanyRef = this.companyRef;
+      this.AttendanceLogCheckInOut.EmployeeRef = this.employeeRef;
+      // this.AttendanceLogCheckInOut.HandleBy = 100;
 
       if (this.selectedSite.length > 0) {
-        this.attendanceLog.p.SiteRef = this.selectedSite[0].p.Ref;
+        this.AttendanceLogCheckInOut.SiteRef = this.selectedSite[0].p.Ref;
       }
 
-      this.attendanceLog.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
-      const entityToSave = this.attendanceLog.GetEditableVersion();
-      const entitiesToSave = [entityToSave];
-
-      // const filesToUpload: FileTransferObject[] = [];
-
-      // if (this.rawCapturedSelfPhoto) {
-      //   const file = await this.uriToFile(this.rawCapturedSelfPhoto, "PunchIn_Self_Photo.jpg");
-      //   filesToUpload.push(FileTransferObject.FromFile("AttendanceLogFile1", file, "PunchIn_Self_Photo"));
-      // }
-
-      // if (this.rawCapturedWorkLocationPhoto) {
-      //   const file = await this.uriToFile(this.rawCapturedWorkLocationPhoto, "PunchIn_Work_location.jpg");
-      //   filesToUpload.push(FileTransferObject.FromFile("AttendanceLogFile2", file, "PunchIn_Work_location"));
-      // }
+      this.AttendanceLogCheckInOut.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
+      // const entityToSave = this.attendanceLog.GetEditableVersion();
+      // const entitiesToSave = [entityToSave];
       const filesToUpload: FileTransferObject[] = [];
       if (this.rawCapturedSelfPhoto) {
         // Convert URI to File with .jpg extension
@@ -415,8 +409,11 @@ export class AttendancePage implements OnInit {
         filesToUpload.push(FileTransferObject.FromFile("AttendanceLogFile2", file, "PunchIn_Work_location.jpg"));
       }
 
-      const tr = await this.utils.SavePersistableEntities(entitiesToSave, filesToUpload);
-
+      console.log('req :', this.AttendanceLogCheckInOut);
+      // return;
+      let td = this.AttendanceLogCheckInOut.FormulateTransportData();
+      let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+      let tr = await this.serverCommunicator.sendHttpRequest(pkt, 'acceptrequest', filesToUpload);
       if (!tr.Successful) {
         // await this.uiUtils.showErrorMessage('Error', tr.Message);
         this.toastService.present(`Error ${tr.Message}`, 1000, 'danger');
@@ -424,12 +421,15 @@ export class AttendancePage implements OnInit {
         return;
       }
 
-      // await this.uiUtils.showSuccessToster('Punch in successfully');
+      // await this.uiUtils.showSuccessToster('Password Created Successfully');
       this.toastService.present(`Punch in successfully`, 1000, 'success');
       await this.haptic.success();
+      let tdResult = JSON.parse(tr.Tag) as TransportData;
 
       // Reset state
-      this.attendanceLog = AttendanceLog.CreateNewInstance();
+      // this.attendanceLog = AttendanceLog.CreateNewInstance();
+      this.AttendanceLogCheckInOut = new AttendanceLogCheckInOutCustomProcess();
+
       this.capturedSelfPhoto = null;
       this.capturedWorkLocationPhoto = null;
 
@@ -452,26 +452,48 @@ export class AttendancePage implements OnInit {
   submitPunchOut = async () => {
     try {
       await this.loadingService.show();
-      this.attendanceLog.p.IsCheckIn = false;
-      this.attendanceLog.p.CompanyRef = this.companyRef;
-      this.attendanceLog.p.EmployeeRef = this.employeeRef;
-      this.attendanceLog.p.HandleBy = 100;
+      this.AttendanceLogCheckInOut.IsCheckIn = false;
+      this.AttendanceLogCheckInOut.CompanyRef = this.companyRef;
+      this.AttendanceLogCheckInOut.EmployeeRef = this.employeeRef;
+      // this.AttendanceLogCheckInOut.HandleBy = 100;
       // Convert date to full format
-      this.attendanceLog.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
-      const entityToSave = this.attendanceLog.GetEditableVersion();
-      const entitiesToSave = [entityToSave];
-
-      const tr = await this.utils.SavePersistableEntities(entitiesToSave);
+      this.AttendanceLogCheckInOut.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
+      
+      console.log('req :', this.AttendanceLogCheckInOut);
+      // return;
+      let td = this.AttendanceLogCheckInOut.FormulateTransportData();
+      let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+      let tr = await this.serverCommunicator.sendHttpRequest(pkt);
       if (!tr.Successful) {
+        // await this.uiUtils.showErrorMessage('Error', tr.Message);
         this.toastService.present(`Error ${tr.Message}`, 1000, 'danger');
-        console.log('tr.Message :', tr.Message);
         await this.haptic.error();
         return;
       }
+
+      // await this.uiUtils.showSuccessToster('Password Created Successfully');
       this.toastService.present(`Punch out successfully`, 1000, 'success');
       await this.haptic.success();
-      // Reset and refresh data
-      this.attendanceLog = AttendanceLog.CreateNewInstance();
+      let tdResult = JSON.parse(tr.Tag) as TransportData;
+
+      // Reset state
+      // this.attendanceLog = AttendanceLog.CreateNewInstance();
+      this.AttendanceLogCheckInOut = new AttendanceLogCheckInOutCustomProcess();
+
+      // const entityToSave = this.attendanceLog.GetEditableVersion();
+      // const entitiesToSave = [entityToSave];
+
+      // const tr = await this.utils.SavePersistableEntities(entitiesToSave);
+      // if (!tr.Successful) {
+      //   this.toastService.present(`Error ${tr.Message}`, 1000, 'danger');
+      //   console.log('tr.Message :', tr.Message);
+      //   await this.haptic.error();
+      //   return;
+      // }
+      // this.toastService.present(`Punch out successfully`, 1000, 'success');
+      // await this.haptic.success();
+      // // Reset and refresh data
+      // this.attendanceLog = AttendanceLog.CreateNewInstance();
       await Promise.all([
         this.getCheckInData(),
         this.getWeekWiseAttendanceLogByAttendanceListType()
