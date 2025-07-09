@@ -97,6 +97,7 @@ export class InvoiceDetailsComponent implements OnInit {
 
   async ngOnInit() {
     await this.appStateManage.setDropdownDisabled(true);
+    await this.getVendorListByCompanyRef();
     this.getSiteListByCompanyRef()
     this.getLedgerListByCompanyRef()
     await this.getUnitList()
@@ -139,6 +140,16 @@ export class InvoiceDetailsComponent implements OnInit {
     let txtName = document.getElementById('SiteRef')!;
     txtName.focus();
   }
+
+  getVendorListByCompanyRef = async () => {
+      if (this.companyRef() <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
+      this.VendorList = []
+      let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.VendorList = lst;
+    }
 
   private FormulateVendorServiceList = async () => {
     if (this.companyRef() <= 0) {
@@ -367,7 +378,7 @@ export class InvoiceDetailsComponent implements OnInit {
 
   CloseTimeModal = async (type: string) => {
     if (type === 'machinetime') {
-      const keysToCheck = ['Start Time', 'End Time'] as const;
+      const keysToCheck = ['StartTime', 'EndTime'] as const;
 
       const hasData = keysToCheck.some(
         key => (this.MachineTimeEntity as any)[key]?.toString().trim()
@@ -428,7 +439,7 @@ export class InvoiceDetailsComponent implements OnInit {
 
    CloseLabourTimeModal = async (type: string) => {
     if (type === 'labourtime') {
-      const keysToCheck = ['From Time', 'To Time'] as const;
+      const keysToCheck = ['LabourType', 'LabourFromTime','LabourToTime','LabourQty','LabourRate'] as const;
 
       const hasData = keysToCheck.some(
         key => (this.LabourTimeEntity as any)[key]?.toString().trim()

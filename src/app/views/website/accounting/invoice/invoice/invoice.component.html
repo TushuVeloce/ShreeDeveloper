@@ -30,7 +30,7 @@
           <td Class="tbldata">{{Invoice.p.LedgerName}}</td>
           <td Class="tbldata">{{Invoice.p.SubLedgerName}}</td>
           <td Class="tbldata">{{Invoice.p.Description}}</td>
-          <td Class="tbldata">{{Invoice.p.RecipientName | titleCase}}</td>
+          <td Class="tbldata">{{Invoice.p.RecipientName? (Invoice.p.RecipientName | titleCase) : Invoice.p.VendorName}}</td>
           <td Class="tbldata">{{Invoice.p.InvoiceAmount | currency : "INR" }}</td>
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(Invoice)" />
