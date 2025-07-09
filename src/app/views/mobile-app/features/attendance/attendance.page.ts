@@ -396,7 +396,7 @@ export class AttendancePage implements OnInit {
       if (this.selectedAttendanceLogType === AttendanceLogType.TodaysAttendanceLog) {
         let logs = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(
           this.companyRef,
-          this.selectedAttendanceLogType,
+          AttendanceLogType.WeeklyAttendanceLog,
           this.employeeRef,
           async errMsg => {
             this.toastService.present(`Error ${errMsg}`, 1000, 'danger');
