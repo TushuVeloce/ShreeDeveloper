@@ -181,24 +181,59 @@ export class AttendancePage implements OnInit {
       this.isOnLeave = false;
 
       const tranDate = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
-      const lst = await AttendanceLog.FetchEntireListByCompanyRef(this.employeeRef, this.companyRef, tranDate, async errMsg => {
-        this.toastService.present('Error ' + errMsg, 1000, 'danger');
-        await this.haptic.error();
-      });
+      const lst = await AttendanceLog.FetchEntireListByCompanyRef(
+        this.employeeRef,
+        this.companyRef,
+        tranDate,
+        async errMsg => {
+          this.toastService.present('Error ' + errMsg, 1000, 'danger');
+          await this.haptic.error();
+        }
+      );
+
+      console.log('Attendance List:', lst);
+
+      if (!lst || lst.length === 0) {
+        this.isCheckInEnabled = true;
+        this.bothButtonsEnabled = true;
+        return;
+      }
 
       const checkInData: AttendanceLogProps[] = lst.map(log => log.p);
       const pendingCheckIn = checkInData.find(e => !e.CheckOutTime);
       const completedCheckIn = checkInData.find(e => e.CheckOutTime);
 
+      // Assign latest attendance data to attendanceLog
       Object.assign(this.attendanceLog.p, pendingCheckIn || completedCheckIn || {});
 
-      this.isCheckInEnabled = !this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime;
-      this.bothButtonsEnabled = true;
-    } catch {
+      // Update state from assigned log data
+      const { FirstCheckInTime, CheckInTime, CheckOutTime } = this.attendanceLog.p;
+
+      if (!FirstCheckInTime && !CheckInTime && !CheckOutTime) {
+        this.isCheckInEnabled = true;
+        this.bothButtonsEnabled = true;
+      } else if (CheckInTime && !CheckOutTime) {
+        this.isCheckInEnabled = false;
+        this.bothButtonsEnabled = true;
+      } else if (CheckInTime && CheckOutTime) {
+        this.isCheckInEnabled = true;
+        this.bothButtonsEnabled = true;
+      } else {
+        this.isCheckInEnabled = false;
+        this.bothButtonsEnabled = false;
+      }
+
+      // Optionally use `AttendanceLogCheckInOut` if it contains relevant runtime data
+      this.checkInTime = this.attendanceLog.p.CheckInTime || '';
+      this.checkOutTime = this.attendanceLog.p.CheckOutTime || '';
+      this.isOnLeave = Boolean(this.attendanceLog.p.IsLeave);
+    } catch (error) {
       this.toastService.present('Unexpected error while fetching attendance.', 1000, 'danger');
       await this.haptic.error();
     }
-  }
+  };
+  
+
 
   formatDate(date: string | Date): string {
     return this.dateConversionService.formatDate(date);
