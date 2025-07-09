@@ -55,6 +55,7 @@ export class AttendancePage implements OnInit {
   selectedAttendanceLocationType: any[] = [];
   SiteName = '';
   AttendanceLocationTypeName = '';
+  AttendanceLocationTypeRef: number = 0;
 
   weeklyAttendanceLogs: AttendanceLogs[] = [];
   filteredWeeklyAttendanceLogs: AttendanceLogs[] = [];
@@ -232,7 +233,7 @@ export class AttendancePage implements OnInit {
       await this.haptic.error();
     }
   };
-  
+
 
 
   formatDate(date: string | Date): string {
@@ -245,6 +246,7 @@ export class AttendancePage implements OnInit {
     if (selected) {
       this.selectedAttendanceLocationType = selected;
       this.AttendanceLocationTypeName = selected[0].p.Name;
+      this.AttendanceLocationTypeRef = selected[0].p.Ref;
     }
   }
 
@@ -299,14 +301,45 @@ export class AttendancePage implements OnInit {
     try {
       await this.loadingService.show();
       this.isSubmitting = true;
+      if (!this.employeeRef) {
+        this.toastService.present('Employee not selected', 1000, 'warning');
+        await this.haptic.warning();
+        return;
+      }
+      if (!this.companyRef) {
+        this.toastService.present('Company not selected', 1000, 'warning');
+        await this.haptic.warning();
+        return;
+      }
+      if (this.selectedAttendanceLocationType.length === 0) {
+        this.toastService.present('Location Type not selected', 1000, 'warning');
+        await this.haptic.warning();
+        return;
+      }
 
+      const selectedTypeRef = this.selectedAttendanceLocationType[0]?.p?.Ref;
+      if (selectedTypeRef === this.AttendanceLocationTypes.Site && this.selectedSite.length === 0) {
+        this.toastService.present('Site not selected', 1000, 'warning');
+        await this.haptic.warning();
+        return;
+      }
+      // if (!this.rawCapturedSelfPhoto) {
+      //   this.toastService.present('Self Photo not uploaded', 1000, 'warning');
+      //   await this.haptic.warning();
+      //   return;
+      // }
+      // if (!this.rawCapturedWorkLocationPhoto) {
+      //   this.toastService.present('Work Location Photo not uploaded', 1000, 'warning');
+      //   await this.haptic.warning();
+      //   return;
+      // }
       const request = new AttendanceLogCheckInCustomProcess();
       Object.assign(request, {
         IsCheckIn: true,
         CompanyRef: this.companyRef,
         EmployeeRef: this.employeeRef,
-        SiteRef: this.selectedSite[0]?.p?.Ref || 0,
-        AttendanceLocationType: this.selectedAttendanceLocationType[0]?.p?.Ref || 0
+        SiteRef: this.selectedSite[0].p.Ref || 0,
+        AttendanceLocationType: this.selectedAttendanceLocationType[0].p.Ref || 0
       });
 
       const filesToUpload: FileTransferObject[] = [];
@@ -319,8 +352,6 @@ export class AttendancePage implements OnInit {
         const file = await this.uriToFile(this.rawCapturedWorkLocationPhoto, 'PunchIn_Work_location.jpg');
         filesToUpload.push(FileTransferObject.FromFile('AttendanceLogFile2', file, 'PunchIn_Work_location.jpg'));
       }
-      console.log('request :', request);
-      this.resetPunchState();
       const td = request.FormulateTransportData();
       const pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
       const tr = await this.serverCommunicator.sendHttpRequest(pkt, 'acceptrequest', filesToUpload);
@@ -333,7 +364,7 @@ export class AttendancePage implements OnInit {
 
       this.toastService.present('Punch in successfully', 1000, 'success');
       await this.haptic.success();
-
+      this.punchModalOpen = false;
       this.resetPunchState();
 
       await Promise.all([
@@ -345,7 +376,6 @@ export class AttendancePage implements OnInit {
       await this.haptic.error();
     } finally {
       this.isSubmitting = false;
-      this.punchModalOpen = false;
       await this.loadingService.hide();
     }
   }
@@ -392,11 +422,12 @@ export class AttendancePage implements OnInit {
 
   getAttendanceLogByAttendanceType = async () => {
     try {
-      let logs: any = [];
+      let logs: any[] = [];
+
       if (this.selectedAttendanceLogType === AttendanceLogType.TodaysAttendanceLog) {
-        let logs = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(
+        const allLogs = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(
           this.companyRef,
-          AttendanceLogType.WeeklyAttendanceLog,
+          AttendanceLogType.WeeklyAttendanceLog, // using weekly to fetch today from it
           this.employeeRef,
           async errMsg => {
             this.toastService.present(`Error ${errMsg}`, 1000, 'danger');
@@ -405,16 +436,21 @@ export class AttendancePage implements OnInit {
         );
 
         const strCurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
-        const today = this.formatDate(strCurrentDateTime);
+        const today = strCurrentDateTime.substring(0, 10); // e.g. '2025-07-09'
 
-        // Filter logs where LogDate is today's date
-        logs = logs.filter(log => {
-          const serverFormattedDate = this.formatDate(log.p.TransDateTime)
-          return serverFormattedDate === today;
+        console.log('today :', today);
+        console.log('allLogs :', allLogs);
+
+        logs = allLogs.filter(log => {
+          const transDate = log.p.TransDateTime?.substring(0, 10);
+          console.log('transDate:', transDate);
+          return transDate === today;
         });
 
-      }      
-      if (this.selectedAttendanceLogType === AttendanceLogType.WeeklyAttendanceLog) {
+        console.log('filtered today logs :', logs);
+      }
+
+      else if (this.selectedAttendanceLogType === AttendanceLogType.WeeklyAttendanceLog) {
         logs = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(
           this.companyRef,
           this.selectedAttendanceLogType,
@@ -425,11 +461,12 @@ export class AttendancePage implements OnInit {
           }
         );
       }
-      if (this.selectedAttendanceLogType === AttendanceLogType.MonthlyAttendanceLog) {
+
+      else if (this.selectedAttendanceLogType === AttendanceLogType.MonthlyAttendanceLog) {
         logs = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(
           this.companyRef,
           this.selectedAttendanceLogType,
-          this.selectedMonth,
+          this.selectedMonth + 1, // Month is 0-indexed
           this.employeeRef,
           async errMsg => {
             this.toastService.present(`Error ${errMsg}`, 1000, 'danger');
@@ -437,19 +474,24 @@ export class AttendancePage implements OnInit {
           }
         );
       }
+
+      console.log('Final logs:', logs);
+
       this.weeklyAttendanceLogs = logs;
       this.filteredWeeklyAttendanceLogs = logs;
     } catch (error) {
       this.toastService.present('Error fetching attendance logs', 1000, 'danger');
       await this.haptic.error();
     }
-  }
+  };
+
 
   private resetPunchState = () => {
     this.AttendanceLocationTypeName = '';
+    this.selectedAttendanceLocationType = [];
+    this.AttendanceLocationTypeRef=0
     this.SiteName = '';
     this.selectedSite = [];
-    this.selectedAttendanceLocationType = [];
     this.capturedSelfPhoto = null;
     this.rawCapturedSelfPhoto = null;
     this.capturedWorkLocationPhoto = null;
