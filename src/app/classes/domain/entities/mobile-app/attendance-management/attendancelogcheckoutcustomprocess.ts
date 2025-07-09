@@ -4,8 +4,8 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class AttendanceLogCheckInOutCustomProcess {
-    public static readonly CustomProcessRequestType: string = "ChekInCheckOutCustomRequest";
+export class AttendanceLogCheckOutCustomProcess {
+    public static readonly CustomProcessRequestType: string = "CheckOutCustomRequest";
     public Ref: number = 0;
     public EmployeeRef: number = 0;
     public CompanyRef: number = 0;
@@ -36,7 +36,7 @@ export class AttendanceLogCheckInOutCustomProcess {
     public IsCheckIn = false;
 
     public MergeIntoTransportData = (td: TransportData) => {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, AttendanceLogCheckInOutCustomProcess.CustomProcessRequestType) as DataCollection;
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, AttendanceLogCheckOutCustomProcess.CustomProcessRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 

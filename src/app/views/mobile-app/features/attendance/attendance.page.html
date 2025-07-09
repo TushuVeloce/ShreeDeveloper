@@ -57,12 +57,12 @@
           <ion-card-title class="header-title">Recent Attendance</ion-card-title>
         </ion-col>
         <ion-col size="6" class="ion-text-end">
-          <ion-select class="week-select" mode="ios" interface="popover" [value]="selectedWeek"
-            (ionChange)="onWeekChange()">
-            <ion-select-option *ngFor="let week of AttendanceLogTypeList" [value]="week.Ref">
-              {{ week.Name }}
+          <ion-select class="week-select" mode="ios" interface="popover" [(ngModel)]="selectedAttendanceLogType"
+            (ionChange)="onAttendanceLogTypeChange()">
+            <ion-select-option *ngFor="let AttendanceLogType of AttendanceLogTypeList" [value]="AttendanceLogType.Ref">
+              {{ AttendanceLogType.Name }}
             </ion-select-option>
-          </ion-select>
+          </ion-select>        
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -139,7 +139,7 @@
 
             <!-- Site Selection -->
             <ion-item class="input-item" button (click)="selectSiteBottomsheet()"
-              *ngIf="AttendanceLogCheckInOut.AttendanceLocationType === AttendanceLocationTypes.Site">
+              *ngIf="selectedAttendanceLogType === AttendanceLocationTypes.Site">
               <ion-label>Select Site</ion-label>
 
               <!-- Text showing the selected status -->
