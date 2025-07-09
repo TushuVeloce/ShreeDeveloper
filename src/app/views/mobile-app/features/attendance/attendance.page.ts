@@ -15,12 +15,13 @@ import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { Utils } from 'src/app/services/utils.service';
-import { ToastService } from '../../core/toast.service';
 import { HapticService } from '../../core/haptic.service';
 import { AlertService } from '../../core/alert.service';
 import { LoadingService } from '../../core/loading.service';
-import { TransportData } from 'src/app/classes/infrastructure/transportdata';
-import { AttendanceLogCheckInOutCustomProcess } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelogcheckinoutcustomprocess';
+import { ToastService } from '../../core/toast.service';
+import { SegmentValue } from '@ionic/angular';
+import { AttendanceLogCheckInCustomProcess } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelogcheckincustomprocess';
+import { AttendanceLogCheckOutCustomProcess } from 'src/app/classes/domain/entities/mobile-app/attendance-management/attendancelogcheckoutcustomprocess';
 
 @Component({
   selector: 'app-attendance',
@@ -29,68 +30,39 @@ import { AttendanceLogCheckInOutCustomProcess } from 'src/app/classes/domain/ent
   standalone: false
 })
 export class AttendancePage implements OnInit {
-
-  // State and UI flags
   punchModalOpen = false;
-  // isLoading = false;
   isSubmitting = false;
   disableTopCard = false;
 
-  // Data fields
-  currentDateTime: string = "";
-  checkInTime: string = "";
-  checkOutTime: string = "";
-  DateValue: string = "";
-  // capturedBeforePhoto: string | null = null;
-  // capturedAfterPhoto: string | null = null;
-  capturedSelfPhoto: string | null | undefined = null;
-  rawCapturedSelfPhoto: string | null | undefined = null;
-  capturedWorkLocationPhoto: string | null | undefined = null;
-  rawCapturedWorkLocationPhoto: string | null | undefined = null;
-  isOnLeave: boolean = false;
-  isCheckInEnabled: boolean = false;
-  bothButtonsEnabled: boolean = true;
+  currentDateTime = '';
+  checkInTime = '';
+  checkOutTime = '';
+  DateValue = '';
 
-  // Attendance and site data
-  attendanceLog: AttendanceLog = AttendanceLog.CreateNewInstance();
-  AttendanceLogCheckInOut = new AttendanceLogCheckInOutCustomProcess();
+  capturedSelfPhoto: string | null = null;
+  rawCapturedSelfPhoto: string | null = null;
+  capturedWorkLocationPhoto: string | null = null;
+  rawCapturedWorkLocationPhoto: string | null = null;
+
+  isOnLeave = false;
+  isCheckInEnabled = false;
+  bothButtonsEnabled = true;
+
+  attendanceLog = AttendanceLog.CreateNewInstance();
 
   siteList: Site[] = [];
   selectedSite: Site[] = [];
   selectedAttendanceLocationType: any[] = [];
-  SiteName: string = "";
-  filteredWeeklyAttendanceLogs: AttendanceLogs[] = [];
+  SiteName = '';
+  AttendanceLocationTypeName = '';
+
   weeklyAttendanceLogs: AttendanceLogs[] = [];
+  filteredWeeklyAttendanceLogs: AttendanceLogs[] = [];
 
-
-  // Enums and Lists
   AttendanceLocationTypes = AttendanceLocationType;
   attendanceLocationTypeList = DomainEnums.AttendanceLocationTypeList();
-  AttendanceLocationTypeName: string = '';
   AttendanceLogTypeList = DomainEnums.AttendanceLogTypeMobileAppList();
   readonly LeaveRequestTypeEnum = LeaveRequestType;
-  // gridItems = [
-  //   { label: 'Salary Slip', icon: 'layers-outline', gridFunction: 100 },
-  //   { label: 'Leave', icon: 'grid-outline', gridFunction: 200 },
-  //   { label: 'Attendance', icon: 'bar-chart-outline', gridFunction: 300 },
-  // ];
-  gridItems = [
-    {
-      icon: 'assets/icons/salary_slip_request_mobile_app.png',
-      label: 'Salary Slip',
-      routerPath: '/mobileapp/tabs/attendance/salary-slip'
-    },
-    {
-      icon: 'assets/icons/leave_requests_mobile_app.png',
-      label: 'Leave',
-      routerPath: '/mobileapp/tabs/attendance/leave'
-    },
-    {
-      icon: 'assets/icons/attendance _mobile_app.png',
-      label: 'Attendance',
-      routerPath: '/mobileapp/tabs/attendance/attendance-details'
-    }
-  ];
 
   selectedIndex = 0;
 
@@ -98,9 +70,17 @@ export class AttendancePage implements OnInit {
     this.selectedIndex = index;
   }
 
-  selectedWeek: number = 0;
+  gridItems = [
+    { icon: 'assets/icons/salary_slip_request_mobile_app.png', label: 'Salary Slip', routerPath: '/mobileapp/tabs/attendance/salary-slip' },
+    { icon: 'assets/icons/leave_requests_mobile_app.png', label: 'Leave', routerPath: '/mobileapp/tabs/attendance/leave' },
+    { icon: 'assets/icons/attendance _mobile_app.png', label: 'Attendance', routerPath: '/mobileapp/tabs/attendance/attendance-details' }
+  ];
+
+  selectedAttendanceLogType: number = AttendanceLogType.TodaysAttendanceLog;
   employeeRef: number = 0;
   companyRef: number = 0;
+  selectedMonth: number = 0;
+  months: any[] = [];
 
   constructor(
     private router: Router,
@@ -118,51 +98,48 @@ export class AttendancePage implements OnInit {
     private loadingService: LoadingService
   ) { }
 
-  async ngOnInit() {
-    await this.loadAttendanceIfEmployeeExists();
+  ngOnInit = async () => {
+    // await this.loadAttendanceIfEmployeeExists();
   }
+
   ionViewWillEnter = async () => {
     await this.loadAttendanceIfEmployeeExists();
-  }
-  ngOnDestroy = () => {
-    // cleanup logic if needed later
-  }
+  };
+
   private loadAttendanceIfEmployeeExists = async () => {
     try {
       await this.loadingService.show();
-      this.disableTopCard = await this.appStateManage.localStorage.getItem('IsDefaultUser') == "1" ? true : false;
+      this.disableTopCard = (await this.appStateManage.localStorage.getItem('IsDefaultUser')) === '1';
       this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
       this.employeeRef = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
-      if (this.AttendanceLogTypeList?.length > 0) {
-        this.selectedWeek = this.AttendanceLogTypeList[0].Ref; // Ref is a number
-        this.onWeekChange();
-      }
-      if (this.employeeRef > 0) {
-        // Retrieve employee reference from storage (ensure proper type conversion)
-        this.employeeRef = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
-        // Get current date time and set state
-        try {
-          const strCurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
-          this.DateValue = strCurrentDateTime.substring(0, 10);
-          this.currentDateTime = strCurrentDateTime;
-        } catch (error) {
-          this.toastService.present('Error obtaining current date/time', 1000, 'danger');
-          await this.haptic.warning();
-          // console.error('Error obtaining current date/time:', error);
-        }
+      await this.fetchAttendanceByMonth(new Date().getMonth());
 
-        // Load check-in data and weekly attendance logs
-        await Promise.all([
-          this.getCheckInData(),
-          this.getWeekWiseAttendanceLogByAttendanceListType()
-        ]);
-      } else {
+      if (this.AttendanceLogTypeList?.length > 0) {
+        this.selectedAttendanceLogType = this.AttendanceLogTypeList[0].Ref;
+        this.onAttendanceLogTypeChange();
+      }
+
+      if (!this.employeeRef) {
         this.toastService.present('Employee not selected', 1000, 'danger');
         await this.haptic.warning();
-        // await this.uiUtils.showErrorToster('Employee not selected');
+        return;
       }
-    } catch (error) {
 
+      try {
+        const strCurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
+        this.DateValue = strCurrentDateTime.substring(0, 10);
+        this.currentDateTime = strCurrentDateTime;
+      } catch (error) {
+        this.toastService.present('Error obtaining current date/time', 1000, 'danger');
+        await this.haptic.warning();
+      }
+
+      await Promise.all([
+        this.getCheckInData(),
+        this.getAttendanceLogByAttendanceType()
+      ]);
+    } catch (error) {
+      this.toastService.present('Unexpected error while loading attendance.', 1000, 'danger');
     } finally {
       await this.loadingService.hide();
     }
@@ -170,208 +147,112 @@ export class AttendancePage implements OnInit {
 
   handleRefresh = async (event: CustomEvent) => {
     try {
-      await this.loadingService.show();
-      await this.getCheckInData(),
-        await this.getWeekWiseAttendanceLogByAttendanceListType(),
-        (event.target as HTMLIonRefresherElement).complete();
-    } catch (error) {
-
+      await this.getCheckInData();
+      await this.getAttendanceLogByAttendanceType();
     } finally {
-      await this.loadingService.hide();
+      (event.target as HTMLIonRefresherElement).complete();
     }
+  };
+
+  onAttendanceLogTypeChange = async () => {
+    console.log('this.selectedAttendanceLogType :', this.selectedAttendanceLogType, this.AttendanceLogTypeList);
+    const selected = this.AttendanceLogTypeList.find(w => w.Ref === this.selectedAttendanceLogType);
+    console.log('Selected onAttendanceLogTypeChange:', selected?.Name);
+    await this.getAttendanceLogByAttendanceType();
   }
 
-
-  onWeekChange() {
-    const selected = this.AttendanceLogTypeList.find(
-      (week) => week.Ref === this.selectedWeek
-    );
-    console.log('Selected week:', selected?.Name, '| Ref:', selected?.Ref);
+  async fetchAttendanceByMonth(value: SegmentValue | undefined): Promise<void> {
+    try {
+      const SelectedMonth = Number(value);
+      if (isNaN(SelectedMonth)) return;
+      this.selectedMonth = SelectedMonth;
+      console.log('selectedMonth :', SelectedMonth);
+      // await this.fetchMonthlyLogs();
+    } catch (error) {
+      // this.handleError(error, 'Fetching attendance for selected month');
+    }
   }
 
   getCheckInData = async () => {
     try {
-      // await this.loadingService.show();
-      this.isOnLeave = false;
+      this.attendanceLog = AttendanceLog.CreateNewInstance();
       this.checkInTime = '';
       this.checkOutTime = '';
-      this.attendanceLog = AttendanceLog.CreateNewInstance();
+      this.isOnLeave = false;
 
       const tranDate = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
-      // const companyRef = this.companyRef;
-      // console.log('employeeRef, companyRef, tranDate :', this.employeeRef, companyRef, tranDate);
+      const lst = await AttendanceLog.FetchEntireListByCompanyRef(this.employeeRef, this.companyRef, tranDate, async errMsg => {
+        this.toastService.present('Error ' + errMsg, 1000, 'danger');
+        await this.haptic.error();
+      });
 
-      const lst = await AttendanceLog.FetchEntireListByCompanyRef(
-        this.employeeRef,
-        this.companyRef,
-        tranDate,
-        async errMsg => {
-          this.toastService.present('Error ' + errMsg, 1000, 'danger'),
-            await this.haptic.error()
-        }
-      );
-      console.log('lst :', lst, this.employeeRef,
-        this.companyRef,
-        tranDate,);
-
-      if (!lst || lst.length === 0) {
-        // this.bothButtonsEnabled = false;
-        this.isCheckInEnabled = true;
-        this.bothButtonsEnabled = true;
-        // this.toastService.present('Error Unable to get attendance data', 1000, 'danger');
-        // await this.haptic.warning();
-        return;
-      }
-
-      // const checkInData = lst as AttendanceLogProps[];
       const checkInData: AttendanceLogProps[] = lst.map(log => log.p);
-      console.log('lst :', lst);
-      console.log('checkInData :', checkInData);
       const pendingCheckIn = checkInData.find(e => !e.CheckOutTime);
       const completedCheckIn = checkInData.find(e => e.CheckOutTime);
 
-      if (pendingCheckIn) {
-        Object.assign(this.attendanceLog.p, pendingCheckIn);
-      } else if (completedCheckIn) {
-        Object.assign(this.attendanceLog.p, completedCheckIn);
-      }
+      Object.assign(this.attendanceLog.p, pendingCheckIn || completedCheckIn || {});
 
-      this.isOnLeave = Boolean(this.AttendanceLogCheckInOut.IsLeave);
-      this.checkInTime = this.AttendanceLogCheckInOut.CheckInTime || '';
-      this.checkOutTime = this.AttendanceLogCheckInOut.CheckOutTime || '';
-
-      // Set button statuses based on attendanceLog properties
-      const { FirstCheckInTime, CheckInTime, CheckOutTime } = this.attendanceLog.p;
-
-      if (!FirstCheckInTime && !CheckInTime && !CheckOutTime) {
-        this.isCheckInEnabled = true;
-        this.bothButtonsEnabled = true;
-      } else if (CheckInTime && !CheckOutTime) {
-        this.isCheckInEnabled = false;
-        this.bothButtonsEnabled = true;
-      } else if (CheckInTime && CheckOutTime) {
-        this.isCheckInEnabled = true;
-        this.bothButtonsEnabled = true;
-      } else {
-        this.isCheckInEnabled = false;
-        this.bothButtonsEnabled = false;
-      }
-    } catch (error) {
-      this.toastService.present('Error Unexpected error while fetching attendance.', 1000, 'danger');
+      this.isCheckInEnabled = !this.attendanceLog.p.CheckInTime && !this.attendanceLog.p.CheckOutTime;
+      this.bothButtonsEnabled = true;
+    } catch {
+      this.toastService.present('Unexpected error while fetching attendance.', 1000, 'danger');
       await this.haptic.error();
-    } finally {
-      // await this.loadingService.hide();
     }
   }
-
 
   formatDate(date: string | Date): string {
     return this.dateConversionService.formatDate(date);
   }
 
-  gridItemsFunction = (id: number) => {
-    switch (id) {
-      case 100:
-        this.getSalarySlip();
-        break;
-      case 200:
-        this.requestLeave();
-        break;
-      case 300:
-        this.viewAllAttendance();
-        break;
-      default:
-        break;
+  selectAttendanceLocationBottomsheet = async () => {
+    const options = this.attendanceLocationTypeList.map(item => ({ p: item }));
+    const selected = await this.bottomsheetMobileAppService.openSelectModal(options, this.selectedAttendanceLocationType, false, 'Select Location Type', 1);
+    if (selected) {
+      this.selectedAttendanceLocationType = selected;
+      this.AttendanceLocationTypeName = selected[0].p.Name;
     }
   }
 
-  public selectAttendanceLocationBottomsheet = async () => {
-    try {
-      const options = this.attendanceLocationTypeList.map((item) => ({ p: item }));
-
-      this.openSelectModal(options, this.selectedAttendanceLocationType, false, 'Select Location Type', 1, (selected) => {
-        this.selectedAttendanceLocationType = selected;
-        // this.attendanceLog.p.AttendanceLocationType = selected[0].p.Ref;
-        this.AttendanceLogCheckInOut.AttendanceLocationType = selected[0].p.Ref;
-        this.AttendanceLocationTypeName = selected[0].p.Name;
-      });
-    } catch (error) {
-
+  selectSiteBottomsheet = async () => {
+    const selected = await this.bottomsheetMobileAppService.openSelectModal(this.siteList, this.selectedSite, false, 'Select Site', 1);
+    if (selected) {
+      this.selectedSite = selected;
+      this.SiteName = selected[0].p.Name;
     }
-  }
-
-  public selectSiteBottomsheet = async () => {
-    try {
-      const options = this.siteList;
-      // const options = this.attendanceLocationTypeList.map((item) => ({ p: item }));
-
-      this.openSelectModal(options, this.selectedSite, false, 'Select Site', 1, (selected) => {
-        this.selectedSite = selected;
-
-        this.selectedSite = selected;
-        this.SiteName = selected[0].p.Name;
-        this.AttendanceLogCheckInOut.SiteRef = selected[0].p.Ref;
-      });
-    } catch (error) {
-
-    }
-  }
-
-  private openSelectModal = async (
-    dataList: any[],
-    selectedItems: any[],
-    multiSelect: boolean,
-    title: string,
-    MaxSelection: number,
-    updateCallback: (selected: any[]) => void
-  ) => {
-    const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, multiSelect, title, MaxSelection);
-    if (selected) updateCallback(selected);
   }
 
   openPunchModal = async () => {
-    if (this.isCheckInEnabled) {
-      this.punchModalOpen = true;
-    }
+    if (!this.isCheckInEnabled) return;
+    this.punchModalOpen = true;
+
     try {
-      this.siteList = await Site.FetchEntireListByCompanyRef(
-        this.companyRef,
-        async (errMsg: string) => {
-          this.toastService.present('Error' + errMsg, 1000, 'danger');
-          await this.haptic.error();
-        }
-      );
+      this.siteList = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+        this.toastService.present('Error ' + errMsg, 1000, 'danger');
+        await this.haptic.error();
+      });
     } catch (error) {
-      this.toastService.present('Error fetching site list:' + error, 1000, 'danger');
+      this.toastService.present('Error fetching site list', 1000, 'danger');
       await this.haptic.error();
     }
   }
 
   takePhoto = async (type: 'before' | 'after') => {
     try {
-      const image = await Camera.getPhoto({
-        quality: 80,
-        allowEditing: false,
-        resultType: CameraResultType.Uri,
-        source: CameraSource.Camera
-      });
-
-      const fileUri = image.path ?? image.webPath;
+      const image = await Camera.getPhoto({ quality: 80, allowEditing: false, resultType: CameraResultType.Uri, source: CameraSource.Camera });
+      const uri = image.path ?? image.webPath;
 
       if (type === 'before') {
-        this.rawCapturedSelfPhoto = fileUri ?? null;
+        this.rawCapturedSelfPhoto = uri ?? null;
         this.capturedSelfPhoto = image.webPath ?? null;
       } else {
-        this.rawCapturedWorkLocationPhoto = fileUri ?? null;
+        this.rawCapturedWorkLocationPhoto = uri ?? null;
         this.capturedWorkLocationPhoto = image.webPath ?? null;
       }
     } catch (error) {
-      this.toastService.present(`Error capturing ${type} photo:` + error, 1000, 'danger');
+      this.toastService.present(`Error capturing ${type} photo`, 1000, 'danger');
       await this.haptic.error();
-      // console.error(`Error capturing ${type} photo:`, error);
     }
   }
-
 
   uriToFile = async (uri: string, fileName: string, mimeType = 'image/jpeg') => {
     const response = await fetch(uri);
@@ -384,62 +265,48 @@ export class AttendancePage implements OnInit {
       await this.loadingService.show();
       this.isSubmitting = true;
 
-      this.AttendanceLogCheckInOut.IsCheckIn = true;
-      this.AttendanceLogCheckInOut.CompanyRef = this.companyRef;
-      this.AttendanceLogCheckInOut.EmployeeRef = this.employeeRef;
-      // this.AttendanceLogCheckInOut.HandleBy = 100;
+      const request = new AttendanceLogCheckInCustomProcess();
+      Object.assign(request, {
+        IsCheckIn: true,
+        CompanyRef: this.companyRef,
+        EmployeeRef: this.employeeRef,
+        SiteRef: this.selectedSite[0]?.p?.Ref || 0,
+        AttendanceLocationType: this.selectedAttendanceLocationType[0]?.p?.Ref || 0
+      });
 
-      if (this.selectedSite.length > 0) {
-        this.AttendanceLogCheckInOut.SiteRef = this.selectedSite[0].p.Ref;
-      }
-
-      this.AttendanceLogCheckInOut.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
-      // const entityToSave = this.attendanceLog.GetEditableVersion();
-      // const entitiesToSave = [entityToSave];
       const filesToUpload: FileTransferObject[] = [];
       if (this.rawCapturedSelfPhoto) {
-        // Convert URI to File with .jpg extension
-        const file = await this.uriToFile(this.rawCapturedSelfPhoto, "PunchIn_Self_Photo.jpg");
-        // Send file with extension explicitly included
-        filesToUpload.push(FileTransferObject.FromFile("AttendanceLogFile1", file, "PunchIn_Self_Photo.jpg"));
+        const file = await this.uriToFile(this.rawCapturedSelfPhoto, 'PunchIn_Self_Photo.jpg');
+        filesToUpload.push(FileTransferObject.FromFile('AttendanceLogFile1', file, 'PunchIn_Self_Photo.jpg'));
       }
 
       if (this.rawCapturedWorkLocationPhoto) {
-        const file = await this.uriToFile(this.rawCapturedWorkLocationPhoto, "PunchIn_Work_location.jpg");
-        filesToUpload.push(FileTransferObject.FromFile("AttendanceLogFile2", file, "PunchIn_Work_location.jpg"));
+        const file = await this.uriToFile(this.rawCapturedWorkLocationPhoto, 'PunchIn_Work_location.jpg');
+        filesToUpload.push(FileTransferObject.FromFile('AttendanceLogFile2', file, 'PunchIn_Work_location.jpg'));
       }
+      console.log('request :', request);
+      this.resetPunchState();
+      const td = request.FormulateTransportData();
+      const pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+      const tr = await this.serverCommunicator.sendHttpRequest(pkt, 'acceptrequest', filesToUpload);
 
-      console.log('req :', this.AttendanceLogCheckInOut);
-      // return;
-      let td = this.AttendanceLogCheckInOut.FormulateTransportData();
-      let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-      let tr = await this.serverCommunicator.sendHttpRequest(pkt, 'acceptrequest', filesToUpload);
       if (!tr.Successful) {
-        // await this.uiUtils.showErrorMessage('Error', tr.Message);
         this.toastService.present(`Error ${tr.Message}`, 1000, 'danger');
         await this.haptic.error();
         return;
       }
 
-      // await this.uiUtils.showSuccessToster('Password Created Successfully');
-      this.toastService.present(`Punch in successfully`, 1000, 'success');
+      this.toastService.present('Punch in successfully', 1000, 'success');
       await this.haptic.success();
-      let tdResult = JSON.parse(tr.Tag) as TransportData;
 
-      // Reset state
-      // this.attendanceLog = AttendanceLog.CreateNewInstance();
-      this.AttendanceLogCheckInOut = new AttendanceLogCheckInOutCustomProcess();
-
-      this.capturedSelfPhoto = null;
-      this.capturedWorkLocationPhoto = null;
+      this.resetPunchState();
 
       await Promise.all([
         this.getCheckInData(),
-        this.getWeekWiseAttendanceLogByAttendanceListType()
+        this.getAttendanceLogByAttendanceType()
       ]);
     } catch (error) {
-      // console.error('Error in submitPunchIn:', error);
-      this.toastService.present(`Error ${error}`, 1000, 'danger');
+      this.toastService.present('Error during punch in', 1000, 'danger');
       await this.haptic.error();
     } finally {
       this.isSubmitting = false;
@@ -448,100 +315,109 @@ export class AttendancePage implements OnInit {
     }
   }
 
-
   submitPunchOut = async () => {
     try {
       await this.loadingService.show();
-      this.AttendanceLogCheckInOut.IsCheckIn = false;
-      this.AttendanceLogCheckInOut.CompanyRef = this.companyRef;
-      this.AttendanceLogCheckInOut.EmployeeRef = this.employeeRef;
-      // this.AttendanceLogCheckInOut.HandleBy = 100;
-      // Convert date to full format
-      this.AttendanceLogCheckInOut.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.DateValue);
-      
-      console.log('req :', this.AttendanceLogCheckInOut);
-      // return;
-      let td = this.AttendanceLogCheckInOut.FormulateTransportData();
-      let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-      let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+      this.isSubmitting = true;
+
+      const request = new AttendanceLogCheckOutCustomProcess();
+      Object.assign(request, {
+        IsCheckIn: false,
+        CompanyRef: this.companyRef,
+        EmployeeRef: this.employeeRef
+      });
+
+      const td = request.FormulateTransportData();
+      const pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+      const tr = await this.serverCommunicator.sendHttpRequest(pkt);
+
       if (!tr.Successful) {
-        // await this.uiUtils.showErrorMessage('Error', tr.Message);
         this.toastService.present(`Error ${tr.Message}`, 1000, 'danger');
         await this.haptic.error();
         return;
       }
 
-      // await this.uiUtils.showSuccessToster('Password Created Successfully');
-      this.toastService.present(`Punch out successfully`, 1000, 'success');
+      this.toastService.present('Punch out successfully', 1000, 'success');
       await this.haptic.success();
-      let tdResult = JSON.parse(tr.Tag) as TransportData;
 
-      // Reset state
-      // this.attendanceLog = AttendanceLog.CreateNewInstance();
-      this.AttendanceLogCheckInOut = new AttendanceLogCheckInOutCustomProcess();
+      this.resetPunchState();
 
-      // const entityToSave = this.attendanceLog.GetEditableVersion();
-      // const entitiesToSave = [entityToSave];
-
-      // const tr = await this.utils.SavePersistableEntities(entitiesToSave);
-      // if (!tr.Successful) {
-      //   this.toastService.present(`Error ${tr.Message}`, 1000, 'danger');
-      //   console.log('tr.Message :', tr.Message);
-      //   await this.haptic.error();
-      //   return;
-      // }
-      // this.toastService.present(`Punch out successfully`, 1000, 'success');
-      // await this.haptic.success();
-      // // Reset and refresh data
-      // this.attendanceLog = AttendanceLog.CreateNewInstance();
       await Promise.all([
         this.getCheckInData(),
-        this.getWeekWiseAttendanceLogByAttendanceListType()
+        this.getAttendanceLogByAttendanceType()
       ]);
     } catch (error) {
-      // console.error('Error in submitPunchOut:', error);
+      this.toastService.present('Error during punch out', 1000, 'danger');
+      await this.haptic.error();
     } finally {
       this.isSubmitting = false;
       await this.loadingService.hide();
     }
   }
 
-  getWeekWiseAttendanceLogByAttendanceListType = async () => {
+  getAttendanceLogByAttendanceType = async () => {
     try {
-      // await this.loadingService.show();
-      const logs = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(
-        this.companyRef,
-        AttendanceLogType.WeeklyAttendanceLog, this.employeeRef,
-        async (errMsg: string) => {
-          this.toastService.present(`Error ${errMsg}`, 1000, 'danger');
-          await this.haptic.error();
-        }
-      );
+      let logs: any = [];
+      if (this.selectedAttendanceLogType === AttendanceLogType.TodaysAttendanceLog) {
+        let logs = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(
+          this.companyRef,
+          this.selectedAttendanceLogType,
+          this.employeeRef,
+          async errMsg => {
+            this.toastService.present(`Error ${errMsg}`, 1000, 'danger');
+            await this.haptic.error();
+          }
+        );
+
+        const strCurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
+        const today = this.formatDate(strCurrentDateTime);
+
+        // Filter logs where LogDate is today's date
+        logs = logs.filter(log => {
+          const serverFormattedDate = this.formatDate(log.p.TransDateTime)
+          return serverFormattedDate === today;
+        });
+
+      }      
+      if (this.selectedAttendanceLogType === AttendanceLogType.WeeklyAttendanceLog) {
+        logs = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(
+          this.companyRef,
+          this.selectedAttendanceLogType,
+          this.employeeRef,
+          async errMsg => {
+            this.toastService.present(`Error ${errMsg}`, 1000, 'danger');
+            await this.haptic.error();
+          }
+        );
+      }
+      if (this.selectedAttendanceLogType === AttendanceLogType.MonthlyAttendanceLog) {
+        logs = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(
+          this.companyRef,
+          this.selectedAttendanceLogType,
+          this.selectedMonth,
+          this.employeeRef,
+          async errMsg => {
+            this.toastService.present(`Error ${errMsg}`, 1000, 'danger');
+            await this.haptic.error();
+          }
+        );
+      }
       this.weeklyAttendanceLogs = logs;
-      // Optionally, apply further filtering before assigning to filteredWeeklyAttendanceLogs
       this.filteredWeeklyAttendanceLogs = logs;
-      console.log('filteredWeeklyAttendanceLogs :', this.filteredWeeklyAttendanceLogs);
     } catch (error) {
-      // console.error('Error fetching weekly attendance logs:', error);
-    } finally {
-      // await this.loadingService.hide();
+      this.toastService.present('Error fetching attendance logs', 1000, 'danger');
+      await this.haptic.error();
     }
   }
 
-  getSalarySlip = () => {
-    this.router.navigate(['/mobileapp/tabs/attendance/salary-slip']);
+  private resetPunchState = () => {
+    this.AttendanceLocationTypeName = '';
+    this.SiteName = '';
+    this.selectedSite = [];
+    this.selectedAttendanceLocationType = [];
+    this.capturedSelfPhoto = null;
+    this.rawCapturedSelfPhoto = null;
+    this.capturedWorkLocationPhoto = null;
+    this.rawCapturedWorkLocationPhoto = null;
   }
-
-  requestLeave = () => {
-    this.router.navigate(['/mobileapp/tabs/attendance/leave']);
-  }
-
-  // viewAllPresentEmployee(): void {
-  //   this.router.navigate(['/app_homepage/tabs/attendance-management/present-employee']);
-  // }
-
-  viewAllAttendance = () => {
-    this.router.navigate(['/mobileapp/tabs/attendance/attendance-details']);
-  }
-
 }
