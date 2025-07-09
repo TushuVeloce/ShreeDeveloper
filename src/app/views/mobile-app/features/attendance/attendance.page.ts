@@ -369,16 +369,15 @@ export class AttendancePage implements OnInit {
           }
         );
 
-        const today = new Date().toISOString().split('T')[0]; // e.g., '2025-07-09'
+        const strCurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
+        const today = this.formatDate(strCurrentDateTime);
 
         // Filter logs where LogDate is today's date
-        // logs = logs.filter(log => {
-        //   const serverFormattedDate = this.formatDate(log.p.TransDateTime)
-        //   // const logDate = new Date(log.LogDate).toISOString().split('T')[0];
-        //   return serverFormattedDate === today;
-        // });
+        logs = logs.filter(log => {
+          const serverFormattedDate = this.formatDate(log.p.TransDateTime)
+          return serverFormattedDate === today;
+        });
 
-        // this.filteredLogs = logs; // assign to your display variable
       }      
       if (this.selectedAttendanceLogType === AttendanceLogType.WeeklyAttendanceLog) {
         logs = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(
