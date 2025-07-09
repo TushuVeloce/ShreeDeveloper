@@ -69,7 +69,7 @@ export class InvoiceDetailsComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time', 'Worked Hours', 'Action'];
-  labourtimeheaders: string[] = ['Sr.No.', 'Quantity ', 'Rate', 'Amount','From Time','To Time','Action'];
+  labourtimeheaders: string[] = ['Sr.No.','Labour Type','From Time','To Time', 'Quantity ', 'Rate', 'Amount','Action'];
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
   // @ViewChild('invoiceForm') invoiceForm!: NgForm;
@@ -104,6 +104,7 @@ export class InvoiceDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Bill' : 'Edit Bill';
       this.Entity = Invoice.GetCurrentInstance();
+      console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.Entity.p.LedgerRef) {
@@ -135,7 +136,7 @@ export class InvoiceDetailsComponent implements OnInit {
   }
 
   focusInput = () => {
-    let txtName = document.getElementById('Date')!;
+    let txtName = document.getElementById('SiteRef')!;
     txtName.focus();
   }
 
@@ -251,13 +252,16 @@ export class InvoiceDetailsComponent implements OnInit {
   }
 
   CalculateAmount = () => {
+    const TotalWorkedHours = this.getTotalWorkedHours()
     const Qty = Number(this.Entity.p.Qty)
     const Rate = Number(this.Entity.p.Rate)
-    if (this.Entity.p.DieselAmount == 0) {
-      this.Entity.p.InvoiceAmount = Qty * Rate
-    } else {
-      this.Entity.p.InvoiceAmount = (Qty * Rate) - Number(this.Entity.p.DieselAmount)
+    const DieselAmount = Number(this.Entity.p.DieselAmount) || 0
+    if(TotalWorkedHours > 0){
+      this.Entity.p.InvoiceAmount = (TotalWorkedHours * Rate) -DieselAmount
+    }else{
+      this.Entity.p.InvoiceAmount = (Qty * Rate) -DieselAmount
     }
+    
   }
 
   getChalanNo = async () => {
@@ -390,6 +394,10 @@ export class InvoiceDetailsComponent implements OnInit {
     if (!this.LabourTimeEntity.LabourFromTime || !this.LabourTimeEntity.LabourToTime) {
       await this.uiUtils.showErrorMessage('Error', 'Start Time and End Time are required!');
       return;
+    }
+      if (this.LabourTimeEntity.LabourType != 0) {
+      const labourtype = this.LabourTypeList.find(item => item.Ref == this.LabourTimeEntity.LabourType)
+      this.LabourTimeEntity.LabourTypeName = labourtype?.Name || ''
     }
     if (this.LabourEditingIndex !== null && this.LabourEditingIndex !== undefined && this.LabourEditingIndex >= 0) {
       this.Entity.p.LabourExpenseDetailsArray[this.LabourEditingIndex] = { ...this.LabourTimeEntity };
