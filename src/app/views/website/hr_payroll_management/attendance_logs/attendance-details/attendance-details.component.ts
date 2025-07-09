@@ -30,7 +30,9 @@ export class AttendanceDetailsComponent implements OnInit {
   EmployeeList: Employee[] = [];
   FromTime: string = '';
   SiteList: Site[] = [];
+  TotalWorkingHrs: number = 0;
   editingIndex: null | undefined | number
+  ModalEditable: boolean = false;
   isModalOpen: boolean = false;
   newAttendance: WebAttendaneLogDetailsLogProps = WebAttendaneLogDetailsLogProps.Blank();
   AttendanceLocationTypeList = DomainEnums.AttendanceLocationTypeList();
@@ -39,7 +41,7 @@ export class AttendanceDetailsComponent implements OnInit {
   strCDT: string = ''
   Date: string = ''
 
-  baseHeaders: string[] = ['Sr. No', 'Site Name', 'Check In Time', 'Check Out Time', 'Working Hours'];
+  baseHeaders: string[] = ['Sr. No', 'Site Name', 'Check In Time', 'Check Out Time', 'Working Hours', 'Action'];
 
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos
 
@@ -89,12 +91,7 @@ export class AttendanceDetailsComponent implements OnInit {
     this.SiteList = lst;
   };
 
-
-  openModal() {
-    this.isModalOpen = true;
-  }
-
-  SaveAttendenceMaster = async () => {
+  SaveAttendence = async () => {
     this.isSaveDisabled = true;
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     if (this.Entity.p.CreatedBy == 0) {
@@ -129,21 +126,9 @@ export class AttendanceDetailsComponent implements OnInit {
     }
   }
 
-  editAttendane(index: number) {
-    this.isModalOpen = true
-    this.newAttendance = { ...this.Entity.p.AttendanceLog[index] }
-    this.editingIndex = index;
-  }
-
-  async removeAttendane(index: number) {
-    await this.uiUtils.showConfirmationMessage(
-      'Delete',
-      `This process is <strong>IRREVERSIBLE!</strong> <br/>
-       Are you sure that you want to DELETE this Attendane Material?`,
-      async () => {
-        this.Entity.p.AttendanceLog.splice(index, 1);
-      }
-    );
+  openModal() {
+    this.isModalOpen = true;
+    this.ModalEditable = false;
   }
 
   closeModal = async () => {
@@ -160,6 +145,7 @@ export class AttendanceDetailsComponent implements OnInit {
                Are you sure you want to close this modal?`,
         async () => {
           this.isModalOpen = false;
+          this.ModalEditable = false;
           this.newAttendance = WebAttendaneLogDetailsLogProps.Blank();
         }
       );
@@ -169,7 +155,35 @@ export class AttendanceDetailsComponent implements OnInit {
     }
   };
 
-  calculateTotalWorkingHours = () => {
+  editAttendane(index: number) {
+    this.isModalOpen = true
+    this.newAttendance = { ...this.Entity.p.AttendanceLogDetailsArray[index] }
+    this.ModalEditable = true;
+    this.editingIndex = index;
+  }
+
+  async removeAttendane(index: number) {
+    await this.uiUtils.showConfirmationMessage(
+      'Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+       Are you sure that you want to DELETE this Attendane Material?`,
+      async () => {
+        this.Entity.p.AttendanceLogDetailsArray.splice(index, 1);
+      }
+    );
+  }
+
+  onSiteSelection = () => {
+    if (this.newAttendance.SiteRef == 0) {
+      this.newAttendance.SiteName = 'Office'
+    } else {
+      const SingleRecord = this.SiteList.find(data => data.p.Ref == this.newAttendance.SiteRef);
+      if (SingleRecord)
+        this.newAttendance.SiteName = SingleRecord.p.Name
+    }
+  }
+
+  calculateWorkingHours = () => {
     if (this.newAttendance.CheckOutTime == '') {
       return
     }
@@ -203,31 +217,109 @@ export class AttendanceDetailsComponent implements OnInit {
     return;
   }
 
+  calculateTotalWorkingHours = () => {
+    if (this.Entity.p.FirstCheckInTime == '') {
+      return
+    }
+
+    if (this.Entity.p.LastCheckOutTime == '') {
+      return
+    }
+
+    // Fallback to "00:00" if either is missing or invalid
+    if (!this.Entity.p.FirstCheckInTime || !this.Entity.p.FirstCheckInTime.includes(":")) return 0;
+
+    const [inHour, inMin] = this.Entity.p.FirstCheckInTime.split(':').map(Number);
+    const [outHour, outMin] = (this.Entity.p.LastCheckOutTime && this.Entity.p.LastCheckOutTime.includes(":") ? this.Entity.p.LastCheckOutTime : "00:00").split(':').map(Number);
+
+    // Check for invalid numbers
+    if (isNaN(inHour) || isNaN(inMin) || isNaN(outHour) || isNaN(outMin)) return 0;
+
+    const inDate = new Date();
+    inDate.setHours(inHour, inMin, 0, 0);
+
+    const outDate = new Date();
+    outDate.setHours(outHour, outMin, 0, 0);
+
+    // Handle overnight shift
+    if (outDate <= inDate) {
+      outDate.setDate(outDate.getDate() + 1);
+    }
+
+    const diffMs = outDate.getTime() - inDate.getTime();
+    const diffMinutes = Math.floor(diffMs / 60000);
+
+    const decimalHours = diffMinutes / 60;
+
+    this.Entity.p.TotalWorkingHrs = parseFloat(decimalHours.toFixed(2));
+    return;
+  }
+
+  selectAllValue(event: MouseEvent): void {
+    const input = event.target as HTMLInputElement;
+    input.select();
+  }
+
+
+  getTotalWorkingHrs = () => {
+    this.TotalWorkingHrs = this.Entity.p.AttendanceLogDetailsArray.reduce((total: number, item: any) => {
+      return total + Number(item.WorkingHrs || 0);
+    }, 0);
+    return this.TotalWorkingHrs;
+  }
+
 
   async addAttendance() {
     if (this.newAttendance.CheckInTime == '') {
       return this.uiUtils.showWarningToster('Check In Time cannot be blank.');
     }
 
-    debugger
+
+    if (this.newAttendance.CheckOutTime) {
+      if (this.newAttendance.CheckOutTime < this.newAttendance.CheckInTime) {
+        return this.uiUtils.showWarningToster('Check Out time should be after Check In.');
+      }
+    }
+
+    this.onSiteSelection();
+
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
-      this.Entity.p.AttendanceLog[this.editingIndex] = { ...this.newAttendance };
+      if (this.Entity.p.AttendanceLogDetailsArray.length > 1) {
+        if (this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 2].CheckOutTime == '') {
+          return this.uiUtils.showWarningToster('Next Check In time should be after previous Check Out.');
+        }
+
+        if (this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 2].CheckOutTime > this.newAttendance.CheckInTime) {
+          return this.uiUtils.showWarningToster('Next Check In time should be after previous Check Out.');
+        }
+      }
+      this.Entity.p.AttendanceLogDetailsArray[this.editingIndex] = { ...this.newAttendance };
       await this.uiUtils.showSuccessToster('Attendance updated successfully');
       this.isModalOpen = false;
 
     } else {
+      if (this.Entity.p.AttendanceLogDetailsArray.length > 0) {
+        if (this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].CheckOutTime == '') {
+          return this.uiUtils.showWarningToster('Next Check In time should be after previous Check Out.');
+        }
+
+        if (this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].CheckOutTime > this.newAttendance.CheckInTime) {
+          return this.uiUtils.showWarningToster('Next Check In time should be after previous Check Out.');
+        }
+      }
       let AttendaneDetailsLogInstance = new WebAttendaneLogDetailsLog(this.newAttendance, true);
       let AttendaneLogInstance = new WebAttendaneLog(this.Entity.p, true);
       await AttendaneDetailsLogInstance.EnsurePrimaryKeysWithValidValues();
       await AttendaneLogInstance.EnsurePrimaryKeysWithValidValues();
 
-      this.newAttendance.AttendanceLogRef = this.Entity.p.Ref;
-      this.Entity.p.AttendanceLog.push({ ...AttendaneDetailsLogInstance.p });
-      console.log('this.Entity.p.AttendanceLog :', this.Entity.p.AttendanceLog);
+      this.Entity.p.AttendanceLogDetailsArray.push({ ...AttendaneDetailsLogInstance.p });
       await this.uiUtils.showSuccessToster('Attendance added successfully');
     }
     this.newAttendance = WebAttendaneLogDetailsLogProps.Blank();
     this.editingIndex = null;
+    this.Entity.p.FirstCheckInTime = this.Entity.p.AttendanceLogDetailsArray[0].CheckInTime;
+    this.Entity.p.LastCheckOutTime = this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].CheckOutTime;
+    this.calculateTotalWorkingHours();
   }
 
   BackAttendence = async () => {

@@ -24,6 +24,9 @@ export class WebAttendaneLogProps {
   public UpdatedDate: string = '';
   public UpdatedByName: number = 0;
 
+  public Months: number = 0;
+
+
   public Ref: number = 0;
   public EmployeeRef: number = 0;
   public readonly EmployeeName: string = '';
@@ -31,17 +34,24 @@ export class WebAttendaneLogProps {
   public readonly CompanyName: string = '';
   public TransDateTime: string = '';
   public TotalWorkingHrs: number = 0;
-  public IsLateMark: number = 0;
+  public IsLateMark: boolean = false;
   public TotalLateMarkHrs: number = 0;
-  public IsOverTime: number = 0;
+  public IsOverTime: boolean = false;
   public TotalOvertimeHrs: number = 0;
   public FirstCheckInTime: string = '';
   public LastCheckOutTime: string = '';
   public IsLeave: number = 0;
   public IsHalfDay: number = 0;
   public LeaveType: number = 0;
-  public AttendanceLog: WebAttendaneLogDetailsLogProps[] = [];
+  public OnLeave: number = 0;
+  public AttendanceLogDetailsArray: WebAttendaneLogDetailsLogProps[] = [];
 
+  public TeamSize: number = 0;
+  public Present: number = 0;
+  public Absent: number = 0;
+  public OnLeaveDaily: number = 0;
+  public TotalDaysInWeek: number = 0;
+  public TotalDaysInMonth: number = 0;
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -183,6 +193,33 @@ export class WebAttendaneLog implements IPersistable<WebAttendaneLog> {
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new WebAttendaneLogFetchRequest();
     req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await WebAttendaneLog.FetchTransportData(req, errorHandler) as TransportData;
+    return WebAttendaneLog.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByCompanyRefAndAttendanceLogType(CompanyRef: number, AttendanceLogTypes: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new WebAttendaneLogFetchRequest();
+    req.CompanyRefs.push(CompanyRef);
+    req.AttendanceLogTypes.push(AttendanceLogTypes);
+    let tdResponse = await WebAttendaneLog.FetchTransportData(req, errorHandler) as TransportData;
+    return WebAttendaneLog.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(CompanyRef: number, AttendanceLogTypes: number, EmployeeRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new WebAttendaneLogFetchRequest();
+    req.CompanyRefs.push(CompanyRef);
+    req.EmployeeRefs.push(EmployeeRef);
+    req.AttendanceLogTypes.push(AttendanceLogTypes);
+    let tdResponse = await WebAttendaneLog.FetchTransportData(req, errorHandler) as TransportData;
+    return WebAttendaneLog.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(CompanyRef: number, AttendanceLogTypeRef: number, monthref: number, employeeref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new WebAttendaneLogFetchRequest();
+    req.CompanyRefs.push(CompanyRef);
+    req.AttendanceLogTypes.push(AttendanceLogTypeRef);
+    req.Months.push(monthref);
+    req.EmployeeRefs.push(employeeref);
     let tdResponse = await WebAttendaneLog.FetchTransportData(req, errorHandler) as TransportData;
     return WebAttendaneLog.ListFromTransportData(tdResponse);
   }

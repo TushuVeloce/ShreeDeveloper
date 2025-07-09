@@ -234,7 +234,8 @@
 <div *ngIf="isOrderMaterialModalOpen" class="custom-modal-overlay">
   <div class="custom-modal">
     <div class="custom-modal-header">
-      <h5><b> Add Material</b></h5>
+      <h5><b>{{ ModalEditable ? 'Edit Material' : 'Add Material'}}</b></h5>
+
       <button type="button" class="btn-close" (click)="closeModal('OrderMaterial')"></button>
     </div>
     <div class="custom-modal-body">

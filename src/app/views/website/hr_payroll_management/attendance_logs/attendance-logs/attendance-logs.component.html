@@ -123,23 +123,16 @@
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata">{{attendancelog.p.EmployeeName}}</td>
             <td Class="tbldata">{{ formatDate(attendancelog.p.TransDateTime) }}</td>
-            <td Class="tbldata">{{attendancelog.p.LatestCheckInTime? attendancelog.p.LatestCheckInTime : "--"}}</td>
-            <td Class="tbldata">{{attendancelog.p.FirstCheckInTime? attendancelog.p.FirstCheckInTime : "--"}}</td>
+            <td Class="tbldata">{{attendancelog.p.FirstCheckInTime ? attendancelog.p.FirstCheckInTime : "--"}}</td>
             <td Class="tbldata">{{attendancelog.p.LastCheckOutTime? attendancelog.p.LastCheckOutTime : "--"}}</td>
             <td Class="tbldata">{{attendancelog.p.TotalWorkingHrs? attendancelog.p.TotalWorkingHrs: "--"}}</td>
-
-            <td Class="tbldata">{{attendancelog.p.InOfficeHrs? attendancelog.p.InOfficeHrs : "--"}}</td>
-            <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.OnLeave ? attendancelog.p.OnLeave :
-              '--'}}</td>
-            <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.LeaveType ? attendancelog.p.LeaveType :
-              '--'}}</td>
-            <!-- <td class="tbldata">
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-            </span>
-            <span style="margin-left: 9px;">
-              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-          </td> -->
+            <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.OnLeave ? attendancelog.p.OnLeave : '--'}}</td>
+            <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.LeaveType ? attendancelog.p.LeaveType : '--'}}</td>
+            <td Class="tbldata" *ngIf="isTodayAttendanceView">
+              <span style="margin-left: 9px;" (click)="onEditClicked(attendancelog)">
+                <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
+              </span>
+            </td>
           </tr>
         </tbody>
       </nz-table>

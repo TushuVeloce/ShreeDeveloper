@@ -220,7 +220,7 @@ export class UIUtils {
         await this.router.navigate(['']);
         return
       }
-    }, 2000);
+    }, 3000);
   }
 
   public async showWarningToster(title: string) {
@@ -235,7 +235,7 @@ export class UIUtils {
         await this.router.navigate(['']);
         return
       }
-    }, 2000);
+    }, 3000);
   }
 
   // public async askForConfirmation(title: string, msg: string,

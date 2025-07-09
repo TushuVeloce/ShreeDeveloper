@@ -17,12 +17,12 @@
     </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4 col-6">
+        <div class="col-6">
           <label>Date</label>
           <input type="date" name="Date" class="form-control date-input" id="Date" readonly [(ngModel)]="Date"
             placeholder="Select Date" />
         </div>
-        <div class="col-md-4 col-6">
+        <div class="col-6">
           <label>Employee</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" [nzSize]="'large'" name="EmployeeRef" required id="EmployeeRef"
@@ -33,56 +33,26 @@
         </div>
         <div class="col-md-4 col-6">
           <div>
-            <label>Total Working Hrs</label>
-            <input type="text" [(ngModel)]="Entity.p.TotalWorkingHrs" name="TotalWorkingHrs" class="form-control"
-              id="TotalWorkingHrs" />
-          </div>
-        </div>
-        <div class="col-md-4 col-6">
-          <div>
-            <label>Total Late Mark Hrs</label>
-            <input type="text" [(ngModel)]="Entity.p.TotalLateMarkHrs" name="TotalLateMarkHrs" class="form-control"
-              id="TotalLateMarkHrs" />
-          </div>
-        </div>
-        <div class="col-md-4 col-6">
-          <div>
-            <label>Total Over Time Hrs</label>
-            <input type="text" [(ngModel)]="Entity.p.TotalOvertimeHrs" name="TotalOvertimeHrs" class="form-control"
-              id="TotalOvertimeHrs" />
-          </div>
-        </div>
-        <div class="col-md-4 col-6">
-          <div>
             <label>First Check In Time</label>
-            <input type="text" [(ngModel)]="Entity.p.FirstCheckInTime" name="FirstCheckInTime" class="form-control"
-              id="FirstCheckInTime" />
+            <input type="time" [(ngModel)]="Entity.p.FirstCheckInTime" name="FirstCheckInTime" class="form-control"
+              id="FirstCheckInTime" readonly />
           </div>
         </div>
         <div class="col-md-4 col-6">
           <div>
             <label>Last Check Out Time</label>
-            <input type="text" [(ngModel)]="Entity.p.LastCheckOutTime" name="LastCheckOutTime" class="form-control"
-              id="LastCheckOutTime" />
+            <input type="time" [(ngModel)]="Entity.p.LastCheckOutTime" name="LastCheckOutTime" class="form-control"
+              id="LastCheckOutTime" readonly />
           </div>
         </div>
-        <div class="col-md-4 col-6 ">
-          <label style="color: white;">Is Leave</label>
-          <div class="d-flex align-items-center">
-            <input type="checkbox" id="IsLeave" [(ngModel)]="Entity.p.IsLeave" name="IsLeave"
-              class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
-            <label for="IsLeave" class="form-check-label mb-0">Is Leave</label>
+        <div class="col-md-4 col-6">
+          <div>
+            <label>Total Working Hrs</label>
+            <input type="number" [(ngModel)]="Entity.p.TotalWorkingHrs" name="TotalWorkingHrs" class="form-control"
+              id="TotalWorkingHrs" />
           </div>
         </div>
-        <div class="col-md-4 col-6 ">
-          <label style="color: white;">Is Half Day</label>
-          <div class="d-flex align-items-center">
-            <input type="checkbox" id="IsHalfDay" [(ngModel)]="Entity.p.IsHalfDay" name="IsHalfDay"
-              class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
-            <label for="IsHalfDay" class="form-check-label mb-0">Is Half Day</label>
-          </div>
-        </div>
-        <div class="col-md-4 col-6 ">
+        <div class="col-md-2 col-6 ">
           <label style="color: white;">Is Late Mark</label>
           <div class="d-flex align-items-center">
             <input type="checkbox" id="IsLateMark" [(ngModel)]="Entity.p.IsLateMark" name="IsLateMark"
@@ -90,12 +60,26 @@
             <label for="IsLateMark" class="form-check-label mb-0">Is Late Mark</label>
           </div>
         </div>
-        <div class="col-md-4 col-6 ">
+        <div class="col-md-4 col-6">
+          <div>
+            <label>Total Late Mark Hrs</label>
+            <input type="number" [disabled]="!Entity.p.IsLateMark" [(ngModel)]="Entity.p.TotalLateMarkHrs"
+              name="TotalLateMarkHrs" class="form-control" id="TotalLateMarkHrs" (click)="selectAllValue($event)" />
+          </div>
+        </div>
+        <div class="col-md-2 col-6 ">
           <label style="color: white;">Is Over Time</label>
           <div class="d-flex align-items-center">
             <input type="checkbox" id="IsOverTime" [(ngModel)]="Entity.p.IsOverTime" name="IsOverTime"
               class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
             <label for="IsOverTime" class="form-check-label mb-0">Is Over Time</label>
+          </div>
+        </div>
+        <div class="col-md-4 col-6">
+          <div>
+            <label>Total Over Time Hrs</label>
+            <input type="number" [disabled]="!Entity.p.IsOverTime" [(ngModel)]="Entity.p.TotalOvertimeHrs"
+              name="TotalOvertimeHrs" class="form-control" id="TotalOvertimeHrs" (click)="selectAllValue($event)" />
           </div>
         </div>
       </div>
@@ -112,7 +96,7 @@
         </div>
       </div>
       <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem"
-        *ngIf="Entity.p.AttendanceLog.length > 0">
+        *ngIf="Entity.p.AttendanceLogDetailsArray.length > 0">
         <div class="table-container" style="margin-top: 2rem">
           <div class="row">
             <div class="col-12">
@@ -120,7 +104,7 @@
             </div>
           </div>
           <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{ x: 'auto' }"
-            nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.AttendanceLog">
+            nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="Entity.p.AttendanceLogDetailsArray">
             <thead>
               <tr>
                 <th *ngFor="let header of baseHeaders" class="tblsubheader">
@@ -130,13 +114,14 @@
             </thead>
             <tbody>
               <tr *ngFor="
-                  let Attendance of Entity.p.AttendanceLog;
+                  let Attendance of Entity.p.AttendanceLogDetailsArray;
                   let i = index
                 ">
                 <td Class="tbldata">{{ i + 1 }}</td>
+                <td Class="tbldata">{{ Attendance.AttendenceLocationType == AttendanceLocationType.Site ?
+                  Attendance.SiteName : 'Office' }}</td>
                 <td Class="tbldata">{{ Attendance.CheckInTime }}</td>
-                <td Class="tbldata">{{ Attendance.CheckOutMode }}</td>
-                <td Class="tbldata">{{ Attendance.SiteName }}</td>
+                <td Class="tbldata">{{ Attendance.CheckOutTime }}</td>
                 <td Class="tbldata">{{ Attendance.WorkingHrs }}</td>
                 <td class="tbldata">
                   <span style="margin-left: 9px" (click)="editAttendane(i)">
@@ -147,26 +132,18 @@
                   </span>
                 </td>
               </tr>
-              <!-- <tr>
-                <td class="tbldata" colspan="2"><b>Grand Total</b></td>
-                <td class="tbldata" colspan="10"></td>
-                <td class="tbldata">
-                  <b>{{ getGrandTotal() }}</b>
-                </td>
-                <td class="tbldata"><b></b></td>
-              </tr> -->
             </tbody>
           </nz-table>
         </div>
       </div>
-      <div *ngIf="Entity.p.AttendanceLog.length === 0" class="card-body_light">
+      <div *ngIf="Entity.p.AttendanceLogDetailsArray.length === 0" class="card-body_light">
         <div style="height: 20vh; background-color: white" class="d-flex align-items-center justify-content-center">
           <span class="title_light"> Data Not Found</span>
         </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>
-          <button type="button" class="btn" (click)="SaveAttendenceMaster()" [disabled]="isSaveDisabled">Save</button>
+          <button type="button" class="btn" (click)="SaveAttendence()" [disabled]="isSaveDisabled">Save</button>
         </div>
         <div>
           <button type="button" class="btn" (click)="BackAttendence()">Cancel</button>
@@ -180,23 +157,32 @@
 <div *ngIf="isModalOpen" class="custom-modal-overlay">
   <div class="custom-modal">
     <div class="custom-modal-header">
-      <h5><b> Add Attendance</b></h5>
+      <h5><b>{{ ModalEditable ? 'Edit Attendance' : 'Add Attendance'}}</b></h5>
       <button type="button" class="btn-close" (click)="closeModal()"></button>
     </div>
     <div class="custom-modal-body">
       <form autocomplete="off">
         <div class="row" style="margin-top: 1rem;">
           <div class="col-md-6">
+            <label><b>Attendance Location Type</b></label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="AttendenceLocationType" name="AttendenceLocationType" [nzSize]="'large'"
+              [(ngModel)]="newAttendance.AttendenceLocationType">
+              <nz-option *ngFor="let AttendanceLocationType of AttendanceLocationTypeList"
+                [nzValue]="AttendanceLocationType.Ref" [nzLabel]="AttendanceLocationType.Name"></nz-option>
+            </nz-select>
+          </div>
+          <div class="col-md-6" *ngIf="newAttendance.AttendenceLocationType == AttendanceLocationType.Site">
             <label><b>Site Name</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="newAttendance.SiteRef">
-              <nz-option [nzValue]="0" [nzLabel]="'Office'"></nz-option>
+              nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="newAttendance.SiteRef"
+              (ngModelChange)="onSiteSelection()">
               <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
             </nz-select>
           </div>
           <div class="col-6">
             <label>Check In Time</label>
-            <input type="time" [(ngModel)]="newAttendance.CheckInTime" (ngModelChange)="calculateTotalWorkingHours()"
+            <input type="time" [(ngModel)]="newAttendance.CheckInTime" (ngModelChange)="calculateWorkingHours()"
               name="CheckInTime" class="form-control" id="CheckInTime" required #CheckInTimeCtrl="ngModel"
               (blur)="CheckInTimeCtrl.control.markAsTouched()" />
             <div *ngIf="(CheckInTimeCtrl.invalid && (CheckInTimeCtrl.touched || CheckInTimeCtrl.dirty))">
@@ -205,7 +191,7 @@
           </div>
           <div class="col-6">
             <label>Check Out Time</label>
-            <input type="time" [(ngModel)]="newAttendance.CheckOutTime" (ngModelChange)="calculateTotalWorkingHours()"
+            <input type="time" [(ngModel)]="newAttendance.CheckOutTime" (ngModelChange)="calculateWorkingHours()"
               name="CheckOutTime" class="form-control" id="CheckOutTime" required #CheckOutTimeCtrl="ngModel"
               (blur)="CheckOutTimeCtrl.control.markAsTouched()" />
             <div *ngIf="(CheckOutTimeCtrl.invalid && (CheckOutTimeCtrl.touched || CheckOutTimeCtrl.dirty))">
@@ -214,8 +200,7 @@
           </div>
           <div class="col-6 mb-1">
             <label>Working Hrs</label>
-            <input type="number" name="WorkingHrs" class="form-control"
-              [(ngModel)]="newAttendance.WorkingHrs" />
+            <input type="number" name="WorkingHrs" class="form-control" [(ngModel)]="newAttendance.WorkingHrs" />
           </div>
         </div>
       </form>

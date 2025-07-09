@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AttendanceLogType, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { AttendanceLogsCount } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogcount/attendancelogsCount';
 import { AttendanceLogs, AttendanceLogsProps } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogs';
+import { WebAttendaneLog } from 'src/app/classes/domain/entities/website/HR_and_Payroll/web_attendance_log/web_attendance_log/webattendancelog';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
@@ -22,11 +23,14 @@ import { Utils } from 'src/app/services/utils.service';
   standalone: false,
 })
 export class AttendanceLogsComponent implements OnInit {
-  Entity: AttendanceLogs = AttendanceLogs.CreateNewInstance();
+  Entity: WebAttendaneLog = WebAttendaneLog.CreateNewInstance();
   AttendanceLogCount: AttendanceLogsCount = AttendanceLogsCount.CreateNewInstance();
-  MasterList: AttendanceLogs[] = [];
-  DisplayMasterList: AttendanceLogs[] = [];
-  SelectedAttendanceLogs: AttendanceLogs = AttendanceLogs.CreateNewInstance();
+  MasterList: WebAttendaneLog[] = [];
+  DisplayMasterList: WebAttendaneLog[] = [];
+  SelectedAttendance: WebAttendaneLog = WebAttendaneLog.CreateNewInstance();
+
+    // headers as per required
+    baseHeaders: string[] = ['Sr. no', 'Employee Name', 'Date', 'First Check In Time', 'Last Check Out Time', 'Total Time'];
 
   pageSize: number = 10; // Items per page
   currentPage: number = 1; // Initialize current page
@@ -99,7 +103,7 @@ export class AttendanceLogsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let TodaysAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendanceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let TodaysAttendanceLog = await WebAttendaneLog.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendanceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('TodaysAttendanceLog :', TodaysAttendanceLog);
     this.DisplayMasterList = TodaysAttendanceLog
     this.getAttendanceCount(AttendanceLogType.TodaysAttendanceLog)
@@ -130,7 +134,8 @@ export class AttendanceLogsComponent implements OnInit {
 
     let employeeref = this.Entity.p.EmployeeRef
 
-    let WeeklyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(this.companyRef(), AttendanceLogType.WeeklyAttendanceLog, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let WeeklyAttendanceLog = await WebAttendaneLog.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(this.companyRef(), AttendanceLogType.WeeklyAttendanceLog, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('WeeklyAttendanceLog :', WeeklyAttendanceLog);
     this.DisplayMasterList = WeeklyAttendanceLog
     this.getAttendanceCount(AttendanceLogType.WeeklyAttendanceLog);
   }
@@ -166,9 +171,10 @@ export class AttendanceLogsComponent implements OnInit {
     const month = this.Entity.p.Months;
     const employeeref = this.Entity.p.EmployeeRef;
 
-    let MonthlyAttendanceLog = await AttendanceLogs.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendanceLogType.MonthlyAttendanceLog,
+    let MonthlyAttendanceLog = await WebAttendaneLog.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendanceLogType.MonthlyAttendanceLog,
       month, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = MonthlyAttendanceLog
+    console.log('MonthlyAttendanceLog :', MonthlyAttendanceLog);
     this.getAttendanceCount(AttendanceLogType.MonthlyAttendanceLog)
   }
 
@@ -197,11 +203,15 @@ export class AttendanceLogsComponent implements OnInit {
     }
   }
 
-  // headers as per required
-  baseHeaders: string[] = ['Sr. no', 'Employee Name', 'Date', 'Latest Check In Time', 'First Check In Time', 'Last Check Out Time', 'Total Time', 'In Office Hours'];
+  onEditClicked = async (item: WebAttendaneLog) => {
+    this.SelectedAttendance = item.GetEditableVersion();
+    WebAttendaneLog.SetCurrentInstance(this.SelectedAttendance);
+    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
+    this.router.navigate(['/homepage/Website/Attendance_Details']);
+  };
   get headers(): string[] {
     if (this.isTodayAttendanceView) {
-      return [...this.baseHeaders, 'On Leave', 'Leave Type'];
+      return [...this.baseHeaders, 'On Leave', 'Leave Type', 'Action'];
     }
     return this.baseHeaders;
   }
