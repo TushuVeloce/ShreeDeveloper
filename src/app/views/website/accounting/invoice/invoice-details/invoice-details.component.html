@@ -246,11 +246,12 @@
               <tbody>
                 <tr *ngFor="   let time of Entity.p.LabourExpenseDetailsArray;   let i = index ">
                   <td Class="tbldata">{{ i + 1 }}</td>
-                  <td Class="tbldata">{{ time.LabourRate}}</td>
-                  <td Class="tbldata">{{ time.LabourQty}}</td>
-                  <td Class="tbldata">{{ time.LabourAmount}}</td>
+                  <td Class="tbldata">{{ time.LabourTypeName }}</td>
                   <td Class="tbldata">{{ time.LabourFromTime }}</td>
                   <td Class="tbldata">{{ time.LabourToTime }}</td>
+                  <td Class="tbldata">{{ time.LabourQty}}</td>
+                  <td Class="tbldata">{{ time.LabourRate}}</td>
+                  <td Class="tbldata">{{ time.LabourAmount}}</td>
                   <td class="tbldata">
                     <span style="margin-left: 9px" (click)="EditLabourTime(i)">
                       <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
@@ -393,7 +394,7 @@
   <div class="custom-modal">
     <div class="custom-modal-header">
       <h5>Add Machine Hours</h5>
-      <button type="button" class="btn-close" (click)="isTimeModalOpen = false"></button>
+      <button type="button" class="btn-close" (click)="CloseTimeModal('machinetime')"></button>
     </div>
     <div class="custom-modal-body">
       <form autocomplete="off">

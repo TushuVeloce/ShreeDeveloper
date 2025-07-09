@@ -14,13 +14,14 @@ import { LabourTimeFetchRequest } from "./labourtimefetchrequest";
 
 
 export class LabourTimeProps {
-  public readonly Db_Table_Name = "LabourTimeDetails";
+  public readonly Db_Table_Name = "LabourExpenseDetails";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
   public Ref: number = 0;
   public LabourType : number = 0;
+  public LabourTypeName : string = '';
   public LabourQty: number = 0;
   public LabourRate: number = 0;
   public LabourAmount : number = 0;
@@ -43,7 +44,7 @@ export class LabourTimeProps {
 }
 
 export class LabourTime implements IPersistable<LabourTime> {
-  public static readonly Db_Table_Name: string = 'LabourTimeDetails';
+  public static readonly Db_Table_Name: string = 'LabourExpenseDetails';
 
   public constructor(public readonly p: LabourTimeProps, public readonly AllowEdit: boolean) {
 
