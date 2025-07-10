@@ -419,6 +419,11 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '/assets/icons/Bank Account Master.png',
       },
       {
+        Name: 'Opening Balance Master',
+        RouterLink: '/homepage/Website/Opening_Balance_Master',
+        LogoPath: '/assets/icons/Bank Account Master.png',
+      },
+      {
         Name: 'Country Master',
         RouterLink: '/homepage/Website/Country',
         LogoPath: '/assets/icons/Country Master.png',

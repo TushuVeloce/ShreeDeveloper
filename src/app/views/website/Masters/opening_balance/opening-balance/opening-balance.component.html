@@ -1,0 +1,43 @@
+<div class="row">
+   <div class="col-4 mb-2">
+    <h1 style="padding-top: 3px;" class="title title_light">Opening Balance Master</h1>
+  </div>
+   <div class="col-4 mb-2 search-container_light">
+    <app-shared-filter [masterList]="MasterList" [filterFields]="['Code', 'Name', 'UnitName']"
+      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
+  </div>
+  <div class="col-4 mb-2" routerLinkActive="active">
+    <nz-button nz-button class="btn1" (click)='AddOpeningBalance()'>
+      Add Opening Balance
+    </nz-button>
+  </div>
+</div>
+<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+  <div class="table-container">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let OpeningBalance of paginatedList(); index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{OpeningBalance.p.ModeOfPayment == Cash ? 'Cash' : 'Cheque'}}</td>
+          <td Class="tbldata">{{OpeningBalance.p.BankName? OpeningBalance.p.BankName : '--'}}</td>
+          <td Class="tbldata">{{OpeningBalance.p.OpeningBalanceAmount}}</td>
+          <td class="tbldata">
+            <Edit-Icon (editClick)="onEditClicked(OpeningBalance)" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(OpeningBalance)" />
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+  <Pagination [pageSize]="pageSize" [total]="total" [(currentPage)]="currentPage" (pageChange)="onPageChange($event)" />
+</div>
+
+<div *ngIf="DisplayMasterList.length === 0">
+  <Data-Not-Found />
+</div>

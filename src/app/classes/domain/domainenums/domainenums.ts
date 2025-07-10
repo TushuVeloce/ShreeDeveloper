@@ -208,6 +208,12 @@ export enum ModeOfPayments {
   GpayPhonePay = 500,
 }
 
+export enum OpeningBalanceModeOfPayments {
+  None = 0,
+  Cash = 100,
+  Cheque = 200,
+}
+
 export enum ExpenseTypes {
   None = 0,
   MachinaryExpense = 105,
@@ -1691,6 +1697,41 @@ export class DomainEnums {
     if (withAllOption) {
       let allEntry = {
         Ref: ModeOfPayments.None,
+        Name: allOptionName,
+      };
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+  public static OpeningBalanceModeOfPaymentsName(itemType: OpeningBalanceModeOfPayments) {
+    switch (itemType) {
+      case OpeningBalanceModeOfPayments.Cash:
+        return 'Cash';
+      case OpeningBalanceModeOfPayments.Cheque:
+        return 'Cheque';
+      default:
+        return '';
+    }
+  }
+
+  public static OpeningBalanceModeOfPaymentsList(
+    withAllOption: boolean = false,
+    allOptionName: string = '<All>'
+  ) {
+    let result = [
+      {
+        Ref: OpeningBalanceModeOfPayments.Cash,
+        Name: DomainEnums.OpeningBalanceModeOfPaymentsName(OpeningBalanceModeOfPayments.Cash),
+      },
+      {
+        Ref: OpeningBalanceModeOfPayments.Cheque,
+        Name: DomainEnums.OpeningBalanceModeOfPaymentsName(OpeningBalanceModeOfPayments.Cheque),
+      },
+    ];
+    if (withAllOption) {
+      let allEntry = {
+        Ref: OpeningBalanceModeOfPayments.None,
         Name: allOptionName,
       };
       result.unshift(allEntry);

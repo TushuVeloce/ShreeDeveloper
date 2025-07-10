@@ -143,6 +143,8 @@ import { PayerDetailsComponent } from './Masters/payer/payer-details/payer-detai
 import { CrmReportComponent } from './Reports/crm-report/crm-report.component';
 import { AccountingReportComponent } from './accounting/accounting_report/accounting-report/accounting-report.component';
 import { InvoicePrintComponent } from './accounting/invoice/invoice-print/invoice-print.component';
+import { OpeningBalanceComponent } from './Masters/opening_balance/opening-balance/opening-balance.component';
+import { OpeningBalanceDetailsComponent } from './Masters/opening_balance/opening-balance-details/opening-balance-details.component';
 
 
 const routes: Routes = [
@@ -188,6 +190,9 @@ const routes: Routes = [
 
       { path: 'Bank_Account_Master', component: BankAccountMasterComponent },
       { path: 'Bank_Account_Master_Details', component: BankAccountMasterDetailsComponent },
+
+      { path: 'Opening_Balance_Master', component: OpeningBalanceComponent },
+      { path: 'Opening_Balance_Master_Details', component: OpeningBalanceDetailsComponent },
 
       { path: 'External_Users', component: ExternalUsersComponent },
       { path: 'External_Users_Details', component: ExternalUsersMasterDetailsComponent },

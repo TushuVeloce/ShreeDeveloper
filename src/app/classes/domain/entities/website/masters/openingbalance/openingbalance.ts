@@ -10,35 +10,28 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { WebAttendaneLogDetailsLogFetchRequest } from "./webattendancelogdetailsfetchrequest";
+import { OpeningBalanceFetchRequest } from "./openingbalancefetchrequest";
+import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 
 
-export class WebAttendaneLogDetailsLogProps {
-  public readonly Db_Table_Name = "AttendanceLogDetails";
-
+export class OpeningBalanceProps {
+  public readonly Db_Table_Name = "OpeningBalanceMaster";
   public CompanyRef: number = 0;
-  public readonly CompanyName: string = '';
+  public CompanyName: string = '';
   public CreatedBy: number = 0;
   public CreatedDate: string = '';
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
   public UpdatedDate: string = '';
   public UpdatedByName: number = 0;
-
   public Ref: number = 0;
-  public AttendanceLogRef: number = 0;
-  public CheckInTime: string = '';
-  public CheckOutTime: string = '';
-  public AttendanceLogPath1: string = '';
-  public AttendanceLogPath2: string = '';
-  public AttendenceLocationType: number = 0;
-  public SiteRef: number = 0;
-  public SiteName: string = '';
-  public WorkingHrs: number = 0;
-  public CheckOutMode: number = 0;
-  public IsCheckOutDone: number = 0;
-  public Latitude: string = '';
-  public Longitude: string = '';
+  public ModeOfPayment: number = 0;
+  public OpeningBalanceAmount: number = 0;
+  public BankAccountRef: number = 0;
+  public BankName: string = '';
+  public FinancialYearRef : number = 0;
+  public FinancialYearName : string = '';
+  public readonly UnitName: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -48,14 +41,14 @@ export class WebAttendaneLogDetailsLogProps {
   }
 
   public static Blank() {
-    return new WebAttendaneLogDetailsLogProps(true);
+    return new OpeningBalanceProps(true);
   }
 }
 
-export class WebAttendaneLogDetailsLog implements IPersistable<WebAttendaneLogDetailsLog> {
-  public static readonly Db_Table_Name: string = 'AttendanceLogDetails';
+export class OpeningBalance implements IPersistable<OpeningBalance> {
+  public static readonly Db_Table_Name: string = 'OpeningBalanceMaster';
 
-  constructor(public readonly p: WebAttendaneLogDetailsLogProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: OpeningBalanceProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -68,46 +61,48 @@ export class WebAttendaneLogDetailsLog implements IPersistable<WebAttendaneLogDe
     }
   }
 
-  public GetEditableVersion(): WebAttendaneLogDetailsLog {
-    let newState: WebAttendaneLogDetailsLogProps = Utils.GetInstance().DeepCopy(this.p);
-    return WebAttendaneLogDetailsLog.CreateInstance(newState, true);
+  public GetEditableVersion(): OpeningBalance {
+    let newState: OpeningBalanceProps = Utils.GetInstance().DeepCopy(this.p);
+    return OpeningBalance.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new WebAttendaneLogDetailsLog(WebAttendaneLogDetailsLogProps.Blank(), true);
+    return new OpeningBalance(OpeningBalanceProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new WebAttendaneLogDetailsLog(data as WebAttendaneLogDetailsLogProps, allowEdit);
+    return new OpeningBalance(data as OpeningBalanceProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
+    if (this.p.ModeOfPayment == 0) {vra.add('ModeOfPayment', 'Mode of Payment cannot be blank.');}
+    if (this.p.OpeningBalanceAmount == 0) {vra.add('OpeningBalanceAmount', 'Opening Balance Amount cannot be blank.');}
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, WebAttendaneLogDetailsLog.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, OpeningBalance.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: WebAttendaneLogDetailsLog = WebAttendaneLogDetailsLog.CreateNewInstance();
+  private static m_currentInstance: OpeningBalance = OpeningBalance.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return WebAttendaneLogDetailsLog.m_currentInstance;
+    return OpeningBalance.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: WebAttendaneLogDetailsLog) {
-    WebAttendaneLogDetailsLog.m_currentInstance = value;
+  public static SetCurrentInstance(value: OpeningBalance) {
+    OpeningBalance.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): WebAttendaneLogDetailsLog {
+  public static SingleInstanceFromTransportData(td: TransportData): OpeningBalance {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, WebAttendaneLogDetailsLog.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, WebAttendaneLogDetailsLog.Db_Table_Name)!.Entries) {
-        return WebAttendaneLogDetailsLog.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, OpeningBalance.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, OpeningBalance.Db_Table_Name)!.Entries) {
+        return OpeningBalance.CreateInstance(data, false);
       }
     }
 
@@ -116,13 +111,13 @@ export class WebAttendaneLogDetailsLog implements IPersistable<WebAttendaneLogDe
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = ""): WebAttendaneLogDetailsLog[] {
-    let result: WebAttendaneLogDetailsLog[] = [];
+   sortPropertyName: string = ""): OpeningBalance[] {
+    let result: OpeningBalance[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, WebAttendaneLogDetailsLog.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, WebAttendaneLogDetailsLog.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, OpeningBalance.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, OpeningBalance.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -132,18 +127,18 @@ export class WebAttendaneLogDetailsLog implements IPersistable<WebAttendaneLogDe
       }
 
       for (let data of entries) {
-        result.push(WebAttendaneLogDetailsLog.CreateInstance(data, false));
+        result.push(OpeningBalance.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): WebAttendaneLogDetailsLog[] {
-    return WebAttendaneLogDetailsLog.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): OpeningBalance[] {
+    return OpeningBalance.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: WebAttendaneLogDetailsLogFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: OpeningBalanceFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -157,30 +152,31 @@ export class WebAttendaneLogDetailsLog implements IPersistable<WebAttendaneLogDe
     return tdResponse;
   }
 
-  public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new WebAttendaneLogDetailsLogFetchRequest();
-    req.WebAttendaneLogDetailsLogRefs.push(ref);
+  public static async FetchInstance(ref: number,companyRef:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new OpeningBalanceFetchRequest();
+    req.OpeningBalanceRefs.push(ref);
+    req.CompanyRefs.push(companyRef);
 
-    let tdResponse = await WebAttendaneLogDetailsLog.FetchTransportData(req, errorHandler) as TransportData;
-    return WebAttendaneLogDetailsLog.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await OpeningBalance.FetchTransportData(req, errorHandler) as TransportData;
+    return OpeningBalance.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: WebAttendaneLogDetailsLogFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await WebAttendaneLogDetailsLog.FetchTransportData(req, errorHandler) as TransportData;
-    return WebAttendaneLogDetailsLog.ListFromTransportData(tdResponse);
+  public static async FetchList(req: OpeningBalanceFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await OpeningBalance.FetchTransportData(req, errorHandler) as TransportData;
+    return OpeningBalance.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new WebAttendaneLogDetailsLogFetchRequest();
-    let tdResponse = await WebAttendaneLogDetailsLog.FetchTransportData(req, errorHandler) as TransportData;
-    return WebAttendaneLogDetailsLog.ListFromTransportData(tdResponse);
+    let req = new OpeningBalanceFetchRequest();
+    let tdResponse = await OpeningBalance.FetchTransportData(req, errorHandler) as TransportData;
+    return OpeningBalance.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new WebAttendaneLogDetailsLogFetchRequest();
+    let req = new OpeningBalanceFetchRequest();
     req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await WebAttendaneLogDetailsLog.FetchTransportData(req, errorHandler) as TransportData;
-    return WebAttendaneLogDetailsLog.ListFromTransportData(tdResponse);
+    let tdResponse = await OpeningBalance.FetchTransportData(req, errorHandler) as TransportData;
+    return OpeningBalance.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {

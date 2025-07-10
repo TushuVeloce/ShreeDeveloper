@@ -4,7 +4,7 @@
   </div>
   <div class="col-4 mb-2 search-container_light">
   </div>
-  <div class="col-4 mb-2 text-end">
+  <div class="col-4 mb-2 text-end" *ngIf="DisplayMasterList.length > 0">
     <img class="no-print" src="/assets/icons/printer.png" alt="Print" title="Print" width="30px" height="30px"
       style="cursor: pointer; padding-top: 4px;" (click)="printReport()" />
   </div>

@@ -280,7 +280,7 @@
         <!-- Labour time table Ends -->
 
 
-        <div class="col-md-4" style="margin-top: 1rem">
+        <div class="col-md-4" style="margin-top: 1rem"  *ngIf="Entity.p.ExpenseType != LabourExpenseRef && !(Entity.p.ExpenseType == MachinaryExpenseRef&& Entity.p.UnitRef == TimeUnitRef) ">
           <div>
             <label>Quantity</label>
             <input type="number" [(ngModel)]="Entity.p.Qty" name="Qty" class="form-control" id="Qty" required
@@ -291,7 +291,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem">
+        <div class="col-md-4" style="margin-top: 1rem" *ngIf="Entity.p.ExpenseType != LabourExpenseRef">
           <div>
             <label>Rate</label>
             <input type="number" [(ngModel)]="Entity.p.Rate" name="Rate" class="form-control" id="Rate" required
