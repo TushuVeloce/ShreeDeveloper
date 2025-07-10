@@ -67,6 +67,8 @@ export class InvoiceProps {
   public readonly CityName: string = ''
   public readonly Contacts: string = ''
   public readonly OwnerName: string = ''
+  public BankAccountRef: number = 0
+  public IsAutoInvoiceEnabled: number = 0
 
 
   public readonly IsNewlyCreated: boolean = false;

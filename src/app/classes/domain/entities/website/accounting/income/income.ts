@@ -46,6 +46,7 @@ export class IncomeProps {
   public ShreesBalance: number = 0
   public IncomeModeOfPayment: number = 0
   public ModeOfPaymentName: string = ''
+  public BankAccountRef: number = 0
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';

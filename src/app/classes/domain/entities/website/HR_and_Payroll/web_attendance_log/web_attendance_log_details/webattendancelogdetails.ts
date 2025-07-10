@@ -37,6 +37,8 @@ export class WebAttendaneLogDetailsLogProps {
   public WorkingHrs: number = 0;
   public CheckOutMode: number = 0;
   public IsCheckOutDone: number = 0;
+  public Latitude: string = '';
+  public Longitude: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
