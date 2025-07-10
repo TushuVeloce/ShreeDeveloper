@@ -20,10 +20,10 @@ const routes: Routes = [
     path: 'marketing-management',
     loadChildren: () => import('../marketing-management-mobile/marketing-management-mobile.module').then(m => m.MarketingManagementMobilePageModule)
   },
-  {
-    path: 'report',
-    loadChildren: () => import('../site-management-mobile/site-management-mobile.module').then(m => m.SiteManagementMobilePageModule)
-  },
+  // {
+  //   path: 'report',
+  //   loadChildren: () => import('../site-management-mobile/site-management-mobile.module').then(m => m.SiteManagementMobilePageModule)
+  // },
   {
     path: 'customer-relationship-management',
     loadChildren: () => import('../customer-relationship-management-mobile/customer-relationship-management-mobile.module').then(m => m.CustomerRelationshipManagementMobilePageModule)

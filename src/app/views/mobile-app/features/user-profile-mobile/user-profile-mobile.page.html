@@ -5,66 +5,125 @@
     <ion-row class="ion-justify-content-center ion-align-items-center h-100">
       <ion-col size="12" size-sm="10" size-md="6" size-lg="4" class="ion-text-center">
 
-        <!-- Profile Picture Upload -->
+        <!-- Profile Picture -->
         <div class="profile-image-wrapper">
           <img *ngIf="imagePreviewUrl; else placeholderImage" [src]="imagePreviewUrl" class="profile-img"
             alt="Profile" />
           <ng-template #placeholderImage>
-            <ion-icon name="person-circle-outline" class="placeholder-icon"></ion-icon>
+            <ion-icon name="person-circle-outline" class="placeholder-icon profile-img" size="large"></ion-icon>
           </ng-template>
-          <ion-button fill="clear" size="small" (click)="addImage()">Change Photo</ion-button>
+          <ion-button fill="clear" size="small" (click)="addImage()" *ngIf="isEditing" >Change Photo</ion-button>
         </div>
 
-        <!-- Profile Form -->
-        <form [formGroup]="employeeForm" (ngSubmit)="SaveProfile()" class="form-wrapper">
+        <!-- Profile Info -->
+        <div class="profile-info">
+          <ion-item lines="none" class="input-item">
+            <ion-label position="stacked">Name</ion-label>
+            <ng-container *ngIf="isEditing; else viewName">
+              <ion-input [(ngModel)]="Entity.p.Name" placeholder="Enter name"></ion-input>
+            </ng-container>
+            <ng-template #viewName>
+              <ion-text>{{ Entity?.p?.Name || 'N/A' }}</ion-text>
+            </ng-template>
+          </ion-item>
 
-          <app-input-field label="Name" controlName="name" type="text" [formGroup]="employeeForm"
-            placeholder="Enter your name" customClass="input-wrapper">
-          </app-input-field>
+          <ion-item lines="none" class="input-item">
+            <ion-label position="stacked">Official Email Id</ion-label>
+            <ng-container *ngIf="isEditing; else viewOfficialEmailId">
+              <ion-input [(ngModel)]="Entity.p.OfficialEmailId" placeholder="Enter OfficialEmailId"></ion-input>
+            </ng-container>
+            <ng-template #viewOfficialEmailId>
+              <ion-text>{{ Entity?.p?.OfficialEmailId || 'N/A' }}</ion-text>
+            </ng-template>
+          </ion-item>
 
-          <app-input-field label="Email" controlName="email" type="email" [formGroup]="employeeForm"
-            placeholder="Enter your email" customClass="input-wrapper">
-          </app-input-field>
+          <ion-item lines="none" class="input-item">
+            <ion-label position="stacked">Mobile</ion-label>
+            <ng-container *ngIf="isEditing; else viewContactNos">
+              <ion-input [(ngModel)]="Entity.p.ContactNos" placeholder="Enter Mobile Nos"></ion-input>
+            </ng-container>
+            <ng-template #viewContactNos>
+              <ion-text>{{ Entity?.p?.ContactNos || 'N/A' }}</ion-text>
+            </ng-template>
+          </ion-item>
 
-          <app-input-field label="Mobile Number" controlName="mobilenumber" type="number" [formGroup]="employeeForm"
-            placeholder="Enter your phone" customClass="input-wrapper"   [maxlength]="10"
-            [minlength]="10"
-            pattern="[0-9]{10}">
-          </app-input-field>
+          <ion-item lines="none" class="input-item">
+            <ion-label position="stacked">Address</ion-label>
+            <ng-container *ngIf="isEditing; else viewAddressLine1">
+              <ion-input [(ngModel)]="Entity.p.AddressLine1" placeholder="Enter Address"></ion-input>
+            </ng-container>
+            <ng-template #viewAddressLine1>
+              <ion-text>{{ Entity?.p?.AddressLine1 || 'N/A' }}</ion-text>
+            </ng-template>
+          </ion-item>
 
-          <app-input-field label="Address" controlName="address" type="text" [formGroup]="employeeForm"
-            placeholder="Enter your address" customClass="input-wrapper">
-          </app-input-field>
-
-          <!-- <app-input-field label="Date of Birth" controlName="DOB" type="date" [formGroup]="employeeForm"
-            placeholder="Select DOB" customClass="input-wrapper">
-          </app-input-field> -->
-          
-          <app-date-field label="Date of Birth" controlName="DOB" [formGroup]="employeeForm"
-          displayFormat="dd MMM yyyy" placeholder="Choose your birthdate" presentation="date" customClass="input-wrapper">
-          </app-date-field>
-
-          <app-input-field label="Gender" controlName="gender" type="text" [formGroup]="employeeForm"
-            placeholder="Select your Gender" customClass="input-wrapper" [buttonType]='true' [readonly]="true"  (fieldClick)="selectGenderBottomsheet()">
-          </app-input-field>
-
-          <!-- <ion-item lines="none" class="input-wrapper">
-            <ion-label>Gender</ion-label>
-            <ion-select formControlName="gender" placeholder="Select Gender">
-              <ion-select-option *ngFor="let gender of GenderList" [value]="gender.Ref">
-                {{ gender.Name }}
-              </ion-select-option>
-            </ion-select>
+          <!-- <ion-item lines="none" class="input-item">
+            <ion-label position="stacked">Date of Birth</ion-label>
+            <ng-container *ngIf="isEditing; else viewDOB">
+              <ion-input [(ngModel)]="Entity.p.DOB" placeholder="Enter Date of Birth"></ion-input>
+            </ng-container>
+            <ng-template #viewDOB>
+              <ion-text>{{ Entity?.p?.DOB || 'N/A' }}</ion-text>
+            </ng-template>
           </ion-item> -->
 
-          <app-custom-button label="Update Profile" type="submit" [loading]="isLoggingIn" color="primary" icon="save"
-            iconPosition="end" shape="round" fill="solid" [disabled]="employeeForm.invalid">
-          </app-custom-button>
+          <ion-item lines="none" class="input-item">
+            <ion-label position="stacked">Date of Birth</ion-label>
+          
+            <ng-container *ngIf="isEditing; else viewDOB">
+              <ion-input readonly [value]="Entity?.p?.DOB" placeholder="Select Date"
+                (click)="presentDOBPopover($event)"></ion-input>
+          
+              <ion-popover *ngIf="dobPopoverOpen" [event]="popoverEvent" [showBackdrop]="true"
+                (ionPopoverDidDismiss)="dobPopoverOpen = false">
+                <ng-template>
+                  <ion-datetime presentation="date" [(ngModel)]="Entity.p.DOB"
+                    (ionChange)="dobPopoverOpen = false"></ion-datetime>
+                </ng-template>
+              </ion-popover>
+            </ng-container>
+          
+            <ng-template #viewDOB>
+              <ion-text>{{ Entity?.p?.DOB || 'N/A' }}</ion-text>
+            </ng-template>
+          </ion-item>
+          
+          <ion-item lines="none" class="input-item">
+            <ion-label position="stacked">Gender</ion-label>
+          
+            <ng-container *ngIf="isEditing; else viewGender">
+              <ion-select [(ngModel)]="Entity.p.Gender" interface="popover" placeholder="Select Gender">
+                <ion-select-option *ngFor="let gender of GenderList" [value]="gender.Ref">
+                  {{ gender.Name }}
+                </ion-select-option>
+              </ion-select>
+            </ng-container>
+          
+            <ng-template #viewGender>
+              <ion-text>{{ findGenderName(Entity.p.Gender)  }}</ion-text>
+            </ng-template>
+          </ion-item>          
+        </div>
 
-        </form>
+        <!-- Action Buttons -->
+        <ion-button *ngIf="!isEditing" expand="block" color="primary" (click)="editProfile()">
+          <ion-icon slot="start" name="create-outline"></ion-icon>
+          Edit Profile
+        </ion-button>
+        <ion-button *ngIf="isEditing" expand="block" color="success" (click)="SaveProfile()">
+          <ion-icon slot="start" name="save-outline"></ion-icon>
+          Save Profile
+        </ion-button>
 
-        <ion-button fill="clear" expand="full" class="Button-In-loginPage" (click)="BackProfile()">Back to
-          settings</ion-button>
+        <ion-button *ngIf="isEditing" expand="block" fill="clear" color="medium" (click)="cancelEdit()">
+          Cancel
+        </ion-button>
+
+
+        <ion-button fill="clear" expand="full" (click)="BackProfile()">
+          Back to settings
+        </ion-button>
+
       </ion-col>
     </ion-row>
   </ion-grid>

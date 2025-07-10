@@ -1,24 +1,21 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { ActionSheetController } from '@ionic/angular';
-import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
-import { DomainEnums, Gender } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
+import { AdminProfile } from 'src/app/classes/domain/entities/website/profile/adminprofile/adminprofile';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
-import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 import { ToastService } from '../../core/toast.service';
 import { HapticService } from '../../core/haptic.service';
 import { AlertService } from '../../core/alert.service';
 import { LoadingService } from '../../core/loading.service';
-import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile-app.service';
 
 @Component({
   selector: 'app-user-profile-mobile',
@@ -28,34 +25,39 @@ import { BottomsheetMobileAppService } from 'src/app/services/bottomsheet-mobile
 })
 export class UserProfileMobilePage implements OnInit {
   Entity: Employee = Employee.CreateNewInstance();
-  employeeForm!: FormGroup;
-  isLoggingIn = false;
+  AdminEntity: AdminProfile = AdminProfile.CreateNewInstance();
+
   GenderList = DomainEnums.GenderTypeList();
-  currentemployee: number = 0
-  companyRef = this.companystatemanagement.SelectedCompanyRef;
+  currentemployee = 0;
+  companyRef = 0;
   imagePreviewUrl: string | null = null;
   selectedFileName: string | null = null;
-  TimeStamp = Date.now()
-  ImageBaseUrl: string = "";
+  TimeStamp = Date.now();
+  ImageBaseUrl = '';
   LoginToken = '';
-  file: File | null = null;
-  imageUrl: string | null = null;  // Add imageUrl to bind to src
-  ProfilePicFile: File = null as any
-  errors = { profile_image: '' };
+  imageUrl: string | null = null;
+  ProfilePicFile: File | null = null;
+  // selectedDOB: string | null = '';
+  selectedDOB: string | null = null;
+
+  IsEmployee = false;
+  IsAdmin = false;
   allowedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
-  isLoading: boolean = false;
-  Date: string | null = null;
-  selectedGender: any[] = [];
+
+  isEditing: boolean = false;
+  dobPopoverOpen = false;
+  popoverEvent: any = null;
+
+  presentDOBPopover(ev: Event) {
+    this.popoverEvent = ev;
+    this.dobPopoverOpen = true;
+  }
+  
 
 
-  INDPhoneNo: string = ValidationPatterns.INDPhoneNo
-
-  INDPhoneNoMsg: string = ValidationMessages.INDPhoneNoMsg
-  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
-
-  constructor(private cdr: ChangeDetectorRef, private DateconversionService: DateconversionService,
+  constructor(
+    private cdr: ChangeDetectorRef,
     private router: Router,
-    private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
     private utils: Utils,
     private companystatemanagement: CompanyStateManagement,
@@ -65,229 +67,240 @@ export class UserProfileMobilePage implements OnInit {
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
-    private loadingService: LoadingService,
-    private fb: FormBuilder,
-    private bottomsheetMobileAppService: BottomsheetMobileAppService,
+    private loadingService: LoadingService
   ) { }
 
-  ngOnInit() {
-    this.currentemployee = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-    this.LoginToken = this.appStateManage.getLoginToken();
-    this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
-    if (this.currentemployee != 0 && this.currentemployee != 1001) {
-      this.getEmployeeDetails()
-    }
-    this.employeeForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      name: ['', Validators.required],
-      address: ['', Validators.required],
-      gender: ['', Validators.required],
-      mobilenumber: ['', Validators.required],
-      DOB: new FormControl(new Date().toISOString(), Validators.required),
-    });
-  }
+  ngOnInit = async () => {
+
+    // this.currentemployee = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
+    // this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
+    // this.LoginToken = this.appStateManage.getLoginToken();
+    // this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
+    // if (this.currentemployee !== 0) {
+    //   await this.getEmployeeDetails();
+    // }
+  };
 
   ionViewWillEnter = async () => {
     await this.loadingService.show();
-    this.currentemployee = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-    this.LoginToken = this.appStateManage.getLoginToken();
+    this.currentemployee = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
+    this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
+    this.LoginToken = this.appStateManage.getLoginTokenForMobile();
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
-    if (this.currentemployee != 0 && this.currentemployee != 1001) {
-      this.getEmployeeDetails()
+    if (this.currentemployee !== 0) {
+      await this.getEmployeeDetails();
     }
     await this.loadingService.hide();
-  }
-
-  DateChange(value: string) {
-    this.Date = value;
-    console.log('value :', value);
-    // this.Entity.p.Date = value || '';
-  }
-
-  public async selectGenderBottomsheet(): Promise<void> {
-    try {
-      const options = this.GenderList.map((item) => ({ p: item }));
-
-      this.openSelectModal(
-        options,
-        this.selectedGender,
-        false,
-        'Select Gender',
-        1,
-        (selected) => {
-          this.selectedGender = selected;
-
-          // Optional: update the form control with selected gender
-          const selectedRef = selected?.[0]?.p?.Ref;
-          const selectedName = selected?.[0]?.p?.Name;
-          if (selectedRef) {
-            this.employeeForm.get('gender')?.setValue(selectedName);
-          }
-        }
-      );
-    } catch (error) {
-      console.error('Error in selectGenderBottomsheet:', error);
-    }
-  }
-
-  // private async openSelectModal(
-  //   dataList: any[],
-  //   selectedItems: any[],
-  //   multiSelect: boolean,
-  //   title: string,
-  //   MaxSelection: number,
-  //   updateCallback: (selected: any[]) => void
-  // ): Promise<void> {
-  //   const selected = await this.bottomsheetMobileAppService.openSelectModal(
-  //     dataList,
-  //     selectedItems,
-  //     multiSelect,
-  //     title,
-  //     MaxSelection
-  //   );
-
-  //   if (selected) {
-  //     updateCallback(selected);
-  //   }
-  // }
-  private async openSelectModal(
-    dataList: any[],
-    selectedItems: any[],
-    multiSelect: boolean,
-    title: string,
-    MaxSelection: number,
-    updateCallback: (selected: any[]) => void
-  ): Promise<void> {
-    const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, multiSelect, title, MaxSelection);
-    if (selected) updateCallback(selected);
-  }
+  };
 
   getEmployeeDetails = async () => {
-    if (this.currentemployee && this.companyRef()) {
-      let EmployeeData = await Employee.FetchInstance(this.currentemployee, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.Entity = EmployeeData
-      if (this.Entity.p.DOB != '') {
-        this.Entity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.DOB)
-      }
-      this.imageUrl = this.Entity.p.ProfilePicPath;
-      this.loadImageFromBackend(this.Entity.p.ProfilePicPath)
-    }
-  }
+    if (this.currentemployee && this.companyRef) {
+      const employeeData = await Employee.FetchInstance(
+        this.currentemployee,
+        this.companyRef,
+        async errMsg => {
+          await this.toastService.present("Error " + errMsg, 1000, 'danger');
+          await this.haptic.error();
+        }
+      );
+      console.log('employeeData :', employeeData);
+      if (employeeData == null) {
+        const adminData = await AdminProfile.FetchAdminData(async errMsg => {
+          await this.toastService.present("Error " + errMsg, 1000, 'danger');
+          await this.haptic.error();
+          // await this.uiUtils.showErrorMessage('Error', errMsg)
+        }
+        );
 
-  loadImageFromBackend(imageUrl: string): void {
-    console.log('imageUrl :', imageUrl);
+        console.log('adminData :', adminData);
+
+        if (adminData?.[0]) {
+          this.AdminEntity = adminData[0];
+          this.IsAdmin = true;
+          this.IsEmployee = false;
+
+          if (this.AdminEntity.p.DOB) {
+            this.AdminEntity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.AdminEntity.p.DOB);
+          }
+          this.imageUrl = this.AdminEntity.p.ProfilePicPath;
+          this.loadImageFromBackend(this.imageUrl);
+        }
+      } else {
+        this.Entity = employeeData;
+        this.IsEmployee = true;
+        this.IsAdmin = false;
+
+        if (this.Entity.p.DOB) {
+          this.Entity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.DOB);
+        }
+        this.imageUrl = this.Entity.p.ProfilePicPath;
+        this.loadImageFromBackend(this.imageUrl);
+        this.AdminEntity = AdminProfile.CreateNewInstance();
+      }
+    }
+  };
+
+  loadImageFromBackend(imageUrl: string | null): void {
     if (imageUrl) {
       this.imagePreviewUrl = `${this.ImageBaseUrl}${imageUrl}/${this.LoginToken}?${this.TimeStamp}`;
-      console.log('this.imagePreviewUrl :', this.imagePreviewUrl);
       this.selectedFileName = imageUrl;
     } else {
       this.imagePreviewUrl = null;
     }
   }
 
-  async addImage() {
+  findGenderName(GenderRef: number): string {
+    const gender = this.GenderList.find(g => g.Ref === GenderRef);
+    return gender ? gender.Name : 'N/A';
+  }
+
+  addImage = async () => {
     const actionSheet = await this.actionSheetController.create({
       header: 'Select Image Source',
       buttons: [
         {
           text: 'Take Photo',
           icon: 'camera',
-          handler: () => {
-            this.pickImage(CameraSource.Camera);
-          },
+          handler: () => this.pickImage(CameraSource.Camera)
         },
         {
           text: 'Choose from Gallery',
           icon: 'image',
-          handler: () => {
-            this.pickImage(CameraSource.Photos);
-          },
+          handler: () => this.pickImage(CameraSource.Photos)
         },
         {
           text: 'Cancel',
           icon: 'close',
-          role: 'cancel',
-        },
-      ],
+          role: 'cancel'
+        }
+      ]
     });
 
     await actionSheet.present();
-  }
+  };
 
-  private async pickImage(source: CameraSource) {
+  private pickImage = async (source: CameraSource) => {
     try {
       const image = await Camera.getPhoto({
         quality: 90,
         allowEditing: false,
-        resultType: CameraResultType.DataUrl,
-        source: source,
+        resultType: CameraResultType.Uri, // Use URI instead of DataUrl
+        source
       });
 
-      this.imageUrl = image.dataUrl!;
-      this.imagePreviewUrl = this.imageUrl;
+      const uri = image.path ?? image.webPath;
+      if (!uri) {
+        throw new Error('Image URI not available');
+      }
+
+      // Convert URI to file
+      const fileName = `profile_${Date.now()}.jpeg`;
+      const file = await this.uriToFile(uri, fileName);
+
+      // Set preview image
+      this.imagePreviewUrl = uri;
+
+      // Assign to the correct entity
+      if (this.IsEmployee) {
+        this.ProfilePicFile = file;
+        this.selectedFileName = file.name;
+      } else if (this.AdminEntity && this.AdminEntity.p) {
+        this.AdminEntity.p.ProfilePicFile = file;
+        this.selectedFileName = file.name;
+      }
+
     } catch (error) {
       console.error('Image picking error:', error);
+      this.toastService.present('Error picking image', 1000, 'danger');
+      await this.haptic.error();
     }
-  }
-  handleFileChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      this.ProfilePicFile = input.files[0];
-      this.selectedFileName = this.ProfilePicFile.name;
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreviewUrl = reader.result as string;
-      };
-      reader.readAsDataURL(this.ProfilePicFile);
-    }
-  }
-
-  // Utility function to create object URL
-  createObjectURL(file: File): string {
-    return URL.createObjectURL(file);
-  }
-
-  // Extracted from services date conversion //
-  formatDate = (date: string | Date): string => {
-    return this.DateconversionService.formatDate(date);
-  }
-
-  selectAllValue(event: MouseEvent): void {
-    const input = event.target as HTMLInputElement;
-    input.select();
-  }
-
-  SaveProfile = async () => {
-    let entityToSave = this.Entity.GetEditableVersion();
-    let entitiesToSave = [entityToSave];
-
-    let lstFTO: FileTransferObject[] = [];
-
-    if (this.ProfilePicFile) {
-      lstFTO.push(
-        FileTransferObject.FromFile(
-          "ProfilePicFile",
-          this.ProfilePicFile,
-          this.ProfilePicFile.name
-        )
-      );
-    }
-
-    await this.Entity.EnsurePrimaryKeysWithValidValues();
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
-
-    if (!tr.Successful) {
-      this.uiUtils.showErrorMessage('Error', tr.Message);
-    } else {
-      await this.uiUtils.showSuccessToster('Profile Updated successfully');
-      this.router.navigate(['/mobileapp/tabs/settings']);
-    }
+  };
+  uriToFile = async (uri: string, fileName: string, mimeType = 'image/jpeg') => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    return new File([blob], fileName, { type: mimeType });
   };
 
 
+  SaveProfile = async () => {
+    let lstFTO: FileTransferObject[] = [];
+
+    if (this.IsEmployee) {
+      const entityToSave = this.Entity.GetEditableVersion();
+      const entitiesToSave = [entityToSave];
+
+      if (this.ProfilePicFile) {
+        lstFTO.push(
+          FileTransferObject.FromFile(
+            'ProfilePicFile',
+            this.ProfilePicFile,
+            this.ProfilePicFile.name
+          )
+        );
+      }
+
+      await this.Entity.EnsurePrimaryKeysWithValidValues();
+      const tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+
+      if (!tr.Successful) {
+        // this.uiUtils.showErrorMessage('Error', tr.Message);
+        await this.toastService.present("Error " + tr.Message, 1000, 'danger');
+        await this.haptic.error();
+      } else {
+        // await this.uiUtils.showSuccessToster('Employee Profile Updated successfully');
+        await this.toastService.present('Employee Profile Updated successfully', 1000, 'success');
+        await this.haptic.success();
+        // this.router.navigate(['/homepage']);
+      }
+    } else if (this.IsAdmin && this.AdminEntity?.p) {
+      const adminToSave = this.AdminEntity.GetEditableVersion();
+      const adminEntitiesToSave = [adminToSave];
+
+      if (this.AdminEntity.p.ProfilePicFile) {
+        lstFTO.push(
+          FileTransferObject.FromFile(
+            'ProfilePicFile',
+            this.AdminEntity.p.ProfilePicFile,
+            this.AdminEntity.p.ProfilePicFile.name
+          )
+        );
+      }
+
+      await this.AdminEntity.EnsurePrimaryKeysWithValidValues();
+      const tr = await this.utils.SavePersistableEntities(adminEntitiesToSave, lstFTO);
+
+      if (!tr.Successful) {
+        // this.uiUtils.showErrorMessage('Error', tr.Message);
+        await this.toastService.present("Error " + tr.Message, 1000, 'danger');
+        await this.haptic.error();
+      } else {
+        // await this.uiUtils.showSuccessToster('Admin Profile Updated successfully');
+        // this.router.navigate(['/homepage']);
+        await this.toastService.present('Employee Profile Updated successfully', 1000, 'success');
+        await this.haptic.success();
+        this.cancelEdit()
+      }
+    } else {
+      // this.uiUtils.showErrorMessage('Error', 'No profile found to save.');
+      await this.toastService.present("Error No profile found to save.", 1000, 'danger');
+      await this.haptic.error();
+    }
+
+    // Reset file
+    this.ProfilePicFile = null;
+  };
+
+  editProfile = () => {
+    this.isEditing = true;
+  };
+
+  cancelEdit = () => {
+    this.isEditing = false;
+    this.getEmployeeDetails(); // Re-fetch original data
+  };
+
   BackProfile = () => {
-    this.router.navigate(['/mobileapp/tabs/settings']);
-  }
+    this.router.navigate(['/mobileapp/tabs/settings'], { replaceUrl: true });
+  };
 
 }
