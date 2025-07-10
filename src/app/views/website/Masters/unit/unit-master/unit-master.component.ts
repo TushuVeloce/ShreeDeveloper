@@ -38,7 +38,7 @@ export class UnitMasterComponent implements OnInit {
     private serverCommunicator: ServerCommunicatorService, private ValidMenuItem: ValidMenuItemsStateManagement) { }
 
   async ngOnInit() {
-    this.appStateManage.setDropdownDisabled(true);
+    await this.appStateManage.setDropdownDisabled(true);
     this.ValidMenuItems = this.ValidMenuItem.getData(this.FeatureRef.UnitMaster);
     console.log('ValidMenuItems :', this.ValidMenuItems);
     // const rawItems = JSON.parse(sessionStorage.getItem('ValidMenuItems') || '[]');

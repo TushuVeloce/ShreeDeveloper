@@ -1,97 +1,81 @@
-<div>
-  <div class="row">
-   <div class="col-4 mb-2">
-      <h1 style="padding-top: 3px" class="title title_light">
-        Estimate Stage List
-      </h1>
-    </div>
-     <div class="col-4 mb-2 search-container_light">
-      <app-shared-filter [masterList]="MasterList" [filterFields]="['SiteName', 'Description', 'Amount']"
-        (filteredList)="DisplayMasterList = $event"></app-shared-filter>
-    </div>
-    <div class="col-4 mb-2" routerLinkActive="active">
-      <nz-button nz-button class="btn1" (click)="AddEstimateStages()">
-        Add Estimate Stage
-      </nz-button>
-    </div>
-    <ng-template #noDataTpl>
-      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
-        No Data
+<div class="row">
+  <div class="col-4 mb-2">
+    <h1 style="padding-top: 3px" class="title title_light">
+      Estimate Stage List
+    </h1>
+  </div>
+  <div class="col-4 mb-2 search-container_light">
+    <app-shared-filter [masterList]="MasterList" [filterFields]="['SiteName', 'Description', 'Amount']"
+      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
+  </div>
+  <div class="col-4 mb-2" routerLinkActive="active">
+    <nz-button nz-button class="btn1" (click)="AddEstimateStages()">
+      Add Estimate Stage
+    </nz-button>
+  </div>
+</div>
+<ng-template #noDataTpl>
+  <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+    No Data
+  </div>
+</ng-template>
+<div class="card-body">
+  <form autocomplete="off">
+    <div class="row gy-3">
+      <div class="col-md-4">
+        <label for="SiteRef"><b>Site</b></label>
+        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+          nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
+          (ngModelChange)="onSiteChange(Entity.p.SiteRef)">
+          <nz-option [nzValue]="0" nzLabel="All"></nz-option>
+          <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+        </nz-select>
       </div>
-    </ng-template>
-    <div class="card-body" style="margin-left: 14px">
-      <form autocomplete="off">
-        <div class="row">
-          <div class="card-body" style="margin-left: 14px">
-            <form autocomplete="off">
-              <div class="row">
-                <div class="col-md-4">
-                  <label for="SiteRef"><b>Site</b></label>
-                  <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-                    nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
-                    (ngModelChange)="onSiteChange(Entity.p.SiteRef)">
-                    <nz-option [nzValue]="0" nzLabel="All"></nz-option>
-                    <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
-                  </nz-select>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </form>
     </div>
+  </form>
+</div>
+<div class="table-wrapper tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+  <div class="table-container">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
+      [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">
+            {{ header }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let estimatestage of paginatedList; index as i">
+          <td class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td class="tbldata">{{ estimatestage.p.SiteName }}</td>
+          <td class="tbldata">{{ estimatestage.p.StageName }}</td>
+          <td Class="tbldata" style="cursor: pointer;" [nzTooltipTitle]="estimatestage.p.Description"
+            nzTooltipPlacement="top" nzTooltipColor="#A52A2A" nz-button nz-tooltip>{{estimatestage.p.Description}}
+          </td>
+          <td class="tbldata" style="text-align: right">
+            {{ estimatestage.p.Amount | currency : "INR" }}
+          </td>
+          <td class="tbldata">
+            <Edit-Icon (editClick)="onEditClicked(estimatestage)" />
+            <Delete-Icon (deleteClicked)="onDeleteClicked(estimatestage)" />
+          </td>
+        </tr>
+        <tr>
+          <td class="tbldata" colspan="3"></td>
+          <td class="tbldata"><b>Total</b></td>
+          <td class="tbldata"><b> {{ totalAmount | currency : "INR" }}</b></td>
+        </tr>
+        <tr>
+          <td class="tbldata" colspan="3"></td>
+          <td class="tbldata"><b>In Words</b></td>
+          <td class="tbldata"><b>{{ totalAmountInWords }}</b></td>
+        </tr>
+      </tbody>
+    </nz-table>
   </div>
-  <!-- Machinary Expense -->
-  <!-- Machinery Expense Table -->
-  <div class="table-wrapper tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
-    <div class="table-container">
-      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList"
-        [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
-        <thead>
-          <tr>
-            <th *ngFor="let header of headers" class="tblheader">
-              {{ header }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let estimatestage of paginatedList; index as i">
-            <td class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td class="tbldata">{{ estimatestage.p.SiteName }}</td>
-            <td class="tbldata">{{ estimatestage.p.StageName }}</td>
-            <!-- <td class="tbldata">{{ estimatestage.p.Description }}</td> -->
-            <td Class="tbldata" style="cursor: pointer;" [nzTooltipTitle]="estimatestage.p.Description"
-              nzTooltipPlacement="top" nzTooltipColor="#A52A2A" nz-button nz-tooltip>{{estimatestage.p.Description}}
-            </td>
-            <td class="tbldata" style="text-align: right">
-              {{ estimatestage.p.Amount | currency : "INR" }}
-            </td>
-            <td class="tbldata">
-              <Edit-Icon (editClick)="onEditClicked(estimatestage)" />
-              <Delete-Icon (deleteClicked)="onDeleteClicked(estimatestage)" />
-            </td>
-          </tr>
-          <tr>
-            <td class="tbldata" colspan="3"></td>
-            <td class="tbldata"><b>Total</b></td>
-            <td class="tbldata"><b> {{ totalAmount | currency : "INR" }}</b></td>
-          </tr>
-          <tr>
-             <td class="tbldata" colspan="3"></td>
-             <td class="tbldata"><b>In Words</b></td>
-            <td class="tbldata"><b>{{ totalAmountInWords }}</b></td>
-          </tr>
-        </tbody>
-      </nz-table>
-    </div>
-
-    <!-- Pagination Component -->
-    <Pagination [pageSize]="pageSize" [total]="total" [(currentPage)]="currentPage"
-      (pageChange)="onPageChange($event)" />
-  </div>
-
-  <!-- If No Data Found -->
-  <div *ngIf="DisplayMasterList.length === 0">
-    <Data-Not-Found />
-  </div>
+  <Pagination [pageSize]="pageSize" [total]="total" [(currentPage)]="currentPage" (pageChange)="onPageChange($event)" />
+</div>
+<div *ngIf="DisplayMasterList.length === 0">
+  <Data-Not-Found />
 </div>

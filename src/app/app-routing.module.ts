@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { LoginPageComponent } from './views/login-page/login-page.component';
-import { CreatePasswordComponent } from './views/login-page/create_password/create-password/create-password.component';
 import { ForgotPasswordComponent } from './views/sidebarlayout/forgot_password/forgot-password/forgot-password.component';
+import { CreatePasswordComponent } from './views/sidebarlayout/create_password/create-password/create-password.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },

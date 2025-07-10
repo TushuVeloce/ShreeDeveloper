@@ -1,32 +1,31 @@
 <div class="row">
- <div class="col-4 mb-2">
+  <div class="col-4 mb-2">
     <h1 style="padding-top: 3px;" class="title title_light">State Master</h1>
   </div>
- <div class="col-4 mb-2 search-container_light">
-    <app-shared-filter [masterList]="MasterList"
-      [filterFields]="['Name']"
+  <div class="col-4 mb-2 search-container_light">
+    <app-shared-filter [masterList]="MasterList" [filterFields]="['Name']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
-  <ng-template #noDataTpl>
-    <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
-      No Data
-    </div>
-  </ng-template>
-  <div class="card-body" style="margin-left: 14px;">
-    <form autocomplete="off">
-      <div class="row">
-        <div class="col-md-4">
-          <label for="CountryRef"><b>Country Name</b></label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="Entity.p.CountryRef" name="CountryRef" required
-            id="CountryRef" (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
-            <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
-              [nzValue]="country.p.Ref"></nz-option>
-          </nz-select>
-        </div>
-      </div>
-    </form>
+</div>
+<ng-template #noDataTpl>
+  <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+    No Data
   </div>
+</ng-template>
+<div class="card-body">
+  <form autocomplete="off">
+    <div class="row gy-3">
+      <div class="col-md-4">
+        <label for="CountryRef"><b>Country Name</b></label>
+        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+          nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="Entity.p.CountryRef" name="CountryRef" required
+          id="CountryRef" (ngModelChange)="getStateListByCountryRef(Entity.p.CountryRef)">
+          <nz-option *ngFor="let country of CountryList" [nzLabel]="country.p.Name"
+            [nzValue]="country.p.Ref"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+  </form>
 </div>
 <div class="table-wrapper" class="tblcard_light" style="margin-top: 1rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">

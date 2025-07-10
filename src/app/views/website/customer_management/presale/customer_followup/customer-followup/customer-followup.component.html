@@ -1,72 +1,67 @@
-<div>
-  <div class="row">
-    <div class="col-4 mb-2">
-      <h1 style="padding-top: 3px;" class="title title_light">Customer Follow Up</h1>
-    </div>
-     <div class="col-4 mb-2 search-container_light">
-      <app-shared-filter [masterList]="followup" [filterFields]="['CustomerName', 'ContactNos', 'ReminderDate', 'CustomerStatusName']"
-        (filteredList)="DisplayMasterList = $event"></app-shared-filter>
-    </div>
+<div class="row">
+  <div class="col-4 mb-2">
+    <h1 style="padding-top: 3px;" class="title title_light">Customer Follow Up</h1>
   </div>
-  <ng-template #noDataTpl>
-    <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
-      No Data
-    </div>
-  </ng-template>
-  <div class="row">
-    <div class="card-body" style="margin-left: 14px;">
-      <form autocomplete="off">
-        <div class="row">
-          <div class="col-md-4">
-            <label for="date"><b>Reminder Date</b></label>
-            <input type="date" name="date" class="form-control" id="date" [(ngModel)]="ReminderDate"
-              (ngModelChange)="getCustomerFollowUpListByDateCompanyAndContactModeRef()" />
-          </div>
-          <div class="col-md-4">
-            <label for="ContactModeRef"><b>Contact Mode</b></label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" id="ContactModeRef" name="ContactModeRef" [(ngModel)]="Entity.p.ContactMode"
-              (ngModelChange)="getCustomerFollowUpListByDateCompanyAndContactModeRef()" [nzSize]="'large'">
-              <nz-option *ngFor="let contactmode of ContactModeList" [nzValue]="contactmode.Ref"
-                [nzLabel]="contactmode.Name"></nz-option>
-            </nz-select>
-          </div>
-        </div>
-      </form>
-    </div>
+  <div class="col-4 mb-2 search-container_light">
+    <app-shared-filter [masterList]="followup"
+      [filterFields]="['CustomerName', 'ContactNos', 'ReminderDate', 'CustomerStatusName']"
+      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
-  <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
-    <div class="table-container">
-      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
-        nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedList"
-        (nzPageIndexChange)="onPageChange($event)">
-        <thead>
-          <tr>
-            <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let followup of paginatedList; index as i">
-            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td Class="tbldata">{{followup.p.CustomerName}}</td>
-            <td Class="tbldata">{{followup.p.ContactNos}}</td>
-            <td class="tbldata">{{formatDate(followup.p.ReminderDate)}}</td>
+</div>
+<ng-template #noDataTpl>
+  <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+    No Data
+  </div>
+</ng-template>
+<div class="card-body">
+  <form autocomplete="off">
+    <div class="row gy-3">
+      <div class="col-12 col-md-6 col-lg-4">
+        <label for="date"><b>Reminder Date</b></label>
+        <input type="date"  name="date" class="form-control" id="date" [(ngModel)]="ReminderDate" (ngModelChange)="getCustomerFollowUpListByDateCompanyAndContactModeRef()"/>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4">
+        <label for="ContactModeRef"><b>Contact Mode</b></label>
+        <nz-select class="w-100 nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="ContactModeRef" name="ContactModeRef" [(ngModel)]="Entity.p.ContactMode"
+          (ngModelChange)="getCustomerFollowUpListByDateCompanyAndContactModeRef()" [nzSize]="'large'">
+          <nz-option *ngFor="let contactmode of ContactModeList" [nzValue]="contactmode.Ref" [nzLabel]="contactmode.Name"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+  </form>
+</div>
 
-            <td Class="tbldata">{{followup.p.CustomerStatusName}}</td>
-            <td class="tbldata d-flex justify-content-center">
-              <nz-button nz-button class="btn2" (click)="onEditClicked(followup)">
-                Follow Up
-              </nz-button>
-            </td>
-          </tr>
-        </tbody>
-      </nz-table>
-    </div>
-    <div class="fixed-pagination">
-      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
-        (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
-      </nz-pagination>
-    </div>
+<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+  <div class="table-container">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzScroll]="{x:'auto' }"
+      nzFrontPagination="false" [nzShowSizeChanger]="false" [nzData]="paginatedList"
+      (nzPageIndexChange)="onPageChange($event)">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let followup of paginatedList; index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{followup.p.CustomerName}}</td>
+          <td Class="tbldata">{{followup.p.ContactNos}}</td>
+          <td class="tbldata">{{formatDate(followup.p.ReminderDate)}}</td>
+
+          <td Class="tbldata">{{followup.p.CustomerStatusName}}</td>
+          <td class="tbldata d-flex justify-content-center">
+            <nz-button nz-button class="btn2" (click)="onEditClicked(followup)">
+              Follow Up
+            </nz-button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+  <div class="fixed-pagination">
+    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+      (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+    </nz-pagination>
   </div>
   <div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
     <div style="height: 200px" class="d-flex align-items-center justify-content-center">

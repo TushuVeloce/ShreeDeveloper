@@ -111,7 +111,6 @@ import { CompanyHolidaysComponent } from './hr_payroll_management/company_holida
 import { CompanyHolidaysDetailsComponent } from './hr_payroll_management/company_holidays/company-holidays-details/company-holidays-details.component';
 import { AttendanceDetailsComponent } from './hr_payroll_management/attendance_logs/attendance-details/attendance-details.component';
 import { ForgotPasswordComponent } from '../sidebarlayout/forgot_password/forgot-password/forgot-password.component';
-import { CreatePasswordComponent } from '../login-page/create_password/create-password/create-password.component';
 import { MaterialRequisitionDetailsComponent } from './stock management/material_requisition/material-requisition-details/material-requisition-details.component';
 import { MaterialRequisitionComponent } from './stock management/material_requisition/material-requisition/material-requisition.component';
 import { QuotationComponent } from './stock management/Quotation/quotation/quotation.component';
@@ -362,13 +361,9 @@ const routes: Routes = [
       { path: 'Site_Work_Done_Details', component: SiteWorkDoneMasterDetailsComponent },
 
 
-      // Razorpay
       { path: 'Razorpay', component: RazorpayComponent },
       { path: 'Your_Profile', component: YourProfileComponent },
-      { path: 'Create_Password', component: CreatePasswordComponent },
       { path: 'Change_Password', component: ChangePasswordComponent },
-      // { path: 'change_password', component: ChangePasswordComponent},
-
       // { path: 'Progress_Report', component: ProgressReportComponent},
     ]
 

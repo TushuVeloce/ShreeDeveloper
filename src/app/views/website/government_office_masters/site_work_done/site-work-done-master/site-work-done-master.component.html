@@ -20,7 +20,7 @@
   </ng-template>
   <div class="row">
     <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
-      <label> Site Group</label>
+      <label><b>Site Group</b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
         id="SiteWorkGroupRef" name="SiteWorkGroupRef" [nzSize]="'large'" [(ngModel)]="SiteWorkGroupRef"
         (ngModelChange)="getSiteWorkListBySiteWorkGroupRef()">
@@ -29,7 +29,7 @@
       </nz-select>
     </div>
     <div class="col-lg-4 col-md-4 col-sm-12 mb-3">
-      <label> Site Work </label>
+      <label> <b>Site Work </b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
         id="SiteWorkRef" name="SiteWorkRef" [nzSize]="'large'" [(ngModel)]="SiteWorkRef"
         (ngModelChange)="getSiteWorkDoneListBySiteWorkRef()">

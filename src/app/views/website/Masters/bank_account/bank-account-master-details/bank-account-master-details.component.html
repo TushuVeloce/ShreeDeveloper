@@ -15,7 +15,7 @@
     </div>
     <form autocomplete="off" #bankForm="ngForm">
       <div class="row" style="margin-top: 1rem">
-        <div class="col-6">
+        <div class="col-4" style="margin-top: 1rem">
           <label>Bank Name</label>
           <input type="text" [(ngModel)]="Entity.p.Name" name="Name" class="form-control" id="Name" required
             placeholder="Enter Bank Name" pattern="{{NameWithoutNos}}" #NameCtrl="ngModel" required
@@ -25,7 +25,7 @@
             <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-6">
+        <div class="col-4" style="margin-top: 1rem">
           <label>Branch Name</label>
           <input type="text" [(ngModel)]="Entity.p.BranchName" name="BranchName" class="form-control" id="BranchName"
             placeholder="Enter Branch Name" #BranchNameCtrl="ngModel" required
@@ -34,7 +34,7 @@
             <span class="validation-text" *ngIf="BranchNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-6">
+        <div class="col-4" style="margin-top: 1rem">
           <label>Account No</label>
           <input type="text" [(ngModel)]="Entity.p.AccountNumber" name="AccountNo" class="form-control" id="AccountNo"
             pattern="{{LargeInputNumber}}" placeholder="Enter Account Number" #AccountNumberCtrl="ngModel" required
@@ -44,7 +44,7 @@
             <span class="validation-text" *ngIf="AccountNumberCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-6">
+        <div class="col-4" style="margin-top: 1rem">
           <label for="IFSCCode">IFSC Code</label>
           <input type="text" [(ngModel)]="Entity.p.IFSCCode" name="IFSCCode" class="form-control" id="IFSCCode"
             pattern="{{IFSCPattern}}" placeholder="Enter IFSC" #IFSCCodeCtrl="ngModel" required
@@ -54,7 +54,7 @@
             <span class="validation-text" *ngIf="IFSCCodeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
         </div>
-        <div class="col-6">
+        <!-- <div class="col-4" style="margin-top: 1rem">
           <label>Opening Balance</label>
           <input type="number" [(ngModel)]="Entity.p.OpeningBalance" name="OpeningBalance" class="form-control"
             id="OpeningBalance" pattern="{{LargeInputNumber}}" placeholder="Enter Opening Balance"
@@ -64,8 +64,8 @@
             <span class="validation-text" *ngIf="OpeningBalanceCtrl.errors?.['pattern']">{{LargeInputNumberMsg}}</span>
             <span class="validation-text" *ngIf="OpeningBalanceCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
           </div>
-        </div>
-        <div class="col-6">
+        </div> -->
+        <div class="col-4" style="margin-top: 1rem">
           <label>Date of Opening</label>
           <input type="date" [(ngModel)]="dateofopening" name="DateofOpening" class="form-control" id="DateofOpening"
             #DateofOpeningCtrl="ngModel" required (blur)="DateofOpeningCtrl.control.markAsTouched()" [max]="today" />

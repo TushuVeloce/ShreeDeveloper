@@ -62,7 +62,7 @@ constructor(private router: Router,private uiUtils: UIUtils,private payloadPacke
 
     await this.uiUtils.showSuccessToster('Password Created Successfully');
     let tdResult = JSON.parse(tr.Tag) as TransportData;
-    await this.router.navigate(['/login']);
+    await this.router.navigate(['/homepage']);
   };
 
    Back = () => {

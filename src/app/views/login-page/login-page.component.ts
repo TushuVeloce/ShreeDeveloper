@@ -60,6 +60,7 @@ export class LoginPageComponent implements OnInit {
     req.LoginDeviceId = this.sessionValues.LoginDeviceId;
 
     const response = await this.servercommunicator.LoginUser(req);
+    console.log('response :', response);
     this.appStateManage.setEmployeeRef(response.LoginEmployeeRef)
     this.appStateManage.setLoginToken(response.LoginToken)
     this.validmenuitemsstatemanagement.setValidMenuItems(response.ValidMenuItems)
@@ -78,7 +79,7 @@ export class LoginPageComponent implements OnInit {
       if (this.isMobile) {
         await this.router.navigate(['/homepage']);  // Navigate to web
       } else if (response.LoginForFirstTime == 0) {
-        await this.router.navigate(['/Create_Password']);
+         this.router.navigate(['/create_password']);
       } else {
         await this.router.navigate(['/homepage']);  // Navigate to web
         this.appStateManage.triggerCompanyInit();

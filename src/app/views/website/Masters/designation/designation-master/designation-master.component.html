@@ -1,73 +1,69 @@
-<div>
-  <div class="row">
-   <div class="col-4 mb-2">
-      <h1 style="padding-top: 3px;" class="title title_light">Designation Master</h1>
-    </div>
-    <div class="col-4 mb-2 search-container_light">
-      <app-shared-filter [masterList]="MasterList" [filterFields]="['Name', 'SeniorityLevel']"
-        (filteredList)="DisplayMasterList = $event"></app-shared-filter>
-    </div>
-    <div class="col-4 mb-2" routerLinkActive="active">
-      <nz-button nz-button class="btn1" (click)='AddDesignation()'>
-        Add Designation
-      </nz-button>
-    </div>
-    <div>
-    </div>
-    <ng-template #noDataTpl>
-      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
-        No Data
+<div class="row">
+  <div class="col-4 mb-2">
+    <h1 style="padding-top: 3px;" class="title title_light">Designation Master</h1>
+  </div>
+  <div class="col-4 mb-2 search-container_light">
+    <app-shared-filter [masterList]="MasterList" [filterFields]="['Name', 'SeniorityLevel']"
+      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
+  </div>
+  <div class="col-4 mb-2" routerLinkActive="active">
+    <nz-button nz-button class="btn1" (click)='AddDesignation()'>
+      Add Designation
+    </nz-button>
+  </div>
+</div>
+<ng-template #noDataTpl>
+  <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+    No Data
+  </div>
+</ng-template>
+<div class="card-body">
+  <form autocomplete="off">
+    <div class="row gy-3">
+      <div class="col-md-4">
+        <label for="DepartmentRef"><b>Department</b></label>
+        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+          nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef" name="DepartmentRef" required
+          id="DepartmentRef" (ngModelChange)="getDesignationListByDepartmentRef()">
+          <nz-option *ngFor="let Department of DepartmentList" [nzLabel]="Department.p.Name"
+            [nzValue]="Department.p.Ref"></nz-option>
+        </nz-select>
       </div>
-    </ng-template>
-    <div class="card-body" style="margin-left: 14px;">
-      <form autocomplete="off">
-        <div class="row">
-          <div class="col-md-4">
-            <label for="DepartmentRef"><b>Department</b></label>
-            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" [nzSize]="'large'" [(ngModel)]="Entity.p.DepartmentRef" name="DepartmentRef" required
-              id="DepartmentRef" (ngModelChange)="getDesignationListByDepartmentRef()">
-              <nz-option *ngFor="let Department of DepartmentList" [nzLabel]="Department.p.Name"
-                [nzValue]="Department.p.Ref"></nz-option>
-            </nz-select>
-          </div>
-        </div>
-      </form>
     </div>
+  </form>
+</div>
+<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+  <div class="table-container">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let designation of paginatedList(); index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{designation.p.Name}}</td>
+          <td Class="tbldata">{{designation.p.SeniorityLevel}}</td>
+          <td class="tbldata">
+            <span style="margin-left: 9px;" (click)="onEditClicked(designation);">
+              <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
+            </span>
+            <span style="margin-left: 9px;" (click)="onDeleteClicked(designation);">
+              <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
   </div>
-  <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
-    <div class="table-container">
-      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
-        [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
-        <thead>
-          <tr>
-            <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let designation of paginatedList(); index as i">
-            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-            <td Class="tbldata">{{designation.p.Name}}</td>
-            <td Class="tbldata">{{designation.p.SeniorityLevel}}</td>
-            <td class="tbldata">
-              <span style="margin-left: 9px;" (click)="onEditClicked(designation);">
-                <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
-              </span>
-              <span style="margin-left: 9px;" (click)="onDeleteClicked(designation);">
-                <img src="\assets\icons\delete.png" alt="logo" title="Delete" width="20px" height="20px" /></span>
-            </td>
-          </tr>
-        </tbody>
-      </nz-table>
-    </div>
-    <div class="fixed-pagination">
-      <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
-        (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
-      </nz-pagination>
-    </div>
+  <div class="fixed-pagination">
+    <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+      (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+    </nz-pagination>
   </div>
-  <div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
-    <div style="height: 200px" class="d-flex align-items-center justify-content-center">
-      <span class="title_light"> Data Not Found</span>
-    </div>
+</div>
+<div *ngIf="DisplayMasterList.length === 0" class="card-body_light">
+  <div style="height: 200px" class="d-flex align-items-center justify-content-center">
+    <span class="title_light"> Data Not Found</span>
   </div>
