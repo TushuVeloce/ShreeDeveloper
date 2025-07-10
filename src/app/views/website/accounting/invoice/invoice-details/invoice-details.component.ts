@@ -264,12 +264,15 @@ export class InvoiceDetailsComponent implements OnInit {
 
   CalculateAmount = () => {
     const TotalWorkedHours = this.getTotalWorkedHours()
+    const TotalLabourAmount = this.getTotalLabourAmount()
     const Qty = Number(this.Entity.p.Qty)
     const Rate = Number(this.Entity.p.Rate)
     const DieselAmount = Number(this.Entity.p.DieselAmount) || 0
     if (TotalWorkedHours > 0) {
       this.Entity.p.InvoiceAmount = Math.round(((TotalWorkedHours * Rate) - DieselAmount) * 100) / 100;
-    } else {
+    }else if(TotalLabourAmount > 0){
+      this.Entity.p.InvoiceAmount = Math.round((TotalLabourAmount) * 100) / 100;
+    }else{
       this.Entity.p.InvoiceAmount = Math.round(((Qty * Rate) - DieselAmount) * 100) / 100;
     }
   }
@@ -309,6 +312,12 @@ export class InvoiceDetailsComponent implements OnInit {
   getTotalWorkedHours(): number {
     return this.Entity.p.MachineUsageDetailsArray.reduce((total: number, item: any) => {
       return total + Number(item.WorkedHours || 0);
+    }, 0);
+  }
+
+  getTotalLabourAmount(): number {
+    return this.Entity.p.LabourExpenseDetailsArray.reduce((total: number, item: any) => {
+      return total + Number(item.LabourAmount || 0);
     }, 0);
   }
 
@@ -354,7 +363,6 @@ export class InvoiceDetailsComponent implements OnInit {
     } else {
       this.MachineTimeEntity.InvoiceRef = this.Entity.p.Ref;
       this.Entity.p.MachineUsageDetailsArray.push({ ...this.MachineTimeEntity });
-      // this.CalculateAmountOnRateAndQuantity()
       await this.uiUtils.showSuccessToster('Machinary Time added successfully');
       this.resetTimeControls();
       this.isTimeModalOpen = false;
@@ -362,6 +370,7 @@ export class InvoiceDetailsComponent implements OnInit {
 
     this.MachineTimeEntity = TimeDetailProps.Blank();
     this.MachineEditingIndex = null;
+    this.CalculateAmount()
   }
 
   EditTime(index: number) {
@@ -372,7 +381,7 @@ export class InvoiceDetailsComponent implements OnInit {
 
   RemoveTime(index: number) {
     this.Entity.p.MachineUsageDetailsArray.splice(index, 1); // Remove Time
-    // this.CalculateAmountOnRateAndQuantity()
+     this.CalculateAmount()
   }
 
   CloseTimeModal = async (type: string) => {
@@ -416,13 +425,13 @@ export class InvoiceDetailsComponent implements OnInit {
     } else {
       this.LabourTimeEntity.InvoiceRef = this.Entity.p.Ref;
       this.Entity.p.LabourExpenseDetailsArray.push({ ...this.LabourTimeEntity });
-      // this.CalculateAmountOnRateAndQuantity()
       await this.uiUtils.showSuccessToster('Labour Time added successfully');
       // this.resetTimeControls();
       this.isLabourTimeModalOpen = false;
     }
     this.LabourTimeEntity = LabourTimeProps.Blank();
     this.LabourEditingIndex = null;
+    this.CalculateAmount()
   }
 
   EditLabourTime(index: number) {
@@ -433,8 +442,7 @@ export class InvoiceDetailsComponent implements OnInit {
 
   RemoveLabourTime(index: number) {
     this.Entity.p.LabourExpenseDetailsArray.splice(index, 1); // Remove Time
-    // this.CalculateAmountOnRateAndQuantity()
-  }
+    this.CalculateAmount()  }
 
   CloseLabourTimeModal = async (type: string) => {
     if (type === 'labourtime') {

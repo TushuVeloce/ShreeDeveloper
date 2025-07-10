@@ -45,7 +45,7 @@ export class IncomeDetailsComponent implements OnInit {
   BankList: BankAccount[] = [];
   Cheque = ModeOfPayments.Cheque
   Bill = ModeOfPayments.Bill
-  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Name !== 'Bill');
+  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
   Date: string = '';
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
