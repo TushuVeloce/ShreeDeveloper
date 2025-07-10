@@ -18,8 +18,8 @@ import { ValidMenuItemsStateManagement } from 'src/app/services/ValidMenuItems';
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss'],
   imports: [FormsModule, CommonModule, ReactiveFormsModule]
-  // standalone: true,
 })
+
 export class LoginPageComponent implements OnInit {
   isIosPlatform: boolean = false;
   isAndroidPlatform: boolean = false;
@@ -27,11 +27,9 @@ export class LoginPageComponent implements OnInit {
   isForgetPasswordDisabled: boolean = false;
   isSpinning: boolean = false;
 
-
   isMobile: boolean = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-  constructor(private router: Router, private platform: Platform, private servercommunicator: ServerCommunicatorService,
-    private uiUtils: UIUtils, private activatedRoute: ActivatedRoute, private sessionValues: SessionValues,
+  constructor(private router: Router, private platform: Platform, private servercommunicator: ServerCommunicatorService, private uiUtils: UIUtils, private activatedRoute: ActivatedRoute, private sessionValues: SessionValues,
     private appStateManage: AppStateManageService, private companystatemanagement: CompanyStateManagement, private validmenuitemsstatemanagement: ValidMenuItemsStateManagement) {
 
     platform.ready().then(async () => {
@@ -39,12 +37,14 @@ export class LoginPageComponent implements OnInit {
       this.isAndroidPlatform = platform.is('android');
     });
   }
-
-  // UserId: string = 'shweta@veloce.com';
   UserId: string = 'pranav.p@velocetechinsights.com';
   Password: string = '123';
 
-  ngOnInit() { }
+
+  ngOnInit() {
+    let a = 1;
+   }
+
   Login = async () => {
     if (this.UserId === '') {
       this.uiUtils.showErrorMessage('Error', 'Please Enter Email ID');
@@ -58,10 +58,8 @@ export class LoginPageComponent implements OnInit {
     req.UserId = this.UserId;
     req.Password = this.Password;
     req.LoginDeviceId = this.sessionValues.LoginDeviceId;
-    // req.SenderURL;
 
     const response = await this.servercommunicator.LoginUser(req);
-    console.log('response :', response.ValidMenuItems);
     this.appStateManage.setEmployeeRef(response.LoginEmployeeRef)
     this.appStateManage.setLoginToken(response.LoginToken)
     this.validmenuitemsstatemanagement.setValidMenuItems(response.ValidMenuItems)
@@ -77,11 +75,8 @@ export class LoginPageComponent implements OnInit {
       await this.uiUtils.showErrorMessage('Error', response.Message);
       return
     } else {
-      //   const user = { UserDisplayName: response.UserDisplayName, EMailId: response.EMailId, PhoneNos: response.PhoneNos }
-      // this.appStateManage.setUserJSON(user);
       if (this.isMobile) {
-        // await this.router.navigate(['/splash-screen']);  // Navigate to mobile
-        await this.router.navigate(['/homepage']);  // Navigate to webŚ
+        await this.router.navigate(['/homepage']);  // Navigate to web
       } else if (response.LoginForFirstTime == 0) {
         await this.router.navigate(['/Create_Password']);
       } else {
@@ -102,7 +97,6 @@ export class LoginPageComponent implements OnInit {
       'generateuserotp',
       body
     );
-    console.log('response :', response);
     if (!response.Successful) {
       await this.uiUtils.showErrorMessage('Error', response.Message);
       this.isForgetPasswordDisabled = false;

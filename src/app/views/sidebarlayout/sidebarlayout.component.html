@@ -74,57 +74,10 @@
   </ng-template>
 
   <nz-layout Class="layout_light">
-    <!-- <nz-header class="container-fluid">
-      <div class="row">
-        <div class="col-3" style="display: flex; align-items: center;">
-          <span>
-            <img src="/assets/icons/menu.png" alt="logo" (click)="toggleCollapsed()"
-              style="width: 2vw; height: 2vw; cursor: pointer" />
-          </span>
-          <span style="margin-left: 15px">
-            <div>
-              <span style="font-size: 90%;"><b>{{ myDay }}</b></span>
-              <span style="margin-left: 5px; font-size: 90%;"><b>{{ myDate }}</b></span>
-            </div>
-          </span>
-        </div>
-        <div class="col-5"></div>
-        <div class="col-3" style="display: flex; justify-content: space-between; align-items: center">
-          <nz-select class="nzSelect-light" nzShowSearch [nzNotFoundContent]="noDataTpl" nzPlaceHolder="Select"
-            [nzSize]="'large'" [(ngModel)]="CompanyRef" name="CompanyRef" required id="CompanyRef"
-            (ngModelChange)="changecompany(CompanyRef)" [nzDropdownMatchSelectWidth]="true" [style.width.px]="300"
-            [disabled]="appStateManagement.isDropdownDisabled()">
-            <nz-option *ngFor="let company of CompnyList" [nzLabel]="company.p.Name"
-              [nzValue]="company.p.Ref"></nz-option>
-          </nz-select>
-        </div>
-        <div class="col-1 d-flex align-items-center">
-          <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
-            <img width="50px" class="img-thumbnail rounded-circle" height="40px" src="/assets/logos/ShreeIcon.png"
-              alt="logo" />
-          </a>
-          <nz-dropdown-menu #menu="nzDropdownMenu" Class="profile_dropdwon_light">
-            <ul class="dropdown-list" nz-menu Class="profile_dropdwon_light">
-              <li class="options" nz-menu-item routerLinkActive="active" routerLink="/homepage/Website/Your_Profile">
-                Your Profile
-              </li>
-              <li class="options" nz-menu-item routerLinkActive="active"
-                routerLink="/homepage/Website/Change_Password/">
-                Change Password
-              </li>
-              <li class="options" nz-menu-item routerLinkActive="active" (click)="logout()">
-                Log Out
-              </li>
-            </ul>
-          </nz-dropdown-menu>
-        </div>
-      </div>
-    </nz-header> -->
-
 
     <!-- Navbar for xl, lg, md -->
     <nav
-      class="navbar navbar-expand-lg bg-light shadow-sm px-3 d-none d-md-flex justify-content-between align-items-center">
+      class="navbar navbar-expand-lg bg-light px-3 d-none d-md-flex justify-content-between align-items-center" style="background-color: white !important;">
       <!-- Left: Toggle + Date -->
       <div class="d-flex align-items-center gap-3">
         <img src="/assets/icons/menu.png" alt="logo" (click)="toggleCollapsed()"
@@ -215,54 +168,6 @@
     </nz-content>
   </nz-layout>
 </nz-layout>
-
-<!-- <div class="modal fade" id="sidebarModal" tabindex="-1" aria-labelledby="sidebarModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <ul nz-menu nzMode="inline">
-
-        -------- Module list start -----------
-        <div *ngFor="let module of ModuleList">
-          <div style="display: flex" (click)="SideMenuHideShowForModule(module.Name, true)">
-            <li nz-menu-item>
-              <a style="margin-top: 12px; margin-right: 12px" (click)="NavigationFromLogo(module.RouterLink)">
-                <img [src]="module.WhiteLogo" alt="logo" style="width: 25px; height: 25px" />
-              </a>
-              <a *ngIf="module.RouterLink !== ''" routerLink="{{ module.RouterLink }}"></a>
-              <span class="sidebar-menu-item">{{ module.Name }}</span>
-            </li>
-          </div>
-          <div *ngFor="let submodule of module.SubModuleList">
-            <li *ngIf="module.Name === newModulename && isShow">
-              <ul>
-                <div style="display: flex; margin-left: 19px" (click)="closeModal()">
-                  <li nz-menu-item>
-                    <div class="row g-1">
-                      <div class="col-1">
-                        <span style="margin-top: 16px; margin-right: 5px"
-                          (click)="NavigationFromLogo(submodule.RouterLink)">
-                          <img [src]="submodule.LogoPath" alt="Arrow" style="width: 18px; height: 17px" />
-                        </span>
-                      </div>
-                      <div class="col-11">
-                        <a *ngIf="submodule.RouterLink !== ''" routerLink="{{ submodule.RouterLink }}"></a>
-                        <span class="sidebar-submenu-item">{{
-                          submodule.Name
-                          }}</span>
-                      </div>
-                    </div>
-                  </li>
-                </div>
-              </ul>
-            </li>
-          </div>
-        </div>
-        ----------- Module list end---------
-      </ul>
-    </div>
-  </div>
-</div> -->
-
 
 <div *ngIf="isModalOpen" class="custom-modal-overlay">
   <div class="custom-modal">
