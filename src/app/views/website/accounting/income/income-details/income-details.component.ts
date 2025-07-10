@@ -33,7 +33,7 @@ export class IncomeDetailsComponent implements OnInit {
   SubLedgerList: SubLedger[] = [];
   ShreeBalance: number = 0;
   UnitList: Unit[] = [];
-  PayerList: Payer[] = [];
+  PayerList: Income[] = [];
   PayerNameInput: boolean = false
   PayerNameReadOnly: boolean = false
   isSaveDisabled: boolean = false;
@@ -129,7 +129,7 @@ export class IncomeDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Payer.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Income.FetchDistinctPayerNameByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.PayerList = lst;
   }
 

@@ -57,8 +57,8 @@
             <nz-select *ngIf="!PayerNameInput && !PayerNameReadOnly" class="nzSelect-light"
               [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PayerMasterRef"
               name="PayerName" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerRef">
-              <nz-option *ngFor="let name of PayerList" [nzValue]="name.p.Ref"
-                [nzLabel]="name.p.Name | titleCase"></nz-option>
+              <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.Ref"
+                [nzLabel]="payer.p.PayerName | titleCase"></nz-option>
             </nz-select>
             <input *ngIf="PayerNameInput && !PayerNameReadOnly" type="text" [(ngModel)]="PayerEntity.p.Name" name="Name"
               class="form-control" id="Name" required placeholder="Enter Payer Name" />

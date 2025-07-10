@@ -14,6 +14,7 @@ import { IncomeFetchRequest } from "./incomefetchrequest";
 import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 import { CurrentBalanceFetchRequest } from "../expense/currentbalancefetchrequest";
 import { TotalIncomeFetchRequest } from "./totalincomefetchrequest";
+import { DistinctPayerNameFetchRequest } from "./distinctpayernamefetchrequest";
 
 
 export class IncomeProps {
@@ -197,8 +198,16 @@ export class Income implements IPersistable<Income> {
     let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
     return Income.ListFromTransportData(tdResponse);
   }
+
   public static async FetchCurrentBalanceByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new CurrentBalanceFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
+    return Income.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchDistinctPayerNameByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new DistinctPayerNameFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
     return Income.ListFromTransportData(tdResponse);
