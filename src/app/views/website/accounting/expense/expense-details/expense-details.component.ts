@@ -2,9 +2,10 @@ import { Component, effect, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
-import { DomainEnums, } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, ModeOfPayments, OpeningBalanceModeOfPayments, } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
+import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
 import { FinancialYear } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { Recipient } from 'src/app/classes/domain/entities/website/masters/recipientname/recipientname';
@@ -40,7 +41,10 @@ export class ExpenseDetailsComponent implements OnInit {
   InitialEntity: Expense = null as any;
   LedgerList: Ledger[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  ModeofPaymentList = DomainEnums.ModeOfPaymentsList();
+  BankList: BankAccount[] = [];
+  Cheque = ModeOfPayments.Cheque
+  Bill = ModeOfPayments.Bill
+  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
   Date: string = '';
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
@@ -62,6 +66,7 @@ export class ExpenseDetailsComponent implements OnInit {
     await this.getUnitList();
     await this.getSiteListByCompanyRef();
     await this.getLedgerListByCompanyRef();
+    this.FormulateBankList();
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Expense' : 'Edit Expense';
@@ -94,6 +99,19 @@ export class ExpenseDetailsComponent implements OnInit {
   getUnitList = async () => {
     let lst = await Unit.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.UnitList = lst;
+  }
+
+  public FormulateBankList = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await BankAccount.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.BankList = lst
+  };
+
+  OnModeChange = () => {
+    this.Entity.p.BankAccountRef = 0
   }
 
   getSiteListByCompanyRef = async () => {

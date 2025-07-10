@@ -69,7 +69,7 @@ export class InvoiceDetailsComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time', 'Worked Hours', 'Action'];
-  labourtimeheaders: string[] = ['Sr.No.','Labour Type','From Time','To Time', 'Quantity ', 'Rate', 'Amount','Action'];
+  labourtimeheaders: string[] = ['Sr.No.', 'Labour Type', 'From Time', 'To Time', 'Quantity ', 'Rate', 'Amount', 'Action'];
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
   // @ViewChild('invoiceForm') invoiceForm!: NgForm;
@@ -142,14 +142,14 @@ export class InvoiceDetailsComponent implements OnInit {
   }
 
   getVendorListByCompanyRef = async () => {
-      if (this.companyRef() <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
-        return;
-      }
-      this.VendorList = []
-      let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.VendorList = lst;
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
+    this.VendorList = []
+    let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.VendorList = lst;
+  }
 
   private FormulateVendorServiceList = async () => {
     if (this.companyRef() <= 0) {
@@ -258,7 +258,7 @@ export class InvoiceDetailsComponent implements OnInit {
   CalculateDieselAmount = () => {
     const DieselQty = Number(this.Entity.p.DieselQty)
     const DieselRate = Number(this.Entity.p.DieselRate)
-    this.Entity.p.DieselAmount = DieselQty * DieselRate
+    this.Entity.p.DieselAmount = Math.round(DieselQty * DieselRate * 100) / 100;
     this.CalculateAmount()
   }
 
@@ -267,12 +267,11 @@ export class InvoiceDetailsComponent implements OnInit {
     const Qty = Number(this.Entity.p.Qty)
     const Rate = Number(this.Entity.p.Rate)
     const DieselAmount = Number(this.Entity.p.DieselAmount) || 0
-    if(TotalWorkedHours > 0){
-      this.Entity.p.InvoiceAmount = (TotalWorkedHours * Rate) -DieselAmount
-    }else{
-      this.Entity.p.InvoiceAmount = (Qty * Rate) -DieselAmount
+    if (TotalWorkedHours > 0) {
+      this.Entity.p.InvoiceAmount = Math.round(((TotalWorkedHours * Rate) - DieselAmount) * 100) / 100;
+    } else {
+      this.Entity.p.InvoiceAmount = Math.round(((Qty * Rate) - DieselAmount) * 100) / 100;
     }
-    
   }
 
   getChalanNo = async () => {
@@ -353,7 +352,7 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showSuccessToster('Machinary Time updated successfully');
       this.isTimeModalOpen = false;
     } else {
-      this.MachineTimeEntity.InvoiceRef  = this.Entity.p.Ref;
+      this.MachineTimeEntity.InvoiceRef = this.Entity.p.Ref;
       this.Entity.p.MachineUsageDetailsArray.push({ ...this.MachineTimeEntity });
       // this.CalculateAmountOnRateAndQuantity()
       await this.uiUtils.showSuccessToster('Machinary Time added successfully');
@@ -401,12 +400,12 @@ export class InvoiceDetailsComponent implements OnInit {
     }
   };
 
- async SaveLabourTime() {
+  async SaveLabourTime() {
     if (!this.LabourTimeEntity.LabourFromTime || !this.LabourTimeEntity.LabourToTime) {
       await this.uiUtils.showErrorMessage('Error', 'Start Time and End Time are required!');
       return;
     }
-      if (this.LabourTimeEntity.LabourType != 0) {
+    if (this.LabourTimeEntity.LabourType != 0) {
       const labourtype = this.LabourTypeList.find(item => item.Ref == this.LabourTimeEntity.LabourType)
       this.LabourTimeEntity.LabourTypeName = labourtype?.Name || ''
     }
@@ -415,7 +414,7 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showSuccessToster('Labour Time updated successfully');
       this.isLabourTimeModalOpen = false;
     } else {
-      this.LabourTimeEntity.InvoiceRef  = this.Entity.p.Ref;
+      this.LabourTimeEntity.InvoiceRef = this.Entity.p.Ref;
       this.Entity.p.LabourExpenseDetailsArray.push({ ...this.LabourTimeEntity });
       // this.CalculateAmountOnRateAndQuantity()
       await this.uiUtils.showSuccessToster('Labour Time added successfully');
@@ -426,20 +425,20 @@ export class InvoiceDetailsComponent implements OnInit {
     this.LabourEditingIndex = null;
   }
 
-   EditLabourTime(index: number) {
+  EditLabourTime(index: number) {
     this.isLabourTimeModalOpen = true
     this.LabourTimeEntity = { ...this.Entity.p.LabourExpenseDetailsArray[index] }
     this.LabourEditingIndex = index;
   }
 
-   RemoveLabourTime(index: number) {
+  RemoveLabourTime(index: number) {
     this.Entity.p.LabourExpenseDetailsArray.splice(index, 1); // Remove Time
     // this.CalculateAmountOnRateAndQuantity()
   }
 
-   CloseLabourTimeModal = async (type: string) => {
+  CloseLabourTimeModal = async (type: string) => {
     if (type === 'labourtime') {
-      const keysToCheck = ['LabourType', 'LabourFromTime','LabourToTime','LabourQty','LabourRate'] as const;
+      const keysToCheck = ['LabourType', 'LabourFromTime', 'LabourToTime', 'LabourQty', 'LabourRate'] as const;
 
       const hasData = keysToCheck.some(
         key => (this.LabourTimeEntity as any)[key]?.toString().trim()
@@ -461,17 +460,20 @@ export class InvoiceDetailsComponent implements OnInit {
       }
     }
   };
-  
-    ClearInputsOnExpenseChange = () => {
+
+  ClearInputsOnExpenseChange = () => {
     this.Entity.p.MachineUsageDetailsArray = []
     this.Entity.p.LabourExpenseDetailsArray = []
     this.Entity.p.VendorRef = 0
     this.Entity.p.VendorServiceRef = 0
     this.Entity.p.VehicleNo = ''
+    this.Entity.p.Qty = 0
+    this.Entity.p.Rate = 0
+    this.CalculateAmount()
     this.DiselPaid(0)
   }
 
-    ClearMachineTimeTable = () => {
+  ClearMachineTimeTable = () => {
     this.Entity.p.MachineUsageDetailsArray = []
   }
 
@@ -486,7 +488,8 @@ export class InvoiceDetailsComponent implements OnInit {
   CalculateLabourAmount = () => {
     const Qty = this.LabourTimeEntity.LabourQty
     const Rate = this.LabourTimeEntity.LabourRate
-    this.LabourTimeEntity.LabourAmount = Number(Qty * Rate)
+    this.LabourTimeEntity.LabourAmount = Math.round(Qty * Rate * 100) / 100;
+
   }
 
   // for value 0 selected while click on Input //

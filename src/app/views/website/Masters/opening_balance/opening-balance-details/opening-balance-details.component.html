@@ -1,0 +1,64 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row align-items-center">
+      <!-- Back Button Column -->
+      <div class="col-2 col-md-1 d-flex justify-content-center">
+        <button type="button" class="backbtn" (click)="BackOpeningBalance()">
+          <img src="/assets/icons/arrow-button.png" alt="Back" class="backbtnimg" />
+        </button>
+      </div>
+
+      <!-- Title Column -->
+      <div class="col-10 col-md-11">
+        <span class="detail_title text-truncate d-block">{{ DetailsFormTitle }}</span>
+      </div>
+    </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
+    <form autocomplete="off">
+      <div class="row mt-2">
+        <div class="col-md-4" style="margin-top: 1rem;">
+          <label>Mode of Payment</label>
+          <nz-select class="nzSelect-light" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="ModeOfPayment" name="ModeOfPayment" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.ModeOfPayment" (ngModelChange)="OnModeChange()">
+            <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.ModeOfPayment != Cash">
+          <div>
+            <label>Bank Name</label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="BankAccountRef" name="BankAccountRef" [nzSize]="'large'" [(ngModel)]="Entity.p.BankAccountRef">
+              <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.Ref" [nzLabel]="bank.p.Name"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+          <div class="col-md-4" style="margin-top: 1rem">
+          <div>
+            <label>Opening Balance Amount</label>
+            <input type="number" [(ngModel)]="Entity.p.OpeningBalanceAmount " name="OpeningBalanceAmount " class="form-control" id="OpeningBalanceAmount " required
+              placeholder="Enter Opening Balance" #OpeningBalanceAmountCtrl="ngModel" (blur)="OpeningBalanceAmountCtrl.control.markAsTouched()"
+              (click)="selectAllValue($event)"/>
+            <div *ngIf="OpeningBalanceAmountCtrl.invalid && (OpeningBalanceAmountCtrl.touched || OpeningBalanceAmountCtrl.dirty)">
+              <span class="validation-text" *ngIf="OpeningBalanceAmountCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn" (click)="SaveOpeningBalanceMaster()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackOpeningBalance()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -48,6 +48,7 @@ export class ExpenseProps {
   public ShreesBalance: number = 0
   public ExpenseModeOfPayment: number = 0
   public ModeOfPaymentName: string = ''
+  public BankAccountRef: number = 0
 
 
   public readonly IsNewlyCreated: boolean = false;
