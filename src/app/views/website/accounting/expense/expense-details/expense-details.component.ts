@@ -178,8 +178,10 @@ export class ExpenseDetailsComponent implements OnInit {
       return;
     }
     let lst = await Expense.FetchCurrentBalanceByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.Entity.p.ShreesBalance = lst[0].p.ShreesBalance;
-    this.ShreeBalance = lst[0].p.ShreesBalance;
+    if (lst.length > 0) {
+      this.Entity.p.ShreesBalance = lst[0].p.ShreesBalance;
+      this.ShreeBalance = lst[0].p.ShreesBalance;
+    }
   }
 
   CalculateRemainingAmountandBalance = () => {

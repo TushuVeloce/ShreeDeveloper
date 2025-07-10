@@ -118,9 +118,10 @@ export class Employee implements IPersistable<Employee> {
     } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.ContactNos)) {
       vra.add('Contact No', ValidationMessages.INDPhoneNoMsg + ' for Contact No');
     }
-    if (this.p.PersonalEmailId == '') {
-      vra.add('Personal Email Id', 'Personal Email Id cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.Email).test(this.p.PersonalEmailId)) {
+    // if (this.p.PersonalEmailId == '') {
+    //   vra.add('Personal Email Id', 'Personal Email Id cannot be blank.');
+    // } else
+    if (!new RegExp(ValidationPatterns.Email).test(this.p.PersonalEmailId) && this.p.PersonalEmailId != '') {
       vra.add('Personal Email Id', ValidationMessages.EmailMsg + ' for Personal Email Id.');
     }
     if (this.p.OfficialEmailId == '') {
@@ -133,41 +134,47 @@ export class Employee implements IPersistable<Employee> {
     if (this.p.CountryRef == 0) vra.add('CountryRef', ' Country cannot be blank.');
     if (this.p.StateRef == 0) vra.add('StateRef', '   State cannot be blank.');
     if (this.p.CityRef == 0) vra.add('CityRef', ' City cannot be blank.');
-    if (this.p.EmergencyContactName == '') {
-      vra.add('Emergency Contact Name', 'Emergency Contact Name cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.EmergencyContactName)) {
+    // if (this.p.EmergencyContactName == '') {
+    //   vra.add('Emergency Contact Name', 'Emergency Contact Name cannot be blank.');
+    // } else
+    if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.EmergencyContactName) && this.p.EmergencyContactName != '') {
       vra.add('Emergency Contact Name', ValidationMessages.NameWithoutNosMsg + ' for Emergency Contact Name.');
     }
-    if (this.p.EmergencyContactNo == '') {
-      vra.add('Emergency Contact No', 'Emergency Contact No cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.EmergencyContactNo)) {
+    // if (this.p.EmergencyContactNo == '') {
+    //   vra.add('Emergency Contact No', 'Emergency Contact No cannot be blank.');
+    // } else
+    if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.EmergencyContactNo) && this.p.EmergencyContactNo != '') {
       vra.add('Emergency Contact No', ValidationMessages.INDPhoneNoMsg + ' for Emergency Contact No.');
-
-    } if (this.p.MaritalStatus == 0) vra.add('MaritalStatus', 'Marital Status cannot be blank.');
+    }
+     if (this.p.MaritalStatus == 0) vra.add('MaritalStatus', 'Marital Status cannot be blank.');
     if (this.p.DepartmentRef == 0) vra.add('DepartmentRef', 'Department cannot be blank.');
     if (this.p.DesignationRef == 0) vra.add('DesignationRef', 'Designation cannot be blank.');
     if (this.p.OfficeDutyTimeRef == 0) vra.add('OfficeDutyTimeRef', 'Office Duty Time cannot be blank.');
-    if (this.p.DateOfJoining == '') vra.add('DateOfJoining', ' Date Of Joining cannot be blank.');
+    // if (this.p.DateOfJoining == '') vra.add('DateOfJoining', ' Date Of Joining cannot be blank.');
     if (this.p.SalaryPerMonth == 0) vra.add('SalaryPerMonth', ' Salary Per Month cannot be blank.');
-    if (this.p.SalaryPerYear == 0) vra.add('SalaryPerYear', ' Salary Per Year cannot be blank.');
-    if (this.p.BankName == '') {
-      vra.add('Bank Name', 'Bank Name cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.BankName)) {
+    // if (this.p.SalaryPerYear == 0) vra.add('SalaryPerYear', ' Salary Per Year cannot be blank.');
+    // if (this.p.BankName == '') {
+    //   vra.add('Bank Name', 'Bank Name cannot be blank.');
+    // } else
+    if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.BankName) && this.p.BankName != '') {
       vra.add('Bank Name', ValidationMessages.NameWithoutNosMsg + ' for Bank Name.');
     }
-    if (this.p.BranchName == '') {
-      vra.add('Branch Name', 'Branch Name cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.BranchName)) {
+    // if (this.p.BranchName == '') {
+    //   vra.add('Branch Name', 'Branch Name cannot be blank.');
+    // } else
+    if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.BranchName) && this.p.BranchName != '') {
       vra.add('Branch Name', ValidationMessages.NameWithoutNosMsg + ' for Branch Name.');
     }
-    if (this.p.IFSC == '') {
-      vra.add('IFSC', 'IFSC cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.IFSC).test(this.p.IFSC)) {
+    // if (this.p.IFSC == '') {
+    //   vra.add('IFSC', 'IFSC cannot be blank.');
+    // } else
+    if (!new RegExp(ValidationPatterns.IFSC).test(this.p.IFSC) && this.p.IFSC != '') {
       vra.add('IFSC', ValidationMessages.IFSCMsg);
     }
-    if (this.p.BanckAccountNo == '') {
-      vra.add('Banck Account No', 'Banck Account No cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.LargeInputNumber).test(this.p.BanckAccountNo)) {
+    // if (this.p.BanckAccountNo == '') {
+    //   vra.add('Banck Account No', 'Banck Account No cannot be blank.');
+    // } else
+    if (!new RegExp(ValidationPatterns.LargeInputNumber).test(this.p.BanckAccountNo) && this.p.BanckAccountNo != '') {
       vra.add('Banck Account No', ValidationMessages.LargeInputNumberMsg);
     }
 
