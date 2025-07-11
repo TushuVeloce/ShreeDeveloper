@@ -148,12 +148,13 @@ export class ExpenseDetailsComponent implements OnInit {
       // await this.uiUtils.showErrorToster('Selected Recipient Name to get Shree Expense');
       return;
     }
-    
+
     let data = await Expense.FetchTotalExpenseFromSiteAndRecipient(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
+    
     this.Entity.p.InvoiceAmount = data[0].p.InvoiceAmount;
-    if(this.Entity.p.RecipientRef){
+    if (this.Entity.p.RecipientRef) {
       const RecipientData = data.find(item => item.p.Ref == this.Entity.p.RecipientRef)
       this.Entity.p.IsSiteRef = RecipientData?.p.IsSiteRef || 0
     }
@@ -187,6 +188,17 @@ export class ExpenseDetailsComponent implements OnInit {
     if (lst.length > 0) {
       this.Entity.p.ShreesBalance = lst[0].p.ShreesBalance;
       this.ShreeBalance = lst[0].p.ShreesBalance;
+    }
+  }
+
+  onRecipientChange = () => {
+    try {
+      let SingleRecord = this.RecipientList.find((data) => data.p.Ref == this.Entity.p.RecipientRef);;
+      if (SingleRecord?.p) {
+        this.Entity.p.IsSiteRef = SingleRecord.p.IsSiteRef;
+      }
+    } catch (error) {
+
     }
   }
 

@@ -29,6 +29,7 @@ export class IncomeProps {
 
   public PayerName: string = ''
   public PayerRef: number = 0
+  public IsRegisterCustomerRef: number = 0
   public Date: string = ''
   public SiteRef: number = 0
   public readonly SiteName: string = ''
