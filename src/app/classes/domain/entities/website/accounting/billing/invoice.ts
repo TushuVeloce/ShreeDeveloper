@@ -15,6 +15,7 @@ import { InvoiceFetchRequest } from "./invoicefetchrequest";
 import { GetDistinctRecipientNameFetchRequest } from "./GetDistinctRecipientNameFetchRequest";
 import { TimeDetailProps } from "../../site_management/time/time";
 import { LabourTimeProps } from "../../site_management/labourtime/labourtime";
+import { ExpenseTypes } from "src/app/classes/domain/domainenums/domainenums";
 
 
 export class InvoiceProps {
@@ -28,7 +29,7 @@ export class InvoiceProps {
   public Ref: number = 0;
   public CompanyRef: number = 0
   public CompanyName: string = ''
-  
+
   public Date: string = ''
   public InvoiceNo: number = 0
   public SiteRef: number = 0
@@ -40,13 +41,13 @@ export class InvoiceProps {
   public ExpenseType: number = 0
   public VendorRef: number = 0
   public readonly VendorName: string = ''
-  public VendorServiceRef : number = 0
+  public VendorServiceRef: number = 0
   public readonly VendorServiceName: string = ''
   public VehicleNo: string = ''
   public Description: string = ''
   public RecipientMasterRef: number = 0
-  public RecipientName: string = '' 
-  public IsSiteRef: number = 0 
+  public RecipientName: string = ''
+  public IsSiteRef: number = 0
   public Reason: string = ''
   public IsDieselPaid: number = 0
   public DieselQty: number = 0
@@ -70,6 +71,8 @@ export class InvoiceProps {
   public readonly OwnerName: string = ''
   public BankAccountRef: number = 0
   public IsAutoInvoiceEnabled: number = 0
+
+  LabourExpenseRef: number = ExpenseTypes.LabourExpense
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -119,7 +122,7 @@ export class Invoice implements IPersistable<Invoice> {
     if (this.p.SiteRef <= 0) { vra.add('SiteRef', 'Site Name cannot be blank.'); }
     if (this.p.LedgerRef <= 0) { vra.add('LedgerRef', 'Ledger cannot be blank.'); }
     if (this.p.Description == '') { vra.add('Description', 'Description cannot be blank.'); }
-    if (this.p.Qty <= 0) { vra.add('Qty', 'Quantity cannot be blank.'); }
+    if (this.p.Qty <= 0 && this.p.ExpenseType != this.p.LabourExpenseRef) { vra.add('Qty', 'Quantity cannot be blank.'); }
     if (this.p.Rate <= 0) { vra.add('Rate', 'Rate cannot be blank.'); }
     if (this.p.IsDieselPaid == 1) {
       if (this.p.DieselQty <= 0) { vra.add('DieselQty', ' Diesel Quantity cannot be blank.'); }
