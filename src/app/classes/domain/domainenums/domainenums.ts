@@ -1658,7 +1658,7 @@ export class DomainEnums {
       case ModeOfPayments.Cash:
         return 'Cash';
       case ModeOfPayments.Cheque:
-        return 'Cheque';
+        return 'Bank';
       case ModeOfPayments.RTGS:
         return 'RTGS';
       case ModeOfPayments.GpayPhonePay:
@@ -1709,7 +1709,7 @@ export class DomainEnums {
       case OpeningBalanceModeOfPayments.Cash:
         return 'Cash';
       case OpeningBalanceModeOfPayments.Cheque:
-        return 'Cheque';
+        return 'Bank';
       default:
         return '';
     }
@@ -1818,9 +1818,9 @@ export class DomainEnums {
     public static LabourTypesName(itemType: LabourTypes) {
     switch (itemType) {
       case LabourTypes.SkillLabour:
-        return 'Skill Labour';
+        return 'Skilled Labour';
       case LabourTypes.UnskillLabour:
-        return 'Unskill Labour';
+        return 'Unskilled Labour';
       case LabourTypes.WomenLabour:
         return 'Women Labour';
       default:

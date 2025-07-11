@@ -101,6 +101,7 @@ export class AccountingReportComponent implements OnInit {
 
   getBalanceByBank = () => {
     let SingleRecord = this.OpeningBalanceList.find((data) => data.p.Ref == this.BankRef);
+    console.log('SingleRecord :', SingleRecord);
     if (SingleRecord) {
       this.Balance = SingleRecord?.p.OpeningBalanceAmount;
     }

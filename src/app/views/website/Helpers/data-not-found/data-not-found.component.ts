@@ -6,7 +6,7 @@ import { ThemeService } from 'src/app/services/theme.service';
   standalone: false,
   template: `
   <div ngClass="card-body_light">
-  <div style="height: 58vh;" class="d-flex align-items-center justify-content-center">
+  <div style="height: 50vh;" class="d-flex align-items-center justify-content-center">
     <span ngClass="title_light">
       Data Not Found
     </span>

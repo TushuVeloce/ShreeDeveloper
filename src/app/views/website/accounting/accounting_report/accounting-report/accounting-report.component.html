@@ -9,6 +9,9 @@
       style="cursor: pointer; padding-top: 4px;" (click)="printReport()" />
   </div>
 </div>
+  <div class="text-end">
+    <p class="balance_title"><b>Shree Balance : {{Entity.p.ShreesBalance}}</b></p>
+  </div>
 <ng-template #noDataTpl>
   <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
     No Data
@@ -46,11 +49,11 @@
     <input type="text" [(ngModel)]="Balance" name="Balance" class="form-control" id="Balance" placeholder="Balance"
       readonly />
   </div>
-  <div class="col-md-4">
+  <!-- <div class="col-md-4">
     <label for="ShreeBalance"><b>Shree Balance</b></label>
     <input type="text" [(ngModel)]="Entity.p.ShreesBalance" name="ShreeBalance" class="form-control" id="ShreeBalance"
       placeholder="ShreeBalance" readonly />
-  </div>
+  </div> -->
 </div>
 
 <!-- Live Table -->
