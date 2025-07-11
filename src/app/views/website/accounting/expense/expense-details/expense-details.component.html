@@ -59,10 +59,7 @@
               nzAllowClear nzPlaceHolder="Select" id="RecipientRef" name="RecipientRef" [nzSize]="'large'"
               [(ngModel)]="Entity.p.RecipientRef"
               (ngModelChange)="getTotalExpenseFromSiteAndRecipientName(); onRecipientChange();">
-              <!-- <nz-option *ngFor="let name of RecipientList" [nzValue]="name.p.Ref"
-                [nzLabel]="name.p.RecipientName | titleCase"></nz-option> -->
-
-              <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.Ref" nzCustomContent>
+              <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.Ref"  [nzLabel]="recipient.p.RecipientName | titleCase" nzCustomContent>
                 <span [ngClass]="recipient.p.IsSiteRef == 1 ? 'site' : 'nonsite'">
                   {{ recipient.p.RecipientName | titleCase }}
                 </span>
@@ -148,7 +145,7 @@
             <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.ExpenseModeOfPayment == Cheque">
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.ExpenseModeOfPayment != Cash && Entity.p.ExpenseModeOfPayment">
           <div>
             <label>Bank Name</label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear

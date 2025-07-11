@@ -42,7 +42,7 @@ export class ExpenseDetailsComponent implements OnInit {
   LedgerList: Ledger[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   BankList: BankAccount[] = [];
-  Cheque = ModeOfPayments.Cheque
+  Cash = ModeOfPayments.Cash
   Bill = ModeOfPayments.Bill
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
   Date: string = '';
@@ -141,7 +141,7 @@ export class ExpenseDetailsComponent implements OnInit {
       return;
     }
     if (this.Entity.p.SiteRef <= 0) {
-      await this.uiUtils.showErrorToster('Selected Site to get Shree Expense');
+      // await this.uiUtils.showErrorToster('Selected Site to get Shree Expense');
       return;
     }
     if (this.Entity.p.RecipientRef <= 0) {
@@ -152,12 +152,8 @@ export class ExpenseDetailsComponent implements OnInit {
     let data = await Expense.FetchTotalExpenseFromSiteAndRecipient(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    
+
     this.Entity.p.InvoiceAmount = data[0].p.InvoiceAmount;
-    if (this.Entity.p.RecipientRef) {
-      const RecipientData = data.find(item => item.p.Ref == this.Entity.p.RecipientRef)
-      this.Entity.p.IsSiteRef = RecipientData?.p.IsSiteRef || 0
-    }
   };
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {

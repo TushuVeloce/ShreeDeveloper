@@ -62,15 +62,15 @@
               <td class="tbldata">{{ detail.RequisitionQty }}</td>
               <td class="tbldata">{{ detail.OrderedQty }}</td>
               <td class="tbldata">{{ detail.RequisitionRemainingQty }}</td>
-              <td class="tbldata">{{ !detail.DiscountedRate ? detail.Rate : detail.DiscountedRate }}</td>
+              <td class="tbldata">{{ !detail.DiscountedRate ? (detail.Rate | currency : "INR") : (detail.DiscountedRate | currency : "INR")}}</td>
               <td Class="tbldata" width="9%">
                 {{ detail.ExpectedDeliveryDate ? formatDate(detail.ExpectedDeliveryDate) : '--'}}
               </td>
-              <td class="tbldata">{{ detail.TotalAmount }}</td>
+              <td class="tbldata">{{ detail.TotalAmount | currency : "INR"}}</td>
 
               <td class="tbldata" width="8%" *ngIf="j === 0"
                 [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
-                <b>₹ {{ Order.p.GrandTotal }}</b>
+                <b> {{ Order.p.GrandTotal | currency : "INR" }}</b>
               </td>
               <!-- Optional: Requisition status -->
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
@@ -82,7 +82,8 @@
 
                 <!-- APPROVED -->
                 <span class="status" style="cursor: pointer;" (click)="NavigateOrderstatus(Order)"
-                  *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved" ngClass="approved">
+                  *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved"
+                  ngClass="approved">
                   Approved
                 </span>
 
@@ -93,13 +94,15 @@
                 </span>
 
                 <!-- Completed -->
-                <span class="status" *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Completed"
+                <span class="status"
+                  *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Completed"
                   ngClass="completed">
                   Completed
                 </span>
 
                 <!-- Incomplete -->
-                <span class="status" *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Incomplete"
+                <span class="status"
+                  *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Incomplete"
                   ngClass="incomplete">
                   Incomplete
                 </span>
