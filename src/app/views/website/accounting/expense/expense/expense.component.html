@@ -53,9 +53,12 @@
           <td class="tbldata" colspan="2"><b>Total Expense</b></td>
           <td class="tbldata" colspan="5"></td>
           <td class="tbldata">
-            <b>{{ getTotalExpense() | currency : "INR" }}</b>
+            <b>{{ getTotalInvoice() | currency : "INR" }}</b>
           </td>
-          <td class="tbldata" colspan="5"></td>
+          <td class="tbldata">
+            <b>{{ getTotalGiven() | currency : "INR" }}</b>
+          </td>
+          <td class="tbldata" colspan="4"></td>
         </tr>
       </tbody>
     </nz-table>

@@ -52,26 +52,30 @@
             <nz-option *ngFor="let sub of SubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
           </nz-select>
         </div>
-         <div class="col-md-4" style="margin-top: 1rem">
+        <div class="col-md-4" style="margin-top: 1rem">
           <label>Recipient Name</label>
           <div class="d-flex align-items-center">
-            <nz-select *ngIf="!RecipientNameInput" class="nzSelect-light"
-              [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="RecipientRef"
-              name="RecipientRef" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientRef" (ngModelChange)="getTotalExpenseFromSiteAndRecipientName()">
-              <nz-option *ngFor="let name of RecipientList" [nzValue]="name.p.Ref"
-                [nzLabel]="name.p.RecipientName | titleCase"></nz-option>
+            <nz-select *ngIf="!RecipientNameInput" class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch
+              nzAllowClear nzPlaceHolder="Select" id="RecipientRef" name="RecipientRef" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.RecipientRef"
+              (ngModelChange)="getTotalExpenseFromSiteAndRecipientName(); onRecipientChange();">
+              <!-- <nz-option *ngFor="let name of RecipientList" [nzValue]="name.p.Ref"
+                [nzLabel]="name.p.RecipientName | titleCase"></nz-option> -->
+
+              <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.Ref" nzCustomContent>
+                <span [ngClass]="recipient.p.IsSiteRef == 1 ? 'site' : 'nonsite'">
+                  {{ recipient.p.RecipientName | titleCase }}
+                </span>
+              </nz-option>
             </nz-select>
-            <!-- <input *ngIf="RecipientNameReadOnly" type="text" [(ngModel)]="Entity.p.RecipientName" name="RecipientName"
-              class="form-control" id="RecipientName" required placeholder="Recipient Name" readonly/> -->
-            <input *ngIf="RecipientNameInput" type="text" [(ngModel)]="RecipientEntity.p.Name"
-              name="Name" class="form-control" id="Name" required
-              placeholder="Enter Recipient Name" />
+            <input *ngIf="RecipientNameInput" type="text" [(ngModel)]="RecipientEntity.p.Name" name="Name"
+              class="form-control" id="Name" required placeholder="Enter Recipient Name" />
             <span *ngIf="!RecipientNameInput" (click)="AddRecipientName()"
               class="ms-2 mb-0.5 d-flex justify-content-center align-items-center border rounded"
               style="width: 36px; height: 36px; cursor: pointer">
               <i class="fa-solid fa-plus" style="color: blue;"></i>
             </span>
-             <span *ngIf="RecipientNameInput" (click)="SaveNewRecipientName()"
+            <span *ngIf="RecipientNameInput" (click)="SaveNewRecipientName()"
               class="ms-2 d-flex justify-content-center align-items-center border rounded text-success"
               style="width: 36px; height: 36px; cursor: pointer">
               <i class="fa-solid fa-check"></i>
@@ -106,7 +110,8 @@
             <label>Given Amount</label>
             <input type="number" [(ngModel)]="Entity.p.GivenAmount" name="GivenAmount" class="form-control"
               id="GivenAmount" required placeholder="Enter GivenAmount" #GivenAmountCtrl="ngModel"
-              (blur)="GivenAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)" (ngModelChange)="CalculateRemainingAmountandBalance()"/>
+              (blur)="GivenAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)"
+              (ngModelChange)="CalculateRemainingAmountandBalance()" />
             <div *ngIf="(GivenAmountCtrl.invalid && (GivenAmountCtrl.touched || GivenAmountCtrl.dirty))">
               <span class="validation-text" *ngIf="GivenAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
@@ -115,9 +120,10 @@
         <div class="col-md-4" style="margin-top: 1rem; ">
           <div>
             <label>Remaining Amount</label>
-            <input type="number" [(ngModel)]="Entity.p.RemainingAmount" readonly name="RemainingAmount" class="form-control"
-              id="RemainingAmount" required placeholder="Enter RemainingAmount" #RemainingAmountCtrl="ngModel"
-              (blur)="RemainingAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+            <input type="number" [(ngModel)]="Entity.p.RemainingAmount" readonly name="RemainingAmount"
+              class="form-control" id="RemainingAmount" required placeholder="Enter RemainingAmount"
+              #RemainingAmountCtrl="ngModel" (blur)="RemainingAmountCtrl.control.markAsTouched()"
+              (click)="selectAllValue($event)" />
             <div *ngIf="(RemainingAmountCtrl.invalid && (RemainingAmountCtrl.touched || RemainingAmountCtrl.dirty))">
               <span class="validation-text" *ngIf="RemainingAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
@@ -142,11 +148,12 @@
             <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
           </nz-select>
         </div>
-          <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.ExpenseModeOfPayment == Cheque">
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.ExpenseModeOfPayment == Cheque">
           <div>
             <label>Bank Name</label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" id="BankAccountRef" name="BankAccountRef" [nzSize]="'large'" [(ngModel)]="Entity.p.BankAccountRef">
+              nzPlaceHolder="Select" id="BankAccountRef" name="BankAccountRef" [nzSize]="'large'"
+              [(ngModel)]="Entity.p.BankAccountRef">
               <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.Ref" [nzLabel]="bank.p.Name"></nz-option>
             </nz-select>
           </div>
@@ -155,7 +162,7 @@
           <div>
             <label>Narration</label>
             <input type="text" [(ngModel)]="Entity.p.Narration" name="Narration" class="form-control" id="Narration"
-              required placeholder="Enter Narration"/>
+              required placeholder="Enter Narration" />
           </div>
         </div>
       </div>

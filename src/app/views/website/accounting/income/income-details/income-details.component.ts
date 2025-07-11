@@ -97,7 +97,7 @@ export class IncomeDetailsComponent implements OnInit {
     this.UnitList = lst;
   }
 
-    public FormulateBankList = async () => {
+  public FormulateBankList = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -131,6 +131,17 @@ export class IncomeDetailsComponent implements OnInit {
     }
     let lst = await Income.FetchDistinctPayerNameByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.PayerList = lst;
+  }
+
+  onPayerChange = () => {
+    try {
+      let SingleRecord = this.PayerList.find((data) => data.p.Ref == this.Entity.p.PayerRef);;
+      if (SingleRecord?.p) {
+        this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
+      }
+    } catch (error) {
+
+    }
   }
 
   AddPayerName = () => {
