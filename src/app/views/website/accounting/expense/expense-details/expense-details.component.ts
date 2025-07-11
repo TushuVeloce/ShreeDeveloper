@@ -154,10 +154,6 @@ export class ExpenseDetailsComponent implements OnInit {
     );
 
     this.Entity.p.InvoiceAmount = data[0].p.InvoiceAmount;
-    if (this.Entity.p.RecipientRef) {
-      const RecipientData = data.find(item => item.p.Ref == this.Entity.p.RecipientRef)
-      this.Entity.p.IsSiteRef = RecipientData?.p.IsSiteRef || 0
-    }
   };
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
