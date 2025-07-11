@@ -214,6 +214,13 @@ export class AttendanceDetailsComponent implements OnInit {
     const decimalHours = diffMinutes / 60;
 
     this.newAttendance.WorkingHrs = parseFloat(decimalHours.toFixed(2));
+
+    // HH:mm format
+    const hours = Math.floor(diffMinutes / 60);
+    const minutes = diffMinutes % 60;
+
+    this.newAttendance.DisplayWorkingHrs = `${hours}:${minutes.toString().padStart(2, '0')}`;
+    // console.log('`${hours}:${minutes.toString().padStart(2, \'0\')}` :', `${hours}:${minutes.toString().padStart(2, '0')}`);
     return;
   }
 
@@ -251,7 +258,12 @@ export class AttendanceDetailsComponent implements OnInit {
 
     const decimalHours = diffMinutes / 60;
 
-    this.Entity.p.TotalWorkingHrs = parseFloat(decimalHours.toFixed(2));
+    // this.Entity.p.TotalWorkingHrs = parseFloat(decimalHours.toFixed(2));
+
+    const hours = Math.floor(diffMinutes / 60);
+    const minutes = diffMinutes % 60;
+    this.Entity.p.TotalWorkingHrs = `${hours}:${minutes.toString().padStart(2, '0')}`;
+    console.log(' this.Entity.p.TotalWorkingHrs :',  this.Entity.p.TotalWorkingHrs);
     return;
   }
 
@@ -308,9 +320,9 @@ export class AttendanceDetailsComponent implements OnInit {
         }
       }
       let AttendaneDetailsLogInstance = new WebAttendaneLogDetailsLog(this.newAttendance, true);
-      let AttendaneLogInstance = new WebAttendaneLog(this.Entity.p, true);
-      await AttendaneDetailsLogInstance.EnsurePrimaryKeysWithValidValues();
-      await AttendaneLogInstance.EnsurePrimaryKeysWithValidValues();
+      // let AttendaneLogInstance = new WebAttendaneLog(this.Entity.p, true);
+      // await AttendaneDetailsLogInstance.EnsurePrimaryKeysWithValidValues();
+      // await AttendaneLogInstance.EnsurePrimaryKeysWithValidValues();
 
       this.Entity.p.AttendanceLogDetailsArray.push({ ...AttendaneDetailsLogInstance.p });
       await this.uiUtils.showSuccessToster('Attendance added successfully');

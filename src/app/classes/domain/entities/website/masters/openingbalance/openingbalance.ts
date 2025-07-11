@@ -30,6 +30,7 @@ export class OpeningBalanceProps {
   public BankAccountRef: number = 0;
   public BankName: string = '';
   public FinancialYearRef : number = 0;
+  public NetBalance : number = 0;
   public FinancialYearName : string = '';
   public readonly UnitName: string = '';
 

@@ -35,6 +35,7 @@ export class WebAttendaneLogDetailsLogProps {
   public SiteRef: number = 0;
   public SiteName: string = '';
   public WorkingHrs: number = 0;
+  public DisplayWorkingHrs: string = '';
   public CheckOutMode: number = 0;
   public IsCheckOutDone: number = 0;
   public Latitude: string = '';

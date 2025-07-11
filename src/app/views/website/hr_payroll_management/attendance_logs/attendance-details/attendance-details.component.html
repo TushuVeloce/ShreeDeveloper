@@ -48,7 +48,7 @@
         <div class="col-md-4 col-6">
           <div>
             <label>Total Working Hrs</label>
-            <input type="number" [(ngModel)]="Entity.p.TotalWorkingHrs" name="TotalWorkingHrs" class="form-control"
+            <input type="text" readonly [(ngModel)]="Entity.p.TotalWorkingHrs" name="TotalWorkingHrs" class="form-control"
               id="TotalWorkingHrs" />
           </div>
         </div>
@@ -122,7 +122,7 @@
                   Attendance.SiteName : 'Office' }}</td>
                 <td Class="tbldata">{{ Attendance.CheckInTime }}</td>
                 <td Class="tbldata">{{ Attendance.CheckOutTime }}</td>
-                <td Class="tbldata">{{ Attendance.WorkingHrs }}</td>
+                <td Class="tbldata">{{ Attendance.DisplayWorkingHrs }}</td>
                 <td class="tbldata">
                   <span style="margin-left: 9px" (click)="editAttendane(i)">
                     <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
@@ -192,7 +192,8 @@
           </div>
           <div class="col-6 mb-1">
             <label>Working Hrs</label>
-            <input type="number" name="WorkingHrs" class="form-control" [(ngModel)]="newAttendance.WorkingHrs" />
+            <input type="text" name="WorkingHrs" readonly class="form-control"
+              [(ngModel)]="newAttendance.DisplayWorkingHrs" />
           </div>
         </div>
       </form>
