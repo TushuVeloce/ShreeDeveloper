@@ -42,6 +42,7 @@ export class ExpenseProps {
   public TransDateTime: string = ''
   public CreatedDate: string = ''
   public UpdatedDate: string = ''
+  public IsAutoInvoiceEnabled: number = 0
   public IsDeleted: number = 0
 
   public GivenAmount: number = 0
