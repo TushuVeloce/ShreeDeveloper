@@ -43,7 +43,7 @@ export class IncomeDetailsComponent implements OnInit {
   LedgerList: Ledger[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   BankList: BankAccount[] = [];
-  Cheque = ModeOfPayments.Cheque
+  Cash = ModeOfPayments.Cash
   Bill = ModeOfPayments.Bill
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
   Date: string = '';

@@ -56,8 +56,9 @@
           <div class="d-flex align-items-center">
             <nz-select *ngIf="!PayerNameInput && !PayerNameReadOnly" class="nzSelect-light"
               [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PayerMasterRef"
-              name="PayerName" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerRef" (ngModelChange)="onPayerChange()" >
-              <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.Ref" nzCustomContent>
+              name="PayerName" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerRef" (ngModelChange)="onPayerChange()">
+              <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.Ref"
+                [nzLabel]="payer.p.PayerName | titleCase" nzCustomContent>
                 <span [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
                   {{ payer.p.PayerName | titleCase }}
                 </span>
@@ -116,7 +117,8 @@
             <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.IncomeModeOfPayment == Cheque">
+        <div class="col-md-4" style="margin-top: 1rem;"
+          *ngIf="Entity.p.IncomeModeOfPayment != Cash && Entity.p.IncomeModeOfPayment">
           <div>
             <label>Bank Name</label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
