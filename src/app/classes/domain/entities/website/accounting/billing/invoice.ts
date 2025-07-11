@@ -72,7 +72,7 @@ export class InvoiceProps {
   public BankAccountRef: number = 0
   public IsAutoInvoiceEnabled: number = 0
 
-  LabourExpenseRef: number = ExpenseTypes.LabourExpense
+  OtherExpenseRef: number = ExpenseTypes.OtherExpense
 
 
   public readonly IsNewlyCreated: boolean = false;
@@ -122,8 +122,8 @@ export class Invoice implements IPersistable<Invoice> {
     if (this.p.SiteRef <= 0) { vra.add('SiteRef', 'Site Name cannot be blank.'); }
     if (this.p.LedgerRef <= 0) { vra.add('LedgerRef', 'Ledger cannot be blank.'); }
     if (this.p.Description == '') { vra.add('Description', 'Description cannot be blank.'); }
-    if (this.p.Qty <= 0 && this.p.ExpenseType != this.p.LabourExpenseRef) { vra.add('Qty', 'Quantity cannot be blank.'); }
-    if (this.p.Rate <= 0) { vra.add('Rate', 'Rate cannot be blank.'); }
+    if (this.p.Qty <= 0 && this.p.ExpenseType == this.p.OtherExpenseRef) { vra.add('Qty', 'Quantity cannot be blank.'); }
+    // if (this.p.Rate <= 0) { vra.add('Rate', 'Rate cannot be blank.'); }
     if (this.p.IsDieselPaid == 1) {
       if (this.p.DieselQty <= 0) { vra.add('DieselQty', ' Diesel Quantity cannot be blank.'); }
       if (this.p.DieselRate <= 0) { vra.add('DieselRate', ' Diesel Rate cannot be blank.'); }
