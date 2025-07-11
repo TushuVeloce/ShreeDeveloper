@@ -28,7 +28,7 @@ import { Utils } from 'src/app/services/utils.service';
 export class ExpenseDetailsComponent implements OnInit {
   Entity: Expense = Expense.CreateNewInstance();
   RecipientEntity: Recipient = Recipient.CreateNewInstance();
-  RecipientList: Recipient[] = [];
+  RecipientList: Invoice[] = [];
   private IsNewEntity: boolean = true;
   SiteList: Site[] = [];
   SubLedgerList: SubLedger[] = [];
@@ -148,10 +148,15 @@ export class ExpenseDetailsComponent implements OnInit {
       // await this.uiUtils.showErrorToster('Selected Recipient Name to get Shree Expense');
       return;
     }
+    
     let data = await Expense.FetchTotalExpenseFromSiteAndRecipient(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.Entity.p.InvoiceAmount = data[0].p.InvoiceAmount;
+    if(this.Entity.p.RecipientRef){
+      const RecipientData = data.find(item => item.p.Ref == this.Entity.p.RecipientRef)
+      this.Entity.p.IsSiteRef = RecipientData?.p.IsSiteRef || 0
+    }
   };
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
@@ -168,7 +173,8 @@ export class ExpenseDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Recipient.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Invoice.FetchRecipientByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.RecipientList = lst;
   }
 

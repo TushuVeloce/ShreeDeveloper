@@ -45,7 +45,8 @@ export class InvoiceProps {
   public VehicleNo: string = ''
   public Description: string = ''
   public RecipientMasterRef: number = 0
-  public RecipientName: string = ''
+  public RecipientName: string = '' 
+  public IsSiteRef: number = 0 
   public Reason: string = ''
   public IsDieselPaid: number = 0
   public DieselQty: number = 0
@@ -225,12 +226,12 @@ export class Invoice implements IPersistable<Invoice> {
     return Invoice.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchRecipientByCompanyRef(CompanyRef: number, SiteRef?: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchRecipientByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new GetDistinctRecipientNameFetchRequest();
     req.CompanyRefs.push(CompanyRef)
-    if (SiteRef) {
-      req.SiteRefs.push(SiteRef)
-    }
+    // if (SiteRef) {
+    //   req.SiteRefs.push(SiteRef)
+    // }
     let tdResponse = await Invoice.FetchTransportData(req, errorHandler) as TransportData;
     return Invoice.ListFromTransportData(tdResponse);
   }

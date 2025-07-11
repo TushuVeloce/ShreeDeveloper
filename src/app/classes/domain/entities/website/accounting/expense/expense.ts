@@ -35,6 +35,7 @@ export class ExpenseProps {
   public readonly SubLedgerName: string = ''
   public RecipientRef: number = 0
   public RecipientName: string = ''
+  public IsSiteRef: number = 0 
   public Reason: string = ''
   public InvoiceAmount: number = 0
   public Narration: string = ''

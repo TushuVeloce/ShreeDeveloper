@@ -59,7 +59,7 @@
               [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="RecipientRef"
               name="RecipientRef" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientRef" (ngModelChange)="getTotalExpenseFromSiteAndRecipientName()">
               <nz-option *ngFor="let name of RecipientList" [nzValue]="name.p.Ref"
-                [nzLabel]="name.p.Name | titleCase"></nz-option>
+                [nzLabel]="name.p.RecipientName | titleCase"></nz-option>
             </nz-select>
             <!-- <input *ngIf="RecipientNameReadOnly" type="text" [(ngModel)]="Entity.p.RecipientName" name="RecipientName"
               class="form-control" id="RecipientName" required placeholder="Recipient Name" readonly/> -->
