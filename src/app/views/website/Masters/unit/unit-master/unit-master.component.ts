@@ -40,7 +40,6 @@ export class UnitMasterComponent implements OnInit {
   async ngOnInit() {
     await this.appStateManage.setDropdownDisabled(true);
     this.ValidMenuItems = this.ValidMenuItem.getData(this.FeatureRef.UnitMaster);
-    console.log('ValidMenuItems :', this.ValidMenuItems);
     // const rawItems = JSON.parse(sessionStorage.getItem('ValidMenuItems') || '[]');
     // console.log('rawItems :', rawItems);
     // this.ValidMenuItems = rawItems.filter((data: MenuItem) => data.FeatureRef == ApplicationFeatures.UnitMaster);

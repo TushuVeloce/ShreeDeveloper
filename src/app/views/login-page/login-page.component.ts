@@ -37,13 +37,16 @@ export class LoginPageComponent implements OnInit {
       this.isAndroidPlatform = platform.is('android');
     });
   }
-  UserId: string = 'pranav.p@velocetechinsights.com';
-  Password: string = '123';
+  // UserId: string = 'pranav.p@velocetechinsights.com';
+  // Password: string = '123';
+
+  UserId: string = 'admin@gmail.com';
+  Password: string = '1234';
 
 
   ngOnInit() {
     let a = 1;
-   }
+  }
 
   Login = async () => {
     if (this.UserId === '') {
@@ -64,7 +67,7 @@ export class LoginPageComponent implements OnInit {
     this.appStateManage.setEmployeeRef(response.LoginEmployeeRef)
     this.appStateManage.setLoginToken(response.LoginToken)
     this.validmenuitemsstatemanagement.setValidMenuItems(response.ValidMenuItems)
-    // this.appStateManage.StorageKey.setItem("ValidMenuItems", JSON.stringify(response.ValidMenuItems));
+    this.appStateManage.StorageKey.setItem("ValidMenuItems", JSON.stringify(response.ValidMenuItems));
     this.appStateManage.StorageKey.setItem("IsDefaultUser", response.IsDefault.toString())
     this.appStateManage.StorageKey.setItem("UserDisplayName", response.UserDisplayName)
     this.appStateManage.StorageKey.setItem('SelectedCompanyRef', response.LastSelectedCompanyRef.toString());
@@ -79,7 +82,7 @@ export class LoginPageComponent implements OnInit {
       if (this.isMobile) {
         await this.router.navigate(['/homepage']);  // Navigate to web
       } else if (response.LoginForFirstTime == 0) {
-         this.router.navigate(['/create_password']);
+        this.router.navigate(['/create_password']);
       } else {
         await this.router.navigate(['/homepage']);  // Navigate to web
         this.appStateManage.triggerCompanyInit();

@@ -144,32 +144,33 @@ import { AccountingReportComponent } from './accounting/accounting_report/accoun
 import { InvoicePrintComponent } from './accounting/invoice/invoice-print/invoice-print.component';
 import { OpeningBalanceComponent } from './Masters/opening_balance/opening-balance/opening-balance.component';
 import { OpeningBalanceDetailsComponent } from './Masters/opening_balance/opening-balance-details/opening-balance-details.component';
+import { AuthGuard } from 'src/app/services/auth-guard.service';
 
 
 const routes: Routes = [
   {
     path: '', component: WebComponent,
     children: [
-      { path: 'Dashboard', component: DashboardComponent },
-      { path: 'Unit_Master', component: UnitMasterComponent },
-      { path: 'Unit_Master_Details', component: UnitMasterDetailsComponent },
+      { path: 'Dashboard', component: DashboardComponent, canActivate: [AuthGuard], data: { featureName: 'UnitMaster' } },
+      { path: 'Unit_Master', component: UnitMasterComponent, canActivate: [AuthGuard], data: { featureName: 'UnitMaster' } },
+      { path: 'Unit_Master_Details', component: UnitMasterDetailsComponent, canActivate: [AuthGuard], data: { featureName: 'UnitMaster' } },
 
-      { path: 'Material_Master', component: MaterialMasterComponent },
-      { path: 'Material_Master_Details', component: MaterialMasterDetailsComponent },
+      { path: 'Material_Master', component: MaterialMasterComponent, },
+      { path: 'Material_Master_Details', component: MaterialMasterDetailsComponent, },
 
-      { path: 'Stage_Master', component: StageMasterComponent },
-      { path: 'Stage_Master_Details', component: StageMasterDetailsComponent },
+      { path: 'Stage_Master', component: StageMasterComponent, },
+      { path: 'Stage_Master_Details', component: StageMasterDetailsComponent, },
 
-      { path: 'Sub_Stage_Master', component: SubStageMasterComponent },
-      { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent },
+      { path: 'Sub_Stage_Master', component: SubStageMasterComponent, },
+      { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent, },
 
-      { path: 'Expense_Type_Master', component: ExpenseTypeMasterComponent },
-      { path: 'Expense_Type_Master_Details', component: ExpenseTypeMasterDetailsComponent },
+      { path: 'Expense_Type_Master', component: ExpenseTypeMasterComponent, },
+      { path: 'Expense_Type_Master_Details', component: ExpenseTypeMasterDetailsComponent, },
 
-      { path: 'Sub_Stage_Master', component: SubStageMasterComponent },
-      { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent },
+      { path: 'Sub_Stage_Master', component: SubStageMasterComponent, },
+      { path: 'Sub_Stage_Master_Details', component: SubStageMasterDetailsComponent, },
 
-      { path: 'Account_Main_Ledger', component: AccountMainLedgerComponent },
+      { path: 'Account_Main_Ledger', component: AccountMainLedgerComponent, },
       { path: 'Account_Main_Ledger_Details', component: AccountMainLedgerDetailsComponent },
 
       { path: 'Account_Sub_Ledger', component: AccountSubLedgerComponent },
@@ -301,7 +302,7 @@ const routes: Routes = [
       { path: 'Income', component: IncomeComponent },
       { path: 'Income_Details', component: IncomeDetailsComponent },
 
-      { path: 'Accounting_Report', component: AccountingReportComponent},
+      { path: 'Accounting_Report', component: AccountingReportComponent },
 
 
       // Reports

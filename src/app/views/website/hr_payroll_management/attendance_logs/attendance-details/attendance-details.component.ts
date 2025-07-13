@@ -29,7 +29,6 @@ export class AttendanceDetailsComponent implements OnInit {
   IsDropdownDisabled: boolean = false
   InitialEntity: WebAttendaneLog = null as any;
   EmployeeList: Employee[] = [];
-  FromTime: string = '';
   SiteList: Site[] = [];
   editingIndex: null | undefined | number
   ModalEditable: boolean = false;
@@ -40,6 +39,20 @@ export class AttendanceDetailsComponent implements OnInit {
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   strCDT: string = ''
   Date: string = ''
+  OfficeDutyandTime: OfficeDutyandTime[] = [];
+
+  ActualLateMarkTime: string = '';
+  LateMarkGraceTimeInMins: string = '';
+
+  // ActualOvertime:"18:15:00.000"
+  // CompanyName:"Shree Developers"
+  // CompanyRef:26883
+  // FromTime:"10:00"
+  // LateMarkGraceTimeInMins:"15"
+  // OvertimeGraceTimeInMins:"15"
+  // Ref:27304
+  // ShortName:"10:00 AM to 06:00 PM"
+  // ToTime:"18:00"
 
   baseHeaders: string[] = ['Sr. No', 'Site Name', 'Check In Time', 'Check Out Time', 'Working Hours', 'Action'];
 
@@ -92,13 +105,18 @@ export class AttendanceDetailsComponent implements OnInit {
   };
 
   getDefaultWorkingHrsByEmployeeRef = async () => {
+
     if (this.Entity.p.EmployeeRef <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
     let lst = await OfficeDutyandTime.FetchEntireListByEmployeeRef(this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
-    // this.EmployeeList = lst;
+    if (lst.length > 0) {
+      this.ActualLateMarkTime = lst[0].p.ActualLateMarkTime;
+      this.LateMarkGraceTimeInMins = lst[0].p.LateMarkGraceTimeInMins;
+    }
+
+    // this.OfficeDutyandTime = lst;
   }
 
   SaveAttendence = async () => {
@@ -237,6 +255,40 @@ export class AttendanceDetailsComponent implements OnInit {
     return `${hours}h ${paddedMinutes}m`;
   }
 
+  calculateLateMark = () => {
+    const actualLateMarkTime = this.ActualLateMarkTime; // this.ActualLateMarkTime
+    console.log('this.ActualLateMarkTime :', this.ActualLateMarkTime);
+    const checkInTime = this.Entity.p.AttendanceLogDetailsArray[0].CheckInTime; // e.g., "21:47"
+    const graceMinutes = Number(this.LateMarkGraceTimeInMins); // this.LateMarkGraceTimeInMins
+    console.log('graceMinutes :', graceMinutes);
+
+    // Convert ActualLateMarkTime to Date
+    const [lateHour, lateMin, lateSec] = actualLateMarkTime.split(":").map(Number);
+    const lateMarkDate = new Date();
+    lateMarkDate.setHours(lateHour, lateMin, lateSec || 0, 0);
+
+    // Convert CheckInTime to Date
+    const [inHour, inMin] = checkInTime.split(":").map(Number);
+    const checkInDate = new Date();
+    checkInDate.setHours(inHour, inMin, 0, 0);
+
+    if (checkInDate > lateMarkDate) {
+      const diffMs = checkInDate.getTime() - lateMarkDate.getTime();
+      let totalLateMinutes = Math.floor(diffMs / 60000) + graceMinutes;
+
+      // Convert totalLateMinutes to hours and minutes
+      const hours = Math.floor(totalLateMinutes / 60);
+      const minutes = totalLateMinutes % 60;
+
+      console.log(`Late by ${hours}h ${minutes}m`);
+      return `${hours}h ${minutes}m`;
+    } else {
+      console.log("Not late");
+      return;
+    }
+  };
+
+
   addAttendance = async () => {
     if (this.newAttendance.CheckInTime == '') {
       return this.uiUtils.showWarningToster('Check In Time cannot be blank.');
@@ -285,6 +337,7 @@ export class AttendanceDetailsComponent implements OnInit {
     this.Entity.p.FirstCheckInTime = this.Entity.p.AttendanceLogDetailsArray[0].CheckInTime;
     this.Entity.p.LastCheckOutTime = this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].CheckOutTime;
     this.calculateTotalWorkingHours();
+    this.calculateLateMark();
   }
 
   BackAttendence = async () => {
