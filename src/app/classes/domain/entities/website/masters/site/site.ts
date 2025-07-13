@@ -43,7 +43,7 @@ export class SiteProps {
   public NumberOfPlots: number = 0;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public LoginEmployeeRef: number = 26893;
+  public LoginEmployeeRef: number = 0;
 
   // public PlotDetailsList: PlotDetailProps[] = [];
   public SiteManagementOwnerDetails: OwnerDetailProps[] = [];

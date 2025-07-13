@@ -26,7 +26,7 @@
           <label>Employee</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" [nzSize]="'large'" name="EmployeeRef" required id="EmployeeRef"
-            [(ngModel)]="Entity.p.EmployeeRef">
+            [(ngModel)]="Entity.p.EmployeeRef" (ngModelChange)="getDefaultWorkingHrsByEmployeeRef()">
             <nz-option *ngFor="let employee of EmployeeList" [nzLabel]="employee.p.Name"
               [nzValue]="employee.p.Ref"></nz-option>
           </nz-select>
@@ -48,14 +48,14 @@
         <div class="col-md-4 col-6">
           <div>
             <label>Total Working Hrs</label>
-            <input type="text" readonly [(ngModel)]="Entity.p.TotalWorkingHrs" name="TotalWorkingHrs" class="form-control"
-              id="TotalWorkingHrs" />
+            <input type="text" readonly [(ngModel)]="Entity.p.DisplayTotalWorkingHrs" name="DisplayTotalWorkingHrs"
+              class="form-control" id="DisplayTotalWorkingHrs" />
           </div>
         </div>
         <div class="col-md-2 col-6 ">
           <label style="color: white;">Is Late Mark</label>
           <div class="d-flex align-items-center">
-            <input type="checkbox" id="IsLateMark" [(ngModel)]="Entity.p.IsLateMark" name="IsLateMark"
+            <input type="checkbox" id="IsLateMark" readonly [(ngModel)]="Entity.p.IsLateMark" name="IsLateMark"
               class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
             <label for="IsLateMark" class="form-check-label mb-0">Is Late Mark</label>
           </div>
@@ -63,14 +63,14 @@
         <div class="col-md-4 col-6">
           <div>
             <label>Total Late Mark Hrs</label>
-            <input type="number" [disabled]="!Entity.p.IsLateMark" [(ngModel)]="Entity.p.TotalLateMarkHrs"
-              name="TotalLateMarkHrs" class="form-control" id="TotalLateMarkHrs" (click)="selectAllValue($event)" />
+            <input type="number" readonly [(ngModel)]="Entity.p.TotalLateMarkHrs" name="TotalLateMarkHrs"
+              class="form-control" id="TotalLateMarkHrs" (click)="selectAllValue($event)" />
           </div>
         </div>
         <div class="col-md-2 col-6 ">
           <label style="color: white;">Is Over Time</label>
           <div class="d-flex align-items-center">
-            <input type="checkbox" id="IsOverTime" [(ngModel)]="Entity.p.IsOverTime" name="IsOverTime"
+            <input type="checkbox" id="IsOverTime" readonly [(ngModel)]="Entity.p.IsOverTime" name="IsOverTime"
               class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
             <label for="IsOverTime" class="form-check-label mb-0">Is Over Time</label>
           </div>
@@ -78,8 +78,8 @@
         <div class="col-md-4 col-6">
           <div>
             <label>Total Over Time Hrs</label>
-            <input type="number" [disabled]="!Entity.p.IsOverTime" [(ngModel)]="Entity.p.TotalOvertimeHrs"
-              name="TotalOvertimeHrs" class="form-control" id="TotalOvertimeHrs" (click)="selectAllValue($event)" />
+            <input type="number" readonly [(ngModel)]="Entity.p.TotalOvertimeHrs" name="TotalOvertimeHrs"
+              class="form-control" id="TotalOvertimeHrs" (click)="selectAllValue($event)" />
           </div>
         </div>
       </div>

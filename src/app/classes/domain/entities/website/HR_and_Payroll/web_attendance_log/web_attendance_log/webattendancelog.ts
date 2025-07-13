@@ -33,11 +33,18 @@ export class WebAttendaneLogProps {
   public CompanyRef: number = 0;
   public readonly CompanyName: string = '';
   public TransDateTime: string = '';
-  public TotalWorkingHrs: string = '';
+
+  public TotalWorkingHrs: number = 0;
+  public DisplayTotalWorkingHrs: string = '';
+
   public IsLateMark: boolean = false;
   public TotalLateMarkHrs: number = 0;
+  public DisplayTotalLateMarkHrs: string = '';
+
   public IsOverTime: boolean = false;
   public TotalOvertimeHrs: number = 0;
+  public DisplayTotalOvertimeHrs: string = '';
+
   public FirstCheckInTime: string = '';
   public LastCheckOutTime: string = '';
   public IsLeave: number = 0;

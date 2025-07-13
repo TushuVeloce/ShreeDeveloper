@@ -3,6 +3,7 @@ import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns, AttendanceHandleByRefs } from 'src/app/classes/domain/constants';
 import { AttendanceLocationType, DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
+import { OfficeDutyandTime } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Office_Duty_and_Time/officedutyandtime';
 import { WebAttendaneLog } from 'src/app/classes/domain/entities/website/HR_and_Payroll/web_attendance_log/web_attendance_log/webattendancelog';
 import { WebAttendaneLogDetailsLog, WebAttendaneLogDetailsLogProps } from 'src/app/classes/domain/entities/website/HR_and_Payroll/web_attendance_log/web_attendance_log_details/webattendancelogdetails';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
@@ -30,7 +31,6 @@ export class AttendanceDetailsComponent implements OnInit {
   EmployeeList: Employee[] = [];
   FromTime: string = '';
   SiteList: Site[] = [];
-  TotalWorkingHrs: number = 0;
   editingIndex: null | undefined | number
   ModalEditable: boolean = false;
   isModalOpen: boolean = false;
@@ -83,13 +83,23 @@ export class AttendanceDetailsComponent implements OnInit {
     this.EmployeeList = lst;
   }
 
-  private getSiteListByCompanyRef = async () => {
+  getSiteListByCompanyRef = async () => {
     let lst = await Site.FetchEntireListByCompanyRef(
       this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.SiteList = lst;
   };
+
+  getDefaultWorkingHrsByEmployeeRef = async () => {
+    if (this.Entity.p.EmployeeRef <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await OfficeDutyandTime.FetchEntireListByEmployeeRef(this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    // this.EmployeeList = lst;
+  }
 
   SaveAttendence = async () => {
     this.isSaveDisabled = true;
@@ -132,27 +142,9 @@ export class AttendanceDetailsComponent implements OnInit {
   }
 
   closeModal = async () => {
-    const keysToCheck = ['CheckInTime', 'CheckOutTime', 'SiteRef', 'WorkingHrs'] as const;
-
-    const hasData = keysToCheck.some(
-      key => (this.newAttendance as any)[key]?.toString().trim()
-    );
-
-    if (hasData) {
-      await this.uiUtils.showConfirmationMessage(
-        'Close',
-        `This process is <strong>IRREVERSIBLE!</strong><br/>
-               Are you sure you want to close this modal?`,
-        async () => {
-          this.isModalOpen = false;
-          this.ModalEditable = false;
-          this.newAttendance = WebAttendaneLogDetailsLogProps.Blank();
-        }
-      );
-    } else {
-      this.isModalOpen = false;
-      this.newAttendance = WebAttendaneLogDetailsLogProps.Blank();
-    }
+    this.isModalOpen = false;
+    this.ModalEditable = false;
+    this.newAttendance = WebAttendaneLogDetailsLogProps.Blank();
   };
 
   editAttendane(index: number) {
@@ -162,7 +154,7 @@ export class AttendanceDetailsComponent implements OnInit {
     this.editingIndex = index;
   }
 
-  async removeAttendane(index: number) {
+  removeAttendane = async (index: number) => {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
@@ -219,69 +211,33 @@ export class AttendanceDetailsComponent implements OnInit {
     const hours = Math.floor(diffMinutes / 60);
     const minutes = diffMinutes % 60;
 
-    this.newAttendance.DisplayWorkingHrs = `${hours}:${minutes.toString().padStart(2, '0')}`;
-    // console.log('`${hours}:${minutes.toString().padStart(2, \'0\')}` :', `${hours}:${minutes.toString().padStart(2, '0')}`);
+    this.newAttendance.DisplayWorkingHrs = `${hours}h ${minutes.toString().padStart(2, '0')}m`;
     return;
   }
 
   calculateTotalWorkingHours = () => {
-    if (this.Entity.p.FirstCheckInTime == '') {
-      return
-    }
+    this.Entity.p.TotalWorkingHrs = this.Entity.p.AttendanceLogDetailsArray.reduce((total: number, item: any) => {
+      return total + Number(item.WorkingHrs || 0);
+    }, 0);
 
-    if (this.Entity.p.LastCheckOutTime == '') {
-      return
-    }
-
-    // Fallback to "00:00" if either is missing or invalid
-    if (!this.Entity.p.FirstCheckInTime || !this.Entity.p.FirstCheckInTime.includes(":")) return 0;
-
-    const [inHour, inMin] = this.Entity.p.FirstCheckInTime.split(':').map(Number);
-    const [outHour, outMin] = (this.Entity.p.LastCheckOutTime && this.Entity.p.LastCheckOutTime.includes(":") ? this.Entity.p.LastCheckOutTime : "00:00").split(':').map(Number);
-
-    // Check for invalid numbers
-    if (isNaN(inHour) || isNaN(inMin) || isNaN(outHour) || isNaN(outMin)) return 0;
-
-    const inDate = new Date();
-    inDate.setHours(inHour, inMin, 0, 0);
-
-    const outDate = new Date();
-    outDate.setHours(outHour, outMin, 0, 0);
-
-    // Handle overnight shift
-    if (outDate <= inDate) {
-      outDate.setDate(outDate.getDate() + 1);
-    }
-
-    const diffMs = outDate.getTime() - inDate.getTime();
-    const diffMinutes = Math.floor(diffMs / 60000);
-
-    const decimalHours = diffMinutes / 60;
-
-    // this.Entity.p.TotalWorkingHrs = parseFloat(decimalHours.toFixed(2));
-
-    const hours = Math.floor(diffMinutes / 60);
-    const minutes = diffMinutes % 60;
-    this.Entity.p.TotalWorkingHrs = `${hours}:${minutes.toString().padStart(2, '0')}`;
-    console.log(' this.Entity.p.TotalWorkingHrs :',  this.Entity.p.TotalWorkingHrs);
+    this.Entity.p.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(this.Entity.p.TotalWorkingHrs);
     return;
   }
 
-  selectAllValue(event: MouseEvent): void {
-    const input = event.target as HTMLInputElement;
-    input.select();
+  convertFractionTimeToHM = (fractionTime: number) => {
+    const hours = Math.floor(fractionTime);
+    const fractionalMinutes = fractionTime - hours;
+
+    // Convert fractional part (base 100) to minutes (base 60)
+    const minutes = Math.round(fractionalMinutes * 100 * 60 / 100);
+
+    // Pad minutes with leading zero if needed
+    const paddedMinutes = String(minutes).padStart(2, '0');
+
+    return `${hours}h ${paddedMinutes}m`;
   }
 
-
-  getTotalWorkingHrs = () => {
-    this.TotalWorkingHrs = this.Entity.p.AttendanceLogDetailsArray.reduce((total: number, item: any) => {
-      return total + Number(item.WorkingHrs || 0);
-    }, 0);
-    return this.TotalWorkingHrs;
-  }
-
-
-  async addAttendance() {
+  addAttendance = async () => {
     if (this.newAttendance.CheckInTime == '') {
       return this.uiUtils.showWarningToster('Check In Time cannot be blank.');
     }
@@ -320,9 +276,6 @@ export class AttendanceDetailsComponent implements OnInit {
         }
       }
       let AttendaneDetailsLogInstance = new WebAttendaneLogDetailsLog(this.newAttendance, true);
-      // let AttendaneLogInstance = new WebAttendaneLog(this.Entity.p, true);
-      // await AttendaneDetailsLogInstance.EnsurePrimaryKeysWithValidValues();
-      // await AttendaneLogInstance.EnsurePrimaryKeysWithValidValues();
 
       this.Entity.p.AttendanceLogDetailsArray.push({ ...AttendaneDetailsLogInstance.p });
       await this.uiUtils.showSuccessToster('Attendance added successfully');
@@ -346,6 +299,11 @@ export class AttendanceDetailsComponent implements OnInit {
     } else {
       await this.router.navigate(['/homepage/Website/Attendance_Logs']);
     }
+  }
+
+  selectAllValue(event: MouseEvent): void {
+    const input = event.target as HTMLInputElement;
+    input.select();
   }
 
   resetAllControls = () => {

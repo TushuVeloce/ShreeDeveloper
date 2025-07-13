@@ -86,7 +86,7 @@ export class SessionValues {
   public get cloudUIController(): string {
     return this.formulateControllerUrlString('cloudui');
   }
-  
+
   public get generateuserotp(): string {
     return this.formulateControllerUrlString('generateuserotp');
   }
@@ -104,36 +104,38 @@ export class SessionValues {
   }
 
 
-  public get UserDisplayName()
-  {
+  public get UserDisplayName() {
     let result = this.appStateManage.StorageKey.getItem('UserDisplayName');
     return isNullOrUndefined(result) ? '' : result!;
   }
 
-  public set UserDisplayName(value: string)
-  {
+  public set UserDisplayName(value: string) {
     this.appStateManage.StorageKey.setItem('UserDisplayName', value);
   }
 
-  public get CurrentLoginToken()
-  {
+  public get CurrentLoginToken() {
     let result = this.appStateManage.StorageKey.getItem('CurrentLoginToken');
     return isNullOrUndefined(result) ? '' : result!;
   }
 
-  public set CurrentLoginToken(value: string)
-  {
+  public set CurrentLoginToken(value: string) {
     this.appStateManage.StorageKey.setItem('CurrentLoginToken', value);
   }
 
   public ClearAllStateValues = () => {
     this.UserDisplayName = '';
     this.CurrentLoginToken = '';
+    this.appStateManage.resetLoginToken();
+    this.appStateManage.StorageKey.setItem('LoginEmployeeRef', '');
+    this.appStateManage.StorageKey.setItem('SelectedCompanyRef', '');
+    this.appStateManage.StorageKey.setItem('companyName', '');
+    this.appStateManage.StorageKey.setItem('companyName', '');
+    this.appStateManage.resetEmployeeRef();
   }
 
   constructor(private platform: Platform,
     private baseUrlService: BaseUrlService,
-    private appStateManage:AppStateManageService) {
+    private appStateManage: AppStateManageService) {
   }
 
   isAuthenticated() {
@@ -142,14 +144,11 @@ export class SessionValues {
 
   private m_loginDeviceId: string = '';
 
-  public get LoginDeviceId(): string
-  {
-    if (this.m_loginDeviceId.length == 0)
-    {
+  public get LoginDeviceId(): string {
+    if (this.m_loginDeviceId.length == 0) {
       let ldid = this.appStateManage.StorageKey.getItem('LoginDeviceId');
 
-      if (isNullOrUndefined(ldid))
-      {
+      if (isNullOrUndefined(ldid)) {
         ldid = uuid.v7();
         this.appStateManage.StorageKey.setItem('LoginDeviceId', JSON.stringify(ldid));
       }

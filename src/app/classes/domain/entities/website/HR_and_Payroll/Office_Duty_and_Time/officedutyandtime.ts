@@ -11,6 +11,7 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { OfficeDutyandTimeFetchRequest } from "./officedutyandtimefetchrequest";
+import { GetDefaultWorkingHrsFetchRequest } from "./getdefaultworkinghrsfetchrequest";
 
 
 export class OfficeDutyandTimeProps {
@@ -18,11 +19,11 @@ export class OfficeDutyandTimeProps {
   public Ref: number = 0;
   public FromTime: string = '';
   public ToTime: string = '';
-  public LateMarkGraceTimeInMins : string = '';
+  public LateMarkGraceTimeInMins: string = '';
   public ActualLateMarkTime: string = '';
   public OvertimeGraceTimeInMins: string = '';
-  public ActualOvertime : string = '';
-  public ShortName : string = '';
+  public ActualOvertime: string = '';
+  public ShortName: string = '';
   public CompanyRef: number = 0;
   public readonly CompanyName: string = '';
   public CreatedBy: number = 0;
@@ -51,8 +52,8 @@ export class OfficeDutyandTime implements IPersistable<OfficeDutyandTime> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -73,10 +74,10 @@ export class OfficeDutyandTime implements IPersistable<OfficeDutyandTime> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-     if (this.p.FromTime == '') vra.add('FromTime', 'From Time cannot be blank.');
-     if (this.p.ToTime == '') vra.add('ToTime', 'To Time cannot be blank.');
-     if (this.p.LateMarkGraceTimeInMins == '') vra.add('LateMarkGraceTimeInMins', 'Late Mark Grace Time cannot be blank.');
-     if (this.p.OvertimeGraceTimeInMins == '') vra.add('OvertimeGraceTimeInMins', 'Over Time Grace Time cannot be blank.');
+    if (this.p.FromTime == '') vra.add('FromTime', 'From Time cannot be blank.');
+    if (this.p.ToTime == '') vra.add('ToTime', 'To Time cannot be blank.');
+    if (this.p.LateMarkGraceTimeInMins == '') vra.add('LateMarkGraceTimeInMins', 'Late Mark Grace Time cannot be blank.');
+    if (this.p.OvertimeGraceTimeInMins == '') vra.add('OvertimeGraceTimeInMins', 'Over Time Grace Time cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -110,7 +111,7 @@ export class OfficeDutyandTime implements IPersistable<OfficeDutyandTime> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): OfficeDutyandTime[] {
+    sortPropertyName: string = ""): OfficeDutyandTime[] {
     let result: OfficeDutyandTime[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -170,9 +171,16 @@ export class OfficeDutyandTime implements IPersistable<OfficeDutyandTime> {
     return OfficeDutyandTime.ListFromTransportData(tdResponse);
   }
 
- public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new OfficeDutyandTimeFetchRequest();
     req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await OfficeDutyandTime.FetchTransportData(req, errorHandler) as TransportData;
+    return OfficeDutyandTime.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByEmployeeRef(EmployeeRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new GetDefaultWorkingHrsFetchRequest();
+    req.EmployeeRefs.push(EmployeeRef)
     let tdResponse = await OfficeDutyandTime.FetchTransportData(req, errorHandler) as TransportData;
     return OfficeDutyandTime.ListFromTransportData(tdResponse);
   }
