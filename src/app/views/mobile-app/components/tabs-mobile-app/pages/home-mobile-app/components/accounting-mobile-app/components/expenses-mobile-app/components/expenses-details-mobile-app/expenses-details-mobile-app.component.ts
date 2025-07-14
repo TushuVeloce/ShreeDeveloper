@@ -26,9 +26,9 @@ import { ToastService } from 'src/app/views/mobile-app/components/core/toast.ser
   selector: 'app-expenses-details-mobile-app',
   templateUrl: './expenses-details-mobile-app.component.html',
   styleUrls: ['./expenses-details-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class ExpensesDetailsMobileAppComponent  implements OnInit {
+export class ExpensesDetailsMobileAppComponent implements OnInit {
 
   Entity: Expense = Expense.CreateNewInstance();
   RecipientEntity: Recipient = Recipient.CreateNewInstance();
@@ -246,7 +246,7 @@ export class ExpensesDetailsMobileAppComponent  implements OnInit {
       return;
     }
 
-    let data = await Expense.FetchTotalExpenseFromSiteAndRecipient(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.RecipientRef,
+    let data = await Expense.FetchTotalInvoiceAmountFromSiteAndRecipient(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.RecipientType, this.Entity.p.RecipientRef,
       async (errMsg) => {
         // await this.uiUtils.showErrorMessage('Error', errMsg)
         await this.toastService.present('Error ' + errMsg, 1000, 'danger');
@@ -283,7 +283,7 @@ export class ExpensesDetailsMobileAppComponent  implements OnInit {
       await this.haptic.error();
       return;
     }
-    let lst = await Invoice.FetchRecipientByCompanyRef(this.companyRef, async errMsg => {
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef, this.Entity.p.RecipientType, async errMsg => {
       // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present('Error ' + errMsg, 1000, 'danger');
       await this.haptic.error();

@@ -32,15 +32,16 @@
           <label>Site Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
-            (ngModelChange)="getTotalExpenseFromSiteAndRecipientName()">
-            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+            (ngModelChange)="getTotalInvoiceAmountFromSiteAndRecipientRef(); Entity.p.RecipientType = 0; Entity.p.RecipientRef = 0; RecipientList = []  ">
+            <nz-option *ngFor=" let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Ledger</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
-            (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef)">
+            nzPlaceHolder="Select" id="IncomeLedgerRef" name="IncomeLedgerRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.IncomeLedgerRef"
+            (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.IncomeLedgerRef)">
             <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -52,14 +53,57 @@
             <nz-option *ngFor="let sub of SubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
           </nz-select>
         </div>
+        <div class="col-md-4" style="margin-top: 1rem; ">
+          <label>To Whom Type</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="RecipientType" name="RecipientType" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.RecipientType"
+            (ngModelChange)="getRecipientListByRecipientTypeRef(); getTotalInvoiceAmountFromSiteAndRecipientRef();">
+            <nz-option *ngFor="let type of RecipientTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem; " *ngIf="this.Entity.p.RecipientType == Sites">
+          <label>Income Ledger</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
+            (ngModelChange)="getSubIncomeLedgerListByIncomeLedgerRef(Entity.p.LedgerRef)">
+            <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem; " *ngIf="this.Entity.p.RecipientType == Sites  ">
+          <label>Income Sub Ledger</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="IncomeSubLedgerRef" name="IncomeSubLedgerRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.IncomeSubLedgerRef">
+            <nz-option *ngFor="let sub of IncomeSubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Employee">
+          <div style="margin-top: 1rem">
+            <div class="d-flex align-items-center mb-2">
+              <label for="IsAdvancePayment"><b>Is Advance Payment</b></label>
+              <input type="checkbox" id="IsAdvancePayment" [(ngModel)]="Entity.p.IsAdvancePayment"
+                name="IsAdvancePayment" class="form-check-input me-4 mb-2 large-dark-checkbox"
+                style="width: 20px; height: 20px; margin-left: 1rem" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Employee">
+          <div>
+            <label>Remaining Advance</label>
+            <input type="text" [(ngModel)]="Entity.p.RemainingAdvance" name="RemainingAdvance" class="form-control"
+              id="RemainingAdvance" readonly placeholder="Enter Remaining Advance" />
+          </div>
+        </div>
         <div class="col-md-4" style="margin-top: 1rem">
-          <label>Recipient Name</label>
+          <label>To Whom</label>
           <div class="d-flex align-items-center">
             <nz-select *ngIf="!RecipientNameInput" class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch
               nzAllowClear nzPlaceHolder="Select" id="RecipientRef" name="RecipientRef" [nzSize]="'large'"
               [(ngModel)]="Entity.p.RecipientRef"
-              (ngModelChange)="getTotalExpenseFromSiteAndRecipientName(); onRecipientChange();">
-              <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.Ref"  [nzLabel]="recipient.p.RecipientName | titleCase" nzCustomContent>
+              (ngModelChange)="getTotalInvoiceAmountFromSiteAndRecipientRef(); onRecipientChange();">
+              <nz-option *ngFor="let recipient of RecipientList" [nzValue]="recipient.p.Ref"
+                [nzLabel]="recipient.p.RecipientName | titleCase" nzCustomContent>
                 <span [ngClass]="recipient.p.IsSiteRef == 1 ? 'site' : 'nonsite'">
                   {{ recipient.p.RecipientName | titleCase }}
                 </span>
@@ -145,7 +189,8 @@
             <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.ExpenseModeOfPayment != Cash && Entity.p.ExpenseModeOfPayment">
+        <div class="col-md-4" style="margin-top: 1rem;"
+          *ngIf="Entity.p.ExpenseModeOfPayment != Cash && Entity.p.ExpenseModeOfPayment">
           <div>
             <label>Bank Name</label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -165,8 +210,8 @@
         <div class="" style="margin-top: 1rem">
           <div class="d-flex align-items-center mb-2">
             <label for="IsAutoInvoiceEnabled"><b>Invoice Enabled</b></label>
-            <input type="checkbox" id="IsAutoInvoiceEnabled" [(ngModel)]="Entity.p.IsAutoInvoiceEnabled" name="IsAutoInvoiceEnabled"
-              class="form-check-input me-4 mb-2 large-dark-checkbox"
+            <input type="checkbox" id="IsAutoInvoiceEnabled" [(ngModel)]="Entity.p.IsAutoInvoiceEnabled"
+              name="IsAutoInvoiceEnabled" class="form-check-input me-4 mb-2 large-dark-checkbox"
               style="width: 20px; height: 20px; margin-left: 1rem" />
           </div>
         </div>

@@ -9,9 +9,9 @@
       style="cursor: pointer; padding-top: 4px;" (click)="printReport()" />
   </div>
 </div>
-  <div class="text-end">
-    <p class="balance_title"><b>Shree Balance : {{Entity.p.ShreesBalance}}</b></p>
-  </div>
+<div class="text-end">
+  <p class="balance_title"><b>Shree Balance : {{Entity.p.ShreesBalance}}</b></p>
+</div>
 <ng-template #noDataTpl>
   <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
     No Data
@@ -45,9 +45,9 @@
     </nz-select>
   </div>
   <div class="col-md-4">
-    <label for="Balance"><b>Balance</b></label>
-    <input type="text" [(ngModel)]="Balance" name="Balance" class="form-control" id="Balance" placeholder="Balance"
-      readonly />
+    <label for="NetBalance"><b>Net Amount</b></label>
+    <input type="text" [(ngModel)]="NetBalance" name="NetBalance" class="form-control" id="NetBalance"
+      placeholder="NetBalance" readonly />
   </div>
   <!-- <div class="col-md-4">
     <label for="ShreeBalance"><b>Shree Balance</b></label>
@@ -74,13 +74,15 @@
           <td class="tbldata">{{ report.p.RecipientName?.trim() ? (report.p.RecipientName | titleCase) : '--' }}</td>
           <td class="tbldata">{{ report.p.SiteName }}</td>
           <td class="tbldata">{{ report.p.Reason }}</td>
-          <td class="tbldata">{{ report.p.IncomeAmount && report.p.IncomeAmount !== 0 ? (report.p.IncomeAmount | currency: 'INR') : '--'}}</td>
-          <td class="tbldata">{{ report.p.GivenAmount && report.p.GivenAmount !== 0 ? (report.p.GivenAmount | currency:'INR') : '--' }}</td>
+          <td class="tbldata">{{ report.p.IncomeAmount && report.p.IncomeAmount !== 0 ? (report.p.IncomeAmount |
+            currency: 'INR') : '--'}}</td>
+          <td class="tbldata">{{ report.p.GivenAmount && report.p.GivenAmount !== 0 ? (report.p.GivenAmount |
+            currency:'INR') : '--' }}</td>
           <td class="tbldata">{{ report.p.ShreesBalance | currency: 'INR' }}</td>
           <td class="tbldata">{{ report.p.ModeOfPaymentName }}</td>
           <td class="tbldata">{{ report.p.Narration }}</td>
         </tr>
-          <tr *ngIf="paginatedList().length > 0">
+        <tr *ngIf="paginatedList().length > 0">
           <td class="tbldata" colspan="5"></td>
           <td class="tbldata"><b>Total</b></td>
           <td class="tbldata"><b>{{ totalTotalIncome | currency: 'INR' }}</b></td>

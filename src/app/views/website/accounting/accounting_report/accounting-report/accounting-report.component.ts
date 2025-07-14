@@ -24,7 +24,7 @@ export class AccountingReportComponent implements OnInit {
   AccountingReportList = DomainEnums.AccountingReportList();
   AccountingReport = AccountingReports;
   BankRef: number = 0;
-  Balance: number = 0;
+  NetBalance: number = 0;
   SearchString: string = '';
   SelectedAccountingReport: AccountingReport = AccountingReport.CreateNewInstance();
   CustomerRef: number = 0;
@@ -103,7 +103,7 @@ export class AccountingReportComponent implements OnInit {
     let SingleRecord = this.OpeningBalanceList.find((data) => data.p.Ref == this.BankRef);
     console.log('SingleRecord :', SingleRecord);
     if (SingleRecord) {
-      this.Balance = SingleRecord?.p.OpeningBalanceAmount;
+      this.NetBalance = SingleRecord?.p.NetBalance;
     }
   }
 

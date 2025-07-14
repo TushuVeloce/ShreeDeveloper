@@ -2,7 +2,7 @@ import { Component, effect, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
-import { DomainEnums, ModeOfPayments, OpeningBalanceModeOfPayments, } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, ModeOfPayments, OpeningBalanceModeOfPayments, RecipientTypes, } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
@@ -32,6 +32,7 @@ export class ExpenseDetailsComponent implements OnInit {
   private IsNewEntity: boolean = true;
   SiteList: Site[] = [];
   SubLedgerList: SubLedger[] = [];
+  IncomeSubLedgerList: SubLedger[] = [];
   UnitList: Unit[] = [];
   RecipientNameInput: boolean = false
   isSaveDisabled: boolean = false;
@@ -45,6 +46,9 @@ export class ExpenseDetailsComponent implements OnInit {
   Cash = ModeOfPayments.Cash
   Bill = ModeOfPayments.Bill
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
+  RecipientTypesList = DomainEnums.RecipientTypesList();
+  Employee = RecipientTypes.Employee;
+  Sites = RecipientTypes.Sites;
   Date: string = '';
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
@@ -82,7 +86,6 @@ export class ExpenseDetailsComponent implements OnInit {
       let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       this.Date = strCDT.substring(0, 10);
     }
-    this.getRecipientListByCompanyRef()
     this.getCurrentBalanceByCompanyRef();
     this.InitialEntity = Object.assign(
       Expense.CreateNewInstance(),
@@ -135,27 +138,6 @@ export class ExpenseDetailsComponent implements OnInit {
     this.LedgerList = lst
   };
 
-  getTotalExpenseFromSiteAndRecipientName = async () => {
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    if (this.Entity.p.SiteRef <= 0) {
-      // await this.uiUtils.showErrorToster('Selected Site to get Shree Expense');
-      return;
-    }
-    if (this.Entity.p.RecipientRef <= 0) {
-      // await this.uiUtils.showErrorToster('Selected Recipient Name to get Shree Expense');
-      return;
-    }
-
-    let data = await Expense.FetchTotalExpenseFromSiteAndRecipient(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientRef,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-
-    this.Entity.p.InvoiceAmount = data[0].p.InvoiceAmount;
-  };
-
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
     if (ledgerref <= 0) {
       await this.uiUtils.showErrorToster('Ledger not Selected');
@@ -165,14 +147,54 @@ export class ExpenseDetailsComponent implements OnInit {
     this.SubLedgerList = lst;
   }
 
-  getRecipientListByCompanyRef = async () => {
+  getSubIncomeLedgerListByIncomeLedgerRef = async (ledgerref: number) => {
+    if (ledgerref <= 0) {
+      await this.uiUtils.showErrorToster('Ledger not Selected');
+      return;
+    }
+    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.IncomeSubLedgerList = lst;
+  }
+
+  getRecipientListByRecipientTypeRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Invoice.FetchRecipientByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
+    if (this.Entity.p.RecipientType <= 0) {
+      await this.uiUtils.showErrorToster('To Whom not Selected');
+      return;
+    }
+    this.Entity.p.RecipientRef = 0;
+    this.RecipientList = [];
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.RecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.RecipientList = lst;
+  }
+
+  getTotalInvoiceAmountFromSiteAndRecipientRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    if (this.Entity.p.SiteRef <= 0) {
+      // await this.uiUtils.showErrorToster('Site not Selected');
+      return;
+    }
+    if (this.Entity.p.RecipientType <= 0) {
+      // await this.uiUtils.showErrorToster('To Whom not Selected');
+      return;
+    }
+    if (this.Entity.p.RecipientRef <= 0) {
+      // await this.uiUtils.showErrorToster('Recipient not Selected');
+      return;
+    }
+    let lst = await Expense.FetchTotalInvoiceAmountFromSiteAndRecipient(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientType, this.Entity.p.RecipientRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    if (lst.length > 0) {
+      this.Entity.p.InvoiceAmount = lst[0].p.InvoiceAmount;
+      this.Entity.p.RemainingAdvance = lst[0].p.RemainingAdvance;
+    }
+    // this.RecipientList = lst;
   }
 
   getCurrentBalanceByCompanyRef = async () => {
@@ -251,7 +273,7 @@ export class ExpenseDetailsComponent implements OnInit {
       await this.uiUtils.showSuccessToster('Recipient Name saved successfully');
       this.RecipientNameInput = false
       this.RecipientEntity = Recipient.CreateNewInstance();
-      await this.getRecipientListByCompanyRef()
+      await this.getRecipientListByRecipientTypeRef()
     }
   };
 
