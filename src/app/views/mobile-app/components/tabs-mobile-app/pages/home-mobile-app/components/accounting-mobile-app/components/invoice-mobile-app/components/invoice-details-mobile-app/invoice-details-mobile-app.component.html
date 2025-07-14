@@ -1,0 +1,602 @@
+<app-header-with-back-handler title={{DetailsFormTitle}}></app-header-with-back-handler>
+
+<ion-content class="form-container">
+  <ion-list lines="none" class="ion-padding">
+    <!--  Date -->
+    <!-- <ion-item class="input-item">
+      <ion-label>Select Date</ion-label>
+      <ion-datetime-button datetime="FromDate" trigger="entry-date-modal"></ion-datetime-button>
+    </ion-item>
+    <ion-modal keepContentsMounted="true" trigger="entry-date-modal">
+      <ng-template>
+        <ion-datetime id="FromDate" presentation="date" [(ngModel)]="Date" show-default-buttons="true"
+          (ionChange)="onDateChange($event.detail.value)"></ion-datetime>
+      </ng-template>
+    </ion-modal> -->
+    <ion-item (click)="showBillingDatePicker = true" class="input-item">
+      <ion-label>Date</ion-label>
+      <ion-label slot="end">{{ DisplayBillingDate || 'Select Date' }}</ion-label>
+    </ion-item>
+    <app-date-picker [show]="showBillingDatePicker" [selectedDate]="BillingDate" [defaultToday]="true"
+      (dateChanged)="onBillingDateChange($event)"
+      (dateSelected)="DisplayBillingDate = $event; showBillingDatePicker = false"
+      (modalDismissed)="showBillingDatePicker = false" />
+
+    <!-- Billing Number-->
+    <ion-item class="input-item">
+      <ion-input label="Bill No" labelPlacement="floating" placeholder="Enter Bill No" [(ngModel)]="Entity.p.InvoiceNo"
+        readonly></ion-input>
+    </ion-item>
+
+    <!-- Select site -->
+    <ion-item class="input-item" button (click)="selectSiteBottomsheet()">
+      <ion-label>Site</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ SiteName|| 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
+    <!-- Select Ledger -->
+    <ion-item class="input-item" button (click)="selectLedgerBottomsheet()">
+      <ion-label>Ledger</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ LedgerName|| 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
+    <!-- Select Sub Ledger -->
+    <ion-item class="input-item" button (click)="selectSubLedgerBottomsheet()">
+      <ion-label>Sub Ledger</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ SubLedgerName|| 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
+    <!-- Select Expense Type -->
+    <ion-item class="input-item" button (click)="selectExpenseTypeBottomsheet()">
+      <ion-label>Expense Type</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ ExpenseTypeName|| 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
+    <!-- Description -->
+    <ion-item class="input-item">
+      <ion-input label="Description" labelPlacement="floating" placeholder="Enter Description"
+        [(ngModel)]="Entity.p.Description" clearInput="true"></ion-input>
+    </ion-item>
+
+    <!-- Select Recipient Name -->
+    <ion-item class="input-item" button
+      *ngIf="Entity.p.ExpenseType != MachinaryExpenseRef && Entity.p.ExpenseType != LabourExpenseRef">
+      <ion-label (click)="selectRecipientNameBottomsheet()">Recipient Name</ion-label>
+
+      <!-- Selected Text -->
+      <ion-text slot="end" class="status-text" (click)="selectRecipientNameBottomsheet()">
+        {{ RecipientName || 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown Icon -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon" style="margin-left: 4px;"></ion-icon>
+
+      <!-- Inline Add Button -->
+      <ion-button slot="end" fill="solid" size="small" (click)="AddRecipientName()"
+        style="--background: var(--ion-color-primary); --border-radius: 8px; --padding-start: 6px; --padding-end: 6px; margin-left: 6px;">
+        <ion-icon slot="icon-only" name="add-outline" color="light"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <!-- Add New Recipient Name Input and Action Buttons -->
+    <ion-grid *ngIf="RecipientNameInput && !RecipientNameReadOnly">
+      <ion-row class="ion-align-items-center ion-justify-content-between" style="gap: 8px;">
+
+        <!-- Input Field -->
+        <ion-col size="12" size-sm="8" size-md="8">
+          <ion-item class="input-item">
+            <ion-input label="Recipient Name" labelPlacement="floating" placeholder="Enter Recipient Name"
+              [(ngModel)]="RecipientEntity.p.Name"></ion-input>
+          </ion-item>
+        </ion-col>
+
+      </ion-row>
+      <ion-row class="ion-align-items-center ion-justify-content-between" style="gap: 8px;">
+        <!-- Confirm Button -->
+        <ion-col size="6" size-sm="2" size-md="2" class="ion-text-start">
+          <ion-button expand="block" fill="solid" size="small" (click)="SaveNewRecipientName()"
+            *ngIf="RecipientNameInput" style="--background: var(--ion-color-primary); --border-radius: 8px;">
+            <ion-icon slot="icon-only" name="checkmark-outline" color="light"></ion-icon>
+          </ion-button>
+        </ion-col>
+
+        <!-- Cancel Button -->
+        <ion-col size="6" size-sm="2" size-md="2" class="ion-text-end">
+          <ion-button expand="block" fill="solid" size="small" (click)="cancelRecipientName()"
+            *ngIf="RecipientNameInput" style="--background: var(--ion-color-medium); --border-radius: 8px;">
+            <ion-icon slot="icon-only" name="close-outline" color="light"></ion-icon>
+          </ion-button>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+
+    <!-- Reason -->
+    <ion-item class="input-item">
+      <ion-input label="Reason" labelPlacement="floating" placeholder="Enter Reason" [(ngModel)]="Entity.p.Reason"
+        clearInput="true"></ion-input>
+    </ion-item>
+
+    <!-- Select Vendor -->
+    <ion-item class="input-item" button (click)="selectVendorBottomsheet()"
+      *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef || Entity.p.ExpenseType == LabourExpenseRef">
+      <ion-label>Vendor</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ VendorName|| 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
+    <!-- Vendor Service -->
+    <ion-item class="input-item" button (click)="selectVendorServiceBottomsheet()"
+      *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef || Entity.p.ExpenseType == LabourExpenseRef">
+      <ion-label>Vendor Service</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ VendorServiceName|| 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
+    <!-- Vehical No. input-->
+    <ion-item class="input-item" *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef">
+      <ion-input label="Vehical No." labelPlacement="floating" placeholder="Enter Vehical No."
+        [(ngModel)]="Entity.p.VehicleNo"></ion-input>
+    </ion-item>
+
+    <!-- Unit -->
+    <ion-item class="input-item" button (click)="selectUnitBottomsheet()">
+      <ion-label>Unit</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ UnitName|| 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
+    <!--Machinary Details Header -->
+    <ion-grid class="ion-margin-top"
+      *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef && Entity.p.UnitRef == TimeUnitRef">
+      <ion-row class="ion-align-items-center">
+        <ion-col size="6">
+          <h5><strong>Machinary Details</strong></h5>
+        </ion-col>
+        <ion-col size="6" class="ion-text-right">
+          <ion-button fill="outline" size="small" (click)="isTimeModalOpen = true">
+            <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+            Add
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- Machinary Details Table -->
+    <ng-container
+      *ngIf="Entity.p.MachineUsageDetailsArray.length > 0 &&( Entity.p.ExpenseType == MachinaryExpenseRef && Entity.p.UnitRef == TimeUnitRef)">
+      <div class="table-container">
+        <div class="table-scroll">
+          <table class="custom-table ion-text-center">
+            <thead>
+              <tr>
+                <th class="sticky-col sticky-header">#</th>
+                <th *ngFor="let item of timeheaders" class="sticky-header">{{ item }}</th>
+                <th class="sticky-col sticky-header">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of Entity.p.MachineUsageDetailsArray; let i = index">
+                <td class="sticky-col">{{i + 1 }}</td>
+                <td>
+                  {{ item.StartTime || '-' }}
+                </td>
+                <td>
+                  {{ item.EndTime || '-' }}
+                </td>
+                <td>
+                  {{ item.WorkedHours || '-' }}
+                </td>
+
+                <td>
+                  <ion-icon name="create-outline" color="warning" size="small"
+                    style="margin-right: 12px; cursor: pointer" (click)="EditTime(i)"></ion-icon>
+                  <ion-icon name="trash-outline" color="danger" size="small" style="cursor: pointer"
+                    (click)="RemoveTime(i)"></ion-icon>
+                </td>
+              </tr>
+              <tr>
+                <td class="sticky-col" colspan="2"><b>Grand Total</b></td>
+                <td colspan="2"><b>Total Hours</b></td>
+                <td><b>{{ getTotalWorkedHours() }}</b></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template
+      *ngIf="Entity.p.MachineUsageDetailsArray.length === 0 &&( Entity.p.ExpenseType == MachinaryExpenseRef && Entity.p.UnitRef == TimeUnitRef)">
+      <div class="ion-padding ion-text-center">
+        <ion-text color="medium">
+          <p>No Machinery Details data available</p>
+        </ion-text>
+      </div>
+    </ng-template>
+
+
+    <!--Labour Time Details Header -->
+    <ion-grid class="ion-margin-top" *ngIf="Entity.p.ExpenseType == LabourExpenseRef">
+      <ion-row class="ion-align-items-center">
+        <ion-col size="6">
+          <h5><strong>Labour Time Details</strong></h5>
+        </ion-col>
+        <ion-col size="6" class="ion-text-right">
+          <ion-button fill="outline" size="small" (click)="isLabourTimeModalOpen = true">
+            <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+            Add
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- Labour Time Details Table -->
+    <ng-container *ngIf="Entity.p.LabourExpenseDetailsArray.length > 0 && Entity.p.ExpenseType == LabourExpenseRef">
+      <div class="table-container">
+        <div class="table-scroll">
+          <table class="custom-table ion-text-center">
+            <thead>
+              <tr>
+                <th class="sticky-col sticky-header">#</th>
+                <th *ngFor="let item of labourtimeheaders" class="sticky-header">{{ item }}</th>
+                <th class="sticky-col sticky-header">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of Entity.p.LabourExpenseDetailsArray; let i = index">
+                <td class="sticky-col">{{i + 1 }}</td>
+                <td>
+                  {{ item.LabourTypeName || '-' }}
+                </td>
+                <td>
+                  {{ item.LabourToTime || '-' }}
+                </td>
+                <td>
+                  {{ item.LabourQty || '-' }}
+                </td>
+                <td>
+                  {{ item.LabourRate || '-' }}
+                </td>
+                <td>
+                  {{ item.LabourAmount || '-' }}
+                </td>
+                <td>
+                  <ion-icon name="create-outline" color="warning" size="small"
+                    style="margin-right: 12px; cursor: pointer" (click)="EditLabourTime(i)"></ion-icon>
+                  <ion-icon name="trash-outline" color="danger" size="small" style="cursor: pointer"
+                    (click)="RemoveLabourTime(i)"></ion-icon>
+                </td>
+              </tr>
+              <!-- <tr>
+              <td class="sticky-col" colspan="2"><b>Grand Total</b></td>
+              <td colspan="2"><b>Total Hours</b></td>
+              <td><b>{{ getTotalWorkedHours() }}</b></td>
+            </tr> -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template *ngIf="Entity.p.LabourExpenseDetailsArray.length === 0 && Entity.p.ExpenseType == LabourExpenseRef">
+      <div class="ion-padding ion-text-center">
+        <ion-text color="medium">
+          <p>No Labour Time Details data available</p>
+        </ion-text>
+      </div>
+    </ng-template>
+
+    <!-- Quantity input-->
+    <ion-item class="input-item"
+      *ngIf="Entity.p.ExpenseType != LabourExpenseRef && !(Entity.p.ExpenseType == MachinaryExpenseRef&& Entity.p.UnitRef == TimeUnitRef)">
+      <ion-input label="Quantity" labelPlacement="floating" placeholder="Enter Quantity" [(ngModel)]="Entity.p.Qty"
+        (ngModelChange)="CalculateAmount()" clearInput="true" clearOnEdit="true" type="number"></ion-input>
+    </ion-item>
+    <!-- Rate input-->
+    <ion-item class="input-item" *ngIf="Entity.p.ExpenseType != LabourExpenseRef">
+      <ion-input label="Rate" labelPlacement="floating" placeholder="Enter Rate" [(ngModel)]="Entity.p.Rate"
+        (ngModelChange)="CalculateAmount()" clearInput="true" clearOnEdit="true" type="number"></ion-input>
+    </ion-item>
+
+    <!-- Diesel Calculation -->
+    <ion-grid *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef">
+      <ion-row>
+        <ion-col size="12">
+          <ion-checkbox [(ngModel)]="Entity.p.IsDieselPaid" (ionChange)="DiselPaid(Entity.p.IsDieselPaid)">Diesel
+            Calculation</ion-checkbox>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="isDieselPaid">
+        <ion-col size="4">
+          <!-- Diesel Ltr -->
+          <ion-item class="input-item">
+            <ion-input type="number" label="Ltr" labelPlacement="floating" placeholder="Enter Diesel Ltr"
+              [(ngModel)]="Entity.p.DieselQty" (ngModelChange)="CalculateDieselAmount()" clearInput="true"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="4">
+          <!-- Diesel Rate -->
+          <ion-item class="input-item">
+            <ion-input type="number" label="Rate" labelPlacement="floating" placeholder="Enter Diesel Rate"
+              [(ngModel)]="Entity.p.DieselRate" (ngModelChange)="CalculateDieselAmount()" clearInput="true"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="4">
+          <!-- Diesel Amount -->
+          <ion-item class="input-item">
+            <ion-input type="number" readonly label="Amount" labelPlacement="floating" placeholder="Enter Diesel Amount"
+              [(ngModel)]="Entity.p.DieselAmount"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- Billing Amount -->
+    <ion-item class="input-item">
+      <ion-input label="Billing Amount" labelPlacement="floating" placeholder="Enter Billing Amount"
+        [(ngModel)]="Entity.p.InvoiceAmount" readonly></ion-input>
+    </ion-item>
+
+    <!-- Unit -->
+    <ion-item class="input-item" button (click)="selectInvoiceModeOfPaymentBottomsheet()">
+      <ion-label>Mode of Payment</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ InvoiceModeOfPaymentName|| 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
+    <!-- Narration -->
+    <ion-item class="input-item">
+      <ion-input label="Narration" labelPlacement="floating" placeholder="Enter Narration"
+        [(ngModel)]="Entity.p.Narration" clearInput="true" clearOnEdit="true"></ion-input>
+    </ion-item>
+
+
+
+    <!-- add time Machine Details Modal -->
+    <ion-modal [isOpen]="isTimeModalOpen" (didDismiss)="CloseTimeModal('machinetime')" class="modal-card">
+      <ng-template>
+        <div class="modal-container">
+          <ion-header>
+            <ion-toolbar color="primary" class="modal-toolbar">
+              <ion-title>Add Machine Time Details</ion-title>
+              <ion-buttons slot="end">
+                <ion-button fill="clear" (click)="CloseTimeModal('machinetime')">
+                  <ion-icon name="close-outline"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+
+          <ion-content class="modal-scroll-content ion-padding">
+            <ion-list lines="none">
+              <ion-item class="input-item">
+                <ion-label>From Time</ion-label>
+                <ion-datetime-button datetime="machinestartTime"></ion-datetime-button>
+              </ion-item>
+              <!-- <ion-datetime id="startTime" presentation="time" [(ngModel)]="StartTime"
+              (ngModelChange)="StartTimeChange($event)" show-default-buttons="true">
+            </ion-datetime> -->
+              <ion-modal keepContentsMounted="true">
+                <ng-template>
+                  <ion-datetime id="machinestartTime" presentation="time" [(ngModel)]="MachineStartTime"
+                    (ngModelChange)="MachineStartTimeChange($event)" hour-cycle="h23" prefer-wheel="true"
+                    show-default-buttons="true">
+                  </ion-datetime>
+                </ng-template>
+              </ion-modal>
+
+              <ion-item class="input-item">
+                <ion-label>To Time</ion-label>
+                <ion-datetime-button datetime="machineendTime"></ion-datetime-button>
+              </ion-item>
+              <!-- <ion-datetime id="endTime" presentation="time" [(ngModel)]="EndTime" (ngModelChange)="EndTimeChange($event)"
+              show-default-buttons="true">
+            </ion-datetime> -->
+              <ion-modal keepContentsMounted="true">
+                <ng-template>
+                  <ion-datetime id="machineendTime" presentation="time" [(ngModel)]="MachineEndTime"
+                    (ngModelChange)="MachineEndTimeChange($event)" hour-cycle="h23" prefer-wheel="true"
+                    show-default-buttons="true">
+                  </ion-datetime>
+                </ng-template>
+              </ion-modal>
+
+              <ion-item class="input-item">
+                <ion-label color="primary">Total Working Hours</ion-label>
+                <ion-text color="dark"><strong>{{ MachineTimeEntity.WorkedHours }} Hours</strong></ion-text>
+              </ion-item>
+
+            </ion-list>
+          </ion-content>
+
+          <ion-footer class=" modal-footer ion-padding">
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-button expand="block" color="medium" shape="round"
+                    (click)="CloseTimeModal('machinetime')">Close</ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button expand="block" color="primary" shape="round" (click)="SaveTime()">
+                    {{ 'Save' }}
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-footer>
+        </div>
+      </ng-template>
+    </ion-modal>
+
+    <!-- add time Labour Details Modal -->
+    <ion-modal [isOpen]="isLabourTimeModalOpen" (didDismiss)="CloseLabourTimeModal('labourtime')" class="modal-card">
+      <ng-template>
+        <div class="modal-container">
+          <ion-header>
+            <ion-toolbar color="primary" class="modal-toolbar">
+              <ion-title>Add Labour Time Details</ion-title>
+              <ion-buttons slot="end">
+                <ion-button fill="clear" (click)="CloseLabourTimeModal('labourtime')">
+                  <ion-icon name="close-outline"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+
+          <ion-content class="modal-scroll-content ion-padding">
+            <ion-list lines="none">
+              <!-- Select Vendor -->
+              <ion-item class="input-item" button (click)="selectLabourTypeBottomsheet()">
+                <ion-label>Labour Type</ion-label>
+
+                <!-- Text showing the selected status -->
+                <ion-text slot="end" class="status-text">
+                  {{ LabourTypeName|| 'Select' }}
+                </ion-text>
+
+                <!-- Dropdown icon (chevron) on the right -->
+                <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+              </ion-item>
+              <ion-item class="input-item">
+                <ion-label>Start Time</ion-label>
+                <ion-datetime-button datetime="labourstartTime"></ion-datetime-button>
+              </ion-item>
+              <!-- <ion-datetime id="startTime" presentation="time" [(ngModel)]="StartTime"
+                (ngModelChange)="StartTimeChange($event)" show-default-buttons="true">
+              </ion-datetime> -->
+              <ion-modal keepContentsMounted="true">
+                <ng-template>
+                  <ion-datetime id="labourstartTime" presentation="time" [(ngModel)]="LabourStartTime"
+                    (ngModelChange)="LabourStartTimeChange($event)" hour-cycle="h23" prefer-wheel="true"
+                    show-default-buttons="true">
+                  </ion-datetime>
+                </ng-template>
+              </ion-modal>
+
+              <ion-item class="input-item">
+                <ion-label>End Time</ion-label>
+                <ion-datetime-button datetime="labourendTime"></ion-datetime-button>
+              </ion-item>
+              <!-- <ion-datetime id="endTime" presentation="time" [(ngModel)]="EndTime" (ngModelChange)="EndTimeChange($event)"
+                show-default-buttons="true">
+              </ion-datetime> -->
+              <ion-modal keepContentsMounted="true">
+                <ng-template>
+                  <ion-datetime id="labourendTime" presentation="time" [(ngModel)]="LabourEndTime"
+                    (ngModelChange)="LabourEndTimeChange($event)" hour-cycle="h23" prefer-wheel="true"
+                    show-default-buttons="true">
+                  </ion-datetime>
+                </ng-template>
+              </ion-modal>
+
+              <!-- <ion-item class="input-item">
+                <ion-label color="primary">Total Working Hours</ion-label>
+                <ion-text color="dark"><strong>{{ TimeEntity.WorkedHours }} Hours</strong></ion-text>
+              </ion-item> -->
+              <ion-item class="input-item">
+                <ion-input type="number" label="Labour Quantity" labelPlacement="floating"
+                  placeholder="Enter Labour Quantity" [(ngModel)]="LabourTimeEntity.LabourQty"
+                  (ngModelChange)="CalculateLabourAmount();calculateWorkedHours()"></ion-input>
+              </ion-item>
+              <ion-item class="input-item">
+                <ion-input type="number" label="Labour Rate" labelPlacement="floating" placeholder="Enter Labour Rate"
+                  [(ngModel)]="LabourTimeEntity.LabourRate"
+                  (ngModelChange)="CalculateLabourAmount();calculateWorkedHours()"></ion-input>
+              </ion-item>
+              <ion-item class="input-item">
+                <ion-input type="number" label="Labour Amount" labelPlacement="floating"
+                  placeholder="Enter Labour Amount" [(ngModel)]="LabourTimeEntity.LabourAmount" readonly></ion-input>
+              </ion-item>
+            </ion-list>
+          </ion-content>
+
+          <ion-footer class="modal-footer ion-padding">
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-button expand="block" color="medium" shape="round"
+                    (click)="CloseLabourTimeModal('labourtime')">Close</ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button expand="block" color="primary" shape="round" (click)="SaveLabourTime()">
+                    {{ 'Save' }}
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-footer>
+        </div>
+      </ng-template>
+    </ion-modal>
+
+
+    <!-- Main Buttons -->
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
+            Cancel
+          </ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button expand="block" (click)="SaveInvoiceMaster()" class="submit-button primary-button">
+            Save
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-list>
+</ion-content>

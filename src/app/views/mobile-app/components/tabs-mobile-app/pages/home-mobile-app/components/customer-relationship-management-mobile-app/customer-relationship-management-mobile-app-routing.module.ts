@@ -1,0 +1,32 @@
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+
+import { CustomerRelationshipManagementMobileAppPage } from './customer-relationship-management-mobile-app.page';
+import { CustomerRelationshipManagementViewMobileAppComponent } from './components/customer-relationship-management-view-mobile-app/customer-relationship-management-view-mobile-app.component';
+import { PendingCustomerFollowupMobileAppComponent } from './components/pending-customer-followup-mobile-app/pending-customer-followup-mobile-app.component';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: CustomerRelationshipManagementMobileAppPage,
+    children: [
+      // { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: '', component: CustomerRelationshipManagementViewMobileAppComponent },
+      { path: 'pending-customer-followup', component: PendingCustomerFollowupMobileAppComponent },
+      {
+        path: 'customer-enquiry',
+        loadChildren: () => import('./components/customer-enquiry-mobile-app/customer-enquiry-mobile-app.module').then(m => m.CustomerEnquiryMobileAppPageModule)
+      },
+      {
+        path: 'customer-followup',
+        loadChildren: () => import('./components/customer-followup-mobile-app/customer-followup-mobile-app.module').then(m => m.CustomerFollowupMobileAppPageModule)
+      }
+    ]
+  },
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class CustomerRelationshipManagementMobileAppPageRoutingModule { }

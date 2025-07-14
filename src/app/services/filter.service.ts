@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { ModalController, Platform } from '@ionic/angular';
 import { Router, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { FilterSheetComponent } from '../views/mobile-app/shared/filter-sheet/filter-sheet.component';
+import { FilterSheetComponent } from '../views/mobile-app/components/shared/filter-sheet/filter-sheet.component';
+
 
 @Injectable({
     providedIn: 'root'

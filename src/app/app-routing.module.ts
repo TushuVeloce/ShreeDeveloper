@@ -13,14 +13,11 @@ const routes: Routes = [
     path: 'homepage',
     loadChildren: () => import('./views/sidebarlayout/sidebarlayout.routes').then(m => m.SidebarLayout_ROUTES)
   },
-  // {
-  //   path: 'splash-screen',
-  //   loadChildren: () => import('./views/mobile-app/splash/splash.module').then(m => m.SplashPageModule)
-  // },
-  // {
-  //   path: 'mobileapp',
-  //   loadChildren: () => import('./views/mobile-app/mobile.module').then(m => m.MobileModule)
-  // },
+  {
+    path: 'mobile-app',
+    loadChildren: () => import('./views/mobile-app/mobile-app.module').then( m => m.MobileAppPageModule)
+  }
+
 ];
 
 

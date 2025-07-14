@@ -1,0 +1,41 @@
+<!-- <app-loader *ngIf="isLoading"></app-loader> -->
+
+<app-header-with-back-handler [title]="DetailsFormTitle"></app-header-with-back-handler>
+
+<ion-content class="form-container">
+  <ion-list lines="none" class="ion-padding">
+    <!-- Employee Name -->
+    <ion-item class="input-item">
+      <ion-input label="Employee Name" labelPlacement="floating" placeholder="Enter Employee Name"
+        [(ngModel)]="Entity.p.EmployeeName" readonly></ion-input>
+    </ion-item>
+
+    <!-- Select Month -->
+    <app-chip-selector [items]="monthList" [selected]="preselectedRefs" [disabledItems]="disabledRefs"
+      [maxSelection]="3" [label]="'Select Months'" [showClear]="true" (selectedChanged)="handleMonthSelection($event)"
+      (validationError)="handleChipError($event)"></app-chip-selector>
+
+    <!-- Select Year Type -->
+    <ion-item class="input-item" button (click)="selectYearBottomsheet()" [class.invalid]="isYearInvalid">
+      <ion-label>Select Year</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ Entity.p.Year }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+    <!-- Buttons -->
+    <div class="button-row">
+      <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
+        Cancel
+      </ion-button>
+      <ion-button expand="block" (click)="SaveSalarySlipRequest()" class="submit-button primary-button">
+        Apply
+      </ion-button>
+    </div>
+
+  </ion-list>
+</ion-content>

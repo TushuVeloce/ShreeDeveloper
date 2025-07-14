@@ -1,0 +1,133 @@
+<app-header-with-back-handler title="Office"
+  backRoute="mobile-app/tabs/dashboard/accounting"></app-header-with-back-handler>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list class="requisition-list" [lines]="'none'">
+    <ion-item *ngFor="let Invoice of DisplayMasterList" class="requisition-item" button detail
+      (click)="openModal(Invoice)">
+      <ion-label>
+        <h2>Site : {{ Invoice.p.SiteName || 'Unknown Site' }}</h2>
+        <p class="date-label">Accounting Report Date : {{ formatDate(Invoice.p.TransDateTime) || '-' }}</p>
+        <!-- <p class="date-label">Ledger : {{ Invoice.p.LedgerName || '-' }}</p>
+        <p class="date-label">Sub Ledger : {{ Invoice.p.SubLedgerName || '-' }}
+        </p> -->
+        <p class="date-label">Payer Name : {{ Invoice.p.PayerName || '-' }}</p>
+        <p class="date-label">Income Amount : {{ Invoice.p.IncomeAmount || '-' }}
+        <p class="date-label">Given Amount: {{ Invoice.p.GivenAmount || '-' }}
+        </p>
+      </ion-label>
+
+      <!-- <div class="action-buttons" slot="end" (click)="$event.stopPropagation()">
+        <ion-button fill="clear" size="small" color="primary" (click)="onEditClicked(Invoice)">
+          <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(Invoice)">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" size="small" color="primary" (click)="navigateToPrint(Invoice)">
+          <ion-icon name="print-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div> -->
+    </ion-item>
+  </ion-list>
+
+  <!-- Show "Data not found" if list is empty -->
+  <div *ngIf="DisplayMasterList.length === 0 " class="no-data-mobile-app">
+    <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+    <p>No Office records found.</p>
+  </div>
+
+
+  <!-- Modal -->
+  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="modal-card">
+    <ng-template>
+      <div class="modal-container">
+        <!-- Header -->
+        <ion-header>
+          <ion-toolbar color="primary" class="modal-toolbar">
+            <ion-title>Accounting Report Details</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" (click)="closeModal()">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <!-- Body -->
+        <ion-content class="ion-padding modal-body">
+          <!-- Info Rows -->
+          <div class="info-row-of-model">
+            <span class="label">Office Date:</span>
+            <span class="value">{{ formatDate(SelectedAccountingReport.p.TransDateTime) || '-' }}</span>
+          </div>
+          <div class="info-row-of-model">
+            <span class="label">Site Name:</span>
+            <span class="value">{{ SelectedAccountingReport.p.SiteName || '-' }}</span>
+          </div>
+          <div class="info-row-of-model">
+            <span class="label">Payer Name :</span>
+            <span class="value">{{ SelectedAccountingReport.p.PayerName || '-' }}</span>
+          </div>
+          <div class="info-row-of-model">
+            <span class="label">Recipient Name:</span>
+            <span class="value">{{ SelectedAccountingReport.p.RecipientName || '-' }}</span>
+          </div>
+          <div class="info-row-of-model">
+            <span class="label">Reason :</span>
+            <span class="value">{{ SelectedAccountingReport.p.Reason || '-' }}</span>
+          </div>
+          <div class="info-row-of-model">
+            <span class="label">Income Amount :</span>
+            <span class="value">{{ SelectedAccountingReport.p.IncomeAmount || '-' }}</span>
+          </div>
+          <div class="info-row-of-model">
+            <span class="label">Given Amount :</span>
+            <span class="value">{{ SelectedAccountingReport.p.GivenAmount || '-' }}</span>
+          </div>
+          <div class="info-row-of-model">
+            <span class="label">Shrees Balance :</span>
+            <span class="value">{{ SelectedAccountingReport.p.ShreesBalance || '-' }}</span>
+          </div>
+          <div class="info-row-of-model">
+            <span class="label">Mode O fPayment Name :</span>
+            <span class="value">{{ SelectedAccountingReport.p.ModeOfPaymentName || '-' }}</span>
+          </div>
+          <div class="info-row-of-model">
+            <span class="label">Narration :</span>
+            <span class="value">{{ SelectedAccountingReport.p.Narration || '-' }}</span>
+          </div>
+        </ion-content>
+
+        <!-- Footer -->
+        <ion-footer class="modal-footer">
+          <!-- <div class="action-buttons">
+            <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
+              Close
+            </ion-button>
+          </div> -->
+          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
+            Close
+          </ion-button>
+        </ion-footer>
+      </div>
+    </ng-template>
+  </ion-modal>
+
+
+  <!-- FAB -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="ellipsis-vertical"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button color="tertiary" (click)="printReport()">
+        <ion-icon name="print-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>

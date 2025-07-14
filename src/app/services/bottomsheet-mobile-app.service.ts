@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { ModalController, Platform } from '@ionic/angular';
 import { Router, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { SelectModalComponent } from '../views/mobile-app/shared/select-modal/select-modal.component';
+import { SelectModalComponent } from '../views/mobile-app/components/shared/select-modal/select-modal.component';
+
 
 @Injectable({
     providedIn: 'root'

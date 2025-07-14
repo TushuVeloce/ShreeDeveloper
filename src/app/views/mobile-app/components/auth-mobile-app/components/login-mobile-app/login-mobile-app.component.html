@@ -1,0 +1,45 @@
+<ion-content [fullscreen]="true" class="login-content ion-padding">
+  <ion-grid class="h-100">
+    <ion-row class="ion-justify-content-center ion-align-items-center h-100">
+      <ion-col size="12" size-sm="10" size-md="6" size-lg="4" class="ion-text-center">
+
+        <!-- Logo -->
+        <div class="logo-wrapper">
+          <img src="assets/logos/ShreeIcon.png" class="logo-img" alt="Shree Logo" loading="lazy" />
+        </div>
+
+        <!-- Heading -->
+        <h2 class="login-title">Log In</h2>
+
+        <!-- Login Form -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form-wrapper">
+
+          <app-input-field label="Email" controlName="email" type="email" icon="mail" [clearInput]="true"
+            [formGroup]="loginForm" placeholder="Enter your email" customClass="input-wrapper">
+          </app-input-field>
+
+          <!-- <app-input-field label="Password" controlName="password" type="password" icon="lock-closed"
+            [formGroup]="loginForm" placeholder="Enter your password" [maxlength]="20"
+            [pattern]="'^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$'" customClass="input-wrapper">
+          </app-input-field> -->
+          <app-input-field label="Password" controlName="password" type="password" icon="lock-closed"
+            [formGroup]="loginForm" placeholder="Enter your password" [maxlength]="20" customClass="input-wrapper">
+          </app-input-field>
+
+          <!-- Align forget password to right below password -->
+          <div class="forgot-password-wrapper">
+            <ion-button fill="clear" size="small" (click)="goToForgotPassword()">forgot Password?</ion-button>
+          </div>
+
+          <!-- Login Button -->
+          <app-custom-button label="Login" type="submit" [loading]="isLoggingIn" color="primary" icon="log-in"
+            iconPosition="end" shape="round" fill="solid" [disabled]="loginForm.invalid">
+          </app-custom-button>
+        </form>
+
+        <ion-button fill="clear" expand="full" class="Button-In-loginPage">New User? Contact Admin</ion-button>
+        <!-- (click)="goToForgotPassword()" -->
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

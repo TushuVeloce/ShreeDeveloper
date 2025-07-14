@@ -1,0 +1,119 @@
+// :host {
+//     display: block;
+//     border-top-left-radius: 20px;
+//     border-top-right-radius: 20px;
+//     overflow: hidden;
+//     background: var(--ion-item-background);
+// }
+// /* Header */
+// ion-header.modern-header {
+//     padding: 10px 16px;
+// }
+
+// ion-toolbar {
+//     --min-height: 56px;
+//     display: flex;
+//     align-items: center;
+//     --background: transparent;
+// }
+
+:host {
+    display: block;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    overflow: hidden;
+    background: var(--ion-item-background);
+}
+
+ion-modal::part(content) {
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    overflow: hidden;
+    background: var(--ion-item-background);
+}
+
+ion-header.modern-header,
+ion-toolbar {
+    background: var(--ion-item-background);
+    box-shadow: none;
+}
+/* Title */
+.custom-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ion-color-primary);
+    text-align: center;
+    width: 100%;
+}
+
+/* Search Bar */
+.custom-search {
+    --border-radius: 12px;
+    --background: var(--ion-background-color-step-100);
+    --color: #333;
+    margin-bottom: 12px;
+}
+
+/* List Container */
+.custom-list {
+    margin-top: 10px;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    overflow: hidden;
+    --background: var(--ion-item-background);
+}
+
+/* List Items */
+.custom-item {
+    border-radius: 8px;
+    margin: 5px 12px;
+    padding: 10px 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.custom-item:hover {
+    --background: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+/* Label inside item */
+.custom-label.selected {
+    font-weight: 600;
+    color: var(--ion-color-primary);
+}
+
+/* No Data Message */
+.no-data {
+    text-align: center;
+    padding: 20px;
+    font-size: 16px;
+    color: var(--ion-color-medium);
+}
+
+/* Infinite Scroll */
+ion-infinite-scroll-content {
+    padding: 12px;
+    border-radius: 8px;
+}
+
+/* Footer */
+ion-footer {
+    padding: 10px;
+    background: var(--ion-item-background);
+    box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Checkbox */
+ion-checkbox {
+    --checkbox-background-checked: var(--ion-color-primary);
+    --border-radius: 6px;
+}
+.selected {
+    font-weight: bold;
+    color: var(--ion-color-primary);
+}
+.SiteSelected{
+    font-weight: bold;
+    color: var(--ion-color-secondary);
+}

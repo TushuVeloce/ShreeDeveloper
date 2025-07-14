@@ -1,0 +1,187 @@
+.attendance-content {
+    --background: var(--ion-background-color-step-50);
+    padding: 0 12px;
+}
+
+.year-select {
+    display: block; // reset flex
+    margin: 10px auto; // this centers it horizontally
+    width: 80%;
+    --background: #fff;
+    --border-radius: 12px;
+    --color: #333;
+
+    // max-width: 130px;
+    font-size: 14px;
+    --padding-start: 8px;
+    --padding-end: 8px;
+    --background: #fff;
+    --border-radius: 12px;
+    --color: #333;
+}
+
+.month-segment {
+    padding: 10px 0;
+
+    ion-segment-button {
+        font-size: 14px;
+        --indicator-color: transparent;
+        color: var(--ion-text-color);
+
+        &.segment-button-checked {
+            background: var(--ion-color-primary);
+            color: #fff;
+            border-radius: 20px;
+            padding: 0 14px;
+        }
+    }
+}
+
+.attendance-dashboard-card {
+    --background: var(--ion-card-background-color);
+    margin: 8px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: var(--ion-text-color-dark);
+
+    .vertical-line-grid {
+        height: 40px;
+        width: 1px;
+        background-color: #ccc;
+        margin: auto;
+    }
+
+    // .vertical-line-grid {
+    //     width: 1px;
+    //     height: 100%;
+    //     background-color: #fff;
+    // }
+
+    ion-icon {
+        font-size: 24px;
+    }
+}
+
+.attendance-list {
+    background-color: var(--ion-background-color-step-50);
+
+    .attendance-card {
+        margin: 10px 0;
+        border-radius: 12px;
+
+        &.empty {
+            opacity: 0.6;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px;
+            background-color: var(--ion-item-background);
+            border-bottom: 1px solid #ddd;
+
+            .date-box {
+                .date {
+                    font-size: 17px;
+                    font-weight: bold;
+                    color: #222;
+                }
+
+                .day {
+                    font-size: 13px;
+                    color: #666;
+                }
+            }
+
+            .status-badge {
+                font-size: 13px;
+                padding: 4px 8px;
+                border-radius: 10px;
+                font-weight: 500;
+                text-transform: uppercase;
+
+                &.present {
+                    background-color: #d4f8e8;
+                    color: #1a7f4c;
+                }
+
+                &.leave {
+                    background-color: #ffe0e0;
+                    color: #c62828;
+                }
+
+                &.absent {
+                    background-color: #f2f2f2;
+                    color: #777;
+                }
+            }
+        }
+
+        .timing-row {
+            display: flex;
+            justify-content: space-around;
+            padding: 14px 10px;
+            gap: 6px;
+
+            .timing-box {
+                flex: 1;
+                text-align: center;
+
+                label {
+                    display: block;
+                    font-size: 12px;
+                    color: #555;
+                }
+
+                span {
+                    font-size: 12px;
+                    font-weight: 600;
+                    color: #000;
+                }
+            }
+        }
+    }
+}
+
+.no-data-text {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    ion-icon {
+        font-size: 32px;
+        margin-bottom: 10px;
+        color: #ccc;
+    }
+}
+
+// @media screen and (max-width: 480px) {
+//     .timing-row {
+//         flex-direction: column;
+//         align-items: center;
+
+//         .timing-box {
+//             width: 100%;
+//             margin-bottom: 10px;
+//         }
+//     }
+
+//     .card-header {
+//         flex-direction: column;
+//         align-items: flex-start;
+
+//         .status-badge {
+//             margin-top: 10px;
+//         }
+//     }
+
+//     .month-segment ion-segment-button {
+//         font-size: 12px;
+//         padding: 0 10px;
+//     }
+// }

@@ -1,0 +1,95 @@
+<app-header-with-back-handler title={{DetailsFormTitle}}></app-header-with-back-handler>
+
+<ion-content class="form-container">
+  <ion-list lines="none" class="ion-padding">
+    <!-- Select From site -->
+    <ion-item class="input-item" button (click)="selectFromSiteBottomsheet()">
+      <ion-label>From Site</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ FromSiteName|| 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
+    <!-- Select To site -->
+    <ion-item class="input-item" button (click)="selectToSiteBottomsheet()">
+      <ion-label>To Site</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ ToSiteName|| 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
+    <ion-item (click)="showTransferDatePicker = true" class="input-item">
+      <ion-label>Date</ion-label>
+      <ion-label slot="end">{{ DisplayTransferDate || 'Select Date' }}</ion-label>
+    </ion-item>
+    <app-date-picker [show]="showTransferDatePicker" [selectedDate]="TransferDate" [defaultToday]="true"
+      (dateChanged)="onTransferDateChange($event)"
+      (dateSelected)="onTransferDateChange($event); showTransferDatePicker = false"
+      (modalDismissed)="showTransferDatePicker = false" />
+
+
+    <!-- Select Vendor -->
+    <ion-item class="input-item" button (click)="selectMaterialBottomsheet()">
+      <ion-label>Material</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ MaterialName|| 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+    </ion-item>
+
+    <!-- Unit input-->
+    <ion-item class="input-item">
+      <ion-input label="Unit" labelPlacement="floating" placeholder="Enter Unit" [(ngModel)]="Entity.p.UnitName"
+        readonly></ion-input>
+    </ion-item>
+
+    <!-- Current Quantity input-->
+    <ion-item class="input-item">
+      <ion-input label="Current Quantity" labelPlacement="floating" placeholder="Enter Current Quantity"
+        [(ngModel)]="Entity.p.CurrentQuantity" readonly></ion-input>
+    </ion-item>
+
+    <!-- Transferred Quantity input-->
+    <ion-item class="input-item">
+      <ion-input label="Transferred Quantity" labelPlacement="floating" placeholder="Enter Transferred Quantity"
+        [(ngModel)]="Entity.p.TransferredQuantity" (ngModelChange)="calculateRemainingQuantity()" [clearOnEdit]="true"
+        [clearInput]="true" type="number"></ion-input>
+    </ion-item>
+
+    <!-- Remaining Quantity input-->
+    <ion-item class="input-item">
+      <ion-input label="Remaining Quantity" labelPlacement="floating" placeholder="Enter Remaining Quantity"
+        [(ngModel)]="Entity.p.RemainingQuantity" readonly></ion-input>
+    </ion-item>
+
+    <!-- Main Buttons -->
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <ion-button expand="block" (click)="goBack()" class="submit-button cancel-button">
+            Cancel
+          </ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button expand="block" (click)="SaveStockTransfer()" class="submit-button primary-button">
+            Save
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-list>
+</ion-content>

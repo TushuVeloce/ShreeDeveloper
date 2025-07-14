@@ -1,0 +1,40 @@
+<ion-tabs>
+  <!-- <ion-router-outlet></ion-router-outlet> -->
+
+  <ion-tab-bar slot="bottom" class="BottomBar" *ngIf="showTabs">
+    <ion-tab-button tab="dashboard">
+      <ion-icon name="home-outline"></ion-icon>
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="attendance">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <ion-label>Attendance</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="settings">
+      <ion-icon name="settings-outline"></ion-icon>
+      <ion-label>Settings</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>
+<!-- <ion-tabs>
+  <ion-router-outlet></ion-router-outlet> You MUST include this
+
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button [routerLink]="['/mobile-app/tabs/dashboard']">
+      <ion-icon name="home-outline"></ion-icon>
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button [routerLink]="['/mobile-app/tabs/attendance']">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <ion-label>Attendance</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button [routerLink]="['/mobile-app/tabs/settings']">
+      <ion-icon name="settings-outline"></ion-icon>
+      <ion-label>Settings</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs> -->
