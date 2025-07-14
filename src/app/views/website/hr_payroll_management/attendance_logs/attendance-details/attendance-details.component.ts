@@ -41,14 +41,16 @@ export class AttendanceDetailsComponent implements OnInit {
   Date: string = ''
   OfficeDutyandTime: OfficeDutyandTime[] = [];
 
+  ActualTotalWorkingHrs: number = 0;
   ActualLateMarkTime: string = '';
   LateMarkGraceTimeInMins: string = '';
+  ActualOvertime: string = '';
+  OvertimeGraceTimeInMins: string = '';
 
   // ActualOvertime:"18:15:00.000"
   // CompanyName:"Shree Developers"
   // CompanyRef:26883
   // FromTime:"10:00"
-  // LateMarkGraceTimeInMins:"15"
   // OvertimeGraceTimeInMins:"15"
   // Ref:27304
   // ShortName:"10:00 AM to 06:00 PM"
@@ -114,9 +116,12 @@ export class AttendanceDetailsComponent implements OnInit {
     if (lst.length > 0) {
       this.ActualLateMarkTime = lst[0].p.ActualLateMarkTime;
       this.LateMarkGraceTimeInMins = lst[0].p.LateMarkGraceTimeInMins;
-    }
 
-    // this.OfficeDutyandTime = lst;
+      this.ActualOvertime = lst[0].p.ActualOvertime;
+      this.OvertimeGraceTimeInMins = lst[0].p.OvertimeGraceTimeInMins;
+      this.OvertimeGraceTimeInMins = lst[0].p.OvertimeGraceTimeInMins;
+      this.ActualTotalWorkingHrs = lst[0].p.TotalWorkingHrs;
+    }
   }
 
   SaveAttendence = async () => {
@@ -255,12 +260,10 @@ export class AttendanceDetailsComponent implements OnInit {
     return `${hours}h ${paddedMinutes}m`;
   }
 
-  calculateLateMark = () => {
+  calculateLateMarkHrs = () => {
     const actualLateMarkTime = this.ActualLateMarkTime; // this.ActualLateMarkTime
-    console.log('this.ActualLateMarkTime :', this.ActualLateMarkTime);
     const checkInTime = this.Entity.p.AttendanceLogDetailsArray[0].CheckInTime; // e.g., "21:47"
     const graceMinutes = Number(this.LateMarkGraceTimeInMins); // this.LateMarkGraceTimeInMins
-    console.log('graceMinutes :', graceMinutes);
 
     // Convert ActualLateMarkTime to Date
     const [lateHour, lateMin, lateSec] = actualLateMarkTime.split(":").map(Number);
@@ -280,12 +283,73 @@ export class AttendanceDetailsComponent implements OnInit {
       const hours = Math.floor(totalLateMinutes / 60);
       const minutes = totalLateMinutes % 60;
 
-      console.log(`Late by ${hours}h ${minutes}m`);
-      return `${hours}h ${minutes}m`;
+      const decimalHours = totalLateMinutes / 60;
+
+      this.Entity.p.IsLateMark = true;
+      this.Entity.p.TotalLateMarkHrs = parseFloat(decimalHours.toFixed(2));
+      this.Entity.p.DisplayTotalLateMarkHrs = `${hours}h ${minutes}m`
+
+      // Set Working Hours to Half
+      this.Entity.p.TotalWorkingHrs = this.Entity.p.TotalWorkingHrs / 2;
+      this.Entity.p.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(this.Entity.p.TotalWorkingHrs);
+
+      this.calculateOverTimeHrs();
+
+      return;
     } else {
-      console.log("Not late");
+      this.Entity.p.IsLateMark = false;
+      this.Entity.p.TotalLateMarkHrs = 0;
+      this.Entity.p.DisplayTotalLateMarkHrs = ''
+      this.calculateOverTimeHrs();
       return;
     }
+  };
+
+  calculateOverTimeHrs = () => {
+    // const actualOverMarkTime = this.ActualOvertime; // this.ActualOvertime
+    // const CheckOutTime = this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].CheckOutTime; // e.g., "21:47"
+    // const overtimeMinutes = Number(this.OvertimeGraceTimeInMins); // this.OvertimeGraceTimeInMins
+
+    // // Convert ActualLateMarkTime to Date
+    // const [overHour, overMin, overSec] = actualOverMarkTime.split(":").map(Number);
+    // const OverTimeDate = new Date();
+    // OverTimeDate.setHours(overHour, overMin, overSec || 0, 0);
+
+    // // Convert CheckInTime to Date
+    // const [inHour, inMin] = CheckOutTime.split(":").map(Number);
+    // const checkInDate = new Date();
+    // checkInDate.setHours(inHour, inMin, 0, 0);
+
+    // if (checkInDate > OverTimeDate) {
+    //   const diffMs = checkInDate.getTime() - OverTimeDate.getTime();
+    //   let totalOverMinutes = Math.floor(diffMs / 60000) + overtimeMinutes;
+
+    //   // Convert totalOverMinutes to hours and minutes
+    //   const hours = Math.floor(totalOverMinutes / 60);
+    //   const minutes = totalOverMinutes % 60;
+
+    //   const decimalHours = totalOverMinutes / 60;
+
+    //   this.Entity.p.IsOverTime = true;
+    //   this.Entity.p.TotalOvertimeHrs = parseFloat(decimalHours.toFixed(2));
+    //   this.Entity.p.DisplayTotalOvertimeHrs = `${hours}h ${minutes}m`
+    //   return;
+    // } else {
+    //   this.Entity.p.IsOverTime = false;
+    //   this.Entity.p.TotalOvertimeHrs = 0;
+    //   this.Entity.p.DisplayTotalOvertimeHrs = ''
+    //   return;
+    // }
+
+    if (this.ActualTotalWorkingHrs < this.Entity.p.TotalWorkingHrs) {
+      this.Entity.p.IsOverTime = true;
+      this.Entity.p.TotalOvertimeHrs = this.Entity.p.TotalWorkingHrs - this.ActualTotalWorkingHrs;
+      this.Entity.p.DisplayTotalOvertimeHrs = this.convertFractionTimeToHM(this.Entity.p.TotalOvertimeHrs);
+    } else {
+      this.Entity.p.IsOverTime = false;
+      this.Entity.p.TotalOvertimeHrs = 0;
+    }
+
   };
 
 
@@ -337,7 +401,7 @@ export class AttendanceDetailsComponent implements OnInit {
     this.Entity.p.FirstCheckInTime = this.Entity.p.AttendanceLogDetailsArray[0].CheckInTime;
     this.Entity.p.LastCheckOutTime = this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].CheckOutTime;
     this.calculateTotalWorkingHours();
-    this.calculateLateMark();
+    this.calculateLateMarkHrs();
   }
 
   BackAttendence = async () => {

@@ -23,6 +23,7 @@ export class OfficeDutyandTimeProps {
   public ActualLateMarkTime: string = '';
   public OvertimeGraceTimeInMins: string = '';
   public ActualOvertime: string = '';
+  public TotalWorkingHrs: number = 0;
   public ShortName: string = '';
   public CompanyRef: number = 0;
   public readonly CompanyName: string = '';
