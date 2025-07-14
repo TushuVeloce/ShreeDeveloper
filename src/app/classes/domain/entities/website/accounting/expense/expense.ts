@@ -43,7 +43,13 @@ export class ExpenseProps {
   public CreatedDate: string = ''
   public UpdatedDate: string = ''
   public IsAutoInvoiceEnabled: number = 0
-  public IsDeleted: number = 0
+  public IsAdvancePayment: number = 0
+  public RecipientType: number = 0
+  public ExpenseLogicalRefToIncome: number = 0
+  public ExpenseLogicalRefToInvoice: number = 0
+  public IncomeLedgerRef: number = 0
+  public IncomeSubLedgerRef: number = 0
+  public RemainingAdvance: number = 0
 
   public GivenAmount: number = 0
   public RemainingAmount: number = 0

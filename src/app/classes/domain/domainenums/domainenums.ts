@@ -228,6 +228,16 @@ export enum LabourTypes {
   WomenLabour = 520,
 }
 
+export enum RecipientTypes {
+  None = 0,
+  Recipient = 100,
+  Vendor = 200,
+  DealCancelledCustomer = 300,
+  Employee = 400,
+  Sites = 500,
+  Owner = 600,
+}
+
 export class DomainEnums {
   public static MarketingModeName(MarketingMode: MarketingModes) {
     switch (MarketingMode) {
@@ -1849,6 +1859,65 @@ export class DomainEnums {
     if (withAllOption) {
       let allEntry = {
         Ref: LabourTypes.None,
+        Name: allOptionName,
+      };
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+    public static RecipientTypesName(itemType: RecipientTypes) {
+    switch (itemType) {
+      case RecipientTypes.Recipient:
+        return 'Recipient';
+      case RecipientTypes.Vendor :
+        return 'Vendor';
+      case RecipientTypes.DealCancelledCustomer:
+        return 'Deal Cancelled Customer';
+      case RecipientTypes.Employee:
+        return 'Employee';
+      case RecipientTypes.Sites:
+        return 'Sites';
+      case RecipientTypes. Owner:
+        return 'Owner';
+      default:
+        return '';
+    }
+  }
+
+  public static RecipientTypesList(
+    withAllOption: boolean = false,
+    allOptionName: string = '<All>'
+  ) {
+    let result = [
+      {
+        Ref: RecipientTypes.Recipient,
+        Name: DomainEnums.RecipientTypesName(RecipientTypes.Recipient),
+      },
+      {
+        Ref: RecipientTypes.Vendor,
+        Name: DomainEnums.RecipientTypesName(RecipientTypes.Vendor),
+      },
+      {
+        Ref: RecipientTypes.DealCancelledCustomer,
+        Name: DomainEnums.RecipientTypesName(RecipientTypes.DealCancelledCustomer),
+      },
+      {
+        Ref: RecipientTypes.Employee,
+        Name: DomainEnums.RecipientTypesName(RecipientTypes.Employee),
+      },
+      {
+        Ref: RecipientTypes.Sites,
+        Name: DomainEnums.RecipientTypesName(RecipientTypes.Sites),
+      },
+      {
+        Ref: RecipientTypes.Owner,
+        Name: DomainEnums.RecipientTypesName(RecipientTypes.Owner),
+      },
+    ];
+    if (withAllOption) {
+      let allEntry = {
+        Ref: RecipientTypes.None,
         Name: allOptionName,
       };
       result.unshift(allEntry);
