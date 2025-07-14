@@ -4,6 +4,7 @@ import { NgForm, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
+import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
@@ -23,8 +24,8 @@ export class BankAccountMasterDetailsComponent implements OnInit {
   Entity: BankAccount = BankAccount.CreateNewInstance();
   DetailsFormTitle: 'New Bank Account' | 'Edit Bank Account' = 'New Bank Account';
   InitialEntity: BankAccount = null as any;
-  dateofopening: string = '';
   today: string = new Date().toISOString().split('T')[0];
+  strCDT: string = ''
   IFSCPattern: string = ValidationPatterns.IFSC;
   LargeInputNumber: string = ValidationPatterns.LargeInputNumber;
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos;
@@ -52,14 +53,20 @@ export class BankAccountMasterDetailsComponent implements OnInit {
       this.Entity = BankAccount.GetCurrentInstance();
 
       // While Edit Converting date String into Date Format //
-      this.dateofopening = this.dtu.ConvertStringDateToShortFormat(
+      this.Entity.p.DateofOpening = this.dtu.ConvertStringDateToShortFormat(
         this.Entity.p.DateofOpening
       );
       this.appStateManage.StorageKey.removeItem('Editable')
     } else {
       this.Entity = BankAccount.CreateNewInstance();
       BankAccount.SetCurrentInstance(this.Entity);
-
+      if(this.Entity.p.DateofOpening == ''){
+        this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+        let parts = this.strCDT.substring(0, 16).split('-');
+        // Construct the new date format
+        this.Entity.p.DateofOpening = `${parts[0]}-${parts[1]}-${parts[2]}`;
+        this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+      }
     }
     this.InitialEntity = Object.assign(BankAccount.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)) as BankAccount;
@@ -75,26 +82,13 @@ export class BankAccountMasterDetailsComponent implements OnInit {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName()
 
-    this.Entity.p.DateofOpening = this.dtu.ConvertStringDateToFullFormat(this.dateofopening);
+    this.Entity.p.DateofOpening = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.DateofOpening);
     if (this.Entity.p.CreatedBy == 0) {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
     let entityToSave = this.Entity.GetEditableVersion();
-    if (!this.Entity.p.OpeningBalance) {
-      this.Entity.p.OpeningBalance = 0;
-    }
-    // ------ Code For Save Date Of InCorporation Year Format ---------------//
-    if (this.dateofopening) {
-      let dateValue = new Date(this.dateofopening);
-
-      if (!isNaN(dateValue.getTime())) {
-        entityToSave.p.DateofOpening =
-          this.dtu.DateStartStringFromDateValue(dateValue);
-      } else {
-        entityToSave.p.DateofOpening = '';
-      }
-    }
+    console.log('entityToSave :', entityToSave);
     let entitiesToSave = [entityToSave]
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
@@ -106,9 +100,13 @@ export class BankAccountMasterDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Bank Account saved successfully');
-        this.dateofopening = '';
         this.Entity = BankAccount.CreateNewInstance();
         this.resetAllControls();
+        this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+        let parts = this.strCDT.substring(0, 16).split('-');
+        // Construct the new date format
+        this.Entity.p.DateofOpening = `${parts[0]}-${parts[1]}-${parts[2]}`;
+        this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
       } else {
         await this.uiUtils.showSuccessToster('Bank Account Updated successfully');
         await this.router.navigate(['/homepage/Website/Bank_Account_Master']);
@@ -122,28 +120,8 @@ export class BankAccountMasterDetailsComponent implements OnInit {
     input.select();
   }
 
-  // resetAllControls = () => {
-  //   // reset touched
-  //   this.NameInputControl.control.markAsUntouched();
-  //   this.IFSCInputControl.control.markAsUntouched();
-  //   this.BranchNameInputControl.control.markAsUntouched();
-  //   this.AccountNumberInputControl.control.markAsUntouched();
-  //   this.IFSCInputControl.control.markAsUntouched();
-  //   this.OpeningBalanceInputControl.control.markAsUntouched();
-  //   this.DateOfOpeningInputControl.control.markAsUntouched();
-
-  //   // reset dirty
-  //   this.NameInputControl.control.markAsPristine();
-  //   this.IFSCInputControl.control.markAsPristine();
-  //   this.BranchNameInputControl.control.markAsPristine();
-  //   this.AccountNumberInputControl.control.markAsPristine();
-  //   this.IFSCInputControl.control.markAsPristine();
-  //   this.OpeningBalanceInputControl.control.markAsPristine();
-  //   this.DateOfOpeningInputControl.control.markAsPristine();
-  // }
-
   resetAllControls() {
-    this.bankForm.resetForm(); // this will reset all form controls to their initial state
+    this.bankForm.resetForm();
   }
 
   BackBankAccount = async () => {

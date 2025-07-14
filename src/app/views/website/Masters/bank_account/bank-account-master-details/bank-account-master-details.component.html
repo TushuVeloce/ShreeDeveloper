@@ -67,7 +67,7 @@
         </div> -->
         <div class="col-4" style="margin-top: 1rem">
           <label>Date of Opening</label>
-          <input type="date" [(ngModel)]="dateofopening" name="DateofOpening" class="form-control" id="DateofOpening"
+          <input type="date" [(ngModel)]="Entity.p.DateofOpening" name="DateofOpening" class="form-control" id="DateofOpening"
             #DateofOpeningCtrl="ngModel" required (blur)="DateofOpeningCtrl.control.markAsTouched()" [max]="today" />
           <div *ngIf="(DateofOpeningCtrl.invalid && (DateofOpeningCtrl.touched || DateofOpeningCtrl.dirty))">
             <span class="validation-text" *ngIf="DateofOpeningCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>

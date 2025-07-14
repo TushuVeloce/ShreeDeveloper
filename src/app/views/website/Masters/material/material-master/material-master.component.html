@@ -24,7 +24,7 @@
       <tbody>
         <tr *ngFor="let material of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{material.p.Code}}</td>
+          <!-- <td Class="tbldata">{{material.p.Code}}</td> -->
           <td Class="tbldata">{{material.p.Name}}</td>
           <td Class="tbldata">{{material.p.UnitName}}</td>
           <td class="tbldata">

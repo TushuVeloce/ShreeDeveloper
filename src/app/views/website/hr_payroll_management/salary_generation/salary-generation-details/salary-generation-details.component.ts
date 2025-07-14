@@ -156,6 +156,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     this.Entity.p.TotalLeavesHrs = lst[0]?.p?.TotalLeavesHrs
     this.Entity.p.OverAllWorkingHrs = lst[0]?.p?.OverAllWorkingHrs
     this.Entity.p.BasicSalary = lst[0]?.p?.BasicSalary
+    await this.calculategrosstotal()
   }
 
   SaveSalaryGeneration = async () => {

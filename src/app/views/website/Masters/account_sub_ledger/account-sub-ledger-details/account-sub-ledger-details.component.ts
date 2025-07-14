@@ -110,7 +110,7 @@ export class AccountSubLedgerDetailsComponent implements OnInit {
       await this.uiUtils.showConfirmationMessage('Cancel',
         `This process is IRREVERSIBLE!
       <br/>
-      Are you sure that you want to Cancel this SubLedger Form?`,
+      Are you sure that you want to Cancel this Sub Ledger Form?`,
         async () => {
           await this.router.navigate(['/homepage/Website/Account_Sub_Ledger']);
         });

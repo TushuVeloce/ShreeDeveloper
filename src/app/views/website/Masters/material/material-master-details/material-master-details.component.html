@@ -1,14 +1,11 @@
 <div class="card-body">
   <div class="card" style="padding: 1rem">
     <div class="row align-items-center">
-      <!-- Back Button Column -->
       <div class="col-2 col-md-1 d-flex justify-content-center">
         <button type="button" class="backbtn" (click)="BackMaterial()">
           <img src="/assets/icons/arrow-button.png" alt="Back" class="backbtnimg" />
         </button>
       </div>
-
-      <!-- Title Column -->
       <div class="col-10 col-md-11">
         <span class="detail_title text-truncate d-block">{{ DetailsFormTitle }}</span>
       </div>
@@ -50,9 +47,7 @@
           <button type="button" class="btn" (click)="SaveMaterialMaster()">Save</button>
         </div>
         <div>
-          <button type="button" class="btn" (click)="BackMaterial()">
-            Cancel
-          </button>
+          <button type="button" class="btn" (click)="BackMaterial()">Cancel</button>
         </div>
       </div>
     </form>

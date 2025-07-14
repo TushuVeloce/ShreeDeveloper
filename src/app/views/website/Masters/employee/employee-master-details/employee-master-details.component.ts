@@ -100,24 +100,12 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     this.maxDOB = date.toISOString().split('T')[0];
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-
-      this.DetailsFormTitle = this.IsNewEntity
-        ? 'New Employee'
-        : 'Edit Employee';
+      this.DetailsFormTitle = this.IsNewEntity? 'New Employee': 'Edit Employee';
       this.Entity = Employee.GetCurrentInstance();
-
-
       // While Edit Converting date String into Date Format //
-      this.dateofjoining = this.datePipe.transform(
-        this.dtu.FromString(this.Entity.p.DateOfJoining),
-        'yyyy-MM-dd'
-      );
-
+      this.dateofjoining = this.datePipe.transform(this.dtu.FromString(this.Entity.p.DateOfJoining),'yyyy-MM-dd');
       // While Edit Converting date String into Date Format //
-      this.dob = this.datePipe.transform(
-        this.dtu.FromString(this.Entity.p.DOB),
-        'yyyy-MM-dd'
-      );
+      this.dob = this.datePipe.transform(this.dtu.FromString(this.Entity.p.DOB),'yyyy-MM-dd');
       this.getDesignationListByDepartmentRef();
       this.appStateManage.StorageKey.removeItem('Editable');
       if (this.Entity.p.CountryRef) {
@@ -148,9 +136,6 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     }
     let lst = await Designation.FetchEntireListByDepartmentRef(this.Entity.p.DepartmentRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DesignationList = lst;
-    // if (lst.length > 0 && this.Entity.p.DesignationRef != lst[0].p.Ref) {
-    //   this.Entity.p.DesignationRef = lst[0].p.Ref;
-    // }
   }
 
 
@@ -158,39 +143,28 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     this.CountryList = await Country.FetchEntireList(
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-
     // Set default country if exists
     if (this.CountryList.length) {
       const defaultCountry = this.CountryList.find(c => c.p.Ref === this.Entity.p.CountryRef);
       this.Entity.p.CountryRef = defaultCountry ? defaultCountry.p.Ref : this.CountryList[0].p.Ref;
-
       // Fetch the corresponding states
       await this.getStateListByCountryRef(this.Entity.p.CountryRef);
     }
   }
 
   getStateListByCountryRef = async (CountryRef: number) => {
-    this.StateList = await State.FetchEntireListByCountryRef(
-      CountryRef,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-
+    this.StateList = await State.FetchEntireListByCountryRef(CountryRef,async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     // Set default state if exists
     if (this.StateList.length) {
       const defaultState = this.StateList.find(s => s.p.Ref === this.Entity.p.StateRef);
       this.Entity.p.StateRef = defaultState ? defaultState.p.Ref : this.StateList[0].p.Ref;
-
       // Fetch the corresponding cities
       await this.getCityListByStateRef(this.Entity.p.StateRef);
     }
   }
 
   getCityListByStateRef = async (StateRef: number) => {
-    this.CityList = await City.FetchEntireListByStateRef(
-      StateRef,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
-
+    this.CityList = await City.FetchEntireListByStateRef(StateRef,async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     // Set default city if exists
     if (this.CityList.length) {
       const defaultCity = this.CityList.find(c => c.p.Ref === this.Entity.p.CityRef);

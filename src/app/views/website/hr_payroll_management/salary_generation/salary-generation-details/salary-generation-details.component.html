@@ -134,6 +134,12 @@
             [(ngModel)]="Entity.p.AdvancePayment" placeholder="Enter Advance Payment" required
             (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()" />
         </div>
+         <div class="col-md-4" style="margin-top: 1rem; ">
+          <label>Advance Deduction</label>
+          <input type="number" name="AdvanceDeduction" class="form-control" id="AdvanceDeduction"
+            [(ngModel)]="Entity.p.AdvanceDeduction" placeholder="Enter Advance Deduction" required
+            (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()" />
+        </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Total Deduction</label>
           <input type="number" name="TotalDeduction" class="form-control" id="TotalDeduction"

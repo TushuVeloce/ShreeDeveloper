@@ -28,6 +28,10 @@ export class SalaryGenerationProps {
   public TotalWorkingHrs: number = 0;
   public TotalLeavesHrs: number = 0;
   public OverAllWorkingHrs: number = 0;
+  public DisplayTotalOverTimeHrs : number = 0;
+  public DisplayTotalWorkingHrs: number = 0;
+  public DisplayTotalLeavesHrs: number = 0;
+  public DisplayOverAllWorkingHrs : number = 0;
   public BasicSalary: number = 0;
   public TotalAllowance: number = 0;
   public TotalIncentive: number = 0;
@@ -37,6 +41,7 @@ export class SalaryGenerationProps {
   public PF: number = 0;
   public TotalLeaveDeduction: number = 0;
   public AdvancePayment: number = 0;
+  public AdvanceDeduction: number = 0;
   public TotalDeduction: number = 0;
   public NetSalary: number = 0;
   public CompanyRef: number = 0;

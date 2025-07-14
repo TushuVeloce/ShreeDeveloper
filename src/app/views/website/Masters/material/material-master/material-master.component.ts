@@ -11,7 +11,6 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   standalone: false,
   templateUrl: './material-master.component.html',
   styleUrls: ['./material-master.component.scss'],
-
 })
 
 export class MaterialMasterComponent implements OnInit {
@@ -24,17 +23,16 @@ export class MaterialMasterComponent implements OnInit {
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
-
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Code', 'Material Name', 'Material Unit', 'Action'];
+  headers: string[] = ['Sr.No.','Material Name', 'Material Unit', 'Action'];
+
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
       await this.getMaterialListByCompanyRef();
-    });
-  }
+    });}
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled();
@@ -51,7 +49,6 @@ export class MaterialMasterComponent implements OnInit {
     }
     let lst = await Material.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
-
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
@@ -102,32 +99,4 @@ export class MaterialMasterComponent implements OnInit {
     }
     this.router.navigate(['/homepage/Website/Material_Master_Details']);
   }
-
-  // filterTable = () => {
-  //   if (this.SearchString != '') {
-  //     this.DisplayMasterList = this.MasterList.filter((data: any) => {
-  //       return data.p.Name.toLowerCase().indexOf(this.SearchString.toLowerCase()) > -1
-  //     })
-  //   }
-  //   else {
-  //     this.DisplayMasterList = this.MasterList
-  //   }
-  // }
-
-  // filterFields: string[] = ['Code', 'Name', 'UnitName'];
-
-  // filterTable = () => {
-  //   const search = this.SearchString?.toLowerCase() || '';
-
-  //   if (search) {
-  //     this.DisplayMasterList = this.MasterList.filter((item: any) => {
-  //       return this.filterFields.some((field) => {
-  //         const value = item.p?.[field];
-  //         return value && value.toString().toLowerCase().includes(search);
-  //       });
-  //     });
-  //   } else {
-  //     this.DisplayMasterList = this.MasterList;
-  //   }
-  // }
 }

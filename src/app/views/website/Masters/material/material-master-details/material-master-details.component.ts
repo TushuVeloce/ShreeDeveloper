@@ -25,13 +25,13 @@ export class MaterialMasterDetailsComponent implements OnInit {
   InitialEntity: Material = null as any;
   UnitList: Unit[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
+  NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
 
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
-  @ViewChild('CodeCtrl') CodeInputControl!: NgModel;
+  // @ViewChild('CodeCtrl') CodeInputControl!: NgModel;
 
   constructor(
     private router: Router,
@@ -43,13 +43,9 @@ export class MaterialMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-
-      this.DetailsFormTitle = this.IsNewEntity
-        ? 'New Material'
-        : 'Edit Material';
+      this.DetailsFormTitle = this.IsNewEntity? 'New Material': 'Edit Material';
       this.Entity = Material.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
@@ -57,23 +53,18 @@ export class MaterialMasterDetailsComponent implements OnInit {
       this.Entity = Material.CreateNewInstance();
       Material.SetCurrentInstance(this.Entity);
     }
-    this.InitialEntity = Object.assign(
-      Material.CreateNewInstance(),
-      this.utils.DeepCopy(this.Entity)
-    ) as Material;
+    this.InitialEntity = Object.assign(Material.CreateNewInstance(),this.utils.DeepCopy(this.Entity))as Material;
     this.FormulateUnitList();
     this.focusInput();
   }
 
   focusInput = () => {
-    let txtName = document.getElementById('Code')!;
+    let txtName = document.getElementById('Name')!;
     txtName.focus();
   }
 
   public FormulateUnitList = async () => {
-    let lst = await Unit.FetchEntireList(
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
+    let lst = await Unit.FetchEntireList(async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.UnitList = lst
   };
 
@@ -86,9 +77,7 @@ export class MaterialMasterDetailsComponent implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message);
@@ -105,7 +94,6 @@ export class MaterialMasterDetailsComponent implements OnInit {
       }
     }
   };
-
 
   BackMaterial = async () => {
     if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
@@ -124,11 +112,8 @@ export class MaterialMasterDetailsComponent implements OnInit {
   resetAllControls = () => {
     // reset touched
     this.NameInputControl.control.markAsUntouched();
-    this.CodeInputControl.control.markAsUntouched();
 
     // reset dirty
-
     this.NameInputControl.control.markAsPristine();
-    this.CodeInputControl.control.markAsPristine();
   }
 }

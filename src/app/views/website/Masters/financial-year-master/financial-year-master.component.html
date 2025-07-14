@@ -2,12 +2,12 @@
   <div class="col-4 mb-2">
     <h1 style="padding-top: 3px;" class="title title_light">Financial Year</h1>
   </div>
-   <div class="col-4 mb-2 search-container_light">
+  <div class="col-4 mb-2 search-container_light">
     <app-shared-filter [masterList]="MasterList"
       [filterFields]="['FromDate', 'ToDate', 'Contacts', 'DepartmentName', 'UserRoleName']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
-    <div class="col-4 mb-2" routerLinkActive="active">
+  <div class="col-4 mb-2" routerLinkActive="active">
     <nz-button nz-button class="btn1" (click)="isPasswordModalOpen = true">
       Create New Financial Year
     </nz-button>
@@ -64,27 +64,22 @@
         <div *ngIf="isSetFinancialYearModalOpen" class="col-md-12" style="margin-top: 1rem;">
           <div>
             <label>OpeningBalance</label>
-            <input type="number" [(ngModel)]="OpeningBalance" name="OpeningBalance" class="form-control" id="OpeningBalance"
-              required placeholder="Enter OpeningBalance" #OpeningBalanceCtrl="ngModel"
+            <input type="number" [(ngModel)]="OpeningBalance" name="OpeningBalance" class="form-control"
+              id="OpeningBalance" required placeholder="Enter OpeningBalance" #OpeningBalanceCtrl="ngModel"
               (blur)="OpeningBalanceCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
             <div *ngIf="(OpeningBalanceCtrl.invalid && (OpeningBalanceCtrl.touched || OpeningBalanceCtrl.dirty))">
               <span class="validation-text" *ngIf="OpeningBalanceCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
         </div>
-        <!-- Password Field -->
-        <div style="margin-top: 12px;">
+        <div style="margin-top: 12px; position: relative;">
           <label for="password">Password</label>
-          <div style="display: flex">
-            <input [type]="showPassword ? 'text' : 'password'" id="password" class="form-control" name="Password"
-              required [(ngModel)]="localpassword" />
-            <span (click)="togglePasswordVisibility()" class="input-icon"
-              style="margin-top: 0.4rem; margin-left: 0.4rem; color: rgb(24, 23, 23); cursor: pointer;">
-              <i class="fas fa-eye" *ngIf="showPassword"></i>
-              <i class="fas fa-eye-slash" *ngIf="!showPassword"></i>
-            </span>
-          </div>
-
+          <input [type]="showPassword ? 'text' : 'password'" id="password" class="form-control" name="Password" required
+            [(ngModel)]="localpassword" style="padding-right: 2.5rem;" />
+          <span (click)="togglePasswordVisibility()"  style="position: absolute; top: 70%; right: 10px; transform: translateY(-50%); cursor: pointer; color: black;">
+            <i class="fas fa-eye" *ngIf="showPassword"></i>
+            <i class="fas fa-eye-slash" *ngIf="!showPassword"></i>
+          </span>
         </div>
         <div style="margin-top: 8px;">
           <strong>Note :</strong> To {{isSetFinancialYearModalOpen ? 'set new ' : 'create a new '}}financial year, you
