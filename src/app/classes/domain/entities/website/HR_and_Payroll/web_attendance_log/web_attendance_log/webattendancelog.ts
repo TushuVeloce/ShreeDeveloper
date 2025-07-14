@@ -37,6 +37,8 @@ export class WebAttendaneLogProps {
   public TotalWorkingHrs: number = 0;
   public DisplayTotalWorkingHrs: string = '';
 
+  public IsAttendanceVerified: boolean = false;
+
   public IsLateMark: boolean = false;
   public TotalLateMarkHrs: number = 0;
   public DisplayTotalLateMarkHrs: string = '';
@@ -47,6 +49,7 @@ export class WebAttendaneLogProps {
 
   public FirstCheckInTime: string = '';
   public LastCheckOutTime: string = '';
+
   public IsLeave: number = 0;
   public IsHalfDay: number = 0;
   public LeaveType: number = 0;

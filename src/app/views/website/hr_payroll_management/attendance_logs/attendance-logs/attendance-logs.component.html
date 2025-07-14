@@ -126,9 +126,25 @@
             <td Class="tbldata">{{attendancelog.p.FirstCheckInTime ? attendancelog.p.FirstCheckInTime : "--"}}</td>
             <td Class="tbldata">{{attendancelog.p.LastCheckOutTime? attendancelog.p.LastCheckOutTime : "--"}}</td>
             <td Class="tbldata">{{attendancelog.p.TotalWorkingHrs? attendancelog.p.TotalWorkingHrs: "--"}}</td>
-            <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.OnLeave ? attendancelog.p.OnLeave : '--'}}</td>
-            <td Class="tbldata" *ngIf="isTodayAttendanceView">{{attendancelog.p.LeaveType ? attendancelog.p.LeaveType : '--'}}</td>
-            <td Class="tbldata" *ngIf="isTodayAttendanceView">
+            <td Class="tbldata">{{attendancelog.p.OnLeave ?
+              attendancelog.p.OnLeave :
+              '--'}}</td>
+            <td Class="tbldata">{{attendancelog.p.LeaveType
+              ? attendancelog.p.LeaveType :
+              '--'}}</td>
+            <td Class="tbldata">
+              <!-- PENDING -->
+              <span class="status" ngClass="pending" *ngIf="!attendancelog.p.IsAttendanceVerified"
+                style="cursor: pointer;" (click)="ChangeAttendanceStatus(attendancelog)">
+                Pending
+              </span>
+
+              <!-- APPROVED -->
+              <span class="status" *ngIf="attendancelog.p.IsAttendanceVerified" ngClass="approved">
+                Approved
+              </span>
+            </td>
+            <td Class="tbldata">
               <span style="margin-left: 9px;" (click)="onEditClicked(attendancelog)">
                 <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
               </span>

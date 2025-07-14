@@ -105,3 +105,44 @@
   margin-top: 0px !important;
   box-shadow: none !important;
 }
+
+.status {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 14px;
+  width: 100px;
+  border: 1px solid;
+  display: inline-block;
+  color: black;
+
+  &.approved {
+    border-color: green;
+    background-color: #e6ffe6;
+  }
+
+  &.pending {
+    border-color: rgb(180, 180, 2);
+    background-color: rgb(252, 252, 213);
+  }
+
+  &.rejected {
+    border-color: red;
+    background-color: #ffe6e6;
+  }
+
+  &.completed {
+    border-color: #007bff;
+    background-color: #e6f0ff;
+  }
+
+  &.incomplete {
+    border-color: #ff9900;
+    background-color: #fff5e6;
+  }
+
+  &.ordered {
+    border-color: #800080;
+    background-color: #f3e6f9;
+  }
+}

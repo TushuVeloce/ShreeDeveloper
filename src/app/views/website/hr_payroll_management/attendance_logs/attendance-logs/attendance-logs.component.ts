@@ -29,8 +29,8 @@ export class AttendanceLogsComponent implements OnInit {
   DisplayMasterList: WebAttendaneLog[] = [];
   SelectedAttendance: WebAttendaneLog = WebAttendaneLog.CreateNewInstance();
 
-    // headers as per required
-    baseHeaders: string[] = ['Sr. no', 'Employee Name', 'Date', 'First Check In Time', 'Last Check Out Time', 'Total Time'];
+  // headers as per required
+  baseHeaders: string[] = ['Sr. no', 'Employee Name', 'Date', 'First Check In Time', 'Last Check Out Time', 'Total Time'];
 
   pageSize: number = 10; // Items per page
   currentPage: number = 1; // Initialize current page
@@ -69,6 +69,7 @@ export class AttendanceLogsComponent implements OnInit {
     private DateconversionService: DateconversionService,
     private router: Router,
     private appStateManage: AppStateManageService,
+    private utils: Utils,
   ) {
     effect(async () => {
       await this.getTodayAttendanceLogByAttendanceListType(); this.getEmployeeListByCompanyRef();
@@ -124,6 +125,36 @@ export class AttendanceLogsComponent implements OnInit {
     this.isShowMonthlyData = false
     this.isDaysShow = true
     this.isDaysShowMonth = false
+  }
+
+  ChangeAttendanceStatus = async (Entity: WebAttendaneLog) => {
+    await this.uiUtils.showConfirmationMessage(
+      'Approval',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+      Are you sure that you want to Approve this Attendance?`,
+      async () => {
+        this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+        Entity.p.IsAttendanceVerified = true;
+        let entitiesToSave = [Entity]
+        console.log('entitiesToSave :', entitiesToSave);
+        let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+        if (!tr.Successful) {
+          this.uiUtils.showErrorMessage('Error', tr.Message);
+          Entity.p.IsAttendanceVerified = false;
+          return
+        }
+        else {
+          if (this.isTodayAttendanceView) {
+            this.getTodayAttendanceLogByAttendanceListType()
+          } else if (this.ToDisplayWeeklyRequirement) {
+            this.getWeekWiseAttendanceLogByAttendanceListType();
+          } else if (this.ToDispayMonthlyRequirement) {
+            this.getMonthWiseAttendanceLogByAttendanceListType();
+          }
+          await this.uiUtils.showSuccessToster('Attendance Updated successfully');
+        }
+      }
+    );
   }
 
   getWeekWiseAttendanceLogByAttendanceListType = async () => {
@@ -209,11 +240,13 @@ export class AttendanceLogsComponent implements OnInit {
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     this.router.navigate(['/homepage/Website/Attendance_Details']);
   };
+
   get headers(): string[] {
-    if (this.isTodayAttendanceView) {
-      return [...this.baseHeaders, 'On Leave', 'Leave Type', 'Action'];
-    }
-    return this.baseHeaders;
+    // if (this.isTodayAttendanceView || this.ToDisplayWeeklyRequirement) {
+    //   return [...this.baseHeaders, 'On Leave', 'Leave Type', 'Status', 'Action'];
+    // }
+    // return this.baseHeaders;
+    return [...this.baseHeaders, 'On Leave', 'Leave Type', 'Status', 'Action'];
   }
 
   // Extracted from services date conversion //
