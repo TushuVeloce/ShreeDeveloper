@@ -38,7 +38,12 @@ export class AttendanceLogsProps {
 
   // for photo uploaded
   public attendacelogpath1 : string = '';
-  public attendacelogpath2 : string = '';
+  public attendacelogpath2: string = '';
+
+  public DisplayTotalWorkingHrs: string = '';
+  public DisplayTotalLateMarkHrs : string = '';
+  public DisplayTotalOvertimeHrs: string = '';
+  public DisplayWorkingHrs: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
   public readonly EmployeeName: string = '';

@@ -17,13 +17,13 @@
     </div>
 
     <div class="btn-group">
-      <ion-button fill="outline" color="light" (click)="openPunchModal()"
+      <ion-button color="light" (click)="openPunchModal()"
         [disabled]="isOnLeave ? isOnLeave:!isCheckInEnabled|| !bothButtonsEnabled">
         <ion-ripple-effect></ion-ripple-effect>
         CHECKIN
       </ion-button>
 
-      <ion-button color="warning" (click)="submitPunchOut()"
+      <ion-button color="light" (click)="submitPunchOut()"
         [disabled]="isOnLeave ? isOnLeave:isCheckInEnabled || !bothButtonsEnabled">
         <ion-ripple-effect></ion-ripple-effect>
         CHECKOUT
@@ -89,7 +89,7 @@
             </ion-col>
             <ion-col size="2" class="text-center">{{ day.p.FirstCheckInTime || '--' }}</ion-col>
             <ion-col size="2" class="text-center">{{ day.p.LastCheckOutTime || '--' }}</ion-col>
-            <ion-col size="4" class="text-center">{{ day.p.TotalWorkingHrs || '--' }}</ion-col>
+            <ion-col size="4" class="text-center">{{ day.p.DisplayTotalWorkingHrs || '--' }}</ion-col>
           </ion-row>
         </ion-grid>
       </ng-container>

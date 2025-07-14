@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SegmentValue } from '@ionic/angular';
 import { AttendanceLogType, DomainEnums, LeaveRequestType } from 'src/app/classes/domain/domainenums/domainenums';
 import { AttendanceLogs } from 'src/app/classes/domain/entities/website/HR_and_Payroll/attendancelogs/attendancelogs';
@@ -16,13 +16,11 @@ import { ToastService } from 'src/app/views/mobile-app/components/core/toast.ser
   selector: 'app-all-attendance-mobile-app',
   templateUrl: './all-attendance-mobile-app.component.html',
   styleUrls: ['./all-attendance-mobile-app.component.scss'],
-  standalone:false
+  standalone: false,
 })
-export class AllAttendanceMobileAppComponent  implements OnInit {
-
+export class AllAttendanceMobileAppComponent implements OnInit, OnDestroy {
   selectedMonth: number = 0;
   months: any[] = [];
-  // isLoading: boolean = false;
   companyRef: number = 0;
 
   attendanceLogFilter: AttendanceLogs = AttendanceLogs.CreateNewInstance();
@@ -44,60 +42,19 @@ export class AllAttendanceMobileAppComponent  implements OnInit {
     private uiUtils: UIUtils,
     private appStateManagement: AppStateManageService,
     private dateConversionService: DateconversionService,
-    private dateService: DateconversionService,
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
     private loadingService: LoadingService,
     private companystatemanagement: CompanyStateManagement,
-
-  ) {
-    // this.filteredMonthlyAttendanceLogsList = [
-    //   {
-    //     p: {
-    //       TransDateTime: '2025-07-01',
-    //       FirstCheckInTime: '09:15 AM',
-    //       LastCheckOutTime: '05:45 PM',
-    //       TotalWorkingHrs: '8:30',
-    //       OnLeave: false
-    //     }
-    //   },
-    //   {
-    //     p: {
-    //       TransDateTime: '2025-07-02',
-    //       FirstCheckInTime: '',
-    //       LastCheckOutTime: '',
-    //       TotalWorkingHrs: '',
-    //       OnLeave: true
-    //     }
-    //   },
-    //   {
-    //     p: {
-    //       TransDateTime: '2025-07-03',
-    //       FirstCheckInTime: '',
-    //       LastCheckOutTime: '',
-    //       TotalWorkingHrs: '',
-    //       OnLeave: false
-    //     }
-    //   },
-    //   {
-    //     p: {
-    //       TransDateTime: '2025-07-04',
-    //       FirstCheckInTime: '10:00 AM',
-    //       LastCheckOutTime: '06:00 PM',
-    //       TotalWorkingHrs: '8:00',
-    //       OnLeave: false
-    //     }
-    //   }
-    // ];
-  }
+  ) { }
 
   async ngOnInit(): Promise<void> {
     await this.loadAttendanceDetailsIfEmployeeExists();
   }
 
   ngOnDestroy(): void {
-    // cleanup if needed in the future
+    // Any cleanup logic
   }
 
   ionViewWillEnter = async () => {
@@ -111,13 +68,17 @@ export class AllAttendanceMobileAppComponent  implements OnInit {
 
   async loadAttendanceDetailsIfEmployeeExists(): Promise<void> {
     try {
-      this.loadingService.show();
-      this.attendanceLogFilter.p.EmployeeRef = this.appStateManagement.getEmployeeRef();
-      this.CompanyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
+      await this.loadingService.show();
+
+      const employeeRef = Number(this.appStateManagement.localStorage.getItem('LoginEmployeeRef'));
+      this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
+      this.CompanyRef = this.companyRef;
       this.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+      this.attendanceLogFilter.p.EmployeeRef = employeeRef;
+
       await this.getFinancialYearListByCompanyRef();
 
-      if (this.attendanceLogFilter.p.EmployeeRef > 0) {
+      if (employeeRef > 0) {
         this.months = DomainEnums.MonthList();
         await this.fetchAttendanceByMonth(new Date().getMonth());
       } else {
@@ -131,46 +92,46 @@ export class AllAttendanceMobileAppComponent  implements OnInit {
     }
   }
 
-  getFinancialYearListByCompanyRef = async () => {
+  async getFinancialYearListByCompanyRef(): Promise<void> {
     try {
-      this.FinancialYearList = [];
       if (this.CompanyRef <= 0) {
-        // await this.uiUtils.showErrorToster('Company not Selected');
         await this.toastService.present('Company not selected', 1000, 'warning');
         await this.haptic.warning();
         return;
       }
-      let lst = await FinancialYear.FetchEntireListByCompanyRef(this.CompanyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+
+      const lst = await FinancialYear.FetchEntireListByCompanyRef(
+        this.CompanyRef,
+        async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
+      );
 
       const updatedArray = lst.map(item => ({
         ...item,
-        FromDate: item.p.FromDate.substring(0, 4),
-        ToDate: item.p.ToDate.substring(0, 4)
+        FromDate: item.p.FromDate?.substring(0, 4) || '',
+        ToDate: item.p.ToDate?.substring(0, 4) || '',
       }));
 
       const years: string[] = [];
 
       updatedArray.forEach(item => {
-        years.push(item.FromDate);
-        years.push(item.ToDate);
+        if (item.FromDate) years.push(item.FromDate);
+        if (item.ToDate) years.push(item.ToDate);
       });
 
-      // Step 2: Sort and remove duplicates
-      const uniqueYears = Array.from(new Set(years)).sort();
-
-      this.FinancialYearList = uniqueYears;
+      this.FinancialYearList = Array.from(new Set(years)).sort();
     } catch (error) {
-
+      this.handleError(error, 'Fetching financial year list');
     }
   }
 
-
   async fetchAttendanceByMonth(value: SegmentValue | undefined): Promise<void> {
     try {
-      const SelectedMonth = Number(value);
+      const SelectedMonth = Number(value)+1;
       if (isNaN(SelectedMonth)) return;
+
       this.selectedMonth = SelectedMonth;
       this.attendanceLogFilter.p.Months = SelectedMonth;
+
       await this.fetchMonthlyLogs();
     } catch (error) {
       this.handleError(error, 'Fetching attendance for selected month');
@@ -187,38 +148,38 @@ export class AllAttendanceMobileAppComponent  implements OnInit {
         AttendanceLogType.MonthlyAttendanceLog,
         month,
         employeeRef,
-        async errMsg => { await this.toastService.present(errMsg, 1000, 'danger'), await this.haptic.error() }
+        async errMsg => {
+          await this.toastService.present(errMsg, 1000, 'danger');
+          await this.haptic.error();
+        }
       );
+      console.log('logs :', logs);
+
       this.monthlyAttendanceLogsList = logs;
       this.filteredMonthlyAttendanceLogsList = logs;
+
       this.PresentCount = logs.filter(log => log.p.FirstCheckInTime).length;
-      this.AbsentCount = logs.filter(log => !log.p.FirstCheckInTime || log.p.OnLeave).length;
-      console.log('filteredMonthlyAttendanceLogsList :', this.filteredMonthlyAttendanceLogsList);
+      this.AbsentCount = logs.filter(log => !log.p.FirstCheckInTime && !log.p.OnLeave).length;
     } catch (error) {
       this.handleError(error, 'Fetching monthly logs');
     }
   }
 
-
-  onYearChange() {
-    console.log('Selected year:', this.SelectedYear);
+  onYearChange(): void {
+    if (!this.SelectedYear || this.SelectedYear.length === 0) return;
     this.fetchMonthlyLogs();
   }
 
   getDayName(dateString: string): string {
-    const formatted = this.formatDate(dateString); // returns "23-05-2025"
+    const formatted = this.formatDate(dateString);
     const date = this.parseFormattedDate(formatted);
-    if (isNaN(date.getTime())) return '--';
-
-    return date.toLocaleDateString(this.DEFAULT_LOCALE, { weekday: 'long' });
+    return isNaN(date.getTime()) ? '--' : date.toLocaleDateString(this.DEFAULT_LOCALE, { weekday: 'long' });
   }
 
   formatDay(dateString: string): string {
-    const formatted = this.formatDate(dateString); // returns "23-05-2025"
+    const formatted = this.formatDate(dateString);
     const date = this.parseFormattedDate(formatted);
-    if (isNaN(date.getTime())) return '--';
-
-    return date.toLocaleDateString(this.DEFAULT_LOCALE, {
+    return isNaN(date.getTime()) ? '--' : date.toLocaleDateString(this.DEFAULT_LOCALE, {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -230,16 +191,13 @@ export class AllAttendanceMobileAppComponent  implements OnInit {
     return new Date(`${year}-${month}-${day}`);
   }
 
-  // Custom date parsing for "DD-MM-YYYY"
   formatDate(date: string | Date): string {
-    // console.log('this.dateConversionService.formatDate(date) :', this.dateConversionService.formatDate(date));
     return this.dateConversionService.formatDate(date);
   }
 
-  private handleError(error: any, context: string): void {
+  private async handleError(error: any, context: string): Promise<void> {
     console.error(`${context} failed:`, error);
-    // this.uiUtils.showErrorToster(`${context} failed`);
-    this.toastService.present(`Error ${error}`, 1000, 'danger');
-    this.haptic.error();
+    await this.toastService.present(`Error: ${error?.message || error}`, 1000, 'danger');
+    await this.haptic.error();
   }
 }
