@@ -438,13 +438,15 @@ export class AttendanceDetailsComponent implements OnInit {
     this.onSiteSelection();
 
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
-      if (this.Entity.p.AttendanceLogDetailsArray.length > 1) {
-        if (this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 2].CheckOutTime == '') {
-          return this.uiUtils.showWarningToster('Next Check In time should be after previous Check Out.');
-        }
+      if (this.editingIndex != 0) {
+        if (this.Entity.p.AttendanceLogDetailsArray.length > 1) {
+          if (this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 2].CheckOutTime == '') {
+            return this.uiUtils.showWarningToster('Next Check In time should be after previous Check Out.');
+          }
 
-        if (this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 2].CheckOutTime > this.newAttendance.CheckInTime) {
-          return this.uiUtils.showWarningToster('Next Check In time should be after previous Check Out.');
+          if (this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 2].CheckOutTime > this.newAttendance.CheckInTime) {
+            return this.uiUtils.showWarningToster('Next Check In time should be after previous Check Out.');
+          }
         }
       }
       this.Entity.p.AttendanceLogDetailsArray[this.editingIndex] = { ...this.newAttendance };

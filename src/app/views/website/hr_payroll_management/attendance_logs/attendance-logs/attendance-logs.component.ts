@@ -133,9 +133,11 @@ export class AttendanceLogsComponent implements OnInit {
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
       Are you sure that you want to Approve this Attendance?`,
       async () => {
+        this.Entity = Entity;
         this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-        Entity.p.IsAttendanceVerified = true;
-        let entitiesToSave = [Entity]
+        this.Entity.p.IsAttendanceVerified = true;
+        let entityToSave = this.Entity.GetEditableVersion();
+        let entitiesToSave = [entityToSave]
         console.log('entitiesToSave :', entitiesToSave);
         let tr = await this.utils.SavePersistableEntities(entitiesToSave);
         if (!tr.Successful) {

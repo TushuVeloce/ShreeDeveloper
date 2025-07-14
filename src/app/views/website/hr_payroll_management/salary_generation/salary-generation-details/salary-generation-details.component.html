@@ -38,7 +38,7 @@
         <div class="col-md-4">
           <label>Total Days</label>
           <input type="number" name="TotalDays" class="form-control" id="TotalDays" [(ngModel)]="Entity.p.TotalDays"
-            placeholder="Enter TotalDays" readonly/>
+            placeholder="Enter TotalDays" readonly />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
@@ -79,7 +79,8 @@
         <div class="col-md-4">
           <label>Basic Salary</label>
           <input type="number" name="BasicSalary" class="form-control" id="BasicSalary"
-            [(ngModel)]="Entity.p.BasicSalary" placeholder="Basic Salary" required readonly (ngModelChange)="calculategrosstotal()" />
+            [(ngModel)]="Entity.p.BasicSalary" placeholder="Basic Salary" required readonly
+            (ngModelChange)="calculategrosstotal()" />
         </div>
         <div class="col-md-4">
           <label>Total Allowance</label>
@@ -111,7 +112,7 @@
         <hr style="border: 2px solid brown" width="20%" />
       </div>
       <div class="row">
-          <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem; ">
           <label>TDS</label>
           <input type="number" name="TDS" class="form-control" id="TDS" [(ngModel)]="Entity.p.TDS"
             placeholder="Enter TDS" required (click)="selectAllValue($event)"
@@ -134,7 +135,7 @@
             [(ngModel)]="Entity.p.AdvancePayment" placeholder="Enter Advance Payment" required
             (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()" />
         </div>
-         <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Advance Deduction</label>
           <input type="number" name="AdvanceDeduction" class="form-control" id="AdvanceDeduction"
             [(ngModel)]="Entity.p.AdvanceDeduction" placeholder="Enter Advance Deduction" required
