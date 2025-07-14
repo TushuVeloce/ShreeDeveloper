@@ -1,0 +1,45 @@
+.chip-scroll-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 12px;
+    gap: 10px;
+    align-items: center;
+    scroll-behavior: smooth;
+
+    /* Optional: hide scrollbars (cross-browser) */
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.chip-with-clear {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .chip-select {
+        --min-width: unset;
+        --max-width: max-content;
+        --padding-start: 12px;
+        --padding-end: 30px;
+        --border-radius: 20px;
+        --background: var(--ion-color-light);
+        --color: var(--ion-color-dark);
+        font-weight: 500;
+        border: 1px solid var(--ion-color-medium);
+        border-radius: 20px;
+        white-space: nowrap;
+    }
+
+    .clear-icon {
+        position: absolute;
+        right: 6px;
+        color: var(--ion-color-danger);
+        font-size: 18px;
+        z-index: 1;
+    }
+}

@@ -81,12 +81,9 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   isLabourTimeModalOpen: boolean = false;
 
   timeheaders: string[] = ['Start Time ', 'End Time', 'Worked Hours'];
-  labourtimeheaders: string[] = ['Labour Type', 'From Time', 'To Time', 'Quantity ', 'Rate', 'Amount'];
-
+  labourtimeheaders: string[] = ['Labour Type', 'From Time', 'To Time', 'Work Hours', 'Quantity ', 'Rate', 'Amount'];
 
   companyRef: number = 0;
-
-
 
   LedgerName: string = '';
   selectedLedger: any[] = [];
@@ -102,6 +99,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
 
   selectedSite: any[] = [];
   SiteName: string = '';
+
   selectedVendor: any[] = [];
   VendorName: string = '';
 
@@ -119,8 +117,6 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
 
   UnitName: string = '';
   selectedUnit: any[] = [];
-
-
 
   TotalOrderedQty: number = 0;
 
@@ -490,14 +486,14 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   };
 
   convertHoursToReadableTime(decimalHours: number): string {
-  const hours = Math.floor(decimalHours);
-  const minutes = Math.round((decimalHours - hours) * 60);
+    const hours = Math.floor(decimalHours);
+    const minutes = Math.round((decimalHours - hours) * 60);
 
-  const hDisplay = hours > 0 ? `${hours}h` : '';
-  const mDisplay = minutes > 0 ? `${minutes}m` : '';
+    const hDisplay = hours > 0 ? `${hours}h` : '';
+    const mDisplay = minutes > 0 ? `${minutes}m` : '';
 
-  return `${hDisplay} ${mDisplay}`.trim() || '0m';
-}
+    return `${hDisplay} ${mDisplay}`.trim() || '0m';
+  }
 
 
   getTotalWorkedHours(): number {
@@ -506,6 +502,16 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     }, 0);
   }
 
+  getTotalLabourWorkedHours(): number {
+    return this.Entity.p.LabourExpenseDetailsArray.reduce((total: number, item: any) => {
+      return total + Number(item.LabourWorkedHours || 0);
+    }, 0);
+  }
+  getTotalLabourQuantity(): number {
+    return this.Entity.p.LabourExpenseDetailsArray.reduce((total: number, item: any) => {
+      return total + Number(item.LabourQty || 0);
+    }, 0);
+  }
   getTotalLabourAmount(): number {
     return this.Entity.p.LabourExpenseDetailsArray.reduce((total: number, item: any) => {
       return total + Number(item.LabourAmount || 0);
@@ -538,34 +544,6 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       this.MachineTimeEntity.WorkedHours = +diffHrs.toFixed(2); // round to 2 decimal places
     } else {
       this.MachineTimeEntity.WorkedHours = 0;
-    }
-  }
-  calculateLaboursWorkedHours() {
-    const start = this.LabourTimeEntity.LabourFromTime;
-    const end = this.LabourTimeEntity.LabourToTime;
-
-    if (start && end) {
-      const [startHour, startMin] = start.split(':').map(Number);
-      const [endHour, endMin] = end.split(':').map(Number);
-
-      const startDate = new Date();
-      startDate.setHours(startHour, startMin, 0);
-
-      const endDate = new Date();
-      endDate.setHours(endHour, endMin, 0);
-
-      let diffMs = endDate.getTime() - startDate.getTime();
-
-      // If end time is before start time, assume it's the next day
-      if (diffMs < 0) {
-        endDate.setDate(endDate.getDate() + 1);
-        diffMs = endDate.getTime() - startDate.getTime();
-      }
-
-      const diffHrs = diffMs / (1000 * 60 * 60); // convert ms to hours
-      this.LabourTimeEntity.LabourWorkedHours = +diffHrs.toFixed(2); // round to 2 decimal places
-    } else {
-      this.LabourTimeEntity.LabourWorkedHours = 0;
     }
   }
 
@@ -622,8 +600,8 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     this.CalculateAmount()
   }
 
-  CloseTimeModal = async (type: string) => {
-    if (type === 'machinetime') {
+  CloseTimeModal = async (type: number) => {
+    if (type === 100) {
       const keysToCheck = ['StartTime', 'EndTime'] as const;
 
       const hasData = keysToCheck.some(
@@ -631,15 +609,6 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       );
 
       if (hasData) {
-        // await this.uiUtils.showConfirmationMessage(
-        //   'Close',
-        //   `This process is <strong>IRREVERSIBLE!</strong><br/>
-        //          Are you sure you want to close this modal?`,
-        //   async () => {
-        //     this.isTimeModalOpen = false;
-        //     this.MachineTimeEntity = TimeDetailProps.Blank();
-        //   }
-        // );
         this.alertService.presentDynamicAlert({
           header: 'Warning',
           subHeader: 'Confirmation needed',
@@ -672,68 +641,9 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     }
   };
 
-  async SaveLabourTime() {
-    try{
-      if (!this.LabourTimeEntity.LabourFromTime || !this.LabourTimeEntity.LabourToTime) {
-        // await this.uiUtils.showErrorMessage('Error', 'Start Time and End Time are required!');
-        await this.toastService.present('Error ' + 'Start Time and End Time are required!', 1000, 'warning');
-        await this.haptic.warning();
-        return;
-      }
-      if (this.LabourTimeEntity.LabourType != 0) {
-        const labourtype = this.LabourTypeList.find(item => item.Ref == this.LabourTimeEntity.LabourType)
-        this.LabourTimeEntity.LabourTypeName = labourtype?.Name || ''
-      }
-      if (this.LabourEditingIndex !== null && this.LabourEditingIndex !== undefined && this.LabourEditingIndex >= 0) {
-        this.Entity.p.LabourExpenseDetailsArray[this.LabourEditingIndex] = { ...this.LabourTimeEntity };
-        // await this.uiUtils.showSuccessToster('Labour Time updated successfully');
-        await this.toastService.present('Labour Time updated successfully', 1000, 'success');
-        await this.haptic.success();
-        // this.isLabourTimeModalOpen = false;
-      } else {
-        this.LabourTimeEntity.InvoiceRef = this.Entity.p.Ref;
-        this.Entity.p.LabourExpenseDetailsArray.push({ ...this.LabourTimeEntity });
-        // await this.uiUtils.showSuccessToster('Labour Time added successfully');
-        await this.toastService.present('Labour Time added successfully', 1000, 'success');
-        await this.haptic.success();
-        // this.LabourTimeEntity = LabourTimeProps.Blank();
-        // this.LabourTypeName = '';
-        // this.selectedLabourType = [];
-        // this.LabourEndTime = null;
-        // this.LabourStartTime = null;
-        // this.isLabourTimeModalOpen = false;
-      }
-    } catch(error){
-
-    }finally{
-      this.LabourTimeEntity = LabourTimeProps.Blank();
-      this.LabourEditingIndex = null;
-      this.CalculateAmount();
-      this.LabourTypeName = '';
-      this.selectedLabourType = [];
-      this.LabourEndTime = null;
-      this.LabourStartTime = null;
-      this.isLabourTimeModalOpen = false;
-    }
-  }
-
-  EditLabourTime(index: number) {
-    this.isLabourTimeModalOpen = true
-    this.LabourTimeEntity = { ...this.Entity.p.LabourExpenseDetailsArray[index] }
-    this.selectedLabourType = [{ p: { Ref: this.Entity.p.LabourExpenseDetailsArray[index].LabourType, Name: this.Entity.p.LabourExpenseDetailsArray[index].LabourTypeName } }];
-    this.SiteName = this.Entity.p.SiteName;
-
-    this.LabourEditingIndex = index;
-  }
-
-  RemoveLabourTime(index: number) {
-    this.Entity.p.LabourExpenseDetailsArray.splice(index, 1); // Remove Time
-    this.CalculateAmount()
-  }
-
-  CloseLabourTimeModal = async (type: string) => {
-    if (type === 'labourtime') {
-      const keysToCheck = ['LabourType', 'LabourFromTime', 'LabourToTime', 'LabourQty', 'LabourRate'] as const;
+  CloseLabourTimeModal = async (type: number) => {
+    if (type === 200) {
+      const keysToCheck = ['StartTime', 'EndTime'] as const;
 
       const hasData = keysToCheck.some(
         key => (this.LabourTimeEntity as any)[key]?.toString().trim()
@@ -759,12 +669,11 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
               handler: () => {
                 this.isLabourTimeModalOpen = false;
                 this.LabourTimeEntity = LabourTimeProps.Blank();
+                this.haptic.success();
                 this.LabourTypeName = '';
                 this.selectedLabourType = [];
                 this.LabourEndTime = null;
                 this.LabourStartTime = null;
-                this.haptic.success();
-                console.log('User confirmed.');
               }
             }
           ]
@@ -775,6 +684,103 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       }
     }
   };
+
+  calculateLaboursWorkedHours() {
+    const start = this.LabourTimeEntity.LabourFromTime;
+    const end = this.LabourTimeEntity.LabourToTime;
+
+    if (start && end) {
+      const [startHour, startMin] = start.split(':').map(Number);
+      const [endHour, endMin] = end.split(':').map(Number);
+
+      const startDate = new Date();
+      startDate.setHours(startHour, startMin, 0);
+
+      const endDate = new Date();
+      endDate.setHours(endHour, endMin, 0);
+
+      let diffMs = endDate.getTime() - startDate.getTime();
+
+      // If end time is before start time, assume it's the next day
+      if (diffMs < 0) {
+        endDate.setDate(endDate.getDate() + 1);
+        diffMs = endDate.getTime() - startDate.getTime();
+      }
+
+      const diffHrs = diffMs / (1000 * 60 * 60); // convert ms to hours
+      this.LabourTimeEntity.LabourWorkedHours = +diffHrs.toFixed(2); // round to 2 decimal places
+    } else {
+      this.LabourTimeEntity.LabourWorkedHours = 0;
+    }
+  }
+
+  async SaveLabourTime() {
+    try {
+      if (!this.LabourTimeEntity.LabourFromTime || !this.LabourTimeEntity.LabourToTime) {
+        // await this.uiUtils.showErrorMessage('Error', 'Start Time and End Time are required!');
+        await this.toastService.present('Error ' + 'Start Time and End Time are required!', 1000, 'warning');
+        await this.haptic.warning();
+        return;
+      }
+      if (!this.LabourTimeEntity.LabourType) {
+        await this.toastService.present('Error ' + 'LabourType is required!', 1000, 'warning');
+        await this.haptic.warning();
+        return;
+      }
+      if (!this.LabourTimeEntity.LabourQty || !this.LabourTimeEntity.LabourRate) {
+        await this.toastService.present('Error ' + 'Labour Quantity and Labour Rate is required!', 1000, 'warning');
+        await this.haptic.warning();
+        return;
+      }
+      if (this.LabourTimeEntity.LabourType != 0) {
+        const labourtype = this.LabourTypeList.find(item => item.Ref == this.LabourTimeEntity.LabourType)
+        this.LabourTimeEntity.LabourTypeName = labourtype?.Name || ''
+      }
+      if (this.LabourEditingIndex !== null && this.LabourEditingIndex !== undefined && this.LabourEditingIndex >= 0) {
+        this.Entity.p.LabourExpenseDetailsArray[this.LabourEditingIndex] = { ...this.LabourTimeEntity };
+        // await this.uiUtils.showSuccessToster('Labour Time updated successfully');
+        await this.toastService.present('Labour Time updated successfully', 1000, 'success');
+        await this.haptic.success();
+        // this.isLabourTimeModalOpen = false;
+      } else {
+        this.LabourTimeEntity.InvoiceRef = this.Entity.p.Ref;
+        this.Entity.p.LabourExpenseDetailsArray.push({ ...this.LabourTimeEntity });
+        console.log(' this.Entity.p.LabourExpenseDetailsArray :',  this.Entity.p.LabourExpenseDetailsArray);
+        // await this.uiUtils.showSuccessToster('Labour Time added successfully');
+        await this.toastService.present('Labour Time added successfully', 1000, 'success');
+        await this.haptic.success();
+        // this.LabourTimeEntity = LabourTimeProps.Blank();
+        // this.LabourTypeName = '';
+        // this.selectedLabourType = [];
+        // this.LabourEndTime = null;
+        // this.LabourStartTime = null;
+        // this.isLabourTimeModalOpen = false;
+      }
+    } catch (error) {
+
+    } finally {
+      this.LabourTimeEntity = LabourTimeProps.Blank();
+      this.LabourEditingIndex = null;
+      this.CalculateAmount();
+      this.LabourTypeName = '';
+      this.selectedLabourType = [];
+      this.LabourEndTime = null;
+      this.LabourStartTime = null;
+      this.isLabourTimeModalOpen = false;
+    }
+  }
+
+  EditLabourTime(index: number) {
+    this.isLabourTimeModalOpen = true
+    this.LabourTimeEntity = { ...this.Entity.p.LabourExpenseDetailsArray[index] }
+    this.selectedLabourType = [{ p: { Ref: this.Entity.p.LabourExpenseDetailsArray[index].LabourType, Name: this.Entity.p.LabourExpenseDetailsArray[index].LabourTypeName } }];
+    this.LabourEditingIndex = index;
+  }
+
+  RemoveLabourTime(index: number) {
+    this.Entity.p.LabourExpenseDetailsArray.splice(index, 1); // Remove Time
+    this.CalculateAmount()
+  }
 
   ClearInputsOnExpenseChange = () => {
     this.Entity.p.MachineUsageDetailsArray = []

@@ -14,8 +14,9 @@ import { DateFieldComponent } from './date-field/date-field.component';
 import { TransactionFilterComponent } from './transaction-filter/transaction-filter.component';
 import { ChipSelectorComponent } from './chip-selector/chip-selector.component';
 import { DatePickerComponent } from './date-picker/date-picker.component';
+import { ChipFilterMobileAppComponent } from './chip-filter-mobile-app/chip-filter-mobile-app.component';
 @NgModule({
-  declarations: [HeaderComponent, HeaderWithBackHandlerComponent, SelectModalComponent, FilterSheetComponent, SkeletonLoaderComponent, InputFieldComponent, CustomButtonComponent, DateFieldComponent, TransactionFilterComponent, ChipSelectorComponent, DatePickerComponent],
+  declarations: [HeaderComponent, HeaderWithBackHandlerComponent, SelectModalComponent, FilterSheetComponent, SkeletonLoaderComponent, InputFieldComponent, CustomButtonComponent, DateFieldComponent, TransactionFilterComponent, ChipSelectorComponent, DatePickerComponent,ChipFilterMobileAppComponent],
   imports: [
     CommonModule,
     IonicModule,
@@ -23,6 +24,6 @@ import { DatePickerComponent } from './date-picker/date-picker.component';
     ReactiveFormsModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA] ,
-  exports: [HeaderComponent, HeaderWithBackHandlerComponent, SelectModalComponent,FilterSheetComponent,SkeletonLoaderComponent,InputFieldComponent,CustomButtonComponent,DateFieldComponent,TransactionFilterComponent,ChipSelectorComponent,DatePickerComponent]
+  exports: [HeaderComponent, HeaderWithBackHandlerComponent, SelectModalComponent,FilterSheetComponent,SkeletonLoaderComponent,InputFieldComponent,CustomButtonComponent,DateFieldComponent,TransactionFilterComponent,ChipSelectorComponent,DatePickerComponent,ChipFilterMobileAppComponent]
 })
 export class SharedModule { }
