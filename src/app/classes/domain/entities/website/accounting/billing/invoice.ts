@@ -229,12 +229,10 @@ export class Invoice implements IPersistable<Invoice> {
     return Invoice.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchRecipientByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchRecipientByRecipientTypeRef(CompanyRef: number, RecipientType: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new GetDistinctRecipientNameFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
-    // if (SiteRef) {
-    //   req.SiteRefs.push(SiteRef)
-    // }
+    req.CompanyRef = CompanyRef
+    req.RecipientType = RecipientType
     let tdResponse = await Invoice.FetchTransportData(req, errorHandler) as TransportData;
     return Invoice.ListFromTransportData(tdResponse);
   }

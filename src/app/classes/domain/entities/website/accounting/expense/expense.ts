@@ -35,7 +35,7 @@ export class ExpenseProps {
   public readonly SubLedgerName: string = ''
   public RecipientRef: number = 0
   public RecipientName: string = ''
-  public IsSiteRef: number = 0 
+  public IsSiteRef: number = 0
   public Reason: string = ''
   public InvoiceAmount: number = 0
   public Narration: string = ''
@@ -224,11 +224,14 @@ export class Expense implements IPersistable<Expense> {
     return Expense.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchTotalExpenseFromSiteAndRecipient(CompanyRef: number, SiteRef: number, RecipientRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTotalInvoiceAmountFromSiteAndRecipient(CompanyRef: number, SiteRef: number, RecipientType: number, RecipientRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new TotalExpenseFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
-    req.SiteRefs.push(SiteRef)
-    req.RecipientRefs.push(RecipientRef)
+    req.CompanyRef = CompanyRef
+    req.SiteRef = SiteRef
+    req.RecipientType = RecipientType
+    req.RecipientRef = RecipientRef
+
+
     let tdResponse = await Expense.FetchTransportData(req, errorHandler) as TransportData;
     return Expense.ListFromTransportData(tdResponse);
   }

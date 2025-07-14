@@ -5,12 +5,16 @@ import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class TotalExpenseFetchRequest {
-  public static readonly FetchRequestType: string = "GetTotalExpenseFromSiteAndRecipientNameFetchRequest";
+  public static readonly FetchRequestType: string = "GetTotalInvoiceAmountFromSiteAndRecipientRefFetchRequest";
 
-  CompanyRefs: number[] = [];
+  CompanyRef: number = 0;
+  ExpenseRef: number = 0;
+  SiteRef: number = 0;
+  RecipientRef: number = 0;
+  RecipientType: number = 0;
+
   ExpenseRefs: number[] = [];
-  SiteRefs: number[] = [];
-  RecipientRefs: number[] = [];
+  CompanyRefs: number[] = [];
 
   public MergeIntoTransportData = (td: TransportData) => {
     let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, TotalExpenseFetchRequest.FetchRequestType) as DataCollection;
