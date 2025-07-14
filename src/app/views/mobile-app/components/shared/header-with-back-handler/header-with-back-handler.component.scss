@@ -42,4 +42,8 @@
 /* Action Buttons */
 .icon-button {
     font-size: 1.4rem;
+    --color: var(--ion-text-color-dark);
 }
+.icon-button-back{
+    --color: var(--ion-text-color-dark);
+}   

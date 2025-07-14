@@ -12,8 +12,9 @@ export class SalaryGenerationCustomRequest
     EmployeeRef:Number=0;
     Month:Number = 0;
     Data: any[] = []
-    CompanyRefs: number[] = [];
+    CompanyRef: number = 0;
     EmployeeRefs:Number=0;
+    CompanyRefs: number[] = [];
     SalaryGenerationRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>

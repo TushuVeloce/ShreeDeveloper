@@ -35,9 +35,9 @@ import { ToastService } from 'src/app/views/mobile-app/components/core/toast.ser
   selector: 'app-invoice-details-mobile-app',
   templateUrl: './invoice-details-mobile-app.component.html',
   styleUrls: ['./invoice-details-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class InvoiceDetailsMobileAppComponent  implements OnInit {
+export class InvoiceDetailsMobileAppComponent implements OnInit {
 
   Entity: Invoice = Invoice.CreateNewInstance();
   RecipientEntity: Recipient = Recipient.CreateNewInstance();
@@ -142,7 +142,7 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
 
   constructor(
     private router: Router,
-    private appStateManage: AppStateManageService ,
+    private appStateManage: AppStateManageService,
     private companystatemanagement: CompanyStateManagement,
     private dtu: DTU,
     private DateconversionService: DateconversionService,
@@ -258,7 +258,7 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
     }
   }
 
-  public async onBillingDateChange(date: any): Promise < void> {
+  public async onBillingDateChange(date: any): Promise<void> {
     this.BillingDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
     this.Entity.p.Date = this.BillingDate;
     this.DisplayBillingDate = this.BillingDate;
@@ -321,6 +321,8 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
     });
     this.VendorServiceList = lst.p.ServiceListSuppliedByVendor;
     this.VendorServiceListByVendor = []; // Clear existing list first
+    this.selectedVendorService = [];
+    this.VendorServiceName = "";
     if (this.VendorServiceList.length > 0) {
       await this.FormulateVendorServiceList();
       const refArray = this.VendorServiceList.map(s => Number(s));
@@ -487,6 +489,17 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
     await this.haptic.error();
   };
 
+  convertHoursToReadableTime(decimalHours: number): string {
+  const hours = Math.floor(decimalHours);
+  const minutes = Math.round((decimalHours - hours) * 60);
+
+  const hDisplay = hours > 0 ? `${hours}h` : '';
+  const mDisplay = minutes > 0 ? `${minutes}m` : '';
+
+  return `${hDisplay} ${mDisplay}`.trim() || '0m';
+}
+
+
   getTotalWorkedHours(): number {
     return this.Entity.p.MachineUsageDetailsArray.reduce((total: number, item: any) => {
       return total + Number(item.WorkedHours || 0);
@@ -527,43 +540,81 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
       this.MachineTimeEntity.WorkedHours = 0;
     }
   }
+  calculateLaboursWorkedHours() {
+    const start = this.LabourTimeEntity.LabourFromTime;
+    const end = this.LabourTimeEntity.LabourToTime;
+
+    if (start && end) {
+      const [startHour, startMin] = start.split(':').map(Number);
+      const [endHour, endMin] = end.split(':').map(Number);
+
+      const startDate = new Date();
+      startDate.setHours(startHour, startMin, 0);
+
+      const endDate = new Date();
+      endDate.setHours(endHour, endMin, 0);
+
+      let diffMs = endDate.getTime() - startDate.getTime();
+
+      // If end time is before start time, assume it's the next day
+      if (diffMs < 0) {
+        endDate.setDate(endDate.getDate() + 1);
+        diffMs = endDate.getTime() - startDate.getTime();
+      }
+
+      const diffHrs = diffMs / (1000 * 60 * 60); // convert ms to hours
+      this.LabourTimeEntity.LabourWorkedHours = +diffHrs.toFixed(2); // round to 2 decimal places
+    } else {
+      this.LabourTimeEntity.LabourWorkedHours = 0;
+    }
+  }
 
   async SaveTime() {
-    if (!this.MachineTimeEntity.StartTime || !this.MachineTimeEntity.EndTime) {
-      // await this.uiUtils.showErrorMessage('Error', 'Start Time and End Time are required!');
-      await this.toastService.present('Error ' + 'Start Time and End Time are required!', 1000, 'warning');
-      await this.haptic.warning();
-      return;
-    }
+    try {
+      if (!this.MachineTimeEntity.StartTime || !this.MachineTimeEntity.EndTime) {
+        // await this.uiUtils.showErrorMessage('Error', 'Start Time and End Time are required!');
+        await this.toastService.present('Error ' + 'Start Time and End Time are required!', 1000, 'warning');
+        await this.haptic.warning();
+        return;
+      }
 
-    if (this.MachineEditingIndex !== null && this.MachineEditingIndex !== undefined && this.MachineEditingIndex >= 0) {
-      this.Entity.p.MachineUsageDetailsArray[this.MachineEditingIndex] = { ...this.MachineTimeEntity };
-      // await this.uiUtils.showSuccessToster('Machinary Time updated successfully');
-      await this.toastService.present('Machinary Time updated successfully', 1000, 'success');
-      await this.haptic.success();
+      if (this.MachineEditingIndex !== null && this.MachineEditingIndex !== undefined && this.MachineEditingIndex >= 0) {
+        this.Entity.p.MachineUsageDetailsArray[this.MachineEditingIndex] = { ...this.MachineTimeEntity };
+        // await this.uiUtils.showSuccessToster('Machinary Time updated successfully');
+        await this.toastService.present('Machinary Time updated successfully', 1000, 'success');
+        await this.haptic.success();
+        // this.MachineStartTime = null;
+        // this.MachineEndTime = null;
+        // this.isTimeModalOpen = false;
+      } else {
+        this.MachineTimeEntity.InvoiceRef = this.Entity.p.Ref;
+        this.Entity.p.MachineUsageDetailsArray.push({ ...this.MachineTimeEntity });
+        // await this.uiUtils.showSuccessToster('Machinary Time added successfully');
+        await this.toastService.present('Machinary Time added successfully', 1000, 'success');
+        await this.haptic.success();
+        // this.MachineStartTime = null;
+        // this.MachineEndTime = null;
+        // this.isTimeModalOpen = false;
+      }
+    } catch (error) {
+
+    } finally {
+
+      this.MachineTimeEntity = TimeDetailProps.Blank();
+      this.MachineEditingIndex = null;
+      this.CalculateAmount()
       this.MachineStartTime = null;
       this.MachineEndTime = null;
       this.isTimeModalOpen = false;
-    } else {
-      this.MachineTimeEntity.InvoiceRef = this.Entity.p.Ref;
-      this.Entity.p.MachineUsageDetailsArray.push({ ...this.MachineTimeEntity });
-      // await this.uiUtils.showSuccessToster('Machinary Time added successfully');
-      await this.toastService.present('Machinary Time added successfully', 1000, 'success');
-      await this.haptic.success();
-      this.MachineStartTime = null;
-      this.MachineEndTime = null;
-      this.isTimeModalOpen = false;
     }
-
-    this.MachineTimeEntity = TimeDetailProps.Blank();
-    this.MachineEditingIndex = null;
-    this.CalculateAmount()
   }
 
   EditTime(index: number) {
     this.isTimeModalOpen = true
     this.MachineTimeEntity = { ...this.Entity.p.MachineUsageDetailsArray[index] }
     this.MachineEditingIndex = index;
+    this.MachineStartTime = this.convertHHMMToISOString(this.Entity.p.MachineUsageDetailsArray[index].StartTime) ?? null;
+    this.MachineEndTime = this.convertHHMMToISOString(this.Entity.p.MachineUsageDetailsArray[index].EndTime) ?? null;
   }
 
   RemoveTime(index: number) {
@@ -622,38 +673,48 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
   };
 
   async SaveLabourTime() {
-    if (!this.LabourTimeEntity.LabourFromTime || !this.LabourTimeEntity.LabourToTime) {
-      // await this.uiUtils.showErrorMessage('Error', 'Start Time and End Time are required!');
-      await this.toastService.present('Error ' + 'Start Time and End Time are required!', 1000, 'warning');
-      await this.haptic.warning();
-      return;
-    }
-    if (this.LabourTimeEntity.LabourType != 0) {
-      const labourtype = this.LabourTypeList.find(item => item.Ref == this.LabourTimeEntity.LabourType)
-      this.LabourTimeEntity.LabourTypeName = labourtype?.Name || ''
-    }
-    if (this.LabourEditingIndex !== null && this.LabourEditingIndex !== undefined && this.LabourEditingIndex >= 0) {
-      this.Entity.p.LabourExpenseDetailsArray[this.LabourEditingIndex] = { ...this.LabourTimeEntity };
-      // await this.uiUtils.showSuccessToster('Labour Time updated successfully');
-      await this.toastService.present('Labour Time updated successfully', 1000, 'success');
-      await this.haptic.success();
-      this.isLabourTimeModalOpen = false;
-    } else {
-      this.LabourTimeEntity.InvoiceRef = this.Entity.p.Ref;
-      this.Entity.p.LabourExpenseDetailsArray.push({ ...this.LabourTimeEntity });
-      // await this.uiUtils.showSuccessToster('Labour Time added successfully');
-      await this.toastService.present('Labour Time added successfully', 1000, 'success');
-      await this.haptic.success();
+    try{
+      if (!this.LabourTimeEntity.LabourFromTime || !this.LabourTimeEntity.LabourToTime) {
+        // await this.uiUtils.showErrorMessage('Error', 'Start Time and End Time are required!');
+        await this.toastService.present('Error ' + 'Start Time and End Time are required!', 1000, 'warning');
+        await this.haptic.warning();
+        return;
+      }
+      if (this.LabourTimeEntity.LabourType != 0) {
+        const labourtype = this.LabourTypeList.find(item => item.Ref == this.LabourTimeEntity.LabourType)
+        this.LabourTimeEntity.LabourTypeName = labourtype?.Name || ''
+      }
+      if (this.LabourEditingIndex !== null && this.LabourEditingIndex !== undefined && this.LabourEditingIndex >= 0) {
+        this.Entity.p.LabourExpenseDetailsArray[this.LabourEditingIndex] = { ...this.LabourTimeEntity };
+        // await this.uiUtils.showSuccessToster('Labour Time updated successfully');
+        await this.toastService.present('Labour Time updated successfully', 1000, 'success');
+        await this.haptic.success();
+        // this.isLabourTimeModalOpen = false;
+      } else {
+        this.LabourTimeEntity.InvoiceRef = this.Entity.p.Ref;
+        this.Entity.p.LabourExpenseDetailsArray.push({ ...this.LabourTimeEntity });
+        // await this.uiUtils.showSuccessToster('Labour Time added successfully');
+        await this.toastService.present('Labour Time added successfully', 1000, 'success');
+        await this.haptic.success();
+        // this.LabourTimeEntity = LabourTimeProps.Blank();
+        // this.LabourTypeName = '';
+        // this.selectedLabourType = [];
+        // this.LabourEndTime = null;
+        // this.LabourStartTime = null;
+        // this.isLabourTimeModalOpen = false;
+      }
+    } catch(error){
+
+    }finally{
       this.LabourTimeEntity = LabourTimeProps.Blank();
+      this.LabourEditingIndex = null;
+      this.CalculateAmount();
       this.LabourTypeName = '';
       this.selectedLabourType = [];
       this.LabourEndTime = null;
       this.LabourStartTime = null;
       this.isLabourTimeModalOpen = false;
     }
-    this.LabourTimeEntity = LabourTimeProps.Blank();
-    this.LabourEditingIndex = null;
-    this.CalculateAmount()
   }
 
   EditLabourTime(index: number) {
@@ -794,7 +855,7 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
   LabourStartTimeChange(value: string) {
     this.LabourStartTime = value;
     this.LabourTimeEntity.LabourFromTime = this.formatTimeToHHMM(value);
-    this.calculateWorkedHours();
+    this.calculateLaboursWorkedHours();
   }
 
   LabourEndTimeChange(value: string) {
@@ -804,7 +865,7 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
     }
     this.LabourEndTime = value;
     this.LabourTimeEntity.LabourToTime = this.formatTimeToHHMM(value);
-    this.calculateWorkedHours();
+    this.calculateLaboursWorkedHours();
   }
 
 
@@ -894,7 +955,7 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
     }
   };
 
-  public async selectLabourTypeBottomsheet(): Promise < void> {
+  public async selectLabourTypeBottomsheet(): Promise<void> {
     try {
       // const options = this.LabourTypeList;
       const options = this.LabourTypeList.map((item) => ({ p: item }));
@@ -903,11 +964,11 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
         this.LabourTimeEntity.LabourType = selected[0].p.Ref;
         this.LabourTypeName = selected[0].p.Name;
       });
-    } catch(error) {
+    } catch (error) {
 
     }
   }
-  public async selectInvoiceModeOfPaymentBottomsheet(): Promise < void> {
+  public async selectInvoiceModeOfPaymentBottomsheet(): Promise<void> {
     try {
       // const options = this.ModeofPaymentList;
       const options = this.ModeofPaymentList.map((item) => ({ p: item }));
@@ -916,27 +977,28 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
         this.Entity.p.InvoiceModeOfPayment = selected[0].p.Ref;
         this.InvoiceModeOfPaymentName = selected[0].p.Name;
       });
-    } catch(error) {
+    } catch (error) {
 
     }
   }
 
-  public async selectUnitBottomsheet(): Promise < void> {
+  public async selectUnitBottomsheet(): Promise<void> {
     try {
       const options = this.UnitList;
       this.openSelectModal(options, this.selectedUnit, false, 'Select Unit', 1, (selected) => {
         this.selectedUnit = selected;
         this.Entity.p.UnitRef = selected[0].p.Ref;
         this.UnitName = selected[0].p.Name;
+        this.ClearMachineTimeTable();
       });
-    } catch(error) {
+    } catch (error) {
 
     }
   }
 
 
 
-  public async selectVendorServiceBottomsheet(): Promise < void> {
+  public async selectVendorServiceBottomsheet(): Promise<void> {
     try {
       const options = this.VendorServiceListByVendor;
       this.openSelectModal(options, this.selectedVendorService, false, 'Select Vendor Service', 1, (selected) => {
@@ -944,12 +1006,12 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
         this.Entity.p.VendorServiceRef = selected[0].p.Ref;
         this.VendorServiceName = selected[0].p.Name;
       });
-    } catch(error) {
+    } catch (error) {
 
     }
   }
 
-  public async selectVendorBottomsheet(): Promise < void> {
+  public async selectVendorBottomsheet(): Promise<void> {
     try {
       const options = this.VendorList;
       this.openSelectModal(options, this.selectedVendor, false, 'Select Vendor Name', 1, (selected) => {
@@ -958,12 +1020,12 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
         this.VendorName = selected[0].p.Name;
         this.getVendorServiceListByVendorRef(this.Entity.p.VendorRef)
       });
-    } catch(error) {
+    } catch (error) {
 
     }
   }
 
-  public async selectRecipientNameBottomsheet(): Promise < void> {
+  public async selectRecipientNameBottomsheet(): Promise<void> {
     try {
       const options = this.RecipientList;
       this.openSelectModal(options, this.selectedRecipientName, false, 'Select Recipient Name', 1, (selected) => {
@@ -971,12 +1033,12 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
         this.Entity.p.RecipientMasterRef = selected[0].p.Ref;
         this.RecipientName = selected[0].p.Name;
       });
-    } catch(error) {
+    } catch (error) {
 
     }
   }
 
-  public async selectExpenseTypeBottomsheet(): Promise < void> {
+  public async selectExpenseTypeBottomsheet(): Promise<void> {
     try {
       // const options = this.ExpenseTypeList;
       const options = this.ExpenseTypeList.map((item) => ({ p: item }));
@@ -986,12 +1048,12 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
         this.ExpenseTypeName = selected[0].p.Name;
         this.ClearInputsOnExpenseChange();
       });
-    } catch(error) {
+    } catch (error) {
 
     }
   }
 
-  public async selectSubLedgerBottomsheet(): Promise < void> {
+  public async selectSubLedgerBottomsheet(): Promise<void> {
     try {
       const options = this.SubLedgerList;
       this.openSelectModal(options, this.selectedSubLedger, false, 'Select Sub Ledger', 1, (selected) => {
@@ -999,12 +1061,12 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
         this.Entity.p.SubLedgerRef = selected[0].p.Ref;
         this.SubLedgerName = selected[0].p.Name;
       });
-    } catch(error) {
+    } catch (error) {
 
     }
   }
 
-  public async selectLedgerBottomsheet(): Promise < void> {
+  public async selectLedgerBottomsheet(): Promise<void> {
     try {
       const options = this.LedgerList;
       this.openSelectModal(options, this.selectedLedger, false, 'Select Ledger', 1, (selected) => {
@@ -1014,12 +1076,12 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
         this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
         this.OnLedgerChange()
       });
-    } catch(error) {
+    } catch (error) {
 
     }
   }
 
-  public async selectSiteBottomsheet(): Promise < void> {
+  public async selectSiteBottomsheet(): Promise<void> {
     try {
       const options = this.SiteList;
       this.openSelectModal(options, this.selectedSite, false, 'Select Site', 1, (selected) => {
@@ -1027,7 +1089,7 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
         this.Entity.p.SiteRef = selected[0].p.Ref;
         this.SiteName = selected[0].p.Name;
       });
-    } catch(error) {
+    } catch (error) {
 
     }
   }
@@ -1038,9 +1100,9 @@ export class InvoiceDetailsMobileAppComponent  implements OnInit {
     title: string,
     MaxSelection: number,
     updateCallback: (selected: any[]) => void
-  ): Promise < void> {
+  ): Promise<void> {
     const selected = await this.bottomsheetMobileAppService.openSelectModal(dataList, selectedItems, multiSelect, title, MaxSelection);
-    if(selected) updateCallback(selected);
+    if (selected) updateCallback(selected);
   }
   isDataFilled(): boolean {
     const emptyEntity: Invoice = Invoice.CreateNewInstance();

@@ -42,6 +42,12 @@
             Delete Request
           </ion-button>
         </div>
+        <div class="action-buttons" *ngIf="slip.p.IsApproved">
+          <ion-button fill="outline" color="danger" (click)="onPrintClicked(slip)">
+            <ion-icon name="arrow-down-circle-outline" slot="start"></ion-icon>
+            Download
+          </ion-button>
+        </div>
       </ion-card-content>
     </ion-card>
   </ion-list>

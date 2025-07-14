@@ -10,11 +10,8 @@
     <ion-item *ngFor="let Invoice of DisplayMasterList" class="requisition-item" button detail
       (click)="openModal(Invoice)">
       <ion-label>
-        <h2>Site : {{ Invoice.p.SiteName || 'Unknown Site' }}</h2>
+        <h3>Site : {{ Invoice.p.SiteName || 'Unknown Site' }}</h3>
         <p class="date-label">Billing Date : {{ formatDate(Invoice.p.Date) || '-' }}</p>
-        <!-- <p class="date-label">Ledger : {{ Invoice.p.LedgerName || '-' }}</p>
-        <p class="date-label">Sub Ledger : {{ Invoice.p.SubLedgerName || '-' }}
-        </p> -->
         <p class="date-label">Recipient Name : {{ Invoice.p.RecipientName || '-' }}</p>
         <p class="date-label">Billing Amount : {{ Invoice.p.InvoiceAmount || '-' }}
         </p>
@@ -33,6 +30,42 @@
       </div>
     </ion-item>
   </ion-list>
+  <!-- <ion-list class="billing-list" lines="none">
+    <ion-item *ngFor="let Invoice of DisplayMasterList" class="billing-card" button detail (click)="openModal(Invoice)">
+      <ion-label class="card-label">
+        <div class="site-header">
+          <ion-icon name="business-outline" class="icon"></ion-icon>
+          <h2>{{ Invoice.p.SiteName || 'Unknown Site' }}</h2>
+        </div>
+        <div class="info-line">
+          <ion-icon name="calendar-outline" class="icon"></ion-icon>
+          {{ formatDate(Invoice.p.Date) || '-' }}
+        </div>
+        <div class="info-line">
+          <ion-icon name="person-outline" class="icon"></ion-icon>
+          {{ Invoice.p.RecipientName || '-' }}
+        </div>
+        <div class="info-line">
+          <ion-icon name="cash-outline" class="icon"></ion-icon>
+          ₹{{ Invoice.p.InvoiceAmount || '-' }}
+        </div>
+      </ion-label>
+
+      <div class="action-buttons" slot="end" (click)="$event.stopPropagation()">
+        <ion-button fill="clear" size="small" color="primary" (click)="onEditClicked(Invoice)">
+          <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" size="small" color="danger" (click)="onDeleteClicked(Invoice)">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" size="small" color="success" (click)="navigateToPrint(Invoice)">
+          <ion-icon name="print-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+    </ion-item>
+  </ion-list> -->
+
+
 
   <!-- Show "Data not found" if list is empty -->
   <div *ngIf="DisplayMasterList.length === 0 " class="no-data-mobile-app">

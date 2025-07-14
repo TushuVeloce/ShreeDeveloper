@@ -59,14 +59,14 @@
         <div class="date">Date : {{ day.p.TransDateTime ? formatDay(day.p.TransDateTime) : '--' }}</div>
       </ion-card-header>
 
-      <ion-card-content *ngIf="day.p.FirstCheckInTime || day.p.LastCheckOutTime || day.p.TotalWorkingHrs"
+      <ion-card-content *ngIf="day.p.FirstCheckInTime || day.p.LastCheckOutTime || day.p.DisplayTotalWorkingHrs"
         class="timing-row">
         <ion-grid>
           <ion-row class="ion-align-items-center">
             <ion-col size="6">
               <div class="timing-box">
                 <label>Total Hours</label>
-                <span>{{ day.p.TotalWorkingHrs || '--' }}</span>
+                <span>{{ day.p.DisplayTotalWorkingHrs || '--' }}</span>
               </div>
             </ion-col>
             <ion-col size="6">

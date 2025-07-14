@@ -142,20 +142,20 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     this.Entity.p.TotalOverTimeHrs = 0
     this.Entity.p.TotalWorkingHrs = 0
     this.Entity.p.TotalLeavesHrs = 0
-    this.Entity.p.OverAllWorkingHrs = 0
+    this.Entity.p.OverallWorkingHrs = 0
     this.Entity.p.BasicSalary = 0
     if (employee === 0 || month === 0) {
       return;
     }
-    let lst = await SalaryGeneration.FetchEmployeeDataByEmployeeRefandMonth(employee,month, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SalaryGeneration.FetchEmployeeDataByEmployeeRefandMonth(this.companyRef(),employee,month, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
-    this.Entity.p.TotalWorkingDays = lst[0]?.p?.TotalWorkingDays
-    this.Entity.p.TotalLeaves = lst[0]?.p?.TotalLeaves
-    this.Entity.p.TotalOverTimeHrs = lst[0]?.p?.TotalOverTimeHrs
-    this.Entity.p.TotalWorkingHrs = lst[0]?.p?.TotalWorkingHrs
-    this.Entity.p.TotalLeavesHrs = lst[0]?.p?.TotalLeavesHrs
-    this.Entity.p.OverAllWorkingHrs = lst[0]?.p?.OverAllWorkingHrs
-    this.Entity.p.BasicSalary = lst[0]?.p?.BasicSalary
+    this.Entity.p.TotalWorkingDays = lst[0]?.p?.TotalWorkingDays || 0
+    this.Entity.p.TotalLeaves = lst[0]?.p?.TotalLeaves || 0
+    this.Entity.p.TotalOverTimeHrs = lst[0]?.p?.TotalOverTimeHrs || 0
+    this.Entity.p.TotalWorkingHrs = lst[0]?.p?.TotalWorkingHrs || 0
+    this.Entity.p.TotalLeavesHrs = lst[0]?.p?.TotalLeavesHrs || 0
+    this.Entity.p.OverallWorkingHrs = lst[0]?.p?.OverallWorkingHrs || 0
+    this.Entity.p.BasicSalary = lst[0]?.p?.BasicSalary || 0
     await this.calculategrosstotal()
   }
 

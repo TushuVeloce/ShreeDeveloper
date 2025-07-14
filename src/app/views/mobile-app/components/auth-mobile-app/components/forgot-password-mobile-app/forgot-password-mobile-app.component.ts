@@ -58,7 +58,7 @@ export class ForgotPasswordMobileAppComponent  implements OnInit {
       const response = await this.servercommunicator.FetchRequestForMobileApp('generateuserotp', body);
       console.log('response :sendOtp', response);
       if (response.Successful) {
-        this.toastService.present(response.Message, 1000, 'success');
+        this.toastService.present("OTP generation successfully", 1000, 'success');
         console.log('OTP generation successfully:', response.Message);
         await this.haptic.success();
         this.step = 2;
@@ -109,7 +109,7 @@ export class ForgotPasswordMobileAppComponent  implements OnInit {
         return;
       } else {
         console.log('Resend OTP Successful', response.Message);
-        this.toastService.present(response.Message, 1000, 'success');
+        this.toastService.present("Resend OTP Successfully", 1000, 'success');
         await this.haptic.success();
         this.startResendTimer();
       }

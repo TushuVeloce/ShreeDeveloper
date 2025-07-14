@@ -22,15 +22,18 @@
   <!-- List of Options -->
   <ion-list class="custom-list">
     <ion-item *ngFor="let option of loadedOptions" (click)="selectOption(option)" class="custom-item">
-      <ion-label class="custom-label" [ngClass]="{ 'selected': isSelected(option)}" [ngClass]="{ 'SiteSelected':isSiteSelected(option)}">
-        <!-- {{ option.p.Name? option.p.Name:option?.p?.PlotNo }} -->
-        {{option?.p?.Name || option?.p?.PlotNo || option?.p?.MaterialName || option?.p?.VendorName || 'Unnamed' }}
-
+      <ion-label class="custom-label" [ngClass]="{
+        'selected': isSelected(option),
+        'SiteSelected': isSiteSelected(option)
+      }">
+        {{ option?.p?.Name || option?.p?.PlotNo || option?.p?.MaterialName || option?.p?.VendorName || 'Unnamed' }}
       </ion-label>
-      <ion-checkbox *ngIf="multiSelect" slot="end" [checked]="isSelected(option)" [disabled]="isDisabled(option)">
-      </ion-checkbox>
+
+      <ion-checkbox *ngIf="multiSelect" slot="end" [checked]="isSelected(option)"
+        [disabled]="isDisabled(option)"></ion-checkbox>
     </ion-item>
   </ion-list>
+
 
   <!-- No Data Message -->
   <div *ngIf="loadedOptions.length === 0" class="no-data">

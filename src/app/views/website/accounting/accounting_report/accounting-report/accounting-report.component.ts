@@ -107,6 +107,14 @@ export class AccountingReportComponent implements OnInit {
     }
   }
 
+  get totalTotalIncome(): number {
+    return this.DisplayMasterList.reduce((sum, item) => sum + (item.p.IncomeAmount || 0), 0);
+  }
+
+  get totalTotalExpense(): number {
+    return this.DisplayMasterList.reduce((sum, item) => sum + (item.p.GivenAmount || 0), 0);
+  }
+
   getCurrentBalanceByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');

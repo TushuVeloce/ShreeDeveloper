@@ -74,13 +74,18 @@
           <td class="tbldata">{{ report.p.RecipientName?.trim() ? (report.p.RecipientName | titleCase) : '--' }}</td>
           <td class="tbldata">{{ report.p.SiteName }}</td>
           <td class="tbldata">{{ report.p.Reason }}</td>
-          <td class="tbldata">{{ report.p.IncomeAmount && report.p.IncomeAmount !== 0 ? (report.p.IncomeAmount |
-            currency: 'INR') : '--'}}</td>
-          <td class="tbldata">{{ report.p.GivenAmount && report.p.GivenAmount !== 0 ? (report.p.GivenAmount | currency:
-            'INR') : '--' }}</td>
+          <td class="tbldata">{{ report.p.IncomeAmount && report.p.IncomeAmount !== 0 ? (report.p.IncomeAmount | currency: 'INR') : '--'}}</td>
+          <td class="tbldata">{{ report.p.GivenAmount && report.p.GivenAmount !== 0 ? (report.p.GivenAmount | currency:'INR') : '--' }}</td>
           <td class="tbldata">{{ report.p.ShreesBalance | currency: 'INR' }}</td>
           <td class="tbldata">{{ report.p.ModeOfPaymentName }}</td>
           <td class="tbldata">{{ report.p.Narration }}</td>
+        </tr>
+          <tr *ngIf="paginatedList().length > 0">
+          <td class="tbldata" colspan="5"></td>
+          <td class="tbldata"><b>Total</b></td>
+          <td class="tbldata"><b>{{ totalTotalIncome | currency: 'INR' }}</b></td>
+          <td class="tbldata"><b>{{ totalTotalExpense | currency: 'INR' }}</b></td>
+          <td class="tbldata"></td>
         </tr>
       </tbody>
     </nz-table>

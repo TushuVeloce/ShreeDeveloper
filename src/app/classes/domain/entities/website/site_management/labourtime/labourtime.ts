@@ -27,7 +27,7 @@ export class LabourTimeProps {
   public LabourAmount : number = 0;
   public LabourFromTime: string = '';
   public LabourToTime: string = '';
-  // public WorkedHours: number = 0;
+  public LabourWorkedHours: number = 0;
   // public Total: number = 0;
   public InvoiceRef: number = 0;
 

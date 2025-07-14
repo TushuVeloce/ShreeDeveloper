@@ -27,7 +27,7 @@ export class SalaryGenerationProps {
   public TotalOverTimeHrs: number = 0;
   public TotalWorkingHrs: number = 0;
   public TotalLeavesHrs: number = 0;
-  public OverAllWorkingHrs: number = 0;
+  public OverallWorkingHrs: number = 0;
   public DisplayTotalOverTimeHrs : number = 0;
   public DisplayTotalWorkingHrs: number = 0;
   public DisplayTotalLeavesHrs: number = 0;
@@ -195,8 +195,9 @@ export class SalaryGeneration implements IPersistable<SalaryGeneration> {
     return SalaryGeneration.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEmployeeDataByEmployeeRefandMonth(EmployeeRef:number,Month:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEmployeeDataByEmployeeRefandMonth(CompanyRef:number,EmployeeRef:number,Month:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new SalaryGenerationCustomRequest();
+    req.CompanyRef = CompanyRef
     req.EmployeeRef = EmployeeRef
     req.Month = Month
     let tdResponse = await SalaryGeneration.FetchTransportData(req, errorHandler) as TransportData;

@@ -14,6 +14,11 @@ export class AccountingViewMobileAppPageComponent  implements OnInit {
 
   gridItems = [
     {
+      icon: 'assets/icons/crm_mobile_app.png',
+      label: 'Billing',
+      routerPath: '/mobile-app/tabs/dashboard/accounting/invoice'
+    },
+    {
       icon: 'assets/icons/site_management_mobile_app.png',
       label: 'Income',
       routerPath: '/mobile-app/tabs/dashboard/accounting/income'
@@ -25,14 +30,9 @@ export class AccountingViewMobileAppPageComponent  implements OnInit {
     },
     {
       icon: 'assets/icons/crm_mobile_app.png',
-      label: 'Billing',
-      routerPath: '/mobile-app/tabs/dashboard/accounting/invoice'
+      label: 'Office',
+      routerPath: '/mobile-app/tabs/dashboard/accounting/office'
     },
-    // {
-    //   icon: 'assets/icons/crm_mobile_app.png',
-    //   label: 'Office',
-    //   routerPath: '/mobile-app/tabs/dashboard/accounting/office'
-    // },
   ];
 
 

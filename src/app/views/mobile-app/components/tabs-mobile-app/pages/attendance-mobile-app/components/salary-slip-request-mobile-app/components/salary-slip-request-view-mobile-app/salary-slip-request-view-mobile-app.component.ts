@@ -7,6 +7,7 @@ import { AlertService } from 'src/app/views/mobile-app/components/core/alert.ser
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
+import { IonButton, IonIcon } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-salary-slip-request-view-mobile-app',
@@ -44,7 +45,7 @@ export class SalarySlipRequestViewMobileAppComponent  implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadSalaryslipIfCompanyExists();
+    // this.loadSalaryslipIfCompanyExists();
   }
 
   async ionViewWillEnter(): Promise<void> {
@@ -102,6 +103,15 @@ export class SalarySlipRequestViewMobileAppComponent  implements OnInit {
       await this.filterSalarySlipsByStatus();
     } catch (error) {
       console.error('Error fetching salary slip list:', error);
+    }
+  }
+
+  
+  async onPrintClicked(slip: SalarySlipRequest): Promise<void> {
+    try {
+      this.router.navigate(['/mobile-app/tabs/attendance/salary-slip-request/print']);
+    } catch (error) {
+      console.error('Error in onPrintClicked:', error);
     }
   }
 

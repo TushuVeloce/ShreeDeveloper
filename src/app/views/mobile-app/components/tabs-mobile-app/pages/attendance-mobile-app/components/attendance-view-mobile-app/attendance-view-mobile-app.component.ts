@@ -339,8 +339,10 @@ export class AttendanceViewMobileAppComponent  implements OnInit {
         IsCheckIn: true,
         CompanyRef: this.companyRef,
         EmployeeRef: this.employeeRef,
-        SiteRef: this.selectedSite[0].p.Ref || 0,
-        AttendanceLocationType: this.selectedAttendanceLocationType[0].p.Ref || 0
+        SiteRef: this.selectedSite[0]?.p?.Ref
+          ? this.selectedSite[0].p.Ref
+          : 0,
+        AttendanceLocationType: Number(this.selectedAttendanceLocationType[0].p.Ref) || 0
       });
 
       const filesToUpload: FileTransferObject[] = [];
@@ -365,18 +367,18 @@ export class AttendanceViewMobileAppComponent  implements OnInit {
 
       this.toastService.present('Punch in successfully', 1000, 'success');
       await this.haptic.success();
+    } catch (error) {
+    // console.log('error :', error);
+    //   this.toastService.present('Error during punch in', 1000, 'danger');
+    //   await this.haptic.error();
+    } finally {
       this.punchModalOpen = false;
       this.resetPunchState();
-
+      this.isSubmitting = false;
       await Promise.all([
         this.getCheckInData(),
         this.getAttendanceLogByAttendanceType()
       ]);
-    } catch (error) {
-      this.toastService.present('Error during punch in', 1000, 'danger');
-      await this.haptic.error();
-    } finally {
-      this.isSubmitting = false;
       await this.loadingService.hide();
     }
   }
@@ -406,16 +408,15 @@ export class AttendanceViewMobileAppComponent  implements OnInit {
       this.toastService.present('Punch out successfully', 1000, 'success');
       await this.haptic.success();
 
-      this.resetPunchState();
-
+    } catch (error) {
+      // this.toastService.present('Error during punch out', 1000, 'danger');
+      // await this.haptic.error();
+    } finally {
       await Promise.all([
         this.getCheckInData(),
         this.getAttendanceLogByAttendanceType()
       ]);
-    } catch (error) {
-      this.toastService.present('Error during punch out', 1000, 'danger');
-      await this.haptic.error();
-    } finally {
+      this.resetPunchState();
       this.isSubmitting = false;
       await this.loadingService.hide();
     }
@@ -481,8 +482,8 @@ export class AttendanceViewMobileAppComponent  implements OnInit {
       this.weeklyAttendanceLogs = logs;
       this.filteredWeeklyAttendanceLogs = logs;
     } catch (error) {
-      this.toastService.present('Error fetching attendance logs', 1000, 'danger');
-      await this.haptic.error();
+      // this.toastService.present('Error fetching attendance logs', 1000, 'danger');
+      // await this.haptic.error();
     }
   };
 
