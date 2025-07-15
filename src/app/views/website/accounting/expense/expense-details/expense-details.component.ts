@@ -75,11 +75,18 @@ export class ExpenseDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Expense' : 'Edit Expense';
       this.Entity = Expense.GetCurrentInstance();
+      console.log('Entity :', this.Entity);
       this.Date = this.Entity.p.Date;
       this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
       this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+      if(this.Entity.p.LedgerRef != 0){
+        this.getSubIncomeLedgerListByIncomeLedgerRef(this.Entity.p.LedgerRef)
+      }
+      if(this.Entity.p.RecipientType != 0){
+        this.getRecipientListByRecipientTypeRef()
+      }
     } else {
       this.Entity = Expense.CreateNewInstance();
       Expense.SetCurrentInstance(this.Entity);
@@ -165,10 +172,20 @@ export class ExpenseDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('To Whom not Selected');
       return;
     }
-    this.Entity.p.RecipientRef = 0;
+    
     this.RecipientList = [];
     let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.RecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.RecipientList = lst;
+  }
+
+  onTypeChange = () =>{
+    this.Entity.p.LedgerRef = 0;
+    this.Entity.p.RecipientRef = 0;
+    this.Entity.p.IsAdvancePayment = 0
+  }
+
+  onChangeIncomeLedger = () =>{
+    this.Entity.p.IncomeSubLedgerRef = 0;
   }
 
   getTotalInvoiceAmountFromSiteAndRecipientRef = async () => {

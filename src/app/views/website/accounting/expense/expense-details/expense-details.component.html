@@ -58,7 +58,7 @@
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="RecipientType" name="RecipientType" [nzSize]="'large'"
             [(ngModel)]="Entity.p.RecipientType"
-            (ngModelChange)="getRecipientListByRecipientTypeRef(); getTotalInvoiceAmountFromSiteAndRecipientRef();">
+            (ngModelChange)="getRecipientListByRecipientTypeRef(); getTotalInvoiceAmountFromSiteAndRecipientRef(); onTypeChange()">
             <nz-option *ngFor="let type of RecipientTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
           </nz-select>
         </div>
@@ -66,7 +66,7 @@
           <label>Income Ledger</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
-            (ngModelChange)="getSubIncomeLedgerListByIncomeLedgerRef(Entity.p.LedgerRef)">
+            (ngModelChange)="getSubIncomeLedgerListByIncomeLedgerRef(Entity.p.LedgerRef); onChangeIncomeLedger()">
             <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
           </nz-select>
         </div>

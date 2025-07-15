@@ -105,8 +105,6 @@ export class Expense implements IPersistable<Expense> {
 
     if (this.p.CompanyRef <= 0) { vra.add('CompanyRef', 'Company Name cannot be blank.'); }
     if (this.p.SiteRef <= 0) { vra.add('SiteRef', 'Site Name cannot be blank.'); }
-    if (this.p.LedgerRef <= 0) { vra.add('LedgerRef', 'Ledger cannot be blank.'); }
-    if (this.p.SubLedgerRef <= 0) { vra.add('SubLedgerRef', 'Sub Ledger cannot be blank.'); }
     if (this.p.GivenAmount <= 0) { vra.add('GivenAmount', 'Given Amount cannot be blank.'); }
     if (this.p.RecipientRef <= 0) { vra.add('RecipientRef', 'Recipient cannot be blank.'); }
   }
