@@ -10,6 +10,7 @@ import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filter-mobile-app/chip-filter-mobile-app.component';
 
 
 @Component({
@@ -36,13 +37,16 @@ export class MarketingManagementViewMobileAppComponent  implements OnInit {
   ToDate = '';
   companyRef: number = 0;
   selectedFilters: any[] = [];
+  filters: FilterItem[] = [];
 
   ngOnInit(): void {
-    this.loadMarketingManagementIfCompanyExists();
+    // this.loadMarketingManagementIfCompanyExists();
+    // this.loadFilters(); 
   }
 
   ionViewWillEnter = async () => {
     await this.loadMarketingManagementIfCompanyExists();
+    await this.loadFilters(); 
   };
 
   async handleRefresh(event: CustomEvent): Promise<void> {
@@ -50,13 +54,91 @@ export class MarketingManagementViewMobileAppComponent  implements OnInit {
     await this.getActualStageListByAllFilters();
     (event.target as HTMLIonRefresherElement).complete();
   }
+
+  // filters = [
+  //   {
+  //     key: 'site',
+  //     label: 'Site',
+  //     multi: false,
+  //     options: this.SiteList.map(site => ({
+  //       Ref: site.p.Ref,
+  //       Name: site.p.Name,
+  //     })),
+  //     selected: null,
+  //   },
+  //   {
+  //     key: 'vendor',
+  //     label: 'Vendor',
+  //     multi: false,
+  //     options: this.VendorList.map(vendor => ({
+  //       Ref: vendor.p.Ref,
+  //       Name: vendor.p.Name,
+  //     })),
+  //     selected: null,
+  //   },
+  //   {
+  //     key: 'mode',
+  //     label: 'Mode',
+  //     multi: false,
+  //     options: this.MarketingModesList.map(mode => ({
+  //       Ref: mode.Ref,
+  //       Name: mode.Name,
+  //     })),
+  //     selected: null,
+  //   },
+  // ];
+
+  loadFilters() {
+    if (this.SiteList && this.VendorList && this.MarketingModesList) {
+      this.filters = [
+        {
+          key: 'site',
+          label: 'Site',
+          multi: false,
+          options: this.SiteList.map(site => ({
+            Ref: site.p.Ref,
+            Name: site.p.Name,
+          })),
+          selected: null,
+        },
+        {
+          key: 'vendor',
+          label: 'Vendor',
+          multi: false,
+          options: this.VendorList.map(vendor => ({
+            Ref: vendor.p.Ref,
+            Name: vendor.p.Name,
+          })),
+          selected: null,
+        },
+        {
+          key: 'mode',
+          label: 'Mode',
+          multi: false,
+          options: this.MarketingModesList.map(mode => ({
+            Ref: mode.Ref,
+            Name: mode.Name,
+          })),
+          selected: null,
+        },
+      ];
+
+    }
+  }
+  onFiltersChanged(updatedFilters: any[]) {
+    console.log('Updated Filters:', updatedFilters);
+    // Make API call or update list
+  }
+
   private async loadMarketingManagementIfCompanyExists(): Promise<void> {
     try {
       this.isLoading = true;
       this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
       this.SiteList = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      console.log('this.SiteList :', this.SiteList);
       this.VendorList = await Vendor.FetchEntireListByCompanyRef(this.companyRef,
         async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+        console.log(' this.VendorList :',  this.VendorList);
       this.getMarketingListByCompanyRef();
       this.getEmployeeListByCompanyRef();
     } catch (error) {

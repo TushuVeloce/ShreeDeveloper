@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
+import { AdminProfile } from 'src/app/classes/domain/entities/website/profile/adminprofile/adminprofile';
 import { UserLogoutRequest } from 'src/app/classes/infrastructure/request_response/userlogoutrequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
+import { BaseUrlService } from 'src/app/services/baseurl.service';
+import { DTU } from 'src/app/services/dtu.service';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { SessionValues } from 'src/app/services/sessionvalues.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
@@ -13,14 +17,29 @@ import { ToastService } from 'src/app/views/mobile-app/components/core/toast.ser
   selector: 'app-settings-view-mobile-app',
   templateUrl: './settings-view-mobile-app.component.html',
   styleUrls: ['./settings-view-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class SettingsViewMobileAppComponent  implements OnInit {
+export class SettingsViewMobileAppComponent implements OnInit {
+  Entity: Employee = Employee.CreateNewInstance();
+  AdminEntity: AdminProfile = AdminProfile.CreateNewInstance();
 
   employeeName: string = '';
   employeeEmail: string = '';
   userImage: string = '';
   defaultAvatar: string = 'assets/logos/dp.png';
+
+  currentemployee = 0;
+  companyRef = 0;
+  imagePreviewUrl: string | null = null;
+  selectedFileName: string | null = null;
+  TimeStamp = Date.now();
+  ImageBaseUrl = '';
+  LoginToken = '';
+  imageUrl: string | null = null;
+  ProfilePicFile: File | null = null;
+  IsEmployee = false;
+  IsAdmin = false;
+
 
   profileOptions = [
     { title: 'Notifications', icon: 'notifications-outline', action: () => this.openNotifications() },
@@ -37,20 +56,93 @@ export class SettingsViewMobileAppComponent  implements OnInit {
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private baseUrl: BaseUrlService,
+    private dtu: DTU,
   ) { }
 
   ngOnInit = async () => {
-    await this.loadingService.show();
-    this.employeeName = localStorage.getItem('UserDisplayName') || 'User';
-    this.employeeEmail = localStorage.getItem('userEmail') || 'email';
-    await this.loadingService.hide();
+    // await this.loadingService.show();
+    // this.employeeName = localStorage.getItem('UserDisplayName') || 'User';
+    // this.employeeEmail = localStorage.getItem('userEmail') || 'email';
+    // this.currentemployee = Number(this.appStateManagement.localStorage.getItem('LoginEmployeeRef'));
+    // this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
+    // this.LoginToken = this.appStateManagement.getLoginTokenForMobile();
+    // this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
+    // if (this.currentemployee !== 0) {
+    //   await this.getEmployeeDetails();
+    // }
+    // await this.loadingService.hide();
   }
   ionViewWillEnter = async () => {
-    await this.loadingService.show();
+    // await this.loadingService.show();
+    // this.employeeName = localStorage.getItem('UserDisplayName') || 'User';
+    // this.employeeEmail = localStorage.getItem('userEmail') || 'email';
+    // await this.loadingService.hide();
     this.employeeName = localStorage.getItem('UserDisplayName') || 'User';
     this.employeeEmail = localStorage.getItem('userEmail') || 'email';
-    await this.loadingService.hide();
+    this.currentemployee = Number(this.appStateManagement.localStorage.getItem('LoginEmployeeRef'));
+    this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
+    this.LoginToken = this.appStateManagement.getLoginTokenForMobile();
+    this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
+    if (this.currentemployee !== 0) {
+      await this.getEmployeeDetails();
+    }
+  }
+  getEmployeeDetails = async () => {
+    if (this.currentemployee && this.companyRef) {
+      const employeeData = await Employee.FetchInstance(
+        this.currentemployee,
+        this.companyRef,
+        async errMsg => {
+          await this.toastService.present("Error " + errMsg, 1000, 'danger');
+          await this.haptic.error();
+        }
+      );
+      console.log('employeeData :', employeeData);
+      if (employeeData == null) {
+        const adminData = await AdminProfile.FetchAdminData(async errMsg => {
+          await this.toastService.present("Error " + errMsg, 1000, 'danger');
+          await this.haptic.error();
+          // await this.uiUtils.showErrorMessage('Error', errMsg)
+        }
+        );
+
+        console.log('adminData :', adminData);
+
+        if (adminData?.[0]) {
+          this.AdminEntity = adminData[0];
+          this.IsAdmin = true;
+          this.IsEmployee = false;
+
+          if (this.AdminEntity.p.DOB) {
+            this.AdminEntity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.AdminEntity.p.DOB);
+          }
+          this.imageUrl = this.AdminEntity.p.ProfilePicPath;
+          this.loadImageFromBackend(this.imageUrl);
+        }
+      } else {
+        this.Entity = employeeData;
+        this.IsEmployee = true;
+        this.IsAdmin = false;
+
+        if (this.Entity.p.DOB) {
+          this.Entity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.DOB);
+        }
+        this.imageUrl = this.Entity.p.ProfilePicPath;
+        this.loadImageFromBackend(this.imageUrl);
+        this.AdminEntity = AdminProfile.CreateNewInstance();
+      }
+    }
+  };
+
+  loadImageFromBackend(imageUrl: string | null): void {
+    if (imageUrl) {
+      this.imagePreviewUrl = `${this.ImageBaseUrl}${imageUrl}/${this.LoginToken}?${this.TimeStamp}`;
+      this.selectedFileName = imageUrl;
+    } else {
+      this.imagePreviewUrl = null;
+    }
   }
 
   openProfile = async () => {

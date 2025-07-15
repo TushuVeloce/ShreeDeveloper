@@ -53,6 +53,36 @@ export class InvoiceViewMobileAppComponent  implements OnInit {
     await this.loadInvoiceIfEmployeeExists();
   };
 
+  filters = [
+      {
+        key: 'category',
+        label: 'Category',
+        multi: true,
+        options: [
+          { Ref: 1, Name: 'Electronics' },
+          { Ref: 2, Name: 'Clothing' },
+          { Ref: 3, Name: 'Books' },
+        ],
+        selected: [],
+      },
+      {
+        key: 'price',
+        label: 'Price',
+        multi: false,
+        options: [
+          { Ref: 'low', Name: 'Low to High' },
+          { Ref: 'high', Name: 'High to Low' },
+        ],
+        selected: null,
+      },
+    ];
+  
+    onFiltersChanged(updatedFilters: any[]) {
+      console.log('Updated Filters:', updatedFilters);
+      // Make API call or update list
+    }
+  
+    
   async handleRefresh(event: CustomEvent) {
     await this.loadInvoiceIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();

@@ -1,11 +1,12 @@
 <app-header-with-back-handler title="Billing"
   backRoute="mobile-app/tabs/dashboard/accounting"></app-header-with-back-handler>
+<!-- <app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
+</app-chip-filter-mobile-app> -->
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content class="ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-
   <ion-list class="requisition-list" [lines]="'none'">
     <ion-item *ngFor="let Invoice of DisplayMasterList" class="requisition-item" button detail
       (click)="openModal(Invoice)">
