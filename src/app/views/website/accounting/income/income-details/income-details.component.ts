@@ -72,7 +72,10 @@ export class IncomeDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Income' : 'Edit Income';
       this.Entity = Income.GetCurrentInstance();
+      console.log('this.Entity :', this.Entity);
+      this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
       this.appStateManage.StorageKey.removeItem('Editable');
+      await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
       this.Entity = Income.CreateNewInstance();
@@ -137,7 +140,6 @@ export class IncomeDetailsComponent implements OnInit {
       return;
     }
     let lst = await Income.FetchPayerNameByPayerTypeRef(this.companyRef(), this.Entity.p.PayerType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.PayerList = lst;
   }
 

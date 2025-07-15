@@ -1,14 +1,14 @@
 <div>
   <div class="row">
-     <div class="col-4 mb-2">
+    <div class="col-4 mb-2">
       <h1 style="padding-top: 3px;" class="title title_light">Salary Generation</h1>
     </div>
-     <div class="col-4 mb-2 search-container_light">
+    <div class="col-4 mb-2 search-container_light">
       <app-shared-filter [masterList]="MasterList"
         [filterFields]="['EmployeeName', 'MonthName', 'TotalWorkingDays', 'BasicSalary', 'GrossTotal', 'TotalDeduction', 'NetSalary']"
         (filteredList)="DisplayMasterList = $event"></app-shared-filter>
     </div>
-   <div class="col-4 mb-2" routerLinkActive="active">
+    <div class="col-4 mb-2" routerLinkActive="active">
       <nz-button nz-button class="btn1" (click)='AddSalaryDetails()'>
         Add Salary Details
       </nz-button>
@@ -29,10 +29,10 @@
             <td Class="tbldata">{{salary.p.EmployeeName}}</td>
             <td Class="tbldata">{{salary.p.MonthName}}</td>
             <td Class="tbldata">{{salary.p.TotalWorkingDays}}</td>
-            <td Class="tbldata">{{salary.p.BasicSalary }}</td>
-            <td Class="tbldata">{{salary.p.GrossTotal}}</td>
-            <td Class="tbldata">{{salary.p.TotalDeduction}}</td>
-            <td Class="tbldata">{{salary.p.NetSalary}}</td>
+            <td Class="tbldata">{{salary.p.BasicSalary | currency : "INR" }}</td>
+            <td Class="tbldata">{{salary.p.GrossTotal | currency : "INR" }}</td>
+            <td Class="tbldata">{{salary.p.TotalDeduction | currency : "INR" }}</td>
+            <td Class="tbldata">{{salary.p.NetSalary | currency : "INR" }}</td>
             <td class="tbldata">
               <span style="margin-left: 9px;" (click)="onEditClicked(salary);">
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />
@@ -158,7 +158,7 @@
               <tr>
                 <td>Other</td>
                 <td>{{ Entity.p.Other | currency:'INR' }}</td>
-                 <td>Advance Payment</td>
+                <td>Advance Payment</td>
                 <td>{{ Entity.p.AdvancePayment | currency:'INR' }}</td>
               </tr>
               <tr class="fw-bold">
