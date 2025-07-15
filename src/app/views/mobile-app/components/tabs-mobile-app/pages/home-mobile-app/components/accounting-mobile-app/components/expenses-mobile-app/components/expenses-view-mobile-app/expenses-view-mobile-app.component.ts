@@ -125,6 +125,7 @@ export class ExpensesViewMobileAppComponent  implements OnInit {
             cssClass: 'custom-confirm',
             handler: async () => {
               try {
+                await this.loadingService.show();
                 await item.DeleteInstance(async () => {
                   await this.toastService.present(
                     `Expense ${item.p.RecipientName} has been deleted!`,
@@ -133,11 +134,14 @@ export class ExpensesViewMobileAppComponent  implements OnInit {
                   );
                   await this.haptic.success();
                 });
-                await this.getExpenseListByCompanyRef();
               } catch (err) {
-                console.error('Error deleting Expense:', err);
-                await this.toastService.present('Failed to delete Expense', 1000, 'danger');
-                await this.haptic.error();
+                // console.error('Error deleting Expense:', err);
+                // await this.toastService.present('Failed to delete Expense', 1000, 'danger');
+                // await this.haptic.error();
+              }
+              finally{
+                await this.getExpenseListByCompanyRef();
+                await this.loadingService.hide();
               }
             }
           }
