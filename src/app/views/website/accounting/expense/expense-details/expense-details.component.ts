@@ -81,8 +81,8 @@ export class ExpenseDetailsComponent implements OnInit {
       this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      if(this.Entity.p.LedgerRef != 0){
-        this.getSubIncomeLedgerListByIncomeLedgerRef(this.Entity.p.LedgerRef)
+      if(this.Entity.p.IncomeLedgerRef != 0){
+        this.getSubIncomeLedgerListByIncomeLedgerRef(this.Entity.p.IncomeLedgerRef)
       }
       if(this.Entity.p.RecipientType != 0){
         this.getRecipientListByRecipientTypeRef()
@@ -179,7 +179,7 @@ export class ExpenseDetailsComponent implements OnInit {
   }
 
   onTypeChange = () =>{
-    this.Entity.p.LedgerRef = 0;
+    this.Entity.p.IncomeLedgerRef = 0;
     this.Entity.p.RecipientRef = 0;
     this.Entity.p.IsAdvancePayment = 0
   }
@@ -206,7 +206,6 @@ export class ExpenseDetailsComponent implements OnInit {
       return;
     }
     let lst = await Expense.FetchTotalInvoiceAmountFromSiteAndRecipient(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientType, this.Entity.p.RecipientRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     if (lst.length > 0) {
       this.Entity.p.InvoiceAmount = lst[0].p.InvoiceAmount;
       this.Entity.p.RemainingAdvance = lst[0].p.RemainingAdvance;
@@ -304,7 +303,6 @@ export class ExpenseDetailsComponent implements OnInit {
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Date);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {

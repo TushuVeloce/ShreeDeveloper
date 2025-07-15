@@ -39,9 +39,9 @@
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Ledger</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="IncomeLedgerRef" name="IncomeLedgerRef" [nzSize]="'large'"
-            [(ngModel)]="Entity.p.IncomeLedgerRef"
-            (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.IncomeLedgerRef)">
+            nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.LedgerRef"
+            (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef)">
             <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -65,8 +65,8 @@
         <div class="col-md-4" style="margin-top: 1rem; " *ngIf="this.Entity.p.RecipientType == Sites">
           <label>Income Ledger</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
-            (ngModelChange)="getSubIncomeLedgerListByIncomeLedgerRef(Entity.p.LedgerRef); onChangeIncomeLedger()">
+            nzPlaceHolder="Select" id="IncomeLedgerRef" name="IncomeLedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.IncomeLedgerRef"
+            (ngModelChange)="getSubIncomeLedgerListByIncomeLedgerRef(Entity.p.IncomeLedgerRef); onChangeIncomeLedger()">
             <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
           </nz-select>
         </div>
