@@ -137,8 +137,11 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
           this.selectedLedger = [{ p: { Ref: this.Entity.p.LedgerRef, Name: this.Entity.p.LedgerName } }];
           this.LedgerName = this.Entity.p.LedgerName;
 
-          this.selectedLedger = [{ p: { Ref: this.Entity.p.LedgerRef, Name: this.Entity.p.LedgerName } }];
-          this.LedgerName = this.Entity.p.LedgerName;
+          this.selectedSubLedger = [{ p: { Ref: this.Entity.p.SubLedgerRef, Name: this.Entity.p.SubLedgerName } }];
+          this.SubLedgerName = this.Entity.p.SubLedgerName;
+
+          this.ToWhomTypeName = this.RecipientTypesList.find(item => item.Ref == this.Entity.p.RecipientType)?.Name ?? '';
+          this.selectedToWhomType = [{ p: { Ref: this.Entity.p.RecipientType, Name: this.ToWhomTypeName } }];
 
           this.selectedRecipientName = [{ p: { Ref: this.Entity.p.RecipientRef, Name: this.Entity.p.RecipientName } }];
           this.RecipientName = this.Entity.p.RecipientName;
@@ -154,7 +157,14 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
           }
           this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
           this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
-          this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+          this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
+         
+          this.selectedIncomeLedger = [{ p: { Ref: this.Entity.p.IncomeLedgerRef, Name: this.Entity.p.IncomeLedgerName } }];
+          this.IncomeLedgerName = this.Entity.p.IncomeLedgerName;
+
+          this.selectedIncomeSubLedger = [{ p: { Ref: this.Entity.p.IncomeSubLedgerRef, Name: this.Entity.p.IncomeSubLedgerName } }];
+          this.IncomeSubLedgerName = this.Entity.p.IncomeSubLedgerName;
+
         } else {
           this.Entity = Expense.CreateNewInstance();
           Expense.SetCurrentInstance(this.Entity);
@@ -162,11 +172,10 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
           // this.Date = strCDT.substring(0, 10);
           let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
           let parts = strCDT.substring(0, 16).split('-');
-          this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
           strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+          this.Entity.p.Date = strCDT;
           this.ExpenseDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
           this.DisplayExpenseDate = this.datePipe.transform(this.ExpenseDate, 'yyyy-MM-dd') ?? '';;
-
         }
         this.getCurrentBalanceByCompanyRef();
         this.InitialEntity = Object.assign(
@@ -187,8 +196,10 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   }
 
   public async onExpenseDateChange(date: any): Promise<void> {
+    console.log('this.ExpenseDate :', this.ExpenseDate);
     this.ExpenseDate = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
     this.Entity.p.Date = this.ExpenseDate;
+    console.log('this.Entity.p.Date :', this.Entity.p.Date);
     this.DisplayExpenseDate = this.ExpenseDate;
   }
 
@@ -301,13 +312,13 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     this.RecipientList = lst;
   }
 
-    onTypeChange = () =>{
+  onTypeChange = () => {
     this.Entity.p.IncomeLedgerRef = 0;
     this.Entity.p.RecipientRef = 0;
     this.Entity.p.IsAdvancePayment = 0
   }
 
-  onChangeIncomeLedger = () =>{
+  onChangeIncomeLedger = () => {
     this.Entity.p.IncomeSubLedgerRef = 0;
   }
 
@@ -438,38 +449,46 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   };
 
   SaveExpense = async () => {
-    this.Entity.p.CompanyRef = this.companyRef;
-    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
-    if (this.Entity.p.CreatedBy == 0) {
-      this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-    }
-    this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Date);
-    let entityToSave = this.Entity.GetEditableVersion();
-    let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-
-    if (!tr.Successful) {
-      this.isSaveDisabled = false;
-      // this.uiUtils.showErrorMessage('Error', tr.Message);
-      await this.toastService.present('Error' + tr.Message, 1000, 'danger');
-      await this.haptic.error();
-      return;
-    } else {
-      this.isSaveDisabled = false;
-      if (this.IsNewEntity) {
-        // await this.uiUtils.showSuccessToster('Expense saved successfully');
-        await this.toastService.present('Expense saved successfully', 1000, 'success');
-        await this.haptic.success();
-        this.Entity = Expense.CreateNewInstance();
-        await this.getCurrentBalanceByCompanyRef()
-      } else {
-        // await this.uiUtils.showSuccessToster('Expense Updated successfully');
-        await this.toastService.present('Expense Updated successfully', 1000, 'success');
-        await this.haptic.success();
-        await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses']);
+    try {
+      await this.loadingService.show();
+      this.Entity.p.CompanyRef = this.companyRef;
+      this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+      if (this.Entity.p.CreatedBy == 0) {
+        this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+        this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
       }
+      this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.ExpenseDate);
+      let entityToSave = this.Entity.GetEditableVersion();
+      let entitiesToSave = [entityToSave];
+      console.log('entitiesToSave :', entitiesToSave);
+      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+
+      if (!tr.Successful) {
+        this.isSaveDisabled = false;
+        // this.uiUtils.showErrorMessage('Error', tr.Message);
+        await this.toastService.present('Error' + tr.Message, 1000, 'danger');
+        await this.haptic.error();
+        return;
+      } else {
+        this.isSaveDisabled = false;
+        if (this.IsNewEntity) {
+          // await this.uiUtils.showSuccessToster('Expense saved successfully');
+          await this.toastService.present('Expense saved successfully', 1000, 'success');
+          await this.haptic.success();
+          await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses']);
+        } else {
+          // await this.uiUtils.showSuccessToster('Expense Updated successfully');
+          await this.toastService.present('Expense Updated successfully', 1000, 'success');
+          await this.haptic.success();
+          await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses']);
+        }
+      }
+    } catch (error) {
+
+    } finally {
+      this.Entity = Expense.CreateNewInstance();
+      await this.getCurrentBalanceByCompanyRef()
+      await this.loadingService.hide();
     }
   };
 
@@ -480,24 +499,10 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     input.select();
   }
 
-  // BackExpense = async () => {
-  //   if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
-  //     await this.uiUtils.showConfirmationMessage('Cancel',
-  //       `This process is IRREVERSIBLE!
-  //     <br/>
-  //     Are you sure that you want to Cancel this Expense Form?`,
-  //       async () => {
-  //         await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses']);
-  //       });
-  //   } else {
-  //     await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses']);
-  //   }
-  // }
-
   public async selectBankBottomsheet(): Promise<void> {
     try {
-      // const options = this.BankList;
-      const options = this.BankList.map((item) => ({ p: item }));
+      const options = this.BankList;
+      // console.log('options :', options);
       this.openSelectModal(options, this.selectedBank, false, 'Select Mode of Payment', 1, (selected) => {
         this.selectedBank = selected;
         this.Entity.p.BankAccountRef = selected[0].p.Ref;
@@ -525,7 +530,18 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
   public async selectRecipientNameBottomsheet(): Promise<void> {
     try {
-      const options = this.RecipientList;
+      let options: any[] = [];
+      if (options) {
+        options = this.RecipientList.map(item => ({
+          p: {
+            Ref: item.p.Ref,
+            Name: item.p.RecipientName
+          }
+        }));
+
+      }
+      // const options = this.RecipientList;
+      console.log('RecipientList :', options);
       this.openSelectModal(options, this.selectedRecipientName, false, 'Select Recipient Name', 1, (selected) => {
         this.selectedRecipientName = selected;
         this.Entity.p.RecipientRef = selected[0].p.Ref;
@@ -559,7 +575,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         this.Entity.p.IncomeLedgerRef = selected[0].p.Ref;
         this.IncomeLedgerName = selected[0].p.Name;
         this.getSubIncomeLedgerListByIncomeLedgerRef(this.Entity.p.IncomeLedgerRef);
-        this.onChangeIncomeLedger();   
+        this.onChangeIncomeLedger();
       });
     } catch (error) {
 
@@ -570,12 +586,13 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     try {
       // const options = this.RecipientTypesList;
       const options = this.RecipientTypesList.map((item) => ({ p: item }));
+      console.log('options :', options);
       this.openSelectModal(options, this.selectedToWhomType, false, 'Select To Whom Type', 1, (selected) => {
         this.selectedToWhomType = selected;
         this.Entity.p.RecipientType = selected[0].p.Ref;
         this.ToWhomTypeName = selected[0].p.Name;
-        this.getRecipientListByRecipientTypeRef(); 
-        this.getTotalInvoiceAmountFromSiteAndRecipientRef(); 
+        this.getRecipientListByRecipientTypeRef();
+        this.getTotalInvoiceAmountFromSiteAndRecipientRef();
         this.onTypeChange();
       });
     } catch (error) {
@@ -686,7 +703,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
             text: 'Yes, Close',
             cssClass: 'custom-confirm',
             handler: () => {
-              this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expense'], { replaceUrl: true });
+              this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses'], { replaceUrl: true });
               this.haptic.success();
               console.log('User confirmed.');
             }
@@ -694,7 +711,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         ]
       });
     } else {
-      this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expense'], { replaceUrl: true });
+      this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses'], { replaceUrl: true });
       this.haptic.success();
     }
   }

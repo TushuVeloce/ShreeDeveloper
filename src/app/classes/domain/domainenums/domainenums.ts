@@ -713,17 +713,17 @@ export class DomainEnums {
       case SiteWorkApplicableTypes.Submit:
         return 'Submit';
       case SiteWorkApplicableTypes.InwardDate:
-        return 'InwardDate';
+        return 'Inward Date';
       case SiteWorkApplicableTypes.InwardNo:
-        return 'InwardNo';
+        return 'Inward No';
       case SiteWorkApplicableTypes.ScrutinyFees:
-        return 'ScrutinyFees';
+        return 'Scrutiny Fees';
       case SiteWorkApplicableTypes.YesNo:
-        return 'YesNo';
+        return 'Yes No';
       case SiteWorkApplicableTypes.OutwardDate:
-        return 'OutwardDate';
+        return 'Outward Date';
       case SiteWorkApplicableTypes.OutwardNo:
-        return 'OutwardNo';
+        return 'Outward No';
       case SiteWorkApplicableTypes.Received:
         return 'Received ';
       default:

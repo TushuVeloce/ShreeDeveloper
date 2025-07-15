@@ -48,7 +48,9 @@ export class ExpenseProps {
   public ExpenseLogicalRefToIncome: number = 0
   public ExpenseLogicalRefToInvoice: number = 0
   public IncomeLedgerRef: number = 0
+  public IncomeLedgerName: string = ''
   public IncomeSubLedgerRef: number = 0
+  public IncomeSubLedgerName: string = ''
   public RemainingAdvance: number = 0
 
   public GivenAmount: number = 0
