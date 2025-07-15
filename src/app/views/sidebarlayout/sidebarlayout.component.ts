@@ -484,6 +484,11 @@ export class SidebarlayoutComponent implements OnInit {
         LogoPath: '/assets/icons/Employee Master.png',
       },
       {
+        Name: 'Owner Master',
+        RouterLink: '/homepage/Website/Owner_Master',
+        LogoPath: '/assets/icons/Employee Master.png',
+      },
+      {
         Name: 'Payer Master',
         RouterLink: '/homepage/Website/Payer_Master',
         LogoPath: '/assets/icons/Employee Master.png',

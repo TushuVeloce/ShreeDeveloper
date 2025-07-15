@@ -71,11 +71,11 @@ export class RecipientMasterComponent implements OnInit {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>
-     Are you sure that you want to DELETE this Expense Type?`,
+     Are you sure that you want to DELETE this Recipient?`,
       async () => {
         await Recipient.DeleteInstance(async () => {
           await this.uiUtils.showSuccessToster(
-            `Expense Type ${Recipient.p.Name} has been deleted!`
+            `Recipient ${Recipient.p.Name} has been deleted!`
           );
           await this.getRecipientListByCompanyRef();
           this.SearchString = '';

@@ -145,6 +145,8 @@ import { InvoicePrintComponent } from './accounting/invoice/invoice-print/invoic
 import { OpeningBalanceComponent } from './Masters/opening_balance/opening-balance/opening-balance.component';
 import { OpeningBalanceDetailsComponent } from './Masters/opening_balance/opening-balance-details/opening-balance-details.component';
 import { AuthGuard } from 'src/app/services/auth-guard.service';
+import { OwnerMasterComponent } from './Masters/owner/owner-master/owner-master.component';
+import { OwnerMasterDetailsComponent } from './Masters/owner/owner-master-details/owner-master-details.component';
 
 
 const routes: Routes = [
@@ -223,6 +225,9 @@ const routes: Routes = [
 
       { path: 'Recipient_Master', component: RecipientMasterComponent },
       { path: 'Recipient_Master_Details', component: RecipientMasterDetailsComponent },
+
+       { path: 'Owner_Master', component: OwnerMasterComponent },
+      { path: 'Owner_Master_Details', component: OwnerMasterDetailsComponent },
 
       { path: 'Payer_Master', component: PayerComponent },
       { path: 'Payer_Master_Details', component: PayerDetailsComponent },

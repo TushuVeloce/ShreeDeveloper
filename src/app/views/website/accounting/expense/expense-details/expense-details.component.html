@@ -88,13 +88,6 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Employee">
-          <div>
-            <label>Remaining Advance</label>
-            <input type="text" [(ngModel)]="Entity.p.RemainingAdvance" name="RemainingAdvance" class="form-control"
-              id="RemainingAdvance" readonly placeholder="Enter Remaining Advance" />
-          </div>
-        </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>To Whom</label>
           <div class="d-flex align-items-center">
@@ -133,6 +126,13 @@
             <label>Reason</label>
             <input type="text" [(ngModel)]="Entity.p.Reason" name="Reason" class="form-control" id="Reason" required
               placeholder="Enter Reason" />
+          </div>
+        </div>
+         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Employee">
+          <div>
+            <label>Remaining Advance</label>
+            <input type="text" [(ngModel)]="Entity.p.RemainingAdvance" name="RemainingAdvance" class="form-control"
+              id="RemainingAdvance" readonly placeholder="Enter Remaining Advance" />
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
