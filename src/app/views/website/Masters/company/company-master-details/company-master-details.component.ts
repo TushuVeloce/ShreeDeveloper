@@ -36,6 +36,7 @@ export class CompanyMasterDetailsComponent implements OnInit {
   CompanyTypeList = DomainEnums.CompanyTypeList(true, '-- Select Company Type --');
   dateOfInCorporation: string | null = null;
   lastDateOfFirstFinancialYear: string | null = null;
+  CompanyLogo: File = null as any
 
   ImageBaseUrl: string = "";
   errors = { company_image: '' };
@@ -88,18 +89,14 @@ export class CompanyMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
-
     this.LoginToken = this.appStateManage.getLoginToken();
-
     this.appStateManage.setDropdownDisabled(true);
-
     await this.FormulateCountryList();
 
     // Load State based on Default Country Ref
     if (this.Entity.p.CountryRef) {
       await this.getStateListByCountryRef(this.Entity.p.CountryRef);
     }
-
     // Load Cities based on Default State Ref
     if (this.Entity.p.StateRef) {
       await this.getCityListByStateRef(this.Entity.p.StateRef);
@@ -126,7 +123,6 @@ export class CompanyMasterDetailsComponent implements OnInit {
       );
 
       this.appStateManage.StorageKey.removeItem('Editable');
-
       if (this.Entity.p.CountryRef) {
         await this.getStateListByCountryRef(this.Entity.p.CountryRef);
       }
@@ -138,8 +134,6 @@ export class CompanyMasterDetailsComponent implements OnInit {
       this.dateOfInCorporation = ''; // Clear Date
       this.lastDateOfFirstFinancialYear = ''; // Clear Date
     }
-
-    this.InitialEntity = Object.assign(Company.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Company;
   }
 
   // Call this when editing existing data
@@ -156,14 +150,14 @@ export class CompanyMasterDetailsComponent implements OnInit {
   onImageUpload(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
-      this.Entity.p.CompanyLogo = input.files[0];
-      this.selectedFileName = this.Entity.p.CompanyLogo.name;
+      this.CompanyLogo = input.files[0];
+      this.selectedFileName = this.CompanyLogo.name;
 
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreviewUrl = reader.result as string;
       };
-      reader.readAsDataURL(this.Entity.p.CompanyLogo);
+      reader.readAsDataURL(this.CompanyLogo);
     }
   }
 
@@ -214,9 +208,11 @@ export class CompanyMasterDetailsComponent implements OnInit {
       const defaultCity = this.CityList.find(c => c.p.Ref === this.Entity.p.CityRef);
       this.Entity.p.CityRef = defaultCity ? defaultCity.p.Ref : this.CityList[0].p.Ref;
     }
+    this.InitialEntity = Object.assign(Company.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Company;
   }
 
   SaveCompanyMaster = async () => {
+    let lstFTO: FileTransferObject[] = [];
     if (this.Entity.p.CreatedBy == 0) {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
@@ -245,7 +241,15 @@ export class CompanyMasterDetailsComponent implements OnInit {
       }
     }
     let entitiesToSave = [entityToSave];
-    let lstFTO: FileTransferObject[] = [FileTransferObject.FromFile("LogoFile", this.Entity.p.CompanyLogo, this.Entity.p.CompanyLogo.name)];
+    if (this.CompanyLogo) {
+      lstFTO.push(
+        FileTransferObject.FromFile(
+          "LogoFile",
+          this.CompanyLogo,
+          this.CompanyLogo.name
+        )
+      );
+    }
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
 
     if (!tr.Successful) {
@@ -268,10 +272,6 @@ export class CompanyMasterDetailsComponent implements OnInit {
       }
     }
   };
-
-  // BackCompany = () => {
-  //   this.router.navigate(['/homepage/Website/Company_Master']);
-  // }
 
   BackCompany = async () => {
     if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
