@@ -265,29 +265,29 @@ export class StockOrderDetailsComponent implements OnInit {
   }
 
   closeModal = async (type: string) => {
-    if (type === 'OrderMaterial') {
-      const keysToCheck = ['Name', 'MaterialRef ', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
+    // if (type === 'OrderMaterial') {
+    //   const keysToCheck = ['MaterialRef ', 'OrderedQty', 'Rate', 'DiscountedRate', 'Gst', 'DeliveryCharges', 'ExpectedDeliveryDate'] as const;
 
-      const hasData = keysToCheck.some(
-        key => (this.newOrderMaterial as any)[key]?.toString().trim()
-      );
+    //   const hasData = keysToCheck.some(
+    //     key => (this.newOrderMaterial as any)[key]?.toString().trim()
+    //   );
 
-      if (hasData) {
-        await this.uiUtils.showConfirmationMessage(
-          'Close',
-          `This process is <strong>IRREVERSIBLE!</strong><br/>
-             Are you sure you want to close this modal?`,
-          async () => {
-            this.isOrderMaterialModalOpen = false;
-            this.newOrderMaterial = OrderMaterialDetailProps.Blank();
-          }
-        );
-      } else {
+    //   if (hasData) {
+    //     await this.uiUtils.showConfirmationMessage(
+    //       'Close',
+    //       `This process is <strong>IRREVERSIBLE!</strong><br/>
+    //          Are you sure you want to close this modal?`,
+    //       async () => {
+    //         this.isOrderMaterialModalOpen = false;
+    //         this.newOrderMaterial = OrderMaterialDetailProps.Blank();
+    //       }
+    //     );
+    //   } else {
         this.isOrderMaterialModalOpen = false;
         this.ModalEditable = false;
         this.newOrderMaterial = OrderMaterialDetailProps.Blank();
-      }
-    }
+    //   }
+    // }
   };
 
   async addOrderMaterial() {
