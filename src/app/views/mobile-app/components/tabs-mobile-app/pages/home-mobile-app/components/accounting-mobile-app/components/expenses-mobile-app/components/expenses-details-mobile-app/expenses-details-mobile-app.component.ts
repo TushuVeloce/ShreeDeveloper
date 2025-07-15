@@ -301,6 +301,16 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     this.RecipientList = lst;
   }
 
+    onTypeChange = () =>{
+    this.Entity.p.IncomeLedgerRef = 0;
+    this.Entity.p.RecipientRef = 0;
+    this.Entity.p.IsAdvancePayment = 0
+  }
+
+  onChangeIncomeLedger = () =>{
+    this.Entity.p.IncomeSubLedgerRef = 0;
+  }
+
   getTotalInvoiceAmountFromSiteAndRecipientRef = async () => {
     if (this.companyRef <= 0) {
       // await this.toastService.present('company not selected', 1000, 'danger');
@@ -530,7 +540,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
   public async selectIncomeSubLedgerBottomsheet(): Promise<void> {
     try {
-      const options = this.SubLedgerList;
+      const options = this.IncomeSubLedgerList;
       this.openSelectModal(options, this.selectedIncomeSubLedger, false, 'Select Sub Ledger', 1, (selected) => {
         this.selectedIncomeSubLedger = selected;
         this.Entity.p.IncomeSubLedgerRef = selected[0].p.Ref;
@@ -546,9 +556,10 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
       const options = this.LedgerList;
       this.openSelectModal(options, this.selectedIncomeLedger, false, 'Select Income Ledger', 1, (selected) => {
         this.selectedIncomeLedger = selected;
-        this.Entity.p.LedgerRef = selected[0].p.Ref;
+        this.Entity.p.IncomeLedgerRef = selected[0].p.Ref;
         this.IncomeLedgerName = selected[0].p.Name;
-        this.getSubIncomeLedgerListByIncomeLedgerRef(this.Entity.p.LedgerRef)
+        this.getSubIncomeLedgerListByIncomeLedgerRef(this.Entity.p.IncomeLedgerRef);
+        this.onChangeIncomeLedger();   
       });
     } catch (error) {
 
@@ -563,8 +574,9 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         this.selectedToWhomType = selected;
         this.Entity.p.RecipientType = selected[0].p.Ref;
         this.ToWhomTypeName = selected[0].p.Name;
-        this.getRecipientListByRecipientTypeRef();
-        this.getTotalInvoiceAmountFromSiteAndRecipientRef();
+        this.getRecipientListByRecipientTypeRef(); 
+        this.getTotalInvoiceAmountFromSiteAndRecipientRef(); 
+        this.onTypeChange();
       });
     } catch (error) {
 
@@ -588,9 +600,9 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
       const options = this.LedgerList;
       this.openSelectModal(options, this.selectedLedger, false, 'Select Ledger', 1, (selected) => {
         this.selectedLedger = selected;
-        this.Entity.p.IncomeLedgerRef = selected[0].p.Ref;
+        this.Entity.p.LedgerRef = selected[0].p.Ref;
         this.LedgerName = selected[0].p.Name;
-        this.getSubLedgerListByLedgerRef(this.Entity.p.IncomeLedgerRef)
+        this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef)
       });
     } catch (error) {
 
@@ -604,7 +616,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         this.selectedSite = selected;
         this.Entity.p.SiteRef = selected[0].p.Ref;
         this.SiteName = selected[0].p.Name;
-        this.getTotalInvoiceAmountFromSiteAndRecipientRef();
+        this.getTotalInvoiceAmountFromSiteAndRecipientRef()
         this.Entity.p.RecipientType = 0;
         this.Entity.p.RecipientRef = 0;
         this.RecipientList = []
