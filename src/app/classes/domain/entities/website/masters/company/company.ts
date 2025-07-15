@@ -118,10 +118,12 @@ export class Company implements IPersistable<Company> {
     if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country cannot be blank.');
     if (this.p.StateRef == 0) vra.add('StateRef', 'State cannot be blank.');
     if (this.p.CityRef == 0) vra.add('CityRef', 'City cannot be blank.');
-    if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN)) {
+
+    if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN) && this.p.GSTIN != '') {
       vra.add('GSTIN', ValidationMessages.GSTINMsg);
     }
-    if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan)) {
+
+    if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan) && this.p.Pan != '') {
       vra.add('Pan', ValidationMessages.PANMsg);
     }
 
@@ -133,7 +135,6 @@ export class Company implements IPersistable<Company> {
 
     if (this.p.DateOfInCorporation == '') vra.add('DateOfInCorporation', 'Date Of InCorporation cannot be blank.');
     if (this.p.LastDateOfFirstFinancialYear == '') vra.add('LastDateOfFirstFinancialYear', 'Last Date Of First Financial Year cannot be blank.');
-    if (this.p.Notes == '') vra.add('Notes', 'Notes cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {

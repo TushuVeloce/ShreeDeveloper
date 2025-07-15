@@ -217,6 +217,12 @@ export class CompanyMasterDetailsComponent implements OnInit {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
+
+    if (!this.CompanyLogo && this.IsNewEntity) {
+      await this.uiUtils.showErrorToster('Company Logo not Selected');
+      return;
+    }
+
     let entityToSave = this.Entity.GetEditableVersion();
     // ------ Code For Save Date Of InCorporation Year Format ---------------//
     if (this.dateOfInCorporation) {
