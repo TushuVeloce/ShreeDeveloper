@@ -414,7 +414,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       // this.uiUtils.showErrorMessage('Error', tr.Message);
-      await this.toastService.present('Error'+tr.Message, 1000, 'danger');
+      await this.toastService.present('Error' + tr.Message, 1000, 'danger');
       await this.haptic.error();
       return;
     } else {
@@ -506,7 +506,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         this.selectedModeOfPayment = selected;
         this.Entity.p.ExpenseModeOfPayment = selected[0].p.Ref;
         this.ModeOfPaymentName = selected[0].p.Name;
-       this.OnModeChange()
+        this.OnModeChange()
       });
     } catch (error) {
 
@@ -520,7 +520,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         this.selectedRecipientName = selected;
         this.Entity.p.RecipientRef = selected[0].p.Ref;
         this.RecipientName = selected[0].p.Name;
-        this.getTotalInvoiceAmountFromSiteAndRecipientRef(); 
+        this.getTotalInvoiceAmountFromSiteAndRecipientRef();
         this.onRecipientChange();
       });
     } catch (error) {
@@ -541,7 +541,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     }
   }
 
-    public async selectIncomeLedgerBottomsheet(): Promise<void> {
+  public async selectIncomeLedgerBottomsheet(): Promise<void> {
     try {
       const options = this.LedgerList;
       this.openSelectModal(options, this.selectedIncomeLedger, false, 'Select Income Ledger', 1, (selected) => {
@@ -557,12 +557,13 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
   public async selectToWhomTypeBottomsheet(): Promise<void> {
     try {
-      const options = this.RecipientTypesList;
+      // const options = this.RecipientTypesList;
+      const options = this.RecipientTypesList.map((item) => ({ p: item }));
       this.openSelectModal(options, this.selectedToWhomType, false, 'Select To Whom Type', 1, (selected) => {
         this.selectedToWhomType = selected;
         this.Entity.p.RecipientType = selected[0].p.Ref;
         this.ToWhomTypeName = selected[0].p.Name;
-        this.getRecipientListByRecipientTypeRef(); 
+        this.getRecipientListByRecipientTypeRef();
         this.getTotalInvoiceAmountFromSiteAndRecipientRef();
       });
     } catch (error) {
@@ -603,10 +604,10 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         this.selectedSite = selected;
         this.Entity.p.SiteRef = selected[0].p.Ref;
         this.SiteName = selected[0].p.Name;
-        this.getTotalInvoiceAmountFromSiteAndRecipientRef(); 
-        this.Entity.p.RecipientType = 0; 
-        this.Entity.p.RecipientRef = 0; 
-        this.RecipientList = []  
+        this.getTotalInvoiceAmountFromSiteAndRecipientRef();
+        this.Entity.p.RecipientType = 0;
+        this.Entity.p.RecipientRef = 0;
+        this.RecipientList = []
 
       });
     } catch (error) {

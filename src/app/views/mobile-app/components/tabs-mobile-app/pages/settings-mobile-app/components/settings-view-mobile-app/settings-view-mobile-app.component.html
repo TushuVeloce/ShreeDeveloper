@@ -7,15 +7,11 @@
         <p class="email-text">{{ employeeEmail || 'email' }}</p>
       </div>
 
-      <!-- <ion-avatar class="avatar">
-        <img [src]="userImage || defaultAvatar" alt="User avatar" />
-      </ion-avatar> -->
       <ion-avatar class="avatar">
-      <img *ngIf="imagePreviewUrl; else placeholderImage" [src]="imagePreviewUrl" alt="Profile"
-        loading="lazy" />
-      <ng-template #placeholderImage>
-        <ion-icon name="person-circle-outline" size="large"></ion-icon>
-      </ng-template>
+        <img *ngIf="imagePreviewUrl; else placeholderImage" [src]="imagePreviewUrl" alt="Profile" loading="lazy" />
+        <ng-template #placeholderImage>
+          <ion-icon name="person-circle-outline" size="large"></ion-icon>
+        </ng-template>
       </ion-avatar>
     </div>
 
