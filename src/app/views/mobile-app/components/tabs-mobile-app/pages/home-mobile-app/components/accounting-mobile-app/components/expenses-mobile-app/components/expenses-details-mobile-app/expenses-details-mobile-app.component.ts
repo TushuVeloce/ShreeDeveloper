@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums, ModeOfPayments } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, ModeOfPayments, RecipientTypes } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
@@ -29,13 +29,13 @@ import { ToastService } from 'src/app/views/mobile-app/components/core/toast.ser
   standalone: false
 })
 export class ExpensesDetailsMobileAppComponent implements OnInit {
-
   Entity: Expense = Expense.CreateNewInstance();
   RecipientEntity: Recipient = Recipient.CreateNewInstance();
   RecipientList: Invoice[] = [];
   private IsNewEntity: boolean = true;
   SiteList: Site[] = [];
   SubLedgerList: SubLedger[] = [];
+  IncomeSubLedgerList: SubLedger[] = [];
   UnitList: Unit[] = [];
   RecipientNameInput: boolean = false
   isSaveDisabled: boolean = false;
@@ -44,28 +44,35 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   IsDropdownDisabled: boolean = false;
   InitialEntity: Expense = null as any;
   LedgerList: Ledger[] = [];
-  companyRef: number = 0;
+  companyRef = 0;
   BankList: BankAccount[] = [];
-  Cheque = ModeOfPayments.Cheque
   Cash = ModeOfPayments.Cash
   Bill = ModeOfPayments.Bill
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
+  RecipientTypesList = DomainEnums.RecipientTypesList();
+  Employee = RecipientTypes.Employee;
+  Sites = RecipientTypes.Sites;
   Date: string = '';
-  UnitName: string = '';
-  selectedUnit: any[] = [];
 
-  TotalOrderedQty: number = 0;
 
   showExpenseDatePicker = false;
   ExpenseDate = '';
   DisplayExpenseDate = '';
-
 
   LedgerName: string = '';
   selectedLedger: any[] = [];
 
   SubLedgerName: string = '';
   selectedSubLedger: any[] = [];
+
+  selectedIncomeSubLedger: any[] = [];
+  IncomeSubLedgerName: string = '';
+
+  selectedIncomeLedger: any[] = [];
+  IncomeLedgerName: string = '';
+
+  selectedToWhomType: any[] = [];
+  ToWhomTypeName: string = '';
 
   RecipientName: string = '';
   selectedRecipientName: any[] = [];
@@ -75,7 +82,6 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
   ModeOfPaymentName: string = '';
   selectedModeOfPayment: any[] = [];
-
 
   BankName: string = '';
   selectedBank: any[] = [];
@@ -123,18 +129,45 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
           this.IsNewEntity = false;
           this.DetailsFormTitle = this.IsNewEntity ? 'New Expense' : 'Edit Expense';
           this.Entity = Expense.GetCurrentInstance();
-          this.Date = this.Entity.p.Date;
+          this.appStateManage.StorageKey.removeItem('Editable');
+
+          this.selectedSite = [{ p: { Ref: this.Entity.p.SiteRef, Name: this.Entity.p.SiteName } }];
+          this.SiteName = this.Entity.p.SiteName;
+
+          this.selectedLedger = [{ p: { Ref: this.Entity.p.LedgerRef, Name: this.Entity.p.LedgerName } }];
+          this.LedgerName = this.Entity.p.LedgerName;
+
+          this.selectedLedger = [{ p: { Ref: this.Entity.p.LedgerRef, Name: this.Entity.p.LedgerName } }];
+          this.LedgerName = this.Entity.p.LedgerName;
+
+          this.selectedRecipientName = [{ p: { Ref: this.Entity.p.RecipientRef, Name: this.Entity.p.RecipientName } }];
+          this.RecipientName = this.Entity.p.RecipientName;
+
+          this.ModeOfPaymentName = this.ModeofPaymentList.find(item => item.Ref == this.Entity.p.ExpenseModeOfPayment)?.Name ?? '';
+          this.selectedModeOfPayment = [{ p: { Ref: this.Entity.p.ExpenseModeOfPayment, Name: this.ModeOfPaymentName } }];
+
+          // this.Date = this.Entity.p.Date;
+          if (this.Entity.p.Date != '') {
+            this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
+            this.ExpenseDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
+            this.DisplayExpenseDate = this.datePipe.transform(this.ExpenseDate, 'yyyy-MM-dd') ?? '';;
+          }
           this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
           this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
-          this.appStateManage.StorageKey.removeItem('Editable');
           this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
         } else {
           this.Entity = Expense.CreateNewInstance();
           Expense.SetCurrentInstance(this.Entity);
+          // let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+          // this.Date = strCDT.substring(0, 10);
           let strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-          this.Date = strCDT.substring(0, 10);
+          let parts = strCDT.substring(0, 16).split('-');
+          this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
+          strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+          this.ExpenseDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
+          this.DisplayExpenseDate = this.datePipe.transform(this.ExpenseDate, 'yyyy-MM-dd') ?? '';;
+
         }
-        this.getRecipientListByCompanyRef()
         this.getCurrentBalanceByCompanyRef();
         this.InitialEntity = Object.assign(
           Expense.CreateNewInstance(),
@@ -167,8 +200,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
   getUnitList = async () => {
     let lst = await Unit.FetchEntireList(async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.toastService.present('Error' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
     this.UnitList = lst;
@@ -176,14 +208,12 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
   public FormulateBankList = async () => {
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('company not selected', 1000, 'danger');
       await this.haptic.error();
       return;
     }
     let lst = await BankAccount.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.toastService.present('Error' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
     this.BankList = lst
@@ -195,14 +225,12 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('company not selected', 1000, 'danger');
       await this.haptic.error();
       return;
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.toastService.present('Error' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
     this.SiteList = lst;
@@ -210,7 +238,6 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
   getLedgerListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('company not selected', 1000, 'danger');
       await this.haptic.error();
       return;
@@ -218,47 +245,11 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     this.Entity.p.SubLedgerRef = 0
     let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef,
       async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
-        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+        await this.toastService.present('Error' + errMsg, 1000, 'danger');
         await this.haptic.error();
       }
     );
     this.LedgerList = lst
-  };
-
-  getTotalExpenseFromSiteAndRecipientName = async () => {
-    if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
-      await this.toastService.present('company not selected', 1000, 'danger');
-      await this.haptic.error();
-      return;
-    }
-    if (this.Entity.p.SiteRef <= 0) {
-      // await this.uiUtils.showErrorToster('Selected Site to get Shree Expense');
-      await this.toastService.present('Selected Site to get Shree Expense', 1000, 'danger');
-      await this.haptic.error();
-      return;
-    }
-    if (this.Entity.p.RecipientRef <= 0) {
-      // await this.uiUtils.showErrorToster('Selected Recipient Name to get Shree Expense');
-      await this.toastService.present('Selected Recipient Name to get Shree Expense', 1000, 'danger');
-      await this.haptic.error();
-      return;
-    }
-
-    let data = await Expense.FetchTotalInvoiceAmountFromSiteAndRecipient(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.RecipientType, this.Entity.p.RecipientRef,
-      async (errMsg) => {
-        // await this.uiUtils.showErrorMessage('Error', errMsg)
-        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-        await this.haptic.error();
-      }
-    );
-
-    this.Entity.p.InvoiceAmount = data[0].p.InvoiceAmount;
-    if (this.Entity.p.RecipientRef) {
-      const RecipientData = data.find(item => item.p.Ref == this.Entity.p.RecipientRef)
-      this.Entity.p.IsSiteRef = RecipientData?.p.IsSiteRef || 0
-    }
   };
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
@@ -269,39 +260,91 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
       return;
     }
     let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.toastService.present('Error' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
     this.SubLedgerList = lst;
   }
 
-  getRecipientListByCompanyRef = async () => {
+  getSubIncomeLedgerListByIncomeLedgerRef = async (ledgerref: number) => {
+    if (ledgerref <= 0) {
+      // await this.uiUtils.showErrorToster('Ledger not Selected');
+      await this.toastService.present('Ledger not Selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => {
+      await this.toastService.present('Error' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.IncomeSubLedgerList = lst;
+  }
+
+  getRecipientListByRecipientTypeRef = async () => {
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('company not selected', 1000, 'danger');
       await this.haptic.error();
       return;
     }
+    if (this.Entity.p.RecipientType <= 0) {
+      // await this.uiUtils.showErrorToster('To Whom not Selected');
+      await this.toastService.present('To Whom not Selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    this.Entity.p.RecipientRef = 0;
+    this.RecipientList = [];
     let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef, this.Entity.p.RecipientType, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.toastService.present('Error' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.RecipientList = lst;
+  }
+
+  getTotalInvoiceAmountFromSiteAndRecipientRef = async () => {
+    if (this.companyRef <= 0) {
+      // await this.toastService.present('company not selected', 1000, 'danger');
+      // await this.haptic.error();
+      return;
+    }
+    if (this.Entity.p.SiteRef <= 0) {
+      // await this.uiUtils.showErrorToster('Site not Selected');
+      // await this.toastService.present('Site not Selected', 1000, 'danger');
+      // await this.haptic.error();
+      return;
+    }
+    if (this.Entity.p.RecipientType <= 0) {
+      // await this.uiUtils.showErrorToster('To Whom not Selected');
+      // await this.toastService.present('To Whom not Selected', 1000, 'danger');
+      // await this.haptic.error();
+      return;
+    }
+    if (this.Entity.p.RecipientRef <= 0) {
+      // await this.uiUtils.showErrorToster('Recipient not Selected');
+      // await this.toastService.present('Recipient not Selected', 1000, 'danger');
+      // await this.haptic.error();
+      return;
+    }
+    let lst = await Expense.FetchTotalInvoiceAmountFromSiteAndRecipient(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.RecipientType, this.Entity.p.RecipientRef, async errMsg => {
+      await this.toastService.present('Error' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
     console.log('lst :', lst);
-    this.RecipientList = lst;
+    if (lst.length > 0) {
+      this.Entity.p.InvoiceAmount = lst[0].p.InvoiceAmount;
+      this.Entity.p.RemainingAdvance = lst[0].p.RemainingAdvance;
+    }
+    // this.RecipientList = lst;
   }
 
   getCurrentBalanceByCompanyRef = async () => {
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('company not selected', 1000, 'danger');
       await this.haptic.error();
       return;
     }
     let lst = await Expense.FetchCurrentBalanceByCompanyRef(this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.toastService.present('Error' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
     if (lst.length > 0) {
@@ -371,7 +414,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       // this.uiUtils.showErrorMessage('Error', tr.Message);
-      await this.toastService.present('Error ' + tr.Message, 1000, 'danger');
+      await this.toastService.present('Error'+tr.Message, 1000, 'danger');
       await this.haptic.error();
       return;
     } else {
@@ -380,7 +423,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
       await this.haptic.success();
       this.RecipientNameInput = false
       this.RecipientEntity = Recipient.CreateNewInstance();
-      await this.getRecipientListByCompanyRef()
+      await this.getRecipientListByRecipientTypeRef()
     }
   };
 
@@ -400,7 +443,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       // this.uiUtils.showErrorMessage('Error', tr.Message);
-      await this.toastService.present('Error ' + tr.Message, 1000, 'danger');
+      await this.toastService.present('Error' + tr.Message, 1000, 'danger');
       await this.haptic.error();
       return;
     } else {
@@ -415,10 +458,31 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         // await this.uiUtils.showSuccessToster('Expense Updated successfully');
         await this.toastService.present('Expense Updated successfully', 1000, 'success');
         await this.haptic.success();
-        await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expense']);
+        await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses']);
       }
     }
   };
+
+
+
+  selectAllValue(event: MouseEvent): void {
+    const input = event.target as HTMLInputElement;
+    input.select();
+  }
+
+  // BackExpense = async () => {
+  //   if (!this.utils.AreEqual(this.InitialEntity, this.Entity)) {
+  //     await this.uiUtils.showConfirmationMessage('Cancel',
+  //       `This process is IRREVERSIBLE!
+  //     <br/>
+  //     Are you sure that you want to Cancel this Expense Form?`,
+  //       async () => {
+  //         await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses']);
+  //       });
+  //   } else {
+  //     await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses']);
+  //   }
+  // }
 
   public async selectBankBottomsheet(): Promise<void> {
     try {
@@ -426,7 +490,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
       const options = this.BankList.map((item) => ({ p: item }));
       this.openSelectModal(options, this.selectedBank, false, 'Select Mode of Payment', 1, (selected) => {
         this.selectedBank = selected;
-        // this.Entity.p.Bank = selected[0].p.Ref;
+        this.Entity.p.BankAccountRef = selected[0].p.Ref;
         this.BankName = selected[0].p.Name;
       });
     } catch (error) {
@@ -440,8 +504,9 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
       const options = this.ModeofPaymentList.map((item) => ({ p: item }));
       this.openSelectModal(options, this.selectedModeOfPayment, false, 'Select Mode of Payment', 1, (selected) => {
         this.selectedModeOfPayment = selected;
-        // this.Entity.p.ModeOfPayment = selected[0].p.Ref;
+        this.Entity.p.ExpenseModeOfPayment = selected[0].p.Ref;
         this.ModeOfPaymentName = selected[0].p.Name;
+       this.OnModeChange()
       });
     } catch (error) {
 
@@ -453,9 +518,9 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
       const options = this.RecipientList;
       this.openSelectModal(options, this.selectedRecipientName, false, 'Select Recipient Name', 1, (selected) => {
         this.selectedRecipientName = selected;
-        // this.Entity.p.RecipientMasterRef = selected[0].p.Ref;
+        this.Entity.p.RecipientRef = selected[0].p.Ref;
         this.RecipientName = selected[0].p.Name;
-        this.getTotalExpenseFromSiteAndRecipientName();
+        this.getTotalInvoiceAmountFromSiteAndRecipientRef(); 
         this.onRecipientChange();
       });
     } catch (error) {
@@ -463,6 +528,47 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     }
   }
 
+  public async selectIncomeSubLedgerBottomsheet(): Promise<void> {
+    try {
+      const options = this.SubLedgerList;
+      this.openSelectModal(options, this.selectedIncomeSubLedger, false, 'Select Sub Ledger', 1, (selected) => {
+        this.selectedIncomeSubLedger = selected;
+        this.Entity.p.IncomeSubLedgerRef = selected[0].p.Ref;
+        this.IncomeSubLedgerName = selected[0].p.Name;
+      });
+    } catch (error) {
+
+    }
+  }
+
+    public async selectIncomeLedgerBottomsheet(): Promise<void> {
+    try {
+      const options = this.LedgerList;
+      this.openSelectModal(options, this.selectedIncomeLedger, false, 'Select Income Ledger', 1, (selected) => {
+        this.selectedIncomeLedger = selected;
+        this.Entity.p.LedgerRef = selected[0].p.Ref;
+        this.IncomeLedgerName = selected[0].p.Name;
+        this.getSubIncomeLedgerListByIncomeLedgerRef(this.Entity.p.LedgerRef)
+      });
+    } catch (error) {
+
+    }
+  }
+
+  public async selectToWhomTypeBottomsheet(): Promise<void> {
+    try {
+      const options = this.RecipientTypesList;
+      this.openSelectModal(options, this.selectedToWhomType, false, 'Select To Whom Type', 1, (selected) => {
+        this.selectedToWhomType = selected;
+        this.Entity.p.RecipientType = selected[0].p.Ref;
+        this.ToWhomTypeName = selected[0].p.Name;
+        this.getRecipientListByRecipientTypeRef(); 
+        this.getTotalInvoiceAmountFromSiteAndRecipientRef();
+      });
+    } catch (error) {
+
+    }
+  }
   public async selectSubLedgerBottomsheet(): Promise<void> {
     try {
       const options = this.SubLedgerList;
@@ -481,9 +587,9 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
       const options = this.LedgerList;
       this.openSelectModal(options, this.selectedLedger, false, 'Select Ledger', 1, (selected) => {
         this.selectedLedger = selected;
-        this.Entity.p.LedgerRef = selected[0].p.Ref;
+        this.Entity.p.IncomeLedgerRef = selected[0].p.Ref;
         this.LedgerName = selected[0].p.Name;
-        this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
+        this.getSubLedgerListByLedgerRef(this.Entity.p.IncomeLedgerRef)
       });
     } catch (error) {
 
@@ -497,7 +603,11 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         this.selectedSite = selected;
         this.Entity.p.SiteRef = selected[0].p.Ref;
         this.SiteName = selected[0].p.Name;
-        this.getTotalExpenseFromSiteAndRecipientName()
+        this.getTotalInvoiceAmountFromSiteAndRecipientRef(); 
+        this.Entity.p.RecipientType = 0; 
+        this.Entity.p.RecipientRef = 0; 
+        this.RecipientList = []  
+
       });
     } catch (error) {
 
@@ -516,7 +626,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     if (selected) updateCallback(selected);
   }
   isDataFilled(): boolean {
-    const emptyEntity: Invoice = Invoice.CreateNewInstance();
+    const emptyEntity: Expense = Expense.CreateNewInstance();
     console.log('emptyEntity :', emptyEntity);
     console.log('this Entity :', this.Entity);
     return !this.deepEqualIgnoringKeys(this.Entity, emptyEntity, ['p.Date']);
