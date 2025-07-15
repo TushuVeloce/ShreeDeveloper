@@ -922,42 +922,49 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   };
 
   SaveInvoiceMaster = async () => {
-    this.Entity.p.CompanyRef = this.companyRef;
-    this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
-    if (this.Entity.p.CreatedBy == 0) {
-      this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-    }
-    this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
-    let entityToSave = this.Entity.GetEditableVersion();
-    let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-
-    if (!tr.Successful) {
-      this.isSaveDisabled = false;
-      // this.uiUtils.showErrorMessage('Error', tr.Message);
-      await this.toastService.present('Error ' + tr.Message, 1000, 'danger');
-      await this.haptic.error();
-      return;
-    } else {
-      this.isSaveDisabled = false;
-      if (this.IsNewEntity) {
-        // await this.uiUtils.showSuccessToster('Bill saved successfully');
-        await this.toastService.present('Bill saved successfully', 1000, 'success');
-        await this.haptic.success();
-        this.Entity = Invoice.CreateNewInstance();
-        this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-        let parts = this.strCDT.substring(0, 16).split('-');
-        this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
-        this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
-        this.isDieselPaid = false
-      } else {
-        // await this.uiUtils.showSuccessToster('Bill Updated successfully');
-        await this.toastService.present('Bill Updated successfully', 1000, 'success');
-        await this.haptic.success();
-        await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/invoice']);
+    try {
+      await this.loadingService.show();
+      this.Entity.p.CompanyRef = this.companyRef;
+      this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
+      if (this.Entity.p.CreatedBy == 0) {
+        this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
+        this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
       }
+      this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
+      let entityToSave = this.Entity.GetEditableVersion();
+      let entitiesToSave = [entityToSave];
+      console.log('entitiesToSave :', entitiesToSave);
+      let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+
+      if (!tr.Successful) {
+        this.isSaveDisabled = false;
+        // this.uiUtils.showErrorMessage('Error', tr.Message);
+        await this.toastService.present('Error ' + tr.Message, 1000, 'danger');
+        await this.haptic.error();
+        return;
+      } else {
+        this.isSaveDisabled = false;
+        if (this.IsNewEntity) {
+          // await this.uiUtils.showSuccessToster('Bill saved successfully');
+          await this.toastService.present('Bill saved successfully', 1000, 'success');
+          await this.haptic.success();
+        } else {
+          // await this.uiUtils.showSuccessToster('Bill Updated successfully');
+          await this.toastService.present('Bill Updated successfully', 1000, 'success');
+          await this.haptic.success();
+        }
+      }
+    } catch (error) {
+      
+    }finally{
+      let parts = this.strCDT.substring(0, 16).split('-');
+      this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
+      this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+      this.isDieselPaid = false
+      this.Entity = Invoice.CreateNewInstance();
+      this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+      await this.loadingService.hide();
+      await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/invoice']);
     }
   };
 

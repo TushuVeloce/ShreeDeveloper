@@ -155,6 +155,7 @@ export class InvoiceViewMobileAppComponent  implements OnInit {
             cssClass: 'custom-confirm',
             handler: async () => {
               try {
+                await this.loadingService.show();
                 await item.DeleteInstance(async () => {
                   await this.toastService.present(
                     `Bill ${item.p.RecipientName} has been deleted!`,
@@ -165,9 +166,11 @@ export class InvoiceViewMobileAppComponent  implements OnInit {
                 });
                 await this.getInvoiceListByCompanyRef();
               } catch (err) {
-                console.error('Error deleting Invoice:', err);
-                await this.toastService.present('Failed to delete Bill', 1000, 'danger');
-                await this.haptic.error();
+                // console.error('Error deleting In voice:', err);
+                // await this.toastService.present('Failed to delete Bill', 1000, 'danger');
+                // await this.haptic.error();
+              }finally{
+                await this.loadingService.hide();
               }
             }
           }
