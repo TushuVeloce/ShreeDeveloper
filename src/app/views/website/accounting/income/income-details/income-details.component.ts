@@ -2,7 +2,7 @@ import { Component, effect, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
-import { DomainEnums, ModeOfPayments, } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, ModeOfPayments, PayerTypes, } from 'src/app/classes/domain/domainenums/domainenums';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
@@ -46,6 +46,9 @@ export class IncomeDetailsComponent implements OnInit {
   Cash = ModeOfPayments.Cash
   Bill = ModeOfPayments.Bill
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
+  PayerTypesList = DomainEnums.PayerTypesList();
+  DealDoneCustomer = PayerTypes.DealDoneCustomer;
+
   Date: string = '';
 
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
@@ -78,7 +81,7 @@ export class IncomeDetailsComponent implements OnInit {
       this.Date = strCDT.substring(0, 10);
     }
 
-    this.getPayerListByCompanyRef()
+    this.getPayerListByPayerType()
     this.getCurrentBalanceByCompanyRef();
     this.InitialEntity = Object.assign(
       Income.CreateNewInstance(),
@@ -124,20 +127,28 @@ export class IncomeDetailsComponent implements OnInit {
     this.ShreeBalance = lst[0].p.ShreesBalance;
   }
 
-  getPayerListByCompanyRef = async () => {
+  getPayerListByPayerType = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Income.FetchDistinctPayerNameByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    if (this.Entity.p.PayerType <= 0) {
+      // await this.uiUtils.showErrorToster('Payer Type not Selected');
+      return;
+    }
+    let lst = await Income.FetchPayerNameByPayerTypeRef(this.companyRef(), this.Entity.p.PayerType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.PayerList = lst;
   }
 
   onPayerChange = () => {
     try {
-      let SingleRecord = this.PayerList.find((data) => data.p.Ref == this.Entity.p.PayerRef);;
+      let SingleRecord = this.PayerList.find((data) => data.p.Ref == this.Entity.p.PayerRef);
       if (SingleRecord?.p) {
         this.Entity.p.IsRegisterCustomerRef = SingleRecord.p.IsRegisterCustomerRef;
+        if (this.Entity.p.PayerType == this.DealDoneCustomer) {
+          this.Entity.p.PlotName = SingleRecord.p.PlotName;
+        }
       }
     } catch (error) {
 
@@ -178,7 +189,7 @@ export class IncomeDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Payer Name saved successfully');
         this.PayerNameInput = false
-        await this.getPayerListByCompanyRef()
+        await this.getPayerListByPayerType()
         this.PayerEntity = Payer.CreateNewInstance();
       }
     }

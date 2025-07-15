@@ -29,6 +29,9 @@ export class IncomeProps {
 
   public PayerName: string = ''
   public PayerRef: number = 0
+  public PayerTypeName: string = ''
+  public PlotName: string = ''
+  public PayerType: number = 0
   public IsRegisterCustomerRef: number = 0
   public Date: string = ''
   public SiteRef: number = 0
@@ -210,6 +213,14 @@ export class Income implements IPersistable<Income> {
   public static async FetchDistinctPayerNameByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new DistinctPayerNameFetchRequest();
     req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
+    return Income.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchPayerNameByPayerTypeRef(CompanyRef: number, PayerType: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new DistinctPayerNameFetchRequest();
+    req.CompanyRef = CompanyRef;
+    req.PayerType = PayerType;
     let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
     return Income.ListFromTransportData(tdResponse);
   }

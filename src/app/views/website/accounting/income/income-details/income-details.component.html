@@ -51,6 +51,14 @@
             <nz-option *ngFor="let sub of SubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
           </nz-select>
         </div>
+        <div class="col-md-4" style="margin-top: 1rem; ">
+          <label>From Whom Type</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="PayerType" name="PayerType" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerType"
+            (ngModelChange)="getPayerListByPayerType();">
+            <nz-option *ngFor="let type of PayerTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
+          </nz-select>
+        </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Payer Name</label>
           <div class="d-flex align-items-center">
@@ -81,6 +89,14 @@
               style="width: 36px; height: 36px; cursor: pointer">
               <i class="fa-solid fa-check"></i>
             </span>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;"
+          *ngIf="Entity.p.PayerType == DealDoneCustomer && Entity.p.PayerRef != 0">
+          <div>
+            <label>Plot Name</label>
+            <input type="text" [(ngModel)]="Entity.p.PlotName" name="PlotName" class="form-control" id="PlotName"
+              readonly placeholder="Enter PlotName" />
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">

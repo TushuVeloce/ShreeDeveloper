@@ -5,10 +5,13 @@ import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class DistinctPayerNameFetchRequest {
-  public static readonly FetchRequestType: string = "GetDistinctPayerNameFetchRequest";
+  public static readonly FetchRequestType: string = "GetPayerNameFetchRequest";
 
   IncomeRefs: number[] = [];
   CompanyRefs: number[] = [];
+
+  CompanyRef: number = 0;
+  PayerType: number = 0;
 
   public MergeIntoTransportData = (td: TransportData) => {
     let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, DistinctPayerNameFetchRequest.FetchRequestType) as DataCollection;
