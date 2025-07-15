@@ -53,6 +53,7 @@ export class InvoiceDetailsComponent implements OnInit {
   InitialEntity: Invoice = null as any;
   LedgerList: Ledger[] = [];
   strCDT: string = ''
+  DisplayTotalWorkingHrs: string = ''
 
   MachinaryExpenseRef: number = ExpenseTypes.MachinaryExpense
   LabourExpenseRef: number = ExpenseTypes.LabourExpense
@@ -270,9 +271,9 @@ export class InvoiceDetailsComponent implements OnInit {
     const DieselAmount = Number(this.Entity.p.DieselAmount) || 0
     if (TotalWorkedHours > 0) {
       this.Entity.p.InvoiceAmount = Math.round(((TotalWorkedHours * Rate) - DieselAmount) * 100) / 100;
-    }else if(TotalLabourAmount > 0){
+    } else if (TotalLabourAmount > 0) {
       this.Entity.p.InvoiceAmount = Math.round((TotalLabourAmount) * 100) / 100;
-    }else{
+    } else {
       this.Entity.p.InvoiceAmount = Math.round(((Qty * Rate) - DieselAmount) * 100) / 100;
     }
   }
@@ -310,9 +311,11 @@ export class InvoiceDetailsComponent implements OnInit {
   };
 
   getTotalWorkedHours(): number {
-    return this.Entity.p.MachineUsageDetailsArray.reduce((total: number, item: any) => {
+    let total = this.Entity.p.MachineUsageDetailsArray.reduce((total: number, item: any) => {
       return total + Number(item.WorkedHours || 0);
     }, 0);
+    this.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(total);
+    return total;
   }
 
   getTotalLabourAmount(): number {
@@ -321,33 +324,88 @@ export class InvoiceDetailsComponent implements OnInit {
     }, 0);
   }
 
+  convertFractionTimeToHM = (fractionTime: number) => {
+    const hours = Math.floor(fractionTime);
+    const fractionalMinutes = fractionTime - hours;
+
+    // Convert fractional part (base 100) to minutes (base 60)
+    const minutes = Math.round(fractionalMinutes * 100 * 60 / 100);
+
+    // Pad minutes with leading zero if needed
+    const paddedMinutes = String(minutes).padStart(2, '0');
+
+    return `${hours}h ${paddedMinutes}m`;
+  }
+
   calculateWorkedHours() {
-    const start = this.MachineTimeEntity.StartTime;
-    const end = this.MachineTimeEntity.EndTime;
+    // const start = this.MachineTimeEntity.StartTime;
+    // const end = this.MachineTimeEntity.EndTime;
 
-    if (start && end) {
-      const [startHour, startMin] = start.split(':').map(Number);
-      const [endHour, endMin] = end.split(':').map(Number);
+    // if (start && end) {
+    //   const [startHour, startMin] = start.split(':').map(Number);
+    //   const [endHour, endMin] = end.split(':').map(Number);
 
-      const startDate = new Date();
-      startDate.setHours(startHour, startMin, 0);
+    //   const startDate = new Date();
+    //   startDate.setHours(startHour, startMin, 0);
 
-      const endDate = new Date();
-      endDate.setHours(endHour, endMin, 0);
+    //   const endDate = new Date();
+    //   endDate.setHours(endHour, endMin, 0);
 
-      let diffMs = endDate.getTime() - startDate.getTime();
+    //   let diffMs = endDate.getTime() - startDate.getTime();
 
-      // If end time is before start time, assume it's the next day
-      if (diffMs < 0) {
-        endDate.setDate(endDate.getDate() + 1);
-        diffMs = endDate.getTime() - startDate.getTime();
-      }
+    //   // If end time is before start time, assume it's the next day
+    //   if (diffMs < 0) {
+    //     endDate.setDate(endDate.getDate() + 1);
+    //     diffMs = endDate.getTime() - startDate.getTime();
+    //   }
 
-      const diffHrs = diffMs / (1000 * 60 * 60); // convert ms to hours
-      this.MachineTimeEntity.WorkedHours = +diffHrs.toFixed(2); // round to 2 decimal places
-    } else {
-      this.MachineTimeEntity.WorkedHours = 0;
+    //   const diffHrs = diffMs / (1000 * 60 * 60); // convert ms to hours
+    //   this.MachineTimeEntity.WorkedHours = +diffHrs.toFixed(2); // round to 2 decimal places
+    // } else {
+    //   this.MachineTimeEntity.WorkedHours = 0;
+    // }
+
+    if (this.MachineTimeEntity.StartTime == '') {
+      return
     }
+
+    if (this.MachineTimeEntity.EndTime == '') {
+      return
+    }
+
+    // Fallback to "00:00" if either is missing or invalid
+    if (!this.MachineTimeEntity.StartTime || !this.MachineTimeEntity.StartTime.includes(":")) return 0;
+
+    const [inHour, inMin] = this.MachineTimeEntity.StartTime.split(':').map(Number);
+    const [outHour, outMin] = (this.MachineTimeEntity.EndTime && this.MachineTimeEntity.EndTime.includes(":") ? this.MachineTimeEntity.EndTime : "00:00").split(':').map(Number);
+
+    // Check for invalid numbers
+    if (isNaN(inHour) || isNaN(inMin) || isNaN(outHour) || isNaN(outMin)) return 0;
+
+    const inDate = new Date();
+    inDate.setHours(inHour, inMin, 0, 0);
+
+    const outDate = new Date();
+    outDate.setHours(outHour, outMin, 0, 0);
+
+    // Handle overnight shift
+    if (outDate <= inDate) {
+      outDate.setDate(outDate.getDate() + 1);
+    }
+
+    const diffMs = outDate.getTime() - inDate.getTime();
+    const diffMinutes = Math.floor(diffMs / 60000);
+
+    const decimalHours = diffMinutes / 60;
+
+    this.MachineTimeEntity.WorkedHours = parseFloat(decimalHours.toFixed(2));
+
+    // HH:mm format
+    const hours = Math.floor(diffMinutes / 60);
+    const minutes = diffMinutes % 60;
+
+    this.MachineTimeEntity.DisplayWorkedHours = `${hours}h ${minutes.toString().padStart(2, '0')}m`;
+    return;
   }
 
   async SaveTime() {
@@ -381,7 +439,7 @@ export class InvoiceDetailsComponent implements OnInit {
 
   RemoveTime(index: number) {
     this.Entity.p.MachineUsageDetailsArray.splice(index, 1); // Remove Time
-     this.CalculateAmount()
+    this.CalculateAmount()
   }
 
   CloseTimeModal = async (type: string) => {
@@ -442,7 +500,8 @@ export class InvoiceDetailsComponent implements OnInit {
 
   RemoveLabourTime(index: number) {
     this.Entity.p.LabourExpenseDetailsArray.splice(index, 1); // Remove Time
-    this.CalculateAmount()  }
+    this.CalculateAmount()
+  }
 
   CloseLabourTimeModal = async (type: string) => {
     if (type === 'labourtime') {

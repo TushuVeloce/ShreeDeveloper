@@ -23,6 +23,7 @@ export class TimeDetailProps {
   public StartTime: string = '';
   public EndTime: string = '';
   public WorkedHours: number = 0;
+  public DisplayWorkedHours: string = '';
   public Total: number = 0;
   public SiteManagementRef: number = 0;
   public InvoiceRef: number = 0;
@@ -103,7 +104,7 @@ export class Time implements IPersistable<Time> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): Time[] {
+    sortPropertyName: string = ""): Time[] {
     let result: Time[] = [];
 
     let dcs = DataContainerService.GetInstance();
