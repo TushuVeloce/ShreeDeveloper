@@ -192,7 +192,7 @@ export class StockInwardDetailsMobileAppComponent  implements OnInit {
       await this.haptic.warning();
       return;
     }
-    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef, async errMsg => {
+    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef,this.Entity.p.PurchaseOrderDate, async errMsg => {
       // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present('Error ' + errMsg, 1000, 'danger');
       await this.haptic.error();

@@ -92,6 +92,7 @@ export class AccountingReportComponent implements OnInit {
       return;
     }
     let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.OpeningBalanceList = lst;
     if (this.OpeningBalanceList.length > 0) {
       this.BankRef = this.OpeningBalanceList[0].p.Ref;
@@ -101,7 +102,6 @@ export class AccountingReportComponent implements OnInit {
 
   getBalanceByBank = () => {
     let SingleRecord = this.OpeningBalanceList.find((data) => data.p.Ref == this.BankRef);
-    console.log('SingleRecord :', SingleRecord);
     if (SingleRecord) {
       this.NetBalance = SingleRecord?.p.NetBalance;
     }

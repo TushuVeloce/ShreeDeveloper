@@ -12,6 +12,7 @@ export class MaterialFromOrderFetchRequest
     MaterialRefs: number[] = [];
     SiteRef:number=0
     VendorRef :number=0
+    OrderedDate:string = ''
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

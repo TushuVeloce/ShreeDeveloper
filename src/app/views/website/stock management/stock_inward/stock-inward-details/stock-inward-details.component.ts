@@ -125,7 +125,7 @@ export class StockInwardDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef(),this.Entity.p.PurchaseOrderDate, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
     this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
     this.MaterialListOriginal?.forEach((item, index) => {
