@@ -44,8 +44,10 @@
         }
 
         .avatar {
-            width: 55px;
-            height: 55px;
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 3px;
             border-radius: 50%;
             overflow: hidden;
             margin-top: 10px;

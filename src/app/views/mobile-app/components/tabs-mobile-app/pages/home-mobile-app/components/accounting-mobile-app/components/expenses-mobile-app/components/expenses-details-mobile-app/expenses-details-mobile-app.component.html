@@ -22,7 +22,7 @@
       (modalDismissed)="showExpenseDatePicker = false" />
 
     <!-- Select site -->
-    <ion-item class="input-item" button (click)="selectSiteBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()">
       <ion-label>Site</ion-label>
 
       <!-- Text showing the selected status -->
@@ -31,11 +31,11 @@
       </ion-text>
 
       <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Select Ledger -->
-    <ion-item class="input-item" button (click)="selectLedgerBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectLedgerBottomsheet()">
       <ion-label>Ledger</ion-label>
 
       <!-- Text showing the selected status -->
@@ -44,11 +44,11 @@
       </ion-text>
 
       <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Select Sub Ledger -->
-    <ion-item class="input-item" button (click)="selectSubLedgerBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectSubLedgerBottomsheet()">
       <ion-label>Sub Ledger</ion-label>
 
       <!-- Text showing the selected status -->
@@ -57,12 +57,62 @@
       </ion-text>
 
       <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
-    <!-- Select Recipient Name -->
-    <ion-item class="input-item" button *ngIf="!RecipientNameInput">
-      <ion-label (click)="selectRecipientNameBottomsheet()">Recipient Name</ion-label>
+    <!-- Select To Whom Type -->
+    <ion-item class="input-item" button detail (click)="selectToWhomTypeBottomsheet()">
+      <ion-label>To Whom Types</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ ToWhomTypeName|| 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
+    </ion-item>
+
+    <!-- Select Income Ledger -->
+    <ion-item class="input-item" button detail (click)="selectIncomeLedgerBottomsheet()"
+      *ngIf="this.Entity.p.RecipientType == Sites">
+      <ion-label>Income Ledger</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ IncomeLedgerName|| 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
+    </ion-item>
+
+    <!-- Select SubIncome Ledger -->
+    <ion-item class="input-item" button detail (click)="selectIncomeSubLedgerBottomsheet()"
+      *ngIf="this.Entity.p.RecipientType == Sites">
+      <ion-label>Income SubLedger</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ IncomeSubLedgerName|| 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
+    </ion-item>
+
+    <ion-checkbox class="input-item" [(ngModel)]="Entity.p.IsAdvancePayment"
+      *ngIf="this.Entity.p.RecipientType == Employee">Is Advance Payment</ion-checkbox>
+   
+      <!-- Remaining Advance Amount -->
+    <ion-item class="input-item" *ngIf="this.Entity.p.RecipientType == Employee">
+      <ion-input label="Remaining Advance Amount" labelPlacement="floating" placeholder="Enter Remaining Advance Amount"
+        [(ngModel)]="Entity.p.RemainingAdvance" readonly></ion-input>
+    </ion-item>
+
+    <!-- Select To Whom -->
+    <ion-item class="input-item" button details *ngIf="!RecipientNameInput">
+      <ion-label (click)="selectRecipientNameBottomsheet()">To Whom </ion-label>
 
       <!-- Selected Text -->
       <ion-text slot="end" class="status-text" (click)="selectRecipientNameBottomsheet()">
@@ -70,7 +120,7 @@
       </ion-text>
 
       <!-- Dropdown Icon -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon" style="margin-left: 4px;"></ion-icon>
+      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon" style="margin-left: 4px;"></ion-icon> -->
 
       <!-- Inline Add Button -->
       <ion-button slot="end" fill="solid" size="small" (click)="AddRecipientName()"
@@ -78,14 +128,15 @@
         <ion-icon slot="icon-only" name="add-outline" color="light"></ion-icon>
       </ion-button>
     </ion-item>
+
     <!-- Add New Recipient Name Input and Action Buttons -->
     <ion-grid *ngIf="RecipientNameInput">
       <ion-row class="ion-align-items-center ion-justify-content-between" style="gap: 8px;">
 
         <!-- Input Field -->
-        <ion-col size="12" size-sm="8" size-md="8">
+        <ion-col size="12" size-sm="12" size-md="12">
           <ion-item class="input-item">
-            <ion-input label="Recipient Name" labelPlacement="floating" placeholder="Enter Recipient Name"
+            <ion-input label="To Whom Name" labelPlacement="floating" placeholder="Enter To Whom Name"
               [(ngModel)]="RecipientEntity.p.Name"></ion-input>
           </ion-item>
         </ion-col>
@@ -93,7 +144,7 @@
       </ion-row>
       <ion-row class="ion-align-items-center ion-justify-content-between" style="gap: 8px;">
         <!-- Confirm Button -->
-        <ion-col size="6" size-sm="2" size-md="2" class="ion-text-start">
+        <ion-col size="4" size-sm="2" size-md="2" class="ion-text-start">
           <ion-button expand="block" fill="solid" size="small" (click)="SaveNewRecipientName()"
             *ngIf="RecipientNameInput" style="--background: var(--ion-color-primary); --border-radius: 8px;">
             <ion-icon slot="icon-only" name="checkmark-outline" color="light"></ion-icon>
@@ -101,7 +152,7 @@
         </ion-col>
 
         <!-- Cancel Button -->
-        <ion-col size="6" size-sm="2" size-md="2" class="ion-text-end">
+        <ion-col size="4" size-sm="2" size-md="2" class="ion-text-end">
           <ion-button expand="block" fill="solid" size="small" (click)="cancelRecipientName()"
             *ngIf="RecipientNameInput" style="--background: var(--ion-color-medium); --border-radius: 8px;">
             <ion-icon slot="icon-only" name="close-outline" color="light"></ion-icon>
@@ -110,6 +161,7 @@
 
       </ion-row>
     </ion-grid>
+
 
     <!-- Reason -->
     <ion-item class="input-item">
@@ -125,7 +177,7 @@
     <!-- Given Amount -->
     <ion-item class="input-item">
       <ion-input label="Given Amount" labelPlacement="floating" placeholder="Enter Given Amount"
-        [(ngModel)]="Entity.p.GivenAmount" readonly></ion-input>
+        [(ngModel)]="Entity.p.GivenAmount" (ngModelChange)="CalculateRemainingAmountandBalance()"></ion-input>
     </ion-item>
     <!-- Remaining Amount -->
     <ion-item class="input-item">
@@ -140,7 +192,7 @@
     </ion-item>
 
     <!-- mode of payment -->
-    <ion-item class="input-item" button (click)="selectModeOfPaymentBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectModeOfPaymentBottomsheet()">
       <ion-label>Mode of Payment</ion-label>
 
       <!-- Text showing the selected status -->
@@ -149,12 +201,12 @@
       </ion-text>
 
       <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Bank -->
     <ion-item class="input-item" button (click)="selectBankBottomsheet()"
-      *ngIf="Entity.p.ExpenseModeOfPayment !== Cash && Entity.p.ExpenseModeOfPayment !== Bill">
+      *ngIf="Entity.p.ExpenseModeOfPayment != Cash && Entity.p.ExpenseModeOfPayment">
       <ion-label>Bank</ion-label>
 
       <!-- Text showing the selected status -->
@@ -163,7 +215,7 @@
       </ion-text>
 
       <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Narration -->
@@ -171,6 +223,8 @@
       <ion-input label="Narration" labelPlacement="floating" placeholder="Enter Narration"
         [(ngModel)]="Entity.p.Narration" clearInput="true" clearOnEdit="true"></ion-input>
     </ion-item>
+
+    <ion-checkbox class="input-item" [(ngModel)]="Entity.p.IsAutoInvoiceEnabled">Invoice Auto generate</ion-checkbox>
 
     <!-- Main Buttons -->
     <ion-grid>
