@@ -223,8 +223,8 @@ export enum ExpenseTypes {
 
 export enum LabourTypes {
   None = 0,
-  SkillLabour  = 510,
-  UnskillLabour  = 515,
+  SkillLabour = 510,
+  UnskillLabour = 515,
   WomenLabour = 520,
 }
 
@@ -233,6 +233,16 @@ export enum RecipientTypes {
   Recipient = 100,
   Vendor = 200,
   DealCancelledCustomer = 300,
+  Employee = 400,
+  Sites = 500,
+  Owner = 600,
+}
+
+export enum PayerTypes {
+  None = 0,
+  Payers = 100,
+  Vendor = 200,
+  DealDoneCustomer = 300,
   Employee = 400,
   Sites = 500,
   Owner = 600,
@@ -1749,7 +1759,7 @@ export class DomainEnums {
     return result;
   }
 
-   public static AccountingReportName(itemType: AccountingReports) {
+  public static AccountingReportName(itemType: AccountingReports) {
     switch (itemType) {
       case AccountingReports.All:
         return 'All';
@@ -1784,7 +1794,7 @@ export class DomainEnums {
     return result;
   }
 
-    public static ExpenseTypeName(itemType: ExpenseTypes) {
+  public static ExpenseTypeName(itemType: ExpenseTypes) {
     switch (itemType) {
       case ExpenseTypes.MachinaryExpense:
         return 'Machinary Expense';
@@ -1825,7 +1835,7 @@ export class DomainEnums {
     return result;
   }
 
-    public static LabourTypesName(itemType: LabourTypes) {
+  public static LabourTypesName(itemType: LabourTypes) {
     switch (itemType) {
       case LabourTypes.SkillLabour:
         return 'Skilled Labour';
@@ -1866,11 +1876,11 @@ export class DomainEnums {
     return result;
   }
 
-    public static RecipientTypesName(itemType: RecipientTypes) {
+  public static RecipientTypesName(itemType: RecipientTypes) {
     switch (itemType) {
       case RecipientTypes.Recipient:
         return 'Recipient';
-      case RecipientTypes.Vendor :
+      case RecipientTypes.Vendor:
         return 'Vendor';
       case RecipientTypes.DealCancelledCustomer:
         return 'Deal Cancelled Customer';
@@ -1878,7 +1888,7 @@ export class DomainEnums {
         return 'Employee';
       case RecipientTypes.Sites:
         return 'Sites';
-      case RecipientTypes. Owner:
+      case RecipientTypes.Owner:
         return 'Owner';
       default:
         return '';
@@ -1918,6 +1928,65 @@ export class DomainEnums {
     if (withAllOption) {
       let allEntry = {
         Ref: RecipientTypes.None,
+        Name: allOptionName,
+      };
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+  public static PayerTypesName(itemType: PayerTypes) {
+    switch (itemType) {
+      case PayerTypes.Payers:
+        return 'Payer';
+      case PayerTypes.Vendor:
+        return 'Vendor';
+      case PayerTypes.DealDoneCustomer:
+        return 'Deal Done Customer';
+      case PayerTypes.Employee:
+        return 'Employee';
+      case PayerTypes.Sites:
+        return 'Sites';
+      case PayerTypes.Owner:
+        return 'Owner';
+      default:
+        return '';
+    }
+  }
+
+  public static PayerTypesList(
+    withAllOption: boolean = false,
+    allOptionName: string = '<All>'
+  ) {
+    let result = [
+      {
+        Ref: PayerTypes.Payers,
+        Name: DomainEnums.PayerTypesName(PayerTypes.Payers),
+      },
+      {
+        Ref: PayerTypes.Vendor,
+        Name: DomainEnums.PayerTypesName(PayerTypes.Vendor),
+      },
+      {
+        Ref: PayerTypes.DealDoneCustomer,
+        Name: DomainEnums.PayerTypesName(PayerTypes.DealDoneCustomer),
+      },
+      {
+        Ref: PayerTypes.Employee,
+        Name: DomainEnums.PayerTypesName(PayerTypes.Employee),
+      },
+      {
+        Ref: PayerTypes.Sites,
+        Name: DomainEnums.PayerTypesName(PayerTypes.Sites),
+      },
+      {
+        Ref: PayerTypes.Owner,
+        Name: DomainEnums.PayerTypesName(PayerTypes.Owner),
+      },
+    ];
+    if (withAllOption) {
+      let allEntry = {
+        Ref: PayerTypes.None,
         Name: allOptionName,
       };
       result.unshift(allEntry);
