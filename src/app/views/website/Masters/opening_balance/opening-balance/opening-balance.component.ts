@@ -1,6 +1,7 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OpeningBalanceModeOfPayments } from 'src/app/classes/domain/domainenums/domainenums';
+import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -53,7 +54,6 @@ Entity: OpeningBalance = OpeningBalance.CreateNewInstance();
     let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
     this.MasterList = lst;
-
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
@@ -65,7 +65,20 @@ Entity: OpeningBalance = OpeningBalance.CreateNewInstance();
     await this.router.navigate(['/homepage/Website/Opening_Balance_Master_Details']);
   };
 
- 
+  get totalOpeningBalanceAmount(): number {
+    return this.DisplayMasterList.reduce((sum, item) => sum + (item.p.OpeningBalanceAmount || 0), 0);
+  }
+
+    getCurrentBalanceByCompanyRef = async () => {
+      if (this.companyRef() <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
+      let lst = await Expense.FetchCurrentBalanceByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      if (lst.length > 0) {
+        this.Entity.p.ShreesBalance = lst[0].p.ShreesBalance;
+      }
+    }
 
   onDeleteClicked = async (OpeningBalance: OpeningBalance) => {
     await this.uiUtils.showConfirmationMessage(

@@ -32,6 +32,7 @@ export class OpeningBalanceProps {
   public FinancialYearRef : number = 0;
   public NetBalance : number = 0;
   public FinancialYearName : string = '';
+  public ShreesBalance : number = 0;
   public readonly UnitName: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
