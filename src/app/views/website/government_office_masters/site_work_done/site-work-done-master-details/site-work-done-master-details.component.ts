@@ -60,9 +60,7 @@ export class SiteWorkDoneMasterDetailsComponent implements OnInit {
     const sitegroupName = this.appStateManage.StorageKey.getItem('siteName');
     this.SiteGroupRef = SiteGroupRef ? Number(SiteGroupRef) : 0;
     this.SiteGroupName = sitegroupName ? sitegroupName : '';
-    this.SiteWorkGroupList = await SiteWorkGroup.FetchEntireList();
-    this.SiteWorkMasterList = await SiteWorkMaster.FetchEntireList();
-
+    this.getSiteWorkGroupListByCompanyRef()
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
 
@@ -85,23 +83,36 @@ export class SiteWorkDoneMasterDetailsComponent implements OnInit {
     // this.focusInput();
   }
 
+  getSiteWorkGroupListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await SiteWorkGroup.FetchEntireListByCompanyRef(
+      this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.SiteWorkGroupList = lst;
+  };
+
+  getSiteWorkListBySiteWorkGroupRef = async () => {
+    if (this.SiteGroupRef <= 0) {
+      await this.uiUtils.showErrorToster('Site Group not Selected');
+      return;
+    }
+    let lst = await SiteWorkMaster.FetchEntireListBySiteWorkGroupRef(
+      this.SiteGroupRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.SiteWorkMasterList = lst;
+  };
+
   onApplicableTypeChange(selectedvalue: any) {
     this.Entity.p.ListOfApplicableTypes = selectedvalue;
   }
 
-  onSiteGroupChange(siteGroupRef: number) {
-    this.DisplaySiteWorkMasterList = [];
-    this.Entity.p.SiteWorkRef = 0;
-    if (siteGroupRef > 0) {
-      // this.Entity.p.SiteWorkGroupRef = sitework;
-      // const selectedSiteWorkref = this.SiteWorkMasterList.find(
-      //   (site) => site.p.Ref === sitework
-      // );
-      // if (!selectedSiteWorkref) {
-      //   return;
-      // }
-      this.DisplaySiteWorkMasterList = this.SiteWorkMasterList.filter(e => e.p.SiteWorkGroupRef == siteGroupRef)
-    }
+  onSiteGroupChange() {
+    this.Entity.p.SiteWorkRef =0
   }
 
   SaveSiteWorkDone = async () => {

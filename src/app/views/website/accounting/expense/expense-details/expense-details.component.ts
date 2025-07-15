@@ -322,6 +322,13 @@ export class ExpenseDetailsComponent implements OnInit {
     }
   };
 
+  IsAdvancePayment = async () =>{
+    if(this.Entity.p.IsAdvancePayment == 1){
+      this.Entity.p.InvoiceAmount = 0
+    }else{
+      await this.getTotalInvoiceAmountFromSiteAndRecipientRef()
+    }
+  }
 
 
   selectAllValue(event: MouseEvent): void {

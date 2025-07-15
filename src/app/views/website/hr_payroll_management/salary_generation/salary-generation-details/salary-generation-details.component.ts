@@ -73,7 +73,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   }
 
   calculatetotaldeduction = () => {
-    const TotalDeduction = Math.ceil(this.Entity.p.TDS + this.Entity.p.PF + this.Entity.p.TotalLeaveDeduction + this.Entity.p.AdvancePayment)
+    const TotalDeduction = Math.ceil(this.Entity.p.TDS + this.Entity.p.PF + this.Entity.p.TotalLeaveDeduction  + this.Entity.p.AdvanceDeduction)
     this.Entity.p.TotalDeduction = TotalDeduction
     this.calculatenetsalary()
   }
@@ -144,6 +144,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     this.Entity.p.TotalLeavesHrs = 0
     this.Entity.p.OverallWorkingHrs = 0
     this.Entity.p.BasicSalary = 0
+    this.Entity.p.AdvancePayment = 0
     if (employee === 0 || month === 0) {
       return;
     }
@@ -152,11 +153,17 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     this.Entity.p.TotalWorkingDays = lst[0]?.p?.TotalWorkingDays || 0
     this.Entity.p.TotalLeaves = lst[0]?.p?.TotalLeaves || 0
     this.Entity.p.TotalOverTimeHrs = lst[0]?.p?.TotalOverTimeHrs || 0
+    this.Entity.p.DisplayTotalOverTimeHrs = lst[0]?.p?.DisplayTotalOverTimeHrs || ''
     this.Entity.p.TotalWorkingHrs = lst[0]?.p?.TotalWorkingHrs || 0
+    this.Entity.p.DisplayTotalWorkingHrs = lst[0]?.p?.DisplayTotalWorkingHrs || ''
     this.Entity.p.TotalLeavesHrs = lst[0]?.p?.TotalLeavesHrs || 0
+    this.Entity.p.DisplayTotalLeavesHrs = lst[0]?.p?.DisplayTotalLeavesHrs || ''
     this.Entity.p.OverallWorkingHrs = lst[0]?.p?.OverallWorkingHrs || 0
+    this.Entity.p.DisplayOverAllWorkingHrs = lst[0]?.p?.DisplayOverAllWorkingHrs || ''
     this.Entity.p.BasicSalary = lst[0]?.p?.BasicSalary || 0
+    this.Entity.p.AdvancePayment = lst[0]?.p?.AdvancePayment || 0
     await this.calculategrosstotal()
+    // await this.calculatetotaldeduction()
   }
 
   SaveSalaryGeneration = async () => {

@@ -54,25 +54,25 @@
         </div>
         <div class="col-md-4">
           <label>Total Over Time Hours</label>
-          <input type="number" name="TotalOverTimeHrs" class="form-control" id="TotalOverTimeHrs"
-            [(ngModel)]="Entity.p.TotalOverTimeHrs" placeholder="Total Over Time Hours" required readonly />
+          <input type="text" name="DisplayTotalOverTimeHrs" class="form-control" id="DisplayTotalOverTimeHrs"
+            [(ngModel)]="Entity.p.DisplayTotalOverTimeHrs" placeholder="Total Over Time Hours" required readonly />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4">
           <label>Total Working Hours</label>
-          <input type="number" name="TotalWorkingHrs" class="form-control" id="TotalWorkingHrs"
-            [(ngModel)]="Entity.p.TotalWorkingHrs" placeholder="Total Working Hours" required readonly />
+          <input type="text" name="DisplayTotalWorkingHrs" class="form-control" id="DisplayTotalWorkingHrs"
+            [(ngModel)]="Entity.p.DisplayTotalWorkingHrs" placeholder="Total Working Hours" required readonly />
         </div>
         <div class="col-md-4">
           <label>Total Leaves Hours</label>
-          <input type="number" name="TotalLeavesHrs" class="form-control" id="TotalLeavesHrs"
-            [(ngModel)]="Entity.p.TotalLeavesHrs" placeholder="Total Leaves Hours" required readonly />
+          <input type="text" name="DisplayTotalLeavesHrs" class="form-control" id="DisplayTotalLeavesHrs"
+            [(ngModel)]="Entity.p.DisplayTotalLeavesHrs" placeholder="Total Leaves Hours" required readonly />
         </div>
         <div class="col-md-4">
           <label>Overall Working Hours</label>
-          <input type="number" name="OverallWorkingHrs" class="form-control" id="OverallWorkingHrs"
-            [(ngModel)]="Entity.p.OverallWorkingHrs" placeholder="Overall Working Hours" required readonly />
+          <input type="text" name="DisplayOverAllWorkingHrs" class="form-control" id="DisplayOverAllWorkingHrs"
+            [(ngModel)]="Entity.p.DisplayOverAllWorkingHrs" placeholder="Overall Working Hours" required readonly />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">
@@ -132,8 +132,7 @@
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Advance Payment</label>
           <input type="number" name="AdvancePayment" class="form-control" id="AdvancePayment"
-            [(ngModel)]="Entity.p.AdvancePayment" placeholder="Enter Advance Payment" required
-            (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()" />
+            [(ngModel)]="Entity.p.AdvancePayment" placeholder=" Advance Payment"  readonly/>
         </div>
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Advance Deduction</label>

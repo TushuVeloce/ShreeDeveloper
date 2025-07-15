@@ -28,10 +28,10 @@ export class SalaryGenerationProps {
   public TotalWorkingHrs: number = 0;
   public TotalLeavesHrs: number = 0;
   public OverallWorkingHrs: number = 0;
-  public DisplayTotalOverTimeHrs : number = 0;
-  public DisplayTotalWorkingHrs: number = 0;
-  public DisplayTotalLeavesHrs: number = 0;
-  public DisplayOverAllWorkingHrs : number = 0;
+  public DisplayTotalOverTimeHrs : string = '';
+  public DisplayTotalWorkingHrs: string = '';
+  public DisplayTotalLeavesHrs: string = '';
+  public DisplayOverAllWorkingHrs : string = '';
   public BasicSalary: number = 0;
   public TotalAllowance: number = 0;
   public TotalIncentive: number = 0;
