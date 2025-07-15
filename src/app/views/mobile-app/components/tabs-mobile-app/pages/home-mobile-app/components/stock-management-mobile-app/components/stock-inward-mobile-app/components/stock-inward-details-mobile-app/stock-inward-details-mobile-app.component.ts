@@ -80,6 +80,7 @@ export class StockInwardDetailsMobileAppComponent  implements OnInit {
   showInwardDatePicker = false;
   InwardDate = '';
   DisplayInwardDate = '';
+  DisplayOrderDate: string = ''
 
   constructor(
     private router: Router,
@@ -126,6 +127,7 @@ export class StockInwardDetailsMobileAppComponent  implements OnInit {
           this.SessionAddedRefs = []; // ✅ Reset session-added materials
           this.shouldFilterDropdown = false;
           if (this.Entity.p.PurchaseOrderDate != '') {
+            this.DisplayOrderDate = this.Entity.p.PurchaseOrderDate
             this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate)
             this.PurchaseOrderDate = this.Entity.p.PurchaseOrderDate
             this.DisplayPurchaseOrderDate = this.Entity.p.PurchaseOrderDate
@@ -192,7 +194,7 @@ export class StockInwardDetailsMobileAppComponent  implements OnInit {
       await this.haptic.warning();
       return;
     }
-    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef,this.Entity.p.PurchaseOrderDate, async errMsg => {
+    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef,this.DisplayOrderDate, async errMsg => {
       // await this.uiUtils.showErrorMessage('Error', errMsg)
       await this.toastService.present('Error ' + errMsg, 1000, 'danger');
       await this.haptic.error();

@@ -59,6 +59,7 @@ export class StockInwardDetailsComponent implements OnInit {
   imagePostView: string = '';
   imagePostViewUrl: string = '';
   selectedFileName: string = '';
+  DisplayOrderDate = '';
 
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos
   PinCodePattern: string = ValidationPatterns.PinCode;
@@ -94,6 +95,7 @@ export class StockInwardDetailsComponent implements OnInit {
       this.SessionAddedRefs = []; // ✅ Reset session-added materials
       this.shouldFilterDropdown = false;
       if (this.Entity.p.PurchaseOrderDate != '') {
+        this.DisplayOrderDate = this.Entity.p.PurchaseOrderDate
         this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate)
       }
       if (this.Entity.p.InwardDate != '') {
@@ -125,7 +127,8 @@ export class StockInwardDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef(),this.Entity.p.PurchaseOrderDate, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('this.DisplayOrderDate :', this.DisplayOrderDate);
+    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef(),this.DisplayOrderDate, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
     this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
     this.MaterialListOriginal?.forEach((item, index) => {
