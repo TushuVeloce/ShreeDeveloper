@@ -93,6 +93,7 @@ export class AccountingReportComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
+    console.log('this.Entity.p.SiteRef,this.Entity.p.ModeOfPaymentName, :', this.Entity.p.SiteRef,this.Entity.p.ModeOfPaymentName,);
     let lst = await AccountingReport.FetchEntireListByStartDateandEndDate(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport,this.Entity.p.SiteRef,this.Entity.p.ModeOfPaymentName, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
