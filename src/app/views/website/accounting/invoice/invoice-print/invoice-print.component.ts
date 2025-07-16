@@ -29,6 +29,7 @@ export class InvoicePrintComponent implements OnInit {
   MachinaryExpenseRef: number = ExpenseTypeRefs.MachinaryExpense
   LabourExpenseRef: number = ExpenseTypeRefs.LabourExpense
   OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense
+  DisplayTotalWorkingHrs: string = ''
 
   @ViewChild('PrintContainer')
   PrintContainer!: ElementRef;
@@ -48,9 +49,8 @@ export class InvoicePrintComponent implements OnInit {
     // history.state.myData;
 
     this.Entity = history.state.printData;
-    console.log('this.Entity :', this.Entity);
+    this.getTotalWorkedHours();
     this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.CreatedDate);
-
     this.InitialEntity = Object.assign(Invoice.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Invoice;
   }
 
@@ -104,6 +104,26 @@ export class InvoicePrintComponent implements OnInit {
   //     popupWin.document.close();
   //   }
   // }
+
+ getTotalWorkedHours(): number {
+    let totalMinutes = this.Entity.p.MachineUsageDetailsArray.reduce((sum: number, item: any) => {
+      return sum + parseFloat(item.WorkedHours || 0);
+    }, 0);
+
+    // Set display value in HH:mm format
+    this.DisplayTotalWorkingHrs = this.formatMinutesToHourMin(totalMinutes);
+
+    // Return hours as decimal (rounded to 2 decimals)
+    let totalHours = totalMinutes / 60;
+    return Math.round(totalHours * 100) / 100;
+}
+
+formatMinutesToHourMin = (totalMinutes: number): string => {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+    return `${hours}h ${formattedMinutes}m`;
+}
 
   printSection() {
     const printContent = this.PrintContainer.nativeElement.innerHTML;

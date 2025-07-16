@@ -47,7 +47,7 @@
               <!-- {{ type.SiteWorkApplicableTypeName }}: {{ type.Value || 'N/A' }} -->
               {{ type.SiteWorkApplicableTypeName }} : <!-- Checkbox Input -->
               <input *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'checkbox'"
-                class="form-check-input" type="checkbox" [(ngModel)]="type.Value" [checked]="type.Value === 'true'">
+                class="form-check-input" style="align-self: flex-end;" type="checkbox" [(ngModel)]="type.Value" [checked]="type.Value === 'true'">
 
               <!-- Radio Button Input -->
               <div *ngIf="getTypeOnApplicableTypeName(type.SiteWorkApplicableTypeName) === 'radio'">

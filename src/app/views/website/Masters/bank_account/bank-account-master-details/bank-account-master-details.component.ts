@@ -88,7 +88,6 @@ export class BankAccountMasterDetailsComponent implements OnInit {
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
     let entityToSave = this.Entity.GetEditableVersion();
-    console.log('entityToSave :', entityToSave);
     let entitiesToSave = [entityToSave]
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
@@ -102,13 +101,13 @@ export class BankAccountMasterDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster('Bank Account saved successfully');
         this.Entity = BankAccount.CreateNewInstance();
         this.resetAllControls();
+      } else {
+        await this.uiUtils.showSuccessToster('Bank Account Updated successfully');
         this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
         let parts = this.strCDT.substring(0, 16).split('-');
         // Construct the new date format
         this.Entity.p.DateofOpening = `${parts[0]}-${parts[1]}-${parts[2]}`;
         this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
-      } else {
-        await this.uiUtils.showSuccessToster('Bank Account Updated successfully');
         await this.router.navigate(['/homepage/Website/Bank_Account_Master']);
       }
     }

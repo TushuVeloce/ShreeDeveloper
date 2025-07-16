@@ -103,7 +103,7 @@ export class Site implements IPersistable<Site> {
     if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country cannot be blank.');
     if (this.p.StateRef == 0) vra.add('StateRef', 'State cannot be blank.');
     if (this.p.CityRef == 0) vra.add('CityRef', 'City cannot be blank.');
-    if (this.p.SiteInchargeRef == 0) vra.add('SiteInchargeRef', 'Site Incharge cannot be blank.');
+    // if (this.p.SiteInchargeRef == 0) vra.add('SiteInchargeRef', 'Site Incharge cannot be blank.');
     if (this.p.EstimatedStartingDate == '') vra.add('EstimatedStartingDate', 'Estimated Starting Date cannot be blank.');
     if (this.p.EstimatedEndDate == '') vra.add('EstimatedEndDate', 'Estimated End Date cannot be blank.');
     if (this.p.TotalLandAreaInSqm == 0) vra.add('TotalLandAreaInSqm', 'Total Land Area In Sqm cannot be blank.');
