@@ -27,7 +27,7 @@
       <tbody>
         <tr *ngFor="let OpeningBalance of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{OpeningBalance.p.ModeOfPayment == Cash ? 'Cash' : 'Cheque'}}</td>
+          <td Class="tbldata">{{OpeningBalance.p.ModeOfPayment == Cash ? 'Cash' : 'Bank'}}</td>
           <td Class="tbldata">{{OpeningBalance.p.BankName? OpeningBalance.p.BankName : '--'}}</td>
           <td Class="tbldata">{{OpeningBalance.p.OpeningBalanceAmount | currency : "INR" }}</td>
           <td class="tbldata">
