@@ -45,6 +45,7 @@ export class ExpenseDetailsComponent implements OnInit {
   BankList: BankAccount[] = [];
   Cash = ModeOfPayments.Cash
   Bill = ModeOfPayments.Bill
+  RecipientType = RecipientTypes.Recipient
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
   RecipientTypesList = DomainEnums.RecipientTypesList();
   Employee = RecipientTypes.Employee;
@@ -238,15 +239,14 @@ export class ExpenseDetailsComponent implements OnInit {
 
   CalculateRemainingAmountandBalance = () => {
     if (this.Entity.p.GivenAmount <= this.Entity.p.InvoiceAmount) {
-      this.Entity.p.RemainingAmount = this.Entity.p.InvoiceAmount - this.Entity.p.GivenAmount;
+      this.Entity.p.RemainingAmount = Number((this.Entity.p.InvoiceAmount - this.Entity.p.GivenAmount).toFixed(2));
     } else {
       this.Entity.p.RemainingAmount = 0;
     }
-
     if (this.Entity.p.GivenAmount <= this.Entity.p.ShreesBalance) {
-      this.Entity.p.ShreesBalance = this.ShreeBalance - this.Entity.p.GivenAmount;
+      this.Entity.p.ShreesBalance = Number((this.ShreeBalance - this.Entity.p.GivenAmount).toFixed(2));
     } else {
-      this.Entity.p.ShreesBalance = -(this.Entity.p.GivenAmount - this.ShreeBalance);
+      this.Entity.p.ShreesBalance = -Number((this.Entity.p.GivenAmount - this.ShreeBalance).toFixed(2));
     }
   }
 

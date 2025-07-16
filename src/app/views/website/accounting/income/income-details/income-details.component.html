@@ -55,16 +55,16 @@
           <label>From Whom Type</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="PayerType" name="PayerType" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerType"
-            (ngModelChange)="getPayerListByPayerType();">
+            (ngModelChange)="getPayerListByPayerType(); onTypeChange()">
             <nz-option *ngFor="let type of PayerTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
-          <label>Payer Name</label>
+          <label>Received By</label>
           <div class="d-flex align-items-center">
             <nz-select *ngIf="!PayerNameInput && !PayerNameReadOnly" class="nzSelect-light"
-              [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PayerMasterRef"
-              name="PayerName" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerRef" (ngModelChange)="onPayerChange()">
+              [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="PayerRef"
+              name="PayerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerRef" (ngModelChange)="onPayerChange()">
               <nz-option *ngFor="let payer of PayerList" [nzValue]="payer.p.Ref"
                 [nzLabel]="payer.p.PayerName | titleCase" nzCustomContent>
                 <span [ngClass]="payer.p.IsRegisterCustomerRef == 1 ? 'sitecus' : 'nonsitecus'">
@@ -74,7 +74,7 @@
             </nz-select>
             <input *ngIf="PayerNameInput && !PayerNameReadOnly" type="text" [(ngModel)]="PayerEntity.p.Name" name="Name"
               class="form-control" id="Name" required placeholder="Enter Payer Name" />
-            <span *ngIf="!PayerNameInput && !PayerNameReadOnly" (click)="AddPayerName()"
+            <span *ngIf="!PayerNameInput && !PayerNameReadOnly && Entity.p.PayerType == RecipientType" (click)="AddPayerName()"
               class="ms-2 mb-0.5 d-flex justify-content-center align-items-center border rounded"
               style="width: 36px; height: 36px; cursor: pointer">
               <i class="fa-solid fa-plus" style="color: blue;"></i>

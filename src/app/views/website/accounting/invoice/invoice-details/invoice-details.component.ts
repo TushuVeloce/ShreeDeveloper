@@ -18,7 +18,7 @@ import { InvoiceNoFetchRequest } from 'src/app/classes/domain/entities/website/a
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
-import { DomainEnums, ExpenseTypes } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, ExpenseTypes, ModeOfPayments } from 'src/app/classes/domain/domainenums/domainenums';
 import { ServiceSuppliedByVendorProps, Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { TimeDetailProps } from 'src/app/classes/domain/entities/website/site_management/time/time';
@@ -44,7 +44,6 @@ export class InvoiceDetailsComponent implements OnInit {
   VendorServiceListByVendor: VendorService[] = [];
   isDieselPaid: boolean = false
   RecipientNameReadOnly: boolean = false
-  ModeofPaymentList = DomainEnums.ModeOfPaymentsList();
   ExpenseTypeList = DomainEnums.ExpenseTypeList();
   LabourTypeList = DomainEnums.LabourTypesList();
   isSaveDisabled: boolean = false;
@@ -67,6 +66,8 @@ export class InvoiceDetailsComponent implements OnInit {
   LabourTimeEntity: LabourTimeProps = LabourTimeProps.Blank();
   LabourEditingIndex: null | undefined | number
   isLabourTimeModalOpen: boolean = false;
+  Bill = ModeOfPayments.Bill
+  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref == this.Bill);
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time', 'Worked Hours', 'Action'];

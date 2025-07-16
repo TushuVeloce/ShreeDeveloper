@@ -176,6 +176,10 @@ export class EmployeeMasterDetailsComponent implements OnInit {
     ) as Employee;
   }
 
+  CalculatePerYearSalary = () => {
+    const salarypermonth = Number(this.Entity.p.SalaryPerMonth)
+    this.Entity.p.SalaryPerYear = salarypermonth * 12
+  }
 
   getOfficeDutyTime = async () => {
     let lst = await OfficeDutyandTime.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));

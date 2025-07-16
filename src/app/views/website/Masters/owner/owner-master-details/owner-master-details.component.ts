@@ -55,7 +55,7 @@ Entity: Owner = Owner.CreateNewInstance();
       this.Entity = Owner.CreateNewInstance();
       Owner.SetCurrentInstance(this.Entity);
     }
-
+    this.InitialEntity = Object.assign(Owner.CreateNewInstance(),this.utils.DeepCopy(this.Entity))as Owner;
     this.focusInput();
   }
 
@@ -97,7 +97,7 @@ Entity: Owner = Owner.CreateNewInstance();
       await this.uiUtils.showConfirmationMessage('Cancel',
         `This process is IRREVERSIBLE!
       <br/>
-      Are you sure that you want to Cancel this Owner Name Form?`,
+      Are you sure that you want to Cancel this Owner Form?`,
         async () => {
           await this.router.navigate(['/homepage/Website/Owner_Master']);
         });
