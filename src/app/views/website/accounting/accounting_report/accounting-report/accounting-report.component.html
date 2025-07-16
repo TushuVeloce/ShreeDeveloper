@@ -29,6 +29,23 @@
       placeholder="Enter End Date" (ngModelChange)="FetchEntireListByStartDateandEndDate()" />
   </div>
   <div class="col-md-4">
+    <label for="SiteRef"><b>Site</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
+      (ngModelChange)="FetchEntireListByStartDateandEndDate()">
+      <nz-option nzLabel="All" [nzValue]="0"></nz-option>
+      <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+    </nz-select>
+  </div>
+  <div class="col-md-4">
+    <label><b>Mode of Payment</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      id="ModeOfPaymentName" name="ModeOfPaymentName" [nzSize]="'large'" [(ngModel)]="Entity.p.ModeOfPaymentName"
+      (ngModelChange)="FetchEntireListByStartDateandEndDate()">
+      <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
+    </nz-select>
+  </div>
+  <div class="col-md-4">
     <label><b>Accounting Report</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="AccountingReport" name="AccountingReport" [nzSize]="'large'" [(ngModel)]="Entity.p.AccountingReport"

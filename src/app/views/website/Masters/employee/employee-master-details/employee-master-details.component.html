@@ -226,7 +226,7 @@
             <label>Salary Per Month</label>
             <input type="number" name="SalaryPerMonth" [(ngModel)]="Entity.p.SalaryPerMonth  " class="form-control"
               id="SalaryPerMonth" placeholder="Enter Salary Per Month" required #SalaryPerMonthCtrl="ngModel"
-              (blur)="SalaryPerMonthCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
+              (blur)="SalaryPerMonthCtrl.control.markAsTouched()" (click)="selectAllValue($event)" (ngModelChange)="CalculatePerYearSalary()"/>
             <div *ngIf="(SalaryPerMonthCtrl.invalid && (SalaryPerMonthCtrl.touched || SalaryPerMonthCtrl.dirty))">
               <span class="validation-text" *ngIf="SalaryPerMonthCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
@@ -235,12 +235,8 @@
         <div class="col-md-4 col-6">
           <div>
             <label>Salary Per Year</label>
-            <input type="number" name="SalaryPerYear" [(ngModel)]="Entity.p.SalaryPerYear  " class="form-control"
-              id="SalaryPerYear" placeholder="Enter Salary Per Year" required #SalaryPerYearCtrl="ngModel"
-              (blur)="SalaryPerYearCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
-            <div *ngIf="(SalaryPerYearCtrl.invalid && (SalaryPerYearCtrl.touched || SalaryPerYearCtrl.dirty))">
-              <span class="validation-text" *ngIf="SalaryPerYearCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
+            <input type="number" name="SalaryPerYear" [(ngModel)]="Entity.p.SalaryPerYear" class="form-control"
+              id="SalaryPerYear" placeholder="Salary Per Year" readonly/>
           </div>
         </div>
         <div class="col-md-4 col-6">

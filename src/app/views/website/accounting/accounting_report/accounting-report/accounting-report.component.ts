@@ -4,6 +4,7 @@ import { AccountingReports, DomainEnums, OpeningBalanceModeOfPayments } from 'sr
 import { AccountingReport } from 'src/app/classes/domain/entities/website/accounting/accountingreport/accoiuntingreport';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
@@ -23,6 +24,7 @@ export class AccountingReportComponent implements OnInit {
   OpeningBalanceList: OpeningBalance[] = [];
   AccountingReportList = DomainEnums.AccountingReportList();
   AccountingReport = AccountingReports;
+  SiteList: Site[] = [];
   BankRef: number = 0;
   NetBalance: number = 0;
   SearchString: string = '';
@@ -32,6 +34,7 @@ export class AccountingReportComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   Cash = OpeningBalanceModeOfPayments.Cash
+  ModeofPaymentList = DomainEnums.ModeOfPaymentsList();
 
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
@@ -45,7 +48,8 @@ export class AccountingReportComponent implements OnInit {
       //  await this.getAccountingReportListByCompanyRef();
       await this.FetchEntireListByStartDateandEndDate();
       await this.getOpeningBalanceListByCompanyRef();
-      await this.getCurrentBalanceByCompanyRef()
+      await this.getCurrentBalanceByCompanyRef();
+      await this.getSiteListByCompanyRef();
       this.Entity.p.StartDate = ''
       this.Entity.p.EndDate = ''
     });
@@ -71,6 +75,17 @@ export class AccountingReportComponent implements OnInit {
     this.loadPaginationData();
   }
 
+    getSiteListByCompanyRef = async () => {
+      this.Entity.p.SiteRef = 0
+      this.Entity.p.SiteName = ''
+      if (this.companyRef() <= 0) {
+        await this.uiUtils.showErrorToster('Company not Selected');
+        return;
+      }
+      let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.SiteList = lst;
+    }
+
   FetchEntireListByStartDateandEndDate = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
@@ -78,7 +93,8 @@ export class AccountingReportComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await AccountingReport.FetchEntireListByStartDateandEndDate(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('this.Entity.p.SiteRef,this.Entity.p.ModeOfPaymentName, :', this.Entity.p.SiteRef,this.Entity.p.ModeOfPaymentName,);
+    let lst = await AccountingReport.FetchEntireListByStartDateandEndDate(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport,this.Entity.p.SiteRef,this.Entity.p.ModeOfPaymentName, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();

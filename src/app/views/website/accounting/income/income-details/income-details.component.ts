@@ -2,7 +2,7 @@ import { Component, effect, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
-import { DomainEnums, ModeOfPayments, PayerTypes, } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, ModeOfPayments, PayerTypes, RecipientTypes, } from 'src/app/classes/domain/domainenums/domainenums';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { Income } from 'src/app/classes/domain/entities/website/accounting/income/income';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
@@ -45,6 +45,7 @@ export class IncomeDetailsComponent implements OnInit {
   BankList: BankAccount[] = [];
   Cash = ModeOfPayments.Cash
   Bill = ModeOfPayments.Bill
+  RecipientType = RecipientTypes.Recipient
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
   PayerTypesList = DomainEnums.PayerTypesList();
   DealDoneCustomer = PayerTypes.DealDoneCustomer;
@@ -226,6 +227,11 @@ export class IncomeDetailsComponent implements OnInit {
     }
     let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SubLedgerList = lst;
+  }
+
+   onTypeChange = () =>{
+    this.Entity.p.PayerRef = 0;
+    this.PayerNameInput = false
   }
 
   SaveIncome = async () => {

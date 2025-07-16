@@ -31,7 +31,7 @@
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="SiteWorkRef" name="SiteWorkRef" [nzSize]="'large'"
             [(ngModel)]="Entity.p.SiteWorkRef">
-            <nz-option *ngFor="let sitework of DisplaySiteWorkMasterList" [nzValue]="sitework.p.Ref"
+            <nz-option *ngFor="let sitework of SiteWorkMasterList" [nzValue]="sitework.p.Ref"
               [nzLabel]="sitework.p.Name"></nz-option>
           </nz-select>
         </div>
