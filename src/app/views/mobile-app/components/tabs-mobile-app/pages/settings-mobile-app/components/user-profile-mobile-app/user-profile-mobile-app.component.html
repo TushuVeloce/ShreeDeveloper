@@ -20,40 +20,51 @@
           <ion-item lines="none" class="input-item">
             <ion-label position="stacked">Name</ion-label>
             <ng-container *ngIf="isEditing; else viewName">
-              <ion-input [(ngModel)]="Entity.p.Name" placeholder="Enter name"></ion-input>
+              <ion-input *ngIf="IsEmployee" [(ngModel)]="Entity.p.Name" placeholder="Enter name"></ion-input>
+              <ion-input *ngIf="IsAdmin" [(ngModel)]="AdminEntity.p.Name" placeholder="Enter name"></ion-input>
             </ng-container>
             <ng-template #viewName>
-              <ion-text>{{ Entity.p.Name || 'N/A' }}</ion-text>
+              <ion-text *ngIf="IsEmployee">{{ Entity.p.Name || 'N/A' }}</ion-text>
+              <ion-text *ngIf="IsAdmin">{{ AdminEntity.p.Name || 'N/A' }}</ion-text>
             </ng-template>
           </ion-item>
 
           <ion-item lines="none" class="input-item">
             <ion-label position="stacked">Official Email Id</ion-label>
             <ng-container *ngIf="isEditing; else viewOfficialEmailId">
-              <ion-input [(ngModel)]="Entity.p.OfficialEmailId" placeholder="Enter OfficialEmailId"></ion-input>
+              <ion-input *ngIf="IsAdmin" [(ngModel)]="AdminEntity.p.EmailId" placeholder="Enter EmailId"></ion-input>
+              <ion-input *ngIf="IsEmployee" [(ngModel)]="Entity.p.OfficialEmailId"
+                placeholder="Enter Official EmailId"></ion-input>
             </ng-container>
             <ng-template #viewOfficialEmailId>
-              <ion-text>{{ Entity.p.OfficialEmailId || 'N/A' }}</ion-text>
+              <ion-text *ngIf="IsAdmin">{{ AdminEntity.p.EmailId || 'N/A' }}</ion-text>
+              <ion-text *ngIf="IsEmployee">{{ Entity.p.OfficialEmailId || 'N/A' }}</ion-text>
             </ng-template>
           </ion-item>
 
           <ion-item lines="none" class="input-item">
             <ion-label position="stacked">Mobile</ion-label>
             <ng-container *ngIf="isEditing; else viewContactNos">
-              <ion-input [(ngModel)]="Entity.p.ContactNos" placeholder="Enter Mobile Nos"></ion-input>
+              <ion-input *ngIf="IsAdmin" [(ngModel)]="AdminEntity.p.Contacts"
+                placeholder="Enter Mobile Nos"></ion-input>
+              <ion-input *ngIf="IsEmployee" [(ngModel)]="Entity.p.ContactNos"
+                placeholder="Enter Mobile Nos"></ion-input>
             </ng-container>
             <ng-template #viewContactNos>
-              <ion-text>{{ Entity.p.ContactNos || 'N/A' }}</ion-text>
+              <ion-text *ngIf="IsAdmin">{{ AdminEntity.p.Contacts || 'N/A' }}</ion-text>
+              <ion-text *ngIf="IsEmployee">{{ Entity.p.ContactNos || 'N/A' }}</ion-text>
             </ng-template>
           </ion-item>
 
           <ion-item lines="none" class="input-item">
             <ion-label position="stacked">Address</ion-label>
             <ng-container *ngIf="isEditing; else viewAddressLine1">
-              <ion-input [(ngModel)]="Entity.p.AddressLine1" placeholder="Enter Address"></ion-input>
+              <ion-input *ngIf="IsAdmin" [(ngModel)]="AdminEntity.p.Address" placeholder="Enter Address"></ion-input>
+              <ion-input *ngIf="IsEmployee" [(ngModel)]="Entity.p.AddressLine1" placeholder="Enter Address"></ion-input>
             </ng-container>
             <ng-template #viewAddressLine1>
-              <ion-text>{{ Entity.p.AddressLine1 || 'N/A' }}</ion-text>
+              <ion-text *ngIf="IsAdmin">{{ AdminEntity.p.Address || 'N/A' }}</ion-text>
+              <ion-text *ngIf="IsEmployee">{{ Entity.p.AddressLine1 || 'N/A' }}</ion-text>
             </ng-template>
           </ion-item>
 
@@ -77,14 +88,18 @@
               <ion-popover *ngIf="dobPopoverOpen" [event]="popoverEvent" [showBackdrop]="true"
                 (ionPopoverDidDismiss)="dobPopoverOpen = false">
                 <ng-template>
+                  <ion-datetime presentation="date" [(ngModel)]="AdminEntity.p.DOB"
+                    (ionChange)="dobPopoverOpen = false" *ngIf="IsAdmin"></ion-datetime>
+
                   <ion-datetime presentation="date" [(ngModel)]="Entity.p.DOB"
-                    (ionChange)="dobPopoverOpen = false"></ion-datetime>
+                    (ionChange)="dobPopoverOpen = false" *ngIf="IsEmployee"></ion-datetime>
                 </ng-template>
               </ion-popover>
             </ng-container>
 
             <ng-template #viewDOB>
-              <ion-text>{{ Entity.p.DOB || 'N/A' }}</ion-text>
+              <ion-text *ngIf="IsEmployee">{{ Entity.p.DOB || 'N/A' }}</ion-text>
+              <ion-text *ngIf="IsAdmin">{{ AdminEntity.p.DOB || 'N/A' }}</ion-text>
             </ng-template>
           </ion-item>
 
@@ -92,15 +107,21 @@
             <ion-label position="stacked">Gender</ion-label>
 
             <ng-container *ngIf="isEditing; else viewGender">
-              <ion-select [(ngModel)]="Entity.p.Gender" interface="popover" placeholder="Select Gender">
+              <ion-select [(ngModel)]="Entity.p.Gender" interface="popover" placeholder="Select Gender" *ngIf="IsEmployee">
                 <ion-select-option *ngFor="let gender of GenderList" [value]="gender.Ref">
                   {{ gender.Name }}
                 </ion-select-option>
               </ion-select>
+                <ion-select [(ngModel)]="AdminEntity.p.Gender" interface="popover" placeholder="Select Gender" *ngIf="IsAdmin">
+                  <ion-select-option *ngFor="let gender of GenderList" [value]="gender.Ref">
+                    {{ gender.Name }}
+                  </ion-select-option>
+                </ion-select>
             </ng-container>
 
             <ng-template #viewGender>
-              <ion-text>{{ findGenderName(Entity.p.Gender) }}</ion-text>
+              <ion-text *ngIf="IsEmployee">{{ findGenderName(Entity.p.Gender) }}</ion-text>
+              <ion-text *ngIf="IsAdmin">{{ findGenderName(Entity.p.Gender) }}</ion-text>
             </ng-template>
           </ion-item>
         </div>

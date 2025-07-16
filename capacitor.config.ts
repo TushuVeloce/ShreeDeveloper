@@ -1,13 +1,3 @@
-// import type { CapacitorConfig } from '@capacitor/cli';
-
-// const config: CapacitorConfig = {
-//   appId: 'com.shreedeveloper.app',
-//   appName: 'Shree Developer',
-//   webDir: 'www'
-// };
-
-// export default config;
-
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
@@ -23,6 +13,9 @@ const config: CapacitorConfig = {
     },
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert']
+    },
+     Keyboard: {
+      resize: "body" 
     }
   }
 };

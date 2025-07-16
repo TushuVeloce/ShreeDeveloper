@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
@@ -11,15 +11,16 @@ import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
+import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
 
 @Component({
   selector: 'app-expenses-view-mobile-app',
   templateUrl: './expenses-view-mobile-app.component.html',
   styleUrls: ['./expenses-view-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class ExpensesViewMobileAppComponent  implements OnInit {
+export class ExpensesViewMobileAppComponent implements OnInit {
 
   Entity: Expense = Expense.CreateNewInstance();
   MasterList: Expense[] = [];
@@ -27,6 +28,7 @@ export class ExpensesViewMobileAppComponent  implements OnInit {
   SearchString: string = '';
   SelectedExpense: Expense = Expense.CreateNewInstance();
   CustomerRef: number = 0;
+  printheaders: string[] = ['Sr.No.', 'Date', 'Site Name', 'Ledger', 'Sub Ledger', 'Recipient Name', 'Reason', 'Bill Amount', 'Given Amount', 'Remaining Amount', 'Shree Balance', 'Mode of Payment'];
 
   companyRef = 0;
   modalOpen = false;
@@ -34,20 +36,16 @@ export class ExpensesViewMobileAppComponent  implements OnInit {
   constructor(
     private router: Router,
     private appStateManage: AppStateManageService,
-    private companystatemanagement: CompanyStateManagement,
     private DateconversionService: DateconversionService,
-    private dtu: DTU,
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
     private loadingService: LoadingService,
-    private sanitizer: DomSanitizer,
-    private baseUrl: BaseUrlService,
-    private utils: Utils,
+    private pdfService: PDFService
   ) { }
 
   ngOnInit = async () => {
-    await this.loadExpenseIfEmployeeExists();
+    // await this.loadExpenseIfEmployeeExists();
   };
 
   ionViewWillEnter = async () => {
@@ -139,7 +137,7 @@ export class ExpensesViewMobileAppComponent  implements OnInit {
                 // await this.toastService.present('Failed to delete Expense', 1000, 'danger');
                 // await this.haptic.error();
               }
-              finally{
+              finally {
                 await this.getExpenseListByCompanyRef();
                 await this.loadingService.hide();
               }
@@ -155,11 +153,11 @@ export class ExpensesViewMobileAppComponent  implements OnInit {
   }
 
 
-  navigateToPrint = async (item: Expense) => {
-    this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses/print'], {
-      state: { printData: item.GetEditableVersion() }
-    });
-  }
+  // navigateToPrint = async (item: Expense) => {
+  //   this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses/print'], {
+  //     state: { printData: item.GetEditableVersion() }
+  //   });
+  // }
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
@@ -176,39 +174,17 @@ export class ExpensesViewMobileAppComponent  implements OnInit {
     this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses/add']);
   }
 
-  printReport(): void {
-    const printContents = document.getElementById('print-section')?.innerHTML;
-    if (printContents) {
-      const popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
-      popupWin?.document.write(`
-      <html>
-        <head>
-          <title>Expense</title>
-         <style>
-         * {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-            font-family: sans-serif;
-           }
-            table {
-              border-collapse: collapse;
-              width: 100%;
-            }
+  @ViewChild('PrintContainer')
+  PrintContainer!: ElementRef;
 
-            th, td {
-              border: 1px solid  rgb(169, 167, 167);
-              text-align: center;
-              padding: 15px;
-            }
-          </style>
-        </head>
-        <body onload="window.print();window.close()">
-          ${printContents}
-        </body>
-      </html>
-    `);
-      popupWin?.document.close();
+  async handlePrintOrShare() {
+    if (this.DisplayMasterList.length == 0) {
+      await this.toastService.present('No Expenses Records Found', 1000, 'warning');
+      await this.haptic.warning();
+      return;
     }
+    if (!this.PrintContainer) return;
+    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
   }
 
   openModal(Expense: any) {

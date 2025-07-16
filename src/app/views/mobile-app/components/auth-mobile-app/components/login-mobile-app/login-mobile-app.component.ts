@@ -49,7 +49,7 @@ export class LoginMobileAppComponent  implements OnInit {
     req.LoginDeviceId = this.sessionValues.MobileLoginDeviceId;
 
     const response = await this.servercommunicator.LoginUser(req);
-
+ 
     if (!response.Successful) {
       this.toastService.present(response.Message, 2000, 'danger');
       await this.haptic.error();

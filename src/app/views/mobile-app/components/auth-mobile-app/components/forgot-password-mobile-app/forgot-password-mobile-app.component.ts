@@ -168,7 +168,7 @@ export class ForgotPasswordMobileAppComponent  implements OnInit {
         console.log('OTP verification failed:', response.Message);
         return;
       } else {
-        this.toastService.present(response.Message, 1000, 'success');
+        this.toastService.present('OTP verified successfully', 1000, 'success');
         await this.haptic.success();
         console.log('OTP verified successfully', response.Message);
         this.step = 3;
@@ -210,14 +210,14 @@ export class ForgotPasswordMobileAppComponent  implements OnInit {
       return;
     } else {
       console.log('Password changed successfully', response.Message);
-      this.toastService.present(response.Message, 1000, 'success');
+      this.toastService.present("Password changed successfully", 1000, 'success');
       await this.haptic.success();
       await this.goToLogin();
     }
   }
 
   goToLogin(): void {
-    this.router.navigate(['mobile-app/auth/login-mobile'], { replaceUrl: true });
+    this.router.navigate(['mobile-app/auth/login'], { replaceUrl: true });
   }
 
   goBack(): void {
