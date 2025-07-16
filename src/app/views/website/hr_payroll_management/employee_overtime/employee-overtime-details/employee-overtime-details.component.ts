@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
 import { EmployeeOvertime } from 'src/app/classes/domain/entities/website/HR_and_Payroll/Employee_Overtime/employeeovertime';
 import { Employee } from 'src/app/classes/domain/entities/website/masters/employee/employee';
+import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
@@ -22,6 +23,8 @@ export class EmployeeOvertimeDetailsComponent implements OnInit {
   isSaveDisabled: boolean = false;
   DetailsFormTitle: 'New Employee Overtime' | 'Edit Employee Overtime' = 'New Employee Overtime';
   IsDropdownDisabled: boolean = false;
+  Date: string = '';
+  strCDT: string = '';
   InitialEntity: EmployeeOvertime = null as any;
   EmployeeList: Employee[] = [];
   companyName = this.companystatemanagement.SelectedCompanyName;
@@ -42,7 +45,7 @@ export class EmployeeOvertimeDetailsComponent implements OnInit {
     private dtu: DTU,
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.getEmployeeListByCompanyRef()
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
@@ -57,6 +60,10 @@ export class EmployeeOvertimeDetailsComponent implements OnInit {
       );
       this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
     } else {
+      this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+      let parts = this.strCDT.substring(0, 16).split('-');
+      // Construct the new date format
+      this.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
       this.Entity = EmployeeOvertime.CreateNewInstance();
       EmployeeOvertime.SetCurrentInstance(this.Entity);
     }
@@ -83,21 +90,47 @@ export class EmployeeOvertimeDetailsComponent implements OnInit {
     this.EmployeeList = lst;
   }
 
-  converthrtomin() {
-    if (this.Entity.p.OverTimeInHrs) {
-      this.Entity.p.OverTimeInMin = parseFloat((this.Entity.p.OverTimeInHrs * 60).toFixed(2));
-    } else {
-      this.Entity.p.OverTimeInMin = 0;
+
+  calculateOvertimeHours = () => {
+    if (this.Entity.p.ToTime == '') {
+      return
     }
+
+    // Fallback to "00:00" if either is missing or invalid
+    if (!this.Entity.p.FromTime || !this.Entity.p.FromTime.includes(":")) return 0;
+
+    const [inHour, inMin] = this.Entity.p.FromTime.split(':').map(Number);
+    const [outHour, outMin] = (this.Entity.p.ToTime && this.Entity.p.ToTime.includes(":") ? this.Entity.p.ToTime : "00:00").split(':').map(Number);
+
+    // Check for invalid numbers
+    if (isNaN(inHour) || isNaN(inMin) || isNaN(outHour) || isNaN(outMin)) return 0;
+
+    const inDate = new Date();
+    inDate.setHours(inHour, inMin, 0, 0);
+
+    const outDate = new Date();
+    outDate.setHours(outHour, outMin, 0, 0);
+
+    // Handle overnight shift
+    if (outDate <= inDate) {
+      outDate.setDate(outDate.getDate() + 1);
+    }
+
+    const diffMs = outDate.getTime() - inDate.getTime();
+    const diffMinutes = Math.floor(diffMs / 60000);
+
+    const decimalHours = diffMinutes / 60;
+
+    this.Entity.p.OverTimeInHrs = parseFloat(decimalHours.toFixed(2));
+
+    // HH:mm format
+    const hours = Math.floor(diffMinutes / 60);
+    const minutes = diffMinutes % 60;
+
+    this.Entity.p.DisplayOverTime = `${hours}h ${minutes.toString().padStart(2, '0')}m`;
+    return;
   }
 
-  convertmintohr() {
-    if (this.Entity.p.OverTimeInMin) {
-      this.Entity.p.OverTimeInHrs = parseFloat((this.Entity.p.OverTimeInMin / 60).toFixed(2));
-    } else {
-      this.Entity.p.OverTimeInHrs = 0;
-    }
-  }
 
   SaveEmployeeOvertime = async () => {
     this.Entity.p.CompanyRef =
@@ -110,7 +143,8 @@ export class EmployeeOvertimeDetailsComponent implements OnInit {
         this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
       );
     }
-    this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
+    this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Date);
+
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);

@@ -19,9 +19,12 @@ export class EmployeeOvertimeProps {
   public Date: string = '';
   public EmployeeRef: number = 0;
   public EmployeeName: string = '';
-  public OverTimeInMin: number = 0;
   public OverTimeInHrs: number = 0;
+  public DisplayOverTime: string = '';
+  public ToTime: string = '';
+  public FromTime: string = '';
   public CompanyRef: number = 0;
+
   public readonly CompanyName: string = '';
   public CreatedBy: number = 0;
   public CreatedDate: string = '';
@@ -51,8 +54,8 @@ export class EmployeeOvertime implements IPersistable<EmployeeOvertime> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -73,6 +76,11 @@ export class EmployeeOvertime implements IPersistable<EmployeeOvertime> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
+    if (this.p.Date == '') vra.add('Date', 'Date cannot be blank.');
+    if (this.p.EmployeeRef == 0) vra.add('EmployeeRef', 'Employee not selected.');
+    if (this.p.FromTime == '') vra.add('FromTime', 'From Time cannot be blank.');
+    if (this.p.ToTime == '') vra.add('ToTime', 'To Time cannot be blank.');
+
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -106,7 +114,7 @@ export class EmployeeOvertime implements IPersistable<EmployeeOvertime> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): EmployeeOvertime[] {
+    sortPropertyName: string = ""): EmployeeOvertime[] {
     let result: EmployeeOvertime[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -166,7 +174,7 @@ export class EmployeeOvertime implements IPersistable<EmployeeOvertime> {
     return EmployeeOvertime.ListFromTransportData(tdResponse);
   }
 
- public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new EmployeeOvertimeFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await EmployeeOvertime.FetchTransportData(req, errorHandler) as TransportData;

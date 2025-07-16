@@ -42,7 +42,6 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
   ngOnInit() {}
 
   BindApplicableTypeValueStatusToRadioButton = () => {
-    debugger;
     for (let i = 0; i < this.TpOfficeList.length; i++) {
       let SiteWorksList = this.TpOfficeList[i].SiteWorks;
       let ApplicableTypesList = SiteWorksList.filter(
@@ -94,7 +93,6 @@ export class TpOfficeDetailsComponent implements OnInit, OnChanges {
   // hide show content using radio button
   showReportNOCSection: boolean = false;
   getReportNOCAirportNOC = async (value: boolean, siteWorkName: string) => {
-    debugger;
     if (siteWorkName.trim() === 'Report NOC & Airport NOC') {
       this.showReportNOCSection = value;
     }

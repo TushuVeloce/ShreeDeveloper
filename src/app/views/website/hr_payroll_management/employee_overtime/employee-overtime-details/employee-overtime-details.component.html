@@ -10,7 +10,7 @@
         <span class="detail_title">{{DetailsFormTitle}}</span>
       </div>
     </div>
-     <ng-template #noDataTpl>
+    <ng-template #noDataTpl>
       <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
         No Data
       </div>
@@ -20,43 +20,38 @@
         <div class="col-md-6" style="margin-top: 1rem; ">
           <div>
             <label for="Date">Date</label>
-            <input type="date" name="Date" required class="form-control" id="Date" [(ngModel)]="Entity.p.Date"
+            <input type="date" name="Date" required class="form-control" id="Date" [(ngModel)]="Date"
               placeholder="Enter From Time " #DateCtrl="ngModel" required (blur)="DateCtrl.control.markAsTouched()" />
-          <div *ngIf="(DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty))">
-            <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+            <div *ngIf="(DateCtrl.invalid && (DateCtrl.touched || DateCtrl.dirty))">
+              <span class="validation-text" *ngIf="DateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
           </div>
         </div>
         <div class="col-md-6" style="margin-top: 1rem; ">
           <div>
             <label for="EmployeeRef">Employee Name</label>
-             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" [nzSize]="'large'" name="EmployeeRef" required id="EmployeeRef"
-            [(ngModel)]="Entity.p.EmployeeRef">
-            <nz-option *ngFor="let employee of EmployeeList" [nzLabel]="employee.p.Name"
-              [nzValue]="employee.p.Ref"></nz-option>
-          </nz-select>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" [nzSize]="'large'" name="EmployeeRef" required id="EmployeeRef"
+              [(ngModel)]="Entity.p.EmployeeRef">
+              <nz-option *ngFor="let employee of EmployeeList" [nzLabel]="employee.p.Name"
+                [nzValue]="employee.p.Ref"></nz-option>
+            </nz-select>
           </div>
         </div>
-        <div class="col-md-6" style="margin-top: 1rem; ">
-          <div>
-            <label>Overtime in Hrs</label>
-            <input type="number" name="OverTimeInHrs" class="form-control" id="OverTimeInHrs" [(ngModel)]="Entity.p.OverTimeInHrs" (ngModelChange)="converthrtomin()"
-              placeholder="Enter late Mark Grace" required #OverTimeInHrsCtrl="ngModel" (blur)="OverTimeInHrsCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>
-          <div *ngIf="(OverTimeInHrsCtrl.invalid && (OverTimeInHrsCtrl.touched || OverTimeInHrsCtrl.dirty))">
-            <span class="validation-text" *ngIf="OverTimeInHrsCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
-          </div>
+
+        <div class="col-6">
+          <label>From Time</label>
+          <input type="time" [(ngModel)]="Entity.p.FromTime" (ngModelChange)="calculateOvertimeHours()" name="FromTime"
+            class="form-control" id="FromTime" />
         </div>
-          <div class="col-md-6" style="margin-top: 1rem; ">
-          <div>
-            <label>Overtime in Min</label>
-            <input type="number" name="OverTimeInMin " class="form-control" id="OverTimeInMin " [(ngModel)]="Entity.p.OverTimeInMin" (ngModelChange)="convertmintohr()"
-              placeholder="Enter over time Grace" #OverTimeInMinCtrl="ngModel" required (blur)="OverTimeInMinCtrl.control.markAsTouched()" (click)="selectAllValue($event)"/>
-          <div *ngIf="(OverTimeInMinCtrl.invalid && (OverTimeInMinCtrl.touched || OverTimeInMinCtrl.dirty))">
-            <span class="validation-text" *ngIf="OverTimeInMinCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
-          </div>
+        <div class="col-6">
+          <label>To Time</label>
+          <input type="time" [(ngModel)]="Entity.p.ToTime" (ngModelChange)="calculateOvertimeHours()" name="ToTime"
+            class="form-control" id="ToTime" />
+        </div>
+        <div class="col-6 mb-1">
+          <label>Total Over Time Hrs</label>
+          <input type="text" name="WorkingHrs" readonly class="form-control" [(ngModel)]="Entity.p.DisplayOverTime" />
         </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">

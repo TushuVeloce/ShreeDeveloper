@@ -1,9 +1,9 @@
 <div>
   <div class="row">
-     <div class="col-4 mb-2">
+    <div class="col-4 mb-2">
       <h1 style="padding-top: 3px;" class="title title_light">Employee Overtime</h1>
     </div>
-     <div class="col-4 mb-2 search-container_light">
+    <div class="col-4 mb-2 search-container_light">
       <app-shared-filter [masterList]="MasterList"
         [filterFields]="['FromTime', 'ToTime', 'LateMarkGraceTimeInMins', 'OvertimeGraceTimeInMins']"
         (filteredList)="DisplayMasterList = $event"></app-shared-filter>
@@ -30,8 +30,9 @@
             <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
             <td Class="tbldata" style="white-space: nowrap;">{{formatDate(overtime.p.Date)}}</td>
             <td Class="tbldata">{{overtime.p.EmployeeName}}</td>
-            <td Class="tbldata">{{overtime.p.OverTimeInMin}}</td>
-            <td Class="tbldata">{{overtime.p.OverTimeInHrs}}</td>
+            <td Class="tbldata">{{overtime.p.FromTime}}</td>
+            <td Class="tbldata">{{overtime.p.ToTime}}</td>
+            <td Class="tbldata">{{overtime.p.DisplayOverTime}}</td>
             <td class="tbldata">
               <span style="margin-left: 9px;" (click)="onEditClicked(overtime);">
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />

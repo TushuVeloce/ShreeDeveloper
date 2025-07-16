@@ -143,9 +143,9 @@ export class AttendanceDetailsComponent implements OnInit {
 
     this.Entity.p.IsAttendanceVerified = true;
 
-    const strCurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
-    const DateValue = strCurrentDateTime.substring(0, 10);
-    this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(DateValue);
+    // const strCurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
+    // const DateValue = strCurrentDateTime.substring(0, 10);
+    this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
     console.log('entitiesToSave :', entitiesToSave);
