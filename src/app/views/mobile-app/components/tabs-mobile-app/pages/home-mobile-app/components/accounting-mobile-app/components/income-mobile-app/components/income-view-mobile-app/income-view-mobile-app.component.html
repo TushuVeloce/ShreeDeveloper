@@ -119,15 +119,41 @@
       <ion-icon name="ellipsis-vertical"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button color="primary" (click)="printIncome()">
+      <ion-fab-button color="primary" (click)="handlePrintOrShare()">
         <ion-icon name="print-outline"></ion-icon>
       </ion-fab-button>
       <ion-fab-button color="primary" (click)="AddIncome()">
         <ion-icon name="add-outline"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button color="tertiary" (click)="AddIncome()">
+      <!-- <ion-fab-button color="tertiary" (click)="AddIncome()">
         <ion-icon name="filter-outline"></ion-icon>
-      </ion-fab-button>
+      </ion-fab-button> -->
     </ion-fab-list>
   </ion-fab>
+
+  <!-- Print Section with automatic page breaks -->
+  <div id="print-section" style="display: none;" #PrintContainer>
+    <h2>Income</h2>
+    <table class="table table-bordered print-table">
+      <thead>
+        <tr>
+          <th *ngFor="let header of printheaders" style="background-color: maroon; color: white;">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let Income of DisplayMasterList; index as i">
+          <td class="tbldata">{{ i + 1 }}</td>
+          <td Class="tbldata" style="white-space: nowrap;">{{formatDate(Income.p.Date)}}</td>
+          <td Class="tbldata">{{Income.p.SiteName}}</td>
+          <td Class="tbldata">{{Income.p.LedgerName }}</td>
+          <td Class="tbldata">{{Income.p.SubLedgerName}}</td>
+          <td Class="tbldata">{{Income.p.Reason}}</td>
+          <td Class="tbldata"> {{Income.p.IncomeAmount | currency : "INR" }}</td>
+          <td Class="tbldata"> {{Income.p.ShreesBalance | currency : "INR" }}</td>
+          <td Class="tbldata">{{Income.p.ModeOfPaymentName}}</td>
+          <!-- <td Class="tbldata">{{Income.p.Narration}}</td> -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </ion-content>

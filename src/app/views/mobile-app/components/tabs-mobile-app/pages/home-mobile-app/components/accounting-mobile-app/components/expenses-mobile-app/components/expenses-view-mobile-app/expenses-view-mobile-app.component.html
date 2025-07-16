@@ -109,8 +109,8 @@
       <ion-icon name="ellipsis-vertical"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button color="primary" (click)="printReport()">
-        <ion-icon name="print-outline"></ion-icon>
+      <ion-fab-button color="primary" (click)="handlePrintOrShare()">
+        <ion-icon name="print-outline"></ion-icon> 
       </ion-fab-button>
       <ion-fab-button color="primary" (click)="AddExpense()">
         <ion-icon name="add-outline"></ion-icon>
@@ -120,4 +120,33 @@
       </ion-fab-button> -->
     </ion-fab-list>
   </ion-fab>
+
+  <!-- Print Section with automatic page breaks -->
+  <div id="print-section" style="display: none;" #PrintContainer>
+    <h2>Expense</h2>
+    <table class="table table-bordered print-table">
+      <thead>
+        <tr>
+          <th *ngFor="let header of printheaders" style="background-color: maroon; color: white;">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let Expense of DisplayMasterList; index as i">
+          <td class="tbldata">{{ i + 1 }}</td>
+          <td Class="tbldata" style="white-space: nowrap;">{{ formatDate(Expense.p.Date) }}</td>
+          <td Class="tbldata">{{ Expense.p.SiteName }}</td>
+          <td Class="tbldata">{{ Expense.p.LedgerName }}</td>
+          <td Class="tbldata">{{ Expense.p.SubLedgerName }}</td>
+          <td Class="tbldata">{{ Expense.p.RecipientName }}</td>
+          <td Class="tbldata">{{ Expense.p.Reason }}</td>
+          <td Class="tbldata"> {{ Expense.p.InvoiceAmount| currency : "INR" }}</td>
+          <td Class="tbldata"> {{ Expense.p.GivenAmount | currency : "INR" }}</td>
+          <td Class="tbldata"> {{ Expense.p.RemainingAmount | currency : "INR" }}</td>
+          <td Class="tbldata"> {{ Expense.p.ShreesBalance | currency : "INR" }}</td>
+          <td Class="tbldata">{{ Expense.p.ModeOfPaymentName }}</td>
+          <!-- <td Class="tbldata">{{ Expense.p.Narration }}</td> -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </ion-content>

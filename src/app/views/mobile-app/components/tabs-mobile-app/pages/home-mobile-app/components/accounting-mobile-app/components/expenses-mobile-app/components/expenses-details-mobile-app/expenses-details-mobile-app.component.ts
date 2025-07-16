@@ -165,6 +165,9 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
           this.selectedIncomeSubLedger = [{ p: { Ref: this.Entity.p.IncomeSubLedgerRef, Name: this.Entity.p.IncomeSubLedgerName } }];
           this.IncomeSubLedgerName = this.Entity.p.IncomeSubLedgerName;
 
+          this.BankName = this.BankList.find(item => item.p.Ref == this.Entity.p.BankAccountRef)?.p.Name ?? '';
+          this.selectedBank = [{ p: { Ref: this.Entity.p.BankAccountRef, Name: this.BankName } }];
+
         } else {
           this.Entity = Expense.CreateNewInstance();
           Expense.SetCurrentInstance(this.Entity);

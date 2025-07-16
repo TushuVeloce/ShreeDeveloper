@@ -108,7 +108,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
 
     for (const filter of updatedFilters) {
       const selected = filter.selected;
-      if (!selected) continue;
+      if (!selected) { this.FetchEntireListByStartDateandEndDate(); this.Entity.p.AccountingReport = selected; continue } ;
 
       switch (filter.key) {
         case 'bank':
