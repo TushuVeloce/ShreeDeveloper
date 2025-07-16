@@ -149,7 +149,6 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       return;
     }
     let lst = await SalaryGeneration.FetchEmployeeDataByEmployeeRefandMonth(this.companyRef(),employee,month, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.Entity.p.TotalWorkingDays = lst[0]?.p?.TotalWorkingDays || 0
     this.Entity.p.TotalLeaves = lst[0]?.p?.TotalLeaves || 0
     this.Entity.p.TotalOverTimeHrs = lst[0]?.p?.TotalOverTimeHrs || 0

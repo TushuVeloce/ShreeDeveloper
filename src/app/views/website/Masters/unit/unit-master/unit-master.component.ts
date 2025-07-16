@@ -29,9 +29,9 @@ export class UnitMasterComponent implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   TimeUnitRef: number = UnitRefs.TimeUnitRef;
-  FeatureRef = ApplicationFeatures
+  // FeatureRef = ApplicationFeatures
   ValidMenuItems: any;
-  ApplicationFeatures?: ApplicationFeatures;
+  // ApplicationFeatures?: ApplicationFeatures;
 
   headers: string[] = ['Sr.No.', 'Unit', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService, private payloadPacketFacade: PayloadPacketFacade,
@@ -39,7 +39,7 @@ export class UnitMasterComponent implements OnInit {
 
   async ngOnInit() {
     await this.appStateManage.setDropdownDisabled(true);
-    this.ValidMenuItems = this.ValidMenuItem.getData(this.FeatureRef.UnitMaster);
+    // this.ValidMenuItems = this.ValidMenuItem.getData(this.FeatureRef.UnitMaster);
     // const rawItems = JSON.parse(sessionStorage.getItem('ValidMenuItems') || '[]');
     // console.log('rawItems :', rawItems);
     // this.ValidMenuItems = rawItems.filter((data: MenuItem) => data.FeatureRef == ApplicationFeatures.UnitMaster);

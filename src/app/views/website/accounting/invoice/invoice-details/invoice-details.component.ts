@@ -119,6 +119,7 @@ export class InvoiceDetailsComponent implements OnInit {
         this.isDieselPaid = true
       }
       this.getVendorServiceListByVendorRef(this.Entity.p.VendorRef);
+      this.getTotalWorkedHours();
       // this.RecipientNameReadOnly = true
     } else {
       this.Entity = Invoice.CreateNewInstance();
@@ -267,7 +268,7 @@ export class InvoiceDetailsComponent implements OnInit {
     const TotalWorkedHours = this.getTotalWorkedHours()
     const TotalLabourAmount = this.getTotalLabourAmount()
     const Qty = Number(this.Entity.p.Qty)
-    const Rate = Number(this.Entity.p.Rate)
+    const Rate = Number(this.Entity.p.Rate / 60);
     const DieselAmount = Number(this.Entity.p.DieselAmount) || 0
     if (TotalWorkedHours > 0) {
       this.Entity.p.InvoiceAmount = Math.round(((TotalWorkedHours * Rate) - DieselAmount) * 100) / 100;
@@ -314,8 +315,15 @@ export class InvoiceDetailsComponent implements OnInit {
     let total = this.Entity.p.MachineUsageDetailsArray.reduce((total: number, item: any) => {
       return total + Number(item.WorkedHours || 0);
     }, 0);
-    this.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(total);
+    this.DisplayTotalWorkingHrs = this.formatMinutesToHourMin(total);
     return total;
+  }
+
+  formatMinutesToHourMin = (totalMinutes: number): string => {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+    return `${hours}h ${formattedMinutes}m`;
   }
 
   getTotalLabourAmount(): number {
@@ -365,19 +373,54 @@ export class InvoiceDetailsComponent implements OnInit {
     //   this.MachineTimeEntity.WorkedHours = 0;
     // }
 
-    if (this.MachineTimeEntity.StartTime == '') {
-      return
-    }
+    // if (this.MachineTimeEntity.StartTime == '') {
+    //   return
+    // }
 
-    if (this.MachineTimeEntity.EndTime == '') {
-      return
-    }
+    // if (this.MachineTimeEntity.EndTime == '') {
+    //   return
+    // }
+
+    // // Fallback to "00:00" if either is missing or invalid
+    // if (!this.MachineTimeEntity.StartTime || !this.MachineTimeEntity.StartTime.includes(":")) return 0;
+
+    // const [inHour, inMin] = this.MachineTimeEntity.StartTime.split(':').map(Number);
+    // const [outHour, outMin] = (this.MachineTimeEntity.EndTime && this.MachineTimeEntity.EndTime.includes(":") ? this.MachineTimeEntity.EndTime : "00:00").split(':').map(Number);
+
+    // // Check for invalid numbers
+    // if (isNaN(inHour) || isNaN(inMin) || isNaN(outHour) || isNaN(outMin)) return 0;
+
+    // const inDate = new Date();
+    // inDate.setHours(inHour, inMin, 0, 0);
+
+    // const outDate = new Date();
+    // outDate.setHours(outHour, outMin, 0, 0);
+
+    // // Handle overnight shift
+    // if (outDate <= inDate) {
+    //   outDate.setDate(outDate.getDate() + 1);
+    // }
+
+    // const diffMs = outDate.getTime() - inDate.getTime();
+    // const diffMinutes = Math.floor(diffMs / 60000);
+
+    // const decimalHours = diffMinutes / 60;
+
+    // this.MachineTimeEntity.WorkedHours = parseFloat(decimalHours.toFixed(2));
+
+
+    if (this.MachineTimeEntity.StartTime == '') return;
+    if (this.MachineTimeEntity.EndTime == '') return;
 
     // Fallback to "00:00" if either is missing or invalid
     if (!this.MachineTimeEntity.StartTime || !this.MachineTimeEntity.StartTime.includes(":")) return 0;
 
     const [inHour, inMin] = this.MachineTimeEntity.StartTime.split(':').map(Number);
-    const [outHour, outMin] = (this.MachineTimeEntity.EndTime && this.MachineTimeEntity.EndTime.includes(":") ? this.MachineTimeEntity.EndTime : "00:00").split(':').map(Number);
+    const [outHour, outMin] = (
+      this.MachineTimeEntity.EndTime && this.MachineTimeEntity.EndTime.includes(":")
+        ? this.MachineTimeEntity.EndTime
+        : "00:00"
+    ).split(':').map(Number);
 
     // Check for invalid numbers
     if (isNaN(inHour) || isNaN(inMin) || isNaN(outHour) || isNaN(outMin)) return 0;
@@ -394,11 +437,10 @@ export class InvoiceDetailsComponent implements OnInit {
     }
 
     const diffMs = outDate.getTime() - inDate.getTime();
-    const diffMinutes = Math.floor(diffMs / 60000);
+    const diffMinutes = Math.floor(diffMs / 60000);  // 💡 Minutes difference
 
-    const decimalHours = diffMinutes / 60;
-
-    this.MachineTimeEntity.WorkedHours = parseFloat(decimalHours.toFixed(2));
+    // 🔁 Assign minutes directly instead of decimal hours
+    this.MachineTimeEntity.WorkedHours = diffMinutes;
 
     // HH:mm format
     const hours = Math.floor(diffMinutes / 60);

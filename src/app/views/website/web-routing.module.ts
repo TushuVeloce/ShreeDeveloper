@@ -153,9 +153,13 @@ const routes: Routes = [
   {
     path: '', component: WebComponent,
     children: [
-      { path: 'Dashboard', component: DashboardComponent, canActivate: [AuthGuard], data: { featureName: 'UnitMaster' } },
-      { path: 'Unit_Master', component: UnitMasterComponent, canActivate: [AuthGuard], data: { featureName: 'UnitMaster' } },
-      { path: 'Unit_Master_Details', component: UnitMasterDetailsComponent, canActivate: [AuthGuard], data: { featureName: 'UnitMaster' } },
+      // { path: 'Dashboard', component: DashboardComponent, canActivate: [AuthGuard], data: { featureName: 'UnitMaster' } },
+      // { path: 'Unit_Master', component: UnitMasterComponent, canActivate: [AuthGuard], data: { featureName: 'UnitMaster' } },
+      // { path: 'Unit_Master_Details', component: UnitMasterDetailsComponent, canActivate: [AuthGuard], data: { featureName: 'UnitMaster' } },
+
+      { path: 'Dashboard', component: DashboardComponent },
+      { path: 'Unit_Master', component: UnitMasterComponent },
+      { path: 'Unit_Master_Details', component: UnitMasterDetailsComponent },
 
       { path: 'Material_Master', component: MaterialMasterComponent, },
       { path: 'Material_Master_Details', component: MaterialMasterDetailsComponent, },
@@ -226,7 +230,7 @@ const routes: Routes = [
       { path: 'Recipient_Master', component: RecipientMasterComponent },
       { path: 'Recipient_Master_Details', component: RecipientMasterDetailsComponent },
 
-       { path: 'Owner_Master', component: OwnerMasterComponent },
+      { path: 'Owner_Master', component: OwnerMasterComponent },
       { path: 'Owner_Master_Details', component: OwnerMasterDetailsComponent },
 
       { path: 'Payer_Master', component: PayerComponent },
