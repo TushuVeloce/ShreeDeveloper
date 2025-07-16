@@ -79,6 +79,8 @@ export enum SiteWorkApplicableTypes {
   OutwardNo = 600,
   OutwardDate = 700,
   Received = 800,
+  SubmitToTahsildar = 900,
+  SubmitToUpadhaykshaAndBhumiAdhilekh = 1000,
 }
 
 export enum ApplicationFeatures {
@@ -726,6 +728,10 @@ export class DomainEnums {
         return 'Outward No';
       case SiteWorkApplicableTypes.Received:
         return 'Received ';
+      case SiteWorkApplicableTypes.SubmitToTahsildar:
+        return 'Submit to तहसीलदार';
+      case SiteWorkApplicableTypes.SubmitToUpadhaykshaAndBhumiAdhilekh:
+        return 'Submit to उपाधीक्षक & भूमी अधिलेख ';
       default:
         return '';
     }
@@ -782,6 +788,18 @@ export class DomainEnums {
         Ref: SiteWorkApplicableTypes.Received,
         Name: DomainEnums.ApplicableTypesForSiteName(
           SiteWorkApplicableTypes.Received
+        ),
+      },
+      {
+        Ref: SiteWorkApplicableTypes.SubmitToTahsildar,
+        Name: DomainEnums.ApplicableTypesForSiteName(
+          SiteWorkApplicableTypes.SubmitToTahsildar
+        ),
+      },
+      {
+        Ref: SiteWorkApplicableTypes.SubmitToUpadhaykshaAndBhumiAdhilekh,
+        Name: DomainEnums.ApplicableTypesForSiteName(
+          SiteWorkApplicableTypes.SubmitToUpadhaykshaAndBhumiAdhilekh
         ),
       },
     ];
