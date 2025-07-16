@@ -11,10 +11,14 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { WebAttendaneLogDetailsLogFetchRequest } from "./webattendancelogdetailsfetchrequest";
+import { AttendanceLocationType } from "src/app/classes/domain/domainenums/domainenums";
 
 
 export class WebAttendaneLogDetailsLogProps {
   public readonly Db_Table_Name = "AttendanceLogDetails";
+
+  AttendanceLocationType = AttendanceLocationType;
+
 
   public CompanyRef: number = 0;
   public readonly CompanyName: string = '';
@@ -31,7 +35,7 @@ export class WebAttendaneLogDetailsLogProps {
   public CheckOutTime: string = '';
   public AttendanceLogPath1: string = '';
   public AttendanceLogPath2: string = '';
-  public AttendenceLocationType: number = 0;
+  public AttendenceLocationType: number = AttendanceLocationType.Office;
   public SiteRef: number = 0;
   public SiteName: string = '';
   public WorkingHrs: number = 0;

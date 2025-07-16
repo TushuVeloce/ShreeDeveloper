@@ -35,17 +35,13 @@ export class WebAttendaneLogProps {
   public TransDateTime: string = '';
 
   public TotalWorkingHrs: number = 0;
-  public DisplayTotalWorkingHrs: string = '';
+  public DisplayTotalWorkingHrs: string = '0h 00m';
 
   public IsAttendanceVerified: boolean = false;
 
   public IsLateMark: boolean = false;
   public TotalLateMarkHrs: number = 0;
-  public DisplayTotalLateMarkHrs: string = '';
-
-  public IsOverTime: boolean = false;
-  public TotalOvertimeHrs: number = 0;
-  public DisplayTotalOvertimeHrs: string = '';
+  public DisplayTotalLateMarkHrs: string = '0h 00m';
 
   public FirstCheckInTime: string = '';
   public LastCheckOutTime: string = '';

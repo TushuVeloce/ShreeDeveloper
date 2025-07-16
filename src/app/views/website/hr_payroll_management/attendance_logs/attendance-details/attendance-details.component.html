@@ -55,8 +55,8 @@
         <div class="col-md-2 col-6 ">
           <label style="color: white;">Is Late Mark</label>
           <div class="d-flex align-items-center">
-            <input type="checkbox" id="IsLateMark" disabled [(ngModel)]="Entity.p.IsLateMark" name="IsLateMark"
-              class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
+            <input type="checkbox" id="IsLateMark" [(ngModel)]="Entity.p.IsLateMark" name="IsLateMark"
+              class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;" (ngModelChange)="IsLateMarkChange()">
             <label for="IsLateMark" class="form-check-label mb-0">Is Late Mark</label>
           </div>
         </div>
@@ -68,18 +68,12 @@
           </div>
         </div>
         <div class="col-md-2 col-6 ">
-          <label style="color: white;">Is Over Time</label>
+          <label style="color: white;">Is Half Day</label>
           <div class="d-flex align-items-center">
-            <input type="checkbox" id="IsOverTime" disabled [(ngModel)]="Entity.p.IsOverTime" name="IsOverTime"
-              class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
-            <label for="IsOverTime" class="form-check-label mb-0">Is Over Time</label>
-          </div>
-        </div>
-        <div class="col-md-4 col-6">
-          <div>
-            <label>Total Over Time Hrs</label>
-            <input type="text" readonly [(ngModel)]="Entity.p.DisplayTotalOvertimeHrs" name="DisplayTotalOvertimeHrs"
-              class="form-control" id="DisplayTotalOvertimeHrs" (click)="selectAllValue($event)" />
+            <input type="checkbox" id="IsHalfDay" [(ngModel)]="Entity.p.IsHalfDay" name="IsHalfDay"
+              class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;"
+              (ngModelChange)="IsLateMarkChange()">
+            <label for="IsHalfDay" class="form-check-label mb-0">Is Half Mark</label>
           </div>
         </div>
       </div>
