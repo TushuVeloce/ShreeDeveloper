@@ -1,6 +1,9 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
+import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
@@ -17,6 +20,9 @@ export class ExpenseComponent implements OnInit {
   Entity: Expense = Expense.CreateNewInstance();
   MasterList: Expense[] = [];
   DisplayMasterList: Expense[] = [];
+  SiteList: Site[] = [];
+  LedgerList: Ledger[] = [];
+  SubLedgerList: SubLedger[] = [];
   SearchString: string = '';
   SelectedExpense: Expense = Expense.CreateNewInstance();
   CustomerRef: number = 0;
@@ -39,6 +45,9 @@ export class ExpenseComponent implements OnInit {
   ) {
     effect(async () => {
       await this.getExpenseListByCompanyRef();
+      await this.getSiteListByCompanyRef();
+      await this.getLedgerListByCompanyRef();
+      // await this.FetchEntireListByFilters();
     });
   }
 
@@ -47,6 +56,50 @@ export class ExpenseComponent implements OnInit {
     this.loadPaginationData();
     const pageSize = this.screenSizeService.getPageSize('withDropdown');
     this.pageSize = pageSize - 1
+  }
+
+    getSiteListByCompanyRef = async () => {
+    this.Entity.p.SiteRef = 0
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SiteList = lst;
+  }
+
+  getLedgerListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.LedgerList = lst
+  };
+
+  getSubLedgerListByLedgerRef = async (ledgerref: number) => {
+    this.Entity.p.SubLedgerRef = 0
+    if (ledgerref <= 0) {
+      await this.uiUtils.showErrorToster('Ledger not Selected');
+      return;
+    }
+    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SubLedgerList = lst;
+  }
+
+ FetchEntireListByFilters = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Expense.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
   }
 
   getExpenseListByCompanyRef = async () => {
@@ -86,6 +139,7 @@ export class ExpenseComponent implements OnInit {
             `Expense ${Expense.p.SubLedgerRef} has been deleted!`
           );
           await this.getExpenseListByCompanyRef();
+          // await this.FetchEntireListByFilters();
           this.SearchString = '';
           this.loadPaginationData();
         });

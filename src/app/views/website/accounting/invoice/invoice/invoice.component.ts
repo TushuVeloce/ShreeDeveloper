@@ -1,6 +1,9 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
+import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
@@ -18,6 +21,9 @@ export class InvoiceComponent implements OnInit {
   MasterList: Invoice[] = [];
   DisplayMasterList: Invoice[] = [];
   SearchString: string = '';
+  SiteList: Site[] = [];
+  LedgerList: Ledger[] = [];
+  SubLedgerList: SubLedger[] = [];
   TotalInvoice: number = 0;
   SelectedInvoice: Invoice = Invoice.CreateNewInstance();
   CustomerRef: number = 0;
@@ -33,6 +39,9 @@ export class InvoiceComponent implements OnInit {
   ) {
     effect(async () => {
       await this.getInvoiceListByCompanyRef();
+      await this.getSiteListByCompanyRef();
+      await this.getLedgerListByCompanyRef();
+      // await this.FetchEntireListByFilters();
     });
   }
 
@@ -40,6 +49,50 @@ export class InvoiceComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');
+  }
+
+  getSiteListByCompanyRef = async () => {
+    this.Entity.p.SiteRef = 0
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SiteList = lst;
+  }
+
+  getLedgerListByCompanyRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef(),
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    this.LedgerList = lst
+  };
+
+  getSubLedgerListByLedgerRef = async (ledgerref: number) => {
+    this.Entity.p.SubLedgerRef = 0
+    if (ledgerref <= 0) {
+      await this.uiUtils.showErrorToster('Ledger not Selected');
+      return;
+    }
+    let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SubLedgerList = lst;
+  }
+
+  FetchEntireListByFilters = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await Invoice.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
   }
 
   getInvoiceListByCompanyRef = async () => {
@@ -74,6 +127,7 @@ export class InvoiceComponent implements OnInit {
             `Bill ${Invoice.p.RecipientName} has been deleted!`
           );
           await this.getInvoiceListByCompanyRef();
+          // await this.FetchEntireListByFilters();
           this.SearchString = '';
           this.loadPaginationData();
         });

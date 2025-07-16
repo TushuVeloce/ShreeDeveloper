@@ -11,6 +11,11 @@ export class CurrentBalanceFetchRequest {
   ExpenseRefs: number[] = [];
   IncomeRefs: number[] = [];
 
+  CompanyRef: number = 0;
+  SiteRef: number = 0;
+  LedgerRef: number = 0;
+  SubLedgerRef: number = 0;
+
   public MergeIntoTransportData = (td: TransportData) => {
     let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CurrentBalanceFetchRequest.FetchRequestType) as DataCollection;
     coll.Entries.push(this);

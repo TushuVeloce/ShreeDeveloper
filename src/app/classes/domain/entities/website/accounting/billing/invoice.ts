@@ -237,6 +237,22 @@ export class Invoice implements IPersistable<Invoice> {
     return Invoice.ListFromTransportData(tdResponse);
   }
 
+     public static async FetchEntireListByFilters(SiteRef:number, LedgerRef:number,SubLedgerRef:number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+      let req = new InvoiceFetchRequest();
+      req.CompanyRef = CompanyRef
+      if (LedgerRef) {
+        req.LedgerRef = LedgerRef
+      }
+      if (SubLedgerRef) {
+        req.SubLedgerRef = SubLedgerRef
+      }
+      if (SiteRef) {
+        req.SiteRef = SiteRef
+      }
+      let tdResponse = await Invoice.FetchTransportData(req, errorHandler) as TransportData;
+      return Invoice.ListFromTransportData(tdResponse);
+    }
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

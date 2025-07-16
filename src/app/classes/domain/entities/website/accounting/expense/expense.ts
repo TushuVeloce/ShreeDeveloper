@@ -236,6 +236,22 @@ export class Expense implements IPersistable<Expense> {
     return Expense.ListFromTransportData(tdResponse);
   }
 
+    public static async FetchEntireListByFilters(SiteRef:number, LedgerRef:number,SubLedgerRef:number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+        let req = new ExpenseFetchRequest();
+        req.CompanyRef = CompanyRef
+        if (LedgerRef) {
+          req.LedgerRef = LedgerRef
+        }
+        if (SubLedgerRef) {
+          req.SubLedgerRef = SubLedgerRef
+        }
+        if (SiteRef) {
+          req.SiteRef = SiteRef
+        }
+        let tdResponse = await Expense.FetchTransportData(req, errorHandler) as TransportData;
+        return Expense.ListFromTransportData(tdResponse);
+      }
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;
