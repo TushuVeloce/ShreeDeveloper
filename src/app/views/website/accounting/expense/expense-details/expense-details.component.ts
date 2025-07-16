@@ -8,6 +8,7 @@ import { Expense } from 'src/app/classes/domain/entities/website/accounting/expe
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
 import { FinancialYear } from 'src/app/classes/domain/entities/website/masters/financialyear/financialyear';
 import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
+import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
 import { Recipient } from 'src/app/classes/domain/entities/website/masters/recipientname/recipientname';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
@@ -42,7 +43,7 @@ export class ExpenseDetailsComponent implements OnInit {
   InitialEntity: Expense = null as any;
   LedgerList: Ledger[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  BankList: BankAccount[] = [];
+  BankList: OpeningBalance[] = [];
   Cash = ModeOfPayments.Cash
   Bill = ModeOfPayments.Bill
   RecipientType = RecipientTypes.Recipient
@@ -117,8 +118,8 @@ export class ExpenseDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await BankAccount.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.BankList = lst
+    let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && item.p.OpeningBalanceAmount > 0)
   };
 
   OnModeChange = () => {

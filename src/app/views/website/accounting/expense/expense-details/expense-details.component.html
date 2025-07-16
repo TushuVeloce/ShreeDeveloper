@@ -196,7 +196,7 @@
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
               nzPlaceHolder="Select" id="BankAccountRef" name="BankAccountRef" [nzSize]="'large'"
               [(ngModel)]="Entity.p.BankAccountRef">
-              <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.Ref" [nzLabel]="bank.p.Name"></nz-option>
+              <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.BankAccountRef" [nzLabel]="bank.p.BankName"></nz-option>
             </nz-select>
           </div>
         </div>
