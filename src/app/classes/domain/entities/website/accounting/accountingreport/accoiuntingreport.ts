@@ -23,12 +23,13 @@ export class AccountingReportProps {
   public TransDateTime: string = ''
   public PayerName: string = ''
   public RecipientName: string = ''
+  public SiteRef: number = 0
   public SiteName: string = ''
   public Reason: string = ''
   public IncomeAmount: number = 0
   public GivenAmount: number = 0
   public ShreesBalance: number = 0
-  public ModeOfPaymentName: string = ''
+  public ModeOfPaymentName: number = 0
   public Narration: string = ''
   public StartDate: string = ''
   public EndDate: string = ''
@@ -179,7 +180,7 @@ export class AccountingReport implements IPersistable<AccountingReport> {
     return AccountingReport.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByStartDateandEndDate(StartDate: string, EndDate: string, accountingreport: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByStartDateandEndDate(StartDate: string, EndDate: string, accountingreport: number,SiteRef:number, ModeOfPaymentName:number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new AccountingReportFetchRequest();
     req.CompanyRef = CompanyRef
     if (StartDate) {
@@ -187,6 +188,12 @@ export class AccountingReport implements IPersistable<AccountingReport> {
     }
     if (EndDate) {
       req.EndDate = EndDate
+    }
+    if (SiteRef) {
+      req.SiteRef = SiteRef
+    }
+    if (ModeOfPaymentName) {
+      req.ModeOfPaymentName = ModeOfPaymentName
     }
     if (accountingreport) {
       req.AccountingReport = accountingreport

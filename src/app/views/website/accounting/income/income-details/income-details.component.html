@@ -79,15 +79,15 @@
               style="width: 36px; height: 36px; cursor: pointer">
               <i class="fa-solid fa-plus" style="color: blue;"></i>
             </span>
+             <span *ngIf="PayerNameInput && !PayerNameReadOnly" (click)="SaveNewPayerName()"
+              class="ms-2 d-flex justify-content-center align-items-center border rounded text-success"
+              style="width: 36px; height: 36px; cursor: pointer">
+              <i class="fa-solid fa-check"></i>
+            </span>
             <span *ngIf="PayerNameInput && !PayerNameReadOnly" (click)="cancelPayerName()"
               class="ms-2 d-flex justify-content-center align-items-center border rounded text-danger"
               style="width: 36px; height: 36px; cursor: pointer">
               <i class="fa-solid fa-xmark"></i>
-            </span>
-            <span *ngIf="PayerNameInput && !PayerNameReadOnly" (click)="SaveNewPayerName()"
-              class="ms-2 d-flex justify-content-center align-items-center border rounded text-success"
-              style="width: 36px; height: 36px; cursor: pointer">
-              <i class="fa-solid fa-check"></i>
             </span>
           </div>
         </div>

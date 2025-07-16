@@ -13,6 +13,8 @@ export class AccountingReportFetchRequest
     CompanyRef: number = 0;
     StartDate: string = '';
     EndDate: string = '';
+    SiteRef: number = 0;
+    ModeOfPaymentName: number = 0;
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

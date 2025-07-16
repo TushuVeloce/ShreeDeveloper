@@ -28,6 +28,23 @@
     <input type="date" [(ngModel)]="Entity.p.EndDate" name="EndDate" class="form-control" id="EndDate"
       placeholder="Enter End Date" (ngModelChange)="FetchEntireListByStartDateandEndDate()" />
   </div>
+   <div class="col-md-4">
+      <label for="SiteRef"><b>Site</b></label>
+      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+        [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
+        (ngModelChange)="FetchEntireListByStartDateandEndDate()">
+        <nz-option nzLabel="All" [nzValue]="0"></nz-option>
+        <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+      </nz-select>
+  </div>
+  <div class="col-md-4">
+          <label>Mode of Payment</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="ModeOfPaymentName" name="ModeOfPaymentName" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.ModeOfPaymentName" (ngModelChange)="FetchEntireListByStartDateandEndDate()">
+            <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
+          </nz-select>
+        </div>
   <div class="col-md-4">
     <label><b>Accounting Report</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"

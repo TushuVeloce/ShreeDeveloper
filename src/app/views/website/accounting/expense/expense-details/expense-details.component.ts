@@ -183,6 +183,7 @@ export class ExpenseDetailsComponent implements OnInit {
     this.Entity.p.IncomeLedgerRef = 0;
     this.Entity.p.RecipientRef = 0;
     this.Entity.p.IsAdvancePayment = 0
+    this.RecipientNameInput = false
   }
 
   onChangeIncomeLedger = () =>{

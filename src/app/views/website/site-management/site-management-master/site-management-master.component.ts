@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 
@@ -24,9 +25,9 @@ export class SiteManagementMasterComponent implements OnInit {
   currentPage = 1;
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.', 'Site Name', 'No of Plots', 'Site Incharge', 'Site Location', 'Action'];
+  headers: string[] = ['Sr.No.', 'Site Name', 'No of Plots', 'Starting Date', 'Estimated End Date', 'Site Location', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
   ) {
     effect(async () => {
       // this.getMaterialListByCompanyRef()
@@ -35,6 +36,11 @@ export class SiteManagementMasterComponent implements OnInit {
   }
   ngOnInit() {
     this.appStateManage.setDropdownDisabled();
+  }
+
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
   }
 
   getSiteListByCompanyRef = async () => {

@@ -26,7 +26,9 @@
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{site.p.Name}}</td>
           <td Class="tbldata">{{site.p.NumberOfPlots}}</td>
-          <td Class="tbldata">{{site.p.SiteInchargeName}}</td>
+          <!-- <td Class="tbldata">{{site.p.SiteInchargeName}}</td> -->
+          <td Class="tbldata">{{formatDate(site.p.EstimatedStartingDate)}}</td>
+          <td Class="tbldata">{{formatDate(site.p.EstimatedEndDate)}}</td>
           <td Class="tbldata">{{site.p.AddressLine2}}</td>
           <td class="tbldata">
             <span style="margin-left: 9px;" (click)="onEditClicked(site);">
