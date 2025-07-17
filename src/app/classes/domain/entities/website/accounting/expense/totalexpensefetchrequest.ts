@@ -9,11 +9,13 @@ export class TotalExpenseFetchRequest {
 
   CompanyRef: number = 0;
   ExpenseRef: number = 0;
-  SiteRef: number = 0;
   RecipientRef: number = 0;
   RecipientType: number = 0;
-  LedgerRef: number = 0;
-  SubLedgerRef: number = 0;
+  SiteRef: number = 0;
+  SiteRefs: number[] = [];
+  LedgerRefs: number[] = [];
+  SubLedgerRefs: number[] = [];
+  ModeOfPayments: number[] = [];
 
   ExpenseRefs: number[] = [];
   CompanyRefs: number[] = [];

@@ -4,20 +4,18 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class ExpenseFetchRequest
-{
+export class ExpenseFetchRequest {
     public static readonly FetchRequestType: string = "ExpenseFetchRequest";
 
     ExpenseRefs: number[] = [];
     CompanyRefs: number[] = [];
 
-    CompanyRef: number = 0;
-    SiteRef: number = 0;
-    LedgerRef: number = 0;
-    SubLedgerRef: number = 0;
+    SiteRefs: number[] = [];
+    LedgerRefs: number[] = [];
+    SubLedgerRefs: number[] = [];
+  ModeOfPayments: number[] = [];
 
-    public MergeIntoTransportData = (td: TransportData) =>
-    {
+    public MergeIntoTransportData = (td: TransportData) => {
         let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, ExpenseFetchRequest.FetchRequestType) as DataCollection;
         coll.Entries.push(this);
     }

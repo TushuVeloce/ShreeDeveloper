@@ -14,7 +14,7 @@ export class AccountingReportFetchRequest
     StartDate: string = '';
     EndDate: string = '';
     SiteRef: number = 0;
-    ModeOfPaymentName: number = 0;
+    ModeOfPayments: number = 0;
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

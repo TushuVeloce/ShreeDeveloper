@@ -3,7 +3,7 @@
     <h1 style="padding-top: 3px;" class="title title_light">Stock Transfer</h1>
   </div>
   <div class="col-4 mb-2 search-container_light">
-    <app-shared-filter [masterList]="MasterList" [filterFields]="['Code', 'Name', 'UnitName']"
+    <app-shared-filter [masterList]="MasterList" [filterFields]="['Date', 'FromSiteName', 'ToSiteName','MaterialName','UnitName','CurrentQuantity','TransferredQuantity','RemainingQuantity']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">

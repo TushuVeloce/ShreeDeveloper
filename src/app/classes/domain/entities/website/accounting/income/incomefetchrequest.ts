@@ -10,6 +10,13 @@ export class IncomeFetchRequest {
   IncomeRefs: number[] = [];
   CompanyRefs: number[] = [];
 
+  CompanyRef: number = 0;
+  SiteRefs: number[] = [];
+  LedgerRefs: number[] = [];
+  SubLedgerRefs: number[] = [];
+  ModeOfPayments: number[] = [];
+
+
   public MergeIntoTransportData = (td: TransportData) => {
     let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, IncomeFetchRequest.FetchRequestType) as DataCollection;
     coll.Entries.push(this);

@@ -10,11 +10,10 @@ export class InvoiceFetchRequest
 
     InvoiceRefs: number[] = [];
     CompanyRefs: number[] = [];
-
     CompanyRef: number = 0;
-    SiteRef: number = 0;
-    LedgerRef: number = 0;
-    SubLedgerRef: number = 0;
+    SiteRefs: number[] = [];
+    LedgerRefs: number[] = [];
+    SubLedgerRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

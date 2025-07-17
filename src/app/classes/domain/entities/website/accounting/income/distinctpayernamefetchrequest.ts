@@ -12,6 +12,11 @@ export class DistinctPayerNameFetchRequest {
 
   CompanyRef: number = 0;
   PayerType: number = 0;
+  SiteRefs: number[] = [];
+  LedgerRefs: number[] = [];
+  SubLedgerRefs: number[] = [];
+  ModeOfPayments: number[] = [];
+
 
   public MergeIntoTransportData = (td: TransportData) => {
     let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, DistinctPayerNameFetchRequest.FetchRequestType) as DataCollection;

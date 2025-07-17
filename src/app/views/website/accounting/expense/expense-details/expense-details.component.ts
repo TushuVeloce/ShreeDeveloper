@@ -47,6 +47,7 @@ export class ExpenseDetailsComponent implements OnInit {
   Cash = ModeOfPayments.Cash
   Bill = ModeOfPayments.Bill
   RecipientType = RecipientTypes.Recipient
+  SiteType = RecipientTypes.Sites
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
   RecipientTypesList = DomainEnums.RecipientTypesList();
   Employee = RecipientTypes.Employee;
@@ -180,11 +181,13 @@ export class ExpenseDetailsComponent implements OnInit {
     this.RecipientList = lst;
   }
 
-  onTypeChange = () =>{
+  onTypeChange = async() =>{
     this.Entity.p.IncomeLedgerRef = 0;
     this.Entity.p.RecipientRef = 0;
     this.Entity.p.IsAdvancePayment = 0
     this.RecipientNameInput = false
+    this.Entity.p.GivenAmount = 0
+    await this.CalculateRemainingAmountandBalance()
   }
 
   onChangeIncomeLedger = () =>{
@@ -244,6 +247,10 @@ export class ExpenseDetailsComponent implements OnInit {
       this.Entity.p.RemainingAmount = Number((this.Entity.p.InvoiceAmount - this.Entity.p.GivenAmount).toFixed(2));
     } else {
       this.Entity.p.RemainingAmount = 0;
+    }
+    if(this.Entity.p.RecipientType == this.SiteType){
+      this.getCurrentBalanceByCompanyRef()
+      return
     }
     if (this.Entity.p.GivenAmount <= this.Entity.p.ShreesBalance) {
       this.Entity.p.ShreesBalance = Number((this.ShreeBalance - this.Entity.p.GivenAmount).toFixed(2));
