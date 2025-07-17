@@ -4,7 +4,10 @@ import { Router } from '@angular/router';
 import { AccountingReports, DomainEnums, OpeningBalanceModeOfPayments } from 'src/app/classes/domain/domainenums/domainenums';
 import { AccountingReport } from 'src/app/classes/domain/entities/website/accounting/accountingreport/accoiuntingreport';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
+import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
 import { OpeningBalance } from 'src/app/classes/domain/entities/website/masters/openingbalance/openingbalance';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -40,6 +43,15 @@ export class OfficeViewMobileAppComponent implements OnInit {
   filters: FilterItem[] = [];
   companyRef = 0;
   modalOpen = false;
+  SiteList: Site[] = [];
+  ModeofPaymentList = DomainEnums.ModeOfPaymentsList();
+  ReasonList: any[] = [];
+  LedgerList: Ledger[] = [];
+  SubLedgerList: SubLedger[] = [];
+
+  // Store current selected values here to preserve selections on filter reload
+  selectedFilterValues: Record<string, any> = {};
+
 
   constructor(
     private router: Router,
@@ -71,57 +83,73 @@ export class OfficeViewMobileAppComponent implements OnInit {
   }
 
   loadFilters() {
-    if (this.AccountingReportList && this.OpeningBalanceList) {
-      this.filters = [
-        {
-          key: 'bank',
-          label: 'Bank',
-          multi: false,
-          options: this.OpeningBalanceList.map(item => ({
-            Ref: item.p.Ref,
-            Name: item.p.ModeOfPayment == this.Cash ? 'Cash' : item.p.BankName,
-          })),
-          selected: null,
-        },
-        {
-          key: 'mode',
-          label: 'Accounting Report',
-          multi: false,
-          options: this.AccountingReportList.map(mode => ({
-            Ref: mode.Ref,
-            Name: mode.Name,
-          })),
-          selected: 200,
-        },
-      ];
-
-    }
+    this.filters = [
+      {
+        key: 'site',
+        label: 'Site',
+        multi: false,
+        options: this.SiteList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
+      },
+      {
+        key: 'modeOfPayment',
+        label: 'Mode of Payment',
+        multi: false,
+        options: this.ModeofPaymentList.map(item => ({
+          Ref: item.Ref,
+          Name: item.Name,
+        })),
+        selected: this.selectedFilterValues['modeOfPayment'] > 0 ? this.selectedFilterValues['modeOfPayment'] : null,
+      },
+      {
+        key: 'accountingReport',
+        label: 'Accounting Report',
+        multi: false,
+        options: this.AccountingReportList.map(item => ({
+          Ref: item.Ref,
+          Name: item.Name,
+        })),
+        selected: this.selectedFilterValues['accountingReport'] > 0 ? this.selectedFilterValues['accountingReport'] :200,
+      }
+    ];
   }
-  onFiltersChanged(updatedFilters: any[]) {
-    console.log('Updated Filters:', updatedFilters);
-    // this.Entity.p.AccountingReport = updatedFilters.selected;
-    // this.selectedFilters = updatedFilters;
 
-    this.Entity.p.StartDate = '';
-    this.Entity.p.EndDate = '';
-    this.Entity.p.AccountingReport = 0;
+  async onFiltersChanged(updatedFilters: any[]) {
+    // debugger
+    console.log('Updated Filters:', updatedFilters);
 
     for (const filter of updatedFilters) {
       const selected = filter.selected;
-      if (!selected) { this.FetchEntireListByStartDateandEndDate(); this.Entity.p.AccountingReport = selected; continue } ;
+      const selectedValue = (selected === null || selected === undefined) ? null : selected;
+
+      // Save selected value to preserve after reload
+      this.selectedFilterValues[filter.key] = selectedValue ?? null;
 
       switch (filter.key) {
-        case 'bank':
-          this.BankRef = selected;
-          this.getBalanceByBank()
+        case 'site':
+          this.Entity.p.SiteRef = selectedValue ?? 0;
           break;
-        case 'mode':
-          this.Entity.p.AccountingReport = selected;
-          this.FetchEntireListByStartDateandEndDate()
+
+        case 'reason':
+          this.Entity.p.Reason = selectedValue ?? 0;
+          break;
+
+        case 'accountingReport':
+          this.Entity.p.AccountingReport = selectedValue ?? 0;
+          break;
+
+        case 'modeOfPayment':
+          this.Entity.p.ModeOfPaymentName = selectedValue ?? 0;
           break;
       }
     }
+    this.loadFilters(); // Reload filters with updated options & preserve selections
   }
+
+
 
   private async loadAccountingReportIfEmployeeExists() {
     try {
@@ -140,6 +168,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
       await this.FetchEntireListByStartDateandEndDate();
       await this.getOpeningBalanceListByCompanyRef();
       await this.getCurrentBalanceByCompanyRef()
+      await this.getSiteListByCompanyRef();
       this.Entity.p.StartDate = ''
       this.Entity.p.EndDate = ''
     } catch (error) {
@@ -175,7 +204,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
       await this.haptic.warning();
       return;
     }
-    let lst = await AccountingReport.FetchEntireListByStartDateandEndDate(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport,this.Entity.p.SiteRef,this.Entity.p.ModeOfPaymentName, this.companyRef, async errMsg => {
+    let lst = await AccountingReport.FetchEntireListByStartDateandEndDate(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport, this.Entity.p.SiteRef, this.Entity.p.ModeOfPaymentName, this.companyRef, async errMsg => {
       await this.toastService.present('Error' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -200,6 +229,21 @@ export class OfficeViewMobileAppComponent implements OnInit {
       this.BankRef = this.OpeningBalanceList[0].p.Ref;
       this.getBalanceByBank();
     }
+  }
+
+  getSiteListByCompanyRef = async () => {
+    this.Entity.p.SiteRef = 0
+    this.Entity.p.SiteName = ''
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'warning');
+      await this.haptic.warning();
+      return;
+    }
+    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.SiteList = lst;
   }
 
   getBalanceByBank = () => {

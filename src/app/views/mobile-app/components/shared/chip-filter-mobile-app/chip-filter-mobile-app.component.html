@@ -5,19 +5,22 @@
         (ionChange)="onFilterChange(filter.key, $event.detail.value)" [placeholder]="getSelectedNames(filter)"
         class="chip-select">
         <!-- Show this if no options -->
-        <ion-select-option disabled *ngIf="filter.options.length === 0">
+        <ion-select-option disabled *ngIf="!filter.options?.length">
           No options available
         </ion-select-option>
-      
+
         <!-- Render actual options -->
         <ion-select-option *ngFor="let option of filter.options" [value]="option.Ref">
           {{ option.Name }}
         </ion-select-option>
       </ion-select>
 
-      <!-- Show ❌ only if something is selected -->
-      <ion-icon *ngIf="(filter.multi && filter.selected.length) || (!filter.multi && filter.selected)"
-        name="close-circle" class="clear-icon" (click)="clearFilter(filter.key)"></ion-icon>
+      <!-- ✅ SINGLE & MULTI clear -->
+    <ion-icon
+      *ngIf="(filter.multi && filter.selected?.length > 0) || (!filter.multi && filter.selected !== null && filter.selected !== undefined)"
+      name="close-circle" class="clear-icon" color="primary" (click)="onClearClick($event, filter.key)">
+    </ion-icon>
+
     </div>
   </ng-container>
 

@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
+import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -12,14 +16,15 @@ import { AlertService } from 'src/app/views/mobile-app/components/core/alert.ser
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
+import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filter-mobile-app/chip-filter-mobile-app.component';
 
 @Component({
   selector: 'app-invoice-view-mobile-app',
   templateUrl: './invoice-view-mobile-app.component.html',
   styleUrls: ['./invoice-view-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class InvoiceViewMobileAppComponent  implements OnInit {
+export class InvoiceViewMobileAppComponent implements OnInit {
   Entity: Invoice = Invoice.CreateNewInstance();
   MasterList: Invoice[] = [];
   DisplayMasterList: Invoice[] = [];
@@ -29,6 +34,15 @@ export class InvoiceViewMobileAppComponent  implements OnInit {
 
   companyRef = 0;
   modalOpen = false;
+  filters: FilterItem[] = [];
+  SiteList: Site[] = [];
+  ModeofPaymentList = DomainEnums.ModeOfPaymentsList();
+  ReasonList: any[] = [];
+  LedgerList: Ledger[] = [];
+  SubLedgerList: SubLedger[] = [];
+
+  // Store current selected values here to preserve selections on filter reload
+  selectedFilterValues: Record<string, any> = {};
 
   constructor(
     private router: Router,
@@ -46,43 +60,107 @@ export class InvoiceViewMobileAppComponent  implements OnInit {
   ) { }
 
   ngOnInit = async () => {
-    await this.loadInvoiceIfEmployeeExists();
+    // await this.loadInvoiceIfEmployeeExists();
   };
 
   ionViewWillEnter = async () => {
     await this.loadInvoiceIfEmployeeExists();
+    this.loadFilters();
   };
 
-  filters = [
+  loadFilters() {
+    this.filters = [
       {
-        key: 'category',
-        label: 'Category',
-        multi: true,
-        options: [
-          { Ref: 1, Name: 'Electronics' },
-          { Ref: 2, Name: 'Clothing' },
-          { Ref: 3, Name: 'Books' },
-        ],
-        selected: [],
-      },
-      {
-        key: 'price',
-        label: 'Price',
+        key: 'site',
+        label: 'Site',
         multi: false,
-        options: [
-          { Ref: 'low', Name: 'Low to High' },
-          { Ref: 'high', Name: 'High to Low' },
-        ],
-        selected: null,
+        options: this.SiteList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
       },
+      {
+        key: 'ledger',
+        label: 'Ledger',
+        multi: false,
+        options: this.LedgerList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['ledger'] > 0 ? this.selectedFilterValues['ledger'] : null,
+      },
+      {
+        key: 'subledger',
+        label: 'Sub Ledger',
+        multi: false,
+        options: this.SubLedgerList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['subledger'] > 0 ? this.selectedFilterValues['subledger'] : null,
+      },
+      {
+        key: 'reason',
+        label: 'Reason',
+        multi: false,
+        options: this.ReasonList.map(item => ({
+          Ref: item.Ref,
+          Name: item.Name,
+        })),
+        selected: this.selectedFilterValues['reason'] > 0 ? this.selectedFilterValues['reason'] : null,
+      },
+      {
+        key: 'modeOfPayment',
+        label: 'Mode of Payment',
+        multi: false,
+        options: this.ModeofPaymentList.map(item => ({
+          Ref: item.Ref,
+          Name: item.Name,
+        })),
+        selected: this.selectedFilterValues['modeOfPayment'] > 0 ? this.selectedFilterValues['modeOfPayment'] : null,
+      }
     ];
-  
-    onFiltersChanged(updatedFilters: any[]) {
-      console.log('Updated Filters:', updatedFilters);
-      // Make API call or update list
+  }
+
+
+  async onFiltersChanged(updatedFilters: any[]) {
+    // debugger
+    console.log('Updated Filters:', updatedFilters);
+
+    for (const filter of updatedFilters) {
+      const selected = filter.selected;
+      const selectedValue = (selected === null || selected === undefined) ? null : selected;
+
+      // Save selected value to preserve after reload
+      this.selectedFilterValues[filter.key] = selectedValue ?? null;
+
+      switch (filter.key) {
+        case 'site':
+          this.Entity.p.SiteRef = selectedValue ?? 0;
+          break;
+
+        case 'reason':
+          this.Entity.p.Reason = selectedValue ?? 0;
+          break;
+
+        case 'subledger':
+          this.Entity.p.SubLedgerRef = selectedValue ?? 0;
+          break;
+
+        case 'ledger':
+          this.Entity.p.LedgerRef = selectedValue ?? 0;
+          if (selectedValue != null)  await this.getSubLedgerListByLedgerRef(selectedValue) ;  // Updates SubLedgerList
+          break;
+
+        case 'modeOfPayment':
+          this.Entity.p.InvoiceModeOfPayment = selectedValue ?? 0;
+          break;
+      }
     }
-  
-    
+    this.loadFilters(); // Reload filters with updated options & preserve selections
+  }
+
   async handleRefresh(event: CustomEvent) {
     await this.loadInvoiceIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
@@ -101,6 +179,10 @@ export class InvoiceViewMobileAppComponent  implements OnInit {
         return;
       }
       await this.getInvoiceListByCompanyRef();
+      await this.getSiteListByCompanyRef();
+      await this.getLedgerListByCompanyRef();
+
+      this.loadFilters();
     } catch (error) {
       console.error('Error in loadInvoiceIfEmployeeExists:', error);
       await this.toastService.present('Failed to load Billing', 1000, 'danger');
@@ -110,17 +192,59 @@ export class InvoiceViewMobileAppComponent  implements OnInit {
     }
   }
 
+  getSiteListByCompanyRef = async () => {
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    const lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.SiteList = lst;
+    this.loadFilters();
+  }
+
+  getLedgerListByCompanyRef = async () => {
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    const lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.LedgerList = lst;
+    this.loadFilters();
+  };
+
+  getSubLedgerListByLedgerRef = async (ledgerref: number) => {
+    console.log('ledgerref :', ledgerref);
+
+    if (ledgerref <= 0) {
+      await this.toastService.present('Ledger not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    const lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => {
+      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.SubLedgerList = lst;
+    this.loadFilters();
+  }
+
   getInvoiceListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('Company not Selected', 1000, 'warning');
       await this.haptic.warning();
       return;
     }
-    let lst = await Invoice.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
+    const lst = await Invoice.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
       await this.toastService.present('Error ' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -165,11 +289,7 @@ export class InvoiceViewMobileAppComponent  implements OnInit {
                   await this.haptic.success();
                 });
                 await this.getInvoiceListByCompanyRef();
-              } catch (err) {
-                // console.error('Error deleting In voice:', err);
-                // await this.toastService.present('Failed to delete Bill', 1000, 'danger');
-                // await this.haptic.error();
-              }finally{
+              } finally {
                 await this.loadingService.hide();
               }
             }
@@ -183,31 +303,27 @@ export class InvoiceViewMobileAppComponent  implements OnInit {
     }
   }
 
-
   navigateToPrint = async (item: Invoice) => {
     this.router.navigate(['/mobile-app/tabs/dashboard/accounting/invoice/print'], {
       state: { printData: item.GetEditableVersion() }
     });
   }
 
-  // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   }
 
   AddInvoice = () => {
     if (this.companyRef <= 0) {
-      //  this.uiUtils.showWarningToster('Please select company');
       this.toastService.present('Please select company', 1000, 'warning');
       this.haptic.warning();
       return;
     }
     this.router.navigate(['mobile-app/tabs/dashboard/accounting/invoice/add']);
   }
+
   openModal(Invoice: any) {
-    // console.log('Invoice: any, InvoiceItem: any :', Invoice, InvoiceItem);
     this.SelectedInvoice = Invoice;
-    // this.SelectedInvoice = InvoiceItem;
     this.modalOpen = true;
   }
 
@@ -215,5 +331,4 @@ export class InvoiceViewMobileAppComponent  implements OnInit {
     this.modalOpen = false;
     this.SelectedInvoice = Invoice.CreateNewInstance();
   }
- 
 }

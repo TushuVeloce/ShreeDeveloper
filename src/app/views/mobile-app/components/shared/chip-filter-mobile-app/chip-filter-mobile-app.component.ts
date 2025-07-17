@@ -49,6 +49,12 @@ export class ChipFilterMobileAppComponent  implements OnInit {
     filter.selected = value;
     this.emitFilters();
   }
+  
+  onClearClick(event: Event, filterKey: string) {
+    event.stopPropagation(); // 👈 prevent ion-select from opening
+    this.clearFilter(filterKey);
+  }
+
 
   getSelectedNames(filter: { multi: boolean; label: string; options: FilterOption[]; selected: any }): string {
     // console.log('FilterOption :', filter.options);
@@ -64,7 +70,6 @@ export class ChipFilterMobileAppComponent  implements OnInit {
       return selected ? `${filter.label}: ${selected.Name}` : filter.label;
     }
   }
-
 
   private emitFilters() {
     this.filtersChanged.emit(this.filters);

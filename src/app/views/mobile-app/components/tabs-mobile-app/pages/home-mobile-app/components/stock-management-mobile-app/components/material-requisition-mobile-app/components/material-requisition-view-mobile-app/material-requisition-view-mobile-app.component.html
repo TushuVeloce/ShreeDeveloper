@@ -1,7 +1,8 @@
 <app-header-with-back-handler title="Material Requisition" backRoute="mobile-app/tabs/dashboard/stock-management">
 </app-header-with-back-handler>
-
-<ion-content [fullscreen]="true" class="ion-padding">
+<app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
+</app-chip-filter-mobile-app>
+<ion-content class="ion-padding">
 
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
@@ -25,6 +26,12 @@
       </div>
     </ion-item>
   </ion-list>
+
+  <!-- Show "Data not found" if list is empty -->
+  <div *ngIf="DisplayMasterList.length === 0 " class="no-data-mobile-app">
+    <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+    <p>No Material Requisition records found.</p>
+  </div>
 
   <!-- Modal -->
   <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="modal-card">
@@ -94,16 +101,8 @@
 
   <!-- FAB -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button>
-      <ion-icon name="ellipsis-vertical"></ion-icon>
+    <ion-fab-button color="primary" (click)="AddMaterialRequisition()">
+      <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
-    <ion-fab-list side="top">
-      <ion-fab-button color="primary" (click)="AddMaterialRequisition()">
-        <ion-icon name="add-outline"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button color="tertiary" (click)="AddMaterialRequisition()">
-        <ion-icon name="filter-outline"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
   </ion-fab>
 </ion-content>
