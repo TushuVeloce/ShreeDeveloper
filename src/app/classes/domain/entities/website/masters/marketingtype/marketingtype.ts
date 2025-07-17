@@ -72,7 +72,7 @@ export class MarketingType implements IPersistable<MarketingType> {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.MarketingMode == 0) vra.add('MarketingMode', 'Marketing Mode cannot be blank.');
     if (this.p.Description == '') vra.add('Description', 'Description cannot be blank.');
-    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
+    // if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
 
   }
 

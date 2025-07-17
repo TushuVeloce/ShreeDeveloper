@@ -72,13 +72,13 @@ export class Designation implements IPersistable<Designation> {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
     if (this.p.DepartmentRef == 0) vra.add('DepartmentRef', 'Department cannot be blank.');
-    if (this.p.SeniorityLevel == 0) {
-      vra.add('SeniorityLevel', 'Seniority Level cannot be blank.');
-    } else if (this.p.SeniorityLevel < 0) {
-      vra.add('SeniorityLevel', 'Seniority Level cannot be less then 0.');
-    } else if (this.p.SeniorityLevel.toString().includes('.')) {
-      vra.add('SeniorityLevel', 'Rational Number not allowed for Seniority Level');
-    }
+    // if (this.p.SeniorityLevel == 0) {
+    //   vra.add('SeniorityLevel', 'Seniority Level cannot be blank.');
+    // } else if (this.p.SeniorityLevel < 0) {
+    //   vra.add('SeniorityLevel', 'Seniority Level cannot be less then 0.');
+    // } else if (this.p.SeniorityLevel.toString().includes('.')) {
+    //   vra.add('SeniorityLevel', 'Rational Number not allowed for Seniority Level');
+    // }
   }
 
   public MergeIntoTransportData(td: TransportData) {

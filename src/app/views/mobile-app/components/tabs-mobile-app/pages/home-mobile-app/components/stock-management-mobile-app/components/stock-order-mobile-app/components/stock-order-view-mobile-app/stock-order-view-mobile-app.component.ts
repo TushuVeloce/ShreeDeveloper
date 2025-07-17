@@ -15,6 +15,7 @@ import { AlertService } from 'src/app/views/mobile-app/components/core/alert.ser
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
+import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filter-mobile-app/chip-filter-mobile-app.component';
 
 @Component({
   selector: 'app-stock-order-view-mobile-app',
@@ -44,6 +45,10 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
   tableHeaderData = ['Material', 'Unit', 'Required Qty', 'Ordered Qty', 'Required Remaining Qty', 'Rate', 'Discount Rate', 'GST', 'Delivery Charges', 'Expected Delivery Date', 'Net Amount', 'Total Amount']
   showInvoicePreview = false;
   sanitizedInvoiceUrl: SafeResourceUrl | null = null;
+  filters: FilterItem[] = [];
+
+  // Store current selected values here to preserve selections on filter reload
+  selectedFilterValues: Record<string, any> = {};
 
   constructor(
     private router: Router,
@@ -62,7 +67,7 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
   }
 
   ngOnInit = async () => {
-    await this.loadMaterialRequisitionIfEmployeeExists();
+    // await this.loadMaterialRequisitionIfEmployeeExists();
 
   }
   ionViewWillEnter = async () => {
@@ -76,6 +81,43 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
     await this.loadMaterialRequisitionIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
+
+  loadFilters() {
+    this.filters = [
+      {
+        key: 'site',
+        label: 'Site',
+        multi: false,
+        options: this.SiteList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
+      }
+    ];
+  }
+
+  async onFiltersChanged(updatedFilters: any[]) {
+    // debugger
+    console.log('Updated Filters:', updatedFilters);
+
+    for (const filter of updatedFilters) {
+      const selected = filter.selected;
+      const selectedValue = (selected === null || selected === undefined) ? null : selected;
+
+      // Save selected value to preserve after reload
+      this.selectedFilterValues[filter.key] = selectedValue ?? null;
+
+      switch (filter.key) {
+        case 'site':
+          this.Entity.p.SiteRef = selectedValue ?? 0;
+          break;
+      }
+    }
+    await this.getOrderListByCompanyRefAndSiteRef();
+    this.loadFilters(); // Reload filters with updated options & preserve selections
+  }
+
 
   getStatusClass(status: any): string {
     switch (status) {

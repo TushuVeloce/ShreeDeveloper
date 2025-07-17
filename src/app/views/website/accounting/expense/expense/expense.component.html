@@ -3,7 +3,7 @@
     <h1 style="padding-top: 3px" class="title title_light">Expense</h1>
   </div>
   <div class="col-4 mb-2 search-container_light">
-    <app-shared-filter [masterList]="MasterList" [filterFields]="['Code', 'Name', 'UnitName']"
+    <app-shared-filter [masterList]="MasterList" [filterFields]="['Date', 'SiteName', 'LedgerName','SubLedgerName','RecipientName','Reason','InvoiceAmount','GivenAmount','RemainingAmount','ShreesBalance','ModeOfPaymentName']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">
@@ -24,7 +24,7 @@
   <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
 </ng-template>
 <div class="row" style="margin-top: 1rem">
-  <div class="col-md-4">
+  <div class="col-md-3">
     <label for="SiteRef"><b>Site</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef" (ngModelChange)="FetchEntireListByFilters()">
@@ -32,7 +32,7 @@
       <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
     </nz-select>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-3">
     <label><b>Ledger</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
@@ -40,11 +40,19 @@
       <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
     </nz-select>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-3">
     <label><b>Sub Ledger</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="SubLedgerRef" name="SubLedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SubLedgerRef" (ngModelChange)="FetchEntireListByFilters()">
       <nz-option *ngFor="let sub of SubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
+    </nz-select>
+  </div>
+    <div class="col-md-3">
+    <label><b>Mode of Payment</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      id="ExpenseModeOfPayment" name="ExpenseModeOfPayment" [nzSize]="'large'" [(ngModel)]="Entity.p.ExpenseModeOfPayment"
+      (ngModelChange)="FetchEntireListByFilters()">
+      <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
     </nz-select>
   </div>
 </div>

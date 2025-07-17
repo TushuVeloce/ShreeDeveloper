@@ -1,47 +1,92 @@
 <div class="row">
   <div class="col-4 mb-2">
-    <h1 style="padding-top: 3px;" class="title title_light">Income</h1>
+    <h1 style="padding-top: 3px" class="title title_light">Income</h1>
   </div>
   <div class="col-4 mb-2 search-container_light">
-    <app-shared-filter [masterList]="MasterList" [filterFields]="['Code', 'Name', 'UnitName']"
+    <app-shared-filter [masterList]="MasterList" [filterFields]="['Date', 'SiteName','LedgerName', 'SubLedgerName','PayerName','Reason','IncomeAmount','ShreesBalance','ModeOfPaymentName']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">
-    <nz-button nz-button class="btn1" (click)='AddIncome()'>
+    <nz-button nz-button class="btn1" (click)="AddIncome()">
       Add Income
     </nz-button>
   </div>
 </div>
 <div class="row" *ngIf="DisplayMasterList.length > 0">
-  <div class="col-4 mb-2"> </div>
+  <div class="col-4 mb-2"></div>
   <div class="col-4 mb-2"></div>
   <div class="col-4 mb-2 text-end">
     <img class="no-print" src="/assets/icons/printer.png" alt="Print" title="Print" width="30px" height="30px"
-      style="cursor: pointer; padding-top: 4px;" (click)="printIncome()" />
+      style="cursor: pointer; padding-top: 4px" (click)="printIncome()" />
+  </div>
+</div>
+<ng-template #noDataTpl>
+  <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
+</ng-template>
+<div class="row" style="margin-top: 1rem">
+  <div class="col-md-3">
+    <label for="SiteRef"><b>Site</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
+      (ngModelChange)="FetchEntireListByFilters()">
+      <nz-option nzLabel="All" [nzValue]="0"></nz-option>
+      <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+    </nz-select>
+  </div>
+  <div class="col-md-3">
+    <label><b>Ledger</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
+      (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef)" (ngModelChange)="FetchEntireListByFilters()">
+      <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
+    </nz-select>
+  </div>
+  <div class="col-md-3">
+    <label><b>Sub Ledger</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      id="SubLedgerRef" name="SubLedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SubLedgerRef"
+      (ngModelChange)="FetchEntireListByFilters()">
+      <nz-option *ngFor="let sub of SubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
+    </nz-select>
+  </div>
+    <div class="col-md-3">
+    <label><b>Mode of Payment</b></label>
+    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+      id="IncomeModeOfPayment" name="IncomeModeOfPayment" [nzSize]="'large'" [(ngModel)]="Entity.p.IncomeModeOfPayment"
+      (ngModelChange)="FetchEntireListByFilters()">
+      <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
+    </nz-select>
   </div>
 </div>
 <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
   <div class="table-container">
     <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
-      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
       <thead>
         <tr>
-          <th *ngFor="let header of headers" class="tblheader" style="background-color: maroon; color: white;">{{ header
-            }}</th>
+          <th *ngFor="let header of headers" class="tblheader" style="background-color: maroon; color: white">
+            {{ header }}
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let Income of paginatedList(); index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata" style="white-space: nowrap;">{{formatDate(Income.p.Date)}}</td>
-          <td Class="tbldata">{{Income.p.SiteName}}</td>
-          <td Class="tbldata">{{Income.p.LedgerName | titleCase}}</td>
-          <td Class="tbldata">{{Income.p.SubLedgerName}}</td>
-          <td Class="tbldata">{{Income.p.PayerName}}</td>
-          <td Class="tbldata">{{Income.p.Reason}}</td>
-          <td Class="tbldata"> {{Income.p.IncomeAmount | currency : "INR" }}</td>
-          <td Class="tbldata"> {{Income.p.ShreesBalance | currency : "INR" }}</td>
-          <td Class="tbldata">{{Income.p.ModeOfPaymentName}}</td>
+          <td Class="tbldata" style="white-space: nowrap">
+            {{ formatDate(Income.p.Date) }}
+          </td>
+          <td Class="tbldata">{{ Income.p.SiteName }}</td>
+          <td Class="tbldata">{{ Income.p.LedgerName | titleCase }}</td>
+          <td Class="tbldata">{{ Income.p.SubLedgerName }}</td>
+          <td Class="tbldata">{{ Income.p.PayerName }}</td>
+          <td Class="tbldata">{{ Income.p.Reason }}</td>
+          <td Class="tbldata">
+            {{ Income.p.IncomeAmount | currency : "INR" }}
+          </td>
+          <td Class="tbldata">
+            {{ Income.p.ShreesBalance | currency : "INR" }}
+          </td>
+          <td Class="tbldata">{{ Income.p.ModeOfPaymentName }}</td>
           <!-- <td Class="tbldata">{{Income.p.Narration}}</td> -->
           <td class="tbldata">
             <Edit-Icon (editClick)="onEditClicked(Income)" />
@@ -66,26 +111,30 @@
 </div>
 
 <!-- Print Section with automatic page breaks -->
-<div id="print-section" style="display: none;">
+<div id="print-section" style="display: none">
   <h2>Income</h2>
   <table class="table table-bordered print-table">
     <thead>
       <tr>
-        <th *ngFor="let header of printheaders" style="background-color: maroon; color: white;">{{ header }}</th>
+        <th *ngFor="let header of printheaders" style="background-color: maroon; color: white">
+          {{ header }}
+        </th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let Income of DisplayMasterList; index as i">
         <td class="tbldata">{{ i + 1 }}</td>
-        <td Class="tbldata" style="white-space: nowrap;">{{formatDate(Income.p.Date)}}</td>
-        <td Class="tbldata">{{Income.p.SiteName}}</td>
-        <td Class="tbldata">{{Income.p.LedgerName | titleCase}}</td>
-        <td Class="tbldata">{{Income.p.SubLedgerName}}</td>
-        <td Class="tbldata">{{Income.p.PayerName}}</td>
-        <td Class="tbldata">{{Income.p.Reason}}</td>
-        <td Class="tbldata"> {{Income.p.IncomeAmount | currency : "INR" }}</td>
-        <td Class="tbldata"> {{Income.p.ShreesBalance | currency : "INR" }}</td>
-        <td Class="tbldata">{{Income.p.ModeOfPaymentName}}</td>
+        <td Class="tbldata" style="white-space: nowrap">
+          {{ formatDate(Income.p.Date) }}
+        </td>
+        <td Class="tbldata">{{ Income.p.SiteName }}</td>
+        <td Class="tbldata">{{ Income.p.LedgerName | titleCase }}</td>
+        <td Class="tbldata">{{ Income.p.SubLedgerName }}</td>
+        <td Class="tbldata">{{ Income.p.PayerName }}</td>
+        <td Class="tbldata">{{ Income.p.Reason }}</td>
+        <td Class="tbldata">{{ Income.p.IncomeAmount | currency : "INR" }}</td>
+        <td Class="tbldata">{{ Income.p.ShreesBalance | currency : "INR" }}</td>
+        <td Class="tbldata">{{ Income.p.ModeOfPaymentName }}</td>
         <!-- <td Class="tbldata">{{Income.p.Narration}}</td> -->
       </tr>
     </tbody>

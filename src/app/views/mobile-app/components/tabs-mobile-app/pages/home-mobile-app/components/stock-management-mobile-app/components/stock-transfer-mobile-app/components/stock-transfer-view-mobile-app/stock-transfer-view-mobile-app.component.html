@@ -1,7 +1,7 @@
 <app-header-with-back-handler title="Stock Transfer"
   backRoute="mobile-app/tabs/dashboard/stock-management"></app-header-with-back-handler>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content class="ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>

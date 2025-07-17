@@ -11,14 +11,15 @@ import { AlertService } from 'src/app/views/mobile-app/components/core/alert.ser
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
+import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filter-mobile-app/chip-filter-mobile-app.component';
 
 @Component({
   selector: 'app-material-requisition-view-mobile-app',
   templateUrl: './material-requisition-view-mobile-app.component.html',
   styleUrls: ['./material-requisition-view-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class MaterialRequisitionViewMobileAppComponent  implements OnInit {
+export class MaterialRequisitionViewMobileAppComponent implements OnInit {
 
   Entity: MaterialRequisition = MaterialRequisition.CreateNewInstance();
   MasterList: MaterialRequisition[] = [];
@@ -35,6 +36,11 @@ export class MaterialRequisitionViewMobileAppComponent  implements OnInit {
   modalOpen = false;
   tableHeaderData = ['Material', 'Unit', 'Required Qty', 'Status']
 
+  filters: FilterItem[] = [];
+
+  // Store current selected values here to preserve selections on filter reload
+  selectedFilterValues: Record<string, any> = {};
+
 
 
   constructor(
@@ -50,11 +56,12 @@ export class MaterialRequisitionViewMobileAppComponent  implements OnInit {
   ) { }
 
   ngOnInit = async () => {
-    await this.loadMaterialRequisitionIfEmployeeExists();
+    // await this.loadMaterialRequisitionIfEmployeeExists();
 
   }
   ionViewWillEnter = async () => {
     await this.loadMaterialRequisitionIfEmployeeExists();
+    await this.loadFilters();
   }
   ngOnDestroy() {
     // Cleanup if needed
@@ -64,6 +71,57 @@ export class MaterialRequisitionViewMobileAppComponent  implements OnInit {
     await this.loadMaterialRequisitionIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
+
+  loadFilters() {
+    this.filters = [
+      {
+        key: 'site',
+        label: 'Site',
+        multi: false,
+        options: this.SiteList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
+      },
+      {
+        key: 'status',
+        label: 'Status',
+        multi: false,
+        options: this.StatusList.map(item => ({
+          Ref: item.Ref,
+          Name: item.Name,
+        })),
+        selected: this.selectedFilterValues['status'] > 0 ? this.selectedFilterValues['status'] : null,
+      }
+    ];
+  }
+
+  async onFiltersChanged(updatedFilters: any[]) {
+    // debugger
+    console.log('Updated Filters:', updatedFilters);
+
+    for (const filter of updatedFilters) {
+      const selected = filter.selected;
+      const selectedValue = (selected === null || selected === undefined) ? null : selected;
+
+      // Save selected value to preserve after reload
+      this.selectedFilterValues[filter.key] = selectedValue ?? null;
+
+      switch (filter.key) {
+        case 'site':
+          this.Entity.p.SiteRef = selectedValue ?? 0;
+          break;
+
+        case 'status':
+          this.Entity.p.Status = selectedValue ?? 0;
+          break;
+      }
+    }
+    await this.getRequisitionListByAllFilters()
+    this.loadFilters(); // Reload filters with updated options & preserve selections
+  }
+
   getStatusClass(status: any): string {
     switch (status) {
       case this.MaterialRequisitionStatuses.Pending:

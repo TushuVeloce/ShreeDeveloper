@@ -77,11 +77,11 @@ export class HomeViewMobileAppComponent implements OnInit, OnDestroy {
       label: 'Stock',
       routerPath: '/mobile-app/tabs/dashboard/stock-management'
     },
-    {
-      icon: 'assets/icons/marketing_mobile_app.png',
-      label: 'Marketing',
-      routerPath: '/mobile-app/tabs/dashboard/marketing-management'
-    },
+    // {
+    //   icon: 'assets/icons/marketing_mobile_app.png',
+    //   label: 'Marketing',
+    //   routerPath: '/mobile-app/tabs/dashboard/marketing-management'
+    // },
     {
       icon: 'assets/icons/crm_mobile_app.png',
       label: 'CRM',

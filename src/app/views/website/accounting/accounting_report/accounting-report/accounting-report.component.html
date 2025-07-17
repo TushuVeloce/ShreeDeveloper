@@ -2,7 +2,9 @@
   <div class="col-4 mb-2">
     <h1 style="padding-top: 3px;" class="title title_light">Office Report</h1>
   </div>
-  <div class="col-4 mb-2 search-container_light">
+   <div class="col-4 mb-2 search-container_light">
+    <app-shared-filter [masterList]="MasterList" [filterFields]="['TransDateTime', 'PayerName', 'RecipientName','SiteName','RecipientName','Reason','IncomeAmount','GivenAmount','ShreesBalance','ModeOfPaymentName','Narration']"
+      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
   <div class="col-4 mb-2 text-end" *ngIf="DisplayMasterList.length > 0">
     <img class="no-print" src="/assets/icons/printer.png" alt="Print" title="Print" width="30px" height="30px"
@@ -21,18 +23,18 @@
   <div class="col-md-4">
     <label for="StartDate"><b>From Date</b></label>
     <input type="date" [(ngModel)]="Entity.p.StartDate" name="StartDate" class="form-control" id="StartDate"
-      placeholder="Enter Start Date" (ngModelChange)="FetchEntireListByStartDateandEndDate()" />
+      placeholder="Enter Start Date" (ngModelChange)="FetchEntireListByFilters()" />
   </div>
   <div class="col-md-4">
     <label for="EndDate"><b>To Date</b></label>
     <input type="date" [(ngModel)]="Entity.p.EndDate" name="EndDate" class="form-control" id="EndDate"
-      placeholder="Enter End Date" (ngModelChange)="FetchEntireListByStartDateandEndDate()" />
+      placeholder="Enter End Date" (ngModelChange)="FetchEntireListByFilters()" />
   </div>
   <div class="col-md-4">
     <label for="SiteRef"><b>Site</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
-      (ngModelChange)="FetchEntireListByStartDateandEndDate()">
+      (ngModelChange)="FetchEntireListByFilters()">
       <nz-option nzLabel="All" [nzValue]="0"></nz-option>
       <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
     </nz-select>
@@ -40,16 +42,16 @@
   <div class="col-md-4">
     <label><b>Mode of Payment</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
-      id="ModeOfPaymentName" name="ModeOfPaymentName" [nzSize]="'large'" [(ngModel)]="Entity.p.ModeOfPaymentName"
-      (ngModelChange)="FetchEntireListByStartDateandEndDate()">
+      id="ModeOfPayment" name="ModeOfPayment" [nzSize]="'large'" [(ngModel)]="Entity.p.ModeOfPayment"
+      (ngModelChange)="FetchEntireListByFilters()">
       <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
     </nz-select>
   </div>
   <div class="col-md-4">
     <label><b>Accounting Report</b></label>
-    <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+    <nz-select class="nzSelect-light"  nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="AccountingReport" name="AccountingReport" [nzSize]="'large'" [(ngModel)]="Entity.p.AccountingReport"
-      (ngModelChange)="FetchEntireListByStartDateandEndDate()">
+      (ngModelChange)="FetchEntireListByFilters()">
       <nz-option *ngFor="let mode of AccountingReportList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
     </nz-select>
   </div>
@@ -87,8 +89,8 @@
         <tr *ngFor="let report of paginatedList(); index as i">
           <td class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td class="tbldata" style="white-space: nowrap;">{{ formatDate(report.p.TransDateTime) }}</td>
-          <td class="tbldata">{{ report.p.PayerName?.trim() ? (report.p.PayerName | titleCase) : '--' }} </td>
-          <td class="tbldata">{{ report.p.RecipientName?.trim() ? (report.p.RecipientName | titleCase) : '--' }}</td>
+          <td class="tbldata">{{ report.p.PayerName? (report.p.PayerName | titleCase) : '--' }} </td>
+          <td class="tbldata">{{ report.p.RecipientName? (report.p.RecipientName | titleCase) : '--' }}</td>
           <td class="tbldata">{{ report.p.SiteName }}</td>
           <td class="tbldata">{{ report.p.Reason }}</td>
           <td class="tbldata">{{ report.p.IncomeAmount && report.p.IncomeAmount !== 0 ? (report.p.IncomeAmount |
@@ -135,8 +137,8 @@
       <tr *ngFor="let report of DisplayMasterList; index as i">
         <td class="tbldata">{{ i + 1 }}</td>
         <td class="tbldata" style="white-space: nowrap;">{{ formatDate(report.p.TransDateTime) }}</td>
-        <td class="tbldata">{{ report.p.PayerName?.trim() ? (report.p.PayerName | titleCase) : '--' }} </td>
-        <td class="tbldata">{{ report.p.RecipientName?.trim() ? (report.p.RecipientName | titleCase) : '--' }}</td>
+        <td class="tbldata">{{ report.p.PayerName? (report.p.PayerName | titleCase) : '--' }} </td>
+        <td class="tbldata">{{ report.p.RecipientName? (report.p.RecipientName | titleCase) : '--' }}</td>
         <td class="tbldata">{{ report.p.SiteName }}</td>
         <td class="tbldata">{{ report.p.Reason }}</td>
         <td class="tbldata">{{ report.p.IncomeAmount && report.p.IncomeAmount != 0 ? (report.p.IncomeAmount | currency:
@@ -147,6 +149,13 @@
         <td class="tbldata">{{ report.p.ModeOfPaymentName }}</td>
         <td class="tbldata">{{ report.p.Narration }}</td>
       </tr>
+       <tr *ngIf="DisplayMasterList.length > 0">
+          <td class="tbldata" colspan="5"></td>
+          <td class="tbldata"><b>Total</b></td>
+          <td class="tbldata"><b>{{ totalTotalIncome | currency: 'INR' }}</b></td>
+          <td class="tbldata"><b>{{ totalTotalExpense | currency: 'INR' }}</b></td>
+          <td class="tbldata" colspan="3"></td>
+        </tr>
     </tbody>
   </table>
 </div>

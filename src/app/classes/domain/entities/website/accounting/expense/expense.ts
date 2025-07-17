@@ -54,6 +54,7 @@ export class ExpenseProps {
   public RemainingAdvance: number = 0
 
   public GivenAmount: number = 0
+  public TotalAdvance: number = 0
   public RemainingAmount: number = 0
   public ShreesBalance: number = 0
   public ExpenseModeOfPayment: number = 0
@@ -236,18 +237,21 @@ export class Expense implements IPersistable<Expense> {
     return Expense.ListFromTransportData(tdResponse);
   }
 
-    public static async FetchEntireListByFilters(SiteRef:number, LedgerRef:number,SubLedgerRef:number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    public static async FetchEntireListByFilters(SiteRef:number, LedgerRef:number,SubLedgerRef:number,ModeOfPayment:number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
         let req = new ExpenseFetchRequest();
-        req.CompanyRef = CompanyRef
-        if (LedgerRef) {
-          req.LedgerRef = LedgerRef
-        }
-        if (SubLedgerRef) {
-          req.SubLedgerRef = SubLedgerRef
-        }
-        if (SiteRef) {
-          req.SiteRef = SiteRef
-        }
+       req.CompanyRefs.push(CompanyRef)
+      if (LedgerRef) {
+        req.LedgerRefs.push(LedgerRef)
+      }
+      if (SubLedgerRef) {
+         req.SubLedgerRefs.push(SubLedgerRef)
+      }
+      if (SiteRef) {
+         req.SiteRefs.push(SiteRef)
+      }
+      if (ModeOfPayment) {
+         req.ModeOfPayments.push(ModeOfPayment)
+      }
         let tdResponse = await Expense.FetchTransportData(req, errorHandler) as TransportData;
         return Expense.ListFromTransportData(tdResponse);
       }

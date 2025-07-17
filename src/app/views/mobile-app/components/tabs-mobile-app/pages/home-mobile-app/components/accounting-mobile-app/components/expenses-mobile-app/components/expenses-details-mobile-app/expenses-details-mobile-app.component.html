@@ -103,8 +103,8 @@
 
     <ion-checkbox class="input-item" [(ngModel)]="Entity.p.IsAdvancePayment"
       *ngIf="this.Entity.p.RecipientType == Employee">Is Advance Payment</ion-checkbox>
-   
-      <!-- Remaining Advance Amount -->
+
+    <!-- Remaining Advance Amount -->
     <ion-item class="input-item" *ngIf="this.Entity.p.RecipientType == Employee">
       <ion-input label="Remaining Advance Amount" labelPlacement="floating" placeholder="Enter Remaining Advance Amount"
         [(ngModel)]="Entity.p.RemainingAdvance" readonly></ion-input>
@@ -124,7 +124,8 @@
 
       <!-- Inline Add Button -->
       <ion-button slot="end" fill="solid" size="small" (click)="AddRecipientName()"
-        style="--background: var(--ion-color-primary); --border-radius: 8px; --padding-start: 6px; --padding-end: 6px; margin-left: 6px;">
+        style="--background: var(--ion-color-primary); --border-radius: 8px; --padding-start: 6px; --padding-end: 6px; margin-left: 6px;"
+        *ngIf="Entity.p.RecipientType == payerTypeRecipient">
         <ion-icon slot="icon-only" name="add-outline" color="light"></ion-icon>
       </ion-button>
     </ion-item>
@@ -143,13 +144,6 @@
 
       </ion-row>
       <ion-row class="ion-align-items-center ion-justify-content-between" style="gap: 8px;">
-        <!-- Confirm Button -->
-        <ion-col size="4" size-sm="2" size-md="2" class="ion-text-start">
-          <ion-button expand="block" fill="solid" size="small" (click)="SaveNewRecipientName()"
-            *ngIf="RecipientNameInput" style="--background: var(--ion-color-primary); --border-radius: 8px;">
-            <ion-icon slot="icon-only" name="checkmark-outline" color="light"></ion-icon>
-          </ion-button>
-        </ion-col>
 
         <!-- Cancel Button -->
         <ion-col size="4" size-sm="2" size-md="2" class="ion-text-end">
@@ -159,6 +153,13 @@
           </ion-button>
         </ion-col>
 
+        <!-- Confirm Button -->
+        <ion-col size="4" size-sm="2" size-md="2" class="ion-text-start">
+          <ion-button expand="block" fill="solid" size="small" (click)="SaveNewRecipientName()"
+            *ngIf="RecipientNameInput" style="--background: var(--ion-color-primary); --border-radius: 8px;">
+            <ion-icon slot="icon-only" name="checkmark-outline" color="light"></ion-icon>
+          </ion-button>
+        </ion-col>
       </ion-row>
     </ion-grid>
 
@@ -177,7 +178,8 @@
     <!-- Given Amount -->
     <ion-item class="input-item">
       <ion-input label="Given Amount" labelPlacement="floating" placeholder="Enter Given Amount"
-        [(ngModel)]="Entity.p.GivenAmount" (ngModelChange)="CalculateRemainingAmountandBalance()" type="number"></ion-input>
+        [(ngModel)]="Entity.p.GivenAmount" (ngModelChange)="CalculateRemainingAmountandBalance()"
+        type="number"></ion-input>
     </ion-item>
     <!-- Remaining Amount -->
     <ion-item class="input-item">

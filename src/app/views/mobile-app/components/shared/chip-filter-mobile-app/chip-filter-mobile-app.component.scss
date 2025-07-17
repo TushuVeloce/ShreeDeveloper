@@ -7,13 +7,15 @@
     align-items: center;
     scroll-behavior: smooth;
 
-    /* Optional: hide scrollbars (cross-browser) */
+    /* Hide scrollbars (cross-browser) */
     &::-webkit-scrollbar {
         display: none;
     }
 
     -ms-overflow-style: none;
+    /* IE and Edge */
     scrollbar-width: none;
+    /* Firefox */
 }
 
 .chip-with-clear {
@@ -26,6 +28,7 @@
         --max-width: max-content;
         --padding-start: 12px;
         --padding-end: 30px;
+        /* padding to leave space for icon */
         --border-radius: 20px;
         --background: var(--ion-color-light);
         --color: var(--ion-color-dark);
@@ -37,9 +40,12 @@
 
     .clear-icon {
         position: absolute;
+        top: 50%;
         right: 6px;
-        color: var(--ion-color-danger);
+        transform: translateY(-50%);
+        // color: 'primary';
         font-size: 18px;
-        z-index: 1;
+        cursor: pointer;
+        z-index: 10;
     }
 }

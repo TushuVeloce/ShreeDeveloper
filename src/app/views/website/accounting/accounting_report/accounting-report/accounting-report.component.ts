@@ -45,13 +45,13 @@ export class AccountingReportComponent implements OnInit {
   ) {
     effect(async () => {
       this.Entity.p.AccountingReport = AccountingReports.CurrentFinancialYear
-      //  await this.getAccountingReportListByCompanyRef();
-      await this.FetchEntireListByStartDateandEndDate();
+      this.Entity.p.StartDate = ''
+      this.Entity.p.EndDate = ''
       await this.getOpeningBalanceListByCompanyRef();
       await this.getCurrentBalanceByCompanyRef();
       await this.getSiteListByCompanyRef();
-      this.Entity.p.StartDate = ''
-      this.Entity.p.EndDate = ''
+      await this.FetchEntireListByFilters();
+      //  await this.getAccountingReportListByCompanyRef();
     });
   }
 
@@ -86,18 +86,18 @@ export class AccountingReportComponent implements OnInit {
       this.SiteList = lst;
     }
 
-  FetchEntireListByStartDateandEndDate = async () => {
+  FetchEntireListByFilters = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    console.log('this.Entity.p.SiteRef,this.Entity.p.ModeOfPaymentName, :', this.Entity.p.SiteRef,this.Entity.p.ModeOfPaymentName,);
-    let lst = await AccountingReport.FetchEntireListByStartDateandEndDate(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport,this.Entity.p.SiteRef,this.Entity.p.ModeOfPaymentName, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.MasterList = lst;
+    console.log('this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport,this.Entity.p.SiteRef,this.Entity.p.ModeOfPayment, this.companyRef(), :', this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport,this.Entity.p.SiteRef,this.Entity.p.ModeOfPayment, this.companyRef(),);
+    let lst = await AccountingReport.FetchEntireListByFilters(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport,this.Entity.p.SiteRef,this.Entity.p.ModeOfPayment, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+   this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    this.loadPaginationData();
+    await this.loadPaginationData();
   }
 
   getOpeningBalanceListByCompanyRef = async () => {
@@ -108,7 +108,6 @@ export class AccountingReportComponent implements OnInit {
       return;
     }
     let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.OpeningBalanceList = lst;
     if (this.OpeningBalanceList.length > 0) {
       this.BankRef = this.OpeningBalanceList[0].p.Ref;

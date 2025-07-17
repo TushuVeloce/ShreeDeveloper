@@ -73,7 +73,7 @@ export class SubLedger implements IPersistable<SubLedger> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.LedgerRef == 0) {vra.add('LedgerRef', 'Ledger cannot be blank.');}
-    if (this.p.Name == '') {vra.add('Name', 'Name cannot be blank.');}
+    if (this.p.Name == '') {vra.add('Name', 'Sub Ledger Name cannot be blank.');}
   }
 
   public MergeIntoTransportData(td: TransportData) {

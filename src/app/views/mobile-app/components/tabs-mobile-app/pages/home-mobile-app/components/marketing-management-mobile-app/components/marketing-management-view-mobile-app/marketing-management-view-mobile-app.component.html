@@ -1,7 +1,7 @@
 <app-loader *ngIf="isLoading"></app-loader>
 <app-header-with-back-handler title="Marketing Management"></app-header-with-back-handler>
-<app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
-</app-chip-filter-mobile-app>
+<!-- <app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
+</app-chip-filter-mobile-app> -->
 <ion-content  class="actual-stage-content">
   <!-- Refresher -->
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">

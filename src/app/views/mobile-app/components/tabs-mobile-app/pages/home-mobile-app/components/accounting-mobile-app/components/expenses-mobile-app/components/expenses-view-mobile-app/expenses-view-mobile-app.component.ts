@@ -1,7 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
+import { Ledger } from 'src/app/classes/domain/entities/website/masters/ledgermaster/ledger';
+import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { SubLedger } from 'src/app/classes/domain/entities/website/masters/subledgermaster/subledger';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -13,6 +17,7 @@ import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.s
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
+import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filter-mobile-app/chip-filter-mobile-app.component';
 
 @Component({
   selector: 'app-expenses-view-mobile-app',
@@ -32,6 +37,15 @@ export class ExpensesViewMobileAppComponent implements OnInit {
 
   companyRef = 0;
   modalOpen = false;
+  filters: FilterItem[] = [];
+  SiteList: Site[] = [];
+  ModeofPaymentList = DomainEnums.ModeOfPaymentsList();
+  ReasonList: any[] = [];
+  LedgerList: Ledger[] = [];
+  SubLedgerList: SubLedger[] = [];
+
+  // Store current selected values here to preserve selections on filter reload
+  selectedFilterValues: Record<string, any> = {};
 
   constructor(
     private router: Router,
@@ -50,12 +64,106 @@ export class ExpensesViewMobileAppComponent implements OnInit {
 
   ionViewWillEnter = async () => {
     await this.loadExpenseIfEmployeeExists();
+    await this.loadFilters();
   };
 
   async handleRefresh(event: CustomEvent) {
     await this.loadExpenseIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
+
+  loadFilters() {
+    this.filters = [
+      {
+        key: 'site',
+        label: 'Site',
+        multi: false,
+        options: this.SiteList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
+      },
+      {
+        key: 'ledger',
+        label: 'Ledger',
+        multi: false,
+        options: this.LedgerList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['ledger'] > 0 ? this.selectedFilterValues['ledger'] : null,
+      },
+      {
+        key: 'subledger',
+        label: 'Sub Ledger',
+        multi: false,
+        options: this.SubLedgerList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['subledger'] > 0 ? this.selectedFilterValues['subledger'] : null,
+      },
+      {
+        key: 'reason',
+        label: 'Reason',
+        multi: false,
+        options: this.ReasonList.map(item => ({
+          Ref: item.Ref,
+          Name: item.Name,
+        })),
+        selected: this.selectedFilterValues['reason'] > 0 ? this.selectedFilterValues['reason'] : null,
+      },
+      {
+        key: 'modeOfPayment',
+        label: 'Mode of Payment',
+        multi: false,
+        options: this.ModeofPaymentList.map(item => ({
+          Ref: item.Ref,
+          Name: item.Name,
+        })),
+        selected: this.selectedFilterValues['modeOfPayment'] > 0 ? this.selectedFilterValues['modeOfPayment'] : null,
+      }
+    ];
+  }
+
+  async onFiltersChanged(updatedFilters: any[]) {
+    // debugger
+    console.log('Updated Filters:', updatedFilters);
+
+    for (const filter of updatedFilters) {
+      const selected = filter.selected;
+      const selectedValue = (selected === null || selected === undefined) ? null : selected;
+
+      // Save selected value to preserve after reload
+      this.selectedFilterValues[filter.key] = selectedValue ?? null;
+
+      switch (filter.key) {
+        case 'site':
+          this.Entity.p.SiteRef = selectedValue ?? 0;
+          break;
+
+        case 'reason':
+          this.Entity.p.Reason = selectedValue ?? 0;
+          break;
+
+        case 'subledger':
+          this.Entity.p.SubLedgerRef = selectedValue ?? 0;
+          break;
+
+        case 'ledger':
+          this.Entity.p.LedgerRef = selectedValue ?? 0;
+          if (selectedValue != null) await this.getSubLedgerListByLedgerRef(selectedValue);  // Updates SubLedgerList
+          break;
+
+        case 'modeOfPayment':
+          this.Entity.p.ExpenseModeOfPayment = selectedValue ?? 0;
+          break;
+      }
+    }
+    this.loadFilters(); // Reload filters with updated options & preserve selections
+  }
+
 
   private async loadExpenseIfEmployeeExists() {
     try {
@@ -70,6 +178,8 @@ export class ExpensesViewMobileAppComponent implements OnInit {
         return;
       }
       await this.getExpenseListByCompanyRef();
+      await this.getSiteListByCompanyRef();
+      await this.getLedgerListByCompanyRef();
     } catch (error) {
       console.error('Error in loadExpenseIfEmployeeExists:', error);
       await this.toastService.present('Failed to load Expense', 1000, 'danger');
@@ -77,6 +187,50 @@ export class ExpensesViewMobileAppComponent implements OnInit {
     } finally {
       await this.loadingService.hide();
     }
+  }
+
+  getSiteListByCompanyRef = async () => {
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    const lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.SiteList = lst;
+    this.loadFilters();
+  }
+
+  getLedgerListByCompanyRef = async () => {
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    const lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.LedgerList = lst;
+    this.loadFilters();
+  };
+
+  getSubLedgerListByLedgerRef = async (ledgerref: number) => {
+    console.log('ledgerref :', ledgerref);
+
+    if (ledgerref <= 0) {
+      await this.toastService.present('Ledger not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    const lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => {
+      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.SubLedgerList = lst;
+    this.loadFilters();
   }
 
   getExpenseListByCompanyRef = async () => {

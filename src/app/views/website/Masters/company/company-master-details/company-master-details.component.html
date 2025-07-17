@@ -27,7 +27,7 @@
             (blur)="NameCtrl.control.markAsTouched()" />
           <div *ngIf="(NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty))">
             <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{NameWithNosAndSpaceMsg}}</span>
-            <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <!-- <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span> -->
           </div>
         </div>
         <div class="col-md-4 col-6">
@@ -37,7 +37,7 @@
             (blur)="ContactsCtrl.control.markAsTouched()" />
           <div *ngIf="(ContactsCtrl.invalid && (ContactsCtrl.touched || ContactsCtrl.dirty))">
             <span class="validation-text" *ngIf="ContactsCtrl.errors?.['pattern']">{{INDPhoneNoMsg}}</span>
-            <span class="validation-text" *ngIf="ContactsCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <!-- <span class="validation-text" *ngIf="ContactsCtrl.errors?.['required']">{{RequiredFieldMsg}}</span> -->
           </div>
         </div>
         <div class="col-md-4 col-6">
@@ -47,7 +47,7 @@
             (blur)="EmailIdCtrl.control.markAsTouched()" />
           <div *ngIf="(EmailIdCtrl.invalid && (EmailIdCtrl.touched || EmailIdCtrl.dirty))">
             <span class="validation-text" *ngIf="EmailIdCtrl.errors?.['pattern']">{{EmailMsg}}</span>
-            <span class="validation-text" *ngIf="EmailIdCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <!-- <span class="validation-text" *ngIf="EmailIdCtrl.errors?.['required']">{{RequiredFieldMsg}}</span> -->
           </div>
         </div>
         <div class="col-md-4 col-6">
@@ -66,17 +66,17 @@
             (blur)="OwnerNameCtrl.control.markAsTouched()" />
           <div *ngIf="(OwnerNameCtrl.invalid && (OwnerNameCtrl.touched || OwnerNameCtrl.dirty))">
             <span class="validation-text" *ngIf="OwnerNameCtrl.errors?.['pattern']">{{NameWithNosAndSpaceMsg}}</span>
-            <span class="validation-text" *ngIf="OwnerNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <!-- <span class="validation-text" *ngIf="OwnerNameCtrl.errors?.['required']">{{RequiredFieldMsg}}</span> -->
           </div>
         </div>
         <div class="col-md-4 col-6">
           <label>Pin Code</label>
           <input type="text" [(ngModel)]="Entity.p.PinCode" name="PinCode" class="form-control" id="PinCode"
-            placeholder="Enter Pin Code" pattern="{{PinCode}}" #PinCodeCtrl="ngModel" required
+            placeholder="Enter Pin Code" pattern="{{PinCode}}" #PinCodeCtrl="ngModel"
             (blur)="PinCodeCtrl.control.markAsTouched()" />
           <div *ngIf="(PinCodeCtrl.invalid && (PinCodeCtrl.touched || PinCodeCtrl.dirty))">
             <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['pattern']">{{PinCodeMsg}}</span>
-            <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <!-- <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['required']">{{RequiredFieldMsg}}</span> -->
           </div>
         </div>
         <div class="col-6">
@@ -85,7 +85,7 @@
             id="AddressLine1" placeholder="Enter Address Line 1" #AddressLine1Ctrl="ngModel" required
             (blur)="AddressLine1Ctrl.control.markAsTouched()" />
           <div *ngIf="(AddressLine1Ctrl.invalid && (AddressLine1Ctrl.touched || AddressLine1Ctrl.dirty))">
-            <span class="validation-text" *ngIf="AddressLine1Ctrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <!-- <span class="validation-text" *ngIf="AddressLine1Ctrl.errors?.['required']">{{RequiredFieldMsg}}</span> -->
           </div>
         </div>
         <div class="col-6">
@@ -120,11 +120,11 @@
         <div class="col-md-4 col-6">
           <label for="GSTIN">GSTIN</label>
           <input type="text" [(ngModel)]="Entity.p.GSTIN" name="GSTIN" class="form-control" id="GSTIN"
-            placeholder="Enter GSTIN" pattern="{{GSTIN}}" #GSTINCtrl="ngModel" required
+            placeholder="Enter GSTIN" pattern="{{GSTIN}}" #GSTINCtrl="ngModel"
             (blur)="GSTINCtrl.control.markAsTouched()" />
           <div *ngIf="(GSTINCtrl.invalid && (GSTINCtrl.touched || GSTINCtrl.dirty))">
             <span class="validation-text" *ngIf="GSTINCtrl.errors?.['pattern']">{{GSTINMsg}}</span>
-            <span class="validation-text" *ngIf="GSTINCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <!-- <span class="validation-text" *ngIf="GSTINCtrl.errors?.['required']">{{RequiredFieldMsg}}</span> -->
           </div>
         </div>
         <div class="col-md-4 col-6">
@@ -133,7 +133,7 @@
             pattern="{{PAN}}" #PanCtrl="ngModel" required (blur)="PanCtrl.control.markAsTouched()" />
           <div *ngIf="(PanCtrl.invalid && (PanCtrl.touched || PanCtrl.dirty))">
             <span class="validation-text" *ngIf="PanCtrl.errors?.['pattern']">{{PANMsg}}</span>
-            <span class="validation-text" *ngIf="PanCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <!-- <span class="validation-text" *ngIf="PanCtrl.errors?.['required']">{{RequiredFieldMsg}}</span> -->
           </div>
         </div>
 
@@ -150,8 +150,7 @@
               #DateOfInCorporationCtrl="ngModel" (blur)="DateOfInCorporationCtrl.control.markAsTouched()" />
             <div
               *ngIf="(DateOfInCorporationCtrl.invalid && (DateOfInCorporationCtrl.touched || DateOfInCorporationCtrl.dirty))">
-              <span class="validation-text"
-                *ngIf="DateOfInCorporationCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              <!-- <span class="validation-text" *ngIf="DateOfInCorporationCtrl.errors?.['required']">{{RequiredFieldMsg}}</span> -->
             </div>
           </div>
           <div class="col-md-12">
@@ -162,8 +161,7 @@
               (blur)="LastDateOfFirstFinancialYearCtrl.control.markAsTouched()" />
             <div
               *ngIf="(LastDateOfFirstFinancialYearCtrl.invalid && (LastDateOfFirstFinancialYearCtrl.touched || LastDateOfFirstFinancialYearCtrl.dirty))">
-              <span class="validation-text"
-                *ngIf="LastDateOfFirstFinancialYearCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+              <!-- <span class="validation-text" *ngIf="LastDateOfFirstFinancialYearCtrl.errors?.['required']">{{RequiredFieldMsg}}</span> -->
             </div>
           </div>
         </div>

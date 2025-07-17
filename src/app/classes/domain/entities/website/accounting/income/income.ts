@@ -225,6 +225,25 @@ export class Income implements IPersistable<Income> {
     return Income.ListFromTransportData(tdResponse);
   }
 
+  public static async FetchEntireListByFilters(SiteRef: number, LedgerRef: number, SubLedgerRef: number,ModeOfPayment:number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new IncomeFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+      if (LedgerRef) {
+        req.LedgerRefs.push(LedgerRef)
+      }
+      if (SubLedgerRef) {
+         req.SubLedgerRefs.push(SubLedgerRef)
+      }
+      if (SiteRef) {
+         req.SiteRefs.push(SiteRef)
+      }
+      if (ModeOfPayment) {
+         req.ModeOfPayments.push(ModeOfPayment)
+      }
+    let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
+    return Income.ListFromTransportData(tdResponse);
+  }
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

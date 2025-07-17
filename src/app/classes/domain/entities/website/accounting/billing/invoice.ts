@@ -239,15 +239,15 @@ export class Invoice implements IPersistable<Invoice> {
 
      public static async FetchEntireListByFilters(SiteRef:number, LedgerRef:number,SubLedgerRef:number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
       let req = new InvoiceFetchRequest();
-      req.CompanyRef = CompanyRef
+      req.CompanyRefs.push(CompanyRef)
       if (LedgerRef) {
-        req.LedgerRef = LedgerRef
+        req.LedgerRefs.push(LedgerRef)
       }
       if (SubLedgerRef) {
-        req.SubLedgerRef = SubLedgerRef
+         req.SubLedgerRefs.push(SubLedgerRef)
       }
       if (SiteRef) {
-        req.SiteRef = SiteRef
+         req.SiteRefs.push(SiteRef)
       }
       let tdResponse = await Invoice.FetchTransportData(req, errorHandler) as TransportData;
       return Invoice.ListFromTransportData(tdResponse);

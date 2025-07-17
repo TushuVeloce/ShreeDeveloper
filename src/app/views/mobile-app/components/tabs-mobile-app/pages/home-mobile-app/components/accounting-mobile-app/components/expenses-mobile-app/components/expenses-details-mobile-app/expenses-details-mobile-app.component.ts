@@ -50,6 +50,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   Bill = ModeOfPayments.Bill
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
   RecipientTypesList = DomainEnums.RecipientTypesList();
+  payerTypeRecipient = RecipientTypes.Recipient;
   Employee = RecipientTypes.Employee;
   Sites = RecipientTypes.Sites;
   Date: string = '';

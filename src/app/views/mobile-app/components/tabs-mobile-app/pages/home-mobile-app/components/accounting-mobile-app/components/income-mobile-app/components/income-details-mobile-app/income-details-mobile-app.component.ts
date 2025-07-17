@@ -52,6 +52,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
   PayerTypesList = DomainEnums.PayerTypesList();
   DealDoneCustomer = PayerTypes.DealDoneCustomer;
+  payerTypeRecipient = PayerTypes.Payers
 
   Date: string = '';
 

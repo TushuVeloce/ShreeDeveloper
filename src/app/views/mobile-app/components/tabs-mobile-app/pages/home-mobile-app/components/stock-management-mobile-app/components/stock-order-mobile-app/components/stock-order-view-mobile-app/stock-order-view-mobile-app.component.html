@@ -1,7 +1,8 @@
 <app-header-with-back-handler title="Stock Order"
   backRoute="mobile-app/tabs/dashboard/stock-management"></app-header-with-back-handler>
-
-<ion-content [fullscreen]="true" class="ion-padding">
+<app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
+</app-chip-filter-mobile-app>
+<ion-content class="ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
