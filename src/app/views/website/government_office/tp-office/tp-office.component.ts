@@ -152,21 +152,21 @@ export class TpOfficeComponent implements OnInit {
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
-    // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
-    // if (!tr.Successful) {
-    //   this.isSaveDisabled = false;
-    //   this.uiUtils.showErrorMessage('Error', tr.Message);
-    //   return;
-    // } else {
-    //   this.isSaveDisabled = false;
-    //   if (this.IsNewEntity) {
-    //     await this.uiUtils.showSuccessToster('TPOffice saved successfully');
-    //     this.Entity = TPOffice.CreateNewInstance();
-    //   } else {
-    //     await this.uiUtils.showSuccessToster('TPOffice Updated successfully');
-    //     await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
-    //   }
-    // }
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
+    } else {
+      this.isSaveDisabled = false;
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('T.P. Office saved successfully');
+        this.Entity = TPOffice.CreateNewInstance();
+      } else {
+        await this.uiUtils.showSuccessToster('T.P. Office Updated successfully');
+        await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
+      }
+    }
   };
 
   BackProgressReport = async () => {
