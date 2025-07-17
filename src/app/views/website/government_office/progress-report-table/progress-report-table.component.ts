@@ -68,7 +68,9 @@ export class ProgressReportTableComponent implements OnInit {
   };
 
   onTPOfficeClicked = async () => {
-    await this.router.navigate(['/homepage/Website/TP_Office']);
+    await this.router.navigate(['/homepage/Website/TP_Office'], {
+      state: { SiteRef: this.SiteRef }
+    });
   };
 
   onNaLetterClicked = async () => {

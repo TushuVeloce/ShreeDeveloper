@@ -17,6 +17,9 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class TpOfficeComponent implements OnInit {
 
+  SiteRef: number = 0;
+  SiteName: string = '';
+
   constructor(
     private router: Router,
     private baseUrl: BaseUrlService,
@@ -29,7 +32,6 @@ export class TpOfficeComponent implements OnInit {
   ) { }
 
   Entity: TPOffice = TPOffice.CreateNewInstance();
-  private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   IsDropdownDisabled: boolean = false;
   InitialEntity: TPOffice = null as any;
@@ -37,16 +39,13 @@ export class TpOfficeComponent implements OnInit {
 
 
   async ngOnInit() {
-    this.appStateManage.setDropdownDisabled(true);
-    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-      this.IsNewEntity = false;
-      this.Entity = TPOffice.GetCurrentInstance();
-      this.appStateManage.StorageKey.removeItem('Editable');
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    } else {
-      this.Entity = TPOffice.CreateNewInstance();
-      TPOffice.SetCurrentInstance(this.Entity);
-    }
+
+    this.SiteRef = history.state.SiteRef;
+    console.log('history.state.SiteRef :', history.state.SiteRef);
+    console.log('this.SiteRef :', this.SiteRef);
+
+    this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+
     this.InitialEntity = Object.assign(TPOffice.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as TPOffice;
   }
 
@@ -159,13 +158,8 @@ export class TpOfficeComponent implements OnInit {
       return;
     } else {
       this.isSaveDisabled = false;
-      if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('T.P. Office saved successfully');
-        this.Entity = TPOffice.CreateNewInstance();
-      } else {
-        await this.uiUtils.showSuccessToster('T.P. Office Updated successfully');
-        await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
-      }
+      await this.uiUtils.showSuccessToster('T.P. Office Updated successfully');
+      await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
     }
   };
 
