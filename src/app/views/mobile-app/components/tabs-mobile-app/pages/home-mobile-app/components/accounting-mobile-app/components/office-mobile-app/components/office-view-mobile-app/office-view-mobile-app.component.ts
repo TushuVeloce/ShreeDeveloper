@@ -204,11 +204,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
       await this.haptic.warning();
       return;
     }
-<<<<<<< Updated upstream
-    let lst = await AccountingReport.FetchEntireListByStartDateandEndDate(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport, this.Entity.p.SiteRef, this.Entity.p.ModeOfPaymentName, this.companyRef, async errMsg => {
-=======
     let lst = await AccountingReport.FetchEntireListByFilters(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport,this.Entity.p.SiteRef,this.Entity.p.ModeOfPayment, this.companyRef, async errMsg => {
->>>>>>> Stashed changes
       await this.toastService.present('Error' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
