@@ -147,6 +147,13 @@ import { OpeningBalanceDetailsComponent } from './Masters/opening_balance/openin
 import { AuthGuard } from 'src/app/services/auth-guard.service';
 import { OwnerMasterComponent } from './Masters/owner/owner-master/owner-master.component';
 import { OwnerMasterDetailsComponent } from './Masters/owner/owner-master-details/owner-master-details.component';
+import { ProgressReportTableComponent } from './government_office/progress-report-table/progress-report-table.component';
+import { TpOfficeComponent } from './government_office/tp-office/tp-office.component';
+import { KJaPaComponent } from './government_office/k-ja-pa/k-ja-pa.component';
+import { MojaniComponent } from './government_office/mojani/mojani.component';
+import { NaLetterComponent } from './government_office/na-letter/na-letter.component';
+import { UlcComponent } from './government_office/ulc/ulc.component';
+import { FinalLayoutComponent } from './government_office/final-layout/final-layout.component';
 
 
 const routes: Routes = [
@@ -356,7 +363,14 @@ const routes: Routes = [
       { path: 'Document', component: DocumentListComponent },
       { path: 'Document_Details', component: DocumentDetailsComponent },
 
-      { path: 'Site_Progress_Report', component: GovernmentTransactionMasterComponent },
+      { path: 'Site_Progress_Report', component: ProgressReportTableComponent },
+      { path: 'TP_Office', component: TpOfficeComponent },
+      { path: 'NA_Letter', component: NaLetterComponent },
+      { path: 'Mojani', component: MojaniComponent },
+      { path: 'ULC', component: UlcComponent },
+      { path: 'Final_Layout', component: FinalLayoutComponent },
+      { path: 'K_JA_PA', component: KJaPaComponent },
+
       { path: 'Site_Progress_Report_Details', component: GovernmentTransactionDetailsComponent },
       { path: 'Respected_child', component: RespectedChildComponentComponent },
 

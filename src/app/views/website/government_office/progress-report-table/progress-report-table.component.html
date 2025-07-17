@@ -1,0 +1,88 @@
+<div>
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12 mb-2">
+      <h5 style="padding-top: 3px;" class="title title_light">Progress Report</h5>
+    </div>
+  </div>
+  <ng-template #noDataTpl>
+    <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+      No Data
+    </div>
+  </ng-template>
+  <div class="row" style="margin-top: 1rem; ">
+    <div class="col-md-4">
+      <div>
+        <label for="SiteRef"><b>Site</b></label>
+        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+          nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" [(ngModel)]="SiteRef" required id="SiteRef">
+          <nz-option nzLabel="All" [nzValue]="0"></nz-option>
+          <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+      <div class="table-container">
+        <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
+          [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+          <thead>
+            <tr>
+              <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let gov of paginatedList(); index as i">
+              <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+              <td Class="tbldata">Site</td>
+              <td class="tbldata">
+                <span class="status" [ngClass]="false ? 'completed' : 'pending' " (click)='onTPOfficeClicked()'>
+                  {{ false ? "Completed" : "Pending" }}
+                </span>
+              </td>
+              <td class="tbldata">
+                <span class="status" [ngClass]="false ? 'completed' : 'pending' " (click)='onNaLetterClicked()'>
+                  {{ false ? "Completed" : "Pending" }}
+                </span>
+              </td>
+              <td class="tbldata">
+                <span class="status" [ngClass]="false ? 'completed' : 'pending' " (click)='onMojaniClicked()'>
+                  {{ false ? "Completed" : "Pending" }}
+                </span>
+              </td>
+              <td class="tbldata">
+                <span class="status" [ngClass]="false ? 'completed' : 'pending' " (click)='onULCClicked()'>
+                  {{ false ? "Completed" : "Pending" }}
+                </span>
+              </td>
+              <td class="tbldata">
+                <span class="status" [ngClass]="false ? 'completed' : 'pending' " (click)='onFinalLayoutClicked()'>
+                  {{ false ? "Completed" : "Pending" }}
+                </span>
+              </td>
+              <td class="tbldata">
+                <span class="status" [ngClass]="false ? 'completed' : 'pending' " (click)='onK_JA_PA_Clicked()'>
+                  {{ false ? "Completed" : "Pending" }}
+                </span>
+              </td>
+              <!-- <td class="tbldata">
+                <Edit-Icon (editClick)="onEditClicked(gov)" />
+                <Delete-Icon (deleteClicked)="onDeleteClicked(gov)" />
+              </td> -->
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+      <div class="fixed-pagination">
+        <nz-pagination class="try light-theme" [nzPageSize]="pageSize" [nzTotal]="total" [(nzPageIndex)]="currentPage"
+          (nzPageIndexChange)="onPageChange($event)" [nzShowSizeChanger]="false" [nzResponsive]="true">
+        </nz-pagination>
+      </div>
+    </div>
+
+    <div *ngIf="DisplayMasterList.length === 0">
+      <Data-Not-Found />
+    </div>
+  </div>
+</div>
