@@ -48,6 +48,7 @@ export class ExpenseDetailsComponent implements OnInit {
   Bill = ModeOfPayments.Bill
   RecipientType = RecipientTypes.Recipient
   SiteType = RecipientTypes.Sites
+  EmployeeType = RecipientTypes.Employee
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
   RecipientTypesList = DomainEnums.RecipientTypesList();
   Employee = RecipientTypes.Employee;
@@ -257,6 +258,9 @@ export class ExpenseDetailsComponent implements OnInit {
     } else {
       this.Entity.p.ShreesBalance = -Number((this.Entity.p.GivenAmount - this.ShreeBalance).toFixed(2));
     }
+    if(this.Entity.p.IsAdvancePayment){
+      this.Entity.p.TotalAdvance = this.Entity.p.RemainingAdvance + this.Entity.p.GivenAmount
+    }
   }
 
   AddRecipientName = () => {
@@ -337,6 +341,8 @@ export class ExpenseDetailsComponent implements OnInit {
     }else{
       await this.getTotalInvoiceAmountFromSiteAndRecipientRef()
     }
+    this.Entity.p.GivenAmount = 0
+    this.Entity.p.TotalAdvance = 0
   }
 
 

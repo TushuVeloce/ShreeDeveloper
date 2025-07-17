@@ -54,6 +54,7 @@ export class ExpenseProps {
   public RemainingAdvance: number = 0
 
   public GivenAmount: number = 0
+  public TotalAdvance: number = 0
   public RemainingAmount: number = 0
   public ShreesBalance: number = 0
   public ExpenseModeOfPayment: number = 0

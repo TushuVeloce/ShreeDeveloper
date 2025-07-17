@@ -386,7 +386,7 @@ export class AttendanceDetailsComponent implements OnInit {
     this.editingIndex = null;
     this.Entity.p.FirstCheckInTime = this.Entity.p.AttendanceLogDetailsArray[0].CheckInTime;
     this.Entity.p.LastCheckOutTime = this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].CheckOutTime;
-    this.IsLateMarkChange();
+    await this.IsLateMarkChange();
   }
 
   BackAttendence = async () => {
