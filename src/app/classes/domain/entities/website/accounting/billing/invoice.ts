@@ -237,7 +237,7 @@ export class Invoice implements IPersistable<Invoice> {
     return Invoice.ListFromTransportData(tdResponse);
   }
 
-     public static async FetchEntireListByFilters(SiteRef:number, LedgerRef:number,SubLedgerRef:number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+     public static async FetchEntireListByFilters(SiteRef:number, LedgerRef:number,SubLedgerRef:number,Ref:number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
       let req = new InvoiceFetchRequest();
       req.CompanyRefs.push(CompanyRef)
       if (LedgerRef) {
@@ -248,6 +248,9 @@ export class Invoice implements IPersistable<Invoice> {
       }
       if (SiteRef) {
          req.SiteRefs.push(SiteRef)
+      }
+      if (Ref) {
+         req.Refs.push(Ref)
       }
       let tdResponse = await Invoice.FetchTransportData(req, errorHandler) as TransportData;
       return Invoice.ListFromTransportData(tdResponse);

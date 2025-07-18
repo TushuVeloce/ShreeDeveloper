@@ -19,6 +19,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 })
 export class ExpenseComponent implements OnInit {
   Entity: Expense = Expense.CreateNewInstance();
+  AllList: Expense[] = [];
   MasterList: Expense[] = [];
   DisplayMasterList: Expense[] = [];
   SiteList: Site[] = [];
@@ -46,10 +47,12 @@ export class ExpenseComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
-      await this.getExpenseListByCompanyRef();
+      this.Entity.p.ExpenseModeOfPayment = 0
+      this.Entity.p.Ref = 0
       await this.getSiteListByCompanyRef();
       await this.getLedgerListByCompanyRef();
-      // await this.FetchEntireListByFilters();
+      await this.getExpenseListByCompanyRef();
+      await this.FetchEntireListByFilters();
     });
   }
 
@@ -71,6 +74,8 @@ export class ExpenseComponent implements OnInit {
   }
 
   getLedgerListByCompanyRef = async () => {
+    this.Entity.p.LedgerRef = 0
+    this.Entity.p.SubLedgerRef = 0
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -98,7 +103,8 @@ export class ExpenseComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Expense.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.ExpenseModeOfPayment, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Expense.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.ExpenseModeOfPayment,this.Entity.p.Ref,  this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.AllList = lst.filter((item)=>item.p.Reason != '');
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -112,7 +118,7 @@ export class ExpenseComponent implements OnInit {
       return;
     }
     let lst = await Expense.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
+    this.AllList = lst;
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -140,8 +146,8 @@ export class ExpenseComponent implements OnInit {
           await this.uiUtils.showSuccessToster(
             `Expense ${Expense.p.SubLedgerRef} has been deleted!`
           );
-          await this.getExpenseListByCompanyRef();
-          // await this.FetchEntireListByFilters();
+          // await this.getExpenseListByCompanyRef();
+          await this.FetchEntireListByFilters();
           this.SearchString = '';
           this.loadPaginationData();
         });

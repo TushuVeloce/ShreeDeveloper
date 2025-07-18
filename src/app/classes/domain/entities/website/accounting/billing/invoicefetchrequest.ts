@@ -14,6 +14,7 @@ export class InvoiceFetchRequest
     SiteRefs: number[] = [];
     LedgerRefs: number[] = [];
     SubLedgerRefs: number[] = [];
+    Refs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) =>
     {

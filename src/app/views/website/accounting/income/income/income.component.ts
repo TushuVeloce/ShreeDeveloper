@@ -20,6 +20,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 export class IncomeComponent implements OnInit {
   Entity: Income = Income.CreateNewInstance();
   MasterList: Income[] = [];
+  AllList: Income[] = [];
   DisplayMasterList: Income[] = [];
   SiteList: Site[] = [];
   LedgerList: Ledger[] = [];
@@ -46,10 +47,12 @@ export class IncomeComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
-      await this.getIncomeListByCompanyRef();
+       this.Entity.p.IncomeModeOfPayment = 0
+      this.Entity.p.Ref = 0
       await this.getSiteListByCompanyRef();
       await this.getLedgerListByCompanyRef();
-      // await this.FetchEntireListByFilters();
+      await this.getIncomeListByCompanyRef();
+      await this.FetchEntireListByFilters();
     });
   }
 
@@ -71,6 +74,8 @@ export class IncomeComponent implements OnInit {
   }
 
   getLedgerListByCompanyRef = async () => {
+     this.Entity.p.LedgerRef = 0
+    this.Entity.p.SubLedgerRef = 0
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -98,7 +103,9 @@ export class IncomeComponent implements OnInit {
         await this.uiUtils.showErrorToster('Company not Selected');
         return;
       }
-      let lst = await Income.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.IncomeModeOfPayment, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      console.log('this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.IncomeModeOfPayment,this.Entity.p.Ref,  :', this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.IncomeModeOfPayment,this.Entity.p.Ref, );
+      let lst = await Income.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.IncomeModeOfPayment,this.Entity.p.Ref,  this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      this.AllList = lst.filter((item)=>item.p.Reason != '');
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
       this.loadPaginationData();
@@ -112,7 +119,7 @@ export class IncomeComponent implements OnInit {
       return;
     }
     let lst = await Income.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
+    this.AllList = lst;
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -140,7 +147,7 @@ export class IncomeComponent implements OnInit {
           await this.uiUtils.showSuccessToster(
             `Income ${Income.p.SubLedgerRef} has been deleted!`
           );
-          await this.getIncomeListByCompanyRef();
+          await this.FetchEntireListByFilters();
           this.SearchString = '';
           this.loadPaginationData();
         });

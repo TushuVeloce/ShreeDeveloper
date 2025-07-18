@@ -7,21 +7,19 @@
         </button>
       </div>
       <div class="col-md-11">
-        <span class="detail_title">{{DetailsFormTitle}}</span>
+        <span class="detail_title">{{ DetailsFormTitle }}</span>
       </div>
     </div>
     <ng-template #noDataTpl>
-      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
-        No Data
-      </div>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
     </ng-template>
     <form autocomplete="off">
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Employee Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" [nzSize]="'large'" name="EmployeeRef" required id="EmployeeRef"
-            [(ngModel)]="Entity.p.EmployeeRef" (ngModelChange)="EmployeeData(Entity.p.EmployeeRef,Entity.p.Month)"
+            [(ngModel)]="Entity.p.EmployeeRef" (ngModelChange)="EmployeeData(Entity.p.EmployeeRef, Entity.p.Month)"
             [disabled]="isEmployeeDisabled">
             <nz-option *ngFor="let employee of EmployeeList" [nzValue]="employee.p.Ref"
               [nzLabel]="employee.p.Name"></nz-option>
@@ -31,7 +29,7 @@
           <label>Month</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" [nzSize]="'large'" name="Month" required id="Month" [(ngModel)]="Entity.p.Month"
-            (ngModelChange)="EmployeeData(Entity.p.EmployeeRef,Entity.p.Month)">
+            (ngModelChange)="EmployeeData(Entity.p.EmployeeRef, Entity.p.Month)">
             <nz-option *ngFor="let month of MonthList" [nzValue]="month.Ref" [nzLabel]="month.Name"></nz-option>
           </nz-select>
         </div>
@@ -41,7 +39,7 @@
             placeholder="Enter TotalDays" readonly />
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Official Working Days</label>
           <input type="number" name="TotalWorkingDays" class="form-control" id="TotalWorkingDays"
@@ -58,7 +56,7 @@
             [(ngModel)]="Entity.p.DisplayTotalOverTimeHrs" placeholder="Total Over Time Hours" required readonly />
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Total Working Hours</label>
           <input type="text" name="DisplayTotalWorkingHrs" class="form-control" id="DisplayTotalWorkingHrs"
@@ -75,8 +73,14 @@
             [(ngModel)]="Entity.p.DisplayOverAllWorkingHrs" placeholder="Overall Working Hours" required readonly />
         </div>
       </div>
-      <div class="row" style="margin-top: 1rem; ">
+      <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
+          <label>OverTime Hours Rate</label>
+          <input type="text" name="OverTimeHrsRate" class="form-control" id="OverTimeHrsRate"
+            [(ngModel)]="Entity.p.OverTimeHrsRate" placeholder="OverTime Hours Rate"
+            (ngModelChange)="calculategrosstotal()" (click)="selectAllValue($event)"/>
+        </div>
+         <div class="col-md-4">
           <label>Basic Salary</label>
           <input type="number" name="BasicSalary" class="form-control" id="BasicSalary"
             [(ngModel)]="Entity.p.BasicSalary" placeholder="Basic Salary" required readonly
@@ -88,15 +92,15 @@
             [(ngModel)]="Entity.p.TotalAllowance" placeholder="Enter Total Allowance" required
             (click)="selectAllValue($event)" (ngModelChange)="calculategrosstotal()" />
         </div>
+      </div>
+      <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Total Incentive</label>
           <input type="number" name="TotalIncentive" class="form-control" id="TotalIncentive"
             [(ngModel)]="Entity.p.TotalIncentive" placeholder="Enter Total Incentive" required
             (click)="selectAllValue($event)" (ngModelChange)="calculategrosstotal()" />
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem; ">
-        <div class="col-md-4">
+             <div class="col-md-4">
           <label>Other</label>
           <input type="number" name="Other" class="form-control" id="Other" [(ngModel)]="Entity.p.Other"
             placeholder="Enter Other" required (click)="selectAllValue($event)"
@@ -108,52 +112,69 @@
             placeholder="Enter Gross Total" readonly />
         </div>
       </div>
-      <div style="width: 100%" class="d-flex justify-content-center" style="margin-top: 1rem;">
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-4" style="margin-top: 1rem">
+          <div class="d-flex align-items-center mb-2">
+            <label for="IsOverTimeVerified"><b>Over Time Verified</b></label>
+            <input type="checkbox" id="IsOverTimeVerified" [(ngModel)]="Entity.p.IsOverTimeVerified"
+              name="IsOverTimeVerified" class="form-check-input me-4 mb-2 large-dark-checkbox"
+              style="width: 20px; height: 20px; margin-left: 1rem" />
+          </div>
+        </div>
+      </div>
+      <div style="width: 100%" class="d-flex justify-content-center" style="margin-top: 1rem">
         <hr style="border: 2px solid brown" width="20%" />
       </div>
       <div class="row">
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <label>TDS</label>
           <input type="number" name="TDS" class="form-control" id="TDS" [(ngModel)]="Entity.p.TDS"
             placeholder="Enter TDS" required (click)="selectAllValue($event)"
             (ngModelChange)="calculatetotaldeduction()" />
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <label>PF</label>
           <input type="number" name="PF" class="form-control" id="PF" [(ngModel)]="Entity.p.PF" placeholder="Enter PF"
             required (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()" />
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <label>Total Leave Deduction</label>
           <input type="number" name="TotalLeaveDeduction" class="form-control" id="TotalLeaveDeduction"
             [(ngModel)]="Entity.p.TotalLeaveDeduction" placeholder="Enter Total Leave Deduction" required
             (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()" />
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <label>Advance Payment</label>
           <input type="number" name="AdvancePayment" class="form-control" id="AdvancePayment"
-            [(ngModel)]="Entity.p.AdvancePayment" placeholder=" Advance Payment"  readonly/>
+            [(ngModel)]="Entity.p.AdvancePayment" placeholder=" Advance Payment" readonly />
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <label>Advance Deduction</label>
           <input type="number" name="AdvanceDeduction" class="form-control" id="AdvanceDeduction"
             [(ngModel)]="Entity.p.AdvanceDeduction" placeholder="Enter Advance Deduction" required
             (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()" />
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <label>Total Deduction</label>
           <input type="number" name="TotalDeduction" class="form-control" id="TotalDeduction"
             [(ngModel)]="Entity.p.TotalDeduction" placeholder="Enter Total Deduction" readonly />
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem">
           <label>Net Salary</label>
           <input type="number" name="NetSalary" class="form-control" id="NetSalary" [(ngModel)]="Entity.p.NetSalary"
             placeholder="Enter Net Salary" readonly />
         </div>
       </div>
-      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
         <div>
-          <button type="button" class="btn" (click)="SaveSalaryGeneration()">Save</button>
+          <button type="button" class="btn" (click)="SaveSalaryGeneration()">
+            Save
+          </button>
         </div>
         <div>
           <button type="button" class="btn" (click)="BackSalaryGenaration()">

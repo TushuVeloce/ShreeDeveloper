@@ -16,6 +16,7 @@ export class TotalExpenseFetchRequest {
   LedgerRefs: number[] = [];
   SubLedgerRefs: number[] = [];
   ModeOfPayments: number[] = [];
+  Refs: number[] = [];
 
   ExpenseRefs: number[] = [];
   CompanyRefs: number[] = [];

@@ -14,6 +14,7 @@ export class GetDistinctRecipientNameFetchRequest {
   RecipientType: number = 0;
   LedgerRefs: number[] = [];
   SubLedgerRefs: number[] = [];
+  Refs: number[] = [];
 
   public MergeIntoTransportData = (td: TransportData) => {
     let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, GetDistinctRecipientNameFetchRequest.FetchRequestType) as DataCollection;

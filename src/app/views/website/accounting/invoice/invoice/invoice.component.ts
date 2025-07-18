@@ -18,6 +18,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 })
 export class InvoiceComponent implements OnInit {
   Entity: Invoice = Invoice.CreateNewInstance();
+  AllList: Invoice[] = [];
   MasterList: Invoice[] = [];
   DisplayMasterList: Invoice[] = [];
   SearchString: string = '';
@@ -38,10 +39,11 @@ export class InvoiceComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
   ) {
     effect(async () => {
-      await this.getInvoiceListByCompanyRef();
+      this.Entity.p.Ref = 0
       await this.getSiteListByCompanyRef();
       await this.getLedgerListByCompanyRef();
-      // await this.FetchEntireListByFilters();
+      await this.getInvoiceListByCompanyRef();
+      await this.FetchEntireListByFilters();
     });
   }
 
@@ -62,6 +64,8 @@ export class InvoiceComponent implements OnInit {
   }
 
   getLedgerListByCompanyRef = async () => {
+     this.Entity.p.LedgerRef = 0
+    this.Entity.p.SubLedgerRef = 0
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -89,7 +93,8 @@ export class InvoiceComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Invoice.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Invoice.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.Ref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.AllList = lst.filter((item)=>item.p.Reason != '');
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -103,7 +108,7 @@ export class InvoiceComponent implements OnInit {
       return;
     }
     let lst = await Invoice.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
+    this.AllList = lst;
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -126,8 +131,8 @@ export class InvoiceComponent implements OnInit {
           await this.uiUtils.showSuccessToster(
             `Bill ${Invoice.p.RecipientName} has been deleted!`
           );
-          await this.getInvoiceListByCompanyRef();
-          // await this.FetchEntireListByFilters();
+          // await this.getInvoiceListByCompanyRef();
+          await this.FetchEntireListByFilters();
           this.SearchString = '';
           this.loadPaginationData();
         });

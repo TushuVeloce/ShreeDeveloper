@@ -67,20 +67,20 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   }
 
   calculategrosstotal = () => {
-    const GrossTotal = Math.ceil(this.Entity.p.BasicSalary + this.Entity.p.TotalAllowance + this.Entity.p.TotalIncentive + this.Entity.p.Other)
-    this.Entity.p.GrossTotal = GrossTotal
+    const GrossTotal = this.Entity.p.BasicSalary + this.Entity.p.TotalAllowance + this.Entity.p.TotalIncentive + this.Entity.p.Other + this.Entity.p.OverTimeHrsRate
+    this.Entity.p.GrossTotal =  parseFloat(GrossTotal.toFixed(2));
     this.calculatenetsalary()
   }
 
   calculatetotaldeduction = () => {
-    const TotalDeduction = Math.ceil(this.Entity.p.TDS + this.Entity.p.PF + this.Entity.p.TotalLeaveDeduction  + this.Entity.p.AdvanceDeduction)
-    this.Entity.p.TotalDeduction = TotalDeduction
+    const TotalDeduction = this.Entity.p.TDS + this.Entity.p.PF + this.Entity.p.TotalLeaveDeduction + this.Entity.p.AdvanceDeduction
+    this.Entity.p.TotalDeduction = parseFloat(TotalDeduction.toFixed(2));
     this.calculatenetsalary()
   }
 
   calculatenetsalary = () => {
-    const NetSalary = Math.ceil(this.Entity.p.GrossTotal - this.Entity.p.TotalDeduction)
-    this.Entity.p.NetSalary = NetSalary
+    const NetSalary = this.Entity.p.GrossTotal - this.Entity.p.TotalDeduction
+    this.Entity.p.NetSalary =  parseFloat(NetSalary.toFixed(2));
   }
 
   selectAllValue(event: MouseEvent): void {
@@ -137,7 +137,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     } else {
       this.Entity.p.TotalDays = 0;
     }
-      this.Entity.p.TotalWorkingDays = 0
+    this.Entity.p.TotalWorkingDays = 0
     this.Entity.p.TotalLeaves = 0
     this.Entity.p.TotalOverTimeHrs = 0
     this.Entity.p.TotalWorkingHrs = 0
@@ -148,7 +148,8 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     if (employee === 0 || month === 0) {
       return;
     }
-    let lst = await SalaryGeneration.FetchEmployeeDataByEmployeeRefandMonth(this.companyRef(),employee,month, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await SalaryGeneration.FetchEmployeeDataByEmployeeRefandMonth(this.companyRef(), employee, month, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.Entity.p.TotalWorkingDays = lst[0]?.p?.TotalWorkingDays || 0
     this.Entity.p.TotalLeaves = lst[0]?.p?.TotalLeaves || 0
     this.Entity.p.TotalOverTimeHrs = lst[0]?.p?.TotalOverTimeHrs || 0
@@ -159,10 +160,12 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     this.Entity.p.DisplayTotalLeavesHrs = lst[0]?.p?.DisplayTotalLeavesHrs || ''
     this.Entity.p.OverallWorkingHrs = lst[0]?.p?.OverallWorkingHrs || 0
     this.Entity.p.DisplayOverAllWorkingHrs = lst[0]?.p?.DisplayOverAllWorkingHrs || ''
+    this.Entity.p.TotalLeaveDeduction = lst[0]?.p?.TotalLeaveDeduction != null? parseFloat(lst[0].p.TotalLeaveDeduction.toFixed(2)): 0; 
+    this.Entity.p.OverTimeHrsRate = lst[0]?.p?.OverTimeHrsRate != null? parseFloat(lst[0].p.OverTimeHrsRate.toFixed(2)): 0; 
     this.Entity.p.BasicSalary = lst[0]?.p?.BasicSalary || 0
     this.Entity.p.AdvancePayment = lst[0]?.p?.AdvancePayment || 0
     await this.calculategrosstotal()
-    // await this.calculatetotaldeduction()
+    await this.calculatetotaldeduction()
   }
 
   SaveSalaryGeneration = async () => {

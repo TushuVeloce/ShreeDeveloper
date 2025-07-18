@@ -15,6 +15,7 @@ export class IncomeFetchRequest {
   LedgerRefs: number[] = [];
   SubLedgerRefs: number[] = [];
   ModeOfPayments: number[] = [];
+  Refs: number[] = [];
 
 
   public MergeIntoTransportData = (td: TransportData) => {

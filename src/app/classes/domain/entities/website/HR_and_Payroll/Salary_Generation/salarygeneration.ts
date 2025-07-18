@@ -50,6 +50,8 @@ export class SalaryGenerationProps {
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
+  public IsOverTimeVerified: number = 0;
+  public OverTimeHrsRate: number = 0;
   public SalarySlipMonthIndicator: string = 'A';
 
   public readonly IsNewlyCreated: boolean = false;
