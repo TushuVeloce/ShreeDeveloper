@@ -63,7 +63,6 @@ export class ProgressReportTableComponent implements OnInit {
       return;
     }
     let lst = await ProgressReport.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.DisplayMasterList = lst;
   }
 

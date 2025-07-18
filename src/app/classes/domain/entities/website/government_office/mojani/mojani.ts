@@ -15,7 +15,7 @@ import { MojaniFetchRequest } from "./mojanifetchrequest";
 
 
 export class MojaniProps {
-  public readonly Db_Table_Name = "GovernmentULC";
+  public readonly Db_Table_Name = "GovernmentMojni";
   public IsNewlyCreated: boolean = false;
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
@@ -56,7 +56,7 @@ export class Mojani implements IPersistable<Mojani> {
 
   public IsComplete: boolean = false;
 
-  public static readonly Db_Table_Name: string = 'GovernmentULC';
+  public static readonly Db_Table_Name: string = 'GovernmentMojni';
 
   private constructor(public readonly p: MojaniProps, public readonly AllowEdit: boolean) {
 
@@ -191,6 +191,14 @@ export class Mojani implements IPersistable<Mojani> {
 
   public static async FetchEntireListBySiteRef(SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MojaniFetchRequest();
+    req.SiteRefs.push(SiteRef)
+    let tdResponse = await Mojani.FetchTransportData(req, errorHandler) as TransportData;
+    return Mojani.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByCompanyAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new MojaniFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
     req.SiteRefs.push(SiteRef)
     let tdResponse = await Mojani.FetchTransportData(req, errorHandler) as TransportData;
     return Mojani.ListFromTransportData(tdResponse);

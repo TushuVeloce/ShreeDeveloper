@@ -221,6 +221,14 @@ export class FinalLayout implements IPersistable<FinalLayout> {
     return FinalLayout.ListFromTransportData(tdResponse);
   }
 
+  public static async FetchEntireListByCompanyAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new FinalLayoutFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    req.SiteRefs.push(SiteRef)
+    let tdResponse = await FinalLayout.FetchTransportData(req, errorHandler) as TransportData;
+    return FinalLayout.ListFromTransportData(tdResponse);
+  }
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

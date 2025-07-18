@@ -19,7 +19,6 @@ export class TpOfficeComponent implements OnInit {
 
   SiteRef: number = 0;
   SiteName: string = '';
-
   Entity: TPOffice = TPOffice.CreateNewInstance();
   isSaveDisabled: boolean = false;
   IsDropdownDisabled: boolean = true;
@@ -45,7 +44,7 @@ export class TpOfficeComponent implements OnInit {
 
     this.getTPOfficeListByCompanyAndSiteRef();
 
-    this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'));
 
     this.InitialEntity = Object.assign(TPOffice.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as TPOffice;
   }
@@ -63,6 +62,33 @@ export class TpOfficeComponent implements OnInit {
     let lst = await TPOffice.FetchEntireListByCompanyAndSiteRef(this.companyRef(), this.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     if (lst.length > 0) {
       this.Entity = lst[0];
+      if (this.Entity.p.TentativeLayoutInwardDate != '') {
+        this.Entity.p.TentativeLayoutInwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.TentativeLayoutInwardDate)
+      }
+
+      if (this.Entity.p.ParishisthaNaUlcInwardDate != '') {
+        this.Entity.p.ParishisthaNaUlcInwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.ParishisthaNaUlcInwardDate)
+      }
+
+      if (this.Entity.p.MojniInwardDate != '') {
+        this.Entity.p.MojniInwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MojniInwardDate)
+      }
+
+      if (this.Entity.p.GramSevakInwardDate != '') {
+        this.Entity.p.GramSevakInwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.GramSevakInwardDate)
+      }
+
+      if (this.Entity.p.ULCInwardDate != '') {
+        this.Entity.p.ULCInwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.ULCInwardDate)
+      }
+
+      if (this.Entity.p.ReportNOCInwardDate != '') {
+        this.Entity.p.ReportNOCInwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.ReportNOCInwardDate)
+      }
+
+      if (this.Entity.p.AirportNOCInwardDate != '') {
+        this.Entity.p.AirportNOCInwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.AirportNOCInwardDate)
+      }
     } else {
       await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
     }
@@ -98,101 +124,20 @@ export class TpOfficeComponent implements OnInit {
 
 
   SaveTPOffice = async () => {
-    // if (!this.Entity.p.IsTentativeLayoutSubmit) {
-    //   await this.uiUtils.showErrorToster('IsTentativeLayoutSubmit not Selected');
-    // }
-    // if (!this.Entity.p.TentativeLayoutInwardNo) {
-    //   await this.uiUtils.showErrorToster('TentativeLayoutInwardNo is empty');
-    // }
-    // if (!this.Entity.p.TentativeLayoutInwardDate) {
-    //   await this.uiUtils.showErrorToster('TentativeLayoutInwardDate is empty');
-    // }
-    // if (!this.Entity.p.IsTentativeLayoutScrutinyFeesSubmit) {
-    //   await this.uiUtils.showErrorToster('IsTentativeLayoutScrutinyFeesSubmit not Selected');
-    // }
-    // if (!this.Entity.p.IsSurveyRemarkSubmit) {
-    //   await this.uiUtils.showErrorToster('IsSurveyRemarkSubmit not Selected');
-    // }
-    // if (!this.Entity.p.IsATPSiteVisitSubmit) {
-    //   await this.uiUtils.showErrorToster('IsATPSiteVisitSubmit not Selected');
-    // }
-    // if (!this.Entity.p.IsADTPSiteVisitSubmit) {
-    //   await this.uiUtils.showErrorToster('IsADTPSiteVisitSubmit not Selected');
-    // }
-    // if (!this.Entity.p.IsDDTPSiteVisitSubmit) {
-    //   await this.uiUtils.showErrorToster('IsDDTPSiteVisitSubmit not Selected');
-    // }
-    // if (!this.Entity.p.IsProposalSanctionSubmit) {
-    //   await this.uiUtils.showErrorToster('IsProposalSanctionSubmit not Selected');
-    // }
-    // if (!this.Entity.p.IsDevelopmentChargesSubmit) {
-    //   await this.uiUtils.showErrorToster('IsDevelopmentChargesSubmit not Selected');
-    // }
-    // if (!this.Entity.p.IsSubmitToTahsildar) {
-    //   await this.uiUtils.showErrorToster('IsSubmitToTahsildar not Selected');
-    // }
-    // if (!this.Entity.p.ParishisthaNaUlcInwardNo) {
-    //   await this.uiUtils.showErrorToster('ParishisthaNaUlcInwardNo is empty');
-    // }
-    // if (!this.Entity.p.ParishisthaNaUlcInwardDate) {
-    //   await this.uiUtils.showErrorToster('ParishisthaNaUlcInwardDate is empty');
-    // }
-    // if (!this.Entity.p.IsSubmitToUpadhaykshaAndBhumiAdhilekh) {
-    //   await this.uiUtils.showErrorToster('IsSubmitToUpadhaykshaAndBhumiAdhilekh not Selected');
-    // }
-    // if (!this.Entity.p.MojniInwardNo) {
-    //   await this.uiUtils.showErrorToster('MojniInwardNo is empty');
-    // }
-    // if (!this.Entity.p.MojniInwardDate) {
-    //   await this.uiUtils.showErrorToster('MojniInwardDate is empty');
-    // }
-    // if (!this.Entity.p.IsGramSevakSubmit) {
-    //   await this.uiUtils.showErrorToster('IsGramSevakSubmit not Selected');
-    // }
-    // if (!this.Entity.p.GramSevakInwardNo) {
-    //   await this.uiUtils.showErrorToster('GramSevakInwardNo is empty');
-    // }
-    // if (!this.Entity.p.GramSevakInwardDate) {
-    //   await this.uiUtils.showErrorToster('GramSevakInwardDate is empty');
-    // }
-    // if (!this.Entity.p.IsULCSubmit) {
-    //   await this.uiUtils.showErrorToster('IsULCSubmit not Selected');
-    // }
-    // if (!this.Entity.p.ULCInwardNo) {
-    //   await this.uiUtils.showErrorToster('ULCInwardNo is empty');
-    // }
-    // if (!this.Entity.p.ULCInwardDate) {
-    //   await this.uiUtils.showErrorToster('ULCInwardDate is empty');
-    // }
-    // if (!this.Entity.p.ReportNOCAirportNOC) {
-    //   await this.uiUtils.showErrorToster('ReportNOCAirportNOC not Selected');
-    // }
-    // if (!this.Entity.p.IsReportNOCSubmit) {
-    //   await this.uiUtils.showErrorToster('IsReportNOCSubmit not Selected');
-    // }
-    // if (!this.Entity.p.ReportNOCInwardNo) {
-    //   await this.uiUtils.showErrorToster('ReportNOCInwardNo is empty');
-    // }
-    // if (!this.Entity.p.ReportNOCInwardDate) {
-    //   await this.uiUtils.showErrorToster('ReportNOCInwardDate is empty');
-    // }
-    // if (!this.Entity.p.IsAirportNOCSubmit) {
-    //   await this.uiUtils.showErrorToster('IsAirportNOCSubmit not Selected');
-    // }
-    // if (!this.Entity.p.AirportNOCInwardNo) {
-    //   await this.uiUtils.showErrorToster('AirportNOCInwardNo is empty');
-    // }
-    // if (!this.Entity.p.AirportNOCInwardDate) {
-    //   await this.uiUtils.showErrorToster('AirportNOCInwardDate is empty');
-    // }
-
-
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     if (this.Entity.p.CreatedBy == 0) {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
+    this.Entity.p.TentativeLayoutInwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.TentativeLayoutInwardDate)
+    this.Entity.p.ParishisthaNaUlcInwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.ParishisthaNaUlcInwardDate)
+    this.Entity.p.MojniInwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.MojniInwardDate)
+    this.Entity.p.GramSevakInwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.GramSevakInwardDate)
+    this.Entity.p.ULCInwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.ULCInwardDate)
+    this.Entity.p.ReportNOCInwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.ReportNOCInwardDate)
+    this.Entity.p.AirportNOCInwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.AirportNOCInwardDate)
+
     this.Entity.p.IsTPOfficeComplete = this.areAllSubmissionsComplete(this.Entity);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];

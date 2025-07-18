@@ -5,7 +5,7 @@ import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class MojaniFetchRequest {
-    public static readonly FetchRequestType: string = "GovernmentMojaniFetchRequest";
+    public static readonly FetchRequestType: string = "GovernmentMojniFetchRequest";
 
     CompanyRefs: number[] = [];
     SiteRefs: number[] = [];

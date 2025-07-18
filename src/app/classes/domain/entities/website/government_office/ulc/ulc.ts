@@ -203,6 +203,14 @@ export class ULC implements IPersistable<ULC> {
     return ULC.ListFromTransportData(tdResponse);
   }
 
+  public static async FetchEntireListByCompanyAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new ULCFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    req.SiteRefs.push(SiteRef)
+    let tdResponse = await ULC.FetchTransportData(req, errorHandler) as TransportData;
+    return ULC.ListFromTransportData(tdResponse);
+  }
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

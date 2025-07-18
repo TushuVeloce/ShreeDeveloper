@@ -17,6 +17,14 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class MojaniComponent implements OnInit {
 
+  SiteRef: number = 0;
+  SiteName: string = '';
+
+  Entity: Mojani = Mojani.CreateNewInstance();
+  isSaveDisabled: boolean = false;
+  IsDropdownDisabled: boolean = true;
+  InitialEntity: Mojani = null as any;
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
 
   constructor(
     private router: Router,
@@ -29,26 +37,58 @@ export class MojaniComponent implements OnInit {
     private datePipe: DatePipe
   ) { }
 
-  Entity: Mojani = Mojani.CreateNewInstance();
-  private IsNewEntity: boolean = true;
-  isSaveDisabled: boolean = false;
-  IsDropdownDisabled: boolean = false;
-  InitialEntity: Mojani = null as any;
-  companyRef = this.companystatemanagement.SelectedCompanyRef;
-
 
   async ngOnInit() {
-    this.appStateManage.setDropdownDisabled(true);
-    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-      this.IsNewEntity = false;
-      this.Entity = Mojani.GetCurrentInstance();
-      this.appStateManage.StorageKey.removeItem('Editable');
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    } else {
-      this.Entity = Mojani.CreateNewInstance();
-      Mojani.SetCurrentInstance(this.Entity);
-    }
+
+    this.SiteRef = history.state.SiteRef;
+
+    this.getMojaniListByCompanyAndSiteRef();
+
+    this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+
     this.InitialEntity = Object.assign(Mojani.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Mojani;
+  }
+
+  getMojaniListByCompanyAndSiteRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    if (this.SiteRef <= 0) {
+      await this.uiUtils.showErrorToster('Site not Selected');
+      return;
+    }
+    let lst = await Mojani.FetchEntireListByCompanyAndSiteRef(this.companyRef(), this.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    if (lst.length > 0) {
+      this.Entity = lst[0];
+
+      if (this.Entity.p.TPPatraDate != '') {
+        this.Entity.p.TPPatraDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.TPPatraDate)
+      }
+
+      if (this.Entity.p.TpOfficeDate != '') {
+        this.Entity.p.TpOfficeDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.TpOfficeDate)
+      }
+    } else {
+      await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
+    }
+  }
+
+  areAllSubmissionsComplete(Entity: any): boolean {
+    let status = false;
+
+    const requiredFields = [
+      'IsTPPatraSubmit',
+      'IsPradhikaranOfficePatraSubmit',
+      'IsTentativeOrderWaNakashaSubmit',
+      'IsParishisthaNaSubmit',
+      'IsMojniNakashaSubmit',
+      'IsTpOfficeSumbit',
+    ];
+
+    status = requiredFields.every(field => Entity.p?.[field] === true);
+
+    return status;
   }
 
 
@@ -59,6 +99,10 @@ export class MojaniComponent implements OnInit {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
+
+    this.Entity.p.TPPatraDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.TPPatraDate)
+    this.Entity.p.TpOfficeDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.TpOfficeDate)
+    this.Entity.p.IsMojniCompleted = this.areAllSubmissionsComplete(this.Entity);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
@@ -68,13 +112,8 @@ export class MojaniComponent implements OnInit {
       return;
     } else {
       this.isSaveDisabled = false;
-      if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Mojani saved successfully');
-        this.Entity = Mojani.CreateNewInstance();
-      } else {
-        await this.uiUtils.showSuccessToster('Mojani Updated successfully');
-        await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
-      }
+      await this.uiUtils.showSuccessToster('Mojani Updated successfully');
+      await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
     }
   };
 

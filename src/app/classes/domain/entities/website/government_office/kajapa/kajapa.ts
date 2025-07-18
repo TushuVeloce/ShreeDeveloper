@@ -11,8 +11,8 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { ApplicableTypeProps } from "../siteworkmaster/siteworkmaster";
-import { KajapaFetchRequest } from "./Kajapafetchrequest";
 import { faL } from "@fortawesome/free-solid-svg-icons";
+import { KajapaFetchRequest } from "./kajapafetchrequest";
 
 
 export class KajapaProps {
@@ -35,7 +35,7 @@ export class KajapaProps {
   public IsSaatBaaraUtaraSubmit: boolean = false;
   public IsKaPratSubmit: boolean = false;
   public IsParishishtaANASubmit: boolean = false;
-  public ParishishtaANAOutwardNo: boolean = false;
+  public ParishishtaANAOutwardNo: string = '';
   public IsTehsilSubmit: boolean = false;
   public TehsilInwardNo: string = '';
   public TehsilDate: string = '';
@@ -196,6 +196,14 @@ export class Kajapa implements IPersistable<Kajapa> {
 
   public static async FetchEntireListBySiteRef(SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new KajapaFetchRequest();
+    req.SiteRefs.push(SiteRef)
+    let tdResponse = await Kajapa.FetchTransportData(req, errorHandler) as TransportData;
+    return Kajapa.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByCompanyAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new KajapaFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
     req.SiteRefs.push(SiteRef)
     let tdResponse = await Kajapa.FetchTransportData(req, errorHandler) as TransportData;
     return Kajapa.ListFromTransportData(tdResponse);

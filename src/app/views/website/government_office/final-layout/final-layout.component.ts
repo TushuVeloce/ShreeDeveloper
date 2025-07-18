@@ -17,6 +17,16 @@ import { Utils } from 'src/app/services/utils.service';
 
 })
 export class FinalLayoutComponent implements OnInit {
+
+  SiteRef: number = 0;
+  SiteName: string = '';
+
+  Entity: FinalLayout = FinalLayout.CreateNewInstance();
+  isSaveDisabled: boolean = false;
+  IsDropdownDisabled: boolean = true;
+  InitialEntity: FinalLayout = null as any;
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+
   constructor(
     private router: Router,
     private baseUrl: BaseUrlService,
@@ -28,36 +38,104 @@ export class FinalLayoutComponent implements OnInit {
     private datePipe: DatePipe
   ) { }
 
-  Entity: FinalLayout = FinalLayout.CreateNewInstance();
-  private IsNewEntity: boolean = true;
-  isSaveDisabled: boolean = false;
-  IsDropdownDisabled: boolean = false;
-  InitialEntity: FinalLayout = null as any;
-  companyRef = this.companystatemanagement.SelectedCompanyRef;
-
 
   async ngOnInit() {
-    this.appStateManage.setDropdownDisabled(true);
-    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-      this.IsNewEntity = false;
-      this.Entity = FinalLayout.GetCurrentInstance();
-      this.appStateManage.StorageKey.removeItem('Editable');
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    } else {
-      this.Entity = FinalLayout.CreateNewInstance();
-      FinalLayout.SetCurrentInstance(this.Entity);
-    }
+
+    this.SiteRef = history.state.SiteRef;
+
+    this.getFinalLayoutListByCompanyAndSiteRef();
+
+    this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+
     this.InitialEntity = Object.assign(FinalLayout.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as FinalLayout;
+  }
+
+  getFinalLayoutListByCompanyAndSiteRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    if (this.SiteRef <= 0) {
+      await this.uiUtils.showErrorToster('Site not Selected');
+      return;
+    }
+    let lst = await FinalLayout.FetchEntireListByCompanyAndSiteRef(this.companyRef(), this.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    if (lst.length > 0) {
+      this.Entity = lst[0];
+      if (this.Entity.p.ArjInwardDate != '') {
+        this.Entity.p.ArjInwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.ArjInwardDate)
+      }
+
+      if (this.Entity.p.OutwardDate != '') {
+        this.Entity.p.OutwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.OutwardDate)
+      }
+
+      if (this.Entity.p.GramSevakInwardDate != '') {
+        this.Entity.p.GramSevakInwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.GramSevakInwardDate)
+      }
+
+      if (this.Entity.p.TahsilInwardDate != '') {
+        this.Entity.p.TahsilInwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.TahsilInwardDate)
+      }
+
+      if (this.Entity.p.MojniInwardDate != '') {
+        this.Entity.p.MojniInwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.MojniInwardDate)
+      }
+    } else {
+      await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
+    }
+  }
+
+  areAllSubmissionsComplete(Entity: any): boolean {
+    let status = false;
+
+    const requiredFields = [
+      'IsFromSubmit',
+      'IsSaatBaaraUtaraSubmit',
+      'IsTentativeOrdervaNakashaSubmit',
+      'IsSanadBinshetiSubmit',
+      'IsKaPratSubmit',
+      'IsULCSubmit',
+      'IsHamiPatraSubmit',
+      'IsBandhPatraSubmit',
+      'IsRastavaKhuliJagaKabjepattiSubmit',
+      'IsSurveyarRemarkSubmit',
+      'IsATPSiteVisitSubmit',
+      'IsADTPSiteVisitSubmit',
+      'IsGramSevakSubmit',
+      'IsTahshilSubmit',
+      'IsMojniSubmit',
+      'IsCopyReceiveSubmit',
+    ];
+
+    status = requiredFields.every(field => Entity.p?.[field] === true);
+
+    if (!Entity.p.IsRoadNOCSubmit && status) {
+      status = true;
+    } else {
+      status = Entity.p.IsArjInwardSubmit;
+    }
+    return status;
   }
 
 
   SaveFinalLayout = async () => {
+
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     if (this.Entity.p.CreatedBy == 0) {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
+
+    this.Entity.p.ArjInwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.ArjInwardDate)
+    this.Entity.p.OutwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.OutwardDate)
+    this.Entity.p.GramSevakInwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.GramSevakInwardDate)
+    this.Entity.p.TahsilInwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.TahsilInwardDate)
+    this.Entity.p.MojniInwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.MojniInwardDate)
+
+
+    this.Entity.p.IsFinalLayoutCompleted = this.areAllSubmissionsComplete(this.Entity);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
@@ -67,13 +145,8 @@ export class FinalLayoutComponent implements OnInit {
       return;
     } else {
       this.isSaveDisabled = false;
-      if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Final Layout saved successfully');
-        this.Entity = FinalLayout.CreateNewInstance();
-      } else {
-        await this.uiUtils.showSuccessToster('Final Layout Updated successfully');
-        await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
-      }
+      await this.uiUtils.showSuccessToster('Final Layout Updated successfully');
+      await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
     }
   };
 

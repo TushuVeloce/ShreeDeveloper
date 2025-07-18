@@ -38,8 +38,6 @@ export class NaLetterComponent implements OnInit {
     private datePipe: DatePipe
   ) { }
 
-
-
   async ngOnInit() {
 
     this.SiteRef = history.state.SiteRef;
@@ -62,9 +60,24 @@ export class NaLetterComponent implements OnInit {
       return;
     }
     let lst = await NaLetter.FetchEntireListByCompanyAndSiteRef(this.companyRef(), this.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     if (lst.length > 0) {
       this.Entity = lst[0];
+
+      if (this.Entity.p.TPPatraInwardDate != '') {
+        this.Entity.p.TPPatraInwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.TPPatraInwardDate)
+      }
+
+      if (this.Entity.p.ArjInwardDate != '') {
+        this.Entity.p.ArjInwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.ArjInwardDate)
+      }
+
+      if (this.Entity.p.TPOfficeInwardDate != '') {
+        this.Entity.p.TPOfficeInwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.TPOfficeInwardDate)
+      }
+
+      if (this.Entity.p.TalathiOfficeDate != '') {
+        this.Entity.p.TalathiOfficeDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.TalathiOfficeDate)
+      }
     } else {
       await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
     }
@@ -104,6 +117,12 @@ export class NaLetterComponent implements OnInit {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
+
+    this.Entity.p.TPPatraInwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.TPPatraInwardDate)
+    this.Entity.p.ArjInwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.ArjInwardDate)
+    this.Entity.p.TPOfficeInwardDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.TPOfficeInwardDate)
+    this.Entity.p.TalathiOfficeDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.TalathiOfficeDate)
+
     this.Entity.p.IsParishisthaNaComplete = this.areAllSubmissionsComplete(this.Entity);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
@@ -114,7 +133,7 @@ export class NaLetterComponent implements OnInit {
       return;
     } else {
       this.isSaveDisabled = false;
-      await this.uiUtils.showSuccessToster('T.P. Office Updated successfully');
+      await this.uiUtils.showSuccessToster('NA Letter Updated successfully');
       await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
     }
   };
