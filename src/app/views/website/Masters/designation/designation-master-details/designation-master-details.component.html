@@ -42,10 +42,10 @@
         <div class="col-md-4">
           <label>Seniority Level</label>
           <input type="number" [(ngModel)]="Entity.p.SeniorityLevel" (click)="selectAllValue($event)"
-            name="SeniorityLevel" class="form-control" id="SeniorityLevel" #SeniorityLevelCtrl="ngModel" required
+            name="SeniorityLevel" class="form-control" id="SeniorityLevel" #SeniorityLevelCtrl="ngModel" 
             (blur)="SeniorityLevelCtrl.control.markAsTouched()" placeholder="Enter Seniority Level" />
           <div *ngIf="(SeniorityLevelCtrl.invalid && (SeniorityLevelCtrl.touched || SeniorityLevelCtrl.dirty))">
-            <span class="validation-text" *ngIf="SeniorityLevelCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            <!-- <span class="validation-text" *ngIf="SeniorityLevelCtrl.errors?.['required']">{{RequiredFieldMsg}}</span> -->
           </div>
         </div>
       </div>

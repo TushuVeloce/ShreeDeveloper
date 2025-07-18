@@ -201,7 +201,7 @@ export class VendorMasterDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Vendor saved successfully');
         this.Entity = Vendor.CreateNewInstance();
-        this.resetAllControls()
+        await this.resetAllControls()
       } else {
         await this.uiUtils.showSuccessToster('Vendor Updated successfully');
         this.router.navigate(['/homepage/Website/Vendor_Master']);
@@ -223,20 +223,17 @@ export class VendorMasterDetailsComponent implements OnInit {
     }
   }
 
-  resetAllControls = () => {
+  resetAllControls = async() => {
     // reset touched
     this.NameInputControl.control.markAsUntouched();
     this.CodeInputControl.control.markAsUntouched();
     this.AddressLine1InputControl.control.markAsUntouched();
     this.MobileNoInputControl.control.markAsUntouched();
     this.TradeNameInputControl.control.markAsUntouched();
-    this.PinCodeInputControl.control.markAsUntouched();
     this.BankNameInputControl.control.markAsUntouched();
     this.BranchNameInputControl.control.markAsUntouched();
     this.AccountNumberInputControl.control.markAsUntouched();
     this.IFSCInputControl.control.markAsUntouched();
-    this.PANInputControl.control.markAsUntouched();
-    this.GSTINInputControl.control.markAsUntouched();
 
     // reset dirty
     this.NameInputControl.control.markAsPristine();
@@ -244,13 +241,10 @@ export class VendorMasterDetailsComponent implements OnInit {
     this.AddressLine1InputControl.control.markAsPristine();
     this.MobileNoInputControl.control.markAsPristine();
     this.TradeNameInputControl.control.markAsPristine();
-    this.PinCodeInputControl.control.markAsPristine();
     this.BankNameInputControl.control.markAsPristine();
     this.BranchNameInputControl.control.markAsPristine();
     this.AccountNumberInputControl.control.markAsPristine();
     this.IFSCInputControl.control.markAsPristine();
-    this.PANInputControl.control.markAsPristine();
-    this.GSTINInputControl.control.markAsPristine();
   }
 
 }

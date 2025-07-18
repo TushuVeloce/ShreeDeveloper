@@ -89,12 +89,8 @@ export class Company implements IPersistable<Company> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     // if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') {
-      vra.add('Name', 'Name cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
-    }
-    if (this.p.Contacts == '') {
-      vra.add('Contact No', 'Contact No cannot be blank.');
+      vra.add('Name', 'Name cannot be blank.');} 
+    if (this.p.Contacts == '') {vra.add('Contact No', 'Contact No cannot be blank.');
     } else if (!new RegExp(ValidationPatterns.INDPhoneNo).test(this.p.Contacts)) {
       vra.add('Contact No', ValidationMessages.INDPhoneNoMsg);
     }
@@ -109,23 +105,23 @@ export class Company implements IPersistable<Company> {
       vra.add('EmailId', ValidationMessages.EmailMsg);
     }
     if (this.p.CompanyType == 0) vra.add('CompanyType', 'Company Type cannot be blank.');
-    if (this.p.PinCode == '') {
-      vra.add('PinCode', 'Pin Code cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.PinCode).test(this.p.PinCode)) {
-      vra.add('PinCode', ValidationMessages.PinCodeMsg);
-    }
+    // if (this.p.PinCode == '') {
+    //   vra.add('PinCode', 'Pin Code cannot be blank.');
+    // } else if (!new RegExp(ValidationPatterns.PinCode).test(this.p.PinCode)) {
+    //   vra.add('PinCode', ValidationMessages.PinCodeMsg);
+    // }
     if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'Address Line 1 cannot be blank.');
     if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country cannot be blank.');
     if (this.p.StateRef == 0) vra.add('StateRef', 'State cannot be blank.');
     if (this.p.CityRef == 0) vra.add('CityRef', 'City cannot be blank.');
 
-    if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN) && this.p.GSTIN != '') {
-      vra.add('GSTIN', ValidationMessages.GSTINMsg);
-    }
+    // if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN) && this.p.GSTIN != '') {
+    //   vra.add('GSTIN', ValidationMessages.GSTINMsg);
+    // }
 
-    if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan) && this.p.Pan != '') {
-      vra.add('Pan', ValidationMessages.PANMsg);
-    }
+    // if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan) && this.p.Pan != '') {
+    //   vra.add('Pan', ValidationMessages.PANMsg);
+    // }
 
     // if (this.p.IsNewlyCreated == true && this.p.CompanyLogo == null) {
     //   vra.add('CompanyLogo', 'Company Logo cannot be blank.');

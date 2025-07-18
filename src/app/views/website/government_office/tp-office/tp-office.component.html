@@ -1,0 +1,435 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row mb-3">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackProgressReport()">
+          <img src="/assets/icons/arrow-button.png" alt="Back" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">T.P. Office</span>
+      </div>
+    </div>
+
+    <!-- If file not selected -->
+    <ng-template #NoFile>
+      No file selected
+    </ng-template>
+
+    <!-- Fallback: If file is missing entirely -->
+    <ng-template #defaultImage>
+      <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
+    </ng-template>
+
+    <!-- Fallback: If file is not an image (e.g., PDF/DOC) -->
+    <ng-template #defaultDocImage>
+      <img src="/assets/icons/doc-placeholder.png" alt="Document File" class="file-preview" />
+    </ng-template>
+    <form autocomplete="off">
+
+      <!----------------------------------------------------------------  Tentative Layout Box ------------------------------------------------>
+      <div
+        style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px;">
+        <!-- Tentative Layout -->
+        <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+          <div class="col-4 text-start">
+            <label> Tentative Layout</label>
+          </div>
+          <div class="col-4"></div>
+          <div class="col-4 d-flex justify-content-end align-items-center">
+            <label for="IsTentativeLayoutSubmit">Submit</label>
+            <input type="checkbox" id="IsTentativeLayoutSubmit" [(ngModel)]="Entity.p.IsTentativeLayoutSubmit"
+              name="IsTentativeLayoutSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+
+        <!-- Details -->
+        <div class="row">
+          <div class="col-md-4">
+            <label>Inward No.</label>
+            <input type="text" name="TentativeLayoutInwardNo" class="form-control date-input"
+              id="TentativeLayoutInwardNo" [(ngModel)]="Entity.p.TentativeLayoutInwardNo" placeholder="Select No" />
+          </div>
+          <div class="col-md-4">
+            <label>Date</label>
+            <input type="date" name="TentativeLayoutInwardDate" class="form-control date-input"
+              id="TentativeLayoutInwardDate" [(ngModel)]="Entity.p.TentativeLayoutInwardDate"
+              placeholder="Select Date" />
+          </div>
+
+          <!-- Submit -->
+          <div class="col-md-4 d-flex justify-content-end align-items-center">
+            <label for="IsTentativeLayoutScrutinyFeesSubmit">Scrutiny Fees</label>
+            <input type="checkbox" id="IsTentativeLayoutScrutinyFeesSubmit"
+              [(ngModel)]="Entity.p.IsTentativeLayoutScrutinyFeesSubmit" name="IsTentativeLayoutScrutinyFeesSubmit"
+              class="custom-checkbox" />
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <!----------------------------------------------------------------  Survey Remark Box ------------------------------------------------>
+      <div
+        style="border: solid; border-color: brown; border-width: 1px; border-radius: 8px; margin-bottom: 2px; padding: 0px 12px;">
+        <!-- Survey Remark -->
+        <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px">
+          <div class="col-4 text-start">
+            <label>Survey Remark</label>
+          </div>
+          <div class="col-4"></div>
+          <div class="col-4 d-flex justify-content-end align-items-center">
+            <label for="IsSurveyRemarkSubmit">Submit</label>
+            <input type="checkbox" id="IsSurveyRemarkSubmit" [(ngModel)]="Entity.p.IsSurveyRemarkSubmit"
+              name="IsSurveyRemarkSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <!----------------------------------------------------------------  ATP Site Visit Box ------------------------------------------------>
+      <div
+        style="border: solid; border-color: brown; border-width: 1px; border-radius: 8px; margin-bottom: 2px; padding: 0px 12px;">
+        <!-- ATP Site Visit -->
+        <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px">
+          <div class="col-4 text-start">
+            <label>ATP Site Visit</label>
+          </div>
+          <div class="col-4"></div>
+          <div class="col-4 my-auto d-flex justify-content-end align-items-center">
+            <label for="IsATPSiteVisitSubmit">Submit</label>
+            <input type="checkbox" id="IsATPSiteVisitSubmit" [(ngModel)]="Entity.p.IsATPSiteVisitSubmit"
+              name="IsATPSiteVisitSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <!----------------------------------------------------------------  ADTP Site Visit Box ------------------------------------------------>
+      <div
+        style="border: solid; border-color: brown; border-width: 1px; border-radius: 8px; margin-bottom: 2px; padding: 0px 12px;">
+        <!-- ADTP Site Visit -->
+        <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px">
+          <div class="col-4 text-start">
+            <label>ADTP Site Visit</label>
+          </div>
+          <div class="col-4"></div>
+          <div class="col-4 d-flex justify-content-end align-items-center">
+            <label for="IsADTPSiteVisitSubmit">Submit</label>
+            <input type="checkbox" id="IsADTPSiteVisitSubmit" [(ngModel)]="Entity.p.IsADTPSiteVisitSubmit"
+              name="IsADTPSiteVisitSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <!----------------------------------------------------------------  DDTP Site Visit Box ------------------------------------------------>
+      <div
+        style="border: solid; border-color: brown; border-width: 1px; border-radius: 8px; margin-bottom: 2px; padding: 0px 12px;">
+        <!-- DDTP Site Visit -->
+        <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px">
+          <div class="col-4 text-start">
+            <label>DDTP Site Visit</label>
+          </div>
+          <div class="col-4"></div>
+          <div class="col-4 d-flex justify-content-end align-items-center">
+            <label for="IsDDTPSiteVisitSubmit">Submit</label>
+            <input type="checkbox" id="IsDDTPSiteVisitSubmit" [(ngModel)]="Entity.p.IsDDTPSiteVisitSubmit"
+              name="IsDDTPSiteVisitSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <!----------------------------------------------------------------  Proposal Sanction Box ------------------------------------------------>
+      <div
+        style="border: solid; border-color: brown; border-width: 1px; border-radius: 8px; margin-bottom: 2px; padding: 0px 12px;">
+        <!-- Proposal Sanction -->
+        <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px">
+          <div class="col-4 text-start">
+            <label>Proposal Sanction</label>
+          </div>
+          <div class="col-4"></div>
+          <div class="col-4 d-flex justify-content-end align-items-center">
+            <label for="IsProposalSanctionSubmit">Submit</label>
+            <input type="checkbox" id="IsProposalSanctionSubmit" [(ngModel)]="Entity.p.IsProposalSanctionSubmit"
+              name="IsProposalSanctionSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <!----------------------------------------------------------------  Development Charges Box ------------------------------------------------>
+      <div
+        style="border: solid; border-color: brown; border-width: 1px; border-radius: 8px; margin-bottom: 2px; padding: 0px 12px;">
+        <!-- Development Charges -->
+        <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px">
+          <div class="col-4 text-start">
+            <label>Development Charges</label>
+          </div>
+          <div class="col-4"></div>
+          <div class="col-4 d-flex justify-content-end align-items-center">
+            <label for="IsDevelopmentChargesSubmit">Submit</label>
+            <input type="checkbox" id="IsDevelopmentChargesSubmit" [(ngModel)]="Entity.p.IsDevelopmentChargesSubmit"
+              name="IsDevelopmentChargesSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <!----------------------------------------------------------------  Outward Box ------------------------------------------------>
+      <div
+        style="border: solid; border-color: brown; border-width: 1px; border-radius: 8px; margin-bottom: 2px; padding: 0px 12px;">
+        <!-- Outward -->
+        <div class="row mb-2 p-1" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+          <div class="col-6 text-start">
+            <label>Outward</label>
+          </div>
+        </div>
+
+        <!----------------------------------------------------------  परिशिष्ठ A (NA) & ULC Box ------------------------------------------------>
+        <div class="mb-3"
+          style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px; width: 70%; margin-left: auto; margin-right: auto;">
+
+          <!-- परिशिष्ठ A (NA) & ULC -->
+          <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+            <div class="col-4 text-start">
+              <label> परिशिष्ठ A (NA) & ULC</label>
+            </div>
+            <div class="col-4"></div>
+            <div class="col-4 d-flex justify-content-end align-items-center">
+              <label for="IsSubmitToTahsildar">Submit to तहसीलदार</label>
+              <input type="checkbox" id="IsSubmitToTahsildar" [(ngModel)]="Entity.p.IsSubmitToTahsildar"
+                name="IsSubmitToTahsildar" class="custom-checkbox" />
+            </div>
+          </div>
+
+          <!-- Details -->
+          <div class="row">
+            <div class="col-md-4">
+              <label>Inward No.</label>
+              <input type="text" name="ParishisthaNaUlcInwardNo" class="form-control date-input"
+                id="ParishisthaNaUlcInwardNo" [(ngModel)]="Entity.p.ParishisthaNaUlcInwardNo"
+                placeholder="Select Date" />
+            </div>
+            <div class="col-md-4">
+              <label>Date</label>
+              <input type="date" name="ParishisthaNaUlcInwardDate" class="form-control date-input"
+                id="ParishisthaNaUlcInwardDate" [(ngModel)]="Entity.p.ParishisthaNaUlcInwardDate"
+                placeholder="Select Date" />
+            </div>
+          </div>
+        </div>
+
+        <!----------------------------------------------------------  मोजिनी Box ------------------------------------------------>
+        <div class="mb-3"
+          style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px; width: 70%; margin-left: auto; margin-right: auto;">
+
+          <!-- मोजिनी -->
+          <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+            <div class="col-7 text-start">
+              <label> मोजिनी</label>
+            </div>
+            <!-- <div class="col-4"></div> -->
+            <div class="col-5 d-flex justify-content-end align-items-center">
+              <label for="IsSubmitToUpadhaykshaAndBhumiAdhilekh">Submit to उपाधीक्षक & भूमी अधिलेख</label>
+              <input type="checkbox" id="IsSubmitToUpadhaykshaAndBhumiAdhilekh"
+                [(ngModel)]="Entity.p.IsSubmitToUpadhaykshaAndBhumiAdhilekh"
+                name="IsSubmitToUpadhaykshaAndBhumiAdhilekh" class="custom-checkbox" />
+            </div>
+          </div>
+
+          <!-- Details -->
+          <div class="row">
+            <div class="col-md-4">
+              <label>Inward No.</label>
+              <input type="text" name="MojniInwardNo" class="form-control date-input" id="MojniInwardNo"
+                [(ngModel)]="Entity.p.MojniInwardNo" placeholder="Select Date" />
+            </div>
+            <div class="col-md-4">
+              <label>Date</label>
+              <input type="date" name="MojniInwardDate" class="form-control date-input" id="MojniInwardDate"
+                [(ngModel)]="Entity.p.MojniInwardDate" placeholder="Select Date" />
+            </div>
+          </div>
+        </div>
+
+        <!---------------------------------------------------------- Gram Sevak Box ------------------------------------------------>
+        <div class="mb-3"
+          style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px; width: 70%; margin-left: auto; margin-right: auto;">
+
+          <!-- Gram Sevak -->
+          <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+            <div class="col-4 text-start">
+              <label> Gram Sevak</label>
+            </div>
+            <div class="col-4"></div>
+            <div class="col-4 d-flex justify-content-end align-items-center">
+              <label for="IsGramSevakSubmit">Submit</label>
+              <input type="checkbox" id="IsGramSevakSubmit" [(ngModel)]="Entity.p.IsGramSevakSubmit"
+                name="IsGramSevakSubmit" class="custom-checkbox" />
+            </div>
+          </div>
+
+          <!-- Details -->
+          <div class="row">
+            <div class="col-md-4">
+              <label>Inward No.</label>
+              <input type="text" name="GramSevakInwardNo" class="form-control date-input" id="GramSevakInwardNo"
+                [(ngModel)]="Entity.p.GramSevakInwardNo" placeholder="Select Date" />
+            </div>
+            <div class="col-md-4">
+              <label>Date</label>
+              <input type="date" name="GramSevakInwardDate" class="form-control date-input" id="GramSevakInwardDate"
+                [(ngModel)]="Entity.p.GramSevakInwardDate" placeholder="Select Date" />
+            </div>
+          </div>
+        </div>
+
+        <!---------------------------------------------------------- ULC Box ------------------------------------------------>
+        <div class="mb-3"
+          style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px; width: 70%; margin-left: auto; margin-right: auto;">
+
+          <!-- ULC -->
+          <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+            <div class="col-4 text-start">
+              <label> ULC</label>
+            </div>
+            <div class="col-4"></div>
+            <div class="col-4 d-flex justify-content-end align-items-center">
+              <label for="IsULCSubmit">Submit</label>
+              <input type="checkbox" id="IsULCSubmit" [(ngModel)]="Entity.p.IsULCSubmit" name="IsULCSubmit"
+                class="custom-checkbox" />
+            </div>
+          </div>
+
+          <!-- Details -->
+          <div class="row">
+            <div class="col-md-4">
+              <label>Inward No.</label>
+              <input type="text" name="ULCInwardNo" class="form-control date-input" id="ULCInwardNo"
+                [(ngModel)]="Entity.p.ULCInwardNo" placeholder="Select Date" />
+            </div>
+            <div class="col-md-4">
+              <label>Date</label>
+              <input type="date" name="ULCInwardDate" class="form-control date-input" id="ULCInwardDate"
+                [(ngModel)]="Entity.p.ULCInwardDate" placeholder="Select Date" />
+            </div>
+          </div>
+        </div>
+
+        <!---------------------------------------------------------- Report NOC & Airport NOC Box ------------------------------------------------>
+        <div class="mb-3"
+          style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px; width: 70%; margin-left: auto; margin-right: auto;">
+
+          <!-- Report NOC & Airport NOC -->
+          <div class="row mb-3 p-1" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+            <div class="col-4 text-start">
+              <label> Report NOC & Airport NOC</label>
+            </div>
+            <div class="col-4"></div>
+            <div class="col-4 d-flex justify-content-end align-items-center">
+              <label for="ReportNOCAirportNOC">Yes</label>
+              <input type="checkbox" id="ReportNOCAirportNOC" [(ngModel)]="Entity.p.ReportNOCAirportNOC"
+                name="ReportNOCAirportNOC" class="custom-checkbox" />
+            </div>
+          </div>
+
+          <!---------------------------------------------------------- Report NOC Box ------------------------------------------------>
+          <div *ngIf="Entity.p.ReportNOCAirportNOC" class="mb-3"
+            style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px; width: 70%; margin-left: auto; margin-right: auto;">
+
+            <!-- Report NOC -->
+            <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+              <div class="col-4 text-start">
+                <label> Report NOC</label>
+              </div>
+              <div class="col-4"></div>
+              <div class="col-4 d-flex justify-content-end align-items-center">
+                <label for="IsReportNOCSubmit">Submit</label>
+                <input type="checkbox" id="IsReportNOCSubmit" [(ngModel)]="Entity.p.IsReportNOCSubmit"
+                  name="IsReportNOCSubmit" class="custom-checkbox" />
+              </div>
+            </div>
+
+            <!-- Details -->
+            <div class="row">
+              <div class="col-md-4">
+                <label>Inward No.</label>
+                <input type="text" name="ReportNOCInwardNo" class="form-control date-input" id="ReportNOCInwardNo"
+                  [(ngModel)]="Entity.p.ReportNOCInwardNo" placeholder="Select Date" />
+              </div>
+              <div class="col-md-4">
+                <label>Date</label>
+                <input type="date" name="ReportNOCInwardDate" class="form-control date-input" id="ReportNOCInwardDate"
+                  [(ngModel)]="Entity.p.ReportNOCInwardDate" placeholder="Select Date" />
+              </div>
+            </div>
+          </div>
+
+
+          <!---------------------------------------------------------- Airport NOC Box ------------------------------------------------>
+          <div *ngIf="Entity.p.ReportNOCAirportNOC" class="mb-3"
+            style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px; width: 70%; margin-left: auto; margin-right: auto;">
+
+            <!-- Airport NOC -->
+            <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+              <div class="col-4 text-start">
+                <label> Airport NOC</label>
+              </div>
+              <div class="col-4"></div>
+              <div class="col-4 d-flex justify-content-end align-items-center">
+                <label for="IsAirportNOCSubmit">Submit</label>
+                <input type="checkbox" id="IsAirportNOCSubmit" [(ngModel)]="Entity.p.IsAirportNOCSubmit"
+                  name="IsAirportNOCSubmit" class="custom-checkbox" />
+              </div>
+            </div>
+
+            <!-- Details -->
+            <div class="row">
+              <div class="col-md-4">
+                <label>Inward No.</label>
+                <input type="text" name="AirportNOCInwardNo" class="form-control date-input" id="AirportNOCInwardNo"
+                  [(ngModel)]="Entity.p.AirportNOCInwardNo" placeholder="Select Date" />
+              </div>
+              <div class="col-md-4">
+                <label>Date</label>
+                <input type="date" name="AirportNOCInwardDate" class="form-control date-input" id="AirportNOCInwardDate"
+                  [(ngModel)]="Entity.p.AirportNOCInwardDate" placeholder="Select Date" />
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <br>
+
+      <!-------------------------------------------------------------  Submit Box -------------------------------------------------------->
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
+        <div>
+          <button type="submit" class="btn" (click)="SaveTPOffice()" [disabled]="isSaveDisabled">
+            Save
+          </button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackProgressReport()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -59,6 +59,7 @@ export class EmployeeOvertimeDetailsComponent implements OnInit {
         this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
       );
       this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
+      this.calculateOvertimeHours()
     } else {
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       let parts = this.strCDT.substring(0, 16).split('-');

@@ -10,39 +10,61 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { MarketingTypeFetchRequest } from "./marketingtypefetchrequest";
+import { ApplicableTypeProps } from "../siteworkmaster/siteworkmaster";
+import { MojaniFetchRequest } from "./mojanifetchrequest";
 
 
-export class MarketingTypeProps {
-  public readonly Db_Table_Name = "MarketingTypeMaster";
+export class MojaniProps {
+  public readonly Db_Table_Name = "GovernmentULC";
+  public IsNewlyCreated: boolean = false;
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
   public Ref: number = 0;
-  public Description: string = '';
-  public MarketingMode: number = 0;
-  public readonly MarketingModeName: string = '';
+  public SiteRef: number = 0;
+  public SiteName: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
 
-  public readonly IsNewlyCreated: boolean = false;
+  public IsUlcSubmit: boolean = false;
+  public UlcInwardNo: string = '';
+  public UlcDate: string = '';
+  public IsUlcTpPatraSubmit: boolean = false;
+  public IsSaatBaraSubmit: boolean = false;
+  public IsTatpurtiOrderVaNakashaSubmit: boolean = false;
+  public IsSanadBinshetiSubmit: boolean = false;
+  public IsPratigyaPatraSubmit: boolean = false;
+  public IsOutwardsubmit: boolean = false;
+  public TpOfficeInwardNo: string = '';
+  public TpOfficeDate: string = '';
+  public IsMojniTarikhSubmit: boolean = false;
+  public IsChalanSubmit: boolean = false;
+  public OutwardOutwardNo: string = '';
+  public OutwardDate: string = '';
+  public IsTpOfficeSubmit: boolean = false;
 
-  // public readonly AccountTypeName: string = '';
+  public IsGovernmentUlcComplete: boolean = false;
 
   private constructor(isNewlyCreated: boolean) {
     this.IsNewlyCreated = isNewlyCreated;
   }
 
   public static Blank() {
-    return new MarketingTypeProps(true);
+    return new MojaniProps(true);
   }
 }
 
-export class MarketingType implements IPersistable<MarketingType> {
-  public static readonly Db_Table_Name: string = 'MarketingTypeMaster';
+export class Mojani implements IPersistable<Mojani> {
+  TransactionJson(TransactionJson: any) {
+    throw new Error('Method not implemented.');
+  }
 
-  private constructor(public readonly p: MarketingTypeProps, public readonly AllowEdit: boolean) {
+  public IsComplete: boolean = false;
+
+  public static readonly Db_Table_Name: string = 'GovernmentULC';
+
+  private constructor(public readonly p: MojaniProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -55,50 +77,49 @@ export class MarketingType implements IPersistable<MarketingType> {
     }
   }
 
-  public GetEditableVersion(): MarketingType {
-    let newState: MarketingTypeProps = Utils.GetInstance().DeepCopy(this.p);
-    return MarketingType.CreateInstance(newState, true);
+  public GetEditableVersion(): Mojani {
+    let newState: MojaniProps = Utils.GetInstance().DeepCopy(this.p);
+    return Mojani.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new MarketingType(MarketingTypeProps.Blank(), true);
+    return new Mojani(MojaniProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new MarketingType(data as MarketingTypeProps, allowEdit);
+    return new Mojani(data as MojaniProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.MarketingMode == 0) vra.add('MarketingMode', 'Marketing Mode cannot be blank.');
-    if (this.p.Description == '') vra.add('Description', 'Description cannot be blank.');
-    // if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
-
+    if (this.p.SiteRef == 0) vra.add('SiteWorkRef', 'Site Name cannot be blank.');
+    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company cannot be blank.');
+    // if (this.p.TransactionJson == '') vra.add('TransactionJson', 'Transaction cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, MarketingType.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Mojani.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: MarketingType = MarketingType.CreateNewInstance();
+  private static m_currentInstance: Mojani = Mojani.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return MarketingType.m_currentInstance;
+    return Mojani.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: MarketingType) {
-    MarketingType.m_currentInstance = value;
+  public static SetCurrentInstance(value: Mojani) {
+    Mojani.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): MarketingType {
+  public static SingleInstanceFromTransportData(td: TransportData): Mojani {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, MarketingType.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, MarketingType.Db_Table_Name)!.Entries) {
-        return MarketingType.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, Mojani.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, Mojani.Db_Table_Name)!.Entries) {
+        return Mojani.CreateInstance(data, false);
       }
     }
 
@@ -107,13 +128,13 @@ export class MarketingType implements IPersistable<MarketingType> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): MarketingType[] {
-    let result: MarketingType[] = [];
+    sortPropertyName: string = ""): Mojani[] {
+    let result: Mojani[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, MarketingType.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, MarketingType.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, Mojani.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, Mojani.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -123,18 +144,18 @@ export class MarketingType implements IPersistable<MarketingType> {
       }
 
       for (let data of entries) {
-        result.push(MarketingType.CreateInstance(data, false));
+        result.push(Mojani.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): MarketingType[] {
-    return MarketingType.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): Mojani[] {
+    return Mojani.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: MarketingTypeFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: MojaniFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -149,31 +170,37 @@ export class MarketingType implements IPersistable<MarketingType> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MarketingTypeFetchRequest();
-    req.MarketingTypeRefs.push(ref);
+    let req = new MojaniFetchRequest();
+    req.GovernmentTransationRefs.push(ref);
 
-    let tdResponse = await MarketingType.FetchTransportData(req, errorHandler) as TransportData;
-    return MarketingType.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await Mojani.FetchTransportData(req, errorHandler) as TransportData;
+    return Mojani.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: MarketingTypeFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await MarketingType.FetchTransportData(req, errorHandler) as TransportData;
-    return MarketingType.ListFromTransportData(tdResponse);
+  public static async FetchList(req: MojaniFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await Mojani.FetchTransportData(req, errorHandler) as TransportData;
+    return Mojani.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MarketingTypeFetchRequest();
-    let tdResponse = await MarketingType.FetchTransportData(req, errorHandler) as TransportData;
-    return MarketingType.ListFromTransportData(tdResponse);
-  }
-  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new MarketingTypeFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await MarketingType.FetchTransportData(req, errorHandler) as TransportData;
-    return MarketingType.ListFromTransportData(tdResponse);
+    let req = new MojaniFetchRequest();
+    let tdResponse = await Mojani.FetchTransportData(req, errorHandler) as TransportData;
+    return Mojani.ListFromTransportData(tdResponse);
   }
 
-  
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new MojaniFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Mojani.FetchTransportData(req, errorHandler) as TransportData;
+    return Mojani.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListBySiteRef(SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new MojaniFetchRequest();
+    req.SiteRefs.push(SiteRef)
+    let tdResponse = await Mojani.FetchTransportData(req, errorHandler) as TransportData;
+    return Mojani.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

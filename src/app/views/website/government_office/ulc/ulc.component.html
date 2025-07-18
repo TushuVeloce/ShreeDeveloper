@@ -1,0 +1,291 @@
+<div class="card-body">
+  <div class="card" style="padding: 1rem">
+    <div class="row mb-3">
+      <div class="col-md-1 col-lg-1 col-sm-6 col-xs-6">
+        <button type="button" class="backbtn" (click)="BackProgressReport()">
+          <img src="/assets/icons/arrow-button.png" alt="Back" width="34px" height="34px" />
+        </button>
+      </div>
+      <div class="col-md-11">
+        <span class="detail_title">ULC</span>
+      </div>
+    </div>
+
+    <!-- If file not selected -->
+    <ng-template #NoFile>
+      No file selected
+    </ng-template>
+
+    <!-- Fallback: If file is missing entirely -->
+    <ng-template #defaultImage>
+      <img src="/assets/images/noimagelandscape.jpeg" alt="No Image" class="img-preview" />
+    </ng-template>
+
+    <!-- Fallback: If file is not an image (e.g., PDF/DOC) -->
+    <ng-template #defaultDocImage>
+      <img src="/assets/icons/doc-placeholder.png" alt="Document File" class="file-preview" />
+    </ng-template>
+    <form autocomplete="off">
+
+      <!---------------------------------------------------------------- Box ------------------------------------------------>
+      <div
+        style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px;">
+
+        <!-- Details -->
+        <div class="row">
+          <div class="col-md-4">
+            <label>Inward No.</label>
+            <input type="text" name="QuotationDate" class="form-control date-input" id="QuotationDate"
+              [(ngModel)]="Entity" placeholder="Select Date" />
+          </div>
+          <div class="col-md-4">
+            <label>Date</label>
+            <input type="date" name="QuotationDate" class="form-control date-input" id="QuotationDate"
+              [(ngModel)]="Entity" placeholder="Select Date" />
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <!----------------------------------------------------------------  ULC T.P.पत्र Box ------------------------------------------------>
+      <div
+        style="border: solid; border-color: brown; border-width: 1px; border-radius: 8px; margin-bottom: 2px; padding: 0px 12px;">
+        <!-- ULC T.P.पत्र -->
+        <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px">
+          <div class="col-6 text-start">
+            <label>ULC T.P.पत्र</label>
+          </div>
+          <div class="col-6 d-flex justify-content-end align-items-center">
+            <label for="IsReportNOCSubmit">Submit</label>
+            <input type="checkbox" id="IsReportNOCSubmit" [(ngModel)]="Entity.p.IsReportNOCSubmit"
+              name="IsReportNOCSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <!---------------------------------------------------------------- 7/12 Box ------------------------------------------------>
+      <div
+        style="border: solid; border-color: brown; border-width: 1px; border-radius: 8px; margin-bottom: 2px; padding: 0px 12px;">
+        <!-- 7/12 -->
+        <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px">
+          <div class="col-6 text-start">
+            <label>7/12</label>
+          </div>
+          <div class="col-6 d-flex justify-content-end align-items-center">
+            <label for="IsReportNOCSubmit">Submit</label>
+            <input type="checkbox" id="IsReportNOCSubmit" [(ngModel)]="Entity.p.IsReportNOCSubmit"
+              name="IsReportNOCSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <!----------------------------------------------------------------  तत्पुर्ती ऑर्डर व नकाशा Box ------------------------------------------------>
+      <div
+        style="border: solid; border-color: brown; border-width: 1px; border-radius: 8px; margin-bottom: 2px; padding: 0px 12px;">
+        <!-- तत्पुर्ती ऑर्डर व नकाशा -->
+        <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px">
+          <div class="col-6 text-start">
+            <label>तत्पुर्ती ऑर्डर व नकाशा</label>
+          </div>
+          <div class="col-6 d-flex justify-content-end align-items-center">
+            <label for="IsReportNOCSubmit">Submit</label>
+            <input type="checkbox" id="IsReportNOCSubmit" [(ngModel)]="Entity.p.IsReportNOCSubmit"
+              name="IsReportNOCSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <!----------------------------------------------------------------  सनद (बिनशेती) Box ------------------------------------------------>
+      <div
+        style="border: solid; border-color: brown; border-width: 1px; border-radius: 8px; margin-bottom: 2px; padding: 0px 12px;">
+        <!-- सनद (बिनशेती) -->
+        <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px">
+          <div class="col-6 text-start">
+            <label>सनद (बिनशेती)</label>
+          </div>
+          <div class="col-6 d-flex justify-content-end align-items-center">
+            <label for="IsReportNOCSubmit">Submit</label>
+            <input type="checkbox" id="IsReportNOCSubmit" [(ngModel)]="Entity.p.IsReportNOCSubmit"
+              name="IsReportNOCSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <!---------------------------------------------------------------- प्रतिज्ञा पत्र Box ------------------------------------------------>
+      <div
+        style="border: solid; border-color: brown; border-width: 1px; border-radius: 8px; margin-bottom: 2px; padding: 0px 12px;">
+        <!-- प्रतिज्ञा पत्र -->
+        <div class="row mb-2 p-1" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+          <div class="col-6 text-start">
+            <label>प्रतिज्ञा पत्र</label>
+          </div>
+          <div class="col-6 d-flex justify-content-end align-items-center">
+            <label for="IsReportNOCSubmit">Submit</label>
+            <input type="checkbox" id="IsReportNOCSubmit" [(ngModel)]="Entity.p.IsReportNOCSubmit"
+              name="IsReportNOCSubmit" class="custom-checkbox" />
+          </div>
+        </div>
+
+        <!----------------------------------------------------------------  Outward Box ------------------------------------------------>
+        <div class="mb-3"
+          style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px; width: 70%; margin-left: auto; margin-right: auto;">
+          <!-- Outward -->
+          <div class="row mb-2 p-1" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+            <div class="col-6 text-start">
+              <label>Outward</label>
+            </div>
+            <div class="col-6 d-flex justify-content-end align-items-center">
+              <label for="IsReportNOCSubmit">Submit</label>
+              <input type="checkbox" id="IsReportNOCSubmit" [(ngModel)]="Entity.p.IsReportNOCSubmit"
+                name="IsReportNOCSubmit" class="custom-checkbox" />
+            </div>
+          </div>
+
+          <!----------------------------------------------------------  T.P.Office Box ------------------------------------------------>
+          <div class="mb-3"
+            style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px; width: 70%; margin-left: auto; margin-right: auto;">
+
+            <!-- T.P.Office -->
+            <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+              <div class="col-6 text-start">
+                <label> T.P.Office</label>
+              </div>
+            </div>
+
+            <!-- Details -->
+            <div class="row">
+              <div class="col-md-6">
+                <label>Inward No.</label>
+                <input type="text" name="QuotationDate" class="form-control date-input" id="QuotationDate"
+                  [(ngModel)]="Entity" placeholder="Select Date" />
+              </div>
+              <div class="col-md-6">
+                <label>Date</label>
+                <input type="date" name="QuotationDate" class="form-control date-input" id="QuotationDate"
+                  [(ngModel)]="Entity" placeholder="Select Date" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <!---------------------------------------------------------------- मोजणी Box ------------------------------------------------>
+      <div class="mb-3"
+        style="border: solid; border-color: brown; border-width: 1px; border-radius: 8px; margin-bottom: 2px; padding: 0px 12px;">
+        <!-- मोजणी -->
+        <div class="row mb-2 p-1" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+          <div class="col-6 text-start">
+            <label>मोजणी</label>
+          </div>
+        </div>
+
+        <!---------------------------------------------------------------- मोजणी तारीख Box ------------------------------------------------>
+        <div class="mb-3"
+          style="border: solid; border-color: brown; border-width: 1px; border-radius: 8px; margin-bottom: 2px; padding: 0px 12px;">
+          <!-- मोजणी तारीख -->
+          <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px">
+            <div class="col-6 text-start">
+              <label>मोजणी तारीख</label>
+            </div>
+            <div class="col-6 d-flex justify-content-end align-items-center">
+              <label for="IsReportNOCSubmit">Submit</label>
+              <input type="checkbox" id="IsReportNOCSubmit" [(ngModel)]="Entity.p.IsReportNOCSubmit"
+                name="IsReportNOCSubmit" class="custom-checkbox" />
+            </div>
+          </div>
+        </div>
+
+
+        <!----------------------------------------------------------------  Chalan Box ------------------------------------------------>
+        <div class="mb-3"
+          style="border: solid; border-color: brown; border-width: 1px; border-radius: 8px; margin-bottom: 2px; padding: 0px 12px;">
+          <!-- Chalan -->
+          <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px">
+            <div class="col-6 text-start">
+              <label>Chalan</label>
+            </div>
+            <div class="col-6 d-flex justify-content-end align-items-center">
+              <label for="IsReportNOCSubmit">Submit</label>
+              <input type="checkbox" id="IsReportNOCSubmit" [(ngModel)]="Entity.p.IsReportNOCSubmit"
+                name="IsReportNOCSubmit" class="custom-checkbox" />
+            </div>
+          </div>
+        </div>
+
+        <!----------------------------------------------------------------  Outward Box ------------------------------------------------>
+        <div class="mb-3"
+          style="border: solid; border-color: brown; border-width: 1px; border-radius: 5px; margin-bottom: 2px; padding: 0px 12px; width: 70%; margin-left: auto; margin-right: auto;">
+          <!-- Outward -->
+          <div class="row mb-2 p-1" style="background-color: #fbe6e6; border-radius: 8px 8px 0px 0px">
+            <div class="col-6 text-start">
+              <label>Outward</label>
+            </div>
+          </div>
+
+          <!-- Details -->
+          <div class="row mb-2">
+            <div class="col-md-6">
+              <label>Outward No.</label>
+              <input type="text" name="QuotationDate" class="form-control date-input" id="QuotationDate"
+                [(ngModel)]="Entity" placeholder="Select Date" />
+            </div>
+            <div class="col-md-6">
+              <label>Date</label>
+              <input type="date" name="QuotationDate" class="form-control date-input" id="QuotationDate"
+                [(ngModel)]="Entity" placeholder="Select Date" />
+            </div>
+          </div>
+
+          <!----------------------------------------------------------------  T.P.Office Box ------------------------------------------------>
+          <div class="mb-3"
+            style="border: solid; border-color: brown; border-width: 1px; border-radius: 8px; padding: 0px 12px;">
+            <!-- T.P.Office -->
+            <div class="row p-1" style="background-color: #fbe6e6; border-radius: 8px">
+              <div class="col-6 text-start">
+                <label>T.P.Office</label>
+              </div>
+              <div class="col-6 d-flex justify-content-end align-items-center">
+                <label for="IsReportNOCSubmit">Submit</label>
+                <input type="checkbox" id="IsReportNOCSubmit" [(ngModel)]="Entity.p.IsReportNOCSubmit"
+                  name="IsReportNOCSubmit" class="custom-checkbox" />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <br>
+
+      <!-------------------------------------------------------------  Submit Box -------------------------------------------------------->
+      <div style="
+          justify-content: center;
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
+        ">
+        <div>
+          <button type="submit" class="btn" (click)="SaveTPOffice()" [disabled]="isSaveDisabled">
+            Save
+          </button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackProgressReport()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

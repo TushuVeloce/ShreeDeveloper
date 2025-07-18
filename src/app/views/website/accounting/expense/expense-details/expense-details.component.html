@@ -135,9 +135,11 @@
               id="RemainingAdvance" readonly placeholder="Enter Remaining Advance" />
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="!Entity.p.IsAdvancePayment">
           <div>
-            <label>Bill Amount</label>
+            <label *ngIf="Entity.p.RecipientType == EmployeeType && Entity.p.IsAdvancePayment">Bill Amount</label>
+            <label *ngIf="Entity.p.RecipientType == EmployeeType && !Entity.p.IsAdvancePayment">Net Salary</label>
+            <label *ngIf="Entity.p.RecipientType != EmployeeType">Bill Amount</label>
             <input type="number" [(ngModel)]="Entity.p.InvoiceAmount" name="InvoiceAmount" class="form-control"
               id="InvoiceAmount" required placeholder="Enter InvoiceAmount" readonly #InvoiceAmountCtrl="ngModel"
               (blur)="InvoiceAmountCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
@@ -158,7 +160,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem; ">
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="!Entity.p.IsAdvancePayment">
           <div>
             <label>Remaining Amount</label>
             <input type="number" [(ngModel)]="Entity.p.RemainingAmount" readonly name="RemainingAmount"
@@ -167,6 +169,18 @@
               (click)="selectAllValue($event)" />
             <div *ngIf="(RemainingAmountCtrl.invalid && (RemainingAmountCtrl.touched || RemainingAmountCtrl.dirty))">
               <span class="validation-text" *ngIf="RemainingAmountCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.IsAdvancePayment">
+          <div>
+            <label>Total Advance</label>
+            <input type="number" [(ngModel)]="Entity.p.TotalAdvance" readonly name="TotalAdvance"
+              class="form-control" id="TotalAdvance" required placeholder="Enter Total Advance"
+              #TotalAdvanceCtrl="ngModel" (blur)="TotalAdvanceCtrl.control.markAsTouched()"
+              (click)="selectAllValue($event)" />
+            <div *ngIf="(TotalAdvanceCtrl.invalid && (TotalAdvanceCtrl.touched || TotalAdvanceCtrl.dirty))">
+              <span class="validation-text" *ngIf="TotalAdvanceCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
           </div>
         </div>
