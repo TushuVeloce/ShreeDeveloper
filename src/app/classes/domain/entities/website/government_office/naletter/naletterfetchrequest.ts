@@ -5,7 +5,7 @@ import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class NaLetterFetchRequest {
-    public static readonly FetchRequestType: string = "GovernmentNaLetterFetchRequest";
+    public static readonly FetchRequestType: string = "GovernmentParishisthaNAFetchRequest";
 
     CompanyRefs: number[] = [];
     SiteRefs: number[] = [];
