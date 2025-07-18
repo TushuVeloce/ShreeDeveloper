@@ -124,6 +124,8 @@ export class Invoice implements IPersistable<Invoice> {
     if (this.p.SubLedgerRef <= 0) { vra.add('SubLedgerRef', 'Sub Ledger cannot be blank.'); }
     if (this.p.ExpenseType <= 0) { vra.add('ExpenseType', 'Expense Type cannot be blank.'); }
     // if (this.p.Description == '') { vra.add('Description', 'Description cannot be blank.'); }
+    if (this.p.ExpenseType <= 0) { vra.add('ExpenseType', 'Expense Type cannot be blank.'); }
+    // if (this.p.Description == '') { vra.add('Description', 'Description cannot be blank.'); }
     if (this.p.Qty <= 0 && this.p.ExpenseType == this.p.OtherExpenseRef) { vra.add('Qty', 'Quantity cannot be blank.'); }
     // if (this.p.Rate <= 0) { vra.add('Rate', 'Rate cannot be blank.'); }
     if (this.p.IsDieselPaid == 1) {
