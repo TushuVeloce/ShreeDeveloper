@@ -19,7 +19,7 @@
           <label>Employee Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" [nzSize]="'large'" name="EmployeeRef" required id="EmployeeRef"
-            [(ngModel)]="Entity.p.EmployeeRef" (ngModelChange)="EmployeeData(Entity.p.EmployeeRef, Entity.p.Month)"
+            [(ngModel)]="Entity.p.EmployeeRef" (ngModelChange)="EmployeeData(Entity.p.EmployeeRef, Entity.p.Month); ClearValues()"
             [disabled]="isEmployeeDisabled">
             <nz-option *ngFor="let employee of EmployeeList" [nzValue]="employee.p.Ref"
               [nzLabel]="employee.p.Name"></nz-option>
@@ -29,7 +29,7 @@
           <label>Month</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" [nzSize]="'large'" name="Month" required id="Month" [(ngModel)]="Entity.p.Month"
-            (ngModelChange)="EmployeeData(Entity.p.EmployeeRef, Entity.p.Month)">
+            (ngModelChange)="EmployeeData(Entity.p.EmployeeRef, Entity.p.Month); ClearValues()">
             <nz-option *ngFor="let month of MonthList" [nzValue]="month.Ref" [nzLabel]="month.Name"></nz-option>
           </nz-select>
         </div>
@@ -140,7 +140,7 @@
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Total Leave Deduction</label>
           <input type="number" name="TotalLeaveDeduction" class="form-control" id="TotalLeaveDeduction"
-            [(ngModel)]="Entity.p.TotalLeaveDeduction" placeholder="Enter Total Leave Deduction" required
+            [(ngModel)]="Entity.p.TotalLeaveDeduction" placeholder="Enter Total Leave Deduction" required readonly
             (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()" />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">

@@ -80,6 +80,8 @@ export class StockConsume implements IPersistable<StockConsume> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
+    if (this.p.ConsumptionDate == '') vra.add('ConsumptionDate', 'Consumption Date cannot be blank.');
+    if (this.p.ConsumedQuantity == 0) vra.add('ConsumedQuantity', 'Consumed Quantity cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {

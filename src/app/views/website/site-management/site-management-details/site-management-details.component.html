@@ -26,7 +26,7 @@
             [pattern]="NameWithoutNos" #NameCtrl="ngModel" required (blur)="NameCtrl.control.markAsTouched()"
             placeholder="Enter Site Name" />
           <div *ngIf="NameCtrl.invalid && (NameCtrl.touched || NameCtrl.dirty)">
-            <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{ NameWithoutNosMsg }}</span>
+            <!-- <span class="validation-text" *ngIf="NameCtrl.errors?.['pattern']">{{ NameWithoutNosMsg }}</span> -->
             <span class="validation-text" *ngIf="NameCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
@@ -35,24 +35,24 @@
           <input type="text" name="AddressLine1" class="form-control" id="AddressLine1"
             [(ngModel)]="Entity.p.AddressLine1" #AddressLine1Ctrl="ngModel" required
             (blur)="AddressLine1Ctrl.control.markAsTouched()" placeholder="Enter  Address" />
-          <div *ngIf="
+          <!-- <div *ngIf="
               AddressLine1Ctrl.invalid &&
               (AddressLine1Ctrl.touched || AddressLine1Ctrl.dirty)
             ">
             <span class="validation-text" *ngIf="AddressLine1Ctrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
-          </div>
+          </div> -->
         </div>
         <div class="col-md-4 col-6">
           <label>Site Location</label>
           <input type="text" name="AddressLine2" class="form-control" id="AddressLine2"
             [(ngModel)]="Entity.p.AddressLine2" #AddressLine2Ctrl="ngModel" required
             (blur)="AddressLine2Ctrl.control.markAsTouched()" placeholder="Enter Site Location" />
-          <div *ngIf="
+          <!-- <div *ngIf="
               AddressLine2Ctrl.invalid &&
               (AddressLine2Ctrl.touched || AddressLine2Ctrl.dirty)
             ">
             <span class="validation-text" *ngIf="AddressLine2Ctrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
-          </div>
+          </div> -->
         </div>
         <div class="col-md-4 col-6">
           <label>Pin Code</label>
@@ -63,7 +63,7 @@
               PinCodeCtrl.invalid && (PinCodeCtrl.touched || PinCodeCtrl.dirty)
             ">
             <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['pattern']">{{ PinCodeMsg }}</span>
-            <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+            <!-- <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span> -->
           </div>
         </div>
         <div class="col-md-4 col-6">
@@ -134,9 +134,9 @@
           <input type="number" name="EstimatedCost" class="form-control" id="EstimatedCost"
             [(ngModel)]="Entity.p.EstimatedCost" placeholder="Enter Estimated Cost" (click)="selectAllValue($event)"
             #EstimatedCostCtrl="ngModel" required (blur)="EstimatedCostCtrl.control.markAsTouched()" />
-          <div *ngIf="(EstimatedCostCtrl.invalid && (EstimatedCostCtrl.touched || EstimatedCostCtrl.dirty))">
+          <!-- <div *ngIf="(EstimatedCostCtrl.invalid && (EstimatedCostCtrl.touched || EstimatedCostCtrl.dirty))">
             <span class="validation-text" *ngIf="EstimatedCostCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+          </div> -->
         </div>
         <div class="col-md-4 col-6">
           <label for="TotalLandAreaInSqm">Total Land Area in Sqm</label>
@@ -144,11 +144,11 @@
             [(ngModel)]="Entity.p.TotalLandAreaInSqm" (ngModelChange)="convertSqmToSqft()"
             #TotalLandAreaInSqmCtrl="ngModel" required (blur)="TotalLandAreaInSqmCtrl.control.markAsTouched()"
             placeholder="Enter Total Land Area in Sqm" (click)="selectAllValue($event)" />
-          <div
+          <!-- <div
             *ngIf="(TotalLandAreaInSqmCtrl.invalid && (TotalLandAreaInSqmCtrl.touched || TotalLandAreaInSqmCtrl.dirty))">
             <span class="validation-text"
               *ngIf="TotalLandAreaInSqmCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+          </div> -->
         </div>
         <div class="col-md-4 col-6">
           <label for="TotalLandAreaInSqft">Total Land Area in Sqft</label>
@@ -156,11 +156,11 @@
             [(ngModel)]="Entity.p.TotalLandAreaInSqft" (ngModelChange)="convertSqftToSqm()"
             #TotalLandAreaInSqftCtrl="ngModel" required (blur)="TotalLandAreaInSqftCtrl.control.markAsTouched()"
             placeholder="Enter Total Land Area in Sqft" (click)="selectAllValue($event)" />
-          <div
+          <!-- <div
             *ngIf="(TotalLandAreaInSqftCtrl.invalid && (TotalLandAreaInSqftCtrl.touched || TotalLandAreaInSqftCtrl.dirty))">
             <span class="validation-text"
               *ngIf="TotalLandAreaInSqftCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+          </div> -->
         </div>
         <div class="col-md-4 col-6">
           <label>Number Of Plots</label>
@@ -168,9 +168,9 @@
             [(ngModel)]="Entity.p.NumberOfPlots" #NumberOfPlotsCtrl="ngModel" required
             (blur)="NumberOfPlotsCtrl.control.markAsTouched()" placeholder="Enter Number of Plots"
             (click)="selectAllValue($event)" />
-          <div *ngIf="(NumberOfPlotsCtrl.invalid && (NumberOfPlotsCtrl.touched || NumberOfPlotsCtrl.dirty))">
+          <!-- <div *ngIf="(NumberOfPlotsCtrl.invalid && (NumberOfPlotsCtrl.touched || NumberOfPlotsCtrl.dirty))">
             <span class="validation-text" *ngIf="NumberOfPlotsCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -284,7 +284,7 @@
               (blur)="OwnerEmailCtrl.control.markAsTouched()" />
             <div *ngIf="(OwnerEmailCtrl.invalid && (OwnerEmailCtrl.touched || OwnerEmailCtrl.dirty))">
               <span class="validation-text" *ngIf="OwnerEmailCtrl.errors?.['pattern']">{{ EmailMsg }}</span>
-              <span class="validation-text" *ngIf="OwnerEmailCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+              <!-- <span class="validation-text" *ngIf="OwnerEmailCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span> -->
             </div>
           </div>
           <div class="col-6">
@@ -338,7 +338,7 @@
               (blur)="OwnerPincodeCtrl.control.markAsTouched()" placeholder="Enter Pin Code" />
             <div *ngIf="(OwnerPincodeCtrl.invalid && (OwnerPincodeCtrl.touched || OwnerPincodeCtrl.dirty))">
               <span class="validation-text" *ngIf="OwnerPincodeCtrl.errors?.['pattern']">{{ PinCodeMsg }}</span>
-              <span class="validation-text" *ngIf="OwnerPincodeCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+              <!-- <span class="validation-text" *ngIf="OwnerPincodeCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span> -->
             </div>
           </div>
         </div>

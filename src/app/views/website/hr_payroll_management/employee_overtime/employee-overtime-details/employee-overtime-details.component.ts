@@ -33,8 +33,8 @@ export class EmployeeOvertimeDetailsComponent implements OnInit {
 
   @ViewChild('OvertimeForm') OvertimeForm!: NgForm;
   @ViewChild('DateCtrl') DateInputControl!: NgModel;
-  @ViewChild('OverTimeInHrsCtrl') OverTimeInHrsInputControl!: NgModel;
-  @ViewChild('OverTimeInMinCtrl') OverTimeInMinInputControl!: NgModel;
+  @ViewChild('FromTimeCtrl') FromTimeInputControl!: NgModel;
+  @ViewChild('ToTimeTimeCtrl') ToTimeTimeInputControl!: NgModel;
 
   constructor(
     private router: Router,

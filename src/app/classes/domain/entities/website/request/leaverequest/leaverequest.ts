@@ -83,7 +83,6 @@ export class LeaveRequest implements IPersistable<LeaveRequest> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-
     if (this.p.EmployeeRef == 0) {
       vra.add('Name', 'Name cannot be blank.');
     }
@@ -105,12 +104,12 @@ export class LeaveRequest implements IPersistable<LeaveRequest> {
         vra.add('Days', 'Days cannot be blank.');
       }
     }
-    if (this.p.LeaveHours == 0) {
-      vra.add('Hours', 'Hours cannot be blank.');
-    }
-    if (this.p.Description == '') {
-      vra.add('Description', 'Description cannot be blank.');
-    }
+    // if (this.p.LeaveHours == 0) {
+    //   vra.add('Hours', 'Hours cannot be blank.');
+    // }
+    // if (this.p.Description == '') {
+    //   vra.add('Description', 'Description cannot be blank.');
+    // }
   }
 
   public MergeIntoTransportData(td: TransportData) {
