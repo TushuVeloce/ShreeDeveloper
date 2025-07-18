@@ -12,7 +12,7 @@ import { ToastService } from '../../../core/toast.service';
   styleUrls: ['./forgot-password-mobile-app.component.scss'],
   standalone: false
 })
-export class ForgotPasswordMobileAppComponent  implements OnInit {
+export class ForgotPasswordMobileAppComponent implements OnInit {
 
   forgotForm!: FormGroup;
   step: number = 1;
@@ -29,10 +29,11 @@ export class ForgotPasswordMobileAppComponent  implements OnInit {
     private appStateManage: AppStateManageService,
     private servercommunicator: ServerCommunicatorService,
     private toastService: ToastService,
-    private haptic: HapticService
+    private haptic: HapticService,
+
   ) { }
 
-  ngOnInit() {
+  ngOnInit ():void {
     this.forgotForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       newPassword: ['', [Validators.required, Validators.minLength(6)]],
@@ -40,7 +41,7 @@ export class ForgotPasswordMobileAppComponent  implements OnInit {
     });
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy (): void {
     this.step = 1;
     if (this.resendInterval) {
       clearInterval(this.resendInterval);
@@ -49,31 +50,35 @@ export class ForgotPasswordMobileAppComponent  implements OnInit {
   }
 
   sendOtp = async () => {
-    if (this.forgotForm.get('email')?.valid) {
-      const { email } = this.forgotForm.value;
-      let body = { EMailId: email };
-      console.log('body : sendOtp', body);
-      this.appStateManage.localStorage.setItem('userEMailId', email);
+    try {
+      if (this.forgotForm.get('email')?.valid) {
+        const { email } = this.forgotForm.value;
+        let body = { EMailId: email };
+        // console.log('body : sendOtp', body);
+        this.appStateManage.localStorage.setItem('userEMailId', email);
 
-      const response = await this.servercommunicator.FetchRequestForMobileApp('generateuserotp', body);
-      console.log('response :sendOtp', response);
-      if (response.Successful) {
-        this.toastService.present("OTP generation successfully", 1000, 'success');
-        console.log('OTP generation successfully:', response.Message);
-        await this.haptic.success();
-        this.step = 2;
-        this.otpDigits = ['', '', '', '', '', ''];
-        this.startResendTimer();
-        return;
-      } else {
-        this.toastService.present(response.Message, 1000, 'danger');
-        await this.haptic.error();
-        console.log('OTP generation failed:', response.Message);
+        const response = await this.servercommunicator.FetchRequestForMobileApp('generateuserotp', body);
+        // console.log('response :sendOtp', response);
+        if (response.Successful) {
+          this.toastService.present("OTP generation successfully", 1000, 'success');
+          // console.log('OTP generation successfully:', response.Message);
+          this.step = 2;
+          this.otpDigits = ['', '', '', '', '', ''];
+          this.startResendTimer();
+          await this.haptic.success();
+          return;
+        } else {
+          this.toastService.present(response.Message, 1000, 'danger');
+          await this.haptic.error();
+          // console.log('OTP generation failed:', response.Message);
+        }
       }
+    } catch (error) {
+
     }
   }
 
-  startResendTimer(): void {
+  startResendTimer = () => {
     this.resendTimer = 30;
     this.canResend = false;
 
@@ -94,21 +99,21 @@ export class ForgotPasswordMobileAppComponent  implements OnInit {
       const { email } = this.forgotForm.value;
       this.otpDigits = ['', '', '', '', '', ''];
       let body = { EMailId: email };
-      console.log('body :resendOtp', body);
+      // console.log('body :resendOtp', body);
 
       const response = await this.servercommunicator.FetchRequestForMobileApp(
         'sendpasswordchangeemailotp',
         body
       );
-      console.log('response :resendOtp', response);
+      // console.log('response :resendOtp', response);
 
       if (!response.Successful) {
-        console.log('Resend OTP Error:', response.Message);
+        // console.log('Resend OTP Error:', response.Message);
         this.toastService.present('Resend OTP Failed!', 1000, 'danger');
         await this.haptic.error();
         return;
       } else {
-        console.log('Resend OTP Successful', response.Message);
+        // console.log('Resend OTP Successful', response.Message);
         this.toastService.present("Resend OTP Successfully", 1000, 'success');
         await this.haptic.success();
         this.startResendTimer();
@@ -116,7 +121,7 @@ export class ForgotPasswordMobileAppComponent  implements OnInit {
     }
   }
 
-  onOtpInput(event: any, index: number): void {
+  onOtpInput = (event: any, index: number) => {
     const input = event.target;
     const value = input.value;
 
@@ -133,7 +138,7 @@ export class ForgotPasswordMobileAppComponent  implements OnInit {
     }
   }
 
-  onOtpKeyDown(event: KeyboardEvent, index: number): void {
+  onOtpKeyDown = (event: KeyboardEvent, index: number) => {
     const input = event.target as HTMLInputElement;
 
     if (event.key === 'Backspace' && !input.value && index > 0) {
@@ -146,7 +151,7 @@ export class ForgotPasswordMobileAppComponent  implements OnInit {
 
   verifyOtp = async () => {
     const otpValue = this.otpDigits.join('');
-    console.log('OTP entered:', otpValue);
+    // console.log('OTP entered:', otpValue);
 
     if (otpValue.length === 6) {
       const { email } = this.forgotForm.value;
@@ -155,23 +160,23 @@ export class ForgotPasswordMobileAppComponent  implements OnInit {
         OTP: otpValue
       };
 
-      console.log('body :verifyOtp', body);
+      // console.log('body :verifyOtp', body);
       const response = await this.servercommunicator.VerifyOTP(
         'verifyuserotp',
         body
       );
-      console.log('response :verifyOtp', response);
+      // console.log('response :verifyOtp', response);
 
       if (!response.Successful) {
         this.toastService.present(response.Message, 1000, 'danger');
         await this.haptic.error();
-        console.log('OTP verification failed:', response.Message);
+        // console.log('OTP verification failed:', response.Message);
         return;
       } else {
+        this.step = 3;
         this.toastService.present('OTP verified successfully', 1000, 'success');
         await this.haptic.success();
-        console.log('OTP verified successfully', response.Message);
-        this.step = 3;
+        // console.log('OTP verified successfully', response.Message);
       }
     } else {
       // alert('Please enter a 6-digit OTP');
@@ -185,34 +190,34 @@ export class ForgotPasswordMobileAppComponent  implements OnInit {
     const otpValue = this.otpDigits.join('');
 
     if (newPassword !== confirmPassword) {
-      alert('Passwords do not match!');
+      // alert('Passwords do not match!');
+      this.toastService.present('Passwords do not match!', 1000, 'warning');
+      await this.haptic.warning();
       return;
     }
 
     let body = {
-      EMailId: email,
+      EmailId: email,
       OTP: otpValue,
       Password: newPassword,
       ConfirmPassword: confirmPassword
-    };
-
-    console.log('body :onSubmit', body);
-    const response = await this.servercommunicator.FetchRequestForMobileApp(
-      'changepassword',
+    }
+    // ---------------------using new mqtt service --------------------
+    const response = await this.servercommunicator.UpdatePassword(
+      'updatepassword',
       body
     );
-    console.log('response :onSubmit', response);
 
     if (!response.Successful) {
-      console.log('Password change failed:', response.Message);
+      // console.log('Password change failed:', response.Message);
       this.toastService.present(response.Message, 1000, 'danger');
       await this.haptic.error();
       return;
     } else {
-      console.log('Password changed successfully', response.Message);
+      // console.log('Password changed successfully', response.Message);
       this.toastService.present("Password changed successfully", 1000, 'success');
-      await this.haptic.success();
       await this.goToLogin();
+      await this.haptic.success();
     }
   }
 

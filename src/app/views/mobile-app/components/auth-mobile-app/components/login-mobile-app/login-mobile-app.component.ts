@@ -51,13 +51,13 @@ export class LoginMobileAppComponent  implements OnInit {
     const response = await this.servercommunicator.LoginUser(req);
  
     if (!response.Successful) {
+      this.isLoggingIn = false;
       this.toastService.present(response.Message, 2000, 'danger');
       await this.haptic.error();
-      this.isLoggingIn = false;
       return;
     }
 
-    // Store session values
+    //  Store session values
     this.appStateManage.setEmployeeRef(response.LoginEmployeeRef);
     this.appStateManage.setLoginTokenForMobile(response.LoginToken);
     this.companystatemanagement.setCompanyRef(response.LastSelectedCompanyRef, response.CompanyName);
@@ -70,8 +70,8 @@ export class LoginMobileAppComponent  implements OnInit {
     this.appStateManage.localStorage.setItem('userEmail', response.EMailId);
     this.appStateManage.localStorage.setItem('LoginEmployeeRef', response.LoginEmployeeRef.toString());
 
-    this.toastService.present('Logged in successfully', 2000, 'success');
     this.isLoggingIn = false;
+    this.toastService.present('Logged in successfully', 2000, 'success');
     this.loginForm.reset();
 
     if (response.LoginForFirstTime == 0) {
@@ -79,7 +79,6 @@ export class LoginMobileAppComponent  implements OnInit {
     } else {
       this.router.navigate(['/mobile-app/tabs']);
     }
-
     await this.haptic.success();
   };
 

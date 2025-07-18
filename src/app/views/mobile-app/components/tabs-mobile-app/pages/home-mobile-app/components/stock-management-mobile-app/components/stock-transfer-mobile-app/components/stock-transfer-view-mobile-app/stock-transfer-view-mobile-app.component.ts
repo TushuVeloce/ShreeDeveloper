@@ -12,6 +12,7 @@ import { AlertService } from 'src/app/views/mobile-app/components/core/alert.ser
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
+import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filter-mobile-app/chip-filter-mobile-app.component';
 
 @Component({
   selector: 'app-stock-transfer-view-mobile-app',
@@ -29,6 +30,10 @@ export class StockTransferViewMobileAppComponent  implements OnInit {
 
   companyRef = 0;
   modalOpen = false;
+  filters: FilterItem[] = [];
+
+  // Store current selected values here to preserve selections on filter reload
+  selectedFilterValues: Record<string, any> = {};
 
   constructor(
     private router: Router,
@@ -45,17 +50,77 @@ export class StockTransferViewMobileAppComponent  implements OnInit {
   ) { }
 
   ngOnInit = async () => {
-    await this.loadStockTransferIfEmployeeExists();
+    // await this.loadStockTransferIfEmployeeExists();
   };
 
   ionViewWillEnter = async () => {
     await this.loadStockTransferIfEmployeeExists();
+    await this.loadFilters();
   };
 
   async handleRefresh(event: CustomEvent) {
     await this.loadStockTransferIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
+
+   loadFilters() {
+    this.filters = [
+      {
+        key: 'fromsite',
+        label: 'From Site',
+        multi: false,
+        options: this.SiteList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['fromsite'] > 0 ? this.selectedFilterValues['fromsite'] : null,
+      },
+      {
+        key: 'tosite',
+        label: 'To Site',
+        multi: false,
+        options: this.SiteList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['tosite'] > 0 ? this.selectedFilterValues['tosite'] : null,
+      }
+    ];
+  }
+
+  async onFiltersChanged(updatedFilters: any[]) {
+    // debugger
+    console.log('Updated Filters:', updatedFilters);
+
+    for (const filter of updatedFilters) {
+      const selected = filter.selected;
+      const selectedValue = (selected === null || selected === undefined) ? null : selected;
+
+      // Save selected value to preserve after reload
+      this.selectedFilterValues[filter.key] = selectedValue ?? null;
+
+      switch (filter.key) {
+        case 'fromsite':
+          if (this.Entity.p.FromSiteRef == this.Entity.p.ToSiteRef) {
+            await this.toastService.present('Same site can not selected', 1000, 'danger');
+            break;
+          }
+          this.Entity.p.FromSiteRef = selectedValue ?? 0;
+          break;
+
+        case 'tosite':
+          if (this.Entity.p.FromSiteRef == this.Entity.p.ToSiteRef) {
+            await this.toastService.present('Same site can not selected', 1000, 'danger');
+            break;
+          }
+          this.Entity.p.ToSiteRef = selectedValue ?? 0;
+          break;
+      }
+    }
+    await this.getStockTransferListByCompanyRefAndSiteRef();
+    this.loadFilters(); // Reload filters with updated options & preserve selections
+  }
+
 
   private async loadStockTransferIfEmployeeExists() {
     try {

@@ -24,7 +24,7 @@
 
 
     <!-- Select site -->
-    <ion-item class="input-item" button (click)="selectSiteBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()">
       <ion-label>Site</ion-label>
 
       <!-- Text showing the selected status -->
@@ -33,11 +33,11 @@
       </ion-text>
 
       <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Select Vendor -->
-    <ion-item class="input-item" button (click)="selectVendorBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectVendorBottomsheet()">
       <ion-label>Vendor</ion-label>
 
       <!-- Text showing the selected status -->
@@ -46,7 +46,7 @@
       </ion-text>
 
       <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Vendor Trade Name input-->
@@ -137,7 +137,7 @@
               <tr>
                 <td class="sticky-col" colspan="2"><b>Grand Total</b></td>
                 <td colspan="11"></td>
-                <td><b>₹ {{ getGrandTotal() }}</b></td>
+                <td><b>{{ getGrandTotal() | currency : "INR" }}</b></td>
               </tr>
             </tbody>
           </table>
@@ -170,7 +170,7 @@
           <ion-content class="ion-padding">
             <ion-list lines="none">
               <!-- Material Dropdown -->
-              <ion-item class="input-item" button (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable">
+              <ion-item class="input-item" button detail (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable">
                 <ion-label>Material Name</ion-label>
 
                 <!-- Text showing the selected status -->
@@ -179,7 +179,7 @@
                 </ion-text>
 
                 <!-- Dropdown icon (chevron) on the right -->
-                <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+                <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
               </ion-item>
 
               <!-- Material input-->

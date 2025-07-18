@@ -3,7 +3,7 @@
 <ion-content class="form-container">
   <ion-list lines="none" class="ion-padding">
     <!-- Select From site -->
-    <ion-item class="input-item" button (click)="selectSiteBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()">
       <ion-label>Site</ion-label>
 
       <!-- Text showing the selected status -->
@@ -12,11 +12,11 @@
       </ion-text>
 
       <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Select To site -->
-    <ion-item class="input-item" button (click)="selectStageBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectStageBottomsheet()">
       <ion-label>Stage</ion-label>
 
       <!-- Text showing the selected status -->
@@ -25,7 +25,7 @@
       </ion-text>
 
       <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <ion-item (click)="showConsumptionDatePicker = true" class="input-item">
@@ -39,7 +39,7 @@
 
 
     <!-- Select Vendor -->
-    <ion-item class="input-item" button (click)="selectMaterialBottomsheet()">
+    <ion-item class="input-item" button detail (click)="selectMaterialBottomsheet()">
       <ion-label>Material</ion-label>
 
       <!-- Text showing the selected status -->
@@ -48,7 +48,7 @@
       </ion-text>
 
       <!-- Dropdown icon (chevron) on the right -->
-      <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Unit input-->

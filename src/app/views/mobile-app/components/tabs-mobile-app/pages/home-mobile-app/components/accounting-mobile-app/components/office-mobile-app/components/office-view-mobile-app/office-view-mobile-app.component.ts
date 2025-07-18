@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AccountingReports, DomainEnums, OpeningBalanceModeOfPayments } from 'src/app/classes/domain/domainenums/domainenums';
@@ -17,6 +17,7 @@ import { Utils } from 'src/app/services/utils.service';
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
+import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
 import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filter-mobile-app/chip-filter-mobile-app.component';
 
@@ -48,6 +49,8 @@ export class OfficeViewMobileAppComponent implements OnInit {
   ReasonList: any[] = [];
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
+  Printheaders: string[] = ['Sr.No.', 'Date', 'Payer Name', 'Recipient Name', 'Site Name', 'Reason', 'Income', 'Expense', 'Shree Bal.', 'Mode of Payment', 'Narration',];
+
 
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
@@ -66,6 +69,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private baseUrl: BaseUrlService,
     private utils: Utils,
+    private pdfService: PDFService
   ) { }
 
   ngOnInit = async () => {
@@ -112,7 +116,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
           Ref: item.Ref,
           Name: item.Name,
         })),
-        selected: this.selectedFilterValues['accountingReport'] > 0 ? this.selectedFilterValues['accountingReport'] :200,
+        selected: this.selectedFilterValues['accountingReport'] > 0 ? this.selectedFilterValues['accountingReport'] : 200,
       }
     ];
   }
@@ -142,14 +146,26 @@ export class OfficeViewMobileAppComponent implements OnInit {
           break;
 
         case 'modeOfPayment':
-          this.Entity.p.ModeOfPaymentName = selectedValue ?? 0;
+          this.Entity.p.ModeOfPayment = selectedValue ?? 0;
           break;
       }
     }
+    await this.FetchEntireListByFilters();
     this.loadFilters(); // Reload filters with updated options & preserve selections
   }
 
-
+    @ViewChild('PrintContainer')
+    PrintContainer!: ElementRef;
+  
+    async handlePrintOrShare() {
+      if (this.DisplayMasterList.length == 0) {
+        await this.toastService.present('No Income Records Found', 1000, 'warning');
+        await this.haptic.warning();
+        return;
+      }
+      if (!this.PrintContainer) return;
+      await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+    }
 
   private async loadAccountingReportIfEmployeeExists() {
     try {
@@ -165,10 +181,10 @@ export class OfficeViewMobileAppComponent implements OnInit {
       }
       this.Entity.p.AccountingReport = AccountingReports.CurrentFinancialYear
       //  await this.getAccountingReportListByCompanyRef();
-      await this.FetchEntireListByStartDateandEndDate();
       await this.getOpeningBalanceListByCompanyRef();
-      await this.getCurrentBalanceByCompanyRef()
+      await this.getCurrentBalanceByCompanyRef();
       await this.getSiteListByCompanyRef();
+      await this.FetchEntireListByFilters();
       this.Entity.p.StartDate = ''
       this.Entity.p.EndDate = ''
     } catch (error) {
@@ -178,6 +194,23 @@ export class OfficeViewMobileAppComponent implements OnInit {
     } finally {
       await this.loadingService.hide();
     }
+  }
+
+  FetchEntireListByFilters = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'warning');
+      await this.haptic.warning();
+      return;
+    }
+    let lst = await AccountingReport.FetchEntireListByFilters(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport, this.Entity.p.SiteRef, this.Entity.p.ModeOfPayment, this.companyRef, async errMsg => {
+      // await this.uiUtils.showErrorMessage('Error', errMsg)
+      await this.toastService.present('Error' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
   }
 
   getAccountingReportListByCompanyRef = async () => {
@@ -204,7 +237,7 @@ export class OfficeViewMobileAppComponent implements OnInit {
       await this.haptic.warning();
       return;
     }
-    let lst = await AccountingReport.FetchEntireListByFilters(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport,this.Entity.p.SiteRef,this.Entity.p.ModeOfPayment, this.companyRef, async errMsg => {
+    let lst = await AccountingReport.FetchEntireListByFilters(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport, this.Entity.p.SiteRef, this.Entity.p.ModeOfPayment, this.companyRef, async errMsg => {
       await this.toastService.present('Error' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -277,40 +310,6 @@ export class OfficeViewMobileAppComponent implements OnInit {
     }
   }
 
-  printReport(): void {
-    const printContents = document.getElementById('print-section')?.innerHTML;
-    if (printContents) {
-      const popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
-      popupWin?.document.write(`
-      <html>
-        <head>
-          <title>Office Report</title>
-         <style>
-         * {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-            font-family: sans-serif;
-           }
-            table {
-              border-collapse: collapse;
-              width: 100%;
-            }
-
-            th, td {
-              border: 1px solid  rgb(169, 167, 167);
-              text-align: center;
-              padding: 15px;
-            }
-          </style>
-        </head>
-        <body onload="window.print();window.close()">
-          ${printContents}
-        </body>
-      </html>
-    `);
-      popupWin?.document.close();
-    }
-  }
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {

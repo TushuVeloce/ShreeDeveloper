@@ -98,7 +98,6 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit {
   }
 
   async onFiltersChanged(updatedFilters: any[]) {
-    // debugger
     console.log('Updated Filters:', updatedFilters);
 
     for (const filter of updatedFilters) {

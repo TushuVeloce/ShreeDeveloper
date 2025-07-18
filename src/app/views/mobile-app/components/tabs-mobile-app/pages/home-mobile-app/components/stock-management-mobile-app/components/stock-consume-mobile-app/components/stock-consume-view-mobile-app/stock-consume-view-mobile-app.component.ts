@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { IonContent } from "@ionic/angular/standalone";
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { StockConsume } from 'src/app/classes/domain/entities/website/stock_management/stock_consume/stockconsume';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';

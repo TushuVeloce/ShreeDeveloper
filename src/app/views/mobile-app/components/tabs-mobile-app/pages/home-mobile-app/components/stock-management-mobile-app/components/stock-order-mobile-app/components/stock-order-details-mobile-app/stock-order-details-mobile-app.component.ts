@@ -36,8 +36,8 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
   InitialEntity: Order = null as any;
   SiteList: Site[] = [];
   VendorList: Vendor[] = [];
-  MaterialRequisitionList: OrderMaterial[] = [];
-  AllMaterialRequisitionList: OrderMaterial[] = [];
+  StockOrderList: OrderMaterial[] = [];
+  AllStockOrderList: OrderMaterial[] = [];
   // OrderDate: string | null = null;
   CurrentDate: string | null = null;
   Date: string | null = null;
@@ -104,17 +104,17 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
   ) { }
 
   ngOnInit = async () => {
-    await this.loadMaterialRequisitionDetailsIfCompanyExists();
+    // await this.loadStockOrderDetailsIfCompanyExists();
 
   }
   ionViewWillEnter = async () => {
-    await this.loadMaterialRequisitionDetailsIfCompanyExists();
+    await this.loadStockOrderDetailsIfCompanyExists();
   }
   ngOnDestroy() {
     // Cleanup if needed
   }
 
-  private async loadMaterialRequisitionDetailsIfCompanyExists() {
+  private async loadStockOrderDetailsIfCompanyExists() {
     try {
       await this.loadingService.show(); // Awaiting this is critical
       this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
@@ -155,6 +155,11 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
           //.............New Date Format...........//
           this.PurchaseOrderDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
           this.DisplayPurchaseOrderDate = this.datePipe.transform(this.PurchaseOrderDate, 'yyyy-MM-dd') ?? '';;
+          // this.selectedGST = [{ p: { Ref: this.newOrderMaterial.Gst, Name: this.newOrderMaterial.Gst } }];
+          // this.gstName = this.newOrderMaterial.Gst;
+          this.gstName = this.GSTList.find(item => item.Ref == this.GSTList[0].Ref)?.Name ?? '';
+          this.selectedGST = [{ p: { Ref: this.newOrderMaterial.Gst, Name: this.gstName } }];
+
         }
         this.InitialEntity = Object.assign(Order.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Order;
 
@@ -250,8 +255,8 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
       }
       );
       console.log('lst :', lst);
-      // this.AllMaterialRequisitionList = lst;
-      this.AllMaterialRequisitionList = lst.filter(material => material.p.IsRequisitionMaterial == 1)
+      // this.AllStockOrderList = lst;
+      this.AllStockOrderList = lst.filter(material => material.p.IsRequisitionMaterial == 1)
       this.filterMaterialList();
     } catch (error) {
 
@@ -261,9 +266,9 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
   }
 
   filterMaterialList() {
-    // this.MaterialRequisitionList = this.AllMaterialRequisitionList.filter(material => material.p.IsRequisitionMaterial == 1)
+    // this.StockOrderList = this.AllStockOrderList.filter(material => material.p.IsRequisitionMaterial == 1)
     const usedRefs = this.Entity.p.MaterialPurchaseOrderDetailsArray.map(item => item.MaterialRef);
-    this.MaterialRequisitionList = this.AllMaterialRequisitionList.filter(
+    this.StockOrderList = this.AllStockOrderList.filter(
       material => !usedRefs.includes(material.p.MaterialRef)
     );
   }
@@ -275,7 +280,7 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
   }
 
   onMaterialSelection = (MaterialRef: number) => {
-    const SingleRecord = this.MaterialRequisitionList.filter(data => data.p.MaterialRef == MaterialRef);
+    const SingleRecord = this.StockOrderList.filter(data => data.p.MaterialRef == MaterialRef);
     this.newOrderMaterial.UnitName = SingleRecord[0].p.UnitName
     this.newOrderMaterial.MaterialName = SingleRecord[0].p.MaterialName
     this.newOrderMaterial.RequisitionQty = SingleRecord[0].p.RequisitionQty
@@ -631,8 +636,8 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
 
   // public async selectMaterialBottomsheet(): Promise<void> {
   //   try {
-  //     const options = this.MaterialRequisitionList;
-  //     console.log('MaterialRequisitionList :', this.MaterialRequisitionList);
+  //     const options = this.StockOrderList;
+  //     console.log('StockOrderList :', this.StockOrderList);
   //     this.openSelectModal(options, this.selectedMaterial, false, 'Select Material', 1, (selected) => {
   //       this.selectedMaterial = selected;
   //       this.MaterialName = selected[0].p.MaterialName;
@@ -653,7 +658,7 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
   public async selectMaterialBottomsheet(): Promise<void> {
     try {
       // Reformat the options with Name and Ref
-      const options = this.MaterialRequisitionList.map(item => ({
+      const options = this.StockOrderList.map(item => ({
         ...item,
         p: {
           ...item.p,
@@ -662,7 +667,7 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
         }
       }));
 
-      console.log('Formatted MaterialRequisitionList:', options);
+      console.log('Formatted StockOrderList:', options);
 
       this.openSelectModal(options, this.selectedMaterial, false, 'Select Material', 1, (selected) => {
         this.selectedMaterial = selected;
@@ -768,7 +773,7 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
             text: 'Yes, Close',
             cssClass: 'custom-confirm',
             handler: () => {
-              this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/vendor-quotation'], { replaceUrl: true });
+              this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-order'], { replaceUrl: true });
               this.haptic.success();
               console.log('User confirmed.');
             }
@@ -776,7 +781,7 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
         ]
       });
     } else {
-      this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/vendor-quotation'], { replaceUrl: true });
+      this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-order'], { replaceUrl: true });
       this.haptic.success();
     }
   }

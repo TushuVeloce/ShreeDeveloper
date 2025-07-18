@@ -32,9 +32,9 @@
           <ion-item lines="none" class="input-item">
             <ion-label position="stacked">Official Email Id</ion-label>
             <ng-container *ngIf="isEditing; else viewOfficialEmailId">
-              <ion-input *ngIf="IsAdmin" [(ngModel)]="AdminEntity.p.EmailId" placeholder="Enter EmailId"></ion-input>
+              <ion-input *ngIf="IsAdmin" [(ngModel)]="AdminEntity.p.EmailId" placeholder="Enter Email Id" readonly></ion-input>
               <ion-input *ngIf="IsEmployee" [(ngModel)]="Entity.p.OfficialEmailId"
-                placeholder="Enter Official EmailId"></ion-input>
+                placeholder="Enter Official Email Id" readonly></ion-input>
             </ng-container>
             <ng-template #viewOfficialEmailId>
               <ion-text *ngIf="IsAdmin">{{ AdminEntity.p.EmailId || 'N/A' }}</ion-text>
@@ -78,7 +78,7 @@
             </ng-template>
           </ion-item> -->
 
-          <ion-item lines="none" class="input-item">
+          <!-- <ion-item lines="none" class="input-item">
             <ion-label position="stacked">Date of Birth</ion-label>
 
             <ng-container *ngIf="isEditing; else viewDOB">
@@ -101,7 +101,7 @@
               <ion-text *ngIf="IsEmployee">{{ Entity.p.DOB || 'N/A' }}</ion-text>
               <ion-text *ngIf="IsAdmin">{{ AdminEntity.p.DOB || 'N/A' }}</ion-text>
             </ng-template>
-          </ion-item>
+          </ion-item> -->
 
           <ion-item lines="none" class="input-item">
             <ion-label position="stacked">Gender</ion-label>

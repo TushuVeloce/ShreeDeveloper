@@ -2,7 +2,7 @@
 
 <ion-content class="form-container" style="--padding-top: 0;">
   <div style="display: flex; justify-content: flex-end; align-items: center; padding: 12px 16px 0 16px;">
-    <ion-button (click)="onShare()" size="small" fill="outline" color="primary">
+    <ion-button (click)="handlePrintOrShare()" size="small" fill="outline" color="primary">
       <ion-icon slot="start" name="share-outline"></ion-icon>
       <ion-label>Share</ion-label>
     </ion-button>
@@ -98,12 +98,12 @@
             <td style="padding: 4px; border: none;">{{ material.OrderedQty }}</td>
             <td style="padding: 4px; border: none;">{{
               !material.DiscountedRate
-              ? material.Rate
-              : material.DiscountedRate
+              ? (material.Rate | currency : "INR")
+              : (material.DiscountedRate| currency : "INR")
               }}</td>
             <td style="padding: 4px; border: none;">{{ material.Gst }}</td>
-            <td style="padding: 4px; border: none;">{{ material.DeliveryCharges }}</td>
-            <td style="padding: 4px; border: none;">{{ material.TotalAmount }}</td>
+            <td style="padding: 4px; border: none;">{{ material.DeliveryCharges | currency : "INR" }}</td>
+            <td style="padding: 4px; border: none;">{{ material.TotalAmount | currency : "INR" }}</td>
           </tr>
           <!-- Total -->
           <tr>
@@ -116,8 +116,8 @@
               style="padding: 8px; border: none; text-align: center; font-weight: bold; background-color: #fef4d4;">
               <strong>TOTAL</strong>
             </td>
-            <td style="padding: 2px; border: none; font-weight: bold; background-color: #fef4d4;"><strong>₹
-                {{Entity.p.GrandTotal}}</strong>
+            <td style="padding: 2px; border: none; font-weight: bold; background-color: #fef4d4;"><strong>
+                {{Entity.p.GrandTotal | currency : "INR"}}</strong>
             </td>
           </tr>
           <!-- In Words -->

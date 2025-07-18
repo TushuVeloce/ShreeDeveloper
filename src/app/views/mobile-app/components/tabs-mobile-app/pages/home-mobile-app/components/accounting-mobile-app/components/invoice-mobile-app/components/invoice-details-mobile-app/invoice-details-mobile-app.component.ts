@@ -155,7 +155,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   ) { }
 
   ngOnInit = async () => {
-    await this.loadInvoiceDetailsIfCompanyExists();
+    // await this.loadInvoiceDetailsIfCompanyExists();
 
   }
   ionViewWillEnter = async () => {
@@ -367,9 +367,9 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   }
 
   AddRecipientName = () => {
+    this.RecipientNameInput = true
     this.Entity.p.RecipientMasterRef = 0
     this.RecipientEntity.p.Name = ''
-    this.RecipientNameInput = true
   }
 
   cancelRecipientName = () => {
@@ -908,11 +908,11 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
         return;
       } else {
         // await this.uiUtils.showSuccessToster('Recipient Name saved successfully');
-        await this.toastService.present('Recipient Name saved successfully', 1000, 'success');
-        await this.haptic.success();
         this.RecipientNameInput = false
         await this.getRecipientListByCompanyRef()
         this.RecipientEntity = Recipient.CreateNewInstance();
+        await this.toastService.present('Recipient Name saved successfully', 1000, 'success');
+        await this.haptic.success();
       }
     } catch (error) {
 
