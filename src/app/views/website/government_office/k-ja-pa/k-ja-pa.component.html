@@ -36,9 +36,9 @@
             <label>T.P. पत्र</label>
           </div>
           <div class="col-6 d-flex justify-content-end align-items-center">
-            <label for="IsReportNOCSubmit">Submit</label>
-            <input type="checkbox" id="IsReportNOCSubmit" [(ngModel)]="Entity.p.IsReportNOCSubmit"
-              name="IsReportNOCSubmit" class="custom-checkbox" />
+            <label for="IsTPPatraSubmit">Submit</label>
+            <input type="checkbox" id="IsTPPatraSubmit" [(ngModel)]="Entity.p.IsTPPatraSubmit" name="IsTPPatraSubmit"
+              class="custom-checkbox" />
           </div>
         </div>
 
@@ -46,13 +46,13 @@
         <div class="row">
           <div class="col-md-4">
             <label>Inward No.</label>
-            <input type="text" name="QuotationDate" class="form-control date-input" id="QuotationDate"
-              [(ngModel)]="Entity" placeholder="Select Date" />
+            <input type="text" name="TPPatraInwardNo" class="form-control date-input" id="TPPatraInwardNo"
+              [(ngModel)]="Entity.p.TPPatraInwardNo" placeholder="Select Date" />
           </div>
           <div class="col-md-4">
             <label>Date</label>
-            <input type="date" name="QuotationDate" class="form-control date-input" id="QuotationDate"
-              [(ngModel)]="Entity" placeholder="Select Date" />
+            <input type="date" name="TPPatraInwardDate" class="form-control date-input" id="TPPatraInwardDate"
+              [(ngModel)]="Entity.p.TPPatraInwardDate" placeholder="Select Date" />
           </div>
         </div>
       </div>
@@ -68,9 +68,9 @@
             <label>Final Order व नकाशा पत्र</label>
           </div>
           <div class="col-6 d-flex justify-content-end align-items-center">
-            <label for="IsReportNOCSubmit">Submit</label>
-            <input type="checkbox" id="IsReportNOCSubmit" [(ngModel)]="Entity.p.IsReportNOCSubmit"
-              name="IsReportNOCSubmit" class="custom-checkbox" />
+            <label for="IsFinalOrdervaNakashaSubmit">Submit</label>
+            <input type="checkbox" id="IsFinalOrdervaNakashaSubmit" [(ngModel)]="Entity.p.IsFinalOrdervaNakashaSubmit"
+              name="IsFinalOrdervaNakashaSubmit" class="custom-checkbox" />
           </div>
         </div>
       </div>
@@ -86,9 +86,9 @@
             <label>7/12</label>
           </div>
           <div class="col-6 d-flex justify-content-end align-items-center">
-            <label for="IsReportNOCSubmit">Submit</label>
-            <input type="checkbox" id="IsReportNOCSubmit" [(ngModel)]="Entity.p.IsReportNOCSubmit"
-              name="IsReportNOCSubmit" class="custom-checkbox" />
+            <label for="IsSaatBaaraUtaraSubmit">Submit</label>
+            <input type="checkbox" id="IsSaatBaaraUtaraSubmit" [(ngModel)]="Entity.p.IsSaatBaaraUtaraSubmit"
+              name="IsSaatBaaraUtaraSubmit" class="custom-checkbox" />
           </div>
         </div>
       </div>
@@ -104,9 +104,9 @@
             <label>क प्रत</label>
           </div>
           <div class="col-6 d-flex justify-content-end align-items-center">
-            <label for="IsReportNOCSubmit">Submit</label>
-            <input type="checkbox" id="IsReportNOCSubmit" [(ngModel)]="Entity.p.IsReportNOCSubmit"
-              name="IsReportNOCSubmit" class="custom-checkbox" />
+            <label for="IsKaPratSubmit">Submit</label>
+            <input type="checkbox" id="IsKaPratSubmit" [(ngModel)]="Entity.p.IsKaPratSubmit" name="IsKaPratSubmit"
+              class="custom-checkbox" />
           </div>
         </div>
       </div>
@@ -121,13 +121,18 @@
           <div class="col-6 text-start">
             <label>परिशिष्ठ A (NA)</label>
           </div>
+          <div class="col-6 d-flex justify-content-end align-items-center">
+            <label for="IsParishishtaANASubmit">Submit</label>
+            <input type="checkbox" id="IsParishishtaANASubmit" [(ngModel)]="Entity.p.IsParishishtaANASubmit"
+              name="IsParishishtaANASubmit" class="custom-checkbox" />
+          </div>
         </div>
         <!-- Details -->
         <div class="row">
           <div class="col-md-4">
-            <label>Inward No.</label>
-            <input type="text" name="QuotationDate" class="form-control date-input" id="QuotationDate"
-              [(ngModel)]="Entity" placeholder="Select Date" />
+            <label>Outward No.</label>
+            <input type="text" name="ParishishtaANAOutwardNo" class="form-control date-input"
+              id="ParishishtaANAOutwardNo" [(ngModel)]="Entity.p.ParishishtaANAOutwardNo" placeholder="Select Date" />
           </div>
         </div>
       </div>
@@ -142,18 +147,23 @@
           <div class="col-6 text-start">
             <label>तहसील</label>
           </div>
+          <div class="col-6 d-flex justify-content-end align-items-center">
+            <label for="IsTehsilSubmit">Submit</label>
+            <input type="checkbox" id="IsTehsilSubmit" [(ngModel)]="Entity.p.IsTehsilSubmit" name="IsTehsilSubmit"
+              class="custom-checkbox" />
+          </div>
         </div>
         <!-- Details -->
         <div class="row">
           <div class="col-md-4">
             <label>Inward No.</label>
-            <input type="text" name="QuotationDate" class="form-control date-input" id="QuotationDate"
-              [(ngModel)]="Entity" placeholder="Select Date" />
+            <input type="text" name="TehsilInwardNo" class="form-control date-input" id="TehsilInwardNo"
+              [(ngModel)]="Entity.p.TehsilInwardNo" placeholder="Select Date" />
           </div>
           <div class="col-md-4">
             <label>Date</label>
-            <input type="date" name="QuotationDate" class="form-control date-input" id="QuotationDate"
-              [(ngModel)]="Entity" placeholder="Select Date" />
+            <input type="date" name="TehsilDate" class="form-control date-input" id="TehsilDate"
+              [(ngModel)]="Entity.p.TehsilDate" placeholder="Select Date" />
           </div>
         </div>
       </div>
@@ -182,9 +192,9 @@
               <label> Circle</label>
             </div>
             <div class="col-6 d-flex justify-content-end align-items-center">
-              <label for="IsReportNOCSubmit">Submit</label>
-              <input type="checkbox" id="IsReportNOCSubmit" [(ngModel)]="Entity.p.IsReportNOCSubmit"
-                name="IsReportNOCSubmit" class="custom-checkbox" />
+              <label for="IsCircleSubmit">Submit</label>
+              <input type="checkbox" id="IsCircleSubmit" [(ngModel)]="Entity.p.IsCircleSubmit" name="IsCircleSubmit"
+                class="custom-checkbox" />
             </div>
           </div>
 
@@ -192,13 +202,13 @@
           <div class="row">
             <div class="col-md-6">
               <label>Inward No.</label>
-              <input type="text" name="QuotationDate" class="form-control date-input" id="QuotationDate"
-                [(ngModel)]="Entity" placeholder="Select Date" />
+              <input type="text" name="CircleInwardNo" class="form-control date-input" id="CircleInwardNo"
+                [(ngModel)]="Entity.p.CircleInwardNo" placeholder="Select Date" />
             </div>
             <div class="col-md-6">
               <label>Date</label>
-              <input type="date" name="QuotationDate" class="form-control date-input" id="QuotationDate"
-                [(ngModel)]="Entity" placeholder="Select Date" />
+              <input type="date" name="CircleInwardDate" class="form-control date-input" id="CircleInwardDate"
+                [(ngModel)]="Entity.p.CircleInwardDate" placeholder="Select Date" />
             </div>
           </div>
         </div>
@@ -212,7 +222,7 @@
           margin-top: 2rem;
         ">
         <div>
-          <button type="submit" class="btn" (click)="SaveTPOffice()" [disabled]="isSaveDisabled">
+          <button type="submit" class="btn" (click)="SaveKajapa()" [disabled]="isSaveDisabled">
             Save
           </button>
         </div>

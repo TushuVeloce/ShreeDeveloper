@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TPOffice } from 'src/app/classes/domain/entities/website/government_office/tpoffice/tpoffice';
+import { Mojani } from 'src/app/classes/domain/entities/website/government_office/mojani/mojani';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -29,11 +29,11 @@ export class MojaniComponent implements OnInit {
     private datePipe: DatePipe
   ) { }
 
-  Entity: TPOffice = TPOffice.CreateNewInstance();
+  Entity: Mojani = Mojani.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   IsDropdownDisabled: boolean = false;
-  InitialEntity: TPOffice = null as any;
+  InitialEntity: Mojani = null as any;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
 
@@ -41,18 +41,18 @@ export class MojaniComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(true);
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.Entity = TPOffice.GetCurrentInstance();
+      this.Entity = Mojani.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
-      this.Entity = TPOffice.CreateNewInstance();
-      TPOffice.SetCurrentInstance(this.Entity);
+      this.Entity = Mojani.CreateNewInstance();
+      Mojani.SetCurrentInstance(this.Entity);
     }
-    this.InitialEntity = Object.assign(TPOffice.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as TPOffice;
+    this.InitialEntity = Object.assign(Mojani.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Mojani;
   }
 
 
-  SaveTPOffice = async () => {
+  SaveMojani = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     if (this.Entity.p.CreatedBy == 0) {
@@ -69,10 +69,10 @@ export class MojaniComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('TPOffice saved successfully');
-        this.Entity = TPOffice.CreateNewInstance();
+        await this.uiUtils.showSuccessToster('Mojani saved successfully');
+        this.Entity = Mojani.CreateNewInstance();
       } else {
-        await this.uiUtils.showSuccessToster('TPOffice Updated successfully');
+        await this.uiUtils.showSuccessToster('Mojani Updated successfully');
         await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
       }
     }

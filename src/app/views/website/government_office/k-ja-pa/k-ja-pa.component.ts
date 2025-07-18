@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TPOffice } from 'src/app/classes/domain/entities/website/government_office/tpoffice/tpoffice';
+import { Kajapa } from 'src/app/classes/domain/entities/website/government_office/kajapa/Kajapa';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -28,11 +28,11 @@ export class KJaPaComponent implements OnInit {
     private datePipe: DatePipe
   ) { }
 
-  Entity: TPOffice = TPOffice.CreateNewInstance();
+  Entity: Kajapa = Kajapa.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   IsDropdownDisabled: boolean = false;
-  InitialEntity: TPOffice = null as any;
+  InitialEntity: Kajapa = null as any;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
 
@@ -40,18 +40,18 @@ export class KJaPaComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(true);
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.Entity = TPOffice.GetCurrentInstance();
+      this.Entity = Kajapa.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
-      this.Entity = TPOffice.CreateNewInstance();
-      TPOffice.SetCurrentInstance(this.Entity);
+      this.Entity = Kajapa.CreateNewInstance();
+      Kajapa.SetCurrentInstance(this.Entity);
     }
-    this.InitialEntity = Object.assign(TPOffice.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as TPOffice;
+    this.InitialEntity = Object.assign(Kajapa.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Kajapa;
   }
 
 
-  SaveTPOffice = async () => {
+  SaveKajapa = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     if (this.Entity.p.CreatedBy == 0) {
@@ -69,9 +69,9 @@ export class KJaPaComponent implements OnInit {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('TPOffice saved successfully');
-        this.Entity = TPOffice.CreateNewInstance();
+        this.Entity = Kajapa.CreateNewInstance();
       } else {
-        await this.uiUtils.showSuccessToster('TPOffice Updated successfully');
+        await this.uiUtils.showSuccessToster('Kajapa Updated successfully');
         await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
       }
     }

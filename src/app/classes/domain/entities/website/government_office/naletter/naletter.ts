@@ -37,6 +37,7 @@ export class NaLetterProps {
   public IsEPatrakSubmit: boolean = false;
   public IsInamPatraSubmit: boolean = false;
   public IsInamPatraSubmitTwo: boolean = false;
+
   public IsArjSubmit: boolean = false;
   public ArjInwardNo: string = '';
   public ArjInwardDate: string = '';
@@ -47,6 +48,7 @@ export class NaLetterProps {
   public IsInamPatraSubmitThree: boolean = false;
   public IsChalanSubmit: boolean = false;
   public IsvargDonTeVargEkChaAadeshSubmit: boolean = false;
+  
   public IsTPOfficeSubmit: boolean = false;
   public TPOfficeInwardNo: string = '';
   public TPOfficeInwardDate: string = '';

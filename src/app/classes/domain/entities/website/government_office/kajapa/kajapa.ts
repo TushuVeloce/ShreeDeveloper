@@ -11,11 +11,12 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { ApplicableTypeProps } from "../siteworkmaster/siteworkmaster";
-import { ULCFetchRequest } from "./ulcfetchrequest";
+import { KajapaFetchRequest } from "./Kajapafetchrequest";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 
-export class ULCProps {
-  public readonly Db_Table_Name = "GovernmentULC";
+export class KajapaProps {
+  public readonly Db_Table_Name = "GovernmentKajapa";
   public IsNewlyCreated: boolean = false;
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
@@ -27,45 +28,42 @@ export class ULCProps {
   public CompanyRef: number = 0;
   public CompanyName: string = '';
 
-  public IsUlcSubmit: boolean = false;
-  public UlcInwardNo: string = '';
-  public UlcDate: string = '';
-  public IsUlcTpPatraSubmit: boolean = false;
-  public IsSaatBaraSubmit: boolean = false;
-  public IsTatpurtiOrderVaNakashaSubmit: boolean = false;
-  public IsSanadBinshetiSubmit: boolean = false;
-  public IsPratigyaPatraSubmit: boolean = false;
-  public IsOutwardsubmit: boolean = false;
-  public TpOfficeInwardNo: string = '';
-  public TpOfficeDate: string = '';
-  public IsMojniTarikhSubmit: boolean = false;
-  public IsChalanSubmit: boolean = false;
-  public OutwardOutwardNo: string = '';
-  public OutwardDate: string = '';
-  public IsTpOfficeSubmit: boolean = false;
+  public IsTPPatraSubmit: boolean = false;
+  public TPPatraInwardNo: string = '';
+  public TPPatraInwardDate: string = '';
+  public IsFinalOrdervaNakashaSubmit: boolean = false;
+  public IsSaatBaaraUtaraSubmit: boolean = false;
+  public IsKaPratSubmit: boolean = false;
+  public IsParishishtaANASubmit: boolean = false;
+  public ParishishtaANAOutwardNo: boolean = false;
+  public IsTehsilSubmit: boolean = false;
+  public TehsilInwardNo: string = '';
+  public TehsilDate: string = '';
+  public IsCircleSubmit: boolean = false;
+  public CircleInwardNo: string = '';
+  public CircleInwardDate: string = '';
 
-  public IsGovernmentUlcComplete: boolean = false;
-
+  public IsKajapaComplete: boolean = false;
 
   private constructor(isNewlyCreated: boolean) {
     this.IsNewlyCreated = isNewlyCreated;
   }
 
   public static Blank() {
-    return new ULCProps(true);
+    return new KajapaProps(true);
   }
 }
 
-export class ULC implements IPersistable<ULC> {
+export class Kajapa implements IPersistable<Kajapa> {
   TransactionJson(TransactionJson: any) {
     throw new Error('Method not implemented.');
   }
 
   public IsComplete: boolean = false;
 
-  public static readonly Db_Table_Name: string = 'GovernmentULC';
+  public static readonly Db_Table_Name: string = 'GovernmentKajapa';
 
-  private constructor(public readonly p: ULCProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: KajapaProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -78,17 +76,17 @@ export class ULC implements IPersistable<ULC> {
     }
   }
 
-  public GetEditableVersion(): ULC {
-    let newState: ULCProps = Utils.GetInstance().DeepCopy(this.p);
-    return ULC.CreateInstance(newState, true);
+  public GetEditableVersion(): Kajapa {
+    let newState: KajapaProps = Utils.GetInstance().DeepCopy(this.p);
+    return Kajapa.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new ULC(ULCProps.Blank(), true);
+    return new Kajapa(KajapaProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new ULC(data as ULCProps, allowEdit);
+    return new Kajapa(data as KajapaProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
@@ -99,28 +97,28 @@ export class ULC implements IPersistable<ULC> {
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, ULC.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, Kajapa.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: ULC = ULC.CreateNewInstance();
+  private static m_currentInstance: Kajapa = Kajapa.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return ULC.m_currentInstance;
+    return Kajapa.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: ULC) {
-    ULC.m_currentInstance = value;
+  public static SetCurrentInstance(value: Kajapa) {
+    Kajapa.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): ULC {
+  public static SingleInstanceFromTransportData(td: TransportData): Kajapa {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, ULC.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, ULC.Db_Table_Name)!.Entries) {
-        return ULC.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, Kajapa.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, Kajapa.Db_Table_Name)!.Entries) {
+        return Kajapa.CreateInstance(data, false);
       }
     }
 
@@ -129,13 +127,13 @@ export class ULC implements IPersistable<ULC> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = ""): ULC[] {
-    let result: ULC[] = [];
+    sortPropertyName: string = ""): Kajapa[] {
+    let result: Kajapa[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, ULC.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, ULC.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, Kajapa.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, Kajapa.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -145,18 +143,18 @@ export class ULC implements IPersistable<ULC> {
       }
 
       for (let data of entries) {
-        result.push(ULC.CreateInstance(data, false));
+        result.push(Kajapa.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): ULC[] {
-    return ULC.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): Kajapa[] {
+    return Kajapa.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: ULCFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: KajapaFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -171,36 +169,36 @@ export class ULC implements IPersistable<ULC> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new ULCFetchRequest();
+    let req = new KajapaFetchRequest();
     req.GovernmentTransationRefs.push(ref);
 
-    let tdResponse = await ULC.FetchTransportData(req, errorHandler) as TransportData;
-    return ULC.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await Kajapa.FetchTransportData(req, errorHandler) as TransportData;
+    return Kajapa.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: ULCFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await ULC.FetchTransportData(req, errorHandler) as TransportData;
-    return ULC.ListFromTransportData(tdResponse);
+  public static async FetchList(req: KajapaFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await Kajapa.FetchTransportData(req, errorHandler) as TransportData;
+    return Kajapa.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new ULCFetchRequest();
-    let tdResponse = await ULC.FetchTransportData(req, errorHandler) as TransportData;
-    return ULC.ListFromTransportData(tdResponse);
+    let req = new KajapaFetchRequest();
+    let tdResponse = await Kajapa.FetchTransportData(req, errorHandler) as TransportData;
+    return Kajapa.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new ULCFetchRequest();
+    let req = new KajapaFetchRequest();
     req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await ULC.FetchTransportData(req, errorHandler) as TransportData;
-    return ULC.ListFromTransportData(tdResponse);
+    let tdResponse = await Kajapa.FetchTransportData(req, errorHandler) as TransportData;
+    return Kajapa.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListBySiteRef(SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new ULCFetchRequest();
+    let req = new KajapaFetchRequest();
     req.SiteRefs.push(SiteRef)
-    let tdResponse = await ULC.FetchTransportData(req, errorHandler) as TransportData;
-    return ULC.ListFromTransportData(tdResponse);
+    let tdResponse = await Kajapa.FetchTransportData(req, errorHandler) as TransportData;
+    return Kajapa.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {

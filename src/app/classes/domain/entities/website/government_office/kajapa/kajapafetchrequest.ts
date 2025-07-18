@@ -4,15 +4,15 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class ULCFetchRequest {
-    public static readonly FetchRequestType: string = "GovernmentULCFetchRequest";
+export class KajapaFetchRequest {
+    public static readonly FetchRequestType: string = "GovernmentKajapaFetchRequest";
 
     CompanyRefs: number[] = [];
     SiteRefs: number[] = [];
     GovernmentTransationRefs: number[] = [];
 
     public MergeIntoTransportData = (td: TransportData) => {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, ULCFetchRequest.FetchRequestType) as DataCollection;
+        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, KajapaFetchRequest.FetchRequestType) as DataCollection;
         coll.Entries.push(this);
     }
 

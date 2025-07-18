@@ -11,11 +11,11 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { ApplicableTypeProps } from "../siteworkmaster/siteworkmaster";
-import { ULCFetchRequest } from "./ulcfetchrequest";
+import { FinalLayoutFetchRequest } from "./finallayoutfetchrequest";
 
 
-export class ULCProps {
-  public readonly Db_Table_Name = "GovernmentULC";
+export class FinalLayoutProps {
+  public readonly Db_Table_Name = "GovernmentFinalLayout";
   public IsNewlyCreated: boolean = false;
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
@@ -27,24 +27,42 @@ export class ULCProps {
   public CompanyRef: number = 0;
   public CompanyName: string = '';
 
-  public IsUlcSubmit: boolean = false;
-  public UlcInwardNo: string = '';
-  public UlcDate: string = '';
-  public IsUlcTpPatraSubmit: boolean = false;
-  public IsSaatBaraSubmit: boolean = false;
-  public IsTatpurtiOrderVaNakashaSubmit: boolean = false;
+  public IsFromSubmit: boolean = false;
+  public IsSaatBaaraUtaraSubmit: boolean = false;
+  public IsTentativeOrdervaNakashaSubmit: boolean = false;
   public IsSanadBinshetiSubmit: boolean = false;
-  public IsPratigyaPatraSubmit: boolean = false;
-  public IsOutwardsubmit: boolean = false;
-  public TpOfficeInwardNo: string = '';
-  public TpOfficeDate: string = '';
-  public IsMojniTarikhSubmit: boolean = false;
-  public IsChalanSubmit: boolean = false;
-  public OutwardOutwardNo: string = '';
-  public OutwardDate: string = '';
-  public IsTpOfficeSubmit: boolean = false;
+  public IsKaPratSubmit: boolean = false;
+  public IsULCSubmit: boolean = false;
+  public IsHamiPatraSubmit: boolean = false;
+  public IsBandhPatraSubmit: boolean = false;
+  public IsRastavaKhuliJagaKabjepattiSubmit: boolean = false;
+  public IsRoadNOCSubmit: boolean = false;
 
-  public IsGovernmentUlcComplete: boolean = false;
+  public IsArjInwardSubmit: boolean = false;
+  public ArjInwardNo: string = '';
+  public ArjInwardDate: string = '';
+  public IsRoadNOCSaatBaaraUtaraSubmit: boolean = false;
+  public IsRoadNOCTentativeOrdervaNakashaSubmit: boolean = false;
+
+  public IsSurveyarRemarkSubmit: boolean = false;
+  public IsATPSiteVisitSubmit: boolean = false;
+  public IsADTPSiteVisitSubmit: boolean = false;
+
+  public OutwardNo: string = '';
+  public OutwardDate: string = '';
+
+  public IsGramSevakSubmit: boolean = false;
+  public GramSevakInwardNo: string = '';
+  public GramSevakInwardDate: string = '';
+  public IsTahshilSubmit: boolean = false;
+  public TahsilInwardNo: string = '';
+  public TahsilInwardDate: string = '';
+  public IsMojniSubmit: boolean = false;
+  public MojniInwardNo: string = '';
+  public MojniInwardDate: string = '';
+  public IsCopyReceiveSubmit: boolean = false;
+
+  public IsFinalLayoutCompleted: boolean = false;
 
 
   private constructor(isNewlyCreated: boolean) {
@@ -52,20 +70,20 @@ export class ULCProps {
   }
 
   public static Blank() {
-    return new ULCProps(true);
+    return new FinalLayoutProps(true);
   }
 }
 
-export class ULC implements IPersistable<ULC> {
+export class FinalLayout implements IPersistable<FinalLayout> {
   TransactionJson(TransactionJson: any) {
     throw new Error('Method not implemented.');
   }
 
   public IsComplete: boolean = false;
 
-  public static readonly Db_Table_Name: string = 'GovernmentULC';
+  public static readonly Db_Table_Name: string = 'GovernmentFinalLayout';
 
-  private constructor(public readonly p: ULCProps, public readonly AllowEdit: boolean) {
+  private constructor(public readonly p: FinalLayoutProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -78,17 +96,17 @@ export class ULC implements IPersistable<ULC> {
     }
   }
 
-  public GetEditableVersion(): ULC {
-    let newState: ULCProps = Utils.GetInstance().DeepCopy(this.p);
-    return ULC.CreateInstance(newState, true);
+  public GetEditableVersion(): FinalLayout {
+    let newState: FinalLayoutProps = Utils.GetInstance().DeepCopy(this.p);
+    return FinalLayout.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new ULC(ULCProps.Blank(), true);
+    return new FinalLayout(FinalLayoutProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new ULC(data as ULCProps, allowEdit);
+    return new FinalLayout(data as FinalLayoutProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
@@ -99,28 +117,28 @@ export class ULC implements IPersistable<ULC> {
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, ULC.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, FinalLayout.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: ULC = ULC.CreateNewInstance();
+  private static m_currentInstance: FinalLayout = FinalLayout.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return ULC.m_currentInstance;
+    return FinalLayout.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: ULC) {
-    ULC.m_currentInstance = value;
+  public static SetCurrentInstance(value: FinalLayout) {
+    FinalLayout.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): ULC {
+  public static SingleInstanceFromTransportData(td: TransportData): FinalLayout {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, ULC.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, ULC.Db_Table_Name)!.Entries) {
-        return ULC.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, FinalLayout.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, FinalLayout.Db_Table_Name)!.Entries) {
+        return FinalLayout.CreateInstance(data, false);
       }
     }
 
@@ -129,13 +147,13 @@ export class ULC implements IPersistable<ULC> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = ""): ULC[] {
-    let result: ULC[] = [];
+    sortPropertyName: string = ""): FinalLayout[] {
+    let result: FinalLayout[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, ULC.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, ULC.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, FinalLayout.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, FinalLayout.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -145,18 +163,18 @@ export class ULC implements IPersistable<ULC> {
       }
 
       for (let data of entries) {
-        result.push(ULC.CreateInstance(data, false));
+        result.push(FinalLayout.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): ULC[] {
-    return ULC.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): FinalLayout[] {
+    return FinalLayout.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: ULCFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: FinalLayoutFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -171,36 +189,36 @@ export class ULC implements IPersistable<ULC> {
   }
 
   public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new ULCFetchRequest();
+    let req = new FinalLayoutFetchRequest();
     req.GovernmentTransationRefs.push(ref);
 
-    let tdResponse = await ULC.FetchTransportData(req, errorHandler) as TransportData;
-    return ULC.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await FinalLayout.FetchTransportData(req, errorHandler) as TransportData;
+    return FinalLayout.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: ULCFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await ULC.FetchTransportData(req, errorHandler) as TransportData;
-    return ULC.ListFromTransportData(tdResponse);
+  public static async FetchList(req: FinalLayoutFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await FinalLayout.FetchTransportData(req, errorHandler) as TransportData;
+    return FinalLayout.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new ULCFetchRequest();
-    let tdResponse = await ULC.FetchTransportData(req, errorHandler) as TransportData;
-    return ULC.ListFromTransportData(tdResponse);
+    let req = new FinalLayoutFetchRequest();
+    let tdResponse = await FinalLayout.FetchTransportData(req, errorHandler) as TransportData;
+    return FinalLayout.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new ULCFetchRequest();
+    let req = new FinalLayoutFetchRequest();
     req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await ULC.FetchTransportData(req, errorHandler) as TransportData;
-    return ULC.ListFromTransportData(tdResponse);
+    let tdResponse = await FinalLayout.FetchTransportData(req, errorHandler) as TransportData;
+    return FinalLayout.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListBySiteRef(SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new ULCFetchRequest();
+    let req = new FinalLayoutFetchRequest();
     req.SiteRefs.push(SiteRef)
-    let tdResponse = await ULC.FetchTransportData(req, errorHandler) as TransportData;
-    return ULC.ListFromTransportData(tdResponse);
+    let tdResponse = await FinalLayout.FetchTransportData(req, errorHandler) as TransportData;
+    return FinalLayout.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {

@@ -27,24 +27,18 @@ export class MojaniProps {
   public CompanyRef: number = 0;
   public CompanyName: string = '';
 
-  public IsUlcSubmit: boolean = false;
-  public UlcInwardNo: string = '';
-  public UlcDate: string = '';
-  public IsUlcTpPatraSubmit: boolean = false;
-  public IsSaatBaraSubmit: boolean = false;
-  public IsTatpurtiOrderVaNakashaSubmit: boolean = false;
-  public IsSanadBinshetiSubmit: boolean = false;
-  public IsPratigyaPatraSubmit: boolean = false;
-  public IsOutwardsubmit: boolean = false;
+  public IsTPPatraSubmit: boolean = false;
+  public TPPatraInwardNo: string = '';
+  public TPPatraDate: string = '';
+  public IsPradhikaranOfficePatraSubmit: boolean = false;
+  public IsTentativeOrderWaNakashaSubmit: boolean = false;
+  public IsParishisthaNaSubmit: boolean = false;
+  public IsMojniNakashaSubmit: boolean = false;
+  public IsTpOfficeSumbit: boolean = false;
   public TpOfficeInwardNo: string = '';
   public TpOfficeDate: string = '';
-  public IsMojniTarikhSubmit: boolean = false;
-  public IsChalanSubmit: boolean = false;
-  public OutwardOutwardNo: string = '';
-  public OutwardDate: string = '';
-  public IsTpOfficeSubmit: boolean = false;
 
-  public IsGovernmentUlcComplete: boolean = false;
+  public IsMojniCompleted: boolean = false;
 
   private constructor(isNewlyCreated: boolean) {
     this.IsNewlyCreated = isNewlyCreated;

@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TPOffice } from 'src/app/classes/domain/entities/website/government_office/tpoffice/tpoffice';
+import { FinalLayout } from 'src/app/classes/domain/entities/website/government_office/finallayout/finallayout';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -28,11 +28,11 @@ export class FinalLayoutComponent implements OnInit {
     private datePipe: DatePipe
   ) { }
 
-  Entity: TPOffice = TPOffice.CreateNewInstance();
+  Entity: FinalLayout = FinalLayout.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   IsDropdownDisabled: boolean = false;
-  InitialEntity: TPOffice = null as any;
+  InitialEntity: FinalLayout = null as any;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
 
@@ -40,18 +40,18 @@ export class FinalLayoutComponent implements OnInit {
     this.appStateManage.setDropdownDisabled(true);
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
-      this.Entity = TPOffice.GetCurrentInstance();
+      this.Entity = FinalLayout.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     } else {
-      this.Entity = TPOffice.CreateNewInstance();
-      TPOffice.SetCurrentInstance(this.Entity);
+      this.Entity = FinalLayout.CreateNewInstance();
+      FinalLayout.SetCurrentInstance(this.Entity);
     }
-    this.InitialEntity = Object.assign(TPOffice.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as TPOffice;
+    this.InitialEntity = Object.assign(FinalLayout.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as FinalLayout;
   }
 
 
-  SaveTPOffice = async () => {
+  SaveFinalLayout = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef();
     this.Entity.p.CompanyName = this.companystatemanagement.getCurrentCompanyName();
     if (this.Entity.p.CreatedBy == 0) {
@@ -68,10 +68,10 @@ export class FinalLayoutComponent implements OnInit {
     } else {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('TPOffice saved successfully');
-        this.Entity = TPOffice.CreateNewInstance();
+        await this.uiUtils.showSuccessToster('Final Layout saved successfully');
+        this.Entity = FinalLayout.CreateNewInstance();
       } else {
-        await this.uiUtils.showSuccessToster('TPOffice Updated successfully');
+        await this.uiUtils.showSuccessToster('Final Layout Updated successfully');
         await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
       }
     }
