@@ -511,14 +511,14 @@ export class InvoiceDetailsComponent implements OnInit {
   };
 
   async SaveLabourTime() {
-    if ( !this.LabourTimeEntity.LabourType) {
-      await this.uiUtils.showErrorMessage('Error', 'Labour Type is required!');
-       return;
-    }else if(!this.LabourTimeEntity.LabourFromTime ){
+    if (!this.LabourTimeEntity.LabourFromTime) {
       await this.uiUtils.showErrorMessage('Error', 'From Time is required!');
+       return;
+    }else if( !this.LabourTimeEntity.LabourToTime){
+       await this.uiUtils.showErrorMessage('Error', 'To Time is required!');
         return;
-    }else if(!this.LabourTimeEntity.LabourToTime){
-        await this.uiUtils.showErrorMessage('Error', 'To Time is required!');
+    }else if(!this.LabourTimeEntity.LabourType){
+       await this.uiUtils.showErrorMessage('Error', 'Labour Type is required!');
         return;
     }
     if (this.LabourTimeEntity.LabourType != 0) {
