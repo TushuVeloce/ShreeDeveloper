@@ -88,6 +88,17 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     input.select();
   }
 
+  ClearValues  = () =>{
+    this.Entity.p.TotalAllowance = 0
+    this.Entity.p.TotalIncentive = 0
+    this.Entity.p.Other = 0
+    this.Entity.p.PF = 0
+    this.Entity.p.TDS = 0
+    this.Entity.p.AdvanceDeduction = 0
+    this.calculategrosstotal()
+    this.calculatetotaldeduction()
+  }
+
   // EmployeeData = async (employee: number, month: number) => {
   //   if (month != 0) {
   //     const selectedMonthData = this.MonthList.find(m => m.Ref === month);

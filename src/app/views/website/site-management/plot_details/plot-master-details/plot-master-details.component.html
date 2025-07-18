@@ -39,9 +39,9 @@
             (ngModelChange)="convertSqmToSqft()" #AreaInSqmCtrl="ngModel" required
             (blur)="AreaInSqmCtrl.control.markAsTouched()" placeholder="Enter Area in Sqm"
             (click)="selectAllValue($event)" />
-          <div *ngIf="(AreaInSqmCtrl.invalid && (AreaInSqmCtrl.touched || AreaInSqmCtrl.dirty))">
+          <!-- <div *ngIf="(AreaInSqmCtrl.invalid && (AreaInSqmCtrl.touched || AreaInSqmCtrl.dirty))">
             <span class="validation-text" *ngIf="AreaInSqmCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+          </div> -->
         </div>
         <div class="col-md-4 col-6">
           <label for="AreaInSqft">Area in Sqft</label>
@@ -49,9 +49,9 @@
             (ngModelChange)="convertSqftToSqm()" #AreaInSqftCtrl="ngModel" required
             (blur)="AreaInSqftCtrl.control.markAsTouched()" placeholder="Enter Area in Sqft"
             (click)="selectAllValue($event)" />
-          <div *ngIf="(AreaInSqftCtrl.invalid && (AreaInSqftCtrl.touched || AreaInSqftCtrl.dirty))">
+          <!-- <div *ngIf="(AreaInSqftCtrl.invalid && (AreaInSqftCtrl.touched || AreaInSqftCtrl.dirty))">
             <span class="validation-text" *ngIf="AreaInSqftCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+          </div> -->
         </div>
         <div class="col-md-4 col-6">
           <label>Goverment Rate Per Sqm </label>
@@ -59,11 +59,11 @@
             [(ngModel)]="Entity.p.GovermentRatePerSqm" #GovermentRatePerSqmCtrl="ngModel" required
             (blur)="GovermentRatePerSqmCtrl.control.markAsTouched()" placeholder="Enter Goverment Rate Per Sqm "
             (click)="selectAllValue($event)" />
-          <div
+          <!-- <div
             *ngIf="(GovermentRatePerSqmCtrl.invalid && (GovermentRatePerSqmCtrl.touched || GovermentRatePerSqmCtrl.dirty))">
             <span class="validation-text"
               *ngIf="GovermentRatePerSqmCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+          </div> -->
         </div>
         <div class="col-md-4 col-6">
           <label>Basic Rate Per Sqft </label>
@@ -71,9 +71,9 @@
             [(ngModel)]="Entity.p.BasicRatePerSqft" #BasicRatePerSqftCtrl="ngModel" required
             (blur)="BasicRatePerSqftCtrl.control.markAsTouched()" placeholder="Enter Basic Rate Per Sqft"
             (click)="selectAllValue($event)" />
-          <div *ngIf="(BasicRatePerSqftCtrl.invalid && (BasicRatePerSqftCtrl.touched || BasicRatePerSqftCtrl.dirty))">
+          <!-- <div *ngIf="(BasicRatePerSqftCtrl.invalid && (BasicRatePerSqftCtrl.touched || BasicRatePerSqftCtrl.dirty))">
             <span class="validation-text" *ngIf="BasicRatePerSqftCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+          </div> -->
         </div>
         <div class="col-md-4 col-6">
           <label>Booking Remark</label>

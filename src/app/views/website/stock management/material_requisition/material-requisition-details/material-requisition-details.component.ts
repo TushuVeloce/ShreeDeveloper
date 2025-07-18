@@ -175,8 +175,7 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
   async addMaterial() {
     if (this.newRequisition.MaterialRef == 0) {
       return this.uiUtils.showWarningToster('Material cannot be blank.');
-    }
-    if (this.newRequisition.RequisitionQty == 0) {
+    }else if (this.newRequisition.RequisitionQty <= 0) {
       return this.uiUtils.showWarningToster('Required Quantity cannot be blank.');
     }
 

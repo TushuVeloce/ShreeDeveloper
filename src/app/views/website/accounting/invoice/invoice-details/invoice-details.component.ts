@@ -511,9 +511,15 @@ export class InvoiceDetailsComponent implements OnInit {
   };
 
   async SaveLabourTime() {
-    if (!this.LabourTimeEntity.LabourFromTime || !this.LabourTimeEntity.LabourToTime) {
-      await this.uiUtils.showErrorMessage('Error', 'Start Time and End Time are required!');
-      return;
+    if (!this.LabourTimeEntity.LabourFromTime) {
+      await this.uiUtils.showErrorMessage('Error', 'From Time is required!');
+       return;
+    }else if( !this.LabourTimeEntity.LabourToTime){
+       await this.uiUtils.showErrorMessage('Error', 'To Time is required!');
+        return;
+    }else if(!this.LabourTimeEntity.LabourType){
+       await this.uiUtils.showErrorMessage('Error', 'Labour Type is required!');
+        return;
     }
     if (this.LabourTimeEntity.LabourType != 0) {
       const labourtype = this.LabourTypeList.find(item => item.Ref == this.LabourTimeEntity.LabourType)

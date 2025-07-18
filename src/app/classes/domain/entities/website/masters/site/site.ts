@@ -92,11 +92,9 @@ export class Site implements IPersistable<Site> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') vra.add('Name', 'Site Name cannot be blank.'); else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.NameWithoutNosMsg);
-    }
-    if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'Address Line  cannot be blank.');
-    if (this.p.AddressLine2 == '') vra.add('AddressLine2', 'Site Location cannot be blank.');
+    if (this.p.Name == '') vra.add('Name', 'Site Name cannot be blank.');
+    // if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'Address Line  cannot be blank.');
+    // if (this.p.AddressLine2 == '') vra.add('AddressLine2', 'Site Location cannot be blank.');
     // if (this.p.PinCode == '') vra.add('PinCode', 'PinCode cannot be blank.');else if (!new RegExp(ValidationPatterns.PinCode).test(this.p.Name)) {
     //   vra.add('Name', ValidationMessages.PinCodeMsg);
     // }
@@ -106,8 +104,8 @@ export class Site implements IPersistable<Site> {
     // if (this.p.SiteInchargeRef == 0) vra.add('SiteInchargeRef', 'Site Incharge cannot be blank.');
     if (this.p.EstimatedStartingDate == '') vra.add('EstimatedStartingDate', 'Estimated Starting Date cannot be blank.');
     if (this.p.EstimatedEndDate == '') vra.add('EstimatedEndDate', 'Estimated End Date cannot be blank.');
-    if (this.p.TotalLandAreaInSqm == 0) vra.add('TotalLandAreaInSqm', 'Total Land Area In Sqm cannot be blank.');
-    if (this.p.TotalLandAreaInSqft == 0) vra.add('TotalLandAreaInSqft', 'Total Land Area In Sqft cannot be blank.');
+    // if (this.p.TotalLandAreaInSqm == 0) vra.add('TotalLandAreaInSqm', 'Total Land Area In Sqm cannot be blank.');
+    // if (this.p.TotalLandAreaInSqft == 0) vra.add('TotalLandAreaInSqft', 'Total Land Area In Sqft cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {

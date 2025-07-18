@@ -266,9 +266,9 @@ export class SiteManagementDetailsComponent implements OnInit {
       return this.uiUtils.showWarningToster(ValidationMessages.INDPhoneNoMsg);
     }
 
-    if (!new RegExp(ValidationPatterns.Email).test(this.newOwner.EmailId)) {
-      return this.uiUtils.showWarningToster(ValidationMessages.EmailMsg);
-    }
+    // if (!new RegExp(ValidationPatterns.Email).test(this.newOwner.EmailId)) {
+    //   return this.uiUtils.showWarningToster(ValidationMessages.EmailMsg);
+    // }
 
     if (!this.newOwner.CountryRef) {
       return this.uiUtils.showWarningToster('Country cannot be blank.');
@@ -279,9 +279,9 @@ export class SiteManagementDetailsComponent implements OnInit {
     if (!this.newOwner.CityRef) {
       return this.uiUtils.showWarningToster('City cannot be blank.');
     }
-    if (!this.newOwner.Address) {
-      return this.uiUtils.showWarningToster('Address cannot be blank.');
-    }
+    // if (!this.newOwner.Address) {
+    //   return this.uiUtils.showWarningToster('Address cannot be blank.');
+    // }
 
     if (this.editingIndex !== null && this.editingIndex !== undefined && this.editingIndex >= 0) {
       this.Entity.p.SiteManagementOwnerDetails[this.editingIndex] = { ...this.newOwner };

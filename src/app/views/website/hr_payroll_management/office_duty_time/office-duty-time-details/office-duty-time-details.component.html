@@ -37,9 +37,9 @@
             <label>Late Mark Grace Time (mins):</label>
             <input type="text" name="LateMarkGraceTimeInMins" class="form-control" id="LateMarkGraceTimeInMins" [(ngModel)]="Entity.p.LateMarkGraceTimeInMins"
               placeholder="Enter late Mark Grace" required #LateMarkGraceTimeInMinsCtrl="ngModel" (blur)="LateMarkGraceTimeInMinsCtrl.control.markAsTouched()" />
-          <div *ngIf="(LateMarkGraceTimeInMinsCtrl.invalid && (LateMarkGraceTimeInMinsCtrl.touched || LateMarkGraceTimeInMinsCtrl.dirty))">
+          <!-- <div *ngIf="(LateMarkGraceTimeInMinsCtrl.invalid && (LateMarkGraceTimeInMinsCtrl.touched || LateMarkGraceTimeInMinsCtrl.dirty))">
             <span class="validation-text" *ngIf="LateMarkGraceTimeInMinsCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+          </div> -->
           </div>
         </div>
         <div class="col-md-6"  style="margin-top: 1rem; ">
@@ -47,9 +47,9 @@
             <label>Overtime Grace Time (mins):</label>
             <input type="text" name="OvertimeGraceTimeInMins " class="form-control" id="OvertimeGraceTimeInMins " [(ngModel)]="Entity.p.OvertimeGraceTimeInMins"
               placeholder="Enter over time Grace" #OvertimeGraceTimeInMinsCtrl="ngModel" required (blur)="OvertimeGraceTimeInMinsCtrl.control.markAsTouched()" />
-          <div *ngIf="(OvertimeGraceTimeInMinsCtrl.invalid && (OvertimeGraceTimeInMinsCtrl.touched || OvertimeGraceTimeInMinsCtrl.dirty))">
+          <!-- <div *ngIf="(OvertimeGraceTimeInMinsCtrl.invalid && (OvertimeGraceTimeInMinsCtrl.touched || OvertimeGraceTimeInMinsCtrl.dirty))">
             <span class="validation-text" *ngIf="OvertimeGraceTimeInMinsCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+          </div> -->
           </div>
         </div>
       </div>

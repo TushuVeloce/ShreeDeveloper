@@ -55,12 +55,12 @@
           <textarea type="text" [(ngModel)]="Entity.p.Description" name="Description" class="form-control"
             id="Description" rows="1" required placeholder="Enter Description" #DescriptionCtrl="ngModel"
             (blur)="DescriptionCtrl.control.markAsTouched()"></textarea>
-          <div style="height: 25px" *ngIf="
+          <!-- <div style="height: 25px" *ngIf="
               DescriptionCtrl.invalid &&
               (DescriptionCtrl.touched || DescriptionCtrl.dirty)
             ">
             <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
-          </div>
+          </div> -->
         </div>
       </div>
       <div style="

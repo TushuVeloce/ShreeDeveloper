@@ -85,11 +85,11 @@ export class Plot implements IPersistable<Plot> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.PlotNo == '') vra.add('PlotNo', 'Plot No cannot be blank.');
-    if (this.p.AreaInSqm == 0) vra.add('AreaInSqm', 'Area In Sqm cannot be blank.');
-    if (this.p.AreaInSqft == 0) vra.add('AreaInSqft', 'Area In Sq ft cannot be blank.');
-    if (this.p.GovermentRatePerSqm == 0) vra.add('GovermentRatePerSqm', 'Goverment Rate Per Sqm cannot be blank.');
-    if (this.p.BasicRatePerSqft == 0) vra.add('BasicRatePerSqft', 'Basic Rate Per Sqft cannot be blank.');
-    if (this.p.CurrentBookingRemark == 0) vra.add('CurrentBookingRemark', 'Booking Remark cannot be blank.');
+    // if (this.p.AreaInSqm == 0) vra.add('AreaInSqm', 'Area In Sqm cannot be blank.');
+    // if (this.p.AreaInSqft == 0) vra.add('AreaInSqft', 'Area In Sq ft cannot be blank.');
+    // if (this.p.GovermentRatePerSqm == 0) vra.add('GovermentRatePerSqm', 'Goverment Rate Per Sqm cannot be blank.');
+    // if (this.p.BasicRatePerSqft == 0) vra.add('BasicRatePerSqft', 'Basic Rate Per Sqft cannot be blank.');
+    // if (this.p.CurrentBookingRemark == 0) vra.add('CurrentBookingRemark', 'Booking Remark cannot be blank.');
     // if (this.p.CurrentOwnerRef == 0) vra.add('CurrentOwnerRef', 'Customer Name cannot be blank.');
   }
 
