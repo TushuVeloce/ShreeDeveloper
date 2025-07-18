@@ -17,7 +17,7 @@
         <!-- <p class="date-label">Ledger : {{ Income.p.LedgerName || '-' }}</p>
         <p class="date-label">Sub Ledger : {{ Income.p.SubLedgerName || '-' }} -->
         <p class="date-label">Reason : {{ Income.p.Reason || '-' }}
-        <p class="date-label">Income Amount : {{ Income.p.IncomeAmount || '-' }}
+        <p class="date-label">Income Amount : {{ Income.p.IncomeAmount| currency : "INR" }}
         </p>
       </ion-label>
 
@@ -83,11 +83,11 @@
           </div>
           <div class="info-row-of-model">
             <span class="label">Income Amount :</span>
-            <span class="value">{{ SelectedIncome.p.IncomeAmount || '-' }}</span>
+            <span class="value">{{ SelectedIncome.p.IncomeAmount | currency : "INR" }}</span>
           </div>
           <div class="info-row-of-model">
             <span class="label">Shrees Balance :</span>
-            <span class="value">{{ SelectedIncome.p.ShreesBalance || '-' }}</span>
+            <span class="value">{{ SelectedIncome.p.ShreesBalance | currency : "INR"  }}</span>
           </div>
           <div class="info-row-of-model">
             <span class="label">Mode Of Payment Name :</span>

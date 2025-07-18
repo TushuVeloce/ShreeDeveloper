@@ -140,7 +140,7 @@
           <ion-content class="ion-padding">
             <ion-list lines="none">
               <!-- Material Dropdown -->
-              <ion-item class="input-item" button (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable">
+              <ion-item class="input-item" button detail (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable">
                 <ion-label>Material Name</ion-label>
 
                 <!-- Text showing the selected status -->
@@ -149,7 +149,7 @@
                 </ion-text>
 
                 <!-- Dropdown icon (chevron) on the right -->
-                <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon>
+                <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
               </ion-item>
 
               <!-- Material input-->

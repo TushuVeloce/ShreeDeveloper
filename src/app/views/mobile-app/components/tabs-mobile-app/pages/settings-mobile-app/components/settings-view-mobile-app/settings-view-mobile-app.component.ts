@@ -25,6 +25,7 @@ export class SettingsViewMobileAppComponent implements OnInit {
 
   employeeName: string = '';
   employeeEmail: string = '';
+  Role:string='';
   userImage: string = '';
   defaultAvatar: string = 'assets/logos/dp.png';
 
@@ -99,7 +100,7 @@ export class SettingsViewMobileAppComponent implements OnInit {
           await this.haptic.error();
         }
       );
-      console.log('employeeData :', employeeData);
+      // console.log('employeeData :', employeeData);
       if (employeeData == null) {
         const adminData = await AdminProfile.FetchAdminData(async errMsg => {
           await this.toastService.present("Error " + errMsg, 1000, 'danger');
@@ -108,13 +109,13 @@ export class SettingsViewMobileAppComponent implements OnInit {
         }
         );
 
-        console.log('adminData :', adminData);
+        // console.log('adminData :', adminData);
 
         if (adminData?.[0]) {
           this.AdminEntity = adminData[0];
           this.IsAdmin = true;
           this.IsEmployee = false;
-
+          this.Role ='Admin';
           if (this.AdminEntity.p.DOB) {
             this.AdminEntity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.AdminEntity.p.DOB);
           }
@@ -125,7 +126,7 @@ export class SettingsViewMobileAppComponent implements OnInit {
         this.Entity = employeeData;
         this.IsEmployee = true;
         this.IsAdmin = false;
-
+        this.Role =this.Entity.p.DesignationName;
         if (this.Entity.p.DOB) {
           this.Entity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.DOB);
         }
@@ -172,14 +173,14 @@ export class SettingsViewMobileAppComponent implements OnInit {
           role: 'cancel',
           cssClass: 'custom-cancel',
           handler: () => {
-            console.log('User cancelled.');
+            // console.log('User cancelled.');
           }
         },
         {
           text: 'Yes, Logout',
           cssClass: 'custom-confirm',
           handler: () => {
-            console.log('User confirmed logout.');
+            // console.log('User confirmed logout.');
             this.logout()
           }
         }

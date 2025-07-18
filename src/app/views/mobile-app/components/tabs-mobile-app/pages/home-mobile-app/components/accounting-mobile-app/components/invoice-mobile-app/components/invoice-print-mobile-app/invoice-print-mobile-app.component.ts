@@ -25,10 +25,11 @@ export class InvoicePrintMobileAppComponent  implements OnInit {
   IsDropdownDisabled: boolean = false
   InitialEntity: Invoice = null as any;
   isPrintButtonClicked: boolean = false;
-  MachinaryExpenseRef: number = ExpenseTypeRefs.MachinaryExpense
-  LabourExpenseRef: number = ExpenseTypeRefs.LabourExpense
-  OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense
-
+  MachinaryExpenseRef: number = ExpenseTypeRefs.MachinaryExpense;
+  LabourExpenseRef: number = ExpenseTypeRefs.LabourExpense;
+  OtherExpenseRef: number = ExpenseTypeRefs.OtherExpense;
+  DisplayTotalWorkingHrs: string = '';
+  
   @ViewChild('PrintContainer')
   PrintContainer!: ElementRef;
 
@@ -67,5 +68,5 @@ export class InvoicePrintMobileAppComponent  implements OnInit {
     if (!this.printContainer) return;
     await this.pdfService.generatePdfAndHandleAction(this.printContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
   }
-
+ 
 }

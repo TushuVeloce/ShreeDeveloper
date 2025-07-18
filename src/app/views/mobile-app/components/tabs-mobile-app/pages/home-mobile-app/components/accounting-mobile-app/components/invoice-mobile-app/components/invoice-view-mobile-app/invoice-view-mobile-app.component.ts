@@ -100,32 +100,31 @@ export class InvoiceViewMobileAppComponent implements OnInit {
         })),
         selected: this.selectedFilterValues['subledger'] > 0 ? this.selectedFilterValues['subledger'] : null,
       },
-      {
-        key: 'reason',
-        label: 'Reason',
-        multi: false,
-        options: this.ReasonList.map(item => ({
-          Ref: item.Ref,
-          Name: item.Name,
-        })),
-        selected: this.selectedFilterValues['reason'] > 0 ? this.selectedFilterValues['reason'] : null,
-      },
-      {
-        key: 'modeOfPayment',
-        label: 'Mode of Payment',
-        multi: false,
-        options: this.ModeofPaymentList.map(item => ({
-          Ref: item.Ref,
-          Name: item.Name,
-        })),
-        selected: this.selectedFilterValues['modeOfPayment'] > 0 ? this.selectedFilterValues['modeOfPayment'] : null,
-      }
+      // {
+      //   key: 'reason',
+      //   label: 'Reason',
+      //   multi: false,
+      //   options: this.ReasonList.map(item => ({
+      //     Ref: item.Ref,
+      //     Name: item.Name,
+      //   })),
+      //   selected: this.selectedFilterValues['reason'] > 0 ? this.selectedFilterValues['reason'] : null,
+      // },
+      // {
+      //   key: 'modeOfPayment',
+      //   label: 'Mode of Payment',
+      //   multi: false,
+      //   options: this.ModeofPaymentList.map(item => ({
+      //     Ref: item.Ref,
+      //     Name: item.Name,
+      //   })),
+      //   selected: this.selectedFilterValues['modeOfPayment'] > 0 ? this.selectedFilterValues['modeOfPayment'] : null,
+      // }
     ];
   }
 
 
   async onFiltersChanged(updatedFilters: any[]) {
-    // debugger
     console.log('Updated Filters:', updatedFilters);
 
     for (const filter of updatedFilters) {
@@ -158,6 +157,7 @@ export class InvoiceViewMobileAppComponent implements OnInit {
           break;
       }
     }
+    await this.FetchEntireListByFilters();
     this.loadFilters(); // Reload filters with updated options & preserve selections
   }
 
@@ -191,6 +191,24 @@ export class InvoiceViewMobileAppComponent implements OnInit {
       await this.loadingService.hide();
     }
   }
+
+    FetchEntireListByFilters = async () => {
+      this.MasterList = [];
+      this.DisplayMasterList = [];
+      if (this.companyRef <= 0) {
+        await this.toastService.present('Company not selected', 1000, 'danger');
+        await this.haptic.error();
+        return;
+      }
+      let lst = await Invoice.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.companyRef, async errMsg => {
+        // await this.uiUtils.showErrorMessage('Error', errMsg)
+        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+        await this.haptic.error();
+      });
+      console.log('lst :', lst);
+      this.MasterList = lst;
+      this.DisplayMasterList = this.MasterList;
+    }
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {

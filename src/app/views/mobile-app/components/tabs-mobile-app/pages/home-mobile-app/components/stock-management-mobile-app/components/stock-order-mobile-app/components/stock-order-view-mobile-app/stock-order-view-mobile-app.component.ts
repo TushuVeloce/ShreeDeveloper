@@ -72,6 +72,7 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
   }
   ionViewWillEnter = async () => {
     await this.loadMaterialRequisitionIfEmployeeExists();
+    await this.loadFilters();
   }
   ngOnDestroy() {
     // Cleanup if needed
@@ -98,7 +99,6 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
   }
 
   async onFiltersChanged(updatedFilters: any[]) {
-    // debugger
     console.log('Updated Filters:', updatedFilters);
 
     for (const filter of updatedFilters) {

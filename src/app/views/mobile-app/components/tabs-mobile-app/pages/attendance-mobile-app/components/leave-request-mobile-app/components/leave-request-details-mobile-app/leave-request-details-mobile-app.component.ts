@@ -198,24 +198,6 @@ export class LeaveRequestDetailsMobileAppComponent  implements OnInit {
     this.haptic.warning();
   }
 
-  private async openSelectModal(
-    dataList: any[],
-    selectedItems: any[],
-    multiSelect: boolean,
-    title: string,
-    MaxSelection: number,
-    updateCallback: (selected: any[]) => void
-  ): Promise<void> {
-    const selected = await this.bottomsheetMobileAppService.openSelectModal(
-      dataList,
-      selectedItems,
-      multiSelect,
-      title,
-      MaxSelection
-    );
-    if (selected) updateCallback(selected);
-  }
-
   public async SaveLeaveRequest(): Promise<void> {
     try {
       this.loadingService.show();
@@ -248,10 +230,10 @@ export class LeaveRequestDetailsMobileAppComponent  implements OnInit {
       }
 
       await this.toastService.present('Leave Request saved successfully', 1000, 'success');
-      await this.haptic.success();
-
       this.resetForm();
       await this.router.navigate(['/mobile-app/tabs/attendance/leave-request'], { replaceUrl: true });
+      await this.haptic.success();
+
     } catch (error) {
       console.error('Save error:', error);
     } finally {
@@ -290,13 +272,28 @@ export class LeaveRequestDetailsMobileAppComponent  implements OnInit {
 
   goBack = async () => {
     if (this.isDataFilled()) {
-      await this.uiUtils.showConfirmationMessage(
-        'Warning',
-        'You have unsaved data. Are you sure you want to go back? All data will be lost.',
-        async () => {
-          this.router.navigate(['/mobile-app/tabs/attendance/leave-request'], { replaceUrl: true });
-        }
-      );
+       this.alertService.presentDynamicAlert({
+        header: 'Warning',
+        subHeader: 'Confirmation needed',
+         message: 'You have unsaved data. Are you sure you want to go back? All data will be lost.',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'custom-cancel',
+            handler: async () => {
+              // console.log('Delete cancelled.');
+            }
+          },
+          {
+            text: 'Yes, Close',
+            cssClass: 'custom-confirm',
+            handler: async () => {
+              this.router.navigate(['/mobile-app/tabs/attendance/leave-request'], { replaceUrl: true });
+            }
+          }
+        ]
+      });
     } else {
       this.router.navigate(['/mobile-app/tabs/attendance/leave-request'], { replaceUrl: true });
     }

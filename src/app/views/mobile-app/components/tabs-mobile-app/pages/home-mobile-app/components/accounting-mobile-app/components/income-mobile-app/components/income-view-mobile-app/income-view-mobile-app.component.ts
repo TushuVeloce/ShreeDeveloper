@@ -124,16 +124,16 @@ export class IncomeViewMobileAppComponent implements OnInit {
         })),
         selected: this.selectedFilterValues['subledger'] > 0 ? this.selectedFilterValues['subledger'] : null,
       },
-      {
-        key: 'reason',
-        label: 'Reason',
-        multi: false,
-        options: this.ReasonList.map(item => ({
-          Ref: item.Ref,
-          Name: item.Name,
-        })),
-        selected: this.selectedFilterValues['reason'] > 0 ? this.selectedFilterValues['reason'] : null,
-      },
+      // {
+      //   key: 'reason',
+      //   label: 'Reason',
+      //   multi: false,
+      //   options: this.ReasonList.map(item => ({
+      //     Ref: item.Ref,
+      //     Name: item.Name,
+      //   })),
+      //   selected: this.selectedFilterValues['reason'] > 0 ? this.selectedFilterValues['reason'] : null,
+      // },
       {
         key: 'modeOfPayment',
         label: 'Mode of Payment',
@@ -181,6 +181,7 @@ export class IncomeViewMobileAppComponent implements OnInit {
           break;
       }
     }
+    await this.FetchEntireListByFilters();
     this.loadFilters(); // Reload filters with updated options & preserve selections
   }
 
@@ -207,50 +208,68 @@ export class IncomeViewMobileAppComponent implements OnInit {
       await this.loadingService.hide();
     }
   }
+
+  FetchEntireListByFilters = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    let lst = await Income.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.Entity.p.IncomeModeOfPayment, this.companyRef, async errMsg => {
+      // await this.uiUtils.showErrorMessage('Error', errMsg)
+       await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+  }
+
   getSiteListByCompanyRef = async () => {
-      if (this.companyRef <= 0) {
-        await this.toastService.present('Company not selected', 1000, 'danger');
-        await this.haptic.error();
-        return;
-      }
-      const lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-        await this.haptic.error();
-      });
-      this.SiteList = lst;
-      this.loadFilters();
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
     }
-  
-    getLedgerListByCompanyRef = async () => {
-      if (this.companyRef <= 0) {
-        await this.toastService.present('Company not selected', 1000, 'danger');
-        await this.haptic.error();
-        return;
-      }
-      const lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-        await this.haptic.error();
-      });
-      this.LedgerList = lst;
-      this.loadFilters();
-    };
-  
-    getSubLedgerListByLedgerRef = async (ledgerref: number) => {
-      console.log('ledgerref :', ledgerref);
-  
-      if (ledgerref <= 0) {
-        await this.toastService.present('Ledger not selected', 1000, 'danger');
-        await this.haptic.error();
-        return;
-      }
-      const lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => {
-        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-        await this.haptic.error();
-      });
-      this.SubLedgerList = lst;
-      this.loadFilters();
+    const lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.SiteList = lst;
+    this.loadFilters();
+  }
+
+  getLedgerListByCompanyRef = async () => {
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
     }
-  
+    const lst = await Ledger.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.LedgerList = lst;
+    this.loadFilters();
+  };
+
+  getSubLedgerListByLedgerRef = async (ledgerref: number) => {
+    console.log('ledgerref :', ledgerref);
+
+    if (ledgerref <= 0) {
+      await this.toastService.present('Ledger not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    const lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => {
+      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.SubLedgerList = lst;
+    this.loadFilters();
+  }
+
 
   getIncomeListByCompanyRef = async () => {
     this.MasterList = [];

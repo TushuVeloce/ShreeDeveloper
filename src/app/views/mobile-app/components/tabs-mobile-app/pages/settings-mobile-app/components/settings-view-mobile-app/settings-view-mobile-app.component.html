@@ -19,7 +19,7 @@
       <ion-chip class="info-chip">
         <ion-label>
           <small>Role</small><br />
-          <strong>Admin</strong>
+          <strong>{{Role ? Role: 'Role'}}</strong>
         </ion-label>
       </ion-chip>
       <ion-chip class="info-chip" (click)="openProfile()">

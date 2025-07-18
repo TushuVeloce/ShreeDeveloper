@@ -64,7 +64,7 @@ export class CreateNewPasswordMobileAppComponent  implements OnInit {
       let td = req.FormulateTransportData();
       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
       let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-      console.log('tr :', tr);
+      // console.log('tr :', tr);
       if (!tr.Successful) {
         this.toastService.present(tr.Message, 2000, 'danger');
         this.isUpdating = false;

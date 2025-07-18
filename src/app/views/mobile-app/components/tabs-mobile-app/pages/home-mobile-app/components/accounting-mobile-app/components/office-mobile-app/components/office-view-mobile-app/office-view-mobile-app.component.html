@@ -17,8 +17,8 @@
         <p class="date-label">Sub Ledger : {{ Invoice.p.SubLedgerName || '-' }}
         </p> -->
         <p class="date-label">Payer Name : {{ Invoice.p.PayerName || '-' }}</p>
-        <p class="date-label">Income Amount : {{ Invoice.p.IncomeAmount || '-' }}
-        <p class="date-label">Given Amount: {{ Invoice.p.GivenAmount || '-' }}
+        <p class="date-label">Income Amount : {{ Invoice.p.IncomeAmount | currency : "INR" }}
+        <p class="date-label">Given Amount: {{ Invoice.p.GivenAmount | currency : "INR" }}
         </p>
       </ion-label>
 
@@ -84,18 +84,18 @@
           </div>
           <div class="info-row-of-model">
             <span class="label">Income Amount :</span>
-            <span class="value">{{ SelectedAccountingReport.p.IncomeAmount || '-' }}</span>
+            <span class="value">{{ SelectedAccountingReport.p.IncomeAmount | currency : "INR" }}</span>
           </div>
           <div class="info-row-of-model">
             <span class="label">Given Amount :</span>
-            <span class="value">{{ SelectedAccountingReport.p.GivenAmount || '-' }}</span>
+            <span class="value">{{ SelectedAccountingReport.p.GivenAmount | currency : "INR" }}</span>
           </div>
           <div class="info-row-of-model">
             <span class="label">Shrees Balance :</span>
-            <span class="value">{{ SelectedAccountingReport.p.ShreesBalance || '-' }}</span>
+            <span class="value">{{ SelectedAccountingReport.p.ShreesBalance | currency : "INR" }}</span>
           </div>
           <div class="info-row-of-model">
-            <span class="label">Mode O fPayment Name :</span>
+            <span class="label">Mode Of Payment Name :</span>
             <span class="value">{{ SelectedAccountingReport.p.ModeOfPaymentName || '-' }}</span>
           </div>
           <div class="info-row-of-model">
@@ -122,13 +122,44 @@
 
   <!-- FAB -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button>
-      <ion-icon name="ellipsis-vertical"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-list side="top">
-      <ion-fab-button color="tertiary" (click)="printReport()">
-        <ion-icon name="print-outline"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
+  <ion-fab-button color="primary" (click)="handlePrintOrShare()">
+    <ion-icon name="print-outline"></ion-icon>
+  </ion-fab-button>
   </ion-fab>
+
+  <!-- Print Section with automatic page breaks -->
+<div id="print-section" style="display: none;" #PrintContainer>
+  <h2>Office Report</h2>
+  <table class="table table-bordered print-table">
+    <thead>
+      <tr>
+        <th *ngFor="let header of Printheaders" style="background-color: maroon; color: white;">{{ header }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let report of DisplayMasterList; index as i">
+        <td class="tbldata">{{ i + 1 }}</td>
+        <td class="tbldata" style="white-space: nowrap;">{{ formatDate(report.p.TransDateTime) }}</td>
+        <td class="tbldata">{{ report.p.PayerName? (report.p.PayerName ) : '--' }} </td>
+        <td class="tbldata">{{ report.p.RecipientName? (report.p.RecipientName ) : '--' }}</td>
+        <td class="tbldata">{{ report.p.SiteName }}</td>
+        <td class="tbldata">{{ report.p.Reason }}</td>
+        <td class="tbldata">{{ report.p.IncomeAmount && report.p.IncomeAmount != 0 ? (report.p.IncomeAmount | currency:
+          'INR'): '--'}}</td>
+        <td class="tbldata">{{ report.p.GivenAmount && report.p.GivenAmount != 0 ? (report.p.GivenAmount | currency:
+          'INR'): '--'}}</td>
+        <td class="tbldata">{{ report.p.ShreesBalance | currency: 'INR' }}</td>
+        <td class="tbldata">{{ report.p.ModeOfPaymentName }}</td>
+        <td class="tbldata">{{ report.p.Narration }}</td>
+      </tr>
+       <tr *ngIf="DisplayMasterList.length > 0">
+          <td class="tbldata" colspan="5"></td>
+          <td class="tbldata"><b>Total</b></td>
+          <td class="tbldata"><b>{{ totalTotalIncome | currency: 'INR' }}</b></td>
+          <td class="tbldata"><b>{{ totalTotalExpense | currency: 'INR' }}</b></td>
+          <td class="tbldata" colspan="3"></td>
+        </tr>
+    </tbody>
+  </table>
+</div>
 </ion-content>

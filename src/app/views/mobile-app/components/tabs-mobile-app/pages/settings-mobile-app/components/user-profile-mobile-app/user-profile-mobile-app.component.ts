@@ -100,7 +100,7 @@ export class UserProfileMobileAppComponent  implements OnInit {
           await this.haptic.error();
         }
       );
-      console.log('employeeData :', employeeData);
+      // console.log('employeeData :', employeeData);
       if (employeeData == null) {
         const adminData = await AdminProfile.FetchAdminData(async errMsg => {
           await this.toastService.present("Error " + errMsg, 1000, 'danger');
@@ -109,7 +109,7 @@ export class UserProfileMobileAppComponent  implements OnInit {
         }
         );
 
-        console.log('adminData :', adminData);
+        // console.log('adminData :', adminData);
 
         if (adminData?.[0]) {
           this.AdminEntity = adminData[0];
@@ -207,9 +207,9 @@ export class UserProfileMobileAppComponent  implements OnInit {
       }
 
     } catch (error) {
-      console.error('Image picking error:', error);
-      this.toastService.present('Error picking image', 1000, 'danger');
-      await this.haptic.error();
+      // console.error('Image picking error:', error);
+      // this.toastService.present('Error picking image', 1000, 'danger');
+      // await this.haptic.error();
     }
   };
   uriToFile = async (uri: string, fileName: string, mimeType = 'image/jpeg') => {
@@ -245,6 +245,7 @@ export class UserProfileMobileAppComponent  implements OnInit {
         await this.haptic.error();
       } else {
         // await this.uiUtils.showSuccessToster('Employee Profile Updated successfully');
+        this.cancelEdit()
         await this.toastService.present('Employee Profile Updated successfully', 1000, 'success');
         await this.haptic.success();
         // this.router.navigate(['/homepage']);
@@ -272,10 +273,10 @@ export class UserProfileMobileAppComponent  implements OnInit {
         await this.haptic.error();
       } else {
         // await this.uiUtils.showSuccessToster('Admin Profile Updated successfully');
-        // this.router.navigate(['/homepage']);
-        await this.toastService.present('Employee Profile Updated successfully', 1000, 'success');
-        await this.haptic.success();
         this.cancelEdit()
+        // this.router.navigate(['/homepage']);
+        await this.toastService.present('Admin Profile Updated successfully', 1000, 'success');
+        await this.haptic.success();
       }
     } else {
       // this.uiUtils.showErrorMessage('Error', 'No profile found to save.');

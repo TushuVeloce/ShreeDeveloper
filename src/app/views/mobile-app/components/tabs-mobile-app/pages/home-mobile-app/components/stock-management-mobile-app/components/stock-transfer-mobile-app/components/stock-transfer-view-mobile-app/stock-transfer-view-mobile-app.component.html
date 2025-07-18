@@ -1,6 +1,7 @@
 <app-header-with-back-handler title="Stock Transfer"
   backRoute="mobile-app/tabs/dashboard/stock-management"></app-header-with-back-handler>
-
+  <app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
+  </app-chip-filter-mobile-app>
 <ion-content class="ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
@@ -112,16 +113,8 @@
 
   <!-- FAB -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button>
-      <ion-icon name="ellipsis-vertical"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-list side="top">
       <ion-fab-button color="primary" (click)="AddStockTransfer()">
         <ion-icon name="add-outline"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button color="tertiary" (click)="AddStockTransfer()">
-        <ion-icon name="filter-outline"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
   </ion-fab>
 </ion-content>

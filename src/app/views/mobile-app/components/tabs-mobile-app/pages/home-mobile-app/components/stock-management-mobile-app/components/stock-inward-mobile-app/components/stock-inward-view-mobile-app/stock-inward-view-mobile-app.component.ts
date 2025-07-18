@@ -57,15 +57,16 @@ export class StockInwardViewMobileAppComponent  implements OnInit {
   ) { }
 
   ngOnInit = async () => {
-    await this.loadMaterialRequisitionIfEmployeeExists();
+    // await this.loadStockInwordsIfEmployeeExists();
   };
 
   ionViewWillEnter = async () => {
-    await this.loadMaterialRequisitionIfEmployeeExists();
+    await this.loadStockInwordsIfEmployeeExists();
+    await this.loadFilters();
   };
 
   async handleRefresh(event: CustomEvent) {
-    await this.loadMaterialRequisitionIfEmployeeExists();
+    await this.loadStockInwordsIfEmployeeExists();
     (event.target as HTMLIonRefresherElement).complete();
   }
 
@@ -106,7 +107,7 @@ export class StockInwardViewMobileAppComponent  implements OnInit {
     this.loadFilters(); // Reload filters with updated options & preserve selections
   }
 
-  private async loadMaterialRequisitionIfEmployeeExists() {
+  private async loadStockInwordsIfEmployeeExists() {
     try {
       await this.loadingService.show();
 
@@ -122,7 +123,7 @@ export class StockInwardViewMobileAppComponent  implements OnInit {
       await this.getSiteListByCompanyRef();
       await this.getStockInwardListByCompanyRef();
     } catch (error) {
-      console.error('Error in loadMaterialRequisitionIfEmployeeExists:', error);
+      console.error('Error in loadStockInwordsIfEmployeeExists:', error);
       await this.toastService.present('Failed to load Stock Inward', 1000, 'danger');
       await this.haptic.error();
     } finally {
@@ -255,7 +256,7 @@ export class StockInwardViewMobileAppComponent  implements OnInit {
                 //     'success'
                 //   );
                 //   await this.haptic.success();
-                //   await this.loadMaterialRequisitionIfEmployeeExists();
+                //   await this.loadStockInwordsIfEmployeeExists();
                 // });
                 await stockInward.DeleteInstance(async () => {
                   await this.toastService.present(

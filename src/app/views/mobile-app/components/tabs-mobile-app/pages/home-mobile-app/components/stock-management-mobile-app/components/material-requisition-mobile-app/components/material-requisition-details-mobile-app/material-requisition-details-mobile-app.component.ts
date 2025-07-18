@@ -22,9 +22,9 @@ import { ToastService } from 'src/app/views/mobile-app/components/core/toast.ser
   selector: 'app-material-requisition-details-mobile-app',
   templateUrl: './material-requisition-details-mobile-app.component.html',
   styleUrls: ['./material-requisition-details-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class MaterialRequisitionDetailsMobileAppComponent  implements OnInit {
+export class MaterialRequisitionDetailsMobileAppComponent implements OnInit {
   Entity: MaterialRequisition = MaterialRequisition.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
@@ -256,6 +256,8 @@ export class MaterialRequisitionDetailsMobileAppComponent  implements OnInit {
                 this.ismaterialModalOpen = false;
                 this.ModalEditable = false;
                 this.newRequisition = RequiredMaterialDetailProps.Blank();
+                this.MaterialName = '';
+                this.selectedMaterial = [];
                 this.haptic.success();
                 console.log('User confirmed.');
               }
@@ -265,6 +267,8 @@ export class MaterialRequisitionDetailsMobileAppComponent  implements OnInit {
       } else {
         this.ismaterialModalOpen = false;
         this.newRequisition = RequiredMaterialDetailProps.Blank();
+        this.MaterialName = '';
+        this.selectedMaterial = [];
       }
     }
   };

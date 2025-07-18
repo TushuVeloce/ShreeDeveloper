@@ -123,25 +123,25 @@
                       {{ item.RequisitionRemainingQty || '-' }}
                     </td>
                     <td>
-                      {{ item.Rate || '-' }}
+                      {{ item.Rate | currency : "INR" }}
                     </td>
                     <td>
-                      {{ item.DiscountedRate || '-' }}
+                      {{ item.DiscountedRate | currency : "INR" }}
                     </td>
                     <td>
                       {{ item.Gst || '-' }}
                     </td>
                     <td>
-                      {{ item.DeliveryCharges || '-' }}
+                      {{ item.DeliveryCharges | currency : "INR" }}
                     </td>
                     <td>
                       {{ formatDate(item.ExpectedDeliveryDate) || '-' }}
                     </td>
                     <td>
-                      {{ item.NetAmount || '-' }}
+                      {{ item.NetAmount | currency : "INR" }}
                     </td>
                     <td>
-                      {{ item.TotalAmount || '-' }}
+                      {{ item.TotalAmount | currency : "INR" }}
                     </td>
                   </tr>
                 </tbody>
@@ -181,16 +181,8 @@
   </ion-modal>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button>
-      <ion-icon name="ellipsis-vertical"></ion-icon>
+    <ion-fab-button color="primary" (click)="AddOrder()">
+      <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
-    <ion-fab-list side="top">
-      <ion-fab-button color="primary" (click)="AddOrder()">
-        <ion-icon name="add-outline"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button color="tertiary" (click)="AddOrder()">
-        <ion-icon name="filter-outline"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
   </ion-fab>
 </ion-content>
