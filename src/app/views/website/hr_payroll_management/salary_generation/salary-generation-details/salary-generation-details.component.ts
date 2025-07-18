@@ -67,8 +67,13 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   }
 
   calculategrosstotal = () => {
-    const GrossTotal = this.Entity.p.BasicSalary + this.Entity.p.TotalAllowance + this.Entity.p.TotalIncentive + this.Entity.p.Other + this.Entity.p.OverTimeHrsRate
-    this.Entity.p.GrossTotal =  parseFloat(GrossTotal.toFixed(2));
+    if(this.Entity.p.TotalOverTimeHrs){
+      const GrossTotal = this.Entity.p.BasicSalary + this.Entity.p.TotalAllowance + this.Entity.p.TotalIncentive + this.Entity.p.Other + this.Entity.p.OverTimeHrsRate
+      this.Entity.p.GrossTotal =  parseFloat(GrossTotal.toFixed(2));
+    }else{
+       const GrossTotal = this.Entity.p.BasicSalary + this.Entity.p.TotalAllowance + this.Entity.p.TotalIncentive + this.Entity.p.Other
+      this.Entity.p.GrossTotal =  parseFloat(GrossTotal.toFixed(2));
+    }
     this.calculatenetsalary()
   }
 
