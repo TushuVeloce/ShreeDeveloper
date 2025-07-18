@@ -216,6 +216,14 @@ export class TPOffice implements IPersistable<TPOffice> {
     return TPOffice.ListFromTransportData(tdResponse);
   }
 
+  public static async FetchEntireListByCompanyAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new TPOfficeFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    req.SiteRefs.push(SiteRef)
+    let tdResponse = await TPOffice.FetchTransportData(req, errorHandler) as TransportData;
+    return TPOffice.ListFromTransportData(tdResponse);
+  }
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

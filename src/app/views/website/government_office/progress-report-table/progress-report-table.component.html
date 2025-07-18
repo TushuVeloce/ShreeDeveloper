@@ -35,35 +35,41 @@
           <tbody>
             <tr *ngFor="let gov of paginatedList(); index as i">
               <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-              <td Class="tbldata">Site</td>
+              <td Class="tbldata">{{gov.p.SiteName}}</td>
               <td class="tbldata">
-                <span class="status" [ngClass]="false ? 'completed' : 'pending' " (click)='onTPOfficeClicked()'>
-                  {{ false ? "Completed" : "Pending" }}
+                <span class="status" [ngClass]="gov.p.IsTPOfficeComplete ? 'completed' : 'pending'"
+                  (click)='onTPOfficeClicked(gov.p.SiteRef)'>
+                  {{ gov.p.IsTPOfficeComplete ? "Completed" : "Pending" }}
                 </span>
               </td>
               <td class="tbldata">
-                <span class="status" [ngClass]="false ? 'completed' : 'pending' " (click)='onNaLetterClicked()'>
-                  {{ false ? "Completed" : "Pending" }}
+                <span class="status" [ngClass]="gov.p.IsParishisthaNaComplete ? 'completed' : 'pending' "
+                  (click)='onNaLetterClicked(gov.p.SiteRef)'>
+                  {{ gov.p.IsParishisthaNaComplete ? "Completed" : "Pending" }}
                 </span>
               </td>
               <td class="tbldata">
-                <span class="status" [ngClass]="false ? 'completed' : 'pending' " (click)='onMojaniClicked()'>
-                  {{ false ? "Completed" : "Pending" }}
+                <span class="status" [ngClass]="gov.p.IsMojniCompleted ? 'completed' : 'pending' "
+                  (click)='onMojaniClicked(gov.p.SiteRef)'>
+                  {{ gov.p.IsMojniCompleted ? "Completed" : "Pending" }}
                 </span>
               </td>
               <td class="tbldata">
-                <span class="status" [ngClass]="false ? 'completed' : 'pending' " (click)='onULCClicked()'>
-                  {{ false ? "Completed" : "Pending" }}
+                <span class="status" [ngClass]="gov.p.IsGovernmentUlcComplete ? 'completed' : 'pending' "
+                  (click)='onULCClicked(gov.p.SiteRef)'>
+                  {{ gov.p.IsGovernmentUlcComplete ? "Completed" : "Pending" }}
                 </span>
               </td>
               <td class="tbldata">
-                <span class="status" [ngClass]="false ? 'completed' : 'pending' " (click)='onFinalLayoutClicked()'>
-                  {{ false ? "Completed" : "Pending" }}
+                <span class="status" [ngClass]="gov.p.IsFinalLayoutCompleted ? 'completed' : 'pending' "
+                  (click)='onFinalLayoutClicked(gov.p.SiteRef)'>
+                  {{ gov.p.IsFinalLayoutCompleted ? "Completed" : "Pending" }}
                 </span>
               </td>
               <td class="tbldata">
-                <span class="status" [ngClass]="false ? 'completed' : 'pending' " (click)='onK_JA_PA_Clicked()'>
-                  {{ false ? "Completed" : "Pending" }}
+                <span class="status" [ngClass]="gov.p.IsKajapaComplete ? 'completed' : 'pending' "
+                  (click)='onK_JA_PA_Clicked(gov.p.SiteRef)'>
+                  {{ gov.p.IsKajapaComplete ? "Completed" : "Pending" }}
                 </span>
               </td>
               <!-- <td class="tbldata">

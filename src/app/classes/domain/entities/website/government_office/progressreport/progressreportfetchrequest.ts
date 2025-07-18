@@ -6,7 +6,7 @@ import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
 export class ProgressReportFetchRequest
 {
-    public static readonly FetchRequestType: string = "ProgressReportFetchRequest";
+    public static readonly FetchRequestType: string = "ShowOfficeStatusFetchRequest";
 
     ProgressReportRefs: number[] = [];
     CompanyRefs: number[] = [];
