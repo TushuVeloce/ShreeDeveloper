@@ -48,7 +48,7 @@ export class NaLetterProps {
   public IsInamPatraSubmitThree: boolean = false;
   public IsChalanSubmit: boolean = false;
   public IsvargDonTeVargEkChaAadeshSubmit: boolean = false;
-  
+
   public IsTPOfficeSubmit: boolean = false;
   public TPOfficeInwardNo: string = '';
   public TPOfficeInwardDate: string = '';
@@ -75,7 +75,7 @@ export class NaLetter implements IPersistable<NaLetter> {
 
   public IsComplete: boolean = false;
 
-  public static readonly Db_Table_Name: string = 'GovernmentNaLetter';
+  public static readonly Db_Table_Name: string = 'GovernmentParishisthaNA';
 
   private constructor(public readonly p: NaLetterProps, public readonly AllowEdit: boolean) {
 
@@ -210,6 +210,14 @@ export class NaLetter implements IPersistable<NaLetter> {
 
   public static async FetchEntireListBySiteRef(SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new NaLetterFetchRequest();
+    req.SiteRefs.push(SiteRef)
+    let tdResponse = await NaLetter.FetchTransportData(req, errorHandler) as TransportData;
+    return NaLetter.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByCompanyAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new NaLetterFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
     req.SiteRefs.push(SiteRef)
     let tdResponse = await NaLetter.FetchTransportData(req, errorHandler) as TransportData;
     return NaLetter.ListFromTransportData(tdResponse);

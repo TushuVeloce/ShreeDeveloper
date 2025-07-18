@@ -20,6 +20,12 @@ export class TpOfficeComponent implements OnInit {
   SiteRef: number = 0;
   SiteName: string = '';
 
+  Entity: TPOffice = TPOffice.CreateNewInstance();
+  isSaveDisabled: boolean = false;
+  IsDropdownDisabled: boolean = true;
+  InitialEntity: TPOffice = null as any;
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+
   constructor(
     private router: Router,
     private baseUrl: BaseUrlService,
@@ -31,11 +37,6 @@ export class TpOfficeComponent implements OnInit {
     private datePipe: DatePipe
   ) { }
 
-  Entity: TPOffice = TPOffice.CreateNewInstance();
-  isSaveDisabled: boolean = false;
-  IsDropdownDisabled: boolean = true;
-  InitialEntity: TPOffice = null as any;
-  companyRef = this.companystatemanagement.SelectedCompanyRef;
 
 
   async ngOnInit() {
@@ -60,7 +61,6 @@ export class TpOfficeComponent implements OnInit {
       return;
     }
     let lst = await TPOffice.FetchEntireListByCompanyAndSiteRef(this.companyRef(), this.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     if (lst.length > 0) {
       this.Entity = lst[0];
     } else {
@@ -87,7 +87,7 @@ export class TpOfficeComponent implements OnInit {
     ];
 
     status = requiredFields.every(field => Entity.p?.[field] === true);
-    
+
     if (!Entity.p.ReportNOCAirportNOC && status) {
       status = true;
     } else {
@@ -194,7 +194,6 @@ export class TpOfficeComponent implements OnInit {
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
     this.Entity.p.IsTPOfficeComplete = this.areAllSubmissionsComplete(this.Entity);
-    console.log(' this.Entity.p.IsTPOfficeComplete :', this.Entity.p.IsTPOfficeComplete);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);

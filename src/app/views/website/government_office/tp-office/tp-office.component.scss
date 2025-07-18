@@ -40,7 +40,14 @@ form {
     margin-top: 0.30rem;
     margin-bottom: 0.30rem;
     font-weight: bold;
-    font-size: 1vw;
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+    }
+
+    @media (max-width: 468px) {
+      font-size: 12px;
+    }
   }
 }
 

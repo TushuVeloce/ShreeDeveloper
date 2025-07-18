@@ -17,6 +17,16 @@ import { Utils } from 'src/app/services/utils.service';
 })
 export class NaLetterComponent implements OnInit {
 
+  SiteRef: number = 0;
+  SiteName: string = '';
+
+  Entity: NaLetter = NaLetter.CreateNewInstance();
+  private IsNewEntity: boolean = true;
+  isSaveDisabled: boolean = false;
+  IsDropdownDisabled: boolean = false;
+  InitialEntity: NaLetter = null as any;
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+
   constructor(
     private router: Router,
     private baseUrl: BaseUrlService,
@@ -28,26 +38,62 @@ export class NaLetterComponent implements OnInit {
     private datePipe: DatePipe
   ) { }
 
-  Entity: NaLetter = NaLetter.CreateNewInstance();
-  private IsNewEntity: boolean = true;
-  isSaveDisabled: boolean = false;
-  IsDropdownDisabled: boolean = false;
-  InitialEntity: NaLetter = null as any;
-  companyRef = this.companystatemanagement.SelectedCompanyRef;
 
 
   async ngOnInit() {
-    this.appStateManage.setDropdownDisabled(true);
-    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-      this.IsNewEntity = false;
-      this.Entity = NaLetter.GetCurrentInstance();
-      this.appStateManage.StorageKey.removeItem('Editable');
-      this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    } else {
-      this.Entity = NaLetter.CreateNewInstance();
-      NaLetter.SetCurrentInstance(this.Entity);
-    }
+
+    this.SiteRef = history.state.SiteRef;
+
+    this.getNALetterListByCompanyAndSiteRef();
+
+    this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+
     this.InitialEntity = Object.assign(NaLetter.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as NaLetter;
+  }
+
+
+  getNALetterListByCompanyAndSiteRef = async () => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    if (this.SiteRef <= 0) {
+      await this.uiUtils.showErrorToster('Site not Selected');
+      return;
+    }
+    let lst = await NaLetter.FetchEntireListByCompanyAndSiteRef(this.companyRef(), this.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    if (lst.length > 0) {
+      this.Entity = lst[0];
+    } else {
+      await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
+    }
+  }
+
+
+  areAllSubmissionsComplete(Entity: any): boolean {
+    let status = false;
+
+    const requiredFields = [
+      'IsTPPatraSubmit',
+      'IsPradhikaranOfficePatraSubmit',
+      'IsTentativeOrderMapSubmit',
+      'IsZoneDakhalaMapSubmit',
+      'IsEkonisheEkonPanasPasuncheSatbaraVaFerfarSubmit',
+      'IsEPatrakSubmit',
+      'IsInamPatraSubmit',
+      'IsTPOfficeSubmit',
+      'IsTalathiOfficeSubmit',
+    ];
+
+    status = requiredFields.every(field => Entity.p?.[field] === true);
+
+    if (!Entity.p.IsInamPatraSubmitTwo && status) {
+      status = true;
+    } else {
+      status = Entity.p.IsArjSubmit;
+    }
+    return status;
   }
 
 
@@ -58,6 +104,7 @@ export class NaLetterComponent implements OnInit {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
+    this.Entity.p.IsParishisthaNaComplete = this.areAllSubmissionsComplete(this.Entity);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
@@ -67,13 +114,8 @@ export class NaLetterComponent implements OnInit {
       return;
     } else {
       this.isSaveDisabled = false;
-      if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('NaLetter saved successfully');
-        this.Entity = NaLetter.CreateNewInstance();
-      } else {
-        await this.uiUtils.showSuccessToster('NaLetter Updated successfully');
-        await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
-      }
+      await this.uiUtils.showSuccessToster('T.P. Office Updated successfully');
+      await this.router.navigate(['/homepage/Website/Site_Progress_Report']);
     }
   };
 
