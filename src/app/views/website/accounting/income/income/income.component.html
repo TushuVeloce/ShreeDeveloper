@@ -13,9 +13,9 @@
   </div>
 </div>
 <div class="row" *ngIf="DisplayMasterList.length > 0">
-  <div class="col-4 mb-2"></div>
-  <div class="col-4 mb-2"></div>
-  <div class="col-4 mb-2 text-end">
+  <div class="col-4"></div>
+  <div class="col-4"></div>
+  <div class="col-4 text-end">
     <img class="no-print" src="/assets/icons/printer.png" alt="Print" title="Print" width="30px" height="30px"
       style="cursor: pointer; padding-top: 4px" (click)="printIncome()" />
   </div>
@@ -23,7 +23,7 @@
 <ng-template #noDataTpl>
   <div style="text-align: center; color: rgba(0, 0, 0, 0.25)">No Data</div>
 </ng-template>
-<div class="row" style="margin-top: 1rem">
+<div class="row" style="margin-top: 0.5rem">
   <div class="col-md-4">
     <label for="SiteRef"><b>Site</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"

@@ -60,7 +60,7 @@ export class IncomeComponent implements OnInit {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
     const pageSize = this.screenSizeService.getPageSize('withDropdown');
-    this.pageSize = pageSize - 1
+    this.pageSize = pageSize - 6
   }
 
   getSiteListByCompanyRef = async () => {
