@@ -14,18 +14,20 @@ import { ProgressReportFetchRequest } from "./progressreportfetchrequest";
 
 
 export class ProgressReportProps {
+  public readonly Db_Table_Name = "ProgressReport";
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
   public Ref: number = 0;
+  public SiteRef: number = 0;
   public SiteName: string = '';
-  public TpOffice: string = '';
-  public NALetter: string = '';
-  public Mojani: string = '';
-  public ULC: string = '';
-  public FinalLayout: string = '';
-  public KaJaPa: string = '';
+  public IsTPOfficeComplete: boolean = false;
+  public IsParishisthaNaComplete: boolean = false;
+  public IsMojniCompleted: boolean = false;
+  public IsGovernmentUlcComplete: boolean = false;
+  public IsFinalLayoutCompleted: boolean = false;
+  public IsKajapaComplete: boolean = false;
 
   public IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';
@@ -70,15 +72,6 @@ export class ProgressReport implements IPersistable<ProgressReport> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    // if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-    // if (this.p.Date == '') vra.add('Date', 'Date cannot be blank.');
-    // if (this.p.ContactNos == '') vra.add('OwnerName', 'Owner Name cannot be blank.');
-    // if (this.p.EmailId == '') vra.add('EmailId', 'Email Id cannot be blank.');
-    // if (this.p.PinCode == '') vra.add('PinCode', 'Pin code cannot be blank.');
-    // if (this.p.Address == '') vra.add('AddressLine1', 'AddressLine1 cannot be blank.');
-    // if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country Name cannot be blank.');
-    // if (this.p.StateRef == 0) vra.add('StateRef', 'State Name cannot be blank.');
-    // if (this.p.CityRef == 0) vra.add('CityRef', 'City Name cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -112,7 +105,7 @@ export class ProgressReport implements IPersistable<ProgressReport> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): ProgressReport[] {
+    sortPropertyName: string = ""): ProgressReport[] {
     let result: ProgressReport[] = [];
 
     let dcs = DataContainerService.GetInstance();
