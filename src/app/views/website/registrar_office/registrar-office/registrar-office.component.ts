@@ -40,6 +40,11 @@ export class RegistrarOfficeComponent implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled();
     this.loadPaginationData();
+    this.Entity.p.SiteRef =   Number(this.appStateManage.StorageKey.getItem('registartsiteRef'));
+    this.Entity.p.PlotRef = Number(this.appStateManage.StorageKey.getItem('registartplotRef'));
+    if(this.Entity.p.SiteRef){
+      this.getPlotListBySiteRef(this.Entity.p.SiteRef)
+    }
   }
 
   // get SiteList With Company Ref //
@@ -55,10 +60,12 @@ export class RegistrarOfficeComponent implements OnInit {
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
 
-    if (this.SiteList.length >= 0) {
-      this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
-      this.getRegistrarOfficeListBySiteRef(this.Entity.p.SiteRef);
-    }
+    // if (this.SiteList.length > 0 && !this.islocalstoragedata) {
+    //   this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
+    //   this.appStateManage.StorageKey.setItem('registartsiteRef', String(this.Entity.p.SiteRef));
+    //   await this.getPlotListBySiteRef(this.Entity.p.SiteRef)
+    //   this.getRegistrarOfficeListBySiteRef(this.Entity.p.SiteRef);
+    // }
     this.loadPaginationData();
   }
 
@@ -69,9 +76,8 @@ export class RegistrarOfficeComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     this.PlotNoList = [];
-    this.Entity.p.PlotRef = 0;
+    // this.Entity.p.PlotRef = 0;
     this.appStateManage.StorageKey.setItem('registartsiteRef', String(SiteRef));
-    this.appStateManage.StorageKey.setItem('registartplotRef', String( this.Entity.p.PlotRef));
     if (SiteRef <= 0) {
       await this.uiUtils.showWarningToster(`Please Select Site`);
       return
@@ -98,12 +104,17 @@ export class RegistrarOfficeComponent implements OnInit {
       await this.uiUtils.showWarningToster(`Please Select Plot`);
       return
     }
+    this.appStateManage.StorageKey.setItem('registartplotRef', String(PlotRef));
     let lst = await RegistrarOffice.FetchEntireListByPlotRef(PlotRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
 
+  OnSiteChange = () => {
+    this.Entity.p.PlotRef = 0;
+    this.appStateManage.StorageKey.setItem('registartplotRef', String(this.Entity.p.PlotRef));
+  }
 
   isWitness1Completed(office: any): boolean {
     const p = office.p;
