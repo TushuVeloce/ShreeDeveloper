@@ -29,7 +29,7 @@
     <label for="SiteRef"><b>Site</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
-      (ngModelChange)="FetchEntireListByFilters()">
+     (ngModelChange)="FetchEntireListByFilters(); ClearRef()">
       <nz-option nzLabel="All" [nzValue]="0"></nz-option>
       <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
     </nz-select>
@@ -38,7 +38,7 @@
     <label><b>Ledger</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
-      (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef)" (ngModelChange)="FetchEntireListByFilters()">
+      (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef)" (ngModelChange)="FetchEntireListByFilters(); ClearRef()">
       <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
     </nz-select>
   </div>
@@ -46,7 +46,7 @@
     <label><b>Sub Ledger</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="SubLedgerRef" name="SubLedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SubLedgerRef"
-      (ngModelChange)="FetchEntireListByFilters()">
+     (ngModelChange)="FetchEntireListByFilters(); ClearRef()">
       <nz-option *ngFor="let sub of SubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
     </nz-select>
   </div>
@@ -54,7 +54,7 @@
     <label><b>Mode of Payment</b></label>
     <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
       id="ExpenseModeOfPayment" name="ExpenseModeOfPayment" [nzSize]="'large'"
-      [(ngModel)]="Entity.p.ExpenseModeOfPayment" (ngModelChange)="FetchEntireListByFilters()">
+      [(ngModel)]="Entity.p.ExpenseModeOfPayment" (ngModelChange)="FetchEntireListByFilters(); ClearRef()">
       <nz-option *ngFor="let mode of ModeofPaymentList" [nzValue]="mode.Ref" [nzLabel]="mode.Name"></nz-option>
     </nz-select>
   </div>

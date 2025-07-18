@@ -217,7 +217,7 @@ export class IncomeViewMobileAppComponent implements OnInit {
       await this.haptic.error();
       return;
     }
-    let lst = await Income.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.Entity.p.IncomeModeOfPayment, this.companyRef, async errMsg => {
+    let lst = await Income.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.Entity.p.IncomeModeOfPayment, this.Entity.p.Ref, this.companyRef, async errMsg => {
       // await this.uiUtils.showErrorMessage('Error', errMsg)
        await this.toastService.present('Error ' + errMsg, 1000, 'danger');
       await this.haptic.error();

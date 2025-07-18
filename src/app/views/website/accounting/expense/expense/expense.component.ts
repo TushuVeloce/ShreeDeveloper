@@ -65,6 +65,7 @@ export class ExpenseComponent implements OnInit {
 
     getSiteListByCompanyRef = async () => {
     this.Entity.p.SiteRef = 0
+    this.Entity.p.Ref = 0
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -76,6 +77,7 @@ export class ExpenseComponent implements OnInit {
   getLedgerListByCompanyRef = async () => {
     this.Entity.p.LedgerRef = 0
     this.Entity.p.SubLedgerRef = 0
+    this.Entity.p.Ref = 0
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -88,6 +90,7 @@ export class ExpenseComponent implements OnInit {
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
     this.Entity.p.SubLedgerRef = 0
+    this.Entity.p.Ref = 0
     if (ledgerref <= 0) {
       await this.uiUtils.showErrorToster('Ledger not Selected');
       return;
@@ -95,6 +98,10 @@ export class ExpenseComponent implements OnInit {
     let lst = await SubLedger.FetchEntireListByLedgerRef(ledgerref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SubLedgerList = lst;
   }
+
+ClearRef = () =>{
+ this.Entity.p.Ref = 0
+}
 
  FetchEntireListByFilters = async () => {
     this.MasterList = [];

@@ -47,7 +47,7 @@ export class IncomeComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
-       this.Entity.p.IncomeModeOfPayment = 0
+      this.Entity.p.IncomeModeOfPayment = 0
       this.Entity.p.Ref = 0
       await this.getSiteListByCompanyRef();
       await this.getLedgerListByCompanyRef();
@@ -65,6 +65,7 @@ export class IncomeComponent implements OnInit {
 
   getSiteListByCompanyRef = async () => {
     this.Entity.p.SiteRef = 0
+    this.Entity.p.Ref = 0
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -74,8 +75,9 @@ export class IncomeComponent implements OnInit {
   }
 
   getLedgerListByCompanyRef = async () => {
-     this.Entity.p.LedgerRef = 0
+    this.Entity.p.LedgerRef = 0
     this.Entity.p.SubLedgerRef = 0
+    this.Entity.p.Ref = 0
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -88,6 +90,7 @@ export class IncomeComponent implements OnInit {
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
     this.Entity.p.SubLedgerRef = 0
+    this.Entity.p.Ref = 0
     if (ledgerref <= 0) {
       await this.uiUtils.showErrorToster('Ledger not Selected');
       return;
@@ -96,20 +99,24 @@ export class IncomeComponent implements OnInit {
     this.SubLedgerList = lst;
   }
 
-   FetchEntireListByFilters = async () => {
-      this.MasterList = [];
-      this.DisplayMasterList = [];
-      if (this.companyRef() <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
-        return;
-      }
-      console.log('this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.IncomeModeOfPayment,this.Entity.p.Ref,  :', this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.IncomeModeOfPayment,this.Entity.p.Ref, );
-      let lst = await Income.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.IncomeModeOfPayment,this.Entity.p.Ref,  this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.AllList = lst.filter((item)=>item.p.Reason != '');
-      this.MasterList = lst;
-      this.DisplayMasterList = this.MasterList;
-      this.loadPaginationData();
+  FetchEntireListByFilters = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
+    console.log('this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.IncomeModeOfPayment,this.Entity.p.Ref,  :', this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.Entity.p.IncomeModeOfPayment, this.Entity.p.Ref,);
+    let lst = await Income.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.Entity.p.IncomeModeOfPayment, this.Entity.p.Ref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.AllList = lst.filter((item) => item.p.Reason != '');
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
+  }
+
+  ClearRef = () => {
+    this.Entity.p.Ref = 0
+  }
 
   getIncomeListByCompanyRef = async () => {
     this.MasterList = [];

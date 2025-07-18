@@ -55,6 +55,7 @@ export class InvoiceComponent implements OnInit {
 
   getSiteListByCompanyRef = async () => {
     this.Entity.p.SiteRef = 0
+     this.Entity.p.Ref = 0
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -66,6 +67,7 @@ export class InvoiceComponent implements OnInit {
   getLedgerListByCompanyRef = async () => {
      this.Entity.p.LedgerRef = 0
     this.Entity.p.SubLedgerRef = 0
+     this.Entity.p.Ref = 0
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -78,6 +80,7 @@ export class InvoiceComponent implements OnInit {
 
   getSubLedgerListByLedgerRef = async (ledgerref: number) => {
     this.Entity.p.SubLedgerRef = 0
+     this.Entity.p.Ref = 0
     if (ledgerref <= 0) {
       await this.uiUtils.showErrorToster('Ledger not Selected');
       return;
@@ -98,6 +101,10 @@ export class InvoiceComponent implements OnInit {
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
+  }
+
+   ClearRef = () => {
+    this.Entity.p.Ref = 0
   }
 
   getInvoiceListByCompanyRef = async () => {
