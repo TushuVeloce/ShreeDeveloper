@@ -37,9 +37,7 @@ export class CountryComponent implements OnInit {
   }
 
   private FormulateCountryList = async () => {
-    let lst = await Country.FetchEntireList(
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    );
+    let lst = await Country.FetchEntireList(async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();

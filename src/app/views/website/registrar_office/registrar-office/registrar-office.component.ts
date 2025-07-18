@@ -70,7 +70,8 @@ export class RegistrarOfficeComponent implements OnInit {
     this.DisplayMasterList = [];
     this.PlotNoList = [];
     this.Entity.p.PlotRef = 0;
-    this.appStateManage.StorageKey.setItem('siteRef', String(SiteRef));
+    this.appStateManage.StorageKey.setItem('registartsiteRef', String(SiteRef));
+    this.appStateManage.StorageKey.setItem('registartplotRef', String( this.Entity.p.PlotRef));
     if (SiteRef <= 0) {
       await this.uiUtils.showWarningToster(`Please Select Site`);
       return
