@@ -170,12 +170,15 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     this.Entity.p.TotalLeaves = lst[0]?.p?.TotalLeaves || 0
     this.Entity.p.TotalOverTimeHrs = lst[0]?.p?.TotalOverTimeHrs || 0
     this.Entity.p.DisplayTotalOverTimeHrs = lst[0]?.p?.DisplayTotalOverTimeHrs || ''
-    this.Entity.p.TotalWorkingHrs = lst[0]?.p?.TotalWorkingHrs || 0
-    this.Entity.p.DisplayTotalWorkingHrs = lst[0]?.p?.DisplayTotalWorkingHrs || ''
-    this.Entity.p.TotalLeavesHrs = lst[0]?.p?.TotalLeavesHrs || 0
-    this.Entity.p.DisplayTotalLeavesHrs = lst[0]?.p?.DisplayTotalLeavesHrs || ''
-    this.Entity.p.OverallWorkingHrs = lst[0]?.p?.OverallWorkingHrs || 0
-    this.Entity.p.DisplayOverAllWorkingHrs = lst[0]?.p?.DisplayOverAllWorkingHrs || ''
+    // this.Entity.p.TotalWorkingHrs = lst[0]?.p?.TotalWorkingHrs || 0
+    // this.Entity.p.DisplayTotalWorkingHrs = lst[0]?.p?.DisplayTotalWorkingHrs || ''
+    // this.Entity.p.TotalLeavesHrs = lst[0]?.p?.TotalLeavesHrs || 0
+    // this.Entity.p.DisplayTotalLeavesHrs = lst[0]?.p?.DisplayTotalLeavesHrs || ''
+    // this.Entity.p.OverallWorkingHrs = lst[0]?.p?.OverallWorkingHrs || 0
+    // this.Entity.p.DisplayOverAllWorkingHrs = lst[0]?.p?.DisplayOverAllWorkingHrs || ''
+    this.Entity.p.TotalLateMarksAndHalfDays = lst[0]?.p?.TotalLateMarksAndHalfDays || 0
+    this.Entity.p.LateMarksAndHalfDayRate = lst[0]?.p?.LateMarksAndHalfDayRate || 0
+    this.Entity.p.TotalDeductionOfLateMarksAndHalfDays = lst[0]?.p?.TotalDeductionOfLateMarksAndHalfDays || 0
     this.Entity.p.TotalLeaveDeduction = lst[0]?.p?.TotalLeaveDeduction != null? parseFloat(lst[0].p.TotalLeaveDeduction.toFixed(2)): 0; 
     this.Entity.p.OverTimeHrsRate = lst[0]?.p?.OverTimeHrsRate != null? parseFloat(lst[0].p.OverTimeHrsRate.toFixed(2)): 0; 
     this.Entity.p.BasicSalary = lst[0]?.p?.BasicSalary || 0

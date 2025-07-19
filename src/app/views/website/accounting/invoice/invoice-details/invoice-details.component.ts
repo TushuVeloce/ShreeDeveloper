@@ -18,7 +18,7 @@ import { InvoiceNoFetchRequest } from 'src/app/classes/domain/entities/website/a
 import { TransportData } from 'src/app/classes/infrastructure/transportdata';
 import { PayloadPacketFacade } from 'src/app/classes/infrastructure/payloadpacket/payloadpacketfacade';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
-import { DomainEnums, ExpenseTypes, ModeOfPayments } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, ExpenseTypes, ModeOfPayments, RecipientTypes } from 'src/app/classes/domain/domainenums/domainenums';
 import { ServiceSuppliedByVendorProps, Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
 import { TimeDetailProps } from 'src/app/classes/domain/entities/website/site_management/time/time';
@@ -35,7 +35,8 @@ export class InvoiceDetailsComponent implements OnInit {
   RecipientEntity: Recipient = Recipient.CreateNewInstance();
   private IsNewEntity: boolean = true;
   SiteList: Site[] = [];
-  RecipientList: Recipient[] = [];
+  // RecipientList: Recipient[] = [];
+  RecipientList: Invoice[] = [];
   RecipientNameInput: boolean = false
   SubLedgerList: SubLedger[] = [];
   UnitList: Unit[] = [];
@@ -67,7 +68,9 @@ export class InvoiceDetailsComponent implements OnInit {
   LabourEditingIndex: null | undefined | number
   isLabourTimeModalOpen: boolean = false;
   Bill = ModeOfPayments.Bill
+  TypeRecipient = RecipientTypes.Recipient
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref == this.Bill);
+  RecipientTypesList = DomainEnums.RecipientTypesList();
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   timeheaders: string[] = ['Sr.No.', 'Start Time ', 'End Time', 'Worked Hours', 'Action'];
@@ -131,7 +134,10 @@ export class InvoiceDetailsComponent implements OnInit {
       this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
       await this.getChalanNo()
     }
-    this.getRecipientListByCompanyRef()
+    // this.getRecipientListByCompanyRef()
+    if(this.Entity.p.RecipientType != 0){
+        this.getRecipientListByRecipientTypeRef()
+      }
     this.InitialEntity = Object.assign(
       Invoice.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
@@ -200,12 +206,27 @@ export class InvoiceDetailsComponent implements OnInit {
     this.SiteList = lst;
   }
 
-  getRecipientListByCompanyRef = async () => {
+  // getRecipientListByCompanyRef = async () => {
+  //   if (this.companyRef() <= 0) {
+  //     await this.uiUtils.showErrorToster('Company not Selected');
+  //     return;
+  //   }
+  //   let lst = await Recipient.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.RecipientList = lst;
+  // }
+
+    getRecipientListByRecipientTypeRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await Recipient.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    if (this.Entity.p.RecipientType <= 0) {
+      await this.uiUtils.showErrorToster('To Whom not Selected');
+      return;
+    }
+    
+    this.RecipientList = [];
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.RecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.RecipientList = lst;
   }
 
@@ -218,6 +239,11 @@ export class InvoiceDetailsComponent implements OnInit {
   cancelRecipientName = () => {
     this.RecipientNameInput = false
     this.RecipientEntity.p.Name = ''
+  }
+
+    onTypeChange = async() =>{
+    this.Entity.p.RecipientMasterRef = 0;
+    this.RecipientNameInput = false
   }
 
   getLedgerListByCompanyRef = async () => {
@@ -580,6 +606,9 @@ export class InvoiceDetailsComponent implements OnInit {
   ClearInputsOnExpenseChange = () => {
     this.Entity.p.MachineUsageDetailsArray = []
     this.Entity.p.LabourExpenseDetailsArray = []
+    this.Entity.p.RecipientType = 0
+    this.Entity.p.RecipientMasterRef = 0
+    this.RecipientNameInput = false
     this.Entity.p.VendorRef = 0
     this.Entity.p.VendorServiceRef = 0
     this.Entity.p.VehicleNo = ''
@@ -588,7 +617,7 @@ export class InvoiceDetailsComponent implements OnInit {
     this.CalculateAmount()
     this.DiselPaid(0)
   }
-
+  
   ClearMachineTimeTable = () => {
     this.Entity.p.MachineUsageDetailsArray = []
   }
@@ -636,8 +665,9 @@ export class InvoiceDetailsComponent implements OnInit {
     } else {
       await this.uiUtils.showSuccessToster('Recipient Name saved successfully');
       this.RecipientNameInput = false
-      await this.getRecipientListByCompanyRef()
       this.RecipientEntity = Recipient.CreateNewInstance();
+      // await this.getRecipientListByCompanyRef()
+      await this.getRecipientListByRecipientTypeRef()
     }
   };
 

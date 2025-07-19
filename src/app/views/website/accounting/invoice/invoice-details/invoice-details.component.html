@@ -77,6 +77,14 @@
             <span class="validation-text" *ngIf="DescriptionCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
+         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.ExpenseType != MachinaryExpenseRef && Entity.p.ExpenseType != LabourExpenseRef">
+          <label>Recipient Type</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="RecipientType" name="RecipientType" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.RecipientType" (ngModelChange)="getRecipientListByRecipientTypeRef(); onTypeChange()">
+            <nz-option *ngFor="let type of RecipientTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
+          </nz-select>
+        </div>
         <div class="col-md-4" style="margin-top: 1rem"
           *ngIf="Entity.p.ExpenseType != MachinaryExpenseRef && Entity.p.ExpenseType != LabourExpenseRef">
           <label>Recipient Name</label>
@@ -85,13 +93,13 @@
               [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select" id="RecipientMasterRef"
               name="RecipientName" [nzSize]="'large'" [(ngModel)]="Entity.p.RecipientMasterRef">
               <nz-option *ngFor="let name of RecipientList" [nzValue]="name.p.Ref"
-                [nzLabel]="name.p.Name | titleCase"></nz-option>
+                [nzLabel]="name.p.RecipientName | titleCase"></nz-option>
             </nz-select>
             <!-- <input *ngIf="RecipientNameReadOnly" type="text" [(ngModel)]="Entity.p.RecipientName" name="RecipientName"
               class="form-control" id="RecipientName" required placeholder="Recipient Name" readonly/> -->
             <input *ngIf="RecipientNameInput && !RecipientNameReadOnly" type="text" [(ngModel)]="RecipientEntity.p.Name"
               name="Name" class="form-control" id="Name" required placeholder="Enter Recipient Name" />
-            <span *ngIf="!RecipientNameInput && !RecipientNameReadOnly" (click)="AddRecipientName()"
+            <span *ngIf="!RecipientNameInput && !RecipientNameReadOnly && Entity.p.RecipientType == TypeRecipient" (click)="AddRecipientName()"
               class="ms-2 mb-0.5 d-flex justify-content-center align-items-center border rounded"
               style="width: 36px; height: 36px; cursor: pointer">
               <i class="fa-solid fa-plus" style="color: blue;"></i>

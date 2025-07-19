@@ -141,7 +141,7 @@ export class IncomeDetailsComponent implements OnInit {
       // await this.uiUtils.showErrorToster('Payer Type not Selected');
       return;
     }
-    let lst = await Income.FetchPayerNameByPayerTypeRef(this.companyRef(), this.Entity.p.PayerType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef,this.companyRef(), this.Entity.p.PayerType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.PayerList = lst;
   }
 

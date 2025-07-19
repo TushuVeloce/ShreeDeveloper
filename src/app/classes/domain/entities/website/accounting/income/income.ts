@@ -210,16 +210,18 @@ export class Income implements IPersistable<Income> {
     return Income.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchDistinctPayerNameByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchDistinctPayerNameByCompanyRef(SiteRef:number,CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new DistinctPayerNameFetchRequest();
     req.CompanyRefs.push(CompanyRef)
+    req.SiteRef = SiteRef
     let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
     return Income.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchPayerNameByPayerTypeRef(CompanyRef: number, PayerType: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchPayerNameByPayerTypeRef(SiteRef:number,CompanyRef: number, PayerType: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new DistinctPayerNameFetchRequest();
     req.CompanyRef = CompanyRef;
+    req.SiteRef = SiteRef
     req.PayerType = PayerType;
     let tdResponse = await Income.FetchTransportData(req, errorHandler) as TransportData;
     return Income.ListFromTransportData(tdResponse);

@@ -582,6 +582,16 @@ export class SidebarlayoutComponent implements OnInit {
         Name: 'Registered Customer',
         RouterLink: '/homepage/Website/Registered_Customer',
         LogoPath: '/assets/icons/Registered Customer.png',
+      },
+      {
+        Name: 'Customer Summary',
+        RouterLink: '/homepage/Website/Customer_Summary_Report',
+        LogoPath: '/assets/icons/Registered Customer.png',
+      },
+      {
+        Name: 'Customer Info',
+        RouterLink: '/homepage/Website/Customer_Info_Report',
+        LogoPath: '/assets/icons/Registered Customer.png',
       }
     ]
 

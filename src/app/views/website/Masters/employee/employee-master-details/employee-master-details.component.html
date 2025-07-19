@@ -89,7 +89,7 @@
         <div class="col-md-6">
           <div>
             <label>Address Line 1</label>
-            <input type="text" name="address" [(ngModel)]="Entity.p.AddressLine1" class="form-control" id="address"
+            <input type="text" name="AddressLine1" [(ngModel)]="Entity.p.AddressLine1" class="form-control" id="AddressLine1"
               required placeholder="Enter Address Line 1" #AddressLine1Ctrl="ngModel"
               (blur)="AddressLine1Ctrl.control.markAsTouched()" />
             <div *ngIf="(AddressLine1Ctrl.invalid && (AddressLine1Ctrl.touched || AddressLine1Ctrl.dirty))">
@@ -100,7 +100,7 @@
         <div class="col-md-6">
           <div>
             <label>Address Line 2</label>
-            <input type="text" name="address" [(ngModel)]="Entity.p.AddressLine2" class="form-control" id="address"
+            <input type="text" name="AddressLine2" [(ngModel)]="Entity.p.AddressLine2" class="form-control" id="AddressLine2"
               required placeholder="Enter Address Line 2" />
           </div>
         </div>

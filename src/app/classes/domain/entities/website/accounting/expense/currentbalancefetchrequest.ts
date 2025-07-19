@@ -12,6 +12,7 @@ export class CurrentBalanceFetchRequest {
   IncomeRefs: number[] = [];
   CompanyRef: number = 0;
 
+  SiteRef: number = 0;
   SiteRefs: number[] = [];
   LedgerRefs: number[] = [];
   SubLedgerRefs: number[] = [];

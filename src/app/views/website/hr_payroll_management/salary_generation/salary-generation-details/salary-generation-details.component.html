@@ -19,7 +19,8 @@
           <label>Employee Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" [nzSize]="'large'" name="EmployeeRef" required id="EmployeeRef"
-            [(ngModel)]="Entity.p.EmployeeRef" (ngModelChange)="EmployeeData(Entity.p.EmployeeRef, Entity.p.Month); ClearValues()"
+            [(ngModel)]="Entity.p.EmployeeRef"
+            (ngModelChange)="EmployeeData(Entity.p.EmployeeRef, Entity.p.Month); ClearValues()"
             [disabled]="isEmployeeDisabled">
             <nz-option *ngFor="let employee of EmployeeList" [nzValue]="employee.p.Ref"
               [nzLabel]="employee.p.Name"></nz-option>
@@ -57,7 +58,7 @@
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
           <label>Total Working Hours</label>
           <input type="text" name="DisplayTotalWorkingHrs" class="form-control" id="DisplayTotalWorkingHrs"
             [(ngModel)]="Entity.p.DisplayTotalWorkingHrs" placeholder="Total Working Hours" required readonly />
@@ -71,6 +72,25 @@
           <label>Overall Working Hours</label>
           <input type="text" name="DisplayOverAllWorkingHrs" class="form-control" id="DisplayOverAllWorkingHrs"
             [(ngModel)]="Entity.p.DisplayOverAllWorkingHrs" placeholder="Overall Working Hours" required readonly />
+        </div> -->
+
+        <div class="col-md-4">
+          <label>Total Late Mark and Half Days</label>
+          <input type="text" name="TotalLateMarksAndHalfDays" class="form-control" id="TotalLateMarksAndHalfDays"
+            [(ngModel)]="Entity.p.TotalLateMarksAndHalfDays" placeholder="Total Late Mark and Half Days" required
+            readonly />
+        </div>
+        <div class="col-md-4">
+          <label>Late Mark and Half Day Rate</label>
+          <input type="text" name="LateMarksAndHalfDayRate" class="form-control" id="LateMarksAndHalfDayRate"
+            [(ngModel)]="Entity.p.LateMarksAndHalfDayRate" placeholder="Late Mark and Half Day Rate" required
+            readonly />
+        </div>
+        <div class="col-md-4">
+          <label>Total Late Mark and Half Day Deduction</label>
+          <input type="text" name="TotalDeductionOfLateMarksAndHalfDays" class="form-control"
+            id="TotalDeductionOfLateMarksAndHalfDays" [(ngModel)]="Entity.p.TotalDeductionOfLateMarksAndHalfDays"
+            placeholder="Total Late Mark and Half Day Deduction" required readonly />
         </div>
       </div>
       <div class="row" style="margin-top: 1rem">
@@ -78,9 +98,9 @@
           <label>OverTime Hours Rate</label>
           <input type="text" name="OverTimeHrsRate" class="form-control" id="OverTimeHrsRate"
             [(ngModel)]="Entity.p.OverTimeHrsRate" placeholder="OverTime Hours Rate"
-            (ngModelChange)="calculategrosstotal()" (click)="selectAllValue($event)"/>
+            (ngModelChange)="calculategrosstotal()" (click)="selectAllValue($event)" />
         </div>
-         <div class="col-md-4">
+        <div class="col-md-4">
           <label>Basic Salary</label>
           <input type="number" name="BasicSalary" class="form-control" id="BasicSalary"
             [(ngModel)]="Entity.p.BasicSalary" placeholder="Basic Salary" required readonly
@@ -100,7 +120,7 @@
             [(ngModel)]="Entity.p.TotalIncentive" placeholder="Enter Total Incentive" required
             (click)="selectAllValue($event)" (ngModelChange)="calculategrosstotal()" />
         </div>
-             <div class="col-md-4">
+        <div class="col-md-4">
           <label>Other</label>
           <input type="number" name="Other" class="form-control" id="Other" [(ngModel)]="Entity.p.Other"
             placeholder="Enter Other" required (click)="selectAllValue($event)"

@@ -9,6 +9,7 @@ export class TotalIncomeFetchRequest {
 
   IncomeRefs: number[] = [];
   CompanyRefs: number[] = [];
+  SiteRef: number = 0;
   SiteRefs: number[] = [];
   RecipientRefs: number[] = [];
   Refs: number[] = [];

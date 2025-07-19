@@ -154,6 +154,8 @@ import { MojaniComponent } from './government_office/mojani/mojani.component';
 import { NaLetterComponent } from './government_office/na-letter/na-letter.component';
 import { UlcComponent } from './government_office/ulc/ulc.component';
 import { FinalLayoutComponent } from './government_office/final-layout/final-layout.component';
+import { CustomersummarryReportComponent } from './customer_management/crmreports/customersummarry-report/customersummarry-report.component';
+import { CustomerinfoReportComponent } from './customer_management/crmreports/customerinfo-report/customerinfo-report.component';
 
 
 const routes: Routes = [
@@ -296,6 +298,9 @@ const routes: Routes = [
 
       { path: 'Registered_Customer', component: RegisteredCustomerComponent },
       { path: 'Registered_Customer_Details', component: RegisteredCustomerDetailsComponent },
+
+      { path: 'Customer_Summary_Report', component: CustomersummarryReportComponent },
+      { path: 'Customer_Info_Report', component: CustomerinfoReportComponent },
 
 
       //Registrar Office

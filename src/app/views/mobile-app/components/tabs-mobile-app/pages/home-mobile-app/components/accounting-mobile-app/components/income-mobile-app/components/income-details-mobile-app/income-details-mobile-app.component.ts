@@ -258,7 +258,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
       // await this.uiUtils.showErrorToster('Payer Type not Selected');
       return;
     }
-    let lst = await Income.FetchPayerNameByPayerTypeRef(this.companyRef, this.Entity.p.PayerType, async errMsg => {
+    let lst = await Income.FetchPayerNameByPayerTypeRef(this.Entity.p.SiteRef,this.companyRef, this.Entity.p.PayerType, async errMsg => {
       await this.toastService.present('Error ' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -517,6 +517,7 @@ export class IncomeDetailsMobileAppComponent implements OnInit {
         this.selectedSite = selected;
         this.Entity.p.SiteRef = selected[0].p.Ref;
         this.SiteName = selected[0].p.Name;
+        this.getPayerListByPayerType();
       });
     } catch (error) {
 

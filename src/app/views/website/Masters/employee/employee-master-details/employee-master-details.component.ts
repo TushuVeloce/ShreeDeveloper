@@ -92,8 +92,8 @@ export class EmployeeMasterDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    this.getDepartmentListByCompanyRef()
-    this.getOfficeDutyTime();
+    await this.getDepartmentListByCompanyRef()
+   await this.getOfficeDutyTime();
     await this.FormulateCountryList();
     const date = new Date();
     date.setFullYear(date.getFullYear() - 14); // Subtract 14 years
@@ -102,11 +102,14 @@ export class EmployeeMasterDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity? 'New Employee': 'Edit Employee';
       this.Entity = Employee.GetCurrentInstance();
+      console.log('Entity :', this.Entity);
       // While Edit Converting date String into Date Format //
       this.dateofjoining = this.datePipe.transform(this.dtu.FromString(this.Entity.p.DateOfJoining),'yyyy-MM-dd');
       // While Edit Converting date String into Date Format //
       this.dob = this.datePipe.transform(this.dtu.FromString(this.Entity.p.DOB),'yyyy-MM-dd');
-      this.getDesignationListByDepartmentRef();
+      if(this.Entity.p.DepartmentRef){
+       await this.getDesignationListByDepartmentRef();
+      }
       this.appStateManage.StorageKey.removeItem('Editable');
       if (this.Entity.p.CountryRef) {
         this.getStateListByCountryRef(this.Entity.p.CountryRef);
