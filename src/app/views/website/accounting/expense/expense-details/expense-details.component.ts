@@ -26,6 +26,7 @@ import { Utils } from 'src/app/services/utils.service';
   templateUrl: './expense-details.component.html',
   styleUrls: ['./expense-details.component.scss'],
 })
+
 export class ExpenseDetailsComponent implements OnInit {
   Entity: Expense = Expense.CreateNewInstance();
   RecipientEntity: Recipient = Recipient.CreateNewInstance();
@@ -176,7 +177,7 @@ export class ExpenseDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('To Whom not Selected');
       return;
     }
-    
+
     this.RecipientList = [];
     let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.RecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.RecipientList = lst;

@@ -51,7 +51,8 @@ export class ExpenseProps {
   public IncomeLedgerName: string = ''
   public IncomeSubLedgerRef: number = 0
   public IncomeSubLedgerName: string = ''
-  public RemainingAdvance: number = 0
+  public RemainingAdvance: number = 0;
+  public IsSalaryExpense: boolean = false;
 
   public GivenAmount: number = 0
   public TotalAdvance: number = 0
@@ -241,27 +242,27 @@ export class Expense implements IPersistable<Expense> {
     return Expense.ListFromTransportData(tdResponse);
   }
 
-    public static async FetchEntireListByFilters(SiteRef:number, LedgerRef:number,SubLedgerRef:number,ModeOfPayment:number,Ref:number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-        let req = new ExpenseFetchRequest();
-       req.CompanyRefs.push(CompanyRef)
-      if (LedgerRef) {
-        req.LedgerRefs.push(LedgerRef)
-      }
-      if (SubLedgerRef) {
-         req.SubLedgerRefs.push(SubLedgerRef)
-      }
-      if (SiteRef) {
-         req.SiteRefs.push(SiteRef)
-      }
-      if (ModeOfPayment) {
-         req.ModeOfPayments.push(ModeOfPayment)
-      }
-      if (Ref) {
-         req.Refs.push(Ref)
-      }
-        let tdResponse = await Expense.FetchTransportData(req, errorHandler) as TransportData;
-        return Expense.ListFromTransportData(tdResponse);
-      }
+  public static async FetchEntireListByFilters(SiteRef: number, LedgerRef: number, SubLedgerRef: number, ModeOfPayment: number, Ref: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new ExpenseFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    if (LedgerRef) {
+      req.LedgerRefs.push(LedgerRef)
+    }
+    if (SubLedgerRef) {
+      req.SubLedgerRefs.push(SubLedgerRef)
+    }
+    if (SiteRef) {
+      req.SiteRefs.push(SiteRef)
+    }
+    if (ModeOfPayment) {
+      req.ModeOfPayments.push(ModeOfPayment)
+    }
+    if (Ref) {
+      req.Refs.push(Ref)
+    }
+    let tdResponse = await Expense.FetchTransportData(req, errorHandler) as TransportData;
+    return Expense.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

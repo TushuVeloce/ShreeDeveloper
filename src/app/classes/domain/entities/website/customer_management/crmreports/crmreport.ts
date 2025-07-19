@@ -130,7 +130,7 @@ export class CRMReports implements IPersistable<CRMReports> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): CRMReports[] {
+    sortPropertyName: string = ""): CRMReports[] {
     let result: CRMReports[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -192,7 +192,7 @@ export class CRMReports implements IPersistable<CRMReports> {
 
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new CRMReportsFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
+    req.CompanyRef = CompanyRef
     let tdResponse = await CRMReports.FetchTransportData(req, errorHandler) as TransportData;
     return CRMReports.ListFromTransportData(tdResponse);
   }

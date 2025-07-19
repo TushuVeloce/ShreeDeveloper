@@ -39,8 +39,7 @@
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Ledger</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'"
-            [(ngModel)]="Entity.p.LedgerRef"
+            nzPlaceHolder="Select" id="LedgerRef" name="LedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.LedgerRef"
             (ngModelChange)="getSubLedgerListByLedgerRef(Entity.p.LedgerRef)">
             <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
           </nz-select>
@@ -65,7 +64,8 @@
         <div class="col-md-4" style="margin-top: 1rem; " *ngIf="this.Entity.p.RecipientType == Sites">
           <label>Income Ledger</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="IncomeLedgerRef" name="IncomeLedgerRef" [nzSize]="'large'" [(ngModel)]="Entity.p.IncomeLedgerRef"
+            nzPlaceHolder="Select" id="IncomeLedgerRef" name="IncomeLedgerRef" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.IncomeLedgerRef"
             (ngModelChange)="getSubIncomeLedgerListByIncomeLedgerRef(Entity.p.IncomeLedgerRef); onChangeIncomeLedger()">
             <nz-option *ngFor="let ledger of LedgerList" [nzValue]="ledger.p.Ref" [nzLabel]="ledger.p.Name"></nz-option>
           </nz-select>
@@ -78,7 +78,7 @@
             <nz-option *ngFor="let sub of IncomeSubLedgerList" [nzValue]="sub.p.Ref" [nzLabel]="sub.p.Name"></nz-option>
           </nz-select>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Employee">
+        <!-- <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Employee">
           <div style="margin-top: 1rem">
             <div class="d-flex align-items-center mb-2">
               <label for="IsAdvancePayment"><b>Is Advance Payment</b></label>
@@ -87,6 +87,15 @@
                 style="width: 20px; height: 20px; margin-left: 1rem" (ngModelChange)="IsAdvancePayment()"/>
             </div>
           </div>
+        </div> -->
+        <div class="col-md-4" style="margin-top: 1rem; " *ngIf="this.Entity.p.RecipientType == Sites  ">
+          <label>Payment Type</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="IsSalaryExpense" name="IsSalaryExpense" [nzSize]="'large'"
+            [(ngModel)]="Entity.p.IsSalaryExpense">
+            <nz-option [nzValue]="true" [nzLabel]="'Advance'"></nz-option>
+            <nz-option [nzValue]="false" [nzLabel]="'Salary'"></nz-option>
+          </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>To Whom</label>
@@ -128,7 +137,7 @@
               placeholder="Enter Reason" />
           </div>
         </div>
-         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Employee">
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Employee">
           <div>
             <label>Remaining Advance</label>
             <input type="text" [(ngModel)]="Entity.p.RemainingAdvance" name="RemainingAdvance" class="form-control"
@@ -175,10 +184,9 @@
         <div class="col-md-4" style="margin-top: 1rem;" *ngIf="Entity.p.IsAdvancePayment">
           <div>
             <label>Total Advance</label>
-            <input type="number" [(ngModel)]="Entity.p.TotalAdvance" readonly name="TotalAdvance"
-              class="form-control" id="TotalAdvance" required placeholder="Enter Total Advance"
-              #TotalAdvanceCtrl="ngModel" (blur)="TotalAdvanceCtrl.control.markAsTouched()"
-              (click)="selectAllValue($event)" />
+            <input type="number" [(ngModel)]="Entity.p.TotalAdvance" readonly name="TotalAdvance" class="form-control"
+              id="TotalAdvance" required placeholder="Enter Total Advance" #TotalAdvanceCtrl="ngModel"
+              (blur)="TotalAdvanceCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
             <div *ngIf="(TotalAdvanceCtrl.invalid && (TotalAdvanceCtrl.touched || TotalAdvanceCtrl.dirty))">
               <span class="validation-text" *ngIf="TotalAdvanceCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
             </div>
@@ -210,7 +218,8 @@
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
               nzPlaceHolder="Select" id="BankAccountRef" name="BankAccountRef" [nzSize]="'large'"
               [(ngModel)]="Entity.p.BankAccountRef">
-              <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.BankAccountRef" [nzLabel]="bank.p.BankName"></nz-option>
+              <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.BankAccountRef"
+                [nzLabel]="bank.p.BankName"></nz-option>
             </nz-select>
           </div>
         </div>
