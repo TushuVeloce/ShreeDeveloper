@@ -119,145 +119,145 @@
           </div>
         </div>
       </div>
-  <ng-template #noDataTpl>
-    <div class="no-data-text">Data Not Found</div>
-  </ng-template>
-  <!-- Plot Details table  -->
-  <div class="table-container" style="margin-top: 2rem" *ngIf="Entity.p.CustomerFollowUpPlotDetails.length > 0">
-    <div class="row">
-      <div class="col-12">
-        <h3 class="TableHeading">Follow Up Plots</h3>
+      <ng-template #noDataTpl>
+        <div class="no-data-text">Data Not Found</div>
+      </ng-template>
+      <!-- Plot Details table  -->
+      <div class="table-container" style="margin-top: 2rem" *ngIf="Entity.p.CustomerFollowUpPlotDetails.length > 0">
+        <div class="row">
+          <div class="col-12">
+            <h3 class="TableHeading">Follow Up Plots</h3>
+          </div>
+        </div>
+        <nz-table #basicTable [nzNoResult]="noDataTpl" nzSize="small" class="no-hover-table bgtable_light"
+          [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+          <thead>
+            <tr>
+              <th *ngFor="let header of Plotheaders" class="tblsubheader">
+                {{header}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let plot of Entity.p.CustomerFollowUpPlotDetails; let i = index">
+              <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+              <td Class="tbldata">{{ plot.SiteName }}</td>
+              <td Class="tbldata">{{ plot.PlotName }}</td>
+              <td Class="tbldata">{{ plot.PlotAreaInSqm }}</td>
+              <td Class="tbldata">{{ plot.PlotAreaInSqft }}</td>
+              <td class="tbldata">
+                <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+                  nzPlaceHolder="Select" name="{{plot.PlotName.trim() + '_' + i + 100}}" [(ngModel)]="plot.CustomerStatus"
+                  [nzSize]="'large'">
+                  <nz-option *ngFor="let customerstatus of CustomerStatusList" [nzValue]="customerstatus.Ref"
+                    [nzLabel]="customerstatus.Name"></nz-option>
+                </nz-select>
+              </td>
+              <td class="tbldata">
+                <input type="text" name="{{plot.PlotName.trim() + '_' + i + 1000}}" class="form-control"
+                  [(ngModel)]="plot.Reason" required placeholder="Enter Reason" />
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
       </div>
-    </div>
-    <nz-table #basicTable [nzNoResult]="noDataTpl" nzSize="small" class="no-hover-table bgtable_light"
-      [nzScroll]="{ x: 'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
-      <thead>
-        <tr>
-          <th *ngFor="let header of Plotheaders" class="tblsubheader">
-            {{header}}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let plot of Entity.p.CustomerFollowUpPlotDetails; let i = index">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{ plot.SiteName }}</td>
-          <td Class="tbldata">{{ plot.PlotName }}</td>
-          <td Class="tbldata">{{ plot.PlotAreaInSqm }}</td>
-          <td Class="tbldata">{{ plot.PlotAreaInSqft }}</td>
-          <td class="tbldata">
+
+      <div style="width: 100%" class="d-flex justify-content-center" style="margin-top: 1rem;">
+        <hr style="border: 2px solid brown" width="20%" />
+      </div>
+
+      <div class="row">
+        <!-- Lead Source -->
+        <div class="col-md-4" style="margin-top: 1rem;">
+          <div>
+            <label for="LeadSource"><b>Lead Source</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-              nzPlaceHolder="Select" name="{{plot.PlotName.trim() + '_' + i + 100}}" [(ngModel)]="plot.CustomerStatus"
-              [nzSize]="'large'">
-              <nz-option *ngFor="let customerstatus of CustomerStatusList" [nzValue]="customerstatus.Ref"
-                [nzLabel]="customerstatus.Name"></nz-option>
+              nzPlaceHolder="Select" [nzSize]="'large'" name="LeadSource" [(ngModel)]="Entity.p.LeadSource" required
+              id="LeadSource" (ngModelChange)="onLeadSourceChange(Entity.p.LeadSource)">
+              <nz-option *ngFor="let lead of LeadSourceList" [nzValue]="lead.Ref" [nzLabel]="lead.Name"></nz-option>
             </nz-select>
-          </td>
-          <td class="tbldata">
-            <input type="text" name="{{plot.PlotName.trim() + '_' + i + 1000}}" class="form-control"
-              [(ngModel)]="plot.Reason" required placeholder="Enter Reason" />
-          </td>
-        </tr>
-      </tbody>
-    </nz-table>
-  </div>
+          </div>
+        </div>
+        <!-- Agent Name  -->
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="showAgentBrokerInput">
+          <div>
+            <label for="AgentName"><b>Agent/Name</b></label>
+            <input type="text" name="AgentName" class="form-control" id="AgentName" [(ngModel)]="Entity.p.BrokerName"
+              required placeholder="Enter Agent/Broker Name">
+          </div>
+        </div>
+        <!-- Lead Handle By  -->
+        <div class="col-md-4" style="margin-top: 1rem;" style="margin-top: 1rem;">
+          <div>
+            <label for="LeadHandleBy"><b>Lead Handled By</b></label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="LeadHandleBy" name="LeadHandleBy" [(ngModel)]="Entity.p.LeadHandleBy"
+              [nzSize]="'large'">
+              <nz-option *ngFor="let employee of EmployeeList" [nzValue]="employee.p.Ref"
+                [nzLabel]="employee.p.Name"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <!-- Remark  -->
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="!showAgentBrokerInput">
+          <label>Remark</label>
+          <input type="text" name="Remark" class="form-control" id="Remark " required placeholder="Enter Remark"
+            [(ngModel)]="Entity.p.Remark" (focus)="selectAll($event)" />
+        </div>
 
-  <div style="width: 100%" class="d-flex justify-content-center" style="margin-top: 1rem;">
-    <hr style="border: 2px solid brown" width="20%" />
+        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="showAgentBrokerInput">
+          <label>Remark</label>
+          <input type="text" name="Remark" class="form-control" id="Remark " required placeholder="Enter Remark"
+            [(ngModel)]="Entity.p.Remark" />
+        </div>
+        <!-- Customer Status  -->
+        <div class="col-md-4" style="margin-top: 1rem;" style="margin-top: 1rem;">
+          <div>
+            <label for="CustomerStatus"><b>Customer Status</b></label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" id="CustomerStatus" name="CustomerStatus" [(ngModel)]="Entity.p.CustomerStatus"
+              [nzSize]="'large'" (mgModelChange)="ConverttoDeal(Entity.p.CustomerStatus)">
+              <nz-option *ngFor="let status of CustomerStatusList" [nzValue]="status.Ref"
+                [nzLabel]="status.Name"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <!-- Next site visit date  -->
+        <div class="col-md-4" style="margin-top: 1rem;"
+          *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== CustomerStatusEnum.ConvertToDeal">
+          <div>
+            <label>Next Site Visit Date</label>
+            <input type="date" name="localSiteVisitDate" class="form-control" id="localSiteVisitDate" [min]="today"
+              [(ngModel)]="localSiteVisitDate" required />
+          </div>
+        </div>
+        <!-- Next Office visit date  -->
+        <div class="col-md-4" style="margin-top: 1rem;"
+          *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== CustomerStatusEnum.ConvertToDeal">
+          <div>
+            <label>Next Office Visit Date</label>
+            <input type="date" name="localOfficeVisitDate" class="form-control" id="localOfficeVisitDate" [min]="today"
+              [(ngModel)]="localOfficeVisitDate" required />
+          </div>
+        </div>
+        <!--Reminder Date  -->
+        <div class="col-md-4" style="margin-top: 1rem;"
+          *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== 40">
+          <div>
+            <label>Reminder Date</label>
+            <input type="Date" name="localReminderDate" class="form-control" id="localReminderDate" [min]="today"
+              [(ngModel)]="localReminderDate" required />
+          </div>
+        </div>
+      </div>
+      <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
+        <div>
+          <button type="button" class="btn" (click)="SaveCustomerFollowUp()">Save</button>
+        </div>
+        <div>
+          <button type="button" class="btn" (click)="BackCustomerFollowUp()">Cancel</button>
+        </div>
+      </div>
+    </form>
   </div>
-
-  <div class="row">
-    <!-- Lead Source -->
-    <div class="col-md-4" style="margin-top: 1rem;">
-      <div>
-        <label for="LeadSource"><b>Lead Source</b></label>
-        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-          nzPlaceHolder="Select" [nzSize]="'large'" name="LeadSource" [(ngModel)]="Entity.p.LeadSource" required
-          id="LeadSource" (ngModelChange)="onLeadSourceChange(Entity.p.LeadSource)">
-          <nz-option *ngFor="let lead of LeadSourceList" [nzValue]="lead.Ref" [nzLabel]="lead.Name"></nz-option>
-        </nz-select>
-      </div>
-    </div>
-    <!-- Agent Name  -->
-    <div class="col-md-4" style="margin-top: 1rem;" *ngIf="showAgentBrokerInput">
-      <div>
-        <label for="AgentName"><b>Agent/Name</b></label>
-        <input type="text" name="AgentName" class="form-control" id="AgentName" [(ngModel)]="Entity.p.BrokerName"
-          required placeholder="Enter Agent/Broker Name">
-      </div>
-    </div>
-    <!-- Lead Handle By  -->
-    <div class="col-md-4" style="margin-top: 1rem;" style="margin-top: 1rem;">
-      <div>
-        <label for="LeadHandleBy"><b>Lead Handled By</b></label>
-        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-          nzPlaceHolder="Select" id="LeadHandleBy" name="LeadHandleBy" [(ngModel)]="Entity.p.LeadHandleBy"
-          [nzSize]="'large'">
-          <nz-option *ngFor="let employee of EmployeeList" [nzValue]="employee.p.Ref"
-            [nzLabel]="employee.p.Name"></nz-option>
-        </nz-select>
-      </div>
-    </div>
-    <!-- Remark  -->
-    <div class="col-md-4" style="margin-top: 1rem;" *ngIf="!showAgentBrokerInput">
-      <label>Remark</label>
-      <input type="text" name="Remark" class="form-control" id="Remark " required placeholder="Enter Remark"
-        [(ngModel)]="Entity.p.Remark" (focus)="selectAll($event)" />
-    </div>
-
-    <div class="col-md-4" style="margin-top: 1rem;" *ngIf="showAgentBrokerInput">
-      <label>Remark</label>
-      <input type="text" name="Remark" class="form-control" id="Remark " required placeholder="Enter Remark"
-        [(ngModel)]="Entity.p.Remark" />
-    </div>
-    <!-- Customer Status  -->
-    <div class="col-md-4" style="margin-top: 1rem;" style="margin-top: 1rem;">
-      <div>
-        <label for="CustomerStatus"><b>Customer Status</b></label>
-        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-          nzPlaceHolder="Select" id="CustomerStatus" name="CustomerStatus" [(ngModel)]="Entity.p.CustomerStatus"
-          [nzSize]="'large'" (mgModelChange)="ConverttoDeal(Entity.p.CustomerStatus)">
-          <nz-option *ngFor="let status of CustomerStatusList" [nzValue]="status.Ref"
-            [nzLabel]="status.Name"></nz-option>
-        </nz-select>
-      </div>
-    </div>
-    <!-- Next site visit date  -->
-    <div class="col-md-4" style="margin-top: 1rem;"
-      *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== CustomerStatusEnum.ConvertToDeal">
-      <div>
-        <label>Next Site Visit Date</label>
-        <input type="date" name="localSiteVisitDate" class="form-control" id="localSiteVisitDate" [min]="today"
-          [(ngModel)]="localSiteVisitDate" required />
-      </div>
-    </div>
-    <!-- Next Office visit date  -->
-    <div class="col-md-4" style="margin-top: 1rem;"
-      *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== CustomerStatusEnum.ConvertToDeal">
-      <div>
-        <label>Next Office Visit Date</label>
-        <input type="date" name="localOfficeVisitDate" class="form-control" id="localOfficeVisitDate" [min]="today"
-          [(ngModel)]="localOfficeVisitDate" required />
-      </div>
-    </div>
-    <!--Reminder Date  -->
-    <div class="col-md-4" style="margin-top: 1rem;"
-      *ngIf="Entity.p.CustomerStatus !== 30 && Entity.p.CustomerStatus !== 40">
-      <div>
-        <label>Reminder Date</label>
-        <input type="Date" name="localReminderDate" class="form-control" id="localReminderDate" [min]="today"
-          [(ngModel)]="localReminderDate" required />
-      </div>
-    </div>
-  </div>
-  <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
-    <div>
-      <button type="button" class="btn" (click)="SaveCustomerFollowUp()">Save</button>
-    </div>
-    <div>
-      <button type="button" class="btn" (click)="BackCustomerFollowUp()">Cancel</button>
-    </div>
-  </div>
-  </form>
-</div>
 </div>

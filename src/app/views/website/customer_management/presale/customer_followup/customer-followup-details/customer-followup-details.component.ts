@@ -302,8 +302,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     const isAlreadyAdded = this.Entity.p.CustomerFollowUpPlotDetails.some(
       (plot) => plot.PlotRef === this.InterestedPlotRef
     );
-    // const isAlreadyAdded = this.plotDetailsArray.some(
-    //   (plot) => plot.PlotRef === this.InterestedPlotRef);
 
     if (isAlreadyAdded) {
       this.uiUtils.showWarningToster(
@@ -319,6 +317,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       this.InterestedPlotRef = 0;
     }
   };
+  
   GenerateCustomerFollowUpPlotDetailsRef = async () => {
     for (const obj of this.Entity.p.CustomerFollowUpPlotDetails) {
       obj.Ref =

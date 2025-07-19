@@ -58,22 +58,28 @@ export class CustomerFollowupComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement, private dtu: DTU, private datePipe: DatePipe, private DateconversionService: DateconversionService
   ) {
     effect(() => {
-      this.getCustomerFollowUpListByDateCompanyAndContactModeRef();
+      // this.getCustomerFollowUpListByDateCompanyAndContactModeRef();
     });
   }
 
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled();
-    if (this.ReminderDate == '') {
+    try {
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-      let parts = this.strCDT.substring(0, 16).split('-');
-      // Construct the new date format
-      this.ReminderDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
-      this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
-      // if (this.strCDT != '') {
-      //   this.getCustomerFollowUpListByDateCompanyAndContactModeRef();
-      // }
+    } catch (error) {
+      console.error('Error fetching current date time:', error);
+      // Optionally, show a toaster or alert
+      await this.uiUtils.showErrorToster('Failed to get current date and time');
+    }
+
+    console.log(' this.strCDT :', this.strCDT);
+    let parts = this.strCDT.substring(0, 16).split('-');
+    // Construct the new date format
+    this.ReminderDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+    this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
+    if (this.strCDT != '') {
+      this.getCustomerFollowUpListByDateCompanyAndContactModeRef();
     }
 
     this.loadPaginationData();

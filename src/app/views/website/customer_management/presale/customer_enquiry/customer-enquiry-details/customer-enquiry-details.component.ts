@@ -3,8 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
-  ValidationMessages,
-  ValidationPatterns,
+  ValidationMessages, ValidationPatterns,
 } from 'src/app/classes/domain/constants';
 import {
   BookingRemark,
@@ -264,6 +263,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     );
     this.SiteList = lst;
   };
+
   // get employee list
   private getEmployeeListByCompanyRef = async () => {
     let lst = await Employee.FetchEntireListByCompanyRef(
@@ -280,22 +280,10 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     }
     this.PlotList = []
     this.InterestedPlotRef = 0;
-    // old code start
-    // let bookingref = BookingRemark.Booked;
-    // let lst = await Plot.FetchEntireListBySiteandbookingremarkRef(
-    //   siteRef,
-    //   bookingref,
-    //   async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-    // );
-    // this.PlotList = lst;
-    // old code End
-
     let lst = await Plot.FetchEntireListBySiteRef(
       siteRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.PlotList = lst.filter((plot) => plot.p.CurrentBookingRemark !== BookingRemark.Booked);
-    // this.DisplayMasterList = this.PlotList
-    // this.IsPlotDetails = true;
   };
 
   addDataToTable() {
@@ -315,6 +303,9 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     if (selectedPlot) {
       obj.EnsurePrimaryKeysWithValidValues();
       obj.p.SiteRef = this.SiteManagementRef;
+      obj.p.SiteName = selectedPlot.p.SiteName;
+      obj.p.PlotRef = this.InterestedPlotRef;
+      obj.p.PlotName = selectedPlot.p.PlotNo;
       obj.p.PlotRef = this.InterestedPlotRef;
       obj.p.PlotAreaInSqft = selectedPlot.p.AreaInSqft;
       obj.p.PlotAreaInSqm = selectedPlot.p.AreaInSqm;
