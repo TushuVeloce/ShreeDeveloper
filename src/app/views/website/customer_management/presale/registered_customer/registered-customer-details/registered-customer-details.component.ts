@@ -37,6 +37,8 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
   SiteManagementRef: number = 0;
   GoodandServicesTaxList = DomainEnums.GoodsAndServicesTaxList(true, '--Select GST --');
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  BookingRemarkList = DomainEnums.BookingRemarkList(true,);
+
   FinancialYearList: FinancialYear[] = []
 
   PANPattern: string = ValidationPatterns.PAN;
