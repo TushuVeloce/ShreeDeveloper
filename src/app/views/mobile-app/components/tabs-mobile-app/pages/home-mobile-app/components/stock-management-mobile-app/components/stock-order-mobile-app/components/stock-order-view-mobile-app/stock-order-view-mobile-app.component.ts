@@ -187,6 +187,19 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
     return filePath?.toLowerCase().endsWith('.pdf');
   }
 
+  fileNavigation(filePath: string) {
+    const ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
+    const LoginToken = this.appStateManage.localStorage.getItem('LoginToken');
+
+    if (!filePath) return;
+
+    const TimeStamp = Date.now();
+    const fileUrl = `${ImageBaseUrl}${filePath}/${LoginToken}?${TimeStamp}`;
+    console.log('Invoice Preview URL:', fileUrl);
+
+    window.open(fileUrl, '_blank');
+  }
+
 
   private async loadMaterialRequisitionIfEmployeeExists() {
     try {
@@ -346,6 +359,7 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
   openModal(requisition: any) {
     console.log('requisition: any:', requisition);
     this.SelectedOrder = requisition;
+    this.prepareInvoiceUrl(requisition.p.MaterialPurchaseInvoicePath)
     this.modalOpen = true;
   }
 
@@ -353,79 +367,7 @@ export class StockOrderViewMobileAppComponent  implements OnInit {
     this.modalOpen = false;
     this.SelectedOrder = Order.CreateNewInstance();
   }
-  // SaveOrder = async (status: number) => {
-  //   let lstFTO: FileTransferObject[] = [];
-  //   this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-  //   this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-  //   this.EntityOfOrder.p.MaterialPurchaseOrderStatus = status;
-  //   let entityToSave = this.EntityOfOrder.GetEditableVersion();
-  //   let entitiesToSave = [entityToSave];
-  //   console.log('entitiesToSave :', entitiesToSave);
-
-  //   // if (this.InvoiceFile) {
-  //   //   lstFTO.push(
-  //   //     FileTransferObject.FromFile(
-  //   //       "InvoiceFile",
-  //   //       this.InvoiceFile,
-  //   //       this.InvoiceFile.name
-  //   //     )
-  //   //   );
-  //   // }
-  //   let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
-  //   if (!tr.Successful) {
-  //     await this.toastService.present(tr.Message, 1000, 'danger');
-  //     await this.haptic.error();
-  //     return;
-  //   } else {
-  //     await this.toastService.present('Order Status Updated successfully', 1000, 'success');
-  //     await this.haptic.success();
-  //     this.EntityOfOrder = Order.CreateNewInstance();
-  //   }
-  // };
-
-  // SaveOrder = async (status: number) => {
-  //   let lstFTO: FileTransferObject[] = [];
-  //   this.Entity.p.CreatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-  //   this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'))
-  //   this.Entity.p.MaterialPurchaseOrderStatus = status;
-  //   let entityToSave = this.Entity.GetEditableVersion();
-  //   let entitiesToSave = [entityToSave];
-  //   console.log('entitiesToSave :', entitiesToSave);
-
-  //   // if (this.InvoiceFile) {
-  //   //   lstFTO.push(
-  //   //     FileTransferObject.FromFile(
-  //   //       "InvoiceFile",
-  //   //       this.InvoiceFile,
-  //   //       this.InvoiceFile.name
-  //   //     )
-  //   //   );
-  //   // }
-  //   let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
-  //   if (!tr.Successful) {
-  //     // this.isSaveDisabled = false;
-  //     // this.uiUtils.showErrorMessage('Error', tr.Message)
-  //     await this.toastService.present(tr.Message, 1000, 'danger');
-  //     await this.haptic.error();
-  //     return;
-  //   } else {
-  //     // this.isSaveDisabled = false;
-  //     // if (this.IsNewEntity) {
-  //     //   // await this.uiUtils.showSuccessToster('Order saved successfully');
-  //     //   await this.toastService.present('Order saved successfully', 1000, 'success');
-  //     //   await this.haptic.success();
-  //     //   this.Entity = Order.CreateNewInstance();
-  //     // } else {
-  //     //   // await this.uiUtils.showSuccessToster('Order Status Updated successfully');
-  //     //   await this.toastService.present('Order Status Updated successfully', 1000, 'success');
-  //     //   await this.haptic.success();
-  //     // }
-  //     // await this.router.navigate(['/homepage/Website/Stock_Order']);
-  //     await this.toastService.present('Order saved successfully', 1000, 'success');
-  //     await this.haptic.success();
-  //     this.Entity = Order.CreateNewInstance();
-  //   }
-  // };
+ 
   SaveOrder = async (status: number) => {
     let lstFTO: FileTransferObject[] = [];
 

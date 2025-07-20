@@ -136,7 +136,12 @@ export class UserProfileMobileAppComponent  implements OnInit {
       }
     }
   };
-
+  
+    findGenderName(GenderRef: number): string {
+      const gender = this.GenderList.find(g => g.Ref === GenderRef);
+      return gender ? gender.Name : 'N/A';
+    }
+  
   loadImageFromBackend(imageUrl: string | null): void {
     if (imageUrl) {
       this.imagePreviewUrl = `${this.ImageBaseUrl}${imageUrl}/${this.LoginToken}?${this.TimeStamp}`;
@@ -144,11 +149,6 @@ export class UserProfileMobileAppComponent  implements OnInit {
     } else {
       this.imagePreviewUrl = null;
     }
-  }
-
-  findGenderName(GenderRef: number): string {
-    const gender = this.GenderList.find(g => g.Ref === GenderRef);
-    return gender ? gender.Name : 'N/A';
   }
 
   addImage = async () => {

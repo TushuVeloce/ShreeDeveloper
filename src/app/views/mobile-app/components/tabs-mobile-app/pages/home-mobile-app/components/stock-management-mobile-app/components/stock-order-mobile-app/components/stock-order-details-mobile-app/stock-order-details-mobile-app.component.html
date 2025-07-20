@@ -153,6 +153,91 @@
       </div>
     </ng-template>
 
+    <ion-grid class="ion-margin-top">
+      <ion-row class="ion-align-items-center">
+        <ion-col size="6">
+          <h5><strong>File Upload</strong></h5>
+        </ion-col>
+        <ion-col size="6" class="ion-text-right">
+          <ion-button fill="outline" size="small" (click)="fileInput.click()"
+            [disabled]="selectedFiles.length >= maxFiles">
+            <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+            Choose Files
+          </ion-button>
+          <input #fileInput type="file" hidden (change)="onFilesSelected($event)" multiple
+            accept="image/*,application/pdf" />
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ng-container *ngIf="hasFiles(); else noFiles">
+      <ion-text color="danger" *ngIf="selectedFiles.length >= maxFiles">
+        Maximum {{ maxFiles }} files allowed.
+      </ion-text>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="4" class="ion-text-center" *ngFor="let file of previewFiles(); let i = index">
+            <div class="file-preview-container">
+              <div class="file-preview">
+                <!-- Existing File -->
+                <ng-container *ngIf="selectedFiles.length==0 && selectedFileName">
+                  <img *ngIf="isImageFile(selectedFileName)" [src]="imagePostView" class="preview-img"
+                    (click)="viewImage(imagePostView)" />
+                  <img *ngIf="!isImageFile(selectedFileName)" [src]="'assets/icons/doc-placeholder.png'"
+                    class="preview-pdf" (click)="fileNavigation(selectedFileName)" />
+                </ng-container>
+
+                <!-- Uploaded File -->
+                <ng-container *ngIf="selectedFiles.length">
+                  <img *ngIf="file.type === 'image'" [src]="file.preview" class="preview-img"
+                    (click)="viewImage(file.preview)" />
+                  <img *ngIf="file.type === 'pdf'" [src]="file.preview" class="preview-pdf"
+                    (click)="viewPdf(file.file)" />
+                  <ion-button size="small" color="danger" fill="clear" (click)="removeFile(i)">
+                    <ion-icon name="trash-outline"></ion-icon>
+                  </ion-button>
+                </ng-container>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-container>
+
+    <ng-template #noFiles>
+      <div class="ion-padding ion-text-center">
+        <ion-text color="medium">
+          <p>No file records available</p>
+        </ion-text>
+      </div>
+    </ng-template>
+
+    <!-- Image Modal -->
+    <ion-modal [isOpen]="isImageModalOpen" (didDismiss)="isImageModalOpen = false" class="modal-card">
+      <div class="modal-container">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar color="primary">
+              <ion-title>Image Preview</ion-title>
+              <ion-buttons slot="end">
+                <ion-button fill="clear" (click)="isImageModalOpen = false">
+                  <ion-icon name="close-outline"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+
+          <ion-content class="ion-padding">
+            <div class="image-preview-wrapper-modal">
+              <img [src]="selectedImage" class="full-image-modal" />
+            </div>
+          </ion-content>
+        </ng-template>
+      </div>
+    </ion-modal>
+
+
     <ion-modal [isOpen]="isOrderMaterialModalOpen" (didDismiss)="isOrderMaterialModalOpen=false" class="modal-card">
       <ng-template>
         <div class="modal-container">
@@ -314,7 +399,6 @@
         </div>
       </ng-template>
     </ion-modal>
-
 
     <!-- Main Buttons -->
     <ion-grid>

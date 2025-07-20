@@ -86,7 +86,7 @@
           <!-- Invoice Viewer Section -->
           <div *ngIf="showInvoicePreview" class="invoice-preview-container">
             <ng-container *ngIf="isPDF(SelectedOrder.p.MaterialPurchaseInvoicePath); else imageBlock">
-              <iframe [src]="sanitizedInvoiceUrl" width="100%" height="400px" style="border: none;"></iframe>
+              <img [src]="'assets/icons/doc-placeholder.png'" alt="Invoice Image" class="invoice-pdf" (click)="fileNavigation(SelectedOrder.p.MaterialPurchaseInvoicePath)" />
             </ng-container>
 
             <ng-template #imageBlock>
