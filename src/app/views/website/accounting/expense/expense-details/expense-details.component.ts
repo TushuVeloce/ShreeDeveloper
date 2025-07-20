@@ -84,7 +84,7 @@ export class ExpenseDetailsComponent implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity ? 'New Expense' : 'Edit Expense';
       this.Entity = Expense.GetCurrentInstance();
 
-      if (this.Entity.p.IsAdvancePayment && !this.Entity.p.IsSalaryExpense) {
+      if (this.Entity.p.IsAdvancePayment && this.Entity.p.IsSalaryExpense) {
         this.PaymentType = this.TypeofEmployeePayments.Advance;
       } else if (!this.Entity.p.IsAdvancePayment && this.Entity.p.IsSalaryExpense) {
         this.PaymentType = this.TypeofEmployeePayments.Salary;
@@ -139,7 +139,7 @@ export class ExpenseDetailsComponent implements OnInit {
   onPaymentTypeSelection = () => {
     if (this.PaymentType == this.TypeofEmployeePayments.Advance) {
       this.Entity.p.IsAdvancePayment = 1;
-      this.Entity.p.IsSalaryExpense = false;
+      this.Entity.p.IsSalaryExpense = true;
     } else if (this.PaymentType == this.TypeofEmployeePayments.Salary) {
       this.Entity.p.IsAdvancePayment = 0;
       this.Entity.p.IsSalaryExpense = true;
@@ -237,10 +237,21 @@ export class ExpenseDetailsComponent implements OnInit {
       // await this.uiUtils.showErrorToster('Recipient not Selected');
       return;
     }
-    let lst = await Expense.FetchTotalInvoiceAmountFromSiteAndRecipient(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientType, this.Entity.p.RecipientRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+
+    if (this.PaymentType <= 0) {
+      await this.uiUtils.showErrorToster('Payment Type not Selected');
+      return;
+    }
+
+
+    let lst = await Expense.FetchTotalInvoiceAmountFromSiteAndRecipient(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientType, this.Entity.p.RecipientRef, this.Entity.p.IsSalaryExpense, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
     if (lst.length > 0) {
-      this.Entity.p.InvoiceAmount = lst[0].p.InvoiceAmount;
+      if (lst[0].p.InvoiceAmount < 0) {
+        this.Entity.p.InvoiceAmount = 0;
+      } else {
+        this.Entity.p.InvoiceAmount = lst[0].p.InvoiceAmount;
+      }
       this.Entity.p.RemainingAdvance = lst[0].p.RemainingAdvance;
     }
     // this.RecipientList = lst;
@@ -343,23 +354,23 @@ export class ExpenseDetailsComponent implements OnInit {
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
-    // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
-    // if (!tr.Successful) {
-    //   this.isSaveDisabled = false;
-    //   this.uiUtils.showErrorMessage('Error', tr.Message);
-    //   return;
-    // } else {
-    //   this.isSaveDisabled = false;
-    //   if (this.IsNewEntity) {
-    //     await this.uiUtils.showSuccessToster('Expense saved successfully');
-    //     this.Entity = Expense.CreateNewInstance();
-    //     await this.getCurrentBalanceByCompanyRef()
-    //   } else {
-    //     await this.uiUtils.showSuccessToster('Expense Updated successfully');
-    //     await this.router.navigate(['/homepage/Website/Expense']);
-    //   }
-    // }
+    if (!tr.Successful) {
+      this.isSaveDisabled = false;
+      this.uiUtils.showErrorMessage('Error', tr.Message);
+      return;
+    } else {
+      this.isSaveDisabled = false;
+      if (this.IsNewEntity) {
+        await this.uiUtils.showSuccessToster('Expense saved successfully');
+        this.Entity = Expense.CreateNewInstance();
+        await this.getCurrentBalanceByCompanyRef()
+      } else {
+        await this.uiUtils.showSuccessToster('Expense Updated successfully');
+        await this.router.navigate(['/homepage/Website/Expense']);
+      }
+    }
   };
 
   IsAdvancePayment = async () => {

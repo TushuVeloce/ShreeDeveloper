@@ -159,7 +159,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
           this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
           this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
           this.Entity.p.UpdatedBy = Number(this.appStateManage.localStorage.getItem('LoginEmployeeRef'));
-         
+
           this.selectedIncomeLedger = [{ p: { Ref: this.Entity.p.IncomeLedgerRef, Name: this.Entity.p.IncomeLedgerName } }];
           this.IncomeLedgerName = this.Entity.p.IncomeLedgerName;
 
@@ -350,7 +350,7 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
       // await this.haptic.error();
       return;
     }
-    let lst = await Expense.FetchTotalInvoiceAmountFromSiteAndRecipient(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.RecipientType, this.Entity.p.RecipientRef, async errMsg => {
+    let lst = await Expense.FetchTotalInvoiceAmountFromSiteAndRecipient(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.RecipientType, this.Entity.p.RecipientRef, this.Entity.p.IsSalaryExpense, async errMsg => {
       await this.toastService.present('Error' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });

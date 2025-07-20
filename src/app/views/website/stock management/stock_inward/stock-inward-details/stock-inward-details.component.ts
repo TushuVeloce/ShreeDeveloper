@@ -37,7 +37,7 @@ export class StockInwardDetailsComponent implements OnInit {
   localEstimatedStartingDate: string = '';
   localEstimatedEndDate: string = '';
   ModalEditable: boolean = false;
-  materialheaders: string[] = ['Sr.No.', 'Material Name ', 'Unit', 'Ordered Qty.', 'Inward Qty.', 'Remaining Qty.', 'Action'];
+  materialheaders: string[] = ['Sr.No.', 'Date', 'Material Name ', 'Unit', 'Ordered Qty.', 'Inward Qty.', 'Remaining Qty.', 'Action'];
   ismaterialModalOpen: boolean = false;
   newInward: InwardMaterialDetailProps = InwardMaterialDetailProps.Blank();
   editingIndex: null | undefined | number
@@ -160,6 +160,11 @@ export class StockInwardDetailsComponent implements OnInit {
     this.newInward = InwardMaterialDetailProps.Blank();
     this.NewRemainingQty = 0;
 
+    this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+    let parts = this.strCDT.substring(0, 16).split('-');
+    // Construct the new date format
+    this.newInward.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
+
     const UnitData = this.MaterialList.find((data) => data.p.InternalRef === internalRef);
 
     if (UnitData) {
@@ -261,10 +266,6 @@ export class StockInwardDetailsComponent implements OnInit {
 
   openModal = async (type: string) => {
     if (type === 'material') this.ismaterialModalOpen = true;
-    this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-    let parts = this.strCDT.substring(0, 16).split('-');
-    // Construct the new date format
-    this.newInward.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
     this.ModalEditable = false;
   }
 

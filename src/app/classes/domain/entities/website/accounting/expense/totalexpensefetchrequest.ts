@@ -10,6 +10,7 @@ export class TotalExpenseFetchRequest {
   CompanyRef: number = 0;
   ExpenseRef: number = 0;
   RecipientRef: number = 0;
+  IsSalaryExpense: boolean = false;
   RecipientType: number = 0;
   SiteRef: number = 0;
   SiteRefs: number[] = [];

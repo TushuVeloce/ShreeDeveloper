@@ -1,3 +1,56 @@
-<p>
-  customerinfo-report works!
-</p>
+<div class="row">
+  <div class="col-4 mb-2">
+    <h1 style="padding-top: 3px;" class="title title_light">Customer Info</h1>
+  </div>
+  <div class="col-4 mb-2 search-container_light">
+    <app-shared-filter [masterList]="MasterList" [filterFields]="['Code', 'Name', 'UnitName']"
+      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
+  </div>
+</div>
+<div class="tblcard_light" style="margin-top: 2rem;" *ngIf="DisplayMasterList.length > 0">
+  <div class="table-container">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let material of paginatedList(); index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{material.p.CustID}}</td>
+          <td Class="tbldata">{{material.p.CustomerName}}</td>
+          <td Class="tbldata">{{material.p.CustomerAddress}}</td>
+          <td Class="tbldata">{{material.p.ContactNos}}</td>
+          <td Class="tbldata">{{material.p.PANNo}}</td>
+          <td Class="tbldata">{{material.p.AdharNo}}</td>
+          <td Class="tbldata">{{material.p.LeadSource}}</td>
+          <td Class="tbldata">{{material.p.BookingRemarkName}}</td>
+          <td Class="tbldata">{{material.p.PlotNo}}</td>
+          <td Class="tbldata">{{material.p.AreaInSqm}}</td>
+          <td Class="tbldata">{{material.p.AreaInSqft}}</td>
+          <td Class="tbldata">{{material.p.BasicRatePerSqft}}</td>
+          <td Class="tbldata">{{material.p.DiscountedRateOnArea}}</td>
+          <td Class="tbldata">{{material.p.TotalPlotAmount}}</td>
+          <td Class="tbldata">{{material.p.GovernmentValue}}</td>
+          <td Class="tbldata">{{material.p.ValueOfAgreement}}</td>
+          <td Class="tbldata">{{material.p.RegTaxValueInPercentage}}</td>
+          <td Class="tbldata">{{material.p.StampDuties}}</td>
+          <td Class="tbldata">{{material.p.GstToatalAmount}}</td>
+          <td Class="tbldata">{{material.p.GoodsServicesTax}}</td>
+          <td Class="tbldata">{{material.p.LegalCharges}}</td>
+          <td Class="tbldata">{{material.p.TotalChequeRecieved}}</td>
+          <td Class="tbldata">{{material.p.TotalCashRecieved}}</td>
+          <td Class="tbldata">{{material.p.TotalAmountRecieved}}</td>
+          <td Class="tbldata">{{material.p.GrandTotal}}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+  <Pagination [pageSize]="pageSize" [total]="total" [(currentPage)]="currentPage" (pageChange)="onPageChange($event)" />
+</div>
+
+<div *ngIf="DisplayMasterList.length === 0">
+  <Data-Not-Found />
+</div>

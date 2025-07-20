@@ -37,6 +37,7 @@ export class CRMReportsProps {
   public RegistrationFees: number = 0;
   public LegalCharges: number = 0;
   public TotalExtraCharges: number = 0;
+  public LeadSource: number = 0;
   public GrandTotal: number = 0;
   public ValueOfAgreement: number = 0;
   public GovermentRatePerSqm: number = 0;
@@ -46,6 +47,7 @@ export class CRMReportsProps {
   public TotalCashRecieved: number = 0;
   public RemainingAmount: number = 0;
   public TotalAmountRecieved: number = 0;
+  public GstToatalAmount: number = 0;
 
 
   public readonly IsNewlyCreated: boolean = false;

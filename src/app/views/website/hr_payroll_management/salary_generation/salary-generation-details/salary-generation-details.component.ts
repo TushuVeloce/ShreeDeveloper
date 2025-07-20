@@ -67,12 +67,12 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   }
 
   calculategrosstotal = () => {
-    if(this.Entity.p.TotalOverTimeHrs){
+    if (this.Entity.p.TotalOverTimeHrs) {
       const GrossTotal = this.Entity.p.BasicSalary + this.Entity.p.TotalAllowance + this.Entity.p.TotalIncentive + this.Entity.p.Other + this.Entity.p.OverTimeHrsRate
-      this.Entity.p.GrossTotal =  parseFloat(GrossTotal.toFixed(2));
-    }else{
-       const GrossTotal = this.Entity.p.BasicSalary + this.Entity.p.TotalAllowance + this.Entity.p.TotalIncentive + this.Entity.p.Other
-      this.Entity.p.GrossTotal =  parseFloat(GrossTotal.toFixed(2));
+      this.Entity.p.GrossTotal = parseFloat(GrossTotal.toFixed(2));
+    } else {
+      const GrossTotal = this.Entity.p.BasicSalary + this.Entity.p.TotalAllowance + this.Entity.p.TotalIncentive + this.Entity.p.Other
+      this.Entity.p.GrossTotal = parseFloat(GrossTotal.toFixed(2));
     }
     this.calculatenetsalary()
   }
@@ -85,7 +85,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
 
   calculatenetsalary = () => {
     const NetSalary = this.Entity.p.GrossTotal - this.Entity.p.TotalDeduction
-    this.Entity.p.NetSalary =  parseFloat(NetSalary.toFixed(2));
+    this.Entity.p.NetSalary = parseFloat(NetSalary.toFixed(2));
   }
 
   selectAllValue(event: MouseEvent): void {
@@ -93,7 +93,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     input.select();
   }
 
-  ClearValues  = () =>{
+  ClearValues = () => {
     this.Entity.p.TotalAllowance = 0
     this.Entity.p.TotalIncentive = 0
     this.Entity.p.Other = 0
@@ -166,23 +166,29 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     }
     let lst = await SalaryGeneration.FetchEmployeeDataByEmployeeRefandMonth(this.companyRef(), employee, month, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
-    this.Entity.p.TotalWorkingDays = lst[0]?.p?.TotalWorkingDays || 0
-    this.Entity.p.TotalLeaves = lst[0]?.p?.TotalLeaves || 0
-    this.Entity.p.TotalOverTimeHrs = lst[0]?.p?.TotalOverTimeHrs || 0
-    this.Entity.p.DisplayTotalOverTimeHrs = lst[0]?.p?.DisplayTotalOverTimeHrs || ''
-    // this.Entity.p.TotalWorkingHrs = lst[0]?.p?.TotalWorkingHrs || 0
-    // this.Entity.p.DisplayTotalWorkingHrs = lst[0]?.p?.DisplayTotalWorkingHrs || ''
-    // this.Entity.p.TotalLeavesHrs = lst[0]?.p?.TotalLeavesHrs || 0
-    // this.Entity.p.DisplayTotalLeavesHrs = lst[0]?.p?.DisplayTotalLeavesHrs || ''
-    // this.Entity.p.OverallWorkingHrs = lst[0]?.p?.OverallWorkingHrs || 0
-    // this.Entity.p.DisplayOverAllWorkingHrs = lst[0]?.p?.DisplayOverAllWorkingHrs || ''
-    this.Entity.p.TotalLateMarksAndHalfDays = lst[0]?.p?.TotalLateMarksAndHalfDays || 0
-    this.Entity.p.LateMarksAndHalfDayRate = lst[0]?.p?.LateMarksAndHalfDayRate || 0
-    this.Entity.p.TotalDeductionOfLateMarksAndHalfDays = lst[0]?.p?.TotalDeductionOfLateMarksAndHalfDays || 0
-    this.Entity.p.TotalLeaveDeduction = lst[0]?.p?.TotalLeaveDeduction != null? parseFloat(lst[0].p.TotalLeaveDeduction.toFixed(2)): 0; 
-    this.Entity.p.OverTimeHrsRate = lst[0]?.p?.OverTimeHrsRate != null? parseFloat(lst[0].p.OverTimeHrsRate.toFixed(2)): 0; 
-    this.Entity.p.BasicSalary = lst[0]?.p?.BasicSalary || 0
-    this.Entity.p.AdvancePayment = lst[0]?.p?.AdvancePayment || 0
+    if(lst.length > 0){
+      this.Entity = lst[0];
+      console.log('this.Entity :', this.Entity);
+    }
+    // this.Entity.p.TotalWorkingDays = lst[0]?.p?.TotalWorkingDays || 0
+    // this.Entity.p.TotalLeaves = lst[0]?.p?.TotalLeaves || 0
+    // this.Entity.p.TotalOverTimeHrs = lst[0]?.p?.TotalOverTimeHrs || 0
+    // this.Entity.p.DisplayTotalOverTimeHrs = lst[0]?.p?.DisplayTotalOverTimeHrs || ''
+    // // this.Entity.p.TotalWorkingHrs = lst[0]?.p?.TotalWorkingHrs || 0
+    // // this.Entity.p.DisplayTotalWorkingHrs = lst[0]?.p?.DisplayTotalWorkingHrs || ''
+    // // this.Entity.p.TotalLeavesHrs = lst[0]?.p?.TotalLeavesHrs || 0
+    // // this.Entity.p.DisplayTotalLeavesHrs = lst[0]?.p?.DisplayTotalLeavesHrs || ''
+    // // this.Entity.p.OverallWorkingHrs = lst[0]?.p?.OverallWorkingHrs || 0
+    // // this.Entity.p.DisplayOverAllWorkingHrs = lst[0]?.p?.DisplayOverAllWorkingHrs || ''
+    // this.Entity.p.TotalLateMarksAndHalfDays = lst[0]?.p?.TotalLateMarksAndHalfDays || 0
+    // this.Entity.p.LateMarksAndHalfDayRate = lst[0]?.p?.LateMarksAndHalfDayRate || 0
+    // this.Entity.p.TotalDeductionOfLateMarksAndHalfDays = lst[0]?.p?.TotalDeductionOfLateMarksAndHalfDays || 0
+    // this.Entity.p.TotalLeaveDeduction = lst[0]?.p?.TotalLeaveDeduction != null ? parseFloat(lst[0].p.TotalLeaveDeduction.toFixed(2)) : 0;
+    // this.Entity.p.OverTimeHrsRate = lst[0]?.p?.OverTimeHrsRate != null ? parseFloat(lst[0].p.OverTimeHrsRate.toFixed(2)) : 0;
+    // this.Entity.p.BasicSalary = lst[0]?.p?.BasicSalary || 0
+    // this.Entity.p.AdvancePayment = lst[0]?.p?.AdvancePayment || 0
+    // this.Entity.p.TotalLeaves = lst[0]?.p?.TotalLeaves
+    // this.Entity.p.TotalLeaveDeduction = lst[0]?.p?.TotalLeaveDeduction
     await this.calculategrosstotal()
     await this.calculatetotaldeduction()
   }

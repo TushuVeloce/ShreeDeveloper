@@ -28,10 +28,10 @@ export class SalaryGenerationProps {
   public TotalWorkingHrs: number = 0;
   public TotalLeavesHrs: number = 0;
   public OverallWorkingHrs: number = 0;
-  public DisplayTotalOverTimeHrs : string = '';
+  public DisplayTotalOverTimeHrs: string = '';
   public DisplayTotalWorkingHrs: string = '';
   public DisplayTotalLeavesHrs: string = '';
-  public DisplayOverAllWorkingHrs : string = '';
+  public DisplayOverAllWorkingHrs: string = '';
   public TotalLateMarksAndHalfDays: number = 0;
   public LateMarksAndHalfDayRate: number = 0;
   public TotalDeductionOfLateMarksAndHalfDays: number = 0;
@@ -53,7 +53,6 @@ export class SalaryGenerationProps {
   public CreatedByName: string = '';
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
-  public IsOverTimeVerified: number = 0;
   public OverTimeHrsRate: number = 0;
   public SalarySlipMonthIndicator: string = 'A';
 
@@ -78,8 +77,8 @@ export class SalaryGeneration implements IPersistable<SalaryGeneration> {
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
     if (this.p.Ref === undefined || this.p.Ref === 0) {
-            const newRefs = await IdProvider.GetInstance().GetNextEntityId();
-            // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
+      const newRefs = await IdProvider.GetInstance().GetNextEntityId();
+      // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
       this.p.Ref = newRefs[0];
       if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
     }
@@ -133,7 +132,7 @@ export class SalaryGeneration implements IPersistable<SalaryGeneration> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): SalaryGeneration[] {
+    sortPropertyName: string = ""): SalaryGeneration[] {
     let result: SalaryGeneration[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -193,14 +192,14 @@ export class SalaryGeneration implements IPersistable<SalaryGeneration> {
     return SalaryGeneration.ListFromTransportData(tdResponse);
   }
 
- public static async FetchEntireListByCompanyRef(CompanyRef:number,errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new SalaryGenerationFetchRequest();
     req.CompanyRefs.push(CompanyRef)
     let tdResponse = await SalaryGeneration.FetchTransportData(req, errorHandler) as TransportData;
     return SalaryGeneration.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEmployeeDataByEmployeeRefandMonth(CompanyRef:number,EmployeeRef:number,Month:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEmployeeDataByEmployeeRefandMonth(CompanyRef: number, EmployeeRef: number, Month: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new SalaryGenerationCustomRequest();
     req.CompanyRef = CompanyRef
     req.EmployeeRef = EmployeeRef
