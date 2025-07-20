@@ -41,7 +41,6 @@ export class FinancialYearMasterComponent implements OnInit {
   editingIndex: null | undefined | number;
   localpassword: string = '';
   showPassword: boolean = false;
-  OpeningBalance: number = 0;
 
   localRef: number = 0
 
@@ -130,10 +129,6 @@ export class FinancialYearMasterComponent implements OnInit {
 
   // To Create New Financial Year Custom Request
   AddNewFinancialYear = async () => {
-    if (this.OpeningBalance <= 0) {
-      await this.uiUtils.showErrorToster('Opening balance Cannot be blank');
-      return;
-    }
     if (this.localpassword.trim().length > 0) {
 
       let req = new GenerateNewFinancialYearCustomRequest();
@@ -174,7 +169,6 @@ export class FinancialYearMasterComponent implements OnInit {
 
       req.FinancialYearRef = this.Entity.p.Ref
       req.CompanyRef = this.companyRef();
-      req.OpeningBalance = this.OpeningBalance,
 
         req.Password = this.localpassword;
       req.EmployeeRef = this.appStateManage.getEmployeeRef();
@@ -191,7 +185,6 @@ export class FinancialYearMasterComponent implements OnInit {
       let tdResult = JSON.parse(tr.Tag) as TransportData;
       let NewFinancialYear = this.utils.GetString(tdResult);
       this.Entity.p.FromDate = NewFinancialYear;
-      this.OpeningBalance = 0;
       this.closeModal('password');
       await this.uiUtils.showSuccessToster('This Financial Year Set Successfully');
       this.getFinancialYearListByCompanyRef();

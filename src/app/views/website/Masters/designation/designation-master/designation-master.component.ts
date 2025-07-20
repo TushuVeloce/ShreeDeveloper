@@ -54,12 +54,12 @@ export class DesignationMasterComponent implements OnInit {
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
     this.DepartmentList = lst;
-    // if (this.DepartmentList.length > 0) {
-    //   this.Entity.p.DepartmentRef = this.DepartmentList[0].p.Ref;
-    //   this.getDesignationListByDepartmentRef();
-    // } else {
-    //   this.DisplayMasterList = [];
-    // }
+    if (this.DepartmentList.length > 0) {
+      this.Entity.p.DepartmentRef = this.DepartmentList[0].p.Ref;
+      this.getDesignationListByDepartmentRef();
+    } else {
+      this.DisplayMasterList = [];
+    }
   };
 
   getDesignationListByDepartmentRef = async () => {
