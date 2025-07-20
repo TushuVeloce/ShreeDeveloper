@@ -42,7 +42,7 @@ export class RegisteredCustomerProps {
   public CompanyRef: number = 0;
   public UpdatedDate: string = '';
   public PANNo: string = '';
-  public AadharNo: string = '';
+  public AdharNo: string = '';
   public CustID: string = '';
   public RegisterCustomerBookingRemark: string = '';
 
@@ -125,8 +125,8 @@ export class RegisteredCustomer implements IPersistable<RegisteredCustomer> {
     if (!new RegExp(ValidationPatterns.PAN).test(this.p.PANNo) && this.p.PANNo) {
       vra.add('PANNo', ValidationMessages.PANMsg);
     }
-    if (!new RegExp(ValidationPatterns.Aadhar).test(this.p.AadharNo) && this.p.AadharNo) {
-      vra.add('AadharNo', ValidationMessages.AadharMsg);
+    if (!new RegExp(ValidationPatterns.Aadhar).test(this.p.AdharNo) && this.p.AdharNo) {
+      vra.add('AdharNo', ValidationMessages.AadharMsg);
     }
   }
 

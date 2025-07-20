@@ -67,7 +67,7 @@
         </div>
         <div class="col-md-4 col-6">
           <label>Aadhar No.</label>
-          <input type="text" [(ngModel)]="Entity.p.AadharNo" name="AadharNo" class="form-control" id="AadharNo"
+          <input type="text" [(ngModel)]="Entity.p.AdharNo" name="AdharNo" class="form-control" id="AdharNo"
             pattern="{{AadharPattern}}" placeholder="Enter Aadhar No." #AadharCtrl="ngModel" required
             (blur)="AadharCtrl.control.markAsTouched()" />
           <div *ngIf="(AadharCtrl.invalid && (AadharCtrl.touched || AadharCtrl.dirty))">

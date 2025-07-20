@@ -29,7 +29,6 @@ export class RegisteredCustomerComponent  implements OnInit {
   currentPage = 1; // Initialize current page
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  RegisterCustomerList: RegisteredCustomer[] = [];
 
   headers: string[] = [
     'Sr.No.',
@@ -65,7 +64,7 @@ export class RegisteredCustomerComponent  implements OnInit {
     let lst = await RegisteredCustomer.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    this.RegisterCustomerList = lst
+    console.log('this.DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
   };
 

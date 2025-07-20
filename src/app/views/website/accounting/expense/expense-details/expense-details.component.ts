@@ -342,23 +342,24 @@ export class ExpenseDetailsComponent implements OnInit {
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Date);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+    console.log('entitiesToSave :', entitiesToSave);
+    // let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
-    if (!tr.Successful) {
-      this.isSaveDisabled = false;
-      this.uiUtils.showErrorMessage('Error', tr.Message);
-      return;
-    } else {
-      this.isSaveDisabled = false;
-      if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster('Expense saved successfully');
-        this.Entity = Expense.CreateNewInstance();
-        await this.getCurrentBalanceByCompanyRef()
-      } else {
-        await this.uiUtils.showSuccessToster('Expense Updated successfully');
-        await this.router.navigate(['/homepage/Website/Expense']);
-      }
-    }
+    // if (!tr.Successful) {
+    //   this.isSaveDisabled = false;
+    //   this.uiUtils.showErrorMessage('Error', tr.Message);
+    //   return;
+    // } else {
+    //   this.isSaveDisabled = false;
+    //   if (this.IsNewEntity) {
+    //     await this.uiUtils.showSuccessToster('Expense saved successfully');
+    //     this.Entity = Expense.CreateNewInstance();
+    //     await this.getCurrentBalanceByCompanyRef()
+    //   } else {
+    //     await this.uiUtils.showSuccessToster('Expense Updated successfully');
+    //     await this.router.navigate(['/homepage/Website/Expense']);
+    //   }
+    // }
   };
 
   IsAdvancePayment = async () => {
