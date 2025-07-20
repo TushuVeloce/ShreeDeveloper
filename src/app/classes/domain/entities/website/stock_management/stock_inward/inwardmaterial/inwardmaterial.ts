@@ -22,6 +22,7 @@ export class InwardMaterialDetailProps {
   public UpdatedByName: number = 0;
   public Ref: number = 0;
   public MaterialRef: number = 0;
+  public Date: string = '';
   public MaterialStockOrderDetailsRef:number=0
   public MaterialName: string = '';
   public UnitRef: number = 0;
@@ -30,7 +31,7 @@ export class InwardMaterialDetailProps {
   public InwardQty: number = 0;
   public PurchaseOrderRemainingQty: number = 0;
   public MaterialInwardRef: number = 0;
-  public InternalRef: number = 0; // ✅ Add this field 
+  public InternalRef: number = 0; // ✅ Add this field
 
   public readonly IsNewlyCreated: boolean = false;
   // public readonly AccountTypeName: string = '';

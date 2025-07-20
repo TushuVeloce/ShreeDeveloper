@@ -10,8 +10,10 @@ import { InwardMaterialDetailProps } from 'src/app/classes/domain/entities/websi
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { MaterialStockOrder } from 'src/app/classes/domain/entities/website/stock_management/stock_order/materialstockorder/materialstockorder';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
+import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
@@ -79,8 +81,10 @@ export class StockInwardDetailsComponent implements OnInit {
     private router: Router,
     private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
-    private utils: Utils, private companystatemanagement: CompanyStateManagement,
+    private utils: Utils,
+    private companystatemanagement: CompanyStateManagement,
     private dtu: DTU,
+    private DateconversionService: DateconversionService
   ) { }
 
   async ngOnInit() {
@@ -122,14 +126,17 @@ export class StockInwardDetailsComponent implements OnInit {
     this.SiteList = lst;
   }
 
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
+  }
+
   getMaterialListByCompanyRef = async (SiteRef: number, VendorRef: number) => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    console.log('this.DisplayOrderDate :', this.DisplayOrderDate);
-    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef(),this.DisplayOrderDate, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
+    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef(), this.DisplayOrderDate, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
     this.MaterialListOriginal?.forEach((item, index) => {
       item.p.InternalRef = index + 1;
@@ -143,33 +150,33 @@ export class StockInwardDetailsComponent implements OnInit {
     }
   };
 
- filterMaterialList() {
-  this.MaterialList = this.MaterialListOriginal.filter(item =>
-    !this.SessionAddedRefs.includes(item.p.InternalRef)
-  );
-}
-
- getUnitByMaterialRef = async (internalRef: number) => {
-  this.newInward = InwardMaterialDetailProps.Blank();
-  this.NewRemainingQty = 0;
-
-  const UnitData = this.MaterialList.find((data) => data.p.InternalRef === internalRef);
-
-  if (UnitData) {
-    this.newInward.UnitRef = UnitData.p.UnitRef;
-    this.newInward.UnitName = UnitData.p.UnitName;
-    this.newInward.MaterialRef = UnitData.p.MaterialRef;
-    this.newInward.MaterialName = UnitData.p.MaterialName;
-    this.newInward.PurchaseOrderQty = UnitData.p.OrderQty;
-    this.newInward.PurchaseOrderRemainingQty = UnitData.p.RemainingQty;
-    this.newInward.MaterialStockOrderDetailsRef = UnitData.p.Ref;
-
-    this.newInward.InternalRef = UnitData.p.InternalRef; 
-    this.NewRemainingQty = UnitData.p.RemainingQty;
-  } else {
-    await this.uiUtils.showErrorToster('Material not found');
+  filterMaterialList() {
+    this.MaterialList = this.MaterialListOriginal.filter(item =>
+      !this.SessionAddedRefs.includes(item.p.InternalRef)
+    );
   }
-};
+
+  getUnitByMaterialRef = async (internalRef: number) => {
+    this.newInward = InwardMaterialDetailProps.Blank();
+    this.NewRemainingQty = 0;
+
+    const UnitData = this.MaterialList.find((data) => data.p.InternalRef === internalRef);
+
+    if (UnitData) {
+      this.newInward.UnitRef = UnitData.p.UnitRef;
+      this.newInward.UnitName = UnitData.p.UnitName;
+      this.newInward.MaterialRef = UnitData.p.MaterialRef;
+      this.newInward.MaterialName = UnitData.p.MaterialName;
+      this.newInward.PurchaseOrderQty = UnitData.p.OrderQty;
+      this.newInward.PurchaseOrderRemainingQty = UnitData.p.RemainingQty;
+      this.newInward.MaterialStockOrderDetailsRef = UnitData.p.Ref;
+
+      this.newInward.InternalRef = UnitData.p.InternalRef;
+      this.NewRemainingQty = UnitData.p.RemainingQty;
+    } else {
+      await this.uiUtils.showErrorToster('Material not found');
+    }
+  };
 
 
   getVendorDataByVendorRef = async (vendorref: number) => {
@@ -252,8 +259,12 @@ export class StockInwardDetailsComponent implements OnInit {
     }
   }
 
-  openModal(type: string) {
+  openModal = async (type: string) => {
     if (type === 'material') this.ismaterialModalOpen = true;
+    this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+    let parts = this.strCDT.substring(0, 16).split('-');
+    // Construct the new date format
+    this.newInward.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
     this.ModalEditable = false;
   }
 
@@ -267,7 +278,7 @@ export class StockInwardDetailsComponent implements OnInit {
         } else if (typeof value === 'number') {
           return !isNaN(value) && value !== 0;
         } else {
-          return value != null; 
+          return value != null;
         }
       });
       if (hasData) {
@@ -292,45 +303,45 @@ export class StockInwardDetailsComponent implements OnInit {
 
 
   async addMaterial() {
-  if (
-    this.newInward.InternalRef <= 0 ||
-    this.newInward.InwardQty <= 0
-  ) {
-    await this.uiUtils.showErrorMessage('Error', 'Inward Quantity must be greater than 0 and material must be selected');
-    return;
-  }
-
-  if (this.newInward.InwardQty > this.newInward.PurchaseOrderRemainingQty) {
-    await this.uiUtils.showErrorMessage('Error', 'Inward Quantity cannot be more than Remaining Quantity');
-    return;
-  }
-
-  const newInternalRef = this.newInward.InternalRef;
-
-  if (typeof this.editingIndex === 'number' && this.editingIndex >= 0) {
-    this.Entity.p.MaterialInwardDetailsArray[this.editingIndex] = { ...this.newInward };
-    await this.uiUtils.showSuccessToster('Material details updated successfully');
-    this.ismaterialModalOpen = false;
-  } else {
-    this.newInward.MaterialInwardRef = this.Entity.p.Ref;
-    this.newInward.PurchaseOrderRemainingQty = this.NewRemainingQty;
-    this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
-
-    // ✅ Track InternalRef instead of MaterialRef
-    if (!this.SessionAddedRefs.includes(newInternalRef)) {
-      this.SessionAddedRefs.push(newInternalRef);
+    if (
+      this.newInward.InternalRef <= 0 ||
+      this.newInward.InwardQty <= 0
+    ) {
+      await this.uiUtils.showErrorMessage('Error', 'Inward Quantity must be greater than 0 and material must be selected');
+      return;
     }
 
-    this.shouldFilterDropdown = true;
-    this.filterMaterialList();
+    if (this.newInward.InwardQty > this.newInward.PurchaseOrderRemainingQty) {
+      await this.uiUtils.showErrorMessage('Error', 'Inward Quantity cannot be more than Remaining Quantity');
+      return;
+    }
 
-    await this.uiUtils.showSuccessToster('Material added successfully');
+    const newInternalRef = this.newInward.InternalRef;
+
+    if (typeof this.editingIndex === 'number' && this.editingIndex >= 0) {
+      this.Entity.p.MaterialInwardDetailsArray[this.editingIndex] = { ...this.newInward };
+      await this.uiUtils.showSuccessToster('Material details updated successfully');
+      this.ismaterialModalOpen = false;
+    } else {
+      this.newInward.MaterialInwardRef = this.Entity.p.Ref;
+      this.newInward.PurchaseOrderRemainingQty = this.NewRemainingQty;
+      this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
+
+      // ✅ Track InternalRef instead of MaterialRef
+      if (!this.SessionAddedRefs.includes(newInternalRef)) {
+        this.SessionAddedRefs.push(newInternalRef);
+      }
+
+      this.shouldFilterDropdown = true;
+      this.filterMaterialList();
+
+      await this.uiUtils.showSuccessToster('Material added successfully');
+    }
+
+    this.newInward = InwardMaterialDetailProps.Blank();
+    this.NewRemainingQty = 0;
+    this.editingIndex = null;
   }
-
-  this.newInward = InwardMaterialDetailProps.Blank();
-  this.NewRemainingQty = 0;
-  this.editingIndex = null;
-}
 
 
   editMaterial(index: number) {
@@ -341,25 +352,25 @@ export class StockInwardDetailsComponent implements OnInit {
   }
 
   async removeMaterial(index: number) {
-  const removedItem = this.Entity.p.MaterialInwardDetailsArray[index];
-  const removedInternalRef = removedItem.InternalRef;
-  const dbRef = removedItem.Ref;
+    const removedItem = this.Entity.p.MaterialInwardDetailsArray[index];
+    const removedInternalRef = removedItem.InternalRef;
+    const dbRef = removedItem.Ref;
 
-  if (dbRef !== 0) {
-    this.uiUtils.showWarningToster('This record cannot be deleted');
-    return;
-  }
-
-  await this.uiUtils.showConfirmationMessage(
-    'Delete',
-    `This process is <strong>IRREVERSIBLE!</strong><br/>Are you sure you want to DELETE this material?`,
-    async () => {
-      this.Entity.p.MaterialInwardDetailsArray.splice(index, 1);
-      this.SessionAddedRefs = this.SessionAddedRefs.filter(ref => ref !== removedInternalRef);
-      this.filterMaterialList();
+    if (dbRef !== 0) {
+      this.uiUtils.showWarningToster('This record cannot be deleted');
+      return;
     }
-  );
-}
+
+    await this.uiUtils.showConfirmationMessage(
+      'Delete',
+      `This process is <strong>IRREVERSIBLE!</strong><br/>Are you sure you want to DELETE this material?`,
+      async () => {
+        this.Entity.p.MaterialInwardDetailsArray.splice(index, 1);
+        this.SessionAddedRefs = this.SessionAddedRefs.filter(ref => ref !== removedInternalRef);
+        this.filterMaterialList();
+      }
+    );
+  }
 
   SaveStockInward = async () => {
     let lstFTO: FileTransferObject[] = [];
@@ -420,7 +431,7 @@ export class StockInwardDetailsComponent implements OnInit {
   }
 
   resetAllControls() {
-    this.requisitionForm.resetForm(); 
+    this.requisitionForm.resetForm();
   }
 
 }

@@ -11,6 +11,11 @@
         <span class="detail_title">Registered Customer</span>
       </div>
     </div>
+    <ng-template #noDataTpl>
+      <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+        No Data
+      </div>
+    </ng-template>
     <form autocomplete="off">
       <div class="row" style="margin-top: 1rem; ">
         <div class="col-md-4 col-6">
@@ -67,7 +72,7 @@
         </div>
         <div class="col-md-4 col-6">
           <label>Aadhar No.</label>
-          <input type="text" [(ngModel)]="Entity.p.AadharNo" name="AadharNo" class="form-control" id="AadharNo"
+          <input type="text" [(ngModel)]="Entity.p.AdharNo" name="AdharNo" class="form-control" id="AdharNo"
             pattern="{{AadharPattern}}" placeholder="Enter Aadhar No." #AadharCtrl="ngModel" required
             (blur)="AadharCtrl.control.markAsTouched()" />
           <div *ngIf="(AadharCtrl.invalid && (AadharCtrl.touched || AadharCtrl.dirty))">
@@ -96,12 +101,13 @@
           </div>
         </div>
         <div class="col-md-4">
-          <div>
-            <label>Booking Remark</label>
-            <input type="text" name="RegisterCustomerBookingRemark" class="form-control"
-              id="RegisterCustomerBookingRemark" [(ngModel)]="Entity.p.RegisterCustomerBookingRemark"
-              placeholder="Enter Booking Remark" />
-          </div>
+          <label>Booking Remark</label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="RegisterCustomerBookingRemark" name="RegisterCustomerBookingRemark"
+            [nzSize]="'large'" [(ngModel)]="Entity.p.RegisterCustomerBookingRemark">
+            <nz-option *ngFor="let bookingremark of BookingRemarkList" [nzValue]="bookingremark.Ref"
+              [nzLabel]="bookingremark.Name"></nz-option>
+          </nz-select>
         </div>
       </div>
       <div class="row" style="margin-top: 1rem; ">

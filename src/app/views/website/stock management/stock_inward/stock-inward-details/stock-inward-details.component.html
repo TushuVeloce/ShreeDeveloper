@@ -37,12 +37,6 @@
           <label>Ordered Date</label>
           <input type="date" name="PurchaseOrderDate" class="form-control" id="PurchaseOrderDate"
             [(ngModel)]="Entity.p.PurchaseOrderDate" placeholder="Ordered Date" readonly />
-          <!-- <div *ngIf="
-              PurchaseOrderDateCtrl.invalid &&
-              (PurchaseOrderDateCtrl.touched || PurchaseOrderDateCtrl.dirty)
-            ">
-            <span class="validation-text" *ngIf="PurchaseOrderDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
-          </div> -->
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Inward Date</label>
@@ -168,6 +162,7 @@
                   let i = index
                 ">
                 <td Class="tbldata">{{ i + 1 }}</td>
+                <td Class="tbldata">{{formatDate(material.Date)}}</td>
                 <td Class="tbldata">{{ material.MaterialName }}</td>
                 <td Class="tbldata">{{ material.UnitName }}</td>
                 <td Class="tbldata">{{ material.PurchaseOrderQty }}</td>
@@ -221,30 +216,36 @@
     <div class="custom-modal-body">
       <form autocomplete="off">
         <div class="row">
-          <div class="col-md-6" style="margin-top: 1rem">
+          <div class="col-6" style="margin-top: 1rem">
+            <label>Date</label>
+            <input type="date" name="Date" class="form-control" id="Date" [(ngModel)]="newInward.Date"
+              placeholder="Ordered Date" readonly />
+          </div>
+          <div class="col-6" style="margin-top: 1rem">
             <label>Material Name</label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="MaterialInternalRef" [nzSize]="'large'" name="MaterialInternalRef" [(ngModel)]="newInward.InternalRef"
-              (ngModelChange)="getUnitByMaterialRef($event)" [nzDisabled]="ModalEditable" placeholder="Select Material">
+              nzPlaceHolder="Select" id="MaterialInternalRef" [nzSize]="'large'" name="MaterialInternalRef"
+              [(ngModel)]="newInward.InternalRef" (ngModelChange)="getUnitByMaterialRef($event)"
+              [nzDisabled]="ModalEditable" placeholder="Select Material">
 
               <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.InternalRef"
                 [nzLabel]="material.p.MaterialName + ' - Qty: ' + material.p.OrderQty">
               </nz-option>
             </nz-select>
-             <!-- [nzLabel]="material.p.MaterialName + ' - Qty: ' + material.p.OrderQty"> -->
+            <!-- [nzLabel]="material.p.MaterialName + ' - Qty: ' + material.p.OrderQty"> -->
             <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control" readonly
               [(ngModel)]="newInward.MaterialName" />
           </div>
-          <div class="col-md-6" style="margin-top: 1rem">
+          <div class="col-6" style="margin-top: 1rem">
             <label>Unit</label>
             <input type="text" name="UnitRef" class="form-control" [(ngModel)]="newInward.UnitName" readonly />
           </div>
-          <div class="col-md-6" style="margin-top: 1rem">
+          <div class="col-6" style="margin-top: 1rem">
             <label>Ordered Quantity</label>
             <input type="number" name="PurchaseOrderQty" class="form-control" [(ngModel)]="newInward.PurchaseOrderQty"
               required placeholder="Ordered Quantity" (click)="selectAllValue($event)" />
           </div>
-          <div class="col-md-6" style="margin-top: 1rem">
+          <div class="col-6" style="margin-top: 1rem">
             <label>Inward Quantity</label>
             <input type="number" name="InwardQty" class="form-control" [(ngModel)]="newInward.InwardQty" required
               placeholder="Inward Quantity" (click)="selectAllValue($event)" (ngModelChange)="
@@ -254,7 +255,7 @@
                 )
               " />
           </div>
-          <div class="col-md-6" style="margin-top: 1rem">
+          <div class="col-6" style="margin-top: 1rem">
             <label>Remaining Quantity</label>
             <input type="number" name="RemainingQty" class="form-control" [(ngModel)]="NewRemainingQty" required
               placeholder="Remaining Quantity" (click)="selectAllValue($event)" readonly />
