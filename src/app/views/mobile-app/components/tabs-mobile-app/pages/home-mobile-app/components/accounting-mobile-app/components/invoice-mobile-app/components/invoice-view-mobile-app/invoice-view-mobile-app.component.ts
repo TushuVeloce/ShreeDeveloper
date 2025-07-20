@@ -31,13 +31,12 @@ export class InvoiceViewMobileAppComponent implements OnInit {
   SearchString: string = '';
   SelectedInvoice: Invoice = Invoice.CreateNewInstance();
   CustomerRef: number = 0;
-
   companyRef = 0;
   modalOpen = false;
   filters: FilterItem[] = [];
   SiteList: Site[] = [];
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList();
-  ReasonList: any[] = [];
+  ReasonList: Invoice[] = [];
   LedgerList: Ledger[] = [];
   SubLedgerList: SubLedger[] = [];
 
@@ -100,16 +99,16 @@ export class InvoiceViewMobileAppComponent implements OnInit {
         })),
         selected: this.selectedFilterValues['subledger'] > 0 ? this.selectedFilterValues['subledger'] : null,
       },
-      // {
-      //   key: 'reason',
-      //   label: 'Reason',
-      //   multi: false,
-      //   options: this.ReasonList.map(item => ({
-      //     Ref: item.Ref,
-      //     Name: item.Name,
-      //   })),
-      //   selected: this.selectedFilterValues['reason'] > 0 ? this.selectedFilterValues['reason'] : null,
-      // },
+      {
+        key: 'reason',
+        label: 'Reason',
+        multi: false,
+        options: this.ReasonList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Reason,
+        })),
+        selected: this.selectedFilterValues['reason'] > 0 ? this.selectedFilterValues['reason'] : null,
+      },
       // {
       //   key: 'modeOfPayment',
       //   label: 'Mode of Payment',
@@ -140,7 +139,7 @@ export class InvoiceViewMobileAppComponent implements OnInit {
           break;
 
         case 'reason':
-          this.Entity.p.Reason = selectedValue ?? 0;
+          this.Entity.p.Ref = selectedValue ?? 0;
           break;
 
         case 'subledger':
@@ -267,6 +266,7 @@ export class InvoiceViewMobileAppComponent implements OnInit {
       await this.haptic.error();
     });
     this.MasterList = lst;
+    this.ReasonList = lst.filter((item) => item.p.Reason != '');
     this.DisplayMasterList = this.MasterList;
   }
 

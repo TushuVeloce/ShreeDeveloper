@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MaterialRequisitionStatuses } from 'src/app/classes/domain/domainenums/domainenums';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -20,14 +20,21 @@ import { AlertService } from 'src/app/views/mobile-app/components/core/alert.ser
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { ActionSheetController } from '@ionic/angular';
 
+interface PreviewFile {
+  file: File;
+  type: 'image' | 'pdf' | 'other';
+  url: string;
+}
 @Component({
   selector: 'app-stock-order-details-mobile-app',
   templateUrl: './stock-order-details-mobile-app.component.html',
   styleUrls: ['./stock-order-details-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class StockOrderDetailsMobileAppComponent  implements OnInit {
+export class StockOrderDetailsMobileAppComponent implements OnInit {
   Entity: Order = Order.CreateNewInstance();
   IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
@@ -66,6 +73,7 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
     { Name: "18%", Ref: 18 },
     { Name: "27%", Ref: 27 }
   ];
+  filesToUpload: FileTransferObject[] = [];
 
 
   errors: string = "";
@@ -78,6 +86,10 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
   imagePostView: string = '';
   imagePostViewUrl: string = '';
   selectedFileName: string = '';
+
+  imagePreviewUrl: string | null = null;
+  imageUrl: string | null = null;
+  ProfilePicFile: File | null = null;
 
   showPurchaseOrderDatePicker = false;
   PurchaseOrderDate = '';
@@ -101,6 +113,7 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
     private utils: Utils,
     private datePipe: DatePipe,
     private baseUrl: BaseUrlService,
+    private actionSheetController: ActionSheetController,
   ) { }
 
   ngOnInit = async () => {
@@ -115,6 +128,7 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
   }
 
   private async loadStockOrderDetailsIfCompanyExists() {
+    // debugger
     try {
       await this.loadingService.show(); // Awaiting this is critical
       this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
@@ -122,7 +136,7 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
       if (this.companyRef > 0) {
         this.ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
 
-        this.LoginToken = this.appStateManage.getLoginToken();
+        this.LoginToken = this.appStateManage.getLoginTokenForMobile();
         this.appStateManage.setDropdownDisabled(true);
         await this.getSiteListByCompanyRef();
         await this.getVendorListByCompanyRef()
@@ -130,8 +144,11 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
           this.IsNewEntity = false;
           this.DetailsFormTitle = this.IsNewEntity ? 'New Order' : 'Edit Order';
           this.Entity = Order.GetCurrentInstance();
+          console.log('this.Entity :', this.Entity);
           this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.MaterialPurchaseInvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
+          console.log('this.imagePostView :', this.imagePostView);
           this.selectedFileName = this.Entity.p.MaterialPurchaseInvoicePath;
+          console.log('this.selectedFileName :', this.selectedFileName);
 
           this.selectedSite = [{ p: { Ref: this.Entity.p.SiteRef, Name: this.Entity.p.SiteName } }];
           this.SiteName = this.Entity.p.SiteName;
@@ -195,11 +212,168 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
     this.Date = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
     this.Entity.p.PurchaseOrderDate = this.Date;
   }
-  // public async onExpectedDeliveryDateChange(date: any): Promise<void> {
-  //   this.Date = this.datePipe.transform(date, 'yyyy-MM-dd') ?? '';
-  //   // this.Entity.p.MaterialQuotationDetailsArray[this.editingIndex].ExpectedDeliveryDate = this.Date;
-  //   this.newOrderMaterial.ExpectedDeliveryDate = this.Date;
+
+  @ViewChild('fileInput', { static: false }) fileInput!: ElementRef<HTMLInputElement>;
+
+  selectedFiles: { file: File; type: 'image' | 'pdf'; preview: string }[] = [];
+  maxFiles = 1;
+  selectedImage = '';
+  isImageModalOpen = false;
+
+  // Check if there are any files to show
+  hasFiles(): boolean {
+    return this.selectedFiles.length > 0 || !!this.Entity?.p?.MaterialPurchaseInvoicePath;
+  }
+
+  // Decide which files to loop in *ngFor
+  previewFiles(): { file: File; type: 'image' | 'pdf'; preview: string }[] {
+    if (this.selectedFiles.length > 0) return this.selectedFiles;
+
+    if (this.selectedFileName) {
+      const isImage = this.isImageFile(this.selectedFileName);
+      const dummyFile = new File([], this.selectedFileName);
+
+      return [{
+        file: dummyFile,
+        type: isImage ? 'image' : 'pdf',
+        preview: `${this.ImageBaseUrl}${this.selectedFileName}/${this.LoginToken}?${this.TimeStamp}`,
+      }];
+    }
+
+    return [];
+  }
+
+
+  async onFilesSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+    if (!files) return;
+
+    for (const file of Array.from(files)) {
+      if (this.selectedFiles.length >= this.maxFiles) {
+        this.toastService.present(`Maximum ${this.maxFiles} files allowed.`, 1000, 'warning');
+        this.haptic.warning();
+        break;
+      }
+
+      const fileType = file.type;
+
+      if (fileType.startsWith('image/')) {
+        const compressedFile = await this.compressImage(file, 0.7);
+        if (!compressedFile) continue;
+
+        if (compressedFile.size / 1024 / 1024 > 2) {
+          this.toastService.present('Compressed image still exceeds 2 MB.', 1000, 'warning');
+          this.haptic.warning();
+          continue;
+        }
+
+        const preview = await this.readFileAsDataURL(compressedFile);
+        this.selectedFiles.push({ file: compressedFile, type: 'image', preview });
+
+        this.filesToUpload.push(FileTransferObject.FromFile("MaterialPurchaseInvoiceFile", compressedFile, compressedFile.name));
+      } else if (fileType === 'application/pdf') {
+        if (file.size / 1024 / 1024 > 2) {
+          this.toastService.present('PDF size should not exceed 2 MB.', 1000, 'warning');
+          this.haptic.warning();
+          continue;
+        }
+
+        this.selectedFiles.push({ file, type: 'pdf', preview: 'assets/icons/doc-placeholder.png' });
+        this.filesToUpload.push(FileTransferObject.FromFile("MaterialPurchaseInvoiceFile", file, file.name));
+      } else {
+        this.toastService.present('Unsupported file type.', 1000, 'warning');
+      }
+    }
+
+    input.value = '';
+  }
+
+  private compressImage(file: File, quality: number): Promise<File | null> {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (event: any) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const maxWidth = 1024;
+          const scale = Math.min(1, maxWidth / img.width);
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return resolve(null);
+
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob(blob => {
+            if (!blob) return resolve(null);
+            resolve(new File([blob], file.name, { type: 'image/jpeg', lastModified: Date.now() }));
+          }, 'image/jpeg', quality);
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  private readFileAsDataURL(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // isImageFile(filePath: string): boolean {
+  //   console.log('isImageFile :', filePath);
+  //   if (!filePath) return false;
+  //   const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+  //   const ext = filePath.substring(filePath.lastIndexOf('.')).toLowerCase();
+  //   return imageExtensions.includes(ext);
   // }
+
+  isImageFile(input: string | File): boolean {
+    const name = typeof input === 'string' ? input : input.name;
+    const ext = name.slice(name.lastIndexOf('.')).toLowerCase();
+    return ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'].includes(ext);
+  }
+
+  viewImage(imageSrc: string) {
+    this.selectedImage = imageSrc;
+    this.isImageModalOpen = true;
+  }
+
+  viewPdf(file: File) {
+    const blob = new Blob([file], { type: file.type });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = file.name || 'document.pdf';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  removeFile(index: number) {
+    this.selectedFiles.splice(index, 1);
+    this.filesToUpload.splice(index, 1);
+  }
+
+  // For loading previously uploaded file (if editing)
+  loadFileFromBackend(imageUrl: string): void {
+    console.log('loadFileFromBackend :', imageUrl);
+    if (imageUrl) {
+      this.imagePostView = `${this.ImageBaseUrl}${imageUrl}/${this.LoginToken}?${this.TimeStamp}`;
+      this.selectedFileName = imageUrl;
+    } else {
+      this.imagePostView = '';
+    }
+  }
+
+  fileNavigation(filePath: string) {
+    const fullPath = `${this.ImageBaseUrl}${filePath}/${this.LoginToken}?${this.TimeStamp}`;
+    window.open(fullPath, '_blank');
+  }
 
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
@@ -289,36 +463,6 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
     this.newOrderMaterial.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty;
   }
 
-
-  // Trigger file input when clicking the image
-  triggerFileInput(): void {
-    // this.fileInputRef.nativeElement.click();
-  }
-
-  isImageFile(filePath: string): boolean {
-    if (!filePath) return false;
-    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
-    const ext = filePath.substring(filePath.lastIndexOf('.')).toLowerCase();
-    return imageExtensions.includes(ext);
-  }
-
-  fileNavigation = (File: string) => {
-    if (File) {
-      window.open(this.imagePostView, '_blank');
-    } else {
-      window.open(this.imagePostViewUrl, '_blank');
-    }
-  }
-
-  // Call this when editing existing data
-  loadFileFromBackend(imageUrl: string): void {
-    if (imageUrl) {
-      this.imagePreView = `${this.ImageBaseUrl}${imageUrl}/${this.LoginToken}?${this.TimeStamp}`;
-      this.selectedFileName = imageUrl;
-    } else {
-      this.imagePreView = null;
-    }
-  }
 
   // On file selected
 
@@ -543,15 +687,16 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
 
-    if (this.InvoiceFile) {
-      lstFTO.push(
-        FileTransferObject.FromFile(
-          "InvoiceFile",
-          this.InvoiceFile,
-          this.InvoiceFile.name
-        )
-      );
-    }
+    // if (this.InvoiceFile) {
+    //   lstFTO.push(
+    //     FileTransferObject.FromFile(
+    //       "InvoiceFile",
+    //       this.InvoiceFile,
+    //       this.InvoiceFile.name
+    //     )
+    //   );
+    // }
+
 
     if (this.Entity.p.MaterialPurchaseOrderStatus == MaterialRequisitionStatuses.Ordered) {
       this.Entity.p.MaterialPurchaseOrderDetailsArray.map((data) => {
@@ -559,7 +704,7 @@ export class StockOrderDetailsMobileAppComponent  implements OnInit {
       })
     }
 
-    let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+    let tr = await this.utils.SavePersistableEntities(entitiesToSave, this.filesToUpload);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       // this.uiUtils.showErrorMessage('Error', tr.Message)
