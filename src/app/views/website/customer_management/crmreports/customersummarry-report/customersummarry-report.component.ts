@@ -58,16 +58,18 @@ export class CustomersummarryReportComponent implements OnInit {
       return;
     }
     let lst = await CRMReports.FetchEntireListByCompanyAndSiteRef(this.companyRef(), this.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.CustomerList = lst;
     if (this.CustomerRef == 0 && lst.length > 0) {
-      this.CustomerRef = lst[0].p.Ref
+      this.CustomerRef = lst[0].p.CustomerEnquiryRef
     }
 
   }
 
   OnCustomerSelection = () => {
-
+    let report = this.CustomerList.filter((data) => data.p.CustomerEnquiryRef == this.CustomerRef);
+    if (report.length > 0) {
+      this.Entity = report[0];
+    }
   }
 
 }

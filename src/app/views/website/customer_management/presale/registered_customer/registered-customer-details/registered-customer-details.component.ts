@@ -43,6 +43,7 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
   AadharPattern: string = ValidationPatterns.Aadhar;
 
   PANMsg: string = ValidationMessages.PANMsg;
+  AadharMsg: string = ValidationMessages.AadharMsg;
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
 
   @ViewChild('CusIdCtrl') CusIdInputControl!: NgModel;

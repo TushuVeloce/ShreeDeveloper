@@ -71,7 +71,7 @@
             pattern="{{AadharPattern}}" placeholder="Enter Aadhar No." #AadharCtrl="ngModel" required
             (blur)="AadharCtrl.control.markAsTouched()" />
           <div *ngIf="(AadharCtrl.invalid && (AadharCtrl.touched || AadharCtrl.dirty))">
-            <span class="validation-text" *ngIf="AadharCtrl.errors?.['pattern']">{{PANMsg}}</span>
+            <span class="validation-text" *ngIf="AadharCtrl.errors?.['pattern']">{{AadharMsg}}</span>
           </div>
         </div>
         <div class="col-md-4">

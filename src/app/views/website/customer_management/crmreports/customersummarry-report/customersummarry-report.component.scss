@@ -6,7 +6,7 @@ body {
   background: white;
   border: 1px solid #ccc;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
@@ -21,7 +21,7 @@ body {
 .section-header {
   background-color: #FBE6E6;
   color: black;
-  font-weight: bold;
+  font-weight: bolder;
   text-align: center;
   text-transform: uppercase;
   padding: 8px 0;
@@ -45,10 +45,29 @@ body {
   border: 1px solid #ccc;
   padding: 8px;
   background: white;
-  text-align: center;      /* Horizontal center */
-  display: flex;            /* For vertical centering */
-  align-items: center;      /* Vertical center */
-  justify-content: center;  /* Horizontal center (for flex) */
+  text-align: center;
+  /* Horizontal center */
+  display: flex;
+  /* For vertical centering */
+  align-items: center;
+  /* Vertical center */
+  justify-content: center;
+  /* Horizontal center (for flex) */
+}
+
+.table-cell-heading {
+  border: 1px solid #ccc;
+  padding: 8px;
+  background: white;
+  font-weight: bold;
+  text-align: center;
+  /* Horizontal center */
+  display: flex;
+  /* For vertical centering */
+  align-items: center;
+  /* Vertical center */
+  justify-content: center;
+  /* Horizontal center (for flex) */
 }
 
 
