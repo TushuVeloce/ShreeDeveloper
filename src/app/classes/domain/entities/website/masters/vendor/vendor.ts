@@ -123,19 +123,19 @@ export class Vendor implements IPersistable<Vendor> {
     if (this.p.BranchName == '') vra.add('BranchName', 'Branch Name cannot be blank.');
     if (this.p.AccountNumber == '') vra.add('AccountNumber', 'Account Number cannot be blank.');
     if (this.p.AccountNumber.length > 15) vra.add('AccountNumber', 'Account Number Should be less then 15.');
-    
-    if (!new RegExp(ValidationPatterns.PinCode).test(this.p.PinCode)) {
+
+    if (!new RegExp(ValidationPatterns.PinCode).test(this.p.PinCode) && this.p.PinCode != '') {
       vra.add('PinCode', ValidationMessages.PinCodeMsg);
     }
     if (this.p.IFSC == '') {
       vra.add('IFSC', 'IFSC cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.IFSC).test(this.p.IFSC)) {
+    } else if (!new RegExp(ValidationPatterns.IFSC).test(this.p.IFSC) && this.p.IFSC != '') {
       vra.add('IFSC', ValidationMessages.IFSCMsg);
     }
-    if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN)) {
+    if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN) && this.p.GSTIN != '') {
       vra.add('GSTIN', ValidationMessages.GSTINMsg);
     }
-    if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan)) {
+    if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan) && this.p.Pan != '') {
       vra.add('Pan', ValidationMessages.PANMsg);
     }
 

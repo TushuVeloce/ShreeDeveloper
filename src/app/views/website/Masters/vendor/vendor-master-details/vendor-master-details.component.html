@@ -98,7 +98,7 @@
       <div class="col-md-4 col-6">
         <label>Pin Code</label>
         <input type="text" [(ngModel)]="Entity.p.PinCode" name="PinCode" class="form-control" id="PinCode"
-          placeholder="Enter Pin Code" pattern="{{PinCodePattern}}" #PinCodeCtrl="ngModel" 
+          placeholder="Enter Pin Code" pattern="{{PinCodePattern}}" #PinCodeCtrl="ngModel"
           (blur)="PinCodeCtrl.control.markAsTouched()" />
         <div *ngIf="(PinCodeCtrl.invalid && (PinCodeCtrl.touched || PinCodeCtrl.dirty))">
           <span class="validation-text" *ngIf="PinCodeCtrl.errors?.['pattern']">{{PinCodeMsg}}</span>

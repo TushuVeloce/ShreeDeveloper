@@ -9,6 +9,7 @@ export class CRMReportsFetchRequest {
 
   CRMReportsRefs: number[] = [];
   CompanyRef: number = 0;
+  SiteRef: number = 0;
 
   public MergeIntoTransportData = (td: TransportData) => {
     let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, CRMReportsFetchRequest.FetchRequestType) as DataCollection;

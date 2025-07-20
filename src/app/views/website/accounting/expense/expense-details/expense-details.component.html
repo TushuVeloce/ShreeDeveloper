@@ -88,13 +88,13 @@
             </div>
           </div>
         </div> -->
-        <div class="col-md-4" style="margin-top: 1rem; " *ngIf="this.Entity.p.RecipientType == Sites  ">
+        <div class="col-md-4" style="margin-top: 1rem; " *ngIf="this.Entity.p.RecipientType == Employee ">
           <label>Payment Type</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="IsSalaryExpense" name="IsSalaryExpense" [nzSize]="'large'"
-            [(ngModel)]="Entity.p.IsSalaryExpense">
-            <nz-option [nzValue]="true" [nzLabel]="'Advance'"></nz-option>
-            <nz-option [nzValue]="false" [nzLabel]="'Salary'"></nz-option>
+            nzPlaceHolder="Select" id="PaymentType" name="PaymentType" [nzSize]="'large'" [(ngModel)]="PaymentType" (ngModelChange)="onPaymentTypeSelection()" >
+            <nz-option *ngFor="let type of TypeofEmployeePaymentList" [nzValue]="type.Ref"
+              [nzLabel]="type.Name"></nz-option>
+
           </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">

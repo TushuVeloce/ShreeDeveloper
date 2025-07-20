@@ -71,7 +71,7 @@
             </span>
           </ng-container>
 
-          <!-- Customer Aadhar Image Display -->
+          <!-- Invoice File Display -->
           <ng-container *ngIf="Entity.p.InvoicePath; else AddDocImage">
             <img [src]="isImageFile(Entity.p.InvoicePath) ? imagePostView : '/assets/icons/doc-placeholder.png'"
               alt="Quotation" title="Quotation" (click)="fileNavigation(Entity.p.InvoicePath)"

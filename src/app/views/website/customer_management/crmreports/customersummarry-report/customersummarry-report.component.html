@@ -1,5 +1,33 @@
 <div class="table-wrapper tblcard_light mt-4">
+  <ng-template #noDataTpl>
+    <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+      No Data
+    </div>
+  </ng-template>
 
+  <div class="card-body m-3">
+    <form autocomplete="off">
+      <div class="row gy-3">
+        <div class="col-md-4 col-6">
+          <label for="SiteRef"><b>Site</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="SiteRef"
+            (ngModelChange)="getCustomerReportByCompanyAndSiteRef()">
+            <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-md-4 col-6">
+          <label for="CustomerRef"><b>Customer</b></label>
+          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+            nzPlaceHolder="Select" id="CustomerRef" name="CustomerRef" [nzSize]="'large'" [(ngModel)]="CustomerRef"
+            (ngModelChange)="OnCustomerSelection()">
+            <nz-option *ngFor="let cus of CustomerList" [nzValue]="cus.p.CustomerEnquiryRef"
+              [nzLabel]="cus.p.CustomerName"></nz-option>
+          </nz-select>
+        </div>
+      </div>
+    </form>
+  </div>
   <div class="table-container">
 
     <div class="row bg-brown text-white text-center py-2">
@@ -71,7 +99,7 @@
       <div class="col-md-3 col-6 table-cell">Basic Rate/Sq.Ft.</div>
       <div class="col-md-3 col-6 table-cell">{{Entity.p.BasicRatePerSqft}}</div>
 
-     <div class="col-md-3 col-6 table-cell">Discounted Rate</div>
+      <div class="col-md-3 col-6 table-cell">Discounted Rate</div>
       <div class="col-md-3 col-6 table-cell">{{Entity.p.DiscountedRateOnArea}}</div>
     </div>
 
@@ -111,7 +139,7 @@
 
       <div class="col-md-3 col-6 table-cell">TOTAL EXTRA CHARGES</div>
       <div class="col-md-3 col-6 table-cell">{{Entity.p.TotalExtraCharges}}</div>
-        
+
     </div>
 
     <!-- Payment Details -->
@@ -125,23 +153,23 @@
 
     <div class="row table-row">
 
-         <div class="col-md-3 col-6 table-cell">Total Cheque Received</div>
+      <div class="col-md-3 col-6 table-cell">Total Cheque Received</div>
       <div class="col-md-3 col-6 table-cell">{{Entity.p.TotalChequeRecieved}}</div>
 
-        <div class="col-md-3 col-6 table-cell">Total Cheque Balance</div>
+      <div class="col-md-3 col-6 table-cell">Total Cheque Balance</div>
       <div class="col-md-3 col-6 table-cell">{{Entity.p.TotalChequeRecieved}}</div>
 
-     
+
     </div>
 
     <div class="row table-row">
-     
- <div class="col-md-3 col-6 table-cell">Total Cash Received</div>
+
+      <div class="col-md-3 col-6 table-cell">Total Cash Received</div>
       <div class="col-md-3 col-6 table-cell">{{Entity.p.TotalCashRecieved}}</div>
 
       <div class="col-md-3 col-6 table-cell">Total Cash Balance</div>
       <div class="col-md-3 col-6 table-cell">{{Entity.p.GoodsServicesTax}}</div>
-     
+
     </div>
 
     <div class="row table-row">

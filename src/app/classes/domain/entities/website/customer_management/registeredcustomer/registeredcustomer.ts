@@ -11,6 +11,7 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { RegisteredCustomerFetchRequest } from "./registeredcustomerfetchrequest";
+import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 
 
 export class RegisteredCustomerProps {
@@ -40,6 +41,10 @@ export class RegisteredCustomerProps {
   public GstToatalAmount: number = 0;
   public CompanyRef: number = 0;
   public UpdatedDate: string = '';
+  public PANNo: string = '';
+  public AadharNo: string = '';
+  public CustID: string = '';
+  public RegisterCustomerBookingRemark: string = '';
 
   public readonly SiteRef: number = 0;
   public readonly SiteName: string = '';
@@ -113,7 +118,16 @@ export class RegisteredCustomer implements IPersistable<RegisteredCustomer> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.CustomerEnquiryRef == 0) vra.add('CustomerEnquiryRef', 'CustomerEnquiry Name cannot be blank.');
+    if (this.p.CustomerEnquiryRef == 0) vra.add('CustomerEnquiryRef', 'Customer Name cannot be blank.');
+
+    if (!this.p.CustID) vra.add('CustID', 'Customer Id cannot be blank.');
+
+    if (!new RegExp(ValidationPatterns.PAN).test(this.p.PANNo) && this.p.PANNo) {
+      vra.add('PANNo', ValidationMessages.PANMsg);
+    }
+    if (!new RegExp(ValidationPatterns.Aadhar).test(this.p.AadharNo) && this.p.AadharNo) {
+      vra.add('AadharNo', ValidationMessages.AadharMsg);
+    }
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -147,7 +161,7 @@ export class RegisteredCustomer implements IPersistable<RegisteredCustomer> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): RegisteredCustomer[] {
+    sortPropertyName: string = ""): RegisteredCustomer[] {
     let result: RegisteredCustomer[] = [];
 
     let dcs = DataContainerService.GetInstance();

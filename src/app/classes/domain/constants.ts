@@ -19,6 +19,7 @@ export class ValidationPatterns {
   public static readonly Website: string = "https?://.+";
   public static readonly IFSC: string = "[A-Z]{4}0[A-Z0-9]{6}";
   public static readonly PAN: string = "[A-Z]{5}[0-9]{4}[A-Z]";
+  public static readonly Aadhar: string = "^[2-9]{1}[0-9]{11}$";
   public static readonly GSTIN: string = "[0-3][0-9][A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]";
   public static readonly CIN: string = "^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$";
   public static readonly demo: string = "demo";
@@ -54,6 +55,7 @@ export class ValidationMessages {
 
   public static readonly IFSCMsg: string = "Invalid IFSC Code!";
   public static readonly PANMsg: string = "Invalid PAN!";
+  public static readonly AadharMsg: string = "Invalid Aadhar No.!";
   public static readonly GSTINMsg: string = "Invalid GSTIN!";
   public static readonly CINMsg: string = "Invalid CIN!";
 }

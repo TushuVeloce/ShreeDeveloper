@@ -15,6 +15,7 @@ import { CRMReportsFetchRequest } from "./crmreportfetchrequest";
 
 export class CRMReportsProps {
   public Ref: number = 0;
+  public CustomerEnquiryRef: number = 0;
   public RegisterDate: string = '';
   public CustID: string = '';
   public SiteName: string = '';
@@ -193,6 +194,14 @@ export class CRMReports implements IPersistable<CRMReports> {
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new CRMReportsFetchRequest();
     req.CompanyRef = CompanyRef
+    let tdResponse = await CRMReports.FetchTransportData(req, errorHandler) as TransportData;
+    return CRMReports.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByCompanyAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new CRMReportsFetchRequest();
+    req.CompanyRef = CompanyRef
+    req.SiteRef = SiteRef
     let tdResponse = await CRMReports.FetchTransportData(req, errorHandler) as TransportData;
     return CRMReports.ListFromTransportData(tdResponse);
   }

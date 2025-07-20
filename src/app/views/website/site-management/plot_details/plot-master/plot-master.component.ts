@@ -57,9 +57,6 @@ export class PlotMasterComponent implements OnInit {
         await this.getPlotListBySiteandBookingRemarkRef(storedSiteRef, bookingRemarkeRef);
       });
     }
-    // if (this.siteref == 0) {
-    //   this.getPlotList()
-    // }
   }
 
   FormulateSiteListByCompanyRef = async () => {
@@ -80,7 +77,7 @@ export class PlotMasterComponent implements OnInit {
      this.siteref = lst[0].p.Ref
      this.Entity.p.SiteManagementRef = lst[0].p.Ref
       this.onsitechange(this.siteref)
-    } 
+    }
     // else {
     //   this.BookingRemarkList = DomainEnums.BookingRemarkList(true, '--select--');
     // }

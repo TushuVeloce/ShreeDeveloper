@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
 import { RegisteredCustomer } from 'src/app/classes/domain/entities/website/customer_management/registeredcustomer/registeredcustomer';
@@ -11,6 +11,8 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { DTU } from 'src/app/services/dtu.service';
+import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
+import { NgModel } from '@angular/forms';
 
 
 @Component({
@@ -36,6 +38,17 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
   GoodandServicesTaxList = DomainEnums.GoodsAndServicesTaxList(true, '--Select GST --');
   companyRef = this.companystatemanagement.SelectedCompanyRef;
   FinancialYearList: FinancialYear[] = []
+
+  PANPattern: string = ValidationPatterns.PAN;
+  AadharPattern: string = ValidationPatterns.Aadhar;
+
+  PANMsg: string = ValidationMessages.PANMsg;
+  RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg;
+
+  @ViewChild('CusIdCtrl') CusIdInputControl!: NgModel;
+  @ViewChild('PANCtrl') PANInputControl!: NgModel;
+  @ViewChild('AadharCtrl') AadharInputControl!: NgModel;
+
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private servicecommunicator: ServerCommunicatorService, private dtu: DTU,) { }
 
@@ -102,7 +115,7 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
     const LegalCharges = Number(this.Entity.p.LegalCharges);
     const StampDuties = Number(this.Entity.p.StampDuties);
     const RegistrationFees = Number(this.Entity.p.RegistrationFees);
-     const GSTonValueofAgreement = Number((this.Entity.p.GoodsServicesTax / 100) * (this.Entity.p.ValueOfAgreement));
+    const GSTonValueofAgreement = Number((this.Entity.p.GoodsServicesTax / 100) * (this.Entity.p.ValueOfAgreement));
     this.Entity.p.TotalExtraCharges = Math.ceil(LegalCharges + StampDuties + RegistrationFees + GSTonValueofAgreement);
     this.Entity.p.GstToatalAmount = GSTonValueofAgreement
     this.calculateGrandTotal()
@@ -165,4 +178,17 @@ export class RegisteredCustomerDetailsComponent implements OnInit {
       await this.router.navigate(['/homepage/Website/Registered_Customer']);
     }
   }
+
+  resetAllControls = async () => {
+    // reset touched
+    this.CusIdInputControl.control.markAsUntouched();
+    this.PANInputControl.control.markAsUntouched();
+    this.AadharInputControl.control.markAsUntouched();
+
+    // reset dirty
+    this.CusIdInputControl.control.markAsPristine();
+    this.PANInputControl.control.markAsPristine();
+    this.AadharInputControl.control.markAsPristine();
+  }
+
 }

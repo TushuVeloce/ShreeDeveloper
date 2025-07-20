@@ -210,6 +210,13 @@ export enum ModeOfPayments {
   GpayPhonePay = 500,
 }
 
+export enum TypeOfEmployeePayments {
+  None = 0,
+  Advance = 100,
+  Salary = 200,
+  Other = 300,
+}
+
 export enum OpeningBalanceModeOfPayments {
   None = 0,
   Cash = 100,
@@ -1735,6 +1742,47 @@ export class DomainEnums {
     if (withAllOption) {
       let allEntry = {
         Ref: ModeOfPayments.None,
+        Name: allOptionName,
+      };
+      result.unshift(allEntry);
+    }
+    return result;
+  }
+
+  public static TypeOfEmployeePaymentsName(itemType: TypeOfEmployeePayments) {
+    switch (itemType) {
+      case TypeOfEmployeePayments.Advance:
+        return 'Advance';
+      case TypeOfEmployeePayments.Salary:
+        return 'Salary';
+      case TypeOfEmployeePayments.Other:
+        return 'Other';
+      default:
+        return '';
+    }
+  }
+
+  public static TypeOfEmployeePaymentsList(
+    withAllOption: boolean = false,
+    allOptionName: string = '<All>'
+  ) {
+    let result = [
+      {
+        Ref: TypeOfEmployeePayments.Advance,
+        Name: DomainEnums.TypeOfEmployeePaymentsName(TypeOfEmployeePayments.Advance),
+      },
+      {
+        Ref: TypeOfEmployeePayments.Salary,
+        Name: DomainEnums.TypeOfEmployeePaymentsName(TypeOfEmployeePayments.Salary),
+      },
+      {
+        Ref: TypeOfEmployeePayments.Other,
+        Name: DomainEnums.TypeOfEmployeePaymentsName(TypeOfEmployeePayments.Other),
+      },
+    ];
+    if (withAllOption) {
+      let allEntry = {
+        Ref: TypeOfEmployeePayments.None,
         Name: allOptionName,
       };
       result.unshift(allEntry);

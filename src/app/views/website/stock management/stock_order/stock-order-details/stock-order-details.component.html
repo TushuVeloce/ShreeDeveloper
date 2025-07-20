@@ -92,7 +92,7 @@
           <input type="file" #fileInput accept=".jpg,.jpeg,.png,.gif,.pdf" style="display: none"
             (change)="onFileUpload($event)" />
 
-          <!-- Customer Aadhar Image Display -->
+          <!-- Invoice File Display -->
           <ng-container *ngIf="Entity.p.MaterialPurchaseInvoicePath; else AddDocImage">
             <img [src]="
                 isImageFile(Entity.p.MaterialPurchaseInvoicePath)

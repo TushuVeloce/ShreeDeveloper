@@ -2,7 +2,7 @@ import { Component, effect, OnInit, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages } from 'src/app/classes/domain/constants';
-import { DomainEnums, ModeOfPayments, OpeningBalanceModeOfPayments, RecipientTypes, } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, ModeOfPayments, OpeningBalanceModeOfPayments, RecipientTypes, TypeOfEmployeePayments, } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
@@ -39,6 +39,7 @@ export class ExpenseDetailsComponent implements OnInit {
   RecipientNameInput: boolean = false
   isSaveDisabled: boolean = false;
   ShreeBalance: number = 0;
+  PaymentType: number = 0;
   DetailsFormTitle: 'New Expense' | 'Edit Expense' = 'New Expense';
   IsDropdownDisabled: boolean = false;
   InitialEntity: Expense = null as any;
@@ -51,6 +52,8 @@ export class ExpenseDetailsComponent implements OnInit {
   SiteType = RecipientTypes.Sites
   EmployeeType = RecipientTypes.Employee
   ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref !== this.Bill);
+  TypeofEmployeePaymentList = DomainEnums.TypeOfEmployeePaymentsList();
+  TypeofEmployeePayments = TypeOfEmployeePayments;
   RecipientTypesList = DomainEnums.RecipientTypesList();
   Employee = RecipientTypes.Employee;
   Sites = RecipientTypes.Sites;
@@ -80,16 +83,24 @@ export class ExpenseDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Expense' : 'Edit Expense';
       this.Entity = Expense.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
+
+      if (this.Entity.p.IsAdvancePayment && !this.Entity.p.IsSalaryExpense) {
+        this.PaymentType = this.TypeofEmployeePayments.Advance;
+      } else if (!this.Entity.p.IsAdvancePayment && this.Entity.p.IsSalaryExpense) {
+        this.PaymentType = this.TypeofEmployeePayments.Salary;
+      } else {
+        this.PaymentType = this.TypeofEmployeePayments.Other;
+      }
+
       this.Date = this.Entity.p.Date;
       this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);
       this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      if(this.Entity.p.IncomeLedgerRef != 0){
+      if (this.Entity.p.IncomeLedgerRef != 0) {
         this.getSubIncomeLedgerListByIncomeLedgerRef(this.Entity.p.IncomeLedgerRef)
       }
-      if(this.Entity.p.RecipientType != 0){
+      if (this.Entity.p.RecipientType != 0) {
         this.getRecipientListByRecipientTypeRef()
       }
     } else {
@@ -124,6 +135,19 @@ export class ExpenseDetailsComponent implements OnInit {
     let lst = await OpeningBalance.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.BankList = lst.filter((item) => item.p.BankAccountRef > 0 && item.p.OpeningBalanceAmount > 0)
   };
+
+  onPaymentTypeSelection = () => {
+    if (this.PaymentType == this.TypeofEmployeePayments.Advance) {
+      this.Entity.p.IsAdvancePayment = 1;
+      this.Entity.p.IsSalaryExpense = false;
+    } else if (this.PaymentType == this.TypeofEmployeePayments.Salary) {
+      this.Entity.p.IsAdvancePayment = 0;
+      this.Entity.p.IsSalaryExpense = true;
+    } else {
+      this.Entity.p.IsAdvancePayment = 0;
+      this.Entity.p.IsSalaryExpense = false;
+    }
+  }
 
   OnModeChange = () => {
     this.Entity.p.BankAccountRef = 0
@@ -183,16 +207,16 @@ export class ExpenseDetailsComponent implements OnInit {
     this.RecipientList = lst;
   }
 
-  onTypeChange = async() =>{
+  onTypeChange = async () => {
     this.Entity.p.IncomeLedgerRef = 0;
     this.Entity.p.RecipientRef = 0;
-    this.Entity.p.IsAdvancePayment = 0
+    this.Entity.p.IsAdvancePayment = 0;
     this.RecipientNameInput = false
     this.Entity.p.GivenAmount = 0
     await this.CalculateRemainingAmountandBalance()
   }
 
-  onChangeIncomeLedger = () =>{
+  onChangeIncomeLedger = () => {
     this.Entity.p.IncomeSubLedgerRef = 0;
   }
 
@@ -214,6 +238,7 @@ export class ExpenseDetailsComponent implements OnInit {
       return;
     }
     let lst = await Expense.FetchTotalInvoiceAmountFromSiteAndRecipient(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientType, this.Entity.p.RecipientRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     if (lst.length > 0) {
       this.Entity.p.InvoiceAmount = lst[0].p.InvoiceAmount;
       this.Entity.p.RemainingAdvance = lst[0].p.RemainingAdvance;
@@ -250,7 +275,7 @@ export class ExpenseDetailsComponent implements OnInit {
     } else {
       this.Entity.p.RemainingAmount = 0;
     }
-    if(this.Entity.p.RecipientType == this.SiteType){
+    if (this.Entity.p.RecipientType == this.SiteType) {
       this.getCurrentBalanceByCompanyRef()
       return
     }
@@ -259,7 +284,7 @@ export class ExpenseDetailsComponent implements OnInit {
     } else {
       this.Entity.p.ShreesBalance = -Number((this.Entity.p.GivenAmount - this.ShreeBalance).toFixed(2));
     }
-    if(this.Entity.p.IsAdvancePayment){
+    if (this.Entity.p.IsAdvancePayment) {
       this.Entity.p.TotalAdvance = this.Entity.p.RemainingAdvance + this.Entity.p.GivenAmount
     }
   }
@@ -336,10 +361,10 @@ export class ExpenseDetailsComponent implements OnInit {
     }
   };
 
-  IsAdvancePayment = async () =>{
-    if(this.Entity.p.IsAdvancePayment == 1){
+  IsAdvancePayment = async () => {
+    if (this.Entity.p.IsAdvancePayment == 1) {
       this.Entity.p.InvoiceAmount = 0
-    }else{
+    } else {
       await this.getTotalInvoiceAmountFromSiteAndRecipientRef()
     }
     this.Entity.p.GivenAmount = 0
