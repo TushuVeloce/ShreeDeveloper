@@ -59,37 +59,8 @@ export class CompanyMasterComponent implements OnInit {
     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    // this.onGetCompany();
     this.loadPaginationData();
   }
-
-  // onGetCompany = async () => {
-  //   const storedCompanyRef = this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
-  //   const storedCompanyName = this.appStateManagement.StorageKey.getItem('companyName');
-
-  //   if (storedCompanyRef && storedCompanyName) {
-  //     const ref = Number(storedCompanyRef);
-  //     // this.CompanyRef = ref;
-  //     this.companystatemanagement.setCompanyRef(ref, storedCompanyName);
-  //   } else if (this.DisplayMasterList && this.DisplayMasterList.length > 0) {
-  //     // Select first company if no stored value is found
-  //     const firstCompany = this.DisplayMasterList[0];
-  //     await this.changecompany(firstCompany.p.Ref); // Assuming changecompany is also async
-  //   }
-  // }
-
-  // changecompany(ref: number) {
-  //   const selectedCompany = this.DisplayMasterList.find(company => company.p.Ref === ref);
-  //   if (selectedCompany) {
-  //     this.appStateManagement.StorageKey.setItem('SelectedCompanyRef', selectedCompany.p.Ref.toString());
-  //     this.appStateManagement.StorageKey.setItem('companyName', selectedCompany.p.Name);
-
-  //     this.companystatemanagement.setCompanyRef(ref, selectedCompany.p.Name);
-  //     // this.CompanyRef = ref;
-  //   } else {
-  //     console.warn('Selected company not found');
-  //   }
-  // }
 
   onEditClicked = async (item: Company) => {
     this.SelectedCompany = item.GetEditableVersion();
@@ -108,6 +79,9 @@ export class CompanyMasterComponent implements OnInit {
           this.SearchString = '';
           this.loadPaginationData();
           this.FormulateCompanyMasterList();
+          setTimeout(() => {
+            window.location.reload();
+          }, 100);
         });
       });
   }

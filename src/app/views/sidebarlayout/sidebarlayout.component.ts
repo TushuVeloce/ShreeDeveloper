@@ -872,6 +872,7 @@ export class SidebarlayoutComponent implements OnInit {
     } else if (this.CompanyList && this.CompanyList.length > 0) {
       // Select first company if no stored value is found
       const firstCompany = this.CompanyList[0];
+      if(this.CompanyList.length == 1)
       await this.changecompany(firstCompany.p.Ref); // Assuming changecompany is also async
     }
   }

@@ -218,11 +218,6 @@ export class CompanyMasterDetailsComponent implements OnInit {
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
 
-    // if (!this.CompanyLogo && this.IsNewEntity) {
-    //   await this.uiUtils.showErrorToster('Company Logo not Selected');
-    //   return;
-    // }
-
     let entityToSave = this.Entity.GetEditableVersion();
     // ------ Code For Save Date Of InCorporation Year Format ---------------//
     if (this.dateOfInCorporation) {
@@ -266,16 +261,23 @@ export class CompanyMasterDetailsComponent implements OnInit {
       this.isSaveDisabled = false;
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Company saved successfully');
-        this.dateOfInCorporation = '';
-        this.lastDateOfFirstFinancialYear = '';
-        this.Entity = Company.CreateNewInstance();
-        this.resetAllControls();
+        // this.dateOfInCorporation = '';
+        // this.lastDateOfFirstFinancialYear = '';
+        // this.Entity = Company.CreateNewInstance();
+        // this.resetAllControls();
+        setTimeout(() => {
+          window.location.reload();
+        }, 100);
+        await this.router.navigate(['/homepage/Website/Company_Master']);
       } else {
         await this.uiUtils.showSuccessToster('Company Updated successfully');
+        setTimeout(() => {
+          window.location.reload();
+        }, 100);
+        await this.router.navigate(['/homepage/Website/Company_Master']);
         this.dateOfInCorporation = '';
         this.lastDateOfFirstFinancialYear = '';
       }
-      await this.router.navigate(['/homepage/Website/Company_Master']);
     }
   };
 
