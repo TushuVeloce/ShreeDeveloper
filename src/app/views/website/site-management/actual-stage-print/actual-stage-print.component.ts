@@ -46,7 +46,6 @@ export class ActualStagePrintComponent implements OnInit {
     // history.state.myData;
 
     this.Entity = history.state.printData;
-    console.log('this.Entity :', this.Entity);
     this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.CreatedDate);
 
     this.InitialEntity = Object.assign(ActualStages.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as ActualStages;

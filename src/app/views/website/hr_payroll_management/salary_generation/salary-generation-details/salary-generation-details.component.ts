@@ -143,7 +143,6 @@ export class SalaryGenerationDetailsComponent implements OnInit {
 
   //   let tdResult = JSON.parse(tr.Tag) as TransportData;
   //   let res = SalaryGenerationCustomRequest.FromTransportData(tdResult);
-  //   console.log('res :', res);
   //   if (res.Data.length > 0) {
   //     let checkInData: SalaryGenerationProps[] = res.Data as SalaryGenerationProps[];
   //     Object.assign(this.Entity.p, checkInData[0]);
@@ -172,7 +171,6 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       return;
     }
     let lst = await SalaryGeneration.FetchEmployeeDataByEmployeeRefandMonth(this.companyRef(), employee, month, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
 
     this.Entity.p.TotalWorkingDays = lst[0]?.p?.TotalWorkingDays || 0
     this.Entity.p.TotalLeaves = lst[0]?.p?.TotalLeaves || 0
@@ -195,7 +193,6 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
 
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 

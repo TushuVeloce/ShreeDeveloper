@@ -72,9 +72,7 @@ export class YourProfileComponent implements OnInit {
         let AdminData = await AdminProfile.FetchAdminData(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
         this.IsAdmin = true
         this.IsEmployee = false
-        console.log('AdminData :', AdminData);
         this.AdminEntity = AdminData[0]
-        console.log('Entity :', this.Entity);
         if (this.AdminEntity.p.DOB != '') {
              this.AdminEntity.p.DOB = this.dtu.ConvertStringDateToShortFormat(this.AdminEntity.p.DOB)
            }
@@ -96,10 +94,8 @@ export class YourProfileComponent implements OnInit {
   }
 
   loadImageFromBackend(imageUrl: string): void {
-    console.log('imageUrl :', imageUrl);
     if (imageUrl) {
       this.imagePreviewUrl = `${this.ImageBaseUrl}${imageUrl}/${this.LoginToken}?${this.TimeStamp}`;
-      console.log('this.imagePreviewUrl :', this.imagePreviewUrl);
       this.selectedFileName = imageUrl;
     } else {
       this.imagePreviewUrl = null;
@@ -190,7 +186,6 @@ export class YourProfileComponent implements OnInit {
       // Saving Employee
       let entityToSave = this.Entity.GetEditableVersion();
       let entitiesToSave = [entityToSave];
-      console.log('entitiesToSave :', entitiesToSave);
 
       if (this.ProfilePicFile) {
         lstFTO.push(
@@ -214,7 +209,6 @@ export class YourProfileComponent implements OnInit {
       // Saving AdminProfile
       let adminToSave = this.AdminEntity.GetEditableVersion();
       let adminEntitiesToSave = [adminToSave];
-      console.log('adminEntitiesToSave :', adminEntitiesToSave);
       if (this.AdminEntity.p.ProfilePicFile) {
         lstFTO.push(
           FileTransferObject.FromFile(

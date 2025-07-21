@@ -76,7 +76,6 @@ export class ChangePasswordMobileAppComponent implements OnInit {
 
       // setTimeout(() => {
       //   this.isUpdating = false;
-      //   console.log('Password updated successfully');
       //   this.router.navigate(['mobileapp/tabs/dashboard']);
       //   this.toastService.present('Logged in successfully', 2000, 'success');
       // }, 1500);

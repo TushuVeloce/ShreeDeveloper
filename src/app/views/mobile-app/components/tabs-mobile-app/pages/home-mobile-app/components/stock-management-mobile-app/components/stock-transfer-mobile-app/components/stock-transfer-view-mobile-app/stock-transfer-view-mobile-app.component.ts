@@ -90,7 +90,6 @@ export class StockTransferViewMobileAppComponent  implements OnInit {
 
   async onFiltersChanged(updatedFilters: any[]) {
     // debugger
-    console.log('Updated Filters:', updatedFilters);
 
     for (const filter of updatedFilters) {
       const selected = filter.selected;
@@ -236,7 +235,6 @@ export class StockTransferViewMobileAppComponent  implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: () => {
-              console.log('Deletion cancelled.');
             },
           },
           {

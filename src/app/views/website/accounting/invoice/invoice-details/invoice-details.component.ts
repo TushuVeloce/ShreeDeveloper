@@ -110,7 +110,6 @@ export class InvoiceDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Bill' : 'Edit Bill';
       this.Entity = Invoice.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       if (this.Entity.p.LedgerRef) {
@@ -224,7 +223,7 @@ export class InvoiceDetailsComponent implements OnInit {
       await this.uiUtils.showErrorToster('To Whom not Selected');
       return;
     }
-    
+
     this.RecipientList = [];
     let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef(), this.Entity.p.RecipientType, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.RecipientList = lst;
@@ -617,7 +616,7 @@ export class InvoiceDetailsComponent implements OnInit {
     this.CalculateAmount()
     this.DiselPaid(0)
   }
-  
+
   ClearMachineTimeTable = () => {
     this.Entity.p.MachineUsageDetailsArray = []
   }
@@ -681,7 +680,6 @@ export class InvoiceDetailsComponent implements OnInit {
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {

@@ -102,7 +102,6 @@ export class EmployeeMasterDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity? 'New Employee': 'Edit Employee';
       this.Entity = Employee.GetCurrentInstance();
-      console.log('Entity :', this.Entity);
       // While Edit Converting date String into Date Format //
       this.dateofjoining = this.datePipe.transform(this.dtu.FromString(this.Entity.p.DateOfJoining),'yyyy-MM-dd');
       // While Edit Converting date String into Date Format //

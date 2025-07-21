@@ -48,7 +48,6 @@ export class EmployeeOvertimeComponent implements OnInit {
       return;
     }
     let lst = await EmployeeOvertime.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -72,7 +71,6 @@ export class EmployeeOvertimeComponent implements OnInit {
         this.Entity.p.IsOverTimeVerified = true;
         let entityToSave = this.Entity.GetEditableVersion();
         let entitiesToSave = [entityToSave]
-        console.log('entitiesToSave :', entitiesToSave);
         let tr = await this.utils.SavePersistableEntities(entitiesToSave);
         if (!tr.Successful) {
           this.uiUtils.showErrorMessage('Error', tr.Message);

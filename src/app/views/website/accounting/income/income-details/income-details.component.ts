@@ -74,7 +74,6 @@ export class IncomeDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Income' : 'Edit Income';
       this.Entity = Income.GetCurrentInstance();
-      console.log('this.Entity :', this.Entity);
       this.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date);
       this.appStateManage.StorageKey.removeItem('Editable');
       await this.getSubLedgerListByLedgerRef(this.Entity.p.LedgerRef);

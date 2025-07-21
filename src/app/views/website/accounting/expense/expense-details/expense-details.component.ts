@@ -245,7 +245,6 @@ export class ExpenseDetailsComponent implements OnInit {
 
 
     let lst = await Expense.FetchTotalInvoiceAmountFromSiteAndRecipient(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.RecipientType, this.Entity.p.RecipientRef, this.Entity.p.IsSalaryExpense, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     if (lst.length > 0) {
       if (lst[0].p.InvoiceAmount < 0) {
         this.Entity.p.InvoiceAmount = 0;
@@ -353,7 +352,6 @@ export class ExpenseDetailsComponent implements OnInit {
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Date);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 
     if (!tr.Successful) {

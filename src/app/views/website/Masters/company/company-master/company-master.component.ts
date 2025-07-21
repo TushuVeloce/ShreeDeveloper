@@ -96,7 +96,6 @@ export class CompanyMasterComponent implements OnInit {
     try {
 
       let blobResponse = await this.serverCommunicatorService.DownloadDocument(SelectItem.p.LogoPath, this.appStateManage.getLoginToken())
-      console.log(blobResponse);
       if (blobResponse == null || undefined) {
         alert("Error to get file")
         return

@@ -170,7 +170,6 @@ export class UserrolerightsComponent implements OnInit {
     let entityToSave = this.Entity.GetEditableVersion();
 
     let entitiesToSave = [entityToSave]
-    console.log(entitiesToSave);
 
     // await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);

@@ -105,7 +105,6 @@ export class AttendanceLogsComponent implements OnInit {
       return;
     }
     let TodaysAttendanceLog = await WebAttendaneLog.FetchEntireListByCompanyRefAndAttendanceLogType(this.companyRef(), AttendanceLogType.TodaysAttendanceLog, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('TodaysAttendanceLog :', TodaysAttendanceLog);
     this.DisplayMasterList = TodaysAttendanceLog
     this.getAttendanceCount(AttendanceLogType.TodaysAttendanceLog)
   }
@@ -138,7 +137,6 @@ export class AttendanceLogsComponent implements OnInit {
         this.Entity.p.IsAttendanceVerified = true;
         let entityToSave = this.Entity.GetEditableVersion();
         let entitiesToSave = [entityToSave]
-        console.log('entitiesToSave :', entitiesToSave);
         let tr = await this.utils.SavePersistableEntities(entitiesToSave);
         if (!tr.Successful) {
           this.uiUtils.showErrorMessage('Error', tr.Message);
@@ -168,7 +166,6 @@ export class AttendanceLogsComponent implements OnInit {
     let employeeref = this.Entity.p.EmployeeRef
 
     let WeeklyAttendanceLog = await WebAttendaneLog.FetchEntireListByCompanyRefAndAttendanceLogTypeAndEmployee(this.companyRef(), AttendanceLogType.WeeklyAttendanceLog, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('WeeklyAttendanceLog :', WeeklyAttendanceLog);
     this.DisplayMasterList = WeeklyAttendanceLog
     this.getAttendanceCount(AttendanceLogType.WeeklyAttendanceLog);
   }
@@ -207,7 +204,6 @@ export class AttendanceLogsComponent implements OnInit {
     let MonthlyAttendanceLog = await WebAttendaneLog.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendanceLogType.MonthlyAttendanceLog,
       month, employeeref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = MonthlyAttendanceLog
-    console.log('MonthlyAttendanceLog :', MonthlyAttendanceLog);
     this.getAttendanceCount(AttendanceLogType.MonthlyAttendanceLog)
   }
 

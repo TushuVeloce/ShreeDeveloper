@@ -135,7 +135,6 @@ export class AttendanceDetailsComponent implements OnInit {
     this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
-    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;

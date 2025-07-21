@@ -103,7 +103,6 @@ export class CustomerFollowupDetailsComponent implements OnInit {
     if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
       this.IsNewEntity = false;
       this.Entity = CustomerFollowUp.GetCurrentInstance();
-      console.log('this.Entity :', this.Entity);
       // Reset Required Entities
       this.Entity.p.ReminderDate = '';
       this.Entity.p.Reason = '';
@@ -317,7 +316,7 @@ export class CustomerFollowupDetailsComponent implements OnInit {
       this.InterestedPlotRef = 0;
     }
   };
-  
+
   GenerateCustomerFollowUpPlotDetailsRef = async () => {
     for (const obj of this.Entity.p.CustomerFollowUpPlotDetails) {
       obj.Ref =

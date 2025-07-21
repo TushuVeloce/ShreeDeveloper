@@ -100,7 +100,7 @@ export class SettingsViewMobileAppComponent implements OnInit {
           await this.haptic.error();
         }
       );
-      // console.log('employeeData :', employeeData);
+
       if (employeeData == null) {
         const adminData = await AdminProfile.FetchAdminData(async errMsg => {
           await this.toastService.present("Error " + errMsg, 1000, 'danger');
@@ -108,8 +108,6 @@ export class SettingsViewMobileAppComponent implements OnInit {
           // await this.uiUtils.showErrorMessage('Error', errMsg)
         }
         );
-
-        // console.log('adminData :', adminData);
 
         if (adminData?.[0]) {
           this.AdminEntity = adminData[0];
@@ -173,14 +171,12 @@ export class SettingsViewMobileAppComponent implements OnInit {
           role: 'cancel',
           cssClass: 'custom-cancel',
           handler: () => {
-            // console.log('User cancelled.');
           }
         },
         {
           text: 'Yes, Logout',
           cssClass: 'custom-confirm',
           handler: () => {
-            // console.log('User confirmed logout.');
             this.logout()
           }
         }

@@ -265,7 +265,6 @@ export class EmployeeAttendanceLogsComponent implements OnInit {
     this.AttendanceLogCount.p.TotalDaysInMonth = 0
     this.AttendanceLogCount.p.TotalDaysInWeek = 0
     let lst = await AttendanceLogsCount.FetchEntireListByCompanyRefAndAttendanceLogTypeAndMonth(this.companyRef(), AttendanceLogType, this.Entity.p.Months, this.Entity.p.EmployeeRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.AttendanceLogCount.p.TeamSize = lst[0]?.p?.TeamSize
     this.AttendanceLogCount.p.Present = lst[0]?.p?.Present
     this.AttendanceLogCount.p.Absent = lst[0]?.p?.Absent

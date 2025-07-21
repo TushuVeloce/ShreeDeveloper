@@ -60,7 +60,6 @@ export class PrivacyAndSecurityMobileAppComponent  implements OnInit {
           text: 'Delete',
           role: 'destructive',
           handler: () => {
-            // console.log('Account deleted');
           },
         },
       ],

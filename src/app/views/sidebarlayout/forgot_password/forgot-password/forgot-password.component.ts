@@ -11,7 +11,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.component.html',
-  styleUrls: ['./forgot-password.component.scss'], 
+  styleUrls: ['./forgot-password.component.scss'],
  imports: [CommonModule, NzLayoutModule,
       NzMenuModule, FormsModule]
     })
@@ -63,7 +63,7 @@ export class ForgotPasswordComponent  implements OnInit {
       event.target.value = event.target.value.slice(0, maxLength); // Trim input to max length
     }
   }
- 
+
   ResendOtp = async () => {
     if (this.isResendOtpDisabled) return
     this.OTP = '';
@@ -151,8 +151,7 @@ export class ForgotPasswordComponent  implements OnInit {
       'updatepassword',
       body
     );
-    
-    console.log('response :', response);
+
     if (!response.Successful) {
       await this.uiUtils.showErrorMessage('Error', response.Message);
       this.isVerifyPassword = false;

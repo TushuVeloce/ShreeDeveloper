@@ -397,7 +397,6 @@ export class StockTransferDetailsMobileAppComponent  implements OnInit {
             role: 'cancel',
             cssClass: 'custom-cancel',
             handler: () => {
-              console.log('User cancelled.');
             }
           },
           {
@@ -406,7 +405,6 @@ export class StockTransferDetailsMobileAppComponent  implements OnInit {
             handler: () => {
               this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-transfer'], { replaceUrl: true });
               this.haptic.success();
-              console.log('User confirmed.');
             }
           }
         ]

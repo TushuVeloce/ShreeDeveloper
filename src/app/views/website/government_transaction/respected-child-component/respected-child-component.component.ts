@@ -31,10 +31,6 @@ export class RespectedChildComponentComponent implements OnInit {
 
     this.TransactionTypeArrayObj = JSON.parse(this.appStateManage.StorageKey.getItem('TransactionJson') ?? '[]');
     this.SelectedArrayObj = this.TransactionTypeArrayObj.filter((item: { SiteWorkGroupName: string }) => item.SiteWorkGroupName == this.SelectedTransactionType);
-    console.log(this.SelectedTransactionType, ' this.SelectedTransactionType');
-    console.log(this.SelectedArrayObj, ' this.SelectedArrayObj');
-    console.log(this.TransactionTypeArrayObj, ' this.TransactionTypeArrayObj');
-
   }
   SiteWorkGroupList: SiteWorkGroup[] = [];
   async ngOnInit() {

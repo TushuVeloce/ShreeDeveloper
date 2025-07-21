@@ -73,7 +73,6 @@ export class CustomerFollowupComponent implements OnInit {
       await this.uiUtils.showErrorToster('Failed to get current date and time');
     }
 
-    console.log(' this.strCDT :', this.strCDT);
     let parts = this.strCDT.substring(0, 16).split('-');
     // Construct the new date format
     this.ReminderDate = `${parts[0]}-${parts[1]}-${parts[2]}`;

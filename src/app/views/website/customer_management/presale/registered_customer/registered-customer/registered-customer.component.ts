@@ -64,7 +64,6 @@ export class RegisteredCustomerComponent  implements OnInit {
     let lst = await RegisteredCustomer.FetchEntireListByCompanyRef(this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    console.log('this.DisplayMasterList :', this.DisplayMasterList);
     this.loadPaginationData();
   };
 

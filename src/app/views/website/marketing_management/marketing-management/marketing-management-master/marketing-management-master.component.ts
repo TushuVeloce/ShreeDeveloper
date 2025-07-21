@@ -82,7 +82,6 @@ export class MarketingManagementMasterComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
-    console.log('this.SiteList :', this.SiteList);
   }
 
   getVendorListByCompanyRef = async () => {
@@ -93,7 +92,6 @@ export class MarketingManagementMasterComponent implements OnInit {
     }
     let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.VendorList = lst;
-    console.log('this.VendorList :', this.VendorList);
   }
 
   getMarketingListByCompanyRef = async () => {

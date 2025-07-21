@@ -131,8 +131,6 @@ export class GovernmentTransactionMasterComponent implements OnInit {
 
         this.groupCompletionStatus[obj.p.Ref][group.SiteWorkGroupName] = isGroupComplete;
         this.SiteGroupList.push(group.SiteWorkGroupName)
-        // console.log( this.SiteGroupList);
-
 
         if (isGroupComplete) {
           this.getGroupStatus(transactionRef, group.SiteWorkGroupName);

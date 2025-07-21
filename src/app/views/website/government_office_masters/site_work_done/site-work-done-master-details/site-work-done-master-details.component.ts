@@ -104,7 +104,6 @@ export class SiteWorkDoneMasterDetailsComponent implements OnInit {
       this.SiteGroupRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    console.log('lst :', lst);
     this.SiteWorkMasterList = lst;
   };
 

@@ -41,9 +41,7 @@ export class UnitMasterComponent implements OnInit {
     await this.appStateManage.setDropdownDisabled(true);
     // this.ValidMenuItems = this.ValidMenuItem.getData(this.FeatureRef.UnitMaster);
     // const rawItems = JSON.parse(sessionStorage.getItem('ValidMenuItems') || '[]');
-    // console.log('rawItems :', rawItems);
     // this.ValidMenuItems = rawItems.filter((data: MenuItem) => data.FeatureRef == ApplicationFeatures.UnitMaster);
-    // console.log('this.ValidMenuItems :', this.ValidMenuItems);
     await this.FormulateUnitList();
     this.loadPaginationData();
     this.pageSize = this.screenSizeService.getPageSize('withoutDropdown');

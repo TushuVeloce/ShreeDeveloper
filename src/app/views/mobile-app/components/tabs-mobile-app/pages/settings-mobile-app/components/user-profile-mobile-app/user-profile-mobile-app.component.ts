@@ -100,7 +100,7 @@ export class UserProfileMobileAppComponent  implements OnInit {
           await this.haptic.error();
         }
       );
-      // console.log('employeeData :', employeeData);
+
       if (employeeData == null) {
         const adminData = await AdminProfile.FetchAdminData(async errMsg => {
           await this.toastService.present("Error " + errMsg, 1000, 'danger');
@@ -108,8 +108,6 @@ export class UserProfileMobileAppComponent  implements OnInit {
           // await this.uiUtils.showErrorMessage('Error', errMsg)
         }
         );
-
-        // console.log('adminData :', adminData);
 
         if (adminData?.[0]) {
           this.AdminEntity = adminData[0];
@@ -136,12 +134,12 @@ export class UserProfileMobileAppComponent  implements OnInit {
       }
     }
   };
-  
+
     findGenderName(GenderRef: number): string {
       const gender = this.GenderList.find(g => g.Ref === GenderRef);
       return gender ? gender.Name : 'N/A';
     }
-  
+
   loadImageFromBackend(imageUrl: string | null): void {
     if (imageUrl) {
       this.imagePreviewUrl = `${this.ImageBaseUrl}${imageUrl}/${this.LoginToken}?${this.TimeStamp}`;
