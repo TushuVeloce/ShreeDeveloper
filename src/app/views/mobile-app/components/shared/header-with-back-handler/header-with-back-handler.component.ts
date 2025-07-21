@@ -54,7 +54,7 @@ export class HeaderWithBackHandlerComponent implements OnInit {
 
 
   goToNotificationPage() {
-    this.router.navigate(['/app_homepage/notifications'], { replaceUrl: true });
+    this.router.navigate(['/mobile-app/tabs/settings/notifications'], { replaceUrl: true });
   }
   
   ngOnDestroy() {

@@ -149,12 +149,14 @@ export class CustomerEnquiryViewMobileAppComponent implements OnInit {
   }
 
   filterCustomerList() {
+    console.log('this.selectedStatus :', this.selectedStatus);
     if (this.selectedStatus === 0) {
       this.FilteredCustomerEnquiryList = this.CustomerEnquiryList;
     } else {
       this.FilteredCustomerEnquiryList = this.CustomerEnquiryList.filter(
         (customer) => customer.p.CustomerStatus === this.selectedStatus
       );
+      console.log('this.FilteredCustomerEnquiryList :', this.FilteredCustomerEnquiryList);
     }
   }
 
