@@ -92,20 +92,14 @@ export class Site implements IPersistable<Site> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
+    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
     if (this.p.Name == '') vra.add('Name', 'Site Name cannot be blank.');
-    // if (this.p.AddressLine1 == '') vra.add('AddressLine1', 'Address Line  cannot be blank.');
-    // if (this.p.AddressLine2 == '') vra.add('AddressLine2', 'Site Location cannot be blank.');
-    // if (this.p.PinCode == '') vra.add('PinCode', 'PinCode cannot be blank.');else if (!new RegExp(ValidationPatterns.PinCode).test(this.p.Name)) {
-    //   vra.add('Name', ValidationMessages.PinCodeMsg);
-    // }
     if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country cannot be blank.');
     if (this.p.StateRef == 0) vra.add('StateRef', 'State cannot be blank.');
     if (this.p.CityRef == 0) vra.add('CityRef', 'City cannot be blank.');
-    // if (this.p.SiteInchargeRef == 0) vra.add('SiteInchargeRef', 'Site Incharge cannot be blank.');
     if (this.p.EstimatedStartingDate == '') vra.add('EstimatedStartingDate', 'Estimated Starting Date cannot be blank.');
     if (this.p.EstimatedEndDate == '') vra.add('EstimatedEndDate', 'Estimated End Date cannot be blank.');
-    // if (this.p.TotalLandAreaInSqm == 0) vra.add('TotalLandAreaInSqm', 'Total Land Area In Sqm cannot be blank.');
-    // if (this.p.TotalLandAreaInSqft == 0) vra.add('TotalLandAreaInSqft', 'Total Land Area In Sqft cannot be blank.');
+
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -139,7 +133,7 @@ export class Site implements IPersistable<Site> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): Site[] {
+    sortPropertyName: string = ""): Site[] {
     let result: Site[] = [];
 
     let dcs = DataContainerService.GetInstance();

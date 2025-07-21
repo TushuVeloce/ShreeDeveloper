@@ -81,6 +81,7 @@ export class AccountSubLedgerDetailsComponent implements OnInit {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
+    let ledgerref = this.Entity.p.LedgerRef;
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
@@ -95,6 +96,7 @@ export class AccountSubLedgerDetailsComponent implements OnInit {
         await this.uiUtils.showSuccessToster('SubLedger saved successfully');
         this.Entity = SubLedger.CreateNewInstance();
         this.resetAllControls();
+        this.Entity.p.LedgerRef = ledgerref;
       } else {
         await this.uiUtils.showSuccessToster('SubLedger Updated successfully');
         await this.router.navigate(['/homepage/Website/Account_Sub_Ledger']);

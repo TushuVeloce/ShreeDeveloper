@@ -11,6 +11,7 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { AdminProfileFetchRequest } from "./adminprofilefetchrequest";
+import { ValidationMessages, ValidationPatterns } from "src/app/classes/domain/constants";
 
 export class AdminProfileProps {
   public Ref: number = 0;
@@ -69,6 +70,9 @@ export class AdminProfile implements IPersistable<AdminProfile> {
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
     if (this.p.Address == '') vra.add('Address', 'Address cannot be blank.');
     if (this.p.EmailId == '') vra.add('EmailId', 'EmailId cannot be blank.');
+    if (!new RegExp(ValidationPatterns.Email).test(this.p.EmailId) && this.p.EmailId) {
+      vra.add('EmailId', ValidationMessages.EmailMsg);
+    }
     if (this.p.Contacts == '') vra.add('MobileNo', 'MobileNo cannot be blank.');
   }
 
@@ -164,12 +168,12 @@ export class AdminProfile implements IPersistable<AdminProfile> {
     return AdminProfile.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchAdminData(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-      let req = new AdminProfileFetchRequest();
-      let tdResponse = await AdminProfile.FetchTransportData(req, errorHandler) as TransportData;
-      return AdminProfile.ListFromTransportData(tdResponse);
-    }
-  
+  public static async FetchAdminData(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new AdminProfileFetchRequest();
+    let tdResponse = await AdminProfile.FetchTransportData(req, errorHandler) as TransportData;
+    return AdminProfile.ListFromTransportData(tdResponse);
+  }
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

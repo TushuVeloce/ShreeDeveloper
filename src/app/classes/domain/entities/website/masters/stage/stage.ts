@@ -22,14 +22,6 @@ export class StageProps {
   public UpdatedByName: number = 0;
   public Ref: number = 0;
   public Name: string = '';
-  public StageType: number = 0;
-  public readonly StageTypeName: string = '';
-  public DisplayOrder: number = 0;
-  public IsStageTypeApplicable: Boolean = false;
-  public IsSubStageApplicable: Boolean = false;
-  public IsMachinaryExpenseApplicable: Boolean = false;
-  public IsLabourExpenseApplicable: Boolean = false;
-  public IsOtherExpenseApplicable: Boolean = false;
   public CompanyRef: number = 0;
   public CompanyName: string = '';
 
@@ -77,14 +69,6 @@ export class Stage implements IPersistable<Stage> {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') {
       vra.add('Name', 'Name cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
-    }
-    if ((this.p.IsSubStageApplicable == true || this.p.IsStageTypeApplicable == true) && this.p.StageType <= 0) {
-      vra.add('StageType', 'Stage Type is required');
-    }
-    if (this.p.DisplayOrder < 0) {
-      vra.add('DisplayOrder', 'Display Order cannot be blank');
     }
   }
 

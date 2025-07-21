@@ -74,7 +74,7 @@ export class ExpenseTypeMasterDetailsComponent implements OnInit {
       return;
     }
     let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.StageList = lst.filter((data) => data.p.IsOtherExpenseApplicable);
+    this.StageList = lst;
     if (this.StageList.length > 0) {
       this.Entity.p.StageRef = this.StageList[0].p.Ref;
     }

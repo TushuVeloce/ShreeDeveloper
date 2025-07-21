@@ -84,6 +84,9 @@ export class Order implements IPersistable<Order> {
     // if (this.p.Name == '') vra.add('Name', 'Order Name cannot be blank.'); else if (!new RegExp(ValidationPatterns.NameWithoutNos).test(this.p.Name)) {
     //   vra.add('Name', ValidationMessages.NameWithoutNosMsg);
     // }
+    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
+    if (this.p.SiteRef == 0) vra.add('SiteRef', 'Site Name cannot be blank.');
+
   }
 
   public MergeIntoTransportData(td: TransportData) {

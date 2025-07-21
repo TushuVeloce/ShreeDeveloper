@@ -32,57 +32,6 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <div>
-            <label>Display Order</label>
-            <input type="number" [(ngModel)]="Entity.p.DisplayOrder" name="DisplayOrder" class="form-control"
-              id="DisplayOrder" required placeholder="Enter Display Order" #DisplayOrderCtrl="ngModel" required
-              (blur)="DisplayOrderCtrl.control.markAsTouched()" (click)="selectAllValue($event)" />
-            <div *ngIf="(DisplayOrderCtrl.invalid && (DisplayOrderCtrl.touched || DisplayOrderCtrl.dirty))">
-              <span class="validation-text" *ngIf="DisplayOrderCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4" *ngIf="Entity.p.IsStageTypeApplicable == true">
-          <label>Stage Type</label>
-          <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="StageType" name="StageType" [nzSize]="'large'" [(ngModel)]="Entity.p.StageType">
-            <nz-option *ngFor="let stage of StageTypeList" [nzValue]="stage.Ref" [nzLabel]="stage.Name"></nz-option>
-          </nz-select>
-        </div>
-      </div>
-      <hr style="margin-top: 2rem; margin-bottom: 2rem;">
-      <div class="row">
-        <div class="col-md-4 col-6" style="margin-bottom: 1.5rem; ">
-          <input type="checkbox" id="IsStageTypeApplicable" [(ngModel)]="Entity.p.IsStageTypeApplicable"
-            (ngModelChange)="onStageTypeApplicableChange($event)" name="IsStageTypeApplicable"
-            class="form-check-input me-2 large-dark-checkbox" style="width: 20px; height: 20px;">
-          <label for="IsStageTypeApplicable" class="form-check-label mb-0">Has Stage Type</label>
-        </div>
-        <div class="col-md-4 col-6" style="margin-bottom: 1.5rem; ">
-          <input type="checkbox" id="IsSubStageApplicable" [(ngModel)]="Entity.p.IsSubStageApplicable"
-            name="IsSubStageApplicable" class="form-check-input me-2 large-dark-checkbox"
-            style="width: 20px; height: 20px;">
-          <label for="IsSubStageApplicable" class="form-check-label mb-0">Has Sub Stage</label>
-        </div>
-        <div class="col-md-4 col-6" style="margin-bottom: 1.5rem; ">
-          <input type="checkbox" id="IsMachinaryExpenseApplicable" [(ngModel)]="Entity.p.IsMachinaryExpenseApplicable"
-            name="IsMachinaryExpenseApplicable" class="form-check-input me-2 large-dark-checkbox"
-            style="width: 20px; height: 20px;">
-          <label for="IsMachinaryExpenseApplicable" class="form-check-label mb-0">Machinary expense</label>
-        </div>
-        <div class="col-md-4 col-6" style="margin-bottom: 1.5rem; ">
-          <input type="checkbox" id="IsLabourExpenseApplicable" [(ngModel)]="Entity.p.IsLabourExpenseApplicable"
-            name="IsLabourExpenseApplicable" class="form-check-input me-2 large-dark-checkbox"
-            style="width: 20px; height: 20px;">
-          <label for="IsLabourExpenseApplicable" class="form-check-label mb-0">Labour Expense</label>
-        </div>
-        <div class="col-md-4 col-6" style="margin-bottom: 1.5rem; ">
-          <input type="checkbox" id="IsOtherExpenseApplicable" [(ngModel)]="Entity.p.IsOtherExpenseApplicable"
-            name="IsOtherExpenseApplicable" class="form-check-input me-2 large-dark-checkbox"
-            style="width: 20px; height: 20px;">
-          <label for="IsOtherExpenseApplicable" class="form-check-label mb-0">Other Expense</label>
-        </div>
       </div>
       <div style="justify-content: center; display: flex; gap: 2rem; margin-top : 2rem">
         <div>

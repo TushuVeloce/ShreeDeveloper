@@ -55,12 +55,6 @@ export class StageMasterDetailsComponent implements OnInit {
     txtName.focus();
   }
 
-  onStageTypeApplicableChange(value: boolean): void {
-    if (!value) {
-      this.Entity.p.StageType = 0;
-    }
-  }
-
 
   SaveStageMaster = async () => {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()

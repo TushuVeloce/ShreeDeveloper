@@ -78,7 +78,7 @@ export class ExpenseTypeMasterComponent implements OnInit {
       return;
     }
     let stagedata = await Stage.FetchInstance(this.Entity.p.StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.IsOtherExpenseApplicable = stagedata.p.IsOtherExpenseApplicable;
+    this.IsOtherExpenseApplicable = false;
     let lst = await ExpenseType.FetchEntireListByStageRef(this.Entity.p.StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
 

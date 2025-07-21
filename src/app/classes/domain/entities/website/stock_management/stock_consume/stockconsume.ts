@@ -82,6 +82,8 @@ export class StockConsume implements IPersistable<StockConsume> {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.ConsumptionDate == '') vra.add('ConsumptionDate', 'Consumption Date cannot be blank.');
     if (this.p.ConsumedQuantity == 0) vra.add('ConsumedQuantity', 'Consumed Quantity cannot be blank.');
+    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
+
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -181,13 +183,13 @@ export class StockConsume implements IPersistable<StockConsume> {
     return StockConsume.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-      let req = new StockConsumeFetchRequest();
-      req.SiteRefs.push(SiteRef)
-      req.CompanyRefs.push(CompanyRef)
-      let tdResponse = await StockConsume.FetchTransportData(req, errorHandler) as TransportData;
-      return StockConsume.ListFromTransportData(tdResponse);
-    }
+  public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new StockConsumeFetchRequest();
+    req.SiteRefs.push(SiteRef)
+    req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await StockConsume.FetchTransportData(req, errorHandler) as TransportData;
+    return StockConsume.ListFromTransportData(tdResponse);
+  }
 
   public static async FetchMaterialListBySiteRef(SiteRef: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new GetMaterialFromMaterialInwardFetchRequest();

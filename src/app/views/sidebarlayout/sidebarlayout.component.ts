@@ -54,7 +54,7 @@ export class SidebarlayoutComponent implements OnInit {
   routerChangedSubscription: Subscription | undefined;
   activeModule: string | null = null; // Tracks the active module
   activeSubmodule: string | null = null; // Tracks the active submodule
-  CompnyList: Company[] = [];
+  CompanyList: Company[] = [];
   CompanyRef: number = 0;
   isDropdownDisabled: boolean = false;
   isShow = true;
@@ -68,10 +68,17 @@ export class SidebarlayoutComponent implements OnInit {
 
   previousRoute: string = '';
 
-  constructor(public router: Router, public themeService: ThemeService, private el: ElementRef, private renderer: Renderer2,
+  constructor(
+    public router: Router,
+    public themeService: ThemeService,
+    private el: ElementRef,
+    private renderer: Renderer2,
     public appStateManagement: AppStateManageService,
-    private sessionValues: SessionValues, private cdr: ChangeDetectorRef,
-    private uiUtils: UIUtils, private companystatemanagement: CompanyStateManagement, private servercommunicator: ServerCommunicatorService,) {
+    private sessionValues: SessionValues,
+    private cdr: ChangeDetectorRef,
+    private uiUtils: UIUtils,
+    private companystatemanagement: CompanyStateManagement,
+    private servercommunicator: ServerCommunicatorService) {
 
 
     this.routerChangedSubscription = this.router.events.subscribe(event => {
@@ -373,16 +380,16 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Stage_Master',
         LogoPath: '/assets/icons/Stage Master.png',
       },
-      {
-        Name: 'Sub Stage Master',
-        RouterLink: '/homepage/Website/Sub_Stage_Master',
-        LogoPath: '/assets/icons/Sub Stage Master.png',
-      },
-      {
-        Name: 'Expense Type Master',
-        RouterLink: '/homepage/Website/Expense_Type_Master',
-        LogoPath: '/assets/icons/Expense Type.png',
-      },
+      // {
+      //   Name: 'Sub Stage Master',
+      //   RouterLink: '/homepage/Website/Sub_Stage_Master',
+      //   LogoPath: '/assets/icons/Sub Stage Master.png',
+      // },
+      // {
+      //   Name: 'Expense Type Master',
+      //   RouterLink: '/homepage/Website/Expense_Type_Master',
+      //   LogoPath: '/assets/icons/Expense Type.png',
+      // },
       {
         Name: 'Account Main Ledger',
         RouterLink: '/homepage/Website/Account_Main_Ledger',
@@ -517,16 +524,16 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Plot_Master',
         LogoPath: '/assets/icons/Plot Details.png',
       },
-      {
-        Name: 'Actual Stage',
-        RouterLink: '/homepage/Website/Actual_Stage',
-        LogoPath: '/assets/icons/Actual Stages.png',
-      },
-      {
-        Name: 'Estimate Stage',
-        RouterLink: '/homepage/Website/Estimate_Stages',
-        LogoPath: '/assets/icons/Estimated Stages.png',
-      },
+      // {
+      //   Name: 'Actual Stage',
+      //   RouterLink: '/homepage/Website/Actual_Stage',
+      //   LogoPath: '/assets/icons/Actual Stages.png',
+      // },
+      // {
+      //   Name: 'Estimate Stage',
+      //   RouterLink: '/homepage/Website/Estimate_Stages',
+      //   LogoPath: '/assets/icons/Estimated Stages.png',
+      // },
     ]
 
     let StockManagementSubModuleList = [
@@ -560,7 +567,7 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Stock_Transfer',
         LogoPath: '/assets/icons/Office Duty_Time.png',
       },
-          {
+      {
         Name: 'Stock Summary',
         RouterLink: '/homepage/Website/Stock_Summary',
         LogoPath: '/assets/icons/Office Duty_Time.png',
@@ -601,21 +608,21 @@ export class SidebarlayoutComponent implements OnInit {
     ]
 
     let GovernmentOfficeSubModuleList = [
-      {
-        Name: 'Site Work Group',
-        RouterLink: '/homepage/Website/Site_Work_Group',
-        LogoPath: '/assets/icons/Site Work Group.png',
-      },
-      {
-        Name: 'Site Work Master',
-        RouterLink: '/homepage/Website/Site_Work_Master',
-        LogoPath: '/assets/icons/Site Work Master.png',
-      },
-      {
-        Name: 'Site Work Done',
-        RouterLink: '/homepage/Website/Site_Work_Done',
-        LogoPath: '/assets/icons/Site Work Done.png',
-      },
+      // {
+      //   Name: 'Site Work Group',
+      //   RouterLink: '/homepage/Website/Site_Work_Group',
+      //   LogoPath: '/assets/icons/Site Work Group.png',
+      // },
+      // {
+      //   Name: 'Site Work Master',
+      //   RouterLink: '/homepage/Website/Site_Work_Master',
+      //   LogoPath: '/assets/icons/Site Work Master.png',
+      // },
+      // {
+      //   Name: 'Site Work Done',
+      //   RouterLink: '/homepage/Website/Site_Work_Done',
+      //   LogoPath: '/assets/icons/Site Work Done.png',
+      // },
       {
         Name: 'Progress Report',
         RouterLink: '/homepage/Website/Site_Progress_Report',
@@ -791,12 +798,6 @@ export class SidebarlayoutComponent implements OnInit {
         WhiteLogo: '/assets/icons/Hr-Payroll Management.png',
         SubModuleList: StockManagementSubModuleList,
       },
-      // {
-      //   Name: 'Stock Management',
-      //   RouterLink: '',
-      //   WhiteLogo: '/assets/icons/Hr-Payroll Management.png',
-      //   SubModuleList: StockManagement,
-      // },
       {
         Name: 'Hr-Payroll Management',
         RouterLink: '',
@@ -854,7 +855,7 @@ export class SidebarlayoutComponent implements OnInit {
 
   private async FormulateCompanyList() {
     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.CompnyList = lst;
+    this.CompanyList = lst;
 
     // Set default selection if there is no stored value
     this.ongetcompany();
@@ -868,15 +869,15 @@ export class SidebarlayoutComponent implements OnInit {
       const ref = Number(storedCompanyRef);
       this.CompanyRef = ref;
       this.companystatemanagement.setCompanyRef(ref, storedCompanyName);
-    } else if (this.CompnyList && this.CompnyList.length > 0) {
+    } else if (this.CompanyList && this.CompanyList.length > 0) {
       // Select first company if no stored value is found
-      const firstCompany = this.CompnyList[0];
+      const firstCompany = this.CompanyList[0];
       await this.changecompany(firstCompany.p.Ref); // Assuming changecompany is also async
     }
   }
 
   changecompany(ref: number) {
-    const selectedCompany = this.CompnyList.find(company => company.p.Ref === ref);
+    const selectedCompany = this.CompanyList.find(company => company.p.Ref === ref);
     if (selectedCompany) {
       this.appStateManagement.StorageKey.setItem('SelectedCompanyRef', selectedCompany.p.Ref.toString());
       this.appStateManagement.StorageKey.setItem('companyName', selectedCompany.p.Name);
@@ -890,11 +891,11 @@ export class SidebarlayoutComponent implements OnInit {
 
   //  private FormulateCompanyList = async () => {
   //     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-  //     this.CompnyList = lst;
+  //     this.CompanyList = lst;
   //   }
 
   //   changecompany(ref: number) {
-  //     const selectedCompany = this.CompnyList.find(company => company.p.Ref === ref);
+  //     const selectedCompany = this.CompanyList.find(company => company.p.Ref === ref);
   //     if (selectedCompany) {
   //       this.appStateManagement.StorageKey.setItem('SelectedCompanyRef',selectedCompany.p.Ref.toString());
   //       this.appStateManagement.StorageKey.setItem('companyName', selectedCompany.p.Name);

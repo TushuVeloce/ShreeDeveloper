@@ -104,11 +104,7 @@ export class Vendor implements IPersistable<Vendor> {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
     if (this.p.CompanyType == 0) vra.add('CompanyType', 'Company Type cannot be blank.');
-    if (this.p.Name == '') {
-      vra.add('Name', 'Vendor Name cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.NameWithNosAndSpace).test(this.p.Name)) {
-      vra.add('Name', ValidationMessages.NameWithNosAndSpaceMsg + ' for Name');
-    }
+    if (this.p.Name == '') { vra.add('Name', 'Vendor Name cannot be blank.'); }
     if (this.p.TradeName == '') vra.add('TradeName', 'Trade Name cannot be blank.');
     if (this.p.MobileNo == '') {
       vra.add('MobileNo', 'Mobile No cannot be blank.');
@@ -119,28 +115,21 @@ export class Vendor implements IPersistable<Vendor> {
     if (this.p.CountryRef == 0) vra.add('CountryRef', 'Country cannot be blank.');
     if (this.p.StateRef == 0) vra.add('StateRef', 'State cannot be blank.');
     if (this.p.CityRef == 0) vra.add('CityRef', 'City cannot be blank.');
-    if (this.p.BankName == '') vra.add('BankName', 'Bank Name cannot be blank.');
-    if (this.p.BranchName == '') vra.add('BranchName', 'Branch Name cannot be blank.');
-    if (this.p.AccountNumber == '') vra.add('AccountNumber', 'Account Number cannot be blank.');
-    if (this.p.AccountNumber.length > 15) vra.add('AccountNumber', 'Account Number Should be less then 15.');
 
-    if (!new RegExp(ValidationPatterns.PinCode).test(this.p.PinCode) && this.p.PinCode != '') {
+    if (!new RegExp(ValidationPatterns.PinCode).test(this.p.PinCode) && this.p.PinCode) {
       vra.add('PinCode', ValidationMessages.PinCodeMsg);
     }
     if (this.p.IFSC == '') {
       vra.add('IFSC', 'IFSC cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.IFSC).test(this.p.IFSC) && this.p.IFSC != '') {
+    } else if (!new RegExp(ValidationPatterns.IFSC).test(this.p.IFSC) && this.p.IFSC) {
       vra.add('IFSC', ValidationMessages.IFSCMsg);
     }
-    if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN) && this.p.GSTIN != '') {
+    if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN) && this.p.GSTIN) {
       vra.add('GSTIN', ValidationMessages.GSTINMsg);
     }
-    if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan) && this.p.Pan != '') {
+    if (!new RegExp(ValidationPatterns.PAN).test(this.p.Pan) && this.p.Pan) {
       vra.add('Pan', ValidationMessages.PANMsg);
     }
-
-    // if (this.p.MaterialListSuppliedByVendor.length <= 0 && this.p.ServiceListSuppliedByVendor.length == 0) vra.add('MaterialListSuppliedByVendor', 'Material list cannot be blank.');
-    // if (this.p.ServiceListSuppliedByVendor.length <= 0 && this.p.MaterialListSuppliedByVendor.length == 0) vra.add('ServiceListSuppliedByVendor', 'Service list cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {

@@ -11,6 +11,7 @@ import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { UserProfileFetchRequest } from "./userprofilefetchrequest";
+import { ValidationMessages, ValidationPatterns } from "../../../constants";
 
 export class UserProfileProps {
   public Ref: number = 0;
@@ -67,6 +68,9 @@ export class UserProfile implements IPersistable<UserProfile> {
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
     if (this.p.Address == '') vra.add('Address', 'Address cannot be blank.');
     if (this.p.EmailId == '') vra.add('EmailId', 'EmailId cannot be blank.');
+    if (!new RegExp(ValidationPatterns.Email).test(this.p.EmailId) && this.p.EmailId) {
+      vra.add('EmailId', ValidationMessages.EmailMsg);
+    }
     if (this.p.MobileNo <= 0) vra.add('MobileNo', 'MobileNo cannot be blank.');
   }
 

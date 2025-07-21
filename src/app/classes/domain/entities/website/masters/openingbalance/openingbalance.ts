@@ -29,10 +29,10 @@ export class OpeningBalanceProps {
   public OpeningBalanceAmount: number = 0;
   public BankAccountRef: number = 0;
   public BankName: string = '';
-  public FinancialYearRef : number = 0;
-  public NetBalance : number = 0;
-  public FinancialYearName : string = '';
-  public ShreesBalance : number = 0;
+  public FinancialYearRef: number = 0;
+  public NetBalance: number = 0;
+  public FinancialYearName: string = '';
+  public ShreesBalance: number = 0;
   public readonly UnitName: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
@@ -78,8 +78,10 @@ export class OpeningBalance implements IPersistable<OpeningBalance> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.ModeOfPayment == 0) {vra.add('ModeOfPayment', 'Mode of Payment cannot be blank.');}
-    if (this.p.OpeningBalanceAmount == 0) {vra.add('OpeningBalanceAmount', 'Opening Balance Amount cannot be blank.');}
+    if (this.p.ModeOfPayment == 0) { vra.add('ModeOfPayment', 'Mode of Payment cannot be blank.'); }
+    if (this.p.OpeningBalanceAmount == 0) { vra.add('OpeningBalanceAmount', 'Opening Balance Amount cannot be blank.'); }
+    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
+
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -113,7 +115,7 @@ export class OpeningBalance implements IPersistable<OpeningBalance> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): OpeningBalance[] {
+    sortPropertyName: string = ""): OpeningBalance[] {
     let result: OpeningBalance[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -154,7 +156,7 @@ export class OpeningBalance implements IPersistable<OpeningBalance> {
     return tdResponse;
   }
 
-  public static async FetchInstance(ref: number,companyRef:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchInstance(ref: number, companyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new OpeningBalanceFetchRequest();
     req.OpeningBalanceRefs.push(ref);
     req.CompanyRefs.push(companyRef);

@@ -51,7 +51,7 @@ export class StageMasterComponent implements OnInit {
     let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(),
       async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.MasterList = lst.sort((a, b) => a.p.DisplayOrder - b.p.DisplayOrder);
+    this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   };
@@ -63,42 +63,41 @@ export class StageMasterComponent implements OnInit {
     await this.router.navigate(['/homepage/Website/Stage_Master_Details']);
   }
 
-  // onDeleteClicked = async (Stage: Stage) => {
-  //   await this.uiUtils.showConfirmationMessage('Delete',
-  //     `This process is <strong>IRREVERSIBLE!</strong> <br/>
-  //     Are you sure that you want to DELETE this Stage?`,
-  //     async () => {
-  //       await Stage.DeleteInstance(async () => {
-  //         await this.uiUtils.showSuccessToster(`Stage ${Stage.p.Name} has been deleted!`);
-  //         await this.getStageListByCompanyRef();
-  //         this.SearchString = '';
-  //         this.loadPaginationData();
-
-  //       });
-  //     });
-  // }
-
   onDeleteClicked = async (Stage: Stage) => {
-    await this.uiUtils.showConfirmationMessage(
-      'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Stage?`,
+    await this.uiUtils.showConfirmationMessage('Delete',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+      Are you sure that you want to DELETE this Stage?`,
       async () => {
-        let req = new DeleteStageCustomRequest();
-        req.StageRef = Stage.p.Ref;
-        let td = req.FormulateTransportData();
-        let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
-        let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-        if (!tr.Successful) {
-          await this.uiUtils.showErrorMessage('Error', tr.Message);
-          return;
-        }
-        await this.uiUtils.showSuccessToster(`Stage ${Stage.p.Name} has been deleted!`);
-        let tdResult = JSON.parse(tr.Tag) as TransportData;
-      }
-    );
-    this.getStageListByCompanyRef()
-    this.loadPaginationData()
-     this.SearchString = '';
-  };
+        await Stage.DeleteInstance(async () => {
+          await this.uiUtils.showSuccessToster(`Stage ${Stage.p.Name} has been deleted!`);
+          await this.getStageListByCompanyRef();
+          this.SearchString = '';
+          this.loadPaginationData();
+        });
+      });
+  }
+
+  // onDeleteClicked = async (Stage: Stage) => {
+  //   await this.uiUtils.showConfirmationMessage(
+  //     'Delete', `This process is <strong>IRREVERSIBLE!</strong> <br/>Are you sure that you want to DELETE this Stage?`,
+  //     async () => {
+  //       let req = new DeleteStageCustomRequest();
+  //       req.StageRef = Stage.p.Ref;
+  //       let td = req.FormulateTransportData();
+  //       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
+  //       let tr = await this.serverCommunicator.sendHttpRequest(pkt);
+  //       if (!tr.Successful) {
+  //         await this.uiUtils.showErrorMessage('Error', tr.Message);
+  //         return;
+  //       }
+  //       await this.uiUtils.showSuccessToster(`Stage ${Stage.p.Name} has been deleted!`);
+  //       let tdResult = JSON.parse(tr.Tag) as TransportData;
+  //     }
+  //   );
+  //   this.getStageListByCompanyRef()
+  //   this.loadPaginationData()
+  //   this.SearchString = '';
+  // };
 
   // For Pagination  start ----
   loadPaginationData = () => {

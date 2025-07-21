@@ -25,7 +25,7 @@ export class MaterialCurrentStockProps {
   public UnitRef: number = 0;
   public UnitName: string = '';
   public CurrentQuantity: number = 0;
- 
+
   public readonly IsNewlyCreated: boolean = false;
   private constructor(isNewlyCreated: boolean) {
     this.IsNewlyCreated = isNewlyCreated;

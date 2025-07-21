@@ -80,7 +80,10 @@ export class StockTransfer implements IPersistable<StockTransfer> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
+    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
     if (this.p.TransferredQuantity == 0) vra.add('TransferredQuantity', 'Transferred Quantity cannot be blank.');
+    if (this.p.FromSiteRef == 0) vra.add('FromSiteRef', 'From Site cannot be blank.');
+    if (this.p.ToSiteRef == 0) vra.add('ToSiteRef', 'To Site cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -180,18 +183,18 @@ export class StockTransfer implements IPersistable<StockTransfer> {
     return StockTransfer.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, FromSiteRef: number,ToSiteRef:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-     let req = new StockTransferFetchRequest();
-     req.CompanyRefs.push(CompanyRef)
-     if(FromSiteRef){
-       req.FromSiteRefs.push(FromSiteRef)
-     }
-     if(ToSiteRef){
-       req.ToSiteRefs.push(ToSiteRef)
-     }
-     let tdResponse = await StockTransfer.FetchTransportData(req, errorHandler) as TransportData;
-     return StockTransfer.ListFromTransportData(tdResponse);
-   }
+  public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, FromSiteRef: number, ToSiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new StockTransferFetchRequest();
+    req.CompanyRefs.push(CompanyRef)
+    if (FromSiteRef) {
+      req.FromSiteRefs.push(FromSiteRef)
+    }
+    if (ToSiteRef) {
+      req.ToSiteRefs.push(ToSiteRef)
+    }
+    let tdResponse = await StockTransfer.FetchTransportData(req, errorHandler) as TransportData;
+    return StockTransfer.ListFromTransportData(tdResponse);
+  }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();

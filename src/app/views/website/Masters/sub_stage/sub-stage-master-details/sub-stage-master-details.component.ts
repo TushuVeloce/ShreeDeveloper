@@ -71,8 +71,8 @@ export class SubStageMasterDetailsComponent implements OnInit {
     const services = await Stage.FetchInstance(StageRef, async errMsg =>
       await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    this.Entity.p.StageTypeName = services.p.StageTypeName
-    this.Entity.p.StageType = services.p.StageType
+    this.Entity.p.StageTypeName = ''
+    this.Entity.p.StageType = 0
   };
 
 
@@ -83,7 +83,7 @@ export class SubStageMasterDetailsComponent implements OnInit {
       return;
     }
     let lst = await Stage.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.StageList = lst.filter(stage => stage.p.IsSubStageApplicable === true);
+    this.StageList = lst;
   }
 
   SaveSubStageMaster = async () => {

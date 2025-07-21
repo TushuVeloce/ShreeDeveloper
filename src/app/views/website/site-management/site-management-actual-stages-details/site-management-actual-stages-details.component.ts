@@ -7,7 +7,6 @@ import { Employee } from 'src/app/classes/domain/entities/website/masters/employ
 import { ExpenseType } from 'src/app/classes/domain/entities/website/masters/expensetype/expensetype';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Stage } from 'src/app/classes/domain/entities/website/masters/stage/stage';
-import { SubStage } from 'src/app/classes/domain/entities/website/masters/substage/subStage';
 import { Unit } from 'src/app/classes/domain/entities/website/masters/unit/unit';
 import { ServiceSuppliedByVendorProps, Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { VendorService } from 'src/app/classes/domain/entities/website/masters/vendorservices/vendorservices';
@@ -23,6 +22,7 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
+import { SubStage } from 'src/app/classes/domain/entities/website/masters/substage/subStage';
 
 @Component({
   selector: 'app-site-management-actual-stages-details',
@@ -282,8 +282,8 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
     // }
     let SingleRecord = this.StageList.find((data) => data.p.Ref == StageRef);;
     if (SingleRecord?.p) {
-      this.StageType = SingleRecord.p.StageType;
-      this.IsStage = SingleRecord.p.IsSubStageApplicable;
+      this.StageType = 0;
+      this.IsStage = false;
     }
     // let SingleRecord = await Stage.FetchInstance(StageRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     // this.StageType = SingleRecord.p.StageType;
@@ -414,7 +414,9 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       // this.Entity.p.Amount = rate * quantity
       // this.Entity.p.GrandTotal = rate * quantity - dieselAmount
       if (rate > 0 && quantity > 0) {
+        console.log('rate * quantity :1', rate, quantity);
         this.Entity.p.Amount = rate * quantity
+        console.log('rate * quantity :2', rate, quantity);
         this.Entity.p.GrandTotal = rate * quantity - dieselAmount
       } else {
         this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;

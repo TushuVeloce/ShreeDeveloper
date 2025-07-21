@@ -9,6 +9,7 @@ import { Device } from '@capacitor/device';
 import { ServerCommunicatorService } from 'src/app/services/server-communicator.service';
 import { Utils } from 'src/app/services/utils.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
+import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 
 
 
@@ -34,8 +35,15 @@ export class CompanyMasterComponent implements OnInit {
   LoginToken = '';
   headers: string[] = ['Sr.No.', 'Logo', 'Name', 'Owner Names', 'Contacts', ' GST No', ' Pan No', 'Action'];
 
-  constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService,
-    private serverCommunicatorService: ServerCommunicatorService, private baseUrl: BaseUrlService
+  constructor(
+    private uiUtils: UIUtils,
+    private router: Router,
+    private appStateManage: AppStateManageService,
+    private serverCommunicatorService: ServerCommunicatorService,
+    private baseUrl: BaseUrlService,
+    public appStateManagement: AppStateManageService,
+    private companystatemanagement: CompanyStateManagement,
+
   ) { }
 
   ngOnInit() {
@@ -50,9 +58,38 @@ export class CompanyMasterComponent implements OnInit {
   private FormulateCompanyMasterList = async () => {
     let lst = await Company.FetchEntireList(async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList
+    this.DisplayMasterList = this.MasterList;
+    // this.onGetCompany();
     this.loadPaginationData();
   }
+
+  // onGetCompany = async () => {
+  //   const storedCompanyRef = this.appStateManagement.StorageKey.getItem('SelectedCompanyRef');
+  //   const storedCompanyName = this.appStateManagement.StorageKey.getItem('companyName');
+
+  //   if (storedCompanyRef && storedCompanyName) {
+  //     const ref = Number(storedCompanyRef);
+  //     // this.CompanyRef = ref;
+  //     this.companystatemanagement.setCompanyRef(ref, storedCompanyName);
+  //   } else if (this.DisplayMasterList && this.DisplayMasterList.length > 0) {
+  //     // Select first company if no stored value is found
+  //     const firstCompany = this.DisplayMasterList[0];
+  //     await this.changecompany(firstCompany.p.Ref); // Assuming changecompany is also async
+  //   }
+  // }
+
+  // changecompany(ref: number) {
+  //   const selectedCompany = this.DisplayMasterList.find(company => company.p.Ref === ref);
+  //   if (selectedCompany) {
+  //     this.appStateManagement.StorageKey.setItem('SelectedCompanyRef', selectedCompany.p.Ref.toString());
+  //     this.appStateManagement.StorageKey.setItem('companyName', selectedCompany.p.Name);
+
+  //     this.companystatemanagement.setCompanyRef(ref, selectedCompany.p.Name);
+  //     // this.CompanyRef = ref;
+  //   } else {
+  //     console.warn('Selected company not found');
+  //   }
+  // }
 
   onEditClicked = async (item: Company) => {
     this.SelectedCompany = item.GetEditableVersion();
@@ -102,8 +139,6 @@ export class CompanyMasterComponent implements OnInit {
       }
 
       const platformInfo = await Device.getInfo();
-      // const ext = extension(blobResponse.type); // e.g., "pdf"
-      // let ext2 = mime.extension('text/plain');
       let ext2 = Utils.GetInstance().getMimeTypeFromFileName(blobResponse.type);
       let fileName = SelectItem.p.LogoPath || 'downloaded-file' + '.' + ext2;
       if (platformInfo.platform === 'web') {
@@ -111,12 +146,6 @@ export class CompanyMasterComponent implements OnInit {
       } else {
         const base64Data = await this.convertBlobToBase64(blobResponse);
         const customPath = `Credai/${fileName}`;
-
-        // await Filesystem.writeFile({
-        //   path: fileName,
-        //   data: base64Data,
-        //   directory: Directory.Documents
-        // });
 
         await Filesystem.writeFile({
           path: customPath,

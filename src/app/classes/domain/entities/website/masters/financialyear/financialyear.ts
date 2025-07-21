@@ -74,7 +74,7 @@ export class FinancialYear implements IPersistable<FinancialYear> {
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
     if (this.p.Name == '') vra.add('Name', 'Name cannot be blank.');
-    // if (this.p.CompanyRef <= 0) vra.add('Company', 'Company cannot be blank.');
+    if (this.p.CompanyRef <= 0) vra.add('Company', 'Company cannot be blank.');
   }
 
   public MergeIntoTransportData(td: TransportData) {

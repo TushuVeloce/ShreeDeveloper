@@ -70,7 +70,9 @@ export class Ledger implements IPersistable<Ledger> {
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
     if (!this.AllowEdit) vra.add('', 'This object is not editable and hence cannot be saved.');
-    if (this.p.Name == '') {vra.add('Name', 'Ledger Name cannot be blank.');}
+    if (this.p.Name == '') { vra.add('Name', 'Ledger Name cannot be blank.'); }
+    if (this.p.CompanyRef == 0) vra.add('CompanyRef', 'Company Name cannot be blank.');
+
   }
 
   public MergeIntoTransportData(td: TransportData) {
@@ -104,7 +106,7 @@ export class Ledger implements IPersistable<Ledger> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): Ledger[] {
+    sortPropertyName: string = ""): Ledger[] {
     let result: Ledger[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -145,7 +147,7 @@ export class Ledger implements IPersistable<Ledger> {
     return tdResponse;
   }
 
-  public static async FetchInstance(ref: number,companyRef:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchInstance(ref: number, companyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new LedgerFetchRequest();
     req.LedgerRefs.push(ref);
     req.CompanyRefs.push(companyRef);
