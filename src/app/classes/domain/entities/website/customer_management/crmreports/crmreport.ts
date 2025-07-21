@@ -25,6 +25,7 @@ export class CRMReportsProps {
   public AdharNo: string = '';
   public PANNo: string = '';
   public PlotNo: string = '';
+  public LeadSourceName: string = '';
   public BookingRemarkName: string = '';
   public AreaInSqm: number = 0;
   public AreaInSqft: number = 0;
@@ -37,7 +38,6 @@ export class CRMReportsProps {
   public RegistrationFees: number = 0;
   public LegalCharges: number = 0;
   public TotalExtraCharges: number = 0;
-  public LeadSource: number = 0;
   public GrandTotal: number = 0;
   public ValueOfAgreement: number = 0;
   public GovermentRatePerSqm: number = 0;

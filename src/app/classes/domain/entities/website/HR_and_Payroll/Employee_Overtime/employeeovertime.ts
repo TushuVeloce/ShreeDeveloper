@@ -24,6 +24,7 @@ export class EmployeeOvertimeProps {
   public ToTime: string = '';
   public FromTime: string = '';
   public CompanyRef: number = 0;
+  public IsOverTimeVerified: boolean = false;
 
   public readonly CompanyName: string = '';
   public CreatedBy: number = 0;

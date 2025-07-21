@@ -33,6 +33,18 @@
             <td Class="tbldata">{{overtime.p.FromTime}}</td>
             <td Class="tbldata">{{overtime.p.ToTime}}</td>
             <td Class="tbldata">{{overtime.p.DisplayOverTime}}</td>
+            <td Class="tbldata">
+              <!-- PENDING -->
+              <span class="status" ngClass="pending" *ngIf="!overtime.p.IsOverTimeVerified" style="cursor: pointer;"
+                (click)="ChangeOvertimeStatus(overtime)">
+                Pending
+              </span>
+
+              <!-- APPROVED -->
+              <span class="status" *ngIf="overtime.p.IsOverTimeVerified" ngClass="approved">
+                Approved
+              </span>
+            </td>
             <td class="tbldata">
               <span style="margin-left: 9px;" (click)="onEditClicked(overtime);">
                 <img src="\assets\icons\edit.png" alt="logo" title="Edit" width="20px" height="20px" />

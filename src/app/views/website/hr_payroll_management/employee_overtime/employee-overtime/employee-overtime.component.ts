@@ -6,6 +6,7 @@ import { CompanyStateManagement } from 'src/app/services/companystatemanagement'
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { ScreenSizeService } from 'src/app/services/screensize.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+import { Utils } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-employee-overtime',
@@ -25,9 +26,9 @@ export class EmployeeOvertimeComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Date', 'Employee Name', 'From Time', 'To Time', 'Total Over Time', 'Action'];
+  headers: string[] = ['Sr.No.', 'Date', 'Employee Name', 'From Time', 'To Time', 'Total Over Time', 'Status', 'Action'];
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
-    private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService,
+    private companystatemanagement: CompanyStateManagement, private utils: Utils, private DateconversionService: DateconversionService,
   ) {
     effect(async () => {
       await this.getEmployeeOvertimeListByCompanyRef();
@@ -59,6 +60,31 @@ export class EmployeeOvertimeComponent implements OnInit {
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/homepage/Website/Employee_Overtime_Details']);
   };
+
+  ChangeOvertimeStatus = async (Entity: EmployeeOvertime) => {
+    await this.uiUtils.showConfirmationMessage(
+      'Approval',
+      `This process is <strong>IRREVERSIBLE!</strong> <br/>
+        Are you sure that you want to Approve this Overtime?`,
+      async () => {
+        this.Entity = Entity;
+        this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+        this.Entity.p.IsOverTimeVerified = true;
+        let entityToSave = this.Entity.GetEditableVersion();
+        let entitiesToSave = [entityToSave]
+        console.log('entitiesToSave :', entitiesToSave);
+        let tr = await this.utils.SavePersistableEntities(entitiesToSave);
+        if (!tr.Successful) {
+          this.uiUtils.showErrorMessage('Error', tr.Message);
+          Entity.p.IsOverTimeVerified = false;
+          return
+        }
+        else {
+          await this.uiUtils.showSuccessToster('Attendance Updated successfully');
+        }
+      }
+    );
+  }
 
   onDeleteClicked = async (EmployeeOvertime: EmployeeOvertime) => {
     await this.uiUtils.showConfirmationMessage(
