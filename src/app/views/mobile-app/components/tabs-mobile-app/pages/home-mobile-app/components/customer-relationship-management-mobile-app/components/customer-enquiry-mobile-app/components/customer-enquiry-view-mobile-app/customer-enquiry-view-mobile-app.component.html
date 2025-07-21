@@ -2,8 +2,8 @@
 
 <app-header-with-back-handler title="Customer Enquiry"
   backRoute="mobile-app/tabs/dashboard/customer-relationship-management"></app-header-with-back-handler>
-<app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
-</app-chip-filter-mobile-app>
+<!-- <app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
+</app-chip-filter-mobile-app> -->
 <ion-content class="customer-enquiry-content">
 
   <!-- Refresher -->
@@ -19,7 +19,7 @@
   </ion-segment> -->
 
   <!-- Customer List -->
-  <ion-list class="data-list">s
+  <ion-list class="data-list">
     <!-- <ng-container *ngIf="!isLoading"> -->
       <ng-container *ngIf="FilteredCustomerEnquiryList.length > 0 ; else noData">
         <ion-card *ngFor="let item of FilteredCustomerEnquiryList" class="data-card">

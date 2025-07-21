@@ -1,2 +1,9 @@
 <app-header-with-back-handler title="Notifications"></app-header-with-back-handler>
-<ion-content [fullscreen]="true" class="ion-padding"></ion-content>
+<ion-content [fullscreen]="true" class="ion-padding">
+    <!-- *ngIf="DisplayMasterList.length === 0 " -->
+    <!-- Show "Data not found" if list is empty -->
+    <div class="no-data-mobile-app">
+        <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+        <p>No Notification records found.</p>
+    </div>
+</ion-content>
