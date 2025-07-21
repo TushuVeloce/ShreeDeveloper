@@ -449,17 +449,6 @@ export class StockInwardDetailsMobileAppComponent  implements OnInit {
         }
       });
       if (hasData) {
-        // await this.uiUtils.showConfirmationMessage(
-        //   'Close',
-        //   `This process is <strong>IRREVERSIBLE!</strong><br/>
-        //    Are you sure you want to close this modal?`,
-        //   async () => {
-        //     this.ismaterialModalOpen = false;
-        //     this.ModalEditable = false;
-        //     this.newInward = InwardMaterialDetailProps.Blank();
-        //     this.NewRemainingQty = 0
-        //   }
-        // );
         await this.alertService.presentDynamicAlert({
           header: 'Close',
           subHeader: 'Confirmation needed',
@@ -563,18 +552,6 @@ export class StockInwardDetailsMobileAppComponent  implements OnInit {
       await this.haptic.warning();
       return
     }
-    // await this.uiUtils.showConfirmationMessage(
-    //   'Delete',
-    //   `This process is <strong>IRREVERSIBLE!</strong><br/>Are you sure you want to DELETE this material?`,
-    //   async () => {
-    //     this.Entity.p.MaterialInwardDetailsArray.splice(index, 1);
-
-    //     // ✅ Always remove from session tracking
-    //     this.SessionAddedRefs = this.SessionAddedRefs.filter(ref => ref !== removedRef);
-
-    //     this.filterMaterialList();
-    //   }
-    // );
     await this.alertService.presentDynamicAlert({
       header: 'Delete',
       subHeader: 'Confirmation needed',
@@ -624,6 +601,7 @@ export class StockInwardDetailsMobileAppComponent  implements OnInit {
     //   );
     // }
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, this.filesToUpload);
+    console.log('entitiesToSave, this.filesToUpload :', entitiesToSave, this.filesToUpload);
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       // this.uiUtils.showErrorMessage('Error', tr.Message)
@@ -642,8 +620,8 @@ export class StockInwardDetailsMobileAppComponent  implements OnInit {
       } else {
         // await this.uiUtils.showSuccessToster('Stock Inward Updated successfully');
         await this.toastService.present('Stock Inward Updated successfully', 1000, 'success');
+        await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-inward']);
         await this.haptic.success();
-        await this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-inward']);
       }
     }
   };
@@ -680,15 +658,15 @@ export class StockInwardDetailsMobileAppComponent  implements OnInit {
             text: 'Yes, Delete',
             cssClass: 'custom-confirm',
             handler: () => {
+              this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-inward']);
               this.haptic.success();
-              this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-inward']);
               console.log('User confirmed.');
             }
           }
         ]
       });
     } else {
-      await this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-inward']);
+      await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-inward']);
     }
   }
 

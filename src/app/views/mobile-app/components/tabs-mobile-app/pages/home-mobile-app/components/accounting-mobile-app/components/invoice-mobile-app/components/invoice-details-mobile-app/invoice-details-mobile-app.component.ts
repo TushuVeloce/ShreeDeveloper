@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UnitRefs } from 'src/app/classes/domain/constants';
-import { DomainEnums, ExpenseTypes } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, ExpenseTypes, ModeOfPayments, RecipientTypes } from 'src/app/classes/domain/domainenums/domainenums';
 import { InvoiceNoFetchRequest } from 'src/app/classes/domain/entities/website/accounting/billing/actualstagechalanfetchrequest';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { ServiceSuppliedByVendorProps } from 'src/app/classes/domain/entities/website/MarketingManagement/marketingmanagement';
@@ -43,7 +43,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   RecipientEntity: Recipient = Recipient.CreateNewInstance();
   private IsNewEntity: boolean = true;
   SiteList: Site[] = [];
-  RecipientList: Recipient[] = [];
+  RecipientList: Invoice[] = [];
   RecipientNameInput: boolean = false
   SubLedgerList: SubLedger[] = [];
   UnitList: Unit[] = [];
@@ -52,7 +52,9 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   VendorServiceListByVendor: VendorService[] = [];
   isDieselPaid: boolean = false
   RecipientNameReadOnly: boolean = false
-  ModeofPaymentList = DomainEnums.ModeOfPaymentsList();
+  // ModeofPaymentList = DomainEnums.ModeOfPaymentsList();
+  Bill = ModeOfPayments.Bill;
+  ModeofPaymentList = DomainEnums.ModeOfPaymentsList().filter(item => item.Ref == this.Bill);
   ExpenseTypeList = DomainEnums.ExpenseTypeList();
   LabourTypeList = DomainEnums.LabourTypesList();
   isSaveDisabled: boolean = false;
@@ -80,6 +82,8 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
   LabourEditingIndex: null | undefined | number
   isLabourTimeModalOpen: boolean = false;
 
+  TypeRecipient = RecipientTypes.Recipient
+  RecipientTypesList = DomainEnums.RecipientTypesList();
   timeheaders: string[] = ['Start Time ', 'End Time', 'Worked Hours'];
   labourtimeheaders: string[] = ['Labour Type', 'From Time', 'To Time', 'Work Hours', 'Quantity ', 'Rate', 'Amount'];
 
@@ -96,6 +100,9 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
 
   RecipientName: string = '';
   selectedRecipientName: any[] = [];
+
+  RecipientTypeName: string = '';
+  selectedRecipientType: any[] = [];
 
   selectedSite: any[] = [];
   SiteName: string = '';
@@ -236,7 +243,10 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
           this.DisplayBillingDate = this.datePipe.transform(this.BillingDate, 'yyyy-MM-dd') ?? '';;
           await this.getChalanNo()
         }
-        this.getRecipientListByCompanyRef()
+        // this.getRecipientListByCompanyRef()
+        if (this.Entity.p.RecipientType != 0) {
+          this.getRecipientListByRecipientTypeRef()
+        }
         this.InitialEntity = Object.assign(
           Invoice.CreateNewInstance(),
           this.utils.DeepCopy(this.Entity)
@@ -351,20 +361,21 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     this.SiteList = lst;
   }
 
-  getRecipientListByCompanyRef = async () => {
-    if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
-      await this.toastService.present('company not selected', 1000, 'danger');
-      await this.haptic.error();
-      return;
-    }
-    let lst = await Recipient.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-      await this.haptic.error();
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
-    });
-    this.RecipientList = lst;
-  }
+  // getRecipientListByCompanyRef = async () => {
+  //   if (this.companyRef <= 0) {
+  //     // await this.uiUtils.showErrorToster('Company not Selected');
+  //     await this.toastService.present('company not selected', 1000, 'danger');
+  //     await this.haptic.error();
+  //     return;
+  //   }
+  //   let lst = await Recipient.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+  //     await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+  //     await this.haptic.error();
+  //     // await this.uiUtils.showErrorMessage('Error', errMsg)
+  //   });
+
+  //   this.RecipientList = lst;
+  // }
 
   AddRecipientName = () => {
     this.RecipientNameInput = true
@@ -745,7 +756,7 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       } else {
         this.LabourTimeEntity.InvoiceRef = this.Entity.p.Ref;
         this.Entity.p.LabourExpenseDetailsArray.push({ ...this.LabourTimeEntity });
-        console.log(' this.Entity.p.LabourExpenseDetailsArray :',  this.Entity.p.LabourExpenseDetailsArray);
+        console.log(' this.Entity.p.LabourExpenseDetailsArray :', this.Entity.p.LabourExpenseDetailsArray);
         // await this.uiUtils.showSuccessToster('Labour Time added successfully');
         await this.toastService.present('Labour Time added successfully', 1000, 'success');
         await this.haptic.success();
@@ -874,6 +885,32 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     this.calculateLaboursWorkedHours();
   }
 
+  onTypeChange = async () => {
+    this.Entity.p.RecipientMasterRef = 0;
+    this.RecipientNameInput = false
+  }
+  getRecipientListByRecipientTypeRef = async () => {
+    if (this.companyRef <= 0) {
+      // await this.uiUtils.showErrorToster('Company not Selected'); 
+      await this.toastService.present('Company not Selected', 1000, 'warning');
+      await this.haptic.warning();
+      return;
+    }
+    if (this.Entity.p.RecipientType <= 0) {
+      // await this.uiUtils.showErrorToster('To Whom not Selected');
+      await this.toastService.present('To Whom not Selected', 1000, 'warning');
+      await this.haptic.warning();
+      return;
+    }
+
+    this.RecipientList = [];
+    let lst = await Invoice.FetchRecipientByRecipientTypeRef(this.companyRef, this.Entity.p.RecipientType, async errMsg => {
+      // await this.uiUtils.showErrorMessage('Error', errMsg)
+      await this.toastService.present('Error' + errMsg, 1000, 'danger');
+      await this.haptic.warning();
+    });
+    this.RecipientList = lst;
+  }
 
   // for value 0 selected while click on Input //
   selectAllValue = (event: MouseEvent): void => {
@@ -909,7 +946,9 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
       } else {
         // await this.uiUtils.showSuccessToster('Recipient Name saved successfully');
         this.RecipientNameInput = false
-        await this.getRecipientListByCompanyRef()
+        // await this.getRecipientListByCompanyRef()
+        await this.getRecipientListByRecipientTypeRef()
+
         this.RecipientEntity = Recipient.CreateNewInstance();
         await this.toastService.present('Recipient Name saved successfully', 1000, 'success');
         await this.haptic.success();
@@ -955,8 +994,8 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
         }
       }
     } catch (error) {
-      
-    }finally{
+
+    } finally {
       let parts = this.strCDT.substring(0, 16).split('-');
       this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
       this.strCDT = `${parts[0]}-${parts[1]}-${parts[2]}-00-00-00-000`;
@@ -1038,9 +1077,36 @@ export class InvoiceDetailsMobileAppComponent implements OnInit {
     }
   }
 
+
+  public async selectRecipientTypeBottomsheet(): Promise<void> {
+    try {
+      // const options = this.RecipientTypesList;
+      const options = this.RecipientTypesList.map((item) => ({ p: item }));
+      this.openSelectModal(options, this.selectedRecipientType, false, 'Select Recipient Type', 1, (selected) => {
+        this.selectedRecipientType = selected;
+        this.Entity.p.RecipientType = selected[0].p.Ref;
+        this.RecipientTypeName = selected[0].p.Name;
+        this.getRecipientListByRecipientTypeRef();
+        this.onTypeChange()
+      });
+    } catch (error) {
+
+    }
+  }
+
   public async selectRecipientNameBottomsheet(): Promise<void> {
     try {
-      const options = this.RecipientList;
+      // const options = this.RecipientList;
+      let options: any[] = [];
+      if (options) {
+        options = this.RecipientList.map(item => ({
+          p: {
+            Ref: item.p.Ref,
+            Name: item.p.RecipientName
+          }
+        }));
+
+      }
       this.openSelectModal(options, this.selectedRecipientName, false, 'Select Recipient Name', 1, (selected) => {
         this.selectedRecipientName = selected;
         this.Entity.p.RecipientMasterRef = selected[0].p.Ref;

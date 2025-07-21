@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainEnums, ModeOfPayments, RecipientTypes } from 'src/app/classes/domain/domainenums/domainenums';
+import { DomainEnums, ModeOfPayments, RecipientTypes, TypeOfEmployeePayments } from 'src/app/classes/domain/domainenums/domainenums';
 import { Invoice } from 'src/app/classes/domain/entities/website/accounting/billing/invoice';
 import { Expense } from 'src/app/classes/domain/entities/website/accounting/expense/expense';
 import { BankAccount } from 'src/app/classes/domain/entities/website/masters/bankaccount/banckaccount';
@@ -54,6 +54,10 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   Employee = RecipientTypes.Employee;
   Sites = RecipientTypes.Sites;
   Date: string = '';
+  PaymentType: number = 0;
+  TypeofEmployeePaymentList = DomainEnums.TypeOfEmployeePaymentsList();
+  TypeofEmployeePayments = TypeOfEmployeePayments;
+  EmployeeType = RecipientTypes.Employee
 
 
   showExpenseDatePicker = false;
@@ -87,7 +91,8 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
   BankName: string = '';
   selectedBank: any[] = [];
 
-
+  PaymentTypeName: string = '';
+  selectedPaymentType: any[] = [];
 
   constructor(
     private router: Router,
@@ -150,6 +155,20 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
           this.ModeOfPaymentName = this.ModeofPaymentList.find(item => item.Ref == this.Entity.p.ExpenseModeOfPayment)?.Name ?? '';
           this.selectedModeOfPayment = [{ p: { Ref: this.Entity.p.ExpenseModeOfPayment, Name: this.ModeOfPaymentName } }];
 
+          if (this.Entity.p.IsAdvancePayment && this.Entity.p.IsSalaryExpense) {
+            this.PaymentType = this.TypeofEmployeePayments.Advance;
+          } else if (!this.Entity.p.IsAdvancePayment && this.Entity.p.IsSalaryExpense) {
+            this.PaymentType = this.TypeofEmployeePayments.Salary;
+          } else {
+            this.PaymentType = this.TypeofEmployeePayments.Other;
+          }
+
+          if (this.Entity.p.IncomeLedgerRef != 0) {
+            this.getSubIncomeLedgerListByIncomeLedgerRef(this.Entity.p.IncomeLedgerRef)
+          }
+          if (this.Entity.p.RecipientType != 0) {
+            this.getRecipientListByRecipientTypeRef()
+          }
           // this.Date = this.Entity.p.Date;
           if (this.Entity.p.Date != '') {
             this.Entity.p.Date = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.Date)
@@ -165,6 +184,9 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
 
           this.selectedIncomeSubLedger = [{ p: { Ref: this.Entity.p.IncomeSubLedgerRef, Name: this.Entity.p.IncomeSubLedgerName } }];
           this.IncomeSubLedgerName = this.Entity.p.IncomeSubLedgerName;
+
+          this.PaymentTypeName = this.TypeofEmployeePaymentList.find(item => item.Ref == this.PaymentType)?.Name ?? '';
+          this.selectedPaymentType = [{ p: { Ref: this.Entity.p.RecipientType, Name: this.PaymentTypeName } }];
 
           this.BankName = this.BankList.find(item => item.p.Ref == this.Entity.p.BankAccountRef)?.p.Name ?? '';
           this.selectedBank = [{ p: { Ref: this.Entity.p.BankAccountRef, Name: this.BankName } }];
@@ -326,6 +348,19 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
     this.Entity.p.IncomeSubLedgerRef = 0;
   }
 
+  onPaymentTypeSelection = () => {
+    if (this.PaymentType == this.TypeofEmployeePayments.Advance) {
+      this.Entity.p.IsAdvancePayment = 1;
+      this.Entity.p.IsSalaryExpense = true;
+    } else if (this.PaymentType == this.TypeofEmployeePayments.Salary) {
+      this.Entity.p.IsAdvancePayment = 0;
+      this.Entity.p.IsSalaryExpense = true;
+    } else {
+      this.Entity.p.IsAdvancePayment = 0;
+      this.Entity.p.IsSalaryExpense = false;
+    }
+  }
+
   getTotalInvoiceAmountFromSiteAndRecipientRef = async () => {
     if (this.companyRef <= 0) {
       // await this.toastService.present('company not selected', 1000, 'danger');
@@ -478,13 +513,13 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         if (this.IsNewEntity) {
           // await this.uiUtils.showSuccessToster('Expense saved successfully');
           await this.toastService.present('Expense saved successfully', 1000, 'success');
-          await this.haptic.success();
           await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses']);
+          await this.haptic.success();
         } else {
           // await this.uiUtils.showSuccessToster('Expense Updated successfully');
           await this.toastService.present('Expense Updated successfully', 1000, 'success');
-          await this.haptic.success();
           await this.router.navigate(['/mobile-app/tabs/dashboard/accounting/expenses']);
+          await this.haptic.success();
         }
       }
     } catch (error) {
@@ -526,6 +561,22 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         this.Entity.p.ExpenseModeOfPayment = selected[0].p.Ref;
         this.ModeOfPaymentName = selected[0].p.Name;
         this.OnModeChange()
+      });
+    } catch (error) {
+
+    }
+  }
+  public async selectPaymentTypeBottomsheet(): Promise<void> {
+    try {
+      // const options = this.ModeofPaymentList;
+      const options = this.TypeofEmployeePaymentList.map((item) => ({ p: item }));
+      this.openSelectModal(options, this.selectedPaymentType, false, 'Select Type of Employee Payment', 1, (selected) => {
+        this.selectedPaymentType = selected;
+        this.PaymentType = selected[0].p.Ref;
+        this.PaymentTypeName = selected[0].p.Name;
+        this.onPaymentTypeSelection(); 
+        this.getTotalInvoiceAmountFromSiteAndRecipientRef();
+        this.onRecipientChange();
       });
     } catch (error) {
 

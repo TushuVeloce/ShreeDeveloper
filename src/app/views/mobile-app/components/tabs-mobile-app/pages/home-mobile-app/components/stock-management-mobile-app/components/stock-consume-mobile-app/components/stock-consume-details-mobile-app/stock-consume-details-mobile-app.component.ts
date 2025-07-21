@@ -69,7 +69,7 @@ export class StockConsumeDetailsMobileAppComponent  implements OnInit {
   ) { }
 
   ngOnInit = async () => {
-    await this.loadMaterialRequisitionDetailsIfCompanyExists();
+    // await this.loadMaterialRequisitionDetailsIfCompanyExists();
 
   }
   ionViewWillEnter = async () => {
@@ -86,8 +86,8 @@ export class StockConsumeDetailsMobileAppComponent  implements OnInit {
 
       if (this.companyRef > 0) {
         this.appStateManage.setDropdownDisabled(true);
-        this.getSiteListByCompanyRef;
-        this.getStageListByCompanyRef;
+        this.getSiteListByCompanyRef();
+        this.getStageListByCompanyRef();
 
         const isEditable = this.appStateManage.StorageKey.getItem('Editable') === 'Edit';
         this.IsNewEntity = !isEditable;
@@ -283,16 +283,23 @@ export class StockConsumeDetailsMobileAppComponent  implements OnInit {
         //   'Stock Consume saved successfully'
         // );
         await this.toastService.present('Stock Consume saved successfully', 1000, 'success');
-        await this.haptic.success();
         this.Entity = StockConsume.CreateNewInstance();
+        this.SiteName='';
+        this.StageName='';
+        this.MaterialName='';
+        this.selectedSite = [];
+        this.selectedStage = [];
+        this.selectedMaterial = []; 
+        await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-consume']);
+        await this.haptic.success();
         // this.resetAllControls();
       } else {
         // await this.uiUtils.showSuccessToster(
         //   'Stock Consume Updated successfully'
         // );
         await this.toastService.present('Stock Consume Updated successfully', 1000, 'success');
+        await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-consume']);
         await this.haptic.success();
-        await this.router.navigate(['/mobileapp/tabs/dashboard/stock-management/stock-consume']);
       }
     }
   };
@@ -342,7 +349,7 @@ export class StockConsumeDetailsMobileAppComponent  implements OnInit {
 
   public async selectStageBottomsheet(): Promise<void> {
     try {
-      const options = this.SiteList;
+      const options = this.StageList;
       this.openSelectModal(options, this.selectedStage, false, 'Select Stage', 1, async (selected) => {
         this.selectedStage = selected;
         this.Entity.p.StageRef = selected[0]?.p?.Ref || 0;

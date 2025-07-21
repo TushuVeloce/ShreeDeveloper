@@ -201,6 +201,20 @@ export class StockInwardViewMobileAppComponent  implements OnInit {
     return filePath?.toLowerCase().endsWith('.pdf');
   }
 
+
+  fileNavigation(filePath: string) {
+    const ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
+    const LoginToken = this.appStateManage.localStorage.getItem('LoginToken');
+
+    if (!filePath) return;
+
+    const TimeStamp = Date.now();
+    const fileUrl = `${ImageBaseUrl}${filePath}/${LoginToken}?${TimeStamp}`;
+    console.log('Invoice Preview URL:', fileUrl);
+
+    window.open(fileUrl, '_blank');
+  }
+  
   openModal(stockInward: StockInward) {
     this.SelectedStockInward = stockInward;
     this.modalOpen = true;

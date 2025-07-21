@@ -1,4 +1,4 @@
-<app-loader *ngIf="isLoading"></app-loader>
+<!-- <app-loader *ngIf="isLoading"></app-loader> -->
 
 <!-- <app-header-with-back-handler title="CRM" backRoute="app_homepage/tabs/home"></app-header-with-back-handler> -->
 <app-header-with-back-handler [title]="'CRM'" backRoute='mobile-app/tabs/dashboard'></app-header-with-back-handler>
@@ -58,7 +58,7 @@
       </ion-col>
     </ion-row>
 
-    <ion-row *ngIf="!FilterFollowupList.length && !isLoading">
+    <ion-row *ngIf="!FilterFollowupList.length">
       <ion-col size="12" class="ion-text-center">
         <p class="no-data-msg">No follow-up reminders found for today.</p>
       </ion-col>

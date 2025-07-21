@@ -3,9 +3,11 @@
     <ion-row>
       <ion-col size="4" class="category-column">
         <ion-list *ngIf="selectedCategory as category">
+            <!-- [disabled]="cat.dependUponRef > 0 && !(selectedOptions[cat.dependUponRef]?.length ?? 0)" -->
+
           <ion-item *ngFor="let cat of data?.categories" button (click)="selectCategory(cat)"
             [class.active]="category.Ref === cat.Ref" [class.has-selection]="hasAnySelection(cat.Ref)"
-            [disabled]="cat.dependUponRef > 0 && !(selectedOptions[cat.dependUponRef]?.length ?? 0)"
+            [disabled]="cat.dependUponRef > 0 && !(selectedOptions[cat.dependUponRef].length>0 ?selectedOptions[cat.dependUponRef].length: 0)"
             >
             {{ cat.Name }}
             <ion-icon *ngIf="hasAnySelection(cat.Ref)" name="checkmark-circle-outline" slot="end"

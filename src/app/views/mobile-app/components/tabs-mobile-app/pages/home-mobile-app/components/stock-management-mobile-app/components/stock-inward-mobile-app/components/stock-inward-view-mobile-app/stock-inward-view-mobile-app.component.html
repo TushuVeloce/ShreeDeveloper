@@ -1,9 +1,9 @@
 <app-header-with-back-handler title="Stock Inward"
   backRoute="mobile-app/tabs/dashboard/stock-management"></app-header-with-back-handler>
 
-  <app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
-  </app-chip-filter-mobile-app>
-  
+<app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
+</app-chip-filter-mobile-app>
+
 <ion-content class="ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
@@ -104,7 +104,8 @@
           <!-- Invoice Viewer Section -->
           <div *ngIf="showInvoicePreview" class="invoice-preview-container">
             <ng-container *ngIf="isPDF(SelectedStockInward.p.MaterialInwardInvoiceFile); else imageBlock">
-              <iframe [src]="sanitizedInvoiceUrl" width="100%" height="400px" style="border: none;"></iframe>
+              <img [src]="'assets/icons/doc-placeholder.png'" alt="Invoice Image" class="invoice-pdf"
+                (click)="fileNavigation(SelectedStockInward.p.MaterialInwardInvoiceFile)" />
             </ng-container>
 
             <ng-template #imageBlock>

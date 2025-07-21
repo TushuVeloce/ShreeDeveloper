@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { AlertController, Platform } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { App as CapacitorApp } from '@capacitor/app';
-import { IonIcon, IonCol, IonGrid } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-home-view-mobile-app',

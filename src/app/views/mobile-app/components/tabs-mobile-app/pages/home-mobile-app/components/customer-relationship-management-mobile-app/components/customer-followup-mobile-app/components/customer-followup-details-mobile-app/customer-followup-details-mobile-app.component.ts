@@ -18,14 +18,18 @@ import { CompanyStateManagement } from 'src/app/services/companystatemanagement'
 import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
+import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
+import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
+import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
+import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
 
 @Component({
   selector: 'app-customer-followup-details-mobile-app',
   templateUrl: './customer-followup-details-mobile-app.component.html',
   styleUrls: ['./customer-followup-details-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class CustomerFollowupDetailsMobileAppComponent  implements OnInit {
+export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
 
 
   Entity: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
@@ -38,7 +42,7 @@ export class CustomerFollowupDetailsMobileAppComponent  implements OnInit {
   showAgentBrokerInput: boolean = false;
   isSaveDisabled: boolean = false;
   IsDropdownDisabled: boolean = false;
-  isLoading: boolean = false;
+  // isLoading: boolean = false;
   pageSize = 10; // Items per page
   currentPage = 1; // Initialize current page
   total = 0;
@@ -83,13 +87,17 @@ export class CustomerFollowupDetailsMobileAppComponent  implements OnInit {
 
   constructor(
     private router: Router,
-    private uiUtils: UIUtils,
+    // private uiUtils: UIUtils,
     private appStateManage: AppStateManageService,
     private utils: Utils,
     private dtu: DTU,
     private datePipe: DatePipe,
     private companystatemanagement: CompanyStateManagement,
     private bottomsheetMobileAppService: BottomsheetMobileAppService,
+    private toastService: ToastService,
+    private haptic: HapticService,
+    private alertService: AlertService,
+    private loadingService: LoadingService
   ) { }
   async ngOnInit(): Promise<void> {
     await this.loadCustomerFollowUpIfEmployeeExists();
@@ -105,9 +113,10 @@ export class CustomerFollowupDetailsMobileAppComponent  implements OnInit {
 
   private async loadCustomerFollowUpIfEmployeeExists(): Promise<void> {
     try {
-      this.isLoading = true;
+      // this.isLoading = true;
+      this.loadingService.show();
       this.appStateManage.setDropdownDisabled(true);
-      this.companyRef = Number(this.appStateManage.StorageKey.getItem('SelectedCompanyRef'));
+      this.companyRef = Number(this.appStateManage.localStorage.getItem('SelectedCompanyRef'));
       this.getEmployeeListByCompanyRef()
       this.getSiteListByCompanyRef();
       // Check if CountryRef is already set (e.g., India is preselected)
@@ -180,15 +189,22 @@ export class CustomerFollowupDetailsMobileAppComponent  implements OnInit {
     } catch (error) {
 
     } finally {
-      this.isLoading = false;
+      // this.isLoading = false;
+      this.loadingService.hide()
     }
   }
   getEmployeeListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
+      // await this.uiUtils.showErrorToster('Company not Selected');
+      await this.toastService.present('company not selected', 1000, 'danger');
+      await this.haptic.error();
       return;
     }
-    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await Employee.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      // await this.uiUtils.showErrorMessage('Error', errMsg)
+      await this.toastService.present('Error' + errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
     this.EmployeeList = lst;
   }
 
@@ -309,7 +325,11 @@ export class CustomerFollowupDetailsMobileAppComponent  implements OnInit {
 
       let lst = await State.FetchEntireListByCountryRef(
         CountryRef,
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+        async (errMsg) => {
+          // await this.uiUtils.showErrorMessage('Error', errMsg)
+          await this.toastService.present('Error' + errMsg, 1000, 'danger');
+          await this.haptic.error();
+        }
       );
 
       this.StateList = lst;
@@ -332,7 +352,11 @@ export class CustomerFollowupDetailsMobileAppComponent  implements OnInit {
 
       let lst = await City.FetchEntireListByStateRef(
         StateRef,
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+        async (errMsg) => {
+          await this.toastService.present('Error' + errMsg, 1000, 'danger');
+          await this.haptic.error();
+          // await this.uiUtils.showErrorMessage('Error', errMsg)
+        }
       );
 
       this.CityList = lst;
@@ -349,19 +373,28 @@ export class CustomerFollowupDetailsMobileAppComponent  implements OnInit {
   private getSiteListByCompanyRef = async () => {
     let lst = await Site.FetchEntireListByCompanyRef(
       this.companyRef,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      async (errMsg) => {
+        await this.haptic.error();
+        // await this.uiUtils.showErrorMessage('Error', errMsg)
+      }
     );
     this.SiteList = lst;
   };
 
   getPlotBySiteRefList = async (siteRef: number) => {
     if (siteRef <= 0) {
-      await this.uiUtils.showWarningToster(`Please Select Site`);
+      // await this.uiUtils.showWarningToster(`Please Select Site`);
+      await this.toastService.present('Please Select a Site', 1000, 'danger');
+      await this.haptic.error();
       return;
     }
     let lst = await Plot.FetchEntireListBySiteRef(
       siteRef,
-      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+      async (errMsg) => {
+        // await this.uiUtils.showErrorMessage('Error', errMsg)
+        await this.toastService.present('Error' + errMsg, 1000, 'danger');
+        await this.haptic.error();
+      }
     );
     this.PlotList = lst.filter((plot) => plot.p.CurrentBookingRemark !== BookingRemark.Booked);
 
@@ -372,11 +405,15 @@ export class CustomerFollowupDetailsMobileAppComponent  implements OnInit {
 
   addDataToCustomerFollowUpPlotDetail = () => {
     if (this.SiteManagementRef <= 0) {
-      this.uiUtils.showWarningToster(`Please Select a Site`);
+      // this.uiUtils.showWarningToster(`Please Select a Site`);
+      this.toastService.present('Please Select a Site', 1000, 'danger');
+      this.haptic.error();
       return;
     }
     if (this.InterestedPlotRef <= 0) {
-      this.uiUtils.showWarningToster(`Please Select a Plot`);
+      // this.uiUtils.showWarningToster(`Please Select a Plot`);
+      this.toastService.present('Please Select a Plot', 1000, 'danger');
+      this.haptic.error();
       return;
     }
     let selectedPlot = this.PlotList.find(
@@ -401,9 +438,11 @@ export class CustomerFollowupDetailsMobileAppComponent  implements OnInit {
       (plot) => plot.PlotRef === this.InterestedPlotRef
     );
     if (isAlreadyAdded) {
-      this.uiUtils.showWarningToster(
-        'This plot is already added to the table.'
-      );
+      // this.uiUtils.showWarningToster(
+      //   'This plot is already added to the table.'
+      // );
+      this.toastService.present('This plot is already added to the table.', 1000, 'danger');
+      this.haptic.error();
       return;
     }
 
@@ -432,7 +471,7 @@ export class CustomerFollowupDetailsMobileAppComponent  implements OnInit {
 
   SaveCustomerFollowUp = async () => {
     this.Entity.p.LoginEmployeeRef = Number(
-      this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
+      this.appStateManage.localStorage.getItem('LoginEmployeeRef')
     );
     this.Entity.p.CustomerFollowUpPlotDetails.forEach((plotDetail) => {
       plotDetail.Ref = 0;
@@ -461,20 +500,27 @@ export class CustomerFollowupDetailsMobileAppComponent  implements OnInit {
     let entitiesToSave = [entityToSave];
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
-      this.uiUtils.showErrorMessage('Error', tr.Message);
+      // this.uiUtils.showErrorMessage('Error', tr.Message);
+      await this.toastService.present('Error' + tr.Message, 1000, 'danger');
+      await this.haptic.error();
       return;
     } else {
       if (this.IsNewEntity) {
-        await this.uiUtils.showSuccessToster(
-          'Customer Enquiry saved successfully'
-        );
+        // await this.uiUtils.showSuccessToster(
+        //   'Customer Follow Up saved successfully'
+        // );
+        await this.toastService.present('Customer Follow Up saved successfully', 1000, 'success');
         this.Entity = CustomerFollowUp.CreateNewInstance();
+        this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup'], { replaceUrl: true });
+
+        await this.haptic.success();
       } else {
-        await this.uiUtils.showSuccessToster(
-          'Customer Enquiry Updated successfully'
-        );
+        await this.toastService.present('Customer Follow Up saved successfully', 1000, 'success');
         this.Entity = CustomerFollowUp.CreateNewInstance();
-        this.router.navigate(['/homepage/Website/Customer_FollowUp']);
+        // this.router.navigate(['/homepage/Website/Customer_FollowUp']);
+        this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup'], { replaceUrl: true });
+        await this.haptic.success();
+
       }
     }
   };
@@ -514,13 +560,35 @@ export class CustomerFollowupDetailsMobileAppComponent  implements OnInit {
     const isDataFilled = this.isDataFilled(); // Implement this function based on your form
 
     if (isDataFilled) {
-      await this.uiUtils.showConfirmationMessage(
-        'Warning',
-        `You have unsaved data. Are you sure you want to go back? All data will be lost.`,
-        async () => {
-          this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup'], { replaceUrl: true });
-        }
-      );
+      // await this.uiUtils.showConfirmationMessage(
+      //   'Warning',
+      //   `You have unsaved data. Are you sure you want to go back? All data will be lost.`,
+      //   async () => {
+      //     this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup'], { replaceUrl: true });
+      //   }
+      // );
+      this.alertService.presentDynamicAlert({
+        header: 'Warning',
+        subHeader: 'Confirmation needed',
+        message: 'You have unsaved data. Are you sure you want to go back? All data will be lost.',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'custom-cancel',
+            handler: () => {
+              console.log('Deletion cancelled.');
+            }
+          },
+          {
+            text: 'Yes, Close',
+            cssClass: 'custom-confirm',
+            handler: async () => {
+              this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup'], { replaceUrl: true });
+            }
+          }
+        ]
+      });
     } else {
       this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup'], { replaceUrl: true });
     }

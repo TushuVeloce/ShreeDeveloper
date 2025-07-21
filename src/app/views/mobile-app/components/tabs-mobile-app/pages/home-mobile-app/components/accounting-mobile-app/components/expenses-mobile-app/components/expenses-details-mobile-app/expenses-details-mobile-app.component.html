@@ -100,18 +100,32 @@
       <!-- Dropdown icon (chevron) on the right -->
       <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
-
+    <!-- 
     <ion-checkbox class="input-item" [(ngModel)]="Entity.p.IsAdvancePayment"
-      *ngIf="this.Entity.p.RecipientType == Employee">Is Advance Payment</ion-checkbox>
+      *ngIf="this.Entity.p.RecipientType == Employee">Is Advance Payment</ion-checkbox> -->
 
     <!-- Remaining Advance Amount -->
-    <ion-item class="input-item" *ngIf="this.Entity.p.RecipientType == Employee">
+    <!-- <ion-item class="input-item" *ngIf="this.Entity.p.RecipientType == Employee">
       <ion-input label="Remaining Advance Amount" labelPlacement="floating" placeholder="Enter Remaining Advance Amount"
         [(ngModel)]="Entity.p.RemainingAdvance" readonly></ion-input>
+    </ion-item> -->
+
+    <!-- Payment Type -->
+    <ion-item class="input-item" button detail (click)="selectPaymentTypeBottomsheet()"
+      *ngIf="this.Entity.p.RecipientType == Employee ">
+      <ion-label>Payment Type</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ PaymentTypeName|| 'Select' }}
+      </ion-text>
+
+      <!-- Dropdown icon (chevron) on the right -->
+      <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
     </ion-item>
 
     <!-- Select To Whom -->
-    <ion-item class="input-item" button details *ngIf="!RecipientNameInput">
+    <ion-item class="input-item" button detail *ngIf="!RecipientNameInput">
       <ion-label (click)="selectRecipientNameBottomsheet()">To Whom </ion-label>
 
       <!-- Selected Text -->
@@ -163,24 +177,33 @@
       </ion-row>
     </ion-grid>
 
-
     <!-- Reason -->
     <ion-item class="input-item">
       <ion-input label="Reason" labelPlacement="floating" placeholder="Enter Reason" [(ngModel)]="Entity.p.Reason"
         clearInput="true"></ion-input>
     </ion-item>
 
-    <!-- Expense Amount -->
-    <ion-item class="input-item">
-      <ion-input label="Expense Amount" labelPlacement="floating" placeholder="Enter Expense Amount"
-        [(ngModel)]="Entity.p.InvoiceAmount" readonly></ion-input>
+    <!-- Total Advance -->
+    <ion-item class="input-item" *ngIf="this.Entity.p.RecipientType == Employee && this.Entity.p.IsSalaryExpense">
+      <ion-input label="Total Advance" labelPlacement="floating" placeholder="Enter Total Advance"
+        [(ngModel)]="Entity.p.RemainingAdvance" clearInput="true"></ion-input>
     </ion-item>
+
+    <!-- Amount -->
+    <ion-item class="input-item" *ngIf="!Entity.p.IsAdvancePayment">
+      <ion-input
+        [label]="(Entity.p.RecipientType == EmployeeType && !Entity.p.IsSalaryExpense)?'Bill Amount':(Entity.p.RecipientType == EmployeeType &&  Entity.p.IsSalaryExpense)?'Net Salary':(Entity.p.RecipientType != EmployeeType)?'Bill Amount':'expenese Amount'"
+        labelPlacement="floating" placeholder="Enter Expense Amount" [(ngModel)]="Entity.p.InvoiceAmount"
+        readonly></ion-input>
+    </ion-item>
+
     <!-- Given Amount -->
     <ion-item class="input-item">
       <ion-input label="Given Amount" labelPlacement="floating" placeholder="Enter Given Amount"
         [(ngModel)]="Entity.p.GivenAmount" (ngModelChange)="CalculateRemainingAmountandBalance()"
         type="number"></ion-input>
     </ion-item>
+
     <!-- Remaining Amount -->
     <ion-item class="input-item">
       <ion-input label="Remaining Amount" labelPlacement="floating" placeholder="Enter Remaining Amount"

@@ -8,6 +8,10 @@ import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_r
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
+import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
+import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
+import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
 
 @Component({
   selector: 'app-customer-relationship-management-view-mobile-app',
@@ -60,7 +64,7 @@ export class CustomerRelationshipManagementViewMobileAppComponent  implements On
   InterestedPlotRef: number = 0;
   date: string = '';
   strCDT: string = '';
-  isLoading: boolean = false;
+  // isLoading: boolean = false;
   pieData = [
     {
       "name": "Groceries",
@@ -79,13 +83,17 @@ export class CustomerRelationshipManagementViewMobileAppComponent  implements On
 
   constructor(
     private router: Router,
-    private uiUtils: UIUtils,
+    // private uiUtils: UIUtils,
     private appStateManagement: AppStateManageService,
-    private dateconversionService: DateconversionService
+    private dateconversionService: DateconversionService,
+    private toastService: ToastService,
+    private haptic: HapticService,
+    private alertService: AlertService,
+    private loadingService: LoadingService
   ) { }
 
   async ngOnInit() {
-    await this.loadCRMIfCompanyExists();
+    // await this.loadCRMIfCompanyExists();
   }
 
   async ionViewWillEnter() {
@@ -97,10 +105,12 @@ export class CustomerRelationshipManagementViewMobileAppComponent  implements On
   }
 
   private async loadCRMIfCompanyExists(): Promise<void> {
-    this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
+    this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
 
     if (this.companyRef <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
+      // await this.uiUtils.showErrorToster('Company not Selected');
+      await this.toastService.present('Please Select a Site', 1000, 'danger');
+      await this.haptic.error();
       return;
     }
     await this.initializeDate(); // Ensures data refresh every time user re-enters
@@ -109,7 +119,8 @@ export class CustomerRelationshipManagementViewMobileAppComponent  implements On
 
   private async initializeDate() {
     try {
-      this.isLoading = true;
+      // this.isLoading = true;
+      this.loadingService.show();
       this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
       const parts = this.strCDT.substring(0, 16).split('-');
       if (parts.length >= 3) {
@@ -118,15 +129,17 @@ export class CustomerRelationshipManagementViewMobileAppComponent  implements On
         await this.fetchFollowUps();
       }
     } catch (error) {
-      await this.uiUtils.showErrorToster('Error loading date and follow-ups');
+      // await this.uiUtils.showErrorToster('Error loading date and follow-ups');
     } finally {
-      this.isLoading = false;
+      // this.isLoading = false;
+      this.loadingService.hide();
     }
   }
 
   async onDateChange(date: string) {
     try {
-      this.isLoading = true;
+      // this.isLoading = true;
+      this.loadingService.show();
       if (date) {
         const parts = date.split('-');
         if (parts.length >= 3) {
@@ -138,9 +151,10 @@ export class CustomerRelationshipManagementViewMobileAppComponent  implements On
       }
       await this.fetchFollowUps();
     } catch (error) {
-      await this.uiUtils.showErrorToster('Failed to change date');
+      // await this.uiUtils.showErrorToster('Failed to change date');
     } finally {
-      this.isLoading = false;
+      // this.isLoading = false;
+      this.loadingService.hide();
     }
   }
 
@@ -150,47 +164,64 @@ export class CustomerRelationshipManagementViewMobileAppComponent  implements On
 
   private async fetchFollowUps() {
     try {
-      this.isLoading = true;
+      // this.isLoading = true;
+      this.loadingService.show();
       const followUps = await CustomerFollowUp.FetchEntireListByDateandPlotRef(
         this.strCDT,
         this.InterestedPlotRef,
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+        async (errMsg) => {
+          // await this.uiUtils.showErrorMessage('Error', errMsg)
+          await this.toastService.present('Error'+errMsg, 1000, 'danger');
+          await this.haptic.error();
+        }
       );
       this.followupList = this.FilterFollowupList = followUps;
       console.log('Follow-up list:', followUps);
     } catch (error) {
-      await this.uiUtils.showErrorToster('Error fetching follow-ups');
+      // await this.uiUtils.showErrorToster('Error fetching follow-ups');
     } finally {
-      this.isLoading = false;
+      // this.isLoading = false;
+      this.loadingService.hide();
     }
   }
 
   private async loadSitesByCompanyRef() {
     try {
-      this.isLoading = true;
+      // this.isLoading = true;
+      this.loadingService.show()
       this.SiteList = [];
       this.PlotList = [];
       if (this.companyRef <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
+        // await this.uiUtils.showErrorToster('Company not Selected');
+          await this.toastService.present('company not selected', 1000, 'danger');
+        await this.haptic.error();
         return;
       }
 
       this.SiteList = await Site.FetchEntireListByCompanyRef(
         this.companyRef,
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+        async (errMsg) => {
+          // await this.uiUtils.showErrorMessage('Error', errMsg)
+            await this.toastService.present('Error'+errMsg, 1000, 'danger');
+        await this.haptic.error();
+        }
       );
     } catch (error) {
-      await this.uiUtils.showErrorToster('Error loading sites');
+      // await this.uiUtils.showErrorToster('Error loading sites');
     } finally {
-      this.isLoading = false;
+      // this.isLoading = false;
+      this.loadingService.hide();
     }
   }
 
   async loadPlotsBySiteRef(siteRef: number) {
     try {
-      this.isLoading = true;
+      // this.isLoading = true;
+      this.loadingService.show()
       if (siteRef <= 0) {
-        await this.uiUtils.showWarningToster('Please select a site');
+        // await this.uiUtils.showWarningToster('Please select a site');
+        await this.toastService.present('Please select a site', 1000, 'danger');
+        await this.haptic.error();
         return;
       }
 
@@ -199,12 +230,17 @@ export class CustomerRelationshipManagementViewMobileAppComponent  implements On
       this.PlotList = await Plot.FetchEntireListBySiteandBookingRemarkRef(
         siteRef,
         BookingRemark.Booked,
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+        async (errMsg) => {
+          // await this.uiUtils.showErrorMessage('Error', errMsg)
+            await this.toastService.present('Error'+errMsg, 1000, 'danger');
+        await this.haptic.error();
+        }
       );
     } catch (error) {
-      await this.uiUtils.showErrorToster('Error loading plots');
+      // await this.uiUtils.showErrorToster('Error loading plots');
     } finally {
-      this.isLoading = false;
+      // this.isLoading = false;
+      this.loadingService.hide()
     }
   }
 
@@ -213,9 +249,9 @@ export class CustomerRelationshipManagementViewMobileAppComponent  implements On
       this.SelectedFollowUp = followup.GetEditableVersion();
       CustomerFollowUp.SetCurrentInstance(this.SelectedFollowUp);
       // this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-      await this.router.navigate(['/app_homepage/tabs/crm/customer-follow-up/add']);
+      // await this.router.navigate(['mobile-app/tabs/dashboard/customer-relationship-management/customer-followup/add']);
     } catch (error) {
-      await this.uiUtils.showErrorToster('Error navigating to follow-up');
+      // await this.uiUtils.showErrorToster('Error navigating to follow-up');
     }
   }
 

@@ -1,9 +1,10 @@
-<app-loader *ngIf="isLoading"></app-loader>
+<!-- <app-loader *ngIf="isLoading"></app-loader> -->
 
 <app-header-with-back-handler title="Pending Customer Follow-Up" backRoute="mobile-app/tabs/dashboard/customer-relationship-management">
 </app-header-with-back-handler>
-
-<ion-content [fullscreen]="true" class="followup-content">
+<app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
+</app-chip-filter-mobile-app>
+<ion-content class="followup-content">
 
   <!-- Pull to Refresh -->
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
@@ -16,7 +17,7 @@
   </ion-list>
   <!-- Customer List -->
   <ion-list class="data-list">
-    <ng-container *ngIf="!isLoading">
+    <!-- <ng-container *ngIf="!isLoading"> -->
       <ng-container *ngIf="FilterFollowupList.length > 0 ; else noData">
         <ion-card *ngFor="let item of FilterFollowupList" class="data-card">
           <ion-card-header>
@@ -45,7 +46,7 @@
           </ion-card-content>
         </ion-card>
       </ng-container>
-    </ng-container>
+    <!-- </ng-container> -->
 
     <!-- No Data Template
     <ng-template #noData>
@@ -69,10 +70,10 @@
   </ion-list>
 
   <!-- Floating Action Button -->
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button color="primary" (click)="openFilterSheet()">
       <ion-icon name="filter-outline"></ion-icon>
     </ion-fab-button>
-  </ion-fab>
+  </ion-fab> -->
 
 </ion-content>
