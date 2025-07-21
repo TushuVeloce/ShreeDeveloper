@@ -560,6 +560,11 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Stock_Transfer',
         LogoPath: '/assets/icons/Office Duty_Time.png',
       },
+          {
+        Name: 'Stock Summary',
+        RouterLink: '/homepage/Website/Stock_Summary',
+        LogoPath: '/assets/icons/Office Duty_Time.png',
+      },
     ]
 
     let CustomerManagementSubModuleList = [

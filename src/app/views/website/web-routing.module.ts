@@ -156,6 +156,7 @@ import { UlcComponent } from './government_office/ulc/ulc.component';
 import { FinalLayoutComponent } from './government_office/final-layout/final-layout.component';
 import { CustomersummarryReportComponent } from './customer_management/crmreports/customersummarry-report/customersummarry-report.component';
 import { CustomerinfoReportComponent } from './customer_management/crmreports/customerinfo-report/customerinfo-report.component';
+import { StockSummaryComponent } from './stock management/stock-summary/stock-summary.component';
 
 
 const routes: Routes = [
@@ -287,6 +288,8 @@ const routes: Routes = [
 
       { path: 'Stock_Transfer', component: StockTransferComponent },
       { path: 'Stock_Transfer_Details', component: StockTransferDetailsComponent },
+
+      { path: 'Stock_Summary', component: StockSummaryComponent },
 
       // Customer Management
       { path: 'Customer_Enquiry', component: CustomerEnquiryComponent },

@@ -61,6 +61,7 @@ export class CustomersummarryReportComponent implements OnInit {
     this.CustomerList = lst;
     if (this.CustomerRef == 0 && lst.length > 0) {
       this.CustomerRef = lst[0].p.CustomerEnquiryRef
+      this.OnCustomerSelection();
     }
 
   }

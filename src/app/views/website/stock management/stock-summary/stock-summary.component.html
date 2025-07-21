@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-4 mb-2">
+    <h1 style="padding-top: 3px;" class="title title_light">Stock Summary</h1>
+  </div>
+  <div class="col-4 mb-2 search-container_light">
+    <app-shared-filter [masterList]="MasterList"
+      [filterFields]="['SiteName', 'MaterialName',  'PurchaseOrderDate', 'TotalInwardQty', 'TotalConsumedQty', 'TotalTransferredInQty', 'CurrentStock',]"
+      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
+  </div>
+</div>
+<div class="table-wrapper" class="tblcard_light" style="margin-top: 2rem" *ngIf="DisplayMasterList.length > 0">
+  <div class="table-container">
+    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
+      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let material of paginatedList(); index as i">
+          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td Class="tbldata">{{material.p.SiteName}}</td>
+          <td Class="tbldata">{{material.p.MaterialName}}</td>
+          <td Class="tbldata">{{formatDate(material.p.PurchaseOrderDate)}}</td>
+          <td Class="tbldata">{{material.p.TotalInwardQty}}</td>
+          <td Class="tbldata">{{material.p.TotalConsumedQty}}</td>
+          <td Class="tbldata">{{material.p.TotalTransferredInQty}}</td>
+          <td Class="tbldata">{{material.p.CurrentStock}}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+  <Pagination [pageSize]="pageSize" [total]="total" [(currentPage)]="currentPage" (pageChange)="onPageChange($event)" />
+</div>
+
+<div *ngIf="DisplayMasterList.length === 0">
+  <Data-Not-Found />
+</div>

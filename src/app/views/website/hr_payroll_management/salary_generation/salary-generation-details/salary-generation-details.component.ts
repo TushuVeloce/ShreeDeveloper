@@ -78,13 +78,20 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   }
 
   calculatetotaldeduction = () => {
-    const TotalDeduction = this.Entity.p.TDS + this.Entity.p.PF + this.Entity.p.TotalLeaveDeduction + this.Entity.p.AdvanceDeduction
+    const tds = Number(this.Entity.p.TDS) || 0;
+    const pf = Number(this.Entity.p.PF) || 0;
+    const leaveDeduction = Number(this.Entity.p.TotalLeaveDeduction) || 0;
+    const advance = Number(this.Entity.p.AdvanceDeduction) || 0;
+
+    const TotalDeduction = tds + pf + leaveDeduction + advance;
+
     this.Entity.p.TotalDeduction = parseFloat(TotalDeduction.toFixed(2));
-    this.calculatenetsalary()
+    this.calculatenetsalary();
   }
 
   calculatenetsalary = () => {
-    const NetSalary = this.Entity.p.GrossTotal - this.Entity.p.TotalDeduction
+    const NetSalary = this.Entity.p.GrossTotal - this.Entity.p.TotalDeduction;
+
     this.Entity.p.NetSalary = parseFloat(NetSalary.toFixed(2));
   }
 
@@ -166,29 +173,15 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     }
     let lst = await SalaryGeneration.FetchEmployeeDataByEmployeeRefandMonth(this.companyRef(), employee, month, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     console.log('lst :', lst);
-    if(lst.length > 0){
-      this.Entity = lst[0];
-      console.log('this.Entity :', this.Entity);
-    }
-    // this.Entity.p.TotalWorkingDays = lst[0]?.p?.TotalWorkingDays || 0
-    // this.Entity.p.TotalLeaves = lst[0]?.p?.TotalLeaves || 0
-    // this.Entity.p.TotalOverTimeHrs = lst[0]?.p?.TotalOverTimeHrs || 0
-    // this.Entity.p.DisplayTotalOverTimeHrs = lst[0]?.p?.DisplayTotalOverTimeHrs || ''
-    // // this.Entity.p.TotalWorkingHrs = lst[0]?.p?.TotalWorkingHrs || 0
-    // // this.Entity.p.DisplayTotalWorkingHrs = lst[0]?.p?.DisplayTotalWorkingHrs || ''
-    // // this.Entity.p.TotalLeavesHrs = lst[0]?.p?.TotalLeavesHrs || 0
-    // // this.Entity.p.DisplayTotalLeavesHrs = lst[0]?.p?.DisplayTotalLeavesHrs || ''
-    // // this.Entity.p.OverallWorkingHrs = lst[0]?.p?.OverallWorkingHrs || 0
-    // // this.Entity.p.DisplayOverAllWorkingHrs = lst[0]?.p?.DisplayOverAllWorkingHrs || ''
-    // this.Entity.p.TotalLateMarksAndHalfDays = lst[0]?.p?.TotalLateMarksAndHalfDays || 0
-    // this.Entity.p.LateMarksAndHalfDayRate = lst[0]?.p?.LateMarksAndHalfDayRate || 0
-    // this.Entity.p.TotalDeductionOfLateMarksAndHalfDays = lst[0]?.p?.TotalDeductionOfLateMarksAndHalfDays || 0
-    // this.Entity.p.TotalLeaveDeduction = lst[0]?.p?.TotalLeaveDeduction != null ? parseFloat(lst[0].p.TotalLeaveDeduction.toFixed(2)) : 0;
-    // this.Entity.p.OverTimeHrsRate = lst[0]?.p?.OverTimeHrsRate != null ? parseFloat(lst[0].p.OverTimeHrsRate.toFixed(2)) : 0;
-    // this.Entity.p.BasicSalary = lst[0]?.p?.BasicSalary || 0
-    // this.Entity.p.AdvancePayment = lst[0]?.p?.AdvancePayment || 0
-    // this.Entity.p.TotalLeaves = lst[0]?.p?.TotalLeaves
-    // this.Entity.p.TotalLeaveDeduction = lst[0]?.p?.TotalLeaveDeduction
+
+    this.Entity.p.TotalWorkingDays = lst[0]?.p?.TotalWorkingDays || 0
+    this.Entity.p.TotalLeaves = lst[0]?.p?.TotalLeaves || 0
+    this.Entity.p.TotalOverTimeHrs = lst[0]?.p?.TotalOverTimeHrs || 0
+    this.Entity.p.OverTimeHrsRate = Number(lst[0]?.p?.OverTimeHrsRate) || 0
+    this.Entity.p.TotalLateMarksAndHalfDays = lst[0]?.p?.TotalLateMarksAndHalfDays || 0
+    this.Entity.p.AdvancePayment = Number(lst[0]?.p?.AdvancePayment) || 0
+    this.Entity.p.TotalLeaveDeduction = Number(lst[0]?.p?.TotalLeaveDeduction) || 0
+    this.Entity.p.TotalDeductionOfLateMarksAndHalfDays = lst[0]?.p?.TotalDeductionOfLateMarksAndHalfDays || 0
     await this.calculategrosstotal()
     await this.calculatetotaldeduction()
   }
@@ -202,6 +195,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
 
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
 

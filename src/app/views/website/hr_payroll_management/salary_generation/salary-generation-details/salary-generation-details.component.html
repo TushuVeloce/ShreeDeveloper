@@ -60,19 +60,19 @@
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Total Late Mark and Half Days</label>
-          <input type="text" name="TotalLateMarksAndHalfDays" class="form-control" id="TotalLateMarksAndHalfDays"
+          <input type="number" name="TotalLateMarksAndHalfDays" class="form-control" id="TotalLateMarksAndHalfDays"
             [(ngModel)]="Entity.p.TotalLateMarksAndHalfDays" placeholder="Total Late Mark and Half Days" required
             readonly />
         </div>
         <div class="col-md-4">
           <label>Late Mark and Half Day Rate</label>
-          <input type="text" name="LateMarksAndHalfDayRate" class="form-control" id="LateMarksAndHalfDayRate"
+          <input type="number" name="LateMarksAndHalfDayRate" class="form-control" id="LateMarksAndHalfDayRate"
             [(ngModel)]="Entity.p.LateMarksAndHalfDayRate" placeholder="Late Mark and Half Day Rate" required
             readonly />
         </div>
         <div class="col-md-4">
           <label>Total Late Mark and Half Day Deduction</label>
-          <input type="text" name="TotalDeductionOfLateMarksAndHalfDays" class="form-control"
+          <input type="number" name="TotalDeductionOfLateMarksAndHalfDays" class="form-control"
             id="TotalDeductionOfLateMarksAndHalfDays" [(ngModel)]="Entity.p.TotalDeductionOfLateMarksAndHalfDays"
             placeholder="Total Late Mark and Half Day Deduction" required readonly />
         </div>
@@ -80,7 +80,7 @@
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>OverTime Hours Rate</label>
-          <input type="text" name="OverTimeHrsRate" class="form-control" id="OverTimeHrsRate"
+          <input type="number" name="OverTimeHrsRate" class="form-control" id="OverTimeHrsRate"
             [(ngModel)]="Entity.p.OverTimeHrsRate" placeholder="OverTime Hours Rate"
             (ngModelChange)="calculategrosstotal()" (click)="selectAllValue($event)" />
         </div>
