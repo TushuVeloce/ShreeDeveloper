@@ -51,15 +51,6 @@ export class AttendanceDetailsComponent implements OnInit {
   ToTime: string = '';
   OvertimeGraceTimeInMins: string = '';
 
-  // ActualOvertime:"18:15:00.000"
-  // CompanyName:"Shree Developers"
-  // CompanyRef:26883
-  // FromTime:"10:00"
-  // OvertimeGraceTimeInMins:"15"
-  // Ref:27304
-  // ShortName:"10:00 AM to 06:00 PM"
-  // ToTime:"18:00"
-
   baseHeaders: string[] = ['Sr. No', 'Site Name', 'Check In Time', 'Check Out Time', 'Working Hours', 'Action'];
 
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos
@@ -81,6 +72,7 @@ export class AttendanceDetailsComponent implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity ? 'New Attendance' : 'Edit Attendance';
       this.Entity = WebAttendaneLog.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable')
+      this.getDefaultWorkingHrsByEmployeeRef();
 
     } else {
       this.Entity = WebAttendaneLog.CreateNewInstance();
@@ -138,13 +130,8 @@ export class AttendanceDetailsComponent implements OnInit {
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
 
-    // this.Entity.p.HandleBy = AttendanceHandleByRefs.WebRef;
-    // Get current date time and set state
-
     this.Entity.p.IsAttendanceVerified = true;
 
-    // const strCurrentDateTime = await CurrentDateTimeRequest.GetCurrentDateTime();
-    // const DateValue = strCurrentDateTime.substring(0, 10);
     this.Entity.p.TransDateTime = this.dtu.ConvertStringDateToFullFormat(this.Date);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
@@ -269,7 +256,6 @@ export class AttendanceDetailsComponent implements OnInit {
       this.Entity.p.TotalWorkingHrs = this.ActualTotalWorkingHrs / 2;
       this.Entity.p.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(this.Entity.p.TotalWorkingHrs);
     } else {
-
       this.Entity.p.TotalWorkingHrs = this.Entity.p.AttendanceLogDetailsArray.reduce((total: number, item: any) => {
         return total + Number(item.WorkingHrs || 0);
       }, 0);
@@ -280,16 +266,6 @@ export class AttendanceDetailsComponent implements OnInit {
     }
     this.calculateLateMarkHrs();
   }
-
-  // calculateTotalWorkingHours = () => {
-  //   this.Entity.p.TotalWorkingHrs = this.Entity.p.AttendanceLogDetailsArray.reduce((total: number, item: any) => {
-  //     return total + Number(item.WorkingHrs || 0);
-  //   }, 0);
-
-  //   this.Entity.p.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(this.Entity.p.TotalWorkingHrs);
-  //   this.calculateLateMarkHrs();
-  //   return;
-  // }
 
   calculateLateMarkHrs = () => {
     const actualLateMarkTime = this.ActualLateMarkTime; // this.ActualLateMarkTime
@@ -320,7 +296,7 @@ export class AttendanceDetailsComponent implements OnInit {
       this.Entity.p.TotalLateMarkHrs = parseFloat(decimalHours.toFixed(2));
       this.Entity.p.DisplayTotalLateMarkHrs = `${hours}h ${minutes}m`
 
-      this.newAttendance.WorkingHrs = this.ActualTotalWorkingHrs / 2;
+      this.Entity.p.TotalWorkingHrs = this.ActualTotalWorkingHrs / 2;
 
       // Set Working Hours to Half
       this.Entity.p.DisplayTotalWorkingHrs = this.convertFractionTimeToHM(this.Entity.p.TotalWorkingHrs);
@@ -386,7 +362,8 @@ export class AttendanceDetailsComponent implements OnInit {
     this.editingIndex = null;
     this.Entity.p.FirstCheckInTime = this.Entity.p.AttendanceLogDetailsArray[0].CheckInTime;
     this.Entity.p.LastCheckOutTime = this.Entity.p.AttendanceLogDetailsArray[this.Entity.p.AttendanceLogDetailsArray.length - 1].CheckOutTime;
-    await this.IsLateMarkChange();
+
+    this.IsLateMarkChange();
   }
 
   BackAttendence = async () => {
