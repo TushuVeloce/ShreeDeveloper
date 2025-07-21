@@ -62,15 +62,10 @@ export class DesignationMasterDetailsComponent implements OnInit {
       Designation.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as Designation;
-    this.focusInput();
     // await this.FormulateDepartmentList();
     await this.getDepartmentListByCompanyRef();
   }
 
-  focusInput = () => {
-    let txtName = document.getElementById('Name')!;
-    txtName.focus();
-  }
 
   getDepartmentListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {

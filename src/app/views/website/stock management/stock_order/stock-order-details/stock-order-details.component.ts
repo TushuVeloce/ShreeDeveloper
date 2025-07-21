@@ -169,6 +169,7 @@ export class StockOrderDetailsComponent implements OnInit {
     this.newOrderMaterial.UnitName = SingleRecord[0].p.UnitName
     this.newOrderMaterial.MaterialName = SingleRecord[0].p.MaterialName
     this.newOrderMaterial.RequisitionQty = SingleRecord[0].p.RequisitionQty
+    this.newOrderMaterial.RequisitionRemainingQty = SingleRecord[0].p.RequisitionQty - SingleRecord[0].p.TotalOrderedQty
     this.newOrderMaterial.MaterialQuotationDetailRef = SingleRecord[0].p.Ref
     this.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty
     this.newOrderMaterial.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty;
@@ -282,9 +283,9 @@ export class StockOrderDetailsComponent implements OnInit {
     //       }
     //     );
     //   } else {
-        this.isOrderMaterialModalOpen = false;
-        this.ModalEditable = false;
-        this.newOrderMaterial = OrderMaterialDetailProps.Blank();
+    this.isOrderMaterialModalOpen = false;
+    this.ModalEditable = false;
+    this.newOrderMaterial = OrderMaterialDetailProps.Blank();
     //   }
     // }
   };

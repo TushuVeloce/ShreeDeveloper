@@ -385,7 +385,7 @@ export class StockInwardDetailsComponent implements OnInit {
     if (this.InvoiceFile) {
       lstFTO.push(
         FileTransferObject.FromFile(
-          "MaterialInwardInvoicePath",
+          "MaterialInwardInvoiceFile",
           this.InvoiceFile,
           this.InvoiceFile.name
         )

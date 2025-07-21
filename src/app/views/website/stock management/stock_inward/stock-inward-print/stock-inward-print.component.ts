@@ -5,18 +5,19 @@ import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/v
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
+import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { DTU } from 'src/app/services/dtu.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
 import { Utils } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-stock-inward-print',
-  standalone:false,
+  standalone: false,
   templateUrl: './stock-inward-print.component.html',
   styleUrls: ['./stock-inward-print.component.scss'],
 })
-export class StockInwardPrintComponent  implements OnInit {
- Entity: StockInward = StockInward.CreateNewInstance();
+export class StockInwardPrintComponent implements OnInit {
+  Entity: StockInward = StockInward.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
   DetailsFormTitle = 'Receipt';
@@ -35,7 +36,8 @@ export class StockInwardPrintComponent  implements OnInit {
     private appStateManage: AppStateManageService,
     private utils: Utils,
     private dtu: DTU,
-    private companystatemanagement: CompanyStateManagement
+    private companystatemanagement: CompanyStateManagement,
+    private DateconversionService: DateconversionService,
   ) { }
 
   ngOnInit() {
@@ -66,6 +68,12 @@ export class StockInwardPrintComponent  implements OnInit {
       this.VendorEntity = CompanyData;
     }
   }
+
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
+  }
+
 
   printSection() {
     const printContent = this.PrintContainer.nativeElement.innerHTML;

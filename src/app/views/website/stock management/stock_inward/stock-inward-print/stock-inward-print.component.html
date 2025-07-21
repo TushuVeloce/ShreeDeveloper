@@ -2,97 +2,70 @@
   <div class="row m-2">
     <div class="col-md-2">
       <button type="button" class="backbtn" (click)="BackStockInward()">
-        <img
-          src="/assets/icons/arrow-button.png"
-          alt=""
-          width="34px"
-          height="34px"
-        />
+        <img src="/assets/icons/arrow-button.png" alt="" width="34px" height="34px" />
       </button>
     </div>
     <div class="col-md-9"></div>
     <div class="col-md-1">
       <button type="button" class="backbtn" (click)="printSection()">
-        <img
-          src="/assets/icons/printer.png"
-          alt=""
-          width="34px"
-          height="34px"
-        />
+        <img src="/assets/icons/printer.png" alt="" width="34px" height="34px" />
       </button>
     </div>
   </div>
 
-  <div
-    #PrintContainer
-    style="
+  <!-- <div #PrintContainer style="
       font-family: sans-serif;
       margin: 0;
       padding: 10px;
       font-size: 14px;
       color: #000;
-    "
-  >
+    ">
     <div style="max-width: full; margin: auto; border: 1px solid #ccc">
-      <!-- Header -->
-      <div style="padding-bottom: 10px">
-        <h2
-          style="
+  <div style="padding-bottom: 10px">
+    <h2 style="
             color: maroon;
             text-align: center;
             margin-top: 10px;
             font-weight: 500;
-          "
-        >
-          <b>Receipt</b>
-        </h2>
-      </div>
+          ">
+      <b>Receipt</b>
+    </h2>
+  </div>
 
-      <!-- Logo & Info -->
-      <div>
-        <table style="width: 90%; margin: 0 5% 20px 5%">
-          <tr>
-            <td
-              style="
+  <div>
+    <table style="width: 90%; margin: 0 5% 20px 5%">
+      <tr>
+        <td style="
                 vertical-align: top;
                 text-align: left;
                 width: 20%;
                 border: none;
-              "
-            >
-              <img
-                src="/assets/logos/ShreeIcon.png"
-                alt="Company Logo"
-                height="80"
-                class="mb-2"
-              />
-              <strong>
-                <div>{{ Entity.p.CompanyName }}</div>
-                <div>{{ CompanyEntity.p.AddressLine1 }}</div>
-                <div>{{ CompanyEntity.p.AddressLine2 }}</div>
-                <div>
-                  {{ CompanyEntity.p.CityName }} - {{ CompanyEntity.p.PinCode }}
-                </div>
-                <div>{{ CompanyEntity.p.Contacts }}</div>
-              </strong>
-            </td>
-            <td style="width: 50%; border: none"></td>
-            <td style="vertical-align: center; border: none">
-              <div style="display: flex; justify-content: space-between">
-                <strong>DATE</strong> <strong>{{ this.Entity.p.InwardDate }}</strong>
-              </div>
-              <br />
-              <!-- <div style="display: flex; justify-content: space-between;"><strong>Challan No</strong> <strong>{{
-                  this.Entity.p.ChalanNo }}</strong> </div> -->
-            </td>
-          </tr>
-        </table>
-      </div>
+              ">
+          <img src="/assets/logos/ShreeIcon.png" alt="Company Logo" height="80" class="mb-2" />
+          <strong>
+            <div>{{ Entity.p.CompanyName }}</div>
+            <div>{{ CompanyEntity.p.AddressLine1 }}</div>
+            <div>{{ CompanyEntity.p.AddressLine2 }}</div>
+            <div>
+              {{ CompanyEntity.p.CityName }} - {{ CompanyEntity.p.PinCode }}
+            </div>
+            <div>{{ CompanyEntity.p.Contacts }}</div>
+          </strong>
+        </td>
+        <td style="width: 50%; border: none"></td>
+        <td style="vertical-align: center; border: none">
+          <div style="display: flex; justify-content: space-between">
+            <strong>DATE</strong> <strong>{{ Entity.p.InwardDate }}</strong>
+          </div>
+          <br />
 
-      <!-- Bill To Section -->
+        </td>
+      </tr>
+    </table>
+  </div>
 
-      <div
-        style="
+
+  <div style="
           background-color: maroon;
           color: white;
           font-weight: bold;
@@ -100,44 +73,116 @@
           width: fit-content;
           margin-left: 5%;
           width: 40%;
-        "
-      >
-        BILL TO
-      </div>
-      <div style="display: flex; justify-content: center">
-        <table style="width: 90%; margin: 10px 0 20px 0">
-          <tr>
-            <td
-              style="
+        ">
+    BILL TO
+  </div>
+  <div style="display: flex; justify-content: center">
+    <table style="width: 90%; margin: 10px 0 20px 0">
+      <tr>
+        <td style="
                 width: 20%;
                 text-align: left;
                 vertical-align: top;
                 border: none;
-              "
-            >
+              ">
+          <strong>
+            <div>{{ VendorEntity.p.Name }}</div>
+            <div>{{ VendorEntity.p.TradeName }}</div>
+            <div>{{ VendorEntity.p.AddressLine1 }}</div>
+            <div>{{ VendorEntity.p.AddressLine2 }}</div>
+            <div>{{ VendorEntity.p.MobileNo }}</div>
+          </strong>
+        </td>
+        <td style="width: 50%; border: none"></td>
+        <td style="text-align: right; vertical-align: top; border: none">
+          <strong>
+            <div>{{ Entity.p.VendorName }}</div>
+            <div>{{ Entity.p.StageName }}</div>
+            <div>Service Type</div>
+            <div>{{ Entity.p.VehicleNo }}</div>
+          </strong>
+        </td>
+        <td style="text-align: left; vertical-align: top;">
+          <div>Site Name: {{ Entity.p.VendorCompanyName }}</div>
+          <div>Stage Name: {{ Entity.p.StageName }}</div>
+          <div>Service Type: {{ Entity.p.VendorCompanyName }}</div>
+          <div>Vehicle No: {{ Entity.p.VehicleNo }}</div>
+        </td>
+      </tr>
+    </table>
+  </div> -->
+
+  <div #PrintContainer
+    style="font-family: sans-serif; margin: 0; padding: 10px; font-size: 14px; color: #000; text-transform: capitalize;">
+
+    <div style="max-width: full; margin: auto; border: 2px solid black;">
+      <!-- Header -->
+      <div style="padding-bottom: 10px;">
+        <h2 style="color: maroon; text-align: center; margin-top: 10px; font-weight: 500;"> <b>Inward Receipt</b></h2>
+      </div>
+
+      <!-- Logo & Info -->
+      <div>
+        <table style="width: 100%;">
+          <tr>
+            <td style="vertical-align: top; text-align: left; width: 40%; padding: 5px; border-width:  1px;">
               <strong>
-                <div>{{ VendorEntity.p.Name }}</div>
-                <div>{{ VendorEntity.p.TradeName }}</div>
-                <div>{{ VendorEntity.p.AddressLine1 }}</div>
-                <div>{{ VendorEntity.p.AddressLine2 }}</div>
-                <div>{{ VendorEntity.p.MobileNo }}</div>
+                <div><i class="fa-solid fa-file-lines" style="color: maroon; margin-right: 10px;"></i> पोहोच पावती</div>
+                <div> <i class="fa-solid fa-phone" style="color: maroon; margin-right: 10px;"></i>
+                  <!-- {{ Entity.p.Contacts }} -->
+                </div>
               </strong>
             </td>
-            <td style="width: 50%; border: none"></td>
-            <td style="text-align: right; vertical-align: top; border: none">
-              <!-- <strong>
-                <div>{{ Entity.p.VendorName }}</div>
-                <div>{{ Entity.p.StageName }}</div>
-                <div>Service Type</div>
-                <div>{{ Entity.p.VehicleNo }}</div>
-              </strong> -->
+            <td style="width: 10%; border-width:  1px; padding: 5px;">
+              <img src="/assets/logos/ShreeIcon.png" alt="Company Logo" height="80" class="mb-2" />
             </td>
-            <!-- <td style="text-align: left; vertical-align: top;">
-              <div>Site Name: {{ Entity.p.VendorCompanyName }}</div>
-              <div>Stage Name: {{ Entity.p.StageName }}</div>
-              <div>Service Type: {{ Entity.p.VendorCompanyName }}</div>
-              <div>Vehicle No: {{ Entity.p.VehicleNo }}</div>
-            </td> -->
+            <td style="vertical-align: center; text-align: start; border-width:  1px; padding: 5px;">
+              <strong>ऑफिस पत्ता <br>
+                <!-- {{ Entity.p.AddressLine1 }} <br> -->
+                <!-- {{ Entity.p.AddressLine2 }} -->
+              </strong>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Bill To Section -->
+
+      <!-- <div
+        style="background-color: maroon; color: white; font-weight: bold; padding: 5px 10px; width: fit-content; margin-left: 5%; width: 40%;">
+        BILL TO
+      </div> -->
+      <div style="display: flex; justify-content: center;">
+        <table style="width: 100%;">
+          <tr>
+            <td style="width: 40%; text-align: left; vertical-align: top; padding: 5px; border-width: 1px;">
+              <div>
+                <strong>Site Name - {{ Entity.p.SiteName }}</strong>
+              </div>
+              <br>
+              <div>
+                <strong>Main Ledger - </strong>
+              </div>
+              <br>
+              <div>
+                <strong>Sub Ledger - </strong>
+              </div>
+            </td>
+            <td style="text-align: left; vertical-align: top; padding: 5px; border-width: 1px;">
+              <div>
+                <strong>Vendor Name - {{Entity.p.VendorName}}</strong>
+              </div>
+              <br>
+              <div>
+                <strong>Trade Name - {{Entity.p.VendorTradeName}}</strong>
+              </div>
+              <br>
+              <div>
+                <strong>Date -
+                  {{formatDate(Entity.p.InwardDate)}}
+                </strong>
+              </div>
+            </td>
           </tr>
         </table>
       </div>
@@ -155,12 +200,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            *ngFor="
+          <tr *ngFor="
               let material of Entity.p.MaterialInwardDetailsArray;
               let i = index
-            "
-          >
+            ">
             <td style="padding: 8px; border: none">{{ i + 1 }}</td>
             <td style="padding: 8px; border: none">
               {{ material.MaterialName }}
@@ -183,14 +226,12 @@
 
       <!-- Comments -->
       <div style="margin-top: 5px">
-        <p
-          style="
+        <p style="
             background-color: #fef4d4;
             padding-left: 5%;
             padding-top: 10px;
             padding-bottom: 10px;
-          "
-        >
+          ">
           <strong>OTHER COMMENTS</strong>
         </p>
         <div style="margin-top: 5px; padding-left: 5%">
@@ -207,9 +248,7 @@
       </div>
 
       <!-- Footer Signature -->
-      <div
-        style="margin-top: 30px; display: flex; justify-content: space-between"
-      >
+      <div style="margin-top: 30px; display: flex; justify-content: space-between">
         <p style="margin-left: 5%">
           <strong>Sign : {{ Entity.p.CompanyName }}</strong>
         </p>

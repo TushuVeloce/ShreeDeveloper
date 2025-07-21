@@ -34,7 +34,7 @@ Entity: OpeningBalance = OpeningBalance.CreateNewInstance();
     private companystatemanagement: CompanyStateManagement
   ) {
     effect(async () => {
-      await this.getOpeningBalanceListByCompanyRef();
+      await this.getOpeningBalanceListByCompanyRef(); await this.getCurrentBalanceByCompanyRef();
     });
   }
 
