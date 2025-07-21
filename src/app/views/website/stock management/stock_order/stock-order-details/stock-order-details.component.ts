@@ -93,7 +93,6 @@ export class StockOrderDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Purchase Order' : 'Edit Purchase Order';
       this.Entity = Order.GetCurrentInstance();
-      console.log('this.Entity :', this.Entity);
       this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.MaterialPurchaseInvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
       this.selectedFileName = this.Entity.p.MaterialPurchaseInvoicePath;
 

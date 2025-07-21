@@ -107,7 +107,6 @@ export class AddStockOrderComponent implements OnInit {
       this.OrderDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
       this.CurrentDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
     }
-    console.log('this.Entity :', this.Entity);
     this.InitialEntity = Object.assign(Order.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as Order;
   }
 
@@ -356,7 +355,6 @@ export class AddStockOrderComponent implements OnInit {
 
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
 
     if (this.InvoiceFile) {
       lstFTO.push(

@@ -2,55 +2,85 @@
   <div class="col-4 mb-2">
     <h1 style="padding-top: 3px;" class="title title_light">Customer Info</h1>
   </div>
+  <ng-template #noDataTpl>
+    <div style="text-align: center; color: rgba(0, 0, 0, 0.25);">
+      No Data
+    </div>
+  </ng-template>
   <div class="col-4 mb-2 search-container_light">
-    <app-shared-filter [masterList]="MasterList" [filterFields]="['Code', 'Name', 'UnitName']"
+    <app-shared-filter [masterList]="MasterList"
+      [filterFields]="['CustomerName', 'CustomerAddress', 'ContactNos', 'PANNo', 'AdharNo', 'LeadSourceName', 'BookingRemarkName', 'PlotNo']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
 </div>
-<div class="tblcard_light" style="margin-top: 2rem;" *ngIf="DisplayMasterList.length > 0">
-  <div class="table-container">
-    <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
-      [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
-      <thead>
-        <tr>
-          <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let material of paginatedList(); index as i">
-          <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td Class="tbldata">{{material.p.CustID}}</td>
-          <td Class="tbldata">{{material.p.CustomerName}}</td>
-          <td Class="tbldata">{{material.p.CustomerAddress}}</td>
-          <td Class="tbldata">{{material.p.ContactNos}}</td>
-          <td Class="tbldata">{{material.p.PANNo}}</td>
-          <td Class="tbldata">{{material.p.AdharNo}}</td>
-          <td Class="tbldata">{{material.p.LeadSourceName}}</td>
-          <td Class="tbldata">{{material.p.BookingRemarkName}}</td>
-          <td Class="tbldata">{{material.p.PlotNo}}</td>
-          <td Class="tbldata">{{material.p.AreaInSqm}}</td>
-          <td Class="tbldata">{{material.p.AreaInSqft}}</td>
-          <td Class="tbldata">{{material.p.BasicRatePerSqft | currency : "INR"}}</td>
-          <td Class="tbldata">{{material.p.DiscountedRateOnArea | currency : "INR"}}</td>
-          <td Class="tbldata">{{material.p.TotalPlotAmount | currency : "INR"}}</td>
-          <td Class="tbldata">{{material.p.GovernmentValue | currency : "INR"}}</td>
-          <td Class="tbldata">{{material.p.ValueOfAgreement | currency : "INR"}}</td>
-          <td Class="tbldata">{{material.p.RegTaxValueInPercentage}}</td>
-          <td Class="tbldata">{{material.p.StampDuties | currency : "INR"}}</td>
-          <td Class="tbldata">{{material.p.GstToatalAmount | currency : "INR"}}</td>
-          <td Class="tbldata">{{material.p.GoodsServicesTax | currency : "INR"}}</td>
-          <td Class="tbldata">{{material.p.LegalCharges | currency : "INR"}}</td>
-          <td Class="tbldata">{{material.p.TotalChequeRecieved | currency : "INR"}}</td>
-          <td Class="tbldata">{{material.p.TotalCashRecieved | currency : "INR"}}</td>
-          <td Class="tbldata">{{material.p.TotalAmountRecieved | currency : "INR"}}</td>
-          <td Class="tbldata">{{material.p.GrandTotal | currency : "INR"}}</td>
-        </tr>
-      </tbody>
-    </nz-table>
+<div class="card-body m-3">
+  <form autocomplete="off">
+    <div class="row gy-3">
+      <div class="col-md-4 col-6">
+        <label for="SiteRef"><b>Site</b></label>
+        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+          nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="SiteRef"
+          (ngModelChange)="getCustomerReportByCompanyAndSiteRef()">
+          <nz-option [nzValue]="0" [nzLabel]="'All'"></nz-option>
+          <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
+        </nz-select>
+      </div>
+      <!-- <div class="col-md-4 col-6">
+        <label for="CustomerRef"><b>Customer</b></label>
+        <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+          nzPlaceHolder="Select" id="CustomerRef" name="CustomerRef" [nzSize]="'large'" [(ngModel)]="CustomerRef"
+          (ngModelChange)="OnCustomerSelection()">
+          <nz-option *ngFor="let cus of CustomerList" [nzValue]="cus.p.CustomerEnquiryRef"
+            [nzLabel]="cus.p.CustomerName"></nz-option>
+        </nz-select>
+      </div> -->
+    </div>
+  </form>
+  <div class="tblcard_light" style="margin-top: 2rem;" *ngIf="DisplayMasterList.length > 0">
+    <div class="table-container">
+      <nz-table #basicTable nzSize="small" class="no-hover-table bgtable_light" [nzData]="paginatedList()"
+        [nzScroll]="{x:'auto' }" nzFrontPagination="false" [nzShowSizeChanger]="false">
+        <thead>
+          <tr>
+            <th *ngFor="let header of headers" class="tblheader">{{ header }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let material of paginatedList(); index as i">
+            <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td Class="tbldata">{{material.p.CustID}}</td>
+            <td Class="tbldata">{{material.p.CustomerName}}</td>
+            <td Class="tbldata">{{material.p.CustomerAddress}}</td>
+            <td Class="tbldata">{{material.p.ContactNos}}</td>
+            <td Class="tbldata">{{material.p.PANNo}}</td>
+            <td Class="tbldata">{{material.p.AdharNo}}</td>
+            <td Class="tbldata">{{material.p.LeadSourceName}}</td>
+            <td Class="tbldata">{{material.p.BookingRemarkName}}</td>
+            <td Class="tbldata">{{material.p.PlotNo}}</td>
+            <td Class="tbldata">{{material.p.AreaInSqm}}</td>
+            <td Class="tbldata">{{material.p.AreaInSqft}}</td>
+            <td Class="tbldata">{{material.p.BasicRatePerSqft | currency : "INR"}}</td>
+            <td Class="tbldata">{{material.p.DiscountedRateOnArea | currency : "INR"}}</td>
+            <td Class="tbldata">{{material.p.TotalPlotAmount | currency : "INR"}}</td>
+            <td Class="tbldata">{{material.p.GovernmentValue | currency : "INR"}}</td>
+            <td Class="tbldata">{{material.p.ValueOfAgreement | currency : "INR"}}</td>
+            <td Class="tbldata">{{material.p.RegTaxValueInPercentage}}</td>
+            <td Class="tbldata">{{material.p.StampDuties | currency : "INR"}}</td>
+            <td Class="tbldata">{{material.p.GstToatalAmount | currency : "INR"}}</td>
+            <td Class="tbldata">{{material.p.GoodsServicesTax | currency : "INR"}}</td>
+            <td Class="tbldata">{{material.p.LegalCharges | currency : "INR"}}</td>
+            <td Class="tbldata">{{material.p.TotalChequeRecieved | currency : "INR"}}</td>
+            <td Class="tbldata">{{material.p.TotalCashRecieved | currency : "INR"}}</td>
+            <td Class="tbldata">{{material.p.TotalAmountRecieved | currency : "INR"}}</td>
+            <td Class="tbldata">{{material.p.GrandTotal | currency : "INR"}}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+    <Pagination [pageSize]="pageSize" [total]="total" [(currentPage)]="currentPage"
+      (pageChange)="onPageChange($event)" />
   </div>
-  <Pagination [pageSize]="pageSize" [total]="total" [(currentPage)]="currentPage" (pageChange)="onPageChange($event)" />
-</div>
 
-<div *ngIf="DisplayMasterList.length === 0">
-  <Data-Not-Found />
-</div>
+  <div *ngIf="DisplayMasterList.length === 0">
+    <Data-Not-Found />
+  </div>

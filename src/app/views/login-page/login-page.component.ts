@@ -63,7 +63,6 @@ export class LoginPageComponent implements OnInit {
     req.LoginDeviceId = this.sessionValues.LoginDeviceId;
 
     const response = await this.servercommunicator.LoginUser(req);
-    console.log('response :', response);
     this.appStateManage.setEmployeeRef(response.LoginEmployeeRef)
     this.appStateManage.setLoginToken(response.LoginToken)
     this.validmenuitemsstatemanagement.setValidMenuItems(response.ValidMenuItems)

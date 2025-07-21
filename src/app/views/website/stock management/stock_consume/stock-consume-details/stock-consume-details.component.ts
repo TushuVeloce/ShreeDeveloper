@@ -119,7 +119,6 @@ export class StockConsumeDetailsComponent implements OnInit {
       return;
     }
     let lst = await StockConsume.FetchMaterialListBySiteRef(SiteRef,this.companyRef(),async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.MaterialList = lst;
     // const uniqueMap = new Map();
     // lst.forEach((item) => {
@@ -165,7 +164,6 @@ export class StockConsumeDetailsComponent implements OnInit {
       return;
     }
     let lst = await MaterialCurrentStock.FetchMaterialData(siteref,materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     // const UnitData = this.MaterialList.find(
     //   (data) => data.p.MaterialRef == materialref
     // );
@@ -194,7 +192,6 @@ export class StockConsumeDetailsComponent implements OnInit {
     }
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
     await this.Entity.EnsurePrimaryKeysWithValidValues();
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {

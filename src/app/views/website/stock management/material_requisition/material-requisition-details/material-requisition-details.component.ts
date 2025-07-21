@@ -222,7 +222,6 @@ export class MaterialRequisitionDetailsComponent implements OnInit {
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.isSaveDisabled = false;

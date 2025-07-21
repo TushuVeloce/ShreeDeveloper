@@ -21,11 +21,11 @@ export class CreateNewPasswordMobileAppComponent  implements OnInit {
   EmployeeRef: number = 0;
   CompanyRef: number = 0;
 
-  constructor(private fb: FormBuilder, 
-    private router: Router, 
-    private payloadPacketFacade: PayloadPacketFacade, 
-    private serverCommunicator: ServerCommunicatorService, 
-    private appStateManage: AppStateManageService, 
+  constructor(private fb: FormBuilder,
+    private router: Router,
+    private payloadPacketFacade: PayloadPacketFacade,
+    private serverCommunicator: ServerCommunicatorService,
+    private appStateManage: AppStateManageService,
     private toastService: ToastService,
     private haptic: HapticService,
   ) { }
@@ -64,7 +64,6 @@ export class CreateNewPasswordMobileAppComponent  implements OnInit {
       let td = req.FormulateTransportData();
       let pkt = this.payloadPacketFacade.CreateNewPayloadPacket2(td);
       let tr = await this.serverCommunicator.sendHttpRequest(pkt);
-      // console.log('tr :', tr);
       if (!tr.Successful) {
         this.toastService.present(tr.Message, 2000, 'danger');
         this.isUpdating = false;
@@ -80,7 +79,6 @@ export class CreateNewPasswordMobileAppComponent  implements OnInit {
 
       // setTimeout(() => {
       //   this.isUpdating = false;
-      //   console.log('Password updated successfully');
       //   this.router.navigate(['mobileapp/tabs/dashboard']);
       //   this.toastService.present('Logged in successfully', 2000, 'success');
       // }, 1500);

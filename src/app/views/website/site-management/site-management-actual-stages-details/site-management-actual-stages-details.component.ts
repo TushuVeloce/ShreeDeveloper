@@ -414,11 +414,8 @@ export class SiteManagementActualStagesDetailsComponent implements OnInit {
       // this.Entity.p.Amount = rate * quantity
       // this.Entity.p.GrandTotal = rate * quantity - dieselAmount
       if (rate > 0 && quantity > 0) {
-        console.log('rate * quantity :1', rate, quantity);
         this.Entity.p.Amount = rate * quantity
-        console.log('rate * quantity :2', rate, quantity);
         this.Entity.p.GrandTotal = rate * quantity - dieselAmount
-        console.log(' this.Entity.p.GrandTotal :CalculateAmountOnRateAndQuantity else', this.Entity.p.GrandTotal);
       } else {
         this.Entity.p.Amount = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;
         this.Entity.p.GrandTotal = this.Entity.p.SkillAmount + this.Entity.p.UnskillAmount + this.Entity.p.LadiesAmount;

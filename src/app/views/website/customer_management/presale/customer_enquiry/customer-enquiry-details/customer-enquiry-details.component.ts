@@ -432,7 +432,7 @@ export class CustomerEnquiryDetailsComponent implements OnInit {
     let entitiesToSave = [entityToSave];
     console.log('entitiesToSave :', entitiesToSave);
 
-    // await this.Entity.EnsurePrimaryKeysWithValidValues()
+    await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {
       this.uiUtils.showErrorMessage('Error', tr.Message);

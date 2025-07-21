@@ -61,9 +61,9 @@ export class ValidationMessages {
 }
 
 export class CountryStateCityRefs {
-  public static readonly IndiaRef = 9163;
-  public static readonly MaharashtraRef = 10263;
-  public static readonly KolhapurRef = 10374;
+  public static readonly IndiaRef = 1000000000008162;
+  public static readonly MaharashtraRef = 1000000000009262;
+  public static readonly KolhapurRef = 1000000000009373;
 }
 
 export class AttendanceHandleByRefs {

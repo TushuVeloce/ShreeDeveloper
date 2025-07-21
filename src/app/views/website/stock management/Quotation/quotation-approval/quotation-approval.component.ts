@@ -137,7 +137,6 @@ export class QuotationApprovalComponent implements OnInit {
     this.Entity.p.MaterialQuotationStatus = status;
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
-    console.log('entitiesToSave :', entitiesToSave);
 
     if (this.InvoiceFile) {
       lstFTO.push(

@@ -97,7 +97,6 @@ export class StockTransferDetailsComponent implements OnInit {
       this.companyRef(),
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    console.log('lst :', lst);
     this.MaterialList = lst;
   };
 
@@ -149,7 +148,6 @@ export class StockTransferDetailsComponent implements OnInit {
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave]
-    console.log('entitiesToSave :', entitiesToSave);
     await this.Entity.EnsurePrimaryKeysWithValidValues()
     let tr = await this.utils.SavePersistableEntities(entitiesToSave);
     if (!tr.Successful) {

@@ -31,7 +31,7 @@ export class CustomerinfoReportComponent implements OnInit {
 
   constructor(private uiUtils: UIUtils, private companystatemanagement: CompanyStateManagement) {
     effect(async () => {
-      await this.FormulateSiteListByCompanyRef();
+      await this.FormulateSiteListByCompanyRef(); this.getCustomerReportByCompanyRef();
     });
   }
 
@@ -49,10 +49,22 @@ export class CustomerinfoReportComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
-    if (this.SiteRef == 0 && lst.length > 0) {
-      this.SiteRef = lst[0].p.Ref
-      this.getCustomerReportByCompanyAndSiteRef();
+    // if (this.SiteRef == 0 && lst.length > 0) {
+    //   this.SiteRef = lst[0].p.Ref
+    //   this.getCustomerReportByCompanyAndSiteRef();
+    // }
+  }
+
+  getCustomerReportByCompanyRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
+
+    let lst = await CRMReports.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.DisplayMasterList = lst;
   }
 
   getCustomerReportByCompanyAndSiteRef = async () => {
@@ -68,10 +80,6 @@ export class CustomerinfoReportComponent implements OnInit {
     }
     let lst = await CRMReports.FetchEntireListByCompanyAndSiteRef(this.companyRef(), this.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.DisplayMasterList = lst;
-    // if (this.CustomerRef == 0 && lst.length > 0) {
-    //   this.CustomerRef = lst[0].p.CustomerEnquiryRef
-    // }
-
   }
 
   // For Pagination  start ----
