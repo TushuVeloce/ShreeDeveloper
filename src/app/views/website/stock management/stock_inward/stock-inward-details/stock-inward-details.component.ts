@@ -241,7 +241,7 @@ export class StockInwardDetailsComponent implements OnInit {
         const isImage = file.type.startsWith('image/');
         if (isPdf || isImage) {
           this.imagePostViewUrl = URL.createObjectURL(file);
-          this.Entity.p.MaterialInwardInvoiceFile = '';
+          this.Entity.p.MaterialInwardInvoicePath = '';
         } else {
           this.uiUtils.showWarningToster('Only PDF or image files are supported.')
         }
@@ -385,7 +385,7 @@ export class StockInwardDetailsComponent implements OnInit {
     if (this.InvoiceFile) {
       lstFTO.push(
         FileTransferObject.FromFile(
-          "MaterialInwardInvoiceFile",
+          "MaterialInwardInvoicePath",
           this.InvoiceFile,
           this.InvoiceFile.name
         )

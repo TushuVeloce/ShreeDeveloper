@@ -91,7 +91,7 @@
             (click)="triggerFileInput()" />
 
           <ng-container *ngIf="selectedFileName; else NoFile">
-            <span style="cursor: pointer" (click)="fileNavigation(Entity.p.MaterialInwardInvoiceFile)">
+            <span style="cursor: pointer" (click)="fileNavigation(Entity.p.MaterialInwardInvoicePath)">
               {{ selectedFileName }}
             </span>
           </ng-container>
@@ -101,13 +101,13 @@
             (change)="onFileUpload($event)" />
 
           <!-- Invoice File Display -->
-          <ng-container *ngIf="Entity.p.MaterialInwardInvoiceFile; else AddDocImage">
+          <ng-container *ngIf="Entity.p.MaterialInwardInvoicePath; else AddDocImage">
             <img [src]="
-                isImageFile(Entity.p.MaterialInwardInvoiceFile)
+                isImageFile(Entity.p.MaterialInwardInvoicePath)
                   ? imagePostView
                   : '/assets/icons/doc-placeholder.png'
-              " alt="Invoice" title="Invoice" (click)="fileNavigation(Entity.p.MaterialInwardInvoiceFile)" [class]="
-                isImageFile(Entity.p.MaterialInwardInvoiceFile)
+              " alt="Invoice" title="Invoice" (click)="fileNavigation(Entity.p.MaterialInwardInvoicePath)" [class]="
+                isImageFile(Entity.p.MaterialInwardInvoicePath)
                   ? 'img-preview'
                   : 'file-preview'
               " />
@@ -119,7 +119,7 @@
                   isImageFile(selectedFileName)
                     ? imagePreView
                     : '/assets/icons/doc-placeholder.png'
-                " alt="Invoice" title="Invoice" (click)="fileNavigation(this.Entity.p.MaterialInwardInvoiceFile)"
+                " alt="Invoice" title="Invoice" (click)="fileNavigation(this.Entity.p.MaterialInwardInvoicePath)"
                 [class]="
                   isImageFile(selectedFileName) ? 'img-preview' : 'file-preview'
                 " />

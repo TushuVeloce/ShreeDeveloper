@@ -180,7 +180,7 @@ export class StockInwardDetailsMobileAppComponent  implements OnInit {
   
     // Check if there are any files to show
     hasFiles(): boolean {
-      return this.selectedFiles.length > 0 || !!this.Entity?.p?.MaterialInwardInvoiceFile;
+      return this.selectedFiles.length > 0 || !!this.Entity?.p?.MaterialInwardInvoicePath;
     }
   
     // Decide which files to loop in *ngFor
@@ -229,7 +229,7 @@ export class StockInwardDetailsMobileAppComponent  implements OnInit {
           const preview = await this.readFileAsDataURL(compressedFile);
           this.selectedFiles.push({ file: compressedFile, type: 'image', preview });
   
-          this.filesToUpload.push(FileTransferObject.FromFile("MaterialInwardInvoiceFile", compressedFile, compressedFile.name));
+          this.filesToUpload.push(FileTransferObject.FromFile("MaterialInwardInvoicePath", compressedFile, compressedFile.name));
         } else if (fileType === 'application/pdf') {
           if (file.size / 1024 / 1024 > 2) {
             this.toastService.present('PDF size should not exceed 2 MB.', 1000, 'warning');
@@ -238,7 +238,7 @@ export class StockInwardDetailsMobileAppComponent  implements OnInit {
           }
   
           this.selectedFiles.push({ file, type: 'pdf', preview: 'assets/icons/doc-placeholder.png' });
-          this.filesToUpload.push(FileTransferObject.FromFile("MaterialInwardInvoiceFile", file, file.name));
+          this.filesToUpload.push(FileTransferObject.FromFile("MaterialInwardInvoicePath", file, file.name));
         } else {
           this.toastService.present('Unsupported file type.', 1000, 'warning');
         }
@@ -594,7 +594,7 @@ export class StockInwardDetailsMobileAppComponent  implements OnInit {
     // if (this.InvoiceFile) {
     //   lstFTO.push(
     //     FileTransferObject.FromFile(
-    //       "MaterialInwardInvoiceFile",
+    //       "MaterialInwardInvoicePath",
     //       this.InvoiceFile,
     //       this.InvoiceFile.name
     //     )

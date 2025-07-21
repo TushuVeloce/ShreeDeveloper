@@ -93,19 +93,19 @@
                 <span class="value">{{ SelectedStockInward.p.VehicleNo || '-' }}</span>
               </div> -->
           <!-- Invoice Preview Button -->
-          <div class="info-row-of-model" *ngIf="SelectedStockInward?.p?.MaterialInwardInvoiceFile">
+          <div class="info-row-of-model" >
             <span class="label">Invoice:</span>
             <ion-button size="small" fill="clear" color="primary"
-              (click)="prepareInvoiceUrl(SelectedStockInward.p.MaterialInwardInvoiceFile)">
+              (click)="prepareInvoiceUrl(SelectedStockInward.p.MaterialInwardInvoicePath)">
               <ion-icon [name]="showInvoicePreview?'eye-outline':'eye-off-outline'" slot="icon-only"></ion-icon>
             </ion-button>
           </div>
 
           <!-- Invoice Viewer Section -->
           <div *ngIf="showInvoicePreview" class="invoice-preview-container">
-            <ng-container *ngIf="isPDF(SelectedStockInward.p.MaterialInwardInvoiceFile); else imageBlock">
+            <ng-container *ngIf="isPDF(SelectedStockInward.p.MaterialInwardInvoicePath); else imageBlock">
               <img [src]="'assets/icons/doc-placeholder.png'" alt="Invoice Image" class="invoice-pdf"
-                (click)="fileNavigation(SelectedStockInward.p.MaterialInwardInvoiceFile)" />
+                (click)="fileNavigation(SelectedStockInward.p.MaterialInwardInvoicePath)" />
             </ng-container>
 
             <ng-template #imageBlock>

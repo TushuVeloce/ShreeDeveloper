@@ -183,6 +183,7 @@ export class StockInwardViewMobileAppComponent  implements OnInit {
   }
 
   prepareInvoiceUrl(path: string) {
+  console.log('path :', path);
     this.showInvoicePreview = !this.showInvoicePreview;
 
     if (!path) return;
@@ -217,6 +218,7 @@ export class StockInwardViewMobileAppComponent  implements OnInit {
   
   openModal(stockInward: StockInward) {
     this.SelectedStockInward = stockInward;
+    console.log('stockInward :', stockInward);
     this.modalOpen = true;
   }
 
@@ -239,6 +241,7 @@ export class StockInwardViewMobileAppComponent  implements OnInit {
   onEditClicked = async (item: StockInward) => {
     this.SelectedStockInward = item.GetEditableVersion();
     StockInward.SetCurrentInstance(this.SelectedStockInward);
+    console.log('this.SelectedStockInward :', this.SelectedStockInward);
     this.appStateManage.StorageKey.setItem('Editable', 'Edit');
     await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-inward/edit']);
   };
