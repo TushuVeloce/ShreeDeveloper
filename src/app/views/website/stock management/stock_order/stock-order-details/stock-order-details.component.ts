@@ -358,7 +358,7 @@ export class StockOrderDetailsComponent implements OnInit {
     if (this.InvoiceFile) {
       lstFTO.push(
         FileTransferObject.FromFile(
-          "InvoiceFile",
+          "MaterialPurchaseInvoiceFile",
           this.InvoiceFile,
           this.InvoiceFile.name
         )
