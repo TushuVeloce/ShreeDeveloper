@@ -30,20 +30,20 @@
           <td Class="tbldata">{{material.p.PlotNo}}</td>
           <td Class="tbldata">{{material.p.AreaInSqm}}</td>
           <td Class="tbldata">{{material.p.AreaInSqft}}</td>
-          <td Class="tbldata">{{material.p.BasicRatePerSqft}}</td>
-          <td Class="tbldata">{{material.p.DiscountedRateOnArea}}</td>
-          <td Class="tbldata">{{material.p.TotalPlotAmount}}</td>
-          <td Class="tbldata">{{material.p.GovernmentValue}}</td>
-          <td Class="tbldata">{{material.p.ValueOfAgreement}}</td>
+          <td Class="tbldata">{{material.p.BasicRatePerSqft | currency : "INR"}}</td>
+          <td Class="tbldata">{{material.p.DiscountedRateOnArea | currency : "INR"}}</td>
+          <td Class="tbldata">{{material.p.TotalPlotAmount | currency : "INR"}}</td>
+          <td Class="tbldata">{{material.p.GovernmentValue | currency : "INR"}}</td>
+          <td Class="tbldata">{{material.p.ValueOfAgreement | currency : "INR"}}</td>
           <td Class="tbldata">{{material.p.RegTaxValueInPercentage}}</td>
-          <td Class="tbldata">{{material.p.StampDuties}}</td>
-          <td Class="tbldata">{{material.p.GstToatalAmount}}</td>
-          <td Class="tbldata">{{material.p.GoodsServicesTax}}</td>
-          <td Class="tbldata">{{material.p.LegalCharges}}</td>
-          <td Class="tbldata">{{material.p.TotalChequeRecieved}}</td>
-          <td Class="tbldata">{{material.p.TotalCashRecieved}}</td>
-          <td Class="tbldata">{{material.p.TotalAmountRecieved}}</td>
-          <td Class="tbldata">{{material.p.GrandTotal}}</td>
+          <td Class="tbldata">{{material.p.StampDuties | currency : "INR"}}</td>
+          <td Class="tbldata">{{material.p.GstToatalAmount | currency : "INR"}}</td>
+          <td Class="tbldata">{{material.p.GoodsServicesTax | currency : "INR"}}</td>
+          <td Class="tbldata">{{material.p.LegalCharges | currency : "INR"}}</td>
+          <td Class="tbldata">{{material.p.TotalChequeRecieved | currency : "INR"}}</td>
+          <td Class="tbldata">{{material.p.TotalCashRecieved | currency : "INR"}}</td>
+          <td Class="tbldata">{{material.p.TotalAmountRecieved | currency : "INR"}}</td>
+          <td Class="tbldata">{{material.p.GrandTotal | currency : "INR"}}</td>
         </tr>
       </tbody>
     </nz-table>

@@ -26,7 +26,7 @@ export class CustomerinfoReportComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Customer ID', 'Customer Name', 'Address', 'Contact No', 'Pan', 'Aadhar No', 'Lead Source', 'Booking Reamrk', 'Plot No', 'Area in Sqm', 'Area in Sqft', 'Basic per Rate', 'Discount Rate on Area', 'Total Plot Amount', 'Government Value', 'Value of Agreement', 'Reg Tax Value In %', 'Stamp Duties', 'Gst %', 'Gst Total Amount', 'Goods Services Tax', 'Legal Charges', 'Total Cheque Recieved', 'Total Cash Recieved', 'Total Amount Recieved', 'Grand Total', 'Action'];
+  headers: string[] = ['Sr.No.', 'Customer ID', 'Customer Name', 'Address', 'Contact No', 'Pan', 'Aadhar No', 'Lead Source', 'Booking Remark', 'Plot No', 'Area in Sqm', 'Area in Sqft', 'Basic per Rate', 'Discount Rate on Area', 'Total Plot Amount', 'Government Value', 'Value of Agreement', 'Reg Tax Value In %', 'Stamp Duties', 'Gst Total Amount', 'Goods Services Tax', 'Legal Charges', 'Total Cheque Recieved', 'Total Cash Recieved', 'Total Amount Recieved', 'Grand Total'];
 
 
   constructor(private uiUtils: UIUtils, private companystatemanagement: CompanyStateManagement) {
