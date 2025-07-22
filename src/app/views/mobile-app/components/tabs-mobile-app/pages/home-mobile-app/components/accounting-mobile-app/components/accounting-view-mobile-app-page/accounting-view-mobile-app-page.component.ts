@@ -14,22 +14,22 @@ export class AccountingViewMobileAppPageComponent  implements OnInit {
 
   gridItems = [
     {
-      icon: 'assets/icons/crm_mobile_app.png',
+      icon: 'assets/icons/Invoice_mobile_app.png',
       label: 'Billing',
       routerPath: '/mobile-app/tabs/dashboard/accounting/invoice'
     },
     {
-      icon: 'assets/icons/site_management_mobile_app.png',
+      icon: 'assets/icons/income_mobile_app.png',
       label: 'Income',
       routerPath: '/mobile-app/tabs/dashboard/accounting/income'
     },
-    {
-      icon: 'assets/icons/marketing_mobile_app.png',
+    { 
+      icon: 'assets/icons/expense_mobile_app.png',
       label: 'Expense',
       routerPath: '/mobile-app/tabs/dashboard/accounting/expenses'
     },
     {
-      icon: 'assets/icons/crm_mobile_app.png',
+      icon: 'assets/icons/office_report_mobile_app.png',
       label: 'Office',
       routerPath: '/mobile-app/tabs/dashboard/accounting/office'
     },

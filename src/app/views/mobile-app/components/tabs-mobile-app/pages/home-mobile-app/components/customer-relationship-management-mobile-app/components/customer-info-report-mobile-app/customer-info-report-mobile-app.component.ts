@@ -27,7 +27,7 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
   companyRef = 0;
 
   // headers: string[] = ['#', 'Customer ID', 'Customer Name', 'Address', 'Contact No', 'Pan', 'Aadhar No', 'Lead Source', 'Booking Reamrk', 'Plot No', 'Area in Sqm', 'Area in Sqft', 'Basic per Rate', 'Discount Rate on Area', 'Total Plot Amount', 'Government Value', 'Value of Agreement', 'Reg Tax Value In %', 'Stamp Duties', 'Gst %', 'Gst Total Amount', 'Goods Services Tax', 'Legal Charges', 'Total Cheque Recieved', 'Total Cash Recieved', 'Total Amount Recieved', 'Grand Total', 'Action'];
-  headers: string[] = ['#', 'Customer ID', 'Customer Name', 'Address', 'Contact No', 'Pan Card No', 'Aadhar Card No', 'Lead Source', 'Booking Remark', 'Plot No', 'Area in Sqm', 'Area in Sqft', 'Basic per Rate', 'Discount Rate on Area', 'Total Plot Amount', 'Government Value', 'Value of Agreement', 'Reg Tax Value In %', 'Stamp Duties', 'GST Total Amount', 'Goods Services Tax', 'Legal Charges', 'Total Cheque Recieved', 'Total Cash Recieved', 'Total Amount Recieved', 'Grand Total'];
+  headers: string[] = ['#', 'Customer ID', 'Customer Name', 'Address', 'Contact No', 'Pan Card No', 'Aadhar Card No', 'Lead Source', 'Booking Remark', 'Plot No', 'Area in Sqm', 'Area in Sqft', 'Basic per Rate', 'Discount Rate on Area', 'Total Plot Amount', 'Government Value', 'Value of Agreement', 'Reg Tax Value In %', 'Stamp Duties', 'GST Total Amount', 'Goods Services Tax', 'Legal Charges', 'Total Cheque Recieved', 'Total Cash Recieved', 'Total Amount Recieved', 'Grand Total', 'Action'];
 
 
   filters: FilterItem[] = [];
@@ -104,6 +104,7 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
       return;
     }
     await this.FormulateSiteListByCompanyRef();
+    await this.getCustomerReportByCompanyRef()
   }
 
   FormulateSiteListByCompanyRef = async () => {
@@ -117,14 +118,28 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
       await this.toastService.present('Error' + errMsg, 1000, 'danger');
-    });
+    }); 
     this.SiteList = lst;
     // if (this.SiteRef == 0 && lst.length > 0) {
     //   this.SiteRef = lst[0].p.Ref
     //   this.getCustomerReportByCompanyAndSiteRef();
     // }
   }
+  getCustomerReportByCompanyRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.companyRef <= 0) {
+         await this.toastService.present('Site not selected', 1000, 'danger');
+      return;
+    }
 
+    let lst = await CRMReports.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      // await this.uiUtils.showErrorMessage('Error', errMsg)
+      await this.toastService.present('Error' + errMsg, 1000, 'danger');
+
+    });
+    this.DisplayMasterList = lst;
+  }
   getCustomerReportByCompanyAndSiteRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
