@@ -68,11 +68,9 @@ export class StockInwardComponent implements OnInit {
       return;
     }
     let lst = await MaterialInwardAgainstPOStatus.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    if (lst.length > 0 && lst[0].p.SiteRef) {
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
       this.loadPaginationData();
-    }
   }
 
   // Extracted from services date conversion //
@@ -90,11 +88,9 @@ export class StockInwardComponent implements OnInit {
     let lst = await MaterialInwardAgainstPOStatus.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-    if (lst[0].p.SiteRef) {
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
       this.loadPaginationData();
-    }
   };
 
   AddStockInward = async () => {
