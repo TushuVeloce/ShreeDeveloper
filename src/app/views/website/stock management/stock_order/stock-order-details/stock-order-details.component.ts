@@ -142,7 +142,7 @@ export class StockOrderDetailsComponent implements OnInit {
       return;
     }
     let lst = await OrderMaterial.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.AllMaterialRequisitionList = lst.filter(material => material.p.IsRequisitionMaterial == 1)
+    this.AllMaterialRequisitionList = lst;
     this.filterMaterialList();
   }
 
@@ -169,7 +169,9 @@ export class StockOrderDetailsComponent implements OnInit {
     this.newOrderMaterial.UnitName = SingleRecord[0].p.UnitName
     this.newOrderMaterial.MaterialName = SingleRecord[0].p.MaterialName
     this.newOrderMaterial.RequisitionQty = SingleRecord[0].p.RequisitionQty
-    this.newOrderMaterial.RequisitionRemainingQty = SingleRecord[0].p.RequisitionQty - SingleRecord[0].p.TotalOrderedQty
+    if (SingleRecord[0].p.RequisitionQty - SingleRecord[0].p.TotalOrderedQty > 0) {
+      this.newOrderMaterial.RequisitionRemainingQty = SingleRecord[0].p.RequisitionQty - SingleRecord[0].p.TotalOrderedQty
+    }
     this.newOrderMaterial.MaterialQuotationDetailRef = SingleRecord[0].p.Ref
     this.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty
     this.newOrderMaterial.TotalOrderedQty = SingleRecord[0].p.TotalOrderedQty;

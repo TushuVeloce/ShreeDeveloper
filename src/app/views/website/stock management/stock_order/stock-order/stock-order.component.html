@@ -3,10 +3,9 @@
     <h1 style="padding-top: 3px;" class="title title_light">Purchase Order List</h1>
   </div>
   <div class="col-4 mb-2 search-container_light">
-      <app-shared-filter [masterList]="MasterList"
-        [filterFields]="['SiteName', 'PurchaseOrderDate', 'VendorName']"
-        (filteredList)="DisplayMasterList = $event"></app-shared-filter>
-    </div>
+    <app-shared-filter [masterList]="MasterList" [filterFields]="['SiteName', 'PurchaseOrderDate', 'VendorName']"
+      (filteredList)="DisplayMasterList = $event"></app-shared-filter>
+  </div>
   <div class="col-4" routerLinkActive="active">
     <nz-button nz-button class="btn1" (click)='AddOrder()'>
       Add Order
@@ -64,8 +63,10 @@
               <td class="tbldata">{{ detail.UnitName }}</td>
               <td class="tbldata">{{ detail.RequisitionQty }}</td>
               <td class="tbldata">{{ detail.OrderedQty }}</td>
+              <td class="tbldata">{{ detail.ExtraOrderedQty }}</td>
               <td class="tbldata">{{ detail.RequisitionRemainingQty }}</td>
-              <td class="tbldata">{{ !detail.DiscountedRate ? (detail.Rate | currency : "INR") : (detail.DiscountedRate | currency : "INR")}}</td>
+              <td class="tbldata">{{ !detail.DiscountedRate ? (detail.Rate | currency : "INR") : (detail.DiscountedRate
+                | currency : "INR")}}</td>
               <td Class="tbldata" width="9%">
                 {{ detail.ExpectedDeliveryDate ? formatDate(detail.ExpectedDeliveryDate) : '--'}}
               </td>
@@ -75,6 +76,35 @@
                 [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
                 <b> {{ Order.p.GrandTotal | currency : "INR" }}</b>
               </td>
+
+
+              <td class="tbldata" style="width: 20%;" *ngIf="j === 0"
+                [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
+                <span style="margin-left: 9px; margin-right: 9px; cursor: pointer;" (click)="navigateToPrint(Order)">
+                  <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" />
+                </span>
+                <span style="margin-left: 9px;"
+                  *ngIf="!checkIsEnable(Order.p.MaterialPurchaseOrderDetailsArray) || Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved"
+                  (click)="onEditClicked(Order)">
+                  <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
+                </span>
+                <span style="margin-left: 9px;"
+                  *ngIf="!checkIsEnable(Order.p.MaterialPurchaseOrderDetailsArray) || Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved"
+                  (click)="onDeleteClicked(Order)">
+                  <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
+                </span>
+                <span style="margin-left: 9px;"
+                  *ngIf="checkIsEnable(Order.p.MaterialPurchaseOrderDetailsArray) && Order.p.MaterialPurchaseOrderStatus != MaterialPurchaseOrderStatus.Approved">
+                  <img src="/assets/icons/GrayEditIcon.png" alt="Edit" title="Disable Edit" width="20px"
+                    height="20px" />
+                </span>
+                <span style="margin-left: 9px;"
+                  *ngIf="checkIsEnable(Order.p.MaterialPurchaseOrderDetailsArray) && Order.p.MaterialPurchaseOrderStatus != MaterialPurchaseOrderStatus.Approved">
+                  <img src="/assets/icons/GreyDustbin.png" alt="Delete" title="Disable Delete" width="20px"
+                    height="20px" />
+                </span>
+              </td>
+
               <!-- Optional: Requisition status -->
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
                 <!-- PENDING -->
@@ -114,31 +144,6 @@
                 <span class="status" *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Ordered"
                   ngClass="ordered">
                   Ordered
-                </span>
-              </td>
-
-              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
-                <span style="margin-left: 9px; margin-right: 9px; cursor: pointer;" (click)="navigateToPrint(Order)">
-                  <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
-                <span style="margin-left: 9px;"
-                  *ngIf="!checkIsEnable(Order.p.MaterialPurchaseOrderDetailsArray) || Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved"
-                  (click)="onEditClicked(Order)">
-                  <img src="/assets/icons/edit.png" alt="Edit" title="Edit" width="20px" height="20px" />
-                </span>
-                <span style="margin-left: 9px;"
-                  *ngIf="!checkIsEnable(Order.p.MaterialPurchaseOrderDetailsArray) || Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved"
-                  (click)="onDeleteClicked(Order)">
-                  <img src="/assets/icons/delete.png" alt="Delete" title="Delete" width="20px" height="20px" />
-                </span>
-                <span style="margin-left: 9px;"
-                  *ngIf="checkIsEnable(Order.p.MaterialPurchaseOrderDetailsArray) && Order.p.MaterialPurchaseOrderStatus != MaterialPurchaseOrderStatus.Approved">
-                  <img src="/assets/icons/GrayEditIcon.png" alt="Edit" title="Disable Edit" width="20px"
-                    height="20px" />
-                </span>
-                <span style="margin-left: 9px;"
-                  *ngIf="checkIsEnable(Order.p.MaterialPurchaseOrderDetailsArray) && Order.p.MaterialPurchaseOrderStatus != MaterialPurchaseOrderStatus.Approved">
-                  <img src="/assets/icons/GreyDustbin.png" alt="Delete" title="Disable Delete" width="20px"
-                    height="20px" />
                 </span>
               </td>
             </tr>

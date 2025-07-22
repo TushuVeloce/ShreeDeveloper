@@ -83,7 +83,6 @@ export class ExpenseDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Expense' : 'Edit Expense';
       this.Entity = Expense.GetCurrentInstance();
-
       if (this.Entity.p.IsAdvancePayment && this.Entity.p.IsSalaryExpense) {
         this.PaymentType = this.TypeofEmployeePayments.Advance;
       } else if (!this.Entity.p.IsAdvancePayment && this.Entity.p.IsSalaryExpense) {
