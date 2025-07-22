@@ -12,6 +12,7 @@ import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
 import { StockInwardFetchRequest } from "./stockinwardfetchrequest";
 import { InwardMaterialDetailProps } from "./inwardmaterial/inwardmaterial";
+import { MaterialInwardAgainstPOStatusFetchRequest } from "./materialinwardagainstpostatusfetchrequest";
 
 export class StockInwardProps {
   public readonly Db_Table_Name = "MaterialInward";
@@ -177,9 +178,10 @@ export class StockInward implements IPersistable<StockInward> {
     let tdResponse = await StockInward.FetchTransportData(req, errorHandler) as TransportData;
     return StockInward.ListFromTransportData(tdResponse);
   }
+
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new StockInwardFetchRequest();
-    req.CompanyRefs.push(CompanyRef)
+    let req = new MaterialInwardAgainstPOStatusFetchRequest();
+     req.CompanyRef = CompanyRef;
     let tdResponse = await StockInward.FetchTransportData(req, errorHandler) as TransportData;
     return StockInward.ListFromTransportData(tdResponse);
   }

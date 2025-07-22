@@ -66,12 +66,13 @@ export class StockInwardComponent  implements OnInit {
       return;
     }
     let lst = await StockInward.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
   }
 
-  
+
    getInwardListByCompanyRefAndSiteRef = async () => {
       this.MasterList = [];
       this.DisplayMasterList = [];
