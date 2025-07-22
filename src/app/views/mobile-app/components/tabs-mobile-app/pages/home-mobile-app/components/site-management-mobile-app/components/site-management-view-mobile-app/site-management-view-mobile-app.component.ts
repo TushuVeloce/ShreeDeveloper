@@ -5,14 +5,18 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DateconversionService } from 'src/app/services/dateconversion.service';
 import { UIUtils } from 'src/app/services/uiutils.service';
+import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
+import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
+import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
+import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
 
 @Component({
   selector: 'app-site-management-view-mobile-app',
   templateUrl: './site-management-view-mobile-app.component.html',
   styleUrls: ['./site-management-view-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class SiteManagementViewMobileAppComponent  implements OnInit {
+export class SiteManagementViewMobileAppComponent implements OnInit {
 
   Entity: Site = Site.CreateNewInstance();
   MasterList: Site[] = [];
@@ -20,10 +24,7 @@ export class SiteManagementViewMobileAppComponent  implements OnInit {
   SearchString: string = '';
   SelectedSite: Site = Site.CreateNewInstance();
   CustomerRef: number = 0;
-  pageSize = 10;
-  currentPage = 1;
-  total = 0;
-  isLoading: boolean = false;
+  // isLoading: boolean = false;
   modalOpen: boolean = false;
   companyRef: number = 0;
   constructor(
@@ -31,10 +32,14 @@ export class SiteManagementViewMobileAppComponent  implements OnInit {
     private router: Router,
     private companystatemanagement: CompanyStateManagement,
     private dateService: DateconversionService,
-    private appStateManagement: AppStateManageService
+    private appStateManagement: AppStateManageService,
+    private toastService: ToastService,
+    private haptic: HapticService,
+    private alertService: AlertService,
+    public loadingService: LoadingService,
   ) { }
   async ngOnInit(): Promise<void> {
-    await this.loadSiteIfCompanyExists();
+    // await this.loadSiteIfCompanyExists();
   }
 
   ionViewWillEnter = async () => {
@@ -59,13 +64,18 @@ export class SiteManagementViewMobileAppComponent  implements OnInit {
 
 
   private async loadSiteIfCompanyExists(): Promise<void> {
-    this.companyRef = Number(this.appStateManagement.StorageKey.getItem('SelectedCompanyRef'));
-    if (this.companyRef <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
-      return;
-    }
-    this.appStateManagement.setSiteRef(0, "")
-    await this.getSiteListByCompanyRef();
+    try {
+      this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
+      if (this.companyRef <= 0) {
+        await this.toastService.present('company not selected', 1000, 'danger');
+        await this.haptic.error()
+        return;
+      }
+      this.appStateManagement.setSiteRef(0, "")
+      await this.getSiteListByCompanyRef();
+    } catch (error) {
+      
+    } 
   }
 
   formatDate = (date: string | Date): string =>
@@ -73,26 +83,33 @@ export class SiteManagementViewMobileAppComponent  implements OnInit {
 
   getSiteListByCompanyRef = async () => {
     try {
-      this.isLoading = true;
+      // this.isLoading = true;
+      await this.loadingService.show();
       this.MasterList = [];
       this.DisplayMasterList = [];
       if (this.companyRef <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
+        await this.toastService.present('company not selected', 1000, 'danger');
+        await this.haptic.error();
         return;
       }
-      let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+      let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+        // await this.uiUtils.showErrorMessage('Error', errMsg)
+        await this.toastService.present(errMsg, 1000, 'danger');
+        await this.haptic.error();
+      });
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
       console.log('DisplayMasterList :', this.DisplayMasterList);
     } catch (error) {
 
     } finally {
-      this.isLoading = false;
+      // this.isLoading = false;
+      await this.loadingService.hide();
     }
   }
 
-  OpenActualStage = async (item: Site) => {
-    this.appStateManagement.setSiteRef(item.p.Ref, item.p.Name)
-    await this.router.navigate(['mobile-app/tabs/dashboard/site-management/site-expenses']);
-  };
+  // OpenActualStage = async (item: Site) => {
+  //   this.appStateManagement.setSiteRef(item.p.Ref, item.p.Name)
+  //   await this.router.navigate(['mobile-app/tabs/dashboard/site-management/site-expenses']);
+  // };
 }

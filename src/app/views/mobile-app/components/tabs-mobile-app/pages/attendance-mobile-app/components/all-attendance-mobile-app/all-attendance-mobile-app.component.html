@@ -51,7 +51,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-list *ngIf="filteredMonthlyAttendanceLogsList.length > 0; else noDataTemplate"
+  <ion-list *ngIf="filteredMonthlyAttendanceLogsList.length > 0 && !loadingService.isLoaderActive()"
     class="attendance-list ion-padding">
     <ion-card *ngFor="let day of filteredMonthlyAttendanceLogsList" class="attendance-card"
       [class.empty]="!day.p.FirstCheckInTime && !day.p.LastCheckOutTime">

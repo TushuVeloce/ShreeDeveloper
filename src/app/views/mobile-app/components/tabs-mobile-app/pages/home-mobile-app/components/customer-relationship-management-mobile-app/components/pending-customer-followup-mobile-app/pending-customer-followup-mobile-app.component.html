@@ -17,8 +17,7 @@
   </ion-list>
   <!-- Customer List -->
   <ion-list class="data-list">
-    <!-- <ng-container *ngIf="!isLoading"> -->
-      <ng-container *ngIf="FilterFollowupList.length > 0 ; else noData">
+      <ng-container *ngIf="FilterFollowupList.length > 0">
         <ion-card *ngFor="let item of FilterFollowupList" class="data-card">
           <ion-card-header>
             <ion-card-title class="info-row"><strong>Customer Name : </strong>{{ item.p.CustomerName }}</ion-card-title>
@@ -46,27 +45,12 @@
           </ion-card-content>
         </ion-card>
       </ng-container>
-    <!-- </ng-container> -->
 
-    <!-- No Data Template
-    <ng-template #noData>
-      <ion-card class="data-card">
-        <ion-card-content class="text-center">
-          <ion-icon name="information-circle-outline" size="large" color="medium"></ion-icon>
-          <div>No Customer Follow up data found.</div>
-        </ion-card-content>
-      </ion-card>
-    </ng-template> -->
-    <!-- No Data Template -->
-    <ng-template #noData>
-      <ion-card class="data-card">
-        <ion-card-content class="text-center">
-          <ion-icon name="information-circle-outline" size="large" color="medium"
-            style="align-self: center;"></ion-icon>
-          <div>No Customer Follow up data found.</div>
-        </ion-card-content>
-      </ion-card>
-    </ng-template>
+      <!-- Show "Data not found" if list is empty -->
+      <div *ngIf="FilterFollowupList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
+        <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+        <p>No Pending Follow up records found.</p>
+      </div>
   </ion-list>
 
   <!-- Floating Action Button -->

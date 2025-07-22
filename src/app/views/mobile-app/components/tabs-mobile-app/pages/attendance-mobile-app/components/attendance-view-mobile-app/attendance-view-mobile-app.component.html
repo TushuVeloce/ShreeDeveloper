@@ -81,7 +81,7 @@
       </ion-grid>
 
       <!-- Table Body -->
-      <ng-container *ngIf="filteredWeeklyAttendanceLogs.length > 0; else noData">
+      <ng-container *ngIf="filteredWeeklyAttendanceLogs.length > 0">
         <ion-grid class="attendance-table-body">
           <ion-row *ngFor="let day of filteredWeeklyAttendanceLogs" class="attendance-row">
             <ion-col size="4">
@@ -95,12 +95,10 @@
       </ng-container>
 
       <!-- Fallback -->
-      <ng-template #noData>
-        <div class="no-data-box">
+        <div class="no-data-box"  *ngIf="filteredWeeklyAttendanceLogs.length == 0 && !loadingService.isLoaderActive()">
           <ion-icon name="alert-circle-outline"></ion-icon>
           <p>No attendance data found</p>
         </div>
-      </ng-template>
     </ion-card-content>
   </ion-card>
 

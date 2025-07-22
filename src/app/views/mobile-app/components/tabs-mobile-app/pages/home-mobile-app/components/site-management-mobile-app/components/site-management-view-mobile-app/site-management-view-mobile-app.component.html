@@ -1,4 +1,4 @@
-<app-loader *ngIf="isLoading"></app-loader>
+<!-- <app-loader *ngIf="isLoading"></app-loader> -->
 <app-header-with-back-handler title="Site Management"
   backRoute="mobile-app/tabs/dashboard"></app-header-with-back-handler>
 
@@ -37,18 +37,18 @@
             <ion-icon name="calendar-outline"></ion-icon>
             <small><strong>Estimated End Date:</strong> {{formatDate(site.p.EstimatedEndDate)}}</small><br />
           </div>
-          <div>
+          <!-- <div>
             <ion-icon name="person-outline"></ion-icon>
             <small><strong>Site In charge Name:</strong> {{ site.p.SiteInchargeName }}</small><br />
-          </div>
+          </div> -->
         </div>
       </ion-card-content>
     </ion-card>
-    <!-- Show "Data not found" if list is empty -->
-    <div *ngIf="DisplayMasterList.length === 0 && !isLoading" class="no-data-mobile-app">
-      <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
-      <p>No Site found.</p>
-    </div>
+      <!-- Show "Data not found" if list is empty -->
+        <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
+        <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+        <p>No Office records found.</p>
+      </div>
   </div>
 
   <!-- Site Details Modal -->
@@ -114,11 +114,11 @@
                 }}</span>
             </div>
 
-            <div class="info-row-of-model">
+            <!-- <div class="info-row-of-model">
               <strong class="label">Site Incharge Name:</strong>
               <span class="value">{{ SelectedSite.p.SiteInchargeName?SelectedSite.p.SiteInchargeName:'-'
                 }}</span>
-            </div>
+            </div> -->
 
             <div class="info-row-of-model">
               <strong class="label">Total Land Area In Sqft:</strong>

@@ -35,7 +35,7 @@
   </ion-list>
 
   <!-- Show "Data not found" if list is empty -->
-  <div *ngIf="DisplayMasterList.length === 0 " class="no-data-mobile-app">
+  <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
     <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
     <p>No Stock Consume records found.</p>
   </div>

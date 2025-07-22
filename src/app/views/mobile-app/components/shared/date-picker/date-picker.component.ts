@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-date-picker',
@@ -9,47 +9,48 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class DatePickerComponent  implements OnInit {
   @Input() show = false;
   @Input() selectedDate: string = '';
-  @Input() defaultToday: boolean = false;
-  @Input() maxDate: string = '2030-12-31';
-  @Input() minDate: string = '2000-01-01';
+  @Input() defaultToday = false;
+  @Input() maxDate = '2030-12-31';
+  @Input() minDate = '2000-01-01';
 
-  @Output() dateSelected = new EventEmitter<string>();  // Fires on "Set"
-  @Output() dateChanged = new EventEmitter<string>();   // Fires on change
-  @Output() modalDismissed = new EventEmitter<void>();  // Fires on "Cancel"
+  @Output() dateSelected = new EventEmitter<string>();
+  @Output() dateChanged = new EventEmitter<string>();
+  @Output() modalDismissed = new EventEmitter<void>();
 
-  ngOnInit() {
+  tempDate: string = '';
+
+  ngOnInit(): void {
     this.initializeDate();
   }
 
-  ngOnChanges(changes: any) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes['show'] && this.show) {
-      this.initializeDate(); // Re-initialize when modal opens
+      this.initializeDate();
     }
   }
 
-  initializeDate() {
-    if (!this.selectedDate && this.defaultToday) {
-      this.selectedDate = new Date().toISOString().split('T')[0];
-    }
+  private initializeDate(): void {
+    const initial = this.selectedDate || (this.defaultToday ? this.formatDate(new Date()) : '');
+    this.tempDate = initial;
   }
 
-  onCancel() {
+  onCancel(): void {
     this.modalDismissed.emit();
   }
 
-  onSet() {
-    if (!this.selectedDate){
-      const formatted = new Date().toISOString().split('T')[0];
-      this.dateSelected.emit(formatted);
-      return;
-    }
-    const formatted = new Date(this.selectedDate).toISOString().split('T')[0];
-    this.dateSelected.emit(formatted);
+  onSet(): void {
+    this.selectedDate = this.tempDate || this.formatDate(new Date());
+    this.dateSelected.emit(this.selectedDate);
+    this.dateChanged.emit(this.selectedDate); // Optional: emit on Set as well
   }
 
-  onChange(event: any) {
-    const newDate = event.detail?.value || this.selectedDate;
-    this.selectedDate = newDate;
-    this.dateChanged.emit(newDate); // Emit ISO string
+  onChange(event: any): void {
+    const newDate = event.detail?.value || this.tempDate;
+    this.tempDate = newDate;
+    // Do not emit here, wait until onSet
+  }
+
+  private formatDate(date: Date): string {
+    return date.toISOString().split('T')[0];
   }
 }

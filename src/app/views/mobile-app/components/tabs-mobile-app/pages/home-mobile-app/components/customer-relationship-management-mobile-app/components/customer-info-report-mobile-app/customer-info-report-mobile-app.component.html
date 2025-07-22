@@ -1,0 +1,72 @@
+<app-header-with-back-handler title="Customer Info Report"
+  backRoute="mobile-app/tabs/dashboard/customer-relationship-management">
+</app-header-with-back-handler>
+<app-chip-filter-mobile-app [filters]="filters" (filtersChanged)="onFiltersChanged($event)">
+</app-chip-filter-mobile-app>
+<ion-content class="ion-padding">
+
+  <!-- Pull-to-refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Table -->
+  <ion-list class="requisition-list" [lines]="'none'" *ngIf="DisplayMasterList.length> 0">
+    <div class="table-container">
+      <div class="table-scroll">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th class="sticky-col sticky-header">#</th>
+              <th class="sticky-header" *ngFor="let header of headers.slice(1)">
+                {{ header }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of DisplayMasterList; let i = index">
+              <td class="sticky-col">{{ i + 1 }}</td>
+              <td>{{ item.p.CustID || '-' }}</td>
+              <td>{{ item.p.CustomerName || '-' }}</td>
+              <td>{{ item.p.CustomerAddress || '-' }}</td>
+              <td>{{ item.p.ContactNos || '-' }}</td>
+              <td>{{ item.p.PANNo || '-' }}</td>
+              <td>{{ item.p.AdharNo || '-' }}</td>
+              <td>{{ item.p.LeadSourceName || '-' }}</td>
+              <td>{{ item.p.BookingRemarkName || '-' }}</td>
+              <td>{{ item.p.PlotNo || '-' }}</td>
+              <td>{{ item.p.AreaInSqm || '-' }}</td>
+              <td>{{ item.p.AreaInSqft || '-' }}</td>
+              <td>{{ item.p.BasicRatePerSqft || '-' }}</td>
+              <td>{{ item.p.DiscountedRateOnArea || '-' }}</td>
+              <td>{{ item.p.TotalPlotAmount || '-' }}</td>
+              <td>{{ item.p.GovernmentValue || '-' }}</td>
+              <td>{{ item.p.ValueOfAgreement || '-' }}</td>
+              <td>{{ item.p.RegTaxValueInPercentage || '-' }}</td>
+              <td>{{ item.p.StampDuties || '-' }}</td>
+              <td>{{ item.p.GstToatalAmount || '-' }}</td>
+              <td>{{ item.p.GoodsServicesTax || '-' }}</td>
+              <td>{{ item.p.LegalCharges || '-' }}</td>
+              <td>{{ item.p.TotalChequeRecieved || '-' }}</td>
+              <td>{{ item.p.TotalCashRecieved || '-' }}</td>
+              <td>{{ item.p.TotalAmountRecieved || '-' }}</td>
+              <td>{{ item.p.GrandTotal || '-' }}</td>
+              <td>
+                <ion-button size="small" fill="outline" (click)="OnCustomerSelection()">
+                  View
+                </ion-button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ion-list>
+
+  <!-- No data found -->
+  <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
+    <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+    <p>No customer info records found.</p>
+  </div>
+
+</ion-content>

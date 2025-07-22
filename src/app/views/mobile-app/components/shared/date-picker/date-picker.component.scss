@@ -1,17 +1,17 @@
 ::ng-deep .custom-modal {
-    --width: 90%;
-    --height: 35%;
-    --border-radius: 16px;
-    --background: #fff;
+  --width: 300px;
+  --height:400px;
+  --border-radius: 16px;
+  --background: #ffffff;
 
-    .date-picker {
-        --background: #fff;
-        --highlight-color-focused: #007aff;
-        --border-color: #ccc;
-        --padding-start: 6px;
-        --inner-padding-end: 6px;
-        --min-height: 40px;
-        --max-width: 100%;
-        --max-height: 100%;
-    }
+  .custom-datetime {
+    --background: #fff;
+    --highlight-color-focused: #3c82f6;
+    --min-height: 300px;
+    width: 100%;
+  }
+
+  .custom-header {
+    border-bottom: 1px solid #ccc;
+  }
 }

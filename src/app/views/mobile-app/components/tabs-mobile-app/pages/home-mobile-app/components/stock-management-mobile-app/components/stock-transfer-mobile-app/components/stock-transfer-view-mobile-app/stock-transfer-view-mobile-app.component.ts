@@ -44,7 +44,7 @@ export class StockTransferViewMobileAppComponent  implements OnInit {
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
-    private loadingService: LoadingService,
+    public loadingService: LoadingService,
     private baseUrl: BaseUrlService,
     private utils: Utils,
   ) { }
