@@ -1,3 +1,10 @@
-<p>
-  customer-summary-report-mobile-app works!
-</p>
+<app-header-with-back-handler title="Customer Info Report"
+  backRoute="mobile-app/tabs/dashboard/customer-relationship-management">
+</app-header-with-back-handler>
+<ion-content class="ion-padding">
+
+  <!-- Pull-to-refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+</ion-content>

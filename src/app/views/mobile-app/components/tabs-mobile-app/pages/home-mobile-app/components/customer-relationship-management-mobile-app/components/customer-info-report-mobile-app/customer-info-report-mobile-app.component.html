@@ -33,25 +33,33 @@
               <td>{{ item.p.PANNo || '-' }}</td>
               <td>{{ item.p.AdharNo || '-' }}</td>
               <td>{{ item.p.LeadSourceName || '-' }}</td>
+              <td>{{ item.p.Reference || '-' }}</td>
               <td>{{ item.p.RegisterCustomerBookingRemarkName || '-' }}</td>
               <td>{{ item.p.PlotNo || '-' }}</td>
               <td>{{ item.p.AreaInSqm || '-' }}</td>
               <td>{{ item.p.AreaInSqft || '-' }}</td>
-              <td>{{ item.p.BasicRate || '-' }}</td>
-              <td>{{ item.p.DiscountedRateOnArea || '-' }}</td>
-              <td>{{ item.p.TotalPlotAmount || '-' }}</td>
-              <td>{{ item.p.GovernmentValue || '-' }}</td>
-              <td>{{ item.p.ValueOfAgreement || '-' }}</td>
+              <td>{{ (item.p.BasicRate | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.DiscountedRateOnArea |currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.DiscountOnTotalPlotAmount | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.TotalPlotAmount | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.GovermentRatePerSqm | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.GovernmentValue | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.ValueOfAgreement | currency : "INR") || '-' }}</td>
               <td>{{ item.p.RegTaxValueInPercentage || '-' }}</td>
-              <td>{{ item.p.StampDuties || '-' }}</td>
-              <td>{{ item.p.GoodsServicesTax || '-' }}</td>
-              <td>{{ item.p.LegalCharges || '-' }}</td>
-              <td>{{ item.p.TotalChequeRecieved || '-' }}</td>
-              <td>{{ item.p.TotalCashRecieved || '-' }}</td>
-              <td>{{ item.p.TotalAmountRecieved || '-' }}</td>
-              <td>{{ item.p.GrandTotal || '-' }}</td>
+              <td>{{ item.p.TaxValueInPercentage || '-' }}</td>
+              <td>{{ (item.p.StampDuties | currency : "INR") || '-' }}</td>
+              <td>{{ item.p.GoodsServicesTax != null ? item.p.GoodsServicesTax + '%' : '-' }}</td>
+              <td>{{ (item.p.TotalExtraCharges | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.LegalCharges | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.TotalChequeRecieved | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.TotalCashRecieved | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.TotalAmountRecieved | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.TotalChequeBalance | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.TotalCashBalance | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.TotalBalance | currency : "INR") || '-' }}</td>
+              <td>{{ (item.p.GrandTotal| currency : "INR") || '-' }}</td>
               <td>
-                <ion-button size="small" fill="outline" (click)="OnCustomerSelection()">
+                <ion-button size="small" fill="outline" (click)="onViewClicked(item)">
                   View
                 </ion-button>
               </td>
@@ -67,5 +75,66 @@
     <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
     <p>No customer info records found.</p>
   </div>
+  <ion-modal [isOpen]="ModalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
+    <ng-container *ngIf="SelectedCRMReports">
+      <ion-header class="modal-toolbar-mobile-app">
+        <ion-toolbar color="primary">
+          <ion-title>Customer Details</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="closeModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <!-- { label: 'Status', value: SelectedCRMReports.p.CustomerStatusName }, -->
 
+      <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
+        <div class="info-row-of-model-mobile-app" *ngFor="let field of [
+    { label: 'Customer ID', value: SelectedCRMReports.p.CustID },
+    { label: 'Customer Name', value: SelectedCRMReports.p.CustomerName },
+    { label: 'Address', value: SelectedCRMReports.p.CustomerAddress },
+    { label: 'Contact No', value: SelectedCRMReports.p.ContactNos },
+    { label: 'PAN No', value: SelectedCRMReports.p.PANNo },
+    { label: 'Aadhar No', value: SelectedCRMReports.p.AdharNo },
+    { label: 'Lead Source', value: SelectedCRMReports.p.LeadSourceName },
+    { label: 'Agent/Broker', value: SelectedCRMReports.p.Reference },
+    { label: 'Booking Remark', value: SelectedCRMReports.p.RegisterCustomerBookingRemarkName },
+    { label: 'Plot No', value: SelectedCRMReports.p.PlotNo },
+    { label: 'Area in Sqm', value: SelectedCRMReports.p.AreaInSqm },
+    { label: 'Area in Sqft', value: SelectedCRMReports.p.AreaInSqft },
+    { label: 'Basic Rate', value: SelectedCRMReports.p.BasicRate | currency : 'INR' },
+    { label: 'Discounted Rate on Area', value: SelectedCRMReports.p.DiscountedRateOnArea | currency : 'INR' },
+    { label: 'Discount On Total Plot Amount', value: SelectedCRMReports.p.DiscountOnTotalPlotAmount | currency : 'INR' },
+    { label: 'Total Plot Amount', value: SelectedCRMReports.p.TotalPlotAmount | currency : 'INR' },
+    { label: 'Government Rate per Sqm', value: SelectedCRMReports.p.GovermentRatePerSqm | currency : 'INR' },
+    { label: 'Government Value', value: SelectedCRMReports.p.GovernmentValue | currency : 'INR' },
+    { label: 'Value of Agreement', value: SelectedCRMReports.p.ValueOfAgreement | currency : 'INR' },
+    { label: 'Reg Tax Value (%)', value: SelectedCRMReports.p.RegTaxValueInPercentage != null ? SelectedCRMReports.p.RegTaxValueInPercentage + '%' : '-' },
+    { label: 'Tax Value (%)', value: SelectedCRMReports.p.TaxValueInPercentage != null ? SelectedCRMReports.p.TaxValueInPercentage + '%' : '-' },
+    { label: 'Stamp Duties', value: SelectedCRMReports.p.StampDuties | currency : 'INR' },
+    { label: 'GST (%)', value: SelectedCRMReports.p.GoodsServicesTax != null ? SelectedCRMReports.p.GoodsServicesTax + '%' : '-' },
+    { label: 'Total Extra Charges', value: SelectedCRMReports.p.TotalExtraCharges | currency : 'INR' },
+    { label: 'Legal Charges', value: SelectedCRMReports.p.LegalCharges | currency : 'INR' },
+    { label: 'Total Cheque Received', value: SelectedCRMReports.p.TotalChequeRecieved | currency : 'INR' },
+    { label: 'Total Cash Received', value: SelectedCRMReports.p.TotalCashRecieved | currency : 'INR' },
+    { label: 'Total Amount Received', value: SelectedCRMReports.p.TotalAmountRecieved | currency : 'INR' },
+    { label: 'Total Cheque Balance', value: SelectedCRMReports.p.TotalChequeBalance | currency : 'INR' },
+    { label: 'Total Cash Balance', value: SelectedCRMReports.p.TotalCashBalance | currency : 'INR' },
+    { label: 'Total Balance', value: SelectedCRMReports.p.TotalBalance | currency : 'INR' },
+    { label: 'Grand Total', value: SelectedCRMReports.p.GrandTotal | currency : 'INR' }
+  ]">
+          <strong class="label-mobile-app">{{ field.label }}:</strong>
+          <span class="value-mobile-app">
+            {{ field.value !== null && field.value !== undefined && field.value !== '' ? field.value : '-' }}
+          </span>
+        </div>
+      </ion-content>
+
+
+      <ion-footer class="modal-footer-mobile-app">
+        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">Close</ion-button>
+      </ion-footer>
+    </ng-container>
+  </ion-modal>
 </ion-content>

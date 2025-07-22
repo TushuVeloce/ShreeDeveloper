@@ -35,7 +35,12 @@ export class CustomerSummaryReportMobileAppComponent  implements OnInit {
 
   ngOnInit() { }
 
-
+  async handleRefresh(event: CustomEvent): Promise<void> {
+    // await this.loadCustomerInfoReportIfCompanyExists();
+    // // await this.filterCustomerList();
+    // await this.loadFilters();
+    (event.target as HTMLIonRefresherElement).complete();
+  }
   FormulateSiteListByCompanyRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
@@ -83,5 +88,6 @@ export class CustomerSummaryReportMobileAppComponent  implements OnInit {
       this.Entity = report[0];
     }
   }
+
 
 }

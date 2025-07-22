@@ -393,18 +393,18 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Account Main Ledger',
         RouterLink: '/homepage/Website/Account_Main_Ledger',
-        LogoPath: '/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/Account Main Ledger.png',
       },
       {
         Name: 'Account Sub Ledger',
         RouterLink: '/homepage/Website/Account_Sub_Ledger',
-        LogoPath: '/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/Account Sub Ledger.png',
       },
-      {
-        Name: 'Marketing Type Master',
-        RouterLink: '/homepage/Website/Marketing_Type_Master',
-        LogoPath: '/assets/icons/Marketing Type Master.png',
-      },
+      // {
+      //   Name: 'Marketing Type Master',
+      //   RouterLink: '/homepage/Website/Marketing_Type_Master',
+      //   LogoPath: '/assets/icons/Marketing Type Master.png',
+      // },
       {
         Name: 'Vendor Service Master',
         RouterLink: '/homepage/Website/Vendor_Services_Master',
@@ -463,7 +463,7 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'User Role Right',
         RouterLink: '/homepage/Website/User_Role_Rights',
-        LogoPath: '/assets/icons/Material Master.png',
+        LogoPath: '/assets/icons/User Role Right Master.png',
       },
       // {
       //   Name: 'External Users',
@@ -493,12 +493,12 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Owner Master',
         RouterLink: '/homepage/Website/Owner_Master',
-        LogoPath: '/assets/icons/Employee Master.png',
+        LogoPath: '/assets/icons/owner_master.png',
       },
       {
         Name: 'Payer Master',
         RouterLink: '/homepage/Website/Payer_Master',
-        LogoPath: '/assets/icons/Employee Master.png',
+        LogoPath: '/assets/icons/payer_master.png',
       },
       // {
       //   Name: 'Employee Appraisal Master',
@@ -540,7 +540,7 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Material Requisition',
         RouterLink: '/homepage/Website/Material_Requisition',
-        LogoPath: '/assets/icons/Office Duty_Time.png',
+        LogoPath: '/assets/icons/material_requisition.png',
       },
       // {
       //   Name: 'Quotation',
@@ -550,12 +550,12 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Stock Order',
         RouterLink: '/homepage/Website/Stock_Order',
-        LogoPath: '/assets/icons/Office Duty_Time.png',
+        LogoPath: '/assets/icons/stock_inward.png',
       },
       {
         Name: 'Stock Inward',
         RouterLink: '/homepage/Website/Stock_Inward',
-        LogoPath: '/assets/icons/Office Duty_Time.png',
+        LogoPath: '/assets/icons/stock_inward.png',
       },
       {
         Name: 'Stock Consume',
@@ -565,12 +565,12 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Stock Transfer',
         RouterLink: '/homepage/Website/Stock_Transfer',
-        LogoPath: '/assets/icons/Office Duty_Time.png',
+        LogoPath: '/assets/icons/stock_transfer.png',
       },
       {
         Name: 'Stock Summary',
         RouterLink: '/homepage/Website/Stock_Summary',
-        LogoPath: '/assets/icons/Office Duty_Time.png',
+        LogoPath: '/assets/icons/stock_summary.png',
       },
     ]
 
@@ -588,7 +588,7 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Pending Follow Up',
         RouterLink: '/homepage/Website/Pending_FollowUp',
-        LogoPath: '/assets/icons/Customer Followup.png',
+        LogoPath: '/assets/icons/pending_follow_up.png',
       },
       {
         Name: 'Registered Customer',
@@ -598,12 +598,12 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Customer Summary',
         RouterLink: '/homepage/Website/Customer_Summary_Report',
-        LogoPath: '/assets/icons/Registered Customer.png',
+        LogoPath: '/assets/icons/customer_summary_report.png',
       },
       {
         Name: 'Customer Info',
         RouterLink: '/homepage/Website/Customer_Info_Report',
-        LogoPath: '/assets/icons/Registered Customer.png',
+        LogoPath: '/assets/icons/customer_info_report.png',
       }
     ]
 
@@ -683,12 +683,12 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Employee Overtime',
         RouterLink: '/homepage/Website/Employee_Overtime',
-        LogoPath: '/assets/icons/Salary Slip Approval.png',
+        LogoPath: '/assets/icons/overtime.png',
       },
       {
         Name: 'Company Holidays',
         RouterLink: '/homepage/Website/Company_Holidays',
-        LogoPath: '/assets/icons/Salary Slip Approval.png',
+        LogoPath: '/assets/icons/holiday.png',
       }
 
     ]
@@ -730,22 +730,22 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Billing',
         RouterLink: '/homepage/Website/Billing',
-        LogoPath: '/assets/icons/Customer Enquiry.png',
+        LogoPath: '/assets/icons/invoice.png',
       },
       {
         Name: 'Expense',
         RouterLink: '/homepage/Website/Expense',
-        LogoPath: '/assets/icons/Customer Followup.png',
+        LogoPath: '/assets/icons/expense.png',
       },
       {
         Name: 'Income',
         RouterLink: '/homepage/Website/Income',
-        LogoPath: '/assets/icons/Customer Followup.png',
+        LogoPath: '/assets/icons/income.png',
       },
       {
         Name: 'Office Report',
         RouterLink: '/homepage/Website/Accounting_Report',
-        LogoPath: '/assets/icons/Customer Followup.png',
+        LogoPath: '/assets/icons/office_report.png',
       },
     ]
 
@@ -795,7 +795,7 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Stock Management',
         RouterLink: '',
-        WhiteLogo: '/assets/icons/Hr-Payroll Management.png',
+        WhiteLogo: '/assets/icons/stock.png',
         SubModuleList: StockManagementSubModuleList,
       },
       {
@@ -813,7 +813,7 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Accounting',
         RouterLink: '',
-        WhiteLogo: '/assets/icons/Request.png',
+        WhiteLogo: '/assets/icons/Expense Type.png',
         SubModuleList: AccountingSubModuleList,
       },
       // {
