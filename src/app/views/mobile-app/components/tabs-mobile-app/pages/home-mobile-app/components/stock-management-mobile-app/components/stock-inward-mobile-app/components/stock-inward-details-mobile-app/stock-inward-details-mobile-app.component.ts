@@ -406,7 +406,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
 
   getVendorDataByVendorRef = async (vendorref: number) => {
     this.Entity.p.VendorTradeName = '';
-    this.Entity.p.VendorMobNo = '';
+    this.Entity.p.VendorPhoneNo = '';
     if (vendorref <= 0 || vendorref <= 0) {
       // await this.uiUtils.showErrorToster('Material not Selected');
       await this.toastService.present('Material not Selected', 1000, 'warning');
@@ -420,7 +420,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
     }
     );
     this.Entity.p.VendorTradeName = lst.p.TradeName;
-    this.Entity.p.VendorMobNo = lst.p.MobileNo;
+    this.Entity.p.VendorPhoneNo = lst.p.MobileNo;
   }
 
   CalculateRemainingQty = (InwardQty: number, RemainingQty: number) => {

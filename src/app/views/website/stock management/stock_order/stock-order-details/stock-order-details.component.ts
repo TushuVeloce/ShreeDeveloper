@@ -309,15 +309,9 @@ export class StockOrderDetailsComponent implements OnInit {
       this.Entity.p.MaterialPurchaseOrderDetailsArray[this.editingIndex] = { ...this.newOrderMaterial };
       await this.uiUtils.showSuccessToster('Material updated successfully');
       this.isOrderMaterialModalOpen = false;
-
     } else {
-      let OrderMaterialInstance = new OrderMaterial(this.newOrderMaterial, true);
-      let OrderInstance = new Order(this.Entity.p, true);
-      await OrderMaterialInstance.EnsurePrimaryKeysWithValidValues();
-      await OrderInstance.EnsurePrimaryKeysWithValidValues();
-
+      this.Entity.p.MaterialPurchaseOrderDetailsArray.push({ ...this.newOrderMaterial });
       this.newOrderMaterial.MaterialPurchaseOrderRef = this.Entity.p.Ref;
-      this.Entity.p.MaterialPurchaseOrderDetailsArray.push({ ...OrderMaterialInstance.p });
       this.filterMaterialList();
       await this.uiUtils.showSuccessToster('Material added successfully');
       this.resetMaterialControls()
@@ -402,8 +396,6 @@ export class StockOrderDetailsComponent implements OnInit {
       this.newOrderMaterial.RequisitionRemainingQty = this.newOrderMaterial.RequisitionQty - this.newOrderMaterial.TotalOrderedQty;
       this.newOrderMaterial.ExtraOrderedQty = 0;
     }
-
-
 
     if (this.newOrderMaterial.DiscountedRate == 0) {
       this.newOrderMaterial.NetAmount = (this.newOrderMaterial.Rate * this.newOrderMaterial.OrderedQty);

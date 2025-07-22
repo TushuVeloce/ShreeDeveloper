@@ -34,13 +34,13 @@
             placeholder="Site Name" readonly />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
-          <label>Ordered Date</label>
+          <label>Purchase Ordered Date</label>
           <input type="date" name="PurchaseOrderDate" class="form-control" id="PurchaseOrderDate"
-            [(ngModel)]="Entity.p.PurchaseOrderDate" placeholder="Ordered Date" readonly />
+            [(ngModel)]="PurchaseOrderDate" placeholder="Ordered Date" readonly />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Inward Date</label>
-          <input type="date" name="InwardDate" class="form-control" id="InwardDate" [(ngModel)]="Entity.p.InwardDate"
+          <input type="date" name="InwardDate" class="form-control" id="InwardDate" [(ngModel)]="InwardDate"
             #InwardDateCtrl="ngModel" required (blur)="InwardDateCtrl.control.markAsTouched()"
             placeholder="Enter Site Name" [min]="Entity.p.PurchaseOrderDate" />
           <div *ngIf="
@@ -61,9 +61,9 @@
             id="VendorTradeName" placeholder="Vendor Trade Name" readonly />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
-          <label><b>Vendor Mob No</b></label>
-          <input type="text" [(ngModel)]="Entity.p.VendorMobNo" name="VendorMobNo" class="form-control" id="VendorMobNo"
-            placeholder="Vendor Mob No" readonly />
+          <label><b>Vendor Mobile No</b></label>
+          <input type="text" [(ngModel)]="Entity.p.VendorPhoneNo" name="VendorPhoneNo" class="form-control"
+            id="VendorPhoneNo" placeholder="Vendor Mob No" readonly />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label><b>Chalan No</b></label>
@@ -75,11 +75,6 @@
           <input type="text" [(ngModel)]="Entity.p.VehicleNo" name="VehicleNo" class="form-control" id="VehicleNo"
             placeholder="Vehicle No" />
         </div>
-        <!-- <div class="col-md-4" style="margin-top: 1rem">
-          <label><b>Remaining Required Quantity</b></label>
-          <input type="number" [(ngModel)]="Entity.p.RemainingQty" name="RemainingQty" class="form-control" id="RemainingQty"
-            placeholder="Remaining Required Quantity" />
-        </div> -->
       </div>
       <div class="row mt-3">
         <div class="col-md-2 d-flex justify-content-center align-items-center">

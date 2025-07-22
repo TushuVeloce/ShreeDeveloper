@@ -36,7 +36,6 @@ export class StockInwardPrintComponent implements OnInit {
     private appStateManage: AppStateManageService,
     private utils: Utils,
     private dtu: DTU,
-    private companystatemanagement: CompanyStateManagement,
     private DateconversionService: DateconversionService,
   ) { }
 

@@ -1,6 +1,7 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { MaterialInwardAgainstPOStatus } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/materialinwardagainstpostatus';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
@@ -15,22 +16,24 @@ import { UIUtils } from 'src/app/services/uiutils.service';
   templateUrl: './stock-inward.component.html',
   styleUrls: ['./stock-inward.component.scss'],
 })
-export class StockInwardComponent  implements OnInit {
+export class StockInwardComponent implements OnInit {
 
-  Entity: StockInward = StockInward.CreateNewInstance();
-  MasterList: StockInward[] = [];
-  DisplayMasterList: StockInward[] = [];
+  Entity: MaterialInwardAgainstPOStatus = MaterialInwardAgainstPOStatus.CreateNewInstance();
+  MasterList: MaterialInwardAgainstPOStatus[] = [];
+  DisplayMasterList: MaterialInwardAgainstPOStatus[] = [];
   list: [] = []
   SiteList: Site[] = [];
   SearchString: string = '';
-  SelectedStockInward: StockInward = StockInward.CreateNewInstance();
+  SelectedStockInward: MaterialInwardAgainstPOStatus = MaterialInwardAgainstPOStatus.CreateNewInstance();
   CustomerRef: number = 0;
   pageSize = 10;
   currentPage = 1;
   total = 0;
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
-  headers: string[] = ['Sr.No.','Chalan No','Site Name','Ordered Date','Inward Date','Vendor Name','Action'];
+
+  headers: string[] = ['Sr.No.', 'Chalan No', 'Purchase Order Date', 'Site', 'Vendor', 'Material', 'Unit', 'Ordered Qty', 'Total Inward Qty', 'Remaining Qty', 'Status', 'Action & Print'];
+
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService, private dtu: DTU,
   ) {
@@ -55,7 +58,6 @@ export class StockInwardComponent  implements OnInit {
     if (this.SiteList.length > 0) {
       this.Entity.p.SiteRef = 0
     }
-    // this.getInwardListByAllFilters()
   }
 
   getStockInwardListByCompanyRef = async () => {
@@ -65,33 +67,35 @@ export class StockInwardComponent  implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await StockInward.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
-    this.MasterList = lst;
-    this.DisplayMasterList = this.MasterList;
-    this.loadPaginationData();
-  }
-
-
-   getInwardListByCompanyRefAndSiteRef = async () => {
-      this.MasterList = [];
-      this.DisplayMasterList = [];
-      if (this.Entity.p.SiteRef <= 0) {
-        this.getStockInwardListByCompanyRef();
-        return;
-      }
-      let lst = await StockInward.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
-        async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
-      );
+    let lst = await MaterialInwardAgainstPOStatus.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    if (lst.length > 0 && lst[0].p.SiteRef) {
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
       this.loadPaginationData();
-    };
+    }
+  }
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
     return this.DateconversionService.formatDate(date);
   }
+
+  getInwardListByCompanyRefAndSiteRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+    if (this.Entity.p.SiteRef <= 0) {
+      this.getStockInwardListByCompanyRef();
+      return;
+    }
+    let lst = await MaterialInwardAgainstPOStatus.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+    if (lst[0].p.SiteRef) {
+      this.MasterList = lst;
+      this.DisplayMasterList = this.MasterList;
+      this.loadPaginationData();
+    }
+  };
 
   AddStockInward = async () => {
     if (this.companyRef() <= 0) {
@@ -101,20 +105,20 @@ export class StockInwardComponent  implements OnInit {
     await this.router.navigate(['/homepage/Website/Stock_Inward_Details']);
   }
 
-  onEditClicked = async (item: StockInward) => {
-    this.SelectedStockInward = item.GetEditableVersion();
-    StockInward.SetCurrentInstance(this.SelectedStockInward);
-    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/homepage/Website/Stock_Inward_Details']);
+  onEditClicked = async (item: MaterialInwardAgainstPOStatus) => {
+    this.router.navigate(['/homepage/Website/Stock_Inward_Details'], {
+      state: { inwardref: item.p.InwardRef }
+    });
+
   };
 
-    navigateToPrint = async (item: StockInward) => {
-        this.router.navigate(['/homepage/Website/Stock_Inward_Print'], {
-          state: { printData: item.GetEditableVersion() }
-        });
-      }
+  navigateToPrint = async (item: MaterialInwardAgainstPOStatus) => {
+    this.router.navigate(['/homepage/Website/Stock_Inward_Print'], {
+      state: { printData: item.GetEditableVersion() }
+    });
+  }
 
-  onDeleteClicked = async (StockInward: StockInward) => {
+  onDeleteClicked = async (StockInward: MaterialInwardAgainstPOStatus) => {
     await this.uiUtils.showConfirmationMessage(
       'Delete',
       `This process is <strong>IRREVERSIBLE!</strong> <br/>

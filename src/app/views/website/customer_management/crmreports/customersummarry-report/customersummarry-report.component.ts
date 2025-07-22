@@ -12,8 +12,6 @@ import { UIUtils } from 'src/app/services/uiutils.service';
 })
 export class CustomersummarryReportComponent implements OnInit {
   Entity: CRMReports = CRMReports.CreateNewInstance();
-  MasterList: CRMReports[] = [];
-  DisplayMasterList: CRMReports[] = [];
   SiteList: Site[] = [];
   CustomerList: CRMReports[] = [];
   SiteRef: number = 0;
@@ -30,10 +28,10 @@ export class CustomersummarryReportComponent implements OnInit {
 
 
   FormulateSiteListByCompanyRef = async () => {
-    this.MasterList = [];
-    this.DisplayMasterList = [];
     this.SiteList = [];
     this.SiteRef = 0;
+    this.CustomerList = [];
+    this.Entity = CRMReports.CreateNewInstance();
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -47,8 +45,8 @@ export class CustomersummarryReportComponent implements OnInit {
   }
 
   getCustomerReportByCompanyAndSiteRef = async () => {
-    this.MasterList = [];
-    this.DisplayMasterList = [];
+    this.Entity = CRMReports.CreateNewInstance();
+    this.CustomerList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -59,10 +57,6 @@ export class CustomersummarryReportComponent implements OnInit {
     }
     let lst = await CRMReports.FetchEntireListByCompanyAndSiteRef(this.companyRef(), this.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.CustomerList = lst;
-    if (this.CustomerRef == 0 && lst.length > 0) {
-      this.CustomerRef = lst[0].p.CustomerEnquiryRef
-      this.OnCustomerSelection();
-    }
 
   }
 
