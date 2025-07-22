@@ -45,7 +45,7 @@ export class AllAttendanceMobileAppComponent implements OnInit, OnDestroy {
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
-    private loadingService: LoadingService,
+    public loadingService: LoadingService,
     private companystatemanagement: CompanyStateManagement,
   ) { }
 

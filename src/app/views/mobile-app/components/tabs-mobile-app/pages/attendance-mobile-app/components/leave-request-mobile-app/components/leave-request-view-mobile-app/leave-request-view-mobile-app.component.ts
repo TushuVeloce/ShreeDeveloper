@@ -43,7 +43,7 @@ export class LeaveRequestViewMobileAppComponent  implements OnInit {
     private toast: ToastService,
     private haptic: HapticService,
     private alert: AlertService,
-    private loader: LoadingService
+    public loadingService: LoadingService
   ) { }
 
   async ngOnInit() {
@@ -63,7 +63,7 @@ export class LeaveRequestViewMobileAppComponent  implements OnInit {
 
   private async initializeLeaveRequests() {
     try {
-      this.loader.show();
+      this.loadingService.show();
       const employeeRef = this.appState.getEmployeeRef();
       this.entity.p.EmployeeRef = employeeRef;
       this.companyRef = Number(this.appState.localStorage.getItem('SelectedCompanyRef'));
@@ -79,7 +79,7 @@ export class LeaveRequestViewMobileAppComponent  implements OnInit {
       await this.toast.present('Failed to load data', 1000, 'danger');
       await this.haptic.error();
     } finally {
-      this.loader.hide();
+      this.loadingService.hide();
     }
   }
 

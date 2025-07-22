@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { IonContent } from "@ionic/angular/standalone";
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -50,7 +49,7 @@ export class StockInwardViewMobileAppComponent  implements OnInit {
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
-    private loadingService: LoadingService,
+    public loadingService: LoadingService,
     private sanitizer: DomSanitizer,
     private baseUrl: BaseUrlService,
     private utils: Utils,
@@ -309,7 +308,7 @@ export class StockInwardViewMobileAppComponent  implements OnInit {
   };
 
   navigateToPrint = async (item: StockInward) => {
-    this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-inward/print'], {
+    this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/print'], {
       state: { printData: item.GetEditableVersion() },
     });
   };

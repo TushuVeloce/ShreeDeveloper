@@ -105,7 +105,7 @@
       </ion-card-content>
     </ion-card>
     <!-- Show "Data not found" if list is empty -->
-    <div *ngIf="filteredRequests.length === 0" class="no-data-mobile-app">
+    <div *ngIf="filteredRequests.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
       <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
       <p>No Leave Request records found.</p>
     </div>

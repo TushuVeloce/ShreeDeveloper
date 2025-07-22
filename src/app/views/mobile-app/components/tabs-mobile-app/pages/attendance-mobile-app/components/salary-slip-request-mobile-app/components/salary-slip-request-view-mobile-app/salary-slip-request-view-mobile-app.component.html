@@ -59,7 +59,7 @@
     <small>Try changing the status filter or refreshing the list.</small>
   </div> -->
   <!-- Show "Data not found" if list is empty -->
-  <div *ngIf="filteredSalarySlipRequestList.length === 0" class="no-data-mobile-app">
+  <div *ngIf="filteredSalarySlipRequestList.length === 0&& !loadingService.isLoaderActive()" class="no-data-mobile-app">
     <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
     <p>No salary slip records found.</p>
   </div>

@@ -22,9 +22,9 @@ import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filt
   selector: 'app-pending-customer-followup-mobile-app',
   templateUrl: './pending-customer-followup-mobile-app.component.html',
   styleUrls: ['./pending-customer-followup-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class PendingCustomerFollowupMobileAppComponent  implements OnInit {
+export class PendingCustomerFollowupMobileAppComponent implements OnInit {
 
   Entity: CustomerFollowUp = CustomerFollowUp.CreateNewInstance();
   SiteList: Site[] = [];
@@ -46,10 +46,10 @@ export class PendingCustomerFollowupMobileAppComponent  implements OnInit {
   ContactModeList = DomainEnums.ContactModeList();
   selectedFilters: any[] = [];
 
-    filters: FilterItem[] = [];
-    // Store current selected values here to preserve selections on filter reload
-    selectedFilterValues: Record<string, any> = {};
-  
+  filters: FilterItem[] = [];
+  // Store current selected values here to preserve selections on filter reload
+  selectedFilterValues: Record<string, any> = {};
+
   constructor(
     // private uiUtils: UIUtils,
     private router: Router,
@@ -57,10 +57,10 @@ export class PendingCustomerFollowupMobileAppComponent  implements OnInit {
     private companystatemanagement: CompanyStateManagement,
     private dateconversionService: DateconversionService,
     private filterService: FilterService, private dtu: DTU,
-        private toastService: ToastService,
-        private haptic: HapticService,
-        private alertService: AlertService,
-        private loadingService: LoadingService
+    private toastService: ToastService,
+    private haptic: HapticService,
+    private alertService: AlertService,
+    public loadingService: LoadingService
   ) { }
 
   async ngOnInit() {
@@ -68,11 +68,11 @@ export class PendingCustomerFollowupMobileAppComponent  implements OnInit {
   }
   ionViewWillEnter = async () => {
     await this.LoadAllData();
-    await  this.loadFilters();
+    await this.loadFilters();
   };
   async handleRefresh(event: CustomEvent): Promise<void> {
     await this.LoadAllData();
-    await  this.loadFilters();
+    await this.loadFilters();
     (event.target as HTMLIonRefresherElement).complete();
   }
   ngOnDestroy(): void {

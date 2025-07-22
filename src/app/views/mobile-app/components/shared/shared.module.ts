@@ -15,6 +15,8 @@ import { TransactionFilterComponent } from './transaction-filter/transaction-fil
 import { ChipSelectorComponent } from './chip-selector/chip-selector.component';
 import { DatePickerComponent } from './date-picker/date-picker.component';
 import { ChipFilterMobileAppComponent } from './chip-filter-mobile-app/chip-filter-mobile-app.component';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 @NgModule({
   declarations: [HeaderComponent, HeaderWithBackHandlerComponent, SelectModalComponent, FilterSheetComponent, SkeletonLoaderComponent, InputFieldComponent, CustomButtonComponent, DateFieldComponent, TransactionFilterComponent, ChipSelectorComponent, DatePickerComponent,ChipFilterMobileAppComponent],
   imports: [
@@ -22,6 +24,8 @@ import { ChipFilterMobileAppComponent } from './chip-filter-mobile-app/chip-filt
     IonicModule,
     FormsModule,
     ReactiveFormsModule,
+    NzDatePickerModule,
+    NzModalModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA] ,
   exports: [HeaderComponent, HeaderWithBackHandlerComponent, SelectModalComponent,FilterSheetComponent,SkeletonLoaderComponent,InputFieldComponent,CustomButtonComponent,DateFieldComponent,TransactionFilterComponent,ChipSelectorComponent,DatePickerComponent,ChipFilterMobileAppComponent]

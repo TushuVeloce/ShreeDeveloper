@@ -52,7 +52,7 @@ export class MaterialRequisitionViewMobileAppComponent implements OnInit {
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
-    private loadingService: LoadingService
+    public loadingService: LoadingService
   ) { }
 
   ngOnInit = async () => {

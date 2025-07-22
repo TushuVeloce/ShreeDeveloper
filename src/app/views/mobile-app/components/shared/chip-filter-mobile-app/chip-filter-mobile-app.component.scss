@@ -7,45 +7,79 @@
     align-items: center;
     scroll-behavior: smooth;
 
-    /* Hide scrollbars (cross-browser) */
     &::-webkit-scrollbar {
         display: none;
     }
 
     -ms-overflow-style: none;
-    /* IE and Edge */
     scrollbar-width: none;
-    /* Firefox */
 }
 
-.chip-with-clear {
+.redesigned-chip {
     position: relative;
     display: flex;
     align-items: center;
 
-    .chip-select {
-        --min-width: unset;
-        --max-width: max-content;
+    ion-select.chip-select {
         --padding-start: 12px;
-        --padding-end: 30px;
-        /* padding to leave space for icon */
+        --padding-end: 36px; // leave room for icon
         --border-radius: 20px;
         --background: var(--ion-color-light);
         --color: var(--ion-color-dark);
+        --min-width: max-content;
+        --max-width: 100%;
         font-weight: 500;
         border: 1px solid var(--ion-color-medium);
         border-radius: 20px;
+        font-size: 14px;
         white-space: nowrap;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease-in-out;
     }
 
     .clear-icon {
         position: absolute;
+        right: 8px;
         top: 50%;
-        right: 6px;
         transform: translateY(-50%);
-        // color: 'primary';
-        font-size: 18px;
+        font-size: 20px;
         cursor: pointer;
         z-index: 10;
+        transition: color 0.2s;
+
+        &:hover {
+            color: var(--ion-color-danger);
+        }
     }
+}
+
+.clear-all-btn {
+    --border-radius: 16px;
+    font-size: 13px;
+    height: 30px;
+    padding: 0 12px;
+}
+
+ion-select.chip-select {
+    --padding-start: 12px;
+    --padding-end: 36px;
+    --min-width: max-content;
+    --max-width: 100%;
+    --border-radius: 20px;
+    --background: var(--ion-color-light);
+    --color: var(--ion-color-dark);
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid var(--ion-color-medium);
+    border-radius: 20px;
+    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease-in-out;
+
+    &:focus-within {
+        box-shadow: 0 0 0 2px var(--ion-color-primary-shade);
+    }
+}
+ion-select.chip-select:hover {
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
 }

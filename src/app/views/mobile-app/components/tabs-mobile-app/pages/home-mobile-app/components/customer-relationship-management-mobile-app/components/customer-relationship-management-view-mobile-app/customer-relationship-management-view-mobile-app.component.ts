@@ -43,6 +43,16 @@ export class CustomerRelationshipManagementViewMobileAppComponent  implements On
       icon: 'assets/icons/attendance _mobile_app.png',
       label: 'Pending Followup',
       routerPath: '/mobile-app/tabs/dashboard/customer-relationship-management/pending-customer-followup'
+    },
+    {
+      icon: 'assets/icons/attendance _mobile_app.png',
+      label: 'customer Info Report',
+      routerPath: '/mobile-app/tabs/dashboard/customer-relationship-management/customer-info-report'
+    },
+    {
+      icon: 'assets/icons/attendance _mobile_app.png',
+      label: 'Customer Summary Report',
+      routerPath: '/mobile-app/tabs/dashboard/customer-relationship-management/customer-summary-report'
     }
   ];
 
@@ -89,7 +99,7 @@ export class CustomerRelationshipManagementViewMobileAppComponent  implements On
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
-    private loadingService: LoadingService
+    public loadingService: LoadingService
   ) { }
 
   async ngOnInit() {
