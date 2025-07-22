@@ -49,10 +49,7 @@ export class CustomerinfoReportComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
-    // if (this.SiteRef == 0 && lst.length > 0) {
-    //   this.SiteRef = lst[0].p.Ref
-    //   this.getCustomerReportByCompanyAndSiteRef();
-    // }
+
   }
 
   getCustomerReportByCompanyRef = async () => {
@@ -64,6 +61,7 @@ export class CustomerinfoReportComponent implements OnInit {
     }
 
     let lst = await CRMReports.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.DisplayMasterList = lst;
   }
 

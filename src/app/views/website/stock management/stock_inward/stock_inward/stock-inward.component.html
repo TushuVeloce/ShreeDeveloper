@@ -3,7 +3,8 @@
     <h1 style="padding-top: 3px;" class="title title_light">Stock Inward List</h1>
   </div>
   <div class="col-4 mb-2 search-container_light">
-    <app-shared-filter [masterList]="MasterList" [filterFields]="['ChalanNo', 'SiteName', 'PurchaseOrderDate', 'InwardDate','VendorName']"
+    <app-shared-filter [masterList]="MasterList"
+      [filterFields]="['ChalanNo', 'SiteName', 'PurchaseOrderDate', 'InwardDate','VendorName']"
       (filteredList)="DisplayMasterList = $event"></app-shared-filter>
   </div>
   <div class="col-4 mb-2" routerLinkActive="active">
@@ -134,19 +135,33 @@
           </ng-container>
         </ng-container>
       </tbody> -->
-    
+
 
       <tbody>
         <tr *ngFor="let inward of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{inward.p.ChalanNo}}</td>
+          <td Class="tbldata">{{inward.p.PurchaseOrderDate}}</td>
           <td Class="tbldata">{{inward.p.SiteName}}</td>
-          <td Class="tbldata">{{formatDate(inward.p.PurchaseOrderDate)}}</td>
-          <td Class="tbldata">{{formatDate(inward.p.InwardDate)}}</td>
-           <td Class="tbldata">{{inward.p.VendorName}}</td>
+          <td Class="tbldata">{{inward.p.VendorName }}</td>
+          <td Class="tbldata">{{inward.p.MaterialName}}</td>
+          <td Class="tbldata">{{inward.p.UnitName}}</td>
+          <td Class="tbldata">{{inward.p.OrderedQty}}</td>
+          <td Class="tbldata">{{inward.p.TotalInwardQty }}</td>
+          <td Class="tbldata">{{inward.p.BalanceQty }}</td>
+          <td Class="tbldata">
+            <!-- Completed -->
+            <span class="status" *ngIf="inward.p.Status == 'Complete'" ngClass="completed">
+              Completed
+            </span>
+            <!-- Incomplete -->
+            <span class="status" *ngIf="inward.p.Status == 'Incomplete'" ngClass="incomplete">
+              Incomplete
+            </span>
+          </td>
           <td class="tbldata">
-             <span style="margin-left: 9px; margin-right: 9px; cursor: pointer;" (click)="navigateToPrint(inward)">
-                  <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
+            <span style="margin-left: 3px; margin-right: 3px; cursor: pointer;" (click)="navigateToPrint(inward)">
+              <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" /></span>
             <Edit-Icon (editClick)="onEditClicked(inward)" />
             <Delete-Icon (deleteClicked)="onDeleteClicked(inward)" />
           </td>

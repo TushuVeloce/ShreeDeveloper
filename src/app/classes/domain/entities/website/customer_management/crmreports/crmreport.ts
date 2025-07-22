@@ -26,7 +26,7 @@ export class CRMReportsProps {
   public PANNo: string = '';
   public PlotNo: string = '';
   public LeadSourceName: string = '';
-  public BookingRemarkName: string = '';
+  public RegisterCustomerBookingRemarkName: string = '';
   public AreaInSqm: number = 0;
   public AreaInSqft: number = 0;
   public BasicRatePerSqft: number = 0;

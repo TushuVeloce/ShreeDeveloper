@@ -10,12 +10,12 @@ import { Utils } from "src/app/services/utils.service";
 import { isNullOrUndefined } from "src/tools";
 import { UIUtils } from "src/app/services/uiutils.service";
 import { RequestTypes } from "src/app/classes/infrastructure/enums";
-import { StockInwardFetchRequest } from "./stockinwardfetchrequest";
 import { InwardMaterialDetailProps } from "./inwardmaterial/inwardmaterial";
 import { MaterialInwardAgainstPOStatusFetchRequest } from "./materialinwardagainstpostatusfetchrequest";
 
-export class StockInwardProps {
-  public readonly Db_Table_Name = "MaterialInward";
+export class MaterialInwardAgainstPOStatusProps {
+  public readonly Db_Table_Name = "MaterialInwardAgainstPOStatus";
+
   public CreatedBy: number = 0;
   public CreatedByName: string = '';
   public CreatedDate: string = '';
@@ -25,22 +25,31 @@ export class StockInwardProps {
   public MaterialInwardRef: number = 0;
   public Ref: number = 0;
   public SiteRef: number = 0;
-  public readonly SiteName: string = '';
+  public SiteName: string = '';
+  public PurchaseOrderRef: number = 0;
+  public MaterialRef: number = 0;
+  public MaterialName: string = '';
+  public UnitName: string = '';
+  public OrderedQty: number = 0;
+  public TotalInwardQty: number = 0;
+  public BalanceQty: number = 0;
+  public Status: string = '';
+  public InwardRef: number = 0;
+  public ChalanNo: number = 0;
   public PurchaseOrderDate: string = '';
-  public InwardDate: string = '';
+  public SiteAddressLine1: string = '';
+  public SiteAddressLine2: string = '';
   public VendorRef: number = 0;
-  public readonly VendorName: string = '';
-  public MaterialPurchaseOrderRef: number = 0;
+  public VendorName: string = '';
   public VendorTradeName: string = '';
-  public VendorMobNo: string = '';
-  public ChalanNo: number = 0
-  public VehicleNo: string = ''
-  public RemainingQty: number = 0
+  public VendorAddressLine1: string = '';
+  public VendorAddressLine2: string = '';
+  public VendorPhoneNo: string = '';
   public CompanyRef: number = 0;
   public CompanyName: string = '';
-  public MaterialInwardInvoicePath: string = "";
-  public MaterialInwardDetailsArray: InwardMaterialDetailProps[] = [];
-
+  public CompanyAddressLine1: string = '';
+  public CompanyAddressLine2: string = '';
+  public CompanyPhoneNo: string = '';
 
   public readonly IsNewlyCreated: boolean = false;
   private constructor(isNewlyCreated: boolean) {
@@ -48,14 +57,14 @@ export class StockInwardProps {
   }
 
   public static Blank() {
-    return new StockInwardProps(true);
+    return new MaterialInwardAgainstPOStatusProps(true);
   }
 }
 
-export class StockInward implements IPersistable<StockInward> {
-  public static readonly Db_Table_Name: string = 'MaterialInward';
+export class MaterialInwardAgainstPOStatus implements IPersistable<MaterialInwardAgainstPOStatus> {
+  public static readonly Db_Table_Name: string = 'MaterialInwardAgainstPOStatus';
 
-  public constructor(public readonly p: StockInwardProps, public readonly AllowEdit: boolean) {
+  public constructor(public readonly p: MaterialInwardAgainstPOStatusProps, public readonly AllowEdit: boolean) {
 
   }
 
@@ -68,17 +77,17 @@ export class StockInward implements IPersistable<StockInward> {
     }
   }
 
-  public GetEditableVersion(): StockInward {
-    let newState: StockInwardProps = Utils.GetInstance().DeepCopy(this.p);
-    return StockInward.CreateInstance(newState, true);
+  public GetEditableVersion(): MaterialInwardAgainstPOStatus {
+    let newState: MaterialInwardAgainstPOStatusProps = Utils.GetInstance().DeepCopy(this.p);
+    return MaterialInwardAgainstPOStatus.CreateInstance(newState, true);
   }
 
   public static CreateNewInstance() {
-    return new StockInward(StockInwardProps.Blank(), true);
+    return new MaterialInwardAgainstPOStatus(MaterialInwardAgainstPOStatusProps.Blank(), true);
   }
 
   public static CreateInstance(data: any, allowEdit: boolean) {
-    return new StockInward(data as StockInwardProps, allowEdit);
+    return new MaterialInwardAgainstPOStatus(data as MaterialInwardAgainstPOStatusProps, allowEdit);
   }
 
   public CheckSaveValidity(_td: TransportData, vra: ValidationResultAccumulator): void {
@@ -89,28 +98,28 @@ export class StockInward implements IPersistable<StockInward> {
   }
 
   public MergeIntoTransportData(td: TransportData) {
-    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, StockInward.Db_Table_Name, this.p);
+    DataContainerService.GetInstance().MergeIntoContainer(td.MainData, MaterialInwardAgainstPOStatus.Db_Table_Name, this.p);
   }
 
-  private static m_currentInstance: StockInward = StockInward.CreateNewInstance();
+  private static m_currentInstance: MaterialInwardAgainstPOStatus = MaterialInwardAgainstPOStatus.CreateNewInstance();
 
   public static GetCurrentInstance() {
-    return StockInward.m_currentInstance;
+    return MaterialInwardAgainstPOStatus.m_currentInstance;
   }
 
-  public static SetCurrentInstance(value: StockInward) {
-    StockInward.m_currentInstance = value;
+  public static SetCurrentInstance(value: MaterialInwardAgainstPOStatus) {
+    MaterialInwardAgainstPOStatus.m_currentInstance = value;
   }
 
 
   // ********************************************
   public static cacheDataChangeLevel: number = -1;
 
-  public static SingleInstanceFromTransportData(td: TransportData): StockInward {
+  public static SingleInstanceFromTransportData(td: TransportData): MaterialInwardAgainstPOStatus {
     let dcs = DataContainerService.GetInstance();
-    if (dcs.CollectionExists(td.MainData, StockInward.Db_Table_Name)) {
-      for (let data of dcs.GetCollection(td.MainData, StockInward.Db_Table_Name)!.Entries) {
-        return StockInward.CreateInstance(data, false);
+    if (dcs.CollectionExists(td.MainData, MaterialInwardAgainstPOStatus.Db_Table_Name)) {
+      for (let data of dcs.GetCollection(td.MainData, MaterialInwardAgainstPOStatus.Db_Table_Name)!.Entries) {
+        return MaterialInwardAgainstPOStatus.CreateInstance(data, false);
       }
     }
 
@@ -119,13 +128,13 @@ export class StockInward implements IPersistable<StockInward> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-    sortPropertyName: string = ""): StockInward[] {
-    let result: StockInward[] = [];
+    sortPropertyName: string = ""): MaterialInwardAgainstPOStatus[] {
+    let result: MaterialInwardAgainstPOStatus[] = [];
 
     let dcs = DataContainerService.GetInstance();
 
-    if (dcs.CollectionExists(cont, StockInward.Db_Table_Name)) {
-      let coll = dcs.GetCollection(cont, StockInward.Db_Table_Name)!;
+    if (dcs.CollectionExists(cont, MaterialInwardAgainstPOStatus.Db_Table_Name)) {
+      let coll = dcs.GetCollection(cont, MaterialInwardAgainstPOStatus.Db_Table_Name)!;
       let entries = coll.Entries;
 
       if (!isNullOrUndefined(filterPredicate)) entries = entries.filter(filterPredicate);
@@ -135,18 +144,18 @@ export class StockInward implements IPersistable<StockInward> {
       }
 
       for (let data of entries) {
-        result.push(StockInward.CreateInstance(data, false));
+        result.push(MaterialInwardAgainstPOStatus.CreateInstance(data, false));
       }
     }
 
     return result;
   }
 
-  public static ListFromTransportData(td: TransportData): StockInward[] {
-    return StockInward.ListFromDataContainer(td.MainData);
+  public static ListFromTransportData(td: TransportData): MaterialInwardAgainstPOStatus[] {
+    return MaterialInwardAgainstPOStatus.ListFromDataContainer(td.MainData);
   }
 
-  public static async FetchTransportData(req: StockInwardFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchTransportData(req: MaterialInwardAgainstPOStatusFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = req.FormulateTransportData();
     let pktRequest = PayloadPacketFacade.GetInstance().CreateNewPayloadPacket2(tdRequest);
 
@@ -160,39 +169,38 @@ export class StockInward implements IPersistable<StockInward> {
     return tdResponse;
   }
 
-  public static async FetchInstance(ref: number, companyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new StockInwardFetchRequest();
+  public static async FetchInstance(ref: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new MaterialInwardAgainstPOStatusFetchRequest();
     req.StockInwardManagementRefs.push(ref);
-    req.CompanyRefs.push(companyRef);
 
-    let tdResponse = await StockInward.FetchTransportData(req, errorHandler) as TransportData;
-    return StockInward.SingleInstanceFromTransportData(tdResponse);
+    let tdResponse = await MaterialInwardAgainstPOStatus.FetchTransportData(req, errorHandler) as TransportData;
+    return MaterialInwardAgainstPOStatus.SingleInstanceFromTransportData(tdResponse);
   }
 
-  public static async FetchList(req: StockInwardFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let tdResponse = await StockInward.FetchTransportData(req, errorHandler) as TransportData;
-    return StockInward.ListFromTransportData(tdResponse);
+  public static async FetchList(req: MaterialInwardAgainstPOStatusFetchRequest, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let tdResponse = await MaterialInwardAgainstPOStatus.FetchTransportData(req, errorHandler) as TransportData;
+    return MaterialInwardAgainstPOStatus.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireList(errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new StockInwardFetchRequest();
-    let tdResponse = await StockInward.FetchTransportData(req, errorHandler) as TransportData;
-    return StockInward.ListFromTransportData(tdResponse);
+    let req = new MaterialInwardAgainstPOStatusFetchRequest();
+    let tdResponse = await MaterialInwardAgainstPOStatus.FetchTransportData(req, errorHandler) as TransportData;
+    return MaterialInwardAgainstPOStatus.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByCompanyRef(CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MaterialInwardAgainstPOStatusFetchRequest();
     req.CompanyRef = CompanyRef;
-    let tdResponse = await StockInward.FetchTransportData(req, errorHandler) as TransportData;
-    return StockInward.ListFromTransportData(tdResponse);
+    let tdResponse = await MaterialInwardAgainstPOStatus.FetchTransportData(req, errorHandler) as TransportData;
+    return MaterialInwardAgainstPOStatus.ListFromTransportData(tdResponse);
   }
 
   public static async FetchEntireListByCompanyRefAndSiteRef(CompanyRef: number, SiteRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
-    let req = new StockInwardFetchRequest();
+    let req = new MaterialInwardAgainstPOStatusFetchRequest();
     req.SiteRefs.push(SiteRef)
-    req.CompanyRefs.push(CompanyRef)
-    let tdResponse = await StockInward.FetchTransportData(req, errorHandler) as TransportData;
-    return StockInward.ListFromTransportData(tdResponse);
+    req.CompanyRef = CompanyRef;
+    let tdResponse = await MaterialInwardAgainstPOStatus.FetchTransportData(req, errorHandler) as TransportData;
+    return MaterialInwardAgainstPOStatus.ListFromTransportData(tdResponse);
   }
 
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {

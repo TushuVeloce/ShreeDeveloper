@@ -6,7 +6,7 @@ import { Material } from 'src/app/classes/domain/entities/website/masters/materi
 import { MaterialFromOrder } from 'src/app/classes/domain/entities/website/masters/material/orderedmaterial/materialfromorder';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
-import { InwardMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/inwardmaterial/inwardmaterial';
+import { InwardMaterial, InwardMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/inwardmaterial/inwardmaterial';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { MaterialStockOrder } from 'src/app/classes/domain/entities/website/stock_management/stock_order/materialstockorder/materialstockorder';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
@@ -28,7 +28,7 @@ export class StockInwardDetailsComponent implements OnInit {
   Entity: StockInward = StockInward.CreateNewInstance();
   private IsNewEntity: boolean = true;
   isSaveDisabled: boolean = false;
-  DetailsFormTitle: 'New Stock Inward' | 'Edit Stock Inward' = 'New Stock Inward';
+  DetailsFormTitle: string = 'Edit Stock Inward';
   IsDropdownDisabled: boolean = false;
   InitialEntity: StockInward = null as any;
   SiteList: Site[] = [];
@@ -89,27 +89,23 @@ export class StockInwardDetailsComponent implements OnInit {
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.getSiteListByCompanyRef()
-    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
-      this.IsNewEntity = false;
-      this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Inward' : 'Edit Stock Inward';
-      this.Entity = StockInward.GetCurrentInstance();
-      console.log('this.Entity :', this.Entity);
-      this.PurchaseOrderDate = this.Entity.p.PurchaseOrderDate
-      this.appStateManage.StorageKey.removeItem('Editable');
-      this.SessionAddedRefs = []; // ✅ Reset session-added materials
-      this.shouldFilterDropdown = false;
-      if (this.Entity.p.PurchaseOrderDate != '') {
-        this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate)
-      }
-      if (this.Entity.p.InwardDate != '') {
-        this.Entity.p.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate)
-      }
-      await this.getMaterialListByCompanySiteVendorRefAndPurchaseOrderDate(this.Entity.p.SiteRef, this.Entity.p.VendorRef)
-      await this.getVendorDataByVendorRef(this.Entity.p.VendorRef)
-    } else {
-      this.Entity = StockInward.CreateNewInstance();
-      StockInward.SetCurrentInstance(this.Entity);
+    this.IsNewEntity = false;
+    // this.Entity = StockInward.GetCurrentInstance();
+    console.log(' history.state.inwardref :', history.state.inwardref);
+    this.getInwardSingleInstanceByInwardRef(history.state.inwardref);
+    this.PurchaseOrderDate = this.Entity.p.PurchaseOrderDate
+    this.appStateManage.StorageKey.removeItem('Editable');
+    this.SessionAddedRefs = []; // ✅ Reset session-added materials
+    this.shouldFilterDropdown = false;
+    if (this.Entity.p.PurchaseOrderDate != '') {
+      this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate)
     }
+    if (this.Entity.p.InwardDate != '') {
+      this.Entity.p.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate)
+    }
+    await this.getMaterialListByCompanySiteVendorRefAndPurchaseOrderDate(this.Entity.p.SiteRef, this.Entity.p.VendorRef)
+    await this.getVendorDataByVendorRef(this.Entity.p.VendorRef)
+
     this.InitialEntity = Object.assign(
       StockInward.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
@@ -123,6 +119,17 @@ export class StockInwardDetailsComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.SiteList = lst;
+  }
+
+  getInwardSingleInstanceByInwardRef = async (InwardRef: number) => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await StockInward.FetchInstance(InwardRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    this.Entity = lst;
+    // this.SiteList = lst;
   }
 
   // Extracted from services date conversion //

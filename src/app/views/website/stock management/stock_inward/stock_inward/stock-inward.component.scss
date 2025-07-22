@@ -1,0 +1,30 @@
+.tblheader,
+.tbldata {
+  white-space: nowrap; // Prevent text from wrapping
+  overflow: hidden; // Hide overflow text (optional)
+  text-overflow: ellipsis; // Show ellipsis if overflowed (optional)
+  max-width: 200px; // Optional: control column width
+}
+
+
+
+.status {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 14px;
+  width: 100px;
+  border: 1px solid;
+  display: inline-block;
+  color: black;
+
+  &.completed {
+    border-color: #007bff;
+    background-color: #e6f0ff;
+  }
+
+  &.incomplete {
+    border-color: #ff9900;
+    background-color: #fff5e6;
+  }
+}
