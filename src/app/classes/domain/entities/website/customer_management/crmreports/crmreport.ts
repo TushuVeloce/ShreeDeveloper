@@ -29,11 +29,11 @@ export class CRMReportsProps {
   public RegisterCustomerBookingRemarkName: string = '';
   public AreaInSqm: number = 0;
   public AreaInSqft: number = 0;
-  public BasicRatePerSqft: number = 0;
-  public BasicRatePerSqm: number = 0;
+  public BasicRate: number = 0;
   public DiscountedRateOnArea: number = 0;
   public TotalPlotAmount: number = 0;
   public GovernmentValue: number = 0;
+  public GovernmentRecknor: number = 0;
   public StampDuties: number = 0;
   public RegistrationFees: number = 0;
   public LegalCharges: number = 0;
@@ -45,9 +45,12 @@ export class CRMReportsProps {
   public GoodsServicesTax: number = 0;
   public TotalChequeRecieved: number = 0;
   public TotalCashRecieved: number = 0;
-  public RemainingAmount: number = 0;
   public TotalAmountRecieved: number = 0;
-  public GstToatalAmount: number = 0;
+  public TotalChequeBalance: number = 0;
+  public TotalCashBalance: number = 0;
+  public TotalBalance: number = 0;
+  public RemainingAmount: number = 0;
+
 
 
   public readonly IsNewlyCreated: boolean = false;
