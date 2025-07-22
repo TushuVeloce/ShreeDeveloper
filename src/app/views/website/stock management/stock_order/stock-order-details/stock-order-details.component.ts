@@ -316,6 +316,7 @@ export class StockOrderDetailsComponent implements OnInit {
       await this.uiUtils.showSuccessToster('Material added successfully');
       this.resetMaterialControls()
     }
+    console.log('this.newOrderMaterial :', this.newOrderMaterial);
     this.newOrderMaterial = OrderMaterialDetailProps.Blank();
     this.editingIndex = null;
   }

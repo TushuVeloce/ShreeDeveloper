@@ -340,7 +340,9 @@ export class StockInwardDetailsComponent implements OnInit {
       await this.uiUtils.showSuccessToster('Material added successfully');
     }
 
+    let Date = this.newInward.Date;
     this.newInward = InwardMaterialDetailProps.Blank();
+    this.newInward.Date = Date;
     this.NewRemainingQty = 0;
     this.editingIndex = null;
   }
