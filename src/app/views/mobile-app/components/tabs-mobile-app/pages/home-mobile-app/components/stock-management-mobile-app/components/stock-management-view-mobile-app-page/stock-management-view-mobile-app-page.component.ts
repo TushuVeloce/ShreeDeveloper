@@ -24,7 +24,7 @@ export class StockManagementViewMobileAppPageComponent  implements OnInit {
   }
   gridItems = [
     {
-      icon: 'assets/icons/site_management_mobile_app.png',
+      icon: 'assets/icons/material_requisition_mobile_app.png',
       label: 'Material Requisition',
       routerPath: '/mobile-app/tabs/dashboard/stock-management/material-requisition'
     },
@@ -39,7 +39,7 @@ export class StockManagementViewMobileAppPageComponent  implements OnInit {
       routerPath: '/mobile-app/tabs/dashboard/stock-management/stock-order'
     },
     {
-      icon: 'assets/icons/crm_mobile_app.png',
+      icon: 'assets/icons/stock_inward_mobile_app.png',
       label: 'Stock Inward',
       routerPath: '/mobile-app/tabs/dashboard/stock-management/stock-inward'
     },
@@ -49,15 +49,15 @@ export class StockManagementViewMobileAppPageComponent  implements OnInit {
       routerPath: '/mobile-app/tabs/dashboard/stock-management/stock-consume'
     },
     {
-      icon: 'assets/icons/report_mobile_app.png',
+      icon: 'assets/icons/stock_transfer_mobile_app.png',
       label: 'Stock Transfer',
       routerPath: '/mobile-app/tabs/dashboard/stock-management/stock-transfer'
     },
-    // {
-    //   icon: 'assets/icons/report_mobile_app.png',
-    //   label: 'Report',
-    //   routerPath: '/mobileapp/tabs/dashboard/stock-management/stock-consume'
-    // },
+    {
+      icon: 'assets/icons/report_mobile_app.png',
+      label: 'Stock Summary',
+      routerPath: '/mobile-app/tabs/dashboard/stock-management/stock-summary'
+    },
   ];
 
   // selectedIndex = 0;

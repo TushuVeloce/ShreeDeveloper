@@ -30,27 +30,27 @@ export class CustomerRelationshipManagementViewMobileAppComponent  implements On
   ];
   gridItems = [
     {
-      icon: 'assets/icons/salary_slip_request_mobile_app.png',
+      icon: 'assets/icons/customer_enquiry_mobile_app.png',
       label: 'Customer Enquiry',
       routerPath: '/mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry'
     },
     {
-      icon: 'assets/icons/leave_requests_mobile_app.png',
+      icon: 'assets/icons/customer_followup_mobile_app.png',
       label: 'Followup',
       routerPath: '/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup'
     },
     {
-      icon: 'assets/icons/attendance _mobile_app.png',
+      icon: 'assets/icons/pending_follow_up_mobile_app.png',
       label: 'Pending Followup',
       routerPath: '/mobile-app/tabs/dashboard/customer-relationship-management/pending-customer-followup'
     },
     {
-      icon: 'assets/icons/attendance _mobile_app.png',
+      icon: 'assets/icons/customer_info_report_mobile_app.png',
       label: 'customer Info Report',
       routerPath: '/mobile-app/tabs/dashboard/customer-relationship-management/customer-info-report'
     },
     {
-      icon: 'assets/icons/attendance _mobile_app.png',
+      icon: 'assets/icons/customer_summary_report_mobile_app.png',
       label: 'Customer Summary Report',
       routerPath: '/mobile-app/tabs/dashboard/customer-relationship-management/customer-summary-report'
     }

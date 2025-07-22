@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { StockManagementMobileAppPage } from './stock-management-mobile-app.page';
 import { StockManagementViewMobileAppPageComponent } from './components/stock-management-view-mobile-app-page/stock-management-view-mobile-app-page.component';
+import { StockSummaryMobileAppComponent } from './components/stock-summary-mobile-app/stock-summary-mobile-app.component';
 
 const routes: Routes = [
   {
@@ -11,6 +12,7 @@ const routes: Routes = [
     children: [
       // { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: '', component: StockManagementViewMobileAppPageComponent },
+      { path: 'stock-summary', component: StockSummaryMobileAppComponent },
       {
         path: 'material-requisition',
         loadChildren: () => import('./components/material-requisition-mobile-app/material-requisition-mobile-app.module').then(m => m.MaterialRequisitionMobileAppPageModule)
