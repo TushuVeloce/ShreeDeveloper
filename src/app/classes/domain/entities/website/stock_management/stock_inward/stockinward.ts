@@ -21,6 +21,7 @@ export class StockInwardProps {
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
   public UpdatedDate: number = 0;
+  public MaterialInwardRef: number = 0;
   public Ref: number = 0;
   public SiteRef: number = 0;
   public readonly SiteName: string = '';
@@ -28,6 +29,7 @@ export class StockInwardProps {
   public InwardDate: string = '';
   public VendorRef: number = 0;
   public readonly VendorName: string = '';
+  public MaterialPurchaseOrderRef: number = 0;
   public VendorTradeName: string = '';
   public VendorMobNo: string = '';
   public ChalanNo: number = 0
@@ -57,11 +59,11 @@ export class StockInward implements IPersistable<StockInward> {
   }
 
   public async EnsurePrimaryKeysWithValidValues(): Promise<void> {
-    if (this.p.Ref === undefined || this.p.Ref === 0) {
+    if (this.p.MaterialInwardRef === undefined || this.p.MaterialInwardRef === 0) {
       const newRefs = await IdProvider.GetInstance().GetNextEntityId();
       // const newRefs = await IdProvider.GetInstance().GetAllocateSingleIds();
-      this.p.Ref = newRefs[0];
-      if (this.p.Ref <= 0) throw new Error("Cannot assign Id. Please try again");
+      this.p.MaterialInwardRef = newRefs[0];
+      if (this.p.MaterialInwardRef <= 0) throw new Error("Cannot assign Id. Please try again");
     }
   }
 

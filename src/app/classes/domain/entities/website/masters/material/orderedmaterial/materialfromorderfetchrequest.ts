@@ -4,27 +4,26 @@ import { Utils } from 'src/app/services/utils.service';
 import { RequestTypes } from 'src/app/classes/infrastructure/enums';
 import { DataCollection } from 'src/app/classes/infrastructure/datacollection';
 
-export class MaterialFromOrderFetchRequest
-{
-    public static readonly FetchRequestType: string = "GetMaterialFromMaterialStockOrderedFetchRequest";
+export class MaterialFromOrderFetchRequest {
+  public static readonly FetchRequestType: string = "GetMaterialFromMaterialStockOrderedFetchRequest";
 
-    CompanyRef: number=0
-    MaterialRefs: number[] = [];
-    SiteRef:number=0
-    VendorRef :number=0
-    OrderedDate:string = ''
+  CompanyRef: number = 0
+  MaterialRefs: number[] = [];
+  SiteRef: number = 0
+  VendorRef: number = 0
+  MaterialInwardRef: number = 0
+  MaterialPurchaseOrderRef: number = 0
 
-    public MergeIntoTransportData = (td: TransportData) =>
-    {
-        let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, MaterialFromOrderFetchRequest.FetchRequestType) as DataCollection;
-        coll.Entries.push(this);
-    }
+  public MergeIntoTransportData = (td: TransportData) => {
+    let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, MaterialFromOrderFetchRequest.FetchRequestType) as DataCollection;
+    coll.Entries.push(this);
+  }
 
-    public FormulateTransportData = () => {
-        let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.Fetch);
-        this.MergeIntoTransportData(td);
+  public FormulateTransportData = () => {
+    let td = Utils.GetInstance().CreateNewTransportData(RequestTypes.Fetch);
+    this.MergeIntoTransportData(td);
 
-        return td;
-    }
+    return td;
+  }
 }
 

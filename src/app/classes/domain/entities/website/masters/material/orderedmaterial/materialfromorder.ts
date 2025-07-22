@@ -21,15 +21,15 @@ export class MaterialFromOrderProps {
   public UpdatedByName: number = 0;
   public Ref: number = 0;
   public InternalRef: number = 0;
-  public MaterialRef:number=0
-  public MaterialStockOrderDetailsRef:number=0
+  public MaterialRef: number = 0
+  public MaterialStockOrderDetailsRef: number = 0
   public Code: string = '';
   public MaterialName: string = '';
   public UnitRef: number = 0;
   public readonly UnitName: string = '';
   public OrderQty: number = 0
-  public RemainingQty : number = 0
-  public IsMaterialExist : number = 0
+  public RemainingQty: number = 0
+  public IsMaterialExist: number = 0
   public CompanyRef: number = 0;
   public CompanyName: string = '';
 
@@ -118,7 +118,7 @@ export class MaterialFromOrder implements IPersistable<MaterialFromOrder> {
 
   public static ListFromDataContainer(cont: DataContainer,
     filterPredicate: (arg0: any) => boolean = null as any,
-   sortPropertyName: string = ""): MaterialFromOrder[] {
+    sortPropertyName: string = ""): MaterialFromOrder[] {
     let result: MaterialFromOrder[] = [];
 
     let dcs = DataContainerService.GetInstance();
@@ -159,7 +159,7 @@ export class MaterialFromOrder implements IPersistable<MaterialFromOrder> {
     return tdResponse;
   }
 
-  public static async FetchInstance(ref: number,companyRef:number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchInstance(ref: number, companyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MaterialFromOrderFetchRequest();
     req.MaterialRefs.push(ref);
     req.CompanyRef = companyRef
@@ -186,12 +186,13 @@ export class MaterialFromOrder implements IPersistable<MaterialFromOrder> {
     return MaterialFromOrder.ListFromTransportData(tdResponse);
   }
 
-   public static async FetchOrderedMaterials(SiteRef:number,VendorRef:number, CompanyRef: number,OrderedDate:string, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchOrderedMaterials(SiteRef: number, VendorRef: number, CompanyRef: number, MaterialPurchaseOrderRef: number, MaterialInwardRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MaterialFromOrderFetchRequest();
-     req.CompanyRef = CompanyRef
-     req.SiteRef = SiteRef
-     req.VendorRef = VendorRef
-     req.OrderedDate = OrderedDate
+    req.CompanyRef = CompanyRef
+    req.SiteRef = SiteRef
+    req.VendorRef = VendorRef
+    req.MaterialPurchaseOrderRef = MaterialPurchaseOrderRef
+    req.MaterialInwardRef = MaterialInwardRef
     let tdResponse = await MaterialFromOrder.FetchTransportData(req, errorHandler) as TransportData;
     return MaterialFromOrder.ListFromTransportData(tdResponse);
   }

@@ -19,13 +19,13 @@ import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.s
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
 
- @Component({
+@Component({
   selector: 'app-stock-inward-details-mobile-app',
   templateUrl: './stock-inward-details-mobile-app.component.html',
   styleUrls: ['./stock-inward-details-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class StockInwardDetailsMobileAppComponent  implements OnInit {
+export class StockInwardDetailsMobileAppComponent implements OnInit {
 
   Entity: StockInward = StockInward.CreateNewInstance();
   private IsNewEntity: boolean = true;
@@ -170,161 +170,161 @@ export class StockInwardDetailsMobileAppComponent  implements OnInit {
     this.DisplayInwardDate = this.InwardDate;
   }
 
-  
-    @ViewChild('fileInput', { static: false }) fileInput!: ElementRef<HTMLInputElement>;
-  
-    selectedFiles: { file: File; type: 'image' | 'pdf'; preview: string }[] = [];
-    maxFiles = 1;
-    selectedImage = '';
-    isImageModalOpen = false;
-  
-    // Check if there are any files to show
-    hasFiles(): boolean {
-      return this.selectedFiles.length > 0 || !!this.Entity?.p?.MaterialInwardInvoicePath;
+
+  @ViewChild('fileInput', { static: false }) fileInput!: ElementRef<HTMLInputElement>;
+
+  selectedFiles: { file: File; type: 'image' | 'pdf'; preview: string }[] = [];
+  maxFiles = 1;
+  selectedImage = '';
+  isImageModalOpen = false;
+
+  // Check if there are any files to show
+  hasFiles(): boolean {
+    return this.selectedFiles.length > 0 || !!this.Entity?.p?.MaterialInwardInvoicePath;
+  }
+
+  // Decide which files to loop in *ngFor
+  previewFiles(): { file: File; type: 'image' | 'pdf'; preview: string }[] {
+    if (this.selectedFiles.length > 0) return this.selectedFiles;
+
+    if (this.selectedFileName) {
+      const isImage = this.isImageFile(this.selectedFileName);
+      const dummyFile = new File([], this.selectedFileName);
+
+      return [{
+        file: dummyFile,
+        type: isImage ? 'image' : 'pdf',
+        preview: `${this.ImageBaseUrl}${this.selectedFileName}/${this.LoginToken}?${this.TimeStamp}`,
+      }];
     }
-  
-    // Decide which files to loop in *ngFor
-    previewFiles(): { file: File; type: 'image' | 'pdf'; preview: string }[] {
-      if (this.selectedFiles.length > 0) return this.selectedFiles;
-  
-      if (this.selectedFileName) {
-        const isImage = this.isImageFile(this.selectedFileName);
-        const dummyFile = new File([], this.selectedFileName);
-  
-        return [{
-          file: dummyFile,
-          type: isImage ? 'image' : 'pdf',
-          preview: `${this.ImageBaseUrl}${this.selectedFileName}/${this.LoginToken}?${this.TimeStamp}`,
-        }];
+
+    return [];
+  }
+
+
+  async onFilesSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+    if (!files) return;
+
+    for (const file of Array.from(files)) {
+      if (this.selectedFiles.length >= this.maxFiles) {
+        this.toastService.present(`Maximum ${this.maxFiles} files allowed.`, 1000, 'warning');
+        this.haptic.warning();
+        break;
       }
-  
-      return [];
-    }
-  
-  
-    async onFilesSelected(event: Event) {
-      const input = event.target as HTMLInputElement;
-      const files = input.files;
-      if (!files) return;
-  
-      for (const file of Array.from(files)) {
-        if (this.selectedFiles.length >= this.maxFiles) {
-          this.toastService.present(`Maximum ${this.maxFiles} files allowed.`, 1000, 'warning');
+
+      const fileType = file.type;
+
+      if (fileType.startsWith('image/')) {
+        const compressedFile = await this.compressImage(file, 0.7);
+        if (!compressedFile) continue;
+
+        if (compressedFile.size / 1024 / 1024 > 2) {
+          this.toastService.present('Compressed image still exceeds 2 MB.', 1000, 'warning');
           this.haptic.warning();
-          break;
+          continue;
         }
-  
-        const fileType = file.type;
-  
-        if (fileType.startsWith('image/')) {
-          const compressedFile = await this.compressImage(file, 0.7);
-          if (!compressedFile) continue;
-  
-          if (compressedFile.size / 1024 / 1024 > 2) {
-            this.toastService.present('Compressed image still exceeds 2 MB.', 1000, 'warning');
-            this.haptic.warning();
-            continue;
-          }
-  
-          const preview = await this.readFileAsDataURL(compressedFile);
-          this.selectedFiles.push({ file: compressedFile, type: 'image', preview });
-  
-          this.filesToUpload.push(FileTransferObject.FromFile("MaterialInwardInvoicePath", compressedFile, compressedFile.name));
-        } else if (fileType === 'application/pdf') {
-          if (file.size / 1024 / 1024 > 2) {
-            this.toastService.present('PDF size should not exceed 2 MB.', 1000, 'warning');
-            this.haptic.warning();
-            continue;
-          }
-  
-          this.selectedFiles.push({ file, type: 'pdf', preview: 'assets/icons/doc-placeholder.png' });
-          this.filesToUpload.push(FileTransferObject.FromFile("MaterialInwardInvoicePath", file, file.name));
-        } else {
-          this.toastService.present('Unsupported file type.', 1000, 'warning');
+
+        const preview = await this.readFileAsDataURL(compressedFile);
+        this.selectedFiles.push({ file: compressedFile, type: 'image', preview });
+
+        this.filesToUpload.push(FileTransferObject.FromFile("MaterialInwardInvoicePath", compressedFile, compressedFile.name));
+      } else if (fileType === 'application/pdf') {
+        if (file.size / 1024 / 1024 > 2) {
+          this.toastService.present('PDF size should not exceed 2 MB.', 1000, 'warning');
+          this.haptic.warning();
+          continue;
         }
-      }
-  
-      input.value = '';
-    }
-  
-    private compressImage(file: File, quality: number): Promise<File | null> {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = (event: any) => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const maxWidth = 1024;
-            const scale = Math.min(1, maxWidth / img.width);
-            canvas.width = img.width * scale;
-            canvas.height = img.height * scale;
-  
-            const ctx = canvas.getContext('2d');
-            if (!ctx) return resolve(null);
-  
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            canvas.toBlob(blob => {
-              if (!blob) return resolve(null);
-              resolve(new File([blob], file.name, { type: 'image/jpeg', lastModified: Date.now() }));
-            }, 'image/jpeg', quality);
-          };
-          img.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-  
-    private readFileAsDataURL(file: File): Promise<string> {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-  
-    isImageFile(input: string | File): boolean {
-      const name = typeof input === 'string' ? input : input.name;
-      const ext = name.slice(name.lastIndexOf('.')).toLowerCase();
-      return ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'].includes(ext);
-    }
-  
-    viewImage(imageSrc: string) {
-      this.selectedImage = imageSrc;
-      this.isImageModalOpen = true;
-    }
-  
-    viewPdf(file: File) {
-      const blob = new Blob([file], { type: file.type });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = file.name || 'document.pdf';
-      a.click();
-      window.URL.revokeObjectURL(url);
-    }
-  
-    removeFile(index: number) {
-      this.selectedFiles.splice(index, 1);
-      this.filesToUpload.splice(index, 1);
-    }
-  
-    // For loading previously uploaded file (if editing)
-    loadFileFromBackend(imageUrl: string): void {
-      console.log('loadFileFromBackend :', imageUrl);
-      if (imageUrl) {
-        this.imagePostView = `${this.ImageBaseUrl}${imageUrl}/${this.LoginToken}?${this.TimeStamp}`;
-        this.selectedFileName = imageUrl;
+
+        this.selectedFiles.push({ file, type: 'pdf', preview: 'assets/icons/doc-placeholder.png' });
+        this.filesToUpload.push(FileTransferObject.FromFile("MaterialInwardInvoicePath", file, file.name));
       } else {
-        this.imagePostView = '';
+        this.toastService.present('Unsupported file type.', 1000, 'warning');
       }
     }
-  
-    fileNavigation(filePath: string) {
-      const fullPath = `${this.ImageBaseUrl}${filePath}/${this.LoginToken}?${this.TimeStamp}`;
-      window.open(fullPath, '_blank');
+
+    input.value = '';
+  }
+
+  private compressImage(file: File, quality: number): Promise<File | null> {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (event: any) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const maxWidth = 1024;
+          const scale = Math.min(1, maxWidth / img.width);
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return resolve(null);
+
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob(blob => {
+            if (!blob) return resolve(null);
+            resolve(new File([blob], file.name, { type: 'image/jpeg', lastModified: Date.now() }));
+          }, 'image/jpeg', quality);
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  private readFileAsDataURL(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  isImageFile(input: string | File): boolean {
+    const name = typeof input === 'string' ? input : input.name;
+    const ext = name.slice(name.lastIndexOf('.')).toLowerCase();
+    return ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'].includes(ext);
+  }
+
+  viewImage(imageSrc: string) {
+    this.selectedImage = imageSrc;
+    this.isImageModalOpen = true;
+  }
+
+  viewPdf(file: File) {
+    const blob = new Blob([file], { type: file.type });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = file.name || 'document.pdf';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  removeFile(index: number) {
+    this.selectedFiles.splice(index, 1);
+    this.filesToUpload.splice(index, 1);
+  }
+
+  // For loading previously uploaded file (if editing)
+  loadFileFromBackend(imageUrl: string): void {
+    console.log('loadFileFromBackend :', imageUrl);
+    if (imageUrl) {
+      this.imagePostView = `${this.ImageBaseUrl}${imageUrl}/${this.LoginToken}?${this.TimeStamp}`;
+      this.selectedFileName = imageUrl;
+    } else {
+      this.imagePostView = '';
     }
-  
+  }
+
+  fileNavigation(filePath: string) {
+    const fullPath = `${this.ImageBaseUrl}${filePath}/${this.LoginToken}?${this.TimeStamp}`;
+    window.open(fullPath, '_blank');
+  }
+
   getSiteListByCompanyRef = async () => {
     if (this.companyRef <= 0) {
       // await this.uiUtils.showErrorToster('Company not Selected');
@@ -342,13 +342,11 @@ export class StockInwardDetailsMobileAppComponent  implements OnInit {
 
   getMaterialListByCompanyRef = async (SiteRef: number, VendorRef: number) => {
     if (this.companyRef <= 0) {
-      // await this.uiUtils.showErrorToster('Company not Selected');
       await this.toastService.present('Company not Selected', 1000, 'warning');
       await this.haptic.warning();
       return;
     }
-    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef,this.DisplayOrderDate, async errMsg => {
-      // await this.uiUtils.showErrorMessage('Error', errMsg)
+    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef, this.Entity.p.MaterialPurchaseOrderRef, this.Entity.p.MaterialInwardRef, async errMsg => {
       await this.toastService.present('Error ' + errMsg, 1000, 'danger');
       await this.haptic.error();
     });
@@ -512,7 +510,7 @@ export class StockInwardDetailsMobileAppComponent  implements OnInit {
       await this.haptic.success();
       this.ismaterialModalOpen = false;
     } else {
-      this.newInward.MaterialInwardRef = this.Entity.p.Ref;
+      this.newInward.MaterialInwardRef = this.Entity.p.MaterialInwardRef;
       this.newInward.PurchaseOrderRemainingQty = this.NewRemainingQty;
       this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
 
