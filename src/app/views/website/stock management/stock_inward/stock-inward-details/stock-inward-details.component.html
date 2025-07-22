@@ -225,14 +225,13 @@
             <label>Material Name</label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
               nzPlaceHolder="Select" id="MaterialInternalRef" [nzSize]="'large'" name="MaterialInternalRef"
-              [(ngModel)]="newInward.InternalRef" (ngModelChange)="getUnitByMaterialRef($event)"
+              [(ngModel)]="newInward.InternalRef" (ngModelChange)="OnMaterialSelection($event)"
               [nzDisabled]="ModalEditable" placeholder="Select Material">
 
               <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.InternalRef"
                 [nzLabel]="material.p.MaterialName + ' - Qty: ' + material.p.OrderQty">
               </nz-option>
             </nz-select>
-            <!-- [nzLabel]="material.p.MaterialName + ' - Qty: ' + material.p.OrderQty"> -->
             <input *ngIf="ModalEditable" type="text" name="MaterialName" class="form-control" readonly
               [(ngModel)]="newInward.MaterialName" />
           </div>

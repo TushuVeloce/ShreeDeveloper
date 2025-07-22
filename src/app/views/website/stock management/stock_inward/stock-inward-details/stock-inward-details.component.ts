@@ -61,7 +61,6 @@ export class StockInwardDetailsComponent implements OnInit {
   imagePostView: string = '';
   imagePostViewUrl: string = '';
   selectedFileName: string = '';
-  DisplayOrderDate = '';
 
   NameWithoutNos: string = ValidationPatterns.NameWithoutNos
   PinCodePattern: string = ValidationPatterns.PinCode;
@@ -94,19 +93,19 @@ export class StockInwardDetailsComponent implements OnInit {
       this.IsNewEntity = false;
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Inward' : 'Edit Stock Inward';
       this.Entity = StockInward.GetCurrentInstance();
+      console.log('this.Entity :', this.Entity);
       this.PurchaseOrderDate = this.Entity.p.PurchaseOrderDate
       this.appStateManage.StorageKey.removeItem('Editable');
       this.SessionAddedRefs = []; // ✅ Reset session-added materials
       this.shouldFilterDropdown = false;
       if (this.Entity.p.PurchaseOrderDate != '') {
-        this.DisplayOrderDate = this.Entity.p.PurchaseOrderDate
         this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate)
       }
       if (this.Entity.p.InwardDate != '') {
         this.Entity.p.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate)
       }
-      this.getMaterialListByCompanyRef(this.Entity.p.SiteRef, this.Entity.p.VendorRef)
-      this.getVendorDataByVendorRef(this.Entity.p.VendorRef)
+      await this.getMaterialListByCompanySiteVendorRefAndPurchaseOrderDate(this.Entity.p.SiteRef, this.Entity.p.VendorRef)
+      await this.getVendorDataByVendorRef(this.Entity.p.VendorRef)
     } else {
       this.Entity = StockInward.CreateNewInstance();
       StockInward.SetCurrentInstance(this.Entity);
@@ -131,12 +130,20 @@ export class StockInwardDetailsComponent implements OnInit {
     return this.DateconversionService.formatDate(date);
   }
 
-  getMaterialListByCompanyRef = async (SiteRef: number, VendorRef: number) => {
+  getMaterialListByCompanySiteVendorRefAndPurchaseOrderDate = async (SiteRef: number, VendorRef: number) => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef(), this.DisplayOrderDate, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    if (SiteRef <= 0) {
+      await this.uiUtils.showErrorToster('Site not Selected');
+      return;
+    }
+    if (VendorRef <= 0) {
+      await this.uiUtils.showErrorToster('Vendor not Selected');
+      return;
+    }
+    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef(), this.Entity.p.MaterialPurchaseOrderRef, this.Entity.p.Ref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
     this.MaterialListOriginal?.forEach((item, index) => {
       item.p.InternalRef = index + 1;
@@ -156,7 +163,7 @@ export class StockInwardDetailsComponent implements OnInit {
     );
   }
 
-  getUnitByMaterialRef = async (internalRef: number) => {
+  OnMaterialSelection = async (internalRef: number) => {
     this.newInward = InwardMaterialDetailProps.Blank();
     this.NewRemainingQty = 0;
 
@@ -324,7 +331,7 @@ export class StockInwardDetailsComponent implements OnInit {
       await this.uiUtils.showSuccessToster('Material details updated successfully');
       this.ismaterialModalOpen = false;
     } else {
-      this.newInward.MaterialInwardRef = this.Entity.p.Ref;
+      this.newInward.MaterialInwardRef = this.Entity.p.MaterialInwardRef;
       this.newInward.PurchaseOrderRemainingQty = this.NewRemainingQty;
       this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
 
