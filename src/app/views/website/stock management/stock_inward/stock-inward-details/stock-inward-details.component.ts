@@ -125,7 +125,7 @@ export class StockInwardDetailsComponent implements OnInit {
       this.InwardDate = lst.p.InwardDate
     }
 
-    await this.getMaterialListByCompanySiteVendorRefAndPurchaseOrderDate(this.Entity.p.SiteRef, this.Entity.p.VendorRef)
+    await this.getMaterialListByCompanySiteVendorRefAndPurchaseOrderDate()
   }
 
   // Extracted from services date conversion //
@@ -133,20 +133,20 @@ export class StockInwardDetailsComponent implements OnInit {
     return this.DateconversionService.formatDate(date);
   }
 
-  getMaterialListByCompanySiteVendorRefAndPurchaseOrderDate = async (SiteRef: number, VendorRef: number) => {
+  getMaterialListByCompanySiteVendorRefAndPurchaseOrderDate = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    if (SiteRef <= 0) {
+    if (this.Entity.p.SiteRef <= 0) {
       await this.uiUtils.showErrorToster('Site not Selected');
       return;
     }
-    if (VendorRef <= 0) {
+    if (this.Entity.p.VendorRef <= 0) {
       await this.uiUtils.showErrorToster('Vendor not Selected');
       return;
     }
-    const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef(), this.Entity.p.MaterialPurchaseOrderRef, this.Entity.p.Ref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    const lst = await MaterialFromOrder.FetchOrderedMaterials(this.Entity.p.SiteRef, this.Entity.p.VendorRef, this.companyRef(), this.Entity.p.MaterialPurchaseOrderRef, this.Entity.p.Ref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
     this.MaterialListOriginal?.forEach((item, index) => {
       item.p.InternalRef = index + 1;
@@ -173,7 +173,7 @@ export class StockInwardDetailsComponent implements OnInit {
 
     const UnitData = this.MaterialList.find((data) => data.p.InternalRef === internalRef);
     this.newInward.Date = Date;
-    
+
     if (UnitData) {
       this.newInward.UnitRef = UnitData.p.UnitRef;
       this.newInward.UnitName = UnitData.p.UnitName;
@@ -319,10 +319,12 @@ export class StockInwardDetailsComponent implements OnInit {
     const newInternalRef = this.newInward.InternalRef;
 
     if (typeof this.editingIndex === 'number' && this.editingIndex >= 0) {
+      this.newInward.Date = this.dtu.ConvertStringDateToFullFormat(this.newInward.Date);
       this.Entity.p.MaterialInwardDetailsArray[this.editingIndex] = { ...this.newInward };
       await this.uiUtils.showSuccessToster('Material details updated successfully');
       this.ismaterialModalOpen = false;
     } else {
+      this.newInward.Date = this.dtu.ConvertStringDateToFullFormat(this.newInward.Date);
       this.newInward.MaterialInwardRef = this.Entity.p.MaterialInwardRef;
       this.newInward.PurchaseOrderRemainingQty = this.NewRemainingQty;
       this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
@@ -377,7 +379,7 @@ export class StockInwardDetailsComponent implements OnInit {
     this.Entity.p.CompanyRef = this.companystatemanagement.getCurrentCompanyRef()
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    this.Entity.p.InwardDate = this.dtu.ConvertStringDateToFullFormat(this.InwardDate)
+    this.Entity.p.InwardDate = this.dtu.ConvertStringDateToFullFormat(this.InwardDate);
     let entityToSave = this.Entity.GetEditableVersion();
     let entitiesToSave = [entityToSave];
     if (this.InvoiceFile) {

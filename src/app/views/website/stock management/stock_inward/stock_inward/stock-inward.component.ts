@@ -68,7 +68,7 @@ export class StockInwardComponent implements OnInit {
       return;
     }
     let lst = await MaterialInwardAgainstPOStatus.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    if (lst[0].p.SiteRef) {
+    if (lst.length > 0 && lst[0].p.SiteRef) {
       this.MasterList = lst;
       this.DisplayMasterList = this.MasterList;
       this.loadPaginationData();
