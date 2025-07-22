@@ -298,14 +298,15 @@ export class InvoiceDetailsComponent implements OnInit {
     const TotalWorkedHours = this.getTotalWorkedHours()
     const TotalLabourAmount = this.getTotalLabourAmount()
     const Qty = Number(this.Entity.p.Qty)
-    const Rate = Number(this.Entity.p.Rate / 60);
     const DieselAmount = Number(this.Entity.p.DieselAmount) || 0
+    // debugger
     if (TotalWorkedHours > 0) {
+      const Rate = Number(this.Entity.p.Rate / 60);
       this.Entity.p.InvoiceAmount = Math.round(((TotalWorkedHours * Rate) - DieselAmount) * 100) / 100;
     } else if (TotalLabourAmount > 0) {
       this.Entity.p.InvoiceAmount = Math.round((TotalLabourAmount) * 100) / 100;
     } else {
-      this.Entity.p.InvoiceAmount = Math.round(((Qty * Rate) - DieselAmount) * 100) / 100;
+      this.Entity.p.InvoiceAmount = Math.round(((Qty * this.Entity.p.Rate) - DieselAmount) * 100) / 100;
     }
   }
 
@@ -680,6 +681,10 @@ export class InvoiceDetailsComponent implements OnInit {
     if (this.Entity.p.CreatedBy == 0) {
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
+    }
+    if (this.Entity.p.InvoiceAmount < 0) {
+      await this.uiUtils.showErrorMessage('Error', 'Bill amount should be greater than zero.');
+      return;
     }
     this.Entity.p.Date = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.Date)
     let entityToSave = this.Entity.GetEditableVersion();
