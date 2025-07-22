@@ -113,11 +113,13 @@ export class TpOfficeComponent implements OnInit {
     ];
 
     status = requiredFields.every(field => Entity.p?.[field] === true);
+    if (status) {
 
-    if (!Entity.p.ReportNOCAirportNOC && status) {
-      status = true;
-    } else {
-      status = Entity.p.IsReportNOCSubmit && Entity.p.IsAirportNOCSubmit;
+      if (!Entity.p.ReportNOCAirportNOC) {
+        status = true;
+      } else {
+        status = Entity.p.IsReportNOCSubmit && Entity.p.IsAirportNOCSubmit;
+      }
     }
     return status;
   }

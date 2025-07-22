@@ -100,11 +100,17 @@ export class NaLetterComponent implements OnInit {
     ];
 
     status = requiredFields.every(field => Entity.p?.[field] === true);
-
-    if (!Entity.p.IsInamPatraSubmitTwo && status) {
-      status = true;
-    } else {
-      status = Entity.p.IsArjSubmit;
+    debugger
+    if (status) {
+      if (!Entity.p.IsInamPatraSubmitTwo) {
+        status = true;
+      } else {
+        if (Entity.p.IsArjSubmit && Entity.p.IsInamEkonisheEkonPanasPasuncheSatbaraVaFerfarSubmit && Entity.p.IsInamZoneDakhalaMapSubmit && Entity.p.IsPratijnaPatraSubmit && Entity.p.IsValuationReportSubmit && Entity.p.IsInamPatraSubmitThree && Entity.p.IsChalanSubmit && Entity.p.IsvargDonTeVargEkChaAadeshSubmit) {
+          status = true;
+        } else {
+          status = false;
+        }
+      }
     }
     return status;
   }
