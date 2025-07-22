@@ -429,11 +429,10 @@
     </ion-item>
 
     <!-- add time Machine Details Modal -->
-    <ion-modal [isOpen]="isTimeModalOpen" (didDismiss)="CloseTimeModal(100)" class="modal-card">
+    <ion-modal [isOpen]="isTimeModalOpen" (didDismiss)="CloseTimeModal(100)" class="custom-modal-mobile-app">
       <ng-template>
-        <div class="modal-container">
-          <ion-header>
-            <ion-toolbar color="primary" class="modal-toolbar">
+          <ion-header class="modal-toolbar-mobile-app">
+            <ion-toolbar color="primary">
               <ion-title>Add Machine Time Details</ion-title>
               <ion-buttons slot="end">
                 <ion-button fill="clear" (click)="CloseTimeModal(100)">
@@ -443,7 +442,7 @@
             </ion-toolbar>
           </ion-header>
 
-          <ion-content class="modal-scroll-content ion-padding">
+          <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
             <ion-list lines="none">
               <ion-item class="input-item">
                 <ion-label>From Time</ion-label>
@@ -486,7 +485,7 @@
             </ion-list>
           </ion-content>
 
-          <ion-footer class=" modal-footer ion-padding">
+         <ion-footer class="modal-footer-mobile-app">
             <ion-grid>
               <ion-row>
                 <ion-col>
@@ -501,16 +500,14 @@
               </ion-row>
             </ion-grid>
           </ion-footer>
-        </div>
       </ng-template>
     </ion-modal>
 
     <!-- add time Labour Details Modal -->
-    <ion-modal [isOpen]="isLabourTimeModalOpen" (didDismiss)="CloseLabourTimeModal(200)" class="modal-card">
+    <ion-modal [isOpen]="isLabourTimeModalOpen" (didDismiss)="CloseLabourTimeModal(200)" class="custom-modal-mobile-app">
       <ng-template>
-        <div class="modal-container">
-          <ion-header>
-            <ion-toolbar color="primary" class="modal-toolbar">
+          <ion-header class="modal-toolbar-mobile-app">
+            <ion-toolbar color="primary">
               <ion-title>Add Labour Time Details</ion-title>
               <ion-buttons slot="end">
                 <ion-button fill="clear" (click)="CloseLabourTimeModal(200)">
@@ -520,7 +517,7 @@
             </ion-toolbar>
           </ion-header>
 
-          <ion-content class="modal-scroll-content ion-padding">
+          <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
             <ion-list lines="none">
               <!-- Labour Type -->
               <ion-item class="input-item" button detail (click)="selectLabourTypeBottomsheet()">
@@ -594,7 +591,7 @@
             </ion-list>
           </ion-content>
 
-          <ion-footer class=" modal-footer ion-padding">
+         <ion-footer class="modal-footer-mobile-app">
             <ion-grid>
               <ion-row>
                 <ion-col>
@@ -609,7 +606,6 @@
               </ion-row>
             </ion-grid>
           </ion-footer>
-        </div>
       </ng-template>
     </ion-modal>
 

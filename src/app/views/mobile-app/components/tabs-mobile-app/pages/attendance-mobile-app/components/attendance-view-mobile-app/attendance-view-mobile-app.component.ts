@@ -270,8 +270,8 @@ export class AttendanceViewMobileAppComponent  implements OnInit {
         this.toastService.present('Error ' + errMsg, 1000, 'danger');
         await this.haptic.error();
       });
-      // const location = await this.locationMobileAppService.getFullLocation();
-      // console.log(location);
+      const location = await this.locationMobileAppService.getCurrentCoordinates();
+      console.log(location);
     } catch (error) {
       this.toastService.present('Error fetching site list', 1000, 'danger');
       await this.haptic.error();

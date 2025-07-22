@@ -122,7 +122,7 @@
         </ion-text>
       </div>
     </ng-template>
-    
+
     <ion-grid class="ion-margin-top">
       <ion-row class="ion-align-items-center">
         <ion-col size="6">
@@ -184,110 +184,107 @@
     </ng-template>
 
     <!-- Image Modal -->
-    <ion-modal [isOpen]="isImageModalOpen" (didDismiss)="isImageModalOpen = false" class="modal-card">
-      <div class="modal-container">
-        <ng-template>
-          <ion-header>
-            <ion-toolbar color="primary">
-              <ion-title>Image Preview</ion-title>
-              <ion-buttons slot="end">
-                <ion-button fill="clear" (click)="isImageModalOpen = false">
-                  <ion-icon name="close-outline"></ion-icon>
-                </ion-button>
-              </ion-buttons>
-            </ion-toolbar>
-          </ion-header>
+    <ion-modal [isOpen]="isImageModalOpen" (didDismiss)="isImageModalOpen = false" class="custom-modal-mobile-app">
+      <ng-template>
+        <ion-header class="modal-toolbar-mobile-app">
+          <ion-toolbar color="primary">
+            <ion-title>Image Preview</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" (click)="isImageModalOpen = false">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
 
-          <ion-content class="ion-padding">
-            <div class="image-preview-wrapper-modal">
-              <img [src]="selectedImage" class="full-image-modal" />
-            </div>
-          </ion-content>
-        </ng-template>
-      </div>
+        <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
+          <div class="image-preview-wrapper-modal">
+            <img [src]="selectedImage" class="full-image-modal" />
+          </div>
+        </ion-content>
+      </ng-template>
     </ion-modal>
 
-    <ion-modal [isOpen]="ismaterialModalOpen" (didDismiss)="ismaterialModalOpen=false" class="modal-card">
+    <ion-modal [isOpen]="ismaterialModalOpen" (didDismiss)="ismaterialModalOpen=false" class="custom-modal-mobile-app">
       <ng-template>
-        <div class="modal-container">
-          <ion-header>
-            <ion-toolbar color="primary">
-              <ion-title>Material Details</ion-title>
-              <ion-buttons slot="end">
-                <ion-button fill="clear" (click)="closeModal(100)">
-                  <ion-icon name="close-outline"></ion-icon>
-                </ion-button>
-              </ion-buttons>
-            </ion-toolbar>
-          </ion-header>
 
-          <ion-content class="ion-padding">
-            <ion-list lines="none">
-              <!-- Material Dropdown -->
-              <ion-item class="input-item" button detail (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable">
-                <ion-label>Material Name</ion-label>
+        <ion-header class="modal-toolbar-mobile-app">
+          <ion-toolbar color="primary">
+            <ion-title>Material Details</ion-title>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" (click)="closeModal(100)">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
 
-                <!-- Text showing the selected status -->
-                <ion-text slot="end" class="status-text">
-                  {{ MaterialName|| 'Select' }}
-                </ion-text>
+        <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
+          <ion-list lines="none">
+            <!-- Material Dropdown -->
+            <ion-item class="input-item" button detail (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable">
+              <ion-label>Material Name</ion-label>
 
-                <!-- Dropdown icon (chevron) on the right -->
-                <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
-              </ion-item>
+              <!-- Text showing the selected status -->
+              <ion-text slot="end" class="status-text">
+                {{ MaterialName|| 'Select' }}
+              </ion-text>
 
-              <!-- Material input-->
-              <ion-item class="input-item" *ngIf="ModalEditable">
-                <ion-input label="Material Name" labelPlacement="floating" placeholder="Enter Material Name"
-                  [(ngModel)]="newInward.MaterialName" readonly></ion-input>
-              </ion-item>
+              <!-- Dropdown icon (chevron) on the right -->
+              <!-- <ion-icon name="chevron-down-outline" slot="end" class="dropdown-icon"></ion-icon> -->
+            </ion-item>
 
-              <!-- Unit -->
-              <ion-item class="input-item">
-                <ion-input label="Unit" labelPlacement="floating" placeholder="Enter Unit"
-                  [(ngModel)]="newInward.UnitName" readonly></ion-input>
-              </ion-item>
+            <!-- Material input-->
+            <ion-item class="input-item" *ngIf="ModalEditable">
+              <ion-input label="Material Name" labelPlacement="floating" placeholder="Enter Material Name"
+                [(ngModel)]="newInward.MaterialName" readonly></ion-input>
+            </ion-item>
 
-              <!--Requisition Quantity -->
-              <ion-item class="input-item">
-                <ion-input label="Requisition Qty" labelPlacement="floating" type="number" placeholder="Enter Quantity"
-                  [(ngModel)]="newInward.PurchaseOrderQty" clearInput="true" clearOnEdit="true" readonly></ion-input>
-              </ion-item>
+            <!-- Unit -->
+            <ion-item class="input-item">
+              <ion-input label="Unit" labelPlacement="floating" placeholder="Enter Unit"
+                [(ngModel)]="newInward.UnitName" readonly></ion-input>
+            </ion-item>
 
-              <!--Inward Quantity -->
-              <ion-item class="input-item">
-                <ion-input label="Inward Quantity" labelPlacement="floating" type="number"
-                  placeholder="Enter Inward Quantity" [(ngModel)]="newInward.InwardQty" clearInput="true"
-                  clearOnEdit="true" (ngModelChange)=" CalculateRemainingQty(
+            <!--Requisition Quantity -->
+            <ion-item class="input-item">
+              <ion-input label="Requisition Qty" labelPlacement="floating" type="number" placeholder="Enter Quantity"
+                [(ngModel)]="newInward.PurchaseOrderQty" clearInput="true" clearOnEdit="true" readonly></ion-input>
+            </ion-item>
+
+            <!--Inward Quantity -->
+            <ion-item class="input-item">
+              <ion-input label="Inward Quantity" labelPlacement="floating" type="number"
+                placeholder="Enter Inward Quantity" [(ngModel)]="newInward.InwardQty" clearInput="true"
+                clearOnEdit="true" (ngModelChange)=" CalculateRemainingQty(
                     newInward.InwardQty,
                     newInward.PurchaseOrderRemainingQty
                   )"></ion-input> </ion-item>
 
-              <!--NewRemaining Quantity -->
-              <ion-item class="input-item">
-                <ion-input label="Remaining Qty" labelPlacement="floating" type="number"
-                  placeholder="Enter Remaining Quantity" [(ngModel)]="NewRemainingQty" clearInput="true"
-                  clearOnEdit="true" readonly></ion-input> </ion-item>
-            </ion-list>
-          </ion-content>
+            <!--NewRemaining Quantity -->
+            <ion-item class="input-item">
+              <ion-input label="Remaining Qty" labelPlacement="floating" type="number"
+                placeholder="Enter Remaining Quantity" [(ngModel)]="NewRemainingQty" clearInput="true"
+                clearOnEdit="true" readonly></ion-input> </ion-item>
+          </ion-list>
+        </ion-content>
 
-          <ion-footer>
-            <ion-grid>
-              <ion-row>
-                <ion-col size="6">
-                  <ion-button expand="block" color="primary" shape="round" (click)="closeModal(100)">
-                    Close
-                  </ion-button>
-                </ion-col>
-                <ion-col size="6">
-                  <ion-button expand="block" color="primary" shape="round" (click)="addMaterial()">
-                    {{ModalEditable ? "Update" : "Save"}}
-                  </ion-button>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-footer>
-        </div>
+        <ion-footer class="modal-footer-mobile-app">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="6">
+                <ion-button expand="block" color="primary" shape="round" (click)="closeModal(100)">
+                  Close
+                </ion-button>
+              </ion-col>
+              <ion-col size="6">
+                <ion-button expand="block" color="primary" shape="round" (click)="addMaterial()">
+                  {{ModalEditable ? "Update" : "Save"}}
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-footer>
       </ng-template>
     </ion-modal>
 

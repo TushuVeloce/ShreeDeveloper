@@ -201,7 +201,7 @@ export class PendingCustomerFollowupMobileAppComponent implements OnInit {
   }
 
   async onAddCustomerEnquiry() {
-    await this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-enquiry/add']);
+    await this.router.navigate(['/mobile-app/tabs/dashboard/customer-relationship-management/customer-followup/edit']);
   }
   formatData = (list: any[]) => {
     return list.map(item => ({

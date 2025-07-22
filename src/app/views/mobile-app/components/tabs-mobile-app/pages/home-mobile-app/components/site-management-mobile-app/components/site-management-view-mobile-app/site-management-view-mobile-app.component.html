@@ -49,96 +49,33 @@
         <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
         <p>No Office records found.</p>
       </div>
-  </div>
+  </div>  
 
   <!-- Site Details Modal -->
-  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="modal-card">
-    <ng-template>
-      <div class="modal-container">
-        <ion-header>
-          <ion-toolbar color="primary" class="modal-toolbar">
-            <ion-title>Site Details</ion-title>
-            <ion-buttons slot="end">
-              <ion-button fill="clear" (click)="closeModal()">
-                <ion-icon name="close-outline"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-
-        <!-- Scrollable Body -->
-        <div class="modal-body">
-          <ion-content scroll-y="true" class="modal-scroll-content ion-padding">
-
-            <div class="info-row-of-model">
-              <strong class="label">Site Name:</strong>
-              <span class="value">{{ SelectedSite.p.Name?SelectedSite.p.Name:'-' }}</span>
-            </div>
-
-            <div class="info-row-of-model">
-              <strong class="label">Address Line 1 :</strong>
-              <span class="value">{{ SelectedSite.p.AddressLine1?SelectedSite.p.AddressLine1:'-' }}</span>
-            </div>
-
-            <div class="info-row-of-model">
-              <strong class="label">Address Line 2:</strong>
-              <span class="value">{{ SelectedSite.p.AddressLine2?SelectedSite.p.AddressLine2:'-' }}</span>
-            </div>
-
-            <div class="info-row-of-model">
-              <strong class="label">City Name:</strong>
-              <span class="value">{{ SelectedSite.p.CityName?SelectedSite.p.CityName:'-' }}</span>
-            </div>
-
-            <div class="info-row-of-model">
-              <strong class="label">PinCode:</strong>
-              <span class="value">{{ SelectedSite.p.PinCode?SelectedSite.p.PinCode:'-'
-                }}</span>
-            </div>
-
-            <div class="info-row-of-model">
-              <strong class="label">Estimated Starting Date:</strong>
-              <span class="value">{{
-                SelectedSite.p.EstimatedStartingDate?formatDate(SelectedSite.p.EstimatedStartingDate):'-' }}</span>
-            </div>
-
-            <div class="info-row-of-model">
-              <strong class="label">Estimated End Date:</strong>
-              <span class="value">{{ SelectedSite.p.EstimatedEndDate?formatDate(SelectedSite.p.EstimatedEndDate):'-'
-                }}</span>
-            </div>
-
-            <div class="info-row-of-model">
-              <strong class="label">Number Of Plots:</strong>
-              <span class="value">{{ SelectedSite.p.NumberOfPlots?SelectedSite.p.NumberOfPlots:'-'
-                }}</span>
-            </div>
-
-            <!-- <div class="info-row-of-model">
-              <strong class="label">Site Incharge Name:</strong>
-              <span class="value">{{ SelectedSite.p.SiteInchargeName?SelectedSite.p.SiteInchargeName:'-'
-                }}</span>
-            </div> -->
-
-            <div class="info-row-of-model">
-              <strong class="label">Total Land Area In Sqft:</strong>
-              <span class="value">{{ SelectedSite.p.TotalLandAreaInSqft?SelectedSite.p.TotalLandAreaInSqft:'-'
-                }}</span>
-            </div>
-            <div class="info-row-of-model">
-              <strong class="label">Total Land Area In Sqm:</strong>
-              <span class="value">{{ SelectedSite.p.TotalLandAreaInSqm?SelectedSite.p.TotalLandAreaInSqm:'-'
-                }}</span>
-            </div>
-          </ion-content>
-        </div>
-
-        <ion-footer class="modal-footer">
-          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
-            Close
+<ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
+  <ng-template>
+    <ion-header class="modal-toolbar-mobile-app">
+      <ion-toolbar color="primary">
+        <ion-title>Site Details</ion-title>
+        <ion-buttons slot="end">
+          <ion-button fill="clear" (click)="closeModal()">
+            <ion-icon name="close-outline"></ion-icon>
           </ion-button>
-        </ion-footer>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
+      <div class="info-row-of-model-mobile-app" *ngFor="let item of siteDetails">
+        <strong class="label-mobile-app">{{ item.label }}</strong>
+        <span class="value-mobile-app">{{ item.value || '-' }}</span>
       </div>
-    </ng-template>
-  </ion-modal>
+    </ion-content>
+
+    <ion-footer class="modal-footer-mobile-app">
+      <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">Close</ion-button>
+    </ion-footer>
+  </ng-template>
+</ion-modal>
+
 </ion-content>
