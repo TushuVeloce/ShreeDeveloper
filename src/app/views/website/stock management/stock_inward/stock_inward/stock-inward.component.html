@@ -141,7 +141,7 @@
         <tr *ngFor="let inward of paginatedList; index as i">
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{inward.p.ChalanNo}}</td>
-          <td Class="tbldata">{{inward.p.PurchaseOrderDate}}</td>
+          <td Class="tbldata">{{formatDate(inward.p.PurchaseOrderDate)}}</td>
           <td Class="tbldata">{{inward.p.SiteName}}</td>
           <td Class="tbldata">{{inward.p.VendorName }}</td>
           <td Class="tbldata">{{inward.p.MaterialName}}</td>

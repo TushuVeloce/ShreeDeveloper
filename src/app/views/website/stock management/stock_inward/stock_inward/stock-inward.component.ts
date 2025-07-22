@@ -75,6 +75,10 @@ export class StockInwardComponent implements OnInit {
     }
   }
 
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
+  }
 
   getInwardListByCompanyRefAndSiteRef = async () => {
     this.MasterList = [];
@@ -92,11 +96,6 @@ export class StockInwardComponent implements OnInit {
       this.loadPaginationData();
     }
   };
-
-  // Extracted from services date conversion //
-  formatDate = (date: string | Date): string => {
-    return this.DateconversionService.formatDate(date);
-  }
 
   AddStockInward = async () => {
     if (this.companyRef() <= 0) {

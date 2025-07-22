@@ -32,7 +32,7 @@ export class StockInwardProps {
   public readonly VendorName: string = '';
   public MaterialPurchaseOrderRef: number = 0;
   public VendorTradeName: string = '';
-  public VendorMobNo: string = '';
+  public VendorPhoneNo: string = '';
   public ChalanNo: number = 0
   public VehicleNo: string = ''
   public RemainingQty: number = 0
