@@ -15,9 +15,9 @@ export class BaseUrlService {
     // let baseURLstring = `http://localhost:5111/api/RequestController2`;
     // let baseURLstring = `http://localhost:5111/api`;   //For Backend Developers
     // let baseURLstring = `http://192.168.29.68:5100/api`;  //For Frontend Developers pc
-    // let baseURLstring = `http://192.168.29.81:5100/api`; //For Frontend Developers laptop 1
+    let baseURLstring = `http://192.168.29.81:5100/api`; //For Frontend Developers laptop 1
     // let baseURLstring = `http://192.168.29.245:5100/api`;  //For Frontend Developers laptop 2
-    let baseURLstring = `https://psapi.velocetech.space/api`;
+    // let baseURLstring = `https://psapi.velocetech.space/api`;
 
     //let baseURLstring = ``;
 
