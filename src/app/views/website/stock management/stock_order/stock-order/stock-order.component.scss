@@ -47,3 +47,11 @@
     background-color: #f3e6f9;
   }
 }
+
+.tblheader,
+.tbldata {
+  white-space: nowrap; // Prevent text from wrapping
+  overflow: hidden; // Hide overflow text (optional)
+  text-overflow: ellipsis; // Show ellipsis if overflowed (optional)
+  max-width: 200px; // Optional: control column width
+}

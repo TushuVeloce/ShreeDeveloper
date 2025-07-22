@@ -150,8 +150,7 @@
         <div class="col-md-4" style="margin-top: 1rem" *ngIf="Entity.p.ExpenseType == MachinaryExpenseRef">
           <label><b>Vehical No.</b></label>
           <input type="text" [(ngModel)]="Entity.p.VehicleNo" name="VehicleNo" class="form-control" id="VehicleNo"
-            placeholder="Enter Vehicle No" #VehicleNoCtrl="ngModel" (blur)="VehicleNoCtrl.control.markAsTouched()"
-            maxlength="10" />
+            placeholder="Enter Vehicle No" #VehicleNoCtrl="ngModel" (blur)="VehicleNoCtrl.control.markAsTouched()" />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Unit</label>
