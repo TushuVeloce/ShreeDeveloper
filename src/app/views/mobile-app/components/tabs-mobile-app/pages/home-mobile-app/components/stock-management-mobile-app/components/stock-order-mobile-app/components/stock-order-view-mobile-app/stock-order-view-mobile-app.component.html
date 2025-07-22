@@ -25,9 +25,12 @@
         <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(order)">
           <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
         </ion-button>
+           <ion-button fill="clear" size="small" color="primary" (click)="navigateToPrint(order)">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+        </ion-button>
       </div>
     </ion-item>
-  </ion-list>
+  </ion-list>  
 
   <!-- Show "Data not found" if list is empty -->
   <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
@@ -36,12 +39,11 @@
   </div>
 
   <!-- Modal -->
-  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="modal-card">
+<ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
-      <div class="modal-container">
         <!-- Header -->
-        <ion-header>
-          <ion-toolbar color="primary" class="modal-toolbar">
+         <ion-header class="modal-toolbar-mobile-app">
+          <ion-toolbar color="primary">
             <ion-title>Material Details</ion-title>
             <ion-buttons slot="end">
               <ion-button fill="clear" (click)="closeModal()">
@@ -52,31 +54,31 @@
         </ion-header>
 
         <!-- Body -->
-        <ion-content class="ion-padding modal-body">
+        <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
           <!-- Info Rows -->
-          <div class="info-row-of-model">
-            <span class="label">Date:</span>
-            <span class="value">{{ formatDate(SelectedOrder.p.PurchaseOrderDate) || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Date:</span>
+            <span class="value-mobile-app">{{ formatDate(SelectedOrder.p.PurchaseOrderDate) || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Site:</span>
-            <span class="value">{{ SelectedOrder.p.SiteName || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Site:</span>
+            <span class="value-mobile-app">{{ SelectedOrder.p.SiteName || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Vendor:</span>
-            <span class="value">{{ SelectedOrder.p.VendorName || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Vendor:</span>
+            <span class="value-mobile-app">{{ SelectedOrder.p.VendorName || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Trade Name:</span>
-            <span class="value">{{ SelectedOrder.p.VendorTradeName || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Trade Name:</span>
+            <span class="value-mobile-app">{{ SelectedOrder.p.VendorTradeName || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Address:</span>
-            <span class="value">{{ SelectedOrder.p.AddressLine1 || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Address:</span>
+            <span class="value-mobile-app">{{ SelectedOrder.p.AddressLine1 || '-' }}</span>
           </div>
           <!-- Invoice Preview Button -->
-          <div class="info-row-of-model" *ngIf="SelectedOrder?.p?.MaterialPurchaseInvoicePath">
-            <span class="label">Invoice:</span>
+          <div class="info-row-of-model-mobile-app" *ngIf="SelectedOrder?.p?.MaterialPurchaseInvoicePath">
+            <span class="label-mobile-app">Invoice:</span>
             <ion-button size="small" fill="clear" color="primary"
               (click)="prepareInvoiceUrl(SelectedOrder.p.MaterialPurchaseInvoicePath)">
               <ion-icon [name]="showInvoicePreview?'eye-outline':'eye-off-outline'" slot="icon-only"></ion-icon>
@@ -149,13 +151,13 @@
             </div>
           </div>
           <!-- Summary -->
-          <div class="info-row-of-model">
-            <span class="label">Grand Total:</span>
-            <span class="value">{{ SelectedOrder.p.GrandTotal || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Grand Total:</span>
+            <span class="value-mobile-app">{{ SelectedOrder.p.GrandTotal || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Status:</span>
-            <!-- <span class="value">{{ SelectedOrder.p.MaterialPurchaseOrderStatus || '-' }}</span> -->
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Status:</span>
+            <!-- <span class="value-mobile-app">{{ SelectedOrder.p.MaterialPurchaseOrderStatus || '-' }}</span> -->
             <span class="status-badge" [ngClass]="getStatusClass(SelectedOrder.p.MaterialPurchaseOrderStatus)">
               {{ getStatusText(SelectedOrder.p.MaterialPurchaseOrderStatus) }}
             </span>
@@ -163,8 +165,7 @@
         </ion-content>
 
         <!-- Footer -->
-        <ion-footer class="modal-footer"
-          *ngIf="SelectedOrder.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved">
+      <ion-footer class="modal-footer-mobile-app" *ngIf="SelectedOrder.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved">
           <div class="action-buttons">
             <ion-button expand="block" color="success" shape="round"
               (click)="SaveOrder(MaterialPurchaseOrderStatus.Ordered)">
@@ -176,7 +177,6 @@
             </ion-button>
           </div>
         </ion-footer>
-      </div>
     </ng-template>
   </ion-modal>
 

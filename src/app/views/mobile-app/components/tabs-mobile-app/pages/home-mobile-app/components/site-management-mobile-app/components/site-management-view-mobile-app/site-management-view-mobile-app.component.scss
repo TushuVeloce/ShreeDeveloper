@@ -58,51 +58,42 @@ ion-card {
     color: var(--ion-background-color-step-50);
 }
 
-.modal-card {
+.custom-modal-mobile-app {
     --height: 60%;
     --width: 90%;
     --border-radius: 20px;
-    --background: var(--ion-background-color-step-50);
+    --background: var(--ion-background-color);
 
-    .modal-container {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
+    .modal-toolbar-mobile-app {
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
     }
 
-    .modal-toolbar {
-        border-radius: 20px 20px 0 0;
-    }
-
-    .modal-body {
-        flex: 1;
+    .modal-content-mobile-app {
+        max-height: 100%;
         overflow-y: auto;
     }
 
-    .info-row-of-model {
+    .info-row-of-model-mobile-app {
         margin-bottom: 12px;
         display: flex;
         justify-content: space-between;
-        padding-left: 10px;
+        padding: 0 10px;
 
-        .label {
+        .label-mobile-app {
             font-weight: 600;
         }
 
-        .value {
+        .value-mobile-app {
             font-weight: 500;
+            text-align: right;
+            max-width: 60%;
+            word-break: break-word;
         }
     }
 
-    .text-danger {
-        color: var(--ion-color-danger);
-    }
-
-    .text-success {
-        color: var(--ion-color-success);
-    }
-
-    .modal-footer {
+    .modal-footer-mobile-app {
         padding: 12px;
+        background-color: var(--ion-background-color-step-50);
     }
 }

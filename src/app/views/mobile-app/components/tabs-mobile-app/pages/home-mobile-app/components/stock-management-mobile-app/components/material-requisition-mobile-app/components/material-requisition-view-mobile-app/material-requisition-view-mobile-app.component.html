@@ -35,70 +35,67 @@
 
 
   <!-- Modal -->
-  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="modal-card">
+  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
-      <div class="modal-container">
-        <ion-header>
-          <ion-toolbar color="primary">
-            <ion-title>Material Details</ion-title>
-            <ion-buttons slot="end">
-              <ion-button fill="clear" (click)="closeModal()">
-                <ion-icon name="close-outline"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
+      <ion-header class="modal-toolbar-mobile-app">
+        <ion-toolbar color="primary">
+          <ion-title>Material Details</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="closeModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
 
-        <ion-content class="ion-padding modal-body">
-          <div class="info-row-of-model" *ngIf="SelectedMaterialRequisition">
-            <strong class="label">Date:</strong>
-            <span class="value">{{ formatDate(SelectedMaterialRequisition.p.Date) || '-' }}</span>
+      <ion-content scroll-y="true" class="ion-padding modal-content">
+        <div class="info-row-of-model-mobile-app" *ngIf="SelectedMaterialRequisition">
+          <strong class="label-mobile-app">Date:</strong>
+          <span class="value-mobile-app">{{ formatDate(SelectedMaterialRequisition.p.Date) || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <strong class="label-mobile-app">Site:</strong>
+          <span class="value-mobile-app">{{ SelectedMaterialRequisition.p.SiteName || '-' }}</span>
+        </div>
+        <div class="table-container">
+          <div class="table-scroll">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th class="sticky-col sticky-header">#</th>
+                  <th *ngFor="let item of tableHeaderData" class="sticky-header">{{ item }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of SelectedMaterialRequisition.p.MaterialRequisitionDetailsArray; let i = index">
+                  <td class="sticky-col">{{i + 1 }}</td>
+                  <td>
+                    {{ item.MaterialName || '-' }}
+                  </td>
+                  <td>
+                    {{ item.UnitName || '-' }}
+                  </td>
+                  <td>
+                    {{ item.RequisitionQty || '-' }}
+                  </td>
+                  <td>
+                    <div class="status-badge" [ngClass]="getStatusClass(item.MaterialStatus)">
+                      {{ getStatusText(item.MaterialStatus)}}
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div class="info-row-of-model">
-            <strong class="label">Site:</strong>
-            <span class="value">{{ SelectedMaterialRequisition.p.SiteName || '-' }}</span>
-          </div>
-          <div class="table-container">
-            <div class="table-scroll">
-              <table class="custom-table">
-                <thead>
-                  <tr>
-                    <th class="sticky-col sticky-header">#</th>
-                    <th *ngFor="let item of tableHeaderData" class="sticky-header">{{ item }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of SelectedMaterialRequisition.p.MaterialRequisitionDetailsArray; let i = index">
-                    <td class="sticky-col">{{i + 1 }}</td>
-                    <td>
-                      {{ item.MaterialName || '-' }}
-                    </td>
-                    <td>
-                      {{ item.UnitName || '-' }}
-                    </td>
-                    <td>
-                      {{ item.RequisitionQty || '-' }}
-                    </td>
-                    <td>
-                      <div class="status-badge" [ngClass]="getStatusClass(item.MaterialStatus)">
-                        {{ getStatusText(item.MaterialStatus)}}
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </ion-content>
+        </div>
+      </ion-content>
 
-        <ion-footer class="modal-footer">
-          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
-            Close
-          </ion-button>
-        </ion-footer>
-      </div>
+      <ion-footer class="modal-footer-mobile-app">
+        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">Close</ion-button>
+      </ion-footer>
     </ng-template>
   </ion-modal>
+
 
   <!-- FAB -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

@@ -43,12 +43,11 @@
 
 
   <!-- Modal -->
-  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="modal-card">
+  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
-      <div class="modal-container">
         <!-- Header -->
-        <ion-header>
-          <ion-toolbar color="primary" class="modal-toolbar">
+        <ion-header class="modal-toolbar-mobile-app">
+          <ion-toolbar color="primary">
             <ion-title>Income Details</ion-title>
             <ion-buttons slot="end">
               <ion-button fill="clear" (click)="closeModal()">
@@ -59,58 +58,52 @@
         </ion-header>
 
         <!-- Body -->
-        <ion-content class="ion-padding modal-body" id="print-section">
+    <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
           <!-- Info Rows -->
-          <div class="info-row-of-model">
-            <span class="label">Income Date:</span>
-            <span class="value">{{ formatDate(SelectedIncome.p.Date) || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Income Date:</span>
+            <span class="value-mobile-app">{{ formatDate(SelectedIncome.p.Date) || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Site Name:</span>
-            <span class="value">{{ SelectedIncome.p.SiteName || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Site Name:</span>
+            <span class="value-mobile-app">{{ SelectedIncome.p.SiteName || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Ledger Name :</span>
-            <span class="value">{{ SelectedIncome.p.LedgerName || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Ledger Name :</span>
+            <span class="value-mobile-app">{{ SelectedIncome.p.LedgerName || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Sub Ledger Name:</span>
-            <span class="value">{{ SelectedIncome.p.SubLedgerName || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Sub Ledger Name:</span>
+            <span class="value-mobile-app">{{ SelectedIncome.p.SubLedgerName || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Reason :</span>
-            <span class="value">{{ SelectedIncome.p.Reason || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Reason :</span>
+            <span class="value-mobile-app">{{ SelectedIncome.p.Reason || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Income Amount :</span>
-            <span class="value">{{ SelectedIncome.p.IncomeAmount | currency : "INR" }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Income Amount :</span>
+            <span class="value-mobile-app">{{ SelectedIncome.p.IncomeAmount | currency : "INR" }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Shrees Balance :</span>
-            <span class="value">{{ SelectedIncome.p.ShreesBalance | currency : "INR"  }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Shrees Balance :</span>
+            <span class="value-mobile-app">{{ SelectedIncome.p.ShreesBalance | currency : "INR"  }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Mode Of Payment Name :</span>
-            <span class="value">{{ SelectedIncome.p.ModeOfPaymentName || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Mode Of Payment Name :</span>
+            <span class="value-mobile-app">{{ SelectedIncome.p.ModeOfPaymentName || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Narration :</span>
-            <span class="value">{{ SelectedIncome.p.Narration || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Narration :</span>
+            <span class="value-mobile-app">{{ SelectedIncome.p.Narration || '-' }}</span>
           </div>
         </ion-content>
 
         <!-- Footer -->
-        <ion-footer class="modal-footer">
-          <!-- <div class="action-buttons">
-            <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
-              Close
-            </ion-button>
-          </div> -->
+       <ion-footer class="modal-footer-mobile-app">
           <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
             Close
           </ion-button>
         </ion-footer>
-      </div>
     </ng-template>
   </ion-modal>
 

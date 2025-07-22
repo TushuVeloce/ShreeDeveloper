@@ -1078,3 +1078,42 @@ textarea[placeholder]::placeholder {
     font-size: 16px;
   }
 }
+.custom-modal-mobile-app {
+  --height: 60%;
+  --width: 90%;
+  --border-radius: 20px;
+  --background: var(--ion-background-color);
+
+  .modal-toolbar-mobile-app {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+
+  .modal-content-mobile-app {
+    max-height: 100%;
+    overflow-y: auto;
+  }
+
+  .info-row-of-model-mobile-app {
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+
+    .label-mobile-app {
+      font-weight: 600;
+    }
+
+    .value-mobile-app {
+      font-weight: 500;
+      text-align: right;
+      max-width: 60%;
+      word-break: break-word;
+    }
+  }
+
+  .modal-footer-mobile-app {
+    padding: 12px;
+    background-color: var(--ion-background-color-step-50);
+  }
+}

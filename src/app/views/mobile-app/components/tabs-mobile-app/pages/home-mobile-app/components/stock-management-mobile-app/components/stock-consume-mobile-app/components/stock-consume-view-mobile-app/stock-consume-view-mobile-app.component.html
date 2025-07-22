@@ -42,11 +42,10 @@
 
 
   <!-- Modal -->
-  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="modal-card">
+  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
-      <div class="modal-container">
         <!-- Header -->
-        <ion-header>
+        <ion-header class="modal-toolbar-mobile-app">
           <ion-toolbar color="primary" class="modal-toolbar">
             <ion-title>Inward Details</ion-title>
             <ion-buttons slot="end">
@@ -58,62 +57,56 @@
         </ion-header>
 
         <!-- Body -->
-        <ion-content class="ion-padding modal-body">
+        <ion-content class="ion-padding modal-content-mobile-app" scroll-y="true">
           <!-- Info Rows -->
-          <div class="info-row-of-model">
-            <span class="label">Consumption Date:</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Consumption Date:</span>
             <span class="value">{{ formatDate(SelectedStockConsume.p.ConsumptionDate) || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Site Name:</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Site Name:</span>
             <span class="value">{{ SelectedStockConsume.p.SiteName || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Stage Name :</span>
-            <span class="value">{{ SelectedStockConsume.p.StageName || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Stage Name :</span>
+            <span class="value-mobile-app">{{ SelectedStockConsume.p.StageName || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Material Name:</span>
-            <span class="value">{{ SelectedStockConsume.p.MaterialName || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Material Name:</span>
+            <span class="value-mobile-app">{{ SelectedStockConsume.p.MaterialName || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Unit Name :</span>
-            <span class="value">{{ SelectedStockConsume.p.UnitName || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Unit Name :</span>
+            <span class="value-mobile-app">{{ SelectedStockConsume.p.UnitName || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Consumed Quantity :</span>
-            <span class="value">{{ SelectedStockConsume.p.ConsumedQuantity || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Consumed Quantity :</span>
+            <span class="value-mobile-app">{{ SelectedStockConsume.p.ConsumedQuantity || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Current Quantity :</span>
-            <span class="value">{{ SelectedStockConsume.p.CurrentQuantity || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Current Quantity :</span>
+            <span class="value-mobile-app">{{ SelectedStockConsume.p.CurrentQuantity || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Remaining Quantity :</span>
-            <span class="value">{{ SelectedStockConsume.p.RemainingQuantity || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Remaining Quantity :</span>
+            <span class="value-mobile-app">{{ SelectedStockConsume.p.RemainingQuantity || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Remark :</span>
-            <span class="value">{{ SelectedStockConsume.p.Remark || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Remark :</span>
+            <span class="value-mobile-app">{{ SelectedStockConsume.p.Remark || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Description :</span>
-            <span class="value">{{ SelectedStockConsume.p.Description || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Description :</span>
+            <span class="value-mobile-app">{{ SelectedStockConsume.p.Description || '-' }}</span>
           </div>
         </ion-content>
 
         <!-- Footer -->
-        <ion-footer class="modal-footer">
-          <!-- <div class="action-buttons">
-            <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
-              Close
-            </ion-button>
-          </div> -->
+        <ion-footer class="modal-footer-mobile-app">
           <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
             Close
           </ion-button>
         </ion-footer>
-      </div>
     </ng-template>
   </ion-modal>
 

@@ -119,10 +119,9 @@
       </div>
     </ng-template>
 
-    <ion-modal [isOpen]="ismaterialModalOpen" (didDismiss)="closeModal(100)" class="modal-card">
+    <ion-modal [isOpen]="ismaterialModalOpen" (didDismiss)="closeModal(100)" class="custom-modal-mobile-app">
       <ng-template>
-        <div class="modal-container">
-          <ion-header>
+          <ion-header class="modal-toolbar-mobile-app">
             <ion-toolbar color="primary">
               <ion-title>Material Details</ion-title>
               <ion-buttons slot="end">
@@ -133,7 +132,7 @@
             </ion-toolbar>
           </ion-header>
 
-          <ion-content class="ion-padding">
+          <ion-content class="ion-padding modal-content-mobile-app" scroll-y="true">
             <ion-list lines="none">
               <!-- Material Dropdown -->
               <ion-item class="input-item" button detail (click)="selectMaterialBottomsheet()" *ngIf="!ModalEditable">
@@ -168,7 +167,7 @@
             </ion-list>
           </ion-content>
 
-          <ion-footer>
+          <ion-footer class="modal-footer-mobile-app">
             <ion-grid>
               <ion-row>
                 <ion-col size="6">
@@ -184,7 +183,6 @@
               </ion-row>
             </ion-grid>
           </ion-footer>
-        </div>
       </ng-template>
     </ion-modal>
 

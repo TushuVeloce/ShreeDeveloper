@@ -52,9 +52,9 @@
   </ion-fab>
 
   <!-- Modal -->
-  <ion-modal [isOpen]="ModalOpen" (didDismiss)="closeModal()" class="modal-card">
+  <ion-modal [isOpen]="ModalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-container *ngIf="SelectedCustomerEnquiry">
-      <ion-header>
+      <ion-header class="modal-toolbar-mobile-app">
         <ion-toolbar color="primary">
           <ion-title>Customer Details</ion-title>
           <ion-buttons slot="end">
@@ -66,8 +66,8 @@
       </ion-header>
       <!-- { label: 'Status', value: SelectedCustomerEnquiry.p.CustomerStatusName }, -->
 
-      <ion-content class="ion-padding modal-scroll-content">
-        <div class="modal-detail" *ngFor="let field of [
+       <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
+        <div class="info-row-of-model-mobile-app" *ngFor="let field of [
           { label: 'Name', value: SelectedCustomerEnquiry.p.Name },
           { label: 'Contact No', value: SelectedCustomerEnquiry.p.ContactNos },
           { label: 'Address', value: SelectedCustomerEnquiry.p.Address },
@@ -76,11 +76,11 @@
           { label: 'Country', value: SelectedCustomerEnquiry.p.CountryName },
           { label: 'Pin Code', value: SelectedCustomerEnquiry.p.PinCode }
         ]">
-          <strong class="label">{{ field.label }}:</strong>
-          <span class="value">{{ field.value ? field.value : '-' }}</span>
+          <strong class="label-mobile-app">{{ field.label }}:</strong>
+          <span class="value-mobile-app">{{ field.value ? field.value : '-' }}</span>
         </div>
       </ion-content>
-      <ion-footer>
+      <ion-footer class="modal-footer-mobile-app">
         <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">Close</ion-button>
       </ion-footer>
     </ng-container>

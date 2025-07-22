@@ -44,12 +44,11 @@
 
 
   <!-- Modal -->
-  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="modal-card">
+  <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
-      <div class="modal-container">
         <!-- Header -->
-        <ion-header>
-          <ion-toolbar color="primary" class="modal-toolbar">
+         <ion-header class="modal-toolbar-mobile-app">
+          <ion-toolbar color="primary">
             <ion-title>Accounting Report Details</ion-title>
             <ion-buttons slot="end">
               <ion-button fill="clear" (click)="closeModal()">
@@ -60,62 +59,56 @@
         </ion-header>
 
         <!-- Body -->
-        <ion-content class="ion-padding modal-body">
+         <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
           <!-- Info Rows -->
-          <div class="info-row-of-model">
-            <span class="label">Office Date:</span>
-            <span class="value">{{ formatDate(SelectedAccountingReport.p.TransDateTime) || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Office Date:</span>
+            <span class="value-mobile-app">{{ formatDate(SelectedAccountingReport.p.TransDateTime) || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Site Name:</span>
-            <span class="value">{{ SelectedAccountingReport.p.SiteName || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Site Name:</span>
+            <span class="value-mobile-app">{{ SelectedAccountingReport.p.SiteName || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Payer Name :</span>
-            <span class="value">{{ SelectedAccountingReport.p.PayerName || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Payer Name :</span>
+            <span class="value-mobile-app">{{ SelectedAccountingReport.p.PayerName || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Recipient Name:</span>
-            <span class="value">{{ SelectedAccountingReport.p.RecipientName || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Recipient Name:</span>
+            <span class="value-mobile-app">{{ SelectedAccountingReport.p.RecipientName || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Reason :</span>
-            <span class="value">{{ SelectedAccountingReport.p.Reason || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Reason :</span>
+            <span class="value-mobile-app">{{ SelectedAccountingReport.p.Reason || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Income Amount :</span>
-            <span class="value">{{ SelectedAccountingReport.p.IncomeAmount | currency : "INR" }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Income Amount :</span>
+            <span class="value-mobile-app">{{ SelectedAccountingReport.p.IncomeAmount | currency : "INR" }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Given Amount :</span>
-            <span class="value">{{ SelectedAccountingReport.p.GivenAmount | currency : "INR" }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Given Amount :</span>
+            <span class="value-mobile-app">{{ SelectedAccountingReport.p.GivenAmount | currency : "INR" }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Shrees Balance :</span>
-            <span class="value">{{ SelectedAccountingReport.p.ShreesBalance | currency : "INR" }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Shrees Balance :</span>
+            <span class="value-mobile-app">{{ SelectedAccountingReport.p.ShreesBalance | currency : "INR" }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Mode Of Payment Name :</span>
-            <span class="value">{{ SelectedAccountingReport.p.ModeOfPaymentName || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Mode Of Payment Name :</span>
+            <span class="value-mobile-app">{{ SelectedAccountingReport.p.ModeOfPaymentName || '-' }}</span>
           </div>
-          <div class="info-row-of-model">
-            <span class="label">Narration :</span>
-            <span class="value">{{ SelectedAccountingReport.p.Narration || '-' }}</span>
+          <div class="info-row-of-model-mobile-app">
+            <span class="label-mobile-app">Narration :</span>
+            <span class="value-mobile-app">{{ SelectedAccountingReport.p.Narration || '-' }}</span>
           </div>
         </ion-content>
 
         <!-- Footer -->
-        <ion-footer class="modal-footer">
-          <!-- <div class="action-buttons">
-            <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
-              Close
-            </ion-button>
-          </div> -->
+        <ion-footer class="modal-footer-mobile-app">
           <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
             Close
           </ion-button>
         </ion-footer>
-      </div>
     </ng-template>
   </ion-modal>
 
