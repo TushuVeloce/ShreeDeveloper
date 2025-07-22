@@ -22,6 +22,7 @@ export class CRMReportsProps {
   public CustomerName: string = '';
   public CustomerAddress: string = '';
   public ContactNos: string = '';
+  public Reference: string = '';
   public AdharNo: string = '';
   public PANNo: string = '';
   public PlotNo: string = '';
@@ -31,6 +32,7 @@ export class CRMReportsProps {
   public AreaInSqft: number = 0;
   public BasicRate: number = 0;
   public DiscountedRateOnArea: number = 0;
+  public DiscountOnTotalPlotAmount: number = 0;
   public TotalPlotAmount: number = 0;
   public GovernmentValue: number = 0;
   public GovernmentRecknor: number = 0;
@@ -40,6 +42,7 @@ export class CRMReportsProps {
   public TotalExtraCharges: number = 0;
   public GrandTotal: number = 0;
   public ValueOfAgreement: number = 0;
+  public TaxValueInPercentage: number = 0
   public GovermentRatePerSqm: number = 0;
   public RegTaxValueInPercentage: number = 0;
   public GoodsServicesTax: number = 0;
