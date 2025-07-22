@@ -238,7 +238,7 @@ export class ExpenseDetailsComponent implements OnInit {
       return;
     }
 
-    if (this.PaymentType <= 0) {
+    if (this.PaymentType <= 0 && this.Entity.p.ExpenseModeOfPayment == this.Employee) {
       await this.uiUtils.showErrorToster('Payment Type not Selected');
       return;
     }
