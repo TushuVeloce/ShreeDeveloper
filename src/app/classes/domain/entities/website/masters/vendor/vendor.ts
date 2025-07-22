@@ -119,9 +119,7 @@ export class Vendor implements IPersistable<Vendor> {
     if (!new RegExp(ValidationPatterns.PinCode).test(this.p.PinCode) && this.p.PinCode) {
       vra.add('PinCode', ValidationMessages.PinCodeMsg);
     }
-    if (this.p.IFSC == '') {
-      vra.add('IFSC', 'IFSC cannot be blank.');
-    } else if (!new RegExp(ValidationPatterns.IFSC).test(this.p.IFSC) && this.p.IFSC) {
+    if (!new RegExp(ValidationPatterns.IFSC).test(this.p.IFSC) && this.p.IFSC) {
       vra.add('IFSC', ValidationMessages.IFSCMsg);
     }
     if (!new RegExp(ValidationPatterns.GSTIN).test(this.p.GSTIN) && this.p.GSTIN) {

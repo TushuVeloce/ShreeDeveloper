@@ -55,7 +55,7 @@ export class AccountMainLedgerDetailsComponent implements OnInit {
   }
 
   focusInput = () => {
-    let txtName = document.getElementById('Code')!;
+    let txtName = document.getElementById('Name')!;
     txtName.focus();
   }
 

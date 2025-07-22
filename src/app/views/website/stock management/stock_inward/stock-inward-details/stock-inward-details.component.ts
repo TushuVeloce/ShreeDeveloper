@@ -144,7 +144,6 @@ export class StockInwardDetailsComponent implements OnInit {
       return;
     }
     const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef(), this.Entity.p.MaterialPurchaseOrderRef, this.Entity.p.Ref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
     this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
     this.MaterialListOriginal?.forEach((item, index) => {
       item.p.InternalRef = index + 1;
