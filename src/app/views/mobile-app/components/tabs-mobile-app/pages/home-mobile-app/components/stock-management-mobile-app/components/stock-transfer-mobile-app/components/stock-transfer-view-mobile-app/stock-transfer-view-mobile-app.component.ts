@@ -101,7 +101,7 @@ export class StockTransferViewMobileAppComponent  implements OnInit {
       switch (filter.key) {
         case 'fromsite':
           if (this.Entity.p.FromSiteRef == this.Entity.p.ToSiteRef) {
-            await this.toastService.present('Same site can not selected', 1000, 'danger');
+            // await this.toastService.present('Same site can not selected', 1000, 'danger');
             break;
           }
           this.Entity.p.FromSiteRef = selectedValue ?? 0;
@@ -109,7 +109,7 @@ export class StockTransferViewMobileAppComponent  implements OnInit {
 
         case 'tosite':
           if (this.Entity.p.FromSiteRef == this.Entity.p.ToSiteRef) {
-            await this.toastService.present('Same site can not selected', 1000, 'danger');
+            // await this.toastService.present('Same site can not selected', 1000, 'danger');
             break;
           }
           this.Entity.p.ToSiteRef = selectedValue ?? 0;

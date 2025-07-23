@@ -688,7 +688,9 @@ export class ExpensesDetailsMobileAppComponent implements OnInit {
         this.selectedSite = selected;
         this.Entity.p.SiteRef = selected[0].p.Ref;
         this.SiteName = selected[0].p.Name;
-        this.getTotalInvoiceAmountFromSiteAndRecipientRef()
+        // this.getTotalInvoiceAmountFromSiteAndRecipientRef()
+        this.Entity.p.InvoiceAmount = 0;
+        this.Entity.p.RemainingAmount = 0;
         this.Entity.p.RecipientType = 0;
         this.Entity.p.RecipientRef = 0;
         this.RecipientList = []
