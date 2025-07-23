@@ -186,13 +186,9 @@ export class MaterialFromOrder implements IPersistable<MaterialFromOrder> {
     return MaterialFromOrder.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchOrderedMaterials(SiteRef: number, VendorRef: number, CompanyRef: number, MaterialPurchaseOrderRef: number, MaterialInwardRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchOrderedMaterials(MaterialPurchaseOrderRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new MaterialFromOrderFetchRequest();
-    req.CompanyRef = CompanyRef
-    req.SiteRef = SiteRef
-    req.VendorRef = VendorRef
     req.MaterialPurchaseOrderRef = MaterialPurchaseOrderRef
-    req.MaterialInwardRef = MaterialInwardRef
     let tdResponse = await MaterialFromOrder.FetchTransportData(req, errorHandler) as TransportData;
     return MaterialFromOrder.ListFromTransportData(tdResponse);
   }

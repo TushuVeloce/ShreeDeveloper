@@ -29,6 +29,15 @@
     <form autocomplete="off" #requisitionForm="ngForm">
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
+          <label>Inward Date</label>
+          <input type="date" name="InwardDate" class="form-control" id="InwardDate" [(ngModel)]="InwardDate"
+            #InwardDateCtrl="ngModel" required (blur)="InwardDateCtrl.control.markAsTouched()"
+            placeholder="Enter Site Name" [min]="Entity.p.PurchaseOrderDate" />
+          <div *ngIf="InwardDateCtrl.invalid && (InwardDateCtrl.touched || InwardDateCtrl.dirty)">
+            <span class="validation-text" *ngIf="InwardDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+          </div>
+        </div>
+        <div class="col-md-4">
           <div>
             <label for="SiteRef"><b>Site</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
@@ -43,7 +52,7 @@
             <label for="VendorRef"><b>Vendor</b></label>
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
               nzPlaceHolder="Select" [nzSize]="'large'" name="VendorRef" id="VendorRef" [(ngModel)]="Entity.p.VendorRef"
-              (ngModelChange)="getOrderIdListByCompanySiteAndVendorRef()">
+              (ngModelChange)="getOrderIdListByCompanySiteAndVendorRef(); onVendorSelection(Entity.p.VendorRef);">
               <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref"
                 [nzLabel]="Vendor.p.Name"></nz-option>
             </nz-select>
@@ -54,15 +63,6 @@
           <input type="date" name="PurchaseOrderDate" class="form-control" id="PurchaseOrderDate"
             [(ngModel)]="PurchaseOrderDate" placeholder="Ordered Date" readonly />
         </div> -->
-        <div class="col-md-4">
-          <label>Inward Date</label>
-          <input type="date" name="InwardDate" class="form-control" id="InwardDate" [(ngModel)]="InwardDate"
-            #InwardDateCtrl="ngModel" required (blur)="InwardDateCtrl.control.markAsTouched()"
-            placeholder="Enter Site Name" [min]="Entity.p.PurchaseOrderDate" />
-          <div *ngIf="InwardDateCtrl.invalid && (InwardDateCtrl.touched || InwardDateCtrl.dirty)">
-            <span class="validation-text" *ngIf="InwardDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
-          </div>
-        </div>
         <div class="col-md-4">
           <label><b>Vendor Trade Name</b></label>
           <input type="text" [(ngModel)]="Entity.p.VendorTradeName" name="VendorTradeName" class="form-control"
@@ -83,8 +83,20 @@
           <input type="text" [(ngModel)]="Entity.p.VehicleNo" name="VehicleNo" class="form-control" id="VehicleNo"
             placeholder="Vehicle No" />
         </div>
-        <!-- </div>
-      <div class="row mt-1"> -->
+        <div class="col-md-4">
+          <div>
+            <label for="MaterialPurchaseOrderRef"><b>Purchase ID</b></label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" [nzSize]="'large'" name="MaterialPurchaseOrderRef" id="MaterialPurchaseOrderRef"
+              [(ngModel)]="Entity.p.MaterialPurchaseOrderRef"
+              (ngModelChange)="getMaterialListByCompanySiteVendorRefAndPurchaseOrderID();">
+              <nz-option *ngFor="let OrderId of PurchaseOrderIdList" [nzValue]="OrderId.p.Ref"
+                [nzLabel]="OrderId.p.DisplayPurchaseOrderId"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-1">
         <div class="col-md-2 d-flex justify-content-center align-items-center">
           <label>Invoice</label>
         </div>

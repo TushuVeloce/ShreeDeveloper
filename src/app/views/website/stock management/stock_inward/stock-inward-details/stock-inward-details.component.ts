@@ -125,6 +125,12 @@ export class StockInwardDetailsComponent implements OnInit {
     this.VendorList = lst;
   }
 
+  onVendorSelection = (VendorRef: number) => {
+    const SingleRecord = this.VendorList.filter(data => data.p.Ref == VendorRef);
+    this.Entity.p.VendorTradeName = SingleRecord[0].p.TradeName;
+    this.Entity.p.VendorPhoneNo = SingleRecord[0].p.MobileNo;
+  }
+
   getOrderIdListByCompanySiteAndVendorRef = async () => {
 
     if (this.companyRef() <= 0) {
@@ -140,6 +146,7 @@ export class StockInwardDetailsComponent implements OnInit {
     let lst = await Order.FetchEntireListByCompanySiteAndVendorRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.VendorRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
+    console.log('lst :', lst);
 
     this.PurchaseOrderIdList = lst;
 
@@ -166,20 +173,13 @@ export class StockInwardDetailsComponent implements OnInit {
     return this.DateconversionService.formatDate(date);
   }
 
-  getMaterialListByCompanySiteVendorRefAndPurchaseOrderDate = async () => {
-    if (this.companyRef() <= 0) {
-      await this.uiUtils.showErrorToster('Company not Selected');
+  getMaterialListByCompanySiteVendorRefAndPurchaseOrderID = async () => {
+    if (this.Entity.p.MaterialPurchaseOrderRef <= 0) {
+      await this.uiUtils.showErrorToster('Purchase Id not Selected');
       return;
     }
-    if (this.Entity.p.SiteRef <= 0) {
-      await this.uiUtils.showErrorToster('Site not Selected');
-      return;
-    }
-    if (this.Entity.p.VendorRef <= 0) {
-      await this.uiUtils.showErrorToster('Vendor not Selected');
-      return;
-    }
-    const lst = await MaterialFromOrder.FetchOrderedMaterials(this.Entity.p.SiteRef, this.Entity.p.VendorRef, this.companyRef(), this.Entity.p.MaterialPurchaseOrderRef, this.Entity.p.Ref, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    const lst = await MaterialFromOrder.FetchOrderedMaterials(this.Entity.p.MaterialPurchaseOrderRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
     this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
     this.MaterialListOriginal?.forEach((item, index) => {
       item.p.InternalRef = index + 1;
