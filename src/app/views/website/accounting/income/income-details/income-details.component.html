@@ -31,7 +31,8 @@
         <div class="col-md-4" style="margin-top: 1rem; ">
           <label>Site Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"  (ngModelChange)="getPayerListByPayerType()">
+            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
+            (ngModelChange)="getPayerListBySiteAndPayerType(); Entity.p.PayerRef = 0; Entity.p.LedgerRef = 0; Entity.p.SubLedgerRef = 0; Entity.p.PayerType = 0; Entity.p.PlotName = '';">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -55,7 +56,7 @@
           <label>From Whom Type</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="PayerType" name="PayerType" [nzSize]="'large'" [(ngModel)]="Entity.p.PayerType"
-            (ngModelChange)="getPayerListByPayerType(); onTypeChange()">
+            (ngModelChange)="getPayerListBySiteAndPayerType(); onTypeChange()">
             <nz-option *ngFor="let type of PayerTypesList" [nzValue]="type.Ref" [nzLabel]="type.Name"></nz-option>
           </nz-select>
         </div>
@@ -74,12 +75,13 @@
             </nz-select>
             <input *ngIf="PayerNameInput && !PayerNameReadOnly" type="text" [(ngModel)]="PayerEntity.p.Name" name="Name"
               class="form-control" id="Name" required placeholder="Enter Payer Name" />
-            <span *ngIf="!PayerNameInput && !PayerNameReadOnly && Entity.p.PayerType == RecipientType" (click)="AddPayerName()"
+            <span *ngIf="!PayerNameInput && !PayerNameReadOnly && Entity.p.PayerType == RecipientType"
+              (click)="AddPayerName()"
               class="ms-2 mb-0.5 d-flex justify-content-center align-items-center border rounded"
               style="width: 36px; height: 36px; cursor: pointer">
               <i class="fa-solid fa-plus" style="color: blue;"></i>
             </span>
-             <span *ngIf="PayerNameInput && !PayerNameReadOnly" (click)="SaveNewPayerName()"
+            <span *ngIf="PayerNameInput && !PayerNameReadOnly" (click)="SaveNewPayerName()"
               class="ms-2 d-flex justify-content-center align-items-center border rounded text-success"
               style="width: 36px; height: 36px; cursor: pointer">
               <i class="fa-solid fa-check"></i>
@@ -140,7 +142,8 @@
             <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
               nzPlaceHolder="Select" id="BankAccountRef" name="BankAccountRef" [nzSize]="'large'"
               [(ngModel)]="Entity.p.BankAccountRef">
-              <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.BankAccountRef" [nzLabel]="bank.p.BankName"></nz-option>
+              <nz-option *ngFor="let bank of BankList" [nzValue]="bank.p.BankAccountRef"
+                [nzLabel]="bank.p.BankName"></nz-option>
             </nz-select>
           </div>
         </div>

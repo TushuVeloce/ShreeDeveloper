@@ -85,7 +85,7 @@ export class IncomeDetailsComponent implements OnInit {
       this.Date = strCDT.substring(0, 10);
     }
 
-    this.getPayerListByPayerType()
+    this.getPayerListBySiteAndPayerType()
     this.getCurrentBalanceByCompanyRef();
     this.InitialEntity = Object.assign(
       Income.CreateNewInstance(),
@@ -131,7 +131,7 @@ export class IncomeDetailsComponent implements OnInit {
     this.ShreeBalance = lst[0].p.ShreesBalance;
   }
 
-  getPayerListByPayerType = async () => {
+  getPayerListBySiteAndPayerType = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
@@ -192,7 +192,7 @@ export class IncomeDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Payer Name saved successfully');
         this.PayerNameInput = false
-        await this.getPayerListByPayerType()
+        await this.getPayerListBySiteAndPayerType()
         this.PayerEntity = Payer.CreateNewInstance();
       }
     }

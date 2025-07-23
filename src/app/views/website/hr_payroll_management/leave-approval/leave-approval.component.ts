@@ -33,7 +33,7 @@ export class LeaveApprovalComponent implements OnInit {
 
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Leave Request Type', 'Description', 'Date', 'Days', 'Approval Status'];
+  headers: string[] = ['Sr.No.', 'Employee', 'Leave Request Type', 'Description', 'Date', 'Days', 'Approval Status'];
 
   constructor(
     private uiUtils: UIUtils,
