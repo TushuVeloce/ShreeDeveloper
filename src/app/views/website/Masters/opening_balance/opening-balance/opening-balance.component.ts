@@ -90,6 +90,7 @@ Entity: OpeningBalance = OpeningBalance.CreateNewInstance();
             `Opening Balance of${OpeningBalance.p.BankName} has been deleted!`
           );
           await this.getOpeningBalanceListByCompanyRef();
+          await this.getCurrentBalanceByCompanyRef();
           this.SearchString = '';
           this.loadPaginationData();
         });

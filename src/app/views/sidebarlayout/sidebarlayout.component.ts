@@ -550,7 +550,7 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Stock Order',
         RouterLink: '/homepage/Website/Stock_Order',
-        LogoPath: '/assets/icons/stock_inward.png',
+        LogoPath: '/assets/icons/stock_order.png',
       },
       {
         Name: 'Stock Inward',
