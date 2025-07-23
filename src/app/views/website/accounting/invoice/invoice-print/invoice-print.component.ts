@@ -64,46 +64,6 @@ export class InvoicePrintComponent implements OnInit {
     return this.DateconversionService.formatDate(date);
   }
 
-  // printSection = (sectionId: string) => {
-  //   const printContents = document.getElementById(sectionId)?.innerHTML;
-  //   const originalContents = document.body.innerHTML;
-
-  //   if (printContents) {
-  //     document.body.innerHTML = printContents;
-  //     window.print();
-  //     document.body.innerHTML = originalContents;
-  //     window.location.reload(); // optional: refresh to reload Angular state
-  //   }
-  // }
-
-  // printSection(sectionId: string): void {
-  //   const printContents = document.getElementById(sectionId)?.innerHTML;
-  //   const popupWin = window.open('', '_blank', 'width=1300,height=800');
-
-  //   if (popupWin && printContents) {
-  //     popupWin.document.open();
-  //     popupWin.document.write(`
-  //       <html>
-  //         <head>
-  //           <title>Receipt</title>
-  //           <link rel="stylesheet" href="styles.css" />
-  //           <style>
-  //             @media print {
-  //               body {
-  //                 -webkit-print-color-adjust: exact;
-  //                 print-color-adjust: exact;
-  //               }
-  //             }
-  //           </style>
-  //         </head>
-  //         <body onload="window.print(); window.close();">
-  //           ${printContents}
-  //         </body>
-  //       </html>
-  //     `);
-  //     popupWin.document.close();
-  //   }
-  // }
 
  getTotalWorkedHours(): number {
     let totalMinutes = this.Entity.p.MachineUsageDetailsArray.reduce((sum: number, item: any) => {

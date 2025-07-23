@@ -111,7 +111,7 @@ export class StockInwardComponent implements OnInit {
 
   navigateToPrint = async (item: MaterialInwardAgainstPOStatus) => {
     this.router.navigate(['/homepage/Website/Stock_Inward_Print'], {
-      state: { printData: item.GetEditableVersion() }
+       state: { inwardref: item.p.InwardRef }
     });
   }
 

@@ -38,12 +38,12 @@ export class StockInwardProps {
   public RemainingQty: number = 0
   public CompanyRef: number = 0;
   public CompanyName: string = '';
+  public CompanyPhoneNo: string = '';
+  public CompanyAddressLine1: string = '';
+  public CompanyAddressLine2: string = '';
+  public SiteAddressLine1: string = '';
   public MaterialInwardInvoicePath: string = "";
   public MaterialInwardDetailsArray: InwardMaterialDetailProps[] = [];
-
-  public Contacts: string = '';
-  public AddressLine1: string = '';
-  public AddressLine2: string = '';
 
 
 

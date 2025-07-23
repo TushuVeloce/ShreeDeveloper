@@ -32,9 +32,8 @@ export class SalaryGenerationProps {
   public DisplayTotalWorkingHrs: string = '';
   public DisplayTotalLeavesHrs: string = '';
   public DisplayOverAllWorkingHrs: string = '';
-  public TotalLateMarksAndHalfDays: number = 0;
   public LateMarksAndHalfDayRate: number = 0;
-  public TotalDeductionOfLateMarksAndHalfDays: number = 0;
+  public HalfdayAndLateMarkDeduction: number = 0;
   public BasicSalary: number = 0;
   public TotalAllowance: number = 0;
   public TotalIncentive: number = 0;
@@ -54,6 +53,7 @@ export class SalaryGenerationProps {
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
   public OverTimeHrsRate: number = 0;
+  public TotalLateMarkAndHalfDays: number = 0;
   public SalarySlipMonthIndicator: string = 'A';
 
   public readonly IsNewlyCreated: boolean = false;
