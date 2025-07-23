@@ -13,11 +13,12 @@
     <ion-item *ngFor="let stockInward of DisplayMasterList" class="requisition-item" button detail
       (click)="openModal(stockInward)">
       <ion-label>
-        <h2>Site : {{ stockInward.p.SiteName || 'Unknown Site' }}</h2>
+        <h2>Chalan No : {{ stockInward.p.ChalanNo || '-' }}</h2>
+        <p class="date-label">Site : {{ stockInward.p.SiteName || 'Unknown Site' || '-' }}</p>
         <p class="date-label">Vendor : {{ stockInward.p.VendorName || '-' }}</p>
-        <!-- <p class="date-label">Trade Name : {{ stockInward.p.VendorTradeName || '-' }}</p> -->
-        <p class="date-label">Ordered Date : {{ formatDate(stockInward.p.PurchaseOrderDate) || '-' }}</p>
-        <!-- <p class="date-label" *ngIf="stockInward.p.InwardDate">Inward Date : {{ formatDate(stockInward.p.InwardDate) || '-' }}</p> -->
+        <p class="date-label">Material Name : {{ stockInward.p.MaterialName || '-' }}</p>
+        <p class="date-label">Total Inward Quantity : {{ stockInward.p.TotalInwardQty || '-' }}</p>
+        <p class="date-label">Status : {{ stockInward.p.Status || '-' }}</p>
       </ion-label>
 
       <div class="action-buttons" slot="end" (click)="$event.stopPropagation()">
@@ -44,119 +45,84 @@
   <!-- Modal -->
   <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
-        <!-- Header -->
-        <ion-header class="modal-toolbar-mobile-app">
-          <ion-toolbar color="primary" class="modal-content-mobile-app">
-            <ion-title>Inward Details</ion-title>
-            <ion-buttons slot="end">
-              <ion-button fill="clear" (click)="closeModal()">
-                <ion-icon name="close-outline"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-
-        <!-- Body -->
-        <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
-          <!-- Info Rows -->
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Chalan No:</span>
-            <span class="value-mobile-app">{{ SelectedStockInward.p.ChalanNo || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Site:</span>
-            <span class="value-mobile-app">{{ SelectedStockInward.p.SiteName || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Order Date:</span>
-            <span class="value-mobile-app">{{ formatDate(SelectedStockInward.p.PurchaseOrderDate) || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Inward Date:</span>
-            <span class="value-mobile-app">{{ formatDate(SelectedStockInward.p.InwardDate) || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Vendor:</span>
-            <span class="value-mobile-app">{{ SelectedStockInward.p.VendorName || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Trade Name:</span>
-            <span class="value-mobile-app">{{ SelectedStockInward.p.VendorTradeName || '-' }}</span>
-          </div>
-          <!-- <div class="info-row-of-model-mobile-app">
-                <span class="label-mobile-app">Vendor Mobile No</span>
-                <span class="value-mobile-app">{{ SelectedStockInward.p.VendorMobNo || '-' }}</span>
-              </div>
-              <div class="info-row-of-model-mobile-app">
-                <span class="label-mobile-app">Vehicle No:</span>
-                <span class="value-mobile-app">{{ SelectedStockInward.p.VehicleNo || '-' }}</span>
-              </div> -->
-          <!-- Invoice Preview Button -->
-          <div class="info-row-of-model-mobile-app" >
-            <span class="label-mobile-app">Invoice:</span>
-            <ion-button size="small" fill="clear" color="primary"
-              (click)="prepareInvoiceUrl(SelectedStockInward.p.MaterialInwardInvoicePath)">
-              <ion-icon [name]="showInvoicePreview?'eye-outline':'eye-off-outline'" slot="icon-only"></ion-icon>
+      <!-- Header -->
+      <ion-header class="modal-toolbar-mobile-app">
+        <ion-toolbar color="primary" class="modal-content-mobile-app">
+          <ion-title>Inward Details</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="closeModal()">
+              <ion-icon name="close-outline"></ion-icon>
             </ion-button>
-          </div>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
 
-          <!-- Invoice Viewer Section -->
-          <div *ngIf="showInvoicePreview" class="invoice-preview-container">
-            <ng-container *ngIf="isPDF(SelectedStockInward.p.MaterialInwardInvoicePath); else imageBlock">
-              <img [src]="'assets/icons/doc-placeholder.png'" alt="Invoice Image" class="invoice-pdf"
-                (click)="fileNavigation(SelectedStockInward.p.MaterialInwardInvoicePath)" />
-            </ng-container>
-
-            <ng-template #imageBlock>
-              <img [src]="sanitizedInvoiceUrl" alt="Invoice Image" class="invoice-image" />
-            </ng-template>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Material Details</span>
-          </div>
-
-          <div class="table-container">
-            <div class="table-scroll">
-              <table class="custom-table">
-                <thead>
-                  <tr>
-                    <th class="sticky-col sticky-header">#</th>
-                    <th *ngFor="let item of tableHeaderData" class="sticky-header">{{ item }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of SelectedStockInward.p.MaterialInwardDetailsArray; let i = index">
-                    <td class="sticky-col">{{i + 1 }}</td>
-                    <td>
-                      {{ item.MaterialName || '-' }}
-                    </td>
-                    <td>
-                      {{ item.UnitName || '-' }}
-                    </td>
-                    <td>
-                      {{ item.PurchaseOrderQty }}
-                    </td>
-                    <td>
-                      {{ item.InwardQty }}
-                    </td>
-                    <td>
-                      {{ item.PurchaseOrderRemainingQty }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+      <!-- Body -->
+      <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
+        <!-- Info Rows -->
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Chalan No:</span>
+          <span class="value-mobile-app">{{ SelectedStockInward.p.ChalanNo || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Site:</span>
+          <span class="value-mobile-app">{{ SelectedStockInward.p.SiteName || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Order Date:</span>
+          <span class="value-mobile-app">{{ formatDate(SelectedStockInward.p.PurchaseOrderDate) || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Vendor:</span>
+          <span class="value-mobile-app">{{ SelectedStockInward.p.VendorName || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Trade Name:</span>
+          <span class="value-mobile-app">{{ SelectedStockInward.p.VendorTradeName || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Material Name</span>
+          <span class="value-mobile-app">{{ SelectedStockInward.p.MaterialName }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Unit:</span>
+          <span class="value-mobile-app">{{ SelectedStockInward.p.UnitName || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Ordered Quantity :</span>
+          <span class="value-mobile-app">{{ SelectedStockInward.p.OrderedQty || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Total Inward Quantity :</span>
+          <span class="value-mobile-app">{{ SelectedStockInward.p.TotalInwardQty || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Balance Quantity :</span>
+          <span class="value-mobile-app">{{SelectedStockInward.p.BalanceQty > 0 ? SelectedStockInward.p.BalanceQty : 0||
+            '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Status :</span>
+          <span class="value-mobile-app">
+            <div class="status-badge incomplete" *ngIf="SelectedStockInward.p.Status == 'Complete'">
+              Completed
             </div>
-          </div>
-        </ion-content>
+            <div class="status-badge completed" *ngIf="SelectedStockInward.p.Status == 'Incomplete'" >
+              Incomplete
+            </div>
+          </span>
+        </div>
 
-        <!-- Footer -->
-        <ion-footer class="modal-footer">
-          <div class="action-buttons">
-            <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
-              Close
-            </ion-button>
-          </div>
-        </ion-footer>
+      </ion-content>
+
+      <!-- Footer -->
+      <ion-footer class="modal-footer">
+        <div class="action-buttons">
+          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
+            Close
+          </ion-button>
+        </div>
+      </ion-footer>
     </ng-template>
   </ion-modal>
 
