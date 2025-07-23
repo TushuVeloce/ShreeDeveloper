@@ -93,7 +93,11 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
           break;
       }
     }
-    await this.getCustomerReportByCompanyAndSiteRef();
+    if(this.SiteRef > 0) {
+      await this.getCustomerReportByCompanyAndSiteRef();
+    }else{
+      await this.getCustomerReportByCompanyRef();
+    }
     this.loadFilters(); // Reload filters with updated options & preserve selections
   }
   private async loadCustomerInfoReportIfCompanyExists(): Promise<void> {
