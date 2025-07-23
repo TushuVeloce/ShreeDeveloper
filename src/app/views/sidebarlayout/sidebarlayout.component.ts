@@ -795,7 +795,7 @@ export class SidebarlayoutComponent implements OnInit {
       {
         Name: 'Stock Management',
         RouterLink: '',
-        WhiteLogo: '/assets/icons/stock.png',
+        WhiteLogo: '/assets/icons/stock_management.png',
         SubModuleList: StockManagementSubModuleList,
       },
       {
