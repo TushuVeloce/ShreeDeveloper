@@ -170,7 +170,7 @@ export class CustomerSummaryReportMobileAppComponent implements OnInit {
   
         const options = this.SiteList;
   
-        this.openSelectModal(options, this.selectedSite, false, 'Select Customer Status', 1, (selected) => {
+        this.openSelectModal(options, this.selectedSite, false, 'Select Site', 1, (selected) => {
           this.selectedSite = selected;
           this.SiteName = selected[0].p.Name;
           this.SiteRef = selected[0].p.Ref;
