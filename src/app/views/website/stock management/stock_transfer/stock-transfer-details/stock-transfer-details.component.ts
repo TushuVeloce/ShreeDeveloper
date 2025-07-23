@@ -89,7 +89,7 @@ export class StockTransferDetailsComponent implements OnInit {
       return;
     }
     if (SiteRef <= 0) {
-      await this.uiUtils.showErrorToster('Site not Selected');
+      // await this.uiUtils.showErrorToster('Site not Selected');
       return;
     }
     let lst = await StockConsume.FetchMaterialListBySiteRef(
@@ -119,9 +119,7 @@ export class StockTransferDetailsComponent implements OnInit {
     }
   };
 
-  SiteValidation = async () => {
-    const FromSite = this.Entity.p.FromSiteRef
-    const ToSite = this.Entity.p.ToSiteRef
+  SiteValidation = async (FromSite: number, ToSite: number) => {
     if (FromSite == ToSite) {
       await this.uiUtils.showWarningToster("From Site and To Site can not be same");
       setTimeout(() => {
@@ -130,6 +128,23 @@ export class StockTransferDetailsComponent implements OnInit {
       }, 0);
     }
   }
+
+  onFromSiteChange(newVal: number) {
+    this.Entity.p.FromSiteRef = newVal;
+    this.getMaterialListBySiteRef(newVal);
+    this.onSiteChange();
+    if (newVal && this.Entity.p.ToSiteRef) {
+      this.SiteValidation(newVal, this.Entity.p.ToSiteRef);
+    }
+  }
+
+  onToSiteChange(newVal: number) {
+    this.Entity.p.ToSiteRef = newVal;
+    if (this.Entity.p.FromSiteRef && newVal) {
+      this.SiteValidation(this.Entity.p.FromSiteRef, newVal);
+    }
+  }
+
 
   onSiteChange = () => {
     this.Entity.p.MaterialRef = 0;
