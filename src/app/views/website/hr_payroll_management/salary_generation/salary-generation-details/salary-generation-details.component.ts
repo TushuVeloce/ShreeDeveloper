@@ -31,6 +31,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   isEmployeeDisabled: boolean = false;
   companyName = this.companystatemanagement.SelectedCompanyName;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  GrossTotal = 0;
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement, private serverCommunicator: ServerCommunicatorService, private payloadPacketFacade: PayloadPacketFacade) { }
 
 
@@ -68,8 +69,8 @@ export class SalaryGenerationDetailsComponent implements OnInit {
 
   calculategrosstotal = () => {
     if (this.Entity.p.TotalOverTimeHrs) {
-      const GrossTotal = this.Entity.p.BasicSalary + this.Entity.p.TotalAllowance + this.Entity.p.TotalIncentive + this.Entity.p.Other + this.Entity.p.OverTimeHrsRate
-      this.Entity.p.GrossTotal = parseFloat(GrossTotal.toFixed(2));
+      const ExtraAmountTotal = this.Entity.p.TotalAllowance + this.Entity.p.TotalIncentive + this.Entity.p.Other
+      this.Entity.p.GrossTotal = parseFloat(ExtraAmountTotal.toFixed(2)) + this.GrossTotal;
     } else {
       const GrossTotal = this.Entity.p.BasicSalary + this.Entity.p.TotalAllowance + this.Entity.p.TotalIncentive + this.Entity.p.Other
       this.Entity.p.GrossTotal = parseFloat(GrossTotal.toFixed(2));
@@ -184,6 +185,8 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       this.Entity.p.TotalOverTimeHrs = Number(lst[0].p.TotalOverTimeHrs)
       this.Entity.p.TotalWorkingDays = Number(lst[0].p.TotalWorkingDays)
       this.Entity.p.HalfdayAndLateMarkDeduction = Number(lst[0].p.HalfdayAndLateMarkDeduction)
+      this.Entity.p.GrossTotal = Number(lst[0].p.GrossTotal)
+      this.GrossTotal = Number(lst[0].p.GrossTotal)
 
       await this.calculategrosstotal()
       await this.calculatetotaldeduction()

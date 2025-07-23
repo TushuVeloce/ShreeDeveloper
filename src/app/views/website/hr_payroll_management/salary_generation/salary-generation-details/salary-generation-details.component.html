@@ -86,15 +86,14 @@
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>OverTime Hours Rate</label>
-          <input type="number" name="OverTimeHrsRate" class="form-control" id="OverTimeHrsRate"
+          <input type="number" name="OverTimeHrsRate" readonly class="form-control" id="OverTimeHrsRate"
             [(ngModel)]="Entity.p.OverTimeHrsRate" placeholder="OverTime Hours Rate"
             (ngModelChange)="calculategrosstotal()" (click)="selectAllValue($event)" />
         </div>
         <div class="col-md-4">
           <label>Basic Salary</label>
           <input type="number" name="BasicSalary" class="form-control" id="BasicSalary"
-            [(ngModel)]="Entity.p.BasicSalary" placeholder="Basic Salary" required readonly
-            (ngModelChange)="calculategrosstotal()" />
+            [(ngModel)]="Entity.p.BasicSalary" placeholder="Basic Salary" required readonly/>
         </div>
         <div class="col-md-4">
           <label>Total Allowance</label>
