@@ -114,20 +114,20 @@
           <input type="date" name="localEstimatedStartingDate" class="form-control date-input"
             id="localEstimatedStartingDate" [(ngModel)]="localEstimatedStartingDate" placeholder="Select Date"
             #EstimatedStartingDateCtrl="ngModel" required (blur)="EstimatedStartingDateCtrl.control.markAsTouched()" />
-          <div
+          <!-- <div
             *ngIf="(EstimatedStartingDateCtrl.invalid && (EstimatedStartingDateCtrl.touched || EstimatedStartingDateCtrl.dirty))">
             <span class="validation-text"
               *ngIf="EstimatedStartingDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+          </div> -->
         </div>
         <div class="col-md-4 col-6">
           <label>Estimated End Date</label>
           <input type="date" name="localEstimatedEndDate" class="form-control date-input" id="localEstimatedEndDate"
             [(ngModel)]="localEstimatedEndDate" placeholder="Select Date" #EstimatedEndDateCtrl="ngModel" required
             (blur)="EstimatedEndDateCtrl.control.markAsTouched()" />
-          <div *ngIf="(EstimatedEndDateCtrl.invalid && (EstimatedEndDateCtrl.touched || EstimatedEndDateCtrl.dirty))">
+          <!-- <div *ngIf="(EstimatedEndDateCtrl.invalid && (EstimatedEndDateCtrl.touched || EstimatedEndDateCtrl.dirty))">
             <span class="validation-text" *ngIf="EstimatedEndDateCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div>
+          </div> -->
         </div>
         <div class="col-md-4 col-6">
           <label>Estimated Cost</label>
@@ -168,9 +168,9 @@
             [(ngModel)]="Entity.p.NumberOfPlots" #NumberOfPlotsCtrl="ngModel" required
             (blur)="NumberOfPlotsCtrl.control.markAsTouched()" placeholder="Enter Number of Plots"
             (click)="selectAllValue($event)" />
-          <!-- <div *ngIf="(NumberOfPlotsCtrl.invalid && (NumberOfPlotsCtrl.touched || NumberOfPlotsCtrl.dirty))">
+          <div *ngIf="(NumberOfPlotsCtrl.invalid && (NumberOfPlotsCtrl.touched || NumberOfPlotsCtrl.dirty))">
             <span class="validation-text" *ngIf="NumberOfPlotsCtrl.errors?.['required']">{{RequiredFieldMsg}}</span>
-          </div> -->
+          </div>
         </div>
       </div>
 

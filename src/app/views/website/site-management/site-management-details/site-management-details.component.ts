@@ -345,7 +345,10 @@ export class SiteManagementDetailsComponent implements OnInit {
       if (this.IsNewEntity) {
         await this.uiUtils.showSuccessToster('Site saved successfully');
         this.Entity = Site.CreateNewInstance();
+        this.localEstimatedStartingDate = '';
+        this.localEstimatedEndDate = '';
         this.resetAllControls()
+        await this.router.navigate(['/homepage/Website/Site_Management']);
       } else {
         await this.uiUtils.showSuccessToster('Site Updated successfully');
         await this.router.navigate(['/homepage/Website/Site_Management']);

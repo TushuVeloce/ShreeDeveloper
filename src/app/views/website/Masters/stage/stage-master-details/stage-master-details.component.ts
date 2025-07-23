@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgModel } from '@angular/forms';
+import { NgForm, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ValidationMessages, ValidationPatterns } from 'src/app/classes/domain/constants';
 import { DomainEnums } from 'src/app/classes/domain/domainenums/domainenums';
@@ -29,8 +29,9 @@ export class StageMasterDetailsComponent implements OnInit {
   RequiredFieldMsg: string = ValidationMessages.RequiredFieldMsg
   NameWithNosAndSpaceMsg: string = ValidationMessages.NameWithNosAndSpaceMsg
 
+  @ViewChild('stageForm') stageForm!: NgForm;
   @ViewChild('NameCtrl') NameInputControl!: NgModel;
-  @ViewChild('DisplayOrderCtrl') DisplayOrderInputControl!: NgModel;
+  // @ViewChild('DisplayOrderCtrl') DisplayOrderInputControl!: NgModel;
 
   constructor(private router: Router, private uiUtils: UIUtils, private appStateManage: AppStateManageService, private utils: Utils, private companystatemanagement: CompanyStateManagement) { }
 
@@ -41,7 +42,6 @@ export class StageMasterDetailsComponent implements OnInit {
       this.DetailsFormTitle = this.IsNewEntity ? 'New Stage' : 'Edit Stage';
       this.Entity = Stage.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable')
-
     } else {
       this.Entity = Stage.CreateNewInstance();
       Stage.SetCurrentInstance(this.Entity);
@@ -102,13 +102,7 @@ export class StageMasterDetailsComponent implements OnInit {
     }
   }
 
-  resetAllControls = () => {
-    // reset touched
-    this.NameInputControl.control.markAsUntouched();
-    this.DisplayOrderInputControl.control.markAsUntouched();
-
-    // reset dirty
-    this.NameInputControl.control.markAsPristine();
-    this.DisplayOrderInputControl.control.markAsPristine();
+  resetAllControls() {
+    this.stageForm.resetForm();
   }
 }
