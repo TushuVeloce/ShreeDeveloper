@@ -42,7 +42,8 @@ export class StockInwardPrintComponent implements OnInit {
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
     this.Entity = history.state.printData;
-    this.Entity.p.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate);
+    console.log('this.Entity :', this.Entity);
+    // this.Entity.p.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate);
     this.InitialEntity = Object.assign(StockInward.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as StockInward;
     this.getCompanySingleRecord()
     this.getVendorSingleRecord()

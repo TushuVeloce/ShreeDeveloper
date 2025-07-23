@@ -26,7 +26,8 @@ export class StockSummaryComponent implements OnInit {
   total = 0;
   companyRef = this.companystatemanagement.SelectedCompanyRef;
 
-  headers: string[] = ['Sr.No.', 'Site Name', 'Material', 'Purchase Order Date ', 'Total Inward Qty ', 'Total Consumed Qty ', 'Total Transferred In Qty ', 'Current Stock '];
+  headers: string[] = ['Sr.No.', 'Site Name', 'Material', 'Total Order Qty Per Material', 'Total Extra Order Qty', 'Total Order Qty', 'Total Inward Qty ', 'Inward Remaining Qty', 'Total Consumed Qty ', 'Total Transferred In Qty ', 'Current Stock '];
+
 
   constructor(private uiUtils: UIUtils, private router: Router, private appStateManage: AppStateManageService, private DateconversionService: DateconversionService, private screenSizeService: ScreenSizeService,
     private companystatemanagement: CompanyStateManagement
