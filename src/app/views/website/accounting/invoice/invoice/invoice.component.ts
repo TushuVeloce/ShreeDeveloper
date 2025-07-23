@@ -97,7 +97,7 @@ export class InvoiceComponent implements OnInit {
       return;
     }
     let lst = await Invoice.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.Ref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.AllList = lst.filter((item)=>item.p.Reason != '');
+    // this.AllList = lst.filter((item)=>item.p.Reason != '');
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();

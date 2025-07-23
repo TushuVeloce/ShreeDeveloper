@@ -111,7 +111,7 @@ ClearRef = () =>{
       return;
     }
     let lst = await Expense.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef,this.Entity.p.ExpenseModeOfPayment,this.Entity.p.Ref,  this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.AllList = lst.filter((item)=>item.p.Reason != '');
+    // this.AllList = lst.filter((item)=>item.p.Reason != '');
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -125,7 +125,7 @@ ClearRef = () =>{
       return;
     }
     let lst = await Expense.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.AllList = lst;
+    this.AllList = lst.filter((item) => item.p.Reason != '');
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();

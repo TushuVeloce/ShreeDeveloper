@@ -107,7 +107,7 @@ export class IncomeComponent implements OnInit {
       return;
     }
     let lst = await Income.FetchEntireListByFilters(this.Entity.p.SiteRef, this.Entity.p.LedgerRef, this.Entity.p.SubLedgerRef, this.Entity.p.IncomeModeOfPayment, this.Entity.p.Ref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.AllList = lst.filter((item) => item.p.Reason != '');
+    // this.AllList = lst.filter((item) => item.p.Reason != '');
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();
@@ -125,7 +125,7 @@ export class IncomeComponent implements OnInit {
       return;
     }
     let lst = await Income.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.AllList = lst;
+    this.AllList = lst.filter((item) => item.p.Reason != '');
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
     this.loadPaginationData();

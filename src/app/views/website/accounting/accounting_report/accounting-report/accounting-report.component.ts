@@ -50,8 +50,6 @@ export class AccountingReportComponent implements OnInit {
       await this.getOpeningBalanceListByCompanyRef();
       await this.getCurrentBalanceByCompanyRef();
       await this.getSiteListByCompanyRef();
-      await this.FetchEntireListByFilters();
-      //  await this.getAccountingReportListByCompanyRef();
     });
   }
 
@@ -75,16 +73,16 @@ export class AccountingReportComponent implements OnInit {
     this.loadPaginationData();
   }
 
-    getSiteListByCompanyRef = async () => {
-      this.Entity.p.SiteRef = 0
-      this.Entity.p.SiteName = ''
-      if (this.companyRef() <= 0) {
-        await this.uiUtils.showErrorToster('Company not Selected');
-        return;
-      }
-      let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.SiteList = lst;
+  getSiteListByCompanyRef = async () => {
+    this.Entity.p.SiteRef = 0
+    this.Entity.p.SiteName = ''
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
     }
+    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.SiteList = lst;
+  }
 
   FetchEntireListByFilters = async () => {
     this.MasterList = [];
@@ -93,10 +91,10 @@ export class AccountingReportComponent implements OnInit {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await AccountingReport.FetchEntireListByFilters(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport,this.Entity.p.SiteRef,this.Entity.p.ModeOfPayment, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-   this.MasterList = lst;
+    let lst = await AccountingReport.FetchEntireListByFilters(this.Entity.p.StartDate, this.Entity.p.EndDate, this.Entity.p.AccountingReport, this.Entity.p.SiteRef, this.Entity.p.ModeOfPayment, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
-    await this.loadPaginationData();
+    this.loadPaginationData();
   }
 
   getOpeningBalanceListByCompanyRef = async () => {
