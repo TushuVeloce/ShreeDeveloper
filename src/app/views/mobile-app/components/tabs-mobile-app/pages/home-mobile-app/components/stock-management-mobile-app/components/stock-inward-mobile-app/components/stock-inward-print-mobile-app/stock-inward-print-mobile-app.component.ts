@@ -31,6 +31,8 @@ export class StockInwardPrintMobileAppComponent implements OnInit {
   isPrintButtonClicked: boolean = false;
   CompanyEntity: Company = Company.CreateNewInstance();
   VendorEntity: Vendor = Vendor.CreateNewInstance();
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
+
 
   @ViewChild('PrintContainer')
   PrintContainer!: ElementRef;
@@ -47,12 +49,13 @@ export class StockInwardPrintMobileAppComponent implements OnInit {
 
   ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
+    // await this.getInwardSingleInstanceByInwardRef(history.state.inwardref);
     this.Entity = history.state.printData;
     console.log('this.Entityyyyyyyyyy :', this.Entity);
-    this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate);
+    // this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.PurchaseOrderDate);
     this.InitialEntity = Object.assign(StockInward.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as StockInward;
-    this.getCompanySingleRecord()
-    this.getVendorSingleRecord()
+    // this.getCompanySingleRecord()
+    // this.getVendorSingleRecord()
   }
 
   @ViewChild('PrintContainer') printContainer!: ElementRef;
@@ -62,24 +65,42 @@ export class StockInwardPrintMobileAppComponent implements OnInit {
     await this.pdfService.generatePdfAndHandleAction(this.printContainer.nativeElement, `Receipt_${this.Entity.p.MaterialInwardRef}.pdf`);
   }
 
-  getCompanySingleRecord = async () => {
-    this.CompanyEntity = Company.CreateNewInstance();
-    if (this.Entity.p.CompanyRef > 0) {
-      let CompanyData = await Company.FetchInstance(this.Entity.p.CompanyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.CompanyEntity = CompanyData;
-    }
-  }
+
+  //Get Print Data 
+
+  // getInwardSingleInstanceByInwardRef = async (InwardRef: number) => {
+  //   if (this.companyRef() <= 0) {
+  //     await this.uiUtils.showErrorToster('Company not Selected');
+  //     return;
+  //   }
+  //   let lst = await StockInward.FetchInstance(InwardRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   console.log('lst :', lst);
+  //   this.Entity = lst;
+
+  //   this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(lst.p.PurchaseOrderDate);
+  //   if (lst.p.InwardDate) {
+  //     this.Entity.p.InwardDate = lst.p.InwardDate
+  //   }
+  // }
+
+  // getCompanySingleRecord = async () => {
+  //   this.CompanyEntity = Company.CreateNewInstance();
+  //   if (this.Entity.p.CompanyRef > 0) {
+  //     let CompanyData = await Company.FetchInstance(this.Entity.p.CompanyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //     this.CompanyEntity = CompanyData;
+  //   }
+  // }
 
   totalAmountInWords(number: number): string {
     return this.utils.convertNumberToWords(number);
   }
 
-  getVendorSingleRecord = async () => {
-    this.VendorEntity = Vendor.CreateNewInstance();
-    if (this.Entity.p.VendorRef > 0 && this.Entity.p.CompanyRef > 0) {
-      let CompanyData = await Vendor.FetchInstance(this.Entity.p.VendorRef, this.Entity.p.CompanyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.VendorEntity = CompanyData;
-    }
-  }
+  // getVendorSingleRecord = async () => {
+  //   this.VendorEntity = Vendor.CreateNewInstance();
+  //   if (this.Entity.p.VendorRef > 0 && this.Entity.p.CompanyRef > 0) {
+  //     let CompanyData = await Vendor.FetchInstance(this.Entity.p.VendorRef, this.Entity.p.CompanyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //     this.VendorEntity = CompanyData;
+  //   }
+  // }
 
 }
