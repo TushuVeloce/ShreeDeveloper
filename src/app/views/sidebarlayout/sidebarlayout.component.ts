@@ -430,21 +430,21 @@ export class SidebarlayoutComponent implements OnInit {
         RouterLink: '/homepage/Website/Opening_Balance_Master',
         LogoPath: '/assets/icons/Bank Account Master.png',
       },
-      {
-        Name: 'Country Master',
-        RouterLink: '/homepage/Website/Country',
-        LogoPath: '/assets/icons/Country Master.png',
-      },
-      {
-        Name: 'State Master',
-        RouterLink: '/homepage/Website/State',
-        LogoPath: '/assets/icons/State Master.png',
-      },
-      {
-        Name: 'City Master',
-        RouterLink: '/homepage/Website/City',
-        LogoPath: '/assets/icons/Material Master.png',
-      },
+      // {
+      //   Name: 'Country Master',
+      //   RouterLink: '/homepage/Website/Country',
+      //   LogoPath: '/assets/icons/Country Master.png',
+      // },
+      // {
+      //   Name: 'State Master',
+      //   RouterLink: '/homepage/Website/State',
+      //   LogoPath: '/assets/icons/State Master.png',
+      // },
+      // {
+      //   Name: 'City Master',
+      //   RouterLink: '/homepage/Website/City',
+      //   LogoPath: '/assets/icons/Material Master.png',
+      // },
       {
         Name: 'Department Master',
         RouterLink: '/homepage/Website/Department_Master',
@@ -786,12 +786,12 @@ export class SidebarlayoutComponent implements OnInit {
         WhiteLogo: '/assets/icons/Registrar Office.png',
         // SubModuleList: RegistrarOfficeSubModuleList,
       },
-      {
-        Name: 'Marketing Management',
-        RouterLink: '/homepage/Website/Marketing_Management',
-        WhiteLogo: '/assets/icons/Marketing Management.png',
-        // SubModuleList: MarketingManagementSubModuleList,
-      },
+      // {
+      //   Name: 'Marketing Management',
+      //   RouterLink: '/homepage/Website/Marketing_Management',
+      //   WhiteLogo: '/assets/icons/Marketing Management.png',
+      //   // SubModuleList: MarketingManagementSubModuleList,
+      // },
       {
         Name: 'Stock Management',
         RouterLink: '',
