@@ -12,6 +12,8 @@ export class MaterialInwardAgainstPOStatusFetchRequest {
   CompanyRefs: number[] = [];
   StockInwardStatus: number[] = [];
   SiteRefs: number[] = [];
+  SiteRef: number = 0;
+  VendorRef: number = 0;
 
   public MergeIntoTransportData = (td: TransportData) => {
     let coll = DataContainerService.GetInstance().GetOrCreateCollection(td.MainData, MaterialInwardAgainstPOStatusFetchRequest.FetchRequestType) as DataCollection;

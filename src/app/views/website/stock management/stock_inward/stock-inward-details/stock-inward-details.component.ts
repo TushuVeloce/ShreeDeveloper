@@ -192,7 +192,11 @@ export class StockInwardDetailsComponent implements OnInit {
 
   CalculateRemainingQty = (InwardQty: number, RemainingQty: number) => {
     InwardQty = Number(InwardQty) || 0;
-    this.NewRemainingQty = RemainingQty - InwardQty;
+    if (RemainingQty - InwardQty > 0) {
+      this.NewRemainingQty = RemainingQty - InwardQty;
+    } else {
+      this.NewRemainingQty = 0;
+    }
   }
 
   triggerFileInput(): void {
@@ -311,10 +315,10 @@ export class StockInwardDetailsComponent implements OnInit {
       return;
     }
 
-    if (this.newInward.InwardQty > this.newInward.PurchaseOrderRemainingQty) {
-      await this.uiUtils.showErrorMessage('Error', 'Inward Quantity cannot be more than Remaining Quantity');
-      return;
-    }
+    // if (this.newInward.InwardQty > this.newInward.PurchaseOrderRemainingQty) {
+    //   await this.uiUtils.showErrorMessage('Error', 'Inward Quantity cannot be more than Remaining Quantity');
+    //   return;
+    // }
 
     const newInternalRef = this.newInward.InternalRef;
 
