@@ -37,7 +37,6 @@ export class StockInwardProps {
   public VehicleNo: string = ''
   public RemainingQty: number = 0
   public CompanyRef: number = 0;
-  public PurchaseOrderId: number = 0;
   public CompanyName: string = '';
   public CompanyPhoneNo: string = '';
   public CompanyAddressLine1: string = '';

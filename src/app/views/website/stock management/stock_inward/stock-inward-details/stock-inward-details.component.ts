@@ -9,6 +9,7 @@ import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/v
 import { InwardMaterial, InwardMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/inwardmaterial/inwardmaterial';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { MaterialStockOrder } from 'src/app/classes/domain/entities/website/stock_management/stock_order/materialstockorder/materialstockorder';
+import { Order } from 'src/app/classes/domain/entities/website/stock_management/stock_order/order';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
 import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -32,6 +33,8 @@ export class StockInwardDetailsComponent implements OnInit {
   IsDropdownDisabled: boolean = false;
   InitialEntity: StockInward = null as any;
   SiteList: Site[] = [];
+  VendorList: Vendor[] = [];
+  PurchaseOrderIdList: Order[] = [];
   MaterialList: MaterialFromOrder[] = [];
   MaterialListOriginal: MaterialFromOrder[] = [];
   localEstimatedStartingDate: string = '';
@@ -89,9 +92,10 @@ export class StockInwardDetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    this.getSiteListByCompanyRef()
+    this.getSiteListByCompanyRef();
+    this.getVendorListByCompanyRef();
     this.IsNewEntity = false;
-    this.getInwardSingleInstanceByInwardRef(history.state.inwardref);
+    // this.getInwardSingleInstanceByInwardRef(history.state.inwardref);
     this.SessionAddedRefs = []; // ✅ Reset session-added materials
 
     this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
@@ -112,21 +116,50 @@ export class StockInwardDetailsComponent implements OnInit {
     this.SiteList = lst;
   }
 
-  getInwardSingleInstanceByInwardRef = async (InwardRef: number) => {
+  getVendorListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await StockInward.FetchInstance(InwardRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.Entity = lst;
-
-    this.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(lst.p.PurchaseOrderDate);
-    if (lst.p.InwardDate) {
-      this.InwardDate = lst.p.InwardDate
-    }
-
-    await this.getMaterialListByCompanySiteVendorRefAndPurchaseOrderDate()
+    let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    this.VendorList = lst;
   }
+
+  getOrderIdListByCompanySiteAndVendorRef = async () => {
+
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    if (this.Entity.p.SiteRef <= 0) {
+      return;
+    }
+    if (this.Entity.p.VendorRef <= 0) {
+      return;
+    }
+    let lst = await Order.FetchEntireListByCompanySiteAndVendorRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.VendorRef,
+      async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
+    );
+
+    this.PurchaseOrderIdList = lst;
+
+  };
+
+  // getInwardSingleInstanceByInwardRef = async (InwardRef: number) => {
+  //   if (this.companyRef() <= 0) {
+  //     await this.uiUtils.showErrorToster('Company not Selected');
+  //     return;
+  //   }
+  //   let lst = await StockInward.FetchInstance(InwardRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+  //   this.Entity = lst;
+
+  //   this.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(lst.p.PurchaseOrderDate);
+  //   if (lst.p.InwardDate) {
+  //     this.InwardDate = lst.p.InwardDate
+  //   }
+
+  //   await this.getMaterialListByCompanySiteVendorRefAndPurchaseOrderDate()
+  // }
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {

@@ -27,56 +27,64 @@
     </ng-template>
 
     <form autocomplete="off" #requisitionForm="ngForm">
-      <div class="row">
-        <div class="col-md-4" style="margin-top: 1rem">
-          <label><b>Site Name</b></label>
-          <input type="text" [(ngModel)]="Entity.p.SiteName" name="SiteName" class="form-control" id="SiteName"
-            placeholder="Site Name" readonly />
+      <div class="row" style="margin-top: 1rem">
+        <div class="col-md-4">
+          <div>
+            <label for="SiteRef"><b>Site</b></label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" id="SiteRef" [(ngModel)]="Entity.p.SiteRef"
+              (ngModelChange)="getOrderIdListByCompanySiteAndVendorRef()">
+              <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+            </nz-select>
+          </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem">
+        <div class="col-md-4">
+          <div>
+            <label for="VendorRef"><b>Vendor</b></label>
+            <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
+              nzPlaceHolder="Select" [nzSize]="'large'" name="VendorRef" id="VendorRef" [(ngModel)]="Entity.p.VendorRef"
+              (ngModelChange)="getOrderIdListByCompanySiteAndVendorRef()">
+              <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref"
+                [nzLabel]="Vendor.p.Name"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <!-- <div class="col-md-4">
           <label>Purchase Ordered Date</label>
           <input type="date" name="PurchaseOrderDate" class="form-control" id="PurchaseOrderDate"
             [(ngModel)]="PurchaseOrderDate" placeholder="Ordered Date" readonly />
-        </div>
-        <div class="col-md-4" style="margin-top: 1rem">
+        </div> -->
+        <div class="col-md-4">
           <label>Inward Date</label>
           <input type="date" name="InwardDate" class="form-control" id="InwardDate" [(ngModel)]="InwardDate"
             #InwardDateCtrl="ngModel" required (blur)="InwardDateCtrl.control.markAsTouched()"
             placeholder="Enter Site Name" [min]="Entity.p.PurchaseOrderDate" />
-          <div *ngIf="
-              InwardDateCtrl.invalid &&
-              (InwardDateCtrl.touched || InwardDateCtrl.dirty)
-            ">
+          <div *ngIf="InwardDateCtrl.invalid && (InwardDateCtrl.touched || InwardDateCtrl.dirty)">
             <span class="validation-text" *ngIf="InwardDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem">
-          <label><b>Vendor Name</b></label>
-          <input type="text" [(ngModel)]="Entity.p.VendorName" name="VendorName" class="form-control" id="VendorName"
-            placeholder="Vendor Name" />
-        </div>
-        <div class="col-md-4" style="margin-top: 1rem">
+        <div class="col-md-4">
           <label><b>Vendor Trade Name</b></label>
           <input type="text" [(ngModel)]="Entity.p.VendorTradeName" name="VendorTradeName" class="form-control"
             id="VendorTradeName" placeholder="Vendor Trade Name" readonly />
         </div>
-        <div class="col-md-4" style="margin-top: 1rem">
+        <div class="col-md-4">
           <label><b>Vendor Mobile No</b></label>
           <input type="text" [(ngModel)]="Entity.p.VendorPhoneNo" name="VendorPhoneNo" class="form-control"
             id="VendorPhoneNo" placeholder="Vendor Mob No" readonly />
         </div>
-        <div class="col-md-4" style="margin-top: 1rem">
+        <div class="col-md-4">
           <label><b>Chalan No</b></label>
           <input type="number" [(ngModel)]="Entity.p.ChalanNo" name="ChalanNo" class="form-control" id="ChalanNo"
             placeholder="Chalan No" readonly />
         </div>
-        <div class="col-md-4" style="margin-top: 1rem">
+        <div class="col-md-4">
           <label><b>Vehicle No</b></label>
           <input type="text" [(ngModel)]="Entity.p.VehicleNo" name="VehicleNo" class="form-control" id="VehicleNo"
             placeholder="Vehicle No" />
         </div>
-      </div>
-      <div class="row mt-3">
+        <!-- </div>
+      <div class="row mt-1"> -->
         <div class="col-md-2 d-flex justify-content-center align-items-center">
           <label>Invoice</label>
         </div>

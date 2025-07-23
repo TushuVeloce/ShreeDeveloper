@@ -30,11 +30,13 @@ export class OrderProps {
   public MaterialPurchaseOrderStatus: number = 0;
   public MaterialQuotationRef: number = 0;
   public PurchaseOrderDate: string = '';
+  public DisplayPurchaseOrderId: string = '';
   public VendorRef: number = 0;
   public VendorName: string = '';
   public VendorTradeName: string = '';
   public AddressLine1: string = '';
   public TransDateTime: string = '';
+  public RequisitionQty: number = 0;
   public GrandTotal: number = 0;
   public MaterialPurchaseInvoicePath: string = "";
   public MaterialPurchaseOrderDetailsArray: OrderMaterialDetailProps[] = [];
@@ -190,6 +192,15 @@ export class Order implements IPersistable<Order> {
     let req = new OrderFetchRequest();
     req.SiteRefs.push(SiteRef)
     req.CompanyRefs.push(CompanyRef)
+    let tdResponse = await Order.FetchTransportData(req, errorHandler) as TransportData;
+    return Order.ListFromTransportData(tdResponse);
+  }
+
+  public static async FetchEntireListByCompanySiteAndVendorRef(CompanyRef: number, SiteRef: number, VendorRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new OrderFetchRequest();
+    req.SiteRefs.push(SiteRef)
+    req.CompanyRefs.push(CompanyRef)
+    req.VendorRefs.push(VendorRef)
     let tdResponse = await Order.FetchTransportData(req, errorHandler) as TransportData;
     return Order.ListFromTransportData(tdResponse);
   }
