@@ -110,11 +110,18 @@ export class FinalLayoutComponent implements OnInit {
 
     status = requiredFields.every(field => Entity.p?.[field] === true);
 
-    if (!Entity.p.IsRoadNOCSubmit && status) {
-      status = true;
-    } else {
-      status = Entity.p.IsArjInwardSubmit;
+    if (status) {
+      if (!Entity.p.IsRoadNOCSubmit) {
+        status = true;
+      } else {
+        if (Entity.p.IsArjInwardSubmit && Entity.p.IsRoadNOCSaatBaaraUtaraSubmit && Entity.p.IsRoadNOCTentativeOrdervaNakashaSubmit) {
+          status = true;
+        } else {
+          status = false;
+        }
+      }
     }
+
     return status;
   }
 
