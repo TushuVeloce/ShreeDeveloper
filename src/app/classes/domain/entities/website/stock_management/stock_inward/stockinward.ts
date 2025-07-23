@@ -45,10 +45,6 @@ export class StockInwardProps {
   public MaterialInwardInvoicePath: string = "";
   public MaterialInwardDetailsArray: InwardMaterialDetailProps[] = [];
 
-  public Contacts: string = '';
-  public AddressLine1: string = '';
-  public AddressLine2: string = '';
-
 
 
   public readonly IsNewlyCreated: boolean = false;

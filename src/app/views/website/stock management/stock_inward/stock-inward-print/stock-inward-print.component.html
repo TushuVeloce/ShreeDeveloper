@@ -7,110 +7,11 @@
     </div>
     <div class="col-md-9"></div>
     <div class="col-md-1">
-      <button type="button" class="backbtn" (click)="printSection()">
+      <button type="button" (click)="printSection()">
         <img src="/assets/icons/printer.png" alt="" width="34px" height="34px" />
       </button>
     </div>
   </div>
-
-  <!-- <div #PrintContainer style="
-      font-family: sans-serif;
-      margin: 0;
-      padding: 10px;
-      font-size: 14px;
-      color: #000;
-    ">
-    <div style="max-width: full; margin: auto; border: 1px solid #ccc">
-  <div style="padding-bottom: 10px">
-    <h2 style="
-            color: maroon;
-            text-align: center;
-            margin-top: 10px;
-            font-weight: 500;
-          ">
-      <b>Receipt</b>
-    </h2>
-  </div>
-
-  <div>
-    <table style="width: 90%; margin: 0 5% 20px 5%">
-      <tr>
-        <td style="
-                vertical-align: top;
-                text-align: left;
-                width: 20%;
-                border: none;
-              ">
-          <img src="/assets/logos/ShreeIcon.png" alt="Company Logo" height="80" class="mb-2" />
-          <strong>
-            <div>{{ Entity.p.CompanyName }}</div>
-            <div>{{ CompanyEntity.p.AddressLine1 }}</div>
-            <div>{{ CompanyEntity.p.AddressLine2 }}</div>
-            <div>
-              {{ CompanyEntity.p.CityName }} - {{ CompanyEntity.p.PinCode }}
-            </div>
-            <div>{{ CompanyEntity.p.Contacts }}</div>
-          </strong>
-        </td>
-        <td style="width: 50%; border: none"></td>
-        <td style="vertical-align: center; border: none">
-          <div style="display: flex; justify-content: space-between">
-            <strong>DATE</strong> <strong>{{ Entity.p.InwardDate }}</strong>
-          </div>
-          <br />
-
-        </td>
-      </tr>
-    </table>
-  </div>
-
-
-  <div style="
-          background-color: maroon;
-          color: white;
-          font-weight: bold;
-          padding: 5px 10px;
-          width: fit-content;
-          margin-left: 5%;
-          width: 40%;
-        ">
-    BILL TO
-  </div>
-  <div style="display: flex; justify-content: center">
-    <table style="width: 90%; margin: 10px 0 20px 0">
-      <tr>
-        <td style="
-                width: 20%;
-                text-align: left;
-                vertical-align: top;
-                border: none;
-              ">
-          <strong>
-            <div>{{ VendorEntity.p.Name }}</div>
-            <div>{{ VendorEntity.p.TradeName }}</div>
-            <div>{{ VendorEntity.p.AddressLine1 }}</div>
-            <div>{{ VendorEntity.p.AddressLine2 }}</div>
-            <div>{{ VendorEntity.p.MobileNo }}</div>
-          </strong>
-        </td>
-        <td style="width: 50%; border: none"></td>
-        <td style="text-align: right; vertical-align: top; border: none">
-          <strong>
-            <div>{{ Entity.p.VendorName }}</div>
-            <div>{{ Entity.p.StageName }}</div>
-            <div>Service Type</div>
-            <div>{{ Entity.p.VehicleNo }}</div>
-          </strong>
-        </td>
-        <td style="text-align: left; vertical-align: top;">
-          <div>Site Name: {{ Entity.p.VendorCompanyName }}</div>
-          <div>Stage Name: {{ Entity.p.StageName }}</div>
-          <div>Service Type: {{ Entity.p.VendorCompanyName }}</div>
-          <div>Vehicle No: {{ Entity.p.VehicleNo }}</div>
-        </td>
-      </tr>
-    </table>
-  </div> -->
 
   <div #PrintContainer
     style="font-family: sans-serif; margin: 0; padding: 10px; font-size: 14px; color: #000; text-transform: capitalize;">
@@ -129,11 +30,11 @@
               <strong>
                 <div><i class="fa-solid fa-file-lines" style="color: maroon; margin-right: 10px;"></i> पोहोच पावती</div>
                 <div> <i class="fa-solid fa-phone" style="color: maroon; margin-right: 10px;"></i>
-                  {{ Entity.p.Contacts }}
+                  {{ Entity.p.CompanyPhoneNo }}
                 </div>
               </strong>
               <br>
-               <div>
+              <div>
                 <strong>Date -
                   {{formatDate(Entity.p.PurchaseOrderDate)}}
                 </strong>
@@ -143,9 +44,9 @@
               <img src="/assets/logos/ShreeIcon.png" alt="Company Logo" height="80" class="mb-2" />
             </td>
             <td style="vertical-align: center; text-align: start; border-width:  1px; padding: 5px;">
-              <strong>ऑफिस पत्ता <br>
-                {{ Entity.p.AddressLine1 }} <br>
-                {{ Entity.p.AddressLine2 }}
+              <strong>ऑफिस पत्ता :<br>
+                {{ Entity.p.CompanyAddressLine1 }} <br>
+                {{ Entity.p.CompanyAddressLine2 }}
               </strong>
             </td>
           </tr>
@@ -166,11 +67,11 @@
                 <strong>Site Name - {{ Entity.p.SiteName }}</strong>
               </div>
               <br>
-               <div>
+              <div>
                 <strong>Adderss - {{ Entity.p.SiteAddressLine1 }}</strong>
               </div>
               <br>
-               <!-- <div>
+              <!-- <div>
                 <strong>Adderss - {{ Entity.p.SiteAddressLine2 }}</strong>
               </div>
               <br> -->
@@ -191,7 +92,7 @@
                 <strong>Trade Name - {{Entity.p.VendorTradeName}}</strong>
               </div>
               <br>
-               <div>
+              <div>
                 <strong>Chalan No - {{Entity.p.ChalanNo}}</strong>
               </div>
             </td>
@@ -265,7 +166,7 @@
           <strong>Sign : {{ Entity.p.CompanyName }}</strong>
         </p>
         <p style="margin-right: 5%">
-          <strong>{{ Entity.p.CompanyName }}</strong>
+          <strong>{{ Entity.p.CreatedByName }}</strong>
         </p>
       </div>
 

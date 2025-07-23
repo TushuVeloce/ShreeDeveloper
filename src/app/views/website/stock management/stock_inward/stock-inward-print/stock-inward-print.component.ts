@@ -27,7 +27,7 @@ export class StockInwardPrintComponent implements OnInit {
   isPrintButtonClicked: boolean = false;
   CompanyEntity: Company = Company.CreateNewInstance();
   VendorEntity: Vendor = Vendor.CreateNewInstance();
- companyRef = this.companystatemanagement.SelectedCompanyRef;
+  companyRef = this.companystatemanagement.SelectedCompanyRef;
 
 
   @ViewChild('PrintContainer')
@@ -40,39 +40,33 @@ export class StockInwardPrintComponent implements OnInit {
     private utils: Utils,
     private dtu: DTU,
     private DateconversionService: DateconversionService,
-     private companystatemanagement: CompanyStateManagement,
+    private companystatemanagement: CompanyStateManagement,
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.appStateManage.setDropdownDisabled(true);
-    this.Entity = history.state.printData;
-    console.log('this.Entity :', this.Entity);
-    // this.Entity.p.InwardDate = this.dtu.ConvertStringDateToShortFormat(this.Entity.p.InwardDate);
+    await this.getInwardSingleInstanceByInwardRef(history.state.inwardref);
     this.InitialEntity = Object.assign(StockInward.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as StockInward;
-    this.getCompanySingleRecord()
-    this.getVendorSingleRecord()
   }
 
-  getCompanySingleRecord = async () => {
-    this.CompanyEntity = Company.CreateNewInstance();
-    if (this.Entity.p.CompanyRef > 0) {
-      let CompanyData = await Company.FetchInstance(this.Entity.p.CompanyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.CompanyEntity = CompanyData;
+  getInwardSingleInstanceByInwardRef = async (InwardRef: number) => {
+    if (this.companyRef() <= 0) {
+      await this.uiUtils.showErrorToster('Company not Selected');
+      return;
+    }
+    let lst = await StockInward.FetchInstance(InwardRef, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    this.Entity = lst;
+
+    this.Entity.p.PurchaseOrderDate = this.dtu.ConvertStringDateToShortFormat(lst.p.PurchaseOrderDate);
+    if (lst.p.InwardDate) {
+      this.Entity.p.InwardDate = lst.p.InwardDate
     }
   }
 
   totalAmountInWords(number: number): string {
     return this.utils.convertNumberToWords(number);
   }
-
-  getVendorSingleRecord = async () => {
-    this.VendorEntity = Vendor.CreateNewInstance();
-    if (this.Entity.p.VendorRef > 0 && this.Entity.p.CompanyRef > 0) {
-      let CompanyData = await Vendor.FetchInstance(this.Entity.p.VendorRef, this.Entity.p.CompanyRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.VendorEntity = CompanyData;
-    }
-  }
-
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {
@@ -103,12 +97,12 @@ export class StockInwardPrintComponent implements OnInit {
             font-family: sans-serif;
            }
             table {
-              bStockInward-collapse: collapse;
+              border-collapse: collapse;
               width: 100%;
             }
 
             th, td {
-              bStockInward: 1px solid  rgb(169, 167, 167);
+              border: 1px solid  rgb(169, 167, 167);
               text-align: center;
               padding: 15px;
             }
@@ -120,7 +114,6 @@ export class StockInwardPrintComponent implements OnInit {
     popupWindow.document.close();
     this.isPrintButtonClicked = false;
   }
-
 
   BackStockInward = () => {
     this.router.navigate(['/homepage/Website/Stock_Inward']);
