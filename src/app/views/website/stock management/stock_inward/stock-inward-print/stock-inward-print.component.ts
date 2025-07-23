@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Company } from 'src/app/classes/domain/entities/website/masters/company/company';
+import { MaterialFromOrder } from 'src/app/classes/domain/entities/website/masters/material/orderedmaterial/materialfromorder';
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -26,6 +27,8 @@ export class StockInwardPrintComponent implements OnInit {
   isPrintButtonClicked: boolean = false;
   CompanyEntity: Company = Company.CreateNewInstance();
   VendorEntity: Vendor = Vendor.CreateNewInstance();
+ companyRef = this.companystatemanagement.SelectedCompanyRef;
+
 
   @ViewChild('PrintContainer')
   PrintContainer!: ElementRef;
@@ -37,6 +40,7 @@ export class StockInwardPrintComponent implements OnInit {
     private utils: Utils,
     private dtu: DTU,
     private DateconversionService: DateconversionService,
+     private companystatemanagement: CompanyStateManagement,
   ) { }
 
   ngOnInit() {
@@ -68,6 +72,7 @@ export class StockInwardPrintComponent implements OnInit {
       this.VendorEntity = CompanyData;
     }
   }
+
 
   // Extracted from services date conversion //
   formatDate = (date: string | Date): string => {

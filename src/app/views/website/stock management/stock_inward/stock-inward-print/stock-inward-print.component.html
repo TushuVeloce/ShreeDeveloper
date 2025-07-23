@@ -132,6 +132,12 @@
                   {{ Entity.p.Contacts }}
                 </div>
               </strong>
+              <br>
+               <div>
+                <strong>Date -
+                  {{formatDate(Entity.p.PurchaseOrderDate)}}
+                </strong>
+              </div>
             </td>
             <td style="width: 10%; border-width:  1px; padding: 5px;">
               <img src="/assets/logos/ShreeIcon.png" alt="Company Logo" height="80" class="mb-2" />
@@ -160,13 +166,21 @@
                 <strong>Site Name - {{ Entity.p.SiteName }}</strong>
               </div>
               <br>
-              <div>
+               <div>
+                <strong>Adderss - {{ Entity.p.SiteAddressLine1 }}</strong>
+              </div>
+              <br>
+               <!-- <div>
+                <strong>Adderss - {{ Entity.p.SiteAddressLine2 }}</strong>
+              </div>
+              <br> -->
+              <!-- <div>
                 <strong>Main Ledger - </strong>
               </div>
               <br>
               <div>
                 <strong>Sub Ledger - </strong>
-              </div>
+              </div> -->
             </td>
             <td style="text-align: left; vertical-align: top; padding: 5px; border-width: 1px;">
               <div>
@@ -177,10 +191,8 @@
                 <strong>Trade Name - {{Entity.p.VendorTradeName}}</strong>
               </div>
               <br>
-              <div>
-                <strong>Date -
-                  {{formatDate(Entity.p.InwardDate)}}
-                </strong>
+               <div>
+                <strong>Chalan No - {{Entity.p.ChalanNo}}</strong>
               </div>
             </td>
           </tr>
