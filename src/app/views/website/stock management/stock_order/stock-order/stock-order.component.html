@@ -80,12 +80,12 @@
               <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
                 <!-- PENDING -->
                 <span class="status" *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Pending"
-                  ngClass="pending">
+                  ngClass="pending" (click)="NavigateOrderstatus(Order)">
                   Pending
                 </span>
 
                 <!-- APPROVED -->
-                <span class="status" style="cursor: pointer;" (click)="NavigateOrderstatus(Order)"
+                <span class="status" style="cursor: pointer;"
                   *ngIf="Order.p.MaterialPurchaseOrderStatus == MaterialPurchaseOrderStatus.Approved"
                   ngClass="approved">
                   Approved
@@ -118,8 +118,7 @@
                 </span>
               </td>
 
-              <td class="tbldata" *ngIf="j === 0"
-                [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
+              <td class="tbldata" *ngIf="j === 0" [attr.rowspan]="Order.p.MaterialPurchaseOrderDetailsArray.length">
                 <span style="margin-left: 5px; margin-right: 5px; cursor: pointer;" (click)="navigateToPrint(Order)">
                   <img src="\assets\icons\printer.png" alt="logo" title="Print" width="20px" height="20px" />
                 </span>
