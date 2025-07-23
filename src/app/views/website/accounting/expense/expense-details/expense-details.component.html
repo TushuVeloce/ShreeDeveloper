@@ -32,7 +32,7 @@
           <label>Site Name</label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
-            (ngModelChange)="getTotalInvoiceAmountFromSiteAndRecipientRef(); Entity.p.RecipientType = 0; Entity.p.RecipientRef = 0; RecipientList = []  ">
+            (ngModelChange)="Entity.p.RecipientType = 0; Entity.p.RecipientRef = 0; RecipientList = []; Entity.p.InvoiceAmount = 0">
             <nz-option *ngFor=" let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
@@ -139,7 +139,8 @@
               placeholder="Enter Reason" />
           </div>
         </div>
-        <div class="col-md-4" style="margin-top: 1rem;" *ngIf="this.Entity.p.RecipientType == Employee && this.Entity.p.IsSalaryExpense">
+        <div class="col-md-4" style="margin-top: 1rem;"
+          *ngIf="this.Entity.p.RecipientType == Employee && this.Entity.p.IsSalaryExpense">
           <div>
             <label>Total Advance</label>
             <input type="text" [(ngModel)]="Entity.p.RemainingAdvance" name="RemainingAdvance" class="form-control"
