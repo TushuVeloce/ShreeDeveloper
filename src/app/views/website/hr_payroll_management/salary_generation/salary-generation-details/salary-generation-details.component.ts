@@ -81,10 +81,9 @@ export class SalaryGenerationDetailsComponent implements OnInit {
   calculatetotaldeduction = () => {
     const tds = Number(this.Entity.p.TDS) || 0;
     const pf = Number(this.Entity.p.PF) || 0;
-    const leaveDeduction = Number(this.Entity.p.TotalLeaveDeduction) || 0;
     const advance = Number(this.Entity.p.AdvanceDeduction) || 0;
 
-    const TotalDeduction = tds + pf + leaveDeduction + advance;
+    const TotalDeduction = tds + pf + advance;
 
     this.Entity.p.TotalDeduction = parseFloat(TotalDeduction.toFixed(2));
     this.calculatenetsalary();
