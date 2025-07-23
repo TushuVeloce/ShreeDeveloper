@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CRMReports } from 'src/app/classes/domain/entities/website/customer_management/crmreports/crmreport';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
@@ -6,6 +6,7 @@ import { AppStateManageService } from 'src/app/services/app-state-manage.service
 import { AlertService } from 'src/app/views/mobile-app/components/core/alert.service';
 import { HapticService } from 'src/app/views/mobile-app/components/core/haptic.service';
 import { LoadingService } from 'src/app/views/mobile-app/components/core/loading.service';
+import { PDFService } from 'src/app/views/mobile-app/components/core/pdf.service';
 import { ToastService } from 'src/app/views/mobile-app/components/core/toast.service';
 import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filter-mobile-app/chip-filter-mobile-app.component';
 
@@ -28,7 +29,7 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
   companyRef = 0;
 
   // headers: string[] = ['#', 'Customer ID', 'Customer Name', 'Address', 'Contact No', 'Pan', 'Aadhar No', 'Lead Source', 'Booking Reamrk', 'Plot No', 'Area in Sqm', 'Area in Sqft', 'Basic per Rate', 'Discount Rate on Area', 'Total Plot Amount', 'Government Value', 'Value of Agreement', 'Reg Tax Value In %', 'Stamp Duties', 'Gst %', 'Gst Total Amount', 'Goods Services Tax', 'Legal Charges', 'Total Cheque Recieved', 'Total Cash Recieved', 'Total Amount Recieved', 'Grand Total', 'Action'];
-  headers: string[] = ['Sr.No.', 'Customer ID', 'Customer Name', 'Address', 'Contact No', 'Pan', 'Aadhar No', 'Lead Source','Lead Handle By', 'Agent/Broker', 'Booking Remark', 'Plot No', 'Area in Sqm', 'Area in Sqft', 'Basic per Rate', 'Discount Rate on Area', 'Discount On Plot Amount', 'Total Plot Amount', 'Government Rate sqm', 'Government Value', 'Value of Agreement', 'Reg Tax Value In %', 'Tax Value In Percentage', 'Stamp Duties', 'Goods Services Tax', 'Legal Charges', 'Total Extra Charges', 'Total Cheque Recieved', 'Total Cash Recieved', 'Total Amount Recieved', 'Total Cheque Balance', 'Total Cash Balance', 'Total Balance', 'Grand Total'];
+  headers: string[] = ['Sr.No.', 'Customer ID', 'Customer Name', 'Address', 'Contact No', 'Pan', 'Aadhar No', 'Lead Source', 'Lead Handle By', 'Agent/Broker', 'Booking Remark', 'Plot No', 'Area in Sqm', 'Area in Sqft', 'Basic per Rate', 'Discount Rate on Area', 'Discount On Plot Amount', 'Total Plot Amount', 'Government Rate sqm', 'Government Value', 'Value of Agreement', 'Reg Tax Value In %', 'Tax Value In Percentage', 'Stamp Duties', 'Goods Services Tax', 'Legal Charges', 'Total Extra Charges', 'Total Cheque Recieved', 'Total Cash Recieved', 'Total Amount Recieved', 'Total Cheque Balance', 'Total Cash Balance', 'Total Balance', 'Grand Total'];
 
 
   filters: FilterItem[] = [];
@@ -42,7 +43,8 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
     private toastService: ToastService,
     private haptic: HapticService,
     private alertService: AlertService,
-    public loadingService: LoadingService
+    public loadingService: LoadingService,
+    private pdfService: PDFService
   ) { }
 
   ngOnInit(): void {
@@ -61,6 +63,18 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
     (event.target as HTMLIonRefresherElement).complete();
   }
 
+  @ViewChild('PrintContainer')
+  PrintContainer!: ElementRef;
+
+  async handlePrintOrShare() {
+    if (this.DisplayMasterList.length == 0) {
+      await this.toastService.present('No Income Records Found', 1000, 'warning');
+      await this.haptic.warning();
+      return;
+    }
+    if (!this.PrintContainer) return;
+    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+  }
   loadFilters() {
     this.filters = [
       {
@@ -93,15 +107,15 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
           break;
       }
     }
-    if(this.SiteRef > 0) {
+    if (this.SiteRef > 0) {
       await this.getCustomerReportByCompanyAndSiteRef();
-    }else{
+    } else {
       await this.getCustomerReportByCompanyRef();
     }
     this.loadFilters(); // Reload filters with updated options & preserve selections
   }
   private async loadCustomerInfoReportIfCompanyExists(): Promise<void> {
-    
+
     this.companyRef = Number(this.appStateManagement.localStorage.getItem('SelectedCompanyRef'));
     if (this.companyRef <= 0) {
       await this.toastService.present('company not selected', 1000, 'danger');
@@ -123,7 +137,7 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
     }
     let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
       await this.toastService.present('Error' + errMsg, 1000, 'danger');
-    }); 
+    });
     this.SiteList = lst;
     // if (this.SiteRef == 0 && lst.length > 0) {
     //   this.SiteRef = lst[0].p.Ref
@@ -134,7 +148,7 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
     if (this.companyRef <= 0) {
-         await this.toastService.present('Site not selected', 1000, 'danger');
+      await this.toastService.present('Site not selected', 1000, 'danger');
       return;
     }
 
@@ -177,11 +191,11 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
   }
 
   onViewClicked(item: CRMReports) {
-      this.SelectedCRMReports = item;
-      this.ModalOpen = true;
-    }
-  
-    closeModal() {
-      this.ModalOpen = false;
-    }
+    this.SelectedCRMReports = item;
+    this.ModalOpen = true;
+  }
+
+  closeModal() {
+    this.ModalOpen = false;
+  }
 }
