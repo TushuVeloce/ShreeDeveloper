@@ -19,9 +19,20 @@
       <label for="SiteRef"><b>Site</b></label>
       <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
         [nzSize]="'large'" name="SiteRef" [(ngModel)]="Entity.p.SiteRef" required id="SiteRef"
-        (ngModelChange)="getInwardListByCompanyRefAndSiteRef()">
+        (ngModelChange)="getInwardListByCompanySiteAndVendorRef()">
         <nz-option nzLabel="All" [nzValue]="0"></nz-option>
         <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
+      </nz-select>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div>
+      <label for="VendorRef"><b>Vendor</b></label>
+      <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear nzPlaceHolder="Select"
+        [nzSize]="'large'" name="VendorRef" [(ngModel)]="Entity.p.VendorRef" required id="VendorRef"
+        (ngModelChange)="getInwardListByCompanySiteAndVendorRef()">
+        <nz-option nzLabel="All" [nzValue]="0"></nz-option>
+        <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
       </nz-select>
     </div>
   </div>
@@ -148,7 +159,7 @@
           <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.UnitName}}</td>
           <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.OrderedQty}}</td>
           <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.TotalInwardQty }}</td>
-          <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.BalanceQty }}</td>
+          <td *ngIf="inward.p.SiteRef" Class="tbldata">{{inward.p.BalanceQty > 0 ? inward.p.BalanceQty : 0}}</td>
           <td *ngIf="inward.p.SiteRef" Class="tbldata">
             <!-- Completed -->
             <span class="status" *ngIf="inward.p.Status == 'Complete'" ngClass="completed">

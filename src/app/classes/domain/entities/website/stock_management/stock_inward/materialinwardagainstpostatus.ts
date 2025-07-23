@@ -203,6 +203,19 @@ export class MaterialInwardAgainstPOStatus implements IPersistable<MaterialInwar
     return MaterialInwardAgainstPOStatus.ListFromTransportData(tdResponse);
   }
 
+  public static async FetchEntireListByCompanyRefSiteAndVendorRef(CompanyRef: number, SiteRef: number, VendorRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+    let req = new MaterialInwardAgainstPOStatusFetchRequest();
+    if (SiteRef) {
+      req.SiteRef = SiteRef
+    }
+    if (VendorRef) {
+      req.VendorRef = VendorRef;
+    }
+    req.CompanyRef = CompanyRef;
+    let tdResponse = await MaterialInwardAgainstPOStatus.FetchTransportData(req, errorHandler) as TransportData;
+    return MaterialInwardAgainstPOStatus.ListFromTransportData(tdResponse);
+  }
+
   public async DeleteInstance(successHandler: () => Promise<void> = null!, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let tdRequest = new TransportData();
     tdRequest.RequestType = RequestTypes.Deletion;

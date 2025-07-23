@@ -1,6 +1,7 @@
 import { Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { MaterialInwardAgainstPOStatus } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/materialinwardagainstpostatus';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
@@ -23,6 +24,7 @@ export class StockInwardComponent implements OnInit {
   DisplayMasterList: MaterialInwardAgainstPOStatus[] = [];
   list: [] = []
   SiteList: Site[] = [];
+  VendorList: Vendor[] = [];
   SearchString: string = '';
   SelectedStockInward: MaterialInwardAgainstPOStatus = MaterialInwardAgainstPOStatus.CreateNewInstance();
   CustomerRef: number = 0;
@@ -38,8 +40,9 @@ export class StockInwardComponent implements OnInit {
     private companystatemanagement: CompanyStateManagement, private DateconversionService: DateconversionService, private dtu: DTU,
   ) {
     effect(async () => {
-      this.getSiteListByCompanyRef()
-      await this.getStockInwardListByCompanyRef();
+      await this.getInwardListByCompanySiteAndVendorRef();
+      await this.getSiteListByCompanyRef();
+      await this.getVendorListByCompanyRef();
     });
   }
 
@@ -60,17 +63,18 @@ export class StockInwardComponent implements OnInit {
     }
   }
 
-  getStockInwardListByCompanyRef = async () => {
-    this.MasterList = [];
-    this.DisplayMasterList = [];
+  getVendorListByCompanyRef = async () => {
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await MaterialInwardAgainstPOStatus.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-      this.MasterList = lst;
-      this.DisplayMasterList = this.MasterList;
-      this.loadPaginationData();
+    this.Entity.p.VendorRef = 0
+    let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
+    this.VendorList = lst;
+    if (this.VendorList.length > 0) {
+      this.Entity.p.VendorRef = 0
+    }
   }
 
   // Extracted from services date conversion //
@@ -78,19 +82,16 @@ export class StockInwardComponent implements OnInit {
     return this.DateconversionService.formatDate(date);
   }
 
-  getInwardListByCompanyRefAndSiteRef = async () => {
+  getInwardListByCompanySiteAndVendorRef = async () => {
     this.MasterList = [];
     this.DisplayMasterList = [];
-    if (this.Entity.p.SiteRef <= 0) {
-      this.getStockInwardListByCompanyRef();
-      return;
-    }
-    let lst = await MaterialInwardAgainstPOStatus.FetchEntireListByCompanyRefAndSiteRef(this.companyRef(), this.Entity.p.SiteRef,
+
+    let lst = await MaterialInwardAgainstPOStatus.FetchEntireListByCompanyRefSiteAndVendorRef(this.companyRef(), this.Entity.p.SiteRef, this.Entity.p.VendorRef,
       async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg)
     );
-      this.MasterList = lst;
-      this.DisplayMasterList = this.MasterList;
-      this.loadPaginationData();
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    this.loadPaginationData();
   };
 
   AddStockInward = async () => {
@@ -127,9 +128,9 @@ export class StockInwardComponent implements OnInit {
           this.SearchString = '';
           this.loadPaginationData();
           if (this.Entity.p.SiteRef <= 0) {
-            this.getStockInwardListByCompanyRef();
+            this.getInwardListByCompanySiteAndVendorRef();
           } else {
-            this.getInwardListByCompanyRefAndSiteRef();
+            this.getInwardListByCompanySiteAndVendorRef();
           }
         });
       }
