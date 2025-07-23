@@ -71,6 +71,12 @@
             readonly />
         </div>
         <div class="col-md-4">
+          <label>Total Late Mark and Half Days</label>
+          <input type="number" name="TotalLateMarkAndHalfDays" class="form-control" id="TotalLateMarkAndHalfDays"
+            [(ngModel)]="Entity.p.TotalLateMarkAndHalfDays" placeholder="Total Late Mark and Half Day Deduction"
+            required readonly />
+        </div>
+        <div class="col-md-4">
           <label>Total Late Mark and Half Day Deduction</label>
           <input type="number" name="TotalDeductionOfLateMarksAndHalfDays" class="form-control"
             id="TotalDeductionOfLateMarksAndHalfDays" [(ngModel)]="Entity.p.TotalDeductionOfLateMarksAndHalfDays"

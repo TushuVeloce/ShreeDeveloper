@@ -171,18 +171,36 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       return;
     }
     let lst = await SalaryGeneration.FetchEmployeeDataByEmployeeRefandMonth(this.companyRef(), employee, month, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+    console.log('lst :', lst);
 
-    this.Entity.p.TotalWorkingDays = lst[0]?.p?.TotalWorkingDays || 0
-    this.Entity.p.TotalLeaves = lst[0]?.p?.TotalLeaves || 0
-    this.Entity.p.TotalOverTimeHrs = lst[0]?.p?.TotalOverTimeHrs || 0
-    this.Entity.p.OverTimeHrsRate = Number(lst[0]?.p?.OverTimeHrsRate) || 0
-    this.Entity.p.TotalLateMarksAndHalfDays = lst[0]?.p?.TotalLateMarksAndHalfDays || 0
-    this.Entity.p.AdvancePayment = Number(lst[0]?.p?.AdvancePayment) || 0
-    this.Entity.p.TotalLeaveDeduction = Number(lst[0]?.p?.TotalLeaveDeduction) || 0
-    this.Entity.p.TotalDeductionOfLateMarksAndHalfDays = lst[0]?.p?.TotalDeductionOfLateMarksAndHalfDays || 0
-        this.Entity.p.BasicSalary = lst[0]?.p?.BasicSalary || 0
-    await this.calculategrosstotal()
-    await this.calculatetotaldeduction()
+    if (lst.length > 0) {
+      this.Entity.p.AdvancePayment = Number(lst[0].p.AdvancePayment)
+      this.Entity.p.BasicSalary = Number(lst[0].p.BasicSalary)
+      this.Entity.p.DisplayTotalOverTimeHrs = lst[0].p.DisplayTotalOverTimeHrs;
+      this.Entity.p.OverTimeHrsRate = Number(lst[0].p.OverTimeHrsRate)
+      this.Entity.p.TotalLateMarkAndHalfDays = Number(lst[0].p.TotalLateMarkAndHalfDays)
+      this.Entity.p.TotalLeaveDeduction = Number(lst[0].p.TotalLeaveDeduction)
+      this.Entity.p.TotalLeaves = lst[0].p.TotalLeaves
+      this.Entity.p.TotalOverTimeHrs = Number(lst[0].p.TotalOverTimeHrs)
+      this.Entity.p.TotalWorkingDays = lst[0].p.TotalWorkingDays
+
+      this.Entity.p.TotalLateMarksAndHalfDays = lst[0].p.TotalLateMarksAndHalfDays
+      this.Entity.p.TotalDeductionOfLateMarksAndHalfDays = lst[0].p.TotalDeductionOfLateMarksAndHalfDays
+
+      // AdvancePayment: "0.000000"
+      // BasicSalary: "25000.00"
+      // DisplayTotalOverTimeHrs: "8h 45m"
+      // HalfdayAndLateMarkDeduction: "1612.90"
+      // OverTimeHrsRate: "94.88"
+      // TotalLateMarkAndHalfDays: 4
+      // TotalLeaveDeduction: "18548.39"
+      // TotalLeaves: 23
+      // TotalOverTimeHrs: 8.75
+      // TotalWorkingDays: 8
+
+      await this.calculategrosstotal()
+      await this.calculatetotaldeduction()
+    }
   }
 
   SaveSalaryGeneration = async () => {

@@ -54,6 +54,7 @@ export class SalaryGenerationProps {
   public UpdatedBy: number = 0;
   public UpdatedByName: number = 0;
   public OverTimeHrsRate: number = 0;
+  public TotalLateMarkAndHalfDays: number = 0;
   public SalarySlipMonthIndicator: string = 'A';
 
   public readonly IsNewlyCreated: boolean = false;
