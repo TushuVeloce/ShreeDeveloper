@@ -111,7 +111,7 @@ export class StockInwardViewMobileAppComponent implements OnInit {
         case 'site':
           this.Entity.p.SiteRef = selectedValue ?? 0;
           break;
-        case 'site':
+        case 'vendor':
           this.Entity.p.VendorRef = selectedValue ?? 0;
           break;
       }
@@ -133,9 +133,9 @@ export class StockInwardViewMobileAppComponent implements OnInit {
         return;
       }
 
-      await this.getInwardListByCompanySiteAndVendorRef();
       await this.getSiteListByCompanyRef();
       await this.getVendorListByCompanyRef();
+      await this.getInwardListByCompanySiteAndVendorRef();
     } catch (error) {
       console.error('Error in loadStockInwordsIfEmployeeExists:', error);
       await this.toastService.present('Failed to load Stock Inward', 1000, 'danger');
@@ -190,6 +190,7 @@ export class StockInwardViewMobileAppComponent implements OnInit {
     this.MasterList = [];
     this.DisplayMasterList = [];
 
+    // console.log('this.Entity.p.SiteRef, this.Entity.p.VendorRef :', this.Entity.p.SiteRef, this.Entity.p.VendorRef);
     let lst = await MaterialInwardAgainstPOStatus.FetchEntireListByCompanyRefSiteAndVendorRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.VendorRef,
       async (errMsg) => {
         // await this.uiUtils.showErrorMessage('Error', errMsg)
@@ -199,6 +200,7 @@ export class StockInwardViewMobileAppComponent implements OnInit {
     );
     this.MasterList = lst;
     this.DisplayMasterList = this.MasterList;
+    console.log('this.MasterList :', this.MasterList);
   };
 
   AddStockInward = async () => {

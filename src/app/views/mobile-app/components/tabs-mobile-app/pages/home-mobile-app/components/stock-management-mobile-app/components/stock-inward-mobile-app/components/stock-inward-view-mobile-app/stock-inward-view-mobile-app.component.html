@@ -13,8 +13,8 @@
     <ion-item *ngFor="let stockInward of DisplayMasterList" class="requisition-item" button detail
       (click)="openModal(stockInward)">
       <ion-label>
-        <h2>Chalan No : {{ stockInward.p.ChalanNo || '-' }}</h2>
-        <p class="date-label">Site : {{ stockInward.p.SiteName || 'Unknown Site' || '-' }}</p>
+        <h2>Site : {{ stockInward.p.SiteName || '-' }}</h2>
+        <!-- <p class="date-label">Site : {{ stockInward.p.SiteName || 'Unknown Site' || '-' }}</p> -->
         <p class="date-label">Vendor : {{ stockInward.p.VendorName || '-' }}</p>
         <p class="date-label">Material Name : {{ stockInward.p.MaterialName || '-' }}</p>
         <p class="date-label">Total Inward Quantity : {{ stockInward.p.TotalInwardQty || '-' }}</p>
