@@ -181,7 +181,7 @@ export class AccountingReport implements IPersistable<AccountingReport> {
     return AccountingReport.ListFromTransportData(tdResponse);
   }
 
-  public static async FetchEntireListByFilters(StartDate: string, EndDate: string, accountingreport: number,SiteRef:number, ModeOfPayment:number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
+  public static async FetchEntireListByFilters(StartDate: string, EndDate: string, accountingreport: number, SiteRef: number, ModeOfPayment: number, CompanyRef: number, errorHandler: (err: string) => Promise<void> = UIUtils.GetInstance().GlobalUIErrorHandler) {
     let req = new AccountingReportFetchRequest();
     req.CompanyRef = CompanyRef
     if (StartDate) {
