@@ -180,6 +180,7 @@ export class SalaryGenerationDetailsComponent implements OnInit {
     this.Entity.p.AdvancePayment = Number(lst[0]?.p?.AdvancePayment) || 0
     this.Entity.p.TotalLeaveDeduction = Number(lst[0]?.p?.TotalLeaveDeduction) || 0
     this.Entity.p.TotalDeductionOfLateMarksAndHalfDays = lst[0]?.p?.TotalDeductionOfLateMarksAndHalfDays || 0
+        this.Entity.p.BasicSalary = lst[0]?.p?.BasicSalary || 0
     await this.calculategrosstotal()
     await this.calculatetotaldeduction()
   }
