@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Site } from 'src/app/classes/domain/entities/website/masters/site/site';
+import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
+import { MaterialInwardAgainstPOStatus } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/materialinwardagainstpostatus';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
@@ -19,24 +21,23 @@ import { FilterItem } from 'src/app/views/mobile-app/components/shared/chip-filt
   selector: 'app-stock-inward-view-mobile-app',
   templateUrl: './stock-inward-view-mobile-app.component.html',
   styleUrls: ['./stock-inward-view-mobile-app.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class StockInwardViewMobileAppComponent  implements OnInit {
-
-  Entity: StockInward = StockInward.CreateNewInstance();
-  MasterList: StockInward[] = [];
-  DisplayMasterList: StockInward[] = [];
+export class StockInwardViewMobileAppComponent implements OnInit {
+  Entity: MaterialInwardAgainstPOStatus = MaterialInwardAgainstPOStatus.CreateNewInstance();
+  MasterList: MaterialInwardAgainstPOStatus[] = [];
+  DisplayMasterList: MaterialInwardAgainstPOStatus[] = [];
+  list: [] = []
   SiteList: Site[] = [];
-  SelectedStockInward: StockInward = StockInward.CreateNewInstance();
+  VendorList: Vendor[] = [];
+  SearchString: string = '';
+  SelectedStockInward: MaterialInwardAgainstPOStatus = MaterialInwardAgainstPOStatus.CreateNewInstance();
+  CustomerRef: number = 0;
 
-  companyRef = 0;
   modalOpen = false;
-  showInvoicePreview = false;
-  sanitizedInvoiceUrl: SafeResourceUrl | null = null;
-
   tableHeaderData = ['Material', 'Unit', 'Ordered Qty.', 'Inward Qty.', 'Remaining Qty.'];
   filters: FilterItem[] = [];
-
+  companyRef: number = 0;
   // Store current selected values here to preserve selections on filter reload
   selectedFilterValues: Record<string, any> = {};
 
@@ -81,6 +82,16 @@ export class StockInwardViewMobileAppComponent  implements OnInit {
           Name: item.p.Name,
         })),
         selected: this.selectedFilterValues['site'] > 0 ? this.selectedFilterValues['site'] : null,
+      },
+      {
+        key: 'vendor',
+        label: 'Vendor',
+        multi: false,
+        options: this.VendorList.map(item => ({
+          Ref: item.p.Ref,
+          Name: item.p.Name,
+        })),
+        selected: this.selectedFilterValues['vendor'] > 0 ? this.selectedFilterValues['vendor'] : null,
       }
     ];
   }
@@ -100,9 +111,12 @@ export class StockInwardViewMobileAppComponent  implements OnInit {
         case 'site':
           this.Entity.p.SiteRef = selectedValue ?? 0;
           break;
+        case 'vendor':
+          this.Entity.p.VendorRef = selectedValue ?? 0;
+          break;
       }
     }
-    await this.getInwardListByCompanyRefAndSiteRef()
+    await this.getInwardListByCompanySiteAndVendorRef();
     this.loadFilters(); // Reload filters with updated options & preserve selections
   }
 
@@ -120,7 +134,8 @@ export class StockInwardViewMobileAppComponent  implements OnInit {
       }
 
       await this.getSiteListByCompanyRef();
-      await this.getStockInwardListByCompanyRef();
+      await this.getVendorListByCompanyRef();
+      await this.getInwardListByCompanySiteAndVendorRef();
     } catch (error) {
       console.error('Error in loadStockInwordsIfEmployeeExists:', error);
       await this.toastService.present('Failed to load Stock Inward', 1000, 'danger');
@@ -129,93 +144,149 @@ export class StockInwardViewMobileAppComponent  implements OnInit {
       await this.loadingService.hide();
     }
   }
-
-  private async getSiteListByCompanyRef() {
-    try {
-      if (this.companyRef <= 0) return;
-
-      const lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
-        await this.toastService.present('Error: ' + errMsg, 1000, 'danger');
-        await this.haptic.error();
-      });
-
-      this.SiteList = lst || [];
-
-      this.Entity.p.SiteRef = 0; // Default selection
-    } catch (err) {
-      console.error('Error fetching site list:', err);
+  getSiteListByCompanyRef = async () => {
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    this.Entity.p.SiteRef = 0
+    let lst = await Site.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      // await this.uiUtils.showErrorMessage('Error', errMsg)
+      await this.toastService.present(errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    this.SiteList = lst;
+    if (this.SiteList.length > 0) {
+      this.Entity.p.SiteRef = 0
     }
   }
 
-  private async getStockInwardListByCompanyRef() {
-    try {
-      this.MasterList = [];
-      this.DisplayMasterList = [];
-
-      const lst = await StockInward.FetchEntireListByCompanyRef(this.companyRef, async (errMsg) => {
-        await this.toastService.present('Error: ' + errMsg, 1000, 'danger');
-        await this.haptic.error();
-      });
-
-      this.MasterList = lst || [];
-      this.DisplayMasterList = [...this.MasterList];
-    } catch (err) {
-      console.error('Error fetching stock inward list:', err);
+  getVendorListByCompanyRef = async () => {
+    if (this.companyRef <= 0) {
+      await this.toastService.present('Company not selected', 1000, 'danger');
+      await this.haptic.error();
+      return;
+    }
+    this.Entity.p.VendorRef = 0
+    let lst = await Vendor.FetchEntireListByCompanyRef(this.companyRef, async errMsg => {
+      // await this.uiUtils.showErrorMessage('Error', errMsg)
+      await this.toastService.present(errMsg, 1000, 'danger');
+      await this.haptic.error();
+    });
+    console.log('lst :', lst);
+    this.VendorList = lst;
+    if (this.VendorList.length > 0) {
+      this.Entity.p.VendorRef = 0
     }
   }
 
-  private async getInwardListByCompanyRefAndSiteRef() {
-    try {
-      this.MasterList = [];
-      this.DisplayMasterList = [];
+  // Extracted from services date conversion //
+  formatDate = (date: string | Date): string => {
+    return this.DateconversionService.formatDate(date);
+  }
 
-      const lst = await StockInward.FetchEntireListByCompanyRefAndSiteRef(this.companyRef, this.Entity.p.SiteRef, async (errMsg) => {
-        await this.toastService.present('Error: ' + errMsg, 1000, 'danger');
+  getInwardListByCompanySiteAndVendorRef = async () => {
+    this.MasterList = [];
+    this.DisplayMasterList = [];
+
+    // console.log('this.Entity.p.SiteRef, this.Entity.p.VendorRef :', this.Entity.p.SiteRef, this.Entity.p.VendorRef);
+    let lst = await MaterialInwardAgainstPOStatus.FetchEntireListByCompanyRefSiteAndVendorRef(this.companyRef, this.Entity.p.SiteRef, this.Entity.p.VendorRef,
+      async (errMsg) => {
+        // await this.uiUtils.showErrorMessage('Error', errMsg)
+        await this.toastService.present(errMsg, 1000, 'danger');
         await this.haptic.error();
-      });
+      }
+    );
+    this.MasterList = lst;
+    this.DisplayMasterList = this.MasterList;
+    console.log('this.MasterList :', this.MasterList);
+  };
 
-      this.MasterList = lst || [];
-      this.DisplayMasterList = [...this.MasterList];
-    } catch (err) {
-      console.error('Error fetching stock inward list:', err);
+  AddStockInward = async () => {
+    if (this.companyRef <= 0) {
+      // this.uiUtils.showWarningToster('Please select company');
+      await this.toastService.present('Please select company', 1000, 'warning');
+      await this.haptic.warning();
+      return;
     }
+    await this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/add']);
   }
 
-  prepareInvoiceUrl(path: string) {
-  console.log('path :', path);
-    this.showInvoicePreview = !this.showInvoicePreview;
+  onEditClicked = async (item: MaterialInwardAgainstPOStatus) => {
+    this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/edit'], {
+      state: { inwardref: item.p.InwardRef }
+    });
 
-    if (!path) return;
+  };
 
-    const ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
-    const LoginToken = this.appStateManage.localStorage.getItem('LoginToken');
-    const TimeStamp = Date.now();
-
-    const fileUrl = `${ImageBaseUrl}${path}/${LoginToken}?${TimeStamp}`;
-    console.log('Invoice Preview URL:', fileUrl);
-
-    this.sanitizedInvoiceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
+  navigateToPrint = async (item: MaterialInwardAgainstPOStatus) => {
+    this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/print'], {
+      state: { inwardref: item.p.InwardRef }
+    });
   }
 
-  isPDF(filePath: string): boolean {
-    return filePath?.toLowerCase().endsWith('.pdf');
-  }
+  onDeleteClicked = async (StockInward: MaterialInwardAgainstPOStatus) => {
+    // await this.uiUtils.showConfirmationMessage(
+    //   'Delete',
+    //   `This process is <strong>IRREVERSIBLE!</strong> <br/>
+    //   Are you sure that you want to DELETE this Material Requisition?`,
+    //   async () => {
+    //     await StockInward.DeleteInstance(async () => {
+    //       await this.uiUtils.showSuccessToster(
+    //         `StockInward ${StockInward.p.SiteName} has been deleted!`
+    //       );
+    //       if (this.Entity.p.SiteRef <= 0) {
+    //         this.getInwardListByCompanySiteAndVendorRef();
+    //       } else {
+    //         this.getInwardListByCompanySiteAndVendorRef();
+    //       }
+    //     });
+    //   }
+    // );
+    this.alertService.presentDynamicAlert({
+      header: 'Delete',
+      subHeader: 'Confirmation needed',
+      message: 'Are you sure you want to delete this Stock Inward?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'custom-cancel',
+          handler: () => {
+            console.log('Deletion cancelled.');
+          }
+        },
+        {
+          text: 'Yes, Delete',
+          cssClass: 'custom-confirm',
+          handler: async () => {
+            try {
+              await StockInward.DeleteInstance(async () => {
+                await this.toastService.present(
+                  `Stock Inward on ${this.formatDate(StockInward.p.SiteName)} has been deleted!`,
+                  1000,
+                  'success'
+                );
+                await this.haptic.success();
+              });
+              if (this.Entity.p.SiteRef <= 0) {
+                this.getInwardListByCompanySiteAndVendorRef();
+              } else {
+                this.getInwardListByCompanySiteAndVendorRef();
+              }
+            } catch (err) {
+              console.error('Error deleting Stock Inward:', err);
+              await this.toastService.present('Failed to delete Stock Inward', 1000, 'danger');
+              await this.haptic.error();
+            }
+          }
+        }
+      ]
+    });
+  };
 
-
-  fileNavigation(filePath: string) {
-    const ImageBaseUrl = this.baseUrl.GenerateImageBaseUrl();
-    const LoginToken = this.appStateManage.localStorage.getItem('LoginToken');
-
-    if (!filePath) return;
-
-    const TimeStamp = Date.now();
-    const fileUrl = `${ImageBaseUrl}${filePath}/${LoginToken}?${TimeStamp}`;
-    console.log('Invoice Preview URL:', fileUrl);
-
-    window.open(fileUrl, '_blank');
-  }
-  
-  openModal(stockInward: StockInward) {
+  openModal(stockInward: MaterialInwardAgainstPOStatus) {
     this.SelectedStockInward = stockInward;
     console.log('stockInward :', stockInward);
     this.modalOpen = true;
@@ -223,93 +294,6 @@ export class StockInwardViewMobileAppComponent  implements OnInit {
 
   closeModal() {
     this.modalOpen = false;
-    this.SelectedStockInward = StockInward.CreateNewInstance();
-    this.showInvoicePreview = false;
+    this.SelectedStockInward = MaterialInwardAgainstPOStatus.CreateNewInstance();
   }
-
-  AddStockInward = async () => {
-    if (this.companyRef <= 0) {
-      await this.toastService.present('Company not selected', 1000, 'danger');
-      await this.haptic.error();
-      return;
-    }
-
-    this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-inward/add']);
-  };
-
-  onEditClicked = async (item: StockInward) => {
-    this.SelectedStockInward = item.GetEditableVersion();
-    StockInward.SetCurrentInstance(this.SelectedStockInward);
-    console.log('this.SelectedStockInward :', this.SelectedStockInward);
-    this.appStateManage.StorageKey.setItem('Editable', 'Edit');
-    await this.router.navigate(['/mobile-app/tabs/dashboard/stock-management/stock-inward/edit']);
-  };
-
-  onDeleteClicked = async (stockInward: StockInward) => {
-    try {
-      this.alertService.presentDynamicAlert({
-        header: 'Delete',
-        subHeader: 'Confirmation needed',
-        message: 'Are you sure you want to delete this Stock Inward?',
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel',
-            cssClass: 'custom-cancel',
-            handler: () => {
-              console.log('Deletion cancelled.');
-            },
-          },
-          {
-            text: 'Yes, Delete',
-            cssClass: 'custom-confirm',
-            handler: async () => {
-              try {
-                // await stockInward.DeleteInstance(async () => {
-                //   await this.toastService.present(
-                //     `Deleted Stock Inward on ${this.formatDate(stockInward.p.PurchaseOrderDate)}!`,
-                //     1000,
-                //     'success'
-                //   );
-                //   await this.haptic.success();
-                //   await this.loadStockInwordsIfEmployeeExists();
-                // });
-                await stockInward.DeleteInstance(async () => {
-                  await this.toastService.present(
-                    `Deleted Stock Inward on ${this.formatDate(stockInward.p.PurchaseOrderDate)}!`,
-                    1000,
-                    'success'
-                  );
-                  await this.haptic.success();
-                  if (this.Entity.p.SiteRef <= 0) {
-                    this.getStockInwardListByCompanyRef();
-                  } else {
-                    this.getInwardListByCompanyRefAndSiteRef();
-                  }
-                });
-              } catch (err) {
-                console.error('Error deleting Stock Inward:', err);
-                await this.toastService.present('Failed to delete Stock Inward', 1000, 'danger');
-                await this.haptic.error();
-              }
-            },
-          },
-        ],
-      });
-    } catch (error) {
-      console.error('Delete Alert Error:', error);
-      await this.toastService.present('Something went wrong', 1000, 'danger');
-      await this.haptic.error();
-    }
-  };
-
-  formatDate = (date: string | Date): string => {
-    return this.DateconversionService.formatDate(date);
-  };
-
-  navigateToPrint = async (item: StockInward) => {
-    this.router.navigate(['mobile-app/tabs/dashboard/stock-management/stock-inward/print'], {
-      state: { printData: item.GetEditableVersion() },
-    });
-  };
 }

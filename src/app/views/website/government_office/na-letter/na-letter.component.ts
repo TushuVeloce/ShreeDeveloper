@@ -100,7 +100,7 @@ export class NaLetterComponent implements OnInit {
     ];
 
     status = requiredFields.every(field => Entity.p?.[field] === true);
-    debugger
+
     if (status) {
       if (!Entity.p.IsInamPatraSubmitTwo) {
         status = true;
