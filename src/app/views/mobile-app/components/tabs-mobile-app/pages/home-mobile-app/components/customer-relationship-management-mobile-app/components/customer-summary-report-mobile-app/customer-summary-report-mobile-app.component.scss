@@ -1,0 +1,71 @@
+ion-content {
+    --background: var(--ion-background-color);
+}
+
+.tblcard_light {
+    background: var(--ion-background-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 1rem;
+    border: 1px solid #ccc;
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+.table-container {
+    width: 100%;
+}
+
+.bg-brown {
+    background-color: var(--ion-color-accent) !important;
+    color: var(--ion-text-color-dark);
+}
+
+.section-header {
+    background-color: #FBE6E6;
+    color: var(--ion-text-color);
+    font-weight: bolder;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 8px 0;
+    border: 1px solid #ccc;
+}
+
+.highlight-yellow {
+    background-color: #FFFFC5;
+    font-weight: bold;
+    padding: 10px 0;
+    border: 1px solid #ccc;
+}
+
+.table-row {
+    border-bottom: 1px solid #ccc;
+}
+
+.table-cell,
+.table-cell-heading {
+    border: 1px solid #ccc;
+    background: var(--ion-background-color);
+    text-align: center;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.table-cell-heading {
+    font-weight: bold;
+}
+
+@media (max-width: 767px) {
+    .section-header {
+        font-size: 0.9rem;
+    }
+
+    .table-cell,
+    .table-cell-heading {
+        font-size: 0.85rem;
+    }
+}
