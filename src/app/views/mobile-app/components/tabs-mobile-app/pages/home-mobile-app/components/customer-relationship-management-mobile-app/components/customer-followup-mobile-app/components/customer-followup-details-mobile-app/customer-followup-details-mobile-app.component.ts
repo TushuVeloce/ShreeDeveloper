@@ -129,7 +129,7 @@ export class CustomerFollowupDetailsMobileAppComponent implements OnInit {
         this.Entity.p.Reason = '';
         this.Entity.p.CustomerStatus = 0;
         this.Entity.p.ContactMode = 0;
-        this.Entity.p.CustomerRequirement = '';
+        // this.Entity.p.CustomerRequirement = '';
 
         // While Edit Converting date String into Date Format //
         if (this.Entity.p.ReminderDate) {

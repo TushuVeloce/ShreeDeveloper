@@ -1,10 +1,178 @@
-<app-header-with-back-handler title="Customer Info Report"
+<app-header-with-back-handler title="Customer Summary Report"
   backRoute="mobile-app/tabs/dashboard/customer-relationship-management">
 </app-header-with-back-handler>
+
 <ion-content class="ion-padding">
 
   <!-- Pull-to-refresh -->
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+
+  <div class="tblcard_light">
+
+    <!-- Filter Form -->
+    <div class="card-body ion-padding">
+      <form autocomplete="off">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12" size-md="6">
+              <!-- <ion-label><b>Site</b></ion-label>
+              <ion-select interface="popover" placeholder="Select" [(ngModel)]="SiteRef" name="SiteRef"
+                (ionChange)="getCustomerReportByCompanyAndSiteRef()">
+                <ion-select-option *ngFor="let site of SiteList" [value]="site.p.Ref">
+                  {{ site.p.Name }}
+                </ion-select-option>
+              </ion-select> -->
+              <!-- Select site -->
+              <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()" lines='none'>
+                <ion-label>Site</ion-label>
+
+                <!-- Text showing the selected status -->
+                <ion-text slot="end" class="status-text">
+                  {{ SiteName|| 'Select' }}
+                </ion-text>
+              </ion-item>
+            </ion-col>
+            <ion-col size="12" size-md="6">
+              <!-- <ion-label><b>Customer ID</b></ion-label>
+              <ion-select interface="popover" placeholder="Select" [(ngModel)]="CustomerRef" name="CustomerRef"
+                (ionChange)="OnCustomerSelection()">
+                <ion-select-option *ngFor="let cus of CustomerList" [value]="cus.p.CustomerEnquiryRef">
+                  {{ cus.p.CustID }}
+                </ion-select-option>
+              </ion-select> -->
+              <ion-item class="input-item" button detail (click)="selectCustomerIDBottomsheet()" lines='none'>
+                <ion-label>Customer ID</ion-label>
+
+                <!-- Text showing the selected status -->
+                <ion-text slot="end" class="status-text">
+                  {{ CustomerIDName|| 'Select' }}
+                </ion-text>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </form>
+    </div>
+
+    <!-- Table Data -->
+    <div class="table-container">
+      <ion-grid>
+
+        <!-- Project Header -->
+        <ion-row class="bg-brown text-white ion-text-center ion-padding ion-text-uppercase">
+          <ion-col size="12"><b>PROJECT BY - {{companyName}}</b></ion-col>
+        </ion-row>
+
+        <!-- Project Info -->
+        <ion-row class="table-row">
+          <ion-col class="table-cell-heading" size="6" size-md="3">Customer ID</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.CustID || '-'}}</ion-col>
+          <ion-col class="table-cell-heading" size="6" size-md="3">Name of Project</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.SiteName || '-'}}</ion-col>
+        </ion-row>
+
+        <!-- Customer Details -->
+        <ion-row class="section-header"><ion-col size="12">Customer Details</ion-col></ion-row>
+        <ion-row class="table-row">
+          <ion-col class="table-cell-heading" size="6" size-md="3">Customer Name</ion-col>
+          <ion-col class="table-cell" size="6" size-md="9">{{Entity.p.CustomerName || '-'}}</ion-col>
+        </ion-row>
+        <ion-row class="table-row">
+          <ion-col class="table-cell-heading" size="6" size-md="3">Address</ion-col>
+          <ion-col class="table-cell" size="6" size-md="9">{{Entity.p.CustomerAddress || '-'}}</ion-col>
+        </ion-row>
+        <ion-row class="table-row">
+          <ion-col class="table-cell-heading" size="6" size-md="3">Mobile No.</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.ContactNos || '-'}}</ion-col>
+          <ion-col class="table-cell-heading" size="6" size-md="3">Adhar No.</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.AdharNo || '-'}}</ion-col>
+        </ion-row>
+        <ion-row class="table-row">
+          <ion-col class="table-cell-heading" size="6" size-md="3">PAN No.</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.PANNo || '-'}}</ion-col>
+          <ion-col class="table-cell-heading" size="6" size-md="3">Reference</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.LeadSourceName || '-'}}</ion-col>
+        </ion-row>
+
+        <!-- Plot Details -->
+        <ion-row class="section-header"><ion-col size="12">Plot Details</ion-col></ion-row>
+        <ion-row class="table-row">
+          <ion-col class="table-cell-heading" size="6" size-md="3">Plot No.</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.PlotNo || '-'}}</ion-col>
+          <ion-col class="table-cell-heading" size="6" size-md="3">Booking Remark</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.RegisterCustomerBookingRemarkName ||
+            '-'}}</ion-col>
+        </ion-row>
+        <ion-row class="table-row">
+          <ion-col class="table-cell-heading" size="6" size-md="3">Plot Area (SQ.MT.)</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.AreaInSqm || '-'}}</ion-col>
+          <ion-col class="table-cell-heading" size="6" size-md="3">Plot Area (SQ.FT.)</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.AreaInSqft || '-'}}</ion-col>
+        </ion-row>
+        <ion-row class="table-row">
+          <ion-col class="table-cell-heading" size="6" size-md="3">Basic Rate/Sq.Ft.</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.BasicRate | currency : 'INR'}}</ion-col>
+          <ion-col class="table-cell-heading" size="6" size-md="3">Discounted Rate</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.DiscountedRateOnArea | currency :
+            'INR'}}</ion-col>
+        </ion-row>
+        <ion-row class="table-row highlight-yellow ion-text-center">
+          <ion-col size="12">TOTAL PLOT AMOUNT - Rs {{Entity.p.TotalPlotAmount | currency : 'INR'}}</ion-col>
+        </ion-row>
+
+        <!-- Legal & Agreement -->
+        <ion-row class="section-header"><ion-col size="12">Agreement Value and Legal Charges</ion-col></ion-row>
+        <ion-row class="table-row">
+          <ion-col class="table-cell-heading" size="6" size-md="3">Government Recknor</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.GovernmentRecknor | currency : 'INR'}}</ion-col>
+          <ion-col class="table-cell-heading" size="6" size-md="3">Government Value</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.GovernmentValue | currency : 'INR'}}</ion-col>
+        </ion-row>
+        <ion-row class="table-row">
+          <ion-col class="table-cell-heading" size="6" size-md="3">Value of Agreement</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.ValueOfAgreement | currency : 'INR'}}</ion-col>
+        </ion-row>
+        <ion-row class="table-row">
+          <ion-col class="table-cell-heading" size="6" size-md="3">Stamp Duty</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.StampDuties | currency : 'INR'}}</ion-col>
+          <ion-col class="table-cell-heading" size="6" size-md="3">Registration Fees</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.RegistrationFees | currency : 'INR'}}</ion-col>
+        </ion-row>
+        <ion-row class="table-row">
+          <ion-col class="table-cell-heading" size="6" size-md="3">Legal Charges</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.LegalCharges | currency : 'INR'}}</ion-col>
+          <ion-col class="table-cell-heading" size="6" size-md="3">TOTAL EXTRA CHARGES</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.TotalExtraCharges | currency : 'INR'}}</ion-col>
+        </ion-row>
+
+        <!-- Payment Info -->
+        <ion-row class="section-header"><ion-col size="12">Payment Details</ion-col></ion-row>
+        <ion-row class="table-row highlight-yellow ion-text-center">
+          <ion-col size="12">GRAND TOTAL - Rs {{Entity.p.GrandTotal | currency : 'INR'}}</ion-col>
+        </ion-row>
+        <ion-row class="table-row">
+          <ion-col class="table-cell-heading" size="6" size-md="3">Total Cheque Received</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.TotalChequeRecieved | currency : 'INR'}}</ion-col>
+          <ion-col class="table-cell-heading" size="6" size-md="3">Total Cheque Balance</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.TotalChequeBalance | currency : 'INR'}}</ion-col>
+        </ion-row>
+        <ion-row class="table-row">
+          <ion-col class="table-cell-heading" size="6" size-md="3">Total Cash Received</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.TotalCashRecieved | currency : 'INR'}}</ion-col>
+          <ion-col class="table-cell-heading" size="6" size-md="3">Total Cash Balance</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.TotalCashBalance | currency : 'INR'}}</ion-col>
+        </ion-row>
+        <ion-row class="table-row">
+          <ion-col class="table-cell-heading" size="6" size-md="3">Total Received</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.TotalAmountRecieved | currency : 'INR'}}</ion-col>
+          <ion-col class="table-cell-heading" size="6" size-md="3">Total Balance (cash & chq.)</ion-col>
+          <ion-col class="table-cell" size="6" size-md="3">{{Entity.p.TotalBalance | currency : 'INR'}}</ion-col>
+        </ion-row>
+
+      </ion-grid>
+    </div>
+  </div>
+
 </ion-content>

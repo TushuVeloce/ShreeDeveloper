@@ -1,14 +1,14 @@
 <app-header title="Dashboard"></app-header>
 
 <ion-content fullscreen>
-  <div class="grid-fullpage-wrapper">
-    <ion-grid class="grid-fullpage-grid">
-      <ion-row class="grid-fullpage-row">
-        <ion-col *ngFor="let item of gridItems; let i = index" size="6" class="grid-fullpage-col">
-          <div class="grid-fullpage-item" [routerLink]="item.routerPath" [ngClass]="{ active: i === selectedIndex }"
+  <div class="dashboard-wrapper">
+    <ion-grid>
+      <ion-row>
+        <ion-col *ngFor="let item of gridItems; let i = index" size="6" size-md="4" size-lg="3">
+          <div class="dashboard-item" [routerLink]="item.routerPath" [ngClass]="{ active: i === selectedIndex }"
             (click)="selectItem(i)">
             <img [src]="item.icon" alt="{{ item.label }} icon" />
-            <p class="grid-fullpage-label">{{ item.label }}</p>
+            <span>{{ item.label }}</span>
           </div>
         </ion-col>
       </ion-row>

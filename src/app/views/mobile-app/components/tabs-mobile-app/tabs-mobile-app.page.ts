@@ -56,6 +56,13 @@ export class TabsMobileAppPage implements OnInit {
 
 
   ngOnInit() {
+    this.LoadAllData()
+  }
+  ionViewWillEnter = async () => {
+    await this.LoadAllData();
+  };
+
+  public async LoadAllData() {
     this.backButtonSub = this.platform.backButton.subscribeWithPriority(10, async () => {
       const currentUrl = this.router.url;
 
@@ -115,7 +122,6 @@ export class TabsMobileAppPage implements OnInit {
         this.showTabs = !(lastSegment === 'add' || lastSegment === 'edit' || lastSegment === 'user-profile');
       });
   }
-
   ngOnDestroy() {
     if (this.backButtonSub) this.backButtonSub.unsubscribe();
     if (this.backPressTimer) clearTimeout(this.backPressTimer);

@@ -41,7 +41,7 @@ export class NetworkService {
     this.networkDetails.next({ ...status, timestamp: Date.now() });
     this.isOnline.next(status.connected);
     console.log('[Retry] Network status rechecked:', status);
-    alert('Network status rechecked' + status)
+    // alert('Network status rechecked' + status)
   }
 
   private async loadInitialStatus(): Promise<void> {
