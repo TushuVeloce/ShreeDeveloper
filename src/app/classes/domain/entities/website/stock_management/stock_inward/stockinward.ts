@@ -20,8 +20,7 @@ export class StockInwardProps {
   public CreatedByName: string = '';
   public CreatedDate: string = '';
   public UpdatedBy: number = 0;
-  public UpdatedByName: number = 0;
-  public UpdatedDate: number = 0;
+  public UpdatedByName: string = '';
   public MaterialInwardRef: number = 0;
   public Ref: number = 0;
   public SiteRef: number = 0;

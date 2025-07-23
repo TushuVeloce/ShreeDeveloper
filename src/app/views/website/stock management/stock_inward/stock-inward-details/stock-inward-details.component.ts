@@ -91,20 +91,26 @@ export class StockInwardDetailsComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    this.LoginToken = this.appStateManage.getLoginToken();
     this.appStateManage.setDropdownDisabled(true);
-    this.getSiteListByCompanyRef();
-    this.getVendorListByCompanyRef();
-    this.IsNewEntity = false;
-    // this.getInwardSingleInstanceByInwardRef(history.state.inwardref);
-    this.SessionAddedRefs = []; // ✅ Reset session-added materials
+    await this.getSiteListByCompanyRef();
+    await this.getVendorListByCompanyRef();
 
-    this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
-    let parts = this.strCDT.substring(0, 16).split('-');
-
-    // Construct the new date format
-    this.InwardDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
-
-    this.shouldFilterDropdown = false;
+    if (this.appStateManage.StorageKey.getItem('Editable') == 'Edit') {
+      this.IsNewEntity = false;
+      this.DetailsFormTitle = this.IsNewEntity ? 'New Stock Inward' : 'Edit Stock Inward';
+      this.Entity = StockInward.GetCurrentInstance();
+      this.imagePostView = `${this.ImageBaseUrl}${this.Entity.p.MaterialInwardInvoicePath}/${this.LoginToken}?${this.TimeStamp}`;
+      this.selectedFileName = this.Entity.p.MaterialInwardInvoicePath;
+      this.appStateManage.StorageKey.removeItem('Editable');
+    } else {
+      this.Entity = StockInward.CreateNewInstance();
+      StockInward.SetCurrentInstance(this.Entity);
+      this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+      let parts = this.strCDT.substring(0, 16).split('-');
+      // Construct the new date format
+      this.InwardDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+    }
   }
 
   getSiteListByCompanyRef = async () => {
@@ -420,7 +426,10 @@ export class StockInwardDetailsComponent implements OnInit {
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.InwardDate = this.dtu.ConvertStringDateToFullFormat(this.InwardDate);
     let entityToSave = this.Entity.GetEditableVersion();
+
     let entitiesToSave = [entityToSave];
+    console.log('entitiesToSave :', entitiesToSave);
+    
     if (this.InvoiceFile) {
       lstFTO.push(
         FileTransferObject.FromFile(
@@ -431,6 +440,7 @@ export class StockInwardDetailsComponent implements OnInit {
       );
     }
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message)

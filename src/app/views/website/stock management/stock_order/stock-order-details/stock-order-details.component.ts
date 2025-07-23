@@ -370,6 +370,7 @@ export class StockOrderDetailsComponent implements OnInit {
     }
 
     let tr = await this.utils.SavePersistableEntities(entitiesToSave, lstFTO);
+    
     if (!tr.Successful) {
       this.isSaveDisabled = false;
       this.uiUtils.showErrorMessage('Error', tr.Message)
