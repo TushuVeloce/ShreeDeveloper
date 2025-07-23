@@ -22,8 +22,11 @@
           <td Class="tbldata">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
           <td Class="tbldata">{{material.p.SiteName}}</td>
           <td Class="tbldata">{{material.p.MaterialName}}</td>
-          <td Class="tbldata">{{formatDate(material.p.PurchaseOrderDate)}}</td>
+          <td Class="tbldata">{{material.p.TotalOrderQtyPerMaterial}}</td>
+          <td Class="tbldata">{{material.p.TotalExtraOrderQty}}</td>
+          <td Class="tbldata">{{material.p.TotalOrderQty}}</td>
           <td Class="tbldata">{{material.p.TotalInwardQty}}</td>
+          <td Class="tbldata">{{material.p.RemainingQty}}</td>
           <td Class="tbldata">{{material.p.TotalConsumedQty}}</td>
           <td Class="tbldata">{{material.p.TotalTransferredInQty}}</td>
           <td Class="tbldata">{{material.p.CurrentStock}}</td>

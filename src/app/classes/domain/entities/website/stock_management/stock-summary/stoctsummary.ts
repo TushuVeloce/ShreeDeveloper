@@ -27,8 +27,12 @@ export class StockSummaryProps {
   public MaterialName: string = '';
   public UnitRef: number = 0;
   public UnitName: string = '';
+  public TotalOrderQtyPerMaterial: number = 0;
+  public TotalExtraOrderQty: number = 0;
+  public TotalOrderQty: number = 0;
   public TotalInwardQty: number = 0;
   public TotalConsumedQty: number = 0;
+  public RemainingQty: number = 0;
   public TotalTransferredInQty: number = 0;
   public GST: number = 0;
   public CurrentStock: number = 0;
