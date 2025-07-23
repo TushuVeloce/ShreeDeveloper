@@ -28,7 +28,7 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
   companyRef = 0;
 
   // headers: string[] = ['#', 'Customer ID', 'Customer Name', 'Address', 'Contact No', 'Pan', 'Aadhar No', 'Lead Source', 'Booking Reamrk', 'Plot No', 'Area in Sqm', 'Area in Sqft', 'Basic per Rate', 'Discount Rate on Area', 'Total Plot Amount', 'Government Value', 'Value of Agreement', 'Reg Tax Value In %', 'Stamp Duties', 'Gst %', 'Gst Total Amount', 'Goods Services Tax', 'Legal Charges', 'Total Cheque Recieved', 'Total Cash Recieved', 'Total Amount Recieved', 'Grand Total', 'Action'];
-  headers: string[] = ['Sr.No.', 'Customer ID', 'Customer Name', 'Address', 'Contact No', 'Pan', 'Aadhar No', 'Lead Source', 'Agent/Broker', 'Booking Remark', 'Plot No', 'Area in Sqm', 'Area in Sqft', 'Basic per Rate', 'Discount Rate on Area', 'Discount On Plot Amount', 'Total Plot Amount', 'Government Rate sqm', 'Government Value', 'Value of Agreement', 'Reg Tax Value In %', 'Tax Value In Percentage', 'Stamp Duties', 'Goods Services Tax', 'Legal Charges', 'Total Extra Charges', 'Total Cheque Recieved', 'Total Cash Recieved', 'Total Amount Recieved', 'Total Cheque Balance', 'Total Cash Balance', 'Total Balance', 'Grand Total'];
+  headers: string[] = ['Sr.No.', 'Customer ID', 'Customer Name', 'Address', 'Contact No', 'Pan', 'Aadhar No', 'Lead Source','Lead Handle By', 'Agent/Broker', 'Booking Remark', 'Plot No', 'Area in Sqm', 'Area in Sqft', 'Basic per Rate', 'Discount Rate on Area', 'Discount On Plot Amount', 'Total Plot Amount', 'Government Rate sqm', 'Government Value', 'Value of Agreement', 'Reg Tax Value In %', 'Tax Value In Percentage', 'Stamp Duties', 'Goods Services Tax', 'Legal Charges', 'Total Extra Charges', 'Total Cheque Recieved', 'Total Cash Recieved', 'Total Amount Recieved', 'Total Cheque Balance', 'Total Cash Balance', 'Total Balance', 'Grand Total'];
 
 
   filters: FilterItem[] = [];
@@ -140,6 +140,7 @@ export class CustomerInfoReportMobileAppComponent implements OnInit {
 
     });
     this.DisplayMasterList = lst;
+    console.log('this.DisplayMasterList :', this.DisplayMasterList);
   }
   getCustomerReportByCompanyAndSiteRef = async () => {
     this.MasterList = [];

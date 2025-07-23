@@ -53,6 +53,8 @@ export class CRMReportsProps {
   public TotalCashBalance: number = 0;
   public TotalBalance: number = 0;
   public RemainingAmount: number = 0;
+  public BrokerName: string = '';
+  public LeadHandleByName: string = '';
 
 
 
