@@ -182,21 +182,8 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       this.Entity.p.TotalLeaveDeduction = Number(lst[0].p.TotalLeaveDeduction)
       this.Entity.p.TotalLeaves = lst[0].p.TotalLeaves
       this.Entity.p.TotalOverTimeHrs = Number(lst[0].p.TotalOverTimeHrs)
-      this.Entity.p.TotalWorkingDays = lst[0].p.TotalWorkingDays
-
-      this.Entity.p.TotalLateMarksAndHalfDays = lst[0].p.TotalLateMarksAndHalfDays
-      this.Entity.p.TotalDeductionOfLateMarksAndHalfDays = lst[0].p.TotalDeductionOfLateMarksAndHalfDays
-
-      // AdvancePayment: "0.000000"
-      // BasicSalary: "25000.00"
-      // DisplayTotalOverTimeHrs: "8h 45m"
-      // HalfdayAndLateMarkDeduction: "1612.90"
-      // OverTimeHrsRate: "94.88"
-      // TotalLateMarkAndHalfDays: 4
-      // TotalLeaveDeduction: "18548.39"
-      // TotalLeaves: 23
-      // TotalOverTimeHrs: 8.75
-      // TotalWorkingDays: 8
+      this.Entity.p.TotalWorkingDays = Number(lst[0].p.TotalWorkingDays)
+      this.Entity.p.HalfdayAndLateMarkDeduction = Number(lst[0].p.HalfdayAndLateMarkDeduction)
 
       await this.calculategrosstotal()
       await this.calculatetotaldeduction()
