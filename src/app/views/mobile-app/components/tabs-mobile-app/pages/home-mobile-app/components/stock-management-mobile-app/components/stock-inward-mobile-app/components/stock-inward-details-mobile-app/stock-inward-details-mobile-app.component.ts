@@ -6,6 +6,7 @@ import { Site } from 'src/app/classes/domain/entities/website/masters/site/site'
 import { Vendor } from 'src/app/classes/domain/entities/website/masters/vendor/vendor';
 import { InwardMaterialDetailProps } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/inwardmaterial/inwardmaterial';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
+import { Order } from 'src/app/classes/domain/entities/website/stock_management/stock_order/order';
 import { FileTransferObject } from 'src/app/classes/infrastructure/filetransferobject';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { BaseUrlService } from 'src/app/services/baseurl.service';
@@ -34,6 +35,8 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
   IsDropdownDisabled: boolean = false;
   InitialEntity: StockInward = null as any;
   SiteList: Site[] = [];
+  VendorList: Vendor[] = [];
+  PurchaseOrderIdList: Order[] = [];
   MaterialList: MaterialFromOrder[] = [];
   MaterialListOriginal: MaterialFromOrder[] = [];
   localEstimatedStartingDate: string = '';
@@ -53,6 +56,8 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
   strCDT: string = '';
   selectedSite: any[] = [];
   SiteName: string = '';
+  selectedPurchaseID: any[] = [];
+  PurchaseIDName: string = '';
   selectedVendor: any[] = [];
   VendorName: string = '';
   selectedMaterial: any[] = [];
@@ -135,7 +140,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
             this.InwardDate = this.Entity.p.InwardDate
             this.DisplayInwardDate = this.Entity.p.InwardDate
           }
-          this.getMaterialListByCompanyRef(this.Entity.p.SiteRef, this.Entity.p.VendorRef)
+          // this.getMaterialListByCompanyRef(this.Entity.p.SiteRef, this.Entity.p.VendorRef)
           this.getVendorDataByVendorRef(this.Entity.p.VendorRef)
         } else {
           this.Entity = StockInward.CreateNewInstance();
@@ -340,29 +345,29 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
     this.SiteList = lst;
   }
 
-  getMaterialListByCompanyRef = async (SiteRef: number, VendorRef: number) => {
-    if (this.companyRef <= 0) {
-      await this.toastService.present('Company not Selected', 1000, 'warning');
-      await this.haptic.warning();
-      return;
-    }
-    const lst = await MaterialFromOrder.FetchOrderedMaterials(this.Entity.p.MaterialPurchaseOrderRef, async errMsg => {
-      await this.toastService.present('Error ' + errMsg, 1000, 'danger');
-      await this.haptic.error();
-    });
-    console.log('lst :', lst);
-    this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
-    this.MaterialListOriginal?.forEach((item, index) => {
-      item.p.InternalRef = index + 1;
-    });
-    const allMatched = lst.every(item => item.p.RemainingQty == 0);
-    this.isSaveDisabled = allMatched;
-    if (!this.shouldFilterDropdown) {
-      this.MaterialList = [...this.MaterialListOriginal];
-    } else {
-      this.filterMaterialList();
-    }
-  };
+  // getMaterialListByCompanyRef = async (SiteRef: number, VendorRef: number) => {
+  //   if (this.companyRef <= 0) {
+  //     await this.toastService.present('Company not Selected', 1000, 'warning');
+  //     await this.haptic.warning();
+  //     return;
+  //   }
+  //   const lst = await MaterialFromOrder.FetchOrderedMaterials(SiteRef, VendorRef, this.companyRef, this.Entity.p.MaterialPurchaseOrderRef, this.Entity.p.MaterialInwardRef, async errMsg => {
+  //     await this.toastService.present('Error ' + errMsg, 1000, 'danger');
+  //     await this.haptic.error();
+  //   });
+  //   console.log('lst :', lst);
+  //   this.MaterialListOriginal = lst?.filter(item => item.p.IsMaterialExist == 1);
+  //   this.MaterialListOriginal?.forEach((item, index) => {
+  //     item.p.InternalRef = index + 1;
+  //   });
+  //   const allMatched = lst.every(item => item.p.RemainingQty == 0);
+  //   this.isSaveDisabled = allMatched;
+  //   if (!this.shouldFilterDropdown) {
+  //     this.MaterialList = [...this.MaterialListOriginal];
+  //   } else {
+  //     this.filterMaterialList();
+  //   }
+  // };
 
   filterMaterialList() {
     this.MaterialList = this.MaterialListOriginal.filter(item =>
@@ -510,7 +515,7 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
       await this.haptic.success();
       this.ismaterialModalOpen = false;
     } else {
-      this.newInward.MaterialInwardRef = this.Entity.p.Ref;
+      // this.newInward.MaterialInwardRef = this.Entity.p.MaterialInwardRef;
       this.newInward.PurchaseOrderRemainingQty = this.NewRemainingQty;
       this.Entity.p.MaterialInwardDetailsArray.push({ ...this.newInward });
 
@@ -712,6 +717,48 @@ export class StockInwardDetailsMobileAppComponent implements OnInit {
     }
   }
 
+  public async selectPurchaseIDBottomsheet(): Promise<void> {
+    try {
+      const options = this.PurchaseOrderIdList.map(item => ({
+        p: {
+          Name: item.p.DisplayPurchaseOrderId || '',
+          Ref: item.p.Ref || 0
+        }
+      }));
+
+      this.openSelectModal(
+        options,
+        this.selectedPurchaseID,
+        false,
+        'Select Purchase ID',
+        1,
+        (selected) => {
+          if (selected && selected.length > 0 && selected[0]?.p) {
+            this.selectedPurchaseID = selected;
+            this.Entity.p.MaterialPurchaseOrderRef = selected[0].p.Ref;
+            this.PurchaseIDName = selected[0].p.Name;
+            // this.getMaterialListByCompanySiteVendorRefAndPurchaseOrderID()
+          }
+        }
+      );
+    } catch (error) {
+      console.error('Error in selectPurchaseIDBottomsheet:', error);
+    }
+  }
+
+
+  public async selectVendorBottomsheet(): Promise<void> {
+    try {
+      const options = this.VendorList;
+      this.openSelectModal(options, this.selectedVendor, false, 'Select Vendor', 1, (selected) => {
+        this.selectedVendor = selected;
+        this.Entity.p.VendorRef = selected[0].p.Ref;
+        this.VendorName = selected[0].p.Name;
+      });
+    } catch (error) {
+
+    }
+  }
   public async selectSiteBottomsheet(): Promise<void> {
     try {
       const options = this.SiteList;

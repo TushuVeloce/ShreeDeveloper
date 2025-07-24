@@ -2,24 +2,8 @@
 
 <ion-content class="form-container">
   <ion-list lines="none" class="ion-padding">
-    <!-- Select site -->
-    <ion-item class="input-item">
-      <ion-input label="Site Name" labelPlacement="floating" placeholder="Enter Site Name"
-        [(ngModel)]="Entity.p.SiteName" readonly></ion-input>
-    </ion-item>
-
-    <!--  Ordered Date -->
-    <ion-item (click)="showPurchaseOrderDatePicker = false" class="input-item">
-      <ion-label>Ordered Date</ion-label>
-      <ion-label slot="end">{{ DisplayPurchaseOrderDate || 'Select Date' }}</ion-label>
-    </ion-item>
-    <app-date-picker [show]="showPurchaseOrderDatePicker" [selectedDate]="PurchaseOrderDate" [defaultToday]="true"
-      (dateChanged)="onPurchaseOrderDateChange($event)"
-      (dateSelected)="DisplayPurchaseOrderDate = $event; showPurchaseOrderDatePicker = false"
-      (modalDismissed)="showPurchaseOrderDatePicker = false" />
-
     <!--  Inward Date -->
-    <ion-item (click)="showInwardDatePicker = true" class="input-item" button>
+    <ion-item (click)="showInwardDatePicker = true" class="input-item" button detail>
       <ion-label>Inward Date</ion-label>
       <ion-label slot="end">{{ DisplayInwardDate || 'Select Date' }}</ion-label>
     </ion-item>
@@ -28,10 +12,30 @@
       (dateSelected)="DisplayInwardDate = $event; showInwardDatePicker = false"
       (modalDismissed)="showInwardDatePicker = false" />
 
-    <!-- Vendor Trade Name input-->
+    <!-- Chalan No input-->
     <ion-item class="input-item">
-      <ion-input label="Vendor Name" labelPlacement="floating" placeholder="Enter Vendor Name"
-        [(ngModel)]="Entity.p.VendorName" readonly></ion-input>
+      <ion-input label="Chalan No." labelPlacement="floating" placeholder="Enter Chalan No."
+        [(ngModel)]="Entity.p.ChalanNo" [disabled]="'true'"></ion-input>
+    </ion-item>
+
+    <!-- Select site Dropdown -->
+    <ion-item class="input-item" button detail (click)="selectSiteBottomsheet()">
+      <ion-label>Site</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ SiteName|| 'Select' }}
+      </ion-text>
+    </ion-item>
+
+    <!-- Select vendor Dropdown -->
+    <ion-item class="input-item" button detail (click)="selectVendorBottomsheet()">
+      <ion-label>Vendor</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ VendorName|| 'Select' }}
+      </ion-text>
     </ion-item>
 
     <!-- Vendor Trade Name input-->
@@ -44,19 +48,25 @@
         [(ngModel)]="Entity.p.VendorPhoneNo" readonly></ion-input>
     </ion-item>
     <ion-item class="input-item">
-      <ion-input label="Chalan No." labelPlacement="floating" placeholder="Enter Chalan No."
-        [(ngModel)]="Entity.p.ChalanNo" readonly></ion-input>
-    </ion-item>
-    <ion-item class="input-item">
       <ion-input label="Vehicle No." labelPlacement="floating" placeholder="Enter Vehicle No."
         [(ngModel)]="Entity.p.VehicleNo"></ion-input>
+    </ion-item>
+
+    <!-- Select vendor Dropdown -->
+    <ion-item class="input-item" button detail (click)="selectPurchaseIDBottomsheet()">
+      <ion-label>Purchase ID</ion-label>
+
+      <!-- Text showing the selected status -->
+      <ion-text slot="end" class="status-text">
+        {{ PurchaseIDName|| 'Select' }}
+      </ion-text>
     </ion-item>
 
     <!-- Material List Header -->
     <ion-grid class="ion-margin-top">
       <ion-row class="ion-align-items-center">
         <ion-col size="6">
-          <h5><strong>Order Material List</strong></h5>
+          <h5><strong>Inward Material List</strong></h5>
         </ion-col>
         <ion-col size="6" class="ion-text-right">
           <ion-button fill="outline" size="small" (click)="openModal(100)">

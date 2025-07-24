@@ -52,13 +52,13 @@
   <!-- No data found -->
   <div *ngIf="DisplayMasterList.length === 0 && !loadingService.isLoaderActive()" class="no-data-mobile-app">
     <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
-    <p>No customer info records found.</p>
+    <p>No stock summary records found.</p>
   </div>
   <ion-modal [isOpen]="ModalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-container *ngIf="SelectedStockSummary">
       <ion-header class="modal-toolbar-mobile-app">
         <ion-toolbar color="primary">
-          <ion-title>Customer Details</ion-title>
+          <ion-title>Stock Summary Details</ion-title>
           <ion-buttons slot="end">
             <ion-button fill="clear" (click)="closeModal()">
               <ion-icon name="close-outline"></ion-icon>
@@ -103,7 +103,7 @@
   </ion-fab>
   <!-- Print Section with automatic page breaks -->
   <div id="print-section" style="display: none;" #PrintContainer>
-    <h2 style="text-align: center; margin-bottom: 1rem;">Customer Info Report</h2>
+    <h2 style="text-align: center; margin-bottom: 1rem;">Stock Summary Report</h2>
     <table class="table table-bordered print-table" style="width: 100%; border-collapse: collapse;">
       <thead>
         <tr>

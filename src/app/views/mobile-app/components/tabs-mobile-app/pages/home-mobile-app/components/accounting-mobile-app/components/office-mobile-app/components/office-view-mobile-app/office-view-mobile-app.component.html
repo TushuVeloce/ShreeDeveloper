@@ -13,26 +13,11 @@
       <ion-label>
         <h2>Site : {{ Invoice.p.SiteName || 'Unknown Site' }}</h2>
         <p class="date-label">Accounting Report Date : {{ formatDate(Invoice.p.TransDateTime) || '-' }}</p>
-        <!-- <p class="date-label">Ledger : {{ Invoice.p.LedgerName || '-' }}</p>
-        <p class="date-label">Sub Ledger : {{ Invoice.p.SubLedgerName || '-' }}
-        </p> -->
         <p class="date-label">Payer Name : {{ Invoice.p.PayerName || '-' }}</p>
         <p class="date-label">Income Amount : {{ Invoice.p.IncomeAmount | currency : "INR" }}
         <p class="date-label">Given Amount: {{ Invoice.p.GivenAmount | currency : "INR" }}
         </p>
       </ion-label>
-
-      <!-- <div class="action-buttons" slot="end" (click)="$event.stopPropagation()">
-        <ion-button fill="clear" size="small" color="primary" (click)="onEditClicked(Invoice)">
-          <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-        <ion-button fill="clear" size="small" color="primary" (click)="onDeleteClicked(Invoice)">
-          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-        <ion-button fill="clear" size="small" color="primary" (click)="navigateToPrint(Invoice)">
-          <ion-icon name="print-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-      </div> -->
     </ion-item>
   </ion-list>
 

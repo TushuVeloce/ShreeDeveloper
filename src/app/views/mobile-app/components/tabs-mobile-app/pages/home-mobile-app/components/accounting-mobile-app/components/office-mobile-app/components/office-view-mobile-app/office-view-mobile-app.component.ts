@@ -150,6 +150,9 @@ export class OfficeViewMobileAppComponent implements OnInit {
           break;
       }
     }
+    if (this.Entity.p.AccountingReport===0){
+      this.Entity.p.AccountingReport = AccountingReports.CurrentFinancialYear;
+    }
     await this.FetchEntireListByFilters();
     this.loadFilters(); // Reload filters with updated options & preserve selections
   }

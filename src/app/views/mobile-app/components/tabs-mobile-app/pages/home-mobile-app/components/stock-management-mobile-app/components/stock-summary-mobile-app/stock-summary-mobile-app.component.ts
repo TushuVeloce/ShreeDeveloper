@@ -81,7 +81,7 @@ export class StockSummaryMobileAppComponent implements OnInit {
       return;
     }
     if (!this.PrintContainer) return;
-    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.Ref}.pdf`);
+    await this.pdfService.generatePdfAndHandleAction(this.PrintContainer.nativeElement, `Receipt_${this.Entity.p.PurchaseOrderDate}.pdf`);
   }
   loadFilters() {
     this.filters = [

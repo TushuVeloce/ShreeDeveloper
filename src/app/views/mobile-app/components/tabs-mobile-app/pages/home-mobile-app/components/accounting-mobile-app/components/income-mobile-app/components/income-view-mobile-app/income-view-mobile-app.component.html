@@ -14,9 +14,7 @@
       <ion-label>
         <h2>Site : {{ Income.p.SiteName || 'Unknown Site' }}</h2>
         <p class="date-label">Income Date : {{ formatDate(Income.p.Date) || '-' }}</p>
-        <!-- <p class="date-label">Ledger : {{ Income.p.LedgerName || '-' }}</p>
-        <p class="date-label">Sub Ledger : {{ Income.p.SubLedgerName || '-' }} -->
-        <p class="date-label">Reason : {{ Income.p.Reason || '-' }}
+        <p class="date-label">Received By : {{ Income.p.PayerName || '-' }}
         <p class="date-label">Income Amount : {{ Income.p.IncomeAmount| currency : "INR" }}
         </p>
       </ion-label>
@@ -45,65 +43,65 @@
   <!-- Modal -->
   <ion-modal [isOpen]="modalOpen" (didDismiss)="closeModal()" class="custom-modal-mobile-app">
     <ng-template>
-        <!-- Header -->
-        <ion-header class="modal-toolbar-mobile-app">
-          <ion-toolbar color="primary">
-            <ion-title>Income Details</ion-title>
-            <ion-buttons slot="end">
-              <ion-button fill="clear" (click)="closeModal()">
-                <ion-icon name="close-outline"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
+      <!-- Header -->
+      <ion-header class="modal-toolbar-mobile-app">
+        <ion-toolbar color="primary">
+          <ion-title>Income Details</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="closeModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
 
-        <!-- Body -->
-    <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
-          <!-- Info Rows -->
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Income Date:</span>
-            <span class="value-mobile-app">{{ formatDate(SelectedIncome.p.Date) || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Site Name:</span>
-            <span class="value-mobile-app">{{ SelectedIncome.p.SiteName || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Ledger Name :</span>
-            <span class="value-mobile-app">{{ SelectedIncome.p.LedgerName || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Sub Ledger Name:</span>
-            <span class="value-mobile-app">{{ SelectedIncome.p.SubLedgerName || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Reason :</span>
-            <span class="value-mobile-app">{{ SelectedIncome.p.Reason || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Income Amount :</span>
-            <span class="value-mobile-app">{{ SelectedIncome.p.IncomeAmount | currency : "INR" }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Shrees Balance :</span>
-            <span class="value-mobile-app">{{ SelectedIncome.p.ShreesBalance | currency : "INR"  }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Mode Of Payment Name :</span>
-            <span class="value-mobile-app">{{ SelectedIncome.p.ModeOfPaymentName || '-' }}</span>
-          </div>
-          <div class="info-row-of-model-mobile-app">
-            <span class="label-mobile-app">Narration :</span>
-            <span class="value-mobile-app">{{ SelectedIncome.p.Narration || '-' }}</span>
-          </div>
-        </ion-content>
+      <!-- Body -->
+      <ion-content scroll-y="true" class="ion-padding modal-content-mobile-app">
+        <!-- Info Rows -->
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Income Date:</span>
+          <span class="value-mobile-app">{{ formatDate(SelectedIncome.p.Date) || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Site Name:</span>
+          <span class="value-mobile-app">{{ SelectedIncome.p.SiteName || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Ledger Name :</span>
+          <span class="value-mobile-app">{{ SelectedIncome.p.LedgerName || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Sub Ledger Name:</span>
+          <span class="value-mobile-app">{{ SelectedIncome.p.SubLedgerName || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Reason :</span>
+          <span class="value-mobile-app">{{ SelectedIncome.p.Reason || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Income Amount :</span>
+          <span class="value-mobile-app">{{ SelectedIncome.p.IncomeAmount | currency : "INR" }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Shrees Balance :</span>
+          <span class="value-mobile-app">{{ SelectedIncome.p.ShreesBalance | currency : "INR" }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Mode Of Payment Name :</span>
+          <span class="value-mobile-app">{{ SelectedIncome.p.ModeOfPaymentName || '-' }}</span>
+        </div>
+        <div class="info-row-of-model-mobile-app">
+          <span class="label-mobile-app">Narration :</span>
+          <span class="value-mobile-app">{{ SelectedIncome.p.Narration || '-' }}</span>
+        </div>
+      </ion-content>
 
-        <!-- Footer -->
-       <ion-footer class="modal-footer-mobile-app">
-          <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
-            Close
-          </ion-button>
-        </ion-footer>
+      <!-- Footer -->
+      <ion-footer class="modal-footer-mobile-app">
+        <ion-button expand="block" color="primary" shape="round" (click)="closeModal()">
+          Close
+        </ion-button>
+      </ion-footer>
     </ng-template>
   </ion-modal>
 
