@@ -30,44 +30,46 @@
       <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Inward Date</label>
-          <input type="date" name="InwardDate" [disabled]="!this.IsNewEntity" class="form-control" id="InwardDate" [(ngModel)]="InwardDate"
-            #InwardDateCtrl="ngModel" required (blur)="InwardDateCtrl.control.markAsTouched()"
-            placeholder="Enter Site Name" [min]="Entity.p.PurchaseOrderDate" />
+          <input type="date" name="InwardDate" [disabled]="!this.IsNewEntity" class="form-control" id="InwardDate"
+            [(ngModel)]="InwardDate" #InwardDateCtrl="ngModel" readonly required
+            (blur)="InwardDateCtrl.control.markAsTouched()" placeholder="Enter Site Name"
+            [min]="Entity.p.PurchaseOrderDate" />
           <div *ngIf="InwardDateCtrl.invalid && (InwardDateCtrl.touched || InwardDateCtrl.dirty)">
             <span class="validation-text" *ngIf="InwardDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
         </div>
         <div class="col-md-4">
           <label><b>Chalan No</b></label>
-          <input type="number" [(ngModel)]="Entity.p.ChalanNo" [disabled]="!this.IsNewEntity" name="ChalanNo" class="form-control" id="ChalanNo"
-            placeholder="Chalan No" readonly />
+          <input type="number" [(ngModel)]="Entity.p.ChalanNo" [disabled]="!this.IsNewEntity" name="ChalanNo"
+            class="form-control" id="ChalanNo" placeholder="Chalan No" readonly />
         </div>
         <div class="col-md-4">
 
           <label for="SiteRef"><b>Site</b></label>
-          <nz-select class="nzSelect-light" [disabled]="!this.IsNewEntity" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" id="SiteRef" [(ngModel)]="Entity.p.SiteRef"
-            (ngModelChange)="getOrderIdListByCompanySiteAndVendorRef()">
+          <nz-select class="nzSelect-light" [disabled]="!this.IsNewEntity" [nzNotFoundContent]="noDataTpl" nzShowSearch
+            nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'" name="SiteRef" id="SiteRef"
+            [(ngModel)]="Entity.p.SiteRef" (ngModelChange)="getOrderIdListByCompanySiteAndVendorRef()">
             <nz-option *ngFor="let Site of SiteList" [nzValue]="Site.p.Ref" [nzLabel]="Site.p.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4">
           <label for="VendorRef"><b>Vendor</b></label>
-          <nz-select class="nzSelect-light" [disabled]="!this.IsNewEntity" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" [nzSize]="'large'" name="VendorRef" id="VendorRef" [(ngModel)]="Entity.p.VendorRef"
+          <nz-select class="nzSelect-light" [disabled]="!this.IsNewEntity" [nzNotFoundContent]="noDataTpl" nzShowSearch
+            nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'" name="VendorRef" id="VendorRef"
+            [(ngModel)]="Entity.p.VendorRef"
             (ngModelChange)="getOrderIdListByCompanySiteAndVendorRef(); onVendorSelection(Entity.p.VendorRef);">
             <nz-option *ngFor="let Vendor of VendorList" [nzValue]="Vendor.p.Ref" [nzLabel]="Vendor.p.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4">
           <label><b>Vendor Trade Name</b></label>
-          <input type="text" [(ngModel)]="Entity.p.VendorTradeName" [disabled]="!this.IsNewEntity" name="VendorTradeName" class="form-control"
-            id="VendorTradeName" placeholder="Vendor Trade Name" readonly />
+          <input type="text" [(ngModel)]="Entity.p.VendorTradeName" [disabled]="!this.IsNewEntity"
+            name="VendorTradeName" class="form-control" id="VendorTradeName" placeholder="Vendor Trade Name" readonly />
         </div>
         <div class="col-md-4">
           <label><b>Vendor Mobile No</b></label>
-          <input type="text" [(ngModel)]="Entity.p.VendorPhoneNo" [disabled]="!this.IsNewEntity" name="VendorPhoneNo" class="form-control"
-            id="VendorPhoneNo" placeholder="Vendor Mob No" readonly />
+          <input type="text" [(ngModel)]="Entity.p.VendorPhoneNo" [disabled]="!this.IsNewEntity" name="VendorPhoneNo"
+            class="form-control" id="VendorPhoneNo" placeholder="Vendor Mob No" readonly />
         </div>
 
         <div class="col-md-4">
@@ -77,9 +79,9 @@
         </div>
         <div class="col-md-4">
           <label for="MaterialPurchaseOrderRef"><b>Purchase ID</b></label>
-          <nz-select class="nzSelect-light" [disabled]="!this.IsNewEntity" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" [nzSize]="'large'" name="MaterialPurchaseOrderRef" id="MaterialPurchaseOrderRef"
-            [(ngModel)]="Entity.p.MaterialPurchaseOrderRef"
+          <nz-select class="nzSelect-light" [disabled]="!this.IsNewEntity" [nzNotFoundContent]="noDataTpl" nzShowSearch
+            nzAllowClear nzPlaceHolder="Select" [nzSize]="'large'" name="MaterialPurchaseOrderRef"
+            id="MaterialPurchaseOrderRef" [(ngModel)]="Entity.p.MaterialPurchaseOrderRef"
             (ngModelChange)="getMaterialListByCompanySiteVendorRefAndPurchaseOrderID();">
             <nz-option *ngFor="let OrderId of PurchaseOrderIdList" [nzValue]="OrderId.p.Ref"
               [nzLabel]="OrderId.p.DisplayPurchaseOrderId"></nz-option>

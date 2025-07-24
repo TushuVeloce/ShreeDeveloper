@@ -61,12 +61,6 @@ export class OpeningBalanceDetailsComponent implements OnInit {
       OpeningBalance.CreateNewInstance(),
       this.utils.DeepCopy(this.Entity)
     ) as OpeningBalance;
-    this.focusInput();
-  }
-
-  focusInput = () => {
-    let txtName = document.getElementById('CoModeOfPaymente')!;
-    txtName.focus();
   }
 
   public FormulateBankList = async () => {

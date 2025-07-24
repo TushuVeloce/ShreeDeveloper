@@ -8,6 +8,7 @@ import { Site } from 'src/app/classes/domain/entities/website/masters/site/site'
 import { MaterialCurrentStock } from 'src/app/classes/domain/entities/website/stock_management/Material-Current-Stock/materialcurrentstock';
 import { StockTransfer } from 'src/app/classes/domain/entities/website/stock_management/stock-transfer/stocktransfer';
 import { StockConsume } from 'src/app/classes/domain/entities/website/stock_management/stock_consume/stockconsume';
+import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
@@ -31,6 +32,7 @@ export class StockTransferDetailsComponent implements OnInit {
   MaterialList: StockConsume[] = [];
   GSTList = DomainEnums.GoodsAndServicesTaxList(true, '--Select GST --');
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+  strCDT: string = ''
 
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace
 
@@ -61,6 +63,12 @@ export class StockTransferDetailsComponent implements OnInit {
     } else {
       this.Entity = StockTransfer.CreateNewInstance();
       StockTransfer.SetCurrentInstance(this.Entity);
+
+      this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+      let parts = this.strCDT.substring(0, 16).split('-');
+      // Construct the new date format
+      this.Entity.p.Date = `${parts[0]}-${parts[1]}-${parts[2]}`;
+      
       this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     }
     this.InitialEntity = Object.assign(StockTransfer.CreateNewInstance(), this.utils.DeepCopy(this.Entity)) as StockTransfer;

@@ -13,6 +13,7 @@ import { MaterialCurrentStock } from 'src/app/classes/domain/entities/website/st
 import { StockConsume } from 'src/app/classes/domain/entities/website/stock_management/stock_consume/stockconsume';
 import { InwardMaterial } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/inwardmaterial/inwardmaterial';
 import { StockInward } from 'src/app/classes/domain/entities/website/stock_management/stock_inward/stockinward';
+import { CurrentDateTimeRequest } from 'src/app/classes/infrastructure/request_response/currentdatetimerequest';
 import { AppStateManageService } from 'src/app/services/app-state-manage.service';
 import { CompanyStateManagement } from 'src/app/services/companystatemanagement';
 import { DTU } from 'src/app/services/dtu.service';
@@ -36,6 +37,8 @@ export class StockConsumeDetailsComponent implements OnInit {
   MaterialList: StockConsume[] = [];
   StageList: Stage[] = [];
   companyRef = this.companystatemanagement.SelectedCompanyRef;
+
+  strCDT: string = ''
 
   NameWithNosAndSpace: string = ValidationPatterns.NameWithNosAndSpace;
 
@@ -72,12 +75,18 @@ export class StockConsumeDetailsComponent implements OnInit {
           this.Entity.p.ConsumptionDate
         );
       }
-      if(this.Entity.p.SiteRef > 0){
+      if (this.Entity.p.SiteRef > 0) {
         this.getMaterialListBySiteRef(this.Entity.p.SiteRef);
       }
     } else {
       this.Entity = StockConsume.CreateNewInstance();
       StockConsume.SetCurrentInstance(this.Entity);
+
+      this.strCDT = await CurrentDateTimeRequest.GetCurrentDateTime();
+      let parts = this.strCDT.substring(0, 16).split('-');
+      // Construct the new date format
+      this.Entity.p.ConsumptionDate = `${parts[0]}-${parts[1]}-${parts[2]}`;
+
       this.Entity.p.CreatedBy = Number(
         this.appStateManage.StorageKey.getItem('LoginEmployeeRef')
       );
@@ -111,26 +120,18 @@ export class StockConsumeDetailsComponent implements OnInit {
 
   getMaterialListBySiteRef = async (SiteRef: number) => {
     this.MaterialList = [];
-    if(SiteRef <= 0){
+    if (SiteRef <= 0) {
       return;
     }
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
       return;
     }
-    let lst = await StockConsume.FetchMaterialListBySiteRef(SiteRef,this.companyRef(),async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
+    let lst = await StockConsume.FetchMaterialListBySiteRef(SiteRef, this.companyRef(), async (errMsg) => await this.uiUtils.showErrorMessage('Error', errMsg));
     this.MaterialList = lst;
-    // const uniqueMap = new Map();
-    // lst.forEach((item) => {
-    //   if (!uniqueMap.has(item.p.MaterialRef)) {
-    //     uniqueMap.set(item.p.MaterialRef, item);
-    //   }
-    // });
-    // this.MaterialList = Array.from(uniqueMap.values());
-    // this.Entity.p.SiteRef = this.SiteList[0].p.Ref;
   };
 
- onSiteChange = () => {
+  onSiteChange = () => {
     this.Entity.p.MaterialRef = 0;
     this.Entity.p.UnitRef = 0;
     this.Entity.p.UnitName = '';
@@ -140,7 +141,6 @@ export class StockConsumeDetailsComponent implements OnInit {
   };
 
   getStageListByCompanyRef = async () => {
-    // this.Entity.p.StageRef = 0;
     this.StageList = [];
     if (this.companyRef() <= 0) {
       await this.uiUtils.showErrorToster('Company not Selected');
@@ -153,20 +153,18 @@ export class StockConsumeDetailsComponent implements OnInit {
     this.StageList = lst;
   };
 
-  getUnitByMaterialRef = async (siteref:number,materialref: number) => {
+  getUnitByMaterialRef = async (siteref: number, materialref: number) => {
     this.Entity.p.UnitRef = 0;
     this.Entity.p.UnitName = '';
     this.Entity.p.CurrentQuantity = 0;
-    if(siteref < 0){
-       return;
+    if (siteref < 0) {
+      return;
     }
     if (materialref <= 0) {
       return;
     }
-    let lst = await MaterialCurrentStock.FetchMaterialData(siteref,materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    // const UnitData = this.MaterialList.find(
-    //   (data) => data.p.MaterialRef == materialref
-    // );
+    let lst = await MaterialCurrentStock.FetchMaterialData(siteref, materialref, this.companyRef(), async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
+
     if (lst) {
       this.Entity.p.UnitRef = lst[0].p.UnitRef;
       this.Entity.p.UnitName = lst[0].p.UnitName;
@@ -187,7 +185,7 @@ export class StockConsumeDetailsComponent implements OnInit {
     this.Entity.p.ConsumptionDate = this.dtu.ConvertStringDateToFullFormat(this.Entity.p.ConsumptionDate);
     this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
     this.Entity.p.CreatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-    if(this.Entity.p.Remark == ''){
+    if (this.Entity.p.Remark == '') {
       this.Entity.p.Remark == ''
     }
     let entityToSave = this.Entity.GetEditableVersion();

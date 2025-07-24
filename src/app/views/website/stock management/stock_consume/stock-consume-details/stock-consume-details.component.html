@@ -18,15 +18,16 @@
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="SiteRef"><b>Site Name</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
-            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef" (ngModelChange)="getMaterialListBySiteRef(Entity.p.SiteRef); onSiteChange()">
+            nzPlaceHolder="Select" id="SiteRef" name="SiteRef" [nzSize]="'large'" [(ngModel)]="Entity.p.SiteRef"
+            (ngModelChange)="getMaterialListBySiteRef(Entity.p.SiteRef); onSiteChange()">
             <nz-option *ngFor="let site of SiteList" [nzValue]="site.p.Ref" [nzLabel]="site.p.Name"></nz-option>
           </nz-select>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Consumption Date</label>
           <input type="date" name="ConsumptionDate" class="form-control" id="ConsumptionDate"
-            [(ngModel)]="Entity.p.ConsumptionDate"#ConsumptionDateCtrl="ngModel" required
-          (blur)="ConsumptionDateCtrl.control.markAsTouched()" placeholder="Enter Consumption Date" />
+            [(ngModel)]="Entity.p.ConsumptionDate" #ConsumptionDateCtrl="ngModel" required
+            (blur)="ConsumptionDateCtrl.control.markAsTouched()" placeholder="Enter Consumption Date" />
           <div *ngIf="ConsumptionDateCtrl.invalid && (ConsumptionDateCtrl.touched || ConsumptionDateCtrl.dirty)">
             <span class="validation-text" *ngIf="ConsumptionDateCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
           </div>
@@ -35,33 +36,36 @@
           <label for="MaterialRef"><b>Material Name</b></label>
           <nz-select class="nzSelect-light" [nzNotFoundContent]="noDataTpl" nzShowSearch nzAllowClear
             nzPlaceHolder="Select" id="MaterialRef" name="MaterialRef" [nzSize]="'large'"
-            [(ngModel)]="Entity.p.MaterialRef" (ngModelChange)="getUnitByMaterialRef(Entity.p.SiteRef,Entity.p.MaterialRef)">
+            [(ngModel)]="Entity.p.MaterialRef"
+            (ngModelChange)="getUnitByMaterialRef(Entity.p.SiteRef,Entity.p.MaterialRef)">
             <nz-option *ngFor="let material of MaterialList" [nzValue]="material.p.MaterialRef"
               [nzLabel]="material.p.MaterialName"></nz-option>
           </nz-select>
         </div>
-       <div class="col-md-4" style="margin-top: 1rem">
+        <div class="col-md-4" style="margin-top: 1rem">
           <label for="UnitRef">Unit</label>
           <input type="text" name="UnitRef" class="form-control" [(ngModel)]="Entity.p.UnitName" />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="CurrentQuantity"><b>Current Quantity</b></label>
           <input type="number" [(ngModel)]="Entity.p.CurrentQuantity" name="CurrentQuantity" class="form-control"
-            id="CurrentQuantity" required placeholder="Enter Current Quantity" readonly/>
+            id="CurrentQuantity" required placeholder="Enter Current Quantity" readonly />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="ConsumedQuantity"><b>Consumed Quantity</b></label>
-          <input type="number" [(ngModel)]="Entity.p.ConsumedQuantity" name="ConsumedQuantity"
-            class="form-control" id="ConsumedQuantity" required placeholder="Enter Consumption Quantity"
-            #ConsumedQuantityCtrl="ngModel"  required (blur)="ConsumedQuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)" (ngModelChange)="CalculateRemainingQty()"/>
+          <input type="number" [(ngModel)]="Entity.p.ConsumedQuantity" name="ConsumedQuantity" class="form-control"
+            id="ConsumedQuantity" required placeholder="Enter Consumption Quantity" #ConsumedQuantityCtrl="ngModel"
+            required (blur)="ConsumedQuantityCtrl.control.markAsTouched()" (click)="selectAllValue($event)"
+            (ngModelChange)="CalculateRemainingQty()" />
           <div *ngIf="ConsumedQuantityCtrl.invalid && (ConsumedQuantityCtrl.touched || ConsumedQuantityCtrl.dirty)">
-            <span class="validation-text" *ngIf="ConsumedQuantityCtrl.errors?.['required']">{{ RequiredFieldMsg }}</span>
+            <span class="validation-text" *ngIf="ConsumedQuantityCtrl.errors?.['required']">{{ RequiredFieldMsg
+              }}</span>
           </div>
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="RemainingQuantity"><b>Remaining Quantity</b></label>
           <input type="number" [(ngModel)]="Entity.p.RemainingQuantity" name="RemainingQuantity" class="form-control"
-            id="RemainingQuantity" required placeholder="Enter Remaining Quantity" readonly/>
+            id="RemainingQuantity" required placeholder="Enter Remaining Quantity" readonly />
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="StageRef"><b>Stage</b></label>
@@ -84,8 +88,8 @@
         </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label for="Remark"><b>Remark</b></label>
-          <input type="text" [(ngModel)]="Entity.p.Remark" name="Remark" class="form-control" id="Remark"
-            rows="1" required placeholder="Enter Remark" />
+          <input type="text" [(ngModel)]="Entity.p.Remark" name="Remark" class="form-control" id="Remark" rows="1"
+            required placeholder="Enter Remark" />
         </div>
       </div>
       <div style="
