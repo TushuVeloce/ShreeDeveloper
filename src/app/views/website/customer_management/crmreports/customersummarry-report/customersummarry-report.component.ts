@@ -56,7 +56,9 @@ export class CustomersummarryReportComponent implements OnInit {
       return;
     }
     let lst = await CRMReports.FetchEntireListByCompanyAndSiteRef(this.companyRef(), this.SiteRef, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    this.CustomerList = lst;
+    this.CustomerList = lst.filter(item => item.p && item.p.CustID);
+console.log("Filtered customer list:", this.CustomerList);
+
 
   }
 
