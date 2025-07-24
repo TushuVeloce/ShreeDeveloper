@@ -45,7 +45,6 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       this.Entity = SalaryGeneration.GetCurrentInstance();
       this.appStateManage.StorageKey.removeItem('Editable');
       this.Entity.p.UpdatedBy = Number(this.appStateManage.StorageKey.getItem('LoginEmployeeRef'))
-      this.calculategrosstotal()
     } else {
       this.Entity = SalaryGeneration.CreateNewInstance();
       SalaryGeneration.SetCurrentInstance(this.Entity);
@@ -171,23 +170,28 @@ export class SalaryGenerationDetailsComponent implements OnInit {
       return;
     }
     let lst = await SalaryGeneration.FetchEmployeeDataByEmployeeRefandMonth(this.companyRef(), employee, month, async errMsg => await this.uiUtils.showErrorMessage('Error', errMsg));
-    console.log('lst :', lst);
 
     if (lst.length > 0) {
-      this.Entity.p.AdvancePayment = Number(lst[0].p.AdvancePayment)
+      this.Entity.p.TotalWorkingDays = Number(lst[0].p.TotalWorkingDays)
       this.Entity.p.BasicSalary = Number(lst[0].p.BasicSalary)
+      this.Entity.p.TotalLeaveDeduction = Number(lst[0].p.TotalLeaveDeduction)
+      this.Entity.p.AdvancePayment = Number(lst[0].p.AdvancePayment)
+      this.Entity.p.TotalOverTimeHrs = Number(lst[0].p.TotalOverTimeHrs)
       this.Entity.p.DisplayTotalOverTimeHrs = lst[0].p.DisplayTotalOverTimeHrs;
       this.Entity.p.OverTimeHrsRate = Number(lst[0].p.OverTimeHrsRate)
-      // this.Entity.p.TotalLateMarkAndHalfDays = Number(lst[0].p.TotalLateMarkAndHalfDays)
-      this.Entity.p.TotalLeaveDeduction = Number(lst[0].p.TotalLeaveDeduction)
-      // this.Entity.p.TotalLeaves = lst[0].p.TotalLeaves
-      this.Entity.p.TotalOverTimeHrs = Number(lst[0].p.TotalOverTimeHrs)
-      this.Entity.p.TotalWorkingDays = Number(lst[0].p.TotalWorkingDays)
-      // this.Entity.p.HalfdayAndLateMarkDeduction = Number(lst[0].p.HalfdayAndLateMarkDeduction)
+      this.Entity.p.TotalOverTimeSalary = Number(lst[0].p.TotalOverTimeSalary)
+      this.Entity.p.TotalWorkedDays = Number(lst[0].p.TotalWorkedDays)
+      this.Entity.p.TotalFullDayLeavesWithAbsent = Number(lst[0].p.TotalFullDayLeavesWithAbsent)
+      this.Entity.p.HalfDayLeaves = Number(lst[0].p.HalfDayLeaves)
+      this.Entity.p.FullDayWorked = Number(lst[0].p.FullDayWorked)
+      this.Entity.p.TotalFullDaysSalary = Number(lst[0].p.TotalFullDaysSalary)
+      this.Entity.p.HalfDaysIncludingLateMarks = Number(lst[0].p.HalfDaysIncludingLateMarks)
+      this.Entity.p.TotalHalfDaysAndLateMarkDaysSalary = Number(lst[0].p.TotalHalfDaysAndLateMarkDaysSalary)
+      this.Entity.p.RemainingAdvance = Number(lst[0].p.RemainingAdvance)
       this.Entity.p.GrossTotal = Number(lst[0].p.GrossTotal)
       this.GrossTotal = Number(lst[0].p.GrossTotal)
+      console.log('lst[0] :', lst[0]);
 
-      await this.calculategrosstotal()
       await this.calculatetotaldeduction()
     }
   }

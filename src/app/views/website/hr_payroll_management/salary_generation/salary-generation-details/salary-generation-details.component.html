@@ -35,55 +35,62 @@
           </nz-select>
         </div>
         <div class="col-md-4">
-          <label>Total Days</label>
+          <label>Basic Salary</label>
+          <input type="number" name="BasicSalary" class="form-control" id="BasicSalary"
+            [(ngModel)]="Entity.p.BasicSalary" placeholder="Basic Salary" readonly />
+        </div>
+        <div class="col-md-4">
+          <label>Total Month Days</label>
           <input type="number" name="TotalDays" class="form-control" id="TotalDays" [(ngModel)]="Entity.p.TotalDays"
             placeholder="Enter TotalDays" readonly />
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
-          <label>Official Working Days</label>
+          <label>Total Working Days</label>
           <input type="number" name="TotalWorkingDays" class="form-control" id="TotalWorkingDays"
-            [(ngModel)]="Entity.p.TotalWorkingDays" placeholder="Total Working Days" required readonly />
+            [(ngModel)]="Entity.p.TotalWorkingDays" placeholder="Total Working Days" readonly />
         </div>
-        <!-- <div class="col-md-4">
+        <div class="col-md-4">
+          <label>Total Worked Days</label>
+          <input type="number" name="TotalWorkedDays" class="form-control" id="TotalWorkedDays"
+            [(ngModel)]="Entity.p.TotalWorkedDays" placeholder="Total Working Days" readonly />
+        </div>
+        <div class="col-md-4">
           <label>Total Leaves</label>
-          <input type="number" name="TotalLeaves" class="form-control" id="TotalLeaves"
-            [(ngModel)]="Entity.p.TotalLeaves" placeholder="Total Leaves" required readonly />
-        </div> -->
+          <input type="number" name="TotalFullDayLeavesWithAbsent" class="form-control"
+            id="TotalFullDayLeavesWithAbsent" [(ngModel)]="Entity.p.TotalFullDayLeavesWithAbsent"
+            placeholder="Total Leaves" readonly />
+        </div>
+        <div class="col-md-4">
+          <label>Half Day Leaves</label>
+          <input type="number" name="HalfDayLeaves" class="form-control" id="HalfDayLeaves"
+            [(ngModel)]="Entity.p.HalfDayLeaves" placeholder="Half Day Leaves" readonly />
+        </div>
+        <div class="col-md-4">
+          <label>Full Day Worked</label>
+          <input type="number" name="FullDayWorked" class="form-control" id="FullDayWorked"
+            [(ngModel)]="Entity.p.FullDayWorked" placeholder="Full Day Worked" readonly />
+        </div>
+        <div class="col-md-4">
+          <label>Per Day Salary</label>
+          <input type="number" name="TotalFullDaysSalary" class="form-control" id="TotalFullDaysSalary"
+            [(ngModel)]="Entity.p.TotalFullDaysSalary" placeholder="Per Day Salary" readonly />
+        </div>
+        <div class="col-md-4">
+          <label>Half Days Including Late Marks</label>
+          <input type="number" name="HalfDaysIncludingLateMarks" class="form-control" id="HalfDaysIncludingLateMarks"
+            [(ngModel)]="Entity.p.HalfDaysIncludingLateMarks" placeholder="Half Days Including Late Marks" readonly />
+        </div>
+        <div class="col-md-4">
+          <label>Total Half Days And Late Mark Days Salary</label>
+          <input type="number" name="TotalHalfDaysAndLateMarkDaysSalary" class="form-control"
+            id="TotalHalfDaysAndLateMarkDaysSalary" [(ngModel)]="Entity.p.TotalHalfDaysAndLateMarkDaysSalary"
+            placeholder="Total Half Days And Late Mark Days Salary" readonly />
+        </div>
         <div class="col-md-4">
           <label>Total Over Time Hours</label>
           <input type="text" name="DisplayTotalOverTimeHrs" class="form-control" id="DisplayTotalOverTimeHrs"
-            [(ngModel)]="Entity.p.DisplayTotalOverTimeHrs" placeholder="Total Over Time Hours" required readonly />
+            [(ngModel)]="Entity.p.DisplayTotalOverTimeHrs" placeholder="Display Total Over Time Hrs" readonly />
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
-        <!-- <div class="col-md-4">
-          <label>Total Late Mark and Half Days</label>
-          <input type="number" name="TotalLateMarkAndHalfDays" class="form-control" id="TotalLateMarkAndHalfDays"
-            [(ngModel)]="Entity.p.TotalLateMarkAndHalfDays" placeholder="Total Late Mark and Half Days" required
-            readonly />
-        </div> -->
-        <!-- <div class="col-md-4">
-          <label>Late Mark and Half Day Rate</label>
-          <input type="number" name="LateMarksAndHalfDayRate" class="form-control" id="LateMarksAndHalfDayRate"
-            [(ngModel)]="Entity.p.LateMarksAndHalfDayRate" placeholder="Late Mark and Half Day Rate" required
-            readonly />
-        </div> -->
-        <!-- <div class="col-md-4">
-          <label>Total Late Mark and Half Days</label>
-          <input type="number" name="TotalLateMarkAndHalfDays" class="form-control" id="TotalLateMarkAndHalfDays"
-            [(ngModel)]="Entity.p.TotalLateMarkAndHalfDays" placeholder="Total Late Mark and Half Day Deduction"
-            required readonly />
-        </div> -->
-        <!-- <div class="col-md-4">
-          <label>Total Late Mark and Half Day Deduction</label>
-          <input type="number" name="HalfdayAndLateMarkDeduction" class="form-control"
-            id="HalfdayAndLateMarkDeduction" [(ngModel)]="Entity.p.HalfdayAndLateMarkDeduction"
-            placeholder="Total Late Mark and Half Day Deduction" required readonly />
-        </div> -->
-      </div>
-      <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>OverTime Hours Rate</label>
           <input type="number" name="OverTimeHrsRate" readonly class="form-control" id="OverTimeHrsRate"
@@ -91,23 +98,22 @@
             (ngModelChange)="calculategrosstotal()" (click)="selectAllValue($event)" />
         </div>
         <div class="col-md-4">
-          <label>Basic Salary</label>
-          <input type="number" name="BasicSalary" class="form-control" id="BasicSalary"
-            [(ngModel)]="Entity.p.BasicSalary" placeholder="Basic Salary" required readonly/>
+          <label>Over Time Salary</label>
+          <input type="number" name="TotalOverTimeSalary" readonly class="form-control" id="TotalOverTimeSalary"
+            [(ngModel)]="Entity.p.TotalOverTimeSalary" placeholder="Over Time Salary"
+            (ngModelChange)="calculategrosstotal()" (click)="selectAllValue($event)" />
         </div>
         <div class="col-md-4">
-          <label>Total Allowance</label>
+          <label>Allowance</label>
           <input type="number" name="TotalAllowance" class="form-control" id="TotalAllowance"
-            [(ngModel)]="Entity.p.TotalAllowance" placeholder="Enter Total Allowance" required
-            (click)="selectAllValue($event)" (ngModelChange)="calculategrosstotal()" />
+            [(ngModel)]="Entity.p.TotalAllowance" placeholder="Enter Total Allowance" (click)="selectAllValue($event)"
+            (ngModelChange)="calculategrosstotal()" />
         </div>
-      </div>
-      <div class="row" style="margin-top: 1rem">
         <div class="col-md-4">
           <label>Total Incentive</label>
           <input type="number" name="TotalIncentive" class="form-control" id="TotalIncentive"
-            [(ngModel)]="Entity.p.TotalIncentive" placeholder="Enter Total Incentive" required
-            (click)="selectAllValue($event)" (ngModelChange)="calculategrosstotal()" />
+            [(ngModel)]="Entity.p.TotalIncentive" placeholder="Enter Total Incentive" (click)="selectAllValue($event)"
+            (ngModelChange)="calculategrosstotal()" />
         </div>
         <div class="col-md-4">
           <label>Other</label>
@@ -153,11 +159,11 @@
             [(ngModel)]="Entity.p.AdvanceDeduction" placeholder="Enter Advance Deduction" required
             (click)="selectAllValue($event)" (ngModelChange)="calculatetotaldeduction()" />
         </div>
-        <!-- <div class="col-md-4" style="margin-top: 1rem">
+        <div class="col-md-4" style="margin-top: 1rem">
           <label>Total Deduction</label>
           <input type="number" name="TotalDeduction" class="form-control" id="TotalDeduction"
             [(ngModel)]="Entity.p.TotalDeduction" placeholder="Enter Total Deduction" readonly />
-        </div> -->
+        </div>
         <div class="col-md-4" style="margin-top: 1rem">
           <label>Net Salary</label>
           <input type="number" name="NetSalary" class="form-control" id="NetSalary" [(ngModel)]="Entity.p.NetSalary"
